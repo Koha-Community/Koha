@@ -1,0 +1,103 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue MARC detail<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+    <h1>Issue history for <!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) </h1>
+
+<!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
+    
+<div class="searchresults">
+    <!-- TMPL_IF NAME="issues" -->
+        <br />
+        <b>Has been issued <!-- TMPL_VAR NAME="total" --> times</b>
+        <table>
+            <th>
+                Date
+            </th>
+            <th>
+                Surname
+            </th>
+            <th>
+                Firstname
+            </th>
+            <th>
+                Issuing branch
+            </th>
+            <th>
+                Renew
+            </th>
+            <th>
+                Date due
+            </th>
+            <th>
+                Return date
+            </th>
+        <!-- TMPL_LOOP NAME="issues" -->
+            <tr>
+                <td>
+                    <!-- TMPL_IF NAME="timestamp" -->
+                        <!-- TMPL_VAR NAME="timestamp" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="surname" -->
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+                            <!-- TMPL_VAR NAME="surname" -->
+                        </a>
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="firstname" -->
+                        <!-- TMPL_VAR NAME="firstname" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="issuingbranch" -->
+                        <!-- TMPL_VAR NAME="issuingbranch" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="renewals"-->
+                        YES<br />
+                        <small>
+                            <!-- TMPL_IF NAME="lastreneweddate" -->
+                                last on: <!-- TMPL_VAR NAME="lastreneweddate" -->
+                            <!-- /TMPL_IF -->
+                        </small>
+                    <!-- TMPL_ELSE -->
+                        NO
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="date_due" -->
+                        <!-- TMPL_VAR NAME="date_due" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="returndate" -->
+                        <!-- TMPL_VAR NAME="returndate" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+           </tr>
+        <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+        <br />
+        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->) <span class="problem">has never been issued.</span></b>
+        
+    <!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

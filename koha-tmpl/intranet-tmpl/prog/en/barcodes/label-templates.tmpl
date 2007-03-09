@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Labels<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="label-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+<div id="main">
+<h1>Current Templates
+
+
+</h1>
+
+<!-- TMPL_IF NAME="resultsloop" -->
+<h2>Templates</h2>
+<table>
+<tr>
+        <th>Template Code</th>
+        <th>Description</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>Active</th>
+</tr>
+<!-- TMPL_LOOP NAME="resultsloop" -->
+<tr>
+        <td>
+                <!-- TMPL_VAR NAME="tmpl_code" -->
+        </td>
+        <td>
+                <!-- TMPL_VAR NAME="tmpl_desc" -->
+        </td>
+   		<td>
+				<a href="/cgi-bin/koha/barcodes/label-edit-template.pl?tmpl_code=<!-- TMPL_VAR NAME="tmpl_code" -->">Edit</a>
+        </td>
+   		<td>
+				<a href="/cgi-bin/koha/barcodes/label-templates.pl?op=delete&tmpl_code=<!-- TMPL_VAR NAME="tmpl_code" -->">Delete</a>
+        </td>
+		  <td>
+				<!-- TMPL_IF NAME="active" -->Active<!-- /TMPL_IF -->
+        </td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+<p><br />
+
+				<a href="/cgi-bin/koha/barcodes/label-create-template.pl?op=blank">Create New Label Template</a>
+
+<!-- /TMPL_IF -->
+</form>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

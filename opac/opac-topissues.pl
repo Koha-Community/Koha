@@ -1,0 +1,120 @@
+#!/usr/bin/perl
+
+# $Id$
+
+# Copyright 2000-2002 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+use C4::Auth;
+use CGI;
+use C4::Context;
+use C4::Search;
+use C4::Output;
+use C4::Koha;
+use C4::Branch;
+use C4::Interface::CGI::Output;
+use Date::Manip;
+
+=head1 NAME
+
+plugin that shows a stats on borrowers
+
+=head1 DESCRIPTION
+
+
+=over2
+
+=cut
+
+my $input = new CGI;
+my $branches = GetBranches();
+my $itemtypes = GetItemTypes();
+
+my ($template, $borrowernumber, $cookie)
+	= get_template_and_user({template_name => 'opac-topissues.tmpl',
+				query => $input,
+				type => "opac",
+				authnotrequired => 1,
+				debug => 1,
+				});
+my $dbh = C4::Context->dbh;
+# Displaying results
+my $limit = $input->param('limit') || 10;
+my $branch = $input->param('branch');
+my $itemtype = $input->param('itemtype');
+my $timeLimit = $input->param('timeLimit') || 3;
+my $whereclause;
+$whereclause .= 'items.homebranch='.$dbh->quote($branch)." AND " if ($branch); 
+$whereclause .= 'biblioitems.itemtype='.$dbh->quote($itemtype)." AND " if $itemtype;
+$whereclause .= 'TO_DAYS(NOW()) - TO_DAYS(biblio.timestamp) <= '.$timeLimit*30 if $timeLimit;
+$whereclause =~ s/ AND $//;
+$whereclause = " WHERE ".$whereclause if $whereclause;
+my $query = "SELECT biblio.timestamp, biblio.biblionumber, title, 
+                author, sum( items.issues ) AS tot, biblioitems.itemtype,
+                biblioitems.publishercode,biblioitems.publicationyear,
+                itemtypes.description
+                FROM biblio
+                LEFT JOIN items USING (biblionumber)
+                LEFT JOIN biblioitems USING (biblionumber)
+                LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+                $whereclause
+                GROUP BY biblio.biblionumber
+                ORDER BY tot DESC
+                LIMIT $limit
+                ";
+
+my $sth = $dbh->prepare($query);
+$sth->execute();
+my @results;
+while (my $line= $sth->fetchrow_hashref) {
+    push @results, $line;
+}
+
+$template->param(do_it => 1,
+                limit => $limit,
+                branch => $branches->{$branch}->{branchname},
+                itemtype => $itemtypes->{$itemtype}->{description},
+                timeLimit => $timeLimit,
+                results_loop => \@results,
+                );
+
+my $branches = GetBranches;
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+        my %row =(value => $thisbranch,
+                    branchname => $branches->{$thisbranch}->{'branchname'},
+                        );
+        push @branchloop, \%row;
+}
+
+#doctype
+my $itemtypes = GetItemTypes;
+my @itemtypeloop;
+foreach my $thisitemtype (keys %$itemtypes) {
+        my %row =(value => $thisitemtype,
+                    description => $itemtypes->{$thisitemtype}->{'description'},
+                        );
+        push @itemtypeloop, \%row;
+}
+
+$template->param(
+                branchloop =>\@branchloop,
+                itemtypeloop =>\@itemtypeloop,
+                );
+output_html_with_http_headers $input, $cookie, $template->output;
+

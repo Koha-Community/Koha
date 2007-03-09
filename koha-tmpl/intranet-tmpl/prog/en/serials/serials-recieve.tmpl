@@ -1,0 +1,304 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription edit<!--
+TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+
+<!--------------------------MAIN BODY OF PAGE-------------------------->
+<h1>Check In subscription for: <!-- TMPL_VAR name="bibliotitle" --></h1>
+<div id="action">
+    <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription Details</a>
+    <!-- <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Search All Subscriptions</a> -->
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a>
+    <!-- TMPL_IF NAME="routing" -->
+    <a href="routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="subscription routing list">Routing list</a>
+    <!-- /TMPL_IF -->
+</div>
+
+<h2>waited or late numbers</h2>
+	<form method="post" name="f" action="serials-recieve.pl" onsubmit="return barcode_check()">
+		<input type="hidden" name="op" value="serialchangestatus">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+	<table cellspacing="0" cellpadding="0" border="0" class="collapse">
+	<tr>
+		<th>
+			Numbered
+		</th>
+		<th>
+			Published on
+		</th>
+		<th>
+			planned for
+		</th>
+		<th>
+			Status
+		</th>
+		<th>
+			Notes
+		</th>
+	</tr>
+	<!-- TMPL_LOOP name="serialslist" -->
+		<tr>
+			<td>
+				Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="20" maxlength="100">
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				Callnumber <input type="text" name="itemcallnumber" value="<!--TMPL_VAR NAME="callnumber"-->" size=15 maxlength=100>
+				Barcode <input type="text" name="barcode" value="<!-- TMPL_VAR NAME="barcode"-->" id="barcode<!-- TMPL_VAR NAME="num" -->" size=20 maxlength=20>
+			<!--/TMPL_IF -->
+			</td>
+			<td>
+				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size=10 maxlength=15>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />&nbsp;
+			<!--/TMPL_IF  -->
+			</td>
+			<td>
+				<input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<select name="branch" size="1">
+						<option value="">Branch</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			<!--/TMPL_IF -->
+			</td>
+			<td>
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->">
+				<select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->">
+					<!--TMPL_IF name="status1" -->
+						<option value="1" selected>Waited</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status2" -->
+						<option value="2" selected>Arrived</option>
+					<!-- TMPL_ELSE -->
+						<option value="2">Arrived</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status3" -->
+						<option value="3" selected>Late</option>
+					<!-- TMPL_ELSE -->
+						<option value="3">Late</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status4" -->
+						<option value="4" selected>Missing</option>
+					<!-- TMPL_ELSE -->
+						<option value="4">Missing</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status5" -->
+						<option value="5" selected>Not Available</option>
+					<!-- TMPL_ELSE -->
+						<option value="5">Not Available</option>
+					<!-- /TMPL_IF -->
+					<!--TMPL_IF name="status6" -->
+						<option value="6" selected>Delete</option>
+					<!-- TMPL_ELSE -->
+						<option value="6">Delete</option>
+					<!-- /TMPL_IF -->
+				</select>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<!--TMPL_IF Name="itemstatus"-->
+				    <!--TMPL_IF Name="choice"-->
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<!-- TMPL_VAR name="itemlib" -->: <input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->checked<!-- /TMPL_IF -->>
+						<!-- /TMPL_LOOP -->
+				    <!--TMPL_ELSE-->
+					<select name="itemstatus" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				    <!--/TMPL_IF-->
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			<!--/TMPL_IF -->
+
+			</td>
+			<td>
+				<input type="text" name="notes" value="<!-- TMPL_VAR name="notes" -->" size=20 maxlength=255>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<!--TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF-->
+			<!--/TMPL_IF -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_UNLESS name="hassubscriptionexpired" -->
+		<tr>
+			<td>
+				Manual issue <input type="text" name="serialseq" size=30 maxlength=100 value="<!-- TMPL_VAR NAME="missingseq" -->">
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				Callnumber <input type="text" name="itemcallnumber" value="" size=10 maxlength=15>
+				Barcode <input type="text" name="barcode" value="" size=20 maxlength=20>
+			<!--/TMPL_IF-->
+			</td>
+			<td>
+				<input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size=10 maxlength=15>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />&nbsp;
+			<!--/TMPL_IF  -->
+			</td>
+			<td>
+				<input type="text" name="planneddate" size=10 maxlength=15 value="<!-- TMPL_VAR NAME="missingdate" -->">
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<select name="branch" size="1">
+						<option value="">Branch</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+				</select>
+			<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!-- TMPL_IF NAME="frommissing" -->
+				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="missingid" -->">
+				<!-- TMPL_ELSE -->
+				<input type="hidden" name="serialid" value="0">
+				<!--/TMPL_IF-->
+				<select name="status" size="1">
+						<!-- TMPL_IF NAME="frommissing" -->
+						<option value="2" selected >Arrived</option>
+						<!-- TMPL_ELSE -->
+						<option value="2">Arrived</option>
+				
+						<!--/TMPL_IF-->
+						<!-- TMPL_IF NAME="frommissing" -->
+						<option value="3">Late</option>
+						<!--TMPL_ELSE-->
+						<option value="3" selected>Late</option>
+						<!--/TMPL_IF-->
+						<option value="4">Missing</option>
+						<option value="5">Not Available</option>
+
+
+				</select>
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<!-- TMPL_IF Name="itemstatus"-->
+				    <!--TMPL_IF Name="choice"-->
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<!-- TMPL_VAR name="itemlib" -->: <input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->checked<!-- /TMPL_IF -->>
+						<!-- /TMPL_LOOP -->
+				    <!--TMPL_ELSE-->
+					<select name="itemstatus" size="1">
+						<option value="">Item Status</option>
+						<!-- TMPL_LOOP name="itemstatusloop" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				    <!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			<!--/TMPL_IF-->
+			</td>
+			<td>
+				&nbsp;
+			<!--TMPL_IF Name="serialadditems" -->
+				<br /><br />
+				<!-- TMPL_IF Name="itemlocation"-->
+					<select name="location" size="1">
+						<option value="">Location</option>
+						<!-- TMPL_LOOP name="itemlocationloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- TMPL_ELSE -->
+				&nbsp;
+				<!--/TMPL_IF -->
+			<!--/TMPL_IF-->
+			</td>
+		</tr>
+	<!-- /TMPL_UNLESS -->
+	</table>
+	<input type="submit" value="Save changes" accesskey="w" class="button">
+	<!-- TMPL_IF name="hassubscriptionexpired" -->
+		<h3>Subscription has expired.</h3>
+		<p><b>Waited last issue status can't be changed. <a href="#" onClick="popup()" class="button">Renew</a> your subscription</b></p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="abouttoexpire" -->
+		<h3>Note: Subscription is about to expire next issue.</h3>
+		<script type="text/javascript">
+		<!--
+		alert("Subscription is about to expire next issue");
+		//-->
+		</script>
+	<!-- /TMPL_IF -->	
+	</form>
+
+	<h2>Subscription summary</h2>
+	<form method="post" name="f2" action="serials-recieve.pl">
+		<input type="hidden" name="op" value="modsubscriptionhistory">
+		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<input type="hidden" name="user" value="<!-- TMPL_VAR name="user" -->">
+		<p><label>Librarian</label><!-- TMPL_VAR name="user" --></p>
+		<p><label>Starting date:</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"> (the date of the 1st subscription)</p>
+		<p><label>Ending date:</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->">(if empty : subscription still active)</p>
+		<p>Recieved issues</p>
+		<p>&nbsp;<textarea name="recievedlist" COLS=60 ROWS=5><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p>Missing issues</p>
+		<p>&nbsp;<textarea name="missinglist" COLS=60 ROWS=2><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p>Opac's note</p>
+		<p>&nbsp;<textarea name="opacnote" COLS=60 ROWS=5><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<input type="submit" value="Save changes" class="button">
+	</form>
+
+</div>
+<script language="JavaScript" type="text/javascript">
+
+function popup() {
+	window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR
+name="subscriptionid">","subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+
+function barcode_check(){
+    <!-- TMPL_IF NAME="count" -->
+	var count = '<!-- TMPL_VAR NAME="count" -->';
+	for(var i=1;i<=count;i++){
+
+		var barcodenum = "barcode"+i;
+		var statusnum = "status"+i;
+		var elembarcode = "document.getElementById('"+barcodenum+"')";
+		var elemstatus = "document.getElementById('"+statusnum+"')";
+// alert(elembarcode+"\n"+eval(elembarcode+".value));
+// alert(elemstatus+"\n"+eval(elemstatus+".value"));
+		if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
+			var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
+			if (answer){
+				document.f.submit();
+			} else {
+				return false;
+			}
+		}
+		if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
+			var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
+			if (answer){
+				document.f.submit();
+			} else {
+				return false;
+			}
+		}
+	}
+    <!-- /TMPL_IF -->
+}
+</script>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

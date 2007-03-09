@@ -1,0 +1,180 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+
+<h1>Circulation: Branch Overdues</h1>
+
+<div id="mainbloc">
+<!-- selector of departement -->
+<fieldset id="branch_odues_select_departement">
+<!-- TMPL_IF NAME="departement" -->
+<legend>departement selected</legend>
+<form name="changedepartment" action="branchoverdues.pl">
+    <ul>
+        <li>
+            You are working actually on the overdues for the departement : <b><!-- TMPL_VAR NAME="departement" --></b>
+    <input type="submit" name="changedepartement" class="button" value="change departement">
+        </li>
+    </ul>
+</form>
+<!-- TMPL_ELSE -->
+<legend>Select your departement</legend>
+<ul>
+    <li>
+        <form name="selectdepartement" action="branchoverdues.pl" method="post">
+        <select id="departement" name="departement">
+            <option value="">All departements</option>
+            <!-- TMPL_LOOP NAME="departementsloop" -->
+                <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+            <!-- /TMPL_LOOP -->
+        </select>
+        <input type="submit" name="departement" class="button" value="change departement">
+        </form>
+    </li>
+</ul>
+<!-- /TMPL_IF -->
+</fieldset>
+
+    <fieldset id="branch_odues_global_odues">
+    <legend>Overdues of your library</legend>
+    <form name="sendnotify" action="branchoverdues.pl" method="post">
+    <!-- TMPL_IF name="overduesloop" -->
+        <table>
+        <tr>
+            <th class="circulation">Date_due</th>
+            <th class="circulation">Title</th>
+            <th class="circulation">Borrower</th>
+            <th class="circulation">Localisation</th>
+            <th class="circulation">Overdue status</th>
+            <th class="circulation">Notify by</th>
+        </tr>
+            <!-- TMPL_LOOP NAME="overduesloop" -->
+                <tr>
+                    <td>
+                        <p>
+                        <!-- TMPL_VAR NAME="date_due" -->
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                            &nbsp; (<b><!-- TMPL_VAR NAME="description" --></b>)
+                            <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
+                        </p>
+                    </td>
+                    <td>
+                        <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                    <!-- TMPL_IF NAME="borroweremail" --><a href="mailto:<!-- TMPL_VAR NAME="borroweremail" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">
+                    <!-- TMPL_VAR NAME="borroweremail" --></a><!--/TMPL_IF-->
+                        </p>
+                    </td>
+                    <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+                    </td>
+                    <td align="center">
+                    <b>
+                        <!-- TMPL_IF NAME="overdue1" -->
+                            first overdue
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="overdue2" -->
+                            second overdue
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="overdue3" -->
+                            Third overdue
+                        <!-- /TMPL_IF -->
+                    </b>
+                    </td>
+                    <td align="center">
+                    <!-- TMPL_IF NAME="overdue1" -->
+                        <!-- TMPL_IF NAME="borroweremail" -->
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=mail&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">mail</a>
+                        <!-- TMPL_ELSE -->
+                            mail
+                        <!-- /TMPL_IF -->
+                            &nbsp;|&nbsp;
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->
+                            ">phone</a>
+                            &nbsp;|&nbsp;
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                            &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">letter</a>
+                    <!-- /TMPL_IF -->
+                    
+                    <!-- TMPL_IF NAME="overdue2" -->
+                        <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">letter</a>
+                    <!-- /TMPL_IF -->
+                    
+                    <!-- TMPL_IF NAME="overdue3" -->
+                    <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=lost&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                    &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Considered lost</a>
+                    <!-- /TMPL_IF -->
+                    
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+    <!-- TMPL_ELSE -->
+        There is no overdues for your library today
+    <!-- /TMPL_IF -->
+    </fieldset>
+<!-- TMPL_IF name="todayoverduesloop" -->
+    <fieldset id="branch_odues_today_odues">
+    <legend>Notifys of the day</legend>	
+        <table>
+        <tr>
+            <th class="circulation">Date_due</th>
+            <th class="circulation">Title</th>
+            <th class="circulation">Borrower</th>
+            <th class="circulation">Localisation</th>
+            <th class="circulation">Overdue status</th>
+            <th class="circulation">Notified by</th>
+            <th class="circulation">Cancel</th>			
+        </tr>
+            <!-- TMPL_LOOP NAME="todayoverduesloop" -->
+                <tr>
+                    <td>
+                        <p>
+                        <!-- TMPL_VAR NAME="date_due" -->
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                            &nbsp; (<b><!-- TMPL_VAR NAME="description" --></b>)
+                            <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
+                        </p>
+                    </td>
+                    <td>
+                        <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                    <!-- TMPL_IF NAME="borroweremail" --><a href="mailto:<!-- TMPL_VAR NAME="borroweremail" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">
+                    <!-- TMPL_VAR NAME="borroweremail" --></a><!--/TMPL_IF-->
+                        </p>
+                    </td>
+                    <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+                    </td>
+                    <td align="center">
+                        <b>
+                            <!-- TMPL_IF NAME="overdue1" -->
+                                first overdue
+                            <!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="overdue2" -->
+                                second overdue
+                            <!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="overdue3" -->
+                                considered lost
+                            <!-- /TMPL_IF -->
+                        </b>
+                    </td>
+                    <td align="center">
+                        <b><!-- TMPL_VAR NAME="notify_method" --></b>
+                    </td>
+                
+                    <td>
+                    <a href="branchoverdues.pl?action=remove&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&departement=<!-- TMPL_VAR NAME="departementValue" -->&notify_date=<!-- TMPL_VAR NAME="notify_date" -->">cancel notification</a>
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+    </fieldset>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

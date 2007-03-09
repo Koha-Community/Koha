@@ -1,0 +1,171 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Reserve
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<!-- End of additions --><!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+
+<h1>Pending reserves as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
+<div id="filters">
+<br />
+<form method="post" >
+<p>
+<label for "from">
+    Start date:
+</label>
+<input type="text"
+        size="10"
+        id="from"
+        name="from"
+        value="<!-- TMPL_VAR NAME="from" -->" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" 
+        border="0" id="openCalendarFrom" style="cursor: pointer;" valign="top" />
+<script language="JavaScript" type="text/javascript">
+function validate1(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekDay = date.getDay();
+    var dayMonth = month + '-' + day;
+    var dateString = year + '-' + month + '-' + day;
+    var dateTo = document.getElementById('to').value.split("-");
+    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+    if (date > limitDate) {
+            return true;
+    } else {
+            return false;
+    }
+}
+Calendar.setup(
+        {
+        inputField : "from",
+        ifFormat : "%Y-%m-%d",
+        button : "openCalendarFrom",
+        disableFunc : validate1,
+        dateStatusFunc : validate1
+        }
+);
+</script>
+<label for "to" >
+    End date:
+</label>
+<input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif"
+        id="openCalendarTo"
+        style="cursor: pointer;"
+        valign="top" border="0" />
+<script type="text/javascript">
+        function validate2(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var weekDay = date.getDay();
+            var dayMonth = month + '-' + day;
+            var dateString = year + '-' + month + '-' + day;
+            var dateFrom = document.getElementById('from').value.split("-");
+            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+            if (limitDate > date) {
+                    return true;
+            } else {
+                    return false;
+            }
+        }
+
+        Calendar.setup(
+                {
+                    inputField : "to",
+                    ifFormat : "%Y-%m-%d",
+                    button : "openCalendarTo",
+                    disableFunc : validate2,
+                    dateStatusFunc : validate2
+                }
+        );
+</script>
+(inclusive)
+<input type="submit" value="Go" class="submit">
+</p>
+</form>
+<p>The following reserves have not be affected to any item.</p>
+<p>Please go in the shelves, pickup a book and do a return on them :</p>
+</div>
+
+<div class="searchresults">
+    <!-- TMPL_IF NAME="reserveloop" -->
+    <table>
+    <tr>
+        <th >
+            Priority
+            <a href="/cgi-bin/koha/circ/reserve.pl?order=priority">Sort</a>
+        </th>
+        <th >Reserve Date
+            <a href="/cgi-bin/koha/circ/reserve.pl?order=date">Sort</a>
+        </th>
+        <th >Patron
+        <a href="/cgi-bin/koha/circ/reserve.pl?order=borrower">Sort</a>
+        </th>
+        <th >Title
+        <a href="/cgi-bin/koha/circ/reserve.pl?order=biblio">Sort</a>
+        </th>
+        <th >
+            Location
+        </th>
+    </tr>
+    
+    <!-- TMPL_LOOP NAME="reserveloop" -->
+        <tr>
+            <!-- TMPL_IF name="borrowernumber" -->
+                <td><p><!-- TMPL_VAR NAME="priority" --></p></td>
+                <td width="15%">
+                    <p><!-- TMPL_VAR NAME="reservedate" --></p>
+                    <p>in <!-- TMPL_VAR NAME="branch" --></p>
+                    <!-- TMPL_IF NAME="statusw" --><p>Waiting</p><!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" --><p>Fullfilled</p><!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a><br /><!-- TMPL_VAR NAME="phone" --><br />
+                <!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+    <!-- TMPL_VAR NAME="email" --></a><!--/TMPL_IF-->
+                    </p>
+                </td>
+                <td>
+                    <p>
+                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                        <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                    </a>
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                        <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                            <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                        </a>
+                        <!-- TMPL_ELSE -->
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                            </a>
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
+                    </p>
+                    <p><!-- TMPL_VAR NAME="notes" --></p>
+                </td>
+            <!-- TMPL_ELSE -->
+                <td colspan="2">
+                    &nbsp;
+                </td>
+                <td>"</td>
+                <td>"</td>
+            <!-- /TMPL_IF -->
+            <td><p><!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
+        </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+    <!-- TMPL_ELSE -->
+        <b>No items found.</b>
+    <!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

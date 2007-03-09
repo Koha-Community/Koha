@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- ISBD
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+    <h1>Browse our catalogue</h1>
+        <ul>
+        <li>
+            <!-- TMPL_VAR name="description" --> <a href="opac-browser.pl">Top level</a>
+        </li>
+        <ul>
+        <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
+                <li>
+                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&filter=<!-- TMPL_VAR name="classification"-->"><!-- TMPL_VAR name="description" --></a>
+                </li>
+            <ul>
+        <!-- /TMPL_LOOP -->
+        <table><tr>
+        <!-- TMPL_LOOP name="LEVEL_LOOP" -->
+                <td width="33%">
+                <p>
+                <!-- TMPL_IF name="endnode" -->
+                    <a href="opac-search.pl?q=Dewey-classification:<!-- TMPL_VAR name="classification" -->"><!-- TMPL_VAR name="description" --></a>
+                <!-- TMPL_ELSE -->
+                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&filter=<!-- TMPL_VAR name="classification"-->"><!-- TMPL_VAR name="description" --></a>
+                <!-- /TMPL_IF --></p>
+                <p style="font-size:0.75em"><i>(<!-- TMPL_VAR name="number"--> biblios)</i></p>
+                </td>
+                <!-- TMPL_IF name="count3" --></tr><tr><!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+        <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
+            </ul>
+        <!-- /TMPL_LOOP -->
+        </ul>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

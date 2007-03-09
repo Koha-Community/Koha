@@ -1,0 +1,51 @@
+# Generic character map.
+#
+# $Id$
+
+# Define the basic value-set. *Beware* of changing this without re-indexing
+# your databases.
+lowercase {0-9}{a-y}üzæäøöå
+uppercase {0-9}{A-Y}ÜZÆÄØÖÅ
+
+# Breaking characters
+
+# Characters to be considered equivalent for searching purposes.
+
+equivalent æä(ae)
+equivalent øö(oe)
+equivalent å(aa)
+#equivalent uü
+equivalent y(i)
+
+# Supplemental mappings
+
+map (&auml;)       ä
+map (&aelig;)      æ
+map (&oslash;)     ø
+map (&aring;)      å
+map (&ouml;)       ö
+map (&Auml;)       Ä
+map (&Aelig;)      Æ
+map (&Oslash;)     Ø
+map (&Aring;)      Å
+map (&Ouml;)       Ö
+
+map (âàáäÂÀÂ)		a
+map (êèéëÊÈÉË)		e
+map (îïíÎÏ)		i
+map (ôöóÔÖ)		o
+map (ûùüÛÜ)       u
+map (ç)       c
+#map (y)   i
+
+#map (Aa)	(AA)
+
+#map (aa)        a
+map (^Le\s)    @
+map (^La\s)    @
+map (^Les\s)      @
+map (^Un\s)      @
+map (^Une\s)     @
+map (^De\s)     @
+map (^Des\s)     @
+

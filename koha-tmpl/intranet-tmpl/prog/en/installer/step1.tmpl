@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Web Installer &rsaquo; Step 1
+<!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
+<h1>Koha &rsaquo; Web Installer &rsaquo; Step 1</h1>
+<!--TMPL_UNLESS Name="language"-->
+<p>You are about to install Koha.</p>
+<form name="language" method="post">
+
+<p>Please pick up your language from the following list. If your langauge is not
+listed, please inform your systems administrator.</p>
+
+<select name="language">
+  <!--TMPL_LOOP Name="languages"-->
+  <option value="<!--TMPL_VAR Name="value" -->""><!--TMPL_VAR Name="description"-->
+<!--   </option> -->
+  <!--/TMPL_LOOP -->
+</select>
+</p>
+
+<p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
+</form>
+<!--/TMPL_UNLESS-->
+<!--TMPL_IF Name="language"-->
+  <!--TMPL_UNLESS Name="checkmodule"-->
+  <!--TMPL_IF Name="missing"-->
+  <p>Some perl modules are missing.<br />
+  <ul>
+  <!--TMPL_LOOP Name="missing"-->
+    <li><!--TMPL_VAR Name="name"-->
+    <!--TMPL_IF Name="usagemail"-->
+      <br/> This module is used whenever Koha has to send email.
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="usagebarcode"-->
+      <br/> This module is needed if you intend to print barcodes.
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="usagespine"-->
+      <br/> This module is needed if you intend to print spine labels.
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="usageLDAP"-->
+      <br/> This module is needed if you intend to use LDAP for authentication.
+    <!--/TMPL_IF-->
+    </li>
+  <!--/TMPL_LOOP-->
+  Please consider installing these modules before continuing.
+  <pre>
+  <!--TMPL_LOOP Name="missing"-->
+    perl -MCPAN -e "install <!--TMPL_VAR Name="name"-->";
+  <!--/TMPL_LOOP-->
+  </pre>
+  <!--/TMPL_IF-->
+  <!--TMPL_IF Name="problems"-->
+  <p>I encountered some problems.</p>
+   <ul>
+    <!--TMPL_IF Name="perlversion"-->
+    <li>Your perl version seems to be obsolete.
+      Please upgrade to a newer version of Perl (at least Version 5.006001).</li>
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="perllocation"-->
+    <li>Your perl installation is not in /usr/bin/.
+      This version of the Web Installer expects perl to be in /usr/bin/.</li>
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="zebra"-->
+    <li>Zebra server doesn't seem to be installed or I can't find it.
+      Please install it before continuing.</li>
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="mysql"-->
+    <li>MySQL server doesn't seem to be installed or I can't find it.
+      Please install it before continuing.</li>
+    <!--/TMPL_IF-->
+    <!--TMPL_IF Name="yaz"-->
+    <li>Yaz doesn't seem to be installed or I can't find it.
+      Please install it before continuing.</li>
+    <!--/TMPL_IF-->
+   </ul>
+  <!--/TMPL_IF-->
+  <!--/TMPL_UNLESS-->
+  <!--TMPL_IF Name="checkmodule"-->
+<form name="checkmodules" action="install.pl">
+<p> All dependencies installed.
+</p>
+<input type="hidden" name="step" value="2" />
+<p>Please click next to continue <input value="Next &gt;&gt;" type="submit"></p>
+</form>
+  <!--/TMPL_IF-->
+<!--/TMPL_IF-->
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

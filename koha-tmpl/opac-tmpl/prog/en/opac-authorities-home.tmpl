@@ -1,0 +1,69 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Library Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<h1>Authority search</h1>
+
+<div id="bloc60">
+    <form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+        <input type="hidden" name="op" value="do_search">
+        <input type="hidden" name="type" value="opac">
+        <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+        <div class="details">
+            <h2>Search on
+                <select name="authtypecode">
+                <!-- TMPL_LOOP NAME="authtypesloop" -->
+                <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+                <!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="authtypetext" --></option>
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+                </select>
+            </h2>
+            <p>
+                <label class="label100">Main entry ($a only)</label>
+                <select name="operator">
+                    <option value="contains">contains</option>
+                    <option value="start">starts by</option>
+                    <option value="is">is exactly</option>
+                </select>
+                <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+                <input type="hidden" name="marclist" value="mainmainentry">
+                <input type="hidden" name="and_or" value="and">
+                <input type="hidden" name="excluding" value="">
+            </p>
+            <p>
+                <label class="label100">Main entry</label>
+                <select name="operator">
+                    <option value="contains">contains</option>
+                    <option value="start">starts by</option>
+                    <option value="is">is exactly</option>
+                </select>
+                <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+                <input type="hidden" name="marclist" value="mainentry">
+                <input type="hidden" name="and_or" value="and">
+                <input type="hidden" name="excluding" value="">
+            </p>
+            <p>
+                <label class="label100">Anywhere</label>
+                <select name="operator">
+                    <option value="contains">contains</option>
+                    <option value="start">starts by</option>
+                    <option value="is">is exactly</option>
+
+                </select>
+                <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+                <input type="hidden" name="marclist" value="">
+                <input type="hidden" name="and_or" value="and">
+                <input type="hidden" name="excluding" value="">
+            </p>
+            <p>(add % at the end of your word if you want to use right-truncation : <b>theor%</b> will find theory &amp; theories)</p>
+            <p>
+                <input type="submit" value="Start search" class="submit">
+            </p>
+        </div>
+    </form>
+</div>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

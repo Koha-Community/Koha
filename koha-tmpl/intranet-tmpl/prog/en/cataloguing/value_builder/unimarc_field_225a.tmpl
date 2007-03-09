@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- TMPL_INCLUDE name="auth-search-top.inc" -->
+<title>UNIMARC_Field 225a builder</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<div id="mainbloc">
+	<form name="f_pop" onSubmit="javascript:report()">
+		<h2 class="authority">Collection</h2>
+		<p><label>Select a collection</label><!-- TMPL_VAR name="collection" --></p>
+		<input type="submit" value="OK" class="button authority"></p>
+	</form>
+</div>
+<script>
+	function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+<!-- TMPL_INCLUDE name="auth-search-bottom.inc" -->

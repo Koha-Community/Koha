@@ -1,0 +1,308 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalog -- <!-- TMPL_IF NAME="searchdesc" -->Results of Search for '<!-- TMPL_VAR NAME="searchdesc" -->'<!-- TMPL_ELSE -->You did not specify any search criteria<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+    <!-- TMPL_IF NAME="koha_spsuggest" -->
+        <div style="font-size: 12px;">Did you mean: 
+            <ul style="list-style: none;">
+            <!-- TMPL_LOOP NAME="SPELL_SUGGEST" -->
+            <li>
+                <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="spsuggestion" -->"><!-- TMPL_VAR NAME="spsuggestion" --></a>
+            </li>
+            <!-- /TMPL_LOOP -->
+            </ul>
+        </div>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="total" -->
+    <h3>
+        <!-- TMPL_VAR NAME="total" --> results found for '<!-- TMPL_VAR NAME="searchdesc" -->'
+        <a href="/cgi-bin/koha/catalogue/search.pl">Perform a new search</a>
+    </h3>
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF NAME="searchdesc" -->
+            <h3> No Result found !</h3>
+            <p>
+                No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
+            </p>
+            <a href="/cgi-bin/koha/catalogue/search.pl" title="New search">Perform a new search</a>
+        <!-- TMPL_ELSE -->
+            <h3> No result found !</h3>
+            <p>
+            You did not specify any search criteria.
+            </p>
+            <a href="/cgi-bin/koha/catalogue/search.pl" title="New search">Perform a new search</a>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+    
+    <!-- TMPL_IF NAME="query_error" -->
+        <br /><br />
+        Error : 
+        <span  class="problem">
+            <!-- TMPL_VAR NAME="query_error" -->
+        </span>
+    <!-- /TMPL_IF -->
+    
+    <!-- Search Results Table -->
+    <!-- TMPL_IF NAME="total" -->
+        <!-- TMPL_IF NAME="scan" -->
+            <h1>Scan Index:</h1>
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
+            <table>
+                <tr>
+                    <td>
+                        Scan Index for: <input type="text" name="qf" id="scan-index" size="35" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="scan-index">Indexed in:</label>
+                        <select name="idx" id="scan-index">
+                            <option value="">Any Word</option>
+                            <option value="any/phr:">Any Phrase</option>
+                            <option value="ti:">Title</option>
+                            <option value="ti,phr:">Title Phrase</option>
+                            <option value="au,phr:">Author</option>
+                            <option value="su:">Subject</option>
+                            <option value="su,phr:">Subject Phrase</option>
+                            <option value="se:">Series</option>
+                            <option value="pb:">Publisher</option>
+                            <option value="nt:">Notes</option>
+                            <option value="se:">Series Title</option>
+                            <option value="sn:">ISBN</option>
+                            <option value="ss:">ISSN</option>
+                        </select>
+                        <input type="hidden" name="scan" value="1" />
+                    </td>
+                </tr>
+            </table>
+            </form>
+    
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
+            <table>
+                <tr>
+                    <th>Term/Phrase</th>
+                    <th>Count</th>
+                </tr>
+                <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+                    <tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
+                        <td>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                        </td>
+                        <td>
+                            <!-- TMPL_VAR NAME="subtitle" -->
+                        </td>
+                    </tr>
+                <!-- /TMPL_LOOP -->
+            </table>
+            </form>
+        <!-- TMPL_ELSE -->
+            
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="myform" id="mainform">
+            
+                <!-- TMPL_IF NAME="searchdesc" -->
+                    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
+                <!-- /TMPL_IF -->
+            
+                <div class="searchresults">
+                
+                    <!-- RE-SORT START -->
+                    <!-- TMPL_IF NAME="sort_by_loop" -->
+                    <p>
+                    Re-sort results
+                    <select id="sort_by" name="sort_by" onChange="document.myform.submit();">
+                        <option value="">Field-weighted, Relevance Ranked</option>
+                        <!-- TMPL_LOOP NAME="sort_by_loop" -->
+                            <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                    </p>
+                    <!-- /TMPL_IF -->
+                    <!-- RESORT END -->
+                    
+                    <!-- ######### -->
+                    
+                    <!-- FACETS START -->
+                    <!-- TMPL_IF NAME="opacfacets" -->
+                    <div id="facets" style="display:inline;" >
+                    <h2>Refine Your Search</h2>
+                    <ul>
+                    <!-- TMPL_LOOP NAME="facets_loop" -->
+                    <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
+                        <ul>
+                        <!-- TMPL_LOOP NAME="facets" -->
+                            <li>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
+                                    <!-- TMPL_VAR NAME="facet_label_value" -->
+                                </a> (<!-- TMPL_VAR NAME="facet_count" -->)
+                            </li>
+                        <!-- /TMPL_LOOP -->
+                        <!-- TMPL_IF NAME="expandable" -->
+                            <li class="showmore">
+                                <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
+                                    Show More
+                                </a>
+                            </li>
+                        <!-- /TMPL_IF -->
+                        </ul>
+                    </li>
+                    <!-- /TMPL_LOOP -->
+                    </ul>
+                    </div>
+                    <!-- /TMPL_IF -->
+                    <!-- FACETS END -->
+                    
+                    <!-- ######### -->
+
+                    <!-- TABLE RESULTS START -->
+                    
+                <table>
+                    <tr>
+                        <th>&nbsp;</th>
+                        <th>Title</th>
+                        <th>Location</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                        <!-- Actual Search Results -->
+                        <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
+                            <!-- TMPL_IF name="even" -->
+                                <tr class="highlight">
+                            <!-- TMPL_ELSE -->
+                                <tr>
+                            <!-- /TMPL_IF -->
+                                <td>
+                            <!-- TMPL_IF NAME="AmazonContent" -->
+                                    <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                        <img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" />
+                                    </a>
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_IF name="imageurl" -->
+                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->"/>
+                                <!-- TMPL_ELSE -->
+                                    <!-- TMPL_VAR name="description" -->
+                                <!-- /TMPL_IF -->
+                            <!-- /TMPL_IF -->
+                                </td>
+                            <td>
+                                <p>
+                                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                                        <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                            <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                        </a>
+                                    <!-- TMPL_ELSE -->
+                                        <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                                            <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                            </a>
+                                        <!-- TMPL_ELSE -->
+                                            <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                            </a>
+                                        <!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
+                                </p>
+                                <!-- TMPL_IF name="summary" -->
+                                    <p><!-- TMPL_VAR name="summary" --></p>
+                                <!-- TMPL_ELSE -->
+                                    <p>
+                                        <!-- TMPL_IF NAME="author" -->
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a>
+                                        <!-- TMPL_ELSE -->
+                                            &nbsp;
+                                        <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
+                                    </p>
+                                <!-- /TMPL_IF -->
+                                </td>
+                                <td style="white-space: nowrap">
+                                    <!-- TMPL_IF NAME="items_loop" -->
+                                        <span class="available">
+                                        <!-- TMPL_LOOP NAME="items_loop" -->
+                                            <!-- <!-- TMPL_VAR NAME="branchcode" --> -->
+                                            <!-- TMPL_VAR NAME="branchname" -->
+                                            (<!-- TMPL_VAR NAME="count" -->
+                                                <!-- TMPL_IF name="itemcallnumber" --> <i><!-- TMPL_VAR name="itemcallnumber" -->)</i><!-- /TMPL_IF -->
+                                         <!-- TMPL_IF name="location" --> <i>(<!-- TMPL_VAR name="location" -->)</i><!-- /TMPL_IF -->
+                                         <!-- TMPL_IF name="classification" -->
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="classification" -->
+                                            </a>
+                                        <!-- /TMPL_IF -->
+                                         <br />
+                                        <!-- /TMPL_LOOP -->
+                                        </span>
+                                    <!-- /TMPL_IF -->
+                                    <span class="unavailable">
+                                        <!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->),<br /> <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
+                                    </span>
+                                </td>
+                                <td>
+                                    <!-- TMPL_IF NAME="norequests" -->
+                                        Not Reserveable
+                                    <!-- TMPL_ELSE -->
+                                        <a class="reserve" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                                            Reserves
+                                        </a>
+                                    <!-- /TMPL_IF -->
+                                </td>
+                            </tr>
+                        <!-- /TMPL_LOOP -->
+                </table>
+                </div>
+            </form>
+        <!-- /TMPL_IF -->
+    
+        <!-- TMPL_IF NAME="PAGE_NUMBERS" -->
+            <div class="pages">
+                <!-- Row of numbers corresponding to search result pages -->
+                <!-- TMPL_IF NAME="previous_page_offset" -->
+                    <a class="nav" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="previous_page_offset" -->">
+                        &lt;&lt; Previous
+                    </a>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_LOOP NAME="PAGE_NUMBERS" -->
+                    <!-- TMPL_IF NAME="highlight" -->
+                        <span class="current"><!-- TMPL_VAR NAME="pg" --></span>
+                    <!-- TMPL_ELSE -->
+                        <a class="nav" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->">
+                            <!-- TMPL_VAR NAME="pg" -->
+                        </a>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_IF NAME="next_page_offset" -->
+                    <a class="nav" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="next_page_offset" -->">
+                        Next &gt;&gt;
+                    </a>
+                <!-- /TMPL_IF -->
+            </div>
+        <!-- /TMPL_IF -->
+    
+        <!-- TMPL_IF NAME="outer_sup_results_loop" -->
+            <h3><!-- TMPL_LOOP NAME="outer_sup_results_loop" --></h3>
+                <!-- TMPL_IF NAME="inner_sup_results_loop" -->
+                <!-- TMPL_VAR NAME="servername" -->
+                <!-- TMPL_LOOP NAME="inner_sup_results_loop" -->
+                    <div><a href="<!-- TMPL_VAR NAME="link" -->"><!-- TMPL_VAR NAME="title" --></a></div>
+                <!-- /TMPL_LOOP -->
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+    <!-- /TMPL_IF -->
+    
+    <!-- TMPL_ELSE -->
+    
+    
+    <!-- /TMPL_IF -->
+
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

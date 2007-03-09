@@ -1,0 +1,208 @@
+# $Id$
+
+# indexing rules. It
+# results in a server which provides a passable Bath level 0 and 1 service
+############################################################################
+# IMPORTANT : this file MUST be renamed record.abs : this name is "hardcoded" in zebra
+# the default record.abs is designed for MARC21.
+############################################################################
+# NOTE: This is designed to be used with the grs.marcxml input filter
+# for ISO2709 (ANSI Z39.2) or grs.xml for MARCXML-formatted records. It
+# won't work for the old grs.marc input filter, which yields a different
+# internal structure.
+
+encoding utf-8
+name marc21
+attset bib1.att
+attset gils.att
+esetname F @
+esetname B @
+
+marc usmarc.mar
+systag sysno rank
+xpath disable
+
+all any
+melm 008		 date-entered-on-file:n:range(data,0,6),date-entered-on-file:s:range(data,0,6),date1:n:range(data,7,4),date1:s:range(data,7,4),date2:n:range(data,11,4),date2:s:range(data,11,4),ff8-22:w:range(data,22,1),language:w:range(data,35,3),ff8-33:w:range(data,33,1),ff8-34:w:range(data,34,1)
+
+melm 007		ff7-00:w:range(data,0,1),ff7-01:w:range(data,1,1),ff7-02:w:range(data,2,1)
+
+melm 010$a		ISBN:w
+# wrong ISBN
+melm 010$z		ISBN:w
+melm 011$a		ISSN:w
+# cancelled ISSN
+melm 011$y		ISSN:w
+# wrong ISSN
+melm 011$z		ISSN:w
+
+# Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
+melm 001        Local-number,Local-number:n
+melm 090$9      Local-number,Local-number:n
+melm 680$b		LC-call-number:s
+melm 680		LC-call-number
+#melm 001		Identifier-standard:w
+
+melm 200$b      Material-type
+#melm 200$b      Koha-Itemtype
+
+#melm 100$9		Cross-Reference	!:w
+
+melm 101$a		Code-Language:w
+
+############ AUTHORS ##################
+# main author
+melm 200$f		author,author:p,author:s
+# other authors
+melm 200$g		author,author:p
+# physical author
+melm 700$9      	Koha-Auth-Number,Koha-Auth-Number:n
+melm 700$a		author
+melm 700		author,author:p
+
+melm 701		author,author:p
+melm 702		author,author:p
+# collective author
+melm 710		author,author:p
+melm 711		author,author:p
+melm 712		author,author:p
+
+############## TITLE ##################
+# main title
+melm 200$a		title:w,title:p,title:s
+# title 2
+melm 200$c		title:w,title:p
+# // title
+melm 200$d		title:w,title:p
+# subtitle
+melm 200$e		title:w,title:p
+
+
+
+#Series
+melm 225$a      Title-series
+melm 225$d      Title-series
+#Subtitle
+melm 225$e      Title-series 
+#Authors
+melm 225$f      Author,Author-Title-series
+#Part-Title
+melm 225$h      Title-series 
+#Part Number
+melm 225$i      Title-series 
+#Volume
+melm 225$v      Title-series 
+melm 225$x      ISSN
+
+melm 230$a      Electronic-Ressource
+
+# authorities title
+melm 500		title
+melm 501		title
+melm 503		title
+melm 510		title
+melm 512		title
+melm 513		title
+melm 514		title
+melm 515		title
+melm 516		title
+melm 517		title
+melm 518		title
+melm 519		title
+melm 520		title
+melm 530		title
+melm 531		title
+melm 532		title
+melm 540		title
+melm 541		title
+melm 545		title
+
+melm 210$a		Place-publication	!:w,!:p
+melm 210$x		Publisher		!:w,!:p
+melm 210$d		Date,Date:s,		!:y
+
+
+########## NOTES #################
+melm 300$a		Note	!:w,!:p
+melm 301$a		Note	!:w,!:p
+melm 302$a		Note	!:w,!:p
+melm 303$a		Note	!:w,!:p
+melm 304$a		Note	!:w,!:p
+melm 305$a		Note	!:w,!:p
+melm 306$a		Note	!:w,!:p
+melm 307$a		Note	!:w,!:p
+melm 308$a		Note	!:w,!:p
+melm 309$a		Note	!:w,!:p
+melm 310$a		Note	!:w,!:p
+melm 311$a		Note	!:w,!:p
+melm 312$a		Note	!:w,!:p
+melm 313$a		Note	!:w,!:p
+melm 314$a		Note	!:w,!:p
+melm 315$a		Note	!:w,!:p
+melm 316$a		Note	!:w,!:p
+melm 317$a		Note	!:w,!:p
+melm 318$a		Note	!:w,!:p
+melm 320$a		Note	!:w,!:p
+melm 321$a		Note	!:w,!:p
+melm 322$a		Note	!:w,!:p
+melm 323$a		Note	!:w,!:p
+melm 324$a		Note	!:w,!:p
+melm 325$a		Note	!:w,!:p
+melm 326$a		Note	!:w,!:p
+melm 327$a		Note	!:w,!:p
+melm 328$a		Note	!:w,!:p
+melm 330$a		Note	!:w,!:p
+melm 332$a		Note	!:w,!:p
+melm 333$a		Note	!:w,!:p
+melm 336$a		Note	!:w,!:p
+melm 337$a		Note	!:w,!:p
+melm 345$a		Note	!:w,!:p
+
+########### SUBJECTS (6xx) ##################
+melm 600$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 601$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 602$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 603$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 604$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n
+
+melm 600$a		author
+melm 600		subject-heading,subject-heading:p
+melm 601$a		author
+melm 601		subject-heading,subject-heading:p
+melm 604$a		author
+melm 604$t		title
+melm 610$t		title
+melm 605$a		title
+melm 606		subject-heading,subject-heading:p
+melm 610		subject-heading
+
+
+
+
+######################
+
+
+
+
+#melm 650$9		Controlled-Subject-Index	
+
+melm 676$a		Dewey-classification:w,Dewey-classification:s
+
+#############"# item information (based on 995) ###############
+#melm 995$j		LC-card-number:s
+
+#melm 995$k		Call-Number
+melm 995$k		Local-classification
+
+#melm 952$a		Local-classification
+#melm 995$a		Record-source
+melm 995$a		Host-item
+#melm 995$c		Host-item
+#melm 995$d		Host-item
+melm 995$f		Stock-number
+melm 995$s      popularity:n,popularity:s
+#melm 952$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
+#melm 952		Local-classification
