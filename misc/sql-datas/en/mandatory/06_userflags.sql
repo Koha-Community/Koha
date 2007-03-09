@@ -1,17 +1,16 @@
-INSERT INTO `userflags` VALUES 
-	(0,'superlibrarian','Access to all librarian functions',0),
-	(1,'circulate','Circulate books',0),
-	(2,'catalogue','View Catalogue (Librarian Interface)',0),
-	(3,'parameters','Set Koha system paramters',0),
-	(4,'borrowers','Add or modify borrowers',0),
-	(5,'permissions','Set user permissions',0),
-	(6,'reserveforothers','Reserve books for patrons',0),
-	(7,'borrow','Borrow books',1),
-	(9,'editcatalogue','Edit Catalogue (Modify bibliographic/holdings data)',0),
-	(10,'updatecharges','Update borrower charges',0),
-	(11,'acquisition','Acquisition and/or suggestion management',0),
-	(12,'management','Set library management parameters',0),
-	(13,'tools','Use tools (export, import, barcodes)',0),
-	(14,'editauthorities','allow to edit authorities',0),
-	(15,'serials','allow to manage serials subscriptions',0),
-	(16,'reports','allow to access to the reports module',0);
+INSERT INTO `systempreferences` VALUES(0,'superlibrarian','Access to all librarian functions',0);
+INSERT INTO `systempreferences` VALUES(1,'circulate','Circulate books',0);
+INSERT INTO `systempreferences` VALUES(2,'catalogue','View Catalogue (Librarian Interface)',0);
+INSERT INTO `systempreferences` VALUES(3,'parameters','Set Koha system paramters',0);
+INSERT INTO `systempreferences` VALUES(4,'borrowers','Add or modify borrowers',0);
+INSERT INTO `systempreferences` VALUES(5,'permissions','Set user permissions',0);
+INSERT INTO `systempreferences` VALUES(6,'reserveforothers','Reserve books for patrons',0);
+INSERT INTO `systempreferences` VALUES(7,'borrow','Borrow books',1);
+INSERT INTO `systempreferences` VALUES(9,'editcatalogue','Edit Catalogue (Modify bibliographic/holdings data)',0);
+INSERT INTO `systempreferences` VALUES(10,'updatecharges','Update borrower charges',0);
+INSERT INTO `systempreferences` VALUES(11,'acquisition','Acquisition and/or suggestion management',0);
+INSERT INTO `systempreferences` VALUES(12,'management','Set library management parameters',0);
+INSERT INTO `systempreferences` VALUES(13,'tools','Use tools (export, import, barcodes)',0);
+INSERT INTO `systempreferences` VALUES(14,'editauthorities','allow to edit authorities',0);
+INSERT INTO `systempreferences` VALUES(15,'serials','allow to manage serials subscriptions',0);
+INSERT INTO `systempreferences` VALUES(16,'reports','allow to access to the reports module',0);
