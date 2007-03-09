@@ -106,3 +106,4 @@ sub check_search_inside {
 Joshua Ferraro <jmf@liblime.com>
 
 =cut
+1;

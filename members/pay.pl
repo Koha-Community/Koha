@@ -32,7 +32,7 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Members;
-use C4::Accounts2;
+use C4::Accounts;
 use C4::Stats;
 use C4::Koha;
 use C4::Circulation::Fines;

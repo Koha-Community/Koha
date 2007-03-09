@@ -24,7 +24,7 @@ require Exporter;
 use C4::Context;
 use Date::Calc qw/Today/;
 use vars qw($VERSION @ISA @EXPORT);
-use C4::Accounts2;
+use C4::Accounts;
 use Date::Manip qw/UnixDate/;
 use C4::Log; # logaction
 

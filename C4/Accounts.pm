@@ -1,5 +1,4 @@
-package C4::Accounts2; #assumes C4/Accounts2
-
+package C4::Accounts;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -38,7 +37,7 @@ C4::Accounts - Functions for dealing with Koha accounts
 
 =head1 SYNOPSIS
 
-  use C4::Accounts2;
+use C4::Accounts;
 
 =head1 DESCRIPTION
 
@@ -72,31 +71,31 @@ C<$env> is ignored.
 sub checkaccount  {
   #take borrower number
   #check accounts and list amounts owing
-	my ($env,$borrowernumber,$dbh,$date)=@_;
-	my $select="SELECT SUM(amountoutstanding) AS total
-			FROM accountlines
-		WHERE borrowernumber = ?
-			AND amountoutstanding<>0";
-	my @bind = ($borrowernumber);
-	if ($date && $date ne ''){
-	$select.=" AND date < ?";
-	push(@bind,$date);
-	}
-	#  print $select;
-	my $sth=$dbh->prepare($select);
-	$sth->execute(@bind);
-	my $data=$sth->fetchrow_hashref;
-	my $total = $data->{'total'} || 0;
-	$sth->finish;
-	# output(1,2,"borrower owes $total");
-	#if ($total > 0){
-	#  # output(1,2,"borrower owes $total");
-	#  if ($total > 5){
-	#    reconcileaccount($env,$dbh,$borrowernumber,$total);
-	#  }
-	#}
-	#  pause();
-	return($total);
+    my ($env,$borrowernumber,$dbh,$date)=@_;
+    my $select="SELECT SUM(amountoutstanding) AS total
+            FROM accountlines
+        WHERE borrowernumber = ?
+            AND amountoutstanding<>0";
+    my @bind = ($borrowernumber);
+    if ($date && $date ne ''){
+    $select.=" AND date < ?";
+    push(@bind,$date);
+    }
+    #  print $select;
+    my $sth=$dbh->prepare($select);
+    $sth->execute(@bind);
+    my $data=$sth->fetchrow_hashref;
+    my $total = $data->{'total'} || 0;
+    $sth->finish;
+    # output(1,2,"borrower owes $total");
+    #if ($total > 0){
+    #  # output(1,2,"borrower owes $total");
+    #  if ($total > 5){
+    #    reconcileaccount($env,$dbh,$borrowernumber,$total);
+    #  }
+    #}
+    #  pause();
+    return($total);
 }
 
 =head2 recordpayment
@@ -350,20 +349,20 @@ sub manualinvoice{
   }
   if ($type eq 'M'){
     $desc.="Sundry";
-  }		
-  		
+  }     
+        
   if ($type eq 'L' && $desc eq ''){
     
     $desc="Lost Item";
   }
   if ($type eq 'REF'){
-	$desc.="Cash Refund";    
-	$amountleft=refund('',$borrowernumber,$amount);
+    $desc.="Cash Refund";    
+    $amountleft=refund('',$borrowernumber,$amount);
   }
   if(($type eq 'L') or ($type eq 'F') or ($type eq 'A') or ($type eq 'N') or ($type eq 'M') ){
-  $notifyid=1;	
+  $notifyid=1;  
   }
- 	
+    
   if ($itemnum ne ''){
     $desc.=" ".$itemnum;
     my $sth=$dbh->prepare("INSERT INTO  accountlines
@@ -372,9 +371,9 @@ sub manualinvoice{
 #     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
      $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$notifyid);
   } else {
-    my $sth=$dbh->prepare("INSERT INTO	accountlines
-			(borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,notify_id)
-			VALUES (?, ?, now(), ?, ?, ?, ?,?)");
+    my $sth=$dbh->prepare("INSERT INTO  accountlines
+            (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,notify_id)
+            VALUES (?, ?, now(), ?, ?, ?, ?,?)");
     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft,$notifyid);
   }
 }

@@ -23,7 +23,7 @@
 
 use strict;
 use CGI;
-use C4::Accounts2;
+use C4::Accounts;
 
 my $input=new CGI;
 

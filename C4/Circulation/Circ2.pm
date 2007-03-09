@@ -26,7 +26,7 @@ use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Biblio;
-use C4::Accounts2;
+use C4::Accounts;
 use Date::Calc qw(
   Today
   Today_and_Now
