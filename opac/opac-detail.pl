@@ -25,11 +25,12 @@ use CGI;
 use C4::Auth;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Interface::CGI::Output;
-use HTML::Template;
 use C4::Biblio;
-use C4::Search;
 use C4::Amazon;
 use C4::Review;
+use C4::Serials;
+use C4::Members;
+
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -42,16 +43,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblionumber = $query->param('bib');
+my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 $template->param( biblionumber => $biblionumber );
 
 # change back when ive fixed request.pl
-my @items = &ItemInfo( undef, $biblionumber, 'opac' );
-my $dat = &bibdata($biblionumber);
-my ( $authorcount,        $addauthor )      = &addauthor($biblionumber);
-my ( $webbiblioitemcount, @webbiblioitems ) = &getwebbiblioitems($biblionumber);
-my ( $websitecount,       @websites )       = &getwebsites($biblionumber);
-
+my @items = &GetItemsInfo( $biblionumber, 'opac' );
+my $dat = &GetBiblioData($biblionumber);
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       =
@@ -69,109 +66,66 @@ foreach my $subscription (@subscriptions) {
 }
 
 $dat->{'count'} = @items;
-my @author;
-if ( $dat->{'author'} ) {
-    my %authorpush;
-    $authorpush{author} = $dat->{'author'};
-    push @author, \%authorpush;
-}
-$dat->{'additional'} = $addauthor->[0]->{'author'};
-if ( $dat->{'additional'} ) {
-    my %authorpush;
-    $authorpush{author} = $addauthor->[0]->{'author'};
-    push @author, \%authorpush;
-}
-my @title;
-foreach my $word ( split( " ", $dat->{'title'} ) ) {
-    unless ( length($word) == 4 ) {
-        $word =~ s/\%//g;
-    }
-    unless ( C4::Context->stopwords->{ uc($word) } or length($word) == 1 ) {
-        my %titlepush;
-        $titlepush{title} = $word;
-        push @title, \%titlepush;
-    }    #it's NOT a stopword => use it. Otherwise, ignore
-}
 
-for ( my $i = 1 ; $i < $authorcount ; $i++ ) {
-    $dat->{'additional'} .= " ; " . $addauthor->[$i]->{'author'};
-
-    my %authorpush;
-    $authorpush{author} = $addauthor->[$i]->{'author'};
-    push @author, \%authorpush;
-}    # for
+#adding RequestOnOpac filter to allow or not the display of plce reserve button
+# FIXME - use me or delete me.
+my $RequestOnOpac;
+if (C4::Context->preference("RequestOnOpac")) {
+	$RequestOnOpac = 1;
+}
 
 my $norequests = 1;
 foreach my $itm (@items) {
     $norequests = 0
       unless ( ( $itm->{'wthdrawn'} )
         || ( $itm->{'itemlost'} )
-        || ( $itm->{'notforloan'} )
         || ( $itm->{'itemnotforloan'} )
         || ( !$itm->{'itemnumber'} ) );
     $itm->{ $itm->{'publictype'} } = 1;
 }
 
-$template->param( norequests => $norequests );
+$template->param( norequests => $norequests, );
 
 ## get notes and subjects from MARC record
-my $marc    = C4::Context->preference("marc");
-my @results = ( $dat, );
-if ( C4::Boolean::true_p($marc) ) {
-    my $dbh = C4::Context->dbh;
-    my $bibid = &MARCfind_MARCbibid_from_oldbiblionumber( $dbh, $biblionumber );
-    my $marcflavour = C4::Context->preference("marcflavour");
-    my $marcnotesarray = &getMARCnotes( $dbh, $bibid, $marcflavour );
-    $results[0]->{MARCNOTES} = $marcnotesarray;
-    my $marcsubjctsarray = &getMARCsubjects( $dbh, $bibid, $marcflavour );
-    $results[0]->{MARCSUBJCTS} = $marcsubjctsarray;
+    my $dbh              = C4::Context->dbh;
+    my $marcflavour      = C4::Context->preference("marcflavour");
+    my $record           = GetMarcBiblio($biblionumber);
+    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
+    my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
+    my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
+	my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 
-    # 	$template->param(MARCNOTES => $marcnotesarray);
-    # 	$template->param(MARCSUBJCTS => $marcsubjctsarray);
+    $template->param(
+        MARCNOTES   => $marcnotesarray,
+        MARCSUBJCTS => $marcsubjctsarray,
+        MARCAUTHORS => $marcauthorsarray,
+		MARCSERIES  => $marcseriesarray
+    );
+
+my @results = ( $dat, );
+foreach ( keys %{$dat} ) {
+    $template->param( "$_" => $dat->{$_} . "" );
 }
 
-# get the number of reviews
-my $reviewcount = numberofreviews($biblionumber);
-$dat->{'reviews'} = $reviewcount;
-
-my @results      = ( $dat, );
-my $resultsarray = \@results;
-my $itemsarray   = \@items;
-my $webarray     = \@webbiblioitems;
-my $sitearray    = \@websites;
-my $titlewords   = \@title;
-my $authorwords  = \@author;
-
-#coping with subscriptions
-my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       =
-  GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
-my @subs;
-foreach my $subscription (@subscriptions) {
-    warn "subsid :" . $subscription->{subscriptionid};
-    my %cell;
-    $cell{subscriptionid}    = $subscription->{subscriptionid};
-    $cell{subscriptionnotes} = $subscription->{notes};
-
-    #get the three latest serials.
-    $cell{latestserials} =
-      GetLatestSerials( $subscription->{subscriptionid}, 3 );
-    push @subs, \%cell;
+my $reviews = getreviews( $biblionumber, 1 );
+foreach ( @$reviews ) {
+    my $borrower_number_review = $_->{borrowernumber};
+    my $borrowerData           = GetMember('',$borrower_number_review);
+    # setting some borrower info into this hash
+    $_->{title}     = $borrowerData->{'title'};
+    $_->{surname}   = $borrowerData->{'surname'};
+    $_->{firstname} = $borrowerData->{'firstname'};
 }
 
 $template->param(
-    BIBLIO_RESULTS      => $resultsarray,
-    ITEM_RESULTS        => $itemsarray,
-    WEB_RESULTS         => $webarray,
-    SITE_RESULTS        => $sitearray,
+    ITEM_RESULTS        => \@items,
     subscriptionsnumber => $subscriptionsnumber,
-    LibraryName         => C4::Context->preference("LibraryName"),
-    suggestion          => C4::Context->preference("suggestion"),
-    virtualshelves      => C4::Context->preference("virtualshelves"),
-    titlewords          => $titlewords,
-    authorwords         => $authorwords,
-    reviewson           => C4::Context->preference("marc"),
+    biblionumber        => $biblionumber,
+    subscriptions       => \@subs,
+    subscriptionsnumber => $subscriptionsnumber,
+    reviews             => $reviews
 );
+
 ## Amazon.com stuff
 #not used unless preference set
 if ( C4::Context->preference("AmazonContent") == 1 ) {
@@ -210,6 +164,6 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
         }
     }
     $template->param( SIMILAR_PRODUCTS => \@products );
-    $template->param( REVIEWS          => \@reviews );
+    $template->param( AMAZONREVIEWS    => \@reviews );
 }
 output_html_with_http_headers $query, $cookie, $template->output;

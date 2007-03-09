@@ -14,7 +14,8 @@ use C4::Reserves2;
 use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use C4::Search;
+use C4::Members;
+use C4::Biblio;
 use C4::Serials;
 
 my $query = new CGI;
@@ -55,8 +56,8 @@ if($ok){
 	    $count--;
         }
     }
-    my ($count2,@bibitems) = bibitems($biblio);
-    my @itemresults = ItemInfo($env, $subs->{'biblionumber'}, 'intra');    
+    my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
+    my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
     my $branch = $itemresults[0]->{'holdingbranch'};
     my $const = 'o';
     my $notes;
@@ -66,12 +67,12 @@ if($ok){
                                  AND cancellationdate is NULL AND (found <> 'F' or found is NULL)");
         $sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
         my $data = $sth->fetchrow_hashref;
-#	warn Dumper($data);
+
 #       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
 	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
 	    UpdateReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
         } else {
-            CreateReserve(\$env,$branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
+        CreateReserve(\$env,$branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
 	}
     }
     
@@ -81,16 +82,17 @@ if($ok){
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				flagsrequired => {serials => 1},
 				debug => 1,
-				});    
+				});
+    $template->param("libraryname"=>C4::Context->preference("LibraryName"));
 } else {
     ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/routing-preview.tmpl",
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				flagsrequired => {serials => 1},
 				debug => 1,
 				});
 }    

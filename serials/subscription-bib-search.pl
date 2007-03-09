@@ -18,154 +18,178 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use strict;
 
+=head1 NAME
+
+subscription-bib-search.pl
+
+=head1 DESCRIPTION
+
+this script search among all existing subscriptions.
+
+=head1 PARAMETERS
+
+=over 4
+
+=item op
+op use to know the operation to do on this template.
+ * do_search : to search the subscription.
+
+Note that if op = do_search there are some others params specific to the search :
+    marclist,and_or,excluding,operator,value
+
+=item startfrom
+to multipage gestion.
+
+
+=back
+
+=cut
+
+
+use strict;
+require Exporter;
 use CGI;
 use C4::Koha;
 use C4::Auth;
 use C4::Context;
-use C4::Search;
-use C4::Auth;
+use C4::Output;
 use C4::Interface::CGI::Output;
+use C4::Search;
 use C4::Biblio;
-use C4::Acquisition;
-use C4::Koha; # XXX subfield_is_koha_internal_p
 
-
-# Creates a scrolling list with the associated default value.
-# Using more than one scrolling list in a CGI assigns the same default value to all the
-# scrolling lists on the page !?!? That's why this function was written.
-
-my $query=new CGI;
-my $type=$query->param('type');
-my $op = $query->param('op');
+my $input=new CGI;
+# my $type=$query->param('type');
+my $op = $input->param('op');
 my $dbh = C4::Context->dbh;
 
-my $startfrom=$query->param('startfrom');
-$startfrom=0 if(!defined $startfrom);
+my $startfrom=$input->param('startfrom');
+$startfrom=0 unless $startfrom;
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
 
 if ($op eq "do_search") {
-	my @kohafield = $query->param('kohafield');
-	my @and_or = $query->param('and_or');
-	my @relation = $query->param('relation');
-	my @value = $query->param('value');
-	my $order=$query->param('order');
-	$resultsperpage= $query->param('resultsperpage');
-	$resultsperpage = 9 if(!defined $resultsperpage);
-	# builds tag and subfield arrays
-	
-	my ($total,$facets,@results) = ZEBRAsearch_kohafields(\@kohafield,\@value,\@relation,$order,\@and_or,1,"",$startfrom,$resultsperpage,"intranet");
- 										
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "serials/result.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
+    my $query = $input->param('q');
 
-	# multi page display gestion
-	my $displaynext=0;
-	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
-		$displaynext = 1;
-	}
+    $resultsperpage= $input->param('resultsperpage');
+    $resultsperpage = 19 if(!defined $resultsperpage);
 
-	my @field_data = ();
+    my ($error,$marcrecords) = SimpleSearch($query);
+    my $total = scalar @$marcrecords;
+
+    if (defined $error) {
+        $template->param(query_error => $error);
+        warn "error: ".$error;
+        output_html_with_http_headers $input, $cookie, $template->output;
+        exit;
+    }
+    my @results;
+    warn "total=".$total;
+    
+    for(my $i=0;$i<$total;$i++) {
+        my %resultsloop;
+        my $marcrecord = MARC::File::USMARC::decode($marcrecords->[$i]);
+        my $biblio = MARCmarc2koha(C4::Context->dbh,$marcrecord,'');
+
+        #build the hash for the template.
+        $resultsloop{highlight}       = ($i % 2)?(1):(0);
+        $resultsloop{title}           = $biblio->{'title'};
+        $resultsloop{subtitle}        = $biblio->{'subtitle'};
+        $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
+        $resultsloop{author}          = $biblio->{'author'};
+        $resultsloop{publishercode}   = $biblio->{'publishercode'};
+        $resultsloop{publicationyear} = $biblio->{'publicationyear'};
+
+        push @results, \%resultsloop;
+    }
+    
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/result.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {serials => 1},
+                flagsrequired => {catalogue => 1},
+                debug => 1,
+                });
+
+    # multi page display gestion
+    my $displaynext=0;
+    my $displayprev=$startfrom;
+    if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
+        $displaynext = 1;
+    }
 
 
-	for(my $i = 0 ; $i <= $#value ; $i++)
-	{
-		push @field_data, { term => "kohafield", val=>$kohafield[$i] };
-		push @field_data, { term => "and_or", val=>$and_or[$i] };
-		push @field_data, { term => "relation", val=>$relation[$i] };
-		push @field_data, { term => "value", val=>$value[$i] };
-	}
+    my @numbers = ();
 
-	my @numbers = ();
+    if ($total>$resultsperpage)
+    {
+        for (my $i=1; $i<$total/$resultsperpage+1; $i++)
+        {
+            if ($i<16)
+            {
+                my $highlight=0;
+                ($startfrom==($i-1)) && ($highlight=1);
+                push @numbers, { number => $i,
+                    highlight => $highlight ,
+                    searchdata=> \@results,
+                    startfrom => ($i-1)};
+            }
+        }
+    }
 
-	if ($total>$resultsperpage)
-	{
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++)
-		{
-			if ($i<16)
-			{
-	    		my $highlight=0;
-	    		($startfrom==($i-1)) && ($highlight=1);
-	    		push @numbers, { number => $i,
-					highlight => $highlight ,
-					searchdata=> \@field_data,
-					startfrom => ($i-1)};
-			}
-    	}
-	}
+    my $from = $startfrom*$resultsperpage+1;
+    my $to;
 
-	my $from = $startfrom*$resultsperpage+1;
-	my $to;
+    if($total < (($startfrom+1)*$resultsperpage))
+    {
+        $to = $total;
+    } else {
+        $to = (($startfrom+1)*$resultsperpage);
+    }
+    $template->param(
+                            query => $query,
+                            resultsloop => \@results,
+                            startfrom=> $startfrom,
+                            displaynext=> $displaynext,
+                            displayprev=> $displayprev,
+                            resultsperpage => $resultsperpage,
+                            startfromnext => $startfrom+1,
+                            startfromprev => $startfrom-1,
+                            total=>$total,
+                            from=>$from,
+                            to=>$to,
+                            numbers=>\@numbers,
+                            );
+} # end of if ($op eq "do_search")
+ else {
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {catalogue => 1, serials=>1},
+                debug => 1,
+                });
 
- 	if($total < (($startfrom+1)*$resultsperpage))
-	{
-		$to = $total;
-	} else {
-		$to = (($startfrom+1)*$resultsperpage);
-	}
-	$template->param(result => \@results,
-							startfrom=> $startfrom,
-							displaynext=> $displaynext,
-							displayprev=> $displayprev,
-							resultsperpage => $resultsperpage,
-							startfromnext => $startfrom+1,
-							startfromprev => $startfrom-1,
-							searchdata=>\@field_data,
-							total=>$total,
-							from=>$from,
-							to=>$to,
-							numbers=>\@numbers,
-							);
-} else {
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
-	my $sth=$dbh->prepare("Select itemtype,description from itemtypes order by description");
-	$sth->execute;
-	my  @itemtype;
-	my %itemtypes;
-	push @itemtype, "";
-	$itemtypes{''} = "";
-	while (my ($value,$lib) = $sth->fetchrow_array) {
-		push @itemtype, $value;
-		$itemtypes{$value}=$lib;
-	}
+    my  %itemtypes = GetItemTypes();
+    my @values = values %itemtypes;
+    my $CGIitemtype=CGI::scrolling_list(
+            -name     => 'value',
+            -values   => \@values,
+            -labels   => \%itemtypes,
+            -size     => 1,
+            -multiple => 0
+    );
 
-	my $CGIitemtype=CGI::scrolling_list( -name     => 'value',
-				-values   => \@itemtype,
- 				-labels   => \%itemtypes,
-				-size     => 1,
-	 			-tabindex=>'',
-				-multiple => 0 );
-	$sth->finish;
-
-	$template->param(
-			CGIitemtype => $CGIitemtype,
-			);
+    $template->param(
+            CGIitemtype => $CGIitemtype,
+    );
 }
 
-
 # Print the page
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:
 # tab-width: 4

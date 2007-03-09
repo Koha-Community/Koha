@@ -1,25 +1,48 @@
 #!/usr/bin/perl
 
-# Routing.pl script used to create a routing list for a serial subscription
-# In this instance it is in fact a setting up of a list of reserves for the item
-# where the hierarchical order can be changed on the fly and a routing list can be
-# printed out
+# This file is part of Koha
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+
+=head1 Routing.pl
+
+script used to create a routing list for a serial subscription
+In this instance it is in fact a setting up of a list of reserves for the item
+where the hierarchical order can be changed on the fly and a routing list can be
+printed out
+
+=cut
+
 use strict;
 use CGI;
 use C4::Koha;
 use C4::Auth;
 use C4::Date;
+use C4::Output;
 use C4::Acquisition;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use C4::Search;
+
+use C4::Members;
 use C4::Serials;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
 my $serialseq = $query->param('serialseq');
 my $routingid = $query->param('routingid');
-my $bornum = $query->param('bornum');
+my $borrowernumber = $query->param('borrowernumber');
 my $notes = $query->param('notes');
 my $op = $query->param('op');
 my $date_selected = $query->param('date_selected');
@@ -30,7 +53,7 @@ if($op eq 'delete'){
 }
 
 if($op eq 'add'){
-    addroutingmember($bornum,$subscriptionid);
+    addroutingmember($borrowernumber,$subscriptionid);
 }
 if($op eq 'save'){
     my $sth = $dbh->prepare("UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?");
@@ -40,7 +63,7 @@ if($op eq 'save'){
     
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my $subs = GetSubscription($subscriptionid);
-my ($count,@serials) = old_getserials($subscriptionid);
+my ($count,@serials) = GetSerials($subscriptionid);
 my ($serialdates) = GetLatestSerials($subscriptionid,$count);
 
 my @dates;
@@ -62,7 +85,7 @@ my ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				flagsrequired => {serials => 1},
 				debug => 1,
 				});
 # my $date;
@@ -100,7 +123,7 @@ for(my $i=0;$i<$routing;$i++){
     
     push(@results, $data);
 }
-# warn Dumper(@results);
+
 # for adding routing list
 my $new;
 if ($op eq 'new') {

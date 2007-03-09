@@ -54,73 +54,104 @@ this script modify the status of a subscription to ACCEPTED or to REJECTED
 =item suggestedbyme
 
 =item op
+
 op can be :
  * aorr_confirm : to confirm accept or reject
  * delete_confirm : to confirm the deletion
-
+ * accepted : to display only accepted. 
+ 
 =back
 
 
 =cut
 
-
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
-use C4::Auth;       # get_template_and_user
+
+use C4::Auth;    # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::Suggestions;
+use C4::Koha;    # GetAuthorisedValue
 
-my $input = new CGI;
-my $title = $input->param('title');
-my $author = $input->param('author');
-my $note = $input->param('note');
-my $copyrightdate =$input->param('copyrightdate');
-my $publishercode = $input->param('publishercode');
-my $volumedesc = $input->param('volumedesc');
+my $input           = new CGI;
+my $title           = $input->param('title');
+my $author          = $input->param('author');
+my $note            = $input->param('note');
+my $copyrightdate   = $input->param('copyrightdate');
+my $publishercode   = $input->param('publishercode');
+my $volumedesc      = $input->param('volumedesc');
 my $publicationyear = $input->param('publicationyear');
-my $place = $input->param('place');
-my $isbn = $input->param('isbn');
-my $status = $input->param('status');
-my $suggestedbyme = $input->param('suggestedbyme');
-my $op = $input->param('op');
-$op = 'else' unless $op;
+my $place           = $input->param('place');
+my $isbn            = $input->param('isbn');
+my $status          = $input->param('status');
+my $suggestedbyme   = $input->param('suggestedbyme');
+my $op              = $input->param('op') || "aorr_confirm";
 
 my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "suggestion/acceptorreject.tmpl",
-			     type => "intranet",
-			     query => $input,
-			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
-			 });
-if ($op eq "aorr_confirm") {
-	my @suggestionlist = $input->param("aorr");
-	foreach my $suggestion (@suggestionlist) {
-		if ($suggestion =~ /(A|R)(.*)/) {
-			my ($newstatus,$suggestionid) = ($1,$2);
-			$newstatus="REJECTED" if $newstatus eq "R";
-			$newstatus="ACCEPTED" if $newstatus eq "A";
-			ModStatus($suggestionid,$newstatus,$loggedinuser);
-		}
-	}
-	$op="else";
-}
-
-if ($op eq "delete_confirm") {
-	my @delete_field = $input->param("delete_field");
-	foreach my $delete_field (@delete_field) {
-		&DelSuggestion($loggedinuser,$delete_field);
-	}
-	$op='else';
-}
-
-my $suggestions_loop= &SearchSuggestion("","","","",'ASKED',"");
-$template->param(suggestions_loop => $suggestions_loop,
-		"op_$op" => 1,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "suggestion/acceptorreject.tmpl",
+        type            => "intranet",
+        query           => $input,
+        authnotrequired => 1,
+        flagsrequired   => { catalogue => 1 },
+    }
 );
+
+my $suggestions;
+
+if ( $op eq "aorr_confirm" ) {
+    my @suggestionlist = $input->param("aorr");
+
+    foreach my $suggestion (@suggestionlist) {
+        if ( $suggestion =~ /(A|R)(.*)/ ) {
+            my ( $newstatus, $suggestionid ) = ( $1, $2 );
+            $newstatus = "REJECTED" if $newstatus eq "R";
+            $newstatus = "ACCEPTED" if $newstatus eq "A";
+            my $reason = $input->param( "reason" . $suggestionid );
+            if ( $reason eq "other" ) {
+                $reason = $input->param( "other-reason" . $suggestionid );
+            }
+            ModStatus( $suggestionid, $newstatus, $loggedinuser, '', $reason );
+        }
+    }
+    $op = "else";
+    $suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "" );
+}
+
+if ( $op eq "delete_confirm" ) {
+    my @delete_field = $input->param("delete_field");
+    foreach my $delete_field (@delete_field) {
+        &DelSuggestion( $loggedinuser, $delete_field );
+    }
+    $op = 'else';
+    $suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "" );
+}
+
+if ( $op eq "accepted" ) {
+    $suggestions = &GetSuggestionByStatus('ACCEPTED');
+    $template->param(done => 1);
+}
+
+if ( $op eq "rejected" ) {
+    $suggestions = &GetSuggestionByStatus('REJECTED');
+    $template->param(done => 1);
+}
+
+my $reasonsloop = GetAuthorisedValues("SUGGEST");
+my @suggestions_loop;
+foreach my $suggestion (@$suggestions) {
+    $suggestion->{'reasonsloop'} = $reasonsloop;
+    push @suggestions_loop, $suggestion;
+}
+
+$template->param(
+    suggestions_loop        => \@suggestions_loop,
+    "op_$op"                => 1,
+    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    IntranetNav        => C4::Context->preference("IntranetNav"),
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;

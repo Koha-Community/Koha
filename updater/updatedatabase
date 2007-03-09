@@ -41,8 +41,8 @@ my (
 
 my $silent;
 GetOptions(
-	's' =>\$silent
-	);
+    's' =>\$silent
+    );
 my $dbh = C4::Context->dbh;
 print "connected to your DB. Checking & modifying it\n" unless $silent;
 $|=1; # flushes output
@@ -67,141 +67,192 @@ my %requiretables = (
                              itemtypecodes text default '',
                              PRIMARY KEY (mediatypecode)
                             )",
-    action_logs 	=> "(
-				    `timestamp` TIMESTAMP NOT NULL ,
-				    `user` INT( 11 ) NOT NULL ,
-				    `module` TEXT default '',
-				    `action` TEXT default '' ,
-				    `object` INT(11) default '' ,
-				    `info` TEXT default '' ,
-				    PRIMARY KEY ( `timestamp` , `user` )
-			    )",
-	letter		=> "(
-					module varchar(20) NOT NULL default '',
-					code varchar(20) NOT NULL default '',
-					name varchar(100) NOT NULL default '',
-					title varchar(200) NOT NULL default '',
-					content text,
-					PRIMARY KEY  (module,code)
-				)",
-	alert		=>"(
-					alertid int(11) NOT NULL auto_increment,
-					borrowernumber int(11) NOT NULL default '0',
-					type varchar(10) NOT NULL default '',
-					externalid varchar(20) NOT NULL default '',
-					PRIMARY KEY  (alertid),
-					KEY borrowernumber (borrowernumber),
-					KEY type (type,externalid)
-				)",
-	opac_news => "(
-				`idnew` int(10) unsigned NOT NULL auto_increment,
-				`title` varchar(250) NOT NULL default '',
-				`new` text NOT NULL,
-				`lang` varchar(4) NOT NULL default '',
-				`timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-				PRIMARY KEY  (`idnew`)
-				)",
-	repeatable_holidays => "(
-				`id` int(11) NOT NULL auto_increment,
-				`branchcode` varchar(4) NOT NULL default '',
-				`weekday` smallint(6) default NULL,
-				`day` smallint(6) default NULL,
-				`month` smallint(6) default NULL,
-				`title` varchar(50) NOT NULL default '',
-				`description` text NOT NULL,
-				PRIMARY KEY  (`id`)
-				)",
-	special_holidays => "(
-				`id` int(11) NOT NULL auto_increment,
-				`branchcode` varchar(4) NOT NULL default '',
-				`day` smallint(6) NOT NULL default '0',
-				`month` smallint(6) NOT NULL default '0',
-				`year` smallint(6) NOT NULL default '0',
-				`isexception` smallint(1) NOT NULL default '1',
-				`title` varchar(50) NOT NULL default '',
-				`description` text NOT NULL,
-				PRIMARY KEY  (`id`)
-				)",
-	overduerules	=>"(`branchcode` varchar(255) NOT NULL default '',
-					`categorycode` char(2) NOT NULL default '',
-					`delay1` int(4) default '0',
-					`letter1` varchar(20) default NULL,
-					`debarred1` char(1) default '0',
-					`delay2` int(4) default '0',
-					`debarred2` char(1) default '0',
-					`letter2` varchar(20) default NULL,
-					`delay3` int(4) default '0',
-					`letter3` varchar(20) default NULL,
-					`debarred3` int(1) default '0',
-					PRIMARY KEY  (`branchcode`,`categorycode`)
-					)",
-	cities			=> "(`cityid` int auto_increment,
-						`city_name` char(100) NOT NULL,
-						`city_zipcode` char(20),
-						PRIMARY KEY (`cityid`)
-					)",
-	roadtype			=> "(`roadtypeid` int auto_increment,
-						`road_type` char(100) NOT NULL,
-						PRIMARY KEY (`roadtypeid`)
-					)",
+    action_logs     => "(
+                    `timestamp` TIMESTAMP NOT NULL ,
+                    `user` INT( 11 ) NOT NULL ,
+                    `module` TEXT default '',
+                    `action` TEXT default '' ,
+                    `object` INT(11) default '' ,
+                    `info` TEXT default '' ,
+                    PRIMARY KEY ( `timestamp` , `user` )
+                )",
+    letter        => "(
+                    module varchar(20) NOT NULL default '',
+                    code varchar(20) NOT NULL default '',
+                    name varchar(100) NOT NULL default '',
+                    title varchar(200) NOT NULL default '',
+                    content text,
+                    PRIMARY KEY  (module,code)
+                )",
+    alert        =>"(
+                    alertid int(11) NOT NULL auto_increment,
+                    borrowernumber int(11) NOT NULL default '0',
+                    type varchar(10) NOT NULL default '',
+                    externalid varchar(20) NOT NULL default '',
+                    PRIMARY KEY  (alertid),
+                    KEY borrowernumber (borrowernumber),
+                    KEY type (type,externalid)
+                )",
+    opac_news => "(
+                `idnew` int(10) unsigned NOT NULL auto_increment,
+                `title` varchar(250) NOT NULL default '',
+                `new` text NOT NULL,
+                `lang` varchar(4) NOT NULL default '',
+                `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+                PRIMARY KEY  (`idnew`)
+                )",
+    repeatable_holidays => "(
+                `id` int(11) NOT NULL auto_increment,
+                `branchcode` varchar(4) NOT NULL default '',
+                `weekday` smallint(6) default NULL,
+                `day` smallint(6) default NULL,
+                `month` smallint(6) default NULL,
+                `title` varchar(50) NOT NULL default '',
+                `description` text NOT NULL,
+                PRIMARY KEY  (`id`)
+                )",
+    special_holidays => "(
+                `id` int(11) NOT NULL auto_increment,
+                `branchcode` varchar(4) NOT NULL default '',
+                `day` smallint(6) NOT NULL default '0',
+                `month` smallint(6) NOT NULL default '0',
+                `year` smallint(6) NOT NULL default '0',
+                `isexception` smallint(1) NOT NULL default '1',
+                `title` varchar(50) NOT NULL default '',
+                `description` text NOT NULL,
+                PRIMARY KEY  (`id`)
+                )",
+    overduerules    =>"(`branchcode` varchar(255) NOT NULL default '',
+                    `categorycode` char(2) NOT NULL default '',
+                    `delay1` int(4) default '0',
+                    `letter1` varchar(20) default NULL,
+                    `debarred1` char(1) default '0',
+                    `delay2` int(4) default '0',
+                    `debarred2` char(1) default '0',
+                    `letter2` varchar(20) default NULL,
+                    `delay3` int(4) default '0',
+                    `letter3` varchar(20) default NULL,
+                    `debarred3` int(1) default '0',
+                    PRIMARY KEY  (`branchcode`,`categorycode`)
+                    )",
+    cities            => "(`cityid` int auto_increment,
+                        `city_name` char(100) NOT NULL,
+                        `city_zipcode` char(20),
+                        PRIMARY KEY (`cityid`)
+                    )",
+    roadtype            => "(`roadtypeid` int auto_increment,
+                        `road_type` char(100) NOT NULL,
+                        PRIMARY KEY (`roadtypeid`)
+                    )",
 
-	labels                     => "(
-				labelid int(11) NOT NULL auto_increment,
-                           	itemnumber varchar(100) NOT NULL default '',
-                           	timestamp timestamp(14) NOT NULL,
-                           	PRIMARY KEY  (labelid)
-                           	)",
+    labels                     => "(
+                labelid int(11) NOT NULL auto_increment,
+                               itemnumber varchar(100) NOT NULL default '',
+                               timestamp timestamp(14) NOT NULL,
+                               PRIMARY KEY  (labelid)
+                               )",
 
-	labels_conf                => "(
-				id int(4) NOT NULL auto_increment,
-                           	barcodetype char(100) default '',
-                           	title tinyint(1) default '0',
-                           	isbn tinyint(1) default '0',
-                           	itemtype tinyint(1) default '0',
-                           	barcode tinyint(1) default '0',
-                           	dewey tinyint(1) default '0',
-                           	class tinyint(1) default '0',
-                           	author tinyint(1) default '0',
-                           	papertype char(100) default '',
-                           	startrow int(2) default NULL,
-                           	PRIMARY KEY  (id)
-                           	)",
+    labels_conf                => "(
+                id int(4) NOT NULL auto_increment,
+                               barcodetype char(100) default '',
+                               title tinyint(1) default '0',
+                               isbn tinyint(1) default '0',
+                               itemtype tinyint(1) default '0',
+                               barcode tinyint(1) default '0',
+                               dewey tinyint(1) default '0',
+                               class tinyint(1) default '0',
+                               author tinyint(1) default '0',
+                               papertype char(100) default '',
+                               startrow int(2) default NULL,
+                               PRIMARY KEY  (id)
+                               )",
        reviews                  => "(
-	                        reviewid integer NOT NULL auto_increment,
-	                        borrowernumber integer,
-	                        biblionumber integer,
-	                        review text,
-	                        approved tinyint,
-	                        datereviewed datetime,
-	                        PRIMARY KEY (reviewid)
-	                        )",
-       borrowers_to_borrowers  => "(
-	                        borrower1 integer,
-	                        borrower2 integer
-	                        )",
+                            reviewid integer NOT NULL auto_increment,
+                            borrowernumber integer,
+                            biblionumber integer,
+                            review text,
+                            approved tinyint,
+                            datereviewed datetime,
+                            PRIMARY KEY (reviewid)
+                            )",
+    borrowers_to_borrowers  => "(
+                            borrower1 integer,
+                            borrower2 integer
+                            )",
+    subscriptionroutinglist=>"(
+                             routingid integer NOT NULL auto_increment,
+                             borrowernumber integer,
+                             ranking integer,
+                             subscriptionid integer,
+                            PRIMARY KEY (routingid)
+                             )",
+
+    notifys    => "(
+              notify_id int(11) NOT NULL default '0',
+                `borrowernumber` int(11) NOT NULL default '0',
+              `itemnumber` int(11) NOT NULL default '0',
+              `notify_date` date NOT NULL default '0000-00-00',
+                      `notify_send_date` date default NULL,
+                      `notify_level` int(1) NOT NULL default '0',
+                      `method` varchar(20) NOT NULL default ''
+              )",
+
+   charges    => "(
+              `charge_id` varchar(5) NOT NULL default '',
+                `description` text NOT NULL,
+                `amount` decimal(28,6) NOT NULL default '0.000000',
+                          `min` int(4) NOT NULL default '0',
+                `max` int(4) NOT NULL default '0',
+                          `level` int(1) NOT NULL default '0',
+                          PRIMARY KEY  (`charge_id`)
+              )",
+    tags => "(
+        `entry` varchar(255) NOT NULL default '',
+        `weight` bigint(20) NOT NULL default '0',
+         PRIMARY KEY  (`entry`)
+    )
+    ",
+   zebraqueue    => "(
+                `id` int NOT NULL auto_increment,
+                `biblio_auth_number` int NOT NULL,
+                `operation` char(20) NOT NULL,
+                `server` char(20) NOT NULL ,
+                PRIMARY KEY  (`id`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1",
 
 );
 
 my %requirefields = (
-	subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL'},
-	itemtypes => { 'imageurl' => 'char(200) NULL'},
-	aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
-	aqbudget => { 'branchcode' => 'varchar(4) NULL'},
-	auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
-	auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL UNSIGNED ZEROFILL', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL UNSIGNED', 'isurl' => 'TINYINT(1) UNSIGNED'},
-        statistics => { 'associatedborrower' => 'integer'},
+    subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL', 'firstacquidate'=>'date NOT NULL','irregularity'=>'TEXT NULL default \'\'','numberpattern'=>'TINYINT(3) NULL default 0', 'callnumber'=>'text NULL', 'hemisphere' =>'TINYINT(3) NULL default 0', 'issuesatonce'=>'TINYINT(3) NOT NULL default 1',  'branchcode' =>'varchar(12) NOT NULL default \'\'', 'manualhistory'=>'TINYINT(1) NOT NULL default 0','internalnotes'=>'LONGTEXT NULL default \'\''},
+    itemtypes => { 'imageurl' => 'char(200) NULL'},
+    aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
+    aqbudget => { 'branchcode' => 'varchar(4) NULL'},
+    auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
+    auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL default 0', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL default 0', 'isurl' => 'TINYINT(1)', 'frameworkcode'=>'VARCHAR(8) NOT  NULL'},
+    marc_breeding => { 'isbn' => 'varchar(13) NOT NULL'},
+    serial =>{ 'publisheddate' => 'date', 'claimdate' => 'date', 'itemnumber'=>'text NULL','routingnotes'=>'text NULL',},
+    statistics => { 'associatedborrower' => 'integer'},
+    z3950servers =>{  "name" =>"text",  "description" => "text NOT NULL",
+                    "position" =>"enum('primary','secondary','') NOT NULL default 'primary'",  "icon" =>"text",
+                    "type" =>"enum('zed','opensearch') NOT NULL default 'zed'",
+                    },
+    issues =>{ 'issuedate'=>"date NOT NULL default '0000-00-00'", },
+
 #    tablename        => { 'field' => 'fieldtype' },
 );
 
-my %dropable_table = (
-# tablename => 'tablename',
+# Enter here the table to delete.
+my @TableToDelete = qw(
+    additionalauthors
+    bibliosubject
+    bibliosubtitle
 );
 
 my %uselessfields = (
 # tablename => "field1,field2",
-	borrowers => "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
-	deletedborrowers=> "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
-	);
+    borrowers => "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
+    deletedborrowers=> "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
+    );
 # the other hash contains other actions that can't be done elsewhere. they are done
 # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
 
@@ -215,10 +266,10 @@ my %uselessfields = (
 
 my %tabledata = (
 # tablename => [
-#	{	uniquefielrequired => 'fieldname', # the primary key in the table
-#		fieldname => fieldvalue,
-#		fieldname2 => fieldvalue2,
-#	},
+#    {    uniquefielrequired => 'fieldname', # the primary key in the table
+#        fieldname => fieldvalue,
+#        fieldname2 => fieldvalue2,
+#    },
 # ],
     systempreferences => [
         {
@@ -227,14 +278,23 @@ my %tabledata = (
             value               => 'Calendar',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation			=> 'How to calculate return dates : Calendar means holidays will be controled, Days means the return date don\'t depend on holidays',
-	        type		=> 'Choice',
-	        options		=> 'Calendar|Days'
+            explanation            => 'How to calculate return dates : Calendar means holidays will be controled, Days means the return date don\'t depend on holidays',
+            type        => 'Choice',
+            options        => 'Calendar|Days'
         },
         {
             uniquefieldrequired => 'variable',
-            variable            => 'borrowerMandatoryField',
-            value               => 'zipcode|surname',
+            variable            => 'BorrowersTitles',
+            value               => 'Mr|Mrs|Miss|Ms',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'List all Titles for borrowers',
+            type                => 'free',
+        },
+	{
+            uniquefieldrequired => 'variable',
+            variable            => 'BorrowerMandatoryField',
+            value               => 'cardnumber|surname|address',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
             explanation         => 'List all mandatory fields for borrowers',
@@ -276,7 +336,7 @@ my %tabledata = (
             explanation         => 'Are your patrons members of institutions',
             type                => 'YesNo',
         },
-	{
+    {
             uniquefieldrequired => 'variable',
             variable            => 'ReadingHistory',
             value               => '0',
@@ -285,7 +345,7 @@ my %tabledata = (
             explanation         => 'Allow reading record info retrievable from issues and oldissues tables',
             type                => 'YesNo',
         },
-	{
+    {
             uniquefieldrequired => 'variable',
             variable            => 'IssuingInProcess',
             value               => '0',
@@ -294,7 +354,7 @@ my %tabledata = (
             explanation         => 'Allow no debt alert if the patron is issuing item that accumulate debt',
             type                => 'YesNo',
         },
-	{
+    {
             uniquefieldrequired => 'variable',
             variable            => 'AutomaticItemReturn',
             value               => '1',
@@ -303,7 +363,7 @@ my %tabledata = (
             explanation         => 'This Variable allow or not to return automaticly to his homebranch',
             type                => 'YesNo',
         },
-	{
+    {
             uniquefieldrequired => 'variable',
             variable            => 'reviewson',
             value               => '0',
@@ -312,7 +372,7 @@ my %tabledata = (
             explanation         => 'Allows patrons to submit reviews from the opac',
             type                => 'YesNo',
         },
-	{
+    {
             uniquefieldrequired => 'variable',
             variable            => 'intranet_includes',
             value               => 'includes',
@@ -321,20 +381,602 @@ my %tabledata = (
             explanation         => 'The includes directory you want for specific look of Koha (includes or includes_npl for example)',
             type                => 'Free',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'AutoLocation',
+            value               => '0',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'switch to activate or not Autolocation, if Yes, the Librarian can\'t change his location, it\'s defined by branchip',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'serialsadditems',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                'type' => 1
+            },
+            explanation => 'If set, a new item will be automatically added when receiving an issue',
+            type => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'expandedSearchOption',
+            value               => '0',
+            forceupdate         => {
+                'explanation' => 1,
+                'type' => 1
+            },
+            explanation => 'search among marc field',
+            type => 'YesNo',
+        },
+       {
+            uniquefieldrequired => 'variable',
+            variable            => 'RequestOnOpac',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'option to allow reserves on opac',
+            type                => 'YesNo',
+        },
+       {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacCloud',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable / Disable cloud link on OPAC',
+            type                => 'YesNo',
+        },
+       {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacBrowser',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable/Disable browser link on OPAC (needs to set misc/cronjob/build_browser.pl)',
+            type                => 'YesNo',
+        },
+       {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacTopissue',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable / Disable the top issue link on OPAC',
+            type                => 'YesNo',
+        },
+       {
+            uniquefieldrequired => 'variable',
+            variable            => 'OpacAuthorities',
+            value               => '1',
+            forceupdate         => { 'explanation' => 1,
+                                     'type' => 1},
+            explanation         => 'Enable / Disable the search authority link on OPAC',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'CataloguingLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log cataloguing action.',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'BorrowersLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log borrowers edition/creation/deletion...',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'SubscriptionLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log Subscription action',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'IssueLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log issue.',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'ReturnLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log the circulation return',
+            type                => 'YesNo',
+        },
+        {   
+            uniquefieldrequired => 'variable',
+            variable            => 'LetterLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log all the letter sent',
+            type                => 'YesNo',
+        },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'FinesLog',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Active this if you want to log fines',
+            type                => 'YesNo',
+        },
     ],
-
+    userflags => [
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => '14',
+            flag                => 'editauthorities',
+            flagdesc            => 'allow to edit authorities',
+            defaulton           => '0',
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => '15',
+            flag                 => 'serials',
+            flagdesc            => 'allow to manage serials subscriptions',
+            defaulton           => '0',
+        },
+        {
+            uniquefieldrequired => 'bit',
+            bit                 => '16',
+            flag                 => 'reports',
+            flagdesc            => 'allow to access to the reports module',
+            defaulton           => '0',
+        },
+    ],
+    authorised_values => [
+        {
+            uniquefieldrequired => 'id',
+            category            => 'SUGGEST',
+            authorised_value    => 'Not enoug budget',
+            lib                 => 'This book it too much expensive',
+        }
+    ]
 );
 
 my %fielddefinitions = (
 # fieldname => [
-#	{		  field => 'fieldname',
+#    {          field => 'fieldname',
 #             type    => 'fieldtype',
 #             null    => '',
 #             key     => '',
 #             default => ''
 #         },
 #     ],
-	serial => [
+    aqbasket =>  [
+        {
+            field    => 'booksellerid',
+            type    => 'int(11)',
+            null    => 'NOT NULL',
+            key        => '',
+            default    => '1',
+            extra    => '',
+        },
+    ],
+    aqbooksellers =>  [
+        {
+            field    => 'id',
+            type    => 'int(11)',
+            null    => 'NOT NULL',
+            key        => '',
+            default    => '',
+            extra    => 'auto_increment',
+        },
+        {
+            field    => 'listprice',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'invoiceprice',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+    ],
+    
+    accountlines =>  [
+        {
+            field    => 'notify_id',
+            type    => 'int(11)',
+            null    => 'NOT NULL',
+            key        => '',
+            default    => '0',
+            extra    => '',
+        },
+        {
+            field    => 'notify_level',
+            type    => 'int(2)',
+            null    => 'NOT NULL',
+            key        => '',
+            default    => '0',
+            extra    => '',
+        },
+    
+    ],
+    
+    borrowers => [
+        {    field => 'firstname',
+             type => 'text',
+             null => 'NULL',
+         },
+        {    field => 'initials',
+             type => 'text',
+             null => 'NULL',
+         },
+        {    field => 'B_email',
+             type => 'text',
+             null => 'NULL',
+             after => 'B_zipcode',
+         },
+         {
+            field => 'streetnumber', # street number (hidden if streettable table is empty)
+            type => 'char(10)',
+            null => 'NULL',
+            after => 'initials',
+        },
+        {
+            field => 'streettype', # street table, list builded from a system table
+            type => 'char(50)',
+            null => 'NULL',
+            after => 'streetnumber',
+        },
+        {    field => 'phone',
+             type => 'text',
+             null => 'NULL',
+         },
+        {
+            field => 'B_streetnumber', # street number (hidden if streettable table is empty)
+            type => 'char(10)',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'B_streettype', # street table, list builded from a system table
+            type => 'char(50)',
+            null => 'NULL',
+            after => 'B_streetnumber',
+        },
+        {
+            field => 'phonepro',
+            type => 'text',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'address2', # complement address
+            type => 'text',
+            null => 'NULL',
+            after => 'address',
+        },
+        {
+            field => 'emailpro',
+            type => 'text',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'contactfirstname', # contact's firstname
+            type => 'text',
+            null => 'NULL',
+            after => 'contactname',
+        },
+        {
+            field => 'contacttitle', # contact's title
+            type => 'text',
+            null => 'NULL',
+            after => 'contactfirstname',
+        },
+        {
+            field => 'branchcode',
+            type  => 'varchar(10)',
+            null  => 'NOT NULL',
+            default    => '',
+            extra => '',
+        },
+        {
+            field => 'categorycode',
+            type  => 'varchar(10)',
+            null  => 'NOT NULL',
+            default    => '',
+            extra => '',
+        }
+    ],
+    
+    biblioitems =>  [
+        {
+            field    => 'lcsort',
+            type    => 'varchar(25)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'ccode',
+            type    => 'varchar(4)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+    ],
+    branches =>  [
+        {
+            field    => 'branchip',
+            type    => 'varchar(15)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'branchprinter',
+            type    => 'varchar(100)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field   => 'branchcode',
+            type    => 'varchar(10)',
+            null    => 'NOT NULL',
+            default => '',
+            extra   => '',
+        }
+    ],
+    branchtransfers =>[
+        {
+            field   => 'frombranch',
+            type    => 'VARCHAR(10)',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'tobranch',
+            type    => 'VARCHAR(10)',
+            null    => 'NOT NULL',
+            key     => '',
+            default => '',
+        }
+    ],
+    
+    categories =>  [
+        {
+            field    => 'category_type',
+            type    => 'char(1)',
+            null    => 'NOT NULL',
+            key        => '',
+            default    => 'A',
+            extra    => '',
+        },
+        {
+            field   => 'categorycode',
+            type    => 'varchar(10)',
+            null    => 'NOT NULL',
+            key     => 'PRI',
+            default => '',
+            extra   => '',
+        },
+    ],
+    
+    deletedborrowers => [
+        {    field => 'firstname',
+             type => 'text',
+             null => 'NULL',
+         },
+        {    field => 'initials',
+             type => 'text',
+             null => 'NULL',
+         },
+        {    field => 'B_email',
+             type => 'text',
+             null => 'NULL',
+             after => 'B_zipcode',
+         },
+         {
+            field => 'streetnumber', # street number (hidden if streettable table is empty)
+            type => 'char(10)',
+            null => 'NULL',
+            after => 'initials',
+        },
+        {
+            field => 'streettype', # street table, list builded from a system table
+            type => 'char(50)',
+            null => 'NULL',
+            after => 'streetnumber',
+        },
+        {    field => 'phone',
+             type => 'text',
+             null => 'NULL',
+         },
+         {
+            field => 'B_streetnumber', # street number (hidden if streettable table is empty)
+            type => 'char(10)',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'B_streettype', # street table, list builded from a system table
+            type => 'char(50)',
+            null => 'NULL',
+            after => 'B_streetnumber',
+        },
+        {
+            field => 'phonepro',
+            type => 'text',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'address2', # complement address
+            type => 'text',
+            null => 'NULL',
+            after => 'address',
+        },
+        {
+            field => 'emailpro',
+            type => 'text',
+            null => 'NULL',
+            after => 'fax',
+        },
+        {
+            field => 'contactfirstname', # contact's firstname
+            type => 'text',
+            null => 'NULL',
+            after => 'contactname',
+        },
+        {
+            field => 'contacttitle', # contact's title
+            type => 'text',
+            null => 'NULL',
+            after => 'contactfirstname',
+        },
+    ],
+    
+    issues =>  [
+        {
+            field    => 'borrowernumber',
+            type    => 'int(11)',
+            null    => 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'itemnumber',
+            type    => 'int(11)',
+            null    => 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field   => 'branchcode',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key     => '',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'issuedate',
+            type    => 'date',
+            null    => '',
+            key     => '',
+            default => '0000-00-00',
+            extra   => '',
+        },
+    ],
+    
+    items => [
+        {
+            field    => 'onloan',
+            type    => 'date',
+            null    => 'NULL',
+            key        => '',
+            default    => '0000-00-00',
+            extra    => '',
+        },
+        {
+            field    => 'cutterextra',
+            type    => 'varchar(45)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'issue_date',
+            type    => 'date',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'holdingbranch',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'itype',
+            type    => 'varchar(10)',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+    ],
+    itemtypes => [
+        {
+            field  => 'itemtype',
+            type   => 'varchar(10)',
+            default    => '',
+            null   => 'NOT NULL',
+            key    => 'PRI',
+            extra  => 'UNIQUE',
+        },
+        {
+            field  => 'summary',
+            type   => 'TEXT',
+            null   => 'NULL',
+            key    => '',
+            extra  => '',
+        },
+    ],
+    opac_news => [
+        {
+            field  => 'expirationdate',
+            type   => 'date',
+            null   => 'null',
+            key    => '',
+            extra  => '',
+        },
+        {
+            field   => 'number',
+            type    => 'int(11)',
+            null    => 'NULL',
+            key     => '',
+            default => '0',
+            extra   => '',
+        },
+    ],
+    reserves =>  [
+        {
+            field    => 'waitingdate',
+            type    => 'date',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+    ],
+    serial => [
         {
             field   => 'notes',
             type    => 'TEXT',
@@ -344,753 +986,590 @@ my %fielddefinitions = (
             extra   => ''
         },
     ],
-	aqbasket =>  [
-		{
-			field	=> 'booksellerid',
-			type	=> 'int(11)',
-			null	=> 'NOT NULL',
-			key		=> '',
-			default	=> '1',
-			extra	=> '',
-		},
-	],
-	aqbooksellers =>  [
-		{
-			field	=> 'listprice',
-			type	=> 'varchar(10)',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-		{
-			field	=> 'invoiceprice',
-			type	=> 'varchar(10)',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-	],
-	issues =>  [
-		{
-			field	=> 'borrowernumber',
-			type	=> 'int(11)',
-			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-		{
-			field	=> 'itemnumber',
-			type	=> 'int(11)',
-			null	=> 'NULL', # can be null when a borrower is deleted and the foreign key rule executed
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-	],
-	borrowers => [
-		{	field => 'firstname',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },
-		{	field => 'initials',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },
-		{	field => 'B_email',
-		 	type => 'text',
-		 	null => 'NULL',
-		 	after => 'B_zipcode',
-		 },
-		 {
-			field => 'streetnumber', # street number (hidden if streettable table is empty)
-			type => 'char(10)',
-			null => 'NULL',
-			after => 'initials',
-		},
-		{
-			field => 'streettype', # street table, list builded from a system table
-			type => 'char(50)',
-			null => 'NULL',
-			after => 'streetnumber',
-		},
-		{	field => 'phone',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },				
-		{
-			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
-			type => 'char(10)',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'B_streettype', # street table, list builded from a system table
-			type => 'char(50)',
-			null => 'NULL',
-			after => 'B_streetnumber',
-		},
-		{
-			field => 'phonepro',
-			type => 'text',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'address2', # complement address
-			type => 'text',
-			null => 'NULL',
-			after => 'address',
-		},
-		{
-			field => 'emailpro',
-			type => 'text',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'contactfirstname', # contact's firstname
-			type => 'text',
-			null => 'NULL',
-			after => 'contactname',
-		},
-		{
-			field => 'contacttitle', # contact's title
-			type => 'text',
-			null => 'NULL',
-			after => 'contactfirstname',
-		},
-	],
-	
-	deletedborrowers => [
-		{	field => 'firstname',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },
-		{	field => 'initials',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },
-		{	field => 'B_email',
-		 	type => 'text',
-		 	null => 'NULL',
-		 	after => 'B_zipcode',
-		 },
-		 {
-			field => 'streetnumber', # street number (hidden if streettable table is empty)
-			type => 'char(10)',
-			null => 'NULL',
-			after => 'initials',
-		},
-		{
-			field => 'streettype', # street table, list builded from a system table
-			type => 'char(50)',
-			null => 'NULL',
-			after => 'streetnumber',
-		},
-		{	field => 'phone',
-		 	type => 'text',
-		 	null => 'NULL',
-		 },		
-		 {
-			field => 'B_streetnumber', # street number (hidden if streettable table is empty)
-			type => 'char(10)',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'B_streettype', # street table, list builded from a system table
-			type => 'char(50)',
-			null => 'NULL',
-			after => 'B_streetnumber',
-		},
-		{
-			field => 'phonepro',
-			type => 'text',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'address2', # complement address
-			type => 'text',
-			null => 'NULL',
-			after => 'address',
-		},
-		{
-			field => 'emailpro',
-			type => 'text',
-			null => 'NULL',
-			after => 'fax',
-		},
-		{
-			field => 'contactfirstname', # contact's firstname
-			type => 'text',
-			null => 'NULL',
-			after => 'contactname',
-		},
-		{
-			field => 'contacttitle', # contact's title
-			type => 'text',
-			null => 'NULL',
-			after => 'contactfirstname',
-		},
-	],
-	
-	branches =>  [
-		{
-			field	=> 'branchip',
-			type	=> 'varchar(15)',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-		{
-			field	=> 'branchprinter',
-			type	=> 'varchar(100)',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-	],
-	categories =>  [
-		{
-			field	=> 'category_type',
-			type	=> 'char(1)',
-			null	=> 'NOT NULL',
-			key		=> '',
-			default	=> 'A',
-			extra	=> '',
-		},
-	],
-	reserves =>  [
-		{
-			field	=> 'waitingdate',
-			type	=> 'date',
-			null	=> 'NULL',
-			key		=> '',
-			default	=> '',
-			extra	=> '',
-		},
-	],
+    shelfcontents => [
+        {
+            field => 'dateadded',
+            type => 'timestamp',
+            null    => 'NULL',
+        },
+    ],
+    systempreferences =>  [
+        {
+            field    => 'value',
+            type    => 'text',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'explanation',
+            type    => 'text',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+    ],
+    suggestions => [
+        {
+            field   => 'reason',
+            type    => 'text',
+            null    => 'NULL',
+            key     => ''  ,
+            default => '',
+            extra   =>    '',
+        }
+    ],
 );
 
 my %indexes = (
-#	table => [
-# 		{	indexname => 'index detail'
-# 		}
-#	],
-	shelfcontents => [
-		{	indexname => 'shelfnumber',
-			content => 'shelfnumber',
-		},
-		{	indexname => 'itemnumber',
-			content => 'itemnumber',
-		}
-	],
-	bibliosubject => [
-		{	indexname => 'biblionumber',
-			content => 'biblionumber',
-		}
-	],
-	items => [
-		{	indexname => 'homebranch',
-			content => 'homebranch',
-		},
-		{	indexname => 'holdingbranch',
-			content => 'holdingbranch',
-		}
-	],
-	aqbooksellers => [
-		{	indexname => 'PRIMARY',
-			content => 'id',
-			type => 'PRIMARY',
-		}
-	],
-	aqbasket => [
-		{	indexname => 'booksellerid',
-			content => 'booksellerid',
-		},
-	],
-	aqorders => [
-		{	indexname => 'basketno',
-			content => 'basketno',
-		},
-	],
-	aqorderbreakdown => [
-		{	indexname => 'ordernumber',
-			content => 'ordernumber',
-		},
-		{	indexname => 'bookfundid',
-			content => 'bookfundid',
-		},
-	],
-	currency => [
-		{	indexname => 'PRIMARY',
-			content => 'currency',
-			type => 'PRIMARY',
-		}
-	],
+#    table => [
+#         {    indexname => 'index detail'
+#         }
+#    ],
+    aqbooksellers => [
+        {    indexname => 'PRIMARY',
+            content => 'id',
+            type => 'PRI',
+        }
+    ],
+    aqbasket => [
+        {    indexname => 'booksellerid',
+            content => 'booksellerid',
+        },
+    ],
+    aqorders => [
+        {    indexname => 'basketno',
+            content => 'basketno',
+        },
+    ],
+    aqorderbreakdown => [
+        {    indexname => 'ordernumber',
+            content => 'ordernumber',
+        },
+        {    indexname => 'bookfundid',
+            content => 'bookfundid',
+        },
+    ],
+    biblioitems => [
+        {    indexname => 'isbn',
+            content => 'isbn',
+        },
+        {    indexname => 'publishercode',
+            content => 'publishercode',
+        },
+    ],
+    branches => [
+        {
+            indexname => 'branchcode',
+            content   => 'branchcode',
+    
+        }
+    ],
+    currency => [
+        {    indexname => 'PRIMARY',
+            content => 'currency',
+            type => 'PRI',
+        }
+    ],
+    categories => [
+        {
+            indexname => 'categorycode',
+            content   => 'categorycode',
+        }
+    ],
+    items => [
+        {    indexname => 'homebranch',
+            content => 'homebranch',
+        },
+        {    indexname => 'holdingbranch',
+            content => 'holdingbranch',
+        }
+    ],
+    itemtypes => [
+        {
+            indexname => 'itemtype',
+            content   => 'itemtype',
+        }
+    ],
+    shelfcontents => [
+        {    indexname => 'shelfnumber',
+            content => 'shelfnumber',
+        },
+        {    indexname => 'itemnumber',
+            content => 'itemnumber',
+        }
+    ],
 );
 
 my %foreign_keys = (
-#	table => [
-# 		{	key => 'the key in table' (must be indexed)
-#			foreigntable => 'the foreigntable name', # (the parent)
-#			foreignkey => 'the foreign key column(s)' # (in the parent)
-#			onUpdate => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
-#			onDelete => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
-# 		}
-#	],
-	shelfcontents => [
-		{	key => 'shelfnumber',
-			foreigntable => 'bookshelf',
-			foreignkey => 'shelfnumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemnumber',
-			foreigntable => 'items',
-			foreignkey => 'itemnumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	# onDelete is RESTRICT on reference tables (branches, itemtype) as we don't want items to be 
-	# easily deleted, but branches/itemtype not too easy to empty...
-	biblioitems => [
-		{	key => 'biblionumber',
-			foreigntable => 'biblio',
-			foreignkey => 'biblionumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemtype',
-			foreigntable => 'itemtypes',
-			foreignkey => 'itemtype',
-			onUpdate => 'CASCADE',
-			onDelete => 'RESTRICT',
-		},
-	],
-	items => [
-		{	key => 'biblioitemnumber',
-			foreigntable => 'biblioitems',
-			foreignkey => 'biblioitemnumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'homebranch',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'CASCADE',
-			onDelete => 'RESTRICT',
-		},
-		{	key => 'holdingbranch',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'CASCADE',
-			onDelete => 'RESTRICT',
-		},
-	],
-	additionalauthors => [
-		{	key => 'biblionumber',
-			foreigntable => 'biblio',
-			foreignkey => 'biblionumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	bibliosubject => [
-		{	key => 'biblionumber',
-			foreigntable => 'biblio',
-			foreignkey => 'biblionumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	aqbasket => [
-		{	key => 'booksellerid',
-			foreigntable => 'aqbooksellers',
-			foreignkey => 'id',
-			onUpdate => 'CASCADE',
-			onDelete => 'RESTRICT',
-		},
-	],
-	aqorders => [
-		{	key => 'basketno',
-			foreigntable => 'aqbasket',
-			foreignkey => 'basketno',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'biblionumber',
-			foreigntable => 'biblio',
-			foreignkey => 'biblionumber',
-			onUpdate => 'SET NULL',
-			onDelete => 'SET NULL',
-		},
-	],
-	aqbooksellers => [
-		{	key => 'listprice',
-			foreigntable => 'currency',
-			foreignkey => 'currency',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'invoiceprice',
-			foreigntable => 'currency',
-			foreignkey => 'currency',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	aqorderbreakdown => [
-		{	key => 'ordernumber',
-			foreigntable => 'aqorders',
-			foreignkey => 'ordernumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'bookfundid',
-			foreigntable => 'aqbookfund',
-			foreignkey => 'bookfundid',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	branchtransfers => [
-		{	key => 'frombranch',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'tobranch',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemnumber',
-			foreigntable => 'items',
-			foreignkey => 'itemnumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	issuingrules => [
-		{	key => 'categorycode',
-			foreigntable => 'categories',
-			foreignkey => 'categorycode',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemtype',
-			foreigntable => 'itemtypes',
-			foreignkey => 'itemtype',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	issues => [	# constraint is SET NULL : when a borrower or an item is deleted, we keep the issuing record
-	# for stat purposes
-		{	key => 'borrowernumber',
-			foreigntable => 'borrowers',
-			foreignkey => 'borrowernumber',
-			onUpdate => 'SET NULL',
-			onDelete => 'SET NULL',
-		},
-		{	key => 'itemnumber',
-			foreigntable => 'items',
-			foreignkey => 'itemnumber',
-			onUpdate => 'SET NULL',
-			onDelete => 'SET NULL',
-		},
-	],
-	reserves => [
-		{	key => 'borrowernumber',
-			foreigntable => 'borrowers',
-			foreignkey => 'borrowernumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'biblionumber',
-			foreigntable => 'biblio',
-			foreignkey => 'biblionumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemnumber',
-			foreigntable => 'items',
-			foreignkey => 'itemnumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'branchcode',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	borrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
-	# but prevent deleting a branch as soon as it has 1 borrower !
-		{	key => 'categorycode',
-			foreigntable => 'categories',
-			foreignkey => 'categorycode',
-			onUpdate => 'RESTRICT',
-			onDelete => 'RESTRICT',
-		},
-		{	key => 'branchcode',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'RESTRICT',
-			onDelete => 'RESTRICT',
-		},
-	],
-	deletedborrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
-	# but prevent deleting a branch as soon as it has 1 borrower !
-		{	key => 'categorycode',
-			foreigntable => 'categories',
-			foreignkey => 'categorycode',
-			onUpdate => 'RESTRICT',
-			onDelete => 'RESTRICT',
-		},
-		{	key => 'branchcode',
-			foreigntable => 'branches',
-			foreignkey => 'branchcode',
-			onUpdate => 'RESTRICT',
-			onDelete => 'RESTRICT',
-		},
-	],
-	accountlines => [
-		{	key => 'borrowernumber',
-			foreigntable => 'borrowers',
-			foreignkey => 'borrowernumber',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-		{	key => 'itemnumber',
-			foreigntable => 'items',
-			foreignkey => 'itemnumber',
-			onUpdate => 'SET NULL',
-			onDelete => 'SET NULL',
-		},
-	],
-	auth_tag_structure => [
-		{	key => 'authtypecode',
-			foreigntable => 'auth_types',
-			foreignkey => 'authtypecode',
-			onUpdate => 'CASCADE',
-			onDelete => 'CASCADE',
-		},
-	],
-	# FIXME : don't constraint auth_*_table and auth_word, as they may be replaced by zebra
+#    table => [
+#         {    key => 'the key in table' (must be indexed)
+#            foreigntable => 'the foreigntable name', # (the parent)
+#            foreignkey => 'the foreign key column(s)' # (in the parent)
+#            onUpdate => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+#            onDelete => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
+#         }
+#    ],
+    shelfcontents => [
+        {    key => 'shelfnumber',
+            foreigntable => 'bookshelf',
+            foreignkey => 'shelfnumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemnumber',
+            foreigntable => 'items',
+            foreignkey => 'itemnumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    # onDelete is RESTRICT on reference tables (branches, itemtype) as we don't want items to be
+    # easily deleted, but branches/itemtype not too easy to empty...
+    biblioitems => [
+        {    key => 'biblionumber',
+            foreigntable => 'biblio',
+            foreignkey => 'biblionumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemtype',
+            foreigntable => 'itemtypes',
+            foreignkey => 'itemtype',
+            onUpdate => 'CASCADE',
+            onDelete => 'RESTRICT',
+        },
+    ],
+    items => [
+        {    key => 'biblioitemnumber',
+            foreigntable => 'biblioitems',
+            foreignkey => 'biblioitemnumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'homebranch',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'RESTRICT',
+        },
+        {    key => 'holdingbranch',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'RESTRICT',
+        },
+    ],
+    aqbasket => [
+        {    key => 'booksellerid',
+            foreigntable => 'aqbooksellers',
+            foreignkey => 'id',
+            onUpdate => 'CASCADE',
+            onDelete => 'RESTRICT',
+        },
+    ],
+    aqorders => [
+        {    key => 'basketno',
+            foreigntable => 'aqbasket',
+            foreignkey => 'basketno',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'biblionumber',
+            foreigntable => 'biblio',
+            foreignkey => 'biblionumber',
+            onUpdate => 'SET NULL',
+            onDelete => 'SET NULL',
+        },
+    ],
+    aqbooksellers => [
+        {    key => 'listprice',
+            foreigntable => 'currency',
+            foreignkey => 'currency',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'invoiceprice',
+            foreigntable => 'currency',
+            foreignkey => 'currency',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    aqorderbreakdown => [
+        {    key => 'ordernumber',
+            foreigntable => 'aqorders',
+            foreignkey => 'ordernumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'bookfundid',
+            foreigntable => 'aqbookfund',
+            foreignkey => 'bookfundid',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    branchtransfers => [
+        {    key => 'frombranch',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'tobranch',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemnumber',
+            foreigntable => 'items',
+            foreignkey => 'itemnumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    issuingrules => [
+        {    key => 'categorycode',
+            foreigntable => 'categories',
+            foreignkey => 'categorycode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemtype',
+            foreigntable => 'itemtypes',
+            foreignkey => 'itemtype',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    issues => [    # constraint is SET NULL : when a borrower or an item is deleted, we keep the issuing record
+    # for stat purposes
+        {    key => 'borrowernumber',
+            foreigntable => 'borrowers',
+            foreignkey => 'borrowernumber',
+            onUpdate => 'SET NULL',
+            onDelete => 'SET NULL',
+        },
+        {    key => 'itemnumber',
+            foreigntable => 'items',
+            foreignkey => 'itemnumber',
+            onUpdate => 'SET NULL',
+            onDelete => 'SET NULL',
+        },
+    ],
+    reserves => [
+        {    key => 'borrowernumber',
+            foreigntable => 'borrowers',
+            foreignkey => 'borrowernumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'biblionumber',
+            foreigntable => 'biblio',
+            foreignkey => 'biblionumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemnumber',
+            foreigntable => 'items',
+            foreignkey => 'itemnumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'branchcode',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    borrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
+    # but prevent deleting a branch as soon as it has 1 borrower !
+        {    key => 'categorycode',
+            foreigntable => 'categories',
+            foreignkey => 'categorycode',
+            onUpdate => 'RESTRICT',
+            onDelete => 'RESTRICT',
+        },
+        {    key => 'branchcode',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'RESTRICT',
+            onDelete => 'RESTRICT',
+        },
+    ],
+    deletedborrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
+    # but prevent deleting a branch as soon as it has 1 borrower !
+        {    key => 'categorycode',
+            foreigntable => 'categories',
+            foreignkey => 'categorycode',
+            onUpdate => 'RESTRICT',
+            onDelete => 'RESTRICT',
+        },
+        {    key => 'branchcode',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'RESTRICT',
+            onDelete => 'RESTRICT',
+        },
+    ],
+    accountlines => [
+        {    key => 'borrowernumber',
+            foreigntable => 'borrowers',
+            foreignkey => 'borrowernumber',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'itemnumber',
+            foreigntable => 'items',
+            foreignkey => 'itemnumber',
+            onUpdate => 'SET NULL',
+            onDelete => 'SET NULL',
+        },
+    ],
+    auth_tag_structure => [
+        {    key => 'authtypecode',
+            foreigntable => 'auth_types',
+            foreignkey => 'authtypecode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
+    # FIXME : don't constraint auth_*_table and auth_word, as they may be replaced by zebra
 );
 
 
 # column changes
 my %column_change = (
-	# table
-	borrowers => [
-				{
-					from => 'emailaddress',
-					to => 'email',
-					after => 'city',
-				},
-				{
-					from => 'streetaddress',
-					to => 'address',
-					after => 'initials',
-				},
-				{
-					from => 'faxnumber',
-					to => 'fax',
-					after => 'phone',
-				},
-				{
-					from => 'textmessaging',
-					to => 'opacnote',
-					after => 'userid',
-				},
-				{
-					from => 'altnotes',
-					to => 'contactnote',
-					after => 'opacnote',
-				},
-				{
-					from => 'physstreet',
-					to => 'B_address',
-					after => 'fax',
-				},
-				{
-					from => 'streetcity',
-					to => 'B_city',
-					after => 'B_address',
-				},
-				{
-					from => 'phoneday',
-					to => 'mobile',
-					after => 'phone',
-				},
-				{
-					from => 'zipcode',
-					to => 'zipcode',
-					after => 'city',
-				},
-				{
-					from => 'homezipcode',
-					to => 'B_zipcode',
-					after => 'B_city',
-				},
-				{
-					from => 'altphone',
-					to => 'B_phone',
-					after => 'B_zipcode',
-				},
-				{
-					from => 'expiry',
-					to => 'dateexpiry',
-					after => 'dateenrolled',
-				},
-				{
-					from => 'guarantor',
-					to => 'guarantorid',
-					after => 'contactname',
-				},
-				{
-					from => 'textmessaging',
-					to => 'opacnotes',
-					after => 'flags',
-				},
-				{
-					from => 'altnotes',
-					to => 'contactnotes',
-					after => 'opacnotes',
-				},
-				{
-					from => 'altrelationship',
-					to => 'relationship',
-					after => 'borrowernotes',
-				},
-			],
+    # table
+    borrowers => [
+                {
+                    from => 'emailaddress',
+                    to => 'email',
+                    after => 'city',
+                },
+                {
+                    from => 'streetaddress',
+                    to => 'address',
+                    after => 'initials',
+                },
+                {
+                    from => 'faxnumber',
+                    to => 'fax',
+                    after => 'phone',
+                },
+                {
+                    from => 'textmessaging',
+                    to => 'opacnote',
+                    after => 'userid',
+                },
+                {
+                    from => 'altnotes',
+                    to => 'contactnote',
+                    after => 'opacnote',
+                },
+                {
+                    from => 'physstreet',
+                    to => 'B_address',
+                    after => 'fax',
+                },
+                {
+                    from => 'streetcity',
+                    to => 'B_city',
+                    after => 'B_address',
+                },
+                {
+                    from => 'phoneday',
+                    to => 'mobile',
+                    after => 'phone',
+                },
+                {
+                    from => 'zipcode',
+                    to => 'zipcode',
+                    after => 'city',
+                },
+                {
+                    from => 'homezipcode',
+                    to => 'B_zipcode',
+                    after => 'B_city',
+                },
+                {
+                    from => 'altphone',
+                    to => 'B_phone',
+                    after => 'B_zipcode',
+                },
+                {
+                    from => 'expiry',
+                    to => 'dateexpiry',
+                    after => 'dateenrolled',
+                },
+                {
+                    from => 'guarantor',
+                    to => 'guarantorid',
+                    after => 'contactname',
+                },
+                {
+                    from => 'altrelationship',
+                    to => 'relationship',
+                    after => 'borrowernotes',
+                },
+            ],
 
-	deletedborrowers => [
-				{
-					from => 'emailaddress',
-					to => 'email',
-					after => 'city',
-				},
-				{
-					from => 'streetaddress',
-					to => 'address',
-					after => 'initials',
-				},
-				{
-					from => 'faxnumber',
-					to => 'fax',
-					after => 'phone',
-				},
-				{
-					from => 'textmessaging',
-					to => 'opacnote',
-					after => 'userid',
-				},
-				{
-					from => 'altnotes',
-					to => 'contactnote',
-					after => 'opacnote',
-				},
-				{
-					from => 'physstreet',
-					to => 'B_address',
-					after => 'fax',
-				},
-				{
-					from => 'streetcity',
-					to => 'B_city',
-					after => 'B_address',
-				},
-				{
-					from => 'phoneday',
-					to => 'mobile',
-					after => 'phone',
-				},
-				{
-					from => 'zipcode',
-					to => 'zipcode',
-					after => 'city',
-				},
-				{
-					from => 'homezipcode',
-					to => 'B_zipcode',
-					after => 'B_city',
-				},
-				{
-					from => 'altphone',
-					to => 'B_phone',
-					after => 'B_zipcode',
-				},
-				{
-					from => 'expiry',
-					to => 'dateexpiry',
-					after => 'dateenrolled',
-				},
-				{
-					from => 'guarantor',
-					to => 'guarantorid',
-					after => 'contactname',
-				},
-				{
-					from => 'textmessaging',
-					to => 'opacnotes',
-					after => 'flags',
-				},
-				{
-					from => 'altnotes',
-					to => 'contactnotes',
-					after => 'opacnotes',
-				},
-				{
-					from => 'altrelationship',
-					to => 'relationship',
-					after => 'borrowernotes',
-				},
-			],
+    deletedborrowers => [
+                {
+                    from => 'emailaddress',
+                    to => 'email',
+                    after => 'city',
+                },
+                {
+                    from => 'streetaddress',
+                    to => 'address',
+                    after => 'initials',
+                },
+                {
+                    from => 'faxnumber',
+                    to => 'fax',
+                    after => 'phone',
+                },
+                {
+                    from => 'textmessaging',
+                    to => 'opacnote',
+                    after => 'userid',
+                },
+                {
+                    from => 'altnotes',
+                    to => 'contactnote',
+                    after => 'opacnote',
+                },
+                {
+                    from => 'physstreet',
+                    to => 'B_address',
+                    after => 'fax',
+                },
+                {
+                    from => 'streetcity',
+                    to => 'B_city',
+                    after => 'B_address',
+                },
+                {
+                    from => 'phoneday',
+                    to => 'mobile',
+                    after => 'phone',
+                },
+                {
+                    from => 'zipcode',
+                    to => 'zipcode',
+                    after => 'city',
+                },
+                {
+                    from => 'homezipcode',
+                    to => 'B_zipcode',
+                    after => 'B_city',
+                },
+                {
+                    from => 'altphone',
+                    to => 'B_phone',
+                    after => 'B_zipcode',
+                },
+                {
+                    from => 'expiry',
+                    to => 'dateexpiry',
+                    after => 'dateenrolled',
+                },
+                {
+                    from => 'guarantor',
+                    to => 'guarantorid',
+                    after => 'contactname',
+                },
+                {
+                    from => 'altrelationship',
+                    to => 'relationship',
+                    after => 'borrowernotes',
+                },
+            ],
+        );
+    
 
-		);
-		
-foreach my $table (keys %column_change) {
-	$sth = $dbh->prepare("show columns from $table");
-	$sth->execute();
-	undef %types;
-	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-	{
-		$types{$column}->{type} ="$type";
-		$types{$column}->{null} = "$null";
-		$types{$column}->{key} = "$key";
-		$types{$column}->{default} = "$default";
-		$types{$column}->{extra} = "$extra";
-	}    # while
-	my $tablerows = $column_change{$table};
-	foreach my $row ( @$tablerows ) {
-		if ($types{$row->{from}}->{type}) {
-			print "altering $table $row->{from} to $row->{to}\n";
-			# ALTER TABLE `borrowers` CHANGE `faxnumber` `fax` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
-# 			alter table `borrowers` change `faxnumber` `fax` type text  null after phone
-			my $sql = 
-				"alter table `$table` change `$row->{from}` `$row->{to}` $types{$row->{from}}->{type} ".
-				($types{$row->{from}}->{null} eq 'YES'?" NULL":" NOT NULL").
-				($types{$row->{from}}->{default}?" default ".$types{$row->{from}}->{default}:"").
-				"$types{$row->{from}}->{extra} after $row->{after} ";
-# 			print "$sql";
-			$dbh->do($sql);
-		}
-	}
+# MOVE all tables TO UTF-8 and innoDB
+$sth = $dbh->prepare("show table status");
+$sth->execute;
+while ( my $table = $sth->fetchrow_hashref ) {
+     if ($table->{Engine} ne 'InnoDB') {
+         $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+         print "moving $table->{Name} to InnoDB\n";
+     }
+    next if $table->{Name} eq 'marc_word';
+    next if $table->{Name} eq 'marc_subfield_table';
+    next if $table->{Name} eq 'auth_word';
+    next if $table->{Name} eq 'auth_subfield_table';
+    unless ($table->{Collation} =~ /^utf8/) {
+         print "moving $table->{Name} to utf8\n";
+        $dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
+        $dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
+        # FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
+    } else {
+    }
 }
+
+
+foreach my $table (keys %column_change) {
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute();
+    undef %types;
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $types{$column}->{type} ="$type";
+        $types{$column}->{null} = "$null";
+        $types{$column}->{key} = "$key";
+        $types{$column}->{default} = "$default";
+        $types{$column}->{extra} = "$extra";
+    }    # while
+    my $tablerows = $column_change{$table};
+    foreach my $row ( @$tablerows ) {
+        if ($types{$row->{from}}->{type}) {
+            print "altering $table $row->{from} to $row->{to}\n";
+            # ALTER TABLE `borrowers` CHANGE `faxnumber` `fax` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+#             alter table `borrowers` change `faxnumber` `fax` type text  null after phone
+            my $sql =
+                "alter table `$table` change `$row->{from}` `$row->{to}` $types{$row->{from}}->{type} ".
+                ($types{$row->{from}}->{null} eq 'YES'?" NULL":" NOT NULL").
+                ($types{$row->{from}}->{default}?" default ".$types{$row->{from}}->{default}:"").
+                "$types{$row->{from}}->{extra} after $row->{after} ";
+#             print "$sql";
+            $dbh->do($sql);
+        }
+    }
+}
+
+# Enter here the field you want to delete from DB.
+# FIXME :: there is a %uselessfield before which seems doing the same things.
+my %fieldtodelete = (
+    # tablename => [fieldname1,fieldname2,...]
+
+); # %fielddelete
+
+print "removing some unused fields...\n";
+foreach my $table ( keys %fieldtodelete ) {
+    foreach my $field ( @{$fieldtodelete{$table}} ){
+        print "removing ".$field." from ".$table;
+        my $sth = $dbh->prepare("ALTER TABLE $table DROP $field");
+        $sth->execute;
+        if ( $sth->err ) {
+            print "Error : $sth->errstr \n";
+        }
+    }
+}
+
+# Enter here the line you want to remove from DB.
+my %linetodelete = (
+    # table name => where clause.
+    userflags => "bit = 8", # delete the 'reserveforself' flags
+    
+); # %linetodelete
 
 #-------------------
 # Initialize
@@ -1119,7 +1598,7 @@ while ( my ($table) = $sth->fetchrow ) {
 # Now add any missing tables
 foreach $table ( keys %requiretables ) {
     unless ( $existingtables{$table} ) {
-	print "Adding $table table...\n" unless $silent;
+    print "Adding $table table...\n" unless $silent;
         my $sth = $dbh->prepare("create table $table $requiretables{$table}");
         $sth->execute;
         if ( $sth->err ) {
@@ -1128,17 +1607,6 @@ foreach $table ( keys %requiretables ) {
         }    # if error
     }    # unless exists
 }    # foreach
-
-# now drop useless tables
-foreach $table ( keys %dropable_table ) {
-	if ( $existingtables{$table} ) {
-		print "Dropping unused table $table\n" if $debug and not $silent;
-		$dbh->do("drop table $table");
-		if ( $dbh->err ) {
-			print "Error : $dbh->errstr \n";
-		}
-	}
-}
 
 #---------------------------------
 # Columns
@@ -1159,7 +1627,7 @@ foreach $table ( keys %requirefields ) {
             # column doesn't exist
             print "Adding $column field to $table table...\n" unless $silent;
             $query = "alter table $table
-			add column $column " . $requirefields{$table}->{$column};
+            add column $column " . $requirefields{$table}->{$column};
             print "Execute: $query\n" if $debug;
             my $sti = $dbh->prepare($query);
             $sti->execute;
@@ -1172,100 +1640,128 @@ foreach $table ( keys %requirefields ) {
 }    # foreach table
 
 foreach $table ( keys %fielddefinitions ) {
-	print "Check table $table\n" if $debug;
-	$sth = $dbh->prepare("show columns from $table");
-	$sth->execute();
-	my $definitions;
-	while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-	{
-		$definitions->{$column}->{type}    = $type;
-		$definitions->{$column}->{null}    = $null;
-		$definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
-		$definitions->{$column}->{key}     = $key;
-		$definitions->{$column}->{default} = $default;
-		$definitions->{$column}->{extra}   = $extra;
-	}    # while
-	my $fieldrow = $fielddefinitions{$table};
-	foreach my $row (@$fieldrow) {
-		my $field   = $row->{field};
-		my $type    = $row->{type};
-		my $null    = $row->{null};
-# 		$null    = 'YES' if $row->{null} eq 'NULL';
-		my $key     = $row->{key};
-		my $default = $row->{default};
-		my $null    = $row->{null};
-# 		$default="''" unless $default;
-		my $extra   = $row->{extra};
-		my $def     = $definitions->{$field};
-		my $after	= ($row->{after}?" after ".$row->{after}:"");
+    print "Check table $table\n" if $debug;
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute();
+    my $definitions;
+    while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+    {
+        $definitions->{$column}->{type}    = $type;
+        $definitions->{$column}->{null}    = $null;
+        $definitions->{$column}->{null}    = 'NULL' if $null eq 'YES';
+        $definitions->{$column}->{key}     = $key;
+        $definitions->{$column}->{default} = $default;
+        $definitions->{$column}->{extra}   = $extra;
+    }    # while
+    my $fieldrow = $fielddefinitions{$table};
+    foreach my $row (@$fieldrow) {
+        my $field   = $row->{field};
+        my $type    = $row->{type};
+        my $null    = $row->{null};
+#         $null    = 'YES' if $row->{null} eq 'NULL';
+        my $key     = $row->{key};
+        my $default = $row->{default};
+#         $default="''" unless $default;
+        my $extra   = $row->{extra};
+        my $def     = $definitions->{$field};
+        my $after    = ($row->{after}?" after ".$row->{after}:"");
 
-		unless ( $type eq $def->{type}
-			&& $null eq $def->{null}
-			&& $key eq $def->{key}
-			&& $extra eq $def->{extra} )
-		{
-			if ( $null eq '' ) {
-				$null = 'NOT NULL';
-			}
-			if ( $key eq 'PRI' ) {
-				$key = 'PRIMARY KEY';
-			}
-			unless ( $extra eq 'auto_increment' ) {
-				$extra = '';
-			}
-
-			# if it's a new column use "add", if it's an old one, use "change".
-			my $action;
-			if ($definitions->{$field}->{type}) {
-				$action="change $field"
-			} else {
-				$action="add";
-			}
+        unless ( $type eq $def->{type}
+            && $null eq $def->{null}
+            && $key eq $def->{key}
+            && $extra eq $def->{extra} )
+        {
+            if ( $null eq '' ) {
+                $null = 'NOT NULL';
+            }
+            if ( $key eq 'PRI' ) {
+                $key = 'PRIMARY KEY';
+            }
+            unless ( $extra eq 'auto_increment' ) {
+                $extra = '';
+            }
+    
+            # if it's a new column use "add", if it's an old one, use "change".
+            my $action;
+            if ($definitions->{$field}->{type}) {
+                $action="change $field"
+            } else {
+                $action="add";
+            }
 # if it's a primary key, drop the previous pk, before altering the table
-			my $sth;
-			if ($key ne 'PRIMARY KEY') {
-				$sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
-			} else {
-				$sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
-			}
-			$sth->execute($default);
-			print "  alter or create $field in $table\n" unless $silent;
-		}
-	}
+            my $sth;
+            if ($key ne 'PRIMARY KEY') {
+#                 warn "alter table $table $action $field $type $null $key $extra default $default $after";
+                $sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
+            } else {
+#             warn "alter table $table drop primary key, $action $field $type $null $key $extra default $default $after";
+                 # something strange : for indexes UNIQUE, they are reported as primary key here.
+                 # but if you try to run with drop primary key, it fails.
+                 # thus, we run the query twice, one will fail, one will succeed.
+                 # strange...
+                $sth =$dbh->prepare("alter table $table drop primary key, $action $field $type $null $key $extra default ? $after");
+                $sth =$dbh->prepare("alter table $table $action $field $type $null $key $extra default ? $after");
+            }
+# ALTER TABLE `borrowers` CHANGE `branchcode` `branchcode` VARCHAR( 10 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL 
+            print "  alter or create $field in $table\n" unless $silent;
+            $sth->execute($default);
+        }
+    }
+}
+
+print "removing some unused data...\n";
+foreach my $table ( keys %linetodelete ) {
+    foreach my $where ( @{linetodelete{$table}} ){
+        print "DELETE FROM ".$table." where ".$where;
+        print "\n";
+        my $sth = $dbh->prepare("DELETE FROM $table where $where");
+        $sth->execute;
+        if ( $sth->err ) {
+            print "Error : $sth->errstr \n";
+        }
+    }
 }
 
 # Populate tables with required data
 
-
 # synch table and deletedtable.
 foreach my $table (('borrowers','items','biblio','biblioitems')) {
-	my %deletedborrowers;
-	print "synch'ing $table\n";
-	$sth = $dbh->prepare("show columns from deleted$table");
-	$sth->execute;
-	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
-		$deletedborrowers{$column}=1;
-	}
-	$sth = $dbh->prepare("show columns from $table");
-	$sth->execute;
-	my $previous;
-	while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
-		unless ($deletedborrowers{$column}) {
-			my $newcol="alter table deleted$table add $column $type";
-			if ($null eq 'YES') {
-				$newcol .= " NULL ";
-			} else {
-				$newcol .= " NOT NULL ";
-			}
-			$newcol .= "default $default" if $default;
-			$newcol .= " after $previous" if $previous;
-			$previous=$column;
-			print "creating column $column\n";
-			$dbh->do($newcol);
-		}
-	}
+    my %deletedborrowers;
+    print "synch'ing $table and deleted$table\n";
+    $sth = $dbh->prepare("show columns from deleted$table");
+    $sth->execute;
+    while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+        $deletedborrowers{$column}=1;
+    }
+    $sth = $dbh->prepare("show columns from $table");
+    $sth->execute;
+    my $previous;
+    while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ) {
+        unless ($deletedborrowers{$column}) {
+            my $newcol="alter table deleted$table add $column $type";
+            if ($null eq 'YES') {
+                $newcol .= " NULL ";
+            } else {
+                $newcol .= " NOT NULL ";
+            }
+            $newcol .= "default ".$dbh->quote($default) if $default;
+            $newcol .= " after $previous" if $previous;
+            $previous=$column;
+            print "creating column $column\n";
+            $dbh->do($newcol);
+        }
+    }
 }
-
+#
+# update publisheddate 
+#
+$sth = $dbh->prepare("select count(*) from serial where publisheddate is NULL");
+$sth->execute;
+my ($emptypublished) = $sth->fetchrow;
+if ($emptypublished) {
+    print "Updating publisheddate\n";
+    $dbh->do("update serial set publisheddate=planneddate where publisheddate is NULL");
+}
 foreach my $table ( keys %tabledata ) {
     print "Checking for data required in table $table...\n" unless $silent;
     my $tablerows = $tabledata{$table};
@@ -1278,36 +1774,37 @@ foreach my $table ( keys %tabledata ) {
 "select $uniquefieldrequired from $table where $uniquefieldrequired=?"
         );
         $sth->execute($uniquevalue);
-		if ($sth->rows) {
-			foreach my $field (keys %$forceupdate) {
-				if ($forceupdate->{$field}) {
-					my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
-					$sth->execute($row->{$field}, $uniquevalue);
-				}
-	    	}
-		} else {
-			print "Adding row to $table: " unless $silent;
-			my @values;
-			my $fieldlist;
-			my $placeholders;
-			foreach my $field ( keys %$row ) {
-				next if $field eq 'uniquefieldrequired';
-				next if $field eq 'forceupdate';
-				my $value = $row->{$field};
-				push @values, $value;
-				print "  $field => $value" unless $silent;
-				$fieldlist .= "$field,";
-				$placeholders .= "?,";
-			}
-			print "\n" unless $silent;
-			$fieldlist    =~ s/,$//;
-			$placeholders =~ s/,$//;
-			my $sth =
-			$dbh->prepare(
-				"insert into $table ($fieldlist) values ($placeholders)");
-			$sth->execute(@values);
-		}
-	}
+        if ($sth->rows) {
+            foreach my $field (keys %$forceupdate) {
+                if ($forceupdate->{$field}) {
+                    my $sth=$dbh->prepare("update systempreferences set $field=? where $uniquefieldrequired=?");
+                    $sth->execute($row->{$field}, $uniquevalue);
+                }
+            }
+        } else {
+            print "Adding row to $table: " unless $silent;
+            my @values;
+            my $fieldlist;
+            my $placeholders;
+            foreach my $field ( keys %$row ) {
+                next if $field eq 'uniquefieldrequired';
+                next if $field eq 'forceupdate';
+                my $value = $row->{$field};
+                push @values, $value;
+                print "  $field => $value" unless $silent;
+                $fieldlist .= "$field,";
+                $placeholders .= "?,";
+            }
+            print "\n" unless $silent;
+            $fieldlist    =~ s/,$//;
+            $placeholders =~ s/,$//;
+            print "insert into $table ($fieldlist) values ($placeholders)";
+            my $sth =
+            $dbh->prepare(
+                "insert into $table ($fieldlist) values ($placeholders)");
+            $sth->execute(@values);
+        }
+    }
 }
 
 #
@@ -1315,33 +1812,33 @@ foreach my $table ( keys %tabledata ) {
 #
 print "Checking for index required...\n" unless $silent;
 foreach my $table ( keys %indexes ) {
-	#
-	# read all indexes from $table
-	#
-	$sth = $dbh->prepare("show index from $table");
-	$sth->execute;
-	my %existingindexes;
-	while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow ) {
-		$existingindexes{$key_name} = 1;
-	}
-	# read indexes to check
-	my $tablerows = $indexes{$table};
-	foreach my $row (@$tablerows) {
-		my $key_name=$row->{indexname};
-		if ($existingindexes{$key_name} eq 1) {
-# 			print "$key_name existing";
-		} else {
-			print "\tCreating index $key_name in $table\n";
-			my $sql;
-			if ($row->{indexname} eq 'PRIMARY') {
-				$sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
-			} else {
-				$sql = "alter table $table ADD INDEX $key_name ($row->{content}) $row->{type}";
-			}
- 			$dbh->do($sql);
+    #
+    # read all indexes from $table
+    #
+    $sth = $dbh->prepare("show index from $table");
+    $sth->execute;
+    my %existingindexes;
+    while ( my ( $table, $non_unique, $key_name, $Seq_in_index, $Column_name, $Collation, $cardinality, $sub_part, $Packed, $comment ) = $sth->fetchrow ) {
+        $existingindexes{$key_name} = 1;
+    }
+    # read indexes to check
+    my $tablerows = $indexes{$table};
+    foreach my $row (@$tablerows) {
+        my $key_name=$row->{indexname};
+        if ($existingindexes{$key_name} eq 1) {
+#             print "$key_name existing";
+        } else {
+            print "\tCreating index $key_name in $table\n";
+            my $sql;
+            if ($row->{indexname} eq 'PRIMARY') {
+                $sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
+            } else {
+                $sql = "alter table $table ADD INDEX $key_name ($row->{content}) $row->{type}";
+            }
+             $dbh->do($sql);
             print "Error $sql : $dbh->err \n" if $dbh->err;
-		}
-	}
+        }
+    }
 }
 
 #
@@ -1349,32 +1846,32 @@ foreach my $table ( keys %indexes ) {
 #
 print "Checking for foreign keys required...\n" unless $silent;
 foreach my $table ( keys %foreign_keys ) {
-	#
-	# read all indexes from $table
-	#
-	$sth = $dbh->prepare("show table status like '$table'");
-	$sth->execute;
-	my $stat = $sth->fetchrow_hashref;
-	# read indexes to check
-	my $tablerows = $foreign_keys{$table};
-	foreach my $row (@$tablerows) {
-		my $foreign_table=$row->{foreigntable};
-		if ($stat->{'Comment'} =~/$foreign_table/) {
-# 			print "$foreign_table existing\n";
-		} else {
-			print "\tCreating foreign key $foreign_table in $table\n";
-			# first, drop any orphan value in child table
-			if ($row->{onDelete} ne "RESTRICT") {
-				my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
-				$dbh->do($sql);
-				print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
-			}
-			my $sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
-			$sql .= " on update ".$row->{onUpdate} if $row->{onUpdate};
-			$sql .= " on delete ".$row->{onDelete} if $row->{onDelete};
-			$dbh->do($sql);
-			if ($dbh->err) {
-				print "====================
+    #
+    # read all indexes from $table
+    #
+    $sth = $dbh->prepare("show table status like '$table'");
+    $sth->execute;
+    my $stat = $sth->fetchrow_hashref;
+    # read indexes to check
+    my $tablerows = $foreign_keys{$table};
+    foreach my $row (@$tablerows) {
+        my $foreign_table=$row->{foreigntable};
+        if ($stat->{'Comment'} =~/$foreign_table/) {
+#             print "$foreign_table existing\n";
+        } else {
+            print "\tCreating foreign key $foreign_table in $table\n";
+            # first, drop any orphan value in child table
+            if ($row->{onDelete} ne "RESTRICT") {
+                my $sql = "delete from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})";
+                $dbh->do($sql);
+                print "SQL ERROR: $sql : $dbh->err \n" if $dbh->err;
+            }
+            my $sql="alter table $table ADD FOREIGN KEY $row->{key} ($row->{key}) REFERENCES $row->{foreigntable} ($row->{foreignkey})";
+            $sql .= " on update ".$row->{onUpdate} if $row->{onUpdate};
+            $sql .= " on delete ".$row->{onDelete} if $row->{onDelete};
+            $dbh->do($sql);
+            if ($dbh->err) {
+                print "====================
 An error occured during :
 \t$sql
 It probably means there is something wrong in your DB : a row ($table.$row->{key}) refers to a value in $row->{foreigntable}.$row->{foreignkey} that does not exist. solve the problem and run updater again (or just the previous SQL statement).
@@ -1382,9 +1879,19 @@ You can find those values with select
 \t$table.* from $table where $row->{key} not in (select $row->{foreignkey} from $row->{foreigntable})
 ====================\n
 ";
-			}
-		}
-	}
+            }
+        }
+    }
+}
+# now drop useless tables
+foreach $table ( @TableToDelete ) {
+    if ( $existingtables{$table} ) {
+        print "Dropping unused table $table\n" if $debug and not $silent;
+        $dbh->do("drop table $table");
+        if ( $dbh->err ) {
+            print "Error : $dbh->errstr \n";
+        }
+    }
 }
 
 #
@@ -1404,271 +1911,348 @@ $sth->execute();
 my $definitions;
 my $bibliofwexist=0;
 while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ){
-	$bibliofwexist=1 if $column eq 'frameworkcode';
+    $bibliofwexist=1 if $column eq 'frameworkcode';
 }
 unless ($bibliofwexist) {
-	print "moving biblioframework to biblio table\n";
-	$dbh->do('ALTER TABLE `biblio` ADD `frameworkcode` VARCHAR( 4 ) NOT NULL AFTER `biblionumber`');
-	$sth = $dbh->prepare('select biblionumber,frameworkcode from marc_biblio');
-	$sth->execute;
-	my $sth_update = $dbh->prepare('update biblio set frameworkcode=? where biblionumber=?');
-	my $totaldone=0;
-	while (my ($biblionumber,$frameworkcode) = $sth->fetchrow) {
-		$sth_update->execute($frameworkcode,$biblionumber);
-		$totaldone++;
-		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
-	}
-	print "\rdone\n";
+    print "moving biblioframework to biblio table\n";
+    $dbh->do('ALTER TABLE `biblio` ADD `frameworkcode` VARCHAR( 4 ) NOT NULL AFTER `biblionumber`');
+    $sth = $dbh->prepare('select biblionumber,frameworkcode from marc_biblio');
+    $sth->execute;
+    my $sth_update = $dbh->prepare('update biblio set frameworkcode=? where biblionumber=?');
+    my $totaldone=0;
+    while (my ($biblionumber,$frameworkcode) = $sth->fetchrow) {
+        $sth_update->execute($frameworkcode,$biblionumber);
+        $totaldone++;
+        print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
+    }
+    print "\rdone\n";
 }
-
-#
-# moving MARC data from marc_subfield_table to biblioitems.marc
-#
-$sth = $dbh->prepare("show columns from biblioitems");
-$sth->execute();
-my $definitions;
-my $marcdone=0;
-while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow ){
-	$marcdone=1 if ($type eq 'blob' && $column eq 'marc') ;
-}
-unless ($marcdone) {
-	print "moving MARC record to biblioitems table\n";
-	# changing marc field type
-	$dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` BLOB NULL DEFAULT NULL ');
-	# adding marc xml, just for convenience
-	$dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ');
-	# moving data from marc_subfield_value to biblio
-	$sth = $dbh->prepare('select bibid,biblionumber from marc_biblio');
-	$sth->execute;
-	my $sth_update = $dbh->prepare('update biblioitems set marc=?, marcxml=? where biblionumber=?');
-	my $totaldone=0;
-	while (my ($bibid,$biblionumber) = $sth->fetchrow) {
-		my $record = MARCgetbiblio($dbh,$bibid);
-	#Force UTF-8 in record leader
-		$record->encoding('UTF-8');
-# 		print $record->as_formatted if ($biblionumber==3902);
-		$sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
-		$totaldone++;
-		print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
-	}
-	print "\rdone\n";
-}
-
 
 # at last, remove useless fields
 foreach $table ( keys %uselessfields ) {
-	my @fields = split /,/,$uselessfields{$table};
-	my $fields;
-	my $exists;
-	foreach my $fieldtodrop (@fields) {
-		$fieldtodrop =~ s/\t//g;
-		$fieldtodrop =~ s/\n//g;
-		$exists =0;
-		$sth = $dbh->prepare("show columns from $table");
-		$sth->execute;
-		while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
-		{
-			$exists =1 if ($column eq $fieldtodrop);
-		}
-		if ($exists) {
-			print "deleting $fieldtodrop field in $table...\n" unless $silent;
-			my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
-			$sth->execute;
-		}
-	}
+    my @fields = split /,/,$uselessfields{$table};
+    my $fields;
+    my $exists;
+    foreach my $fieldtodrop (@fields) {
+        $fieldtodrop =~ s/\t//g;
+        $fieldtodrop =~ s/\n//g;
+        $exists =0;
+        $sth = $dbh->prepare("show columns from $table");
+        $sth->execute;
+        while ( my ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+        {
+            $exists =1 if ($column eq $fieldtodrop);
+        }
+        if ($exists) {
+            print "deleting $fieldtodrop field in $table...\n" unless $silent;
+            my $sth = $dbh->prepare("alter table $table drop $fieldtodrop");
+            $sth->execute;
+        }
+    }
 }    # foreach
 
-
-# MOVE all tables TO UTF-8 and innoDB
-$sth = $dbh->prepare("show table status");
+#
+# Changing aqbookfund's primary key 
+#
+$sth=$dbh->prepare("ALTER TABLE `aqbookfund` DROP PRIMARY KEY , ADD PRIMARY KEY ( `bookfundid` , `branchcode` ) ;");
 $sth->execute;
-while ( my $table = $sth->fetchrow_hashref ) {
-# 	if ($table->{Engine} ne 'InnoDB') {
-# 		$dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
-# 		print "moving $table->{Name} to InnoDB\n";
-# 	}
-    next if $table->{Name} eq 'marc_word';
-    next if $table->{Name} eq 'marc_subfield_table';
-    next if $table->{Name} eq 'auth_word';
-    next if $table->{Name} eq 'auth_subfield_table';
-	unless ($table->{Collation} =~ /^utf8/) {
- 		print "moving $table->{Name} to utf8\n";
-		$dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
-		$dbh->do("ALTER TABLE $table->{Name} DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci");
-		# FIXME : maybe a ALTER TABLE tbl_name CONVERT TO CHARACTER SET utf8 would be better, def char set seems to work fine. If any problem encountered, let's try with convert !
-	} else {
-	}
-}
 
 $sth->finish;
-
-#
-# those 2 subs are a copy of Biblio.pm, version 2.2.4
-# they are useful only once, for moving from 2.2 to 3.0
-# the MARCgetbiblio & MARCgetitem subs in Biblio.pm
-# are still here, but uses other tables
-# (the ones that are filled by updatedatabase !)
-#
-
-sub MARCgetbiblio {
-
-    # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid ) = @_;
-    my $record = MARC::Record->new();
-#	warn "". $bidid;
-
-    my $sth =
-      $dbh->prepare(
-"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
-		 		 from marc_subfield_table
-		 		 where bibid=? order by tag,tagorder,subfieldorder
-		 	 "
-    );
-    my $sth2 =
-      $dbh->prepare(
-        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute($bibid);
-    my $prevtagorder = 1;
-    my $prevtag      = 'XXX';
-    my $previndicator;
-    my $field;        # for >=10 tags
-    my $prevvalue;    # for <10 tags
-    while ( my $row = $sth->fetchrow_hashref ) {
-
-        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
-            $sth2->execute( $row->{'valuebloblink'} );
-            my $row2 = $sth2->fetchrow_hashref;
-            $sth2->finish;
-            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
-        }
-        if ( $row->{tagorder} ne $prevtagorder || $row->{tag} ne $prevtag ) {
-            $previndicator .= "  ";
-            if ( $prevtag < 10 ) {
-				if ($prevtag ne '000') {
-                	$record->add_fields( ( sprintf "%03s", $prevtag ), $prevvalue ) unless $prevtag eq "XXX";    # ignore the 1st loop
-				} else {
-					$record->leader(sprintf("%24s",$prevvalue));
-				}
-            }
-            else {
-                $record->add_fields($field) unless $prevtag eq "XXX";
-            }
-            undef $field;
-            $prevtagorder  = $row->{tagorder};
-            $prevtag       = $row->{tag};
-            $previndicator = $row->{tag_indicator};
-            if ( $row->{tag} < 10 ) {
-                $prevvalue = $row->{subfieldvalue};
-            }
-            else {
-                $field = MARC::Field->new(
-                    ( sprintf "%03s", $prevtag ),
-                    substr( $row->{tag_indicator} . '  ', 0, 1 ),
-                    substr( $row->{tag_indicator} . '  ', 1, 1 ),
-                    $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'}
-                );
-            }
-        }
-        else {
-            if ( $row->{tag} < 10 ) {
-                $record->add_fields( ( sprintf "%03s", $row->{tag} ),
-                    $row->{'subfieldvalue'} );
-            }
-            else {
-                $field->add_subfields( $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'} );
-            }
-            $prevtag       = $row->{tag};
-            $previndicator = $row->{tag_indicator};
-        }
-    }
-
-    # the last has not been included inside the loop... do it now !
-    if ( $prevtag ne "XXX" )
-    { # check that we have found something. Otherwise, prevtag is still XXX and we
-         # must return an empty record, not make MARC::Record fail because we try to
-         # create a record with XXX as field :-(
-        if ( $prevtag < 10 ) {
-            $record->add_fields( $prevtag, $prevvalue );
-        }
-        else {
-
-            #  		my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
-            $record->add_fields($field);
-        }
-    }
-    return $record;
-}
-
-sub MARCgetitem {
-
-    # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-    my $record = MARC::Record->new();
-
-    # search MARC tagorder
-    my $sth2 =
-      $dbh->prepare(
-"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
-    );
-    $sth2->execute( $bibid, $itemnumber );
-    my ($tagorder) = $sth2->fetchrow_array();
-
-    #---- TODO : the leader is missing
-    my $sth =
-      $dbh->prepare(
-"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
-		 		 from marc_subfield_table
-		 		 where bibid=? and tagorder=? order by subfieldcode,subfieldorder
-		 	 "
-    );
-    $sth2 =
-      $dbh->prepare(
-        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute( $bibid, $tagorder );
-    while ( my $row = $sth->fetchrow_hashref ) {
-        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
-            $sth2->execute( $row->{'valuebloblink'} );
-            my $row2 = $sth2->fetchrow_hashref;
-            $sth2->finish;
-            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
-        }
-        if ( $record->field( $row->{'tag'} ) ) {
-            my $field;
-
-#--- this test must stay as this, because of strange behaviour of mySQL/Perl DBI with char var containing a number...
-            #--- sometimes, eliminates 0 at beginning, sometimes no ;-\\\
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            $field = $record->field( $row->{'tag'} );
-            if ($field) {
-                my $x =
-                  $field->add_subfields( $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'} );
-                $record->delete_field($field);
-                $record->add_fields($field);
-            }
-        }
-        else {
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            my $temp =
-              MARC::Field->new( $row->{'tag'}, " ", " ",
-                $row->{'subfieldcode'} => $row->{'subfieldvalue'} );
-            $record->add_fields($temp);
-        }
-
-    }
-    return $record;
-}
-
 
 exit;
 
 # $Log$
+# Revision 1.158  2007/03/09 15:14:57  tipaul
+# rel_3_0 moved to HEAD
+#
+# Revision 1.157.2.56  2007/01/31 16:22:54  btoumi
+# -add possibility to use isbn with length of 13 characters
+# for  Import datas in the reservoir.
+# -modify isbn field in marc_breeding table (varchar 13)
+# -add isbn filter (no - )when u read a notice from reservoir
+# -add filter to have right field 100
+#
+# Revision 1.157.2.55  2007/01/30 10:50:19  tipaul
+# adding 2 usefull indexes to biblioitems table
+#
+# Revision 1.157.2.54  2007/01/29 16:45:52  toins
+# * adding a new default authorised value : SUGGEST.
+# SUGGEST give some reasons to accept or reject a suggestion.
+#
+# * default value for borrowersMandatoryfield syspref is now "cardnumber|surname|adress"
+#
+# Revision 1.157.2.53  2007/01/26 20:48:37  hdl
+# Serials management : Bugfixes + improvements.
+# - Partial dates are now managed
+# - next Date Calculation with irregularity tested for 1 week and 1 month.
+# - manage if subscription is abouttoexpire or expired.
+# - Adding some information on serials pages about subscription.
+# - Managing irregularity with numbers.
+# - Adding Internal Notes in subscription management.
+# - Repeating Button above pages.
+#
+# Please run Updatedatabase to change irregularity and add internalnotes field  to subscription
+#
+# Revision 1.157.2.52  2007/01/24 13:57:26  tipaul
+# - setting supplierid to auto_increment (HDL : could you check that is works, i'm not 100% sure)
+# - removing 22 -> 30 marc_subfield_table -> marcxml stuff, it's now in misc/migration_tools/22_to_30/
+#
+# Revision 1.157.2.51  2007/01/18 09:58:45  tipaul
+# defaulting NOT NULL fields (to '')
+#
+# Revision 1.157.2.50  2007/01/18 09:39:21  tipaul
+# issuedate must be defaulted with ' '
+#
+# Revision 1.157.2.49  2007/01/18 09:37:30  tipaul
+# removing 2 field definitions that were here twice
+#
+# Revision 1.157.2.48  2007/01/15 09:55:40  toins
+# adding a new logging systempref : FinesLog.
+#
+# Revision 1.157.2.47  2007/01/12 18:09:49  toins
+# LetterLog added
+#
+# Revision 1.157.2.46  2007/01/11 14:35:39  tipaul
+# adding Opac Browser feature : the build_browser_and_cloud.pl script will :
+# - fill the browser table, that enable browsing, digit by digit of a given category, the catalogue. A complete dewey classification is provided in the script, active only for french libraries, of course (although, for instance, the script check that the catalogue is in english for developping convenience)
+# - fill the tags table, that contains the subject cloud.
+#
+# The cloud part is a copy of the previous build_tags.pl script that can be deleted : those 2 scripts require to parse all the catalogue to extract interesting data, so they are long. It's useless to parse the catalogue twice !
+#
+# The commit also add the systempreference to hide/show the OpacBrowse in database & in systempref management script.
+#
+# IMPROVEMENTS to do :
+# - the script that builds the tables can be improved to update only last week biblios (at the price of a small error in value links, but it's not a problem).
+# - add, in parameters section, a place to edit browser descriptions. The build script has to be updated to to avoid deleting existing browser descriptions.
+#
+# Revision 1.157.2.45  2007/01/10 16:52:52  toins
+# Value for Log Features syspref are set to 0 by default.
+#
+# Revision 1.157.2.44  2007/01/10 16:31:15  toins
+# new systems preferences :
+#  - CataloguingLog (log the update/creation/deletion of a notice if set to 1)
+#  - BorrowersLog ( idem for borrowers )
+#  - IssueLog (log all issue if set to 1)
+#  - ReturnLog (log all return if set to 1)
+#  - SusbcriptionLog (log all creation/deletion/update of a subcription)
+#
+# All of theses are in a new tab called 'LOGFeatures' in systempreferences.pl
+#
+# Revision 1.157.2.43  2007/01/10 14:13:17  toins
+# opac_news.displayed is replaced by opac_news.number.
+# This field say how are ordered the news on the template.
+#
+# Revision 1.157.2.42  2007/01/09 14:09:01  toins
+# 2 field added to opac_news.('expirationdate' and 'displayed').
+#
+# Revision 1.157.2.41  2006/12/22 17:11:33  tipaul
+# adding 3 systempreferences for opac features & a new systempref tab where all systempreferences are located
+#
+# Revision 1.157.2.40  2006/12/20 16:45:59  tipaul
+# ZEBRA update :
+# - adding a new table : when a biblio is added/modified/ deleted, an entry is entered in this table
+# - the zebraqueue_start.pl script read it & does the stuff.
+#
+# code coming from head (tumer). it can be run every minut instead of once every day for dev_week code.
+#
+# I just have commented the previous code (=real time update) in Biblio.pm, we will be able to reactivate it once indexdata fixes zebra update bug !
+#
+# Revision 1.157.2.39  2006/12/20 11:42:17  toins
+# adding table "tags"
+#
+# Revision 1.157.2.38  2006/12/19 12:06:53  alaurin
+# adding a new system preference : RequestOnOpac ;
+#
+# adding update database
+#
+# Revision 1.157.2.37  2006/12/19 10:49:21  toins
+# fix a minor bug in syspref "expandedSearchOption" and adding it on updatedatabase.
+#
+# Revision 1.157.2.36  2006/12/13 19:48:09  hdl
+# Adding claimdate to serials.
+# (Needed to record claimdate
+#
+# Revision 1.157.2.35  2006/12/08 15:36:57  hdl
+# Adding issuedate to issues table.
+#
+# Revision 1.157.2.34  2006/12/07 16:00:41  hdl
+# Adding issuedate to table issues.
+# Modifying issuedate on issue (Circ2.pm)
+# Modifying report issue_avg_stats to take this change into account. (Need TESTING)
+#
+# Revision 1.157.2.33  2006/12/06 14:12:18  btoumi
+# add BorrowersTitles systempreferences to setup borrowers title
+#
+# Revision 1.157.2.32  2006/12/06 13:49:41  toins
+# deleting additionalauthors, bibliosubjects, bibliosubtitles.
+#
+# Revision 1.157.2.31  2006/12/05 15:07:16  tipaul
+# NEW FEATURE :
+# a column (itemtypes.summary) has been added.
+#
+# If it is empty, no changes at all.
+# In admin/itemtypes.pl, the librarian can go and define what (and how) the record appeard below the title.
+# The summary must be entered exactly as the authority summary.
+# An example is provided in admin/itemtypes.pl add/modify itemtype.
+#
+# This feature had been requested for a while by my librarians. The 2 uses we can imagine are :
+# - for websites => show the link directly in the result list, to avoid 1 clic (& there is no need for a size/editor/publicationyear for web sites)
+# - for serial publications => show some serial specific informations.
+#
+# This commit should do everything that is needed for this feature.
+#
+# Revision 1.157.2.30  2006/11/29 11:58:18  toins
+# re indenting with space.
+#
+# Revision 1.157.2.29  2006/11/24 21:58:35  kados
+# changing items.itemtype to items.itype to avoid problems with
+# joins with biblioitems. NOTE: I don't think updatedatabase will remove the
+# items.itemtype from your db so you must do that manually if you updated
+# from an earlier version of updatedatabase.
+#
+# Revision 1.157.2.28  2006/11/24 13:54:55  hdl
+# Adding serialsadditem
+#
+# Revision 1.157.2.27  2006/11/24 11:07:09  alaurin
+# bug sanop #74 :
+#
+# Add a new system prefence "AutoLocation"
+#  this fonction  switching activation or not Autolocation, if Yes, the Librarian can't change his location, it's defined by branchip,
+# if autolocation is setting to "NO", librarian can change his settings ....
+#
+#
+# warn, if autolocation is setting "on", on circulation.pl we don't have anymore the choice to change your library and branchprinter,
+# defined on branches : branchip and branchprinter ....
+#
+# this function could be improved
+#
+# Revision 1.157.2.26  2006/11/23 11:01:06  toins
+# branchtransfers.frombranch & branchtransfers.tobranch must be VARCHAR(10)
+#
+# Revision 1.157.2.25  2006/11/23 09:05:33  tipaul
+# reintroducing move to innoDB (as only innoDB supports extended features like foreign keys)
+#
+# Revision 1.157.2.24  2006/11/21 09:15:23  toins
+# better userflag description
+#
+# Revision 1.157.2.23  2006/11/21 08:51:01  toins
+# 2 new userflags: serials & reports.
+#
+# Revision 1.157.2.22  2006/11/20 16:59:09  toins
+# adding a userflags: 'editauthorities'.
+#
+# Revision 1.157.2.21  2006/11/17 10:53:04  hdl
+# Changing
+# - subscription detail :
+#     adding manual history (in subscription table)
+#     addind subscription summary.
+# - menu-serials.inc deleting old link
+# - adapting serials-collection.pl
+#
+# TODO List :
+# - Some values are hard coded in subscription-detail
+# - subscription-detail.pl relies on subscription-add for edition BUT subscription-add transmits back data to subscription-detail in order to save data back into database. This is a bit odd enough and should not occur.
+# - Some more tests on numberlength which doesnot seem to be kept.
+#
+# Revision 1.157.2.20  2006/11/15 15:15:50  hdl
+# Final First Version for New Facility for subscription management.
+#
+# Now
+# use serials-collection.pl for history display
+# and serials-edit.pl for serial edition
+# subscription add and detail adds a new branch information to help IndependantBranches Library to manage different subscriptions for a serial
+#
+# This is aimed at replacing serials-receive and statecollection.
+#
+# Revision 1.157.2.19  2006/11/14 16:28:01  rych
+# Adding itemtype field to items
+#
+# Revision 1.157.2.18  2006/11/14 16:16:58  rych
+# fix mysql syntax
+#
+# Revision 1.157.2.17  2006/11/14 14:39:31  toins
+# * delete the userflags "reservforself" which is unused.
+# * some new function not use at the moment.
+#
+# Revision 1.157.2.16  2006/11/02 09:27:30  toins
+# issue.branchcode must be varchar(10).
+#
+# Revision 1.157.2.15  2006/10/31 17:41:51  toins
+# items.holdingbranch must be varchar(10)
+#
+# Revision 1.157.2.14  2006/10/30 09:41:45  btoumi
+# remove auto increment for accountno in accountlines table
+#
+# Revision 1.157.2.13  2006/10/20 10:35:05  alaurin
+# new program : branchoverdues.pl
+#
+# with this program, the librararians will can check , and specify the method of notification of documents in overdue
+#
+# little explanation :
+#
+#     - At first, the datas come from accountlines, generated by accounlines (type 'FU')
+#     - There is three levels of notification (come from overduerules ....)
+#     - there is four methods of notification :
+#         - letter (for us, use an openoffice program ....)
+#         - Mail (use a batch program)
+#         - Phone (simple Method, if this method is selected, we consider that the borrower as been notified)
+#         - Considered Lost (For us the third level)
+#
+#     - At this time we have some parameters hardcoded (Must be improve later)
+#
+#     - the choice of methods is hardcoded :
+#         - for the first overduelevel : three methods : mail,letter,phone
+#         -For the second overduelevel :only one method : letter
+#         - For the Third Overdue level : only one method : Considered Lost
+#
+#
+# this program will be heavy tested next week ....
+#
+# Revision 1.157.2.12  2006/10/19 09:04:07  toins
+# itemtypes.itemtype is a primary key.
+#
+# Revision 1.157.2.11  2006/10/18 13:31:13  toins
+# Borrowers.categorycode must have 10 chars lenght & categories.categorycode must be a primary key.
+#
+# Revision 1.157.2.10  2006/10/17 16:18:14  hdl
+# Changing primary key in aqbookfund.
+# Making it branchcode+aqbookfundid rather than simple aqbookfundid.
+#
+# Revision 1.157.2.9  2006/10/16 14:23:47  toins
+# Borrowers.branchcode must be varchar(10) too.
+#
+# Revision 1.157.2.7  2006/10/11 15:22:23  tipaul
+# - adding some missing fields, coming from dev_week :
+# * lcsort & ccode in biblioitems table. lcsort is used for loc callnumbers & ccode is used to have a item level circulation rules. Ccode means C<irc>code
+# * onloan & issue_date in items table. They are filled by the misc/update_items.pl script, with circulation values. NOW, onloan & issue_date in items are NOT set by circulation, this decision speed up a lot the circulation rate (with the Date::Manip removal). The price for this is to have the status of the item not real time updated in zebra, but that's worth the price.
+# * cutterextra in items, that we should ask tumer to understand what it does  ;-)
+#
+# Revision 1.157.2.6  2006/10/10 11:25:40  btoumi
+# add two tables : notifys , charges
+# modify accountlines tables add two fields (notify_id and notify_level)
+#
+# Revision 1.157.2.5  2006/10/02 09:15:44  hdl
+# Serials :
+# * synching with NZ-devs on Serials.
+# * adding routing lists support,
+# * adding serialsadditems support
+# * adding publisheddate management
+#
+# TODO :
+# Management for seasonal serials should be fixed in order to be language independant.
+#
+# Revision 1.157.2.4  2006/09/19 07:44:13  btoumi
+# bug fix : modify wrong field name BorrowerMandatoryField
+#
+# Revision 1.157.2.3  2006/09/18 14:00:24  btoumi
+# bug fix :wrond field name for opacnote and contactnote
+#
+# Revision 1.157.2.2  2006/09/11 13:24:03  alaurin
+# marcxml should be a longtext, some biblios can be more than 65535 char long
+#
+# Revision 1.157.2.1  2006/09/04 08:39:14  toins
+# sync with rel_2_2.
+#
 # Revision 1.157  2006/08/11 10:03:13  tipaul
 # the new "includes" features, for personalized templates. Look at koha-devel, i'll write a mail here (& something on the wiki)
 #
@@ -1791,7 +2375,7 @@ exit;
 # Revision 1.130  2006/03/03 16:35:21  tipaul
 # commit for holidays and news management.
 #
-# Contrib from Tümer Garip (from Turkey) :
+# Contrib from Tmer Garip (from Turkey) :
 # * holiday :
 # in /tools/ the holiday.pl script let you define holidays (days where the library is closed), branch by branch. You can define 3 types of holidays :
 # - single day : only this day is closed

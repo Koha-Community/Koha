@@ -21,18 +21,16 @@
 
 =head1 NAME
 
-MARCdetail.pl : script to show a biblio in MARC format
+opac-ISBDdetail.pl : script to show a biblio in ISBD format
 
 
 =head1 DESCRIPTION
 
-This script needs a biblionumber in bib parameter (bibnumber
-from koha style DB.  Automaticaly maps to marc biblionumber).
+This script needs a biblionumber as parameter 
 
-It shows the biblio in a (nice) MARC format depending on MARC
-parameters tables.
+It shows the biblio
 
-The template is in <templates_dir>/catalogue/MARCdetail.tmpl.
+The template is in <templates_dir>/catalogue/ISBDdetail.tmpl.
 this template must be divided into 11 "tabs".
 
 The first 10 tabs present the biblio, the 11th one presents
@@ -44,7 +42,6 @@ the items attached to the biblio
 
 =cut
 
-
 use strict;
 require Exporter;
 use C4::Auth;
@@ -52,135 +49,183 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
-use C4::Serials; #uses getsubscriptionfrom biblionumber
-use HTML::Template;
+use C4::Review;
+use C4::Serials;    # uses getsubscriptionfrom biblionumber
+use C4::Koha;       # use getitemtypeinfo
+use C4::Members;    # GetMember
 
-my $query=new CGI;
+my $query = new CGI;
 
-my $dbh=C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 
-my $biblionumber=$query->param('bib');
-my $bibid = $query->param('bibid');
-$bibid = &MARCfind_MARCbibid_from_oldbiblionumber($dbh,$biblionumber) unless $bibid;
-$biblionumber = &MARCfind_oldbiblionumber_from_MARCbibid($dbh,$bibid) unless $biblionumber;
-my $itemtype = &MARCfind_frameworkcode($dbh,$bibid);
-my $tagslib = &MARCgettagslib($dbh,1,$itemtype);
+my $biblionumber = $query->param('biblionumber');
+my $itemtype     = &MARCfind_frameworkcode($biblionumber);
+my $tagslib      = &MARCgettagslib( $dbh, 1, $itemtype );
 
-my $record =MARCgetbiblio($dbh,$bibid);
+my $record = GetMarcBiblio($biblionumber);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my $dat = MARCmarc2koha($dbh,$record);
-my @subscriptions = GetSubscriptions($dat->{title},$dat->{issn},$biblionumber);
+my $dat                 = MARCmarc2koha( $dbh, $record );
+my @subscriptions       =
+  GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;
-foreach my $subscription (@subscriptions){
-	my %cell;
-	$cell{subscriptionid}= $subscription->{subscriptionid};
-	$cell{subscriptionnotes}= $subscription->{notes};
-	#get the three latest serials.
-	$cell{latestserials}=GetLatestSerials($subscription->{subscriptionid},3);
-	push @subs, \%cell;
+foreach my $subscription (@subscriptions) {
+    my %cell;
+    $cell{subscriptionid}    = $subscription->{subscriptionid};
+    $cell{subscriptionnotes} = $subscription->{notes};
+
+    #get the three latest serials.
+    $cell{latestserials} =
+      GetLatestSerials( $subscription->{subscriptionid}, 3 );
+    push @subs, \%cell;
 }
 
 # open template
-my ($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "opac-ISBDdetail.tmpl",
-			     query => $query,
-			     type => "opac",
-			     authnotrequired => 1,
-			     debug => 1,
-			     });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-ISBDdetail.tmpl",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => 1,
+        debug           => 1,
+    }
+);
 $template->param(
-				subscriptions => \@subs,
-				subscriptionsnumber => $subscriptionsnumber,
+    subscriptions       => \@subs,
+    subscriptionsnumber => $subscriptionsnumber,
 );
 
 my $ISBD = C4::Context->preference('ISBD');
+
 # my @blocs = split /\@/,$ISBD;
 # my @fields = $record->fields();
 my $res;
+
 # foreach my $bloc (@blocs) {
-# 	$bloc =~ s/\n//g;
-	my $bloc = $ISBD;
-	my $blocres;
-	foreach my $isbdfield (split /#/,$bloc) {
-# 		$isbdfield= /(.?.?.?)/;
-		$isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
-		my $fieldvalue=$1;
-		my $textbefore=$2;
-		my $analysestring=$3;
-		my $textafter=$4;
-# 		warn "==> $1 / $2 / $3 / $4";
-# 		my $fieldvalue=substr($isbdfield,0,3);
-		if ($fieldvalue>0) {
-	# 		warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
-# 			warn "FV : $fieldvalue";
-			my $hasputtextbefore=0;
-			foreach my $field ($record->field($fieldvalue)) {
-				my $calculated = $analysestring;
-				my $tag = $field->tag();
-				if ($tag<10) {
-				} else {
-					my @subf = $field->subfields;
-					for my $i (0..$#subf) {
-						my $subfieldcode = $subf[$i][0];
-						my $subfieldvalue = get_authorised_value_desc($tag, $subf[$i][0], $subf[$i][1], '', $dbh);
-						my $tagsubf = $tag.$subfieldcode;
-						$calculated =~ s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-					}
-					# field builded, store the result
-					if ($calculated && !$hasputtextbefore) { # put textbefore if not done
-						$blocres .=$textbefore;
-						$hasputtextbefore=1
-					}
-					# remove punctuation at start
-					$calculated =~ s/^( |;|:|\.|-)*//g;
-					$blocres.=$calculated;
-				}
-			}
-			$blocres .=$textafter if $hasputtextbefore;
-		} else {
-			$blocres.=$isbdfield;
-		}
-	}
-	$res.=$blocres;
+#     $bloc =~ s/\n//g;
+my $bloc = $ISBD;
+my $blocres;
+foreach my $isbdfield ( split /#/, $bloc ) {
+
+    #         $isbdfield= /(.?.?.?)/;
+    $isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
+    my $fieldvalue    = $1;
+    my $textbefore    = $2;
+    my $analysestring = $3;
+    my $textafter     = $4;
+
+    #         warn "==> $1 / $2 / $3 / $4";
+    #         my $fieldvalue=substr($isbdfield,0,3);
+    if ( $fieldvalue > 0 ) {
+
+        #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
+        #             warn "FV : $fieldvalue";
+        my $hasputtextbefore = 0;
+        foreach my $field ( $record->field($fieldvalue) ) {
+            my $calculated = $analysestring;
+            my $tag        = $field->tag();
+            if ( $tag < 10 ) {
+            }
+            else {
+                my @subf = $field->subfields;
+                for my $i ( 0 .. $#subf ) {
+                    my $subfieldcode  = $subf[$i][0];
+                    my $subfieldvalue =
+                      GetAuthorisedValueDesc( $tag, $subf[$i][0],
+                        $subf[$i][1], '', $tagslib );
+                    my $tagsubf = $tag . $subfieldcode;
+                    $calculated =~
+s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                }
+
+                # field builded, store the result
+                if ( $calculated && !$hasputtextbefore )
+                {    # put textbefore if not done
+                    $blocres .= $textbefore;
+                    $hasputtextbefore = 1;
+                }
+
+                # remove punctuation at start
+                $calculated =~ s/^( |;|:|\.|-)*//g;
+                $blocres .= $calculated;
+            }
+        }
+        $blocres .= $textafter if $hasputtextbefore;
+    }
+    else {
+        $blocres .= $isbdfield;
+    }
+}
+$res .= $blocres;
+
 # }
 $res =~ s/\{(.*?)\}//g;
 $res =~ s/\\n/\n/g;
 $res =~ s/\n/<br\/>/g;
+
 # remove empty ()
 $res =~ s/\(\)//g;
-$template->param(ISBD => $res,
-				biblionumber => $biblionumber);
+
+my $reviews = getreviews( $biblionumber, 1 );
+foreach ( @$reviews ) {
+    my $borrower_number_review = $_->{borrowernumber};
+    my $borrowerData           = GetMember('',$borrower_number_review);
+    # setting some borrower info into this hash
+    $_->{title}     = $borrowerData->{'title'};
+    $_->{surname}   = $borrowerData->{'surname'};
+    $_->{firstname} = $borrowerData->{'firstname'};
+}
+
+
+$template->param(
+    ISBD         => $res,
+    biblionumber => $biblionumber,
+    reviews             => $reviews,
+);
+
+## Amazon.com stuff
+#not used unless preference set
+if ( C4::Context->preference("AmazonContent") == 1 ) {
+    use C4::Amazon;
+    $dat->{'amazonisbn'} = $dat->{'isbn'};
+    $dat->{'amazonisbn'} =~ s|-||g;
+
+    $template->param( amazonisbn => $dat->{amazonisbn} );
+
+    my $amazon_details = &get_amazon_details( $dat->{amazonisbn} );
+
+    foreach my $result ( @{ $amazon_details->{Details} } ) {
+        $template->param( item_description => $result->{ProductDescription} );
+        $template->param( image            => $result->{ImageUrlMedium} );
+        $template->param( list_price       => $result->{ListPrice} );
+        $template->param( amazon_url       => $result->{url} );
+    }
+
+    my @products;
+    my @reviews;
+    for my $details ( @{ $amazon_details->{Details} } ) {
+        next unless $details->{SimilarProducts};
+        for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
+            push @products, +{ Product => $product };
+        }
+        next unless $details->{Reviews};
+        for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
+            $template->param( rating => $product * 20 );
+        }
+        for my $reviews ( @{ $details->{Reviews}->{CustomerReview} } ) {
+            push @reviews,
+              +{
+                Summary => $reviews->{Summary},
+                Comment => $reviews->{Comment},
+              };
+        }
+    }
+    $template->param( SIMILAR_PRODUCTS => \@products );
+    $template->param( AMAZONREVIEWS    => \@reviews );
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-sub get_authorised_value_desc ($$$$$) {
-   my($tag, $subfield, $value, $framework, $dbh) = @_;
-
-   #---- branch
-    if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-       return getbranchname($value);
-    }
-
-   #---- itemtypes
-   if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-       return ItemType($value);
-    }
-
-   #---- "true" authorized value
-   my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
-   if ($category ne "") {
-       my $sth = $dbh->prepare("select lib from authorised_values where category = ? and authorised_value = ?");
-       $sth->execute($category, $value);
-       my $data = $sth->fetchrow_hashref;
-       return $data->{'lib'};
-   } else {
-       return $value; # if nothing is found return the original value
-   }
-}

@@ -5,47 +5,45 @@ use CGI;
 use C4::Auth;
 use C4::Serials;
 use C4::Acquisition;
-
+use C4::Output;
+use C4::Bookseller;
 use C4::Interface::CGI::Output;
 use C4::Context;
+use C4::Letters;
 
+my $input = new CGI;
 
-my $query = new CGI;
-
-my $serialid = $query->param('serialid');
-my $op = $query->param('op');
-# my $claimletter = $query->param('claimletter');
-my $supplierid = $query->param('supplierid');
+my $serialid = $input->param('serialid');
+my $op = $input->param('op');
+my $claimletter = $input->param('claimletter');
+my $supplierid = $input->param('supplierid');
+my $order = $input->param('order');
+warn "order :$order";
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 
 foreach my $supplierid (keys %supplierlist){
-        my ($count, @dummy) = GetMissingIssues($supplierid);
+        my ($count, @dummy) = GetLateOrMissingIssues($supplierid,"",$order);
         my $counting = $count;
         $supplierlist{$supplierid} = $supplierlist{$supplierid}." ($counting)";
 	push @select_supplier, $supplierid
 }
 
-# my @select_letter = (1,2,3,4);
-# my %letters = (1=>'Claim Form 1',2=>'Claim Form 2',3=>'Claim Form 3',4=>'Claim Form 4');
-my ($count2, @missingissues) = GetMissingIssues($supplierid,$serialid);
+my @letters = GetLetters("claimissues");
+my $letter=((scalar(@letters)>1)||($letters[0]->{name}||$letters[0]->{code}));
+my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order);
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-values   => \@select_supplier,
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
-			-multiple => 0 );
+			-multiple => 0 
+            -onChange => 'onchange="submit();"');
 
-# my $CGIletter=CGI::scrolling_list( -name     => 'claimletter',
-#			-values   => \@select_letter,
-#			-default  => $claimletter,
-#			-labels   => \%letters,
-#			-size     => 1,
-#			-multiple => 0 );
 my ($singlesupplier,@supplierinfo);
 if($supplierid){
-   ($singlesupplier,@supplierinfo)=bookseller($supplierid);
+   (@supplierinfo)=GetBookSeller($supplierid);
 } else { # set up supplierid for the claim links out of main table if all suppliers is chosen
    for(my $i=0; $i<@missingissues;$i++){
        $missingissues[$i]->{'supplierid'} = getsupplierbyserialid($missingissues[$i]->{'serialid'});
@@ -58,26 +56,37 @@ if($op eq 'preview'){
     $preview = 1;
 }
 
+if ($op eq "send_alert"){
+  my @serialnums=$input->param("serialid");
+  SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+  my $cntupdate=UpdateClaimdateIssues(\@serialnums);
+  ### $cntupdate SHOULD be equal to scalar(@$serialnums)
+}
+
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/claims.tmpl",
-				query => $query,
+				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
+				flagsrequired => {serials => 1},
 				debug => 1,
 				});
 
+$template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
+    order =>$order,
 	CGIsupplier => $CGIsupplier,
-#    	CGIletter => $CGIletter,
+    phone => $supplierinfo[0]->{phone},
+    booksellerfax => $supplierinfo[0]->{booksellerfax},
+    bookselleremail => $supplierinfo[0]->{bookselleremail},
         preview => $preview,
         missingissues => \@missingissues,
         supplierid => $supplierid,
-#       claimletter => $claimletter,
+        claimletter => $claimletter,
         singlesupplier => $singlesupplier,
         supplierloop => \@supplierinfo,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
 	);
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $template->output;

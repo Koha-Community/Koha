@@ -73,7 +73,8 @@ if ($selectview eq "full"){
      = get_template_and_user({template_name => "serials/serial-issues-full.tmpl",
      query => $query,
      type => "intranet",
-     authnotrequired => 1,
+     authnotrequired => 0,
+	 flagsrequired => {serials => 1},
      debug => 1,
      });
  
@@ -110,8 +111,4 @@ if ($selectview eq "full"){
         virtualshelves => "".C4::Context->preference("virtualshelves"),
     );
 }
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 output_html_with_http_headers $query, $cookie, $template->output;

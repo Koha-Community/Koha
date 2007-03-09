@@ -23,8 +23,10 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use C4::Search;
+use C4::Branch; # GetBranches
+use C4::Output;
 use C4::Koha;
+use C4::Acquisition;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 
@@ -57,7 +59,7 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports=> 1},
 				debug => 1,
 				});
 $template->param(do_it => $do_it);
@@ -69,8 +71,9 @@ if ($do_it) {
 		exit(1);
 	} else {
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
-							 -name=>"$basename.csv",
-							 -attachment=>"$basename.csv");
+                                     -encoding    => 'utf-8',
+                                     -name=>"$basename.csv",
+                                     -attachment=>"$basename.csv");
 		my $cols = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
 		my $sep;
@@ -118,6 +121,17 @@ if ($do_it) {
 				-labels   => \%select_catcode,
 				-size     => 1,
 				-multiple => 0 );
+	
+my $branches = GetBranches;
+my @branchloop;
+foreach my $thisbranch (keys %$branches) {
+   # my $selected = 1 if $thisbranch eq $branch;
+    my %row =(value => $thisbranch,
+#                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
+}
 	
 	$req = $dbh->prepare( "select distinctrow sort1 from borrowers order by sort1");
 	$req->execute;
@@ -172,13 +186,14 @@ if ($do_it) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
-	$template->param(CGICatCode => $CGICatCode,
+	$template->param(CGICatcode => $CGICatCode,
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
 					hassort2 => $hassort2,
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					CGIBranch => @branchloop
 					);
 
 }
@@ -207,14 +222,16 @@ sub calculate {
 	
  	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
  	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
- 	$linefilter = @$filters[2] if ($line =~ /sort1/ ) ;
- 	$linefilter = @$filters[3] if ($line =~ /sort2/ ) ;
+ 	$linefilter = @$filters[2] if ($line =~ /branccode/ ) ;
+ 	$linefilter = @$filters[3] if ($line =~ /sort1/ ) ;
+ 	$linefilter = @$filters[4] if ($line =~ /sort2/ ) ;
 # 
  	my $colfilter = "";
  	$colfilter = @$filters[0] if ($column =~ /categorycode/);
  	$colfilter = @$filters[1] if ($column =~ /zipcode/);
- 	$colfilter = @$filters[2] if ($column =~ /sort1/);
- 	$colfilter = @$filters[3] if ($column =~ /sort2/);
+ 	$colfilter = @$filters[2] if ($column =~ /branchcode/);
+ 	$colfilter = @$filters[3] if ($column =~ /sort1/);
+ 	$colfilter = @$filters[4] if ($column =~ /sort2/);
 
 	my @loopfilter;
 	for (my $i=0;$i<=3;$i++) {
@@ -223,8 +240,9 @@ sub calculate {
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Cat Code " if ($i==0);
 			$cell{crit} .="Zip Code" if ($i==1);
-			$cell{crit} .="Sort1" if ($i==2);
-			$cell{crit} .="Sort2" if ($i==3);
+			$cell{crit} .="Branchcode" if ($i==2);
+			$cell{crit} .="Sort1" if ($i==3);
+			$cell{crit} .="Sort2" if ($i==4);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -278,10 +296,10 @@ sub calculate {
 	$strsth2 .= "select distinctrow $colfield from borrowers where $column is not null";
 	if ( $colfilter ) {
 		$strsth2 .= " and $colfield LIKE ? ";
-	} 
+	}
 	$strsth2 .= " and $status='1' " if ($status);
 	$strsth2 .= " order by $colfield";
-	warn "". $strsth2;
+#	warn "". $strsth2;
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if ($colfilter) {
 		$sth2->execute($colfilter);
@@ -385,4 +403,3 @@ sub calculate {
 	return \@mainloop;
 }
 
-1;

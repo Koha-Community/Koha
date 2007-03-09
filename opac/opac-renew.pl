@@ -9,17 +9,15 @@ use C4::Circulation::Circ2;
 
 my $query = new CGI;
 
-my $itemnumber = $query->param('item');
-my $borrowernumber = $query->param("bornum");
-
-
+my $itemnumber     = $query->param('item');
+my $borrowernumber = $query->param("borrowernumber");
 
 my %env;
-my $status = renewstatus(\%env,$borrowernumber,$itemnumber);
-if ($status == 1){
-    renewbook(\%env,$borrowernumber,$itemnumber);
+my $status = renewstatus( \%env, $borrowernumber, $itemnumber );
+if ( $status == 1 ) {
+    renewbook( \%env, $borrowernumber, $itemnumber );
 }
 
-if ($query->param('from') eq 'opac_user') {
+if ( $query->param('from') eq 'opac_user' ) {
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
 }

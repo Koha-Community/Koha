@@ -23,13 +23,12 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use HTML::Template;
-use C4::Search;
+use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
-use Date::Manip;
+use Date::Calc qw(Delta_Days);
 
 =head1 NAME
 
@@ -61,10 +60,14 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($line, $column, $rodsp, $podsp, $calc, \@filters);
@@ -76,6 +79,7 @@ if ($do_it) {
 	} else {
 # Printing to a csv file
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
+                                     -encoding    => 'utf-8',
 			-attachment=>"$basename.csv",
 			-filename=>"$basename.csv" );
 		my $cols = @$results[0]->{loopcol};
@@ -157,7 +161,7 @@ if ($do_it) {
 		$hassort1 =1 if ($value);
 		push @select, $value;
 	}
-	my $branches=getbranches();
+	my $branches=GetBranches();
 	my @select_branch;
 	my %select_branches;
 	push @select_branch,"";
@@ -337,7 +341,7 @@ sub calculate {
 		$linefield .="Year($line)";
 		$lineorder .= $line;  
 	} elsif (($line=~/timestamp/) or ($line=~/returndate/)){
-		$linefield .= "date_format('$line',\"%Y-%m-%d\")";
+		$linefield .= "date_format(\'$line\',\"%Y-%m-%d\")";
 		$lineorder .= $line;  
 	} else {
 		$linefield .= $line;
@@ -351,9 +355,9 @@ sub calculate {
 		if ($linefilter[1] and ($linefilter[0])){
 			$strsth .= " and $line between '$linefilter[0]' and '$linefilter[1]' " ;
 		} elsif ($linefilter[1]) {
-				$strsth .= " and $line < '$linefilter[1]' " ;
+				$strsth .= " and $line < \'$linefilter[1]\' " ;
 		} elsif ($linefilter[0]) {
-			$strsth .= " and $line > '$linefilter[0]' " ;
+			$strsth .= " and $line > \'$linefilter[0]\' " ;
 		}
 		if ($linefilter[2]){
 			$strsth .= " and dayname($line) = '$linefilter[2]' " ;
@@ -475,7 +479,7 @@ sub calculate {
 	
 # Processing average loanperiods
 	$strcalc .= "SELECT $linefield, $colfield, ";
-	$strcalc .= " DATE_SUB(date_due, INTERVAL CAST(issuingrules.issuelength AS SIGNED INTEGER) * (CAST(issues.renewals AS SIGNED INTEGER)+1) DAY) AS issuedate, returndate, COUNT(*), date_due, issues.renewals, issuelength FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+	$strcalc .= " issuedate, returndate, COUNT(*), date_due, issues.renewals, issuelength FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
 
  	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
  	$strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -521,10 +525,10 @@ sub calculate {
 		$col = "zzEMPTY" if ($col eq undef);
 		$row = "zzEMPTY" if ($row eq undef);
 #		warn "506 row :".$row." column :".$col;
-		my @result =split /:/,DateCalc($returndate,$issuedate) ;
+		my $result =Delta_Days(split(/-/,$issuedate),split (/-/,$returndate)) ;
 #  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
 #  and seconds between the two
-		$loanlength = $result[2]*7+$result[3];
+		$loanlength = $result;
 #		warn "512 Same row and col DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
 #		warn "513 row :".$row." column :".$col;
 		$table{$row}->{$col}+=$weight*$loanlength;

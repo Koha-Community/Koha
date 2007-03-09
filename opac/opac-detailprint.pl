@@ -18,86 +18,82 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use HTML::Template;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Output;  # contains gettemplate
+use C4::Output;    # contains gettemplate
 use CGI;
 use C4::Biblio;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
 
-my $query=new CGI;
-my $type=$query->param('type');
-($type) || ($type='intra');
+my $query = new CGI;
+my $type  = $query->param('type');
+($type) || ( $type = 'intra' );
 
-my $biblionumber=$query->param('bib');
+my $biblionumber = $query->param('biblionumber');
 
 # change back when ive fixed request.pl
-my @items = ItemInfo(undef, $biblionumber, $type);
+my @items      = GetItemInfosOf($biblionumber);
 my $norequests = 1;
 foreach my $itm (@items) {
-     $norequests = 0 unless $itm->{'notforloan'};
+    $norequests = 0 unless $itm->{'notforloan'};
 }
 
+my $dat       = GetBiblioData($biblionumber);
+my $record    = GetMarcBiblio($biblionumber);
+my $addauthor =
+  GetMarcAuthors( $record, C4::Context->preference("marcflavour") );
+my $authorcount = scalar @$addauthor;
 
-
-my $dat=bibdata($biblionumber);
-my ($authorcount, $addauthor)= &getaddauthor($biblionumber);
-my ($webbiblioitemcount, @webbiblioitems) = &getwebbiblioitems($biblionumber);
-my ($websitecount, @websites)             = &getwebsites($biblionumber);
-
-$dat->{'count'}=@items;
+$dat->{'count'}      = @items;
 $dat->{'norequests'} = $norequests;
 
-$dat->{'additional'}=$addauthor->[0]->{'author'};
-for (my $i = 1; $i < $authorcount; $i++) {
-        $dat->{'additional'} .= "|" . $addauthor->[$i]->{'author'};
-} # for
+$dat->{'additional'} = "";
+foreach (@$addauthor) {
+    $dat->{'additional'} .= "|" . $_->{'value'};
+}    # for
 
 my @results;
 
-$results[0]=$dat;
+$results[0] = $dat;
 
-my $resultsarray=\@results;
-my $itemsarray=\@items;
-my $webarray=\@webbiblioitems;
-my $sitearray=\@websites;
+my $resultsarray = \@results;
+my $itemsarray   = \@items;
 
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
+my $startfrom = $query->param('startfrom');
+($startfrom) || ( $startfrom = 0 );
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => ('opac-detailprint.tmpl'),
-	query           => $query,
-	type            => "opac",
-	authnotrequired => 1,
-    });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => ('opac-detailprint.tmpl'),
+        query           => $query,
+        type            => "opac",
+        authnotrequired => 1,
+    }
+);
 
-my $count=1;
+my $count = 1;
 
 # now to get the items into a hash we can use and whack that thru
 
-
-my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
-my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
-$template->param(startfrom => $startfrom+1,
-						endat => $startfrom+20,
-						numrecords => $count,
-						nextstartfrom => $nextstartfrom,
-						prevstartfrom => $prevstartfrom,
-						BIBLIO_RESULTS => $resultsarray,
-						ITEM_RESULTS => $itemsarray,
-						WEB_RESULTS => $webarray,
-						SITE_RESULTS => $sitearray,
-						loggedinuser => $loggedinuser,
-						biblionumber => $biblionumber,
-						);
+my $nextstartfrom =
+  ( $startfrom + 20 < $count - 20 ) ? ( $startfrom + 20 ) : ( $count - 20 );
+my $prevstartfrom = ( $startfrom - 20 > 0 ) ? ( $startfrom - 20 ) : (0);
+$template->param(
+    startfrom      => $startfrom + 1,
+    endat          => $startfrom + 20,
+    numrecords     => $count,
+    nextstartfrom  => $nextstartfrom,
+    prevstartfrom  => $prevstartfrom,
+    BIBLIO_RESULTS => $resultsarray,
+    ITEM_RESULTS   => $itemsarray,
+    loggedinuser   => $loggedinuser,
+    biblionumber   => $biblionumber,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
 
 # Local Variables:
 # tab-width: 8

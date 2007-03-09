@@ -23,10 +23,11 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
+use HTML::Template;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
-
+use C4::Branch; # GetBranches
 =head1
 
 =cut
@@ -60,14 +61,15 @@ sub calculate {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($branch) {
-		$sth = $dbh->prepare("select description, biblio.itemtype, count(*) as total from itemtypes, biblio, items 
-						where biblio.itemtype=itemtypes.itemtype 
-							and items.biblionumber=biblio.biblionumber
+		$sth = $dbh->prepare("select description, biblioitems.itemtype, count(*) as total from itemtypes, biblioitems, items 
+						where biblioitems.itemtype=itemtypes.itemtype 
+							and items.biblioitemnumber=biblioitems.biblioitemnumber
 							and items.holdingbranch=?
-						group by biblio.itemtype");
+						group by biblioitems.itemtype");
 		$sth->execute($branch);
 	} else {
-		$sth = $dbh->prepare("select description, biblio.itemtype, count(*) as total from itemtypes, biblio where biblio.itemtype=itemtypes.itemtype group by biblio.itemtype");
+		$sth = $dbh->prepare("select description, biblioitems.itemtype, count(*) as total from itemtypes, biblioitems,items where biblioitems.itemtype=itemtypes.itemtype 
+                                      and biblioitems.biblioitemnumber = items.biblioitemnumber group by biblioitems.itemtype");
 		$sth->execute;
 	}
 	my ($description,$biblioitems,$total);

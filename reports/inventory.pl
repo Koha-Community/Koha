@@ -24,7 +24,8 @@ use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
-use C4::Biblio;
+use C4::Date;
+
 
 # Fixed variables
 my $linecolor1='#ffffcc';
@@ -38,60 +39,90 @@ my $pagepagesize=20;
 # Main loop....
 my $input = new CGI;
 my $minlocation=$input->param('minlocation');
-#my $maxlocation=$input->param('maxlocation');
-#$maxlocation=$minlocation.'Z' unless $maxlocation;
+my $maxlocation=$input->param('maxlocation');
+$maxlocation=$minlocation.'Z' unless $maxlocation;
 my $datelastseen = $input->param('datelastseen');
 my $offset = $input->param('offset');
 my $markseen = $input->param('markseen');
 $offset=0 unless $offset;
 my $pagesize = $input->param('pagesize');
 $pagesize=20 unless $pagesize;
+my $uploadbarcodes = $input->param('uploadbarcodes');
+# warn "uploadbarcodes : ".$uploadbarcodes;
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "reports/inventory.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
+			     flagsrequired => {reports => 1},
 			     debug => 1,
 			     });
 $template->param(minlocation => $minlocation,
-				
+				maxlocation => $maxlocation,
 				offset => $offset,
 				pagesize => $pagesize,
 				datelastseen => $datelastseen,
+				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
 				);
-if ($markseen) {
-	foreach my $field ($input->param) {
-		if ($field =~ /SEEN-(.*)/) {
-			&itemseen($1);
-			&returnbook($1,"MAIN");
+if ($uploadbarcodes && length($uploadbarcodes)>0){
+	my $dbh=C4::Context->dbh;
+	my $date=format_date($input->param('setdate'));
+	$date = format_date("today") unless $date;
+# 	warn "$date";
+	my $strsth="update items set (datelastseen = $date) where items.barcode =?";
+	my $qupdate = $dbh->prepare($strsth);
+	my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
+	my $qonloan = $dbh->prepare($strsth);
+	my $strsth="select * from items where items.barcode =? and issues.wthdrawn=1";
+	my $qwthdrawn = $dbh->prepare($strsth);
+	my @errorloop;
+	my $count=0;
+	while (my $barcode=<$uploadbarcodes>){
+		chomp $barcode;
+# 		warn "$barcode";
+		if ($qwthdrawn->execute($barcode) &&$qwthdrawn->rows){
+			push @errorloop, {'barcode'=>$barcode,'ERR_WTHDRAWN'=>1};
+		}else{
+			$qupdate->execute($barcode);
+			$count += $qupdate->rows;
+# 			warn "$count";
+			if ($count){
+				$qonloan->execute($barcode);
+				if ($qonloan->rows){
+					my $data = $qonloan->fetchrow_hashref;
+					my ($doreturn, $messages, $iteminformation, $borrower) =returnbook($barcode, $data->{homebranch});
+					if ($doreturn){push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_RET'=>1}}
+					else {push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_NOT_RET'=>1}}
+				}
+			} else {
+				push @errorloop, {'barcode'=>$barcode,'ERR_BARCODE'=>1};
+			}
 		}
 	}
-}
-if ($minlocation) {
-	my @results = listitemsforinventory($minlocation,$datelastseen,$offset,$pagesize);
-## @results is now a hash of kohaxml
-## convert to normal koha hash for the templates
-my @res;
-my $i=0;
-foreach my $xml(@results) {
-
-	my @kohafields; ## just parse the fields required
-	push @kohafields,"title","author","biblionumber","itemnumber","barcode","itemcallnumber";
-	my $dbh=C4::Context->dbh;
-	my ($biblio,@itemrecords) = XMLmarc2koha($dbh,$xml,"",@kohafields);
-		 foreach my $data(@itemrecords){
-		$data->{title}=$biblio->{title};
-		$data->{author}=$biblio->{author};
-		push @res,$data;
-	
+	$qupdate->finish;
+	$qonloan->finish;
+	$qwthdrawn->finish;
+	$template->param(date=>$date,Number=>$count);
+# 	$template->param(errorfile=>$errorfile) if ($errorfile);
+	$template->param(errorloop=>\@errorloop) if (@errorloop);
+}else{
+	if ($markseen) {
+		foreach my $field ($input->param) {
+			if ($field =~ /SEEN-(.*)/) {
+				&itemseen($1);
+			}
 		}
-}
-	$template->param(loop =>\@res,
-					nextoffset => ($offset+$pagesize),
-					prevoffset => ($offset?$offset-$pagesize:0),
-					);
+	}
+	if ($minlocation) {
+		my $res = C4::Circulation::Circ2::listitemsforinventory($minlocation,$maxlocation,$datelastseen,$offset,$pagesize);
+		$template->param(loop =>$res,
+						nextoffset => ($offset+$pagesize),
+						prevoffset => ($offset?$offset-$pagesize:0),
+						);
+	}
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 

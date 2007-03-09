@@ -25,8 +25,8 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Database;
-use HTML::Template;
+
+
 use C4::Context;
 use C4::Barcodes::PrinterConfig;
 
@@ -123,7 +123,7 @@ my ($template, $loggedinuser, $cookie)
 			                 type => "intranet",
 			                 query => $input,
 			                 authnotrequired => 0,
-			                 flagsrequired => {parameters => 1},
+			                 flagsrequired => {tools => 1},
 					         debug => 1,
 			               });
 

@@ -24,9 +24,9 @@
         <category><!-- TMPL_VAR NAME="itemtype" --></category>
         <description><![CDATA[Call Number: <!-- TMPL_VAR NAME="callno" --><br />
         <!-- TMPL_IF NAME="notes" -->Notes: <!-- TMPL_VAR NAME="notes" --><br /><!-- /TMPL_IF -->
-<a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="bibid" -->">View Details</a> <!-- TMPL_IF NAME="reservable" -->| <a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="bibid" -->">Reserve this Item</a><!-- /TMPL_IF -->]]>
+<a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">View Details</a> <!-- TMPL_IF NAME="reservable" -->| <a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Reserve this Item</a><!-- /TMPL_IF -->]]>
 </description>
-  <link>https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR name="bibid" --></link>
+  <link>https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" --></link>
 
  </item>
 <!-- /TMPL_LOOP -->

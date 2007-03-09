@@ -23,11 +23,13 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use C4::Search;
+
+use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 use Date::Manip;
+use C4::Members;
 
 =head1 NAME
 
@@ -56,10 +58,14 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($limit, $column, \@filters);
@@ -71,6 +77,7 @@ if ($do_it) {
 	} else {
 # Printing to a csv file
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
+                                     -encoding    => 'utf-8',
 			-attachment=>"$basename.csv",
 			-filename=>"$basename.csv" );
 		my $cols = @$results[0]->{loopcol};
@@ -131,9 +138,22 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
+	my ($codes,$labels) = GetborCatFromCatType(undef,undef);
+	my @borcatloop;
+	foreach my $thisborcat (sort keys %$labels) {
+ # 			my $selected = 1 if $thisbranch eq $branch;
+ 			my %row =(value => $thisborcat,
+ # 									selected => $selected,
+									description => $labels->{$thisborcat},
+							);
+			push @borcatloop, \%row;
+	}
+	
+	
 	$template->param(
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					borcatloop =>\@borcatloop,
 					);
 output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -157,7 +177,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=6;$i++) {
+	for (my $i=0;$i<=2;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			if (($i==1) and (@$filters[$i-1])) {
@@ -165,6 +185,7 @@ sub calculate {
 			}
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Bor Cat" if ($i==0);
+			$cell{crit} .="Without issues since" if ($i==1);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -226,13 +247,31 @@ sub calculate {
 # preparing calculation
 	my $strcalc ;
 	
-# Processing average loanperiods
+# Processing calculation
 	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM borrowers LEFT JOIN issues ON  issues.borrowernumber=borrowers.borrowernumber WHERE issues.borrowernumber is null";
+	$strcalc .= " FROM borrowers ";
+	$strcalc .= "WHERE 1 ";
 	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-	
+	if (@$filters[1]){
+		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ";
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ");
+		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+		
+# 		$queryfilter->execute(@$filters[1]);
+# 		while (my ($borrowernumber)=$queryfilter->fetchrow){
+# 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
+# 		}
+	} else {
+		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues ";
+		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
+		$queryfilter->execute;
+		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+# 		while (my ($borrowernumber)=$queryfilter->fetchrow){
+# 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
+# 		}
+	}
 	$strcalc .= " group by borrowers.borrowernumber";
 	$strcalc .= ", $colfield" if ($column);
 	$strcalc .= " order by $colfield " if ($colfield);
@@ -260,7 +299,7 @@ sub calculate {
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
 	
-	my $max =(($line)?$line:@table);
+	my $max =(($line)?$line:@table -1);
  	for ($i=1; $i<=$max;$i++) {
  		my @loopcell;
  		#@loopcol ensures the order for columns is common with column titles

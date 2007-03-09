@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -27,7 +26,7 @@ use C4::Search;
 use C4::AuthoritiesMarc;
 use C4::Context;
 use C4::Biblio;
-use HTML::Template;
+
 
 =head1 NAME
 
@@ -48,201 +47,242 @@ The script shows all results & the user can choose what he want, that is copied 
 =cut
 
 my $input = new CGI;
-my $field =$input->param('marclist');
+my $field = $input->param('marclist');
+
 #warn "field :$field";
-my ($tablename, $kohafield)=split /./,$field;
+my ( $tablename, $kohafield ) = split /./, $field;
+
 #my $tablename=$input->param('tablename');
-$tablename="biblio" unless ($tablename);
+$tablename = "biblio" unless ($tablename);
+
 #my $kohafield = $input->param('kohafield');
 my @search = $input->param('search');
+
 # warn " ".$search[0];
 my $index = $input->param('index');
+
 # warn " index: ".$index;
-my $op=$input->param('op');
-if (($search[0]) and not ($op eq 'do_search')){
-	$op='do_search';
+my $op = $input->param('op');
+if ( ( $search[0] ) and not( $op eq 'do_search' ) ) {
+    $op = 'do_search';
 }
 my $script_name = 'opac-dictionary.pl';
 my $query;
-my $type=$input->param('type');
+my $type = $input->param('type');
+
 #warn " ".$type;
 
 my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie);
+my ( $template, $loggedinuser, $cookie );
 
 my $env;
 
-my $startfrom=$input->param('startfrom');
-$startfrom=0 if(!defined $startfrom);
+my $startfrom = $input->param('startfrom');
+$startfrom = 0 if ( !defined $startfrom );
 my $searchdesc;
 my $resultsperpage;
 
 #warn "Starting process";
 
-if ($op eq "do_search") {
-	#
-	# searching in biblio
-	#
-	my $sth=$dbh->prepare("Select distinct tagfield,tagsubfield from marc_subfield_structure where kohafield = ?");
-	$sth->execute("$field");
-	my (@tags, @and_or, @operator, @excluding,@value);
-	
- 	while ((my $tagfield,my $tagsubfield,my $liblibrarian) = $sth->fetchrow) {
- 		push @tags, $dbh->quote("$tagfield$tagsubfield");
- 	}
+if ( $op eq "do_search" ) {
 
-	$resultsperpage= $input->param('resultsperpage');
-	$resultsperpage = 19 if(!defined $resultsperpage);
-	my $orderby = $input->param('orderby');
+    #
+    # searching in biblio
+    #
+    my $sth =
+      $dbh->prepare(
+"Select distinct tagfield,tagsubfield from marc_subfield_structure where kohafield = ?"
+      );
+    $sth->execute("$field");
+    my ( @tags, @and_or, @operator, @excluding, @value );
 
-	findseealso($dbh,\@tags);
+    while ( ( my $tagfield, my $tagsubfield, my $liblibrarian ) =
+        $sth->fetchrow )
+    {
+        push @tags, $dbh->quote("$tagfield$tagsubfield");
+    }
 
-	my @results, my $total;
-	my $strsth="select distinct subfieldvalue, count(marc_subfield_table.bibid) from marc_subfield_table,marc_word where marc_word.word like ? and marc_subfield_table.bibid=marc_word.bibid and marc_subfield_table.tagorder=marc_word.tagorder and marc_word.tagsubfield in ";
-	my $listtags="(";
-	foreach my $tag (@tags){
-		$listtags .= $tag .",";
-	}
-	$listtags =~s/,$/)/;
-	$strsth .= $listtags." and marc_word.tagsubfield=concat(marc_subfield_table.tag,marc_subfield_table.subfieldcode) group by subfieldvalue ";
-# 	warn "search in biblio : ".$strsth;
-	my $value = uc($search[0]);
-	$value=~s/\*/%/g;
-	$value.= "%" if not($value=~m/%/);
-# 	warn " texte : ".$value;
+    $resultsperpage = $input->param('resultsperpage');
+    $resultsperpage = 19 if ( !defined $resultsperpage );
+    my $orderby = $input->param('orderby');
 
-	$sth=$dbh->prepare($strsth);
-	$sth->execute($value);
-	my $total;
-	my @catresults;
-	while (my ($value,$ctresults)=$sth->fetchrow) {
-# 		warn "countresults : ".$ctresults;
-		push @catresults,{value=> $value, 
-						  even=>($total-$startfrom*$resultsperpage)%2,
-						  count=>$ctresults
-						  } if (($total>=$startfrom*$resultsperpage) and ($total<($startfrom+1)*$resultsperpage));
-		$total++;
-	}
-	
+    findseealso( $dbh, \@tags );
 
-	my $strsth="Select distinct authtypecode from marc_subfield_structure where (";
-	foreach my $listtags (@tags){
-		my @taglist=split /,/,$listtags;
-		foreach my $curtag (@taglist){
-			$strsth.="(tagfield='".substr($curtag,1,3)."' AND tagsubfield='".substr($curtag,4,1)."') OR";
-		}
-	}
-	
-	$strsth=~s/ OR$/)/;
-	my $strsth = $strsth." and authtypecode is not NULL";
-# 	warn $strsth;
-	my $sth=$dbh->prepare($strsth);
-	$sth->execute;
-	
-	#
-	# searching in authorities
-	#
-	my @authresults;
-	my $authnbresults;
-	while ((my $authtypecode) = $sth->fetchrow) {
-		my ($curauthresults,$nbresults) = authoritysearch($dbh,[''],[''],[''],['contains'],
-														\@search,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
-		push @authresults, @$curauthresults;
-		$authnbresults+=$nbresults;
-#		warn "auth : $authtypecode nbauthresults : $nbresults";
-	}
-	
-	# 
-	# OK, filling the template with authorities & biblio entries found.
-	#
-	($template, $loggedinuser, $cookie)
-		= get_template_and_user({template_name => "opac-dictionary.tmpl",
-				query => $input,
-				type => 'opac',
-				authnotrequired => 1,
-				debug => 1,
-				});
+    my @results, my $total;
+    my $strsth =
+"select distinct subfieldvalue, count(marc_subfield_table.bibid) from marc_subfield_table,marc_word where marc_word.word like ? and marc_subfield_table.bibid=marc_word.bibid and marc_subfield_table.tagorder=marc_word.tagorder and marc_word.tagsubfield in ";
+    my $listtags = "(";
+    foreach my $tag (@tags) {
+        $listtags .= $tag . ",";
+    }
+    $listtags =~ s/,$/)/;
+    $strsth .= $listtags
+      . " and marc_word.tagsubfield=concat(marc_subfield_table.tag,marc_subfield_table.subfieldcode) group by subfieldvalue ";
 
-	# multi page display gestion
-	my $displaynext=0;
-	my $displayprev=$startfrom;
-	if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
-		$displaynext = 1;
-	}
+    #     warn "search in biblio : ".$strsth;
+    my $value = uc( $search[0] );
+    $value =~ s/\*/%/g;
+    $value .= "%" if not( $value =~ m/%/ );
 
-	my @field_data = ();
+    #     warn " texte : ".$value;
 
-	for(my $i = 0 ; $i <= $#tags ; $i++) {
-		push @field_data, { term => "marclist", val=>$tags[$i] };
-		push @field_data, { term => "and_or", val=>$and_or[$i] };
-		push @field_data, { term => "excluding", val=>$excluding[$i] };
-		push @field_data, { term => "operator", val=>$operator[$i] };
-		push @field_data, { term => "value", val=>$value[$i] };
-	}
+    $sth = $dbh->prepare($strsth);
+    $sth->execute($value);
+    my @catresults;
+    while ( my ( $value, $ctresults ) = $sth->fetchrow ) {
 
-	my @numbers = ();
+        #         warn "countresults : ".$ctresults;
+        push @catresults,
+          {
+            value => $value,
+            even  => ( $total - $startfrom * $resultsperpage ) % 2,
+            count => $ctresults
+          }
+          if (  ( $total >= $startfrom * $resultsperpage )
+            and ( $total < ( $startfrom + 1 ) * $resultsperpage ) );
+        $total++;
+    }
 
-	if ($total>$resultsperpage) {
-		for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
-			if ($i<16) {
-	    		my $highlight=0;
-	    		($startfrom==($i-1)) && ($highlight=1);
-	    		push @numbers, { number => $i,
-					highlight => $highlight ,
-					searchdata=> \@field_data,
-					startfrom => ($i-1)};
-			}
-    	}
-	}
+    $strsth =
+      "Select distinct authtypecode from marc_subfield_structure where (";
+    foreach my $listtags (@tags) {
+        my @taglist = split /,/, $listtags;
+        foreach my $curtag (@taglist) {
+            $strsth .=
+                "(tagfield='"
+              . substr( $curtag, 1, 3 )
+              . "' AND tagsubfield='"
+              . substr( $curtag, 4, 1 ) . "') OR";
+        }
+    }
 
-	my $from = $startfrom*$resultsperpage+1;
-	my $to;
+    $strsth =~ s/ OR$/)/;
+    $strsth = $strsth . " and authtypecode is not NULL";
 
- 	if($total < (($startfrom+1)*$resultsperpage))
-	{
-		$to = $total;
-	} else {
-		$to = (($startfrom+1)*$resultsperpage);
-	}
-	$template->param(anindex => $input->param('index'),
-	opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-        opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
-	);
-	$template->param(result => \@results,
-					 catresult=> \@catresults,
-						search => $search[0],
-						marclist =>$field,
-						authresult => \@authresults,
-						nbresults => $authnbresults,
-						startfrom=> $startfrom,
-						displaynext=> $displaynext,
-						displayprev=> $displayprev,
-						resultsperpage => $resultsperpage,
-						startfromnext => $startfrom+1,
-						startfromprev => $startfrom-1,
-						searchdata=>\@field_data,
-						total=>$total,
-						from=>$from,
-						to=>$to,
-						numbers=>\@numbers,
-						MARC_ON => C4::Context->preference("marc"),
-						);
+    #     warn $strsth;
+    $sth = $dbh->prepare($strsth);
+    $sth->execute;
 
- } else {
- 	($template, $loggedinuser, $cookie)
- 		= get_template_and_user({template_name => "opac-dictionary.tmpl",
- 				query => $input,
- 				type => 'opac',
-				authnotrequired => 1,
- 				debug => 1,
- 				});
-#warn "type : $type";
- 
- }
-$template->param(search => $search[0],
-					marclist =>$field,
-					type=>$type,
-					anindex => $input->param('index'));
+    #
+    # searching in authorities
+    #
+    my @authresults;
+    my $authnbresults;
+    while ( ( my $authtypecode ) = $sth->fetchrow ) {
+        my ( $curauthresults, $nbresults ) =
+          authoritysearch( $dbh, [''], [''], [''], ['contains'], \@search,
+            $startfrom * $resultsperpage,
+            $resultsperpage, $authtypecode );
+        push @authresults, @$curauthresults;
+        $authnbresults += $nbresults;
+
+        #        warn "auth : $authtypecode nbauthresults : $nbresults";
+    }
+
+    #
+    # OK, filling the template with authorities & biblio entries found.
+    #
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "opac-dictionary.tmpl",
+            query           => $input,
+            type            => 'opac',
+            authnotrequired => 1,
+            debug           => 1,
+        }
+    );
+
+    # multi page display gestion
+    my $displaynext = 0;
+    my $displayprev = $startfrom;
+    if ( ( $total - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
+        $displaynext = 1;
+    }
+
+    my @field_data = ();
+
+    for ( my $i = 0 ; $i <= $#tags ; $i++ ) {
+        push @field_data, { term => "marclist",  val => $tags[$i] };
+        push @field_data, { term => "and_or",    val => $and_or[$i] };
+        push @field_data, { term => "excluding", val => $excluding[$i] };
+        push @field_data, { term => "operator",  val => $operator[$i] };
+        push @field_data, { term => "value",     val => $value[$i] };
+    }
+
+    my @numbers = ();
+
+    if ( $total > $resultsperpage ) {
+        for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
+            if ( $i < 16 ) {
+                my $highlight = 0;
+                ( $startfrom == ( $i - 1 ) ) && ( $highlight = 1 );
+                push @numbers,
+                  {
+                    number     => $i,
+                    highlight  => $highlight,
+                    searchdata => \@field_data,
+                    startfrom  => ( $i - 1 )
+                  };
+            }
+        }
+    }
+
+    my $from = $startfrom * $resultsperpage + 1;
+    my $to;
+
+    if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
+        $to = $total;
+    }
+    else {
+        $to = ( ( $startfrom + 1 ) * $resultsperpage );
+    }
+    $template->param(
+        anindex              => $input->param('index'),
+        opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+        opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
+    );
+    $template->param(
+        result         => \@results,
+        catresult      => \@catresults,
+        search         => $search[0],
+        marclist       => $field,
+        authresult     => \@authresults,
+        nbresults      => $authnbresults,
+        startfrom      => $startfrom,
+        displaynext    => $displaynext,
+        displayprev    => $displayprev,
+        resultsperpage => $resultsperpage,
+        startfromnext  => $startfrom + 1,
+        startfromprev  => $startfrom - 1,
+        searchdata     => \@field_data,
+        total          => $total,
+        from           => $from,
+        to             => $to,
+        numbers        => \@numbers,
+        MARC_ON        => C4::Context->preference("marc"),
+    );
+
+}
+else {
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "opac-dictionary.tmpl",
+            query           => $input,
+            type            => 'opac',
+            authnotrequired => 1,
+            debug           => 1,
+        }
+    );
+
+    #warn "type : $type";
+
+}
+$template->param(
+    search   => $search[0],
+    marclist => $field,
+    type     => $type,
+    anindex  => $input->param('index')
+);
 
 # Print the page
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -27,7 +27,7 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
-use HTML::Template;
+
 use PDF::API2;
 use PDF::API2::Page;
 use PDF::API2::PDF::Utils;

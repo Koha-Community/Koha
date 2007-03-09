@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 use CGI;
 use C4::Auth;
@@ -9,7 +24,7 @@ use C4::Serials;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use DateTime;
+use Date::Manip;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -18,20 +33,19 @@ my $sth;
 # my $id;
 my ($template, $loggedinuser, $cookie, $subs);
 my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
-	$publisheddate, $dow, $irregularity, $sublength, $subtype, $numberpattern, $numberlength, $weeklength, $monthlength,
-	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
-	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
-	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-	$numberingmethod, $status, $biblionumber, $bibliotitle, $callnumber, $notes, $hemisphere);
+    $firstacquidate, $dow, $irregularity, $sublength, $subtype, $numberpattern, $numberlength, $weeklength, $monthlength,
+    $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
+    $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
+    $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
+    $numberingmethod, $status, $biblionumber, $bibliotitle, $callnumber, $notes, $hemisphere,$letter,$manualhistory,$histstartdate,$enddate,$missinglist,$recievedlist,$opacnote,$librariannote);
 
 $subscriptionid = $query->param('subscriptionid');
 
 
 if ($op eq 'del') {
-$biblionumber = $query->param('biblionumber');
-	&DelSubscription($subscriptionid,$biblionumber);
-	$query->redirect("/cgi-bin/koha/serials/serials-home.pl");
-	exit;
+    &DelSubscription($subscriptionid);
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
+    exit;
 
 }
 my $subs = &GetSubscription($subscriptionid);
@@ -42,90 +56,54 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
+                query => $query,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {serials => 1},
+                debug => 1,
+                });
 
 my ($user, $cookie, $sessionID, $flags)
-	= checkauth($query, 0, {catalogue => 1}, "intranet");
+    = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 my $weekarrayjs='';
 my $count = 0;
-my $today=get_today();
- my $dateobj=DATE_obj($today);
-  my $year=$dateobj->year;
-  my $month=$dateobj->month;
-  my $day=$dateobj->day_of_month;
-my $firstday = $dateobj->day_of_year;
-my $wkno = $dateobj->week_number;
+my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
+my $firstday = Date_DayOfYear($month,$day,$year);
+my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
-        $count = $i;
-        if($wkno > 52){$year++; $wkno=1;}
-        if($count>365){$count=$i-365;}    
-     my $newdate=DateTime->from_day_of_year(year=>$year,day_of_year=>$count);
-        $weekarrayjs .= "'Wk $wkno: ".format_date($newdate->ymd)."',";
-        $wkno++;    
-}
+            $count = $i;
+            if($wkno > 52){$year++; $wkno=1;}
+            if($count>365){$count=$i-365;}
+            my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+            my $output = "$y-$m-$d";
+            $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
+            $wkno++;
+    }
 chop($weekarrayjs);
 
+# COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
+$subs->{startdate}=format_date($subs->{startdate});
+$subs->{firstacquidate}=format_date($subs->{firstacquidate});
+$subs->{histstartdate}=format_date($subs->{histstartdate});
+$subs->{enddate}=format_date($subs->{enddate});
+$subs->{abouttoexpire}=abouttoexpire($subs->{subscriptionid});
+
+$template->param($subs);
+
 $template->param(
-        routing => $routing,
-	user => $subs->{auser},
-	librarian => $subs->{librarian},
-	aqbooksellerid => $subs->{aqbooksellerid},
-	aqbooksellername => $subs->{aqbooksellername},
-	cost => $subs->{cost},
-	aqbudgetid => $subs->{aqbudgetid},
-	bookfundid => $subs->{bookfundid},
-	startdate => format_date($subs->{startdate}),
-	publisheddate => format_date($subs->{publisheddate}),    
-	periodicity => $subs->{periodicity},
-	dow => $subs->{dow},
-        irregularity => $subs->{irregularity},
-	numberlength => $subs->{numberlength},
-	weeklength => $subs->{weeklength},
-	monthlength => $subs->{monthlength},
-        numberpattern => $subs->{numberpattern},
-	add1 => $subs->{add1},
-	every1 => $subs->{every1},
-	whenmorethan1 => $subs->{whenmorethan1},
-	innerloop1 => $subs->{innerloop1},
-	setto1 => $subs->{setto1},
-	lastvalue1 => $subs->{lastvalue1},
-	add2 => $subs->{add2},
-	every2 => $subs->{every2},
-	whenmorethan2 => $subs->{whenmorethan2},
-	setto2 => $subs->{setto2},
-	lastvalue2 => $subs->{lastvalue2},
-	innerloop2 => $subs->{innerloop2},
-	add3 => $subs->{add3},
-	every3 => $subs->{every3},
-	whenmorethan3 => $subs->{whenmorethan3},
-	setto3 => $subs->{setto3},
-	lastvalue3 => $subs->{lastvalue3},
-	innerloop3 => $subs->{innerloop3},
-        weekarrayjs => $weekarrayjs,
-	numberingmethod => $subs->{numberingmethod},
-	status => $subs->{status},
-	biblionumber => $subs->{biblionumber},
-	bibliotitle => $subs->{bibliotitle},
-        callnumber => $subs->{callnumber},
-	notes => $subs->{notes},
-	subscriptionid => $subs->{subscriptionid},
-	serialslist => \@serialslist,
-	totalissues => $totalissues,
-        hemisphere => $hemisphere,
-	);
+    routing => $routing,
+    serialslist => \@serialslist,
+    totalissues => $totalissues,
+    hemisphere => $hemisphere,
+    );
 $template->param(
-			"periodicity$subs->{periodicity}" => 1,
-			"arrival$subs->{dow}" => 1,
-                        "numberpattern$subs->{numberpattern}" => 1,
-			intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
-			);
+            "periodicity".$subs->{periodicity} => 1,
+            "arrival".$subs->{dow} => 1,
+            "numberpattern".$subs->{numberpattern} => 1,
+            intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+            intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
+            );
 
 output_html_with_http_headers $query, $cookie, $template->output;

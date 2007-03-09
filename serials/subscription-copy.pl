@@ -10,7 +10,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Interface::CGI::Output;
 use C4::Context;
-use HTML::Template;
+
 use C4::Serials;
 use Date::Manip;
 

@@ -41,50 +41,51 @@ this script is the main page for serials/
 
 =cut
 
-
 use strict;
 use CGI;
 use C4::Auth;
 use C4::Serials;
+use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 
-my $query = new CGI;
-my $title = $query->param('title');
-my $ISSN = $query->param('ISSN');
-my $supplierid = $query->param('supplierid');
-my $routing = $query->param('routing');
-my $searched = $query->param('searched');
-my $biblionumber = $query->param('biblionumber');
-my $alt_links = 0;
-if(C4::Context->preference("RoutingSerials")){
-    $alt_links = 0;
+my $query         = new CGI;
+my $title         = $query->param('title_filter');
+my $ISSN          = $query->param('ISSN_filter');
+my $routing       = $query->param('routing');
+my $searched      = $query->param('searched');
+my $biblionumber  = $query->param('biblionumber');
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "serials/serials-home.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { serials => 1 },
+        debug           => 1,
+    }
+);
+
+my @subscriptions;
+if ($searched){
+    @subscriptions = GetSubscriptions( $title, $ISSN, $biblionumber );
 }
-my @subscriptions = GetSubscriptions($title,$ISSN,$biblionumber,$supplierid);
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/serials-home.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {catalogue => 1},
-				debug => 1,
-				});
 
 # to toggle between create or edit routing list options
-if($routing){ 
-    for(my $i=0;$i<@subscriptions;$i++){
-	my $checkrouting = check_routing($subscriptions[$i]->{'subscriptionid'});
-	$subscriptions[$i]->{'routingedit'} = $checkrouting;
-	# warn "check $checkrouting";
+if ($routing) {
+    for ( my $i = 0 ; $i < @subscriptions ; $i++ ) {
+        my $checkrouting =
+          check_routing( $subscriptions[$i]->{'subscriptionid'} );
+        $subscriptions[$i]->{'routingedit'} = $checkrouting;
     }
 }
 
 $template->param(
-	subscriptions => \@subscriptions,
-	title => $title,
-	ISSN => $ISSN,
-        done_searched => $searched,
-        routing => $routing,
-        alt_links => $alt_links,
-	);
+    subscriptions => \@subscriptions,
+    title_filter  => $title,
+    ISSN_filter   => $ISSN,
+    done_searched => $searched,
+    routing       => $routing,
+);
 output_html_with_http_headers $query, $cookie, $template->output;

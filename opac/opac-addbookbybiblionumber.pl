@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+
 #script to provide bookshelf management
 # WARNING: This file uses 4-character tabs!
 #
@@ -22,7 +23,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Search;
 use C4::Biblio;
 use CGI;
 use C4::Output;
@@ -30,99 +30,89 @@ use C4::BookShelves;
 use C4::Circulation::Circ2;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use HTML::Template;
 
-my $env;
-my $query = new CGI;
+my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
-my $shelfnumber = $query->param('shelfnumber');
+my $shelfnumber  = $query->param('shelfnumber');
 my $newbookshelf = $query->param('newbookshelf');
-my $category = $query->param('category');
+my $category     = $query->param('category');
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "opac-addbookbybiblionumber.tmpl",
-							query => $query,
-							type => "opac",
-							authnotrequired => 1,
-						});
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-addbookbybiblionumber.tmpl",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => 1,
+    }
+);
 
-my $x; # for trash
-($x,$x,$shelfnumber) = AddShelf('',$newbookshelf,$loggedinuser,$category) if $newbookshelf;
+$shelfnumber = AddShelf( '', $newbookshelf, $loggedinuser, $category ) if $newbookshelf;
+
+# to know if we had to add more than one biblio.
+my $multiple = 0;
+$multiple = 1 if $biblionumber =~ /^(\d*\/)*$/;
+
 
 if ($shelfnumber) {
-	&AddToShelfFromBiblio($env, $biblionumber, $shelfnumber);
-	print "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
-	exit;
-} else {
 
-	my  ( $bibliocount, @biblios )  = getbiblio($biblionumber);
-
-	my ($shelflist) = GetShelfList($loggedinuser,3);
-	my @shelvesloop;
-	my %shelvesloop;
-	foreach my $element (sort keys %$shelflist) {
-			push (@shelvesloop, $element);
-			$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
-	}
-
-	my $CGIbookshelves;
-	if (@shelvesloop > 0){
-	$CGIbookshelves=CGI::scrolling_list( -name     => 'shelfnumber',
-				-values   => \@shelvesloop,
-				-labels   => \%shelvesloop,
-				-size     => 1,
-	 			-tabindex=>'',
-				-multiple => 0 );
-	 }
-
-	$template->param(biblionumber => $biblionumber,
-				title => $biblios[0]->{'title'},
-				author => $biblios[0]->{'author'},
-				CGIbookshelves => $CGIbookshelves,
-				LibraryName => C4::Context->preference("LibraryName"),
-				suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
-				OpacNav => C4::Context->preference("OpacNav"),
-				opaccredits => C4::Context->preference("opaccredits"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
-	);
-
-	output_html_with_http_headers $query, $cookie, $template->output;
+    if ($multiple){
+        foreach (split /\//,$biblionumber){
+            &AddToShelfFromBiblio($_,$shelfnumber);
+        }
+    }
+    else {
+        &AddToShelfFromBiblio( $biblionumber, $shelfnumber );
+    }
+    print $query->header;
+    print "<html><body onload=\"window.close();\"></body></html>";
+    exit;
 }
-# $Log$
-# Revision 1.5  2006/07/04 14:36:52  toins
-# Head & rel_2_2 merged
-#
-# Revision 1.4  2006/05/21 02:10:32  kados
-# syncing dev-week and HEAD
-#
-# Revision 1.1.2.6  2006/04/27 16:23:34  oleonard
-# Hiding option to add to existing virtual shelves if there are no existing virtual shelves (thanks Chris!)
-#
-# Revision 1.1.2.5  2006/03/01 22:33:25  oleonard
-# Enabling several new system preferences: opacreadinghistory, opaccolorstylesheet, opaclanguagesdisplay, opaclayoutstylesheet, opacsmallimage
-#
-# Revision 1.1.2.4  2006/02/04 16:47:21  kados
-# Adding support for opaccredits to opac scripts
-#
-# Revision 1.1.2.3  2006/02/03 21:03:57  kados
-# Updating script for new system preference: OpacNav
-# ----------------------------------------------------------------------
-#
-# Revision 1.1.2.2  2005/03/25 17:04:27  tipaul
-# adding virtual shelves & suggestions button to the top
-#
-# Revision 1.1.2.1  2005/03/10 08:44:43  tipaul
-# bugfix in baskets :
-# * The user does not need to have to have librarian rights to use virtual shelves
-# * error when adding a biblio to an existing basket
-#
-# Revision 1.1  2005/01/03 11:09:59  tipaul
-# *** empty log message ***
-#
+else {
+    my ($shelflist) = GetShelves( $loggedinuser, 3 );
+    my @shelvesloop;
+    my %shelvesloop;
+    foreach my $element ( sort keys %$shelflist ) {
+        push( @shelvesloop, $element );
+            $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
+    }
 
-# Local Variables:
-# tab-width: 4
-# End:
+    my $CGIbookshelves;
+    if ( @shelvesloop > 0 ) {
+        $CGIbookshelves = CGI::scrolling_list (
+            -name     => 'shelfnumber',
+            -values   => \@shelvesloop,
+            -labels   => \%shelvesloop,
+            -size     => 1,
+            -tabindex => '',
+            -multiple => 0
+        );
+    }
+
+    if ( $multiple ) {
+        my @biblios;
+        foreach (split /\//,$biblionumber){
+            my $data = GetBiblioData($_);
+            push @biblios,$data;
+        }
+        $template->param (
+            multiple => 1,
+            biblionumber => $biblionumber,
+            total    => scalar @biblios,
+            biblios  => \@biblios,
+        );
+    }
+    else { # just one to add.
+        my $data = GetBiblioData( $biblionumber );
+        $template->param (
+            biblionumber => $biblionumber,
+            title        => $data->{'title'},
+            author       => $data->{'author'},
+        );
+    }
+
+    $template->param (
+        CGIbookshelves       => $CGIbookshelves,
+    );
+
+    output_html_with_http_headers $query, $cookie, $template->output;
+}

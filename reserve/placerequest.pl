@@ -22,15 +22,16 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-#use DBI;
-use C4::Search;
+use C4::Biblio;
 use CGI;
 use C4::Output;
 use C4::Reserves2;
+use C4::Circulation::Circ2;
 use C4::Members;
+
 my $input = new CGI;
 #print $input->header;
-my $itemnumber=$input->param('itemnumber');
+
 my @bibitems=$input->param('biblioitem');
 my @reqbib=$input->param('reqbib');
 my $biblionumber=$input->param('biblionumber');
@@ -40,38 +41,52 @@ my $branch=$input->param('pickup');
 my @rank=$input->param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
-my $bornum=borrdata($borrower,'');
-my $cataloger=$input->param('loggedinuser');
+my $borrowernumber=borrdata($borrower,'');
+my $checkitem=$input->param('checkitem');
+my $found;
 
-if ($type eq 'str8' && $bornum ne ''){
-    my $count=@bibitems;
-    @bibitems=sort @bibitems;
-    my $i2=1;
-    my @realbi;
-    $realbi[0]=$bibitems[0];
-for (my $i=1;$i<$count;$i++){
-    my $i3=$i2-1;
-    if ($realbi[$i3] ne $bibitems[$i]){
-	$realbi[$i2]=$bibitems[$i];
-	$i2++;
-    }
+#new op : if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found .
+if ($checkitem ne ''){
+		$rank[0] = '0';
+		my $item = $checkitem;
+		$item = getiteminformation($item);
+		if ( $item->{'holdingbranch'} eq $branch ){
+		$found = 'W';	
+		}
+
+
 }
 
-my $env;
+# END of new op .
 
-my $const;
-
-
-for (my $i=0; $i<@reqbib; $i++){
-if ($reqbib[$i] ne ''){
-  $const='o';
-  CreateReserve(\$env,$bornum->{'borrowernumber'},$cataloger,$biblionumber,'','',$branch,$const,$rank[0],$notes,$title,"",$reqbib[$i]);
-}
-}
-
+if ($type eq 'str8' && $borrowernumber ne ''){
+	my $count=@bibitems;
+	@bibitems=sort @bibitems;
+	my $i2=1;
+	my @realbi;
+	$realbi[0]=$bibitems[0];
+	for (my $i=1;$i<$count;$i++) {
+		my $i3=$i2-1;
+		if ($realbi[$i3] ne $bibitems[$i]) {
+			$realbi[$i2]=$bibitems[$i];
+			$i2++;
+		}
+	}
+	my $env;
+	my $const;
+	if ($input->param('request') eq 'any'){
+	$const='a';
+  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@realbi,$rank[0],$notes,$title,$checkitem,$found);
+	} elsif ($reqbib[0] ne ''){
+	$const='o';
+  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
+	} else {
+  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
+	}
+	
 print $input->redirect("request.pl?biblionumber=$biblionumber");
-} elsif ($bornum eq ''){
-  print $input->header();
-  print "Invalid card number please try again";
-  print $input->Dump;
+} elsif ($borrowernumber eq ''){
+	print $input->header();
+	print "Invalid card number please try again";
+	print $input->Dump;
 }

@@ -4,9 +4,11 @@ use strict;
 use CGI;
 
 use C4::Auth;
-
+use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Calendar::Calendar;
+
+
+use C4::Calendar;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh();
@@ -19,7 +21,15 @@ my $year = $input->param('showYear');
 my $title = $input->param('showTitle');
 my $description = $input->param('showDescription');
 
-my $calendar = C4::Calendar::Calendar->new(branchcode => $branchcode);
+my $calendar = C4::Calendar->new(branchcode => $branchcode);
+
+$title || ($title = '');
+if ($description) {
+    $description =~ s/\r/\\r/g;
+    $description =~ s/\n/\\n/g;
+} else {
+    $description = '';
+}   
 
 if ($input->param('showOperation') eq 'exception') {
 	$calendar->insert_exception_holiday(day => $day,

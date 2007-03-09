@@ -1,111 +1,108 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+# $Id$
+
 use strict;
 require Exporter;
 use CGI;
-use HTML::Template;
-
-use C4::Context;
-use C4::Auth;       # get_template_and_user
+use C4::Auth;    # get_template_and_user
 use C4::Interface::CGI::Output;
 use C4::BookShelves;
-use C4::Koha;
-use C4::Members;
+use C4::Languages;           # getTranslatedLanguages
+use C4::Branch;         # GetBranches
+use C4::Members;        # GetMember
+use C4::NewsChannels;   # get_opac_news
+use C4::Acquisition;    # GetRecentAcqui
 
 my $input = new CGI;
-my $kohaVersion = C4::Context->config("kohaversion");
-my $dbh = C4::Context->dbh;
-my $query="Select itemtype,description from itemtypes order by description";
-my $sth=$dbh->prepare($query);
-$sth->execute;
-my  @itemtypeloop;
-my %itemtypes;
-while (my ($value,$lib) = $sth->fetchrow_array) {
-	my %row =(	value => $value,
-				description => $lib,
-			);
-	push @itemtypeloop, \%row;
-}
-$sth->finish;
+my $dbh   = C4::Context->dbh;
+
+my $limit = $input->param('recentacqui');
 
 my @branches;
 my @select_branch;
 my %select_branches;
-my $branches = getallbranches();
+my $branches = GetBranches();
 my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-        my $selected = 1 if (C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch}));
-        my %row =(value => $thisbranch,
-                                selected => $selected,
-                                branchname => $branches->{$thisbranch}->{'branchname'},
-                        );
-        push @branchloop, \%row;
+foreach my $thisbranch ( keys %$branches ) {
+    my $selected = 1
+      if ( C4::Context->userenv
+        && ( $thisbranch eq C4::Context->userenv->{branch} ) );
+    my %row = (
+        value      => $thisbranch,
+        selected   => $selected,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+    );
+    push @branchloop, \%row;
 }
-
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "opac-main.tmpl",
-			     type => "opac",
-			     query => $input,
-			     authnotrequired => 1,
-			     flagsrequired => {borrow => 1},
-			 });
-my $borrower = getmember('',$borrowernumber);
-my @options;
-my $counter=0;
-foreach my $language (getalllanguages()) {
-	next if $language eq 'images';
-	next if $language eq 'CVS';
-	next if $language=~ /png$/;
-	next if $language=~ /css$/;
-	my $selected='0';
-#                            next if $currently_selected_languages->{$language};
-	push @options, { language => $language, counter => $counter };
-	$counter++;
-}
-my $languages_count = @options;
-if($languages_count > 1){
-		$template->param(languages => \@options);
-}
-
-my $branchinfo = getbranchinfo();
-my @loop_data =();
-foreach my $branch (@$branchinfo) {
-        my %row =();
-        $row{'branch_name'} = $branch->{'branchname'};
-        $row{'branch_hours'} = $branch->{'branchhours'};
-        $row{'branch_hours'} =~ s^\n^<br />^g;
-        push (@loop_data, \%row);
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-main.tmpl",
+        type            => "opac",
+        query           => $input,
+        authnotrequired => 1,
+        flagsrequired   => { borrow => 1 },
     }
-
-sub getbranchinfo {
-        my $dbh = C4::Context->dbh;
-        my $sth;
-        $sth = $dbh->prepare("Select * from branches order by branchcode");
-        $sth->execute();
-    
-        my @results;
-        while(my $data = $sth->fetchrow_hashref) {
-	            push(@results, $data);
-	        }
-        $sth->finish;
-        return \@results;
-}
-
-
-$template->param(		suggestion => C4::Context->preference("suggestion"),
-				virtualshelves => C4::Context->preference("virtualshelves"),
-				textmessaging => $borrower->{textmessaging},
-				opaclargeimage => C4::Context->preference("opaclargeimage"),
-				LibraryName => C4::Context->preference("LibraryName"),
-				OpacNav => C4::Context->preference("OpacNav"),
-				opaccredits => C4::Context->preference("opaccredits"),
-				opacreadinghistory => C4::Context->preference("opacreadinghistory"),
-				opacsmallimage => C4::Context->preference("opacsmallimage"),
-				opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-				opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
-				opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
-                                branches => \@loop_data,
 );
 
-$template->param('Disable_Dictionary'=>C4::Context->preference("Disable_Dictionary")) if (C4::Context->preference("Disable_Dictionary"));
+if($limit) {
+    my $recentacquiloop = GetRecentAcqui($limit);
+    warn Data::Dumper::Dumper($recentacquiloop);
+    $template->param(
+        recentacquiloop => $recentacquiloop,
+    );
+}
+
+my $borrower = GetMember( '', $borrowernumber );
+my @languages;
+my $counter = 0;
+my $langavail = getTranslatedLanguages('opac');
+foreach my $language ( @$langavail ) {
+    #   next if $currently_selected_languages->{$language};
+	#   FIXME: could incorporate language_name and language_locale_name for better display
+    push @languages, { language => $language->{'language_code'}, counter => $counter };
+    $counter++;
+}
+
+# Template params
+if ( $counter > 1 ) {
+    $template->param(languages => \@languages) if C4::Context->preference('opaclanguagesdisplay');
+}
+
+$template->param(
+    branchloop           => \@branchloop,
+    textmessaging        => $borrower->{textmessaging},
+    opaclanguagesdisplay => 0,
+);
+
+# display news
+# use cookie setting for language, bug default to syspref if it's not set
+my $news_lang = $input->cookie('KohaOpacLanguage') || C4::Context->preference('opaclanguages');
+my  $all_koha_news  = &GetNewsToDisplay( $news_lang );
+my $koha_news_count = scalar @$all_koha_news;
+
+$template->param(
+    koha_news       => $all_koha_news,
+    koha_news_count => $koha_news_count
+);
+
+$template->param(
+    'Disable_Dictionary' => C4::Context->preference("Disable_Dictionary") )
+  if ( C4::Context->preference("Disable_Dictionary") );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -23,8 +23,7 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use HTML::Template;
-use C4::Search;
+use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
@@ -58,10 +57,14 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($limit, $column, \@filters);
@@ -73,6 +76,7 @@ if ($do_it) {
 	} else {
 # Printing to a csv file
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
+                                     -encoding    => 'utf-8',
 			-attachment=>"$basename.csv",
 			-filename=>"$basename.csv" );
 		my $cols = @$results[0]->{loopcol};
@@ -132,10 +136,35 @@ if ($do_it) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
+	#doctype
+	my $itemtypes = GetItemTypes;
+	my @itemtypeloop;
+	foreach my $thisitemtype (keys %$itemtypes) {
+# 			my $selected = 1 if $thisbranch eq $branch;
+			my %row =(value => $thisitemtype,
+# 									selected => $selected,
+									description => $itemtypes->{$thisitemtype}->{'description'},
+							);
+			push @itemtypeloop, \%row;
+	}
+		
+	#branch
+	my $branches = GetBranches;
+	my @branchloop;
+	foreach my $thisbranch (keys %$branches) {
+# 			my $selected = 1 if $thisbranch eq $branch;
+			my %row =(value => $thisbranch,
+# 									selected => $selected,
+									branchname => $branches->{$thisbranch}->{'branchname'},
+							);
+			push @branchloop, \%row;
+	}
 	
 	$template->param(
 					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice
+					CGIsepChoice => $CGIsepChoice,
+					itemtypeloop =>\@itemtypeloop,
+					branchloop =>\@branchloop,
 					);
 output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -231,9 +260,9 @@ sub calculate {
 	my $strcalc ;
 	
 # Processing average loanperiods
-	$strcalc .= "SELECT CONCAT( items.itemnumber, \" \",biblioitems.biblioitemnumber)";
+	$strcalc .= "SELECT items.barcode, biblio.title, biblio.biblionumber, biblio.author";
 	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM (items LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber)  LEFT JOIN issues ON  issues.itemnumber=items.itemnumber WHERE issues.itemnumber is null";
+	$strcalc .= " FROM (items LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber  LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber) LEFT JOIN issues ON  issues.itemnumber=items.itemnumber WHERE issues.itemnumber is null";
 #  	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
 #  	$strcalc .= " AND issues.timestamp <= '" . @$filters[0] ."'" if ( @$filters[0] );
 #  	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
@@ -263,10 +292,13 @@ sub calculate {
 	my $previous_col;
 	my $i=1;
 	while (my  @data = $dbcalc->fetchrow) {
-		my ($row, $col )=@data;
+		my ($barcode,$title,$bibnum,$author, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
 		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}=$row;
+		$table[$i]->{$col}->{'barcode'}=$barcode;
+		$table[$i]->{$col}->{'title'}=$title;
+		$table[$i]->{$col}->{'bibnum'}=$bibnum;
+		$table[$i]->{$col}->{'author'}=$author;
 #		warn " ".$i." ".$col. " ".$row;
 		$i++;
 		$previous_col=$col;
@@ -281,13 +313,19 @@ sub calculate {
  		# and the number matches the number of columns
  		my $colcount=0;
  		foreach my $col ( @loopcol ) {
- 			my $value;
+ 			my ($barcode, $author, $title, $bibnum);
  			if (@loopcol){
- 				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
+ 				$barcode =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'barcode'};
+ 				$title =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'title'};
+ 				$author =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'author'};
+ 				$bibnum =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'bibnum'};
  			} else {
- 				$value =$table[$i]->{"zzEMPTY"};
+ 				$barcode =$table[$i]->{"zzEMPTY"}->{'barcode'};
+ 				$title =$table[$i]->{"zzEMPTY"}->{'title'};
+ 				$author =$table[$i]->{"zzEMPTY"}->{'author'};
+ 				$bibnum =$table[$i]->{"zzEMPTY"}->{'bibnum'};
  			}
-			push @loopcell, {value => $value} ;
+			push @loopcell, {author=> $author, title=>$title,bibnum=>$bibnum,barcode=>$barcode} ;
 		}
 		push @looprow,{ 'rowtitle' => $i ,
 						'loopcell' => \@loopcell,

@@ -21,6 +21,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
+use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
 
@@ -35,11 +36,15 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports => 1},
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		report_name => $report_name);
+		report_name => $report_name,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
 unless (opendir(DIR, "$cgidir")) {
 	$cgidir = C4::Context->intranetdir."/reports/";

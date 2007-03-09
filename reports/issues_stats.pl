@@ -23,7 +23,8 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Context;
-use C4::Search;
+use C4::Branch; # GetBranches
+use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 use C4::Circulation::Circ2;
@@ -39,8 +40,6 @@ plugin that shows a stats on borrowers
 =over2
 
 =cut
-
-
 
 my $input = new CGI;
 my $do_it=$input->param('do_it');
@@ -63,10 +62,14 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {editcatalogue => 1},
+				flagsrequired => {reports => 1},
 				debug => 1,
 				});
-$template->param(do_it => $do_it);
+$template->param(do_it => $do_it,
+		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+		IntranetNav => C4::Context->preference("IntranetNav"),
+		);
 if ($do_it) {
 # Displaying results
 	my $results = calculate($line, $column, $podsp, $type, $daysel, $monthsel, $calc, \@filters);
@@ -78,6 +81,7 @@ if ($do_it) {
 	} else {
 # Printing to a csv file
 		print $input->header(-type => 'application/vnd.sun.xml.calc',
+                                     -encoding    => 'utf-8',
 			-attachment=>"$basename.csv",
 			-filename=>"$basename.csv" );
 		my $cols = @$results[0]->{loopcol};
@@ -305,7 +309,7 @@ sub calculate {
 	my $linefield;                               
 	if (($line =~/datetime/) and ($dsp == 1)) {
 		#Display by day
-		$linefield .="concat(weekday($line),' ',dayname($line))";  
+		$linefield .="dayname($line)";  
 	} elsif (($line=~/datetime/) and ($dsp == 2)) {
 		#Display by Month
 		$linefield .="monthname($line)";  
@@ -318,7 +322,9 @@ sub calculate {
 		$linefield .= $line;
 	}  
 	my $lineorder = $linefield;
-	$lineorder = "weekday($line)" if $lineorder =~ "^dayname";
+	$lineorder = "weekday($line)" if $linefield =~ /dayname/;
+	$lineorder = "month($line)" if $linefield =~ "^month";
+	$lineorder = $linefield if (not ($linefield =~ "^month") and not($linefield =~ /dayname/));
 
  	my $strsth;
  	$strsth .= "select distinctrow $linefield from statistics, borrowers where (statistics.borrowernumber=borrowers.borrowernumber) and $line is not null ";
@@ -363,7 +369,8 @@ sub calculate {
  	}
 
 # 2nd, loop cols.
-	my $colfield;                               
+	my $colfield;
+	my $colorder;                               
 	if (($column =~/datetime/) and ($dsp == 1)) {
 		#Display by day
 		$colfield .="dayname($column)";  
@@ -378,6 +385,9 @@ sub calculate {
 	} else {
 		$colfield .= $column;
 	}  
+	$colorder = "weekday($line)" if $colfield =~ "^dayname";
+	$colorder = "month($line)" if $colfield =~ "^month";
+	$colorder = $colfield if (not ($colfield =~ "^month") and not($colfield =~ "^dayname"));
 	
  	my $strsth2;
  	$strsth2 .= "select distinctrow $colfield from statistics, borrowers where (statistics.borrowernumber=borrowers.borrowernumber) and $column is not null ";
@@ -398,7 +408,7 @@ sub calculate {
  		$strsth2 .= " and $column LIKE ? " ;
  	}
 	$strsth2 .=" group by $colfield";
-	$strsth2 .=" order by $colfield";
+	$strsth2 .=" order by $colorder";
 #	warn "". $strsth2;
 	
 	my $sth2 = $dbh->prepare( $strsth2 );
@@ -441,11 +451,17 @@ sub calculate {
 
 	$strcalc .= "SELECT $linefield, $colfield, ";
 	$strcalc .= "COUNT( * ) " if ($process ==1);
+	if ($process ==2){
+		$strcalc .= "(COUNT(DISTINCT borrowers.borrowernumber))" ;
+	}
 	if ($process ==3){
+		$strcalc .= "(COUNT(DISTINCT issues.itemnumber))" ;
+	}
+	if ($process ==4){
 		my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
 		$rqbookcount->execute;
 		my ($bookcount) = $rqbookcount->fetchrow;
-		$strcalc .= "100*(COUNT(itemnumber))/ $bookcount " ;
+		$strcalc .= "100*(COUNT(DISTINCT issues.itemnumber))/ $bookcount " ;
 	}
 	$strcalc .= "FROM statistics,borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
 
@@ -467,14 +483,14 @@ sub calculate {
 	$strcalc .= " AND monthname(datetime) like '" . $monthsel ."'" if ( $monthsel );
 	$strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
 	
-	$strcalc .= " group by $linefield, $colfield order by $lineorder,$colfield";
+	$strcalc .= " group by $linefield, $colfield order by $lineorder,$colorder";
 	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
 	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-#		warn "filling table $row / $col / $value ";
+		warn "filling table $row / $col / $value ";
 		$emptycol = 1 if ($col eq undef);
 		$col = "zzEMPTY" if ($col eq undef);
 		$row = "zzEMPTY" if ($row eq undef);
@@ -485,18 +501,18 @@ sub calculate {
 	}
 	push @loopcol,{coltitle => "NULL"} if ($emptycol);
 
-	foreach my $row ( sort keys %table ) {
+	foreach my $row (@loopline) {
 		my @loopcell;
 		#@loopcol ensures the order for columns is common with column titles
 		# and the number matches the number of columns
 		foreach my $col ( @loopcol ) {
-			my $value =$table{$row}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
+			my $value =$table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
 			push @loopcell, {value => $value  } ;
 		}
-		push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
+		push @looprow,{ 'rowtitle' => ($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle},
 							'loopcell' => \@loopcell,
 							'hilighted' => ($hilighted >0),
-							'totalrow' => $table{$row}->{totalrow}
+							'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
 						};
 		$hilighted = -$hilighted;
 	}

@@ -23,32 +23,41 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-#use DBI;
-use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Reserves2;
-use C4::Members;
+
 my $input = new CGI;
 #print $input->header;
-
-#print $input->Dump;
 
 my @rank=$input->param('rank-request');
 my @biblionumber=$input->param('biblionumber');
 my @borrower=$input->param('borrowernumber');
 my @branch=$input->param('pickup');
+my @itemnumber=$input->param('itemnumber');
 my $count=@rank;
-my $cataloger=$input->param('loggedinuser');
-# goes through and manually changes the reserves record....
-# no attempt is made to check consistency.
-for (my $i=0;$i<$count;$i++){
-    UpdateReserves($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$cataloger); #from C4::Reserves2
+
+my $CancelBiblioNumber=$input->param('CancelBiblioNumber');
+my $CancelBorrowerNumber=$input->param('CancelBorrowerNumber');
+my $CancelItemnumber=$input->param('CancelItemnumber');
+
+# 2 possibilitys : cancel an item reservation, or modify or cancel the queded list
+
+# 1) cancel an item reservation by fonction GlobalCancel (in reserves2.pm)
+if ($CancelBorrowerNumber) {
+	GlobalCancel($CancelItemnumber, $CancelBorrowerNumber);
+	$biblionumber[0] = $CancelBiblioNumber,
 }
 
+# 2) Cancel or modify the queue list of reserves (without item linked)
+else {
+	for (my $i=0;$i<$count;$i++){
+		UpdateReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves2
+	}
+}
 my $from=$input->param('from');
 if ($from eq 'borrower'){
-  print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrower[0]");
+  print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
  } else {
    print $input->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
 }

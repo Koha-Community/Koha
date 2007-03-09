@@ -20,10 +20,14 @@
 use strict;
 use CGI;
 use C4::Context;
+use C4::Output;
+
 use C4::Auth;
+use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
-
+use C4::Branch; # GetBranches
+use C4::Letters;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -118,7 +122,7 @@ if ($op eq 'save') {
 	}
 	unless ($err) {$template->param(datasaved=>1);}
 }
-my $branches = getbranches;
+my $branches = GetBranches();
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
 	my $selected = 1 if $thisbranch eq $branch;
@@ -129,7 +133,9 @@ foreach my $thisbranch (keys %$branches) {
 	push @branchloop, \%row;
 }
 
-my ($countletters,$letters) = getletters("circulation");
+my $letters = GetLetters("circulation");
+
+my $countletters = scalar $letters;
 
 my $sth=$dbh->prepare("Select description,categorycode from categories where overduenoticerequired>0 order by description");
 $sth->execute;
