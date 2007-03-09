@@ -6,14 +6,13 @@
 
 use strict;
 
-use C4::Search;
 use CGI;
 use C4::Output;
 use C4::Auth;
 use C4::Context;
 use C4::Circulation::Circ2;
 #use C4::Acquisitions;
-use HTML::Template;
+
 use C4::Interface::CGI::Output;
 
 my $input = new CGI;
@@ -56,7 +55,7 @@ if ($input->param('newflags')) {
     }
     my $sth=$dbh->prepare("update borrowers set flags=? where borrowernumber=?");
     $sth->execute($flags, $member);
-    print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 } else {
 #     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
     my $bor = getpatroninformation(\%env, $member,'');

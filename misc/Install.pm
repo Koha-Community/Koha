@@ -54,7 +54,8 @@ Defines the version and structure of the module interface
 =cut
 
 # set the version for version checking
-$VERSION = 2.2.3;
+# set the version for version checking
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -838,22 +839,27 @@ sub checkperlmodules(;$) {
 # The following modules are not mandatory, depends on how the library want to use Koha
 	unless (eval {require PDF::API2})   { 
 			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-				push @missing,"You will need PDF::API2 for barcode generator" 
+				push @missing,"You will need PDF::API2 for barcode generator";
 			}
 	}
-                unless (eval {require PDF::API2::PDF})   {
+	unless (eval {require GD::Barcorde})   { 
                                     if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-                                            push @missing,"You will need PDF::API2::PDF for spine and barcode printing"
+				push @missing,"You will need GD::Barcode for the new barcode generator";
                                     }
                     }
-                unless (eval {require PDF::Reuse})   {
+	unless (eval {require GD::Barcorde})   { 
+			if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
+				push @missing,"You will need GD::Barcode for the new barcode generator";
+			}
+	}
+	unless (eval {require Data::Random})   { 
                                     if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-                                            push @missing,"You will need PDF::Reuse for spine and barcode printing"
+				push @missing,"You will need Data::Random for the new barcode generator";
                                     }
                     }
                 unless (eval {require PDF::Reuse::Barcode})   {
                                     if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal
-                                            push @missing,"You will need PDF::Reuse::Barcode for spine and barcode printing"
+				push @missing,"You will need PDF::Reuse::Barcode for the new barcode generator";
                                     }
                     }
                 unless (eval {require PDF::Report})   {
@@ -890,13 +896,13 @@ sub checkperlmodules(;$) {
 			push @missing, "Net::Z3950";
 		}
     }
-    unless (eval {require LWP::Simple)       {
+    unless (eval {require LWP::Simple})       {
 		showmessage(getmessage('LWP::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "LWP::Simple";
 		}
     }
-    unless (eval {require XML::Simple)       {
+    unless (eval {require XML::Simple})       {
 		showmessage(getmessage('XML::Simple'), 'PressEnter', '', 1);
 		if ($#missing>=0) { # see above note
 			push @missing, "XML::Simple";
@@ -1748,7 +1754,7 @@ $messages->{'MysqlRootPassword'}->{en} =
 To create the koha database, please enter your
 mysql server's root user password:
 
-Password: |;	#'
+Password: |;
 
 $messages->{'CreatingDatabase'}->{en} = heading('CREATING DATABASE') . qq|
 Creating the MySQL database for Koha...
@@ -1812,12 +1818,14 @@ sub databasesetup (;$) {
 	setmysqlclipass($mysqlpass);
 	# Set up permissions
 	startsysout();
-	print system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\" mysql\;");
-	system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\" mysql");
-	system("$mysqldir/bin/mysqladmin -u$mysqluser reload");
+       print system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into user (Host,User,Password) values ('$hostname','$user',password('$pass'))\" -h$hostname mysql\;");
+       system("$mysqldir/bin/mysql -u$mysqluser -e \"insert into db (Host,Db,User,Select_priv,Insert_priv,Update_priv,Delete_priv,Create_priv,Drop_priv, index_priv, alter_priv) values ('%','$database','$user','Y','Y','Y','Y','Y','Y','Y','Y')\" -h$hostname mysql");
+       system("$mysqldir/bin/mysqladmin -u$mysqluser -h$hostname reload");
+
+	my $result=system("$mysqldir/bin/mysqladmin", "-u$mysqluser", "create", "$database");
+	system("$mysqldir/bin/mysql '-u$mysqluser' -e \"GRANT ALL PRIVILEGES on ".$database.".* to '$user' IDENTIFIED BY '$pass' \" mysql");
 	# Change to admin user login
 	setmysqlclipass($pass);
-	my $result=system("$mysqldir/bin/mysqladmin", "-u$user", "create", "$database");
 	if ($result) {
 		showmessage(getmessage('CreatingDatabaseError'),'PressEnter', '', 1);
 	} else {
@@ -1849,8 +1857,10 @@ $messages->{'UpdateMarcTables'}->{en} =
    heading('MARC FIELD DEFINITIONS') . qq|
 You can import MARC settings for:
 
-  1 MARC21
-  2 UNIMARC
+  1 MARC21 in english
+  2 UNIMARC in french
+  3 UNIMARC in english
+  4 UNIMARC in ukrainian
   N none
 
 NOTE: If you choose N,
@@ -1896,7 +1906,7 @@ sub updatedatabase (;$) {
 		$response=$auto_install->{UpdateMarcTables};
 		print ON_YELLOW.BLACK."auto-setting UpdateMarcTable to : $response".RESET."\n";
 	} else {
-		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 12Nn', '1');
+		$response=showmessage(getmessage('UpdateMarcTables'), 'restrictchar 1234Nn', '1');
 	}
 	startsysout();
 	if ($response eq '1') {
@@ -1904,6 +1914,12 @@ sub updatedatabase (;$) {
 	}
 	if ($response eq '2') {
 		system("cat scripts/misc/marc_datas/unimarc_fr/structure_def.sql | $mysqldir/bin/mysql '-u$user' '$database'");
+	}
+	if ($response eq '3') {
+		system("cat scripts/misc/marc_datas/unimarc_en/structure_def.sql | $mysqldir/bin/mysql '-u$user' '$database'");
+	}
+	if ($response eq '4') {
+		system("cat scripts/misc/marc_datas/unimarc_uk/structure_def.sql | $mysqldir/bin/mysql '-u$user' '$database'");
 	}
 	delete($ENV{"KOHA_CONF"});
 
@@ -1954,9 +1970,9 @@ sub populatedatabase (;$) {
 		$branchcode or $branchcode='DEF';
 
 		startsysout();
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
-		system("$mysqldir/bin/mysql -u$user -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branches (branchcode,branchname,issuing) values ('$branchcode', '$branch', 1)\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'IS')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into branchrelations (branchcode,categorycode) values ('MAIN', 'CU')\" $database");
 
 		my $printername='lp';
 		my $printerqueue='/dev/lp0';
@@ -1975,7 +1991,7 @@ sub populatedatabase (;$) {
 			$printerqueue=~s/[^A-Za-z0-9]//g;
 		}
 		startsysout();	
-		system("$mysqldir/bin/mysql -u$user -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
+		system("$mysqldir/bin/mysql '-u$user' -e \"insert into printers (printername,printqueue,printtype) values ('$printername', '$printerqueue', '')\" $database");
 	}
 	my $language;
 	if ($auto_install->{Language}) {
@@ -1985,7 +2001,7 @@ sub populatedatabase (;$) {
 		$language=showmessage(getmessage('Language'), 'free', 'en');
 	}
 	startsysout();	
-	system("$mysqldir/bin/mysql -u$user -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
+	system("$mysqldir/bin/mysql '-u$user' -e \"update systempreferences set value='$language' where variable='opaclanguages'\" $database");
 	my @dirs;
 	if (-d "scripts/misc/sql-datas") {
 		# ask for directory to look for files to append

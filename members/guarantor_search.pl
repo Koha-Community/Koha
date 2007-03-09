@@ -26,8 +26,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use C4::Search;
-use HTML::Template;
+
 #op
 use C4::Date;
 use C4::Members;
@@ -76,7 +75,7 @@ if ($member ne ''){
 	for (my $i=0; $i < $count; $i++){
 	#find out stats
 	my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowerid'});
-	
+	my $guarantorinfo=uc($results->[$i]{'surname'})." , ".ucfirst($results->[$i]{'firstname'});
 	my %row = (
 		background => $background,
 		count => $i+1,
@@ -88,7 +87,7 @@ if ($member ne ''){
 		address => $results->[$i]{'address'},
 		city => $results->[$i]{'city'},
 		branchcode => $results->[$i]{'branchcode'},
-		
+		guarantorinfo =>$guarantorinfo,
 		#op
 		dateofbirth =>format_date($results->[$i]{'dateofbirth'}),
 		#fi op	

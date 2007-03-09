@@ -34,7 +34,6 @@ use C4::Context;
 use C4::Date;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
-use Data::Dumper;
 
 my ($confirm, $nomail, $mybranch, $myborcat,$myborcatout, $letter, $MAX, $choice);
 GetOptions(
@@ -133,15 +132,15 @@ while (my ($branchcode)=$rqoverduebranches->fetchrow){
 			my $count = 0;   # to keep track of how many notices are printed
 			my $e_count = 0;   # and e-mailed
 			my $date=format_date(localtime);
-			my ($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
+			my ($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
 			
-			while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
+			while (($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
 				if ($data->{"debarred$i"}){
 					#action taken is debarring
-					$rqdebarring->execute($borrnum);
-					warn "debarring $borrnum $firstname $lastname";
+					$rqdebarring->execute($borrowernumber);
+					warn "debarring $borrowernumber $firstname $lastname";
 				}
-		#		print STDERR "$itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email\n"; 
+		#		print STDERR "$itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email\n"; 
 				if ($letter){
 					my $notice .= $mailtext;
 			#		print STDERR "$notice\n";
@@ -155,7 +154,7 @@ while (my ($branchcode)=$rqoverduebranches->fetchrow){
 					$notice =~ s/\<date\>/$date/g if ($date);
 					$notice =~ s/\<bib\>/$branchname/g if ($branchname);
 			
-					$sth2->execute($borrnum);
+					$sth2->execute($borrowernumber);
 					my $titles="";
 					my ($title, $author, $barcode, $issuedate);
 					while (($title, $author, $barcode,$issuedate) = $sth2->fetchrow){

@@ -69,7 +69,7 @@ my %alreadydone;
 my $counter;
 my %hash;
 while (my ($bibid) = $sth->fetchrow) {
-	my $record = MARCgetbiblio($dbh,$bibid);
+	my $record = GetMarcBiblio($bibid);
 	my $isbnField = $record->field('010');
 	next unless $isbnField;
 	my $isbn=$isbnField->subfield('a');
@@ -152,15 +152,15 @@ exit;
 # 	# 		print "=>".$field->as_formatted."\n";
 # 			foreach my $authentry ($field->subfield("a")) {
 # 				my $hashentry = $authentry;
-# 				# la particularité de ce script là, c'est que l'entrée dans la table d'autorité est $a -- $b (et pas $x -- $x -- $x -- $a comme pour les autorités NC)
-# 				# si nécessaire, compléter avec le $c (n'existe pas dans le fichier que j'ai migré avec cette moulinette
-# 				# supprimer les accents, certaines entrées sont sans, d'autres avec !
-# 				# mysql ne différencie pas, mais les hash perl oui !
-# 				$hashentry =~ s/é|ê|è/e/g;
-# 				$hashentry =~ s/â|à/a/g;
-# 				$hashentry =~ s/î/i/g;
-# 				$hashentry =~ s/ô/o/g;
-# 				$hashentry =~ s/ù|û/u/g;
+# 				# la particularitï¿½de ce script lï¿½ c'est que l'entrï¿½ dans la table d'autoritï¿½est $a -- $b (et pas $x -- $x -- $x -- $a comme pour les autoritï¿½ NC)
+# 				# si nï¿½essaire, complï¿½er avec le $c (n'existe pas dans le fichier que j'ai migrï¿½avec cette moulinette
+# 				# supprimer les accents, certaines entrï¿½s sont sans, d'autres avec !
+# 				# mysql ne diffï¿½encie pas, mais les hash perl oui !
+# 				$hashentry =~ s/ï¿½ï¿½ï¿½e/g;
+# 				$hashentry =~ s/ï¿½ï¿½a/g;
+# 				$hashentry =~ s/ï¿½i/g;
+# 				$hashentry =~ s/ï¿½o/g;
+# 				$hashentry =~ s/|/u/g;
 # 				$hashentry = uc($hashentry);
 # 				print "==>$hashentry" if $hashentry =~ /.*ETATS.*/;
 # 				$totdone++;
@@ -178,21 +178,21 @@ exit;
 # 					$authorityRecord->insert_fields_ordered($newfield);
 # 					$authid=AUTHaddauthority($dbh,$authorityRecord,'','CO');
 # 					$alreadydone{$hashentry} = $authid;
-# 					# OK, on garde la notice d'autorité, on cherche les notices biblio et on les met à jour...
+# 					# OK, on garde la notice d'autoritï¿½ on cherche les notices biblio et on les met ï¿½jour...
 # 					if ($fieldnumber eq '710') {
 # 						$sthBIBLIOS710->execute($authentry);
 # 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS710->fetchrow) {
-# 							my $inbiblio = MARCgetbiblio($dbh,$bibid);
+# 							my $inbiblio = GetMarcBiblio($bibid);
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
-# 								# !!!!! ici, il faut reconstruire l'entrée de la table de hachage comme ci dessus
+# 								# !!!!! ici, il faut reconstruire l'entrï¿½ de la table de hachage comme ci dessus
 # 								# sinon, 
 # 								my $inEntry = $in7xx->subfield('a');
-# 								$inEntry =~ s/é|ê|è/e/g;
-# 								$inEntry =~ s/â|à/a/g;
-# 								$inEntry =~ s/î/i/g;
-# 								$inEntry =~ s/ô/o/g;
-# 								$inEntry =~ s/ù|û/u/g;
+# 								$inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+# 								$inEntry =~ s/ï¿½ï¿½a/g;
+# 								$inEntry =~ s/ï¿½i/g;
+# 								$inEntry =~ s/ï¿½o/g;
+# 								$inEntry =~ s/|/u/g;
 # 								$inEntry = uc($inEntry);
 # 								$isOK=1 if $inEntry eq $hashentry;
 # 							}
@@ -202,17 +202,17 @@ exit;
 # 					if ($fieldnumber eq '711') {
 # 						$sthBIBLIOS711->execute($authentry);
 # 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS711->fetchrow) {
-# 							my $inbiblio = MARCgetbiblio($dbh,$bibid);
+# 							my $inbiblio = GetMarcBiblio($bibid);
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
-# 								# !!!!! ici, il faut reconstruire l'entrée de la table de hachage comme ci dessus
+# 								# !!!!! ici, il faut reconstruire l'entrï¿½ de la table de hachage comme ci dessus
 # 								# sinon, 
 # 								my $inEntry = $in7xx->subfield('a');
-# 								$inEntry =~ s/é|ê|è/e/g;
-# 								$inEntry =~ s/â|à/a/g;
-# 								$inEntry =~ s/î/i/g;
-# 								$inEntry =~ s/ô/o/g;
-# 								$inEntry =~ s/ù|û/u/g;
+# 								$inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+# 								$inEntry =~ s/ï¿½ï¿½a/g;
+# 								$inEntry =~ s/ï¿½i/g;
+# 								$inEntry =~ s/ï¿½o/g;
+# 								$inEntry =~ s/|/u/g;
 # 								$inEntry = uc($inEntry);
 # 								$isOK=1 if $inEntry eq $hashentry;
 # 							}
@@ -222,17 +222,17 @@ exit;
 # 					if ($fieldnumber eq '712') {
 # 						$sthBIBLIOS712->execute($authentry);
 # 						while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS712->fetchrow) {
-# 							my $inbiblio = MARCgetbiblio($dbh,$bibid);
+# 							my $inbiblio = GetMarcBiblio($bibid);
 # 							my $isOK = 0;
 # 							foreach my $in7xx ($inbiblio->field($fieldnumber)) {
-# 								# !!!!! ici, il faut reconstruire l'entrée de la table de hachage comme ci dessus
+# 								# !!!!! ici, il faut reconstruire l'entrï¿½ de la table de hachage comme ci dessus
 # 								# sinon, 
 # 								my $inEntry = $in7xx->subfield('a');
-# 								$inEntry =~ s/é|ê|è/e/g;
-# 								$inEntry =~ s/â|à/a/g;
-# 								$inEntry =~ s/î/i/g;
-# 								$inEntry =~ s/ô/o/g;
-# 								$inEntry =~ s/ù|û/u/g;
+# 								$inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+# 								$inEntry =~ s/ï¿½ï¿½a/g;
+# 								$inEntry =~ s/ï¿½i/g;
+# 								$inEntry =~ s/ï¿½o/g;
+# 								$inEntry =~ s/|/u/g;
 # 								$inEntry = uc($inEntry);
 # 								$isOK=1 if $inEntry eq $hashentry;
 # 							}

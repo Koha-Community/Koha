@@ -29,7 +29,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Members;
-use HTML::Template;
+
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
@@ -95,6 +95,8 @@ for (my $i=0; $i < $count; $i++){
         surname => $results->[$i]{'surname'},
         firstname => $results->[$i]{'firstname'},
         categorycode => $results->[$i]{'categorycode'},
+        category_type => $results->[$i]{'category_type'},
+        category_description => $results->[$i]{'description'},
         streetaddress => $results->[$i]{'streetaddress'},
         city => $results->[$i]{'city'},
         branchcode => $results->[$i]{'branchcode'},

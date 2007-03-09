@@ -43,7 +43,7 @@ my $sth = $dbh->prepare("select biblionumber from biblio");
 $sth->execute;
 my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
-	my $record = MARCgetbiblio($dbh,$biblionumber);
+	my $record = GetMarcBiblio($biblionumber);
 	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
 	open F,"> $filename";
 	print F $record->as_xml();

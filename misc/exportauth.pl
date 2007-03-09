@@ -2,10 +2,10 @@
 ## This script allows you to export a rel_2_2 bibliographic db in 
 #MARC21 format from the command line.
 #
-use HTML::Template;
+
 use strict;
 require Exporter;
-use C4::Database;
+
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Output;  # contains gettemplate

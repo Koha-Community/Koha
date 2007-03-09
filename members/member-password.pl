@@ -8,12 +8,11 @@ use strict;
 use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Search;
 use C4::Context;
 use C4::Members;
 use C4::Circulation::Circ2;
 use CGI;
-use HTML::Template;
+
 use Digest::MD5 qw(md5_base64);
 
 my $input = new CGI;
@@ -54,7 +53,7 @@ if ( $newpassword ) {
 	my $dbh=C4::Context->dbh;
 	if (changepassword($uid,$member,$digest)) {
 		$template->param(newpassword => $newpassword);
-		print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
+		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 	} else {
         $template->param(othernames => $bor->{'othernames'},
 						surname     => $bor->{'surname'},

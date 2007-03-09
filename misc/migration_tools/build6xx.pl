@@ -26,7 +26,7 @@ GetOptions(
 );
 
 if ($version || ($category eq '')) {
-	print <<EOF
+    print <<EOF
 small script to recreate a authority table into Koha.
 parameters :
 \tc : thesaurus category. Can be filled with anything, the NC is hardcoded. But mandatory to confirm that you want to rebuild 6xx
@@ -42,22 +42,22 @@ die;
 my $dbh = C4::Context->dbh;
 my @subf = $subfields =~ /(##\d\d\d##.)/g;
 if ($delete) {
-	print "deleting thesaurus\n";
-	my $del1 = $dbh->prepare("delete from auth_subfield_table where authid=?");
-	my $del2 = $dbh->prepare("delete from auth_word where authid=?");
-	my $sth = $dbh->prepare("select authid from auth_header where authtypecode='NC'");
-	$sth->execute;
-	while (my ($authid) = $sth->fetchrow) {
-		$del1->execute($authid);
-		$del2->execute($authid);
-	}
-	$dbh->do("delete from auth_header where authtypecode='NC'");
-	$dbh->do("delete from marc_subfield_table where tag='606' and subfieldcode='9'");
-	$dbh->do("delete from marc_word where tagsubfield='6069'");
+    print "deleting thesaurus\n";
+    my $del1 = $dbh->prepare("delete from auth_subfield_table where authid=?");
+    my $del2 = $dbh->prepare("delete from auth_word where authid=?");
+    my $sth = $dbh->prepare("select authid from auth_header where authtypecode='NC'");
+    $sth->execute;
+    while (my ($authid) = $sth->fetchrow) {
+        $del1->execute($authid);
+        $del2->execute($authid);
+    }
+    $dbh->do("delete from auth_header where authtypecode='NC'");
+    $dbh->do("delete from marc_subfield_table where tag='606' and subfieldcode='9'");
+    $dbh->do("delete from marc_word where tagsubfield='6069'");
 }
 
 if ($test_parameter) {
-	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
+    print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 $|=1; # flushes output
 my $starttime = gettimeofday;
@@ -75,171 +75,171 @@ my $sthBIBLIOSxxxx = $dbh->prepare("select distinct m1.bibid,m1.tag,m1.tagorder,
 
 # loop through each biblio
 while (my ($bibid) = $sth->fetchrow) {
-	my $record = MARCgetbiblio($dbh,$bibid);
-	my $timeneeded = gettimeofday - $starttime;
-	print "$i in $timeneeded s\n" unless ($i % 50);
-	foreach my $field ($record->field(995)) {
-		$record->delete_field($field);
-	}
-	my $totdone=0;
-	my $authid;
-	# search the 606 field(s)
-	foreach my $field ($record->field("606")) {
-		foreach my $authentry ($field->subfield("a")) {
-			# the hashentry variable contains all $x fields and the $a in a single string. Used to differenciate
-			# $xsomething$aelse and $asomething else
-			my $hashentry = $authentry;
-			foreach my $x ($field->subfield('x')) {
-				$hashentry.=" -- $x";
-			}
-			# remove é,à,$e...
-			# all the same for mysql, but NOT for perl hashes !
-			# without those lines, tôt is not tot and patée is not patee
-			$hashentry =~ s/é|ê|è/e/g;
-			$hashentry =~ s/â|à/a/g;
-			$hashentry =~ s/î/i/g;
-			$hashentry =~ s/ô/o/g;
-			$hashentry =~ s/ù|û/u/g;
-			# uppercase all, in case of typing error.
-			$hashentry = uc($hashentry);
-			$totdone++;
-			if ($alreadydone{$hashentry}) {
-				$authid = $alreadydone{$hashentry};
-				print ".";
-			} else {
-				print "*";
-				#create authority.
-				my $authorityRecord = MARC::Record->new();
-				my $newfield = MARC::Field->new(250,'','','a' => "".$authentry);
-				foreach my $x ($field->subfield('x')) {
-					$newfield->add_subfields('x' => $x);
-				}
-				foreach my $z ($field->subfield('z')) {
-					$newfield->add_subfields('z' => $z);
-				}
-				$authorityRecord->insert_fields_ordered($newfield);
-				$authid=AUTHaddauthority($dbh,$authorityRecord,'','NC');
-				$alreadydone{$hashentry} = $authid;
-				# we have the authority number, now we update all biblios that use this authority...
-				my @x = $field->subfield('x'); # depending on the number of $x in the subfield
-				if ($#x eq -1) { # no $x
-					$sthBIBLIOS->execute($authentry);
-					while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS->fetchrow) {
-						# check that the field does not already have a $x (if it has, it will or has been managed by another authority
-						my $inbiblio = MARCgetbiblio($dbh,$bibid);
-						my $isOK = 0;
-						# loop in each 606 field
-						foreach my $in606 ($inbiblio->field('606')) {
-							my $inEntry = $in606->subfield('a');
-							# and rebuild the $x -- $x -- $a string (like for $hashentry, few lines before)
-							foreach my $x ($in606->subfield('x')) {
-								$inEntry.=" -- $x";
-							}
-							$inEntry =~ s/é|ê|è/e/g;
-							$inEntry =~ s/â|à/a/g;
-							$inEntry =~ s/î/i/g;
-							$inEntry =~ s/ô/o/g;
-							$inEntry =~ s/ù|û/u/g;
-							$inEntry = uc($inEntry);
-							# ok, it's confirmed that we must add the $9 subfield for this biblio, so...
-							$isOK=1 if $inEntry eq $hashentry;
-						}
-						# ... add it !
-						C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
-					}
-				}
-				if ($#x eq 0) { # one $x
-					$sthBIBLIOSx->execute($authentry,$x[0]);
-					while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSx->fetchrow) {
-						my $inbiblio = MARCgetbiblio($dbh,$bibid);
-						my $isOK = 0;
-						foreach my $in606 ($inbiblio->field('606')) {
-							my $inEntry = $in606->subfield('a');
-							foreach my $x ($in606->subfield('x')) {
-								$inEntry.=" -- $x";
-							}
-							$inEntry =~ s/é|ê|è/e/g;
-							$inEntry =~ s/â|à/a/g;
-							$inEntry =~ s/î/i/g;
-							$inEntry =~ s/ô/o/g;
-							$inEntry =~ s/ù|û/u/g;
-							$inEntry = uc($inEntry);
-							$isOK=1 if $inEntry eq $hashentry;
-						}
-						C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
-					}
-				}
-				if ($#x eq 1) { # two $x
-					$sthBIBLIOSxx->execute($authentry,$x[0],$x[1]);
-					while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxx->fetchrow) {
-						my $inbiblio = MARCgetbiblio($dbh,$bibid);
-						my $isOK = 0;
-						foreach my $in606 ($inbiblio->field('606')) {
-							my $inEntry = $in606->subfield('a');
-							foreach my $x ($in606->subfield('x')) {
-								$inEntry.=" -- $x";
-							}
-							$inEntry =~ s/é|ê|è/e/g;
-							$inEntry =~ s/â|à/a/g;
-							$inEntry =~ s/î/i/g;
-							$inEntry =~ s/ô/o/g;
-							$inEntry =~ s/ù|û/u/g;
-							$inEntry = uc($inEntry);
-							$isOK=1 if $inEntry eq $hashentry;
-						}
-						C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
-					}
-				}
-				if ($#x eq 2) { # 3 $x
-					$sthBIBLIOSxxx->execute($authentry,$x[0],$x[1],$x[2]);
-					while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxxx->fetchrow) {
-						my $inbiblio = MARCgetbiblio($dbh,$bibid);
-						my $isOK = 0;
-						foreach my $in606 ($inbiblio->field('606')) {
-							my $inEntry = $in606->subfield('a');
-							foreach my $x ($in606->subfield('x')) {
-								$inEntry.=" -- $x";
-							}
-							$inEntry =~ s/é|ê|è/e/g;
-							$inEntry =~ s/â|à/a/g;
-							$inEntry =~ s/î/i/g;
-							$inEntry =~ s/ô/o/g;
-							$inEntry =~ s/ù|û/u/g;
-							$inEntry = uc($inEntry);
-							$isOK=1 if $inEntry eq $hashentry;
-						}
-						C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
-					}
-				}
-				if ($#x eq 3) { # 3 $x
-					$sthBIBLIOSxxxx->execute($authentry,$x[0],$x[1],$x[2],$x[3]);
-					while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxxxx->fetchrow) {
-						my $inbiblio = MARCgetbiblio($dbh,$bibid);
-						my $isOK = 0;
-						foreach my $in606 ($inbiblio->field('606')) {
-							my $inEntry = $in606->subfield('a');
-							foreach my $x ($in606->subfield('x')) {
-								$inEntry.=" -- $x";
-							}
-							$inEntry =~ s/é|ê|è/e/g;
-							$inEntry =~ s/â|à/a/g;
-							$inEntry =~ s/î/i/g;
-							$inEntry =~ s/ô/o/g;
-							$inEntry =~ s/ù|û/u/g;
-							$inEntry = uc($inEntry);
-							$isOK=1 if $inEntry eq $hashentry;
-						}
-						C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
-					}
-				}
-				if ($#x >4) {
-					# too many $x, not handled, warn the developper that tries to migrate
-					print "warning there is ".$#x.'$x values';
-				}
-			}
-		}
-	}
-	$i++;
+    my $record = GetMarcBiblio($bibid);
+    my $timeneeded = gettimeofday - $starttime;
+    print "$i in $timeneeded s\n" unless ($i % 50);
+    foreach my $field ($record->field(995)) {
+        $record->delete_field($field);
+    }
+    my $totdone=0;
+    my $authid;
+    # search the 606 field(s)
+    foreach my $field ($record->field("606")) {
+        foreach my $authentry ($field->subfield("a")) {
+            # the hashentry variable contains all $x fields and the $a in a single string. Used to differenciate
+            # $xsomething$aelse and $asomething else
+            my $hashentry = $authentry;
+            foreach my $x ($field->subfield('x')) {
+                $hashentry.=" -- $x";
+            }
+            # remove ï¿½ï¿½$e...
+            # all the same for mysql, but NOT for perl hashes !
+            # without those lines, tï¿½ is not tot and patï¿½ is not patee
+            $hashentry =~ s/ï¿½ï¿½ï¿½e/g;
+            $hashentry =~ s/ï¿½ï¿½a/g;
+            $hashentry =~ s/ï¿½i/g;
+            $hashentry =~ s/ï¿½o/g;
+            $hashentry =~ s/|/u/g;
+            # uppercase all, in case of typing error.
+            $hashentry = uc($hashentry);
+            $totdone++;
+            if ($alreadydone{$hashentry}) {
+                $authid = $alreadydone{$hashentry};
+                print ".";
+            } else {
+                print "*";
+                #create authority.
+                my $authorityRecord = MARC::Record->new();
+                my $newfield = MARC::Field->new(250,'','','a' => "".$authentry);
+                foreach my $x ($field->subfield('x')) {
+                    $newfield->add_subfields('x' => $x);
+                }
+                foreach my $z ($field->subfield('z')) {
+                    $newfield->add_subfields('z' => $z);
+                }
+                $authorityRecord->insert_fields_ordered($newfield);
+                $authid=AUTHaddauthority($dbh,$authorityRecord,'','NC');
+                $alreadydone{$hashentry} = $authid;
+                # we have the authority number, now we update all biblios that use this authority...
+                my @x = $field->subfield('x'); # depending on the number of $x in the subfield
+                if ($#x eq -1) { # no $x
+                    $sthBIBLIOS->execute($authentry);
+                    while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOS->fetchrow) {
+                        # check that the field does not already have a $x (if it has, it will or has been managed by another authority
+                        my $inbiblio = GetMarcBiblio($bibid);
+                        my $isOK = 0;
+                        # loop in each 606 field
+                        foreach my $in606 ($inbiblio->field('606')) {
+                            my $inEntry = $in606->subfield('a');
+                            # and rebuild the $x -- $x -- $a string (like for $hashentry, few lines before)
+                            foreach my $x ($in606->subfield('x')) {
+                                $inEntry.=" -- $x";
+                            }
+                            $inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+                            $inEntry =~ s/ï¿½ï¿½a/g;
+                            $inEntry =~ s/ï¿½i/g;
+                            $inEntry =~ s/ï¿½o/g;
+                            $inEntry =~ s/|/u/g;
+                            $inEntry = uc($inEntry);
+                            # ok, it's confirmed that we must add the $9 subfield for this biblio, so...
+                            $isOK=1 if $inEntry eq $hashentry;
+                        }
+                        # ... add it !
+                        C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
+                    }
+                }
+                if ($#x eq 0) { # one $x
+                    $sthBIBLIOSx->execute($authentry,$x[0]);
+                    while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSx->fetchrow) {
+                        my $inbiblio = GetMarcBiblio($bibid);
+                        my $isOK = 0;
+                        foreach my $in606 ($inbiblio->field('606')) {
+                            my $inEntry = $in606->subfield('a');
+                            foreach my $x ($in606->subfield('x')) {
+                                $inEntry.=" -- $x";
+                            }
+                            $inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+                            $inEntry =~ s/ï¿½ï¿½a/g;
+                            $inEntry =~ s/ï¿½i/g;
+                            $inEntry =~ s/ï¿½o/g;
+                            $inEntry =~ s/|/u/g;
+                            $inEntry = uc($inEntry);
+                            $isOK=1 if $inEntry eq $hashentry;
+                        }
+                        C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
+                    }
+                }
+                if ($#x eq 1) { # two $x
+                    $sthBIBLIOSxx->execute($authentry,$x[0],$x[1]);
+                    while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxx->fetchrow) {
+                        my $inbiblio = GetMarcBiblio($bibid);
+                        my $isOK = 0;
+                        foreach my $in606 ($inbiblio->field('606')) {
+                            my $inEntry = $in606->subfield('a');
+                            foreach my $x ($in606->subfield('x')) {
+                                $inEntry.=" -- $x";
+                            }
+                            $inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+                            $inEntry =~ s/ï¿½ï¿½a/g;
+                            $inEntry =~ s/ï¿½i/g;
+                            $inEntry =~ s/ï¿½o/g;
+                            $inEntry =~ s/|/u/g;
+                            $inEntry = uc($inEntry);
+                            $isOK=1 if $inEntry eq $hashentry;
+                        }
+                        C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
+                    }
+                }
+                if ($#x eq 2) { # 3 $x
+                    $sthBIBLIOSxxx->execute($authentry,$x[0],$x[1],$x[2]);
+                    while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxxx->fetchrow) {
+                        my $inbiblio = GetMarcBiblio($bibid);
+                        my $isOK = 0;
+                        foreach my $in606 ($inbiblio->field('606')) {
+                            my $inEntry = $in606->subfield('a');
+                            foreach my $x ($in606->subfield('x')) {
+                                $inEntry.=" -- $x";
+                            }
+                            $inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+                            $inEntry =~ s/ï¿½ï¿½a/g;
+                            $inEntry =~ s/ï¿½i/g;
+                            $inEntry =~ s/ï¿½o/g;
+                            $inEntry =~ s/|/u/g;
+                            $inEntry = uc($inEntry);
+                            $isOK=1 if $inEntry eq $hashentry;
+                        }
+                        C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
+                    }
+                }
+                if ($#x eq 3) { # 3 $x
+                    $sthBIBLIOSxxxx->execute($authentry,$x[0],$x[1],$x[2],$x[3]);
+                    while (my ($bibid,$tag,$tagorder,$subfieldorder) = $sthBIBLIOSxxxx->fetchrow) {
+                        my $inbiblio = GetMarcBiblio($bibid);
+                        my $isOK = 0;
+                        foreach my $in606 ($inbiblio->field('606')) {
+                            my $inEntry = $in606->subfield('a');
+                            foreach my $x ($in606->subfield('x')) {
+                                $inEntry.=" -- $x";
+                            }
+                            $inEntry =~ s/ï¿½ï¿½ï¿½e/g;
+                            $inEntry =~ s/ï¿½ï¿½a/g;
+                            $inEntry =~ s/ï¿½i/g;
+                            $inEntry =~ s/ï¿½o/g;
+                            $inEntry =~ s/|/u/g;
+                            $inEntry = uc($inEntry);
+                            $isOK=1 if $inEntry eq $hashentry;
+                        }
+                        C4::Biblio::MARCaddsubfield($dbh,$bibid,$tag,'',$tagorder,9,$subfieldorder,$authid) if $isOK;
+                    }
+                }
+                if ($#x >4) {
+                    # too many $x, not handled, warn the developper that tries to migrate
+                    print "warning there is ".$#x.'$x values';
+                }
+            }
+        }
+    }
+    $i++;
 }
 my $timeneeded = gettimeofday - $starttime;
 print "$i entries done in $timeneeded seconds (".($i/$timeneeded)." per second)\n";

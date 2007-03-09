@@ -30,7 +30,7 @@ use C4::Interface::CGI::Output;
 use C4::Date;
 use CGI;
 use C4::Members;
-use HTML::Template;
+
 
 my $input=new CGI;
 
@@ -46,13 +46,13 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 
-my $bornum=$input->param('bornum');
+my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=borrdata('',$bornum);
+my $data=borrdata('',$borrowernumber);
 
 #get account details
 my %bor;
-$bor{'borrowernumber'}=$bornum;
+$bor{'borrowernumber'}=$borrowernumber;
 my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
 my $totalcredit;
 if($total <= 0){
@@ -95,7 +95,7 @@ for (my $i=0;$i<$numaccts;$i++){
 $template->param(
 			firstname       => $data->{'firstname'},
 			surname         => $data->{'surname'},
-			bornum          => $bornum,
+			borrowernumber          => $borrowernumber,
 			total           => sprintf("%.2f",$total),
 			totalcredit => $totalcredit,
 			accounts        => \@accountrows );

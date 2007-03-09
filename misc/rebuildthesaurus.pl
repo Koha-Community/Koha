@@ -25,7 +25,7 @@ GetOptions(
 );
 
 if ($version || ($category eq '')) {
-	print <<EOF
+    print <<EOF
 small script to recreate a authority table into Koha.
 parameters :
 \th : this version/help screen
@@ -46,12 +46,12 @@ die;
 my $dbh = C4::Context->dbh;
 my @subf = $subfields =~ /(##\d\d\d##.)/g;
 if ($delete) {
-	print "deleting thesaurus\n";
-	my $sth = $dbh->prepare("delete from bibliothesaurus where category=?");
-	$sth->execute($category);
+    print "deleting thesaurus\n";
+    my $sth = $dbh->prepare("delete from bibliothesaurus where category=?");
+    $sth->execute($category);
 }
 if ($test_parameter) {
-	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
+    print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 $|=1; # flushes output
 
@@ -60,29 +60,29 @@ my $sth = $dbh->prepare("select bibid from marc_biblio");
 $sth->execute;
 my $i=1;
 while (my ($bibid) = $sth->fetchrow) {
-	my $record = MARCgetbiblio($dbh,$bibid);
-	print ".";
-	my $timeneeded = gettimeofday - $starttime;
-	print "$i in $timeneeded s\n" unless ($i % 50);
+    my $record = GetMarcBiblio($bibid);
+    print ".";
+    my $timeneeded = gettimeofday - $starttime;
+    print "$i in $timeneeded s\n" unless ($i % 50);
 
-#	warn $record->as_formatted;
-	my $resultstring = $subfields;
-	foreach my $fieldwanted ($record->fields) {
-		next if $fieldwanted->tag()<=10;
-		foreach my $pair ( $fieldwanted->subfields() ) {
-			my $fieldvalue = $fieldwanted->tag();
-#			warn "$fieldvalue ==> #$fieldvalue#$pair->[0]/$pair->[1]";
-			$resultstring =~ s/##$fieldvalue##$pair->[0]/$pair->[1]/g;
-		}
-	}
-		# deals empty subfields
-		foreach my $empty (@subf) {
-			$resultstring =~ s/$empty//g;
-		}
-		if ($resultstring ne $subfields && $resultstring) {
-			&newauthority($dbh,$category,$resultstring);
-		}
-		$i++;
+#    warn $record->as_formatted;
+    my $resultstring = $subfields;
+    foreach my $fieldwanted ($record->fields) {
+        next if $fieldwanted->tag()<=10;
+        foreach my $pair ( $fieldwanted->subfields() ) {
+            my $fieldvalue = $fieldwanted->tag();
+#            warn "$fieldvalue ==> #$fieldvalue#$pair->[0]/$pair->[1]";
+            $resultstring =~ s/##$fieldvalue##$pair->[0]/$pair->[1]/g;
+        }
+    }
+        # deals empty subfields
+        foreach my $empty (@subf) {
+            $resultstring =~ s/$empty//g;
+        }
+        if ($resultstring ne $subfields && $resultstring) {
+            &newauthority($dbh,$category,$resultstring);
+        }
+        $i++;
 }
 my $timeneeded = gettimeofday - $starttime;
 print "$i entries done in $timeneeded seconds (".($i/$timeneeded)." per second)\n";

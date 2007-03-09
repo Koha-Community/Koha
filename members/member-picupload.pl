@@ -30,13 +30,13 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use CGI;
-use HTML::Template;
+
 use C4::Interface::CGI::Output;
 use C4::Interface::CGI::Template;
 
 my $input = new CGI;
 my $name = $input->param('name');
-my $bornum = $input->param('bornum');
+my $borrowernumber = $input->param('borrowernumber');
 my $photo = $input->param('photo');
 
 my $template_name;
@@ -59,7 +59,7 @@ my ($template, $loggedinuser, $cookie)
 			     });
 if ($photo){
 
-	my $filename=$bornum.'.jpg';
+	my $filename=$borrowernumber.'.jpg';
 	my $upload_filehandle = $input->upload("photo");
 	open UPLOADFILE, ">$upload_dir/$filename";
 	binmode UPLOADFILE;
@@ -71,9 +71,9 @@ if ($photo){
 }
 else {
 	$template->param(
-		 bornum => $bornum,
+		 borrowernumber => $borrowernumber,
 		 name => $name
 		 );
 	output_html_with_http_headers $input, $cookie, $template->output;
 }
-print $input->redirect("http://intranet/cgi-bin/koha/members/moremember.pl?bornum=$bornum");
+print $input->redirect("http://intranet/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");

@@ -14,6 +14,6 @@
 	<a href="/cgi-bin/koha/admin/printers.pl">Printers</a>
 	<a href="/cgi-bin/koha/admin/stopwords.pl">Stop words</a>
 	<a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a>
-	<a href="/cgi-bin/koha/import/breeding.pl">Reservoir</a>
+	<a href="/cgi-bin/koha/tools/breeding.pl">Reservoir</a>
 </div>
 <div id="main">

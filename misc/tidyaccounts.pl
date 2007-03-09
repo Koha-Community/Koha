@@ -30,16 +30,16 @@ my $input=new CGI;
 #print $input->header();
 #print $input->dump;
 
-my $bornum=$input->param('bornum');
+my $borrowernumber=$input->param('borrowernumber');
 
 my @name=$input->param;
 
 foreach my $key (@name){
-  if ($key ne 'bornum'){
+  if ($key ne 'borrowernumber'){
     if (my $temp=$input->param($key)){
-      fixaccounts($bornum,$key,$temp);
+      fixaccounts($borrowernumber,$key,$temp);
     }
   }
 }
 
-print $input->redirect("boraccount.pl?bornum=$bornum");
+print $input->redirect("boraccount.pl?borrowernumber=$borrowernumber");

@@ -1,10 +1,5 @@
 #!/usr/bin/perl
 
-#script to set or lift debarred status
-#written 2/8/04
-#by oleonard@athenscounty.lib.oh.us
-
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -22,32 +17,45 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+# $Id$
+
+=head1 setdebar.pl
+
+script to set or lift debarred status
+written 2/8/04
+by oleonard@athenscounty.lib.oh.us
+
+=cut
+
 use strict;
 
 use CGI;
 use C4::Context;
 use C4::Auth;
 
-
 my $input = new CGI;
 
 my $flagsrequired;
-$flagsrequired->{borrower}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+$flagsrequired->{borrowers} = 1;
+my ( $loggedinuser, $cookie, $sessionID ) =
+  checkauth( $input, 0, $flagsrequired );
 
-my $destination = $input->param("destination");
-my $cardnumber = $input->param("cardnumber");
-my $borrowernumber=$input->param('borrowernumber');
-my $status = $input->param('status');
+my $destination    = $input->param("destination");
+my $cardnumber     = $input->param("cardnumber");
+my $borrowernumber = $input->param('borrowernumber');
+my $status         = $input->param('status');
 
 my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare("Update borrowers set debarred = ? where borrowernumber = ?");
-$sth->execute($status,$borrowernumber);
-my $data=$sth->fetchrow_hashref;
+my $sth =
+  $dbh->prepare("Update borrowers set debarred = ? where borrowernumber = ?");
+$sth->execute( $status, $borrowernumber );
 $sth->finish;
 
-if($destination eq "circ"){
-	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
-} else {
-	print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
+if ( $destination eq "circ" ) {
+    print $input->redirect(
+        "/cgi-bin/koha/circ/circulation.pl?findborrower=".$cardnumber);
+}
+else {
+    print $input->redirect(
+        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 }

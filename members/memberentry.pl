@@ -30,21 +30,29 @@ use Digest::MD5 qw(md5_base64);
 # internal modules
 use C4::Auth;
 use C4::Context;
+use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Search;
 use C4::Members;
 use C4::Koha;
 use C4::Date;
 use C4::Input;
 use C4::Log;
+use C4::Branch; # GetBranches
 
 my $input = new CGI;
 my %data;
 
-
 my $dbh = C4::Context->dbh;
 
-my $category_type = $input->param('category_type') || die "NO CATEGORY_TYPE !"; # A, E, C, or P
+my $categorycode=$input->param('categorycode');
+my $category_type;
+$category_type = $input->param('category_type');
+
+my $desc;
+($category_type,$desc) = getcategorytype($categorycode) unless ($category_type or !($categorycode));
+
+die "NO CATEGORY TYPE !" unless $category_type; # FIXME we should display a error message instead of a 500 error !
+
 my $step=$input->param('step') || 0;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/memberentry$category_type.tmpl",
@@ -60,7 +68,6 @@ my $actionType=$input->param('actionType') || '';
 my $modify=$input->param('modify');
 my $delete=$input->param('delete');
 my $op=$input->param('op');
-my $categorycode=$input->param('categorycode');
 my $destination=$input->param('destination');
 my $cardnumber=$input->param('cardnumber');
 my $check_member=$input->param('check_member');
@@ -68,37 +75,36 @@ my $name_city=$input->param('name_city');
 my $nodouble=$input->param('nodouble');
 my $select_city=$input->param('select_city');
 my $nok=$input->param('nok');
-
+my $guarantorinfo=$input->param('guarantorinfo');
 my @errors;
 my $default_city;
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
 my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
-
+my $borrower_data;
 
 #function  to automatic setup the mandatory  fields (visual with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
 $template->param( "mandatory$_" => 1);		
-}	
-
+}
 $template->param("add"=>1) if ($op eq 'add');
 $template->param( "checked" => 1) if ($nodouble eq 1);
+($borrower_data=borrdata('',$borrowernumber)) if($op eq 'modify');
 
-my $borrower_data=borrdata('',$borrowernumber);
 # if a add or modify is requested => check validity of data.
 if ($step eq 0){
     foreach my $column (keys %$borrower_data){
 	$data{$column}=$borrower_data->{$column};
     }
-   }    
+   }
+
 if ($op eq 'add' or $op eq 'modify') {
 	my @names=$input->param;
 	foreach my $key (@names){
 		$data{$key}=$input->param($key)||'';
-		$data{$key}=~ s/\'/\\\'/g;
-		$data{$key}=~ s/\"/\\\"/g;
+ 		$data{$key}=~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
 	}
 
 	# WARN : some tests must be done whatever the step, because the librarian can click on any tab.
@@ -115,6 +121,7 @@ if ($op eq 'add' or $op eq 'modify') {
 #recover all data from guarantor address phone ,fax... 
 if ($category_type eq 'C' and $guarantorid ne '' ){
 			my $guarantordata=getguarantordata($guarantorid);
+			$guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
 			if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
 				$data{'contactfirstname'}=$guarantordata->{'firstname'};	
 				$data{'contactname'}=$guarantordata->{'surname'};
@@ -136,27 +143,31 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 
 	# CHECKS step by step
 # STEP 1
-	if ($step eq 1) {
-		###############test to take the right zipcode and city name ##############
-		if ( $guarantorid eq ''){
-			my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
-			$data{'city'}= $borrower_city;
-			$data{'zipcode'}=$borrower_zipcode;
-		}
-                if ($category_type ne 'I') {
-                my $age = get_age(format_date_in_iso($data{dateofbirth}));
-                my (undef,$agelimitmin,$agelimitmax,undef)=getborrowercategory($data{'categorycode'});   
-		if ($age > $agelimitmax
-                            or $age < $agelimitmin
-                   ) {
-                        push @errors, 'ERROR_age_limitations';
-                        $nok = 1;
-                    }
-                }
-	
+    if ($step eq 1) {
+        ###############test to take the right zipcode and city name ##############
+        if ( $guarantorid eq ''){
+          if ($select_city){
+            my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
+            $data{'city'}= $borrower_city;
+            $data{'zipcode'}=$borrower_zipcode;
+            }
+        }
+        my $dateofbirthmandatory=0;
+        map {$dateofbirthmandatory=1 if $_ eq "dateofbirth"} @field_check;
+        if ($category_type ne 'I' && $data{dateofbirth} && $dateofbirthmandatory) {
+          my $age = get_age(format_date_in_iso($data{dateofbirth}));
+          my (undef,$agelimitmin,$agelimitmax,undef)=getborrowercategory($data{'categorycode'});   
+          if (($age > $agelimitmax) or ($age < $agelimitmin)) {
+            push @errors, 'ERROR_age_limitations';
+            $nok = 1;
+          }
+        }
 	}
+
 # STEP 2
 	if ($step eq 2) {
+	
+	
 			if ( ($data{'userid'} eq '')){
 				my $onefirstnameletter=substr($data{'firstname'},0,1);
 				my $fivesurnameletter=substr($data{'surname'},0,5);
@@ -186,7 +197,6 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 			# test to know if another user have the same password and same login		
 			if ($loginexist eq 0) {
 				&modmember(%data);		
-				logaction($loggedinuser,"MEMBERS","modify member", $borrowernumber, "");
 			}
 			else {
 				push @errors, "ERROR_login_exist";
@@ -204,7 +214,6 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 				    my @orgs=split(/\|/,$data{'organisations'});
 				    add_member_orgs($borrowernumber,\@orgs);
 				 }
-				logaction($loggedinuser,"MEMBERS","add member", $borrowernumber, "");
 			}
  		}
 
@@ -213,7 +222,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 				print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
 			} else {
 				if ($loginexist == 0) {
-				print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$borrowernumber");
+				print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 				}
 			}
 		}
@@ -258,6 +267,7 @@ if ($delete){
 		$template->param(female => 1);
 	}
 	my ($categories,$labels)=ethnicitycategories();
+    
 	my $ethnicitycategoriescount=$#{$categories};
 	my $ethcatpopup;
 	if ($ethnicitycategoriescount>=0) {
@@ -271,16 +281,21 @@ if ($delete){
 	}
 	
 	
-	($categories,$labels)=borrowercategories($category_type,$op);
+	my $action="WHERE category_type=?";
+	($categories,$labels)=GetborCatFromCatType($category_type,$action);
 	
-	#if u modify the borrowers u must have the right value for is category code
-	
-	(my $default_category=$data{'categorycode'}) if ($op  eq '');
-	my $catcodepopup = CGI::popup_menu(-name=>'categorycode',
- 					-id => 'categorycode',
- 					-values=>$categories,
-  					-default=>$default_category,
- 					-labels=>$labels);
+	if(scalar(@$categories)){
+	    #if you modify the borrowers you must have the right value for his category code
+	(my $default_category=$data{'categorycode'}) if ($op  eq 'modify');
+	    my $catcodepopup = CGI::popup_menu(
+	        -name=>'categorycode',
+ 			-id => 'categorycode',
+ 			-values=>$categories,
+  			-labels=>$labels,
+			-default=>$default_category
+ 	    );
+ 	    $template->param(catcodepopup=>$catcodepopup);
+ 	}
 	#test in city
 	$select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
 	($default_city=$select_city) if ($step eq 0);
@@ -288,7 +303,7 @@ if ($delete){
  	my $selectcity=&getidcity($data{'city'});
  	$default_city=$selectcity;
  	}
-	my($cityid,$name_city)=getcities();
+	my($cityid,$name_city)=GetCities();
 	$template->param( city_cgipopup => 1) if ($cityid );
 	my $citypopup = CGI::popup_menu(-name=>'select_city',
 					-id => 'select_city',
@@ -300,7 +315,7 @@ if ($delete){
 	
  	my $default_roadtype;
  	$default_roadtype=$data{'streettype'} ;
-	my($roadtypeid,$road_type)=getroadtypes();
+ 	my($roadtypeid,$road_type)=GetRoadTypes();
   	$template->param( road_cgipopup => 1) if ($roadtypeid );
 	my $roadpopup = CGI::popup_menu(-name=>'streettype',
 					-id => 'streettype',
@@ -310,7 +325,17 @@ if ($delete){
 					-default=>$default_roadtype
 					);	
 
-	
+	my $default_borrowertitle;
+	$default_borrowertitle=$data{'title'} ;
+ 	my($borrowertitle)=GetBorrowersTitles();
+	my $borrotitlepopup = CGI::popup_menu(-name=>'title',
+					      -id => 'title',
+					      -values=>$borrowertitle,
+					      -override => 1,
+					      -default=>$default_borrowertitle
+					);		
+
+
 	my @relationships = split /,|\|/,C4::Context->preference('BorrowerRelationship');
 	my @relshipdata;
 	while (@relationships) {
@@ -352,7 +377,7 @@ if ($delete){
 	my @branches;
 	my @select_branch;
 	my %select_branches;
-	my $branches=GetBranches('IS');
+	my $branches=GetBranches();
 	my $default;
 	# -----------------------------------------------------
 	#  the value of ip from the branches hash table
@@ -365,24 +390,23 @@ if ($delete){
 		if ((not C4::Context->preference("IndependantBranches")) || (C4::Context->userenv->{'flags'} == 1)) {
 			push @select_branch, $branch;
 			$select_branches{$branch} = $branches->{$branch}->{'branchname'};
- 			$default = $branches->{$branch}->{'branchcode'};
- 			} else {
-				push @select_branch,$branch if ($branch eq C4::Context->userenv->{'branch'});
-				$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
-				$default = C4::Context->userenv->{'branch'};
-					
-				}
+ 			$default=C4::Context->userenv->{'branch'};
+		} else {
+			push @select_branch,$branch if ($branch eq C4::Context->userenv->{'branch'});
+			$select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
+			$default = C4::Context->userenv->{'branch'};
+		}
 	}
 # --------------------------------------------------------------------------------------------------------
  	#in modify mod :default value from $CGIbranch comes from borrowers table
 	#in add mod: default value come from branches table (ip correspendence)
 	$default=$data{'branchcode'}  if ($op eq 'modify');
-	
 	my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
 					   -name   => 'branchcode',
 					   -values => \@select_branch,
 					   -labels => \%select_branches,
 					   -size   => 1,
+					   -override => 1,	
 				           -multiple =>0,
 					   -default => $default,
 					);
@@ -411,7 +435,7 @@ if ($delete){
 
 
 # --------------------------------------------------------------------------------------------------------
-	
+
 	my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data{'sort1'});
 	if ($CGIsort1) {
 		$template->param(CGIsort1 => $CGIsort1);
@@ -426,11 +450,6 @@ if ($delete){
 	} else {
 		$template->param( sort2 => $data{'sort2'});
 	}
-
-	
- 	$data{'opacnotes'} =~ s/\\//g;
-	$data{'borrowernotes'} =~ s/\\//g;
-
 	# increase step to see next page
         if ($nok) {
             foreach my $error (@errors) {
@@ -441,8 +460,6 @@ if ($delete){
         else {
             $step++;
         }
-
-
 	$template->param(
 		BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
 		category_type	=> $category_type,#to know the category type of the borrower
@@ -458,8 +475,7 @@ if ($delete){
 		borrowernumber 	=> $borrowernumber,#register number
 		cardnumber	=> $data{'cardnumber'},
 		surname         => uc($data{'surname'}),
-		firstname       => ucfirst($data{'firstname'}),
-		"title_".$data{'title'}   => " SELECTED ",
+		firstname       => ucfirst(lc $data{'firstname'}),
 		title 		=> $data{'title'},
 		othernames	=> $data{'othernames'},
 		initials	=> $data{'initials'},
@@ -482,7 +498,6 @@ if ($delete){
 		B_phone        => $data{'B_phone'},
 		dateofbirth	=> $data{'dateofbirth'},
 		branchcode      => $data{'branchcode'},
-		catcodepopup	=> $catcodepopup,
 		categorycode 	=> $data{'categorycode'},
 		dateenrolled 	=> format_date($data{'dateenrolled'}),
 		dateexpiry	=> format_date($data{'dateexpiry'}),
@@ -490,7 +505,7 @@ if ($delete){
 		gonenoaddress 	=> $data{'gonenoaddress'}, 
 		lost 	=> $data{'lost'},
 		contactname     => uc($data{'contactname'}),
-		contactfirstname=> ucfirst($data{'contactfirstname'}),
+		contactfirstname=> ucfirst( lc $data{'contactfirstname'}),
 		"contacttitle_".$data{'contacttitle'} => "SELECTED" ,
 		contacttitle	=> $data{'contacttitle'},
 		guarantorid	=> $guarantorid,
@@ -499,14 +514,16 @@ if ($delete){
 		userid 		=> $data{'userid'},	
 		password 	=> $data{'password'},	
 		opacnote   	=> $data{'opacnote'},	
-		contactnotes	=> $data{'contactnotes'},
+		contactnote	=> $data{'contactnote'},
 		borrowernotes	=> $data{'borrowernotes'},
 		relshiploop	=> \@relshipdata,
 		relationship	=> $data{'relationship'},
 		citypopup	=> $citypopup,
 		roadpopup	=> $roadpopup,	
+		borrotitlepopup => $borrotitlepopup,
 		contacttype	=> $data{'contacttype'},
 	        organisations   => $data{'organisations'},
+		guarantorinfo   => $guarantorinfo,
 		flagloop	=> \@flagdata,
 # 		"contacttype_".$data{'contacttype'} =>" SELECTED ",
 		dateformat      => display_date_format(),

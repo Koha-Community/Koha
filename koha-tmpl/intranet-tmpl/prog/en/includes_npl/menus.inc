@@ -42,10 +42,10 @@ function Help() {
         </ul>
     </li>
     <li>
-        <a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Catalog</a>
+        <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
         <ul>
             <li>
-                <form method="post" action="/cgi-bin/koha/search.marc/search.pl">
+                <form method="post" action="/cgi-bin/koha/catalogue/search.pl">
                     <input type="hidden" name="op" value="do_search" />
                     <input type="hidden" name="type" value="intranet" />
                     <input type="hidden" name="nbstatements" value="3" />
@@ -63,7 +63,7 @@ function Help() {
     <li><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Cataloging</a>
         <ul>
             <li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Add MARC</a></li>
-            <li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Acquisitions</a></li>
+            <li><a href="/cgi-bin/koha/acqui/acqui-home.pl>Acquisitions</a></li>
             <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
             <li><a href="/cgi-bin/koha/bull-home.pl">Serials</a></li>
             <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li>

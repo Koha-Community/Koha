@@ -1,7 +1,5 @@
-
-#!/usr/bin/perl -w
+#!/usr/bin/perl 
 #run nightly -- changes J to A on someone's 18th birthday
-use lib '/usr/local/koha/intranet/modules/';
 use strict;
 use C4::Context;
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
@@ -16,9 +14,13 @@ my $dbh=C4::Context->dbh;
 #get today's date, format it and subtract 18 yrs.
 my $itsyourbirthday = "$year-$mon-$mday";
 
-my $fixit="UPDATE borrowers SET categorycode='A' WHERE dateofbirth<=? AND dateofbirth!='0000-00-00' AND categorycode='J'";
-
-my $sth=$dbh->prepare($fixit);
+my $query=qq|UPDATE borrowers 
+	   SET categorycode='A',
+	    guarantorid ='0'	 
+	   WHERE dateofbirth<=? 
+	   AND dateofbirth!='0000-00-00' 
+	   AND categorycode IN (select categorycode from categories where category_type='C')|;
+my $sth=$dbh->prepare($query);
 my $res = $sth->execute($itsyourbirthday) or die "can't execute";
 print "$res\n"; #did it work?
 $dbh->disconnect();

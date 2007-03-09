@@ -25,24 +25,21 @@
 #use lib ('/usr/local/koha/intranet/modules');
 use strict;
 use CGI;
-use HTML::Template;
-use C4::Database;
-use C4::Search;
+
+
 use C4::Circulation::Circ2;
 use C4::Circulation::Fines;
 
-use Data::Dumper;
-
 my $input = new CGI;
-my $bornum = $input->param('bornum');
+my $borrowernumber = $input->param('borrowernumber');
 my $date= $input->param('date');
 print $input->header;
-if ($bornum) {
-	my $borrower = BorType($bornum);
+if ($borrowernumber) {
+	my $borrower = BorType($borrowernumber);
 	my $dbh=C4Connect();    
         my $querystring = "select * from borrowers where borrowernumber = ?";
 	my $sth=$dbh->prepare($querystring);
-	$sth->execute($bornum);    
+	$sth->execute($borrowernumber);    
        my $row=$sth->fetchrow_hashref();
 #     print "<body background=/images/letterhead.jpg> <p> <p> <p>";
     print "
@@ -83,7 +80,7 @@ if ($bornum) {
 
 	
 	$sth=$dbh->prepare($querystring);
-	$sth->execute($date,$bornum);
+	$sth->execute($date,$borrowernumber);
 
 	$row=$sth->fetchrow_hashref();
 #		print $row->{'date'}."<br>\n";
@@ -93,7 +90,7 @@ if ($bornum) {
 		print $row->{'message'}."<br>\n";
 	    	print "<p><p>";
 
-#print $querystring,$date,$bornum;
+#print $querystring,$date,$borrowernumber;
 	}
 
 

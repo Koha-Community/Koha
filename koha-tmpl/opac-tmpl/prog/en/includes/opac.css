@@ -1,46 +1,343 @@
+/* color scheme :
+- #384b73 : light blue, for menus, text enhancement, footer & header
+- #eeeeee : light grey, for background color
+- #CCCCCC : for table backgrounds
+- #EEC95A : orange for action buttons & hyperlinks
+*/
+
+/* attribute for standard html tags */
+
 body {
-	font-family : Verdana, Geneva, Arial, sans-serif;
-	font-size : .7em;
+    font-family : Verdana, Geneva, Arial, sans-serif;
+    font-size : 1em;
+    background-color : #eeeeee;
+    text-align: left;
+    margin-bottom:0px;
+}
+
+h1 {
+    padding-top:25px;
+    color: #384b73;
+    font-size:1.5em;
+    text-align:left;
+}
+
+p {
+    margin:0px;
+    padding:0px;
+    clear:left;
+}
+
+label {
+    font-style:italic;
+    vertical-align:top;
+    display:block;
+    float:left;
+    width:10em;
+    margin-right:0.2em;
+}
+
+a:link, a:visited, a:active {
+    text-decoration : none;
+    color :#384b73;
+}
+
+a:hover {
+    text-decoration : none;
+    background-color : #EEC95A;
+}
+
+fieldset {
+    display:inline;
+    border: 1px solid #384b73;
 }
 
 table {
-	border-collapse : collapse;
-	border-top : 1px solid #CCCCCC;
-	border-right : 1px solid #CCCCCC;
-	margin : 1em 0;
+    border-collapse : collapse;
+    border : 1px solid #CCCCCC;
+    margin : 1em 0;
 }
 
 caption {
-	font-size : 140%;
-	text-align : left;
-	font-weight : bold;
+    font-size : 140%;
+    text-align : left;
+    font-weight : bold;
 }
 
 td,th {
-	border-left : 1px solid #CCCCCC;
-	border-bottom : 1px solid #CCCCCC;
-	padding : 5px;
+    border : 1px solid #CCCCCC;
+    border-bottom : 1px solid #CCCCCC;
+    padding : 5px;
 }
 
 th {
-	background-color : #CCCCCC;
-	border-left : 1px solid #999999;
-	border-bottom : 1px solid #999999;
+    background-color: #384b73;
+    color:white;
+    border : 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
 }
 
 th[scope=row] {
-	background-color : #EEEEEE;
-	text-align : right;
+    text-align : right;
 }
 
-input[type=submit], input[type=button], input[type=reset]{
-	background-color : #6699cc;
-	color : #FFFFFF;
-	font-size : 1em;
-	font-weight : bold;
+input[type=submit], input[type=button], input[type=reset] {
+    background-color : #EEC95A;
+    color : #FFFFFF;
+    font-size : 1em;
+    font-weight : bold;
 }
 
+li {
+    list-style-type:square;
+}
+
+ul {
+    margin:0px;
+}
+
+/* attributes for search result list */
+.searchresults td, .searchresults th, .searchresults table {
+    border: 0;
+}
+.searchresults tr {
+    border-bottom : 1px solid #CCCCCC;
+}
+.searchresults table {
+    border-top : 0px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
+}
+p.searchresults {
+    background-color : #EFF1DC;
+}
+.searchresults a.reserve {
+    background-color : transparent;
+    color : #006699;
+}
+.searchresults table tr:hover {
+    background-color: #CCFFFF;
+}
 tr.highlight td, tr.highlight th {
-	background-color : #EEEEEE;
+    background-color : #EEEEEE;
+    border: 1px solid #DDDDDD;
+    border-right: 1px solid #DDDDDD;
 }
 
+/* the top part of the opac : (the LibraryName) */
+#masthead {
+    color:#384b73;
+    margin-left:15%;
+    text-align:left;
+    font-size:150%;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+/* The image on the top-left (the logo) */
+#masthead-image {
+    position:fixed;
+    padding-left:30px;
+    padding-top:0px;
+}
+#masthead-image img {
+}
+
+/* the itemtype list in advanced search */
+#advsearch-itemtype table {
+    border-collapse: separate;
+    border-spacing: 3px;
+}
+#advsearch-itemtype table tr td {
+    background-color:#CCCCCC;
+    width:100%;
+}
+#advsearch-itemtype table tr td p {
+    font-size:0.8em;
+}
+
+/* the content part of every page */
+#main {
+    margin-left:25%;
+    margin-bottom:0px;
+}
+
+/* the main menu (home, adv search, login...) */
+#menu {
+    position:fixed;
+    margin-top:100px;
+    border-right:1px solid black;
+    padding:0px;
+    font-size:0.8em;
+    color:#384b73;
+}
+#menu ul a {
+    display:block;
+    margin:5px 5px 0px 5px;
+    padding :5px 5px 0px 5px;
+    text-decoration:none;
+    color:#384b73;
+    white-space: nowrap;
+}
+#menu ul a:hover {
+    display:block;
+    margin:5px 5px 0px 5px;
+    padding :5px 5px 0px 5px;
+    text-decoration:none;
+    background-color:#384b73;
+    color:white;
+    white-space: nowrap;
+}
+#menu ul {
+    padding-left:0px;
+    margin-bottom:0px;
+    margin-top:0px;
+}
+#menu li {
+    list-style-type:none;
+}
+#menu label {
+    font-style:italic;
+    display:block;
+    float:left;
+    width:5em;
+}
+
+/* the user menu, for user option (and biblio detail view) */
+#usermenu a {
+    background-color : #EEC95A;
+    color : #FFFFFF;
+    font-size : 1em;
+    border: 2px outset;
+    font-weight : bold;
+    margin:0px 5px 0px 0px;
+    padding:2px 5px 2px 5px;
+    text-decoration:none;
+    display: inline;
+    white-space: nowrap;
+}
+#usermenu a:hover {
+    border: 2px inset;
+    background-color:#384b73;
+}
+
+/* the opac-news */
+#news {
+    width:20%;
+    float:right;
+    font-size:11px;
+}
+#news th {
+background-color:white;
+color:#384b73;
+}
+
+/* "problem" enhancement */
+.problem {
+color: white;
+background-color:red;
+}
+
+/* action buttons */
+#action a {
+    background-color : #EEC95A;
+    color : #FFFFFF;
+    font-size : 1em;
+    border: 2px outset;
+    font-weight : bold;
+    margin:0px 5px 0px 0px;
+    padding-right:5px;
+    padding-left:5px;
+    text-decoration:none;
+    display: inline;
+}
+#action a:hover {
+    border: 2px inset;
+    background-color:#CCCCCC;
+}
+
+#auth {
+    float:left;
+}
+
+/* facets bloc */
+#facets {
+    float:right;
+    border: 1px solid #CCCCCC;
+    margin-top: 5px;
+    margin-left: 15px;
+    font-size:0.8em;
+}
+#facets h2 {
+    background-color:#EFF1DC;
+    border-bottom: 1px solid #CCCCCC;
+    margin:0px;
+    font-size:1em;
+}
+#facets ul {
+    list-style-type: none;
+    padding-left:10px;
+    margin-bottom:0px;
+    margin-top:0px;
+}
+
+/* the USER information block */
+#librarian_information {
+float:right;
+font-size:10pt;
+}
+
+/* the footer */
+#footer {
+    margin-top:30px;
+    margin-left:30%;
+    margin-right:20%;
+    border-top:1px solid #384b73;
+    color: #384b73;
+    font-size:1em;
+    text-align:center;
+}
+
+
+legend {
+font-weight:bold;
+color:#384b73;
+}
+
+
+/* css styles for reserves color alerts */
+.onloan {
+    background-color: #FFED3D;
+}
+
+.reserved {
+    background-color: #8EBAFF;
+}
+
+.transfered {
+    background-color: #F9FF9A;
+}
+
+.inwait {
+    background-color: #33CC99;
+}
+
+.other {
+    background-color: #FF0000;
+}
+
+.available {
+    background-color: white;
+}
+
+.unavailable {
+    background-color: #FFED3D;
+}
+
+/* style for search terms in catalogsearch */
+.term {
+background-color:lightyellow;
+}
+
+#opac-main-search form {
+    display:inline;
+}

@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Online Help: System Preferences -- System preferences administration<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<div id="main-compact">
+
 <h1>System preferences administration</h1>
 <p>This page allows you to set the system preferences that control much of the basic behavior of Koha. These parameters should be set before any other parameters.</p>
 <ul>
@@ -26,7 +26,7 @@
 	<p>means the "block" 995 has &lt;br&gt;Items : BEFORE, then fields 995b, 995j and 995k, repeated for each item (995 is an UNIMARC standard), then nothing after the block.</p>
 	<p> The # means "beginning of a block", the | is the separator of each part, the {} being used for each subfield. A subfield can have up to 3 digits BEFORE and up to 3 digits AFTER each subfield</p>
 	<p>The UNIMARC (partial) definition for ISBD is </p><i>
-	<p>#700|<label>Titre/auteur</label>|{700a}{701a}{702a}| ;
+	<p>#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ;
 		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br/>
 		#230||{ ; 230a}|<br/>
 		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br/>
@@ -68,4 +68,4 @@
 <li><b>timeout --</b> Inactivity timeout period (in seconds). If a workstation is idle for longer than this period, the user will have to login again.</li>
 
 <li><b>virtualshelves --</b> Set virtual shelves management on or off ("1" or "0"). Users can set up and manage their own "virtual bookshelves" of favorite library items if this feature is turned on.</li></ul>
-<!-- TMPL_INCLUDE name="help-bottom.inc" -->
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

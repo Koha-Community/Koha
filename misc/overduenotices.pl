@@ -95,9 +95,9 @@ $sth->execute;
 my $count = 0;   # to keep track of how many notices are printed
 my $e_count = 0;   # and e-mailed
 my $date=localtime;
-my ($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
+my ($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
 
-while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
+while (($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email) = $sth->fetchrow) {
 		my $notice = $mailtext;
 		$notice =~ s/\<itemcount\>/$itemcount/g;
 		$notice =~ s/\<firstname\>/$firstname/g;
@@ -108,7 +108,7 @@ while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$post
 		$notice =~ s/\<postcode\>/$postcode/g;
 		$notice =~ s/\<date\>/$date/g;
 
-		$sth2->execute($borrnum);
+		$sth2->execute($borrowernumber);
 		my $titles="";
 		my ($title, $author, $barcode);
 		while (($title, $author, $barcode) = $sth2->fetchrow){

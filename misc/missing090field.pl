@@ -15,13 +15,13 @@ use MARC::File::USMARC;
 my $dbh = C4::Context->dbh;
 
 my $sth=$dbh->prepare("select m.biblionumber,b.biblioitemnumber from marc_biblio m left join biblioitems b on b.biblionumber=m.biblionumber ");
-	$sth->execute();
+    $sth->execute();
 
 while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
- my $record = MARCgetbiblio($dbh,$biblionumber);
-		
-		MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);
-		
+ my $record = GetMarcBiblio($biblionumber);
+    
+        MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);
+    
 }
 
 sub MARCmodbiblionumber{
@@ -29,7 +29,7 @@ my ($biblionumber,$biblioitemnumber,$record)=@_;
 
 my ($tagfield,$biblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber","");
 my ($tagfield2,$biblioitemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblioitemnumber","");
-	
+    
 my $update=0;
       my @tags = $record->field($tagfield);
 
@@ -38,13 +38,13 @@ if (!@tags){
 my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
     $record->append_fields($newrec);
  $update=1;
-	} 	
+    }
 
  
-if ($update){	
+if ($update){    
 &MARCmodbiblio($dbh,$biblionumber,$record,'',0);
-	print "$biblionumber \n";	
-	}
+    print "$biblionumber \n";
+    }
 
 }
 END;

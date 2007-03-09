@@ -40,43 +40,43 @@ GETIT: while (my $data=$sth->fetchrow_hashref){
     $firstname = $data->{'firstname'};
     $phone = $data->{'phone'};
     $rdate = $data->{'reservedate'};
-    my @items = ItemInfo(undef,$biblionumber,''); # get the items for this biblio
+    my @items = GetItemsInfo($biblionumber,''); # get the items for this biblio
     my @itemorder;   #  prepare a new array to hold re-ordered items
 
 # The following lines take the retrieved items and run them through various
 # tests to decide if they are to be used and then put them in the preferred
 # 'pick' order.
     foreach my $itm (@items) {
-	if ($itm->{"datedue"} eq "Reserved") {   # is item ready for member?
-	    if ($itm->{'holdingbranch'} eq $pickbranch) {
-		$itemorder[0]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'NPL') {
-		$itemorder[1]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'CPL') {
-		$itemorder[2]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'COV') {
-		$itemorder[3]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'GPL') {
-		$itemorder[4]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'ALB') {
-		$itemorder[5]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'PPL') {
-		$itemorder[6]=$itm;
-	    } elsif ($itm->{'homebranch'} eq 'APL') {
-		$itemorder[7]=$itm;
-	    }
-	}
+    if ($itm->{"datedue"} eq "Reserved") {   # is item ready for member?
+        if ($itm->{'holdingbranch'} eq $pickbranch) {
+        $itemorder[0]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'NPL') {
+        $itemorder[1]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'CPL') {
+        $itemorder[2]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'COV') {
+        $itemorder[3]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'GPL') {
+        $itemorder[4]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'ALB') {
+        $itemorder[5]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'PPL') {
+        $itemorder[6]=$itm;
+        } elsif ($itm->{'homebranch'} eq 'APL') {
+        $itemorder[7]=$itm;
+        }
+    }
     }
     my $count = @itemorder;
     next GETIT if $count<1;  # if the re-ordered array is empty, skip to next
     PREP: foreach my $itmlist (@itemorder) {
-	if ($itmlist) {
-	    $barcode = $itmlist->{'barcode'};
-	    $holdingbranch = $itmlist->{'holdingbranch'};
-	    $title = $itmlist->{'title'};
-	    $callno = $itmlist->{'classification'};
-	    last PREP;    # we only want the first def item in the array
-	}
+    if ($itmlist) {
+        $barcode = $itmlist->{'barcode'};
+        $holdingbranch = $itmlist->{'holdingbranch'};
+        $title = $itmlist->{'title'};
+        $callno = $itmlist->{'classification'};
+        last PREP;    # we only want the first def item in the array
+    }
     }
     $sth_load->execute($biblionumber,$barcode,$lastname,$firstname,$phone,$borrno,$cardnumber,$rdate,$title,$callno,$holdingbranch,$pickbranch,$notes);
     $sth_load->finish;

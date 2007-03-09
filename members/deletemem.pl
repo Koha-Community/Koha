@@ -28,11 +28,11 @@ use strict;
 
 use CGI;
 use C4::Context;
-use C4::Search;
 use C4::Interface::CGI::Output;
 use C4::Output;
 use C4::Circulation::Circ2;
 use C4::Auth;
+use C4::Members;
 
 
 my $input = new CGI;
@@ -60,7 +60,7 @@ if (C4::Context->preference("IndependantBranches")) {
 	unless ($userenv->{flags} == 1){
 		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
 #			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
-			print $input->redirect("/cgi-bin/koha/members/moremember.pl?bornum=$member");
+			print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 			exit 1;
 		}
 	}
@@ -70,18 +70,18 @@ my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
 $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-
-if ($i > 0 || $flags->{'CHARGES'} ne '' || $data ne ''){
+if ($i > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
+warn"je suis rentre dans la boucle";
 	my ($template, $borrowernumber, $cookie)
 		= get_template_and_user({template_name => "members/deletemem.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {borrower => 1},
+					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
 	#   print $input->header;
-	$template->param(bornum => $member);
+	$template->param(borrowernumber => $member);
 	if ($i >0) {
 		$template->param(ItemsOnIssues => $i);
 	}
@@ -109,24 +109,8 @@ $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcol
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-	delmember($member);
+	DeleteBorrower($member);
 	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
-sub delmember{
-	my ($member)=@_;
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-	$sth->execute($member);
-	my @data=$sth->fetchrow_array;
-	$sth->finish;
-	$sth=$dbh->prepare("Insert into deletedborrowers values (".("?,"x(scalar(@data)-1))."?)");
-	$sth->execute(@data);
-	$sth->finish;
-	$sth=$dbh->prepare("Delete from borrowers where borrowernumber=?");
-	$sth->execute($member);
-	$sth->finish;
-	$sth=$dbh->prepare("Delete from reserves where borrowernumber=?");
-	$sth->execute($member);
-	$sth->finish;
-}
+

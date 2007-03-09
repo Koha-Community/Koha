@@ -36,7 +36,7 @@ parameters :
 \tc : the char encoding. At the moment, only MARC21 and UNIMARC supported. MARC21 by default.
 \d : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
-\t\tadditionalauthors, \tbibliosubtitles, \tmarc_biblio,
+\tmarc_biblio,
 \t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
 IMPORTANT : don't use this script before you've entered and checked twice (or more) your  MARC parameters tables.
 If you fail this, the import won't work correctly and you will get invalid datas.
@@ -102,13 +102,13 @@ while ( my $record = $batch->next() ) {
 	warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
 	my $authtypecode=substr($newRecord->leader(),9,1);
 	$authtypecode="NP" if ($authtypecode eq 'a'); # personnes
-	$authtypecode="CO" if ($authtypecode eq 'b'); # collectivités
-	$authtypecode="NG" if ($authtypecode eq 'c'); # géographique
+	$authtypecode="CO" if ($authtypecode eq 'b'); # collectivitï¿½
+	$authtypecode="NG" if ($authtypecode eq 'c'); # gï¿½graphique
 	$authtypecode="NM" if ($authtypecode eq 'd'); # marque
 	$authtypecode="NF" if ($authtypecode eq 'e'); # famille
 	$authtypecode="TI" if ($authtypecode eq 'f'); # Titre uniforme
 	$authtypecode="TI" if ($authtypecode eq 'h'); # auteur/titre
-	$authtypecode="MM" if ($authtypecode eq 'j'); # mot matière
+	$authtypecode="MM" if ($authtypecode eq 'j'); # mot matiï¿½e
 	warn "XX => $authtypecode";
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {

@@ -26,14 +26,14 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
 use C4::Members;
-use HTML::Template;
+
 use C4::Date;
 my $input=new CGI;
 
 
-my $bornum=$input->param('bornum');
+my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=borrdata('',$bornum);
+my $data=borrdata('',$borrowernumber);
 my $order=$input->param('order');
 my $order2=$order;
 if ($order2 eq ''){
@@ -49,7 +49,7 @@ if ($limit){
 else {
   $limit=50;
 }
-my ($count,$issues)=allissues($bornum,$order2,$limit);
+my ($count,$issues)=allissues($borrowernumber,$order2,$limit);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
@@ -82,7 +82,7 @@ $template->param(
 						title => $data->{'title'},
 						initials => $data->{'initials'},
 						surname => $data->{'surname'},
-						bornum => $bornum,
+						borrowernumber => $borrowernumber,
 						limit => $limit,
 						firstname => $data->{'firstname'},
 						cardnumber => $data->{'cardnumber'},

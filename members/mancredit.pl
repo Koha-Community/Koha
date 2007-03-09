@@ -26,15 +26,15 @@ use C4::Auth;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use CGI;
-use HTML::Template;
+
 use C4::Members;
 use C4::Accounts2;
 my $input=new CGI;
 
 
-my $bornum=$input->param('bornum');
+my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=borrdata('',$bornum);
+my $data=borrdata('',$borrowernumber);
 my $add=$input->param('add');
 if ($add){
   my $itemnum=$input->param('itemnum');
@@ -42,18 +42,18 @@ if ($add){
   my $amount=$input->param('amount');
   $amount = -$amount;
   my $type=$input->param('type');
-  manualinvoice($bornum,$itemnum,$desc,$type,$amount);
-  print $input->redirect("/cgi-bin/koha/members/boraccount.pl?bornum=$bornum");
+  manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
+  print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 } else {
 	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "mancredit.tmpl",
+	= get_template_and_user({template_name => "members/mancredit.tmpl",
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
 					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
-	$template->param( bornum => $bornum);
+	$template->param( borrowernumber => $borrowernumber);
 	print $input->header(
 	    -type => guesstype($template->output),
 	    -cookie => $cookie
