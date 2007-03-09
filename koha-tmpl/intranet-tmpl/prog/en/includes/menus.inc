@@ -21,7 +21,6 @@ intranet</a></h3>
        </li>
         <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
      </ul>
-     </li>
      <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_borrowers" -->
     <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a>
@@ -51,35 +50,33 @@ intranet</a></h3>
                 </ul>
                 <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
-    <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+    <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>
     <ul>
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
         <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
     </ul>
-    </li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_catalogue" -->
+    <ul>
     <li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
+    </ul>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_parameters" -->
-    <li><a href="/cgi-bin/koha/admin/admin-home.pl">Koha Administration</a>
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Koha Administration</a>
         <ul>
             <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li>
         </ul>
-    </li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools" -->
-            <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
+    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
     <!-- /TMPL_IF -->
-    <li>
-        <a href="/cgi-bin/koha/about.pl">About Koha</a>
-    </li>
+    <a href="/cgi-bin/koha/about.pl">About Koha</a>
     <!-- TMPL_IF NAME="loggedinusername" -->
-    <br />
+    <ul>
     <li>
-        <b> Librarian Informations </b> :
+        <b> Login Information</b> :
     </li>
     </ul>
     <ul>
