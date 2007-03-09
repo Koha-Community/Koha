@@ -1,6 +1,6 @@
-
 package C4::Amazon;
-# Copyright 2004-2005 Joshua Ferraro (jmf at kados dot org)
+# Copyright (C) 2006 LibLime
+# <jmf at liblime dot com>
 #
 # This file is part of Koha.
 #
@@ -16,32 +16,20 @@ package C4::Amazon;
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-#
-# This module dynamically pulls amazon content into Koha.  It does not
-# store the data in Koha's database.  You'll need to get a developer's key
-# as well as an associate's tag to use it.
-# FIXME: need to write up more docs.
-#
-# To use this module you need to do three things:
-# 1. get a dev key and associate tag from Amazon
-# 2. uncomment the Amazon stuff in opac-detail.pl
-# 3. add the template variables to opac-detail.tmpl
-#    here's what's available: 
-#    ProductDescription
-#    ImageUrlMedium
-#    ListPrice
-#    url
-#    loop SimilarProducts (Product)
-#    loop Reviews (rating, Summary)
-#
+
 use XML::Simple;
 use LWP::Simple;
+
+use LWP::UserAgent;
+use HTTP::Request::Common;
+
 use strict;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT);
 
 $VERSION = 0.02;
+
 =head1 NAME
 
 C4::Amazon - Functions for retrieving Amazon.com content in Koha
@@ -56,6 +44,7 @@ This module provides facilities for retrieving Amazon.com content in Koha
 
 @EXPORT = qw(
   &get_amazon_details
+  &check_search_inside
 );
 
 =head1 get_amazon_details($isbn);
@@ -65,34 +54,49 @@ This module provides facilities for retrieving Amazon.com content in Koha
 =cut
 
 sub get_amazon_details {
+    my ( $isbn ) = @_;
 
-my ( $isbn ) = @_;
+    #get rid of MARC cataloger's nonsense
+    $isbn =~ s/(p|-)//g;
 
-# insert your dev key here
-	$isbn =~ s/(p|-)//g;
+    # grab the developer's key: mine is 'ektostoukadou-20'
+    my $dev_key=C4::Context->preference('AmazonDevKey');
 
-# insert your associates tag here
-	my $dev_key=C4::Context->preference('AmazonDevKey');
+    #grab the associates tag: mine is '0ZRY7YASKJS280T7YB02'
+    my $af_tag=C4::Context->preference('AmazonAssocTag');
 
-	#grab the associates tag: mine is '0ZRY7YASKJS280T7YB02'
-	my $af_tag=C4::Context->preference('AmazonAssocTag');
-
-my $asin=$isbn;
-
-# old way from command line: shift @ARGV or die "Usage:perl amazon_http.ol <asin>\n";
-
-#my $url = "http://xml.amazon.com/onca/xml3?t=" . $af_tag .
-#	"&dev-t=" . $dev_key .
-#	"&type=heavy&f=xml&" .
-#	"AsinSearch=" . $asin;
-	my $url = "http://xml.amazon.com/onca/xml3?t=$af_tag&dev-t=$dev_key&type=heavy&f=xml&AsinSearch=" . $asin;
-my $content = get($url);
-	warn "could not retrieve $url" unless $content;
-my $xmlsimple = XML::Simple->new();
-my $response = $xmlsimple->XMLin($content,
-  forcearray => [ qw(Details Product AvgCustomerRating CustomerReview) ],
+    my $asin=$isbn;
+    my $url = "http://xml.amazon.com/onca/xml3?t=$af_tag&dev-t=$dev_key&type=heavy&f=xml&AsinSearch=" . $asin;
+    my $content = get($url);
+    #warn $content;
+    warn "could not retrieve $url" unless $content;
+    my $xmlsimple = XML::Simple->new();
+    my $response = $xmlsimple->XMLin($content,
+    forcearray => [ qw(Details Product AvgCustomerRating CustomerReview) ],
 );
-return $response;
+    return $response;
+}
+
+sub check_search_inside {
+        my $isbn = shift;
+        my $ua = LWP::UserAgent->new(
+        agent => "Mozilla/4.76 [en] (Win98; U)",
+        keep_alive => 1,
+        env_proxy => 1,
+        );
+        my $available = 1;
+        my $uri = "http://www.amazon.com/gp/reader/$isbn/ref=sib_dp_pt/002-7879865-0184864#reader-link";
+        my $req = HTTP::Request->new(GET => $uri);
+        $req->header (
+                'Accept' => 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
+                'Accept-Charset' => 'iso-8859-1,*,utf-8',
+                'Accept-Language' => 'en-US' );
+        my $res = $ua->request($req);
+        my $content = $res->content();
+        if ($content =~ m/This book is temporarily unavailable/) {
+            undef $available;
+        }
+        return $available;
 }
 
 =head1 NOTES
@@ -100,4 +104,5 @@ return $response;
 =head1 AUTHOR
 
 Joshua Ferraro <jmf@liblime.com>
+
 =cut
