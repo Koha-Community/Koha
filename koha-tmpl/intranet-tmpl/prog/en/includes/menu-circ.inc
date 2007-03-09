@@ -1,4 +1,5 @@
 <div id="submenu">
+    <ul>
     <li>
     <a href="/cgi-bin/koha/circ/circulation.pl">Issues</a>
     <a href="/cgi-bin/koha/circ/returns.pl">Returns</a>
@@ -16,6 +17,7 @@
     <a href="/cgi-bin/koha/circ/branchoverdues.pl">Claims</a>
     Daily <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Reconciliation</a>
     </li>
+    </ul>
 </div>
 
 <div id="main">
