@@ -1,5 +1,5 @@
 <!-- templates to add/modify an <A>dult -->
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Adult management
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Adult Borrower Management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
@@ -13,11 +13,11 @@
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add adult member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add adult borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify adult member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify adult borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -49,7 +49,7 @@
 				<p>login/password already exist</p>
 			<!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="ERROR_age_limitations" -->
-                                Member is too young or too old for this category
+                                Borrower is too young or too old for this category
                         <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
@@ -132,7 +132,7 @@
 		<!-- TMPL_ELSE -->
 			<label>
 		<!-- /TMPL_IF-->
-		Civility</label>
+		Title</label>
 		<!-- TMPL_VAR NAME="borrotitlepopup" -->
 		</p>
 
@@ -304,14 +304,14 @@
 			<!-- TMPL_VAR NAME="CGIbranch" -->
 		</p>
 		<fieldset>
-		<legend>Main Address</legend>
+		<legend>Main address</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorystreetnumber" -->
 			<label style="font-weight:bold">
 			<!--TMPL_ELSE-->
 			<label>
 			<!-- /TMPL_IF-->
-			street number</label>
+			Street number</label>
 			<input type="text" name="streetnumber" size="5" value="<!-- TMPL_VAR NAME="streetnumber" -->">
 		</p>
 		<!-- TMPL_IF NAME="road_cgipopup" -->
@@ -363,7 +363,7 @@
 		</p>
 		</fieldset>
 		<fieldset>
-		<legend>Alt Address</legend>
+		<legend>Alternate address</legend>
 			<p>
 				<!-- TMPL_IF NAME="mandatoryB_address" -->
 					<label style="font-weight:bold">
@@ -394,7 +394,7 @@
 		</fieldset>
 	</fieldset>
 	<fieldset id="memberentry_contact">
-		<legend>contact</legend>
+		<legend>Contact</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryphone" --> 
 			<label style="font-weight:bold">

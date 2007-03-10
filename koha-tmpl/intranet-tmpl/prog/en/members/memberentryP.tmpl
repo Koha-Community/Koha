@@ -1,5 +1,5 @@
 <!-- templates to add/modify a <P>rofessional -->
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Professional management
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Professional Borrower Management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
@@ -14,11 +14,11 @@
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add professional member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add professional borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify professional member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify professional borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -46,7 +46,7 @@
 				<p>login/password already exist</p>
 			<!-- /TMPL_IF -->
 		 <!-- TMPL_IF NAME="ERROR_age_limitations" -->
-                                Member is too young or too old for this category
+                                Borrower is too young or too old for this category
                         <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
@@ -131,7 +131,7 @@
 		<!-- TMPL_ELSE -->
 			<label>
 		<!-- /TMPL_IF-->
-		Civility</label>
+		Title</label>
 		<!-- TMPL_VAR NAME="borrotitlepopup" -->
 		</p>
 		<p>

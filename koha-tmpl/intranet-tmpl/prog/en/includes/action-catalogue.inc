@@ -51,7 +51,7 @@
                 </a>
   
                 <!-- TMPL_IF NAME="CAN_user_parameters"-->
-               <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&module=CATALOGUING&action=MODIFY&object=<!-- TMPL_VAR NAME="biblionumber"-->">Modification Log</a>
+               <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&module=CATALOGUING&action=MODIFY&object=<!-- TMPL_VAR NAME="biblionumber"-->">Modification log</a>
                 <!-- /TMPL_IF --> 
             </div>
     </div>

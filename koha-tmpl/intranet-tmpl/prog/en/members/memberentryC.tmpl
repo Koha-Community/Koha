@@ -1,5 +1,5 @@
 <!-- templates to add/modify a <C>hild -->
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Child management
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Child Borrower Management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
@@ -16,11 +16,11 @@
 </script>
 	<!-- TMPL_IF NAME="add" -->
 	<h1>
-		Add children member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add child borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify children member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify children borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -48,7 +48,7 @@
 				<p>login/password already exist</p>
 			<!-- /TMPL_IF -->
  			<!-- TMPL_IF NAME="ERROR_age_limitations" -->
-                                Member is too young or too old for this category
+                                Borrower is too young or too old for this category
                         <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
@@ -134,7 +134,7 @@
 		<!-- TMPL_ELSE -->
 			<label>
 		<!-- /TMPL_IF-->
-		Civility</label>
+		Title</label>
 		<!-- TMPL_VAR NAME="borrotitlepopup" -->
 		</p>
 		<p>
@@ -488,7 +488,7 @@
 		fax</label>
 		<input type="text" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >	
 	</p>
-	<h2>Member</h2>
+	<h2>Borrower</h2>
 	<p>	
 		<!-- TMPL_IF NAME="mandatoryB_email" -->
 			<label style="font-weight:bold">

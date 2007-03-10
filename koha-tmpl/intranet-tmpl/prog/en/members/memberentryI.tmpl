@@ -1,5 +1,5 @@
 <!-- templates to add/modify a <I>nstitution -->
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Organisation management
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Organisation Borrower Management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
@@ -14,11 +14,11 @@
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add organisation member (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add organisation borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify organisation member <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify organisation borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -101,7 +101,7 @@
 			<input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
 	</p>	
 	<fieldset id="memberentry_identity">
-		<legend>organisation identity</legend>
+		<legend>Organisation identity</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorysurname" -->
 			<label style="font-weight:bold">
@@ -306,7 +306,7 @@
 		</p>
 	</fieldset>
 	<fieldset>
-		<legend>Member list</legend>
+		<legend>Borrower list</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorycontactnote" -->
 				<label style="font-weight:bold">
