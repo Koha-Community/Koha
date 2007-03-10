@@ -1,14 +1,14 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Circulation: Select Your Home Branch<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Circulation &rsaquo; Set Branch<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 
-<h1>Circulation: Select Your Home Branch</h1>
+<h1>Circulation &rsaquo; Set Branch</h1>
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
 <!-- TMPL_VAR NAME="branch" -->
 
-<label for="branch">Choose your Branch:</label>
+<label for="branch">Choose branch:</label>
 <!--branchselection-->
 	<select name="branch" id="branch">
 	<!-- TMPL_LOOP Name="branchloop" -->
@@ -18,7 +18,7 @@
 
 
 <!-- TMPL_IF Name="printerloop" -->
-    <label for="printer">Choose a Network Printer:</label>
+    <label for="printer">Choose a network printer:</label>
     <!--printerselection-->
     <select name="printer" id="printer">
         <!-- TMPL_LOOP Name="printerloop" -->

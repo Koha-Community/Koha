@@ -13,9 +13,9 @@
     <a href="/cgi-bin/koha/circ/currenttransfers.pl">to recieve</a>
     </li>
     <li>
-	Overdues <a href="/cgi-bin/koha/circ/overdue.pl">Items</a>
+	<a href="/cgi-bin/koha/circ/overdue.pl">Overdue items</a>
     <a href="/cgi-bin/koha/circ/branchoverdues.pl">Claims</a>
-    Daily <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Reconciliation</a>
+    <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Daily reconciliation</a>
     </li>
     </ul>
 </div>

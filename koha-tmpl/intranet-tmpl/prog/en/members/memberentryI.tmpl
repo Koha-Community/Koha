@@ -1,6 +1,14 @@
 <!-- templates to add/modify a <I>nstitution -->
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Organisation management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
@@ -377,7 +385,17 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Arrival date</label>
-			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
+			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
+            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="dateenrolled_button" />
+            <script language="JavaScript" type="text/javascript">
+                Calendar.setup(
+                {
+                    inputField : "dateenrolled",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    button : "datenrolled_button"
+                }
+                );
+            </script>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->

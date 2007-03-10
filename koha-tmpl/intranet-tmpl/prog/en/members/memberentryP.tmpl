@@ -1,6 +1,14 @@
 <!-- templates to add/modify a <P>rofessional -->
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Member, Professional management
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
@@ -150,8 +158,18 @@
 			<!-- TMPL_ELSE -->	
 			<label>
 			<!-- /TMPL_IF-->
-			Date of Birth</label>
-			<input type="text" name="dateofbirth" size="20" onBlur="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
+			Date of birth</label>
+			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onBlur="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
+            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="dateofbirth_button" />
+            <script language="JavaScript" type="text/javascript">
+                Calendar.setup(
+                {
+                    inputField : "dateofbirth",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    button : "dateofbirth_button"
+                }
+                );
+            </script>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryinitials" -->

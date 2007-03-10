@@ -463,6 +463,7 @@ if ($delete){
 	$template->param(
 		BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
 		category_type	=> $category_type,#to know the category type of the borrower
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 		select_city	=> $select_city,
 		"step_$step" 	=> 1,# associate with step to know where u are
 		step		=> $step,

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Circulation: Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Circulation &rsaquo; Returns<!-- TMPL_IF Name="returned" -->: <!-- TMPL_VAR Name="itemtitle" --><!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
@@ -171,11 +171,11 @@
         <!-- /TMPL_IF -->
     
 <!-- TMPL_ELSE -->
-<h1>Circulation: Returns</h1>
+<h1>Circulation &rsaquo; Returns</h1>
     
     <form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
             <fieldset>
-            <legend>Enter Item Barcode</legend>
+            <legend>Enter item barcode</legend>
             <p>
                 <input name="barcode" id="barcode" size="14" maxlength="14" />
                 <input type="submit" value="Submit" />

@@ -1,9 +1,9 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Circulation: Transfers<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Circulation &rsaquo; Transfers<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 
-<h1>Circulation: Transfers</h1>
+<h1>Circulation &rsaquo; Transfers</h1>
 
 <!-- TMPL_IF Name="found" -->
 	<h3>Reserve Found</h3>
@@ -103,12 +103,12 @@
 	<form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
 	<table>
 	<caption>Transfer</caption>
-	<tr><th scope="row">Destination Branch:</th><td><select name="tobranchcd">
+	<tr><th scope="row">Destination branch:</th><td><select name="tobranchcd">
 			<!-- TMPL_LOOP Name="branchoptionloop" -->
 				<option value="<!-- TMPL_VAR Name="code" -->" <!-- TMPL_VAR Name="selected" -->><!-- TMPL_VAR Name="name" --></option>
 			<!-- /TMPL_LOOP -->
 		</select></td></tr>
-<tr><th scope="row">Enter Book Barcode</th><td><input name="barcode" size="15" /></td></tr>
+<tr><th scope="row">Enter barcode</th><td><input name="barcode" size="15" /></td></tr>
 </table>
 	<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
 	<!-- TMPL_LOOP Name="trsfitemloop" -->
