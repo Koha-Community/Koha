@@ -1,25 +1,24 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Guarantor search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<h1>Search guarantor</h1>
-	Search on
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Guarantor Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<h1>Search for guarantor</h1>
 	<form action="/cgi-bin/koha/members/guarantor_search.pl" method="post">
 		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->"> Ordered by
 		<select name="orderby">
 			<option value="surname,firstname">Surname</option>
-			<option value="cardnumber">cardnumber</option>
+			<option value="cardnumber">Cardnumber</option>
 		</select>
-		<input type="submit" class="button" value="OK">
+		<input type="submit" class="button" value="Search">
 	</form>
 </div>
 
 <!--TMPL_IF NAME="results" -->
-	<p>filter on <!-- TMPL_VAR NAME="member" -->, <!-- TMPL_VAR Name ="numresults" --> members found</p>
+	<p>Searched for <!-- TMPL_VAR NAME="member" -->, <!-- TMPL_VAR Name ="numresults" --> borrower(s) found:</p>
 	<table>
 		<tr>
-			<th>cardnumber</th>
-			<th>surname</th>
-			<th>firstname</th>
+			<th>Cardnumber</th>
+			<th>Surname</th>
+			<th>Firstname</th>
 			<th>Date of birth</th>
-			<th>address</th>
+			<th>Address</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="resultsloop" -->
 			<!-- TMPL_IF NAME="background" -->

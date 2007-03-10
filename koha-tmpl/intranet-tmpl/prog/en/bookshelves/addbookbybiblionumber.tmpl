@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-Koha -- Add to Virtual Shelf
+Koha &rsaquo; Add to Virtual Shelf
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <h1>Add 
     <i><!-- TMPL_VAR NAME="title" --></i>
     <!-- TMPL_IF NAME="author" -->
         by <!-- TMPL_VAR NAME="author" -->
-    <!-- /TMPL_IF --> to a Virtual Shelf
+    <!-- /TMPL_IF --> to a virtual shelf
 </h1>
 
 <form name="f1" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
     
-    <b>Select an Existing Bookshelf</b>
+    <b>Select an existing shelf</b>
     <p>
         <label>Add to virtual shelf</label><!-- TMPL_VAR NAME="CGIbookshelves" -->
     </p>
@@ -21,10 +21,10 @@ Koha -- Add to Virtual Shelf
 </form>
 <p>...or...</p>
 <form name="f2" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
-    <b>Add to a New Bookshelf:</b>
+    <b>Add to a new shelf:</b>
         <p>
             <label for="newbookshelf">
-                Shelf Name:
+                Shelf name:
             </label>
             <input type="text" name="newbookshelf" id="newbookshelf" size="40" />
         </p>

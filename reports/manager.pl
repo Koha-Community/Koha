@@ -50,6 +50,7 @@ unless (opendir(DIR, "$cgidir")) {
 	$cgidir = C4::Context->intranetdir."/reports/";
 } 
 my $plugin = $cgidir.$report_name.".plugin";
+warn "PLUGIN:".$plugin;
 require $plugin;
 if ($do_it) {
 	my $results = calculate(\@values);

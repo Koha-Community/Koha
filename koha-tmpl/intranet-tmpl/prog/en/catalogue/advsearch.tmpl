@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Catalogue: Advanced Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha &rsaquo; Catalogue &rsaquo; Advanced Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 
@@ -7,7 +7,7 @@
 <!-- TMPL_IF NAME="expanded_options" -->
 <h1>Advanced Search</h1>
 <!-- TMPL_ELSE -->
-<h1>Search the Library Catalogue</h1>
+<h1>Search the Catalogue</h1>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
@@ -38,7 +38,7 @@
 <!-- /REMOTE DATABASES -->
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-<h3>Search the Library Catalogue</h3>
+<h3>Search the catalogue:</h3>
 <!-- /TMPL_IF -->
 
 <!-- BOOLEAN SEARCH OPTIONS -->
@@ -91,7 +91,7 @@
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
 <fieldset style="margin-right:20%">
-    <legend>Itemtype to: match any of the following </legend>
+    <legend>Itemtype limit to any of the following:</legend>
     <p>
       <!--TMPL_LOOP Name="itemtypeloop"-->
         <input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" title="<!--TMPL_VAR Name="description" -->"/>
@@ -442,7 +442,7 @@
             <!-- TMPL_ELSE -->
             <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
             <!-- /TMPL_IF -->
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New Search]</a> 
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a> 
             </p>
 <!-- /SEARCH BUTTONS -->
 </div>
