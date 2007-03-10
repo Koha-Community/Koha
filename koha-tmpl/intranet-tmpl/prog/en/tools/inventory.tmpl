@@ -28,7 +28,17 @@
                 <input type="text" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
         </p>
         <p><label>Not seen since:</label>
-            <input type="text" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
+            <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="datelastseen_button" />
+            <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+            inputField : "datelastseen",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "datelastseen_button"
+            }
+            );
+            </script>
         </p>
         <p><label>Show:</label>
             <input type="text" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" />
@@ -45,7 +55,18 @@
         <fieldset>
             <legend>Use a barcode file</legend>
             <p>barcode filename : <input type="file" name="uploadbarcodes" /></p>
-            <p>Set datelastseen to : <input type="text" name="setdate" /></p>
+            <p>Set datelastseen to : <input type="text" id="setdate" name="setdate" />
+             <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="setdate_button" />
+            <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+            inputField : "setdate",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "setdate_button"
+            }
+            );
+            </script>
+</p>
             <p><input type="submit" value="OK" class="button reports"></p>
         </fieldset>
     </form>

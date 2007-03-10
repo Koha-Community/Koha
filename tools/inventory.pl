@@ -61,9 +61,9 @@ for my $branch_hash (keys %$branches) {
 	                   branchname => $branches->{$branch_hash}->{'branchname'}, 
 	                   selected => ($branch_hash eq $branchcode?1:0)};	
 }
-$template->param(branchloop => \@branch_loop,);
-
-$template->param(minlocation => $minlocation,
+$template->param(branchloop => \@branch_loop,
+                DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+                minlocation => $minlocation,
                 maxlocation => $maxlocation,
                 offset => $offset,
                 pagesize => $pagesize,
