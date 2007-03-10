@@ -32,7 +32,7 @@ use Date::Calc qw/Today Today_and_Now Now/;
 =head1 branchoverdues.pl
 
  this module is a new interface, allow to the librarian to check all items on overdues (based on the acountlines type 'FU' )
- this interface is filtered by branches (automaticly), and by departement (optional) ....
+ this interface is filtered by branches (automaticly), and by department (optional) ....
  all informations are stocked in the notifys BDD
 
  FIXME for this time, we have only four methods to notify :
@@ -80,7 +80,7 @@ my $itemnumber     = $input->param('itemnumber');
 my $method         = $input->param('method');
 my $overduelevel   = $input->param('overduelevel');
 my $notifyId       = $input->param('notifyId');
-my $departement = $input->param('departement');
+my $department = $input->param('department');
 
 # now create the line in bdd (notifys)
 if ( $input->param('action') eq 'add' ) {
@@ -100,28 +100,28 @@ my @overduesloop;
 my @todayoverduesloop;
 my $counter = 0;
 
-my @getoverdues = GetOverduesForBranch( $default, $departement );
+my @getoverdues = GetOverduesForBranch( $default, $department );
 
-# filter by departement
-if ($departement) {
-    my ( $departementlib, $departementValue ) = GetDepartementLib($departement);
+# filter by department
+if ($department) {
+    my ( $departmentlib, $departmentValue ) = GetDepartementLib($department);
     $template->param(
-        departement      => $departementlib,
-        departementValue => $departementValue,
+        department      => $departmentlib,
+        departmentValue => $departmentValue,
     );
 }
 else {
 
-    # initiate the selector of departements .....
-    my @getdepartements = GetDepartements();
-    my @departementsloop;
-    foreach my $dpt (@getdepartements) {
-        my %departement;
-        $departement{'authorised_value'} = $dpt->{'authorised_value'};
-        $departement{'lib'}              = $dpt->{'lib'};
-        push( @departementsloop, \%departement );
+    # initiate the selector of departments .....
+    my @getdepartments = GetDepartements();
+    my @departmentsloop;
+    foreach my $dpt (@getdepartments) {
+        my %department;
+        $department{'authorised_value'} = $dpt->{'authorised_value'};
+        $department{'lib'}              = $dpt->{'lib'};
+        push( @departmentsloop, \%department );
     }
-    $template->param( departementsloop => \@departementsloop, );
+    $template->param( departmentsloop => \@departmentsloop, );
 }
 
 # now display infos

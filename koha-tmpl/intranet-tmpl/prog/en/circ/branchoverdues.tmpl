@@ -6,30 +6,30 @@
 <h1>Circulation: Branch Overdues</h1>
 
 <div id="mainbloc">
-<!-- selector of departement -->
-<fieldset id="branch_odues_select_departement">
-<!-- TMPL_IF NAME="departement" -->
-<legend>departement selected</legend>
+<!-- selector of department -->
+<fieldset id="branch_odues_select_department">
+<!-- TMPL_IF NAME="department" -->
+<legend>department selected</legend>
 <form name="changedepartment" action="branchoverdues.pl">
     <ul>
         <li>
-            You are working actually on the overdues for the departement : <b><!-- TMPL_VAR NAME="departement" --></b>
-    <input type="submit" name="changedepartement" class="button" value="change departement">
+            You are working actually on the overdues for the department : <b><!-- TMPL_VAR NAME="department" --></b>
+    <input type="submit" name="changedepartment" class="button" value="change department">
         </li>
     </ul>
 </form>
 <!-- TMPL_ELSE -->
-<legend>Select your departement</legend>
+<legend>Select your department</legend>
 <ul>
     <li>
-        <form name="selectdepartement" action="branchoverdues.pl" method="post">
-        <select id="departement" name="departement">
-            <option value="">All departements</option>
-            <!-- TMPL_LOOP NAME="departementsloop" -->
+        <form name="selectdepartment" action="branchoverdues.pl" method="post">
+        <select id="department" name="department">
+            <option value="">All departments</option>
+            <!-- TMPL_LOOP NAME="departmentsloop" -->
                 <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
             <!-- /TMPL_LOOP -->
         </select>
-        <input type="submit" name="departement" class="button" value="change departement">
+        <input type="submit" name="department" class="button" value="change department">
         </form>
     </li>
 </ul>
@@ -37,7 +37,7 @@
 </fieldset>
 
     <fieldset id="branch_odues_global_odues">
-    <legend>Overdues of your library</legend>
+    <legend>Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></legend>
     <form name="sendnotify" action="branchoverdues.pl" method="post">
     <!-- TMPL_IF name="overduesloop" -->
         <table>
@@ -87,24 +87,24 @@
                     <td align="center">
                     <!-- TMPL_IF NAME="overdue1" -->
                         <!-- TMPL_IF NAME="borroweremail" -->
-                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=mail&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">mail</a>
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=mail&department=<!-- TMPL_VAR NAME="departmentValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">mail</a>
                         <!-- TMPL_ELSE -->
                             mail
                         <!-- /TMPL_IF -->
                             &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&department=<!-- TMPL_VAR NAME="departmentValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->
                             ">phone</a>
                             &nbsp;|&nbsp;
-                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&department=<!-- TMPL_VAR NAME="departmentValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
                             &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">letter</a>
                     <!-- /TMPL_IF -->
                     
                     <!-- TMPL_IF NAME="overdue2" -->
-                        <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">letter</a>
+                        <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&department=<!-- TMPL_VAR NAME="departmentValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">letter</a>
                     <!-- /TMPL_IF -->
                     
                     <!-- TMPL_IF NAME="overdue3" -->
-                    <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=lost&departement=<!-- TMPL_VAR NAME="departementValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                    <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=lost&department=<!-- TMPL_VAR NAME="departmentValue" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
                     &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Considered lost</a>
                     <!-- /TMPL_IF -->
                     
@@ -169,7 +169,7 @@
                     </td>
                 
                     <td>
-                    <a href="branchoverdues.pl?action=remove&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&departement=<!-- TMPL_VAR NAME="departementValue" -->&notify_date=<!-- TMPL_VAR NAME="notify_date" -->">cancel notification</a>
+                    <a href="branchoverdues.pl?action=remove&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&department=<!-- TMPL_VAR NAME="departmentValue" -->&notify_date=<!-- TMPL_VAR NAME="notify_date" -->">cancel notification</a>
                     </td>
                 </tr>
             <!-- /TMPL_LOOP -->

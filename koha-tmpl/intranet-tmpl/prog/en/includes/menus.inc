@@ -64,9 +64,9 @@ intranet</a></h3>
     </ul>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_parameters" -->
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Koha Administration</a>
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>
         <ul>
-            <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li>
+            <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></li>
         </ul>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools" -->
@@ -76,7 +76,7 @@ intranet</a></h3>
     <!-- TMPL_IF NAME="loggedinusername" -->
     <ul>
     <li>
-        <b> Login Information</b> :
+        <b> Login information</b> :
     </li>
     </ul>
     <ul>
