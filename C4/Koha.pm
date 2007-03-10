@@ -70,8 +70,8 @@ Koha.pm provides many functions for Koha scripts.
   &getitemtypeimagesrcfromurl
   &get_infos_of
   &get_notforloan_label_of
-  &GetDepartements
-  &GetDepartementLib
+  &GetDepartments
+  &GetDepartmentLib
   &getitemtypeimagedir
   &getitemtypeimagesrc
   &GetAuthorisedValues
@@ -1088,24 +1088,24 @@ sub displaySecondaryServers {
     return;    #$secondary_servers_loop;
 }
 
-sub GetDepartements {
+sub GetDepartments {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "SELECT authorised_value,lib FROM authorised_values WHERE category='DPT'
     	"
     );
     $sth->execute;
-    my @getdepartements;
+    my @getdepartments;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-        $getdepartements[$i] = $data;
+        $getdepartments[$i] = $data;
         $i++;
     }
     $sth->finish;
-    return (@getdepartements);
+    return (@getdepartments);
 }
 
-sub GetDepartementLib {
+sub GetDepartmentLib {
     my ($authorisedvalue) = @_;
     my $dbh               = C4::Context->dbh;
     my $sth               = $dbh->prepare(

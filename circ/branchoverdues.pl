@@ -24,7 +24,7 @@ use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Date;
 use C4::Circulation::Circ2;    # AddNotifyLine
-use C4::Koha;                  # GetDepartement...
+use C4::Koha;                  # GetDepartment...
 use Mail::Sendmail;
 use Getopt::Long;
 use Date::Calc qw/Today Today_and_Now Now/;
@@ -104,7 +104,7 @@ my @getoverdues = GetOverduesForBranch( $default, $department );
 
 # filter by department
 if ($department) {
-    my ( $departmentlib, $departmentValue ) = GetDepartementLib($department);
+    my ( $departmentlib, $departmentValue ) = GetDepartmentLib($department);
     $template->param(
         department      => $departmentlib,
         departmentValue => $departmentValue,
@@ -113,7 +113,7 @@ if ($department) {
 else {
 
     # initiate the selector of departments .....
-    my @getdepartments = GetDepartements();
+    my @getdepartments = GetDepartments();
     my @departmentsloop;
     foreach my $dpt (@getdepartments) {
         my %department;
