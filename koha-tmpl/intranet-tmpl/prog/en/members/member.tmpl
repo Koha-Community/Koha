@@ -6,7 +6,7 @@
 <h1>Borrowers &rsaquo; Search Results</h1>
 
     <form name="f" action="/cgi-bin/koha/members/member.pl" method="post">
-        <label for="member">Name or barcode</label>
+        <label for="member">Search by name or barcode:</label>
         <input id="member" type="text" size="25" name="member" />
         <select name="orderby" id="orderby">
             <option value="surname,firstname">Order by last name</option>
@@ -15,6 +15,7 @@
         <input type="submit" value="Search" />
     </form>
     <div>
+        Browse by last name:
         <a href="/cgi-bin/koha/members/member.pl?member=a">A</a>
         <a href="/cgi-bin/koha/members/member.pl?member=b">B</a>
         <a href="/cgi-bin/koha/members/member.pl?member=c">C</a>
@@ -71,10 +72,9 @@
 </table>
 </div>
 <!-- TMPL_ELSE -->
-    <p>
-        <br />
-        <b>No results found</b>
-    </p>
+    <!-- TMPL_IF NAME="searching" -->
+    No results found
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
     <script type="text/javascript">
