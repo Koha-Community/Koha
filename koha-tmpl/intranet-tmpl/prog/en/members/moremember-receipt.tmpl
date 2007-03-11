@@ -1,11 +1,8 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Print Receipt for <!-- TMPL_VAR NAME="cardnumber" -->
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-</head>
-<body>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Print Receipt for <!-- TMPL_VAR NAME="cardnumber" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
-<!-- main site -->
-
-<h3>Athens County Library</h3>
+<h3>Library</h3>
 <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br><!-- /TMPL_IF -->
 Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br>
 <!-- TMPL_VAR NAME="todaysdate" --><br>

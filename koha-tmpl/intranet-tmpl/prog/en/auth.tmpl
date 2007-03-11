@@ -1,10 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-    <!-- TMPL_IF NAME="nopermission" -->Access Denied<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="timed_out" -->Session Timed Out --<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="different_ip" -->IP Change -- <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid Username or Password -- <!-- /TMPL_IF -->
+<title>Koha &rsaquo; 
+    <!-- TMPL_IF NAME="nopermission" -->Access denied<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="timed_out" -->Session timed out<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="different_ip" -->IP address change<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid username or password<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF -->
-    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <div id="login">
 <h1><a href="" title=""><span class="hide">Log in to Koha</span></a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
