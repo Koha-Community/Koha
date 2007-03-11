@@ -39,7 +39,7 @@ if($quicksearch){
                  });
 } else {
 ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/members-home.tmpl",
+    = get_template_and_user({template_name => "members/member.tmpl",
                  query => $query,
                  type => "intranet",
                  authnotrequired => 0,
