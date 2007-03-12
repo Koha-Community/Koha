@@ -1,19 +1,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Borrower's Details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
-
 <!-- TMPL_IF NAME="unknowuser" -->
-    <p>
-        <b>
-            This borrower doesn't exist anymore.
-        </b>
-        <br /><br />
-        <a href="javascript:back();">Go Back</a>
-    </p>
+    <p>This borrower doesn't exist anymore.<a href="javascript:back();">Go Back</a></p>
 <!-- TMPL_ELSE -->
 
 <h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
@@ -78,7 +70,6 @@
         <!-- /TMPL_IF -->
     </div>
 </div>
-<br />
 <!-- TMPL_IF NAME="flagged" -->
     <ul>
         <!-- TMPL_IF NAME="debarred" -->
@@ -98,11 +89,11 @@
 
 <fieldset>
 <legend>Borrower information</legend>
-    <!-- TMPL_UNLESS NAME="I" --> <p><label>Title:</label><!-- TMPL_VAR NAME="title" -->&nbsp;</p> 
-    <p><label>First name:</label><!-- TMPL_VAR NAME="firstname" --></p><!-- /TMPL_UNLESS -->
-    <p>
-	<!-- TMPL_IF NAME="I" --><label>Organisation name: </label><!-- TMPL_ELSE --><label>Last name: </label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" -->
-    </p>
+    <!-- TMPL_UNLESS NAME="I" -->
+    <p><label>Title:</label><!-- TMPL_VAR NAME="title" -->&nbsp;</p> 
+    <p><label>First name:</label><!-- TMPL_VAR NAME="firstname" --></p>
+    <!-- /TMPL_UNLESS -->
+    <p><!-- TMPL_IF NAME="I" --><label>Organisation name: </label><!-- TMPL_ELSE --><label>Last name: </label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --></p>
     <!-- TMPL_UNLESS NAME="I" --><p><label>Other names: </label><!-- TMPL_VAR NAME="othernames" --></p>
     <p><label>Initials: </label><!-- TMPL_VAR NAME="initials" --></p><!-- /TMPL_UNLESS -->
     <p>
@@ -118,12 +109,12 @@
         <!-- TMPL_VAR NAME="address2"-->
     </p>
     <p><label>City: </label><!-- TMPL_VAR NAME="city" --></p>
-    <p><label>Zip Code: </label><!-- TMPL_VAR NAME="zipcode" --></p>
+    <p><label>Zip code: </label><!-- TMPL_VAR NAME="zipcode" --></p>
     <!-- TMPL_UNLESS NAME="I"-->
     	<!-- TMPL_UNLESS NAME="C"-->
-	<p><label>alt address: </label><!-- TMPL_VAR NAME="B_address" --></p>
-    	<p><label>alt city: </label><!-- TMPL_VAR NAME="B_city" --></p>
-    	<p><label>alt zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
+	<p><label>Alternate address: </label><!-- TMPL_VAR NAME="B_address" --></p>
+    	<p><label>Alternate city: </label><!-- TMPL_VAR NAME="B_city" --></p>
+    	<p><label>Alternate zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
 	<!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
     <!-- TMPL_IF NAME="I" -->
@@ -242,7 +233,7 @@
                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                     <!-- TMPL_VAR NAME="title" -->
                 </a>
-                <br /><!-- TMPL_VAR name="author" -->
+                <!-- TMPL_VAR name="author" -->
             </td>
             <td><!-- TMPL_VAR NAME="date_due" --></td>
             <td>
@@ -322,17 +313,14 @@
 						<!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
 						<!-- TMPL_IF name="waiting" -->
-						<br/>
 						<i>This document is available</i>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_IF name="transfered" -->
-						<br/>
 						<i>This document has been transfered from library : 
 						<!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
 						<!-- /TMPL_IF -->
 
 						<!-- TMPL_IF name="nottransfered" -->
-						<br/>
 						<i>This document hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
 						<!-- /TMPL_IF -->
 				
@@ -348,7 +336,7 @@
 	<!-- /TMPL_IF -->
 </div>
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function confirm_deletion() {
     var is_confirmed = window.confirm('Do you confirm deletion ?');
     var borrowernumbervalue=document.form.borrowernumber.value; 
