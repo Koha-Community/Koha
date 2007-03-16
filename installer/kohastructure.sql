@@ -1,25 +1,38 @@
--- phpMyAdmin SQL Dump
--- version 2.9.0.2
--- http://www.phpmyadmin.net
--- 
--- Serveur: localhost
--- Généré le : Mardi 06 Février 2007 à 15:21
--- Version du serveur: 4.1.12
--- Version de PHP: 5.0.4
--- 
--- Base de données: `Kohazebratest`
--- 
+-- MySQL dump 10.11
+--
+-- Host: localhost    Database: rel3_edit
+-- ------------------------------------------------------
+-- Server version	5.0.32-Debian_3-log
 
--- --------------------------------------------------------
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+-- Koha Database Structure
+-- 3.0 pre-release
+-- March 2007 
 -- 
--- Structure de la table `accountlines`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+-- IMPORTANT: 
+-- Turning off foreign key checks for import speed.
+-- If you edit this file, run it with foreign key checks ON before committing!
+--
+
+-- SET AUTOCOMMIT = 0;
+-- SET FOREIGN_KEY_CHECKS=0;
+
+--
+-- Table structure for table `accountlines`
+--
 
 DROP TABLE IF EXISTS `accountlines`;
-CREATE TABLE IF NOT EXISTS `accountlines` (
+CREATE TABLE `accountlines` (
   `borrowernumber` int(11) NOT NULL default '0',
   `accountno` smallint(6) NOT NULL default '0',
   `itemnumber` int(11) default NULL,
@@ -34,19 +47,17 @@ CREATE TABLE IF NOT EXISTS `accountlines` (
   `notify_level` int(2) NOT NULL default '0',
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
-  KEY `itemnumber` (`itemnumber`)
+  KEY `itemnumber` (`itemnumber`),
+  CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `accountoffsets`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `accountoffsets`
+--
 
 DROP TABLE IF EXISTS `accountoffsets`;
-CREATE TABLE IF NOT EXISTS `accountoffsets` (
+CREATE TABLE `accountoffsets` (
   `borrowernumber` int(11) NOT NULL default '0',
   `accountno` smallint(6) NOT NULL default '0',
   `offsetaccount` smallint(6) NOT NULL default '0',
@@ -54,16 +65,12 @@ CREATE TABLE IF NOT EXISTS `accountoffsets` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `action_logs`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `action_logs`
+--
 
 DROP TABLE IF EXISTS `action_logs`;
-CREATE TABLE IF NOT EXISTS `action_logs` (
+CREATE TABLE `action_logs` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `user` int(11) NOT NULL default '0',
   `module` text,
@@ -73,16 +80,12 @@ CREATE TABLE IF NOT EXISTS `action_logs` (
   PRIMARY KEY  (`timestamp`,`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `alert`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `alert`
+--
 
 DROP TABLE IF EXISTS `alert`;
-CREATE TABLE IF NOT EXISTS `alert` (
+CREATE TABLE `alert` (
   `alertid` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) NOT NULL default '0',
   `type` varchar(10) NOT NULL default '',
@@ -92,16 +95,12 @@ CREATE TABLE IF NOT EXISTS `alert` (
   KEY `type` (`type`,`externalid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqbasket`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `aqbasket`
+--
 
 DROP TABLE IF EXISTS `aqbasket`;
-CREATE TABLE IF NOT EXISTS `aqbasket` (
+CREATE TABLE `aqbasket` (
   `basketno` int(11) NOT NULL auto_increment,
   `creationdate` date default NULL,
   `closedate` date default NULL,
@@ -109,19 +108,16 @@ CREATE TABLE IF NOT EXISTS `aqbasket` (
   `authorisedby` varchar(10) default NULL,
   `booksellerinvoicenumber` text,
   PRIMARY KEY  (`basketno`),
-  KEY `booksellerid` (`booksellerid`)
+  KEY `booksellerid` (`booksellerid`),
+  CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqbookfund`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `aqbookfund`
+--
 
 DROP TABLE IF EXISTS `aqbookfund`;
-CREATE TABLE IF NOT EXISTS `aqbookfund` (
+CREATE TABLE `aqbookfund` (
   `bookfundid` varchar(5) NOT NULL default '''''',
   `bookfundname` text,
   `bookfundgroup` varchar(5) default NULL,
@@ -129,16 +125,12 @@ CREATE TABLE IF NOT EXISTS `aqbookfund` (
   PRIMARY KEY  (`bookfundid`,`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqbooksellers`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `aqbooksellers`
+--
 
 DROP TABLE IF EXISTS `aqbooksellers`;
-CREATE TABLE IF NOT EXISTS `aqbooksellers` (
+CREATE TABLE `aqbooksellers` (
   `id` int(11) NOT NULL default '0',
   `name` text,
   `address1` text,
@@ -178,19 +170,17 @@ CREATE TABLE IF NOT EXISTS `aqbooksellers` (
   `invoicedisc` float(6,4) default NULL,
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
-  KEY `invoiceprice` (`invoiceprice`)
+  KEY `invoiceprice` (`invoiceprice`),
+  CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqbudget`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `aqbudget`
+--
 
 DROP TABLE IF EXISTS `aqbudget`;
-CREATE TABLE IF NOT EXISTS `aqbudget` (
+CREATE TABLE `aqbudget` (
   `bookfundid` varchar(5) NOT NULL default '',
   `startdate` date NOT NULL default '0000-00-00',
   `enddate` date default NULL,
@@ -200,35 +190,29 @@ CREATE TABLE IF NOT EXISTS `aqbudget` (
   PRIMARY KEY  (`aqbudgetid`,`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqorderbreakdown`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `aqorderbreakdown`
+--
 
 DROP TABLE IF EXISTS `aqorderbreakdown`;
-CREATE TABLE IF NOT EXISTS `aqorderbreakdown` (
+CREATE TABLE `aqorderbreakdown` (
   `ordernumber` int(11) default NULL,
   `linenumber` int(11) default NULL,
   `branchcode` char(4) default NULL,
   `bookfundid` char(5) NOT NULL default '',
   `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
-  KEY `bookfundid` (`bookfundid`)
+  KEY `bookfundid` (`bookfundid`),
+  CONSTRAINT `aqorderbreakdown_ibfk_2` FOREIGN KEY (`bookfundid`) REFERENCES `aqbookfund` (`bookfundid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqorderdelivery`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `aqorderdelivery`
+--
 
 DROP TABLE IF EXISTS `aqorderdelivery`;
-CREATE TABLE IF NOT EXISTS `aqorderdelivery` (
+CREATE TABLE `aqorderdelivery` (
   `ordernumber` date NOT NULL default '0000-00-00',
   `deliverynumber` smallint(6) NOT NULL default '0',
   `deliverydate` varchar(18) default NULL,
@@ -236,16 +220,12 @@ CREATE TABLE IF NOT EXISTS `aqorderdelivery` (
   `deliverycomments` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `aqorders`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `aqorders`
+--
 
 DROP TABLE IF EXISTS `aqorders`;
-CREATE TABLE IF NOT EXISTS `aqorders` (
+CREATE TABLE `aqorders` (
   `ordernumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) default NULL,
   `title` text,
@@ -277,19 +257,17 @@ CREATE TABLE IF NOT EXISTS `aqorders` (
   `sort2` varchar(80) default NULL,
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
-  KEY `biblionumber` (`biblionumber`)
+  KEY `biblionumber` (`biblionumber`),
+  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_header`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `auth_header`
+--
 
 DROP TABLE IF EXISTS `auth_header`;
-CREATE TABLE IF NOT EXISTS `auth_header` (
+CREATE TABLE `auth_header` (
   `authid` bigint(20) unsigned NOT NULL auto_increment,
   `authtypecode` varchar(10) NOT NULL default '',
   `datecreated` date NOT NULL default '0000-00-00',
@@ -303,16 +281,12 @@ CREATE TABLE IF NOT EXISTS `auth_header` (
   KEY `origincode` (`origincode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_subfield_structure`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `auth_subfield_structure`
+--
 
 DROP TABLE IF EXISTS `auth_subfield_structure`;
-CREATE TABLE IF NOT EXISTS `auth_subfield_structure` (
+CREATE TABLE `auth_subfield_structure` (
   `authtypecode` varchar(10) NOT NULL default '',
   `tagfield` varchar(3) NOT NULL default '',
   `tagsubfield` char(1) NOT NULL default '',
@@ -334,16 +308,12 @@ CREATE TABLE IF NOT EXISTS `auth_subfield_structure` (
   KEY `tab` (`authtypecode`,`tab`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_subfield_table`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `auth_subfield_table`
+--
 
 DROP TABLE IF EXISTS `auth_subfield_table`;
-CREATE TABLE IF NOT EXISTS `auth_subfield_table` (
+CREATE TABLE `auth_subfield_table` (
   `subfieldid` bigint(20) unsigned NOT NULL auto_increment,
   `authid` bigint(20) unsigned NOT NULL default '0',
   `tag` varchar(3) NOT NULL default '',
@@ -359,16 +329,12 @@ CREATE TABLE IF NOT EXISTS `auth_subfield_table` (
   KEY `subfieldvalue` (`subfieldvalue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_tag_structure`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `auth_tag_structure`
+--
 
 DROP TABLE IF EXISTS `auth_tag_structure`;
-CREATE TABLE IF NOT EXISTS `auth_tag_structure` (
+CREATE TABLE `auth_tag_structure` (
   `authtypecode` char(10) NOT NULL default '',
   `tagfield` char(3) NOT NULL default '',
   `liblibrarian` char(255) NOT NULL default '',
@@ -376,19 +342,16 @@ CREATE TABLE IF NOT EXISTS `auth_tag_structure` (
   `repeatable` tinyint(4) NOT NULL default '0',
   `mandatory` tinyint(4) NOT NULL default '0',
   `authorised_value` char(10) default NULL,
-  PRIMARY KEY  (`authtypecode`,`tagfield`)
+  PRIMARY KEY  (`authtypecode`,`tagfield`),
+  CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_types`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:56
--- 
+--
+-- Table structure for table `auth_types`
+--
 
 DROP TABLE IF EXISTS `auth_types`;
-CREATE TABLE IF NOT EXISTS `auth_types` (
+CREATE TABLE `auth_types` (
   `authtypecode` varchar(10) NOT NULL default '',
   `authtypetext` varchar(255) NOT NULL default '',
   `auth_tag_to_report` varchar(3) NOT NULL default '',
@@ -396,16 +359,12 @@ CREATE TABLE IF NOT EXISTS `auth_types` (
   PRIMARY KEY  (`authtypecode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `auth_word`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `auth_word`
+--
 
 DROP TABLE IF EXISTS `auth_word`;
-CREATE TABLE IF NOT EXISTS `auth_word` (
+CREATE TABLE `auth_word` (
   `authid` bigint(20) NOT NULL default '0',
   `tagsubfield` varchar(4) NOT NULL default '',
   `tagorder` tinyint(4) NOT NULL default '1',
@@ -418,16 +377,12 @@ CREATE TABLE IF NOT EXISTS `auth_word` (
   KEY `sndx_word` (`sndx_word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `authorised_values`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `authorised_values`
+--
 
 DROP TABLE IF EXISTS `authorised_values`;
-CREATE TABLE IF NOT EXISTS `authorised_values` (
+CREATE TABLE `authorised_values` (
   `id` int(11) NOT NULL auto_increment,
   `category` char(10) NOT NULL default '',
   `authorised_value` char(80) NOT NULL default '',
@@ -436,16 +391,12 @@ CREATE TABLE IF NOT EXISTS `authorised_values` (
   KEY `name` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `biblio`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `biblio`
+--
 
 DROP TABLE IF EXISTS `biblio`;
-CREATE TABLE IF NOT EXISTS `biblio` (
+CREATE TABLE `biblio` (
   `biblionumber` int(11) NOT NULL default '0',
   `author` text,
   `title` text,
@@ -461,52 +412,40 @@ CREATE TABLE IF NOT EXISTS `biblio` (
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `biblio_framework`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `biblio_framework`
+--
 
 DROP TABLE IF EXISTS `biblio_framework`;
-CREATE TABLE IF NOT EXISTS `biblio_framework` (
+CREATE TABLE `biblio_framework` (
   `frameworkcode` char(4) NOT NULL default '',
   `frameworktext` char(255) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `biblioanalysis`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `biblioanalysis`
+--
 
 DROP TABLE IF EXISTS `biblioanalysis`;
-CREATE TABLE IF NOT EXISTS `biblioanalysis` (
+CREATE TABLE `biblioanalysis` (
   `analyticaltitle` text,
   `biblionumber` int(11) NOT NULL default '0',
   `analyticalauthor` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `biblioitems`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `biblioitems`
+--
 
 DROP TABLE IF EXISTS `biblioitems`;
-CREATE TABLE IF NOT EXISTS `biblioitems` (
+CREATE TABLE `biblioitems` (
   `biblioitemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
   `volume` text,
   `number` text,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` varchar(30) default '',
@@ -532,46 +471,17 @@ CREATE TABLE IF NOT EXISTS `biblioitems` (
   KEY `bibnoidx` (`biblionumber`),
   KEY `itemtype` (`itemtype`),
   KEY `isbn` (`isbn`),
-  KEY `publishercode` (`publishercode`)
+  KEY `publishercode` (`publishercode`),
+  CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
--- 
--- Structure de la table `bibliothesaurus`
--- 
--- Création: Mercredi 04 Octobre 2006 à 23:21
--- Dernière modification: Mercredi 04 Octobre 2006 à 23:21
--- Dernière vérification: Mercredi 04 Octobre 2006 à 23:21
--- 
-
-DROP TABLE IF EXISTS `bibliothesaurus`;
-CREATE TABLE IF NOT EXISTS `bibliothesaurus` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `freelib` char(255) NOT NULL default '',
-  `stdlib` char(255) NOT NULL default '',
-  `category` char(10) NOT NULL default '',
-  `level` tinyint(4) NOT NULL default '1',
-  `hierarchy` char(80) NOT NULL default '',
-  `father` char(80) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `freelib` (`freelib`),
-  KEY `stdlib` (`stdlib`),
-  KEY `category` (`category`),
-  KEY `hierarchy` (`hierarchy`),
-  KEY `category_2` (`category`,`freelib`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
--- 
--- Structure de la table `bookshelf`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `bookshelf`
+--
 
 DROP TABLE IF EXISTS `bookshelf`;
-CREATE TABLE IF NOT EXISTS `bookshelf` (
+CREATE TABLE `bookshelf` (
   `shelfnumber` int(11) NOT NULL auto_increment,
   `shelfname` char(255) default NULL,
   `owner` char(80) default NULL,
@@ -579,30 +489,22 @@ CREATE TABLE IF NOT EXISTS `bookshelf` (
   PRIMARY KEY  (`shelfnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `borexp`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `borexp`
+--
 
 DROP TABLE IF EXISTS `borexp`;
-CREATE TABLE IF NOT EXISTS `borexp` (
+CREATE TABLE `borexp` (
   `borrowernumber` int(11) default NULL,
   `newexp` date default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `borrowers`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `borrowers`
+--
 
 DROP TABLE IF EXISTS `borrowers`;
-CREATE TABLE IF NOT EXISTS `borrowers` (
+CREATE TABLE `borrowers` (
   `borrowernumber` int(11) NOT NULL auto_increment,
   `cardnumber` varchar(16) NOT NULL default '',
   `surname` text NOT NULL,
@@ -658,49 +560,39 @@ CREATE TABLE IF NOT EXISTS `borrowers` (
   UNIQUE KEY `cardnumber` (`cardnumber`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
-  KEY `branchcode` (`branchcode`)
+  KEY `branchcode` (`branchcode`),
+  CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
+  CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `borrowers_to_borrowers`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `borrowers_to_borrowers`
+--
 
 DROP TABLE IF EXISTS `borrowers_to_borrowers`;
-CREATE TABLE IF NOT EXISTS `borrowers_to_borrowers` (
+CREATE TABLE `borrowers_to_borrowers` (
   `borrower1` int(11) default NULL,
   `borrower2` int(11) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `branchcategories`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `branchcategories`
+--
 
 DROP TABLE IF EXISTS `branchcategories`;
-CREATE TABLE IF NOT EXISTS `branchcategories` (
+CREATE TABLE `branchcategories` (
   `categorycode` varchar(4) NOT NULL default '',
   `categoryname` text,
   `codedescription` text,
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `branches`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `branches`
+--
 
 DROP TABLE IF EXISTS `branches`;
-CREATE TABLE IF NOT EXISTS `branches` (
+CREATE TABLE `branches` (
   `branchcode` varchar(10) NOT NULL default '',
   `branchname` text NOT NULL,
   `branchaddress1` text,
@@ -715,30 +607,22 @@ CREATE TABLE IF NOT EXISTS `branches` (
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `branchrelations`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `branchrelations`
+--
 
 DROP TABLE IF EXISTS `branchrelations`;
-CREATE TABLE IF NOT EXISTS `branchrelations` (
+CREATE TABLE `branchrelations` (
   `branchcode` varchar(4) default NULL,
   `categorycode` varchar(4) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `branchtransfers`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `branchtransfers`
+--
 
 DROP TABLE IF EXISTS `branchtransfers`;
-CREATE TABLE IF NOT EXISTS `branchtransfers` (
+CREATE TABLE `branchtransfers` (
   `itemnumber` int(11) NOT NULL default '0',
   `datesent` datetime default NULL,
   `frombranch` varchar(10) NOT NULL default '',
@@ -747,19 +631,18 @@ CREATE TABLE IF NOT EXISTS `branchtransfers` (
   `comments` text,
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
-  KEY `itemnumber` (`itemnumber`)
+  KEY `itemnumber` (`itemnumber`),
+  CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `branchtransfers_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `catalogueentry`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `catalogueentry`
+--
 
 DROP TABLE IF EXISTS `catalogueentry`;
-CREATE TABLE IF NOT EXISTS `catalogueentry` (
+CREATE TABLE `catalogueentry` (
   `catalogueentry` text NOT NULL,
   `entrytype` varchar(2) default NULL,
   `see` text,
@@ -768,16 +651,12 @@ CREATE TABLE IF NOT EXISTS `catalogueentry` (
   `biblionumber` int(11) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `categories`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `categories`
+--
 
 DROP TABLE IF EXISTS `categories`;
-CREATE TABLE IF NOT EXISTS `categories` (
+CREATE TABLE `categories` (
   `categorycode` varchar(10) NOT NULL default '',
   `description` text,
   `enrolmentperiod` smallint(6) default NULL,
@@ -794,32 +673,24 @@ CREATE TABLE IF NOT EXISTS `categories` (
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `categorytable`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `categorytable`
+--
 
 DROP TABLE IF EXISTS `categorytable`;
-CREATE TABLE IF NOT EXISTS `categorytable` (
+CREATE TABLE `categorytable` (
   `categorycode` varchar(5) NOT NULL default '',
   `description` text,
   `itemtypecodes` text,
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `charges`
--- 
--- Création: Vendredi 08 Décembre 2006 à 16:47
--- 
+--
+-- Table structure for table `charges`
+--
 
 DROP TABLE IF EXISTS `charges`;
-CREATE TABLE IF NOT EXISTS `charges` (
+CREATE TABLE `charges` (
   `charge_id` varchar(5) NOT NULL default '',
   `description` text NOT NULL,
   `amount` decimal(28,6) NOT NULL default '0.000000',
@@ -829,47 +700,35 @@ CREATE TABLE IF NOT EXISTS `charges` (
   PRIMARY KEY  (`charge_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `cities`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `cities`
+--
 
 DROP TABLE IF EXISTS `cities`;
-CREATE TABLE IF NOT EXISTS `cities` (
+CREATE TABLE `cities` (
   `cityid` int(11) NOT NULL auto_increment,
   `city_name` char(100) NOT NULL default '',
   `city_zipcode` char(20) default NULL,
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `currency`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `currency`
+--
 
 DROP TABLE IF EXISTS `currency`;
-CREATE TABLE IF NOT EXISTS `currency` (
+CREATE TABLE `currency` (
   `currency` varchar(10) NOT NULL default '',
   `rate` float(7,5) default NULL,
   PRIMARY KEY  (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `deletedbiblio`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `deletedbiblio`
+--
 
 DROP TABLE IF EXISTS `deletedbiblio`;
-CREATE TABLE IF NOT EXISTS `deletedbiblio` (
+CREATE TABLE `deletedbiblio` (
   `biblionumber` int(11) NOT NULL default '0',
   `author` text,
   `title` text,
@@ -886,22 +745,18 @@ CREATE TABLE IF NOT EXISTS `deletedbiblio` (
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `deletedbiblioitems`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:40
--- 
+--
+-- Table structure for table `deletedbiblioitems`
+--
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
-CREATE TABLE IF NOT EXISTS `deletedbiblioitems` (
+CREATE TABLE `deletedbiblioitems` (
   `biblioitemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
   `volume` text,
   `number` text,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` double(8,6) default NULL,
@@ -927,16 +782,12 @@ CREATE TABLE IF NOT EXISTS `deletedbiblioitems` (
   KEY `bibnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `deletedborrowers`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `deletedborrowers`
+--
 
 DROP TABLE IF EXISTS `deletedborrowers`;
-CREATE TABLE IF NOT EXISTS `deletedborrowers` (
+CREATE TABLE `deletedborrowers` (
   `borrowernumber` int(11) NOT NULL default '0',
   `cardnumber` varchar(9) NOT NULL default '',
   `surname` text NOT NULL,
@@ -965,7 +816,7 @@ CREATE TABLE IF NOT EXISTS `deletedborrowers` (
   `B_phone` text,
   `dateofbirth` date default NULL,
   `branchcode` varchar(4) NOT NULL default '',
-  `categorycode` varchar(2) default NULL,
+  `categorycode` varchar(10) default NULL,
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
   `gonenoaddress` tinyint(1) default NULL,
@@ -995,16 +846,12 @@ CREATE TABLE IF NOT EXISTS `deletedborrowers` (
   KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `deleteditems`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:40
--- 
+--
+-- Table structure for table `deleteditems`
+--
 
 DROP TABLE IF EXISTS `deleteditems`;
-CREATE TABLE IF NOT EXISTS `deleteditems` (
+CREATE TABLE `deleteditems` (
   `itemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
   `multivolumepart` varchar(30) default NULL,
@@ -1048,31 +895,23 @@ CREATE TABLE IF NOT EXISTS `deleteditems` (
   KEY `itembibnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `ethnicity`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `ethnicity`
+--
 
 DROP TABLE IF EXISTS `ethnicity`;
-CREATE TABLE IF NOT EXISTS `ethnicity` (
+CREATE TABLE `ethnicity` (
   `code` varchar(10) NOT NULL default '',
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `issues`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `issues`
+--
 
 DROP TABLE IF EXISTS `issues`;
-CREATE TABLE IF NOT EXISTS `issues` (
+CREATE TABLE `issues` (
   `borrowernumber` int(11) default '0',
   `itemnumber` int(11) default '0',
   `date_due` date default NULL,
@@ -1086,21 +925,19 @@ CREATE TABLE IF NOT EXISTS `issues` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   KEY `issuesborridx` (`borrowernumber`),
   KEY `issuesitemidx` (`itemnumber`),
-  KEY `bordate` (`borrowernumber`,`timestamp`)
+  KEY `bordate` (`borrowernumber`,`timestamp`),
+  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `issuingrules`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `issuingrules`
+--
 
 DROP TABLE IF EXISTS `issuingrules`;
-CREATE TABLE IF NOT EXISTS `issuingrules` (
-  `categorycode` varchar(2) NOT NULL default '',
-  `itemtype` varchar(4) NOT NULL default '',
+CREATE TABLE `issuingrules` (
+  `categorycode` varchar(10) NOT NULL default '',
+  `itemtype` varchar(10) NOT NULL default '',
   `restrictedtype` tinyint(1) default NULL,
   `rentaldiscount` decimal(28,6) default NULL,
   `reservecharge` decimal(28,6) default NULL,
@@ -1114,19 +951,17 @@ CREATE TABLE IF NOT EXISTS `issuingrules` (
   `branchcode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
-  KEY `itemtype` (`itemtype`)
+  KEY `itemtype` (`itemtype`),
+  CONSTRAINT `issuingrules_ibfk_2` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `items`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `items`
+--
 
 DROP TABLE IF EXISTS `items`;
-CREATE TABLE IF NOT EXISTS `items` (
+CREATE TABLE `items` (
   `itemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
   `multivolumepart` varchar(30) default NULL,
@@ -1165,34 +1000,28 @@ CREATE TABLE IF NOT EXISTS `items` (
   KEY `itembinoidx` (`biblioitemnumber`),
   KEY `itembibnoidx` (`biblionumber`),
   KEY `homebranch` (`homebranch`),
-  KEY `holdingbranch` (`holdingbranch`)
+  KEY `holdingbranch` (`holdingbranch`),
+  CONSTRAINT `items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE,
+  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `itemsprices`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `itemsprices`
+--
 
 DROP TABLE IF EXISTS `itemsprices`;
-CREATE TABLE IF NOT EXISTS `itemsprices` (
+CREATE TABLE `itemsprices` (
   `itemnumber` int(11) default NULL,
   `price1` decimal(28,6) default NULL,
   `price2` decimal(28,6) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `itemtypes`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `itemtypes`
+--
 
 DROP TABLE IF EXISTS `itemtypes`;
-CREATE TABLE IF NOT EXISTS `itemtypes` (
+CREATE TABLE `itemtypes` (
   `itemtype` varchar(10) NOT NULL default '',
   `description` text,
   `renewalsallowed` smallint(6) default NULL,
@@ -1204,32 +1033,24 @@ CREATE TABLE IF NOT EXISTS `itemtypes` (
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `labels`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `labels`
+--
 
 DROP TABLE IF EXISTS `labels`;
-CREATE TABLE IF NOT EXISTS `labels` (
+CREATE TABLE `labels` (
   `labelid` int(11) NOT NULL auto_increment,
   `itemnumber` varchar(100) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`labelid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `labels_conf`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `labels_conf`
+--
 
 DROP TABLE IF EXISTS `labels_conf`;
-CREATE TABLE IF NOT EXISTS `labels_conf` (
+CREATE TABLE `labels_conf` (
   `id` int(4) NOT NULL auto_increment,
   `barcodetype` char(100) default '',
   `title` tinyint(1) default '0',
@@ -1244,16 +1065,12 @@ CREATE TABLE IF NOT EXISTS `labels_conf` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `letter`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `letter`
+--
 
 DROP TABLE IF EXISTS `letter`;
-CREATE TABLE IF NOT EXISTS `letter` (
+CREATE TABLE `letter` (
   `module` varchar(20) NOT NULL default '',
   `code` varchar(20) NOT NULL default '',
   `name` varchar(100) NOT NULL default '',
@@ -1262,16 +1079,12 @@ CREATE TABLE IF NOT EXISTS `letter` (
   PRIMARY KEY  (`module`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_biblio`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `marc_biblio`
+--
 
 DROP TABLE IF EXISTS `marc_biblio`;
-CREATE TABLE IF NOT EXISTS `marc_biblio` (
+CREATE TABLE `marc_biblio` (
   `bibid` bigint(20) unsigned NOT NULL auto_increment,
   `biblionumber` int(11) NOT NULL default '0',
   `datecreated` date NOT NULL default '0000-00-00',
@@ -1283,31 +1096,23 @@ CREATE TABLE IF NOT EXISTS `marc_biblio` (
   KEY `biblionumber` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_blob_subfield`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:57
--- 
+--
+-- Table structure for table `marc_blob_subfield`
+--
 
 DROP TABLE IF EXISTS `marc_blob_subfield`;
-CREATE TABLE IF NOT EXISTS `marc_blob_subfield` (
+CREATE TABLE `marc_blob_subfield` (
   `blobidlink` bigint(20) NOT NULL auto_increment,
   `subfieldvalue` longtext NOT NULL,
   PRIMARY KEY  (`blobidlink`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_breeding`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:58
--- 
+--
+-- Table structure for table `marc_breeding`
+--
 
 DROP TABLE IF EXISTS `marc_breeding`;
-CREATE TABLE IF NOT EXISTS `marc_breeding` (
+CREATE TABLE `marc_breeding` (
   `id` bigint(20) NOT NULL auto_increment,
   `file` varchar(80) NOT NULL default '',
   `isbn` varchar(10) NOT NULL default '',
@@ -1321,16 +1126,12 @@ CREATE TABLE IF NOT EXISTS `marc_breeding` (
   KEY `isbn` (`isbn`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_subfield_structure`
--- 
--- Création: Lundi 27 Novembre 2006 à 17:58
--- 
+--
+-- Table structure for table `marc_subfield_structure`
+--
 
 DROP TABLE IF EXISTS `marc_subfield_structure`;
-CREATE TABLE IF NOT EXISTS `marc_subfield_structure` (
+CREATE TABLE `marc_subfield_structure` (
   `tagfield` varchar(3) NOT NULL default '',
   `tagsubfield` char(1) NOT NULL default '',
   `liblibrarian` varchar(255) NOT NULL default '',
@@ -1352,16 +1153,12 @@ CREATE TABLE IF NOT EXISTS `marc_subfield_structure` (
   KEY `kohafield` (`frameworkcode`,`kohafield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_subfield_table`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:11
--- 
+--
+-- Table structure for table `marc_subfield_table`
+--
 
 DROP TABLE IF EXISTS `marc_subfield_table`;
-CREATE TABLE IF NOT EXISTS `marc_subfield_table` (
+CREATE TABLE `marc_subfield_table` (
   `subfieldid` bigint(20) unsigned NOT NULL auto_increment,
   `bibid` bigint(20) unsigned NOT NULL default '0',
   `tag` varchar(3) NOT NULL default '',
@@ -1381,16 +1178,12 @@ CREATE TABLE IF NOT EXISTS `marc_subfield_table` (
   KEY `tagorder` (`tagorder`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_tag_structure`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:11
--- 
+--
+-- Table structure for table `marc_tag_structure`
+--
 
 DROP TABLE IF EXISTS `marc_tag_structure`;
-CREATE TABLE IF NOT EXISTS `marc_tag_structure` (
+CREATE TABLE `marc_tag_structure` (
   `tagfield` char(3) NOT NULL default '',
   `liblibrarian` char(255) NOT NULL default '',
   `libopac` char(255) NOT NULL default '',
@@ -1401,16 +1194,12 @@ CREATE TABLE IF NOT EXISTS `marc_tag_structure` (
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marc_word`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `marc_word`
+--
 
 DROP TABLE IF EXISTS `marc_word`;
-CREATE TABLE IF NOT EXISTS `marc_word` (
+CREATE TABLE `marc_word` (
   `bibid` bigint(20) NOT NULL default '0',
   `tagsubfield` varchar(4) NOT NULL default '',
   `tagorder` tinyint(4) NOT NULL default '1',
@@ -1425,48 +1214,36 @@ CREATE TABLE IF NOT EXISTS `marc_word` (
   KEY `Search_Marc` (`tagsubfield`,`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `marcrecorddone`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `marcrecorddone`
+--
 
 DROP TABLE IF EXISTS `marcrecorddone`;
-CREATE TABLE IF NOT EXISTS `marcrecorddone` (
+CREATE TABLE `marcrecorddone` (
   `isbn` char(40) default NULL,
   `issn` char(40) default NULL,
   `lccn` char(40) default NULL,
   `controlnumber` char(40) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `mediatypetable`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `mediatypetable`
+--
 
 DROP TABLE IF EXISTS `mediatypetable`;
-CREATE TABLE IF NOT EXISTS `mediatypetable` (
+CREATE TABLE `mediatypetable` (
   `mediatypecode` varchar(5) NOT NULL default '',
   `description` text,
   `itemtypecodes` text,
   PRIMARY KEY  (`mediatypecode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `notifys`
--- 
--- Création: Vendredi 08 Décembre 2006 à 16:47
--- 
+--
+-- Table structure for table `notifys`
+--
 
 DROP TABLE IF EXISTS `notifys`;
-CREATE TABLE IF NOT EXISTS `notifys` (
+CREATE TABLE `notifys` (
   `notify_id` int(11) NOT NULL default '0',
   `borrowernumber` int(11) NOT NULL default '0',
   `itemnumber` int(11) NOT NULL default '0',
@@ -1476,16 +1253,12 @@ CREATE TABLE IF NOT EXISTS `notifys` (
   `method` varchar(20) NOT NULL default ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `opac_news`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `opac_news`
+--
 
 DROP TABLE IF EXISTS `opac_news`;
-CREATE TABLE IF NOT EXISTS `opac_news` (
+CREATE TABLE `opac_news` (
   `idnew` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(250) NOT NULL default '',
   `new` text NOT NULL,
@@ -1496,18 +1269,14 @@ CREATE TABLE IF NOT EXISTS `opac_news` (
   PRIMARY KEY  (`idnew`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `overduerules`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `overduerules`
+--
 
 DROP TABLE IF EXISTS `overduerules`;
-CREATE TABLE IF NOT EXISTS `overduerules` (
+CREATE TABLE `overduerules` (
   `branchcode` varchar(255) NOT NULL default '',
-  `categorycode` varchar(2) NOT NULL default '',
+  `categorycode` varchar(10) NOT NULL default '',
   `delay1` int(4) default '0',
   `letter1` varchar(20) default NULL,
   `debarred1` char(1) default '0',
@@ -1520,16 +1289,12 @@ CREATE TABLE IF NOT EXISTS `overduerules` (
   PRIMARY KEY  (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `phrase_log`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `phrase_log`
+--
 
 DROP TABLE IF EXISTS `phrase_log`;
-CREATE TABLE IF NOT EXISTS `phrase_log` (
+CREATE TABLE `phrase_log` (
   `phr_phrase` varchar(100) NOT NULL default '',
   `phr_resultcount` int(11) NOT NULL default '0',
   `phr_ip` varchar(30) NOT NULL default '',
@@ -1539,32 +1304,24 @@ CREATE TABLE IF NOT EXISTS `phrase_log` (
   KEY `phr_ip` (`phr_ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `printers`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `printers`
+--
 
 DROP TABLE IF EXISTS `printers`;
-CREATE TABLE IF NOT EXISTS `printers` (
+CREATE TABLE `printers` (
   `printername` char(40) NOT NULL default '''''',
   `printqueue` char(20) default NULL,
   `printtype` char(20) default NULL,
   PRIMARY KEY  (`printername`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `repeatable_holidays`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `repeatable_holidays`
+--
 
 DROP TABLE IF EXISTS `repeatable_holidays`;
-CREATE TABLE IF NOT EXISTS `repeatable_holidays` (
+CREATE TABLE `repeatable_holidays` (
   `id` int(11) NOT NULL auto_increment,
   `branchcode` varchar(4) NOT NULL default '',
   `weekday` smallint(6) default NULL,
@@ -1575,16 +1332,12 @@ CREATE TABLE IF NOT EXISTS `repeatable_holidays` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `reserveconstraints`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `reserveconstraints`
+--
 
 DROP TABLE IF EXISTS `reserveconstraints`;
-CREATE TABLE IF NOT EXISTS `reserveconstraints` (
+CREATE TABLE `reserveconstraints` (
   `borrowernumber` int(11) NOT NULL default '0',
   `reservedate` date NOT NULL default '0000-00-00',
   `biblionumber` int(11) NOT NULL default '0',
@@ -1592,16 +1345,12 @@ CREATE TABLE IF NOT EXISTS `reserveconstraints` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `reserves`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `reserves`
+--
 
 DROP TABLE IF EXISTS `reserves`;
-CREATE TABLE IF NOT EXISTS `reserves` (
+CREATE TABLE `reserves` (
   `borrowernumber` int(11) NOT NULL default '0',
   `reservedate` date NOT NULL default '0000-00-00',
   `biblionumber` int(11) NOT NULL default '0',
@@ -1619,19 +1368,19 @@ CREATE TABLE IF NOT EXISTS `reserves` (
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
   KEY `itemnumber` (`itemnumber`),
-  KEY `branchcode` (`branchcode`)
+  KEY `branchcode` (`branchcode`),
+  CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `reviews`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `reviews`
+--
 
 DROP TABLE IF EXISTS `reviews`;
-CREATE TABLE IF NOT EXISTS `reviews` (
+CREATE TABLE `reviews` (
   `reviewid` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) default NULL,
   `biblionumber` int(11) default NULL,
@@ -1641,31 +1390,23 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   PRIMARY KEY  (`reviewid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `roadtype`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `roadtype`
+--
 
 DROP TABLE IF EXISTS `roadtype`;
-CREATE TABLE IF NOT EXISTS `roadtype` (
+CREATE TABLE `roadtype` (
   `roadtypeid` int(11) NOT NULL auto_increment,
   `road_type` char(100) NOT NULL default '',
   PRIMARY KEY  (`roadtypeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `serial`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `serial`
+--
 
 DROP TABLE IF EXISTS `serial`;
-CREATE TABLE IF NOT EXISTS `serial` (
+CREATE TABLE `serial` (
   `serialid` int(11) NOT NULL auto_increment,
   `biblionumber` varchar(100) NOT NULL default '',
   `subscriptionid` varchar(100) NOT NULL default '',
@@ -1680,32 +1421,24 @@ CREATE TABLE IF NOT EXISTS `serial` (
   PRIMARY KEY  (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `sessionqueries`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `sessionqueries`
+--
 
 DROP TABLE IF EXISTS `sessionqueries`;
-CREATE TABLE IF NOT EXISTS `sessionqueries` (
+CREATE TABLE `sessionqueries` (
   `sessionID` varchar(255) NOT NULL default '',
   `userid` varchar(100) NOT NULL default '',
   `ip` varchar(18) NOT NULL default '',
   `url` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `sessions`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `sessions`
+--
 
 DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE IF NOT EXISTS `sessions` (
+CREATE TABLE `sessions` (
   `sessionID` varchar(255) NOT NULL default '',
   `userid` varchar(255) default NULL,
   `ip` varchar(16) default NULL,
@@ -1713,34 +1446,28 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   PRIMARY KEY  (`sessionID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `shelfcontents`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:41
--- 
+--
+-- Table structure for table `shelfcontents`
+--
 
 DROP TABLE IF EXISTS `shelfcontents`;
-CREATE TABLE IF NOT EXISTS `shelfcontents` (
+CREATE TABLE `shelfcontents` (
   `shelfnumber` int(11) NOT NULL default '0',
   `itemnumber` int(11) NOT NULL default '0',
   `flags` int(11) default NULL,
   `dateadded` timestamp NULL default NULL,
   KEY `shelfnumber` (`shelfnumber`),
-  KEY `itemnumber` (`itemnumber`)
+  KEY `itemnumber` (`itemnumber`),
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `bookshelf` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `special_holidays`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `special_holidays`
+--
 
 DROP TABLE IF EXISTS `special_holidays`;
-CREATE TABLE IF NOT EXISTS `special_holidays` (
+CREATE TABLE `special_holidays` (
   `id` int(11) NOT NULL auto_increment,
   `branchcode` varchar(4) NOT NULL default '',
   `day` smallint(6) NOT NULL default '0',
@@ -1752,16 +1479,12 @@ CREATE TABLE IF NOT EXISTS `special_holidays` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `statistics`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `statistics`
+--
 
 DROP TABLE IF EXISTS `statistics`;
-CREATE TABLE IF NOT EXISTS `statistics` (
+CREATE TABLE `statistics` (
   `datetime` datetime NOT NULL default '0000-00-00 00:00:00',
   `branch` varchar(4) default NULL,
   `proccode` varchar(4) default NULL,
@@ -1770,51 +1493,39 @@ CREATE TABLE IF NOT EXISTS `statistics` (
   `other` text,
   `usercode` varchar(10) default NULL,
   `itemnumber` int(11) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `borrowernumber` int(11) default NULL,
   `associatedborrower` int(11) default NULL,
   KEY `timeidx` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `stopwords`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `stopwords`
+--
 
 DROP TABLE IF EXISTS `stopwords`;
-CREATE TABLE IF NOT EXISTS `stopwords` (
+CREATE TABLE `stopwords` (
   `word` varchar(255) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `subcategorytable`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `subcategorytable`
+--
 
 DROP TABLE IF EXISTS `subcategorytable`;
-CREATE TABLE IF NOT EXISTS `subcategorytable` (
+CREATE TABLE `subcategorytable` (
   `subcategorycode` varchar(5) NOT NULL default '',
   `description` text,
   `itemtypecodes` text,
   PRIMARY KEY  (`subcategorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `subscription`
--- 
--- Création: Vendredi 26 Janvier 2007 à 12:44
--- 
+--
+-- Table structure for table `subscription`
+--
 
 DROP TABLE IF EXISTS `subscription`;
-CREATE TABLE IF NOT EXISTS `subscription` (
+CREATE TABLE `subscription` (
   `biblionumber` int(11) NOT NULL default '0',
   `manualhistory` tinyint(1) NOT NULL default '0',
   `subscriptionid` int(11) NOT NULL auto_increment,
@@ -1862,16 +1573,12 @@ CREATE TABLE IF NOT EXISTS `subscription` (
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `subscriptionhistory`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `subscriptionhistory`
+--
 
 DROP TABLE IF EXISTS `subscriptionhistory`;
-CREATE TABLE IF NOT EXISTS `subscriptionhistory` (
+CREATE TABLE `subscriptionhistory` (
   `biblionumber` int(11) NOT NULL default '0',
   `subscriptionid` int(11) NOT NULL default '0',
   `histstartdate` date NOT NULL default '0000-00-00',
@@ -1884,16 +1591,12 @@ CREATE TABLE IF NOT EXISTS `subscriptionhistory` (
   KEY `biblionumber` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `subscriptionroutinglist`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `subscriptionroutinglist`
+--
 
 DROP TABLE IF EXISTS `subscriptionroutinglist`;
-CREATE TABLE IF NOT EXISTS `subscriptionroutinglist` (
+CREATE TABLE `subscriptionroutinglist` (
   `routingid` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) default NULL,
   `ranking` int(11) default NULL,
@@ -1901,16 +1604,12 @@ CREATE TABLE IF NOT EXISTS `subscriptionroutinglist` (
   PRIMARY KEY  (`routingid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `suggestions`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:40
--- 
+--
+-- Table structure for table `suggestions`
+--
 
 DROP TABLE IF EXISTS `suggestions`;
-CREATE TABLE IF NOT EXISTS `suggestions` (
+CREATE TABLE `suggestions` (
   `suggestionid` int(8) NOT NULL auto_increment,
   `suggestedby` int(11) NOT NULL default '0',
   `managedby` int(11) default NULL,
@@ -1933,16 +1632,12 @@ CREATE TABLE IF NOT EXISTS `suggestions` (
   KEY `managedby` (`managedby`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `systempreferences`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:40
--- 
+--
+-- Table structure for table `systempreferences`
+--
 
 DROP TABLE IF EXISTS `systempreferences`;
-CREATE TABLE IF NOT EXISTS `systempreferences` (
+CREATE TABLE `systempreferences` (
   `variable` varchar(50) NOT NULL default '',
   `value` text,
   `options` text,
@@ -1951,31 +1646,23 @@ CREATE TABLE IF NOT EXISTS `systempreferences` (
   PRIMARY KEY  (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `tags`
--- 
--- Création: Mardi 06 Février 2007 à 11:14
--- 
+--
+-- Table structure for table `tags`
+--
 
 DROP TABLE IF EXISTS `tags`;
-CREATE TABLE IF NOT EXISTS `tags` (
+CREATE TABLE `tags` (
   `entry` varchar(255) NOT NULL default '',
   `weight` bigint(20) NOT NULL default '0',
   PRIMARY KEY  (`entry`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `uploadedmarc`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `uploadedmarc`
+--
 
 DROP TABLE IF EXISTS `uploadedmarc`;
-CREATE TABLE IF NOT EXISTS `uploadedmarc` (
+CREATE TABLE `uploadedmarc` (
   `id` int(11) NOT NULL auto_increment,
   `marc` longblob,
   `hidden` smallint(6) default NULL,
@@ -1983,48 +1670,36 @@ CREATE TABLE IF NOT EXISTS `uploadedmarc` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `userflags`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `userflags`
+--
 
 DROP TABLE IF EXISTS `userflags`;
-CREATE TABLE IF NOT EXISTS `userflags` (
+CREATE TABLE `userflags` (
   `bit` int(11) NOT NULL default '0',
   `flag` char(30) default NULL,
   `flagdesc` char(255) default NULL,
   `defaulton` int(11) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `users`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `users`
+--
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE `users` (
   `usercode` varchar(10) default NULL,
   `username` text,
   `password` text,
   `level` smallint(6) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `websites`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `websites`
+--
 
 DROP TABLE IF EXISTS `websites`;
-CREATE TABLE IF NOT EXISTS `websites` (
+CREATE TABLE `websites` (
   `websitenumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) NOT NULL default '0',
   `title` text,
@@ -2033,16 +1708,12 @@ CREATE TABLE IF NOT EXISTS `websites` (
   PRIMARY KEY  (`websitenumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `z3950queue`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `z3950queue`
+--
 
 DROP TABLE IF EXISTS `z3950queue`;
-CREATE TABLE IF NOT EXISTS `z3950queue` (
+CREATE TABLE `z3950queue` (
   `id` int(11) NOT NULL auto_increment,
   `term` text,
   `type` varchar(10) default NULL,
@@ -2056,16 +1727,12 @@ CREATE TABLE IF NOT EXISTS `z3950queue` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `z3950results`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `z3950results`
+--
 
 DROP TABLE IF EXISTS `z3950results`;
-CREATE TABLE IF NOT EXISTS `z3950results` (
+CREATE TABLE `z3950results` (
   `id` int(11) NOT NULL auto_increment,
   `queryid` int(11) default NULL,
   `server` varchar(255) default NULL,
@@ -2080,16 +1747,12 @@ CREATE TABLE IF NOT EXISTS `z3950results` (
   UNIQUE KEY `query_server` (`queryid`,`server`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `z3950servers`
--- 
--- Création: Lundi 27 Novembre 2006 à 18:39
--- 
+--
+-- Table structure for table `z3950servers`
+--
 
 DROP TABLE IF EXISTS `z3950servers`;
-CREATE TABLE IF NOT EXISTS `z3950servers` (
+CREATE TABLE `z3950servers` (
   `host` varchar(255) default NULL,
   `port` int(11) default NULL,
   `db` varchar(255) default NULL,
@@ -2107,16 +1770,12 @@ CREATE TABLE IF NOT EXISTS `z3950servers` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
--- 
--- Structure de la table `zebraqueue`
--- 
--- Création: Mardi 16 Janvier 2007 à 14:19
--- 
+--
+-- Table structure for table `zebraqueue`
+--
 
 DROP TABLE IF EXISTS `zebraqueue`;
-CREATE TABLE IF NOT EXISTS `zebraqueue` (
+CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
   `biblio_auth_number` int(11) NOT NULL default '0',
   `operation` char(20) NOT NULL default '',
@@ -2124,118 +1783,18 @@ CREATE TABLE IF NOT EXISTS `zebraqueue` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- 
--- Contraintes pour les tables exportées
--- 
 
--- 
--- Contraintes pour la table `accountlines`
--- 
-ALTER TABLE `accountlines`
-  ADD CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `accountlines`
-  ADD CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL;
+-- SET FOREIGN_KEY_CHECKS = 1;
+-- COMMIT;
+-- SET AUTOCOMMIT = 1;
 
--- 
--- Contraintes pour la table `aqbasket`
--- 
-ALTER TABLE `aqbasket`
-  ADD CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- 
--- Contraintes pour la table `aqbooksellers`
--- 
-ALTER TABLE `aqbooksellers`
-  ADD CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `aqbooksellers`
-  ADD CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `aqorderbreakdown`
--- 
-ALTER TABLE `aqorderbreakdown`
-  ADD CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `aqorderbreakdown`
-    ADD CONSTRAINT `aqorderbreakdown_ibfk_2` FOREIGN KEY (`bookfundid`) REFERENCES `aqbookfund` (`bookfundid`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `aqorders`
--- 
-ALTER TABLE `aqorders`
-  ADD CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `aqorders`
-    ADD CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL;
-
--- 
--- Contraintes pour la table `auth_tag_structure`
--- 
-ALTER TABLE `auth_tag_structure`
-  ADD CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `biblioitems`
--- 
-ALTER TABLE `biblioitems`
-  ADD CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `borrowers`
--- 
-ALTER TABLE `borrowers`
-  ADD CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`);
-ALTER TABLE `borrowers`
-    ADD CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`);
-
--- 
--- Contraintes pour la table `branchtransfers`
--- 
-ALTER TABLE `branchtransfers`
-  ADD CONSTRAINT `branchtransfers_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `branchtransfers`
-   ADD CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `branchtransfers`
-   ADD CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `issues`
--- 
-ALTER TABLE `issues`
-  ADD CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL;
-ALTER TABLE `issues`
-    ADD CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL;
-
--- 
--- Contraintes pour la table `issuingrules`
--- 
-ALTER TABLE `issuingrules`
-  ADD CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `issuingrules`
-    ADD CONSTRAINT `issuingrules_ibfk_2` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `items`
--- 
-ALTER TABLE `items`
-  ADD CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `items`
-    ADD CONSTRAINT `items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `reserves`
--- 
-ALTER TABLE `reserves`
-  ADD CONSTRAINT `reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `reserves`
-  ADD CONSTRAINT `reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `reserves`
-  ADD CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `reserves`
-   ADD CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- 
--- Contraintes pour la table `shelfcontents`
--- 
-ALTER TABLE `shelfcontents`
-  ADD CONSTRAINT `shelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `bookshelf` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE `shelfcontents`
-    ADD CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+-- Dump completed on 2007-03-12 16:24:34

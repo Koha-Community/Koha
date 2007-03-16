@@ -637,7 +637,7 @@ sub FindDuplicate {
 #     warn "record :".$record->as_formatted." authtattoreport :$auth_tag_to_report";
     # build a request for authoritysearch
     my $query='at='.$authtypecode.' ';
-    map {$query.= " and he=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields();
+    map {$query.= " and he=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields() if $record->field($auth_tag_to_report);
     my ($error,$results)=SimpleSearch($query,"authorityserver");
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
@@ -950,6 +950,20 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.39  2007/03/16 01:25:08  kados
+# Using my precrash CVS copy I did the following:
+#
+# cvs -z3 -d:ext:kados@cvs.savannah.nongnu.org:/sources/koha co -P koha
+# find koha.precrash -type d -name "CVS" -exec rm -v {} \;
+# cp -r koha.precrash/* koha/
+# cd koha/
+# cvs commit
+#
+# This should in theory put us right back where we were before the crash
+#
+# Revision 1.39  2007/03/12 22:16:31  kados
+# chcking for field before calling subfields
+#
 # Revision 1.38  2007/03/09 14:31:47  tipaul
 # rel_3_0 moved to HEAD
 #

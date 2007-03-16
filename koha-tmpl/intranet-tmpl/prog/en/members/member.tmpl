@@ -1,87 +1,96 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Borrowers &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<div id="hd">
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+</div>
+<div id="bd">
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+</div>
+<div id="yui-main">
+<div class="yui-b">
 
-<h1>Borrowers &rsaquo; Search Results</h1>
+<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a><!-- TMPL_IF NAME="searching" --> &rsaquo; <a>Search Results</a><!-- /TMPL_IF -->
 
-    <form name="f" action="/cgi-bin/koha/members/member.pl" method="post">
-        <label for="member">Search by name or barcode:</label>
-        <input id="member" type="text" size="25" name="member" />
-        <select name="orderby" id="orderby">
-            <option value="surname,firstname">Order by last name</option>
-            <option value="cardnumber">Order by card number</option>
-        </select>
-        <input type="submit" value="Search" />
-    </form>
-    <div>
-        Browse by last name:
-        <a href="/cgi-bin/koha/members/member.pl?member=a">A</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=b">B</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=c">C</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=d">D</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=e">E</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=f">F</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=g">G</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=h">H</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=i">I</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=j">J</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=k">K</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=l">L</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=m">M</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=n">N</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=o">O</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=p">P</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=q">Q</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=r">R</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=s">S</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=t">T</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=u">U</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=v">V</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=w">W</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=x">X</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=y">Y</a>
-        <a href="/cgi-bin/koha/members/member.pl?member=z">Z</a>
-    </div>
+<form name="f" action="/cgi-bin/koha/members/member.pl" method="post">
+    <label for="member">Search by name or barcode:</label>
+    <input id="member" type="text" size="25" name="member" />
+    order by:
+    <select name="orderby" id="orderby">
+    <option value="surname,firstname">Surname</option>
+    <option value="cardnumber">Cardnumber</option>
+    </select>
+    <input type="submit" value="Search" />
+</form>
+<div>
+    Browse by last name:
+    <a href="/cgi-bin/koha/members/member.pl?member=a">A</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=b">B</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=c">C</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=d">D</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=e">E</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=f">F</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=g">G</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=h">H</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=i">I</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=j">J</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=k">K</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=l">L</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=m">M</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=n">N</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=o">O</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=p">P</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=q">Q</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=r">R</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=s">S</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=t">T</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=u">U</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=v">V</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=w">W</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=x">X</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=y">Y</a>
+    <a href="/cgi-bin/koha/members/member.pl?member=z">Z</a>
+</div>
+
 <!-- TMPL_IF NAME="resultsloop" -->
 <div class="searchresults">
-	<table>
-	<tr>
-		<th>Card</th>
-		<th>Name</th>
-		<th>Cat</th>
-		<th>OD/Issues</th>
-		<th>Fines</th>
-		<th>Notes</th>
-	</tr>
-	<!-- TMPL_LOOP NAME="resultsloop" -->
-	<!-- TMPL_IF EXPR="odissue+fines > 0" -->
-	   <tr class="problem">
-	<!-- TMPL_ELSE -->
-	   <tr>
-	<!-- /TMPL_IF -->
-		<td><!-- TMPL_VAR NAME="cardnumber" --></td>
-		<td><p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a></p>
-		<p><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city --></p> </td>
-		<td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
-		<td><!-- TMPL_VAR NAME="odissue" --></td>
-		<td><!-- TMPL_VAR NAME="fines" --></td>
-		<td><!-- TMPL_VAR NAME="borrowernotes" --></td>
-	</tr>
+    <table>
+    <tr>
+    <th>Card</th>
+    <th>Name</th>
+    <th>Cat</th>
+    <th>OD/Issues</th>
+    <th>Fines</th>
+    <th>Notes</th>
+    </tr>
+    <!-- TMPL_LOOP NAME="resultsloop" -->
+    <!-- TMPL_IF EXPR="odissue+fines > 0" -->
+    <tr class="problem">
+    <!-- TMPL_ELSE -->
+    <tr>
+    <!-- /TMPL_IF -->
+    <td><!-- TMPL_VAR NAME="cardnumber" --></td>
+    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a>
+    <!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME=city -->
+    </td>
+    <td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
+    <td><!-- TMPL_VAR NAME="odissue" --></td>
+    <td><!-- TMPL_VAR NAME="fines" --></td>
+    <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
+    </tr>
     <!-- /TMPL_LOOP -->
-</table>
+    </table>
 </div>
 <!-- TMPL_ELSE -->
-    <!-- TMPL_IF NAME="searching" -->
-    No results found
-    <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="searching" -->
+No results found
 <!-- /TMPL_IF -->
-
-    <script type="text/javascript">
-		//set the focus to the input text.    
-    	document.f.member.focus();
-    </script>
-
+<!-- /TMPL_IF -->
+<script type="text/javascript">
+//set the focus to the input text.    
+document.f.member.focus();
+</script>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

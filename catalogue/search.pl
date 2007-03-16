@@ -437,7 +437,9 @@ for (my $i=0;$i<=@servers;$i++) {
                 my $this_offset = (($j*$results_per_page)-$results_per_page);
                 my $this_page_number = $j;
                 my $highlight = 1 if ($this_page_number == $current_page_number);
+                if ($this_page_number <= $pages) {
                 push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+                }
             }
             $template->param(PAGE_NUMBERS => \@page_numbers,
                             previous_page_offset => $previous_page_offset,

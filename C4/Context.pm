@@ -138,7 +138,7 @@ Returns undef in case of error.
 sub read_config_file {
     my $fname = shift;    # Config file to read
     my $retval = {};    # Return value: ref-to-hash holding the configuration
-    my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen']);
+    my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen', 'server', 'serverinfo']);
     return $koha;
 }
 
@@ -874,6 +874,20 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.52  2007/03/16 01:25:08  kados
+# Using my precrash CVS copy I did the following:
+#
+# cvs -z3 -d:ext:kados@cvs.savannah.nongnu.org:/sources/koha co -P koha
+# find koha.precrash -type d -name "CVS" -exec rm -v {} \;
+# cp -r koha.precrash/* koha/
+# cd koha/
+# cvs commit
+#
+# This should in theory put us right back where we were before the crash
+#
+# Revision 1.52  2007/03/12 21:17:05  rych
+# add server, serverinfo as arrays from config
+#
 # Revision 1.51  2007/03/09 14:31:47  tipaul
 # rel_3_0 moved to HEAD
 #

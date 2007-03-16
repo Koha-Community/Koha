@@ -489,6 +489,7 @@ for ( my $i = 0 ; $i <= @servers ; $i++ ) {
                 my $this_page_number = $i;
                 my $highlight        = 1
                   if ( $this_page_number == $current_page_number );
+                if ($this_page_number <= $pages) {
                 push @page_numbers,
                   {
                     offset    => $this_offset,
@@ -497,6 +498,7 @@ for ( my $i = 0 ; $i <= @servers ; $i++ ) {
                     sort_by   => join " ",
                     @sort_by
                   };
+                }
             }
             $template->param(
                 PAGE_NUMBERS         => \@page_numbers,

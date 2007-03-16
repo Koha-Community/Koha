@@ -35,31 +35,31 @@ my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
 my ($template, $loggedinuser, $cookie);
 if($quicksearch){
-	($template, $loggedinuser, $cookie)
+    ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member-quicksearch-results.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {borrowers => 1},
+                 debug => 1,
+                 });
 } else {
-	($template, $loggedinuser, $cookie)
+    ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {borrowers => 1},
+                 debug => 1,
+                 });
 }
 my $theme = $input->param('theme') || "default";
-			# only used if allowthemeoverride is set
+            # only used if allowthemeoverride is set
 #my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
-	# FIXME - Error-checking
+    # FIXME - Error-checking
 #my $template = HTML::Template->new( filename => $tmpldata{'path'},
-#				    die_on_bad_params => 0,
-#				    loop_context_vars => 1 );
+#                   die_on_bad_params => 0,
+#                   loop_context_vars => 1 );
 
 
 my $member=$input->param('member');
@@ -73,11 +73,11 @@ my ($count,$results);
 
 if(length($member) == 1)
 {
-	($count,$results)=BornameSearch($env,$member,$orderby,"simple");
+    ($count,$results)=BornameSearch($env,$member,$orderby,"simple");
 }
 else
 {
-	($count,$results)=BornameSearch($env,$member,$orderby,"advanced");
+    ($count,$results)=BornameSearch($env,$member,$orderby,"advanced");
 }
 
 
@@ -88,37 +88,38 @@ for (my $i=0; $i < $count; $i++){
   my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowernumber'});
 
   my %row = (
-  	background => $background,
-	count => $i+1,
-        borrowernumber => $results->[$i]{'borrowernumber'},
-        cardnumber => $results->[$i]{'cardnumber'},
-        surname => $results->[$i]{'surname'},
-        firstname => $results->[$i]{'firstname'},
-        categorycode => $results->[$i]{'categorycode'},
-        category_type => $results->[$i]{'category_type'},
-        category_description => $results->[$i]{'description'},
-        streetaddress => $results->[$i]{'streetaddress'},
-        city => $results->[$i]{'city'},
-        branchcode => $results->[$i]{'branchcode'},
-		overdues => $od,
-		issues => $issue,
-        odissue => "$od/$issue",
-        fines =>  sprintf("%.2f",$fines),
-        borrowernotes => $results->[$i]{'borrowernotes'},
-        sort1 => $results->[$i]{'sort1'},
-        sort2 => $results->[$i]{'sort2'},
-        );
+    background => $background,
+    count => $i+1,
+    borrowernumber => $results->[$i]{'borrowernumber'},
+    cardnumber => $results->[$i]{'cardnumber'},
+    surname => $results->[$i]{'surname'},
+    firstname => $results->[$i]{'firstname'},
+    categorycode => $results->[$i]{'categorycode'},
+    category_type => $results->[$i]{'category_type'},
+    category_description => $results->[$i]{'description'},
+    streetaddress => $results->[$i]{'streetaddress'},
+    city => $results->[$i]{'city'},
+    branchcode => $results->[$i]{'branchcode'},
+    overdues => $od,
+    issues => $issue,
+    odissue => "$od/$issue",
+    fines =>  sprintf("%.2f",$fines),
+    borrowernotes => $results->[$i]{'borrowernotes'},
+    sort1 => $results->[$i]{'sort1'},
+    sort2 => $results->[$i]{'sort2'},
+    );
   if ( $background ) { $background = 0; } else {$background = 1; }
   push(@resultsdata, \%row);
 }
 
 $template->param( 
-			member          => $member,
-			numresults		=> $count,
-			resultsloop     => \@resultsdata,
-			intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-			);
+        searching       => "1",
+        member          => $member,
+        numresults      => $count,
+        resultsloop     => \@resultsdata,
+        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+        IntranetNav => C4::Context->preference("IntranetNav"),
+            );
 
 output_html_with_http_headers $input, $cookie, $template->output;

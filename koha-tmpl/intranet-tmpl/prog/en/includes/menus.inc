@@ -2,8 +2,7 @@
     <a href="#" onclick="javascript:window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes');">[?]</a>
 </div>
 <div id="mainmenu">
-<h3><a href="/cgi-bin/koha/mainpage.pl">Koha
-intranet</a></h3>
+<h3><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h3>
     <!-- TMPL_IF NAME="CAN_user_circulate" -->
     <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
     <ul>

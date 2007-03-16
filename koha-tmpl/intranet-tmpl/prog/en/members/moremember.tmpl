@@ -1,40 +1,40 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Borrower's Details</title>
+<title>Koha &rsaquo; Borrower's Details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
 <!-- TMPL_IF NAME="unknowuser" -->
-    <p>This borrower doesn't exist anymore.<a href="javascript:back();">Go Back</a></p>
+    This borrower doesn't exist anymore.<a href="javascript:back();">Go Back</a>
 <!-- TMPL_ELSE -->
+<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a> &rsaquo; <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
 
-<h1><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h1>
-	<form name="form">
-	<input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->"> 
-	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-	</form>
+<form action="" name="form">
+<input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->"/> 
+<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+</form>
 <div id="action">
     <div class="edit">
         <!-- TMPL_IF name="adultborrower" -->
-            <a href="/cgi-bin/koha/members/memberentry.pl?op=add&guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&category_type=C">
+        <a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">
             Add child
             </a> 
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="category_type" -->
             <!--TMPL_IF NAME="guarantor"-->
-                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->&category_type=<!-- TMPL_VAR NAME="category_type"-->">
+                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">
             <!--TMPL_ELSE-->
-            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&category_type=<!-- TMPL_VAR NAME="category_type"-->">
+            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">
             <!--/TMPL_IF-->
         Edit
             </a>
         <!-- TMPL_ELSE --> <!-- try with categorycode if no category_type -->
             <!-- TMPL_IF NAME="categorycode" -->
-            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&categorycode=<!-- TMPL_VAR NAME="categorycode"-->">
+            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode"-->">
                 Edit
             </a>
             <!-- TMPL_ELSE --> <!-- if no categorycode, set category_type to A by default -->
-                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&category_type=A">
+                <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=A">
                     Edit
                 </a>
             <!-- /TMPL_IF -->
@@ -66,7 +66,7 @@
     </div>
     <div class="others">
         <!-- TMPL_IF NAME="CAN_user_parameters"-->
-        <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&module=MEMBERS&action=MODIFY&object=<!-- TMPL_VAR NAME="borrowernumber"-->">Modification log</a>
+        <a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;module=MEMBERS&amp;action=MODIFY&amp;object=<!-- TMPL_VAR NAME="borrowernumber"-->">Modification log</a>
         <!-- /TMPL_IF -->
     </div>
 </div>
@@ -213,7 +213,7 @@
     <table>
         <tr>
             <th scope="col">Title</th>
-            <th scope="col">Due</th>
+            <th scope="col">Date due</th>
             <th scope="col">Itemtype</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
@@ -277,10 +277,10 @@
             <td colspan="3">&nbsp;</td>
         </tr>
         </table>
-            <div id="action">
-            <input type="submit" name="renew_checked" value="Renew Checked Items" />
-            <input type="submit" name="renew_all" value="Renew All" />
-            </div>
+        <div>
+        <input type="submit" name="renew_checked" value="Renew checked items" />
+        <input type="submit" name="renew_all" value="Renew all" />
+        </div>
     </form>
     </div>
 <!-- TMPL_IF NAME="reservloop" -->
@@ -334,11 +334,9 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 	<!-- /TMPL_IF -->
-</div>
-
 <script type="text/javascript">
 function confirm_deletion() {
-    var is_confirmed = window.confirm('Do you confirm deletion ?');
+    var is_confirmed = window.confirm('Click OK to confirm deletion');
     var borrowernumbervalue=document.form.borrowernumber.value; 
    
     if (is_confirmed) {
@@ -347,10 +345,10 @@ function confirm_deletion() {
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm('Do you confirm re_registration ?');
+    var is_confirmed = window.confirm('Click OK to confirm renewal');
     var borrowernumbervalue1=document.form.borrowernumber.value;
     if (is_confirmed) {
-    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber='+borrowernumbervalue1+'';
+    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber='+borrowernumbervalue1+'';
     }
 }
 </script>

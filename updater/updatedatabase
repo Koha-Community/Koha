@@ -1101,6 +1101,12 @@ my %indexes = (
             content => 'itemnumber',
         }
     ],
+	userflags => [
+		{ 	indexname => 'PRIMARY',
+			content => 'bit',
+			type => 'PRI',
+		}
+	]
 );
 
 my %foreign_keys = (
@@ -1962,6 +1968,20 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.159  2007/03/16 01:25:09  kados
+# Using my precrash CVS copy I did the following:
+#
+# cvs -z3 -d:ext:kados@cvs.savannah.nongnu.org:/sources/koha co -P koha
+# find koha.precrash -type d -name "CVS" -exec rm -v {} \;
+# cp -r koha.precrash/* koha/
+# cd koha/
+# cvs commit
+#
+# This should in theory put us right back where we were before the crash
+#
+# Revision 1.159  2007/03/12 17:52:30  rych
+# add pri key to userflags
+#
 # Revision 1.158  2007/03/09 15:14:57  tipaul
 # rel_3_0 moved to HEAD
 #
