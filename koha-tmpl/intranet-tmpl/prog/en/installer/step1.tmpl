@@ -1,13 +1,15 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Web Installer &rsaquo; Step 1
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Web Installer &rsaquo; Step 1</title>
 <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
+<div>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/en/images/koha.org-logo.gif" /></h1>
 <h1>Koha &rsaquo; Web Installer &rsaquo; Step 1</h1>
 <!--TMPL_UNLESS Name="language"-->
 <p>You are about to install Koha.</p>
-<form name="language" method="post">
 
 <p>Please pick up your language from the following list. If your langauge is not
 listed, please inform your systems administrator.</p>
-
+<form name="language" method="post">
 <select name="language">
   <!--TMPL_LOOP Name="languages"-->
   <option value="<!--TMPL_VAR Name="value" -->""><!--TMPL_VAR Name="description"-->

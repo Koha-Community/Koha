@@ -1,4 +1,3 @@
-</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <style type="text/css" media="screen">
@@ -60,6 +59,4 @@ td input { font-size: 1.5em; }
 
 </style>
 </head>
-
 <body>
-<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/en/images/koha.org-logo.gif" /></h1>

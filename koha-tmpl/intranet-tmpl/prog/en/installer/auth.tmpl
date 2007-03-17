@@ -1,10 +1,13 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --></title>
-    <!-- TMPL_IF NAME="nopermission" -->Koha &rsaquo; Error: Access Denied<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="timed_out" -->Koha &rsaquo; Error: Session Timed Out --<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="different_ip" -->Koha &rsaquo; Error: IP Address Change -- <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="invalid_username_or_password" -->Koha &rsaquo; Error Invalid Username or Password -- <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="loginprompt" -->Koha &rsaquo; Welcome to the Koha Web Installer<!-- /TMPL_IF -->
-    <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title><!-- TMPL_IF NAME="nopermission" -->Koha &rsaquo; Error: Access Denied<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="timed_out" -->Koha &rsaquo; Error: Session Timed Out --<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="different_ip" -->Koha &rsaquo; Error: IP Address Change -- <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="invalid_username_or_password" -->Koha &rsaquo; Error Invalid Username or Password -- <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="loginprompt" -->Koha &rsaquo; Welcome to the Koha Web Installer<!-- /TMPL_IF --></title>
+
+<!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
+<div>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/en/images/koha.org-logo.gif" /></h1>
 <!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesn't have permission --><h3>Login Error</h3>
 <p>Sorry, Koha doesn't think you have permission for this page.</p>
@@ -34,9 +37,9 @@
 <h3>Welcome to the Koha Web Installer</h3>
 <p>Before we begin, please verify you have the correct credentials to continue. Please log in
 with the username and password given to you by your systems administrator and located in your
-<code>koha.xml</code>.</p>
+<code>koha.xml</code> configuration file.</p>
 <table>
-	<caption>Please enter your username and password</caption>
+	<caption>Please enter your username and password:</caption>
     <tr><th scope="row"><label for="userid">Username:</label></th><td><input name="userid" id="userid" /></td></tr>
     <tr><th scope="row"><label for="password">Password:</label></th><td><input type="password" name="password" id="password" /></td></tr>
     </table>
