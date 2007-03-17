@@ -220,9 +220,13 @@ if ($step && $step==1){
     #Framework importing and reports
     my $lang;
     my %hashlevel;
+   # sort by filename -> prepend with numbers to specify order of insertion. 
     
-	foreach my $file ($query->param('framework')){
-      undef $/;
+	my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] <=> $bb[-1] } $query->param('framework')  ;
+	
+	foreach my $file (@fnames){
+     warn $file;
+	 undef $/;
       my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
       my $str = qx($strcmd < $file 2>&1);
       my @file = split qr(\/|\\),$file;
@@ -289,8 +293,9 @@ if ($step && $step==1){
         utf8::encode($lines) unless (utf8::is_utf8($lines));
         push @frameworklist,{'fwkname'=>$name, 'fwkfile'=>"$dir/$_",'fwkdescription'=>$lines};
       } @listname;
+	  my @fwks = sort { $a->{'fwkname'} <=> $b->{'fwkname'} } @frameworklist;
       $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
-      $cell{"frameworks"}=\@frameworklist;
+      $cell{"frameworks"}=\@fwks;
       $cell{"label"}=ucfirst($requirelevel);
       $cell{"code"}=lc($requirelevel);
       push @levellist,\%cell;
