@@ -20,64 +20,64 @@
 <th colspan="2">Basic parameters</th>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/branches.pl">Library branches</a></td>
-	<td>The different branches you manage with this Koha server.</td>
+	<td><a href="/cgi-bin/koha/admin/branches.pl">Libraries and branches</a></td>
+	<td>Define libraries and branches.</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/aqbookfund.pl">Book funds</a></td>
-	<td>Book fund administration. Remember to edit your book funds before you start editing the budgets.</td>
+	<td><a href="/cgi-bin/koha/admin/aqbookfund.pl">Accounts and budgets</a></td>
+	<td>Accounts and budgets administration for acquisitions.</td>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></td>
-	<td>Define exchange rates.</td>
+	<td>Define exchange rates used for acquisitions.</td>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></td>
-	<td>Define item types.</td>
+	<td>Define item types used for circulation rules.</td>
 </tr>
 
 <tr>
-<th colspan="2">Patrons and circulation</th>
+<th colspan="2">Borrowers and circulation</th>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/categorie.pl">Borrower categories</a></td>
-	<td>Define the categories of borrowers.</td>
+	<td>Define borrower categories.</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/cities.pl">City</a></td>
-	<td>Define cities. Fill it to get a list of cities to create your patrons quicker.</td>
+	<td><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></td>
+	<td>Define cities and towns that your borrowers live in.</td>
 </tr>	
 <tr>
-	<td><a href="/cgi-bin/koha/admin/roadtype.pl" >Road Type</a>
+	<td><a href="/cgi-bin/koha/admin/roadtype.pl" >Road types</a>
 	</td>
-	<td>Define road types. Fill this table to get a list of road types (will help Geographic stats)</td>
+	<td>Define road types. Fill this table to get a list of road types when adding/editing borrowers (can be used in Geographic statistics).</td>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></td>
-	<td>Define issuing rules for branches / borrowers / item types (nb of issues, duration, cost...)</td>
+	<td>Define issuing rules in a matrix for branches / borrowers / item types (number of issues, duration, cost...).</td>
 </tr>
 <tr>
 <th colspan="2">Catalogue</th>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></td>
-	<td>Define categories and authorised values for them. Authorised values are used in MARC form to limit and help editing MARC biblios.</td>
+	<td>Define categories and authorised values for them.</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/authtypes.pl">Thesaurus Structure</a></td>
-	<td>Define categories and thesaurus/authority MARC structure.</td>
+	<td><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></td>
+	<td>Create and manage Bibliographic frameworks that define the characteristics of your MARC Records (field and subfield definitions).</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio framework (MARC structure)</a></td>
-	<td>the frameworks defined for the MARC editor. Create frameworks, then define the MARC structure (fields &amp; subfields)</td>
+	<td><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha -> MARC mapping</a></td>
+	<td>Define the mappingbetween the Koha transactional database (SQL) and the MARC Bibliographic records. Note that the mapping can be defined through MARC Bibliographic Framework. This tool is just a shortcut to speed up linkage.</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Links Koha - MARC DB</a></td>
-	<td>Define links between the Koha standard DB and the MARC one. Note those links can be defined through MARC structure. This tool is just a shortcut to speed up linkage.</td>
-</tr>
+	<td><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></td>
+	<td>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition.</td></tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Check</a></td>
-	<td>Checks the MARC structure. USE IT before working with real data. It will show mistakes that can BREAK Koha's database!</td></tr>
+    <td><a href="/cgi-bin/koha/admin/authtypes.pl">MARC Authorities framework</a></td>
+    <td>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).</td>
+</tr>
 
 <tr>
 <th colspan="2">Various parameters</th>
@@ -87,8 +87,8 @@
 	<td>Printers (UNIX paths).</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Servers</a></td>
-	<td>Servers to query for MARC data.</td>
+	<td><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a></td>
+	<td>Define which servers to query for MARC data in the integrated Z39.50 client.</td>
 </tr>
 </table>
 
