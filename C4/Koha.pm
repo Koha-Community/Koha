@@ -760,6 +760,8 @@ SELECT lib,
 
 sub displaySortby {
     my ($sort_by) = @_;
+    $sort_by =~ s/</\&lt;/;
+    $sort_by =~ s/>/\&gt;/;
     my $sort_by_loop = [
         { value => "1=9523 &gt;i", label => "Popularity (Most to Least)" },
         { value => "1=9523 &lt;i", label => "Popularity (Least to Most)" },
