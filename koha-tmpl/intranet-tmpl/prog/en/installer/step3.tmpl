@@ -117,10 +117,10 @@ function Hide(link) {
   </p>
 <!--/TMPL_IF-->
 <!--TMPL_IF Name="addframeworks"-->
-  <h2 align="center">Data added</h2>
+  <h2 align="center">Results of installation:</h2>
   <p>Language :<!--TMPL_VAR Name="fwklanguage"--></p>
   <!--TMPL_LOOP Name="list"-->
-  <h3> <!--TMPL_VAR Name="level"--></h3>
+  <h3><!--TMPL_VAR Name="level"--> data added</h3>
   <p>
   <ul>
   <!--TMPL_LOOP Name="fwklist"-->
@@ -131,7 +131,6 @@ function Hide(link) {
   <!--/TMPL_LOOP-->
   <p>Installation complete.<br/>
     <p>Click on Finish to complete and load the Koha Staff Interface.
-    The installer will be disabled for security reasons.
     <form name="finish">
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="finish" />
