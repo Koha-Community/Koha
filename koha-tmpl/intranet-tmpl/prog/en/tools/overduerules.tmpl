@@ -3,14 +3,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
 
-	<h1>Defining <!-- TMPL_IF NAME="branch" -->overdue rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default overdue rules<!-- /TMPL_IF --></h1>
+	<h1>Defining <!-- TMPL_IF NAME="branch" -->overdue actions for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default overdue actions<!-- /TMPL_IF --></h1>
 	<div class="help">
-		<p>Overdue will be taken into account provided that you input delays as numbers only.</p>
-		<p>Delay is a number of days for the older issue to be taken into account before doing an action (Sending a letter)</p>
-		<p>If you want Koha to do an action (send a letter or debar member), delay is needed.</p>
-		<p>Column 1 is supposed to be filled in first, then Second one then Third one.</p>
+		<p>Delay is the number of days after an issue is due before an action is triggered. </p>
+		<p>If you want Koha to trigger an action (send a letter or debar member), delay is needed.</p>
+		<p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
 	</div>
 		<form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
 		<label for="branch">Select a branch :</label>
@@ -21,21 +20,22 @@
 			<input type="submit" value="Select" />
 		</form>
 		<!--TMPL_IF Name="ERROR"-->
+		<div class="error">
 		<h3>Data error</h3>
 			<p>The following fields have a forbidden value. Correct them and press OK again :</p><ul>
 			<!-- TMPL_IF NAME="ERRORDELAY" -->
-				<li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="bor"--> borrower category have some unexpected characters. There should be only numerical characters. </li>
+				<li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="bor"--> borrower category has some unexpected characters. There should be only numerical characters. </li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERRORORDER" -->
 				<li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="bor"--> borrower category </li>
-			<!-- /TMPL_IF -->
-			</ul>
+		<!-- /TMPL_IF -->
+			</ul></div>
 		<!--/TMPL_IF -->
 		<form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
 			<input type="hidden" name="op" value="save" />
 			
 			<table>
-			<caption>Defining Overdue rules for <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default branch <!--/TMPL_IF-->		<!--TMPL_IF Name="datasaved"-->
+			<caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default branch <!--/TMPL_IF-->		<!--TMPL_IF Name="datasaved"-->
 		<br /><h3 align="center">INPUT SAVED</h3>
 		<!--/TMPL_IF -->
 			</caption>
@@ -43,7 +43,7 @@
 				<th>&nbsp;</th><th colspan="3" scope="col">First</th><th colspan="3" scope="col">Second</th><th colspan="3" scope="col">Third</th>
 			</tr>
 			<tr>
-				<th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debarred</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debarred</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debarred</th>
+				<th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="table" -->
 				<tr>
