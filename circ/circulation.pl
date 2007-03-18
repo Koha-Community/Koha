@@ -65,7 +65,7 @@ my $printer = GetPrinter($query, $printers);
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
-$findborrower =~ s|'| |g;
+#$findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrowernumber');
 
 # new op dev the branch and the printer are now defined by the userenv
