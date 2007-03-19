@@ -18,30 +18,60 @@
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-    <!-- TMPL_LOOP NAME="loop" -->
-    <div class="data <!-- TMPL_VAR NAME="toggle" -->">
-    <fieldset>
-        <legend>Tag <!-- TMPL_VAR NAME="tagfield" -->, Subfield <!-- TMPL_VAR NAME="tagsubfield" --></legend>
-        <h3>MARC constraints</h3>
-            <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
-            <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
-            <p><label for="seealso<!-- TMPL_VAR NAME="row" -->">Search also</label><input type="text" id="seealso<!-- TMPL_VAR NAME="row" -->" name="seealso" value="<!-- TMPL_VAR name="seealso" -->" size="20" /> (example for 200a: '200c','200d','200e'...)</p>
-            <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></p>
-        <h3>Editor constaints</h3>
-            <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
-            <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
-            <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
-            <p><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</label></p>
-            <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</p>
-            <p><label>Link</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple:200b)</p>
-            <p><label>Others Options: <p>(choose one)</p></label>
-                <p><label>Authorized Value</label><!-- TMPL_VAR NAME="authorised_value" --></p>
-                <p><label>Thesaurus</label><!-- TMPL_VAR NAME="authtypes" --></p>
-                <p><label>Plugin</label><!-- TMPL_VAR NAME="value_builder" --></p>
-            </p>
-    </fieldset>
-    <!-- /TMPL_LOOP -->
     <input type="submit" value="Save Changes" />
+    
+    <h3>Tag <!-- TMPL_VAR NAME="tagfield" --></h3>
+    <b>Edit subfields :</b>
+    <div id="tabs">
+        <!-- TMPL_LOOP NAME="loop" -->
+           <!-- TMPL_IF NAME="subfieldcode"-->
+               <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" />
+               <a 
+                    href="javascript:active('sub<!-- TMPL_VAR NAME='subfieldcode' -->');"
+                    class="tab_inactive"
+                    id="sub<!-- TMPL_VAR NAME="subfieldcode" -->"
+                    title="<!-- TMPL_VAR NAME="liblibrarian" -->"
+                >
+                    <!-- TMPL_VAR NAME="subfieldcode" -->
+               </a>
+           <!-- /TMPL_IF -->
+           <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="content" style="display:block">
+        <!-- TMPL_LOOP NAME="loop" --> 
+        <!-- TMPL_IF NAME="subfieldcode"-->
+        <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+        
+        <h3>Basic constaints</h3>
+                <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
+                <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
+                <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
+                <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
+                <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
+                
+                <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
+               
+            <span id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+                <h3>Advanced constraint</h3>
+                <p>
+                    <label for="defaultvalue">default value</label>
+                    <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" />
+                </p>
+                <p><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</label></p>
+                <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</p>
+                <p><label>Link</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple:200b)</p>
+                <p><label>Others Options: <p>(choose one)</p></label>
+                    <p><label>Authorized Value</label><!-- TMPL_VAR NAME="authorised_value" --></p>
+                    <p><label>Thesaurus</label><!-- TMPL_VAR NAME="authtypes" --></p>
+                    <p><label>Plugin</label><!-- TMPL_VAR NAME="value_builder" --></p>
+                </p>
+                <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></p>
+            </span>
+        </div>
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    </div>
     </form>
 <!-- /TMPL_IF -->
 
@@ -134,5 +164,47 @@
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
+<script language="JavaScript" type="text/javascript">
+
+function active(numlayer){
+    var contentdiv   = document.getElementById("content");
+    var subfields    = contentdiv.getElementsByTagName("div");
+    var numSubfield  = subfields.length;
+    var tabs = document.getElementById("tabs").getElementsByTagName('a');
+
+    // all others must be hidden
+    for (i=0; i < numSubfield ; i++ ) {
+        if (subfields[i].getAttribute('id') == "content_"+numlayer) {
+        
+            // display this subfield
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_visible");
+            
+            // change css class
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_active");
+            
+        } else {
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_inactive");
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_hidden");
+        }
+    }
+}
+
+
+function displayMoreConstraint(numlayer){
+    var thisdiv = document.getElementById(numlayer);
+    if(thisdiv.getAttribute("class") == "content_hidden"){
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_visible");
+    } else {
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_hidden");
+    }
+}
+
+</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

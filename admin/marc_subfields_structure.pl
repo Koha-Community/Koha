@@ -175,6 +175,7 @@ if ( $op eq 'add_form' ) {
         else {
             $toggle = 1;
         }
+        $row_data{defaultvalue} = $data->{defaultvalue};
         $row_data{tab} = CGI::scrolling_list(
             -name   => 'tab',
             -id     => "tab$i",
@@ -204,6 +205,7 @@ if ( $op eq 'add_form' ) {
           . "<input type=\"hidden\" name=\"tagsubfield\" value=\""
           . $data->{'tagsubfield'}
           . "\" id=\"tagsubfield\">";
+        $row_data{subfieldcode} = $data->{'tagsubfield'};
         $row_data{liblibrarian} = CGI::escapeHTML( $data->{'liblibrarian'} );
         $row_data{libopac}      = CGI::escapeHTML( $data->{'libopac'} );
         $row_data{seealso}      = CGI::escapeHTML( $data->{'seealso'} );
@@ -270,7 +272,7 @@ if ( $op eq 'add_form' ) {
         );
         $row_data{row}    = $i;
         $row_data{toggle} = $toggle;
-        $row_data{link}   = CGI::escapeHTML( $data->{'link'} );
+        $row_data{link}   = CGI::escapeHTML( $data->{'link'} ); 
         push( @loop_data, \%row_data );
         $i++;
     }
@@ -392,8 +394,8 @@ elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
     my $sth = $dbh->prepare(
-"replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link)
-                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+"replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
+                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
     );
     my @tagsubfield       = $input->param('tagsubfield');
     my @liblibrarian      = $input->param('liblibrarian');
@@ -406,7 +408,8 @@ elsif ( $op eq 'add_validate' ) {
     my @authtypecodes     = $input->param('authtypecode');
     my @value_builder     = $input->param('value_builder');
     my @link              = $input->param('link');
-
+    my @defaultvalue      = $input->param('defaultvalue');
+    
     for ( my $i = 0 ; $i <= $#tagsubfield ; $i++ ) {
         my $tagfield    = $input->param('tagfield');
         my $tagsubfield = $tagsubfield[$i];
@@ -424,7 +427,8 @@ elsif ( $op eq 'add_validate' ) {
         my $hidden = $hidden[$i];                     #input->param("hidden$i");
         my $isurl  = $input->param("isurl$i") ? 1 : 0;
         my $link   = $link[$i];
-
+        my $defaultvalue = $defaultvalue[$i];
+        
         if ($liblibrarian) {
             unless ( C4::Context->config('demo') eq 1 ) {
                 $sth->execute(
@@ -443,8 +447,8 @@ elsif ( $op eq 'add_validate' ) {
                     $hidden,
                     $isurl,
                     $frameworkcode,
-
                     $link,
+                    $defaultvalue,
                 );
             }
         }
@@ -561,10 +565,5 @@ else {    # DEFAULT
             next => "<a href=\"$script_name?offset=$nextpage\">" );
     }
 }    #---- END $OP eq DEFAULT
-$template->param(
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
-);
+
 output_html_with_http_headers $input, $cookie, $template->output;

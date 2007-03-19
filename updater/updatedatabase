@@ -949,6 +949,15 @@ my %fielddefinitions = (
             extra  => '',
         },
     ],
+    marc_subfield_structure => [
+        {
+            field => 'defaultvalue',
+            type  => 'TEXT',
+            null  => 'NULL',
+            key    => '',
+            extra  => '',
+        }
+    ],
     opac_news => [
         {
             field  => 'expirationdate',
@@ -1968,6 +1977,10 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.160  2007/03/19 18:35:13  toins
+#  - adding default value in marc_subfield_structure.
+#  - now marc_subfields_structure displays subfields in tab view.
+#
 # Revision 1.159  2007/03/16 01:25:09  kados
 # Using my precrash CVS copy I did the following:
 #
