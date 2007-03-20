@@ -29,21 +29,22 @@ use CGI;
 use C4::Members;
 use C4::Accounts;
 
-
 my $input=new CGI;
 
 my $borrowernumber=$input->param('borrowernumber');
-#get borrower details
+
+# get borrower details
 my $data=borrdata('',$borrowernumber);
 my $add=$input->param('add');
+
 if ($add){
 #  print $input->header;
-  my $itemnum=$input->param('itemnum');
-  my $desc=$input->param('desc');
-  my $amount=$input->param('amount');
-  my $type=$input->param('type');
-  manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
-  print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    my $itemnum=$input->param('itemnum');
+    my $desc=$input->param('desc');
+    my $amount=$input->param('amount');
+    my $type=$input->param('type');
+    manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
+    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 } else {
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "members/maninvoice.tmpl",
@@ -53,10 +54,13 @@ if ($add){
 					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
-	$template->param(borrowernumber => $borrowernumber);
-	print $input->header(
+	$template->param(
+                    borrowernumber => $borrowernumber,
+                    firstname => $data->{'firstname'},
+                    surname  => $data->{'surname'},
+    );
+    print $input->header(
 	    -type => guesstype($template->output),
 	    -cookie => $cookie
-	),$template->output;
-
+    ),$template->output;
 }
