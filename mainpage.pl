@@ -47,18 +47,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => {
-    #        catalogue        => 1,
-    #        circulate        => 1,
-    #        parameters       => 1,
-    #        borrowers        => 1,
-    #        permissions      => 1,
-    #        reserveforothers => 1,
-    #        borrow           => 1,
-    #        reserveforself   => 1,
-    #        editcatalogue    => 1,
-    #        updatecharges    => 1,
+        catalogue        => 1,
+        circulate        => 1,
+        borrowers        => 1,
         },
-        debug => 1,
     }
 );
 
