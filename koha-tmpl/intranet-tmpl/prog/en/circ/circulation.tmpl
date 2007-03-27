@@ -585,8 +585,12 @@ No patron matched <!-- TMPL_VAR name="message" -->
         </select>
         
         <label for="stickyduedate">
-            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />
+	<!-- TMPL_IF NAME="stickyduedate" -->
+            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> checked />
             Remember due date for this borrower
+<!-- TMPL_ELSE -->
+            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />
+<!-- /TMPL_IF -->
             </label>
         </p>
 
