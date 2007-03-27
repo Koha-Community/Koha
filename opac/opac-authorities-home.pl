@@ -56,17 +56,18 @@ foreach my $thisauthtype ( sort { $authtypes->{$a} <=> $authtypes->{$b} }
 }
 
 if ( $op eq "do_search" ) {
-    my @marclist  = $query->param('marclist');
-    my @and_or    = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator  = $query->param('operator');
-    my @value     = $query->param('value');
+	my @marclist = $query->param('marclist');
+	my @and_or = $query->param('and_or');
+	my @excluding = $query->param('excluding');
+	my @operator = $query->param('operator');
+	my $orderby = $query->param('orderby');
+	my @value = $query->param('value');
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 19 if ( !defined $resultsperpage );
     my @tags;
     my ( $results, $total, @fields ) =
-      authoritysearch( $dbh, \@marclist, \@and_or, \@excluding, \@operator,
+      authoritysearch( \@marclist, \@and_or, \@excluding, \@operator,
         \@value, $startfrom * $resultsperpage,
         $resultsperpage, $authtypecode );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
