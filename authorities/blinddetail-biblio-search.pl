@@ -57,13 +57,13 @@ my $dbh=C4::Context->dbh;
 my $authid = $query->param('authid');
 my $index = $query->param('index');
 my $tagid = $query->param('tagid');
-my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
-my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
+my $authtypecode = &AUTHfind_authtypecode($authid);
+my $tagslib = &AUTHgettagslib(1,$authtypecode);
 
 my $auth_type = AUTHgetauth_type($authtypecode);
  warn "XX = ".$auth_type->{auth_tag_to_report};
 
-my $record =AUTHgetauthority($dbh,$authid);
+my $record =AUTHgetauthority($authid);
   warn "record auth :".$record->as_formatted;
 # open template
 my ($template, $loggedinuser, $cookie)

@@ -147,7 +147,7 @@ if ( $op eq "do_search" ) {
 }
 elsif ( $op eq "delete" ) {
 
-    &AUTHdelauthority( $dbh, $authid, 1 );
+    &AUTHdelauthority( $authid, 1 );
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {

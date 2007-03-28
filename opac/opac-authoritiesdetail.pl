@@ -19,7 +19,7 @@
 
 =head1 NAME
 
-etail.pl : script to show an authority in MARC format
+opac-authoritiesdetail.pl : script to show an authority in MARC format
 
 =head1 SYNOPSIS
 
@@ -54,8 +54,8 @@ my $query = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $authid       = $query->param('authid');
-my $authtypecode = &AUTHfind_authtypecode( $dbh, $authid );
-my $tagslib      = &AUTHgettagslib( $dbh, 1, $authtypecode );
+my $authtypecode = &AUTHfind_authtypecode( $authid );
+my $tagslib      = &AUTHgettagslib( 1, $authtypecode );
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -88,7 +88,7 @@ if ( C4::Context->preference("AuthDisplayHierarchy") ) {
 
             #       warn "tree :$element";
             my %cell;
-            my $elementdata = AUTHgetauthority( $dbh, $element );
+            my $elementdata = AUTHgetauthority( $element );
             $record = $elementdata if ( $authid == $element );
             push @loophierarchy,
               BuildUnimarcHierarchy( $elementdata, "child" . $cnt, $authid );
@@ -103,7 +103,7 @@ if ( C4::Context->preference("AuthDisplayHierarchy") ) {
     }
 }
 else {
-    $record = AUTHgetauthority( $dbh, $authid );
+    $record = AUTHgetauthority( $authid );
 }
 my $count = AUTHcount_usage($authid);
 

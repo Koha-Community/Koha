@@ -46,11 +46,11 @@ my $dbh = C4::Context->dbh;
 # my @subf = $subfields =~ /(##\d\d\d##.)/g;
 
 $|=1; # flushes output
-my $authfrom = AUTHgetauthority($dbh,$mergefrom);
-my $authto = AUTHgetauthority($dbh,$mergeto);
+my $authfrom = AUTHgetauthority($mergefrom);
+my $authto = AUTHgetauthority($mergeto);
 
-my $authtypecodefrom = AUTHfind_authtypecode($dbh,$mergefrom);
-my $authtypecodeto = AUTHfind_authtypecode($dbh,$mergeto);
+my $authtypecodefrom = AUTHfind_authtypecode($mergefrom);
+my $authtypecodeto = AUTHfind_authtypecode($mergeto);
 
 unless ($noconfirm) {
     print "************\n";
@@ -99,13 +99,13 @@ while (my ($bibid,$tag,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder) = 
     # delete all subfields that are in the same tag/tagorder and that are in the authority (& that are not in tab ignore in the biblio)
     # then recreate them with the new authority.
     foreach my $subfield (@record_from) {
-        &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfield->[0]);
+        &MARCdelsubfield($bibid,$tag,$tagorder,$subfield->[0]);
     }
     &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,'9');
     foreach my $subfield (@record_to) {
-        &MARCaddsubfield($dbh,$bibid,$tag,$tag_indicator,$tagorder,$subfield->[0],$subfieldorder,$subfield->[1]);
+        &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,$subfield->[0],$subfieldorder,$subfield->[1]);
     }
-    &MARCaddsubfield($dbh,$bibid,$tag,$tag_indicator,$tagorder,'9',$subfieldorder,$mergeto);
+    &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,'9',$subfieldorder,$mergeto);
     my $biblio = GetMarcBiblio($bibid);
     print "AFTER : ".$biblio->as_formatted."\n" if $verbose;
     $nbdone++;

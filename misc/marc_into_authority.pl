@@ -68,8 +68,8 @@ my $sth2 = $dbh->prepare("UPDATE auth_header  set marc=? where authid=?" );
 while (my ($authid,$authtypecode)=$sth->fetchrow ){
  my $record = AUTHgetauthorityold($dbh,$authid);
 ##Add authid and authtypecode to record. Old records did not have these fields
-my ($authidfield,$authidsubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode);
-my ($authidfield,$authtypesubfield)=AUTHfind_marc_from_kohafield($dbh,"auth_header.authtypecode",$authtypecode);
+my ($authidfield,$authidsubfield)=AUTHfind_marc_from_kohafield("auth_header.authid",$authtypecode);
+my ($authidfield,$authtypesubfield)=AUTHfind_marc_from_kohafield("auth_header.authtypecode",$authtypecode);
 ##Both authid and authtypecode is expected to be in the same field. Modify if other requirements arise
 	$record->add_fields($authidfield,'','',$authidsubfield=>$authid,$authtypesubfield=>$authtypecode);
 $sth2->execute($record->as_usmarc,$authid);

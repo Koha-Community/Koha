@@ -121,6 +121,8 @@ push @EXPORT, qw(
   &checkitems
 );
 
+use MARC::Charset;
+MARC::Charset->ignore_errors(1);
 =head1 NAME
 
 C4::Biblio - acquisitions and cataloging management functions
@@ -492,7 +494,7 @@ sub DelBiblio {
     return $error if $error;
 
     # Delete in Zebra
-    zebraop($dbh,$biblionumber,"delete_record","biblioserver");
+    zebraop($biblionumber,"delete_record","biblioserver");
 
     # delete biblio from Koha tables and save in deletedbiblio
     $error = &_koha_delete_biblio( $dbh, $biblionumber );
@@ -1385,7 +1387,7 @@ sub MARCaddbiblio {
         $biblionumber );
 #     warn $record->as_xml_record();
     $sth->finish;
-    zebraop($dbh,$biblionumber,"specialUpdate","biblioserver");
+    zebraop($biblionumber,"specialUpdate","biblioserver");
     return $biblionumber;
 }
 
@@ -1427,7 +1429,7 @@ sub GetMarcBiblio {
     $sth->execute($biblionumber);
     my ($marcxml) = $sth->fetchrow;
 #     warn "marcxml : $marcxml";
-	MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
+    MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
     $marcxml =~ s/\x1e//g;
     $marcxml =~ s/\x1f//g;
     $marcxml =~ s/\x1d//g;
@@ -3501,8 +3503,8 @@ zebraop( $dbh, $biblionumber, $op, $server );
 
 sub zebraop {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-    my ( $dbh, $biblionumber, $op, $server ) = @_;
-
+    my ( $biblionumber, $op, $server ) = @_;
+    my $dbh=C4::Context->dbh;
     #warn "SERVER:".$server;
 #
 # true zebraop commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
@@ -3695,6 +3697,10 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.189  2007/03/28 10:39:16  hdl
+# removing $dbh as a parameter in AuthoritiesMarc functions
+# And reporting all differences into the scripts taht relies on those functions.
+#
 # Revision 1.188  2007/03/09 14:31:47  tipaul
 # rel_3_0 moved to HEAD
 #

@@ -349,7 +349,7 @@ my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 
 my $dbh = C4::Context->dbh;
-$authtypecode = &AUTHfind_authtypecode($dbh,$authid) if !$authtypecode;
+$authtypecode = &AUTHfind_authtypecode($authid) if !$authtypecode;
 
 
 my ($template, $loggedinuser, $cookie)
@@ -361,17 +361,17 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,);
-$tagslib = AUTHgettagslib($dbh,1,$authtypecode);
+$tagslib = AUTHgettagslib(1,$authtypecode);
 my $record=-1;
 my $encoding="";
-$record = AUTHgetauthority($dbh,$authid) if ($authid);
+$record = AUTHgetauthority($authid) if ($authid);
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
 my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;
 if ($authid) {
 	$is_a_modif=1;
-	($oldauthnumtagfield,$oldauthnumtagsubfield) = &AUTHfind_marc_from_kohafield($dbh,"auth_header.authid",$authtypecode);
-	($oldauthtypetagfield,$oldauthtypetagsubfield) = &AUTHfind_marc_from_kohafield($dbh,"auth_header.authtypecode",$authtypecode);
+	($oldauthnumtagfield,$oldauthnumtagsubfield) = &AUTHfind_marc_from_kohafield("auth_header.authid",$authtypecode);
+	($oldauthtypetagfield,$oldauthtypetagsubfield) = &AUTHfind_marc_from_kohafield("auth_header.authtypecode",$authtypecode);
 }
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -399,9 +399,9 @@ warn "duplicate:$duplicateauthid,$duplicateauthvalue";
 	if (!$duplicateauthid or $confirm_not_duplicate) {
 # warn "noduplicate";
 		if ($is_a_modif ) {	
-			$authid=AUTHmodauthority($dbh,$authid,$record,$authtypecode,1);		
+			$authid=AUTHmodauthority($authid,$record,$authtypecode,1);		
 		} else {
-		($authid) = AUTHaddauthority($dbh,$record,$authid,$authtypecode);
+		($authid) = AUTHaddauthority($record,$authid,$authtypecode);
 
 		}
 	# now, redirect to detail page
@@ -445,7 +445,7 @@ warn "duplicate:$duplicateauthid,$duplicateauthvalue";
 
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
-	&AUTHdelauthority($dbh,$authid);
+	&AUTHdelauthority($authid);
 	if ($nonav){
 	print $input->redirect("auth_finder.pl");
 	}else{

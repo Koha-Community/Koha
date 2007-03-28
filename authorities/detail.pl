@@ -70,8 +70,8 @@ my $authid = $query->param('authid');
 
 
 
-my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
-my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
+my $authtypecode = &AUTHfind_authtypecode($authid);
+my $tagslib = &AUTHgettagslib(1,$authtypecode);
 
 my $record;
 if (C4::Context->preference("AuthDisplayHierarchy")){
@@ -86,7 +86,7 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     my @loophierarchy;
     foreach my $element (@tree){
       my %cell;
-      my $elementdata = AUTHgetauthority($dbh,$element);
+      my $elementdata = AUTHgetauthority($element);
       $record= $elementdata if ($authid==$element);
       push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
       $cnt++;
@@ -98,7 +98,7 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     'loophierarchies' =>\@loophierarchies,
   );
 } else {
-  $record=AUTHgetauthority($dbh,$authid);
+  $record=AUTHgetauthority($authid);
 }
 my $count = AUTHcount_usage($authid);
 
