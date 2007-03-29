@@ -725,8 +725,8 @@ sub buildQuery {
 
         # these are treated as AND
         elsif ($limit_query) {
-            $limit_query       .= " and $limit" if $limit;
-            $limit_search_desc .= " and $limit" if $limit;
+            $limit_query       .= " or $limit" if $limit;
+            $limit_search_desc .= " or $limit" if $limit;
         }
 
         # otherwise, there is nothing but the limit
