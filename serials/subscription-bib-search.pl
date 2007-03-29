@@ -89,7 +89,7 @@ if ($op eq "do_search") {
     for(my $i=0;$i<$total;$i++) {
         my %resultsloop;
         my $marcrecord = MARC::File::USMARC::decode($marcrecords->[$i]);
-        my $biblio = MARCmarc2koha(C4::Context->dbh,$marcrecord,'');
+        my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 
         #build the hash for the template.
         $resultsloop{highlight}       = ($i % 2)?(1):(0);

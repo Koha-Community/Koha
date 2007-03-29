@@ -233,7 +233,7 @@ sub plugin {
         my @field_data = ($search);
         for (my $i=$startfrom; $i<=(($startfrom+$resultsperpage)<scalar(@$results)?($startfrom+$resultsperpage):scalar(@$results));$i++){
             my $record=MARC::Record::new_from_usmarc( $results->[$i] );
-            my $rechash=MARCmarc2koha($dbh,$record);
+            my $rechash=TransformMarcToKoha($dbh,$record);
             my $pos;
             my $countitems=1 if ($rechash->{itemnumber});
             while (index($rechash->{itemnumber},'|',$pos)>0){

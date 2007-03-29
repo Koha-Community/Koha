@@ -89,7 +89,7 @@ if ($op eq "export") {
         if ( $dont_export_items ) {
             # now, find where the itemnumber is stored & extract only the item
             my ( $itemnumberfield, $itemnumbersubfield ) =
-                MARCfind_marc_from_kohafield( $dbh, 'items.itemnumber', '' );
+                GetMarcFromKohaField( $dbh, 'items.itemnumber', '' );
 
             # and delete it.
             foreach ($record->field($itemnumberfield)){

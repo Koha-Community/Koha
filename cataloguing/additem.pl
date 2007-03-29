@@ -65,12 +65,12 @@ my $itemnumber = $input->param('itemnumber');
 my $op = $input->param('op');
 
 # find itemtype
-my $frameworkcode = &MARCfind_frameworkcode($biblionumber);
+my $frameworkcode = &GetFrameworkCode($biblionumber);
 
-my $tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
+my $tagslib = &GetMarcStructure($dbh,1,$frameworkcode);
 my $record = GetMarcBiblio($biblionumber);
 # warn "==>".$record->as_formatted;
-my $oldrecord = MARCmarc2koha($dbh,$record);
+my $oldrecord = TransformMarcToKoha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";
 my @errors; # store errors found while checking data BEFORE saving item.
@@ -84,11 +84,11 @@ if ($op eq "additem") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
     # if autoBarcode is ON, calculate barcode...
     if (C4::Context->preference('autoBarcode')) {
-        my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.barcode");
+        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField($dbh,"items.barcode");
         unless ($record->field($tagfield)->subfield($tagsubfield)) {
             my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
             $sth_barcode->execute;
@@ -102,7 +102,7 @@ if ($op eq "additem") {
         }
     }
 # check for item barcode # being unique
-    my $addedolditem = MARCmarc2koha($dbh,$record);
+    my $addedolditem = TransformMarcToKoha($dbh,$record);
     my $exists = get_item_from_barcode($addedolditem->{'barcode'});
     push @errors,"barcode_not_unique" if($exists);
     # if barcode exists, don't create, but report The problem.
@@ -117,7 +117,7 @@ if ($op eq "additem") {
 } elsif ($op eq "edititem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
-    $itemrecord = MARCgetitem($biblionumber,$itemnumber);
+    $itemrecord = GetMarcItem($biblionumber,$itemnumber);
     $nextop="saveitem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
@@ -145,7 +145,7 @@ if ($op eq "additem") {
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
 #    my $itemnumber = $input->param('itemnumber');
-    my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
         my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
@@ -176,8 +176,8 @@ my @fields = $temp->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",$frameworkcode);
-my ($branchtagfield,$branchtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.homebranch",$frameworkcode);
+my ($itemtagfield,$itemtagsubfield) = &GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
+my ($branchtagfield,$branchtagsubfield) = &GetMarcFromKohaField($dbh,"items.homebranch",$frameworkcode);
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
@@ -207,7 +207,7 @@ foreach my $subfield_code  (keys(%witness)) {
         $big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
     }
 }
-my ($holdingbrtagf,$holdingbrtagsubf) = &MARCfind_marc_from_kohafield($dbh,"items.holdingbranch",$frameworkcode);
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField($dbh,"items.holdingbranch",$frameworkcode);
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
 # now, construct template !

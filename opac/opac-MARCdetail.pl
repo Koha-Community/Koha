@@ -56,8 +56,8 @@ my $query = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');
-my $itemtype     = &MARCfind_frameworkcode($biblionumber);
-my $tagslib      = &MARCgettagslib( $dbh, 0, $itemtype );
+my $itemtype     = &GetFrameworkCode($biblionumber);
+my $tagslib      = &GetMarcStructure( $dbh, 0, $itemtype );
 
 my $record = GetMarcBiblio($biblionumber);
 
@@ -236,7 +236,7 @@ foreach my $field (@fields) {
     }
 }
 my ( $holdingbrtagf, $holdingbrtagsubf ) =
-  &MARCfind_marc_from_kohafield( $dbh, "items.holdingbranch", $itemtype );
+  &GetMarcFromKohaField( $dbh, "items.holdingbranch", $itemtype );
 @big_array =
   sort { $a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf} } @big_array;
 

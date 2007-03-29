@@ -108,12 +108,12 @@ if ($op ne "do_search"){
 	} elsif ($title) {
 		$attr='1=4 ';
         utf8::decode($title);
-        $title=~tr/àâäéèêëîïôöùû/aaaeeeeiioouu/;
+        $title=~tr/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/aaaeeeeiioouu/;
 		$term=$title;
 	} elsif ($author) {
 		$attr='1=1003';
         utf8::decode($author);
-        $author=~tr/àâäéèêëîïôöùû/aaaeeeeiioouu/;
+        $author=~tr/ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/aaaeeeeiioouu/;
 		$term=$author;
 	}
 
@@ -178,7 +178,7 @@ AGAIN:
   ## In HEAD i change everything to UTF-8
   # In rel2_2 i am not sure what encoding is so no character conversion is done here
   ##Add necessary encoding changes to here -TG
-                  my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,"");
+                  my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"");
                   $oldbiblio->{isbn} =~ s/ |-|\.//g,
                   $oldbiblio->{issn} =~ s/ |-|\.//g,
                   my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid)=ImportBreeding($marcdata,1,$serverhost[$k],$encoding[$k],$random);

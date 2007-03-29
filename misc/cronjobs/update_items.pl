@@ -103,8 +103,8 @@ print "fetching marc and items data, updating\n";
 #
 # 1st : find where some informations are hidden : itemnumber, date_due, popularity
 #
-my ($itemnumberTag,$itemnumberSubfield) = MARCfind_marc_from_kohafield($dbh,"items.itemnumber","");
-my ($date_dueTag,$date_dueSubfield) = MARCfind_marc_from_kohafield($dbh,"items.issues","");
+my ($itemnumberTag,$itemnumberSubfield) = GetMarcFromKohaField($dbh,"items.itemnumber","");
+my ($date_dueTag,$date_dueSubfield) = GetMarcFromKohaField($dbh,"items.issues","");
 my (
 while (my $biblionumber=$biblionumber_sth->fetchrow) {
 	$count++;

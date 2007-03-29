@@ -385,7 +385,7 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 #     warn $record->as_formatted;
 	warn $xml;
 	my $record=MARC::Record->new_from_xml($xml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
@@ -432,7 +432,7 @@ warn "duplicate:$duplicateauthid,$duplicateauthvalue";
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 	my $record=MARC::Record->new_from_xml($xml,'UTF-8');
 	$record->encoding('UTF-8');
 	# adding an empty field

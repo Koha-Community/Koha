@@ -43,7 +43,7 @@ $|=1; # flushes output
 my $starttime = gettimeofday;
 
 #1st of all, find item MARC tag.
-my ($tagfield,$tagsubfield) = &MARCfind_marc_from_kohafield($dbh,"items.itemnumber",'');
+my ($tagfield,$tagsubfield) = &GetMarcFromKohaField($dbh,"items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 my $sth = $dbh->prepare("select bibid from marc_biblio");
 $sth->execute;
@@ -68,12 +68,12 @@ while (my ($bibid)= $sth->fetchrow) {
     }
 #     print "$bibid\n";
     # now, create biblio and items with NEWnewXX call.
-    my $frameworkcode = MARCfind_frameworkcode($bibid);
+    my $frameworkcode = GetFrameworkCode($bibid);
     localNEWmodbiblio($dbh,$record,$bibid,$frameworkcode) unless $test_parameter;
 #     warn 'B=>'.$record->as_formatted;
 #     print "biblio done\n";
     for (my $i=0;$i<=$#items;$i++) {
-        my $tmp = MARCmarc2koha($dbh,$items[$i],$frameworkcode) unless $test_parameter; # finds the itemnumber
+        my $tmp = TransformMarcToKoha($dbh,$items[$i],$frameworkcode) unless $test_parameter; # finds the itemnumber
 #         warn "    I=> ".$items[$i]->as_formatted;
         localNEWmoditem($dbh,$items[$i],$bibid,$tmp->{itemnumber},0) unless $test_parameter;
 #         print "1 item done\n";
@@ -89,7 +89,7 @@ sub localNEWmodbiblio {
     my ($dbh,$record,$bibid,$frameworkcode) =@_;
     $frameworkcode="" unless $frameworkcode;
 #     &MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
-    my $oldbiblio = MARCmarc2koha($dbh,$record,$frameworkcode);
+    my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
 
     return 1;
 }
@@ -97,7 +97,7 @@ sub localNEWmodbiblio {
 sub localNEWmoditem {
     my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
 #     warn "NEWmoditem $bibid / $itemnumber / $delete ".$record->as_formatted;
-    my $frameworkcode=MARCfind_frameworkcode($bibid);
-    my $olditem = MARCmarc2koha( $dbh, $record,$frameworkcode );
+    my $frameworkcode=GetFrameworkCode($bibid);
+    my $olditem = TransformMarcToKoha( $dbh, $record,$frameworkcode );
     C4::Biblio::_koha_modify_item( $dbh, $olditem );
 }

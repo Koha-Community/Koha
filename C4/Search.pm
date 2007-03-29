@@ -18,7 +18,7 @@ package C4::Search;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Biblio;    # MARCfind_marc_from_kohafield
+use C4::Biblio;    # GetMarcFromKohaField
 use C4::Koha;      # getFacets
 use Lingua::Stem;
 
@@ -72,7 +72,7 @@ This function modify the @$fields array and add related fields to search on.
 
 sub findseealso {
     my ( $dbh, $fields ) = @_;
-    my $tagslib = MARCgettagslib( $dbh, 1 );
+    my $tagslib = GetMarcStructure( $dbh, 1 );
     for ( my $i = 0 ; $i <= $#{$fields} ; $i++ ) {
         my ($tag)      = substr( @$fields[$i], 1, 3 );
         my ($subfield) = substr( @$fields[$i], 4, 1 );
@@ -91,7 +91,7 @@ sub FindDuplicate {
     my ($record) = @_;
     return;
     my $dbh = C4::Context->dbh;
-    my $result = MARCmarc2koha( $dbh, $record, '' );
+    my $result = TransformMarcToKoha( $dbh, $record, '' );
     my $sth;
     my $query;
     my $search;
@@ -115,7 +115,7 @@ sub FindDuplicate {
     if ($possible_duplicate_record) {
         my $marcrecord =
           MARC::Record->new_from_usmarc($possible_duplicate_record);
-        my $result = MARCmarc2koha( $dbh, $marcrecord, '' );
+        my $result = TransformMarcToKoha( $dbh, $marcrecord, '' );
         
         # FIXME :: why 2 $biblionumber ?
         return $result->{'biblionumber'}, $result->{'biblionumber'},
@@ -160,7 +160,7 @@ my @results;
 for(my $i=0;$i<$hits;$i++) {
     my %resultsloop;
     my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-    my $biblio = MARCmarc2koha(C4::Context->dbh,$marcrecord,'');
+    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 
     #build the hash for the template.
     $resultsloop{highlight}       = ($i % 2)?(1):(0);
@@ -823,7 +823,7 @@ sub searchResults {
     my %subfieldstosearch;
     while ( ( my $column ) = $sth2->fetchrow ) {
         my ( $tagfield, $tagsubfield ) =
-          &MARCfind_marc_from_kohafield( $dbh, "items." . $column, "" );
+          &GetMarcFromKohaField( $dbh, "items." . $column, "" );
         $subfieldstosearch{$column} = $tagsubfield;
     }
     my $times;
@@ -839,7 +839,7 @@ sub searchResults {
         my $marcrecord;
         $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
 
-        my $oldbiblio = MARCmarc2koha( $dbh, $marcrecord, '' );
+        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
 
         # add image url if there is one
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {

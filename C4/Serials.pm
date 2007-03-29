@@ -256,8 +256,8 @@ sub GetSerialInformation {
             my @itemnumbers = split /,/, $data->{'itemnumber'};
             foreach my $itemnum (@itemnumbers) {
 
-                #It is ASSUMED that MARCgetitem ALWAYS WORK...
-                #Maybe MARCgetitem should return values on failure
+                #It is ASSUMED that GetMarcItem ALWAYS WORK...
+                #Maybe GetMarcItem should return values on failure
 #                 warn "itemnumber :$itemnum, bibnum :".$data->{'biblionumber'};
                 my $itemprocessed =
                   PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum );
@@ -1507,7 +1507,7 @@ sub NewIssue {
 
     if ( $status eq 2 ) {
       ### TODO Add a feature that improves recognition and description.
-      ### As such count (serialseq) i.e. : N°18,2(N°19),N°20
+      ### As such count (serialseq) i.e. : N18,2(N19),N20
       ### Would use substr and index But be careful to previous presence of ()
         $recievedlist .= ",$serialseq" unless (index($recievedlist,$serialseq)>0);
     }
@@ -1593,7 +1593,7 @@ sub ItemizeSerials {
         }
     }
 
-    my $fwk = MARCfind_frameworkcode( $data->{'biblionumber'} );
+    my $fwk = GetFrameworkCode( $data->{'biblionumber'} );
     if ( $info->{barcode} ) {
         my @errors;
         my $exists = itemdata( $info->{'barcode'} );
@@ -1601,14 +1601,14 @@ sub ItemizeSerials {
         unless ($exists) {
             my $marcrecord = MARC::Record->new();
             my ( $tag, $subfield ) =
-              MARCfind_marc_from_kohafield( $dbh, "items.barcode", $fwk );
+              GetMarcFromKohaField( $dbh, "items.barcode", $fwk );
             my $newField =
               MARC::Field->new( "$tag", '', '',
                 "$subfield" => $info->{barcode} );
             $marcrecord->insert_fields_ordered($newField);
             if ( $info->{branch} ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.homebranch",
+                  GetMarcFromKohaField( $dbh, "items.homebranch",
                     $fwk );
 
                 #warn "items.homebranch : $tag , $subfield";
@@ -1623,7 +1623,7 @@ sub ItemizeSerials {
                     $marcrecord->insert_fields_ordered($newField);
                 }
                 ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.holdingbranch",
+                  GetMarcFromKohaField( $dbh, "items.holdingbranch",
                     $fwk );
 
                 #warn "items.holdingbranch : $tag , $subfield";
@@ -1640,7 +1640,7 @@ sub ItemizeSerials {
             }
             if ( $info->{itemcallnumber} ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.itemcallnumber",
+                  GetMarcFromKohaField( $dbh, "items.itemcallnumber",
                     $fwk );
 
                 #warn "items.itemcallnumber : $tag , $subfield";
@@ -1657,7 +1657,7 @@ sub ItemizeSerials {
             }
             if ( $info->{notes} ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.itemnotes", $fwk );
+                  GetMarcFromKohaField( $dbh, "items.itemnotes", $fwk );
 
                 # warn "items.itemnotes : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
@@ -1673,7 +1673,7 @@ sub ItemizeSerials {
             }
             if ( $info->{location} ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.location", $fwk );
+                  GetMarcFromKohaField( $dbh, "items.location", $fwk );
 
                 # warn "items.location : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
@@ -1689,7 +1689,7 @@ sub ItemizeSerials {
             }
             if ( $info->{status} ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.notforloan",
+                  GetMarcFromKohaField( $dbh, "items.notforloan",
                     $fwk );
 
                 # warn "items.notforloan : $tag , $subfield";
@@ -1706,7 +1706,7 @@ sub ItemizeSerials {
             }
             if ( C4::Context->preference("RoutingSerials") ) {
                 my ( $tag, $subfield ) =
-                  MARCfind_marc_from_kohafield( $dbh, "items.dateaccessioned",
+                  GetMarcFromKohaField( $dbh, "items.dateaccessioned",
                     $fwk );
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)

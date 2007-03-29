@@ -63,7 +63,7 @@ if ( $op eq "do_search" ) {
     foreach my $marc (@marclist) {
         if ($marc) {
             my ( $tag, $subfield ) =
-              MARCfind_marc_from_kohafield( $dbh, $marc );
+              GetMarcFromKohaField( $dbh, $marc );
             if ($tag) {
                 push @tags, $dbh->quote("$tag$subfield");
             }

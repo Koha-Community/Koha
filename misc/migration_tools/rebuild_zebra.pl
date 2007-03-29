@@ -38,8 +38,8 @@ my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory
 
 my $kohadir = C4::Context->config('intranetdir');
 my $dbh = C4::Context->dbh;
-my ($biblionumbertagfield,$biblionumbertagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber","");
-my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber","");
+my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber","");
+my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber","");
 
 print "some informations\n";
 print "=================\n";
@@ -204,8 +204,8 @@ if ($authorities) {
         $created_dir_or_file++;
     }
     
-    unless (-f C4::Context->zebraoptions('authorityserver')->{ccl2rpn}) {
-        system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraoptions('authorityserver')->{ccl2rpn});
+    unless (-f C4::Context->ModZebrations('authorityserver')->{ccl2rpn}) {
+        system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->ModZebrations('authorityserver')->{ccl2rpn});
     #    system("cp -f $kohadir/misc/zebra/ccl.properties $authorityserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;
@@ -391,8 +391,8 @@ if ($biblios) {
         print "Info: copied default.idx\n";
         $created_dir_or_file++;
     }
-    unless (-f C4::Context->zebraoptions('biblioserver')->{ccl2rpn}) {
-        system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraoptions('biblioserver')->{ccl2rpn});
+    unless (-f C4::Context->ModZebrations('biblioserver')->{ccl2rpn}) {
+        system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->ModZebrations('biblioserver')->{ccl2rpn});
     #    system("cp -f $kohadir/misc/zebra/ccl.properties $biblioserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;

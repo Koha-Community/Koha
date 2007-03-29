@@ -29,7 +29,7 @@ my $totaldone=0;
 $|=1;
 
 while (my ($bibid,$biblionumber) = $sth->fetchrow) {
-    my $record = MARCgetbiblio($dbh,$bibid);
+    my $record = LocalMARCgetbiblio($dbh,$bibid);
     #Force UTF-8 in record leader
     $record->encoding('UTF-8');
     $sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
@@ -41,14 +41,14 @@ print "\rdone\n";
 
 
 #
-# those 2 subs are a copy of Biblio.pm, version 2.2.4
-# they are useful only once, for moving from 2.2 to 3.0
-# the MARCgetbiblio & MARCgetitem subs in Biblio.pm
-# are still here, but uses other tables
+# this sub is a copy of Biblio.pm, version 2.2.4
+# It is useful only once, for moving from 2.2 to 3.0
+# the MARCgetbiblio in Biblio.pm
+# is still here, but uses other tables
 # (the ones that are filled by updatedatabase !)
 #
 
-sub MARCgetbiblio {
+sub LocalMARCgetbiblio {
 
     # Returns MARC::Record of the biblio passed in parameter.
     my ( $dbh, $bibid ) = @_;
@@ -135,70 +135,6 @@ sub MARCgetbiblio {
             #          my $field = MARC::Field->new( $prevtag, "", "", %subfieldlist);
             $record->add_fields($field);
         }
-    }
-    return $record;
-}
-
-sub MARCgetitem {
-
-    # Returns MARC::Record of the biblio passed in parameter.
-    my ( $dbh, $bibid, $itemnumber ) = @_;
-    my $record = MARC::Record->new();
-
-    # search MARC tagorder
-    my $sth2 =
-      $dbh->prepare(
-"select tagorder from marc_subfield_table,marc_subfield_structure where marc_subfield_table.tag=marc_subfield_structure.tagfield and marc_subfield_table.subfieldcode=marc_subfield_structure.tagsubfield and bibid=? and kohafield='items.itemnumber' and subfieldvalue=?"
-    );
-    $sth2->execute( $bibid, $itemnumber );
-    my ($tagorder) = $sth2->fetchrow_array();
-
-    #---- TODO : the leader is missing
-    my $sth =
-      $dbh->prepare(
-"select bibid,subfieldid,tag,tagorder,tag_indicator,subfieldcode,subfieldorder,subfieldvalue,valuebloblink
-                  from marc_subfield_table
-                  where bibid=? and tagorder=? order by subfieldcode,subfieldorder
-              "
-    );
-    $sth2 =
-      $dbh->prepare(
-        "select subfieldvalue from marc_blob_subfield where blobidlink=?");
-    $sth->execute( $bibid, $tagorder );
-    while ( my $row = $sth->fetchrow_hashref ) {
-        if ( $row->{'valuebloblink'} ) {    #---- search blob if there is one
-            $sth2->execute( $row->{'valuebloblink'} );
-            my $row2 = $sth2->fetchrow_hashref;
-            $sth2->finish;
-            $row->{'subfieldvalue'} = $row2->{'subfieldvalue'};
-        }
-        if ( $record->field( $row->{'tag'} ) ) {
-            my $field;
-
-#--- this test must stay as this, because of strange behaviour of mySQL/Perl DBI with char var containing a number...
-            #--- sometimes, eliminates 0 at beginning, sometimes no ;-\\\
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            $field = $record->field( $row->{'tag'} );
-            if ($field) {
-                my $x =
-                  $field->add_subfields( $row->{'subfieldcode'},
-                    $row->{'subfieldvalue'} );
-                $record->delete_field($field);
-                $record->add_fields($field);
-            }
-        }
-        else {
-            if ( length( $row->{'tag'} ) < 3 ) {
-                $row->{'tag'} = "0" . $row->{'tag'};
-            }
-            my $temp =
-              MARC::Field->new( $row->{'tag'}, " ", " ",
-                $row->{'subfieldcode'} => $row->{'subfieldvalue'} );
-            $record->add_fields($temp);
-        }
-
     }
     return $record;
 }

@@ -55,14 +55,18 @@ if ($quantity != 0) {
     # create items if the user has entered barcodes
     my $barcode=$input->param('barcode');
     my @barcodes=split(/\,| |\|/,$barcode);
-    my ($error) = newitems({ biblioitemnumber => $biblioitemnumber,
-                    biblionumber     => $biblionumber,
-                    replacementprice => $replacement,
-                    price            => $cost,
-                    booksellerid     => $supplierid,
-                    homebranch       => $branch,
-                    loan             => 0 },
-                @barcodes);
+    # foreach barcode provided, build the item MARC::Record and create the item
+    foreach my $bc (@barcodes) {
+        my $itemRecord = Koha2Marc({
+                    "items.replacementprice" => $replacement,
+                    "items.price"            => $cost,
+                    "items.booksellerid"     => $supplierid,
+                    "items.homebranch"       => $branch,
+                    "items.holdingbranch"    => $branch,
+                    "items.barcode"          => $bc,
+                    "items.loan"             => 0, });
+        AddItem($itemRecord,$biblionumber);
+    }
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");
 } else {
     print $input->header;

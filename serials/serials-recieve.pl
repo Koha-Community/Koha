@@ -201,7 +201,7 @@ my $subs = &GetSubscription($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 
 if (C4::Context->preference("serialsadditems")){
-    my $fwk=MARCfind_frameworkcode($subscription->{biblionumber});
+    my $fwk=GetFrameworkCode($subscription->{biblionumber});
 
     my $branches = GetBranches;
     my @branchloop;

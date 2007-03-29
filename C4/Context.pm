@@ -338,7 +338,7 @@ sub zebraconfig
     # Return the value of the requested config variable
     return $context->{"server"}->{$var};
 }
-sub zebraoptions
+sub ModZebrations
 {
     my $self = shift;
     my $var = shift;        # The config variable to return
@@ -874,6 +874,31 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.53  2007/03/29 13:30:31  tipaul
+# Code cleaning :
+# == Biblio.pm cleaning (useless) ==
+# * some sub declaration dropped
+# * removed modbiblio sub
+# * removed moditem sub
+# * removed newitems. It was used only in finishrecieve. Replaced by a Koha2Marc+AddItem, that is better.
+# * removed MARCkoha2marcItem
+# * removed MARCdelsubfield declaration
+# * removed MARCkoha2marcBiblio
+#
+# == Biblio.pm cleaning (naming conventions) ==
+# * MARCgettagslib renamed to GetMarcStructure
+# * MARCgetitems renamed to GetMarcItem
+# * MARCfind_frameworkcode renamed to GetFrameworkCode
+# * MARCmarc2koha renamed to TransformMarcToKoha
+# * MARChtml2marc renamed to TransformHtmlToMarc
+# * MARChtml2xml renamed to TranformeHtmlToXml
+# * zebraop renamed to ModZebra
+#
+# == MARC=OFF ==
+# * removing MARC=OFF related scripts (in cataloguing directory)
+# * removed checkitems (function related to MARC=off feature, that is completly broken in head. If someone want to reintroduce it, hard work coming...)
+# * removed getitemsbybiblioitem (used only by MARC=OFF scripts, that is removed as well)
+#
 # Revision 1.52  2007/03/16 01:25:08  kados
 # Using my precrash CVS copy I did the following:
 #
@@ -906,7 +931,7 @@ Joshua Ferraro <jmf at liblime dot com>
 # reident programs, and adding branchcode value in reserves2
 #
 # Revision 1.43.2.7  2006/12/06 21:55:38  hdl
-# Adding zebraoptions for servers to get serverinfos in Context.pm
+# Adding ModZebrations for servers to get serverinfos in Context.pm
 # Using this function in rebuild_zebra.pl
 #
 # Revision 1.43.2.6  2006/11/24 21:18:31  kados

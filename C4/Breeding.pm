@@ -81,7 +81,7 @@ where isbn=? and title=?");
         if (scalar($marcrecord->fields()) == 0) {
             $notmarcrecord++;
         } else {
-            my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,'');
+            my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,'');
             my $isbnlength=10;
             if($oldbiblio->{isbn}){
                 $isbnlength = length($oldbiblio->{isbn});

@@ -87,7 +87,7 @@ if($query) {
     for(my $i=0;$i<$total;$i++) {
         my %resultsloop;
         my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-        my $biblio = MARCmarc2koha(C4::Context->dbh,$marcrecord,'');
+        my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
     
         #hilight the result
         $biblio->{'title'} =~ s/$query/<span class=term>$&<\/span>/gi;

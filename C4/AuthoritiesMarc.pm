@@ -414,7 +414,7 @@ sub AUTHaddauthority {
       $sth->finish;
     }
     $dbh->do("unlock tables");
-    zebraop($authid,'specialUpdate',"authorityserver");
+    ModZebra($authid,'specialUpdate',"authorityserver");
 
 # if ($record->field($linkidfield)){
 # my @fields=$record->field($linkidfield);
@@ -442,7 +442,7 @@ sub AUTHaddlink{
   $sth->execute($record->as_usmarc,$linkid);
   $sth->finish;
   $dbh->do("unlock tables");
-  zebraop($linkid,'specialUpdate',"authorityserver");
+  ModZebra($linkid,'specialUpdate',"authorityserver");
 }
 
 sub AUTH2marcOnefieldlink {
@@ -535,7 +535,7 @@ my    $linkid=$field->subfield($linkidsubfield) ;
             if ($linkfield->subfield($linkidsubfield2) eq $authid){
                 $linkrecord->delete_field($linkfield);
                 $sth->execute($linkrecord->as_usmarc,$linkid);
-                zebraop($linkid,'specialUpdate',"authorityserver");
+                ModZebra($linkid,'specialUpdate',"authorityserver");
             }
             }#foreach linkfield
     }
@@ -571,7 +571,7 @@ sub AUTHdelauthority {
     my $dbh=C4::Context->dbh;
 # if the keep_biblio is set to 1, then authority entries in biblio are preserved.
 
-zebraop($authid,"recordDelete","authorityserver");
+ModZebra($authid,"recordDelete","authorityserver");
     $dbh->do("delete from auth_header where authid=$authid") ;
 
 # FIXME : delete or not in biblio tables (depending on $keep_biblio flag)
@@ -931,10 +931,10 @@ my $update;
         $update=1;
         }#for each tag
     }#foreach tagfield
-        my $oldbiblio = MARCmarc2koha($dbh,$marcrecord,"") ;
+        my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
         if ($update==1){
         # FIXME : this NEWmodbiblio does not exist anymore...
-        &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},MARCfind_frameworkcode($oldbiblio->{'biblionumber'})) ;
+        &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},GetFrameworkCode($oldbiblio->{'biblionumber'})) ;
         }
     
 }#foreach $marc
@@ -953,6 +953,31 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.41  2007/03/29 13:30:31  tipaul
+# Code cleaning :
+# == Biblio.pm cleaning (useless) ==
+# * some sub declaration dropped
+# * removed modbiblio sub
+# * removed moditem sub
+# * removed newitems. It was used only in finishrecieve. Replaced by a Koha2Marc+AddItem, that is better.
+# * removed MARCkoha2marcItem
+# * removed MARCdelsubfield declaration
+# * removed MARCkoha2marcBiblio
+#
+# == Biblio.pm cleaning (naming conventions) ==
+# * MARCgettagslib renamed to GetMarcStructure
+# * MARCgetitems renamed to GetMarcItem
+# * MARCfind_frameworkcode renamed to GetFrameworkCode
+# * MARCmarc2koha renamed to TransformMarcToKoha
+# * MARChtml2marc renamed to TransformHtmlToMarc
+# * MARChtml2xml renamed to TranformeHtmlToXml
+# * zebraop renamed to ModZebra
+#
+# == MARC=OFF ==
+# * removing MARC=OFF related scripts (in cataloguing directory)
+# * removed checkitems (function related to MARC=off feature, that is completly broken in head. If someone want to reintroduce it, hard work coming...)
+# * removed getitemsbybiblioitem (used only by MARC=OFF scripts, that is removed as well)
+#
 # Revision 1.40  2007/03/28 10:39:16  hdl
 # removing $dbh as a parameter in AuthoritiesMarc functions
 # And reporting all differences into the scripts taht relies on those functions.

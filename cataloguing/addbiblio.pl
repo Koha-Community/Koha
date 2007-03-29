@@ -128,7 +128,7 @@ sub MARCfindbreeding {
             return -1;
         } else {
             if (C4::Context->preference("z3950NormalizeAuthor") and C4::Context->preference("z3950AuthorAuthFields")){
-                my ($tag,$subfield) = MARCfind_marc_from_kohafield($dbh,"biblio.author");
+                my ($tag,$subfield) = GetMarcFromKohaField($dbh,"biblio.author");
 #                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields = C4::Context->preference("z3950AuthorAuthFields");
                 my @auth_fields= split /,/,$auth_fields;
@@ -470,7 +470,7 @@ my $op = $input->param('op');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 
-$frameworkcode = &MARCfind_frameworkcode($biblionumber) if ($biblionumber and not ($frameworkcode));
+$frameworkcode = &GetFrameworkCode($biblionumber) if ($biblionumber and not ($frameworkcode));
 
 $frameworkcode='' if ($frameworkcode eq 'Default');
 my ($template, $loggedinuser, $cookie)
@@ -506,7 +506,7 @@ my $framework=CGI::scrolling_list(
             -multiple => 0 );
 $template->param( framework => $framework, breedingid => $breedingid);
 
-$tagslib = &MARCgettagslib($dbh,1,$frameworkcode);
+$tagslib = &GetMarcStructure($dbh,1,$frameworkcode);
 my $record=-1;
 my $encoding="";
 $record = GetMarcBiblio( $biblionumber ) if ($biblionumber);
@@ -519,8 +519,8 @@ my ($biblioitemnumtagfield,$biblioitemnumtagsubfield,$bibitem,$biblioitemnumber)
 if ($biblionumber) {
     $is_a_modif=1;
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
-    ($biblionumtagfield,$biblionumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblio.biblionumber",$frameworkcode);
-    ($biblioitemnumtagfield,$biblioitemnumtagsubfield) = &MARCfind_marc_from_kohafield($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
+    ($biblionumtagfield,$biblionumtagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber",$frameworkcode);
+    ($biblioitemnumtagfield,$biblioitemnumtagsubfield) = &GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
     # search biblioitems value
     my $sth=$dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
     $sth->execute($biblionumber);
@@ -537,9 +537,9 @@ if ($op eq "addbiblio") {
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
     if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
-        $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        $record = TransformHtmlToMarc($dbh,\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
     } else {
-        my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
         $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
 #         warn "MARC :".$record->as_formatted;
 #         die;
@@ -591,16 +591,16 @@ if ($op eq "addbiblio") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
     my $record;
     if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
         my %indicators;
         for (my $i=0;$i<=$#ind_tag;$i++) {
             $indicators{$ind_tag[$i]} = $indicator[$i];
         }
-        $record = MARChtml2marc($dbh,\@tags,\@subfields,\@values,%indicators);
+        $record = TransformHtmlToMarc($dbh,\@tags,\@subfields,\@values,%indicators);
     } else {
-        my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+        my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
         $record=MARC::Record->new_from_xml($xml,C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
     }
     for (my $i=1;$i<=$cntrepeatfield;$i++){

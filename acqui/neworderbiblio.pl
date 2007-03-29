@@ -106,7 +106,7 @@ my @results;
 for(my $i=0;$i<$hits;$i++) {
     my %resultsloop;
     my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-    my $biblio = MARCmarc2koha(C4::Context->dbh,$marcrecord,'');
+    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 
     #build the hash for the template.
     %resultsloop=%$biblio;
