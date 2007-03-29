@@ -30,6 +30,7 @@ use C4::Context;
 use MARC::Record;
 use C4::Log;
 use C4::Koha; # XXX subfield_is_koha_internal_p
+use Date::Calc qw(Today);
 
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -239,6 +240,18 @@ sub create_input () {
         #use Encode;
         #$value = encode('utf-8', $value);
     $value =~ s/"/&quot;/g;
+    # if there is no value provided but a default value in parameters, get it 
+    unless ($value) {
+        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+        # get today date & replace YYYY, MM, DD if provided in the default value
+        my ($year,$month,$day) = Today();
+        $month = sprintf("%02d",$month);
+        $day = sprintf("%02d",$day);
+        $value =~ s/YYYY/$year/g;
+        $value =~ s/MM/$month/g;
+        $value =~ s/DD/$day/g;
+        
+    }
     my $dbh = C4::Context->dbh;
     my %subfield_data;
     $subfield_data{tag}=$tag;

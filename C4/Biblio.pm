@@ -1278,7 +1278,7 @@ sub MARCgettagslib {
 
     $sth =
       $dbh->prepare(
-"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
+"select tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl,link,defaultvalue from marc_subfield_structure where frameworkcode=? order by tagfield,tagsubfield"
       );
     $sth->execute($frameworkcode);
 
@@ -1291,6 +1291,7 @@ sub MARCgettagslib {
     my $hidden;
     my $isurl;
     my $link;
+    my $defaultvalue;
 
     while (
         (
@@ -1299,7 +1300,7 @@ sub MARCgettagslib {
             $mandatory,    $repeatable,    $authorised_value,
             $authtypecode, $value_builder, $kohafield,
             $seealso,      $hidden,        $isurl,
-            $link
+            $link,$defaultvalue
         )
         = $sth->fetchrow
       )
@@ -1317,6 +1318,7 @@ sub MARCgettagslib {
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
         $res->{$tag}->{$subfield}->{link}             = $link;
+        $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
     }
     return $res;
 }
@@ -3695,6 +3697,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.191  2007/03/29 09:42:13  tipaul
+# adding default value new feature into cataloguing. The system (definition) part has already been added by toins
+#
 # Revision 1.190  2007/03/29 08:45:19  hdl
 # Deleting ignore_errors(1) pour MARC::Charset
 #
