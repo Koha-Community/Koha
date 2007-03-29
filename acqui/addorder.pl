@@ -187,7 +187,7 @@ if ( $quantity ne '0' ) {
     if ( $existing eq 'no' ) {
 
         #if it doesnt create it
-        my $record = Koha2Marc(
+        my $record = TransformKohaToMarc(
             {
                 "biblio.title"              => "$title",
                 "biblio.author"             => "$author",

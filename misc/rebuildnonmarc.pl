@@ -88,7 +88,6 @@ print "$i MARC record done in $timeneeded seconds\n";
 sub localNEWmodbiblio {
     my ($dbh,$record,$bibid,$frameworkcode) =@_;
     $frameworkcode="" unless $frameworkcode;
-#     &MARCmodbiblio($dbh,$bibid,$record,$frameworkcode,0);
     my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
 
     return 1;

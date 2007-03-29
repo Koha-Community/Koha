@@ -614,8 +614,8 @@ sub domarctransfer {
       );
     $sth->execute();
     while ( my ( $biblionumber, $holdingbranch ) = $sth->fetchrow ) {
-        &MARCmoditemonefield( $biblionumber, $itemnumber,
-            'items.holdingbranch', $holdingbranch, 0 );
+        &ModItemInMarconefield( $biblionumber, $itemnumber,
+            'items.holdingbranch', $holdingbranch );
     }
     return;
 }

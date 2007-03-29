@@ -42,7 +42,7 @@ my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblio
 
  
 if ($update){    
-&MARCmodbiblio($dbh,$biblionumber,$record,'',0);
+&ModBiblioMarc($record,'',$biblionumber);
     print "$biblionumber \n";
     }
 

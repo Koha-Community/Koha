@@ -874,13 +874,25 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.54  2007/03/29 16:45:53  tipaul
+# Code cleaning of Biblio.pm (continued)
+#
+# All subs have be cleaned :
+# - removed useless
+# - merged some
+# - reordering Biblio.pm completly
+# - using only naming conventions
+#
+# Seems to have broken nothing, but it still has to be heavily tested.
+# Note that Biblio.pm is now much more efficient than previously & probably more reliable as well.
+#
 # Revision 1.53  2007/03/29 13:30:31  tipaul
 # Code cleaning :
 # == Biblio.pm cleaning (useless) ==
 # * some sub declaration dropped
 # * removed modbiblio sub
 # * removed moditem sub
-# * removed newitems. It was used only in finishrecieve. Replaced by a Koha2Marc+AddItem, that is better.
+# * removed newitems. It was used only in finishrecieve. Replaced by a TransformKohaToMarc+AddItem, that is better.
 # * removed MARCkoha2marcItem
 # * removed MARCdelsubfield declaration
 # * removed MARCkoha2marcBiblio

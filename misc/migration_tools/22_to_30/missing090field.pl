@@ -42,7 +42,7 @@ sub MARCmodbiblionumber{
     
     
     if ($update){	
-        &MARCmodbiblio($dbh,$biblionumber,$record,'',0);
+        &ModBiblioMarc($record,'',$biblionumber);
         print "\n modified : $biblionumber \n";	
     }
     

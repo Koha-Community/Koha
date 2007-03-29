@@ -71,7 +71,7 @@ push @EXPORT, qw(
   &GetMarcStructure
   &GetMarcFromKohaField
   &GetFrameworkCode
-  &Koha2Marc
+  &TransformKohaToMarc
 );
 
 # To modify something
@@ -80,6 +80,8 @@ push @EXPORT, qw(
   &ModItem
   &ModBiblioframework
   &ModZebra
+  &ModItemInMarc
+  &ModItemInMarconefield
 );
 
 # To delete something
@@ -88,13 +90,15 @@ push @EXPORT, qw(
   &DelItem
 );
 
-# Marc related functions
+# Internal functions
+# those functions are exported but should not be used
+# they are usefull is few circumstances, so are exported.
+# but don't use them unless you're a core developer ;-)
 push @EXPORT, qw(
-  &MARCmoditemonefield
-  &MARCaddbiblio
-  &MARCadditem
-  &MARCmodbiblio
-  &MARCmoditem
+  &ModBiblioMarc
+  &AddItemInMarc
+  &calculatelc
+  &itemcalculator
 );
 
 # Others functions
@@ -104,13 +108,11 @@ push @EXPORT, qw(
   &TransformHtmlToXml
   &PrepareItemrecordDisplay
   &char_decode
-  &itemcalculator
-  &calculatelc
 );
 
 =head1 NAME
 
-C4::Biblio - acquisitions and cataloging management functions
+C4::Biblio - cataloging management functions
 
 =head1 DESCRIPTION
 
@@ -122,13 +124,13 @@ Biblio.pm contains functions for managing storage and editing of bibliographic d
 
 =item 2. as raw MARC in the Zebra index and storage engine
 
-=item 3. as raw MARC the biblioitems.marc
+=item 3. as raw MARC the biblioitems.marc and biblioitems.marcxml
 
 =back
 
-In the 2.4 version of Koha, the authoritative record-level information is in biblioitems.marc and the authoritative items information is in the items table.
+In the 3.0 version of Koha, the authoritative record-level information is in biblioitems.marcxml
 
-Because the data isn't completely normalized there's a chance for information to get out of sync. The design choice to go with a un-normalized schema was driven by performance and stability concerns:
+Because the data isn't completely normalized there's a chance for information to get out of sync. The design choice to go with a un-normalized schema was driven by performance and stability concerns. However, if this occur, it can be considered as a bug : The API is (or should be) complete & the only entry point for all biblio/items managements.
 
 =over 4
 
@@ -146,15 +148,37 @@ Because of this design choice, the process of managing storage and editing is a 
 
 =item 2. _koha_* - low-level internal functions for managing the koha tables
 
-=item 3. MARC* functions for interacting with the MARC data in both biblioitems.marc Zebra (biblioitems.marc is authoritative)
+=item 3. Marc management function : as the MARC record is stored in biblioitems.marc(xml), some subs dedicated to it's management are in this package. They should be used only internally by Biblio.pm, the only official entry points being AddBiblio, AddItem, ModBiblio, ModItem.
 
 =item 4. Zebra functions used to update the Zebra index
 
 =item 5. internal helper functions such as char_decode, checkitems, etc. Some of these probably belong in Koha.pm
 
-=item 6. other functions that don't belong in Biblio.pm that will be cleaned out in time. (like GetMarcFromKohaField which belongs in Search.pm)
+=back
 
-In time, as we solidify the new API these older functions will be weeded out.
+The MARC record (in biblioitems.marcxml) contains the complete marc record, including items. It also contains the biblionumber. That is the reason why it is not stored directly by AddBiblio, with all other fields . To save a biblio, we need to :
+
+=over 4
+
+=item 1. save datas in biblio and biblioitems table, that gives us a biblionumber and a biblioitemnumber
+
+=item 2. add the biblionumber and biblioitemnumber into the MARC records
+
+=item 3. save the marc record
+
+=back
+
+When dealing with items, we must :
+
+=over 4
+
+=item 1. save the item in items table, that gives us an itemnumber
+
+=item 2. add the itemnumber to the item MARC field
+
+=item 3. overwrite the MARC record (with the added item) into biblioitems.marc(xml)
+
+When modifying a biblio or an item, the behaviour is quite similar.
 
 =back
 
@@ -162,71 +186,64 @@ In time, as we solidify the new API these older functions will be weeded out.
 
 =head2 AddBiblio
 
-($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
+=over 4
 
+($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
 Exported function (core API) for adding a new biblio to koha.
+
+=back
 
 =cut
 
 sub AddBiblio {
     my ( $record, $frameworkcode ) = @_;
-    my $oldbibnum;
-    my $oldbibitemnum;
+    my $biblionumber;
+    my $biblioitemnumber;
     my $dbh = C4::Context->dbh;
     # transform the data into koha-table style data
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
-    $oldbibnum = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
-    $olddata->{'biblionumber'} = $oldbibnum;
-    $oldbibitemnum = _koha_add_biblioitem( $dbh, $olddata );
+    $biblionumber = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
+    $olddata->{'biblionumber'} = $biblionumber;
+    $biblioitemnumber = _koha_add_biblioitem( $dbh, $olddata );
 
     # we must add bibnum and bibitemnum in MARC::Record...
     # we build the new field with biblionumber and biblioitemnumber
     # we drop the original field
     # we add the new builded field.
-    # NOTE : Works only if the field is ONLY for biblionumber and biblioitemnumber
-    # (steve and paul : thinks 090 is a good choice)
-    my $sth =
-      $dbh->prepare(
-        "SELECT tagfield,tagsubfield
-         FROM marc_subfield_structure
-         WHERE kohafield=?"
-      );
-    $sth->execute("biblio.biblionumber");
-    ( my $tagfield1, my $tagsubfield1 ) = $sth->fetchrow;
-    $sth->execute("biblioitems.biblioitemnumber");
-    ( my $tagfield2, my $tagsubfield2 ) = $sth->fetchrow;
+    ( my $biblio_tag, my $biblio_subfield ) = GetMarcFromKohaField($dbh,"biblio.biblionumber",$frameworkcode);
+    ( my $biblioitem_tag, my $biblioitem_subfield ) = GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
 
     my $newfield;
 
     # biblionumber & biblioitemnumber are in different fields
-    if ( $tagfield1 != $tagfield2 ) {
+    if ( $biblio_tag != $biblioitem_tag ) {
 
         # deal with biblionumber
-        if ( $tagfield1 < 10 ) {
-            $newfield = MARC::Field->new( $tagfield1, $oldbibnum, );
+        if ( $biblio_tag < 10 ) {
+            $newfield = MARC::Field->new( $biblio_tag, $biblionumber );
         }
         else {
             $newfield =
-              MARC::Field->new( $tagfield1, '', '',
-                "$tagsubfield1" => $oldbibnum, );
+              MARC::Field->new( $biblio_tag, '', '',
+                "$biblio_subfield" => $biblionumber );
         }
 
         # drop old field and create new one...
-        my $old_field = $record->field($tagfield1);
+        my $old_field = $record->field($biblio_tag);
         $record->delete_field($old_field);
         $record->append_fields($newfield);
 
         # deal with biblioitemnumber
-        if ( $tagfield2 < 10 ) {
-            $newfield = MARC::Field->new( $tagfield2, $oldbibitemnum, );
+        if ( $biblioitem_tag < 10 ) {
+            $newfield = MARC::Field->new( $biblioitem_tag, $biblioitemnumber, );
         }
         else {
             $newfield =
-              MARC::Field->new( $tagfield2, '', '',
-                "$tagsubfield2" => $oldbibitemnum, );
+              MARC::Field->new( $biblioitem_tag, '', '',
+                "$biblioitem_subfield" => $biblioitemnumber, );
         }
         # drop old field and create new one...
-        $old_field = $record->field($tagfield2);
+        $old_field = $record->field($biblioitem_tag);
         $record->delete_field($old_field);
         $record->insert_fields_ordered($newfield);
 
@@ -234,45 +251,35 @@ sub AddBiblio {
     }
     else {
         my $newfield = MARC::Field->new(
-            $tagfield1, '', '',
-            "$tagsubfield1" => $oldbibnum,
-            "$tagsubfield2" => $oldbibitemnum
+            $biblio_tag, '', '',
+            "$biblio_subfield" => $biblionumber,
+            "$biblioitem_subfield" => $biblioitemnumber
         );
 
         # drop old field and create new one...
-        my $old_field = $record->field($tagfield1);
+        my $old_field = $record->field($biblio_tag);
         $record->delete_field($old_field);
         $record->insert_fields_ordered($newfield);
     }
 
-    ###NEU specific add cataloguers cardnumber as well
-    my $cardtag = C4::Context->preference('cataloguersfield');
-    if ($cardtag) {
-        my $tag  = substr( $cardtag, 0, 3 );
-        my $subf = substr( $cardtag, 3, 1 );
-        my $me        = C4::Context->userenv;
-        my $cataloger = $me->{'cardnumber'} if ($me);
-        my $newtag    = MARC::Field->new( $tag, '', '', $subf => $cataloger )
-          if ($me);
-        $record->delete_field($newtag);
-        $record->insert_fields_ordered($newtag);
-    }
-
     # now add the record
     my $biblionumber =
-      MARCaddbiblio( $record, $oldbibnum, $frameworkcode );
+      ModBiblioMarc( $record, $biblionumber, $frameworkcode );
       
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio") 
         if C4::Context->preference("CataloguingLog");
       
-    return ( $biblionumber, $oldbibitemnum );
+    return ( $biblionumber, $biblioitemnumber );
 }
 
 =head2 AddItem
 
-$biblionumber = AddItem( $record, $biblionumber)
+=over
 
+$biblionumber = AddItem( $record, $biblionumber)
 Exported function (core API) for adding a new item to Koha
+
+=back
 
 =cut
 
@@ -323,24 +330,11 @@ sub AddItem {
       $dbh->prepare(
 "select tagfield,tagsubfield from marc_subfield_structure where frameworkcode=? and kohafield=?"
       );
-    &MARCkoha2marcOnefield( $sth, $record, "items.itemnumber", $itemnumber,
+    &TransformKohaToMarcOneField( $sth, $record, "items.itemnumber", $itemnumber,
         $frameworkcode );
 
-    ##NEU specific add cataloguers cardnumber as well
-    my $cardtag = C4::Context->preference('itemcataloguersubfield');
-    if ($cardtag) {
-        $sth->execute( $frameworkcode, "items.itemnumber" );
-        my ( $itemtag, $subtag ) = $sth->fetchrow;
-        my $me         = C4::Context->userenv;
-        my $cataloguer = $me->{'cardnumber'} if ($me);
-        my $newtag     = $record->field($itemtag);
-        $newtag->update( $cardtag => $cataloguer ) if ($me);
-        $record->delete_field($newtag);
-        $record->append_fields($newtag);
-    }
-
     # add the item
-    &MARCadditem( $record, $item->{'biblionumber'},$frameworkcode );
+    &AddItemInMarc( $record, $item->{'biblionumber'},$frameworkcode );
     
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
         if C4::Context->preference("CataloguingLog");
@@ -350,9 +344,12 @@ sub AddItem {
 
 =head2 ModBiblio
 
-ModBiblio( $record,$biblionumber,$frameworkcode);
+=over
 
+ModBiblio( $record,$biblionumber,$frameworkcode);
 Exported function (core API) to modify a biblio
+
+=back
 
 =cut
 
@@ -369,13 +366,13 @@ sub ModBiblio {
     $frameworkcode = "" unless $frameworkcode;
 
     # update the MARC record with the new record data
-    &MARCmodbiblio( $dbh, $biblionumber, $record, $frameworkcode, 1 );
+    &ModBiblioMarc($record, $biblionumber, $frameworkcode );
 
     # load the koha-table data object
     my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
 
     # modify the other koha tables
-    my $oldbiblionumber = _koha_modify_biblio( $dbh, $oldbiblio );
+    my $biblionumber = _koha_modify_biblio( $dbh, $oldbiblio );
     _koha_modify_biblioitem( $dbh, $oldbiblio );
 
     return 1;
@@ -383,14 +380,18 @@ sub ModBiblio {
 
 =head2 ModItem
 
+=over
+
 Exported function (core API) for modifying an item in Koha.
+
+=back
 
 =cut
 
 sub ModItem {
     my ( $record, $biblionumber, $itemnumber, $delete, $new_item_hashref )
       = @_;
-      
+    
     #logging
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","MODIFY",$itemnumber,$record->as_formatted) 
         if C4::Context->preference("CataloguingLog");
@@ -402,7 +403,7 @@ sub ModItem {
     # tables
     if ($record) {
         my $frameworkcode = GetFrameworkCode( $biblionumber );
-        MARCmoditem( $record, $biblionumber, $itemnumber, $frameworkcode, $delete );
+        ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode );
         my $olditem       = TransformMarcToKoha( $dbh, $record, $frameworkcode );
         _koha_modify_item( $dbh, $olditem );
         return $biblionumber;
@@ -417,9 +418,12 @@ sub ModItem {
 
 =head2 ModBiblioframework
 
-ModBiblioframework($biblionumber,$frameworkcode);
+=over
 
+ModBiblioframework($biblionumber,$frameworkcode);
 Exported function to modify a biblio framework
+
+=back
 
 =cut
 
@@ -429,26 +433,87 @@ sub ModBiblioframework {
     my $sth =
       $dbh->prepare(
         "UPDATE biblio SET frameworkcode=? WHERE biblionumber=$biblionumber");
-        
-        warn "IN ModBiblioframework";
     $sth->execute($frameworkcode);
     return 1;
 }
 
+=head2 ModItemInMarconefield
+
+=over
+
+modify only 1 field in a MARC item (mainly used for holdingbranch, but could also be used for status modif - moving a book to "lost" on a long overdu for example)
+&ModItemInMarconefield( $biblionumber, $itemnumber, $itemfield, $newvalue )
+
+=back
+
+=cut
+
+sub ModItemInMarconefield {
+    my ( $biblionumber, $itemnumber, $itemfield, $newvalue ) = @_;
+    my $dbh = C4::Context->dbh;
+    if ( !defined $newvalue ) {
+        $newvalue = "";
+    }
+
+    my $record = GetMarcItem( $biblionumber, $itemnumber );
+    my ($tagfield, $tagsubfield) = GetMarcFromKohaField($dbh, $itemfield,'');
+    if ($tagfield && $tagsubfield) {
+        my $tag = $record->field($tagfield);
+        if ($tag) {
+#             my $tagsubs = $record->field($tagfield)->subfield($tagsubfield);
+            $tag->update( $tagsubfield => $newvalue );
+            $record->delete_field($tag);
+            $record->insert_fields_ordered($tag);
+            &ModItemInMarc( $record, $biblionumber, $itemnumber, 0 );
+        }
+    }
+}
+
+=head2 ModItemInMarc
+
+=over
+
+&ModItemInMarc( $record, $biblionumber, $itemnumber )
+
+=back
+
+=cut
+
+sub ModItemInMarc {
+    my ( $ItemRecord, $biblionumber, $itemnumber, $frameworkcode) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    # get complete MARC record & replace the item field by the new one
+    my $completeRecord = GetMarcBiblio($biblionumber);
+    my ($itemtag,$itemsubfield) = GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
+    my $itemField = $ItemRecord->field($itemtag);
+    my @items = $completeRecord->field($itemtag);
+    foreach (@items) {
+        if ($_->subfield($itemsubfield) eq $itemnumber) {
+#             $completeRecord->delete_field($_);
+            $_->replace_with($itemField);
+        }
+    }
+    # save the record
+    my $sth = $dbh->prepare("update biblioitems set marc=?,marcxml=?  where biblionumber=?");
+    $sth->execute( $completeRecord->as_usmarc(), $completeRecord->as_xml_record(),$biblionumber );
+    $sth->finish;
+    ModZebra($biblionumber,"specialUpdate","biblioserver");
+}
+
 =head2 DelBiblio
 
+=over
+
 my $error = &DelBiblio($dbh,$biblionumber);
-
 Exported function (core API) for deleting a biblio in koha.
-
 Deletes biblio record from Zebra and Koha tables (biblio,biblioitems,items)
-
 Also backs it up to deleted* tables
-
 Checks to make sure there are not issues on any of the items
-
 return:
 C<$error> : undef unless an error occurs
+
+=back
 
 =cut
 
@@ -501,7 +566,7 @@ sub DelBiblio {
             "SELECT itemnumber FROM items WHERE biblioitemnumber=?");
         $items_sth->execute($biblioitemnumber);
         while ( my $itemnumber = $items_sth->fetchrow ) {
-            $error = &_koha_delete_items( $dbh, $itemnumber );
+            $error = &_koha_delete_item( $dbh, $itemnumber );
             return $error if $error;
         }
     }
@@ -512,9 +577,12 @@ sub DelBiblio {
 
 =head2 DelItem
 
-DelItem( $biblionumber, $itemnumber );
+=over
 
+DelItem( $biblionumber, $itemnumber );
 Exported function (core API) for deleting an item record in Koha.
+
+=back
 
 =cut
 
@@ -522,35 +590,49 @@ sub DelItem {
     my ( $biblionumber, $itemnumber ) = @_;
     my $dbh = C4::Context->dbh;
     &_koha_delete_item( $dbh, $itemnumber );
-    my $newrec = &MARCdelitem( $biblionumber, $itemnumber );
-    &MARCaddbiblio( $newrec, $biblionumber, GetFrameworkCode($biblionumber) );
+    # get the MARC record
+    my $record = GetMarcBiblio($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+
+    # backup the record
+    my $copy2deleted =
+      $dbh->prepare("UPDATE deleteditems SET marc=? WHERE itemnumber=?");
+    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
+
+    #search item field code
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
+    my @fields = $record->field($itemtag);
+    # delete the item specified
+    foreach my $field (@fields) {
+        if ( $field->subfield($itemsubfield) eq $itemnumber ) {
+            $record->delete_field($field);
+        }
+    }
+    &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$itemnumber,"item") 
         if C4::Context->preference("CataloguingLog");
 }
 
 =head2 GetBiblioData
 
-  $data = &GetBiblioData($biblionumber, $type);
+=over 4
 
+$data = &GetBiblioData($biblionumber);
 Returns information about the book with the given biblionumber.
-
-C<$type> is ignored.
-
 C<&GetBiblioData> returns a reference-to-hash. The keys are the fields in
 the C<biblio> and C<biblioitems> tables in the
 Koha database.
-
 In addition, C<$data-E<gt>{subject}> is the list of the book's
 subjects, separated by C<" , "> (space, comma, space).
-
 If there are multiple biblioitems with the given biblionumber, only
 the first one is considered.
 
+=back
+
 =cut
 
-#'
 sub GetBiblioData {
-    my ( $bibnum, $type ) = @_;
+    my ( $bibnum ) = @_;
     my $dbh = C4::Context->dbh;
 
     my $query = "
@@ -572,6 +654,8 @@ sub GetBiblioData {
 
 
 =head2 GetItemsInfo
+
+=over 4
 
   @results = &GetItemsInfo($biblionumber, $type);
 
@@ -615,9 +699,10 @@ If this is set, it is set to C<One Order>.
 
 =back
 
+=back
+
 =cut
 
-#'
 sub GetItemsInfo {
     my ( $biblionumber, $type ) = @_;
     my $dbh   = C4::Context->dbh;
@@ -730,12 +815,14 @@ sub GetItemsInfo {
 
 =head2 getitemstatus
 
-  $itemstatushash = &getitemstatus($fwkcode);
-  returns information about status.
-  Can be MARC dependant.
-  fwkcode is optional.
-  But basically could be can be loan or not
-  Create a status selector with the following code
+=over 4
+
+$itemstatushash = &getitemstatus($fwkcode);
+returns information about status.
+Can be MARC dependant.
+fwkcode is optional.
+But basically could be can be loan or not
+Create a status selector with the following code
 
 =head3 in PERL SCRIPT
 
@@ -750,7 +837,8 @@ foreach my $thisstatus (keys %$itemstatushash) {
 $template->param(statusloop=>\@itemstatusloop);
 
 
-=head3 in TEMPLATE  
+=head3 in TEMPLATE
+
             <select name="statusloop">
                 <option value="">Default</option>
             <!-- TMPL_LOOP name="statusloop" -->
@@ -805,10 +893,12 @@ sub GetItemStatus {
 
 =head2 getitemlocation
 
-  $itemlochash = &getitemlocation($fwk);
-  returns informations about location.
-  where fwk stands for an optional framework code.
-  Create a location selector with the following code
+=over 4
+
+$itemlochash = &getitemlocation($fwk);
+returns informations about location.
+where fwk stands for an optional framework code.
+Create a location selector with the following code
 
 =head3 in PERL SCRIPT
 
@@ -824,13 +914,16 @@ foreach my $thisloc (keys %$itemlochash) {
 }
 $template->param(itemlocationloop => \@itemlocloop);
 
-=head3 in TEMPLATE  
-            <select name="location">
-                <option value="">Default</option>
-            <!-- TMPL_LOOP name="itemlocationloop" -->
-                <option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
-            <!-- /TMPL_LOOP -->
-            </select>
+=head3 in TEMPLATE
+
+<select name="location">
+    <option value="">Default</option>
+<!-- TMPL_LOOP name="itemlocationloop" -->
+    <option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+
+=back
 
 =cut
 
@@ -879,12 +972,16 @@ sub GetItemLocation {
 
 =head2 &GetBiblioItemData
 
-  $itemdata = &GetBiblioItemData($biblioitemnumber);
+=over 4
+
+$itemdata = &GetBiblioItemData($biblioitemnumber);
 
 Looks up the biblioitem with the given biblioitemnumber. Returns a
 reference-to-hash. The keys are the fields from the C<biblio>,
 C<biblioitems>, and C<itemtypes> tables in the Koha database, except
 that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
+
+=back
 
 =cut
 
@@ -908,7 +1005,11 @@ sub GetBiblioItemData {
 
 =head2 GetItemFromBarcode
 
+=over 4
+
 $result = GetItemFromBarcode($barcode);
+
+=back
 
 =cut
 
@@ -925,7 +1026,11 @@ sub GetItemFromBarcode {
 
 =head2 GetBiblioItemByBiblioNumber
 
+=over 4
+
 NOTE : This function has been copy/paste from C4/Biblio.pm from head before zebra integration.
+
+=back
 
 =cut
 
@@ -948,13 +1053,17 @@ sub GetBiblioItemByBiblioNumber {
 
 =head2 GetBiblioFromItemNumber
 
-  $item = &GetBiblioFromItemNumber($itemnumber);
+=over 4
+
+$item = &GetBiblioFromItemNumber($itemnumber);
 
 Looks up the item with the given itemnumber.
 
 C<&itemnodata> returns a reference-to-hash whose keys are the fields
 from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
 database.
+
+=back
 
 =cut
 
@@ -978,7 +1087,11 @@ sub GetBiblioFromItemNumber {
 
 =head2 GetBiblio
 
+=over 4
+
 ( $count, @results ) = &GetBiblio($biblionumber);
+
+=back
 
 =cut
 
@@ -999,13 +1112,17 @@ sub GetBiblio {
 
 =head2 get_itemnumbers_of
 
-  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
+=over 4
+
+my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
 
 Given a list of biblionumbers, return the list of corresponding itemnumbers
 for each biblionumber.
 
 Return a reference on a hash where keys are biblionumbers and values are
 references on array of itemnumbers.
+
+=back
 
 =cut
 
@@ -1032,29 +1149,13 @@ sub get_itemnumbers_of {
     return \%itemnumbers_of;
 }
 
-=head2 getRecord
-
-$record = getRecord( $server, $koha_query, $recordSyntax );
-
-get a single record in piggyback mode from Zebra and return it in the requested record syntax
-
-default record syntax is XML
-
-=cut
-
-sub getRecord {
-    my ( $server, $koha_query, $recordSyntax ) = @_;
-    $recordSyntax = "xml" unless $recordSyntax;
-    my $Zconn = C4::Context->Zconn( $server, 0, 1, 1, $recordSyntax );
-    my $rs = $Zconn->search( new ZOOM::Query::CCL2RPN( $koha_query, $Zconn ) );
-    if ( $rs->record(0) ) {
-        return $rs->record(0)->raw();
-    }
-}
-
 =head2 GetItemInfosOf
 
+=over 4
+
 GetItemInfosOf(@itemnumbers);
+
+=back
 
 =cut
 
@@ -1071,7 +1172,11 @@ sub GetItemInfosOf {
 
 =head2 GetBiblioItemInfosOf
 
+=over 4
+
 GetBiblioItemInfosOf(@biblioitemnumbers);
+
+=back
 
 =cut
 
@@ -1088,117 +1193,22 @@ sub GetBiblioItemInfosOf {
     return get_infos_of( $query, 'biblioitemnumber' );
 }
 
-=head2 z3950_extended_services
-
-z3950_extended_services($serviceType,$serviceOptions,$record);
-
-    z3950_extended_services is used to handle all interactions with Zebra's extended serices package, which is employed to perform all management of the MARC data stored in Zebra.
-
-C<$serviceType> one of: itemorder,create,drop,commit,update,xmlupdate
-
-C<$serviceOptions> a has of key/value pairs. For instance, if service_type is 'update', $service_options should contain:
-
-    action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
-
-and maybe
-
-    recordidOpaque => Opaque Record ID (user supplied) or recordidNumber => Record ID number (system number).
-    syntax => the record syntax (transfer syntax)
-    databaseName = Database from connection object
-
-    To set serviceOptions, call set_service_options($serviceType)
-
-C<$record> the record, if one is needed for the service type
-
-    A record should be in XML. You can convert it to XML from MARC by running it through marc2xml().
-
-=cut
-
-sub z3950_extended_services {
-    my ( $server, $serviceType, $action, $serviceOptions ) = @_;
-
-    # get our connection object
-    my $Zconn = C4::Context->Zconn( $server, 0, 1 );
-
-    # create a new package object
-    my $Zpackage = $Zconn->package();
-
-    # set our options
-    $Zpackage->option( action => $action );
-
-    if ( $serviceOptions->{'databaseName'} ) {
-        $Zpackage->option( databaseName => $serviceOptions->{'databaseName'} );
-    }
-    if ( $serviceOptions->{'recordIdNumber'} ) {
-        $Zpackage->option(
-            recordIdNumber => $serviceOptions->{'recordIdNumber'} );
-    }
-    if ( $serviceOptions->{'recordIdOpaque'} ) {
-        $Zpackage->option(
-            recordIdOpaque => $serviceOptions->{'recordIdOpaque'} );
-    }
-
- # this is an ILL request (Zebra doesn't support it, but Koha could eventually)
- #if ($serviceType eq 'itemorder') {
- #   $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
- #   $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
- #   $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
- #   $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
- #}
-
-    if ( $serviceOptions->{record} ) {
-        $Zpackage->option( record => $serviceOptions->{record} );
-
-        # can be xml or marc
-        if ( $serviceOptions->{'syntax'} ) {
-            $Zpackage->option( syntax => $serviceOptions->{'syntax'} );
-        }
-    }
-
-    # send the request, handle any exception encountered
-    eval { $Zpackage->send($serviceType) };
-    if ( $@ && $@->isa("ZOOM::Exception") ) {
-        return "error:  " . $@->code() . " " . $@->message() . "\n";
-    }
-
-    # free up package resources
-    $Zpackage->destroy();
-}
-
-=head2 set_service_options
-
-my $serviceOptions = set_service_options($serviceType);
-
-C<$serviceType> itemorder,create,drop,commit,update,xmlupdate
-
-Currently, we only support 'create', 'commit', and 'update'. 'drop' support will be added as soon as Zebra supports it.
-
-=cut
-
-sub set_service_options {
-    my ($serviceType) = @_;
-    my $serviceOptions;
-
-# FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
-#   $serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
-
-    if ( $serviceType eq 'commit' ) {
-
-        # nothing to do
-    }
-    if ( $serviceType eq 'create' ) {
-
-        # nothing to do
-    }
-    if ( $serviceType eq 'drop' ) {
-        die "ERROR: 'drop' not currently supported (by Zebra)";
-    }
-    return $serviceOptions;
-}
-
 =head1 FUNCTIONS FOR HANDLING MARC MANAGEMENT
 
 =head2 GetMarcStructure
+
+=over 4
+
+$res = GetMarcStructure($dbh,$forlibrarian,$frameworkcode);
+
+Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
+$dbh : DB handler
+$forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
+$frameworkcode : the framework code to read
+
+=back
+
+=back
 
 =cut
 
@@ -1281,6 +1291,14 @@ sub GetMarcStructure {
 
 =head2 GetMarcFromKohaField
 
+=over 4
+
+($MARCfield,$MARCsubfield)=GetMarcFromKohaField($dbh,$kohafield,$frameworkcode);
+Returns the MARC fields & subfields mapped to the koha field 
+for the given frameworkcode
+
+=back
+
 =cut
 
 sub GetMarcFromKohaField {
@@ -1293,87 +1311,14 @@ sub GetMarcFromKohaField {
     );
 }
 
-=head2 MARCaddbiblio
-
-&MARCaddbiblio($newrec,$biblionumber,$frameworkcode);
-
-Add MARC data for a biblio to koha 
-
-=cut
-
-sub MARCaddbiblio {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ( $record, $biblionumber, $frameworkcode ) = @_;
-    my $dbh = C4::Context->dbh;
-    my @fields = $record->fields();
-    if ( !$frameworkcode ) {
-        $frameworkcode = "";
-    }
-    my $sth =
-      $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
-    $sth->execute( $frameworkcode, $biblionumber );
-    $sth->finish;
-    my $encoding = C4::Context->preference("marcflavour");
-
-# deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
-    if ( $encoding eq "UNIMARC" ) {
-        my $string;
-        if ( $record->subfield( 100, "a" ) ) {
-            $string = $record->subfield( 100, "a" );
-            my $f100 = $record->field(100);
-            $record->delete_field($f100);
-        }
-        else {
-            $string = POSIX::strftime( "%Y%m%d", localtime );
-            $string =~ s/\-//g;
-            $string = sprintf( "%-*s", 35, $string );
-        }
-        substr( $string, 22, 6, "frey50" );
-        unless ( $record->subfield( 100, "a" ) ) {
-            $record->insert_grouped_field(
-                MARC::Field->new( 100, "", "", "a" => $string ) );
-        }
-    }
-#     warn "biblionumber : ".$biblionumber;
-    $sth =
-      $dbh->prepare(
-        "update biblioitems set marc=?,marcxml=?  where biblionumber=?");
-    $sth->execute( $record->as_usmarc(), $record->as_xml_record(),
-        $biblionumber );
-#     warn $record->as_xml_record();
-    $sth->finish;
-    ModZebra($biblionumber,"specialUpdate","biblioserver");
-    return $biblionumber;
-}
-
-=head2 MARCadditem
-
-$newbiblionumber = MARCadditem( $record, $biblionumber, $frameworkcode );
-
-=cut
-
-sub MARCadditem {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ( $record, $biblionumber, $frameworkcode ) = @_;
-    my $newrec = &GetMarcBiblio($biblionumber);
-
-    # 2nd recreate it
-    my @fields = $record->fields();
-    foreach my $field (@fields) {
-        $newrec->append_fields($field);
-    }
-
-    # FIXME: should we be making sure the biblionumbers are the same?
-    my $newbiblionumber =
-      &MARCaddbiblio( $newrec, $biblionumber, $frameworkcode );
-    return $newbiblionumber;
-}
-
 =head2 GetMarcBiblio
 
+=over 4
+
 Returns MARC::Record of the biblionumber passed in parameter.
+the marc record contains both biblio & item datas
+
+=back
 
 =cut
 
@@ -1398,9 +1343,14 @@ sub GetMarcBiblio {
 
 =head2 GetXmlBiblio
 
+=over 4
+
 my $marcxml = GetXmlBiblio($biblionumber);
 
 Returns biblioitems.marcxml of the biblionumber passed in parameter.
+The XML contains both biblio & item datas
+
+=back
 
 =cut
 
@@ -1416,8 +1366,13 @@ sub GetXmlBiblio {
 
 =head2 GetAuthorisedValueDesc
 
+=over 4
+
 my $subfieldvalue =get_authorised_value_desc(
     $tag, $subf[$i][0],$subf[$i][1], '', $taglib);
+Retrieve the complete description for a given authorised value.
+
+=back
 
 =cut
 
@@ -1454,7 +1409,11 @@ sub GetAuthorisedValueDesc {
 
 =head2 GetMarcItem
 
+=over 4
+
 Returns MARC::Record of the item passed in parameter.
+
+=back
 
 =cut
 
@@ -1483,11 +1442,13 @@ sub GetMarcItem {
 
 =head2 GetMarcNotes
 
+=over 4
+
 $marcnotesarray = GetMarcNotes( $record, $marcflavour );
+Get all notes from the MARC record and returns them in an array.
+The note are stored in differents places depending on MARC flavour
 
-get a single record in piggyback mode from Zebra and return it in the requested record syntax
-
-default record syntax is XML
+=back
 
 =cut
 
@@ -1525,7 +1486,13 @@ sub GetMarcNotes {
 
 =head2 GetMarcSubjects
 
+=over 4
+
 $marcsubjcts = GetMarcSubjects($record,$marcflavour);
+Get all subjects from the MARC record and returns them in an array.
+The subjects are stored in differents places depending on MARC flavour
+
+=back
 
 =cut
 
@@ -1576,7 +1543,13 @@ sub GetMarcSubjects {
 
 =head2 GetMarcAuthors
 
+=over 4
+
 authors = GetMarcAuthors($record,$marcflavour);
+Get all authors from the MARC record and returns them in an array.
+The authors are stored in differents places depending on MARC flavour
+
+=back
 
 =cut
 
@@ -1618,7 +1591,13 @@ sub GetMarcAuthors {
 
 =head2 GetMarcSeries
 
+=over 4
+
 $marcseriessarray = GetMarcSeries($record,$marcflavour);
+Get all series from the MARC record and returns them in an array.
+The series are stored in differents places depending on MARC flavour
+
+=back
 
 =cut
 
@@ -1679,191 +1658,13 @@ sub GetMarcSeries {
     return $marcseriessarray;
 }  #end getMARCseriess
 
-=head2 MARCmodbiblio
-
-MARCmodbibio($dbh,$biblionumber,$record,$frameworkcode,1);
-
-Modify a biblio record with the option to save items data
-
-=cut
-
-sub MARCmodbiblio {
-    my ( $dbh, $biblionumber, $record, $frameworkcode, $keep_items ) = @_;
-
-    # delete original record but save the items
-    my $newrec = &MARCdelbiblio( $biblionumber, $keep_items );
-
-    # recreate it and add the new fields
-    my @fields = $record->fields();
-    foreach my $field (@fields) {
-
-        # this requires a more recent version of MARC::Record
-        # but ensures the fields are in order
-        $newrec->insert_fields_ordered($field);
-    }
-
-    # give back our old leader
-    $newrec->leader( $record->leader() );
-
-    # add the record back with the items info preserved
-    &MARCaddbiblio( $newrec, $biblionumber, $frameworkcode );
-}
-
-=head2 MARCdelbiblio
-
-&MARCdelbiblio( $biblionumber, $keep_items )
-
-if the keep_item is set to 1, then all items are preserved.
-This flag is set when the delbiblio is called by modbiblio
-due to a too complex structure of MARC (repeatable fields and subfields),
-the best solution for a modif is to delete / recreate the record.
-
-1st of all, copy the MARC::Record to deletedbiblio table => if a true deletion, MARC data will be kept.
-if deletion called before MARCmodbiblio => won't do anything, as the oldbiblionumber doesn't
-exist in deletedbiblio table
-
-=cut
-
-sub MARCdelbiblio {
-    my ( $biblionumber, $keep_items ) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    my $record          = GetMarcBiblio($biblionumber);
-    my $oldbiblionumber = $biblionumber;
-    my $copy2deleted    =
-      $dbh->prepare("update deletedbiblio set marc=? where biblionumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $oldbiblionumber );
-    my @fields = $record->fields();
-
-    # now, delete in MARC tables.
-    if ( $keep_items eq 1 ) {
-        #search item field code
-        my $sth =
-          $dbh->prepare(
-"select tagfield from marc_subfield_structure where kohafield like 'items.%'"
-          );
-        $sth->execute;
-        my $itemtag = $sth->fetchrow_hashref->{tagfield};
-
-        foreach my $field (@fields) {
-
-            if ( $field->tag() ne $itemtag ) {
-                $record->delete_field($field);
-            }    #if
-        }    #foreach
-    }
-    else {
-        foreach my $field (@fields) {
-
-            $record->delete_field($field);
-        }    #foreach
-    }
-    return $record;
-}
-
-=head2 MARCdelitem
-
-MARCdelitem( $biblionumber, $itemnumber )
-
-delete the item field from the MARC record for the itemnumber specified
-
-=cut
-
-sub MARCdelitem {
-    my ( $biblionumber, $itemnumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    # get the MARC record
-    my $record = GetMarcBiblio($biblionumber);
-
-    # backup the record
-    my $copy2deleted =
-      $dbh->prepare("UPDATE deleteditems SET marc=? WHERE itemnumber=?");
-    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
-
-    #search item field code
-    my $sth =
-      $dbh->prepare(
-"SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE kohafield LIKE 'items.itemnumber'"
-      );
-    $sth->execute;
-    my ( $itemtag, $itemsubfield ) = $sth->fetchrow;
-    my @fields = $record->field($itemtag);
-    # delete the item specified
-    foreach my $field (@fields) {
-        if ( $field->subfield($itemsubfield) eq $itemnumber ) {
-            $record->delete_field($field);
-        }
-    }
-    return $record;
-}
-
-=head2 MARCmoditemonefield
-
-&MARCmoditemonefield( $biblionumber, $itemnumber, $itemfield, $newvalue )
-
-=cut
-
-sub MARCmoditemonefield {
-    my ( $biblionumber, $itemnumber, $itemfield, $newvalue ) = @_;
-    my $dbh = C4::Context->dbh;
-    if ( !defined $newvalue ) {
-        $newvalue = "";
-    }
-
-    my $record = GetMarcItem( $biblionumber, $itemnumber );
-
-    my $sth =
-      $dbh->prepare(
-"select tagfield,tagsubfield from marc_subfield_structure where kohafield=?"
-      );
-    my $tagfield;
-    my $tagsubfield;
-    $sth->execute($itemfield);
-    if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
-        my $tag = $record->field($tagfield);
-        if ($tag) {
-            my $tagsubs = $record->field($tagfield)->subfield($tagsubfield);
-            $tag->update( $tagsubfield => $newvalue );
-            $record->delete_field($tag);
-            $record->insert_fields_ordered($tag);
-            &MARCmoditem( $record, $biblionumber, $itemnumber, 0 );
-        }
-    }
-}
-
-=head2 MARCmoditem
-
-&MARCmoditem( $record, $biblionumber, $itemnumber, $frameworkcode, $delete )
-
-=cut
-
-sub MARCmoditem {
-    my ( $record, $biblionumber, $itemnumber, $frameworkcode, $delete ) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    # delete this item from MARC
-    my $newrec = &MARCdelitem( $biblionumber, $itemnumber );
-
-    # 2nd recreate it
-    my @fields = $record->fields();
-    ###NEU specific add cataloguers cardnumber as well
-    my $cardtag = C4::Context->preference('itemcataloguersubfield');
-
-    foreach my $field (@fields) {
-        if ($cardtag) {
-            my $me = C4::Context->userenv;
-            my $cataloguer = $me->{'cardnumber'} if ($me);
-            $field->update( $cardtag => $cataloguer ) if ($me);
-        }
-        $newrec->append_fields($field);
-    }
-    &MARCaddbiblio( $newrec, $biblionumber, $frameworkcode );
-}
-
 =head2 GetFrameworkCode
 
+=over 4
+
 $frameworkcode = GetFrameworkCode( $biblionumber )
+
+=back
 
 =cut
 
@@ -1877,19 +1678,20 @@ sub GetFrameworkCode {
     return $frameworkcode;
 }
 
-=head2 Koha2Marc
+=head2 TransformKohaToMarc
 
-$record = Koha2Marc( $hash )
+=over 4
 
+$record = TransformKohaToMarc( $hash )
 This function builds partial MARC::Record from a hash
-
 Hash entries can be from biblio or biblioitems.
-
 This function is called in acquisition module, to create a basic catalogue entry from user entry
+
+=back
 
 =cut
 
-sub Koha2Marc {
+sub TransformKohaToMarc {
 
     my ( $hash ) = @_;
     my $dbh = C4::Context->dbh;
@@ -1899,19 +1701,23 @@ sub Koha2Marc {
     );
     my $record = MARC::Record->new();
     foreach (keys %{$hash}) {
-        &MARCkoha2marcOnefield( $sth, $record, $_,
+        &TransformKohaToMarcOneField( $sth, $record, $_,
             $hash->{$_}, '' );
         }
     return $record;
 }
 
-=head2 MARCkoha2marcOnefield
+=head2 TransformKohaToMarcOneField
 
-$record = MARCkoha2marcOnefield( $sth, $record, $kohafieldname, $value, $frameworkcode );
+=over 4
+
+$record = TransformKohaToMarcOneField( $sth, $record, $kohafieldname, $value, $frameworkcode );
+
+=back
 
 =cut
 
-sub MARCkoha2marcOnefield {
+sub TransformKohaToMarcOneField {
     my ( $sth, $record, $kohafieldname, $value, $frameworkcode ) = @_;
     $frameworkcode='' unless $frameworkcode;
     my $tagfield;
@@ -1941,7 +1747,11 @@ sub MARCkoha2marcOnefield {
 
 =head2 TransformHtmlToXml
 
+=over 4
+
 $xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, $ind_tag )
+
+=back
 
 =cut
 
@@ -2048,7 +1858,11 @@ sub TransformHtmlToXml {
 
 =head2 TransformHtmlToMarc
 
+=over 4
+
 $record = TransformHtmlToMarc( $dbh, $rtags, $rsubfields, $rvalues, %indicators )
+
+=back
 
 =cut
 
@@ -2126,7 +1940,11 @@ sub TransformHtmlToMarc {
 
 =head2 TransformMarcToKoha
 
+=over 4
+
 $result = TransformMarcToKoha( $dbh, $record, $frameworkcode )
+
+=back
 
 =cut
 
@@ -2188,7 +2006,11 @@ sub TransformMarcToKoha {
 
 =head2 TransformMarcToKohaOneField
 
+=over 4
+
 $result = TransformMarcToKohaOneField( $kohatable, $kohafield, $record, $result, $frameworkcode )
+
+=back
 
 =cut
 
@@ -2230,620 +2052,18 @@ sub TransformMarcToKohaOneField {
     }
     return $result;
 }
-
-=head2 MARCitemchange
-
-&MARCitemchange( $record, $itemfield, $newvalue )
-
-=cut
-
-sub MARCitemchange {
-    my ( $record, $itemfield, $newvalue ) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    my ( $tagfield, $tagsubfield ) =
-      GetMarcFromKohaField( $dbh, $itemfield, "" );
-    if ( ($tagfield) && ($tagsubfield) ) {
-        my $tag = $record->field($tagfield);
-        if ($tag) {
-            $tag->update( $tagsubfield => $newvalue );
-            $record->delete_field($tag);
-            $record->insert_fields_ordered($tag);
-        }
-    }
-}
-
-=head1 INTERNAL FUNCTIONS
-
-=head2 _koha_add_biblio
-
-_koha_add_biblio($dbh,$biblioitem);
-
-Internal function to add a biblio ($biblio is a hash with the values)
-
-=cut
-
-sub _koha_add_biblio {
-    my ( $dbh, $biblio, $frameworkcode ) = @_;
-    my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
-    $sth->execute;
-    my $data         = $sth->fetchrow_arrayref;
-    my $biblionumber = $$data[0] + 1;
-    my $series       = 0;
-
-    if ( $biblio->{'seriestitle'} ) { $series = 1 }
-    $sth->finish;
-    $sth = $dbh->prepare(
-        "INSERT INTO biblio
-    SET biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?, frameworkcode = ? "
-    );
-    $sth->execute(
-        $biblionumber,         $biblio->{'title'},
-        $biblio->{'author'},   $biblio->{'copyrightdate'},
-        $biblio->{'serial'},   $biblio->{'seriestitle'},
-        $biblio->{'notes'},    $biblio->{'abstract'},
-        $biblio->{'unititle'}, $frameworkcode
-    );
-
-    $sth->finish;
-    return ($biblionumber);
-}
-
-=head2 _find_value
-
-    ($indicators, $value) = _find_value($tag, $subfield, $record,$encoding);
-
-Find the given $subfield in the given $tag in the given
-MARC::Record $record.  If the subfield is found, returns
-the (indicators, value) pair; otherwise, (undef, undef) is
-returned.
-
-PROPOSITION :
-Such a function is used in addbiblio AND additem and serial-edit and maybe could be used in Authorities.
-I suggest we export it from this module.
-
-=cut
-
-sub _find_value {
-    my ( $tagfield, $insubfield, $record, $encoding ) = @_;
-    my @result;
-    my $indicator;
-    if ( $tagfield < 10 ) {
-        if ( $record->field($tagfield) ) {
-            push @result, $record->field($tagfield)->data();
-        }
-        else {
-            push @result, "";
-        }
-    }
-    else {
-        foreach my $field ( $record->field($tagfield) ) {
-            my @subfields = $field->subfields();
-            foreach my $subfield (@subfields) {
-                if ( @$subfield[0] eq $insubfield ) {
-                    push @result, @$subfield[1];
-                    $indicator = $field->indicator(1) . $field->indicator(2);
-                }
-            }
-        }
-    }
-    return ( $indicator, @result );
-}
-
-=head2 _koha_modify_biblio
-
-Internal function for updating the biblio table
-
-=cut
-
-sub _koha_modify_biblio {
-    my ( $dbh, $biblio ) = @_;
-
-# FIXME: this code could be made more portable by not hard-coding the values that are supposed to be in biblio table
-    my $sth =
-      $dbh->prepare(
-"Update biblio set title = ?, author = ?, abstract = ?, copyrightdate = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ? where biblionumber = ?"
-      );
-    $sth->execute(
-        $biblio->{'title'},       $biblio->{'author'},
-        $biblio->{'abstract'},    $biblio->{'copyrightdate'},
-        $biblio->{'seriestitle'}, $biblio->{'serial'},
-        $biblio->{'unititle'},    $biblio->{'notes'},
-        $biblio->{'biblionumber'}
-    );
-    $sth->finish;
-    return ( $biblio->{'biblionumber'} );
-}
-
-=head2 _koha_modify_biblioitem
-
-_koha_modify_biblioitem( $dbh, $biblioitem );
-
-=cut
-
-sub _koha_modify_biblioitem {
-    my ( $dbh, $biblioitem ) = @_;
-    my $query;
-##Recalculate LC in case it changed --TG
-
-    $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
-    $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
-    $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
-    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
-    $biblioitem->{'publishercode'} =
-      $dbh->quote( $biblioitem->{'publishercode'} );
-    $biblioitem->{'publicationyear'} =
-      $dbh->quote( $biblioitem->{'publicationyear'} );
-    $biblioitem->{'classification'} =
-      $dbh->quote( $biblioitem->{'classification'} );
-    $biblioitem->{'dewey'}        = $dbh->quote( $biblioitem->{'dewey'} );
-    $biblioitem->{'subclass'}     = $dbh->quote( $biblioitem->{'subclass'} );
-    $biblioitem->{'illus'}        = $dbh->quote( $biblioitem->{'illus'} );
-    $biblioitem->{'pages'}        = $dbh->quote( $biblioitem->{'pages'} );
-    $biblioitem->{'volumeddesc'}  = $dbh->quote( $biblioitem->{'volumeddesc'} );
-    $biblioitem->{'bnotes'}       = $dbh->quote( $biblioitem->{'bnotes'} );
-    $biblioitem->{'size'}         = $dbh->quote( $biblioitem->{'size'} );
-    $biblioitem->{'place'}        = $dbh->quote( $biblioitem->{'place'} );
-    $biblioitem->{'ccode'}        = $dbh->quote( $biblioitem->{'ccode'} );
-    $biblioitem->{'biblionumber'} =
-      $dbh->quote( $biblioitem->{'biblionumber'} );
-
-    $query = "Update biblioitems set
-        itemtype        = $biblioitem->{'itemtype'},
-        url             = $biblioitem->{'url'},
-        isbn            = $biblioitem->{'isbn'},
-        issn            = $biblioitem->{'issn'},
-        publishercode   = $biblioitem->{'publishercode'},
-        publicationyear = $biblioitem->{'publicationyear'},
-        classification  = $biblioitem->{'classification'},
-        dewey           = $biblioitem->{'dewey'},
-        subclass        = $biblioitem->{'subclass'},
-        illus           = $biblioitem->{'illus'},
-        pages           = $biblioitem->{'pages'},
-        volumeddesc     = $biblioitem->{'volumeddesc'},
-        notes           = $biblioitem->{'bnotes'},
-        size            = $biblioitem->{'size'},
-        place           = $biblioitem->{'place'},
-        ccode           = $biblioitem->{'ccode'}
-        where biblionumber = $biblioitem->{'biblionumber'}";
-
-    $dbh->do($query);
-    if ( $dbh->errstr ) {
-        warn "$query";
-    }
-}
-
-=head2 _koha_modify_note
-
-_koha_modify_note( $dbh, $bibitemnum, $note );
-
-=cut
-
-sub _koha_modify_note {
-    my ( $dbh, $bibitemnum, $note ) = @_;
-
-    #  my $dbh=C4Connect;
-    my $query = "update biblioitems set notes='$note' where
-  biblioitemnumber='$bibitemnum'";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    $sth->finish;
-}
-
-=head2 _koha_add_biblioitem
-
-_koha_add_biblioitem( $dbh, $biblioitem );
-
-Internal function to add a biblioitem
-
-=cut
-
-sub _koha_add_biblioitem {
-    my ( $dbh, $biblioitem ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("SELECT max(biblioitemnumber) FROM biblioitems");
-    my $data;
-    my $bibitemnum;
-
-    $sth->execute;
-    $data       = $sth->fetchrow_arrayref;
-    $bibitemnum = $$data[0] + 1;
-
-    $sth->finish;
-
-    $sth = $dbh->prepare(
-        "INSERT INTO biblioitems SET
-            biblioitemnumber = ?, biblionumber    = ?,
-            volume           = ?, number          = ?,
-            classification   = ?, itemtype        = ?,
-            url              = ?, isbn            = ?,
-            issn             = ?, dewey           = ?,
-            subclass         = ?, publicationyear = ?,
-            publishercode    = ?, volumedate      = ?,
-            volumeddesc      = ?, illus           = ?,
-            pages            = ?, notes           = ?,
-            size             = ?, lccn            = ?,
-            marc             = ?, lcsort          =?,
-            place            = ?, ccode           = ?
-          "
-    );
-    my ($lcsort) =
-      calculatelc( $biblioitem->{'classification'} )
-      . $biblioitem->{'subclass'};
-    $sth->execute(
-        $bibitemnum,                     $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},         $biblioitem->{'number'},
-        $biblioitem->{'classification'}, $biblioitem->{'itemtype'},
-        $biblioitem->{'url'},            $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},           $biblioitem->{'dewey'},
-        $biblioitem->{'subclass'},       $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},  $biblioitem->{'volumedate'},
-        $biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
-        $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},           $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},           $biblioitem->{'place'},
-        $lcsort,                         $biblioitem->{'ccode'}
-    );
-    $sth->finish;
-    return ($bibitemnum);
-}
-
-=head2 _koha_new_items
-
-_koha_new_items( $dbh, $item, $barcode );
-
-=cut
-
-sub _koha_new_items {
-    my ( $dbh, $item, $barcode ) = @_;
-
-    #  my $dbh   = C4Connect;
-    my $sth = $dbh->prepare("Select max(itemnumber) from items");
-    my $data;
-    my $itemnumber;
-    my $error = "";
-
-    $sth->execute;
-    $data       = $sth->fetchrow_hashref;
-    $itemnumber = $data->{'max(itemnumber)'} + 1;
-    $sth->finish;
-## Now calculate lccalnumber
-    my ($cutterextra) = itemcalculator(
-        $dbh,
-        $item->{'biblioitemnumber'},
-        $item->{'itemcallnumber'}
-    );
-
-# FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
-    if ( $item->{'loan'} ) {
-        $item->{'notforloan'} = $item->{'loan'};
-    }
-
-    # if dateaccessioned is provided, use it. Otherwise, set to NOW()
-    if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
-
-        $sth = $dbh->prepare(
-            "Insert into items set
-            itemnumber           = ?,     biblionumber     = ?,
-            multivolumepart      = ?,
-            biblioitemnumber     = ?,     barcode          = ?,
-            booksellerid         = ?,     dateaccessioned  = NOW(),
-            homebranch           = ?,     holdingbranch    = ?,
-            price                = ?,     replacementprice = ?,
-            replacementpricedate = NOW(), datelastseen     = NOW(),
-            multivolume          = ?,     stack            = ?,
-            itemlost             = ?,     wthdrawn         = ?,
-            paidfor              = ?,     itemnotes        = ?,
-            itemcallnumber       =?,      notforloan       = ?,
-            location             = ?,     Cutterextra      = ?
-          "
-        );
-        $sth->execute(
-            $itemnumber,                $item->{'biblionumber'},
-            $item->{'multivolumepart'}, $item->{'biblioitemnumber'},
-            $barcode,                   $item->{'booksellerid'},
-            $item->{'homebranch'},      $item->{'holdingbranch'},
-            $item->{'price'},           $item->{'replacementprice'},
-            $item->{multivolume},       $item->{stack},
-            $item->{itemlost},          $item->{wthdrawn},
-            $item->{paidfor},           $item->{'itemnotes'},
-            $item->{'itemcallnumber'},  $item->{'notforloan'},
-            $item->{'location'},        $cutterextra
-        );
-    }
-    else {
-        $sth = $dbh->prepare(
-            "INSERT INTO items SET
-            itemnumber           = ?,     biblionumber     = ?,
-            multivolumepart      = ?,
-            biblioitemnumber     = ?,     barcode          = ?,
-            booksellerid         = ?,     dateaccessioned  = ?,
-            homebranch           = ?,     holdingbranch    = ?,
-            price                = ?,     replacementprice = ?,
-            replacementpricedate = NOW(), datelastseen     = NOW(),
-            multivolume          = ?,     stack            = ?,
-            itemlost             = ?,     wthdrawn         = ?,
-            paidfor              = ?,     itemnotes        = ?,
-            itemcallnumber       = ?,     notforloan       = ?,
-            location             = ?,
-            Cutterextra          = ?
-                            "
-        );
-        $sth->execute(
-            $itemnumber,                 $item->{'biblionumber'},
-            $item->{'multivolumepart'},  $item->{'biblioitemnumber'},
-            $barcode,                    $item->{'booksellerid'},
-            $item->{'dateaccessioned'},  $item->{'homebranch'},
-            $item->{'holdingbranch'},    $item->{'price'},
-            $item->{'replacementprice'}, $item->{multivolume},
-            $item->{stack},              $item->{itemlost},
-            $item->{wthdrawn},           $item->{paidfor},
-            $item->{'itemnotes'},        $item->{'itemcallnumber'},
-            $item->{'notforloan'},       $item->{'location'},
-            $cutterextra
-        );
-    }
-    if ( defined $sth->errstr ) {
-        $error .= $sth->errstr;
-    }
-    return ( $itemnumber, $error );
-}
-
-=head2 _koha_modify_item
-
-_koha_modify_item( $dbh, $item, $op );
-
-=cut
-
-sub _koha_modify_item {
-    my ( $dbh, $item, $op ) = @_;
-    $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
-
-    # if all we're doing is setting statuses, just update those and get out
-    if ( $op eq "setstatus" ) {
-        my $query =
-          "UPDATE items SET itemlost=?,wthdrawn=?,binding=? WHERE itemnumber=?";
-        my @bind = (
-            $item->{'itemlost'}, $item->{'wthdrawn'},
-            $item->{'binding'},  $item->{'itemnumber'}
-        );
-        my $sth = $dbh->prepare($query);
-        $sth->execute(@bind);
-        $sth->finish;
-        return undef;
-    }
-## Now calculate lccalnumber
-    my ($cutterextra) =
-      itemcalculator( $dbh, $item->{'bibitemnum'}, $item->{'itemcallnumber'} );
-
-    my $query = "UPDATE items SET
-barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,homebranch=?,cutterextra=?, onloan=?, binding=?";
-
-    my @bind = (
-        $item->{'barcode'},        $item->{'notes'},
-        $item->{'itemcallnumber'}, $item->{'notforloan'},
-        $item->{'location'},       $item->{multivolumepart},
-        $item->{multivolume},      $item->{stack},
-        $item->{wthdrawn},         $item->{holdingbranch},
-        $item->{homebranch},       $cutterextra,
-        $item->{onloan},           $item->{binding}
-    );
-    if ( $item->{'lost'} ne '' ) {
-        $query =
-"update items set biblioitemnumber=?,barcode=?,itemnotes=?,homebranch=?,
-                            itemlost=?,wthdrawn=?,itemcallnumber=?,notforloan=?,
-                             location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,cutterextra=?,onloan=?, binding=?";
-        @bind = (
-            $item->{'bibitemnum'},     $item->{'barcode'},
-            $item->{'notes'},          $item->{'homebranch'},
-            $item->{'lost'},           $item->{'wthdrawn'},
-            $item->{'itemcallnumber'}, $item->{'notforloan'},
-            $item->{'location'},       $item->{multivolumepart},
-            $item->{multivolume},      $item->{stack},
-            $item->{wthdrawn},         $item->{holdingbranch},
-            $cutterextra,              $item->{onloan},
-            $item->{binding}
-        );
-        if ( $item->{homebranch} ) {
-            $query .= ",homebranch=?";
-            push @bind, $item->{homebranch};
-        }
-        if ( $item->{holdingbranch} ) {
-            $query .= ",holdingbranch=?";
-            push @bind, $item->{holdingbranch};
-        }
-    }
-    $query .= " where itemnumber=?";
-    push @bind, $item->{'itemnum'};
-    if ( $item->{'replacement'} ne '' ) {
-        $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    $sth->finish;
-}
-
-=head2 _koha_delete_item
-
-_koha_delete_item( $dbh, $itemnum );
-
-Internal function to delete an item record from the koha tables
-
-=cut
-
-sub _koha_delete_item {
-    my ( $dbh, $itemnum ) = @_;
-
-    my $sth = $dbh->prepare("select * from items where itemnumber=?");
-    $sth->execute($itemnum);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    my $query = "Insert into deleteditems set ";
-    my @bind  = ();
-    foreach my $temp ( keys %$data ) {
-        $query .= "$temp = ?,";
-        push( @bind, $data->{$temp} );
-    }
-    $query =~ s/\,$//;
-
-    #  print $query;
-    $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    $sth->finish;
-    $sth = $dbh->prepare("Delete from items where itemnumber=?");
-    $sth->execute($itemnum);
-    $sth->finish;
-}
-
-=head2 _koha_delete_biblio
-
-$error = _koha_delete_biblio($dbh,$biblionumber);
-
-Internal sub for deleting from biblio table -- also saves to deletedbiblio
-
-C<$dbh> - the database handle
-C<$biblionumber> - the biblionumber of the biblio to be deleted
-
-=cut
-
-# FIXME: add error handling
-
-sub _koha_delete_biblio {
-    my ( $dbh, $biblionumber ) = @_;
-
-    # get all the data for this biblio
-    my $sth = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber=?");
-    $sth->execute($biblionumber);
-
-    if ( my $data = $sth->fetchrow_hashref ) {
-
-        # save the record in deletedbiblio
-        # find the fields to save
-        my $query = "INSERT INTO deletedbiblio SET ";
-        my @bind  = ();
-        foreach my $temp ( keys %$data ) {
-            $query .= "$temp = ?,";
-            push( @bind, $data->{$temp} );
-        }
-
-        # replace the last , by ",?)"
-        $query =~ s/\,$//;
-        my $bkup_sth = $dbh->prepare($query);
-        $bkup_sth->execute(@bind);
-        $bkup_sth->finish;
-
-        # delete the biblio
-        my $del_sth = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
-        $del_sth->execute($biblionumber);
-        $del_sth->finish;
-    }
-    $sth->finish;
-    return undef;
-}
-
-=head2 _koha_delete_biblioitems
-
-$error = _koha_delete_biblioitems($dbh,$biblioitemnumber);
-
-Internal sub for deleting from biblioitems table -- also saves to deletedbiblioitems
-
-C<$dbh> - the database handle
-C<$biblionumber> - the biblioitemnumber of the biblioitem to be deleted
-
-=cut
-
-# FIXME: add error handling
-
-sub _koha_delete_biblioitems {
-    my ( $dbh, $biblioitemnumber ) = @_;
-
-    # get all the data for this biblioitem
-    my $sth =
-      $dbh->prepare("SELECT * FROM biblioitems WHERE biblioitemnumber=?");
-    $sth->execute($biblioitemnumber);
-
-    if ( my $data = $sth->fetchrow_hashref ) {
-
-        # save the record in deletedbiblioitems
-        # find the fields to save
-        my $query = "INSERT INTO deletedbiblioitems SET ";
-        my @bind  = ();
-        foreach my $temp ( keys %$data ) {
-            $query .= "$temp = ?,";
-            push( @bind, $data->{$temp} );
-        }
-
-        # replace the last , by ",?)"
-        $query =~ s/\,$//;
-        my $bkup_sth = $dbh->prepare($query);
-        $bkup_sth->execute(@bind);
-        $bkup_sth->finish;
-
-        # delete the biblioitem
-        my $del_sth =
-          $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
-        $del_sth->execute($biblioitemnumber);
-        $del_sth->finish;
-    }
-    $sth->finish;
-    return undef;
-}
-
-=head2 _koha_delete_items
-
-$error = _koha_delete_items($dbh,$itemnumber);
-
-Internal sub for deleting from items table -- also saves to deleteditems
-
-C<$dbh> - the database handle
-C<$itemnumber> - the itemnumber of the item to be deleted
-
-=cut
-
-# FIXME: add error handling
-
-sub _koha_delete_items {
-    my ( $dbh, $itemnumber ) = @_;
-
-    # get all the data for this item
-    my $sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
-    $sth->execute($itemnumber);
-
-    if ( my $data = $sth->fetchrow_hashref ) {
-
-        # save the record in deleteditems
-        # find the fields to save
-        my $query = "INSERT INTO deleteditems SET ";
-        my @bind  = ();
-        foreach my $temp ( keys %$data ) {
-            $query .= "$temp = ?,";
-            push( @bind, $data->{$temp} );
-        }
-
-        # replace the last , by ",?)"
-        $query =~ s/\,$//;
-        my $bkup_sth = $dbh->prepare($query);
-        $bkup_sth->execute(@bind);
-        $bkup_sth->finish;
-
-        # delete the item
-        my $del_sth = $dbh->prepare("DELETE FROM items WHERE itemnumber=?");
-        $del_sth->execute($itemnumber);
-        $del_sth->finish;
-    }
-    $sth->finish;
-    return undef;
-}
-
 =head1  OTHER FUNCTIONS
 
 =head2 char_decode
+
+=over 4
 
 my $string = char_decode( $string, $encoding );
 
 converts ISO 5426 coded string to UTF-8
 sloppy code : should be improved in next issue
+
+=back
 
 =cut
 
@@ -3009,11 +2229,37 @@ sub char_decode {
     return ($string);
 }
 
+=head2 nsb_clean
+
+=over 4
+
+my $string = nsb_clean( $string, $encoding );
+
+=back
+
+=cut
+
+sub nsb_clean {
+    my $NSB      = '\x88';    # NSB : begin Non Sorting Block
+    my $NSE      = '\x89';    # NSE : Non Sorting Block end
+                              # handles non sorting blocks
+    my ($string) = @_;
+    $_ = $string;
+    s/$NSB/(/gm;
+    s/[ ]{0,1}$NSE/) /gm;
+    $string = $_;
+    return ($string);
+}
+
 =head2 PrepareItemrecordDisplay
+
+=over 4
 
 PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber);
 
 Returns a hash with all the fields for Display a given item data in a template
+
+=back
 
 =cut
 
@@ -3197,55 +2443,47 @@ sub PrepareItemrecordDisplay {
         'iteminformation' => \@loop_data
     };
 }
+#"
 
-=head2 nsb_clean
-
-my $string = nsb_clean( $string, $encoding );
-
-=cut
-
-sub nsb_clean {
-    my $NSB      = '\x88';    # NSB : begin Non Sorting Block
-    my $NSE      = '\x89';    # NSE : Non Sorting Block end
-                              # handles non sorting blocks
-    my ($string) = @_;
-    $_ = $string;
-    s/$NSB/(/gm;
-    s/[ ]{0,1}$NSE/) /gm;
-    $string = $_;
-    return ($string);
-}
-
-=head2 ModZebrafiles
-
-&ModZebrafiles( $dbh, $biblionumber, $record, $folder, $server );
-
-=cut
-
-sub ModZebrafiles {
-
-    my ( $dbh, $biblionumber, $record, $folder, $server ) = @_;
-
-    my $op;
-    my $zebradir =
-      C4::Context->zebraconfig($server)->{directory} . "/" . $folder . "/";
-    unless ( opendir( DIR, "$zebradir" ) ) {
-        warn "$zebradir not found";
-        return;
-    }
-    closedir DIR;
-    my $filename = $zebradir . $biblionumber;
-
-    if ($record) {
-        open( OUTPUT, ">", $filename . ".xml" );
-        print OUTPUT $record;
-        close OUTPUT;
-    }
-}
+#
+# true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
+# at the same time
+# replaced by a zebraqueue table, that is filled with ModZebra to run.
+# the table is emptied by misc/cronjobs/zebraqueue_start.pl script
+# =head2 ModZebrafiles
+# 
+# &ModZebrafiles( $dbh, $biblionumber, $record, $folder, $server );
+# 
+# =cut
+# 
+# sub ModZebrafiles {
+# 
+#     my ( $dbh, $biblionumber, $record, $folder, $server ) = @_;
+# 
+#     my $op;
+#     my $zebradir =
+#       C4::Context->zebraconfig($server)->{directory} . "/" . $folder . "/";
+#     unless ( opendir( DIR, "$zebradir" ) ) {
+#         warn "$zebradir not found";
+#         return;
+#     }
+#     closedir DIR;
+#     my $filename = $zebradir . $biblionumber;
+# 
+#     if ($record) {
+#         open( OUTPUT, ">", $filename . ".xml" );
+#         print OUTPUT $record;
+#         close OUTPUT;
+#     }
+# }
 
 =head2 ModZebra
 
+=over 4
+
 ModZebra( $dbh, $biblionumber, $op, $server );
+
+=back
 
 =cut
 
@@ -3349,9 +2587,606 @@ $sth->finish;
 #     $Zpackage->destroy();
 }
 
+=head1 INTERNAL FUNCTIONS
+
+=head2 MARCitemchange
+
+=over 4
+
+&MARCitemchange( $record, $itemfield, $newvalue )
+
+Function to update a single value in an item field.
+Used twice, could probably be replaced by something else, but works well...
+
+=back
+
+=back
+
+=cut
+
+sub MARCitemchange {
+    my ( $record, $itemfield, $newvalue ) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my ( $tagfield, $tagsubfield ) =
+      GetMarcFromKohaField( $dbh, $itemfield, "" );
+    if ( ($tagfield) && ($tagsubfield) ) {
+        my $tag = $record->field($tagfield);
+        if ($tag) {
+            $tag->update( $tagsubfield => $newvalue );
+            $record->delete_field($tag);
+            $record->insert_fields_ordered($tag);
+        }
+    }
+}
+
+=head2 _koha_add_biblio
+
+=over 4
+
+_koha_add_biblio($dbh,$biblioitem);
+
+Internal function to add a biblio ($biblio is a hash with the values)
+
+=back
+
+=cut
+
+sub _koha_add_biblio {
+    my ( $dbh, $biblio, $frameworkcode ) = @_;
+    my $sth = $dbh->prepare("Select max(biblionumber) from biblio");
+    $sth->execute;
+    my $data         = $sth->fetchrow_arrayref;
+    my $biblionumber = $$data[0] + 1;
+    my $series       = 0;
+
+    if ( $biblio->{'seriestitle'} ) { $series = 1 }
+    $sth->finish;
+    $sth = $dbh->prepare(
+        "INSERT INTO biblio
+    SET biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?, frameworkcode = ? "
+    );
+    $sth->execute(
+        $biblionumber,         $biblio->{'title'},
+        $biblio->{'author'},   $biblio->{'copyrightdate'},
+        $biblio->{'serial'},   $biblio->{'seriestitle'},
+        $biblio->{'notes'},    $biblio->{'abstract'},
+        $biblio->{'unititle'}, $frameworkcode
+    );
+
+    $sth->finish;
+    return ($biblionumber);
+}
+
+=head2 _find_value
+
+=over 4
+
+($indicators, $value) = _find_value($tag, $subfield, $record,$encoding);
+
+Find the given $subfield in the given $tag in the given
+MARC::Record $record.  If the subfield is found, returns
+the (indicators, value) pair; otherwise, (undef, undef) is
+returned.
+
+PROPOSITION :
+Such a function is used in addbiblio AND additem and serial-edit and maybe could be used in Authorities.
+I suggest we export it from this module.
+
+=back
+
+=cut
+
+sub _find_value {
+    my ( $tagfield, $insubfield, $record, $encoding ) = @_;
+    my @result;
+    my $indicator;
+    if ( $tagfield < 10 ) {
+        if ( $record->field($tagfield) ) {
+            push @result, $record->field($tagfield)->data();
+        }
+        else {
+            push @result, "";
+        }
+    }
+    else {
+        foreach my $field ( $record->field($tagfield) ) {
+            my @subfields = $field->subfields();
+            foreach my $subfield (@subfields) {
+                if ( @$subfield[0] eq $insubfield ) {
+                    push @result, @$subfield[1];
+                    $indicator = $field->indicator(1) . $field->indicator(2);
+                }
+            }
+        }
+    }
+    return ( $indicator, @result );
+}
+
+=head2 _koha_modify_biblio
+
+=over 4
+
+Internal function for updating the biblio table
+
+=back
+
+=cut
+
+sub _koha_modify_biblio {
+    my ( $dbh, $biblio ) = @_;
+
+# FIXME: this code could be made more portable by not hard-coding the values that are supposed to be in biblio table
+    my $sth =
+      $dbh->prepare(
+"Update biblio set title = ?, author = ?, abstract = ?, copyrightdate = ?, seriestitle = ?, serial = ?, unititle = ?, notes = ? where biblionumber = ?"
+      );
+    $sth->execute(
+        $biblio->{'title'},       $biblio->{'author'},
+        $biblio->{'abstract'},    $biblio->{'copyrightdate'},
+        $biblio->{'seriestitle'}, $biblio->{'serial'},
+        $biblio->{'unititle'},    $biblio->{'notes'},
+        $biblio->{'biblionumber'}
+    );
+    $sth->finish;
+    return ( $biblio->{'biblionumber'} );
+}
+
+=head2 _koha_modify_biblioitem
+
+=over 4
+
+_koha_modify_biblioitem( $dbh, $biblioitem );
+
+=back
+
+=cut
+
+sub _koha_modify_biblioitem {
+    my ( $dbh, $biblioitem ) = @_;
+    my $query;
+##Recalculate LC in case it changed --TG
+
+    $biblioitem->{'itemtype'}      = $dbh->quote( $biblioitem->{'itemtype'} );
+    $biblioitem->{'url'}           = $dbh->quote( $biblioitem->{'url'} );
+    $biblioitem->{'isbn'}          = $dbh->quote( $biblioitem->{'isbn'} );
+    $biblioitem->{'issn'}          = $dbh->quote( $biblioitem->{'issn'} );
+    $biblioitem->{'publishercode'} =
+      $dbh->quote( $biblioitem->{'publishercode'} );
+    $biblioitem->{'publicationyear'} =
+      $dbh->quote( $biblioitem->{'publicationyear'} );
+    $biblioitem->{'classification'} =
+      $dbh->quote( $biblioitem->{'classification'} );
+    $biblioitem->{'dewey'}        = $dbh->quote( $biblioitem->{'dewey'} );
+    $biblioitem->{'subclass'}     = $dbh->quote( $biblioitem->{'subclass'} );
+    $biblioitem->{'illus'}        = $dbh->quote( $biblioitem->{'illus'} );
+    $biblioitem->{'pages'}        = $dbh->quote( $biblioitem->{'pages'} );
+    $biblioitem->{'volumeddesc'}  = $dbh->quote( $biblioitem->{'volumeddesc'} );
+    $biblioitem->{'bnotes'}       = $dbh->quote( $biblioitem->{'bnotes'} );
+    $biblioitem->{'size'}         = $dbh->quote( $biblioitem->{'size'} );
+    $biblioitem->{'place'}        = $dbh->quote( $biblioitem->{'place'} );
+    $biblioitem->{'ccode'}        = $dbh->quote( $biblioitem->{'ccode'} );
+    $biblioitem->{'biblionumber'} =
+      $dbh->quote( $biblioitem->{'biblionumber'} );
+
+    $query = "Update biblioitems set
+        itemtype        = $biblioitem->{'itemtype'},
+        url             = $biblioitem->{'url'},
+        isbn            = $biblioitem->{'isbn'},
+        issn            = $biblioitem->{'issn'},
+        publishercode   = $biblioitem->{'publishercode'},
+        publicationyear = $biblioitem->{'publicationyear'},
+        classification  = $biblioitem->{'classification'},
+        dewey           = $biblioitem->{'dewey'},
+        subclass        = $biblioitem->{'subclass'},
+        illus           = $biblioitem->{'illus'},
+        pages           = $biblioitem->{'pages'},
+        volumeddesc     = $biblioitem->{'volumeddesc'},
+        notes           = $biblioitem->{'bnotes'},
+        size            = $biblioitem->{'size'},
+        place           = $biblioitem->{'place'},
+        ccode           = $biblioitem->{'ccode'}
+        where biblionumber = $biblioitem->{'biblionumber'}";
+
+    $dbh->do($query);
+    if ( $dbh->errstr ) {
+        warn "$query";
+    }
+}
+
+=head2 _koha_add_biblioitem
+
+=over 4
+
+_koha_add_biblioitem( $dbh, $biblioitem );
+
+Internal function to add a biblioitem
+
+=back
+
+=cut
+
+sub _koha_add_biblioitem {
+    my ( $dbh, $biblioitem ) = @_;
+
+    #  my $dbh   = C4Connect;
+    my $sth = $dbh->prepare("SELECT max(biblioitemnumber) FROM biblioitems");
+    my $data;
+    my $bibitemnum;
+
+    $sth->execute;
+    $data       = $sth->fetchrow_arrayref;
+    $bibitemnum = $$data[0] + 1;
+
+    $sth->finish;
+
+    $sth = $dbh->prepare(
+        "INSERT INTO biblioitems SET
+            biblioitemnumber = ?, biblionumber    = ?,
+            volume           = ?, number          = ?,
+            classification   = ?, itemtype        = ?,
+            url              = ?, isbn            = ?,
+            issn             = ?, dewey           = ?,
+            subclass         = ?, publicationyear = ?,
+            publishercode    = ?, volumedate      = ?,
+            volumeddesc      = ?, illus           = ?,
+            pages            = ?, notes           = ?,
+            size             = ?, lccn            = ?,
+            marc             = ?, lcsort          =?,
+            place            = ?, ccode           = ?
+          "
+    );
+    my ($lcsort) =
+      calculatelc( $biblioitem->{'classification'} )
+      . $biblioitem->{'subclass'};
+    $sth->execute(
+        $bibitemnum,                     $biblioitem->{'biblionumber'},
+        $biblioitem->{'volume'},         $biblioitem->{'number'},
+        $biblioitem->{'classification'}, $biblioitem->{'itemtype'},
+        $biblioitem->{'url'},            $biblioitem->{'isbn'},
+        $biblioitem->{'issn'},           $biblioitem->{'dewey'},
+        $biblioitem->{'subclass'},       $biblioitem->{'publicationyear'},
+        $biblioitem->{'publishercode'},  $biblioitem->{'volumedate'},
+        $biblioitem->{'volumeddesc'},    $biblioitem->{'illus'},
+        $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
+        $biblioitem->{'size'},           $biblioitem->{'lccn'},
+        $biblioitem->{'marc'},           $biblioitem->{'place'},
+        $lcsort,                         $biblioitem->{'ccode'}
+    );
+    $sth->finish;
+    return ($bibitemnum);
+}
+
+=head2 _koha_new_items
+
+=over 4
+
+_koha_new_items( $dbh, $item, $barcode );
+
+=back
+
+=cut
+
+sub _koha_new_items {
+    my ( $dbh, $item, $barcode ) = @_;
+
+    #  my $dbh   = C4Connect;
+    my $sth = $dbh->prepare("Select max(itemnumber) from items");
+    my $data;
+    my $itemnumber;
+    my $error = "";
+
+    $sth->execute;
+    $data       = $sth->fetchrow_hashref;
+    $itemnumber = $data->{'max(itemnumber)'} + 1;
+    $sth->finish;
+## Now calculate lccalnumber
+    my ($cutterextra) = itemcalculator(
+        $dbh,
+        $item->{'biblioitemnumber'},
+        $item->{'itemcallnumber'}
+    );
+
+# FIXME the "notforloan" field seems to be named "loan" in some places. workaround bugfix.
+    if ( $item->{'loan'} ) {
+        $item->{'notforloan'} = $item->{'loan'};
+    }
+
+    # if dateaccessioned is provided, use it. Otherwise, set to NOW()
+    if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
+
+        $sth = $dbh->prepare(
+            "Insert into items set
+            itemnumber           = ?,     biblionumber     = ?,
+            multivolumepart      = ?,
+            biblioitemnumber     = ?,     barcode          = ?,
+            booksellerid         = ?,     dateaccessioned  = NOW(),
+            homebranch           = ?,     holdingbranch    = ?,
+            price                = ?,     replacementprice = ?,
+            replacementpricedate = NOW(), datelastseen     = NOW(),
+            multivolume          = ?,     stack            = ?,
+            itemlost             = ?,     wthdrawn         = ?,
+            paidfor              = ?,     itemnotes        = ?,
+            itemcallnumber       =?,      notforloan       = ?,
+            location             = ?,     Cutterextra      = ?
+          "
+        );
+        $sth->execute(
+            $itemnumber,                $item->{'biblionumber'},
+            $item->{'multivolumepart'}, $item->{'biblioitemnumber'},
+            $barcode,                   $item->{'booksellerid'},
+            $item->{'homebranch'},      $item->{'holdingbranch'},
+            $item->{'price'},           $item->{'replacementprice'},
+            $item->{multivolume},       $item->{stack},
+            $item->{itemlost},          $item->{wthdrawn},
+            $item->{paidfor},           $item->{'itemnotes'},
+            $item->{'itemcallnumber'},  $item->{'notforloan'},
+            $item->{'location'},        $cutterextra
+        );
+    }
+    else {
+        $sth = $dbh->prepare(
+            "INSERT INTO items SET
+            itemnumber           = ?,     biblionumber     = ?,
+            multivolumepart      = ?,
+            biblioitemnumber     = ?,     barcode          = ?,
+            booksellerid         = ?,     dateaccessioned  = ?,
+            homebranch           = ?,     holdingbranch    = ?,
+            price                = ?,     replacementprice = ?,
+            replacementpricedate = NOW(), datelastseen     = NOW(),
+            multivolume          = ?,     stack            = ?,
+            itemlost             = ?,     wthdrawn         = ?,
+            paidfor              = ?,     itemnotes        = ?,
+            itemcallnumber       = ?,     notforloan       = ?,
+            location             = ?,
+            Cutterextra          = ?
+                            "
+        );
+        $sth->execute(
+            $itemnumber,                 $item->{'biblionumber'},
+            $item->{'multivolumepart'},  $item->{'biblioitemnumber'},
+            $barcode,                    $item->{'booksellerid'},
+            $item->{'dateaccessioned'},  $item->{'homebranch'},
+            $item->{'holdingbranch'},    $item->{'price'},
+            $item->{'replacementprice'}, $item->{multivolume},
+            $item->{stack},              $item->{itemlost},
+            $item->{wthdrawn},           $item->{paidfor},
+            $item->{'itemnotes'},        $item->{'itemcallnumber'},
+            $item->{'notforloan'},       $item->{'location'},
+            $cutterextra
+        );
+    }
+    if ( defined $sth->errstr ) {
+        $error .= $sth->errstr;
+    }
+    return ( $itemnumber, $error );
+}
+
+=head2 _koha_modify_item
+
+=over 4
+
+_koha_modify_item( $dbh, $item, $op );
+
+=back
+
+=cut
+
+sub _koha_modify_item {
+    my ( $dbh, $item, $op ) = @_;
+    $item->{'itemnum'} = $item->{'itemnumber'} unless $item->{'itemnum'};
+
+    # if all we're doing is setting statuses, just update those and get out
+    if ( $op eq "setstatus" ) {
+        my $query =
+          "UPDATE items SET itemlost=?,wthdrawn=?,binding=? WHERE itemnumber=?";
+        my @bind = (
+            $item->{'itemlost'}, $item->{'wthdrawn'},
+            $item->{'binding'},  $item->{'itemnumber'}
+        );
+        my $sth = $dbh->prepare($query);
+        $sth->execute(@bind);
+        $sth->finish;
+        return undef;
+    }
+## Now calculate lccalnumber
+    my ($cutterextra) =
+      itemcalculator( $dbh, $item->{'bibitemnum'}, $item->{'itemcallnumber'} );
+
+    my $query = "UPDATE items SET
+barcode=?,itemnotes=?,itemcallnumber=?,notforloan=?,location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,homebranch=?,cutterextra=?, onloan=?, binding=?";
+
+    my @bind = (
+        $item->{'barcode'},        $item->{'notes'},
+        $item->{'itemcallnumber'}, $item->{'notforloan'},
+        $item->{'location'},       $item->{multivolumepart},
+        $item->{multivolume},      $item->{stack},
+        $item->{wthdrawn},         $item->{holdingbranch},
+        $item->{homebranch},       $cutterextra,
+        $item->{onloan},           $item->{binding}
+    );
+    if ( $item->{'lost'} ne '' ) {
+        $query =
+"update items set biblioitemnumber=?,barcode=?,itemnotes=?,homebranch=?,
+                            itemlost=?,wthdrawn=?,itemcallnumber=?,notforloan=?,
+                             location=?,multivolumepart=?,multivolume=?,stack=?,wthdrawn=?,holdingbranch=?,cutterextra=?,onloan=?, binding=?";
+        @bind = (
+            $item->{'bibitemnum'},     $item->{'barcode'},
+            $item->{'notes'},          $item->{'homebranch'},
+            $item->{'lost'},           $item->{'wthdrawn'},
+            $item->{'itemcallnumber'}, $item->{'notforloan'},
+            $item->{'location'},       $item->{multivolumepart},
+            $item->{multivolume},      $item->{stack},
+            $item->{wthdrawn},         $item->{holdingbranch},
+            $cutterextra,              $item->{onloan},
+            $item->{binding}
+        );
+        if ( $item->{homebranch} ) {
+            $query .= ",homebranch=?";
+            push @bind, $item->{homebranch};
+        }
+        if ( $item->{holdingbranch} ) {
+            $query .= ",holdingbranch=?";
+            push @bind, $item->{holdingbranch};
+        }
+    }
+    $query .= " where itemnumber=?";
+    push @bind, $item->{'itemnum'};
+    if ( $item->{'replacement'} ne '' ) {
+        $query =~ s/ where/,replacementprice='$item->{'replacement'}' where/;
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind);
+    $sth->finish;
+}
+
+=head2 _koha_delete_biblio
+
+=over 4
+
+$error = _koha_delete_biblio($dbh,$biblionumber);
+
+Internal sub for deleting from biblio table -- also saves to deletedbiblio
+
+C<$dbh> - the database handle
+C<$biblionumber> - the biblionumber of the biblio to be deleted
+
+=back
+
+=cut
+
+# FIXME: add error handling
+
+sub _koha_delete_biblio {
+    my ( $dbh, $biblionumber ) = @_;
+
+    # get all the data for this biblio
+    my $sth = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber=?");
+    $sth->execute($biblionumber);
+
+    if ( my $data = $sth->fetchrow_hashref ) {
+
+        # save the record in deletedbiblio
+        # find the fields to save
+        my $query = "INSERT INTO deletedbiblio SET ";
+        my @bind  = ();
+        foreach my $temp ( keys %$data ) {
+            $query .= "$temp = ?,";
+            push( @bind, $data->{$temp} );
+        }
+
+        # replace the last , by ",?)"
+        $query =~ s/\,$//;
+        my $bkup_sth = $dbh->prepare($query);
+        $bkup_sth->execute(@bind);
+        $bkup_sth->finish;
+
+        # delete the biblio
+        my $del_sth = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
+        $del_sth->execute($biblionumber);
+        $del_sth->finish;
+    }
+    $sth->finish;
+    return undef;
+}
+
+=head2 _koha_delete_biblioitems
+
+=over 4
+
+$error = _koha_delete_biblioitems($dbh,$biblioitemnumber);
+
+Internal sub for deleting from biblioitems table -- also saves to deletedbiblioitems
+
+C<$dbh> - the database handle
+C<$biblionumber> - the biblioitemnumber of the biblioitem to be deleted
+
+=back
+
+=cut
+
+# FIXME: add error handling
+
+sub _koha_delete_biblioitems {
+    my ( $dbh, $biblioitemnumber ) = @_;
+
+    # get all the data for this biblioitem
+    my $sth =
+      $dbh->prepare("SELECT * FROM biblioitems WHERE biblioitemnumber=?");
+    $sth->execute($biblioitemnumber);
+
+    if ( my $data = $sth->fetchrow_hashref ) {
+
+        # save the record in deletedbiblioitems
+        # find the fields to save
+        my $query = "INSERT INTO deletedbiblioitems SET ";
+        my @bind  = ();
+        foreach my $temp ( keys %$data ) {
+            $query .= "$temp = ?,";
+            push( @bind, $data->{$temp} );
+        }
+
+        # replace the last , by ",?)"
+        $query =~ s/\,$//;
+        my $bkup_sth = $dbh->prepare($query);
+        $bkup_sth->execute(@bind);
+        $bkup_sth->finish;
+
+        # delete the biblioitem
+        my $del_sth =
+          $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
+        $del_sth->execute($biblioitemnumber);
+        $del_sth->finish;
+    }
+    $sth->finish;
+    return undef;
+}
+
+=head2 _koha_delete_item
+
+=over 4
+
+_koha_delete_item( $dbh, $itemnum );
+
+Internal function to delete an item record from the koha tables
+
+=back
+
+=cut
+
+sub _koha_delete_item {
+    my ( $dbh, $itemnum ) = @_;
+
+    my $sth = $dbh->prepare("select * from items where itemnumber=?");
+    $sth->execute($itemnum);
+    my $data = $sth->fetchrow_hashref;
+    $sth->finish;
+    my $query = "Insert into deleteditems set ";
+    my @bind  = ();
+    foreach my $temp ( keys %$data ) {
+        $query .= "$temp = ?,";
+        push( @bind, $data->{$temp} );
+    }
+    $query =~ s/\,$//;
+
+    #  print $query;
+    $sth = $dbh->prepare($query);
+    $sth->execute(@bind);
+    $sth->finish;
+    $sth = $dbh->prepare("Delete from items where itemnumber=?");
+    $sth->execute($itemnum);
+    $sth->finish;
+}
+
+=head1 UNEXPORTED FUNCTIONS
+
+=over 4
+
 =head2 calculatelc
 
 $lc = calculatelc($classification);
+
+=back
 
 =cut
 
@@ -3407,7 +3242,11 @@ sub calculatelc {
 
 =head2 itemcalculator
 
+=over 4
+
 $cutterextra = itemcalculator( $dbh, $biblioitem, $callnumber );
+
+=back
 
 =cut
 
@@ -3425,6 +3264,206 @@ sub itemcalculator {
     my $cutterextra = substr( $callnumber, $total - 1 );
 
     return $cutterextra;
+}
+
+=head2 ModBiblioMarc
+
+=over 4
+
+&ModBiblioMarc($newrec,$biblionumber,$frameworkcode);
+
+Add MARC data for a biblio to koha 
+
+Function exported, but should NOT be used, unless you really know what you're doing
+
+=back
+
+=cut
+
+sub ModBiblioMarc {
+
+# pass the MARC::Record to this function, and it will create the records in the marc tables
+    my ( $record, $biblionumber, $frameworkcode ) = @_;
+    my $dbh = C4::Context->dbh;
+    my @fields = $record->fields();
+    if ( !$frameworkcode ) {
+        $frameworkcode = "";
+    }
+    my $sth =
+      $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
+    $sth->execute( $frameworkcode, $biblionumber );
+    $sth->finish;
+    my $encoding = C4::Context->preference("marcflavour");
+
+# deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
+    if ( $encoding eq "UNIMARC" ) {
+        my $string;
+        if ( $record->subfield( 100, "a" ) ) {
+            $string = $record->subfield( 100, "a" );
+            my $f100 = $record->field(100);
+            $record->delete_field($f100);
+        }
+        else {
+            $string = POSIX::strftime( "%Y%m%d", localtime );
+            $string =~ s/\-//g;
+            $string = sprintf( "%-*s", 35, $string );
+        }
+        substr( $string, 22, 6, "frey50" );
+        unless ( $record->subfield( 100, "a" ) ) {
+            $record->insert_grouped_field(
+                MARC::Field->new( 100, "", "", "a" => $string ) );
+        }
+    }
+#     warn "biblionumber : ".$biblionumber;
+    $sth =
+      $dbh->prepare(
+        "update biblioitems set marc=?,marcxml=?  where biblionumber=?");
+    $sth->execute( $record->as_usmarc(), $record->as_xml_record(),
+        $biblionumber );
+#     warn $record->as_xml_record();
+    $sth->finish;
+    ModZebra($biblionumber,"specialUpdate","biblioserver");
+    return $biblionumber;
+}
+
+=head2 AddItemInMarc
+
+=over 4
+
+$newbiblionumber = AddItemInMarc( $record, $biblionumber, $frameworkcode );
+
+Add an item in a MARC record and save the MARC record
+
+Function exported, but should NOT be used, unless you really know what you're doing
+
+=back
+
+=cut
+
+sub AddItemInMarc {
+
+# pass the MARC::Record to this function, and it will create the records in the marc tables
+    my ( $record, $biblionumber, $frameworkcode ) = @_;
+    my $newrec = &GetMarcBiblio($biblionumber);
+
+    # create it
+    my @fields = $record->fields();
+    foreach my $field (@fields) {
+        $newrec->append_fields($field);
+    }
+
+    # FIXME: should we be making sure the biblionumbers are the same?
+    my $newbiblionumber =
+      &ModBiblioMarc( $newrec, $biblionumber, $frameworkcode );
+    return $newbiblionumber;
+}
+
+=head2 z3950_extended_services
+
+z3950_extended_services($serviceType,$serviceOptions,$record);
+
+    z3950_extended_services is used to handle all interactions with Zebra's extended serices package, which is employed to perform all management of the MARC data stored in Zebra.
+
+C<$serviceType> one of: itemorder,create,drop,commit,update,xmlupdate
+
+C<$serviceOptions> a has of key/value pairs. For instance, if service_type is 'update', $service_options should contain:
+
+    action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
+
+and maybe
+
+    recordidOpaque => Opaque Record ID (user supplied) or recordidNumber => Record ID number (system number).
+    syntax => the record syntax (transfer syntax)
+    databaseName = Database from connection object
+
+    To set serviceOptions, call set_service_options($serviceType)
+
+C<$record> the record, if one is needed for the service type
+
+    A record should be in XML. You can convert it to XML from MARC by running it through marc2xml().
+
+=cut
+
+sub z3950_extended_services {
+    my ( $server, $serviceType, $action, $serviceOptions ) = @_;
+
+    # get our connection object
+    my $Zconn = C4::Context->Zconn( $server, 0, 1 );
+
+    # create a new package object
+    my $Zpackage = $Zconn->package();
+
+    # set our options
+    $Zpackage->option( action => $action );
+
+    if ( $serviceOptions->{'databaseName'} ) {
+        $Zpackage->option( databaseName => $serviceOptions->{'databaseName'} );
+    }
+    if ( $serviceOptions->{'recordIdNumber'} ) {
+        $Zpackage->option(
+            recordIdNumber => $serviceOptions->{'recordIdNumber'} );
+    }
+    if ( $serviceOptions->{'recordIdOpaque'} ) {
+        $Zpackage->option(
+            recordIdOpaque => $serviceOptions->{'recordIdOpaque'} );
+    }
+
+ # this is an ILL request (Zebra doesn't support it, but Koha could eventually)
+ #if ($serviceType eq 'itemorder') {
+ #   $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
+ #   $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
+ #   $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
+ #   $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
+ #}
+
+    if ( $serviceOptions->{record} ) {
+        $Zpackage->option( record => $serviceOptions->{record} );
+
+        # can be xml or marc
+        if ( $serviceOptions->{'syntax'} ) {
+            $Zpackage->option( syntax => $serviceOptions->{'syntax'} );
+        }
+    }
+
+    # send the request, handle any exception encountered
+    eval { $Zpackage->send($serviceType) };
+    if ( $@ && $@->isa("ZOOM::Exception") ) {
+        return "error:  " . $@->code() . " " . $@->message() . "\n";
+    }
+
+    # free up package resources
+    $Zpackage->destroy();
+}
+
+=head2 set_service_options
+
+my $serviceOptions = set_service_options($serviceType);
+
+C<$serviceType> itemorder,create,drop,commit,update,xmlupdate
+
+Currently, we only support 'create', 'commit', and 'update'. 'drop' support will be added as soon as Zebra supports it.
+
+=cut
+
+sub set_service_options {
+    my ($serviceType) = @_;
+    my $serviceOptions;
+
+# FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
+#   $serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
+
+    if ( $serviceType eq 'commit' ) {
+
+        # nothing to do
+    }
+    if ( $serviceType eq 'create' ) {
+
+        # nothing to do
+    }
+    if ( $serviceType eq 'drop' ) {
+        die "ERROR: 'drop' not currently supported (by Zebra)";
+    }
+    return $serviceOptions;
 }
 
 END { }    # module clean-up code here (global destructor)
@@ -3445,13 +3484,25 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.193  2007/03/29 16:45:53  tipaul
+# Code cleaning of Biblio.pm (continued)
+#
+# All subs have be cleaned :
+# - removed useless
+# - merged some
+# - reordering Biblio.pm completly
+# - using only naming conventions
+#
+# Seems to have broken nothing, but it still has to be heavily tested.
+# Note that Biblio.pm is now much more efficient than previously & probably more reliable as well.
+#
 # Revision 1.192  2007/03/29 13:30:31  tipaul
 # Code cleaning :
 # == Biblio.pm cleaning (useless) ==
 # * some sub declaration dropped
 # * removed modbiblio sub
 # * removed moditem sub
-# * removed newitems. It was used only in finishrecieve. Replaced by a Koha2Marc+AddItem, that is better.
+# * removed newitems. It was used only in finishrecieve. Replaced by a TransformKohaToMarc+AddItem, that is better.
 # * removed MARCkoha2marcItem
 # * removed MARCdelsubfield declaration
 # * removed MARCkoha2marcBiblio
@@ -3479,252 +3530,3 @@ Joshua Ferraro jmf@liblime.com
 # Revision 1.189  2007/03/28 10:39:16  hdl
 # removing $dbh as a parameter in AuthoritiesMarc functions
 # And reporting all differences into the scripts taht relies on those functions.
-#
-# Revision 1.188  2007/03/09 14:31:47  tipaul
-# rel_3_0 moved to HEAD
-#
-# Revision 1.178.2.59  2007/02/28 10:01:13  toins
-# reporting bug fix from 2.2.7.1 to rel_3_0
-# LOG was :
-# 		BUGFIX/improvement : limiting MARCsubject to 610 as 676 is dewey, and is somewhere else
-#
-# Revision 1.178.2.58  2007/02/05 16:50:01  toins
-# fix a mod_perl bug:
-# There was a global var modified into an internal function in {MARC|ISBD}detail.pl.
-# Moving this function in Biblio.pm
-#
-# Revision 1.178.2.57  2007/01/25 09:37:58  tipaul
-# removing warn
-#
-# Revision 1.178.2.56  2007/01/24 13:50:26  tipaul
-# Acquisition fix
-# removing newbiblio & newbiblioitems subs.
-# adding Koha2Marc
-#
-# IMHO, all biblio handling is better handled if they are done in a single place, the subs with MARC::Record as parameters.
-# newbiblio & newbiblioitems where koha 1.x subs, that are called when MARC=OFF (which is not working anymore in koha 3.0, unless someone reintroduce it), and in acquisition module.
-# The Koha2Marc sub moves a hash (with biblio/biblioitems subfield as keys) into a MARC::Record, that can be used to call NewBiblio, the standard biblio manager sub.
-#
-# Revision 1.178.2.55  2007/01/17 18:07:17  alaurin
-# bugfixing for zebraqueue_start and biblio.pm :
-#
-# 	- Zebraqueue_start : restoring function of deletion in zebraqueue DB list
-#
-# 	-biblio.pm : changing method of default_record_format, now we have :
-# 		MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
-#
-# 	with this line the encoding in zebra seems to be ok (in unimarc and marc21)
-#
-# Revision 1.178.2.54  2007/01/16 15:00:03  tipaul
-# donc try to delete the biblio in koha, just fill zebraqueue table !
-#
-# Revision 1.178.2.53  2007/01/16 10:24:11  tipaul
-# BUGFIXING :
-# when modifying or deleting an item, the biblio frameworkcode was emptied.
-#
-# Revision 1.178.2.52  2007/01/15 17:20:55  toins
-# *** empty log message ***
-#
-# Revision 1.178.2.51  2007/01/15 15:16:44  hdl
-# Uncommenting ModZebra.
-#
-# Revision 1.178.2.50  2007/01/15 14:59:09  hdl
-# Adding creation of an unexpected serial any time.
-# +
-# USING Date::Calc and not Date::Manip.
-# WARNING : There are still some Bugs in next issue date management. (Date::Calc donot wrap easily next year calculation.)
-#
-# Revision 1.178.2.49  2007/01/12 10:12:30  toins
-# writing $record->as_formatted in the log when Modifying an item.
-#
-# Revision 1.178.2.48  2007/01/11 16:33:04  toins
-# write $record->as_formatted into the log.
-#
-# Revision 1.178.2.47  2007/01/10 16:46:27  toins
-# Theses modules need to use C4::Log.
-#
-# Revision 1.178.2.46  2007/01/10 16:31:15  toins
-# new systems preferences :
-#  - CataloguingLog (log the update/creation/deletion of a notice if set to 1)
-#  - BorrowersLog ( idem for borrowers )
-#  - IssueLog (log all issue if set to 1)
-#  - ReturnLog (log all return if set to 1)
-#  - SusbcriptionLog (log all creation/deletion/update of a subcription)
-#
-# All of theses are in a new tab called 'LOGFeatures' in systempreferences.pl
-#
-# Revision 1.178.2.45  2007/01/09 10:31:09  toins
-# sync with dev_week. ( new function : GetMarcSeries )
-#
-# Revision 1.178.2.44  2007/01/04 17:41:32  tipaul
-# 2 major bugfixes :
-# - deletion of an item deleted the whole biblio because of a wrong API
-# - create an item was bugguy for default framework
-#
-# Revision 1.178.2.43  2006/12/22 15:09:53  toins
-# removing C4::Database;
-#
-# Revision 1.178.2.42  2006/12/20 16:51:00  tipaul
-# ZEBRA update :
-# - adding a new table : when a biblio is added/modified/ deleted, an entry is entered in this table
-# - the zebraqueue_start.pl script read it & does the stuff.
-#
-# code coming from head (tumer). it can be run every minut instead of once every day for dev_week code.
-#
-# I just have commented the previous code (=real time update) in Biblio.pm, we will be able to reactivate it once indexdata fixes zebra update bug !
-#
-# Revision 1.178.2.41  2006/12/20 08:54:44  toins
-# GetXmlBiblio wasn't exported.
-#
-# Revision 1.178.2.40  2006/12/19 16:45:56  alaurin
-# bugfixing, for zebra and authorities
-#
-# Revision 1.178.2.39  2006/12/08 17:55:44  toins
-# GetMarcAuthors now get authors for all subfields
-#
-# Revision 1.178.2.38  2006/12/07 15:42:14  toins
-# synching opac & intranet.
-# fix some broken link & bugs.
-# removing warn compilation.
-#
-# Revision 1.178.2.37  2006/12/07 11:09:39  tipaul
-# MAJOR FIX :
-# the ->destroy() line destroys the zebra connection. When we are running koha as cgi, it's not a problem, as the script dies after each request.
-# BUT for bulkmarcimport & mod_perl, the zebra conn must be persistant.
-#
-# Revision 1.178.2.36  2006/12/06 16:54:21  alaurin
-# restore function ModZebra for delete biblios :
-#
-# 1) restore C4::Circulation::Circ2::itemissues, (was missing)
-# 2) restore ModZebra value : delete_record
-#
-# Revision 1.178.2.35  2006/12/06 10:02:12  alaurin
-# bugfixing for delete a biblio :
-#
-# restore itemissue fonction .... :
-#
-# other is pointed, zebra error 224... for biblio is not deleted in zebra ..
-# ....
-#
-# Revision 1.178.2.34  2006/12/06 09:14:25  toins
-# Correct the link to the MARC subjects.
-#
-# Revision 1.178.2.33  2006/12/05 11:35:29  toins
-# Biblio.pm cleaned.
-# additionalauthors, bibliosubject, bibliosubtitle tables are now unused.
-# Some functions renamed according to the coding guidelines.
-#
-# Revision 1.178.2.32  2006/12/04 17:39:57  alaurin
-# bugfix :
-#
-# restore ModZebra for update zebra
-#
-# Revision 1.178.2.31  2006/12/01 17:00:19  tipaul
-# additem needs $frameworkcode
-#
-# Revision 1.178.2.30  2006/11/30 18:23:51  toins
-# theses scripts don't need to use C4::Search.
-#
-# Revision 1.178.2.29  2006/11/30 17:17:01  toins
-# following functions moved from Search.p to Biblio.pm :
-# - bibdata
-# - itemsissues
-# - addauthor
-# - getMARCNotes
-# - getMARCsubjects
-#
-# Revision 1.178.2.28  2006/11/28 15:15:03  toins
-# sync with dev_week.
-# (deleteditems table wasn't getting populaated because the execute was commented out. This puts it back
-#     -- some table changes are needed as well, I'll commit those separately.)
-#
-# Revision 1.178.2.27  2006/11/20 16:52:05  alaurin
-# minor bugfixing :
-#
-# correcting in _koha_modify_biblioitem : restore the biblionumber line .
-#
-# now the sql update of biblioitems is ok ....
-#
-# Revision 1.178.2.26  2006/11/17 14:57:21  tipaul
-# code cleaning : moving bornum, borrnum, bornumber to a correct "borrowernumber"
-#
-# Revision 1.178.2.25  2006/11/17 13:18:58  tipaul
-# code cleaning : removing use of "bib", and replacing with "biblionumber"
-#
-# WARNING : I tried to do carefully, but there are probably some mistakes.
-# So if you encounter a problem you didn't have before, look for this change !!!
-# anyway, I urge everybody to use only "biblionumber", instead of "bib", "bi", "biblio" or anything else. will be easier to maintain !!!
-#
-# Revision 1.178.2.24  2006/11/17 11:18:47  tipaul
-# * removing useless subs
-# * moving bibid to biblionumber where needed
-#
-# Revision 1.178.2.23  2006/11/17 09:39:04  btoumi
-# bug fix double declaration of variable in same function
-#
-# Revision 1.178.2.22  2006/11/15 15:15:50  hdl
-# Final First Version for New Facility for subscription management.
-#
-# Now
-# use serials-collection.pl for history display
-# and serials-edit.pl for serial edition
-# subscription add and detail adds a new branch information to help IndependantBranches Library to manage different subscriptions for a serial
-#
-# This is aimed at replacing serials-receive and statecollection.
-#
-# Revision 1.178.2.21  2006/11/15 14:49:38  tipaul
-# in some cases, there are invalid utf8 chars in XML (at least in SANOP). this commit remove them on the fly.
-# Not sure it's a good idea to keep them in biblio.pm, let me know your opinion on koha-devel if you think it's a bad idea...
-#
-# Revision 1.178.2.20  2006/10/31 17:20:49  toins
-# * moving bibitemdata from search to here.
-# * using _koha_modify_biblio instead of OLDmodbiblio.
-#
-# Revision 1.178.2.19  2006/10/20 15:26:41  toins
-# sync with dev_week.
-#
-# Revision 1.178.2.18  2006/10/19 11:57:04  btoumi
-# bug fix : wrong syntax in sub call
-#
-# Revision 1.178.2.17  2006/10/17 09:54:42  toins
-# ccode (re)-integration.
-#
-# Revision 1.178.2.16  2006/10/16 16:20:34  toins
-# MARCgetbiblio cleaned up.
-#
-# Revision 1.178.2.15  2006/10/11 14:26:56  tipaul
-# handling of UNIMARC :
-# - better management of field 100 = automatic creation of the field if needed & filling encoding to unicode.
-# - better management of encoding (MARC::File::XML new_from_xml()). This fix works only on my own version of M:F:XML, i think the actual one is buggy & have reported the problem to perl4lib mailing list
-# - fixing a bug on GetMarcItem, that uses biblioitems.marc and not biblioitems.marcxml
-#
-# Revision 1.178.2.14  2006/10/11 07:59:36  tipaul
-# removing hardcoded ccode fiels in biblioitems
-#
-# Revision 1.178.2.13  2006/10/10 14:21:24  toins
-# Biblio.pm now returns a true value.
-#
-# Revision 1.178.2.12  2006/10/09 16:44:23  toins
-# Sync with dev_week.
-#
-# Revision 1.178.2.11  2006/10/06 13:23:49  toins
-# Synch with dev_week.
-#
-# Revision 1.178.2.10  2006/10/02 09:32:02  hdl
-# Adding GetItemStatus and GetItemLocation function in order to make serials-receive.pl work.
-#
-# *************WARNING.***************
-# tested for UNIMARC and using 'marcflavour' system preferences to set defaut_record_format.
-#
-# Revision 1.178.2.9  2006/09/26 07:54:20  hdl
-# Bug FIX: Correct accents for UNIMARC biblio MARC details.
-# (Adding the use of default_record_format in MARCgetbiblio if UNIMARC marcflavour is chosen. This should be widely used as soon as we use xml records)
-#
-# Revision 1.178.2.8  2006/09/25 14:46:22  hdl
-# Now using iso2709 MARC data for MARC.
-# (Works better for accents than XML)
-#
-# Revision 1.178.2.7  2006/09/20 13:44:14  hdl
-# Bug Fixing : Cataloguing was broken for UNIMARC.
-# Please test.
-

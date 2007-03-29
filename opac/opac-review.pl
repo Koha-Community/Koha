@@ -40,7 +40,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $biblio = GetBiblioData( $biblionumber, 'opac' );
+my $biblio = GetBiblioData( $biblionumber);
 
 my $savedreview = getreview( $biblionumber, $borrowernumber );
 if ( $type eq 'save' ) {

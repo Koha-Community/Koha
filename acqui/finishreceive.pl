@@ -57,7 +57,7 @@ if ($quantity != 0) {
     my @barcodes=split(/\,| |\|/,$barcode);
     # foreach barcode provided, build the item MARC::Record and create the item
     foreach my $bc (@barcodes) {
-        my $itemRecord = Koha2Marc({
+        my $itemRecord = TransformKohaToMarc({
                     "items.replacementprice" => $replacement,
                     "items.price"            => $cost,
                     "items.booksellerid"     => $supplierid,
