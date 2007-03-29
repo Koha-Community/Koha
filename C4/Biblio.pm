@@ -121,8 +121,6 @@ push @EXPORT, qw(
   &checkitems
 );
 
-use MARC::Charset;
-MARC::Charset->ignore_errors(1);
 =head1 NAME
 
 C4::Biblio - acquisitions and cataloging management functions
@@ -3697,6 +3695,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.190  2007/03/29 08:45:19  hdl
+# Deleting ignore_errors(1) pour MARC::Charset
+#
 # Revision 1.189  2007/03/28 10:39:16  hdl
 # removing $dbh as a parameter in AuthoritiesMarc functions
 # And reporting all differences into the scripts taht relies on those functions.
