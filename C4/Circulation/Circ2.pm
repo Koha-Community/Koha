@@ -1194,7 +1194,7 @@ Issue a book. Does no check, they are done in canbookbeissued. If we reach this 
 sub issuebook {
     my ( $env, $borrower, $barcode, $date, $cancelreserve ) = @_;
     my $dbh = C4::Context->dbh;
-
+if ($borrower and $barcode){
 #   my ($borrower, $flags) = &getpatroninformation($env, $borrowernumber, 0);
     my $iteminformation = getiteminformation( 0, $barcode );
 
@@ -1401,7 +1401,7 @@ sub issuebook {
     
     &logaction(C4::Context->userenv->{'number'},"CIRCULATION","ISSUE",$borrower->{'borrowernumber'},$iteminformation->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
-    
+  }  
 }
 
 =head2 getLoanLength
