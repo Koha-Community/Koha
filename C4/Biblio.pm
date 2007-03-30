@@ -1237,6 +1237,11 @@ sub GetMarcStructure {
     {
         $res->{$tag}->{lib} =
           ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
+          # why the hell do we need to explicitly decode utf8 ? 
+          # that's a good question, but we must do it...
+          use utf8;
+          utf8::decode($res->{$tag}->{lib});
+#           warn "$liblibrarian";
         $res->{$tab}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
@@ -3484,6 +3489,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.194  2007/03/30 12:00:42  tipaul
+# why the hell do we need to explicitly utf8 decode this string ? I really don't know, but it seems it's mandatory, otherwise, tag descriptions are not properly encoded...
+#
 # Revision 1.193  2007/03/29 16:45:53  tipaul
 # Code cleaning of Biblio.pm (continued)
 #
