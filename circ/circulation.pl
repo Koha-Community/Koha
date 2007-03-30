@@ -42,7 +42,7 @@ use Date::Calc qw(
 
 use C4::Biblio;
 use C4::Reserves2;
-use C4::Circulation::Date;
+use C4::Date;
 
 #
 # PARAMETERS READING
