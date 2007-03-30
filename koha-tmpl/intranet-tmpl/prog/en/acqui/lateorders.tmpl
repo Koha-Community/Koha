@@ -10,16 +10,9 @@
 			<tr>
 				<th>Supplier</th>
 				<th>Order Date</th>
-				<th>Ordered for</th>
-				<th>Including Basket</th>
 				<th>Book information</th>
-				<th>Branch</th>
-				<th>Estimated Unit Price</th>
-				<th>Retailer Catalogue Unit Price</th>
-				<th>Quantity</th>
 				<th>Total cost</th>
-				<th>Budget</th>
-				<th>&nbsp;</th>
+				<th>Basket</th>
 				<th>&nbsp;</th>
 			</tr>
 			<tr>
@@ -27,14 +20,10 @@
                         <form action="lateorders.pl" method="post">
 						<!-- TMPL_VAR name="CGIsupplier" -->
 					</td>
-					<td> &nbsp;</td>
 					<td align="center" class="doNotPrint">
 						<input align="right" size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days
 					</td>
 					<td colspan="2">
-						&nbsp;
-					</td>
-					<td colspan="6">
 						&nbsp;
 					</td>
 					
@@ -61,40 +50,25 @@
 					</td>
 					<td>
 						<!-- TMPL_VAR name="orderdate" -->
-					</td>
-					<td class="number" align="right">
-						<!-- TMPL_VAR name="latesince" -->
-					</td>
-					<td align="center" class="doNotPrint">
-						<a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->">
-						    <!-- TMPL_VAR name="basketno" -->
-						</a>
+						(<!-- TMPL_VAR name="latesince" --> days)
 					</td>
 					<td >
 						<b><!-- TMPL_VAR name="title" --></b>
 					<!-- TMPL_IF name="author" --><br/><i>Author:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="publisher" --><br/><i>Published by:</i> <!-- TMPL_VAR NAME="publisher" --><!-- TMPL_IF name="publicationyear" --><i> in </i><!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 					</td>
-					<td class="doNotPrint">
-						<!-- TMPL_VAR name="branch" -->
-					</td>
-					<td align="right" class="doNotPrint">
-						<!-- TMPL_VAR name="unitpricelib" -->
-					</td>
 					<td align="right">
-						<!-- TMPL_VAR name="unitpricesupplier" -->
-					</td>
-					<td align="right">
-						<!-- TMPL_VAR name="quantity" -->
-					</td>
-					<td align="right">
+						<!-- TMPL_VAR name="unitpricesupplier" -->x
+						<!-- TMPL_VAR name="quantity" --> = 
 						<!-- TMPL_VAR name="subtotal" -->
 					</td>
 					<td class="doNotPrint">
-						<!-- TMPL_VAR name="budget" -->
-					</td>
-					<td class="doNotPrint">
-						&nbsp;
+						<p><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->" title="basket">
+						    <!-- TMPL_VAR name="basketno" -->
+						</a>
+						</p>
+						<p title="budget"><!-- TMPL_VAR name="budget" --></p>
+						<p title="branch"><!-- TMPL_VAR name="branch" --></p>
 					</td>
 					<td class="doNotPrint">
 						<input type="checkbox" name="claim_for" value="<!--TMPL_VAR Name="ordernumber" -->" />
@@ -108,17 +82,10 @@
 					<th colspan="2">
 						&nbsp;
 					</th>
-					<th class="doNotPrint"> &nbsp;</th>
-					<th colspan="5">
-						&nbsp;
-					</th>
-					
 					<th>
 						<!-- TMPL_VAR name="total" -->
 					</th>
-					<td colspan="2">
-                        &nbsp;
-					</td>
+					<th class="doNotPrint"> &nbsp;</th>
 					<td>
 						<input type="submit" value="Claim Order" />
                         </form>
