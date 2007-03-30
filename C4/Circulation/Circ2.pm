@@ -62,39 +62,65 @@ Also deals with stocktaking.
 =cut
 
 @ISA    = qw(Exporter);
-@EXPORT = qw(
+
+# FIXME subs that should probably be elsewhere
+push @EXPORT, qw(
   &getpatroninformation
-  &currentissues
-  &getissues
   &getiteminformation
-  &renewstatus
-  &renewbook
+);
+# subs to deal with issuing a book
+push @EXPORT, qw(
   &canbookbeissued
   &issuebook
-  &returnbook
-  &find_reserves
-  &transferbook
-  &decode
+  &currentissues
+  &getissues
+  &renewstatus
+  &renewbook
   &calc_charges
-  &GetItemsForInventory
-  &itemseen
   &fixdate
-  &get_current_return_date_of
-  &get_transfert_infos
-  &checktransferts
+  &GetIssuesFromBiblio
+  &itemissues
+  &AnonymiseIssueHistory
+);
+# subs to deal with returns
+push @EXPORT, qw(
+  &returnbook
+);
+# subs to deal with reserves => Move to Reserves2.pm
+push @EXPORT, qw(
+  &find_reserves
   &GetReservesForBranch
   &GetReservesToBranch
+);
+
+# subs to deal with transfers
+push @EXPORT, qw(
+  &transferbook
+  &get_transfert_infos
+  &checktransferts
   &GetTransfersFromBib
-  &getBranchIp
+  &updateWrongTransfer
+);
+
+# subs to remove
+push @EXPORT, qw(
+  &decode
+  &get_current_return_date_of
   &dotransfer
+);
+
+# to move in Biblio.pm
+push @EXPORT, qw(
+  &itemseen
+  &GetItemsForInventory
+  &GetLostItems
+);
+
+# subs to deal with late issues => to move to Fines.pm
+push @EXPORT, qw(
   &GetOverduesForBranch
   &AddNotifyLine
   &RemoveNotifyLine
-  &GetIssuesFromBiblio
-  &AnonymiseIssueHistory
-  &GetLostItems
-  &itemissues
-  &updateWrongTransfer
 );
 
 =head2 itemseen

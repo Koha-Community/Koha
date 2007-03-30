@@ -55,7 +55,6 @@ this modules provides somes functions to deal with reservations.
 
 @ISA = qw(Exporter);
 
-# FIXME Take out CalcReserveFee after it can be removed from opac-reserves.pl
 @EXPORT = qw(
   &FindReserves
   &CheckReserves

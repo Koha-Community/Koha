@@ -52,30 +52,49 @@ overdue items. It is primarily used by the 'misc/fines2.pl' script.
 =cut
 
 @ISA    = qw(Exporter);
-@EXPORT = qw(    &BorType
+# subs to rename (and maybe merge some...)
+push @EXPORT, qw(
         &CalcFine
         &Getoverdues
-        &GetIssuingRules
         &CheckAccountLineLevelInfo
         &CheckAccountLineItemInfo
         &CheckExistantNotifyid
-        &CheckBorrowerDebarred
-        &GetIssuesIteminfo
         &GetNextIdNotify
-        &GetOverdueDelays
-        &GetOverduerules
-        &GetFine
-        &GetItems
         &GetNotifyId
-        &GetNextIdNotify
         &NumberNotifyId
         &AmountNotify
         &UpdateAccountLines
         &UpdateFine
-        &UpdateBorrowerDebarred
+        &GetOverdueDelays
+        &GetOverduerules
+        &GetFine
         &CreateItemAccountLine
+        &ReplacementCost2
+);
+# subs to remove
+push @EXPORT, qw(
+        &BorType
+);
+
+#
+# All subs to move : check that an equivalent don't exist already before moving
+#
+
+# subs to move to Circulation.pm
+push @EXPORT, qw(
+        &GetIssuingRules
+        &GetIssuesIteminfo
+);
+# subs to move to Members.pm
+push @EXPORT, qw(
+        &CheckBorrowerDebarred
+        &UpdateBorrowerDebarred
+);
+# subs to move to Biblio.pm
+push @EXPORT, qw(
+        &GetItems
         &ReplacementCost
-        &ReplacementCost2);
+);
 
 =item Getoverdues
 
