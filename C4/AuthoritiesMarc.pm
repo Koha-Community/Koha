@@ -66,6 +66,7 @@ sub AUTHfind_marc_from_kohafield {
     
   return  ($tagfield,$tagsubfield);
 }
+
 sub authoritysearch {
   my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
   my $dbh=C4::Context->dbh;
@@ -220,56 +221,6 @@ NOLUCK:
     return (\@finalresult, $nbresults);
 }
 
-# Creates the SQL Request
-
-sub create_request {
-    my ($tags, $and_or, $operator, $value) = @_;
-    my $dbh=C4::Context->dbh;
-
-    my $sql_tables; # will contain marc_subfield_table as m1,...
-    my $sql_where1; # will contain the "true" where
-    my $sql_where2 = "("; # will contain m1.authid=m2.authid
-    my $nb_active=0; # will contain the number of "active" entries. and entry is active is a value is provided.
-    my $nb_table=1; # will contain the number of table. ++ on each entry EXCEPT when an OR  is provided.
-
-    for(my $i=0; $i<=@$value;$i++) {
-      if (@$value[$i]) {
-        $nb_active++;
-        if ($nb_active==1) {
-          $sql_tables = "auth_subfield_table as m$nb_table,";
-          $sql_where1 .= "( m$nb_table.subfieldvalue like '@$value[$i]' ";
-          if (@$tags[$i]) {
-            $sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) IN (@$tags[$i])";
-          }
-          $sql_where1.=")";
-        } else {
-          $nb_table++;
-          $sql_tables .= "auth_subfield_table as m$nb_table,";
-          $sql_where1 .= "@$and_or[$i] (m$nb_table.subfieldvalue   like '@$value[$i]' ";
-          if (@$tags[$i]) {
-              $sql_where1 .=" and concat(m$nb_table.tag,m$nb_table.subfieldcode) IN (@$tags[$i])";
-          }
-          $sql_where1.=")";
-          $sql_where2.="m1.authid=m$nb_table.authid and ";
-        }
-      }
-    }
-
-    if($sql_where2 ne "(")    # some datas added to sql_where2, processing
-    {
-        $sql_where2 = substr($sql_where2, 0, (length($sql_where2)-5)); # deletes the trailing ' and '
-        $sql_where2 .= ")";
-    }
-    else    # no sql_where2 statement, deleting '('
-    {
-        $sql_where2 = "";
-    }
-    chop $sql_tables;    # deletes the trailing ','
-    
-    return ($sql_tables, $sql_where1, $sql_where2);
-}
-
-
 sub AUTHcount_usage {
   my ($authid) = @_;
   ### try ZOOM search here
@@ -288,8 +239,6 @@ sub AUTHcount_usage {
   return ($result);
 }
 
-
-
 sub AUTHfind_authtypecode {
   my ($authid) = @_;
   my $dbh=C4::Context->dbh;
@@ -299,7 +248,6 @@ sub AUTHfind_authtypecode {
   return $authtypecode;
 }
  
-
 sub AUTHgettagslib {
   my ($forlibrarian,$authtypecode)= @_;
   my $dbh=C4::Context->dbh;
@@ -374,7 +322,6 @@ sub AUTHaddauthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
   my ($record,$authid,$authtypecode) = @_;
   my $dbh=C4::Context->dbh;
-#my $leadercode=AUTHfind_leader($dbh,$authtypecode);
   my $leader='         a              ';##Fixme correct leader as this one just adds utf8 to MARC21
 #substr($leader,8,1)=$leadercode;
 #    $record->leader($leader);
@@ -407,7 +354,7 @@ sub AUTHaddauthority {
       $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
 #       $record->add_fields($authfield,$authid);
 #       $record->add_fields($authfield2,'','',$authtypesubfield=>$authtypecode);
-      warn $record->as_formatted;
+#       warn $record->as_formatted;
       $dbh->do("lock tables auth_header WRITE");
       my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
       $sth->execute($record->as_usmarc,$authid);
@@ -416,45 +363,7 @@ sub AUTHaddauthority {
     $dbh->do("unlock tables");
     ModZebra($authid,'specialUpdate',"authorityserver");
 
-# if ($record->field($linkidfield)){
-# my @fields=$record->field($linkidfield);
-# 
-#     foreach my $field (@fields){
-#      my $linkid=$field->subfield($linkidsubfield) ;
-#        if ($linkid){
-#     ##Modify the record of linked
-#          AUTHaddlink($dbh,$linkid,$authid);
-#        }
-#     }
-# }
     return ($authid);
-}
-
-sub AUTHaddlink{
-  my ($linkid,$authid)=@_;
-  my $dbh=C4::Context->dbh;
-  my $record=AUTHgetauthority($linkid);
-  my $authtypecode=AUTHfind_authtypecode($linkid);
-#warn "adding l:$linkid,a:$authid,auth:$authtypecode";
-  $record=AUTH2marcOnefieldlink($record,"auth_header.linkid",$authid,$authtypecode);
-  $dbh->do("lock tables auth_header WRITE");
-  my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
-  $sth->execute($record->as_usmarc,$linkid);
-  $sth->finish;
-  $dbh->do("unlock tables");
-  ModZebra($linkid,'specialUpdate',"authorityserver");
-}
-
-sub AUTH2marcOnefieldlink {
-  my ( $record, $kohafieldname, $newvalue,$authtypecode ) = @_;
-  my $dbh=C4::Context->dbh;
-  my $sth =      $dbh->prepare(
-"select tagfield,tagsubfield from auth_subfield_structure where authtypecode=? and kohafield=?"
-    );
-  $sth->execute($authtypecode,$kohafieldname);
-  my  ($tagfield,$tagsubfield)=$sth->fetchrow;
-  $record->add_fields( $tagfield, " ", " ", $tagsubfield => $newvalue );
-  return $record;
 }
 
 sub XMLgetauthority {
@@ -470,24 +379,6 @@ sub XMLgetauthority {
   my $marcxml=$marc->as_xml_record();
   return $marcxml;
 
-}
-
-
-sub AUTHfind_leader{
-##Hard coded for NEU auth types 
-my($authtypecode)=@_;
-
-my $leadercode;
-if ($authtypecode eq "AUTH"){
-$leadercode="a";
-}elsif ($authtypecode eq "ESUB"){
-$leadercode="b";
-}elsif ($authtypecode eq "TSUB"){
-$leadercode="c";
-}else{
-$leadercode=" ";
-}
-return $leadercode;
 }
 
 sub AUTHgetauthority {
@@ -509,8 +400,8 @@ sub AUTHgetauth_type {
     $sth->execute($authtypecode);
     return $sth->fetchrow_hashref;
 }
-sub AUTHmodauthority {
 
+sub AUTHmodauthority {
     my ($authid,$record,$authtypecode,$merge)=@_;
     my $dbh=C4::Context->dbh;
     my ($oldrecord)=&AUTHgetauthority($authid);
@@ -574,7 +465,6 @@ sub AUTHdelauthority {
 ModZebra($authid,"recordDelete","authorityserver");
     $dbh->do("delete from auth_header where authid=$authid") ;
 
-# FIXME : delete or not in biblio tables (depending on $keep_biblio flag)
 }
 
 sub AUTHhtml2marc {
@@ -623,7 +513,6 @@ sub AUTHhtml2marc {
     $record->add_fields($field) if $field;
     return $record;
 }
-
 
 
 sub FindDuplicate {
@@ -768,6 +657,7 @@ my $dbh=C4::Context->dbh;
         }
 return $summary;
 }
+
 sub BuildUnimarcHierarchies{
   my $authid = shift @_;
 #   warn "authid : $authid";
@@ -858,7 +748,6 @@ sub AUTHsavetrees{
 	my $rq= $dbh->prepare($sql);
     $rq->execute($trees,$authid);
 }
-
 
 sub merge {
     my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
@@ -953,6 +842,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.43  2007/03/30 11:59:16  tipaul
+# some cleaning (minor, the main one will come later) : removing some unused subs
+#
 # Revision 1.42  2007/03/29 16:45:53  tipaul
 # Code cleaning of Biblio.pm (continued)
 #
@@ -1074,60 +966,3 @@ Paul POULAIN paul.poulain@free.fr
 # Revision 1.28.2.2  2006/10/12 22:04:47  hdl
 # Authorities working with zebra.
 # zebra Configuration files are comitted next.
-#
-# Revision 1.9.2.17.2.2  2006/07/27 16:34:56  kados
-# syncing with rel_2_2 .. .untested.
-#
-# Revision 1.9.2.17.2.1  2006/05/28 18:49:12  tgarip1957
-# This is an unusual commit. The main purpose is a working model of Zebra on a modified rel2_2.
-# Any questions regarding these commits should be asked to Joshua Ferraro unless you are Joshua whom I'll report to
-#
-# Revision 1.9.2.6  2005/06/07 10:02:00  tipaul
-# porting dictionnary search from head to 2.2. there is now a ... facing titles, author & subject, to search in biblio & authorities existing values.
-#
-# Revision 1.9.2.5  2005/05/31 14:50:46  tipaul
-# fix for authority merging. There was a bug on official installs
-#
-# Revision 1.9.2.4  2005/05/30 11:24:15  tipaul
-# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in AUTHhtml2marc, this empty field was not discarded correctly)
-#
-# Revision 1.9.2.3  2005/04/28 08:45:33  tipaul
-# porting FindDuplicate feature for authorities from HEAD to rel_2_2, works correctly now.
-#
-# Revision 1.9.2.2  2005/02/28 14:03:13  tipaul
-# * adding search on "main entry" (ie $a subfield) on a given authority (the "search everywhere" field is still here).
-# * adding a select box to requet "contain" or "begin with" search.
-# * fixing some bug in authority search (related to "main entry" search)
-#
-# Revision 1.9.2.1  2005/02/24 13:12:13  tipaul
-# saving authority modif in a text file. This will be used soon with another script (in crontab). The script in crontab will retrieve every authorityid in the directory localfile/authorities and modify every biblio using this authority. Those modifs may be long. So they can't be done through http, because we may encounter a webserver timeout, and kill the process before end of the job.
-# So, it will be done through a cron job.
-# (/me agree we need some doc for command line scripts)
-#
-# Revision 1.9  2004/12/23 09:48:11  tipaul
-# Minor changes in summary "exploding" (the 3 digits AFTER the subfield were not on the right place).
-#
-# Revision 1.8  2004/11/05 10:11:39  tipaul
-# export auth_count_usage (bugfix)
-#
-# Revision 1.7  2004/09/23 16:13:00  tipaul
-# Bugfix in modification
-#
-# Revision 1.6  2004/08/18 16:00:24  tipaul
-# fixes for authorities management
-#
-# Revision 1.5  2004/07/05 13:37:22  doxulting
-# First step for working authorities
-#
-# Revision 1.4  2004/06/22 11:35:37  tipaul
-# removing % at the beginning of a string to avoid loooonnnngggg searchs
-#
-# Revision 1.3  2004/06/17 08:02:13  tipaul
-# merging tag & subfield in auth_word for better perfs
-#
-# Revision 1.2  2004/06/10 08:29:01  tipaul
-# MARC authority management (continued)
-#
-# Revision 1.1  2004/06/07 07:35:01  tipaul
-# MARC authority management package
-#
