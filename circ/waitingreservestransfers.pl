@@ -29,7 +29,7 @@ use C4::Date;
 use C4::Circulation::Circ2;
 use Date::Calc qw(
   Today
-  Add_Delta_YM
+  Add_Delta_Days
   Date_to_Days
 );
 use C4::Koha;
@@ -99,8 +99,8 @@ foreach my $br ( keys %$branches ) {
                 my ( $reserve_year, $reserve_month, $reserve_day ) = split /-/,
                   $num->{'reservedate'};
                 ( $reserve_year, $reserve_month, $reserve_day ) =
-                  Add_Delta_YM( $reserve_year, $reserve_month, $reserve_day,
-                    C4::Context->preference('ReservesMaxPickUpDelay'), 0 );
+                  Add_Delta_Days( $reserve_year, $reserve_month, $reserve_day,
+                    C4::Context->preference('ReservesMaxPickUpDelay'));
                 my $calcDate =
                   Date_to_Days( $reserve_year, $reserve_month, $reserve_day );
                 my $today   = Date_to_Days(&Today);

@@ -30,7 +30,7 @@ use C4::Circulation::Circ2;
 use C4::Interface::CGI::Output;
 use Date::Calc qw(
   Today
-  Add_Delta_YM
+  Add_Delta_Days
   Date_to_Days
 );
 
@@ -82,8 +82,8 @@ foreach my $br ( keys %$branches ) {
               $num->{'datesent'};
             $sent_day = ( split " ", $sent_day )[0];
             ( $sent_year, $sent_month, $sent_day ) =
-              Add_Delta_YM( $sent_year, $sent_month, $sent_day,
-                C4::Context->preference('TransfersMaxDaysWarning'), 0 );
+              Add_Delta_Days( $sent_year, $sent_month, $sent_day,
+                C4::Context->preference('TransfersMaxDaysWarning'));
             my $calcDate = Date_to_Days( $sent_year, $sent_month, $sent_day );
             my $today    = Date_to_Days(&Today);
             my $warning  = ( $today > $calcDate );
