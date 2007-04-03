@@ -30,7 +30,7 @@ use C4::Circulation::Circ2;
 
 use Date::Calc qw(
   Today
-  Add_Delta_YM
+  Add_Delta_Days
   Date_to_Days
 );
 use C4::Reserves2;
@@ -123,8 +123,8 @@ foreach my $num (@getreserves) {
     my ( $waiting_year, $waiting_month, $waiting_day ) = split /-/,
       $num->{'waitingdate'};
     ( $waiting_year, $waiting_month, $waiting_day ) =
-      Add_Delta_YM( $waiting_year, $waiting_month, $waiting_day,
-        C4::Context->preference('ReservesMaxPickUpDelay'), 0 );
+      Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day,
+        C4::Context->preference('ReservesMaxPickUpDelay'));
     my $calcDate = Date_to_Days( $waiting_year, $waiting_month, $waiting_day );
     my $today    = Date_to_Days(&Today);
     my $warning  = ( $today > $calcDate );
