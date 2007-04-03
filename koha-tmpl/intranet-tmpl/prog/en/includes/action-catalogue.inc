@@ -10,7 +10,7 @@
                 <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                     Edit item
                 </a>
-                <a href="javascript:confirm_deletion()">
+                <a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="count" -->)">
                     Delete
                 </a>
             </div>
