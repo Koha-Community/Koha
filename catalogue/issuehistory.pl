@@ -23,7 +23,7 @@ use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
-use C4::Circulation::Circ2;    # GetIssuesFromBiblio
+use C4::Circulation;    # GetBiblioIssues
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -43,7 +43,7 @@ my $biblionumber = $params->{'biblionumber'};
 my $title        = $params->{'title'};
 my $author       = $params->{'author'};
 
-my $issues = GetIssuesFromBiblio($biblionumber);
+my $issues = GetBiblioIssues($biblionumber);
 my $total  = scalar @$issues;
 
 if ( $total && !$title ) {

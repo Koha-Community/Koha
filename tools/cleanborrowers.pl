@@ -40,7 +40,7 @@ use C4::Interface::CGI::Output;
 
 
 use C4::Members;               # GetBorrowersWhoHavexxxBorrowed.
-use C4::Circulation::Circ2;    # AnonymiseIssueHistory.
+use C4::Circulation;    # AnonymiseIssueHistory.
 use Date::Calc qw/Date_to_Days Today/;
 
 my $cgi = new CGI;

@@ -19,7 +19,7 @@
 
 use strict;
 use CGI qw/:standard/;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Output;
 use C4::Auth;
 use C4::Print;

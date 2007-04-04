@@ -26,7 +26,7 @@ use CGI;
 use C4::Branch; # GetBranchName
 use C4::Auth;
 use C4::Date;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 use Date::Calc qw(
   Today
@@ -77,8 +77,8 @@ if ($item) {
 
     # 		if we have a result
     if ($nextreservinfo) {
-        my $borrowerinfo = getpatroninformation( \%env, $nextreservinfo );
-        my $iteminfo = C4::Circulation::Circ2::getiteminformation($item);
+        my $borrowerinfo = GetMemberDetails( $nextreservinfo );
+        my $iteminfo = GetBiblioFromItemNumber($item);
         if ( $messages->{'transfert'} ) {
             my $branchname = GetBranchName( $messages->{'transfert'} );
             $template->param(
@@ -114,8 +114,8 @@ my @getreserves = GetReservesForBranch($default);
 foreach my $num (@getreserves) {
     my %getreserv;
     my %env;
-    my $gettitle     = getiteminformation( $num->{'itemnumber'} );
-    my $getborrower  = getpatroninformation( \%env, $num->{'borrowernumber'} );
+    my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
+    my $getborrower  = GetMemberDetails( $num->{'borrowernumber'} );
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
     $getreserv{'waitingdate'} = format_date( $num->{'waitingdate'} );
 

@@ -10,7 +10,7 @@ use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Members;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use CGI;
 
 use Digest::MD5 qw(md5_base64);
@@ -38,13 +38,13 @@ my %env;
 $env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
-my $issues=currentissues(\%env,\%member2);
+my $issues=GetBorrowerIssues(\%member2);
 my $i=0;
 foreach (sort keys %$issues) {
     $i++;
 }
 
-my ($bor,$flags)=getpatroninformation(\%env, $member,'');
+my ($bor,$flags)=GetMemberDetails( $member,'');
 my $newpassword = $input->param('newpassword');
 
 if ( $newpassword ) {

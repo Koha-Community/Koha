@@ -23,7 +23,7 @@
 
 use strict;
 use CGI;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Output;
 use C4::Reserves2;
 use C4::Auth;
@@ -157,7 +157,7 @@ foreach ( $query->param ) {
     $item{barcode}  = $bc;
     $item{frombrcd} = $frbcd;
     $item{tobrcd}   = $tobcd;
-    my ($iteminformation) = getiteminformation( 0, $bc );
+    my ($iteminformation) = GetBiblioFromItemNumer( 0, $bc );
     $item{'biblionumber'} = $iteminformation->{'biblionumber'};
     $item{'title'}        = $iteminformation->{'title'};
     $item{'author'}       = $iteminformation->{'author'};
@@ -193,7 +193,7 @@ my $wastransferred;
 if ($found) {
     my $res = $messages->{'ResFound'};
     $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
-    my ($borr) = getpatroninformation( \%env, $res->{'borrowernumber'}, 0 );
+    my ($borr) = GetMemberDetails( $res->{'borrowernumber'}, 0 );
     $title          = $borr->{'title'};
     $surname        = $borr->{'surname'};
     $firstname      = $borr->{'firstname'};
@@ -243,7 +243,7 @@ foreach my $code ( keys %$messages ) {
         $err{errwasreturned} = 1;
         $allmessages = 1;
         my ($borrowerinfo) =
-          getpatroninformation( \%env, $messages->{'WasReturned'}, 0 );
+          GetMemberDetails( $messages->{'WasReturned'}, 0 );
         $title          = $borrowerinfo->{'title'};
         $surname        = $borrowerinfo->{'surname'};
         $firstname      = $borrowerinfo->{'firstname'};

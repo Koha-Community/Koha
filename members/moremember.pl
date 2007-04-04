@@ -43,7 +43,7 @@ use C4::Members;
 use Date::Manip;
 use C4::Date;
 use C4::Reserves2;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Koha;
 use C4::Letters;
 use C4::Biblio;
@@ -223,15 +223,8 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $row{toggle} = $toggle++ % 2;
 
     #find the charge for an item
-    # FIXME - This is expecting
-    # &C4::Circulation::Renewals2::calc_charges, but it's getting
-    # &C4::Circulation::Circ2::calc_charges, which only returns one
-    # element, so itemtype isn't being set.
-    # But &C4::Circulation::Renewals2::calc_charges doesn't appear to
-    # return the correct item type either (or a properly-formatted
-    # charge, for that matter).
     my ( $charge, $itemtype ) =
-      calc_charges( $dbh, $issue->[$i]{'itemnumber'}, $borrowernumber );
+      GetIssuingCharges( $issue->[$i]{'itemnumber'}, $borrowernumber );
 
     my $itemtypeinfo = getitemtypeinfo($itemtype);
     $row{'itemtype_description'} = $itemtypeinfo->{description};
@@ -284,10 +277,10 @@ if ($borrowernumber) {
     foreach my $num_res (@borrowerreserv) {
         my %getreserv;
         my %env;
-        my $getiteminfo  = getiteminformation( $num_res->{'itemnumber'} );
+        my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          checktransferts( $num_res->{'itemnumber'} );
+          GetTransfers( $num_res->{'itemnumber'} );
 
         $getreserv{waiting}       = 0;
         $getreserv{transfered}    = 0;

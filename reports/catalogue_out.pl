@@ -27,7 +27,7 @@ use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use Date::Manip;
 
 =head1 NAME

@@ -28,8 +28,8 @@
 # $Id$
 
 use C4::Context;
-use C4::Circulation::Circ2;
-use C4::Circulation::Fines;
+use C4::Circulation;
+use C4::Overdues;
 use Date::Manip;
 use C4::Biblio;
 
@@ -130,15 +130,15 @@ for (my $i=0;$i<$numOverdueItems;$i++){
         my $cost=ReplacementCost($data->[$i]->{'itemnumber'});
     my $dbh = C4::Context->dbh;
     my $env;
-    my $accountno=C4::Circulation::Circ2::getnextacctno($env,$data->[$i]->{'borrowernumber'},$dbh);
+    my $accountno=C4::Circulation::Circ2::getnextacctno($data->[$i]->{'borrowernumber'});
     my $item=GetBiblioFromItemNumber($data->[$i]->{'itemnumber'});
     if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
               # FIXME
               # this should be a separate function
               #
-      my $sth=$dbh->prepare("Insert into accountlines
+      my $sth=$dbh->prepare("INSERT INTO accountlines
       (borrowernumber,itemnumber,accountno,date,amount,
-      description,accounttype,amountoutstanding) values
+      description,accounttype,amountoutstanding) VALUES
       (?,?,?,now(),?,?,'L',?)");
       $sth->execute($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
       $accountno,$cost,"Lost item $item->{'title'} $item->{'barcode'} $due",$cost);

@@ -23,7 +23,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;
+use C4::Biblio;
 use C4::Date;
 
 
@@ -93,7 +93,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
 				$qonloan->execute($barcode);
 				if ($qonloan->rows){
 					my $data = $qonloan->fetchrow_hashref;
-					my ($doreturn, $messages, $iteminformation, $borrower) =returnbook($barcode, $data->{homebranch});
+					my ($doreturn, $messages, $iteminformation, $borrower) =AddReturn($barcode, $data->{homebranch});
 					if ($doreturn){push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_RET'=>1}}
 					else {push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_NOT_RET'=>1}}
 				}
@@ -112,7 +112,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
 	if ($markseen) {
 		foreach my $field ($input->param) {
 			if ($field =~ /SEEN-(.*)/) {
-				&itemseen($1);
+				&ModDateLastSeen($1);
 			}
 		}
 	}

@@ -27,7 +27,7 @@ require Exporter;
 use C4::Context;
 use C4::Biblio;
 use C4::Search;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 my $library_name = C4::Context->preference("LibraryName");
@@ -75,6 +75,8 @@ this modules provides somes functions to deal with reservations.
   &CountReservesFromBorrower
   &FixPriority
   &FindReservesInQueue
+  GetReservesForBranch
+  GetReservesToBranch
 );
 
 # make all your functions, whether exported or not;
@@ -87,7 +89,6 @@ this modules provides somes functions to deal with reservations.
 
 =cut
 
-#'
 sub GlobalCancel {
     my $messages;
     my $nextreservinfo;
@@ -117,7 +118,7 @@ sub OtherReserves {
     my $nextreservinfo;
     my ( $restype, $checkreserves ) = CheckReserves($itemnumber);
     if ($checkreserves) {
-        my $iteminfo = C4::Circulation::Circ2::getiteminformation($itemnumber,undef);
+        my $iteminfo = GetItem($itemnumber);
         if ( $iteminfo->{'holdingbranch'} ne $checkreserves->{'branchcode'} ) {
             $messages->{'transfert'} = $checkreserves->{'branchcode'};
             #minus priorities of others reservs
@@ -167,37 +168,37 @@ sub MinusPriority {
 
     #first step update the value of the first person on reserv
     my $dbh   = C4::Context->dbh;
-    my $query = qq/
+    my $query = "
         UPDATE reserves
         SET    priority = 0 , itemnumber = ? 
         WHERE  cancellationdate IS NULL 
           AND  borrowernumber=?
           AND  biblionumber=?
-    /;
+    ";
     my $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $itemnumber, $borrowernumber, $biblionumber );
     $sth_upd->finish;
     # second step update all others reservs
-    $query = qq/
+    $query = "
         SELECT priority,borrowernumber,biblionumber,reservedate
         FROM   reserves
         WHERE  priority !='0'
 	AND biblionumber = ?
           AND  cancellationdate IS NULL
-    /;
+    ";
     my $sth_oth = $dbh->prepare($query);
     $sth_oth->execute($biblionumber);
     while ( my ( $priority, $borrowernumber, $biblionumber, $reservedate ) =
         $sth_oth->fetchrow_array )
     {
         $priority--;
-        $query = qq/
+        $query = "
              UPDATE reserves
              SET    priority = ?
              WHERE  biblionumber = ?
                AND  borrowernumber   = ?
                AND  reservedate      = ?
-        /;
+        ";
         my $sth_upd_oth = $dbh->prepare($query);
         $sth_upd_oth->execute( $priority, $biblionumber, $borrowernumber,
             $reservedate );
@@ -219,13 +220,13 @@ sub SetWaitingStatus {
     #first : check if we have a reservation for this item .
     my ($itemnumber) = @_;
     my $dbh          = C4::Context->dbh;
-    my $query        = qq/
+    my $query        = "
         SELECT priority,borrowernumber
         FROM   reserves
         WHERE  itemnumber=?
            AND cancellationdate IS NULL
            AND found IS NULL AND priority='0'
-    /;
+    ";
     my $sth_find = $dbh->prepare($query);
     $sth_find->execute($itemnumber);
     my ( $priority, $borrowernumber ) = $sth_find->fetchrow_array;
@@ -233,13 +234,13 @@ sub SetWaitingStatus {
     return unless $borrowernumber;
 
 # step 2 : if we have a borrowernumber, we update the value found to 'W' to notify the borrower
-    $query = qq/
+    $query = "
     UPDATE reserves
     SET    found='W',waitingdate = now()
     WHERE  borrowernumber=?
       AND itemnumber=?
       AND found IS NULL
-    /;
+    ";
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $borrowernumber, $itemnumber );
     $sth_set->finish;
@@ -258,13 +259,13 @@ sub GetReservations {
     my ( $itemnumber, $borrowernumber ) = @_;
     if ($itemnumber) {
         my $dbh   = C4::Context->dbh;
-        my $query = qq/
+        my $query = "
             SELECT reservedate,borrowernumber
             FROM   reserves
             WHERE  itemnumber=?
               AND  cancellationdate IS NULL
               AND  (found <> 'F' OR found IS NULL)
-        /;
+        ";
         my $sth_res = $dbh->prepare($query);
         $sth_res->execute($itemnumber);
         my ( $reservedate, $borrowernumber ) = $sth_res->fetchrow_array;
@@ -272,14 +273,14 @@ sub GetReservations {
     }
     if ($borrowernumber) {
         my $dbh   = C4::Context->dbh;
-        my $query = qq/
+        my $query = "
             SELECT *
             FROM   reserves
             WHERE  borrowernumber=?
               AND  cancellationdate IS NULL
               AND (found != 'F' or found is null)
             ORDER BY reservedate
-        /;
+        ";
 
         my $sth_find = $dbh->prepare($query);
         $sth_find->execute($borrowernumber);
@@ -324,7 +325,7 @@ sub FindReserves {
     my @bind;
 
     # Find the desired items in the reserves
-    my $query = qq/
+    my $query = "
         SELECT  branchcode,
                 timestamp AS rtimestamp,
                 priority,
@@ -337,7 +338,7 @@ sub FindReserves {
           FROM     reserves
           WHERE     cancellationdate IS NULL
           AND    (found <> \'F\' OR found IS NULL)
-    /;
+    ";
 
     if ( $biblionumber ne '' ) {
         $query .= '
@@ -511,25 +512,25 @@ sub CheckReserves {
     if ($item) {
         my $qitem = $dbh->quote($item);
         # Look up the item by itemnumber
-        my $query = qq(
+        my $query = "
             SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
             FROM   items, biblioitems, itemtypes
             WHERE  items.biblioitemnumber = biblioitems.biblioitemnumber
                AND biblioitems.itemtype = itemtypes.itemtype
                AND itemnumber=$qitem
-        );
+        ";
         $sth = $dbh->prepare($query);
     }
     else {
         my $qbc = $dbh->quote($barcode);
         # Look up the item by barcode
-        my $query = qq(
+        my $query = "
             SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
             FROM   items, biblioitems, itemtypes
             WHERE  items.biblioitemnumber = biblioitems.biblioitemnumber
               AND biblioitems.itemtype = itemtypes.itemtype
               AND barcode=$qbc
-        );
+        ";
         $sth = $dbh->prepare($query);
 
         # FIXME - This function uses $item later on. Ought to set it here.
@@ -611,14 +612,14 @@ sub CancelReserve {
         if ( ( $item and $borr ) and ( not $biblio ) ) {
         # removing a waiting reserve record....
         # update the database...
-        my $query = qq/
+        my $query = "
             UPDATE reserves
             SET    cancellationdate = now(),
                    found            = Null,
                    priority         = 0
             WHERE  itemnumber       = ?
              AND   borrowernumber   = ?
-        /;
+        ";
         my $sth = $dbh->prepare($query);
         $sth->execute( $item, $borr );
         $sth->finish;
@@ -844,17 +845,17 @@ sub ReserveWaiting {
 
     # update reserves record....
     if ($diffBranchSend) {
-    $query = qq/
+    $query = "
         UPDATE reserves
         SET    priority = 0,
                itemnumber = ?
         WHERE borrowernumber = ?
           AND biblionumber = ?
           AND timestamp = ?
-    /;
+    ";
     }
     else {
-    $query = qq/
+    $query = "
         UPDATE reserves
         SET    priority = 0,
                found = 'W',
@@ -863,7 +864,7 @@ sub ReserveWaiting {
         WHERE borrowernumber = ?
           AND biblionumber = ?
           AND timestamp = ?
-    /;
+    ";
     }
     $sth = $dbh->prepare($query);
     $sth->execute( $item, $borr, $biblio, $timestamp );
@@ -889,13 +890,13 @@ sub GetWaitingReserves {
     my ($borr) = @_;
     my $dbh = C4::Context->dbh;
     my @itemswaiting;
-    my $query = qq/
+    my $query = "
         SELECT *
         FROM reserves
         WHERE borrowernumber = ?
           AND reserves.found = 'W'
           AND cancellationdate IS NULL
-    /;
+    ";
     my $sth = $dbh->prepare($query);
     $sth->execute($borr);
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -1002,7 +1003,7 @@ sub CreateReserve {
     #eval {
     # updates take place here
     if ( $fee > 0 ) {
-        my $nextacctno = &getnextacctno( $env, $borrowernumber, $dbh );
+        my $nextacctno = &getnextacctno( $borrowernumber );
         my $query      = qq/
         INSERT INTO accountlines
             (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
@@ -1381,6 +1382,63 @@ sub FindReservesInQueue {
     $sth->finish;
 
     return ( $#results + 1, \@results );
+}
+
+
+=head2 GetReservesToBranch
+
+@transreserv = GetReservesToBranch( $frombranch, $excludingbranch );
+
+=cut
+
+sub GetReservesToBranch {
+    my ( $frombranch, $excludingbranch ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        "SELECT borrowernumber,reservedate,itemnumber,timestamp
+         FROM reserves 
+         WHERE priority='0' AND cancellationdate is null  
+           AND branchcode=?
+           AND branchcode!=?
+           AND found IS NULL "
+    );
+    $sth->execute( $frombranch, $excludingbranch );
+    my @transreserv;
+    my $i = 0;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $transreserv[$i] = $data;
+        $i++;
+    }
+    $sth->finish;
+    return (@transreserv);
+}
+
+=head2 GetReservesForBranch
+
+@transreserv = GetReservesForBranch($frombranch);
+
+=cut
+
+sub GetReservesForBranch {
+    my ($frombranch) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $sth          = $dbh->prepare( "
+        SELECT borrowernumber,reservedate,itemnumber,waitingdate
+        FROM   reserves 
+        WHERE   priority='0'
+            AND cancellationdate IS NULL 
+            AND found='W' 
+            AND branchcode=?
+        ORDER BY waitingdate" );
+    $sth->execute($frombranch);
+    my @transreserv;
+    my $i = 0;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $transreserv[$i] = $data;
+        $i++;
+    }
+    $sth->finish;
+    return (@transreserv);
 }
 
 =back

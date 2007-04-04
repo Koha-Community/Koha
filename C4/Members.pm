@@ -26,6 +26,9 @@ use C4::Date;
 use Digest::MD5 qw(md5_base64);
 use Date::Calc qw/Today Add_Delta_YM/;
 use C4::Log; # logaction
+use C4::Accounts;
+use C4::Overdues;
+use C4::Reserves2;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -52,7 +55,7 @@ This module contains routines for adding, modifying and deleting members/patrons
 @ISA = qw(Exporter);
 
 @EXPORT = qw(
-  &BornameSearch &GetMember
+  &BornameSearch &GetMember &GetMemberDetails
   &borrdata &borrdata2
   &fixup_cardnumber &findguarantees &findguarantor &GuarantornameSearch
   &modmember &newmember &changepassword &borrissues &allissues
@@ -235,6 +238,256 @@ sub GetMember {
     }
     return undef;
 }
+
+=head2 GetMemberDetails
+
+($borrower, $flags) = &GetMemberDetails($borrowernumber, $cardnumber);
+
+Looks up a patron and returns information about him or her. If
+C<$borrowernumber> is true (nonzero), C<&GetMemberDetails> looks
+up the borrower by number; otherwise, it looks up the borrower by card
+number.
+
+C<$env> is effectively ignored, but should be a reference-to-hash.
+
+C<$borrower> is a reference-to-hash whose keys are the fields of the
+borrowers table in the Koha database. In addition,
+C<$borrower-E<gt>{flags}> is a hash giving more detailed information
+about the patron. Its keys act as flags :
+
+    if $borrower->{flags}->{LOST} {
+        # Patron's card was reported lost
+    }
+
+Each flag has a C<message> key, giving a human-readable explanation of
+the flag. If the state of a flag means that the patron should not be
+allowed to borrow any more books, then it will have a C<noissues> key
+with a true value.
+
+The possible flags are:
+
+=head3 CHARGES
+
+=over 4
+
+=item Shows the patron's credit or debt, if any.
+
+=back
+
+=head3 GNA
+
+=over 4
+
+=item (Gone, no address.) Set if the patron has left without giving a
+forwarding address.
+
+=back
+
+=head3 LOST
+
+=over 4
+
+=item Set if the patron's card has been reported as lost.
+
+=back
+
+=head3 DBARRED
+
+=over 4
+
+=item Set if the patron has been debarred.
+
+=back
+
+=head3 NOTES
+
+=over 4
+
+=item Any additional notes about the patron.
+
+=back
+
+=head3 ODUES
+
+=over 4
+
+=item Set if the patron has overdue items. This flag has several keys:
+
+C<$flags-E<gt>{ODUES}{itemlist}> is a reference-to-array listing the
+overdue items. Its elements are references-to-hash, each describing an
+overdue item. The keys are selected fields from the issues, biblio,
+biblioitems, and items tables of the Koha database.
+
+C<$flags-E<gt>{ODUES}{itemlist}> is a string giving a text listing of
+the overdue items, one per line.
+
+=back
+
+=head3 WAITING
+
+=over 4
+
+=item Set if any items that the patron has reserved are available.
+
+C<$flags-E<gt>{WAITING}{itemlist}> is a reference-to-array listing the
+available items. Each element is a reference-to-hash whose keys are
+fields from the reserves table of the Koha database.
+
+=back
+
+=cut
+
+sub GetMemberDetails {
+    my ( $borrowernumber, $cardnumber ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query;
+    my $sth;
+    if ($borrowernumber) {
+        $sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
+        $sth->execute($borrowernumber);
+    }
+    elsif ($cardnumber) {
+        $sth = $dbh->prepare("select * from borrowers where cardnumber=?");
+        $sth->execute($cardnumber);
+    }
+    else {
+        return undef;
+    }
+    my $borrower = $sth->fetchrow_hashref;
+    my $amount = C4::Accounts::checkaccount( $borrowernumber, $dbh );
+    $borrower->{'amountoutstanding'} = $amount;
+    my $flags = patronflags( $borrower, $dbh );
+    my $accessflagshash;
+
+    $sth = $dbh->prepare("select bit,flag from userflags");
+    $sth->execute;
+    while ( my ( $bit, $flag ) = $sth->fetchrow ) {
+        if ( $borrower->{'flags'} && $borrower->{'flags'} & 2**$bit ) {
+            $accessflagshash->{$flag} = 1;
+        }
+    }
+    $sth->finish;
+    $borrower->{'flags'}     = $flags;
+    $borrower->{'authflags'} = $accessflagshash;
+
+    # find out how long the membership lasts
+    $sth =
+      $dbh->prepare(
+        "select enrolmentperiod from categories where categorycode = ?");
+    $sth->execute( $borrower->{'categorycode'} );
+    my $enrolment = $sth->fetchrow;
+    $borrower->{'enrolmentperiod'} = $enrolment;
+    return ($borrower);    #, $flags, $accessflagshash);
+}
+
+=head2 patronflags
+
+ Not exported
+
+ NOTE!: If you change this function, be sure to update the POD for
+ &GetMemberDetails.
+
+ $flags = &patronflags($env, $patron, $dbh);
+
+ $flags->{CHARGES}
+        {message}    Message showing patron's credit or debt
+       {noissues}    Set if patron owes >$5.00
+         {GNA}            Set if patron gone w/o address
+        {message}    "Borrower has no valid address"
+        {noissues}    Set.
+        {LOST}        Set if patron's card reported lost
+        {message}    Message to this effect
+        {noissues}    Set.
+        {DBARRED}        Set is patron is debarred
+        {message}    Message to this effect
+        {noissues}    Set.
+         {NOTES}        Set if patron has notes
+        {message}    Notes about patron
+         {ODUES}        Set if patron has overdue books
+        {message}    "Yes"
+        {itemlist}    ref-to-array: list of overdue books
+        {itemlisttext}    Text list of overdue items
+         {WAITING}        Set if there are items available that the
+                patron reserved
+        {message}    Message to this effect
+        {itemlist}    ref-to-array: list of available items
+
+=cut
+
+sub patronflags {
+    my %flags;
+    my ( $patroninformation, $dbh ) = @_;
+    my $amount =
+      C4::Accounts::checkaccount( $patroninformation->{'borrowernumber'}, $dbh );
+    if ( $amount > 0 ) {
+        my %flaginfo;
+        my $noissuescharge = C4::Context->preference("noissuescharge");
+        $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
+        if ( $amount > $noissuescharge ) {
+            $flaginfo{'noissues'} = 1;
+        }
+        $flags{'CHARGES'} = \%flaginfo;
+    }
+    elsif ( $amount < 0 ) {
+        my %flaginfo;
+        $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$amount;
+        $flags{'CHARGES'} = \%flaginfo;
+    }
+    if (   $patroninformation->{'gonenoaddress'}
+        && $patroninformation->{'gonenoaddress'} == 1 )
+    {
+        my %flaginfo;
+        $flaginfo{'message'}  = 'Borrower has no valid address.';
+        $flaginfo{'noissues'} = 1;
+        $flags{'GNA'}         = \%flaginfo;
+    }
+    if ( $patroninformation->{'lost'} && $patroninformation->{'lost'} == 1 ) {
+        my %flaginfo;
+        $flaginfo{'message'}  = 'Borrower\'s card reported lost.';
+        $flaginfo{'noissues'} = 1;
+        $flags{'LOST'}        = \%flaginfo;
+    }
+    if (   $patroninformation->{'debarred'}
+        && $patroninformation->{'debarred'} == 1 )
+    {
+        my %flaginfo;
+        $flaginfo{'message'}  = 'Borrower is Debarred.';
+        $flaginfo{'noissues'} = 1;
+        $flags{'DBARRED'}     = \%flaginfo;
+    }
+    if (   $patroninformation->{'borrowernotes'}
+        && $patroninformation->{'borrowernotes'} )
+    {
+        my %flaginfo;
+        $flaginfo{'message'} = "$patroninformation->{'borrowernotes'}";
+        $flags{'NOTES'}      = \%flaginfo;
+    }
+    my ( $odues, $itemsoverdue ) =
+      checkoverdues( $patroninformation->{'borrowernumber'}, $dbh );
+    if ( $odues > 0 ) {
+        my %flaginfo;
+        $flaginfo{'message'}  = "Yes";
+        $flaginfo{'itemlist'} = $itemsoverdue;
+        foreach ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
+            @$itemsoverdue )
+        {
+            $flaginfo{'itemlisttext'} .=
+              "$_->{'date_due'} $_->{'barcode'} $_->{'title'} \n";
+        }
+        $flags{'ODUES'} = \%flaginfo;
+    }
+    my $itemswaiting =
+      C4::Reserves2::GetWaitingReserves( $patroninformation->{'borrowernumber'} );
+    my $nowaiting = scalar @$itemswaiting;
+    if ( $nowaiting > 0 ) {
+        my %flaginfo;
+        $flaginfo{'message'}  = "Reserved items available";
+        $flaginfo{'itemlist'} = $itemswaiting;
+        $flags{'WAITING'}     = \%flaginfo;
+    }
+    return ( \%flags );
+}
+
 
 =item borrdata
 

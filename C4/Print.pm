@@ -23,7 +23,7 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -65,12 +65,12 @@ queue to print to; if it is empty or has the special value C<nulllp>,
 C<&remoteprint> will print to the file F</tmp/kohaiss>.
 
 C<$borrower> is a reference-to-hash giving information about a patron.
-This may be gotten from C<&getpatroninformation>. The patron's name
+This may be gotten from C<&GetMemberDetails>. The patron's name
 will be printed in the output.
 
 C<$items> is a reference-to-list, where each element is a
 reference-to-hash describing a borrowed item. C<$items> may be gotten
-from C<&currentissues>.
+from C<&GetBorrowerIssues>.
 
 =cut
 
@@ -197,12 +197,12 @@ EOF
 #'
 sub printslip {
     my ( $env, $borrowernumber ) = @_;
-    my ( $borrower, $flags ) = getpatroninformation( $env, $borrowernumber, 0 );
+    my ( $borrower, $flags ) = GetMemberDetails( $borrowernumber);
     $env->{'todaysissues'} = 1;
-    my ($borrowerissues) = currentissues( $env, $borrower );
+    my ($borrowerissues) = GetBorrowerIssues( $borrower );
     $env->{'nottodaysissues'} = 1;
     $env->{'todaysissues'}    = 0;
-    my ($borroweriss2) = currentissues( $env, $borrower );
+    my ($borroweriss2) = GetBorrowerIssues( $borrower );
     $env->{'nottodaysissues'} = 0;
     my $i = 0;
     my @issues;

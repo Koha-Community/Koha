@@ -27,7 +27,7 @@ written 11/3/2002 by Finlay
 
 use strict;
 use CGI;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Date;
 use C4::Output;
 use C4::Print;
@@ -116,7 +116,7 @@ if ( $query->param('resbarcode') ) {
     my $resbarcode     = $query->param('resbarcode');
     my $diffBranchReturned = $query->param('diffBranch');
     # set to waiting....
-    my $iteminfo   = getiteminformation($item);
+    my $iteminfo   = GetBiblioFromItemNumber($item);
     my $diffBranchSend;
     
 #     addin in ReserveWaiting the possibility to check if the document is expected in this library or not,
@@ -133,7 +133,7 @@ if ( $query->param('resbarcode') ) {
     my ( $messages, $nextreservinfo ) = OtherReserves($item);
 
     my $branchname = GetBranchName( $messages->{'transfert'} );
-    my ($borr) = getpatroninformation( \%env, $nextreservinfo, 0 );
+    my ($borr) = GetMemberDetails( $nextreservinfo, 0 );
     my $borcnum = $borr->{'cardnumber'};
     my $name    =
       $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
@@ -166,7 +166,7 @@ if ($barcode) {
     # decode cuecat
     $barcode = cuecatbarcodedecode($barcode);
     ( $returned, $messages, $iteminformation, $borrower ) =
-      returnbook( $barcode, C4::Context->userenv->{'branch'} );
+      AddReturn( $barcode, C4::Context->userenv->{'branch'} );
     if ($returned) {
         $returneditems{0}    = $barcode;
         $riborrowernumber{0} = $borrower->{'borrowernumber'};
@@ -225,7 +225,7 @@ my $reserved = 0;
 
 if ( $messages->{'WasTransfered'} ) {
 
-    my ($iteminfo) = getiteminformation( 0, $barcode );
+    my $iteminfo = GetBiblioFromItemNumber( 0, $barcode );
 
     $template->param(
         found          => 1,
@@ -247,10 +247,10 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 
     my $res        = $messages->{'ResFound'};
     my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
-    my ($borr) = getpatroninformation( \%env, $res->{'borrowernumber'}, 0 );
+    my ($borr) = GetMemberDetails( $res->{'borrowernumber'}, 0 );
     my $name =
       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
-    my ($iteminfo) = getiteminformation( 0, $barcode );
+    my $iteminfo = GetBiblioFromItemNumber( 0, $barcode );
         
         $template->param(
             wname           => $name,
@@ -278,10 +278,10 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 if ( $messages->{'ResFound'} and not $messages->{'WrongTransfer'}) {
     my $res        = $messages->{'ResFound'};
     my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
-    my ($borr) = getpatroninformation( \%env, $res->{'borrowernumber'}, 0 );
+    my ($borr) = GetMemberDetails( $res->{'borrowernumber'}, 0 );
     my $name =
       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
-    my ($iteminfo) = getiteminformation( 0, $barcode );
+    my $iteminfo = GetBiblioFromItemNumber( 0, $barcode );
 
     if ( $res->{'ResFound'} eq "Waiting" ) {
         if ( C4::Context->userenv->{'branch'} eq $res->{'branchcode'} ) {
@@ -441,8 +441,8 @@ if ($borrower) {
             my @waitingitemloop;
             my $items = $flags->{$flag}->{'itemlist'};
             foreach my $item (@$items) {
-                my ($iteminformation) =
-                  getiteminformation( $item->{'itemnumber'}, 0 );
+                my $iteminformation =
+                  GetBiblioFromItemNumber( $item->{'itemnumber'});
                 my %waitingitem;
                 $waitingitem{biblionum} = $iteminformation->{'biblionumber'};
                 $waitingitem{barcode}   = $iteminformation->{'barcode'};
@@ -460,8 +460,8 @@ if ($borrower) {
             foreach my $item ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
                 @$items )
             {
-                my ($iteminformation) =
-                  getiteminformation( $item->{'itemnumber'}, 0 );
+                my $iteminformation =
+                  GetBiblioFromItemNumber( $item->{'itemnumber'}, 0 );
                 my %overdueitem;
                 $overdueitem{duedate}   = format_date( $item->{'date_due'} );
                 $overdueitem{biblionum} = $iteminformation->{'biblionumber'};
@@ -515,7 +515,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
               . sprintf( "%0.2d", $datearr[3] );
             $ri{duedate} = format_date($duedate);
             my ($borrower) =
-              getpatroninformation( \%env, $riborrowernumber{$_}, 0 );
+              GetMemberDetails( $riborrowernumber{$_}, 0 );
             $ri{borrowernumber} = $borrower->{'borrowernumber'};
             $ri{borcnum}        = $borrower->{'cardnumber'};
             $ri{borfirstname}   = $borrower->{'firstname'};
@@ -527,7 +527,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         }
 
         #        my %ri;
-        my ($iteminformation) = getiteminformation( 0, $barcode );
+        my $iteminformation = GetBiblioFromItemNumber( 0, $barcode );
         $ri{itembiblionumber} = $iteminformation->{'biblionumber'};
         $ri{itemtitle}        = $iteminformation->{'title'};
         $ri{itemauthor}       = $iteminformation->{'author'};

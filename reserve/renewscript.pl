@@ -24,7 +24,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use CGI;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 my $input = new CGI;
 
@@ -49,8 +49,8 @@ my $borrowernumber = $input->param("borrowernumber");
 
 foreach my $itemno (@data) {
     #check status before renewing issue
-    if (renewstatus(\%env,$borrowernumber,$itemno)){
-        renewbook(\%env,$borrowernumber,$itemno);
+    if (CanBookBeRenewed($borrowernumber,$itemno)){
+        AddRenewal($borrowernumber,$itemno);
     }
 }
 

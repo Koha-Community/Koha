@@ -26,7 +26,7 @@ use C4::Output;
 use C4::Branch;
 use C4::Auth;
 use C4::Date;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Interface::CGI::Output;
 use Date::Calc qw(
   Today
@@ -71,7 +71,7 @@ foreach my $br ( keys %$branches ) {
     $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
     $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
     my @gettransfers =
-      GetTransfersFromBib( $branches->{$br}->{'branchcode'}, $default );
+      GetTransfersFromTo( $branches->{$br}->{'branchcode'}, $default );
 
     if (@gettransfers) {
         foreach my $num (@gettransfers) {
@@ -91,7 +91,7 @@ foreach my $br ( keys %$branches ) {
             if ( $warning > 0 ) {
                 $getransf{'messcompa'} = 1;
             }
-            my $gettitle     = getiteminformation( $num->{'itemnumber'} );
+            my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
             my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
 
             $getransf{'title'}        = $gettitle->{'title'};
@@ -108,7 +108,7 @@ foreach my $br ( keys %$branches ) {
             my @checkreserv = GetReservations( $num->{'itemnumber'} );
             if ( $checkreserv[0] ) {
                 my $getborrower =
-                  getpatroninformation( \%env, $checkreserv[1] );
+                  GetMemberDetails( $checkreserv[1] );
                 $getransf{'borrowernum'}  = $getborrower->{'borrowernumber'};
                 $getransf{'borrowername'} = $getborrower->{'surname'};
                 $getransf{'borrowerfirstname'} = $getborrower->{'firstname'};

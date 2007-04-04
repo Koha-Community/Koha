@@ -27,7 +27,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;    # GetLostItems
+use C4::Biblio;    # GetLostItems
 use C4::Koha;                  # GetItemTypes
 use C4::Branch; # GetBranches
 

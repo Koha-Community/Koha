@@ -25,7 +25,7 @@ package C4::BookShelves;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -161,7 +161,7 @@ Looks up information about the contents of virtual bookshelf number
 C<$shelfnumber>.
 
 Returns a reference-to-array, whose elements are references-to-hash,
-as returned by C<C4::Circ2::getiteminformation>.
+as returned by C<C4::Biblio::GetBiblioFromItemNumber>.
 
 =cut
 
@@ -422,6 +422,11 @@ C4::Circulation::Circ2(3)
 
 #
 # $Log$
+# Revision 1.21  2007/04/04 16:46:22  tipaul
+# HUGE COMMIT : code cleaning circulation.
+#
+# some stuff to do, i'll write a mail on koha-devel NOW !
+#
 # Revision 1.20  2007/03/09 14:31:47  tipaul
 # rel_3_0 moved to HEAD
 #

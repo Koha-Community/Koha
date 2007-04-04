@@ -52,9 +52,12 @@ push @EXPORT, qw(
   &GetBiblioFromItemNumber
   
   &GetMarcItem
+  &GetItem
   &GetItemInfosOf
   &GetItemStatus
   &GetItemLocation
+  &GetLostItems
+  &GetItemsForInventory
 
   &GetMarcNotes
   &GetMarcSubjects
@@ -82,6 +85,7 @@ push @EXPORT, qw(
   &ModZebra
   &ModItemInMarc
   &ModItemInMarconefield
+  &ModDateLastSeen
 );
 
 # To delete something
@@ -501,6 +505,24 @@ sub ModItemInMarc {
     ModZebra($biblionumber,"specialUpdate","biblioserver");
 }
 
+=head2 ModDateLastSeen
+
+&ModDateLastSeen($itemnum)
+Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking
+C<$itemnum> is the item number
+
+=cut
+
+sub ModDateLastSeen {
+    my ($itemnum) = @_;
+    my $dbh       = C4::Context->dbh;
+    my $sth       =
+      $dbh->prepare(
+          "update items set itemlost=0, datelastseen  = now() where items.itemnumber = ?"
+      );
+    $sth->execute($itemnum);
+    return;
+}
 =head2 DelBiblio
 
 =over
@@ -970,6 +992,114 @@ sub GetItemLocation {
     return \%itemlocation;
 }
 
+=head2 GetLostItems
+
+$items = GetLostItems($where,$orderby);
+
+This function get the items lost into C<$items>.
+
+=over 2
+
+=item input:
+C<$where> is a hashref. it containts a field of the items table as key
+and the value to match as value.
+C<$orderby> is a field of the items table.
+
+=item return:
+C<$items> is a reference to an array full of hasref which keys are items' table column.
+
+=item usage in the perl script:
+
+my %where;
+$where{barcode} = 0001548;
+my $items = GetLostItems( \%where, "homebranch" );
+$template->param(itemsloop => $items);
+
+=back
+
+=cut
+
+sub GetLostItems {
+    # Getting input args.
+    my $where   = shift;
+    my $orderby = shift;
+    my $dbh     = C4::Context->dbh;
+
+    my $query   = "
+        SELECT *
+        FROM   items
+        WHERE  itemlost IS NOT NULL
+          AND  itemlost <> 0
+    ";
+    foreach my $key (keys %$where) {
+        $query .= " AND " . $key . " LIKE '%" . $where->{$key} . "%'";
+    }
+    $query .= " ORDER BY ".$orderby if defined $orderby;
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my @items;
+    while ( my $row = $sth->fetchrow_hashref ){
+        push @items, $row;
+    }
+    return \@items;
+}
+
+=head2 GetItemsForInventory
+
+$itemlist = GetItemsForInventory($minlocation,$maxlocation,$datelastseen,$offset,$size)
+
+Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
+
+The sub returns a list of hashes, containing itemnumber, author, title, barcode & item callnumber.
+It is ordered by callnumber,title.
+
+The minlocation & maxlocation parameters are used to specify a range of item callnumbers
+the datelastseen can be used to specify that you want to see items not seen since a past date only.
+offset & size can be used to retrieve only a part of the whole listing (defaut behaviour)
+
+=cut
+
+sub GetItemsForInventory {
+    my ( $minlocation, $maxlocation, $datelastseen, $branch, $offset, $size ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth;
+    if ($datelastseen) {
+        my $query =
+                "SELECT itemnumber,barcode,itemcallnumber,title,author,datelastseen
+                 FROM items
+                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
+                 WHERE itemcallnumber>= ?
+                   AND itemcallnumber <=?
+                   AND (datelastseen< ? OR datelastseen IS NULL)";
+        $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
+        $query .= " ORDER BY itemcallnumber,title";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $minlocation, $maxlocation, $datelastseen );
+    }
+    else {
+        my $query ="
+                SELECT itemnumber,barcode,itemcallnumber,title,author,datelastseen
+                FROM items 
+                  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
+                WHERE itemcallnumber>= ?
+                  AND itemcallnumber <=?";
+        $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
+        $query .= " ORDER BY itemcallnumber,title";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $minlocation, $maxlocation );
+    }
+    my @results;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        $offset-- if ($offset);
+        if ( ( !$offset ) && $size ) {
+            push @results, $row;
+            $size--;
+        }
+    }
+    return \@results;
+}
+
 =head2 &GetBiblioItemData
 
 =over 4
@@ -1109,6 +1239,39 @@ sub GetBiblio {
     $sth->finish;
     return ( $count, @results );
 }    # sub GetBiblio
+
+=head2 GetItem
+
+=over 4
+
+$data = &GetItem($itemnumber,$barcode);
+
+return Item information, for a given itemnumber or barcode
+
+=back
+
+=cut
+
+sub GetItem {
+    my ($itemnumber,$barcode) = @_;
+    my $dbh = C4::Context->dbh;
+    if ($itemnumber) {
+        my $sth = $dbh->prepare("
+            SELECT * FROM items 
+            WHERE itemnumber = ?");
+        $sth->execute($itemnumber);
+        my $data = $sth->fetchrow_hashref;
+        return $data;
+    } else {
+        my $sth = $dbh->prepare("
+            SELECT * FROM items 
+            WHERE barcode = ?"
+            );
+        $sth->execute($barcode);
+        my $data = $sth->fetchrow_hashref;
+        return $data;
+    }
+}    # sub GetItem
 
 =head2 get_itemnumbers_of
 
@@ -1444,6 +1607,8 @@ sub GetMarcItem {
     }
     return $newrecord;
 }
+
+
 
 =head2 GetMarcNotes
 
@@ -3489,6 +3654,11 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.195  2007/04/04 16:46:22  tipaul
+# HUGE COMMIT : code cleaning circulation.
+#
+# some stuff to do, i'll write a mail on koha-devel NOW !
+#
 # Revision 1.194  2007/03/30 12:00:42  tipaul
 # why the hell do we need to explicitly utf8 decode this string ? I really don't know, but it seems it's mandatory, otherwise, tag descriptions are not properly encoded...
 #

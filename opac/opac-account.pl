@@ -22,7 +22,7 @@ use strict;
 use C4::Output;
 use CGI;
 use C4::Members;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -41,7 +41,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
 my @bordat;
 $bordat[0] = $borr;

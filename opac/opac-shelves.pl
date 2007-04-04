@@ -68,7 +68,7 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::BookShelves;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -86,7 +86,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $query->param('modifyshelfcontents') ) {
     my $shelfnumber = $query->param('viewshelf');
     my $barcode     = $query->param('addbarcode');
-    my ($item) = getiteminformation( 0, $barcode );
+    my ($item) = GetItemFromBarcode($barcode);
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
         AddToShelf( $item->{'itemnumber'}, $shelfnumber );
         foreach ( $query->param ) {
@@ -229,6 +229,11 @@ output_html_with_http_headers $query, $cookie, $template->output;
 
 #
 # $Log$
+# Revision 1.10  2007/04/04 16:46:23  tipaul
+# HUGE COMMIT : code cleaning circulation.
+#
+# some stuff to do, i'll write a mail on koha-devel NOW !
+#
 # Revision 1.9  2007/03/09 15:12:54  tipaul
 # rel_3_0 moved to HEAD
 #

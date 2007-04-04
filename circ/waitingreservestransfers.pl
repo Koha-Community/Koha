@@ -26,7 +26,7 @@ use CGI;
 use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Date;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -85,11 +85,11 @@ foreach my $br ( keys %$branches ) {
         foreach my $num (@getreserves) {
             my %getreserv;
             my %env;
-            my $gettitle     = getiteminformation( $num->{'itemnumber'} );
+            my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
             my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
             if ( $gettitle->{'holdingbranch'} eq $default ) {
                 my $getborrower =
-                  getpatroninformation( \%env, $num->{'borrowernumber'} );
+                  GetMemberDetails( $num->{'borrowernumber'} );
                 $getreserv{'reservedate'} =
                   format_date( $num->{'reservedate'} );
 

@@ -23,7 +23,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 
 my $input = new CGI;

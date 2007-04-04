@@ -23,7 +23,7 @@ use CGI;
 use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Date;
-use C4::Circulation::Circ2;    # AddNotifyLine
+use C4::Overdues;    # AddNotifyLine
 use C4::Koha;                  # GetDepartment...
 use Mail::Sendmail;
 use Getopt::Long;

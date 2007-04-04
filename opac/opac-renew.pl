@@ -5,7 +5,7 @@
 #script to renew items from the web
 
 use CGI;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 my $query = new CGI;
 
@@ -13,9 +13,9 @@ my $itemnumber     = $query->param('item');
 my $borrowernumber = $query->param("borrowernumber");
 
 my %env;
-my $status = renewstatus( \%env, $borrowernumber, $itemnumber );
+my $status = CanBookBeRenewed( $borrowernumber, $itemnumber );
 if ( $status == 1 ) {
-    renewbook( \%env, $borrowernumber, $itemnumber );
+    AddRenewal( $borrowernumber, $itemnumber );
 }
 
 if ( $query->param('from') eq 'opac_user' ) {

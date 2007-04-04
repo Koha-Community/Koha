@@ -35,7 +35,7 @@ use C4::Members;
 use C4::Accounts;
 use C4::Stats;
 use C4::Koha;
-use C4::Circulation::Fines;
+use C4::Overdues;
 use C4::Branch; # GetBranches
 
 my $input = new CGI;

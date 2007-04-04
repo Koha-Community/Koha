@@ -23,7 +23,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Reserves2;
 use C4::Members;
 use C4::Interface::CGI::Output;
@@ -45,7 +45,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
 $borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
 $borr->{'expiry'}       = format_date( $borr->{'expiry'} );
@@ -76,7 +76,7 @@ $template->param( BORROWER_INFO  => \@bordat );
 $template->param( borrowernumber => $borrowernumber );
 
 #get issued items ....
-my $issues = getissues($borr);
+my $issues = GetBorrowerIssues($borr);
 
 my $count          = 0;
 my $overdues_count = 0;
@@ -84,9 +84,7 @@ my @overdues;
 my @issuedat;
 my $imgdir = getitemtypeimagesrc();
 my $itemtypes = GetItemTypes();
-foreach my $key ( keys %$issues ) {
-    my $issue = $issues->{$key};
-    $issue->{'date_due'} = format_date( $issue->{'date_due'} );
+foreach my $issue ( @$issues ) {
 
     # check for reserves
     my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
@@ -113,7 +111,7 @@ foreach my $key ( keys %$issues ) {
 
     # check if item is renewable
     my %env;
-    my $status = renewstatus( \%env, $borrowernumber, $issue->{'itemnumber'} );
+    my $status = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
 
     $issue->{'status'} = $status;
 
@@ -162,7 +160,7 @@ my @waiting;
 my $wcount = 0;
 foreach my $res (@$reserves) {
     if ( $res->{'itemnumber'} ) {
-        my $item = getiteminformation( $res->{'itemnumber'}, '' );
+        my $item = GetItem( $res->{'itemnumber'});
         $res->{'holdingbranch'} =
           $branches->{ $item->{'holdingbranch'} }->{'branchname'};
         $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};

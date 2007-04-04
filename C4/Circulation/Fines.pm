@@ -38,7 +38,7 @@ C4::Circulation::Fines - Koha module dealing with fines
 
 =head1 SYNOPSIS
 
-  use C4::Circulation::Fines;
+  use C4::Overdues;
 
 =head1 DESCRIPTION
 
@@ -439,11 +439,11 @@ sub UpdateFine {
 #         $sth3->finish;
 #         $accountno[0]++;
 # begin transaction
-  my $nextaccntno = getnextacctno(undef,$borrowernumber,$dbh);    
+  my $nextaccntno = getnextacctno($borrowernumber);
     my $sth2 = $dbh->prepare(
-            "Insert into accountlines
+            "INSERT INTO accountlines
     (borrowernumber,itemnumber,date,amount,
-    description,accounttype,amountoutstanding,accountno) values
+    description,accounttype,amountoutstanding,accountno) VALUES
     (?,?,now(),?,?,'FU',?,?)"
         );
         $sth2->execute( $borrowernumber, $itemnum, $amount,
@@ -764,11 +764,11 @@ C<$level> contains the file level
  sub CreateItemAccountLine {
   my ($borrowernumber,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level)=@_;
   my $dbh = C4::Context->dbh;
-  my $nextaccntno = getnextacctno(undef,$borrowernumber,$dbh);
-   my $query= qq|INSERT into accountlines  
+  my $nextaccntno = getnextacctno($borrowernumber);
+   my $query= "INSERT into accountlines  
          (borrowernumber,accountno,itemnumber,date,amount,description,accounttype,amountoutstanding,timestamp,notify_id,notify_level)
           VALUES
-             (?,?,?,?,?,?,?,?,?,?,?)|;
+             (?,?,?,?,?,?,?,?,?,?,?)";
   
   
   my $sth=$dbh->prepare($query);

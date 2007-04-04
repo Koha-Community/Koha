@@ -17,8 +17,8 @@
 
 
 use C4::Members;
-use C4::Circulation::Circ2;
-use C4::Circulation::Fines;
+use C4::Circulation;
+use C4::Overdues;
 use Date::Manip;
 
 use Mail::Sendmail;
@@ -101,7 +101,7 @@ sub levyFines {
                         my $dbh=C4Connect();
                         my $env;
 
-                        my $accountno=C4::Circulation::Circ2::getnextacctno($env,$overdue->{'borrowernumber'},$dbh);
+                        my $accountno=C4::Circulation::Circ2::getnextacctno($overdue->{'borrowernumber'});
                            my $item=GetBiblioFromItemNumber($overdue->{'itemnumber'});
                         if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
                               $item->{'title'}=~ s/\'/\\'/g;

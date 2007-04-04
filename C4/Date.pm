@@ -31,6 +31,7 @@ $VERSION = 0.01;
              &get_date_format_string_for_DHTMLcalendar
              &format_date
              &format_date_in_iso
+             &fixdate
 );
 
 
@@ -183,4 +184,56 @@ sub check_whether_iso
     return 1 if (length($olddate[0])==4 && length($olddate[1])<=2 && length($olddate[2])<=2);
     return 0;
 }
+
+=head2 fixdate
+
+( $date, $invalidduedate ) = fixdate( $year, $month, $day );
+
+=cut
+
+sub fixdate {
+    my ( $year, $month, $day ) = @_;
+    my $invalidduedate;
+    my $date;
+    if ( $year && $month && $day ) {
+        if ( ( $year eq 0 ) && ( $month eq 0 ) && ( $year eq 0 ) ) {
+
+            #    $env{'datedue'}='';
+        }
+        else {
+            if ( ( $year eq 0 ) || ( $month eq 0 ) || ( $year eq 0 ) ) {
+                $invalidduedate = 1;
+            }
+            else {
+                if (
+                    ( $day > 30 )
+                    && (   ( $month == 4 )
+                        || ( $month == 6 )
+                        || ( $month == 9 )
+                        || ( $month == 11 ) )
+                  )
+                {
+                    $invalidduedate = 1;
+                }
+                elsif ( ( $day > 29 ) && ( $month == 2 ) ) {
+                    $invalidduedate = 1;
+                }
+                elsif (
+                       ( $month == 2 )
+                    && ( $day > 28 )
+                    && (   ( $year % 4 )
+                        && ( ( !( $year % 100 ) || ( $year % 400 ) ) ) )
+                  )
+                {
+                    $invalidduedate = 1;
+                }
+                else {
+                    $date = "$year-$month-$day";
+                }
+            }
+        }
+    }
+    return ( $date, $invalidduedate );
+}
+
 1;

@@ -60,7 +60,7 @@ use C4::Biblio;
 use CGI;
 use C4::Output;
 use C4::BookShelves;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 
@@ -122,6 +122,11 @@ if ($shelfnumber || ($shelfnumber == -1)) { # the shelf already exist.
 }
 
 # $Log$
+# Revision 1.7  2007/04/04 16:46:22  tipaul
+# HUGE COMMIT : code cleaning circulation.
+#
+# some stuff to do, i'll write a mail on koha-devel NOW !
+#
 # Revision 1.6  2007/03/09 14:32:26  tipaul
 # rel_3_0 moved to HEAD
 #

@@ -10,7 +10,7 @@ use CGI;
 use C4::Output;
 use C4::Auth;
 use C4::Context;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 #use C4::Acquisitions;
 
 use C4::Interface::CGI::Output;
@@ -38,7 +38,7 @@ my %env;
 $env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
-my $issues=currentissues(\%env,\%member2);
+my $issues=GetBorrowerIssues(\%member2);
 my $i=0;
 foreach (sort keys %$issues) {
     $i++;
@@ -57,8 +57,8 @@ if ($input->param('newflags')) {
     $sth->execute($flags, $member);
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 } else {
-#     my ($bor,$flags,$accessflags)=getpatroninformation(\%env, $member,'');
-    my $bor = getpatroninformation(\%env, $member,'');
+#     my ($bor,$flags,$accessflags)=GetMemberDetails($member,'');
+    my $bor = GetMemberDetails( $member,'');
     my $flags = $bor->{'flags'};
     my $accessflags = $bor->{'authflags'};
     my $dbh=C4::Context->dbh();

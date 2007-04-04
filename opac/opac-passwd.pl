@@ -25,7 +25,7 @@ use CGI;
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
 use Digest::MD5 qw(md5_base64);
-use C4::Circulation::Circ2;
+use C4::Circulation;
 
 use C4::Interface::CGI::Output;
 
@@ -44,7 +44,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 my $sth =
   $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
 

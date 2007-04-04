@@ -26,8 +26,8 @@ use strict;
 use CGI;
 
 
-use C4::Circulation::Circ2;
-use C4::Circulation::Fines;
+use C4::Circulation;
+use C4::Overdues;
 
 use Data::Dumper;
 

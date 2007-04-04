@@ -23,7 +23,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Date;
 use C4::Members;
 
@@ -42,7 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
 $template->param($borr);
 

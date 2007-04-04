@@ -27,7 +27,7 @@ use C4::Biblio;
 use CGI;
 use C4::Output;
 use C4::BookShelves;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Auth;
 use C4::Interface::CGI::Output;
 

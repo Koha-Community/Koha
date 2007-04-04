@@ -27,7 +27,6 @@ require Exporter;
 use C4::Context;
 use C4::Output;    # to get the template
 use C4::Interface::CGI::Output;
-use C4::Circulation::Circ2;    # getpatroninformation
 use C4::Members;
 
 # use Net::LDAP;
@@ -136,7 +135,7 @@ sub get_template_and_user {
 
         $borrowernumber = getborrowernumber($user);
         my ( $borr, $alternativeflags ) =
-          getpatroninformation( undef, $borrowernumber );
+          GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
         $template->param( USER_INFO => \@bordat, );

@@ -24,11 +24,10 @@
 
 use strict;
 use CGI;
-use C4::Circulation::Circ2;
-use C4::Members;
 use C4::Output;
 use C4::Print;
 use C4::Auth;
+use C4::Date;
 use C4::Interface::CGI::Output;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
@@ -40,9 +39,10 @@ use Date::Calc qw(
   Date_to_Days
 );
 
+use C4::Circulation;
+use C4::Members;
 use C4::Biblio;
 use C4::Reserves2;
-use C4::Date;
 
 #
 # PARAMETERS READING
@@ -170,7 +170,7 @@ my $borrower;
 my @lines;
 
 if ($borrowernumber) {
-    $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
+    $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
 
     # Warningdate is the date that the warning starts appearing
@@ -217,17 +217,17 @@ if ($barcode) {
     $barcode = cuecatbarcodedecode($barcode);
     my ( $datedue, $invalidduedate ) = fixdate( $year, $month, $day );
     if ($issueconfirmed) {
-        issuebook( \%env, $borrower, $barcode, $datedue, $cancelreserve );
+        AddIssue( \%env, $borrower, $barcode, $datedue, $cancelreserve );
         $inprocess = 1;
     }
     else {
         my ( $error, $question ) =
-          canbookbeissued( \%env, $borrower, $barcode, $year, $month, $day,
+          CanBookBeIssued( \%env, $borrower, $barcode, $year, $month, $day,
             $inprocess );
         my $noerror    = 1;
         my $noquestion = 1;
 #         Get the item title for more information
-    my $getmessageiteminfo  = getiteminformation( undef, $barcode );
+    my $getmessageiteminfo  = GetBiblioFromItemNumber( undef, $barcode );
     
         foreach my $impossible ( keys %$error ) {
             $template->param(
@@ -250,7 +250,7 @@ if ($barcode) {
             year  => $year
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
-            issuebook( \%env, $borrower, $barcode, $datedue );
+            AddIssue( \%env, $borrower, $barcode, $datedue );
             $inprocess = 1;
         }
     }
@@ -264,7 +264,7 @@ if ($barcode) {
 
 # reload the borrower info for the sake of reseting the flags.....
 if ($borrowernumber) {
-    $borrower = getpatroninformation( \%env, $borrowernumber, 0 );
+    $borrower = GetMemberDetails( $borrowernumber, 0 );
 }
 
 ##################################################################################
@@ -282,10 +282,10 @@ if ($borrowernumber) {
         my %getreserv;
         my %getWaitingReserveInfo;
         my %env;
-        my $getiteminfo  = getiteminformation( $num_res->{'itemnumber'} );
+        my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          checktransferts( $num_res->{'itemnumber'} );
+          GetTransfers( $num_res->{'itemnumber'} );
 
         $getreserv{waiting}       = 0;
         $getreserv{transfered}    = 0;
@@ -377,73 +377,69 @@ if ($borrower) {
 # get each issue of the borrower & separate them in todayissues & previous issues
     my @todaysissues;
     my @previousissues;
-    my $issueslist = getissues($borrower);
+    my $issueslist = GetBorrowerIssues($borrower);
 
     # split in 2 arrays for today & previous
     my $dbh = C4::Context->dbh;
-    foreach my $it ( keys %$issueslist ) {
-        my $issuedate = $issueslist->{$it}->{'timestamp'};
+    foreach my $it ( @$issueslist ) {
+        my $issuedate = $it->{'timestamp'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
 
         # to let perl sort this correctly
-        $issueslist->{$it}->{'timestamp'} =~ s/(-|\:| )//g;
+        $it->{'timestamp'} =~ s/(-|\:| )//g;
 
         if ( $todaysdate == $issuedate ) {
             (
-                $issueslist->{$it}->{'charge'},
-                $issueslist->{$it}->{'itemtype_charge'}
+                $it->{'charge'},
+                $it->{'itemtype_charge'}
               )
-              = calc_charges(
-                $dbh,
-                $issueslist->{$it}->{'itemnumber'},
+              = GetIssuingCharges(
+                $it->{'itemnumber'},
                 $borrower->{'borrowernumber'}
               );
-            $issueslist->{$it}->{'charge'} =
-              sprintf( "%.2f", $issueslist->{$it}->{'charge'} );
+            $it->{'charge'} =
+              sprintf( "%.2f", $it->{'charge'} );
             (
-                $issueslist->{$it}->{'can_renew'},
-                $issueslist->{$it}->{'can_renew_error'}
+                $it->{'can_renew'},
+                $it->{'can_renew_error'}
               )
-              = renewstatus(
-                \%env,
+              = CanBookBeRenewed(
                 $borrower->{'borrowernumber'},
-                $issueslist->{$it}->{'itemnumber'}
+                $it->{'itemnumber'}
               );
             my ( $restype, $reserves ) =
-              CheckReserves( $issueslist->{$it}->{'itemnumber'} );
+              CheckReserves( $it->{'itemnumber'} );
             if ($restype) {
-                $issueslist->{$it}->{'can_renew'} = 0;
+                $it->{'can_renew'} = 0;
             }
             push @todaysissues, $issueslist->{$it};
         }
         else {
             (
-                $issueslist->{$it}->{'charge'},
-                $issueslist->{$it}->{'itemtype_charge'}
+                $it->{'charge'},
+                $it->{'itemtype_charge'}
               )
-              = calc_charges(
-                $dbh,
-                $issueslist->{$it}->{'itemnumber'},
+              = GetIssuingCharges(
+                $it->{'itemnumber'},
                 $borrower->{'borrowernumber'}
               );
-            $issueslist->{$it}->{'charge'} =
-              sprintf( "%.2f", $issueslist->{$it}->{'charge'} );
+            $it->{'charge'} =
+              sprintf( "%.2f", $it->{'charge'} );
             (
-                $issueslist->{$it}->{'can_renew'},
-                $issueslist->{$it}->{'can_renew_error'}
+                $it->{'can_renew'},
+                $it->{'can_renew_error'}
               )
-              = renewstatus(
-                \%env,
+              = CanBookBeRenewed(
                 $borrower->{'borrowernumber'},
-                $issueslist->{$it}->{'itemnumber'}
+                $it->{'itemnumber'}
               );
             my ( $restype, $reserves ) =
-              CheckReserves( $issueslist->{$it}->{'itemnumber'} );
+              CheckReserves( $it->{'itemnumber'} );
             if ($restype) {
-                $issueslist->{$it}->{'can_renew'} = 0;
+                $it->{'can_renew'} = 0;
             }
-            push @previousissues, $issueslist->{$it};
+            push @previousissues, $it;
         }
     }
     my $od;    # overdues
@@ -642,14 +638,15 @@ foreach $flag ( sort keys %$flags ) {
             );
 
             my $items = $flags->{$flag}->{'itemlist'};
-            {
-                my @itemswaiting;
-                foreach my $item (@$items) {
-                    my ($iteminformation) =
-                        getiteminformation( $item->{'itemnumber'}, 0 );
-                    push @itemswaiting, $iteminformation;
-                }
-            }
+# useless ???
+#             {
+#                 my @itemswaiting;
+#                 foreach my $item (@$items) {
+#                     my ($iteminformation) =
+#                         getiteminformation( $item->{'itemnumber'}, 0 );
+#                     push @itemswaiting, $iteminformation;
+#                 }
+#             }
             if ( $query->param('module') ne 'returns' ) {
                 $template->param( nonreturns => 'true' );
             }

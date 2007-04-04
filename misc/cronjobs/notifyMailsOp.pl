@@ -3,7 +3,7 @@ use C4::Context;
 use C4::Date;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 # use C4::Members;
 #  this module will notify only the mail case
 # Now it's only programmed for ouest provence, you can modify it for yourself
@@ -204,7 +204,7 @@ foreach my $num (@getnofifys) {
 					
 # now deal with the debarred mode
 #		if ($debarred eq 1) {
-# 		à ajouter : si le lecteur est en mode debarred, ajouter la fonction qui nous permettra cela
+# 		ï¿½ajouter : si le lecteur est en mode debarred, ajouter la fonction qui nous permettra cela
 #		UpdateBorrowerDebarred($num->{'borrowernumber'});
 #		}
 	close(OUT);

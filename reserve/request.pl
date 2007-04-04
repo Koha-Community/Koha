@@ -37,7 +37,7 @@ use C4::Auth;
 use C4::Reserves2;
 use C4::Biblio;
 use C4::Koha;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Date;
 use C4::Members;
 
@@ -88,7 +88,7 @@ if ($findborrower) {
 }
 
 if ($cardnumber) {
-    my $borrowerinfo = getpatroninformation( \%env, 0, $cardnumber );
+    my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
     my $expiry;
     my $diffbranch;
     my @getreservloop;
@@ -166,8 +166,8 @@ my ( $count, $reserves ) = FindReserves($biblionumber);
 my $totalcount = $count;
 my $alreadyreserved;
 
-# FIXME launch another time getpatroninformation perhaps until
-my $borrowerinfo = getpatroninformation( \%env, 0, $cardnumber );
+# FIXME launch another time GetMemberDetails perhaps until
+my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
 
 foreach my $res (@$reserves) {
     if ( ( $res->{found} eq 'W' ) or ( $res->{priority} == 0 ) ) {
@@ -226,8 +226,6 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
 my $itemtypeinfos_of = get_itemtypeinfos_of(@itemtypes);
 
-my $return_date_of = get_current_return_date_of(@itemnumbers);
-
 my @bibitemloop;
 
 foreach my $biblioitemnumber (@biblioitemnumbers) {
@@ -251,22 +249,20 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
               $branchinfos_of->{ $item->{holdingbranch} }{branchname};
         }
         
-# 	add inforrmation
+# 	add information
 	$item->{itemcallnumber} = $item->{itemcallnumber};
 	
         # if the item is currently on loan, we display its return date and
         # change the background color
-        my $date_due;
-
-        if ( defined $return_date_of->{$itemnumber} ) {
-            $date_due = format_date( $return_date_of->{$itemnumber} );
-            $item->{date_due} = $date_due;
+        my $issues= GetItemIssue($itemnumber);
+        if ( $issues->{'date_due'} ) {
+            $item->{date_due} = format_date($issues->{'date_due'});
             $item->{backgroundcolor} = 'onloan';
         }
 
         # checking reserve
         my ($reservedate,$reservedfor,$expectedAt) = GetFirstReserveDateFromItem($itemnumber);
-        my $ItemBorrowerReserveInfo = getpatroninformation( \%env, $reservedfor, 0);
+        my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         if ( defined $reservedate ) {
             $item->{backgroundcolor} = 'reserved';
@@ -298,7 +294,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
         # Check of the transfered documents
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          get_transfert_infos($itemnumber);
+          GetTransfers($itemnumber);
 
         if ( $transfertwhen ne '' ) {
             $item->{transfertwhen} = format_date($transfertwhen);
@@ -314,7 +310,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # An item is available only if:
         if (
             not defined $reservedate    # not reserved yet
-            and $date_due eq ''         # not currently on loan
+            and $issues->{'date_due'} eq ''         # not currently on loan
             and not $item->{itemlost}   # not lost
             and not $item->{notforloan} # not forbidden to loan
             and $transfertwhen eq ''    # not currently on transfert
@@ -371,7 +367,7 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
     }
     
 #     get borrowers reserve info
-my $reserveborrowerinfo = getpatroninformation( \%env, $res->{'borrowernumber'}, 0);
+my $reserveborrowerinfo = GetMemberDetails( $res->{'borrowernumber'}, 0);
 
     $reserve{'date'}           = format_date( $res->{'reservedate'} );
     $reserve{'borrowernumber'} = $res->{'borrowernumber'};

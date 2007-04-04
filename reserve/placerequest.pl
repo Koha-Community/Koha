@@ -26,7 +26,7 @@ use C4::Biblio;
 use CGI;
 use C4::Output;
 use C4::Reserves2;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Members;
 
 my $input = new CGI;
@@ -49,7 +49,7 @@ my $found;
 if ($checkitem ne ''){
 		$rank[0] = '0';
 		my $item = $checkitem;
-		$item = getiteminformation($item);
+		$item = GetItem($item);
 		if ( $item->{'holdingbranch'} eq $branch ){
 		$found = 'W';	
 		}

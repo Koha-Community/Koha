@@ -29,7 +29,7 @@ use C4::Output;             # contains gettemplate
 use C4::Auth;
 use C4::Interface::CGI::Output;
 use C4::Date;
-use C4::Circulation::Circ2;  # to use itemissues
+use C4::Circulation;  # to use itemissues
 
 my $query=new CGI;
 

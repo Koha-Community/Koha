@@ -24,7 +24,7 @@ require Exporter;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
-#use C4::Circulation::Circ2;
+#use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -55,7 +55,7 @@ patron.
 
 =head2 checkaccount
 
-  $owed = &checkaccount($env, $borrowernumber, $dbh, $date);
+  $owed = &checkaccount($borrowernumber, $dbh, $date);
 
 Looks up the total amount of money owed by a borrower (fines, etc.).
 
@@ -71,7 +71,7 @@ C<$env> is ignored.
 sub checkaccount  {
   #take borrower number
   #check accounts and list amounts owing
-    my ($env,$borrowernumber,$dbh,$date)=@_;
+    my ($borrowernumber,$dbh,$date)=@_;
     my $select="SELECT SUM(amountoutstanding) AS total
             FROM accountlines
         WHERE borrowernumber = ?
@@ -126,7 +126,7 @@ sub recordpayment{
     warn $branch;
   my $amountleft = $data;
   # begin transaction
-  my $nextaccntno = getnextacctno($env,$borrowernumber,$dbh);
+  my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
   my $sth = $dbh->prepare("select * from accountlines
   where (borrowernumber = ?) and (amountoutstanding<>0)
@@ -189,7 +189,7 @@ sub makepayment{
   $env{'branchcode'}=$branch;
   my $dbh = C4::Context->dbh;
   # begin transaction
-  my $nextaccntno = getnextacctno(\%env,$borrowernumber,$dbh);
+  my $nextaccntno = getnextacctno($borrowernumber);
   my $newamtos=0;
   my $sth=$dbh->prepare("Select * from accountlines where  borrowernumber=? and accountno=?");
   $sth->execute($borrowernumber,$accountno);
@@ -234,7 +234,7 @@ EOT
 
 =head2 getnextacctno
 
-  $nextacct = &getnextacctno($env, $borrowernumber, $dbh);
+  $nextacct = &getnextacctno($borrowernumber);
 
 Returns the next unused account number for the patron with the given
 borrower number.
@@ -248,11 +248,12 @@ C<$env> is ignored.
 #'
 # FIXME - Okay, so what does the above actually _mean_?
 sub getnextacctno {
-  my ($env,$borrowernumber,$dbh)=@_;
+  my ($borrowernumber)=@_;
   my $nextaccntno = 1;
-  my $sth = $dbh->prepare("select * from accountlines
-  where (borrowernumber = ?)
-  order by accountno desc");
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("SELECT * FROM accountlines
+  WHERE (borrowernumber = ?)
+  ORDER BY accountno DESC");
   $sth->execute($borrowernumber);
   if (my $accdata=$sth->fetchrow_hashref){
     $nextaccntno = $accdata->{'accountno'} + 1;
@@ -330,7 +331,7 @@ sub manualinvoice{
   my $insert;
   $itemnum=~ s/ //g;
   my %env;
-  my $accountno=getnextacctno('',$borrowernumber,$dbh);
+  my $accountno=getnextacctno($borrowernumber);
   my $amountleft=$amount;
 
   if ($type eq 'CS' || $type eq 'CB' || $type eq 'CW'
@@ -395,8 +396,8 @@ sub fixcredit{
   my $accdata = "";
   my $amountleft = $data;
   if ($barcode ne ''){
-    my $item=getiteminformation('',$barcode);
-    my $nextaccntno = getnextacctno($env,$borrowernumber,$dbh);
+    my $item=GetBiblioFromItemNumber('',$barcode);
+    my $nextaccntno = getnextacctno($borrowernumber);
     my $query="Select * from accountlines where (borrowernumber=?
     and itemnumber=? and amountoutstanding > 0)";
     if ($type eq 'CL'){
@@ -431,7 +432,7 @@ sub fixcredit{
      $usth->finish;
   }
   # begin transaction
-  my $nextaccntno = getnextacctno($env,$borrowernumber,$dbh);
+  my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
   my $sth = $dbh->prepare("select * from accountlines
   where (borrowernumber = ?) and (amountoutstanding >0)
@@ -483,7 +484,7 @@ sub refund{
   my $amountleft = $data *-1;
 
   # begin transaction
-  my $nextaccntno = getnextacctno($env,$borrowernumber,$dbh);
+  my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
   my $sth = $dbh->prepare("select * from accountlines
   where (borrowernumber = ?) and (amountoutstanding<0)

@@ -28,8 +28,8 @@
 # $Id$
 
 use C4::Context;
-use C4::Circulation::Circ2;
-use C4::Circulation::Fines;
+use C4::Circulation;
+use C4::Overdues;
 use Date::Manip qw/Date_DaysSince1BC/;
 use C4::Biblio;
 

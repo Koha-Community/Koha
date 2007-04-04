@@ -25,7 +25,7 @@ use Mail::Sendmail;
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
 use C4::Koha;
-use C4::Circulation::Circ2;
+use C4::Circulation;
 use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::Members;
@@ -44,7 +44,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
 # handle the new information....
 # collect the form values and send an email.
