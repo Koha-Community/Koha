@@ -120,8 +120,8 @@ sub authoritysearch {
   }
   ##Add how many queries generated
   $query= $and.$query.$q2;
-  $query=' @or  @attr 7=1 @attr 1=Heading 0 '.$query if ($sortby eq "HeadingAsc");
-  $query=' @or  @attr 7=2 @attr 1=Heading 0 '.$query if ($sortby eq "HeadingDsc");
+  $query=' @or  @attr 7=1 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingAsc");
+  $query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingDsc");
   warn $query;
   
   $offset=0 unless $offset;
@@ -842,6 +842,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.44  2007/04/05 12:17:55  btoumi
+# add "sort by" with heading-entity in authorities search
+#
 # Revision 1.43  2007/03/30 11:59:16  tipaul
 # some cleaning (minor, the main one will come later) : removing some unused subs
 #
