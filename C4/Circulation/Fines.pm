@@ -658,7 +658,8 @@ sub NumberNotifyId{
     my $env;
     my $query=qq|    SELECT distinct(notify_id)
             FROM accountlines
-            WHERE borrowernumber=?|;
+            WHERE borrowernumber=?
+	    AND notify_id != 0|;
     my @notify;
     my $sth=$dbh->prepare($query);
         $sth->execute($borrowernumber);
