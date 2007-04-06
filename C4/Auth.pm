@@ -339,6 +339,10 @@ sub checkauth {
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
+    unless (C4::Context->preference('Version')){
+      print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+      exit;
+    }
     my $timeout = C4::Context->preference('timeout');
     $timeout = 600 unless $timeout;
 

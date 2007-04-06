@@ -32,6 +32,16 @@ if (defined($language) ){
                 debug => 1,
                 });
 
+my %info;
+$info{'dbname'}=C4::Context->config("database");
+$info{'dbms'}=(C4::Context->config("db_scheme")?C4::Context->config("db_scheme"):"mysql");
+$info{'hostname'}=C4::Context->config("hostname");
+($info{'hostname'},$info{'port'})=($1,$2) if $info{'hostname'}=~/([^:]*):([0-9]+)/;
+$info{'user'}=C4::Context->config("user");
+$info{'password'}=C4::Context->config("pass");
+my $dbh= DBI->connect("DBI:$info{dbms}:$info{dbname}:$info{hostname}".($info{port}?":$info{port}":""),$info{'user'}, $info{'password'});
+
+
 if ($step && $step==1){
   #First Step
   #Checking ALL perl Modules and services needed are installed.
@@ -150,18 +160,10 @@ if ($step && $step==1){
   
 } elsif ($step && $step==2){
   # Check Database connection and access
-  my %info;
-  $info{'dbname'}=C4::Context->config("database");
-  $info{'dbms'}=(C4::Context->config("db_scheme")?C4::Context->config("db_scheme"):"mysql");
-  $info{'hostname'}=C4::Context->config("hostname");
-  ($info{'hostname'},$info{'port'})=($1,$2) if $info{'hostname'}=~/([^:]*):([0-9]+)/;
-  $info{'user'}=C4::Context->config("user");
-  $info{'password'}=C4::Context->config("pass");
   $template->param(%info);
   my $checkmysql=$query->param("checkmysql");
   $template->param('mysqlconnection'=>$checkmysql);
   if ($checkmysql){
-    my $dbh= DBI->connect("DBI:$info{dbms}:$info{dbname}:$info{hostname}".($info{port}?":$info{port}":""),$info{'user'}, $info{'password'});
     if ($dbh){
       # Can connect to the mysql
       $template->param("checkdatabaseaccess"=>1);
@@ -198,22 +200,14 @@ if ($step && $step==1){
     }
   }
 } elsif ($step && $step==3){
-  my %info;
-  $info{'dbname'}=C4::Context->config("database");
-  $info{'dbms'}=(C4::Context->config("db_scheme")?C4::Context->config("db_scheme"):"mysql");
-  $info{'hostname'}=C4::Context->config("hostname");
-  ($info{'hostname'},$info{'port'})=($1,$2) if $info{'hostname'}=~/([^:]*):([0-9]+)/;
-  $info{port} = 3306 unless ($info{port});
-  $info{'user'}=C4::Context->config("user");
-  $info{'password'}=C4::Context->config("pass");
   my $op=$query->param('op');
   if ($op && $op eq 'finish'){
     # Installation is finished.
     # We just deny anybody acess to install
     # And we redirect people to mainpage.
     # The installer wil have to relogin since we donot pass cookie to redirection.
-    my $dir=C4::Context->config('intranetdir');
-    qx(chmod -R uog-xw $dir/installer);
+    $template->param("$op"=>1);
+  }elsif ($op && $op eq 'finished'){
     print $query->redirect("/cgi-bin/koha/mainpage.pl");
     exit 1;
   } elsif ($op && $op eq 'addframeworks'){
@@ -222,11 +216,10 @@ if ($step && $step==1){
     my %hashlevel;
    # sort by filename -> prepend with numbers to specify order of insertion. 
     
-	my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] <=> $bb[-1] } $query->param('framework')  ;
-	
-	foreach my $file (@fnames){
-     warn $file;
-	 undef $/;
+    my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] <=> $bb[-1] } $query->param('framework')  ;
+    foreach my $file (@fnames){
+#      warn $file;
+      undef $/;
       my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
       my $str = qx($strcmd < $file 2>&1);
       my @file = split qr(\/|\\),$file;
@@ -239,11 +232,11 @@ if ($step && $step==1){
     map {push @list,{"level"=>$_,"fwklist"=>$hashlevel{$_}}} keys %hashlevel;
     my $fwk_language;
     for my $each_language(@$all_languages) {
-		warn "CODE".$each_language->{'language_code'};
-		warn "LANG:".$lang;
-		if ($lang eq $each_language->{'language_code'}) {
-			$fwk_language = $each_language->{language_locale_name};
-		}
+# 		warn "CODE".$each_language->{'language_code'};
+# 		warn "LANG:".$lang;
+      if ($lang eq $each_language->{'language_code'}) {
+              $fwk_language = $each_language->{language_locale_name};
+      }
     }
     $template->param("fwklanguage"=>$fwk_language,
                      "list"=>\@list);
@@ -261,11 +254,11 @@ if ($step && $step==1){
     # Framework Selection is achieved through checking boxes.
     my $langchoice=$query->param('fwklanguage') ;
     $langchoice=$query->cookie('KohaOpacLanguage') unless ($langchoice);
-	my $dir=C4::Context->config('intranetdir')."/misc/sql-datas/";
+    my $dir=C4::Context->config('intranetdir')."/misc/sql-datas/";
     opendir (MYDIR,$dir);
     my @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir(MYDIR);
     closedir MYDIR;
-	my $frmwklangs = getFrameworkLanguages();
+    my $frmwklangs = getFrameworkLanguages();
     my @languages;
     map{
       push @languages,{'dirname'=>$_->{'language_code'}, 'languagedescription'=>$_->{'language_name'},'checked'=>($_->{'language_code'} eq $langchoice) } if ($_->{'language_code'});
@@ -319,8 +312,8 @@ if ($step && $step==1){
     undef $/;
 	my $str = qx(mysql -h $info{hostname} -P $info{port} -u $info{user} -p$info{password} $info{dbname} <$filename 2>&1);
 	$str=~s/\n|\r/<br \/>/g;
-	$template->param("error"=>$str , 
-					importdatastructure => 1, );
+	$template->param("error"=>$str ,
+	                 "$op"=> 1, );
   } else {
     #Check if there are enough tables.
     # Version 2_2 was 74 tables, so we check if there is more than 75
@@ -348,5 +341,13 @@ if ($step && $step==1){
 	push @languages,{'value'=>$_->{'language_code'}, 'description'=>$_->{'language_name'} } if ($_->{'language_code'});
   }
   $template->param(languages=>\@languages);
+  if ($dbh){
+    my $rq=$dbh->prepare("SELECT * from systempreferences WHERE variable='Version'");
+    $rq->execute;
+    my ($version)=$rq->fetchrow;
+    if ($version){
+      $query->redirect("install.pl?step=3");
+    }
+  }
 }
 output_html_with_http_headers $query, $cookie, $template->output;
