@@ -52,8 +52,6 @@ my $dbh = C4::Context->dbh;
 if ($delete) {
 	print "deleting authorities\n";
 	$dbh->do("delete from auth_header");
-	$dbh->do("delete from auth_subfield_table");
-	$dbh->do("delete from auth_word");
 }
 if ($test_parameter) {
 	print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
@@ -112,7 +110,7 @@ while ( my $record = $batch->next() ) {
 	warn "XX => $authtypecode";
 	# now, create biblio and items with NEWnewXX call.
 	unless ($test_parameter) {
-		my ($authid) = AUTHaddauthority($dbh,$newRecord,0,$authtypecode);
+		my ($authid) = AddAuthority($newRecord,0,$authtypecode);
 		warn "ADDED authority NB $authid in DB\n" if $verbose;
 	}
 }
