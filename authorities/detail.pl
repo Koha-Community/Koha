@@ -19,7 +19,7 @@
 
 =head1 NAME
 
-etail.pl : script to show an authority in MARC format
+detail.pl : script to show an authority in MARC format
 
 =head1 SYNOPSIS
 
@@ -70,8 +70,8 @@ my $authid = $query->param('authid');
 
 
 
-my $authtypecode = &AUTHfind_authtypecode($authid);
-my $tagslib = &AUTHgettagslib(1,$authtypecode);
+my $authtypecode = &GetAuthTypeCode($authid);
+my $tagslib = &GetTagsLabels(1,$authtypecode);
 
 my $record;
 if (C4::Context->preference("AuthDisplayHierarchy")){
@@ -85,8 +85,8 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     my $cnt=0;
     my @loophierarchy;
     foreach my $element (@tree){
-      my %cell;
-      my $elementdata = AUTHgetauthority($element);
+      my $cell;
+      my $elementdata = GetAuthority($element);
       $record= $elementdata if ($authid==$element);
       push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
       $cnt++;
@@ -98,9 +98,9 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     'loophierarchies' =>\@loophierarchies,
   );
 } else {
-  $record=AUTHgetauthority($authid);
+  $record=GetAuthority($authid);
 }
-my $count = AUTHcount_usage($authid);
+my $count = CountUsage($authid);
 
 # find the marc field/subfield used in biblio by this authority
 my $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");

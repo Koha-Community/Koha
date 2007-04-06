@@ -104,5 +104,9 @@ $template->param(
 $template->param(
     'Disable_Dictionary' => C4::Context->preference("Disable_Dictionary") )
   if ( C4::Context->preference("Disable_Dictionary") );
+$template->param(
+    'OpacAuthorities' => 1 );
+$template->param(
+    'OpacCloud' => 1 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

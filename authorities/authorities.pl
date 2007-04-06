@@ -349,7 +349,7 @@ my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 
 my $dbh = C4::Context->dbh;
-$authtypecode = &AUTHfind_authtypecode($authid) if !$authtypecode;
+$authtypecode = &GetAuthTypeCode($authid) if !$authtypecode;
 
 
 my ($template, $loggedinuser, $cookie)
@@ -361,17 +361,17 @@ my ($template, $loggedinuser, $cookie)
 			     debug => 1,
 			     });
 $template->param(nonav   => $nonav,index=>$myindex,authtypecode=>$authtypecode,);
-$tagslib = AUTHgettagslib(1,$authtypecode);
+$tagslib = GetTagsLabels(1,$authtypecode);
 my $record=-1;
 my $encoding="";
-$record = AUTHgetauthority($authid) if ($authid);
+$record = GetAuthority($authid) if ($authid);
 my ($oldauthnumtagfield,$oldauthnumtagsubfield);
 my ($oldauthtypetagfield,$oldauthtypetagsubfield);
 $is_a_modif=0;
 if ($authid) {
-	$is_a_modif=1;
-	($oldauthnumtagfield,$oldauthnumtagsubfield) = &AUTHfind_marc_from_kohafield("auth_header.authid",$authtypecode);
-	($oldauthtypetagfield,$oldauthtypetagsubfield) = &AUTHfind_marc_from_kohafield("auth_header.authtypecode",$authtypecode);
+  $is_a_modif=1;
+  ($oldauthnumtagfield,$oldauthnumtagsubfield) = &GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
+  ($oldauthtypetagfield,$oldauthtypetagsubfield) = &GetAuthMARCFromKohaField("auth_header.authtypecode",$authtypecode);
 }
 
 #------------------------------------------------------------------------------------------------------------------------------
@@ -387,39 +387,32 @@ if ($op eq "add") {
 	my @indicator = $input->param('indicator');
 	my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
 #     warn $record->as_formatted;
-	warn $xml;
+# 	warn $xml;
 	my $record=MARC::Record->new_from_xml($xml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
 	$record->encoding('UTF-8');
 	#warn $record->as_formatted;
 	# check for a duplicate
-	my ($duplicateauthid,$duplicateauthvalue) = C4::AuthoritiesMarc::FindDuplicate($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+	my ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
 warn "duplicate:$duplicateauthid,$duplicateauthvalue";	
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
 	if (!$duplicateauthid or $confirm_not_duplicate) {
 # warn "noduplicate";
-		if ($is_a_modif ) {	
-			$authid=AUTHmodauthority($authid,$record,$authtypecode,1);		
-		} else {
-		($authid) = AUTHaddauthority($record,$authid,$authtypecode);
-
-		}
-	# now, redirect to detail page
-# 		if ($nonav){
-#warn ($myindex,$nonav);
-# 		print $input->redirect("auth_finder.pl?index=$myindex&nonav=$nonav&authtypecode=$authtypecode");
-# 		}else{
-		print $input->redirect("detail.pl?authid=$authid");
-# 		}
-		exit;
+          if ($is_a_modif ) {	
+            $authid=ModAuthority($authid,$record,$authtypecode,1);		
+          } else {
+            ($authid) = AddAuthority($record,$authid,$authtypecode);
+          }
+          print $input->redirect("detail.pl?authid=$authid");
+          exit;
  	} else {
 	# it may be a duplicate, warn the user and do nothing
- 		build_tabs ($template, $record, $dbh,$encoding);
- 		build_hidden_data;
- 		$template->param(authid =>$authid,
- 			duplicateauthid				=> $duplicateauthid,
- 			duplicateauthvalue				=> $duplicateauthvalue,
- 			 );
+            build_tabs ($template, $record, $dbh,$encoding);
+            build_hidden_data;
+            $template->param(authid =>$authid,
+                            duplicateauthid     => $duplicateauthid,
+                            duplicateauthvalue  => $duplicateauthvalue,
+                            );
  	}
 #------------------------------------------------------------------------------------------------------------------------------
 } elsif ($op eq "addfield") {
@@ -441,7 +434,7 @@ warn "duplicate:$duplicateauthid,$duplicateauthvalue";
 	build_tabs ($template, $record, $dbh,$encoding);
 	build_hidden_data;
 	$template->param(
-		authid                       => $authid,);
+		authid => $authid,);
 
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -464,11 +457,6 @@ if ($op eq "duplicate")
 		authid                      => $authid , authtypecode=>$authtypecode,	);
 }
 
-#unless ($op) {
-#	warn "BUILDING";
-#	build_tabs ($template, $record, $dbh,$encoding);
-#	build_hidden_data;
-#}
 $template->param(
 	authid                       => $authid,
 	authtypecode => $authtypecode,

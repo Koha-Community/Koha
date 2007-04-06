@@ -58,10 +58,10 @@ my $dbh=C4::Context->dbh;
 
 my $authid = $query->param('authid');
 my $index = $query->param('index');
-my $authtypecode = &AUTHfind_authtypecode($dbh,$authid);
-my $tagslib = &AUTHgettagslib($dbh,1,$authtypecode);
+my $authtypecode = &GetAuthTypeCode($authid);
+my $tagslib = &GetTagsLabels(1,$authtypecode);
 
-my $record =AUTHgetauthority($dbh,$authid);
+my $record =GetAuthority($authid);
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/detail-biblio-search.tmpl",
@@ -119,52 +119,6 @@ my $tag;
 		}
 	}
 	$template->param("0XX" =>\@loop_data);
-# }
-# now, build item tab !
-# the main difference is that datas are in lines and not in columns : thus, we build the <th> first, then the values...
-# loop through each tag
-# warning : we may have differents number of columns in each row. Thus, we first build a hash, complete it if necessary
-# then construct template.
-# my @fields = $record->fields();
-# my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
-# my @big_array;
-# foreach my $field (@fields) {
-# 	next if ($field->tag()<10);
-# 	my @subf=$field->subfields;
-# 	my %this_row;
-# # loop through each subfield
-# 	for my $i (0..$#subf) {
-# 		next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10);
-# 		$witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
-# 		$this_row{$subf[$i][0]} =$subf[$i][1];
-# 	}
-# 	if (%this_row) {
-# 		push(@big_array, \%this_row);
-# 	}
-# }
-# #fill big_row with missing datas
-# foreach my $subfield_code  (keys(%witness)) {
-# 	for (my $i=0;$i<=$#big_array;$i++) {
-# 		$big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
-# 	}
-# }
-# # now, construct template !
-# my @item_value_loop;
-# my @header_value_loop;
-# for (my $i=0;$i<=$#big_array; $i++) {
-# 	my $items_data;
-# 	foreach my $subfield_code (keys(%witness)) {
-# 		$items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
-# 	}
-# 	my %row_data;
-# 	$row_data{item_value} = $items_data;
-# 	push(@item_value_loop,\%row_data);
-# }
-# foreach my $subfield_code (keys(%witness)) {
-# 	my %header_value;
-# 	$header_value{header_value} = $witness{$subfield_code};
-# 	push(@header_value_loop, \%header_value);
-# }
 
 my $authtypes = getauthtypes;
 my @authtypesloop;

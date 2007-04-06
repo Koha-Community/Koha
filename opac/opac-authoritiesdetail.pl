@@ -55,7 +55,7 @@ my $dbh = C4::Context->dbh;
 
 my $authid       = $query->param('authid');
 my $authtypecode = &AUTHfind_authtypecode( $authid );
-my $tagslib      = &AUTHgettagslib( 1, $authtypecode );
+my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -88,7 +88,7 @@ if ( C4::Context->preference("AuthDisplayHierarchy") ) {
 
             #       warn "tree :$element";
             my %cell;
-            my $elementdata = AUTHgetauthority( $element );
+            my $elementdata = GetAuthority( $element );
             $record = $elementdata if ( $authid == $element );
             push @loophierarchy,
               BuildUnimarcHierarchy( $elementdata, "child" . $cnt, $authid );
@@ -103,9 +103,9 @@ if ( C4::Context->preference("AuthDisplayHierarchy") ) {
     }
 }
 else {
-    $record = AUTHgetauthority( $authid );
+    $record = GetAuthority( $authid );
 }
-my $count = AUTHcount_usage($authid);
+my $count = CountUsage($authid);
 
 # find the marc field/subfield used in biblio by this authority
 my $sth =

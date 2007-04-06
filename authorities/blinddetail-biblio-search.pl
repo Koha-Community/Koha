@@ -57,13 +57,13 @@ my $dbh=C4::Context->dbh;
 my $authid = $query->param('authid');
 my $index = $query->param('index');
 my $tagid = $query->param('tagid');
-my $authtypecode = &AUTHfind_authtypecode($authid);
-my $tagslib = &AUTHgettagslib(1,$authtypecode);
+my $authtypecode = &GetAuthTypeCode($authid);
+my $tagslib = &GetTagsLabels(1,$authtypecode);
 
-my $auth_type = AUTHgetauth_type($authtypecode);
+my $auth_type = GetAuthType($authtypecode);
  warn "XX = ".$auth_type->{auth_tag_to_report};
 
-my $record =AUTHgetauthority($authid);
+my $record =GetAuthority($authid);
   warn "record auth :".$record->as_formatted;
 # open template
 my ($template, $loggedinuser, $cookie)
@@ -80,67 +80,56 @@ my @loop_data =();
 my $tag;
 my @loop_data =();
 if ($authid) {
-	foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
-		my @subfields_data;
-		my @subf=$field->subfields;
-		# loop through each subfield
-		my %result;
-		for my $i (0..$#subf) {
-			$subf[$i][0] = "@" unless $subf[$i][0];
-			$result{$subf[$i][0]}.=$subf[$i][1]."|";
-		}
-		foreach (keys %result) {
-			my %subfield_data;
-			chop $result{$_};
-			$subfield_data{marc_value}=$result{$_};
-			$subfield_data{marc_subfield}=$_;
+  foreach my $field ($record->field($auth_type->{auth_tag_to_report})) {
+    my @subfields_data;
+    my @subf=$field->subfields;
+    # loop through each subfield
+    my %result;
+    for my $i (0..$#subf) {
+      $subf[$i][0] = "@" unless $subf[$i][0];
+      $result{$subf[$i][0]}.=$subf[$i][1]."|";
+    }
+    foreach (keys %result) {
+      my %subfield_data;
+      chop $result{$_};
+      $subfield_data{marc_value}=$result{$_};
+      $subfield_data{marc_subfield}=$_;
 # 			$subfield_data{marc_tag}=$field->tag();
-			push(@subfields_data, \%subfield_data);
-		}
-		if ($#subfields_data>=0) {
-			my %tag_data;
-			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
-			$tag_data{subfield} = \@subfields_data;
-			push (@loop_data, \%tag_data);
-		}
-	}
+      push(@subfields_data, \%subfield_data);
+    }
+    if ($#subfields_data>=0) {
+      my %tag_data;
+      $tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+      $tag_data{subfield} = \@subfields_data;
+      push (@loop_data, \%tag_data);
+    }
+  }
 } else {
 # authid is empty => the user want to empty the entry.
-	my @subfields_data;
-	foreach my $subfield ('a'..'z') {
-			my %subfield_data;
-			$subfield_data{marc_value}='';
-			$subfield_data{marc_subfield}=$subfield;
-			push(@subfields_data, \%subfield_data);
-		}
+  my @subfields_data;
+  foreach my $subfield ('a'..'z') {
+    my %subfield_data;
+    $subfield_data{marc_value}='';
+    $subfield_data{marc_subfield}=$subfield;
+    push(@subfields_data, \%subfield_data);
+  }
 # 	if ($#subfields_data>=0) {
-		my %tag_data;
+  my %tag_data;
 # 			$tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
-		$tag_data{subfield} = \@subfields_data;
-		push (@loop_data, \%tag_data);
+  $tag_data{subfield} = \@subfields_data;
+  push (@loop_data, \%tag_data);
 # 	}
 }
 
 $template->param("0XX" =>\@loop_data);
 
-# my $authtypes = getauthtypes;
-# my @authtypesloop;
-# foreach my $thisauthtype (keys %$authtypes) {
-# 	my $selected = 1 if $thisauthtype eq $authtypecode;
-# 	my %row =(value => $thisauthtype,
-# 				selected => $selected,
-# 				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-# 			);
-# 	push @authtypesloop, \%row;
-# }
 
 $template->param(authid => $authid?$authid:"",
-# 				authtypesloop => \@authtypesloop,
-				index => $index,
-				tagid => $tagid,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-				);
+                index => $index,
+                tagid => $tagid,
+                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+                IntranetNav => C4::Context->preference("IntranetNav"),
+                );
 output_html_with_http_headers $query, $cookie, $template->output;
 

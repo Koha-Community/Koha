@@ -64,7 +64,7 @@ if ($op eq "do_search") {
     $resultsperpage= $query->param('resultsperpage');
     $resultsperpage = 19 if(!defined $resultsperpage);
 
-    my ($results,$total) = authoritysearch(\@marclist,\@and_or,
+    my ($results,$total) = SearchAuthorities(\@marclist,\@and_or,
                                         \@excluding, \@operator, \@value,
                                         $startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
 

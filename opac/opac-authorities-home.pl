@@ -67,7 +67,7 @@ if ( $op eq "do_search" ) {
     $resultsperpage = 19 if ( !defined $resultsperpage );
     my @tags;
     my ( $results, $total, @fields ) =
-      authoritysearch( \@marclist, \@and_or, \@excluding, \@operator,
+      SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator,
         \@value, $startfrom * $resultsperpage,
         $resultsperpage, $authtypecode );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -147,7 +147,7 @@ if ( $op eq "do_search" ) {
 }
 elsif ( $op eq "delete" ) {
 
-    &AUTHdelauthority( $authid, 1 );
+    &DelAuthority( $authid, 1 );
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {

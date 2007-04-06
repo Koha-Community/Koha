@@ -62,7 +62,7 @@ if ($op eq "do_search") {
     my $startfrom = $query->param('startfrom') || 1;
     my $resultsperpage = $query->param('resultsperpage') || 19;
 
-	my ($results,$total) = authoritysearch(
+	my ($results,$total) = SearchAuthorities(
         \@marclist,
         \@and_or,
         \@excluding,
@@ -146,7 +146,7 @@ if ($op eq "do_search") {
 
 } elsif ($op eq "delete") {
 
-	&AUTHdelauthority($authid, 1);
+	&DelAuthority($authid, 1);
 
 	($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/authorities-home.tmpl",
