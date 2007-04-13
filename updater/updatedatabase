@@ -497,6 +497,14 @@ my %tabledata = (
             explanation         => 'Active this if you want to log the circulation return',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'Version',
+            value               => '3.0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => 'Koha Version',
+            type                => 'Free',
+        },
         {   
             uniquefieldrequired => 'variable',
             variable            => 'LetterLog',
@@ -1977,6 +1985,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.161  2007/04/13 16:27:55  hdl
+# Adding Version variable to systempreferences.
+#
 # Revision 1.160  2007/03/19 18:35:13  toins
 #  - adding default value in marc_subfield_structure.
 #  - now marc_subfields_structure displays subfields in tab view.
