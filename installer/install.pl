@@ -215,19 +215,24 @@ if ($step && $step==1){
     my $lang;
     my %hashlevel;
    # sort by filename -> prepend with numbers to specify order of insertion. 
-    
-    my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] <=> $bb[-1] } $query->param('framework')  ;
+    my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] lt $bb[-1] } $query->param('framework')  ;
+    my $systempreference;
     foreach my $file (@fnames){
 #      warn $file;
       undef $/;
       my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
-      my $str = qx($strcmd < $file 2>&1);
+      my $error = qx($strcmd < $file 2>&1);
       my @file = split qr(\/|\\),$file;
       $lang=$file[scalar(@file)-3] unless ($lang);
       my $level=$file[scalar(@file)-2];
+      unless ($error){
+        $systempreference.="$file[scalar(@file)-1]|";
+      }
       #Bulding here a hierarchy to display files by level.
-      push @{$hashlevel{$level}},{"fwkname"=>$file[scalar(@file)-1],"error"=>$str};
+      push @{$hashlevel{$level}},{"fwkname"=>$file[scalar(@file)-1],"error"=>$error};
     }
+    #systempreference contains an ending |
+    chop $systempreference;
     my @list;
     map {push @list,{"level"=>$_,"fwklist"=>$hashlevel{$_}}} keys %hashlevel;
     my $fwk_language;
@@ -237,6 +242,14 @@ if ($step && $step==1){
       if ($lang eq $each_language->{'language_code'}) {
               $fwk_language = $each_language->{language_locale_name};
       }
+    }
+    warn "frameworksloaded : $systempreference";
+    my $updateflag=$dbh->do("UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'");
+    unless ($updateflag==1){
+      my $string="INSERT INTO systempreferences (value, variable, explanation, type) VALUES (\"$systempreference\",'FrameworksLoaded','Frameworks loaded through webinstaller','choice')";
+      warn "$string";
+      my $rq=$dbh->prepare($string);
+      $rq->execute;
     }
     $template->param("fwklanguage"=>$fwk_language,
                      "list"=>\@list);
@@ -270,7 +283,14 @@ if ($step && $step==1){
     @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir(MYDIR);
     closedir MYDIR;
     my @levellist;
-	foreach my $requirelevel (@listdir){
+    my $request=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
+    $request->execute;
+    my ($frameworksloaded)=$request->fetchrow;
+    my %frameworksloaded;
+    foreach (split(/\|/,$frameworksloaded)){
+      $frameworksloaded{$_}=1;
+    }
+    foreach my $requirelevel (@listdir){
       $dir =C4::Context->config('intranetdir')."/misc/sql-datas/$langchoice/$requirelevel";
       opendir (MYDIR,$dir);
       my @listname = grep { !/^\.|CVS/ && -f "$dir/$_" && $_=~m/\.sql$/} readdir(MYDIR);
@@ -284,10 +304,15 @@ if ($step && $step==1){
         $lines=~s/\n|\r/<br \/>/g;
         use utf8;
         utf8::encode($lines) unless (utf8::is_utf8($lines));
-        push @frameworklist,{'fwkname'=>$name, 'fwkfile'=>"$dir/$_",'fwkdescription'=>$lines};
+        push @frameworklist,
+          {'fwkname'=>$name, 
+           'fwkfile'=>"$dir/$_",
+           'fwkdescription'=>$lines,
+           'checked'=>(($frameworksloaded{$_}||($requirelevel=~/(mandatory|requi|oblig|necess)/i))?1:0)
+          };
       } @listname;
-	  my @fwks = sort { $a->{'fwkname'} <=> $b->{'fwkname'} } @frameworklist;
-      $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
+      my @fwks = sort { $a->{'fwkname'} lt $b->{'fwkname'} } @frameworklist;
+#       $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
       $cell{"frameworks"}=\@fwks;
       $cell{"label"}=ucfirst($requirelevel);
       $cell{"code"}=lc($requirelevel);
