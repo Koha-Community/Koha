@@ -216,7 +216,9 @@ if ($step && $step==1){
     my %hashlevel;
    # sort by filename -> prepend with numbers to specify order of insertion. 
     my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] lt $bb[-1] } $query->param('framework')  ;
-    my $systempreference;
+    my $request=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
+    $request->execute;
+    my ($systempreference)=$request->fetchrow;
     foreach my $file (@fnames){
 #      warn $file;
       undef $/;
@@ -226,7 +228,7 @@ if ($step && $step==1){
       $lang=$file[scalar(@file)-3] unless ($lang);
       my $level=$file[scalar(@file)-2];
       unless ($error){
-        $systempreference.="$file[scalar(@file)-1]|";
+        $systempreference.="$file[scalar(@file)-1]|" unless(index($systempreference,$file[scalar(@file)-1])>=0);
       }
       #Bulding here a hierarchy to display files by level.
       push @{$hashlevel{$level}},{"fwkname"=>$file[scalar(@file)-1],"error"=>$error};
@@ -243,11 +245,9 @@ if ($step && $step==1){
               $fwk_language = $each_language->{language_locale_name};
       }
     }
-    warn "frameworksloaded : $systempreference";
     my $updateflag=$dbh->do("UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'");
     unless ($updateflag==1){
       my $string="INSERT INTO systempreferences (value, variable, explanation, type) VALUES (\"$systempreference\",'FrameworksLoaded','Frameworks loaded through webinstaller','choice')";
-      warn "$string";
       my $rq=$dbh->prepare($string);
       $rq->execute;
     }
