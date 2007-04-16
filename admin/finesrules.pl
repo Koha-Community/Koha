@@ -39,7 +39,7 @@ my $op = $input->param('op');
 # my $flagsrequired;
 # $flagsrequired->{circulation}=1;
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/issuingrules.tmpl",
+    = get_template_and_user({template_name => "admin/finesrules.tmpl",
                              query => $input,
                              type => "intranet",
                              authnotrequired => 0,
@@ -48,33 +48,35 @@ my ($template, $loggedinuser, $cookie)
                              });
 # save the values entered
 if ($op eq 'save') {
-	my @names=$input->param();
-	my $sth_search = $dbh->prepare("select count(*) as total from issuingrules where branchcode=? and categorycode=? and itemtype=?");
+  my @names=$input->param();
+  my $sth_search = $dbh->prepare("select count(*) as total from issuingrules where branchcode=? and categorycode=? and itemtype=?");
 
-	my $sth_Iinsert = $dbh->prepare("insert into issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength,rentaldiscount) values (?,?,?,?,?,?)");
-	my $sth_Iupdate=$dbh->prepare("Update issuingrules set maxissueqty=?, issuelength=?, rentaldiscount=? where branchcode=? and categorycode=? and itemtype=?");
-	my $sth_Idelete=$dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and fine=0");
-	foreach my $key (@names){
-		# ISSUES
-		if ($key =~ /I-(.*)-(.*)\.(.*)/) {
-			my $br = $1; # branch
-			my $bor = $2; # borrower category
-			my $cat = $3; # item type
-			my $data=$input->param($key);
-			my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
-# 			if ($maxissueqty >0) {
-				$sth_search->execute($br,$bor,$cat);
-				my $res = $sth_search->fetchrow_hashref();
-				if ($res->{total}) {
-					$sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
-				} else {
-					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
-				}
-# 			} else {
-# 				$sth_Idelete->execute($br,$bor,$cat);
-# 			}
-		}
-	}
+  my $sth_Finsert = $dbh->prepare("insert into issuingrules (branchcode,categorycode,itemtype,fine,firstremind,chargeperiod) values (?,?,?,?,?,?)");
+  my $sth_Fupdate=$dbh->prepare("Update issuingrules set fine=?,firstremind=?,chargeperiod=? where branchcode=? and categorycode=? and itemtype=?");
+  my $sth_Fdelete=$dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and issuelength=0");
+
+  foreach my $key (@names){
+    # FINES
+    if ($key =~ /F-(.*)-(.*)\.(.*)/) {
+      my $br = $1; # branch
+      my $bor = $2; # borrower category
+      my $cat = $3; # item type
+      my $data=$input->param($key);
+      my ($fine,$firstremind,$chargeperiod)=split(',',$data);
+      warn "$br $bor $cat $fine $firstremind $chargeperiod";
+# 			if ($fine >0) {
+#       $br="*" unless ($br);
+      $bor="*" unless ($bor);
+      $cat="*" unless ($cat);
+      $sth_search->execute($br,$bor,$cat);
+      my $res = $sth_search->fetchrow_hashref();
+      if ($res->{total}) {
+              $sth_Fupdate->execute($fine,$firstremind,$chargeperiod,$br,$bor,$cat);
+      } else {
+              $sth_Finsert->execute($br,$bor,$cat,$fine,$firstremind,$chargeperiod);
+      }
+    }
+  }
 
 }
 my $branches = GetBranches;
@@ -133,17 +135,12 @@ foreach my $data (@itemtypes) {
 		my $dat=$sth2->fetchrow_hashref;
 		$sth2->finish;
 		my $fine=$dat->{'fine'}+0;
-		my $maxissueqty = $dat->{'maxissueqty'}+0;
-		my $issuelength = $dat->{'issuelength'}+0;
-	        my $rentaldiscount = $dat->{'rentaldiscount'}+0;
 		my $finesvalue;
 		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine+$dat->{'firstremind'}+$dat->{'chargeperiod'}>0;
-		my $issuingvalue;
-                $issuingvalue = "$issuelength,$maxissueqty,$rentaldiscount" if $issuelength+$maxissueqty>0;
-		my %row = (	issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
-				issuingvalue => $issuingvalue,
-				toggle => $toggle,
-				);
+		my %row = (finesname=> "F-$branch-$trow3[$i].$$data->{'itemtype'}",
+					finesvalue => $finesvalue,
+					toggle => $toggle,
+					);
 		push @cell_loop,\%row;
 	}
 	my %row = (categorycode => $$data->{description},
@@ -153,10 +150,10 @@ foreach my $data (@itemtypes) {
 
 $sth->finish;
 $template->param(title => \@title_loop,
-						row => \@row_loop,
-						branchloop => \@branchloop,
-						branch => $branch,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+                row => \@row_loop,
+                branchloop => \@branchloop,
+                branch => $branch,
+                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
 		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
 		IntranetNav => C4::Context->preference("IntranetNav"),
 						);
