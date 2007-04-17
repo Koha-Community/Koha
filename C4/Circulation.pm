@@ -200,39 +200,25 @@ The item was eligible to be transferred. Barring problems communicating with the
 
 =cut
 
-#'
-# FIXME - This function tries to do too much, and its API is clumsy.
-# If it didn't also return books, it could be used to change the home
-# branch of a book while the book is on loan.
-#
-# Is there any point in returning the item information? The caller can
-# look that up elsewhere if ve cares.
-#
-# This leaves the ($dotransfer, $messages) tuple. This seems clumsy.
-# If the transfer succeeds, that's all the caller should need to know.
-# Thus, this function could simply return 1 or 0 to indicate success
-# or failure, and set $C4::Circulation::Circ2::errmsg in case of
-# failure. Or this function could return undef if successful, and an
-# error message in case of failure (this would feel more like C than
-# Perl, though).
 sub transferbook {
     my ( $tbr, $barcode, $ignoreRs ) = @_;
     my $messages;
     my %env;
     my $dotransfer      = 1;
     my $branches        = GetBranches();
-    my $item = GetItemnumberFromBarcode( $barcode );
-    my $issue      = GetItemIssues($item->{itemnumber});
+    my $itemnumber = GetItemnumberFromBarcode( $barcode );
+    my $issue      = GetItemIssue($itemnumber);
+    my $biblio = GetBiblioFromItemNumber($itemnumber);
 
     # bad barcode..
-    if ( not $item ) {
+    if ( not $itemnumber ) {
         $messages->{'BadBarcode'} = $barcode;
         $dotransfer = 0;
     }
 
     # get branches of book...
-    my $hbr = $item->{'homebranch'};
-    my $fbr = $item->{'holdingbranch'};
+    my $hbr = $biblio->{'homebranch'};
+    my $fbr = $biblio->{'holdingbranch'};
 
     # if is permanent...
     if ( $hbr && $branches->{$hbr}->{'PE'} ) {
@@ -240,7 +226,6 @@ sub transferbook {
     }
 
     # can't transfer book if is already there....
-    # FIXME - Why not? Shouldn't it trivially succeed?
     if ( $fbr eq $tbr ) {
         $messages->{'DestinationEqualsHolding'} = 1;
         $dotransfer = 0;
@@ -253,10 +238,9 @@ sub transferbook {
     }
 
     # find reserves.....
-    # FIXME - Don't call &CheckReserves unless $ignoreRs is true.
     # That'll save a database query.
     my ( $resfound, $resrec ) =
-      CheckReserves( $item->{'itemnumber'} );
+      CheckReserves( $itemnumber );
     if ( $resfound and not $ignoreRs ) {
         $resrec->{'ResFound'} = $resfound;
 
@@ -266,12 +250,12 @@ sub transferbook {
 
     #actually do the transfer....
     if ($dotransfer) {
-        dotransfer( $item->{'itemnumber'}, $fbr, $tbr );
+        dotransfer( $itemnumber, $fbr, $tbr );
 
         # don't need to update MARC anymore, we do it in batch now
         $messages->{'WasTransfered'} = 1;
     }
-    return ( $dotransfer, $messages, $item );
+    return ( $dotransfer, $messages, $biblio );
 }
 
 # Not exported
@@ -1210,135 +1194,133 @@ patron who last borrowed the book.
 
 sub AddReturn {
     my ( $barcode, $branch ) = @_;
-    my %env;
-    my $messages;
     my $dbh      = C4::Context->dbh;
+    my $messages;
     my $doreturn = 1;
+    my $borrower;
     my $validTransfert = 0;
     my $reserveDone = 0;
     
-    die '$branch not defined' unless defined $branch;  # just in case (bug 170)
     # get information on item
     my $iteminformation = GetItemIssue( GetItemnumberFromBarcode($barcode));
-    if ( not $iteminformation ) {
+    unless ($iteminformation->{'itemnumber'} ) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
-    }
-
-    # find the borrower
-    if ( ( not $iteminformation->{borrowernumber} ) && $doreturn ) {
-        $messages->{'NotIssued'} = $barcode;
-        $doreturn = 0;
-    }
-
-    # check if the book is in a permanent collection....
-    my $hbr      = $iteminformation->{'homebranch'};
-    my $branches = GetBranches();
-    if ( $hbr && $branches->{$hbr}->{'PE'} ) {
-        $messages->{'IsPermanent'} = $hbr;
-    }
-
-    # check that the book has been cancelled
-    if ( $iteminformation->{'wthdrawn'} ) {
-        $messages->{'wthdrawn'} = 1;
-        $doreturn = 0;
-    }
-
-#     new op dev : if the book returned in an other branch update the holding branch
-
-# update issues, thereby returning book (should push this out into another subroutine
-    my ($borrower) = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
-
-# case of a return of document (deal with issues and holdingbranch)
-
-    if ($doreturn) {
-        my $sth =
-          $dbh->prepare(
-"update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)"
-          );
-        $sth->execute( $borrower->{'borrowernumber'},
-            $iteminformation->{'itemnumber'} );
-        $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
-    }
-
-# continue to deal with returns cases, but not only if we have an issue
-
-# the holdingbranch is updated if the document is returned in an other location .
-if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} )
-        {
-        	UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
-#         	reload iteminformation holdingbranch with the userenv value
-        	$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+    } else {
+        # find the borrower
+        if ( ( not $iteminformation->{borrowernumber} ) && $doreturn ) {
+            $messages->{'NotIssued'} = $barcode;
+            $doreturn = 0;
         }
-    ModDateLastSeen( $iteminformation->{'itemnumber'} );
-    ($borrower) = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
     
-    # fix up the accounts.....
-    if ( $iteminformation->{'itemlost'} ) {
-        $messages->{'WasLost'} = 1;
-    }
-
-   # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-   #     check if we have a transfer for this document
-    my ($datesent,$frombranch,$tobranch) = GetTransfers( $iteminformation->{'itemnumber'} );
-
- #     if we have a transfer to do, we update the line of transfers with the datearrived
-    if ($datesent) {
-    	if ( $tobranch eq C4::Context->userenv->{'branch'} ) {
-        	my $sth =
-          	$dbh->prepare(
-			"update branchtransfers set datearrived = now() where itemnumber= ? AND datearrived IS NULL"
-          	);
-        	$sth->execute( $iteminformation->{'itemnumber'} );
-        	$sth->finish;
-#         now we check if there is a reservation with the validate of transfer if we have one, we can         set it with the status 'W'
-        SetWaitingStatus( $iteminformation->{'itemnumber'} );
+        # check if the book is in a permanent collection....
+        my $hbr      = $iteminformation->{'homebranch'};
+        my $branches = GetBranches();
+        if ( $hbr && $branches->{$hbr}->{'PE'} ) {
+            $messages->{'IsPermanent'} = $hbr;
         }
-     else {
-     	$messages->{'WrongTransfer'} = $tobranch;
-     	$messages->{'WrongTransferItem'} = $iteminformation->{'itemnumber'};
-     }
-     $validTransfert = 1;
-    }
-
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# fix up the overdues in accounts...
-    fixoverduesonreturn( $borrower->{'borrowernumber'},
-        $iteminformation->{'itemnumber'} );
-
-# find reserves.....
-#     if we don't have a reserve with the status W, we launch the Checkreserves routine
-    my ( $resfound, $resrec ) =
-      CheckReserves( $iteminformation->{'itemnumber'} );
-    if ($resfound) {
-        $resrec->{'ResFound'}   = $resfound;
-        $messages->{'ResFound'} = $resrec;
-        $reserveDone = 1;
-    }
-
-    # update stats?
-    # Record the fact that this book was returned.
-    UpdateStats(
-        \%env, $branch, 'return', '0', '',
-        $iteminformation->{'itemnumber'},
-        $iteminformation->{'itemtype'},
-        $borrower->{'borrowernumber'}
-    );
     
-    &logaction(C4::Context->userenv->{'number'},"CIRCULATION","RETURN",$iteminformation->{borrowernumber},$iteminformation->{'biblionumber'}) 
-        if C4::Context->preference("ReturnLog");
-     
-    #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
-    #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
+        # check that the book has been cancelled
+        if ( $iteminformation->{'wthdrawn'} ) {
+            $messages->{'wthdrawn'} = 1;
+            $doreturn = 0;
+        }
     
-    if ( ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
-		if (C4::Context->preference("AutomaticItemReturn") == 1) {
-        	dotransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
-        	$messages->{'WasTransfered'} = 1;
-        	warn "was transfered";
-        	}
-    }
+    #     new op dev : if the book returned in an other branch update the holding branch
+    
+    # update issues, thereby returning book (should push this out into another subroutine
+        $borrower = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+    
+    # case of a return of document (deal with issues and holdingbranch)
+    
+        if ($doreturn) {
+            my $sth =
+            $dbh->prepare(
+    "update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)"
+            );
+            $sth->execute( $borrower->{'borrowernumber'},
+                $iteminformation->{'itemnumber'} );
+            $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
+        }
+    
+    # continue to deal with returns cases, but not only if we have an issue
+    
+    # the holdingbranch is updated if the document is returned in an other location .
+    if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} )
+            {
+                    UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
+    #         	reload iteminformation holdingbranch with the userenv value
+                    $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+            }
+        ModDateLastSeen( $iteminformation->{'itemnumber'} );
+        ($borrower) = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
         
+        # fix up the accounts.....
+        if ( $iteminformation->{'itemlost'} ) {
+            $messages->{'WasLost'} = 1;
+        }
+    
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+    #     check if we have a transfer for this document
+        my ($datesent,$frombranch,$tobranch) = GetTransfers( $iteminformation->{'itemnumber'} );
+    
+    #     if we have a transfer to do, we update the line of transfers with the datearrived
+        if ($datesent) {
+            if ( $tobranch eq C4::Context->userenv->{'branch'} ) {
+                    my $sth =
+                    $dbh->prepare(
+                            "update branchtransfers set datearrived = now() where itemnumber= ? AND datearrived IS NULL"
+                    );
+                    $sth->execute( $iteminformation->{'itemnumber'} );
+                    $sth->finish;
+    #         now we check if there is a reservation with the validate of transfer if we have one, we can         set it with the status 'W'
+            SetWaitingStatus( $iteminformation->{'itemnumber'} );
+            }
+        else {
+            $messages->{'WrongTransfer'} = $tobranch;
+            $messages->{'WrongTransferItem'} = $iteminformation->{'itemnumber'};
+        }
+        $validTransfert = 1;
+        }
+    
+    # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+    # fix up the overdues in accounts...
+        fixoverduesonreturn( $borrower->{'borrowernumber'},
+            $iteminformation->{'itemnumber'} );
+    
+    # find reserves.....
+    #     if we don't have a reserve with the status W, we launch the Checkreserves routine
+        my ( $resfound, $resrec ) =
+        CheckReserves( $iteminformation->{'itemnumber'} );
+        if ($resfound) {
+            $resrec->{'ResFound'}   = $resfound;
+            $messages->{'ResFound'} = $resrec;
+            $reserveDone = 1;
+        }
+    
+        # update stats?
+        # Record the fact that this book was returned.
+        UpdateStats(
+            $branch, 'return', '0', '',
+            $iteminformation->{'itemnumber'},
+            $iteminformation->{'itemtype'},
+            $borrower->{'borrowernumber'}
+        );
+        
+        &logaction(C4::Context->userenv->{'number'},"CIRCULATION","RETURN",$iteminformation->{borrowernumber},$iteminformation->{'biblionumber'}) 
+            if C4::Context->preference("ReturnLog");
+        
+        #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
+        #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
+        
+        if ( ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+                    if (C4::Context->preference("AutomaticItemReturn") == 1) {
+                    dotransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
+                    $messages->{'WasTransfered'} = 1;
+                    warn "was transfered";
+                    }
+        }
+    }
     return ( $doreturn, $messages, $iteminformation, $borrower );
 }
 
@@ -1389,6 +1371,7 @@ Returns an array of hashes
 
 sub GetItemIssue {
     my ( $itemnumber) = @_;
+    return unless $itemnumber;
     my $dbh = C4::Context->dbh;
     my @GetItemIssues;
     

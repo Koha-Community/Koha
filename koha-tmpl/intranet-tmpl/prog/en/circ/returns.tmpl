@@ -7,7 +7,7 @@
 
 <!-- case of a mistake in transfert loop -->
 <!-- TMPL_IF Name="WrongTransfer" -->
-    <h3 class="problem">This item was not transfered initialy to this library !</h3>
+    <h3 class="problem">This item should not be in this library !</h3>
     <table>
     <tr>
         <th>Title : </th>
@@ -32,7 +32,7 @@
         </tr>
         <tr><th>Action : </th>
             <td class="problem">
-                this document must be transfered to : <!-- TMPL_VAR Name="TransferWaitingAt" -->
+                This item must be transfered to : <!-- TMPL_VAR Name="TransferWaitingAt" -->
             </td>
         </tr>
     </table>
@@ -146,9 +146,9 @@
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
         <!-- TMPL_IF Name="transfertodo"-->
-            <h3>Reserve With necesary transfert Found</h3>
+            <h3>Reserve at an other library, transfer to do</h3>
         <!-- TMPL_ELSE -->
-            <h3>Waiting Reserve Found in your library</h3>
+            <h3>Waiting reserve found in your library</h3>
         <!-- /TMPL_IF -->
         <table>
             <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
