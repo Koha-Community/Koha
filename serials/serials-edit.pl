@@ -227,7 +227,7 @@ if ($op eq 'serialchangestatus') {
               }
             }
             # check for item barcode # being unique
-            my $exists = GetItemFromBarcode($record->subfield($tagfield,$tagsubfield)) if ($record->subfield($tagfield,$tagsubfield));
+            my $exists = GetItemnumberFromBarcode($record->subfield($tagfield,$tagsubfield)) if ($record->subfield($tagfield,$tagsubfield));
   #           push @errors,"barcode_not_unique" if($exists);
             $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
             # if barcode exists, don't create, but report The problem.

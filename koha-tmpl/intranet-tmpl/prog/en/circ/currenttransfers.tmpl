@@ -5,18 +5,19 @@
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 <div id="mainbloc">
-	<h1 class="circulation">Transfers in wait for your library the : <!-- TMPL_VAR NAME="show_date" --></h1>
+	<h1 class="circulation">Transfers made TO your library the : <!-- TMPL_VAR NAME="show_date" --></h1>
+        <p>You are the destination of this transfer</p>
 	<div id="resultlist">
 	<!-- TMPL_LOOP NAME="branchesloop" -->
 		<!-- TMPL_IF NAME="branchcode" -->
 		<table>
 		<tr>
-			<th class="circulation" colspan="5">current transfers from the library : <!-- TMPL_VAR NAME="branchname" --> </th>
+			<th class="circulation" colspan="5">Coming from <!-- TMPL_VAR NAME="branchname" --> </th>
 		</tr>
 		<tr>
 			<th class="circulation">Date of transfer</th>
 			<th class="circulation">Title</th>
-			<th class="circulation">Borrower</th>
+			<th class="circulation">Reserved by </th>
 			<th class="circulation">Localisation</th>
 			<th class="circulation">Action</th>
 		</tr>
@@ -37,9 +38,9 @@
 	<!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
 					</p>
 				<!-- TMPL_ELSE -->
-					<P>
-					Transfer without reserv linked
-					</P>
+					<p>
+					None
+					</p>
 				<!-- /TMPL_IF -->
 				</td>
 				<td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>

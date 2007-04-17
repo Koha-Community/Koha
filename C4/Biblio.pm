@@ -66,7 +66,7 @@ push @EXPORT, qw(
   &GetMarcSeries
 
   &GetItemsInfo
-  &GetItemFromBarcode
+  &GetItemnumberFromBarcode
   &get_itemnumbers_of
   &GetXmlBiblio
 
@@ -1133,17 +1133,17 @@ sub GetBiblioItemData {
     return ($data);
 }    # sub &GetBiblioItemData
 
-=head2 GetItemFromBarcode
+=head2 GetItemnumberFromBarcode
 
 =over 4
 
-$result = GetItemFromBarcode($barcode);
+$result = GetItemnumberFromBarcode($barcode);
 
 =back
 
 =cut
 
-sub GetItemFromBarcode {
+sub GetItemnumberFromBarcode {
     my ($barcode) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1497,13 +1497,12 @@ sub GetMarcBiblio {
       $dbh->prepare("select marcxml from biblioitems where biblionumber=? ");
     $sth->execute($biblionumber);
     my ($marcxml) = $sth->fetchrow;
-#     warn "marcxml : $marcxml";
     MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
-    $marcxml =~ s/\x1e//g;
-    $marcxml =~ s/\x1f//g;
-    $marcxml =~ s/\x1d//g;
-    $marcxml =~ s/\x0f//g;
-    $marcxml =~ s/\x0c//g;
+#     $marcxml =~ s/\x1e//g;
+#     $marcxml =~ s/\x1f//g;
+#     $marcxml =~ s/\x1d//g;
+#     $marcxml =~ s/\x0f//g;
+#     $marcxml =~ s/\x0c//g;
     my $record = MARC::Record->new();
     $record = MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour')) if $marcxml;
     return $record;
@@ -1593,9 +1592,7 @@ sub GetMarcItem {
     
     my $marcxml = GetXmlBiblio($biblionumber);
     my $record = MARC::Record->new();
-#     warn "marcxml :$marcxml";
     $record = MARC::Record::new_from_xml( $marcxml, "utf8", $marcflavour );
-#     warn "record :".$record->as_formatted;
     # now, find where the itemnumber is stored & extract only the item
     my ( $itemnumberfield, $itemnumbersubfield ) =
       GetMarcFromKohaField( $dbh, 'items.itemnumber', '' );
@@ -2101,7 +2098,6 @@ sub TransformHtmlToMarc {
     # the last has not been included inside the loop... do it now !
     $record->insert_fields_ordered($field) if $field;
 
-    #     warn "HTML2MARC=".$record->as_formatted;
     $record->encoding('UTF-8');
 
     #    $record->MARC::File::USMARC::update_leader();
@@ -3654,6 +3650,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.196  2007/04/17 08:48:00  tipaul
+# circulation cleaning continued: bufixing
+#
 # Revision 1.195  2007/04/04 16:46:22  tipaul
 # HUGE COMMIT : code cleaning circulation.
 #

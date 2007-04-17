@@ -413,7 +413,7 @@ if ($borrower) {
             if ($restype) {
                 $it->{'can_renew'} = 0;
             }
-            push @todaysissues, $issueslist->{$it};
+            push @todaysissues, $it;
         }
         else {
             (

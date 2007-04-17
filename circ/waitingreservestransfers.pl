@@ -27,6 +27,8 @@ use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Date;
 use C4::Circulation;
+use C4::Reserves2;
+use C4::Members;
 use Date::Calc qw(
   Today
   Add_Delta_Days
@@ -36,8 +38,6 @@ use C4::Koha;
 use C4::Biblio;
 
 my $input = new CGI;
-
-my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -77,25 +77,22 @@ foreach my $br ( keys %$branches ) {
     my %branchloop;
     $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
     $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
-
-    #	warn " branch=>".$branches->{$br}->{'branchcode'};
     my @getreserves =
-      GetReservesToBranch( $branches->{$br}->{'branchcode'}, $default );
+      GetReservesToBranch( $branches->{$br}->{'branchcode'} );
     if (@getreserves) {
         foreach my $num (@getreserves) {
             my %getreserv;
             my %env;
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
+#             use Data::Dumper;
+#             warn Dumper($gettitle);
+            warn "ITEM : ".$gettitle->{'title'};
             my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
             if ( $gettitle->{'holdingbranch'} eq $default ) {
                 my $getborrower =
                   GetMemberDetails( $num->{'borrowernumber'} );
                 $getreserv{'reservedate'} =
                   format_date( $num->{'reservedate'} );
-
-#my $calcDate=DateCalc($num->{'reservedate'},"+".C4::Context->preference('TransfersMaxDaysWarning')."  days");
-#my $warning=Date_Cmp(ParseDate("today"),$calcDate);
-
                 my ( $reserve_year, $reserve_month, $reserve_day ) = split /-/,
                   $num->{'reservedate'};
                 ( $reserve_year, $reserve_month, $reserve_day ) =
@@ -119,12 +116,10 @@ foreach my $br ( keys %$branches ) {
                 $getreserv{'borrowernum'}    = $getborrower->{'borrowernumber'};
                 $getreserv{'borrowername'}   = $getborrower->{'surname'};
                 $getreserv{'borrowerfirstname'} = $getborrower->{'firstname'};
-
-                if ( $getborrower->{'emailaddress'} ) {
-                    $getreserv{'borrowermail'} = $getborrower->{'emailaddress'};
-                }
+                $getreserv{'borrowermail'} = $getborrower->{'emailaddress'};
                 $getreserv{'borrowerphone'} = $getborrower->{'phone'};
                 push( @reservloop, \%getreserv );
+                warn "=".$getreserv{'title'}.">>".$gettitle->{'title'};
             }
         }
 

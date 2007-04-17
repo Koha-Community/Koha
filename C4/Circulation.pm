@@ -221,7 +221,7 @@ sub transferbook {
     my %env;
     my $dotransfer      = 1;
     my $branches        = GetBranches();
-    my $item = GetItemFromBarcode( $barcode );
+    my $item = GetItemnumberFromBarcode( $barcode );
     my $issue      = GetItemIssues($item->{itemnumber});
 
     # bad barcode..
@@ -697,7 +697,7 @@ sub CanBookBeIssued {
     my ( $env, $borrower, $barcode, $year, $month, $day, $inprocess ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
-    my $item = GetItem(GetItemFromBarcode( $barcode ));
+    my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
     my $dbh             = C4::Context->dbh;
 
@@ -877,7 +877,7 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 =item C<$date> contains the max date of return. calculated if empty.
 
 AddIssue does the following things :
-- step 0°: check that there is a borrowernumber & a barcode provided
+- step 0ï¿½: check that there is a borrowernumber & a barcode provided
 - check for RENEWAL (book issued & being issued to the same patron)
     - renewal YES = Calculate Charge & renew
     - renewal NO  = 
@@ -1219,7 +1219,7 @@ sub AddReturn {
     
     die '$branch not defined' unless defined $branch;  # just in case (bug 170)
     # get information on item
-    my $iteminformation = GetItemIssue( GetItemFromBarcode($barcode));
+    my $iteminformation = GetItemIssue( GetItemnumberFromBarcode($barcode));
     if ( not $iteminformation ) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
@@ -1240,7 +1240,7 @@ sub AddReturn {
 
     # check that the book has been cancelled
     if ( $iteminformation->{'wthdrawn'} ) {
-        $messages->{'wthdrawn'} = 1;itemnumber
+        $messages->{'wthdrawn'} = 1;
         $doreturn = 0;
     }
 
@@ -1311,8 +1311,6 @@ if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} )
     my ( $resfound, $resrec ) =
       CheckReserves( $iteminformation->{'itemnumber'} );
     if ($resfound) {
-
-#    my $tobrcd = ReserveWaiting($resrec->{'itemnumber'}, $resrec->{'borrowernumber'});
         $resrec->{'ResFound'}   = $resfound;
         $messages->{'ResFound'} = $resrec;
         $reserveDone = 1;
@@ -1409,7 +1407,7 @@ sub GetItemIssue {
     if ( $datedue < $today ) {
         $data->{'overdue'} = 1;
     }
-    my $itemnumber = $data->{'itemnumber'};
+    $data->{'itemnumber'} = $itemnumber; # fill itemnumber, in case item is not on issue
     $sth->finish;
     return ($data);
 }

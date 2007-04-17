@@ -27,6 +27,8 @@ use C4::Branch; # GetBranchName
 use C4::Auth;
 use C4::Date;
 use C4::Circulation;
+use C4::Members;
+use C4::Biblio;
 
 use Date::Calc qw(
   Today
@@ -103,7 +105,7 @@ if ($item) {
 
 # 		if the document is not in his homebranch location and there is not reservation after, we transfer it
     if ( ( $fbr ne $tbr ) and ( not $nextreservinfo ) ) {
-        C4::Circulation::Circ2::dotransfer( $item, $fbr, $tbr );
+        dotransfer( $item, $fbr, $tbr );
     }
 }
 

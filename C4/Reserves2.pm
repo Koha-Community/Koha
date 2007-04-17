@@ -129,7 +129,7 @@ sub OtherReserves {
             );
 
             #launch the subroutine dotransfer
-            C4::Circulation::Circ2::dotransfer(
+            C4::Circulation::dotransfer(
                 $itemnumber,
                 $iteminfo->{'holdingbranch'},
                 $checkreserves->{'branchcode'}
@@ -1387,22 +1387,23 @@ sub FindReservesInQueue {
 
 =head2 GetReservesToBranch
 
-@transreserv = GetReservesToBranch( $frombranch, $excludingbranch );
+@transreserv = GetReservesToBranch( $frombranch );
+
+Get reserve list for a given branch
 
 =cut
 
 sub GetReservesToBranch {
-    my ( $frombranch, $excludingbranch ) = @_;
+    my ( $frombranch ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "SELECT borrowernumber,reservedate,itemnumber,timestamp
          FROM reserves 
          WHERE priority='0' AND cancellationdate is null  
            AND branchcode=?
-           AND branchcode!=?
            AND found IS NULL "
     );
-    $sth->execute( $frombranch, $excludingbranch );
+    $sth->execute( $frombranch );
     my @transreserv;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {

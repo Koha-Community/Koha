@@ -86,7 +86,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $query->param('modifyshelfcontents') ) {
     my $shelfnumber = $query->param('viewshelf');
     my $barcode     = $query->param('addbarcode');
-    my ($item) = GetItemFromBarcode($barcode);
+    my ($item) = GetItemnumberFromBarcode($barcode);
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
         AddToShelf( $item->{'itemnumber'}, $shelfnumber );
         foreach ( $query->param ) {
@@ -229,6 +229,9 @@ output_html_with_http_headers $query, $cookie, $template->output;
 
 #
 # $Log$
+# Revision 1.11  2007/04/17 08:52:19  tipaul
+# circulation cleaning continued: bufixing
+#
 # Revision 1.10  2007/04/04 16:46:23  tipaul
 # HUGE COMMIT : code cleaning circulation.
 #

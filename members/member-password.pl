@@ -38,11 +38,11 @@ my %env;
 $env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
-my $issues=GetBorrowerIssues(\%member2);
-my $i=0;
-foreach (sort keys %$issues) {
-    $i++;
-}
+# my $issues=GetBorrowerIssues(\%member2);
+# my $i=0;
+# foreach (sort keys %$issues) {
+#     $i++;
+# }
 
 my ($bor,$flags)=GetMemberDetails( $member,'');
 my $newpassword = $input->param('newpassword');

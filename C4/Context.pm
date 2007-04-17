@@ -544,7 +544,8 @@ sub _new_dbh
                 $db_user, $db_passwd);
     # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
     # this is better than modifying my.cnf (and forcing all communications to be in utf8)
-     $dbh->do("set NAMES 'utf8'") if ($dbh);
+    $dbh->do("set NAMES 'utf8'") if ($dbh);
+    $dbh->{'mysql_enable_utf8'}=1; #enable
     return $dbh;
 }
 
@@ -874,6 +875,9 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.55  2007/04/17 08:48:00  tipaul
+# circulation cleaning continued: bufixing
+#
 # Revision 1.54  2007/03/29 16:45:53  tipaul
 # Code cleaning of Biblio.pm (continued)
 #

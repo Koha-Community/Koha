@@ -10,7 +10,7 @@ use CGI;
 use C4::Output;
 use C4::Auth;
 use C4::Context;
-use C4::Circulation;
+use C4::Members;
 #use C4::Acquisitions;
 
 use C4::Interface::CGI::Output;
@@ -38,11 +38,6 @@ my %env;
 $env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
-my $issues=GetBorrowerIssues(\%member2);
-my $i=0;
-foreach (sort keys %$issues) {
-    $i++;
-}
 
 if ($input->param('newflags')) {
     my $dbh=C4::Context->dbh();
