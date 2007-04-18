@@ -63,8 +63,6 @@ C<$borrowernumber> specifies the borrower to look up.
 
 C<$dbh> is a DBI::db handle for the Koha database.
 
-C<$env> is ignored.
-
 =cut
 
 #'
@@ -91,7 +89,7 @@ sub checkaccount  {
     #if ($total > 0){
     #  # output(1,2,"borrower owes $total");
     #  if ($total > 5){
-    #    reconcileaccount($env,$dbh,$borrowernumber,$total);
+    #    reconcileaccount($dbh,$borrowernumber,$total);
     #  }
     #}
     #  pause();
@@ -100,13 +98,11 @@ sub checkaccount  {
 
 =head2 recordpayment
 
-  &recordpayment($env, $borrowernumber, $payment);
+  &recordpayment($borrowernumber, $payment);
 
 Record payment by a patron. C<$borrowernumber> is the patron's
 borrower number. C<$payment> is a floating-point number, giving the
-amount that was paid. C<$env> is a reference-to-hash;
-C<$env-E<gt>{branchcode}> is the code of the branch where payment was
-made.
+amount that was paid. 
 
 Amounts owed are paid off oldest first. That is, if the patron has a
 $1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
@@ -118,12 +114,11 @@ will be credited to the next one.
 #'
 sub recordpayment{
   #here we update both the accountoffsets and the account lines
-  my ($env,$borrowernumber,$data)=@_;
+  my ($borrowernumber,$data)=@_;
   my $dbh = C4::Context->dbh;
   my $newamtos = 0;
   my $accdata = "";
-  my $branch=$env->{'branchcode'};
-    warn $branch;
+  my $branch=C4::Context->userenv->{'branch'};
   my $amountleft = $data;
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
@@ -158,7 +153,7 @@ sub recordpayment{
   values (?,?,now(),?,'Payment,thanks','Pay',?)");
   $usth->execute($borrowernumber,$nextaccntno,0-$data,0-$amountleft);
   $usth->finish;
-  UpdateStats($env,$branch,'payment',$data,'','','',$borrowernumber);
+  UpdateStats($branch,'payment',$data,'','','',$borrowernumber);
   $sth->finish;
 }
 
@@ -185,8 +180,6 @@ sub makepayment{
   #updated to check, if they are paying off a lost item, we return the item
   # from their card, and put a note on the item record
   my ($borrowernumber,$accountno,$amount,$user,$branch)=@_;
-  my %env;
-  $env{'branchcode'}=$branch;
   my $dbh = C4::Context->dbh;
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
@@ -224,7 +217,7 @@ EOT
   # FIXME - The second argument to &UpdateStats is supposed to be the
   # branch code.
   # UpdateStats is now being passed $accountno too. MTJ
-  UpdateStats(\%env,$user,'payment',$amount,'','','',$borrowernumber,$accountno);
+  UpdateStats($user,'payment',$amount,'','','',$borrowernumber,$accountno);
   $sth->finish;
   #check to see what accounttype
   if ($data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L'){
@@ -240,8 +233,6 @@ Returns the next unused account number for the patron with the given
 borrower number.
 
 C<$dbh> is a DBI::db handle to the Koha database.
-
-C<$env> is ignored.
 
 =cut
 
@@ -330,14 +321,13 @@ sub manualinvoice{
   my $notifyid;
   my $insert;
   $itemnum=~ s/ //g;
-  my %env;
   my $accountno=getnextacctno($borrowernumber);
   my $amountleft=$amount;
 
   if ($type eq 'CS' || $type eq 'CB' || $type eq 'CW'
   || $type eq 'CF' || $type eq 'CL'){
     my $amount2=$amount*-1;     # FIXME - $amount2 = -$amount
-    $amountleft=fixcredit(\%env,$borrowernumber,$amount2,$itemnum,$type,$user);
+    $amountleft=fixcredit($borrowernumber,$amount2,$itemnum,$type,$user);
   }
   if ($type eq 'N'){
     $desc.="New Card";
@@ -381,7 +371,7 @@ sub manualinvoice{
 
 =head2 fixcredit
 
- $amountleft = &fixcredit($env, $borrowernumber, $data, $barcode, $type, $user);
+ $amountleft = &fixcredit($borrowernumber, $data, $barcode, $type, $user);
 
  This function is only used internally, not exported.
  FIXME - Figure out what this function does, and write it down.
@@ -390,7 +380,7 @@ sub manualinvoice{
 
 sub fixcredit{
   #here we update both the accountoffsets and the account lines
-  my ($env,$borrowernumber,$data,$barcode,$type,$user)=@_;
+  my ($borrowernumber,$data,$barcode,$type,$user)=@_;
   my $dbh = C4::Context->dbh;
   my $newamtos = 0;
   my $accdata = "";
@@ -460,9 +450,8 @@ sub fixcredit{
      $usth->finish;
   }
   $sth->finish;
-  $env->{'branch'}=$user;
   $type="Credit ".$type;
-  UpdateStats($env,$user,$type,$data,$user,'','',$borrowernumber);
+  UpdateStats($user,$type,$data,$user,'','',$borrowernumber);
   $amountleft*=-1;
   return($amountleft);
 
@@ -476,11 +465,10 @@ sub fixcredit{
 
 sub refund{
   #here we update both the accountoffsets and the account lines
-  my ($env,$borrowernumber,$data)=@_;
+  my ($borrowernumber,$data)=@_;
   my $dbh = C4::Context->dbh;
   my $newamtos = 0;
   my $accdata = "";
-#  my $branch=$env->{'branchcode'};
   my $amountleft = $data *-1;
 
   # begin transaction

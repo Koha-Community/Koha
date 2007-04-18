@@ -27,7 +27,7 @@ use C4::Context;
 
 
 sub StringSearch  {
-	my ($env,$searchstring,$authtypecode)=@_;
+	my ($searchstring,$authtypecode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
@@ -463,8 +463,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my $env;
-	my ($count,$results)=StringSearch($env,$tagfield,$authtypecode);
+	my ($count,$results)=StringSearch($tagfield,$authtypecode);
 	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){

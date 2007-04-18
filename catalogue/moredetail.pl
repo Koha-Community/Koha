@@ -74,9 +74,6 @@ $data->{'count'}=$count;
 my $ordernum = GetOrderNumber($biblionumber,$bi);
 my $order = GetOrder($ordernum);
 
-my $env;
-$env->{itemcount}=1;
-
 $results[0]=$data;
 
 foreach my $item (@items){

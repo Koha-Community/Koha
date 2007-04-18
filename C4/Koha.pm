@@ -486,12 +486,10 @@ sub getitemtypeimagesrc {
 
 =head2 GetPrinters
 
-  $printers = &GetPrinters($env);
+  $printers = &GetPrinters();
   @queues = keys %$printers;
 
 Returns information about existing printer queues.
-
-C<$env> is ignored.
 
 C<$printers> is a reference-to-hash whose keys are the print queues
 defined in the printers table of the Koha database. The values are
@@ -500,7 +498,6 @@ references-to-hash, whose keys are the fields in the printers table.
 =cut
 
 sub GetPrinters {
-    my ($env) = @_;
     my %printers;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("select * from printers");

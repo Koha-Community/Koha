@@ -55,10 +55,8 @@ my ( $template, $librarian, $cookie ) = get_template_and_user(
 
 #####################
 #Global vars
-my %env;
-
 my $branches = GetBranches();
-my $printers = GetPrinters( \%env );
+my $printers = GetPrinters();
 
 #my $branch  = C4::Context->userenv?C4::Context->userenv->{'branch'}:"";
 my $printer = C4::Context->userenv?C4::Context->userenv->{'branchprinter'}:"";
@@ -66,11 +64,6 @@ my $printer = C4::Context->userenv?C4::Context->userenv->{'branchprinter'}:"";
 #
 # Some code to handle the error if there is no branch or printer setting.....
 #
-
-#$env{'branchcode'} = $branch;
-$env{'printer'}    = $printer;
-$env{'queue'}      = $printer;
-
 
 # Set up the item stack ....
 my %returneditems;

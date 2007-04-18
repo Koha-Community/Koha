@@ -203,7 +203,6 @@ The item was eligible to be transferred. Barring problems communicating with the
 sub transferbook {
     my ( $tbr, $barcode, $ignoreRs ) = @_;
     my $messages;
-    my %env;
     my $dotransfer      = 1;
     my $branches        = GetBranches();
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
@@ -303,11 +302,9 @@ sub domarctransfer {
 
 Check if a book can be issued.
 
-my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued($env,$borrower,$barcode,$year,$month,$day);
+my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued($borrower,$barcode,$year,$month,$day);
 
 =over 4
-
-=item C<$env> Environment variable. Should be empty usually, but used by other subs. Next code cleaning could drop it.
 
 =item C<$borrower> hash with borrower informations (from GetMemberDetails)
 
@@ -671,14 +668,14 @@ sub itemissues {
 =head2 CanBookBeIssued
 
 $issuingimpossible, $needsconfirmation = 
-        CanBookBeIssued( $env, $borrower, $barcode, $year, $month, $day, $inprocess );
+        CanBookBeIssued( $borrower, $barcode, $year, $month, $day, $inprocess );
 
 C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =cut
 
 sub CanBookBeIssued {
-    my ( $env, $borrower, $barcode, $year, $month, $day, $inprocess ) = @_;
+    my ( $borrower, $barcode, $year, $month, $day, $inprocess ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
@@ -848,11 +845,9 @@ sub CanBookBeIssued {
 
 Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this sub, it means the user confirmed if needed.
 
-&AddIssue($env,$borrower,$barcode,$date)
+&AddIssue($borrower,$barcode,$date)
 
 =over 4
-
-=item C<$env> Environment variable. Should be empty usually, but used by other subs. Next code cleaning could drop it.
 
 =item C<$borrower> hash with borrower informations (from GetMemberDetails)
 
@@ -878,7 +873,7 @@ AddIssue does the following things :
 =cut
 
 sub AddIssue {
-    my ( $env, $borrower, $barcode, $date, $cancelreserve ) = @_;
+    my ( $borrower, $barcode, $date, $cancelreserve ) = @_;
     
     my $dbh = C4::Context->dbh;
 if ($borrower and $barcode){
@@ -909,7 +904,7 @@ if ($borrower and $barcode){
             $item->{'charge'} = $charge;
         }
         &UpdateStats(
-            $env,                           $env->{'branchcode'},
+            C4::Context->userenv->{'branch'},
             'renew',                        $charge,
             '',                             $item->{'itemnumber'},
             $biblio->{'itemtype'}, $borrower->{'borrowernumber'}
@@ -1026,7 +1021,7 @@ if ($borrower and $barcode){
         $sth->execute(
             $borrower->{'borrowernumber'},
             $item->{'itemnumber'},
-            strftime( "%Y-%m-%d", localtime ),$dateduef, $env->{'branchcode'}
+            strftime( "%Y-%m-%d", localtime ),$dateduef, C4::Context->userenv->{'branch'}
         );
         $sth->finish;
         $item->{'issues'}++;
@@ -1055,7 +1050,7 @@ if ($borrower and $barcode){
 
         # Record the fact that this book was issued.
         &UpdateStats(
-            $env,                           $env->{'branchcode'},
+            C4::Context->userenv->{'branch'},
             'issue',                        $charge,
             '',                             $item->{'itemnumber'},
             $item->{'itemtype'}, $borrower->{'borrowernumber'}
@@ -1527,8 +1522,6 @@ $ok = &CanBookBeRenewed($borrowernumber, $itemnumber);
 
 Find out whether a borrowed item may be renewed.
 
-C<$env> is ignored.
-
 C<$dbh> is a DBI handle to the Koha database.
 
 C<$borrowernumber> is the borrower number of the patron who currently
@@ -1604,12 +1597,6 @@ sub CanBookBeRenewed {
 &AddRenewal($borrowernumber, $itemnumber, $datedue);
 
 Renews a loan.
-
-C<$env-E<gt>{branchcode}> is the code of the branch where the
-renewal is taking place.
-
-C<$env-E<gt>{usercode}> is the value to log in C<statistics.usercode>
-in the Koha database.
 
 C<$borrowernumber> is the borrower number of the patron who currently
 has the item.
@@ -1695,8 +1682,6 @@ sub AddRenewal {
 
 Calculate how much it would cost for a given patron to borrow a given
 item, including any applicable discounts.
-
-C<$env> is ignored.
 
 C<$itemnumber> is the item number of item the patron wishes to borrow.
 

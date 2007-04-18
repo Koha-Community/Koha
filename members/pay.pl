@@ -75,9 +75,6 @@ for ( my $i = 0 ; $i < @names ; $i++ ) {
         $check = 2;
     }
 }
-my %env;
-
-$env{'branchcode'} = $branch;
 my $total = $input->param('total');
 if ( $check == 0 ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -91,7 +88,7 @@ if ( $check == 0 ) {
         }
     );
     if ( $total ne '' ) {
-        recordpayment( \%env, $borrowernumber, $total );
+        recordpayment( $borrowernumber, $total );
     }
 
     my ( $numaccts, $accts, $total ) = getboracctrecord( '', \%bor );
@@ -179,7 +176,6 @@ sub writeoff {
     my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount ) = @_;
     my $user = $input->remote_user;
     my $dbh  = C4::Context->dbh;
-    my $env;
     my $sth =
       $dbh->prepare(
 "Update accountlines set amountoutstanding=0 where (accounttype='Res' OR accounttype='FU' OR accounttype ='IP' OR accounttype='CH' OR accounttype='N' OR accounttype='F' OR accounttype='A' OR accounttype='M' OR accounttype='L' OR accounttype='RE' OR accounttype='RL') and accountno=? and borrowernumber=?"
@@ -198,6 +194,6 @@ sub writeoff {
     $sth->execute( $borrowernumber, $account->{'max(accountno)'},
         $itemnum, $amount );
     $sth->finish;
-    UpdateStats( $env, $branch, 'writeoff', $amount, '', '', '',
+    UpdateStats( $branch, 'writeoff', $amount, '', '', '',
         $borrowernumber );
 }

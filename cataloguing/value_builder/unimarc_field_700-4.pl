@@ -69,9 +69,6 @@ return ($function_name,$res);
 
 sub plugin {
 my ($input) = @_;
-	my %env;
-
-#	my $input = new CGI;
 	my $index= $input->param('index');
 	my $index2= $input->param('index2');
 	$index2=-1 unless($index2);

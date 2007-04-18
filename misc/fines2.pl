@@ -129,7 +129,6 @@ for (my $i=0;$i<$numOverdueItems;$i++){
       if ($borrower->{'cardnumber'} ne ''){
         my $cost=ReplacementCost($data->[$i]->{'itemnumber'});
     my $dbh = C4::Context->dbh;
-    my $env;
     my $accountno=C4::Circulation::Circ2::getnextacctno($data->[$i]->{'borrowernumber'});
     my $item=GetBiblioFromItemNumber($data->[$i]->{'itemnumber'});
     if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){

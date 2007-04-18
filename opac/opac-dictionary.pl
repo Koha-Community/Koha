@@ -75,8 +75,6 @@ my $type = $input->param('type');
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie );
 
-my $env;
-
 my $startfrom = $input->param('startfrom');
 $startfrom = 0 if ( !defined $startfrom );
 my $searchdesc;

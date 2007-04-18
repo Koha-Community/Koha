@@ -124,7 +124,6 @@ elsif ( $op eq 'add_validate' ) {
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
-    my $env;
     my $sth =
       $dbh->prepare(
 "Select tagfield,tagsubfield,liblibrarian,kohafield from marc_subfield_structure"

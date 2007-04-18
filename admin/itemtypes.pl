@@ -50,7 +50,7 @@ use C4::Auth;
 use C4::Interface::CGI::Output;
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
@@ -261,8 +261,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-    my $env;
-    my ($count,$results)=StringSearch($env,$searchfield,'web');
+    my ($count,$results)=StringSearch($searchfield,'web');
 
     my $page = $input->param('page') || 1;
     my $first = ($page - 1) * $pagesize;

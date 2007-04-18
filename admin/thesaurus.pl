@@ -158,7 +158,6 @@ if ($op eq 'add_form') {
 	if (!$search_category) {
 		$search_category=$category_list[0];
 	}
-	my $env;
 	my $sth = $dbh->prepare("select father,stdlib,category,hierarchy from bibliothesaurus where id=?");
 	$sth->execute($id);
 	my ($father,$stdlib,$category,$suphierarchy) = $sth->fetchrow_array;
@@ -207,8 +206,7 @@ if ($op eq 'add_form') {
 	if (!$search_category) {
 		$search_category=$category_list[0];
 	}
-	my $env;
-	my ($count,$results)=searchauthority($env,$search_category,$branch,$searchstring,$offset,$pagesize);
+	my ($count,$results)=searchauthority($search_category,$branch,$searchstring,$offset,$pagesize);
 	my $toggle="white";
 	my @loop_data = ();
 	# builds value list

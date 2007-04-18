@@ -56,13 +56,9 @@ The functions in this module handle sending text to a printer.
 
 =item remoteprint
 
-  &remoteprint($env, $items, $borrower);
+  &remoteprint($items, $borrower);
 
 Prints the list of items in C<$items> to a printer.
-
-C<$env> is a reference-to-hash. C<$env-E<gt>{queue}> specifies the
-queue to print to; if it is empty or has the special value C<nulllp>,
-C<&remoteprint> will print to the file F</tmp/kohaiss>.
 
 C<$borrower> is a reference-to-hash giving information about a patron.
 This may be gotten from C<&GetMemberDetails>. The patron's name
@@ -74,14 +70,13 @@ from C<&GetBorrowerIssues>.
 
 =cut
 
-#'
 # FIXME - It'd be nifty if this could generate pretty PostScript.
 sub remoteprint {
-    my ( $env, $items, $borrower ) = @_;
+    my ($items, $borrower ) = @_;
 
     (return)
       unless ( C4::Context->boolean_preference('printcirculationslips') );
-    my $queue = $env->{'queue'};
+    my $queue = '';
 
     # FIXME - If 'queue' is undefined or empty, then presumably it should
     # mean "use the default queue", whatever the default is. Presumably
@@ -106,12 +101,9 @@ sub remoteprint {
     #  print $queue;
     #open (FILE,">/tmp/$file");
     my $i      = 0;
-    my $brdata = $env->{'brdata'};    # FIXME - Not used
-         # FIXME - This is HLT-specific. Put this stuff in a customizable
-         # site-specific file somewhere.
+    # FIXME - This is HLT-specific. Put this stuff in a customizable
+    # site-specific file somewhere.
     print PRINTER "Horowhenua Library Trust\r\n";
-
-    #  print PRINTER "$brdata->{'branchname'}\r\n";
     print PRINTER "Phone: 368-1953\r\n";
     print PRINTER "Fax:    367-9218\r\n";
     print PRINTER "Email:  renewals\@library.org.nz\r\n\r\n\r\n";
@@ -134,19 +126,15 @@ sub remoteprint {
         $i++;
     }
     print PRINTER "\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
-    if ( $env->{'printtype'} eq "docket" ) {
-
-        #print chr(27).chr(105);
-    }
     close PRINTER;
 
     #system("lpr /tmp/$file");
 }
 
 sub printreserve {
-    my ( $env, $branchname, $bordata, $itemdata ) = @_;
+    my ( $branchname, $bordata, $itemdata ) = @_;
     my $file    = time;
-    my $printer = $env->{'printer'};
+    my $printer = '';
     (return) unless ( C4::Context->boolean_preference('printreserveslips') );
     if ( $printer eq "" || $printer eq 'nulllp' ) {
         open( PRINTER, ">>/tmp/kohares" );
@@ -188,7 +176,7 @@ EOF
 
 =item printslip
 
-  &printslip($env, $borrowernumber)
+  &printslip($borrowernumber)
 
   print a slip for the given $borrowernumber
   
@@ -196,14 +184,10 @@ EOF
 
 #'
 sub printslip {
-    my ( $env, $borrowernumber ) = @_;
+    my ( $borrowernumber ) = @_;
     my ( $borrower, $flags ) = GetMemberDetails( $borrowernumber);
-    $env->{'todaysissues'} = 1;
     my ($borrowerissues) = GetBorrowerIssues( $borrower );
-    $env->{'nottodaysissues'} = 1;
-    $env->{'todaysissues'}    = 0;
     my ($borroweriss2) = GetBorrowerIssues( $borrower );
-    $env->{'nottodaysissues'} = 0;
     my $i = 0;
     my @issues;
 
@@ -227,7 +211,7 @@ sub printslip {
         $issues[$i]->{'date_due'} = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
         $i++;
     }
-    remoteprint( $env, \@issues, $borrower );
+    remoteprint(\@issues, $borrower );
 }
 
 END { }    # module clean-up code here (global destructor)

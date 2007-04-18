@@ -12,7 +12,6 @@ my $query = new CGI;
 my $itemnumber     = $query->param('item');
 my $borrowernumber = $query->param("borrowernumber");
 
-my %env;
 my $status = CanBookBeRenewed( $borrowernumber, $itemnumber );
 if ( $status == 1 ) {
     AddRenewal( $borrowernumber, $itemnumber );

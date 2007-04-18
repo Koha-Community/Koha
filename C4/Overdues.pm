@@ -697,7 +697,6 @@ C<$notify_id> contains the file number for the borrower number nad item number
 sub NumberNotifyId{
     my ($borrowernumber)=@_;
     my $dbh = C4::Context->dbh;
-    my $env;
     my $query=qq|    SELECT distinct(notify_id)
             FROM accountlines
             WHERE borrowernumber=?|;

@@ -57,7 +57,6 @@ if ($member eq ''){
 }else{
 		$template->param(results=>1);
 }	
-my $env;
 
 my ($count,$results);
 my @resultsdata;
@@ -66,15 +65,15 @@ my $background = 0;
 if ($member ne ''){
 	if(length($member) == 1)
 	{
-		($count,$results)=GuarantornameSearch($env,$member,$orderby,"simple");
+		($count,$results)=GuarantornameSearch($member,$orderby,"simple");
 	}
 	else
 	{
-		($count,$results)=GuarantornameSearch($env,$member,$orderby,"advanced");
+		($count,$results)=GuarantornameSearch($member,$orderby,"advanced");
 	}
 	for (my $i=0; $i < $count; $i++){
 	#find out stats
-	my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowerid'});
+	my ($od,$issue,$fines)=borrdata2($results->[$i]{'borrowerid'});
 	my $guarantorinfo=uc($results->[$i]{'surname'})." , ".ucfirst($results->[$i]{'firstname'});
 	my %row = (
 		background => $background,

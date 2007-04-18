@@ -62,7 +62,6 @@ my $dat          = GetBiblioData($biblionumber);
 my $findborrower = $input->param('findborrower');
 $findborrower =~ s|,| |g;
 my $cardnumber = $input->param('cardnumber');
-my %env;
 my $borrowerslist;
 my $messageborrower;
 
@@ -70,7 +69,7 @@ my $date = sprintf( '%04d-%02d-%02d', Today() );
 
 if ($findborrower) {
     my ( $count, $borrowers ) =
-      BornameSearch( \%env, $findborrower, 'cardnumber', 'web' );
+      BornameSearch($findborrower, 'cardnumber', 'web' );
 
     my @borrowers = @$borrowers;
 
@@ -351,7 +350,6 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
     }
 
     if ( ( $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) ) {
-        my %env;
         my $item = $res->{'itemnumber'};
         $item = getiteminformation($item,undef);
         $reserve{'wait'}= 1; 

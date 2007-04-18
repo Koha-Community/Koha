@@ -27,11 +27,11 @@ It need :
   isbn separator editor separator collection.
   for example :
   2204 -- Cerf -- Cogitatio fidei
-  2204 -- Cerf -- Le Magistère de l'Eglise
+  2204 -- Cerf -- Le Magistï¿½re de l'Eglise
   2204 -- Cerf -- Lectio divina
   2204 -- Cerf -- Lire la Bible
   2204 -- Cerf -- Pour lire
-  2204 -- Cerf -- Sources chrétiennes
+  2204 -- Cerf -- Sources chrï¿½tiennes
 
   when the user clic on ... on 225a line, the popup shows the list of collections from the selected editor
   if the biblio has no isbn, then the search if done on editor only
@@ -98,9 +98,6 @@ return ($function_name,$res);
 }
 sub plugin {
 my ($input) = @_;
-	my %env;
-
-#	my $input = new CGI;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
 	my $editor_found = $input->param('editor_found');

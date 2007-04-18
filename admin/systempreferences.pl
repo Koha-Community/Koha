@@ -173,7 +173,7 @@ my %tabsysprefs;
     $tabsysprefs{FinesLog}        = "LOGFeatures";
     
 sub StringSearch  {
-    my ($env,$searchstring,$type)=@_;
+    my ($searchstring,$type)=@_;
     my $dbh = C4::Context->dbh;
     $searchstring=~ s/\'/\\\'/g;
     my @data=split(' ',$searchstring);
@@ -429,8 +429,7 @@ if ($op eq 'add_form') {
     #Adding tab management for system preferences
     my $tab=$input->param('tab');
     
-    my $env;
-    my ($count,$results)=StringSearch($env,$searchfield,$tab);
+    my ($count,$results)=StringSearch($searchfield,$tab);
     my $toggle=0;
     my @loop_data = ();
     for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){

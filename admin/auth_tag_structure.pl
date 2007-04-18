@@ -208,8 +208,7 @@ if ($op eq 'add_form') {
 	if  ($searchfield ne '') {
 		 $template->param(searchfield => $searchfield);
 	}
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,$authtypecode);
+	my ($count,$results)=StringSearch($searchfield,$authtypecode);
 	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
@@ -263,7 +262,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 # the sub used for searches
 #
 sub StringSearch  {
-	my ($env,$searchstring,$authtypecode)=@_;
+	my ($searchstring,$authtypecode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);

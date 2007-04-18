@@ -110,7 +110,6 @@ foreach my $issue ( @$issues ) {
     $issue->{$publictype} = 1;
 
     # check if item is renewable
-    my %env;
     my $status = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
 
     $issue->{'status'} = $status;

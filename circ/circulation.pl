@@ -97,16 +97,8 @@ my $print          = $query->param('print');
 #     $branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
 #     $printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 # }
-
-my %env
-  ; # FIXME env is used as an "environment" variable. Could be dropped probably...
-
 #
-$env{'branchcode'}   = $branch;
-$env{'printer'}      = $printer;
-$env{'organisation'} = $organisation;
 
-# $env{'queue'}=$printer;
 
 my @datearr = localtime( time() );
 
@@ -136,7 +128,7 @@ if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
 }
 
 if ( $print eq 'yes' && $borrowernumber ne '' ) {
-    printslip( \%env, $borrowernumber );
+    printslip( $borrowernumber );
     $query->param( 'borrowernumber', '' );
     $borrowernumber = '';
 }
@@ -149,7 +141,7 @@ my $borrowerslist;
 my $message;
 if ($findborrower) {
     my ( $count, $borrowers ) =
-      BornameSearch( \%env, $findborrower, 'cardnumber', 'web' );
+      BornameSearch($findborrower, 'cardnumber', 'web' );
     my @borrowers = @$borrowers;
     if ( $#borrowers == -1 ) {
         $query->param( 'findborrower', '' );
@@ -171,7 +163,7 @@ my @lines;
 
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
-    my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
+    my ( $od, $issue, $fines ) = borrdata2( $borrowernumber );
 
     # Warningdate is the date that the warning starts appearing
     my ( $today_year,   $today_month,   $today_day )   = Today();
@@ -217,12 +209,12 @@ if ($barcode) {
     $barcode = cuecatbarcodedecode($barcode);
     my ( $datedue, $invalidduedate ) = fixdate( $year, $month, $day );
     if ($issueconfirmed) {
-        AddIssue( \%env, $borrower, $barcode, $datedue, $cancelreserve );
+        AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
         $inprocess = 1;
     }
     else {
         my ( $error, $question ) =
-          CanBookBeIssued( \%env, $borrower, $barcode, $year, $month, $day,
+          CanBookBeIssued( $borrower, $barcode, $year, $month, $day,
             $inprocess );
         my $noerror    = 1;
         my $noquestion = 1;
@@ -250,13 +242,13 @@ if ($barcode) {
             year  => $year
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
-            AddIssue( \%env, $borrower, $barcode, $datedue );
+            AddIssue( $borrower, $barcode, $datedue );
             $inprocess = 1;
         }
     }
     
 # FIXME If the issue is confirmed, we launch another time borrdata2, now display the issue count after issue 
-        my ( $od, $issue, $fines ) = borrdata2( \%env, $borrowernumber );
+        my ( $od, $issue, $fines ) = borrdata2( $borrowernumber );
         $template->param(
         issuecount   => $issue,
         );
@@ -281,7 +273,6 @@ if ($borrowernumber) {
     foreach my $num_res (@borrowerreserv) {
         my %getreserv;
         my %getWaitingReserveInfo;
-        my %env;
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =

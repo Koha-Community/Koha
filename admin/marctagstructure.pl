@@ -222,7 +222,6 @@ if ($op eq 'add_form') {
 	my $cnt=0;
 	if ($dspchoice) {
 		#here, user only wants used tags/subfields displayed
-		my $env;
 		$searchfield=~ s/\'/\\\'/g;
 		my @data=split(' ',$searchfield);
 		my $sth=$dbh->prepare("
@@ -294,8 +293,7 @@ if ($op eq 'add_form') {
 		$sth->finish;
 	} else {
 		#here, normal old style : display every tags
-		my $env;
-		my ($count,$results)=StringSearch($env,$searchfield,$frameworkcode);
+		my ($count,$results)=StringSearch($searchfield,$frameworkcode);
 		$cnt = $count;
 		my $toggle=0;
 		my @loop_data = ();
@@ -350,7 +348,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 # the sub used for searches
 #
 sub StringSearch  {
-	my ($env,$searchstring,$frameworkcode)=@_;
+	my ($searchstring,$frameworkcode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);

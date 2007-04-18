@@ -54,7 +54,7 @@ the Koha database, which acts as an activity log.
 
 =item UpdateStats
 
-  &UpdateStats($env, $branch, $type, $value, $other, $itemnumber,
+  &UpdateStats($branch, $type, $value, $other, $itemnumber,
                $itemtype, $borrowernumber);
 
 Adds a line to the statistics table of the Koha database. In effect,
@@ -63,11 +63,6 @@ it logs an event.
 C<$branch>, C<$type>, C<$value>, C<$other>, C<$itemnumber>,
 C<$itemtype>, and C<$borrowernumber> correspond to the fields of the
 statistics table in the Koha database.
-
-If C<$branch> is the empty string, the branch code will be taken from
-C<$env-E<gt>{branchcode}>.
-
-C<$env-E<gt>{usercode}> specifies the value of the C<usercode> field.
 
 =cut
 

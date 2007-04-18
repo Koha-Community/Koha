@@ -79,11 +79,9 @@ This module contains routines for adding, modifying and deleting members/patrons
 
 =item BornameSearch
 
-  ($count, $borrowers) = &BornameSearch($env, $searchstring, $type);
+  ($count, $borrowers) = &BornameSearch($searchstring, $type);
 
 Looks up patrons (borrowers) by name.
-
-C<$env> is ignored.
 
 BUGFIX 499: C<$type> is now used to determine type of search.
 if $type is "simple", search is performed on the first letter of the
@@ -104,7 +102,7 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl
 sub BornameSearch {
-    my ( $env, $searchstring, $orderby, $type ) = @_;
+    my ($searchstring, $orderby, $type ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "";
     my $count;
@@ -248,8 +246,6 @@ C<$borrowernumber> is true (nonzero), C<&GetMemberDetails> looks
 up the borrower by number; otherwise, it looks up the borrower by card
 number.
 
-C<$env> is effectively ignored, but should be a reference-to-hash.
-
 C<$borrower> is a reference-to-hash whose keys are the fields of the
 borrowers table in the Koha database. In addition,
 C<$borrower-E<gt>{flags}> is a hash giving more detailed information
@@ -387,7 +383,7 @@ sub GetMemberDetails {
  NOTE!: If you change this function, be sure to update the POD for
  &GetMemberDetails.
 
- $flags = &patronflags($env, $patron, $dbh);
+ $flags = &patronflags($patron, $dbh);
 
  $flags->{CHARGES}
         {message}    Message showing patron's credit or debt
@@ -545,12 +541,10 @@ sub borrdata {
 
 =item borrdata2
 
-  ($borrowed, $due, $fine) = &borrdata2($env, $borrowernumber);
+  ($borrowed, $due, $fine) = &borrdata2($borrowernumber);
 
 Returns aggregate data about items borrowed by the patron with the
 given borrowernumber.
-
-C<$env> is ignored.
 
 C<&borrdata2> returns a three-element array. C<$borrowed> is the
 number of books the patron currently has borrowed. C<$due> is the
@@ -561,7 +555,7 @@ the total fine currently due by the borrower.
 
 #'
 sub borrdata2 {
-    my ( $env, $borrowernumber ) = @_;
+    my ( $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query =
       "Select count(*) from issues where borrowernumber='$borrowernumber' and
@@ -1023,11 +1017,9 @@ sub findguarantor {
 
 =item GuarantornameSearch
 
-  ($count, $borrowers) = &GuarantornameSearch($env, $searchstring, $type);
+  ($count, $borrowers) = &GuarantornameSearch($searchstring, $type);
 
 Looks up guarantor  by name.
-
-C<$env> is ignored.
 
 BUGFIX 499: C<$type> is now used to determine type of search.
 if $type is "simple", search is performed on the first letter of the
@@ -1050,7 +1042,7 @@ return all info from guarantor =>only category_type A
 #used by member enquiries from the intranet
 #called by guarantor_search.pl
 sub GuarantornameSearch {
-    my ( $env, $searchstring, $orderby, $type ) = @_;
+    my ($searchstring, $orderby, $type ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "";
     my $count;
@@ -1219,11 +1211,9 @@ sub allissues {
 
 =head2 getboracctrecord
 
-  ($count, $acctlines, $total) = &getboracctrecord($env, $borrowernumber);
+  ($count, $acctlines, $total) = &getboracctrecord($borrowernumber);
 
 Looks up accounting data for the patron with the given borrowernumber.
-
-C<$env> is ignored.
 
 (FIXME - I'm not at all sure what this is about.)
 
@@ -1237,7 +1227,7 @@ total amount outstanding for all of the account lines.
 
 #'
 sub getboracctrecord {
-    my ( $env, $params ) = @_;
+    my ($params ) = @_;
     my $dbh = C4::Context->dbh;
     my @acctlines;
     my $numlines = 0;
@@ -1270,11 +1260,9 @@ borrowernumber=? order by date desc,timestamp desc"
 
 =head2 GetBorNotifyAcctRecord
 
-  ($count, $acctlines, $total) = &GetBorNotifyAcctRecord($env, $params,$notifyid);
+  ($count, $acctlines, $total) = &GetBorNotifyAcctRecord($params,$notifyid);
 
 Looks up accounting data for the patron with the given borrowernumber per file number.
-
-C<$env> is ignored.
 
 (FIXME - I'm not at all sure what this is about.)
 
@@ -1287,7 +1275,7 @@ total amount outstanding for all of the account lines.
 =cut
 
 sub GetBorNotifyAcctRecord {
-    my ( $env, $params, $notifyid ) = @_;
+    my ( $params, $notifyid ) = @_;
     my $dbh = C4::Context->dbh;
     my @acctlines;
     my $numlines = 0;

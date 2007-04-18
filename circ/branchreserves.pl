@@ -73,7 +73,6 @@ my $todaysdate =
 if ($item) {
     my $messages;
     my $nextreservinfo;
-    my %env;
     my $waiting;
     ( $messages, $nextreservinfo ) = GlobalCancel( $item, $borrowernumber );
 
@@ -115,7 +114,6 @@ my @getreserves = GetReservesForBranch($default);
 
 foreach my $num (@getreserves) {
     my %getreserv;
-    my %env;
     my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
     my $getborrower  = GetMemberDetails( $num->{'borrowernumber'} );
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );

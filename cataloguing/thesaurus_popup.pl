@@ -30,8 +30,6 @@ use C4::Output;
 use C4::Authorities;
 use C4::Interface::CGI::Output;
 # get all the data ....
-my %env;
-
 my $input = new CGI;
 my $result = $input->param('result');
 my $search_string= $input->param('search_string');

@@ -99,9 +99,7 @@ sub levyFines {
                       if ($borrower->{'cardnumber'} ne ''){
                            my $cost=ReplacementCost($overdue->{'itemnumber'});
                         my $dbh=C4Connect();
-                        my $env;
-
-                        my $accountno=C4::Circulation::Circ2::getnextacctno($overdue->{'borrowernumber'});
+                        my $accountno=C4::Circulation::getnextacctno($overdue->{'borrowernumber'});
                            my $item=GetBiblioFromItemNumber($overdue->{'itemnumber'});
                         if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
                               $item->{'title'}=~ s/\'/\\'/g;
@@ -273,10 +271,8 @@ my %actions;
 
                         my @bookdetails;
                         my $total_fines = 0;
-                                        foreach my $over (@alloverdues) {
-                                                my %row_data;
-                            my $env;    #FIXME what is this varible for?
-    
+                        foreach my $over (@alloverdues) {
+                            my %row_data;    
                              if ( my $item = GetBiblioFromItemNumber( $over->{'itemnumber'})){
                                 print "getting fine ($over->{'itemnumber'} $overdue->{'borrowernumber'} $over->{'borrowernumber'}\n";
                                 my $fine = GetFine($over->{'itemnumber'},$overdue->{'borrowernumber'});
@@ -316,12 +312,10 @@ my %actions;
                                 }
                                                 }
 
-                                            $template->param(BOOKDETAILS => \@bookdetails);
-       
-                        my $env;
+                                $template->param(BOOKDETAILS => \@bookdetails);
                                 my %params;
                                 %params->{'borrowernumber'} = $overdue->{'borrowernumber'};
-                                my ($count, $acctlines, $total) = &getboracctrecord($env, \%params);
+                                my ($count, $acctlines, $total) = &getboracctrecord(\%params);
                                             $template->param(FINES_TOTAL => $total_fines);
                             $template->param(OWING => $total);
                             my $name= "$borrower->{'firstname'} $borrower->{'surname'}";

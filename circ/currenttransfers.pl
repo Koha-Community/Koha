@@ -78,7 +78,6 @@ foreach my $br ( keys %$branches ) {
     if (@gettransfers) {
         foreach my $num (@gettransfers) {
             my %getransf;
-            my %env;
 
             my ( $sent_year, $sent_month, $sent_day ) = split "-",
               $num->{'datesent'};

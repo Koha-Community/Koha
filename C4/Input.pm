@@ -53,36 +53,19 @@ number or ISBN is valid.
 	&buildCGIsort
 );
 
-# FIXME - This is never used.
-#sub checkflds {
-#  my ($env,$reqflds,$data) = @_;
-#  my $numrflds = @$reqflds;
-#  my @probarr;
-#  my $i = 0;
-#  while ($i < $numrflds) {
-#    if ($data->{@$reqflds[$i]} eq "") {
-#      push(@probarr, @$reqflds[$i]);
-#    }
-#    $i++
-#  }
-#  return (\@probarr);
-#}
-
 =item checkdigit
 
-  $valid = &checkdigit($env, $cardnumber $nounique);
+  $valid = &checkdigit($cardnumber $nounique);
 
 Takes a card number, computes its check digit, and compares it to the
 checkdigit at the end of C<$cardnumber>. Returns a true value iff
 C<$cardnumber> has a valid check digit.
 
-C<$env> is ignored.
-
 =cut
 #'
 sub checkdigit {
 
-	my ($env,$infl, $nounique) =  @_;
+	my ($infl, $nounique) =  @_;
 	$infl = uc $infl;
 
 

@@ -44,7 +44,6 @@ my ($count,@serials) = GetSerials($subscriptionid);
 my ($template, $loggedinuser, $cookie);
 
 if($ok){
-    my $env;
     # get biblio information....
     my $biblio = $subs->{'biblionumber'};
     
@@ -72,7 +71,7 @@ if($ok){
 	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
 	    UpdateReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
         } else {
-        CreateReserve(\$env,$branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
+        CreateReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
 	}
     }
     

@@ -75,9 +75,6 @@ function Clic$function_name(i) {
 }
 sub plugin {
 	my ($input) = @_;
-	my %env;
-
-#	my $input = new CGI;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
 

@@ -67,17 +67,16 @@ my $orderby=$input->param('orderby');
 $orderby = "surname,firstname" unless $orderby;
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
-my $env;
 
 my ($count,$results);
 
 if(length($member) == 1)
 {
-    ($count,$results)=BornameSearch($env,$member,$orderby,"simple");
+    ($count,$results)=BornameSearch($member,$orderby,"simple");
 }
 else
 {
-    ($count,$results)=BornameSearch($env,$member,$orderby,"advanced");
+    ($count,$results)=BornameSearch($member,$orderby,"advanced");
 }
 
 
@@ -85,7 +84,7 @@ my @resultsdata;
 my $background = 0;
 for (my $i=0; $i < $count; $i++){
   #find out stats
-  my ($od,$issue,$fines)=borrdata2($env,$results->[$i]{'borrowernumber'});
+  my ($od,$issue,$fines)=borrdata2($results->[$i]{'borrowernumber'});
 
   my %row = (
     background => $background,

@@ -1201,7 +1201,6 @@ database.
 sub GetBiblioFromItemNumber {
     my ( $itemnumber ) = @_;
     my $dbh = C4::Context->dbh;
-    my $env;
     my $sth = $dbh->prepare(
         "SELECT * FROM biblio,items,biblioitems
          WHERE items.itemnumber = ?
@@ -3650,6 +3649,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.197  2007/04/18 17:00:14  tipaul
+# removing all useless %env / $env
+#
 # Revision 1.196  2007/04/17 08:48:00  tipaul
 # circulation cleaning continued: bufixing
 #

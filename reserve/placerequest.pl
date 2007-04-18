@@ -72,16 +72,15 @@ if ($type eq 'str8' && $borrowernumber ne ''){
 			$i2++;
 		}
 	}
-	my $env;
 	my $const;
 	if ($input->param('request') eq 'any'){
 	$const='a';
-  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@realbi,$rank[0],$notes,$title,$checkitem,$found);
+  CreateReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@realbi,$rank[0],$notes,$title,$checkitem,$found);
 	} elsif ($reqbib[0] ne ''){
 	$const='o';
-  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
+  CreateReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
 	} else {
-  CreateReserve(\$env,$branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
+  CreateReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
 	}
 	
 print $input->redirect("request.pl?biblionumber=$biblionumber");

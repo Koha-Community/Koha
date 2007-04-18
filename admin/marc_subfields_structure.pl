@@ -26,7 +26,7 @@ use C4::Context;
 
 
 sub StringSearch {
-    my ( $env, $searchstring, $frameworkcode ) = @_;
+    my ( $searchstring, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
     my @data  = split( ' ', $searchstring );
@@ -505,8 +505,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
-    my $env;
-    my ( $count, $results ) = StringSearch( $env, $tagfield, $frameworkcode );
+    my ( $count, $results ) = StringSearch( $tagfield, $frameworkcode );
     my $toggle    = 1;
     my @loop_data = ();
     for (

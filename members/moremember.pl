@@ -276,7 +276,6 @@ if ($borrowernumber) {
     my @reservloop;
     foreach my $num_res (@borrowerreserv) {
         my %getreserv;
-        my %env;
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =

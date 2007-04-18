@@ -197,8 +197,6 @@ sub fixdate {
     my $date;
     if ( $year && $month && $day ) {
         if ( ( $year eq 0 ) && ( $month eq 0 ) && ( $year eq 0 ) ) {
-
-            #    $env{'datedue'}='';
         }
         else {
             if ( ( $year eq 0 ) || ( $month eq 0 ) || ( $year eq 0 ) ) {

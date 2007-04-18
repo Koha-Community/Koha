@@ -210,8 +210,7 @@ sub default {
 sub editbranchform {
     my ($branchcode,$innertemplate) = @_;
     # initiate the scrolling-list to select the printers
-    my %env;
-    my $printers = GetPrinters( \%env );
+    my $printers = GetPrinters();
     my @printerloop;
     my $printercount = 0;
     my $oldprinter;

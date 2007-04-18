@@ -59,9 +59,6 @@ return ($function_name,$res);
 
 sub plugin {
 	my ($input) = @_;
-	my %env;
-	
-	
 	my $dbh=C4::Context->dbh;
 	my $query = new CGI;
 	my $op = $query->param('op');

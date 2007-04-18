@@ -47,7 +47,7 @@ use C4::Interface::CGI::Output;
 
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
@@ -204,8 +204,7 @@ if ($op eq 'add_form') {
 	        $template->param(search => 1);
 		$template->param(searchfield => $searchfield);
 	}
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($searchfield,'web');
 	my $toggle="white";
 	my @loop_data =();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){

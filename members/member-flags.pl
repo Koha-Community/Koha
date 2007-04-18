@@ -34,8 +34,6 @@ my ($template, $loggedinuser, $cookie)
 
 
 my $member=$input->param('member');
-my %env;
-$env{'nottodayissues'}=1;
 my %member2;
 $member2{'borrowernumber'}=$member;
 

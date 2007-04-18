@@ -34,10 +34,9 @@ use C4::Branch; # GetBranches
 #general design stuff...
 
 # try to get the branch and printer settings from the http....
-my %env;
 my $query    = new CGI;
 my $branches = GetBranches();
-my $printers = GetPrinters( \%env );
+my $printers = GetPrinters();
 my $branch   = $query->param('branch');
 my $printer  = $query->param('printer');
 
@@ -51,10 +50,6 @@ my %cookie = $query->cookie('userenv');
 # is you force a selection....
 my $oldbranch  = $branch;
 my $oldprinter = $printer;
-
-$env{'branchcode'} = $branch;
-$env{'printer'}    = $printer;
-$env{'queue'}      = $printer;
 
 # set up select options....
 my $branchcount  = 0;

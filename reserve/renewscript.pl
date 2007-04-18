@@ -43,7 +43,6 @@ else {
 #
 # renew items
 #
-my %env;
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber = $input->param("borrowernumber");
 

@@ -82,7 +82,6 @@ foreach my $br ( keys %$branches ) {
     if (@getreserves) {
         foreach my $num (@getreserves) {
             my %getreserv;
-            my %env;
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
 #             use Data::Dumper;
 #             warn Dumper($gettitle);

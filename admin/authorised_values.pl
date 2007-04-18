@@ -28,7 +28,7 @@ use C4::Context;
 
 
 sub StringSearch  {
-	my ($env,$searchstring,$type)=@_;
+	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
@@ -164,8 +164,7 @@ if ($op eq 'add_form') {
 	if (!$searchfield) {
 		$searchfield=$category_list[0];
 	}
-	my $env;
-	my ($count,$results)=StringSearch($env,$searchfield,'web');
+	my ($count,$results)=StringSearch($searchfield,'web');
 	my $toggle="white";
 	my @loop_data = ();
 	# builds value list

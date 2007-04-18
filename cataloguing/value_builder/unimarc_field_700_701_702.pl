@@ -53,7 +53,6 @@ return ($function_name,$res);
 }
 sub plugin {
 	my ($input) = @_;
-	my %env;
 	my $dbh = C4::Context->dbh;
 #	my $input = new CGI;
 	my $index= $input->param('index');

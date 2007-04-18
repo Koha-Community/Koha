@@ -964,7 +964,7 @@ sub Findgroupreserve {
 
 =item CreateReserve
 
-CreateReserve($env,$branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
+CreateReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
 
 FIXME - A somewhat different version of this function appears in
 C4::Reserves. Pick one and stick with it.
@@ -973,19 +973,19 @@ C4::Reserves. Pick one and stick with it.
 
 sub CreateReserve {
     my (
-        $env,        $branch,    $borrowernumber, $biblionumber,
+        $branch,    $borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority,       $notes,
         $title,      $checkitem, $found
     ) = @_;
     my $fee;
     if ( $library_name =~ /Horowhenua/ ) {
         $fee =
-          CalcHLTReserveFee( $env, $borrowernumber, $biblionumber, $constraint,
+          CalcHLTReserveFee($borrowernumber, $biblionumber, $constraint,
             $bibitems );
     }
     else {
         $fee =
-          CalcReserveFee( $env, $borrowernumber, $biblionumber, $constraint,
+          CalcReserveFee($borrowernumber, $biblionumber, $constraint,
             $bibitems );
     }
     my $dbh     = C4::Context->dbh;
@@ -1061,7 +1061,7 @@ sub CreateReserve {
 # FIXME - opac-reserves.pl need to use it, temporarily put into @EXPORT
 
 sub CalcReserveFee {
-    my ( $env, $borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
+    my ($borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
 
     #check for issues;
     my $dbh   = C4::Context->dbh;
@@ -1169,7 +1169,7 @@ sub CalcReserveFee {
 #
 # All other item types should incur a reserve charge.
 sub CalcHLTReserveFee {
-    my ( $env, $borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
+    my ($borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         "SELECT * FROM borrowers,categories
@@ -1212,7 +1212,7 @@ GetNextAccountNumber()
 =cut
 
 sub GetNextAccountNumber {
-    my ( $env, $borrowernumber, $dbh ) = @_;
+    my ($borrowernumber, $dbh ) = @_;
     my $nextaccntno = 1;
     my $sth         = $dbh->prepare(
         "select * from accountlines
