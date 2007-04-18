@@ -24,7 +24,8 @@ use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Date;
 use C4::Overdues;    # AddNotifyLine
-use C4::Koha;                  # GetDepartment...
+use C4::Biblio;
+use C4::Koha;
 use Mail::Sendmail;
 use Getopt::Long;
 use Date::Calc qw/Today Today_and_Now Now/;
@@ -32,7 +33,7 @@ use Date::Calc qw/Today Today_and_Now Now/;
 =head1 branchoverdues.pl
 
  this module is a new interface, allow to the librarian to check all items on overdues (based on the acountlines type 'FU' )
- this interface is filtered by branches (automaticly), and by department (optional) ....
+ this interface is filtered by branches (automaticly), and by location (optional) ....
  all informations are stocked in the notifys BDD
 
  FIXME for this time, we have only four methods to notify :
@@ -55,6 +56,8 @@ use Date::Calc qw/Today Today_and_Now Now/;
 =cut
 
 my $input       = new CGI;
+my $dbh = C4::Context->dbh;
+
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -80,7 +83,7 @@ my $itemnumber     = $input->param('itemnumber');
 my $method         = $input->param('method');
 my $overduelevel   = $input->param('overduelevel');
 my $notifyId       = $input->param('notifyId');
-my $department = $input->param('department');
+my $location = $input->param('location');
 
 # now create the line in bdd (notifys)
 if ( $input->param('action') eq 'add' ) {
@@ -100,30 +103,15 @@ my @overduesloop;
 my @todayoverduesloop;
 my $counter = 0;
 
-my @getoverdues = GetOverduesForBranch( $default, $department );
+my @getoverdues = GetOverduesForBranch( $default, $location );
 
-# filter by department
-if ($department) {
-    my ( $departmentlib, $departmentValue ) = GetDepartmentLib($department);
-    $template->param(
-        department      => $departmentlib,
-        departmentValue => $departmentValue,
-    );
+# search for location authorised value
+my ($tag,$subfield) = GetMarcFromKohaField($dbh,'items.location','');
+my $tagslib = &GetMarcStructure($dbh,1,'');
+if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+    my $values= GetAuthorisedValues($tagslib->{$tag}->{$subfield}->{authorised_value});
+    $template->param(locationsloop => $values);
 }
-else {
-
-    # initiate the selector of departments .....
-    my @getdepartments = GetDepartments();
-    my @departmentsloop;
-    foreach my $dpt (@getdepartments) {
-        my %department;
-        $department{'authorised_value'} = $dpt->{'authorised_value'};
-        $department{'lib'}              = $dpt->{'lib'};
-        push( @departmentsloop, \%department );
-    }
-    $template->param( departmentsloop => \@departmentsloop, );
-}
-
 # now display infos
 foreach my $num (@getoverdues) {
 
@@ -165,6 +153,7 @@ foreach my $num (@getoverdues) {
 $template->param(
     overduesloop => \@overduesloop,
     show_date    => format_date($todaysdate),
+    location     => $location,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

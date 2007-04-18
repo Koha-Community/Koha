@@ -1131,14 +1131,14 @@ return ($notified);
 =head2 GetOverduesForBranch
 
 Sql request for display all information for branchoverdues.pl
-2 possibilities : with or without department .
+2 possibilities : with or without location .
 display is filtered by branch
 
 =cut
 
 sub GetOverduesForBranch {
-    my ( $branch, $department) = @_;
-    if ( not $department ) {
+    my ( $branch, $location) = @_;
+    if ( not $location ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("
             SELECT 
@@ -1229,7 +1229,7 @@ sub GetOverduesForBranch {
              AND (issues.date_due <= NOW())
            ORDER BY  borrowers.surname
         " );
-        $sth->execute( $branch, $department);
+        $sth->execute( $branch, $location);
         my @getoverdues;
 	my $i = 0;
         while ( my $data = $sth->fetchrow_hashref ) {
