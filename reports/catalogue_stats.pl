@@ -174,7 +174,7 @@ if ($do_it) {
 #	warn "highlightLOC ".$hglghtLOC;
 	
 	
-	$req = $dbh->prepare("select distinctrow itemtype from biblioitems order by itemtype");
+	$req = $dbh->prepare("select itemtype from itemtypes order by itemtype");
 	$req->execute;
 	undef @select;
 	push @select,"";
@@ -216,12 +216,15 @@ if ($do_it) {
 				-size     => 1,
 				-multiple => 0 );
 	
-	$req = $dbh->prepare("select distinctrow holdingbranch from items order by holdingbranch");
+	$req = $dbh->prepare("select distinctrow location from items order by location");
 	$req->execute;
 	undef @select;
 	push @select,"";
+	while (my ($value) =$req->fetchrow) {
+		push @select, $value;
+	}
 	my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'holdingbranch',
+				-id => 'location',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -333,7 +336,7 @@ sub calculate {
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
  	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	@linefilter[0] = @$filters[11] if ($line =~ /items.holdingbranch/ ) ;
+ 	@linefilter[0] = @$filters[11] if ($line =~ /items.location/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
@@ -347,7 +350,7 @@ sub calculate {
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
  	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	@colfilter[0] = @$filters[11] if ($column =~ /items.holdingbranch/ ) ;
+ 	@colfilter[0] = @$filters[11] if ($column =~ /items.location/ ) ;
 
 # 1st, loop rows.
 	my $linefield;
@@ -506,7 +509,7 @@ sub calculate {
 	}
 	if (@$filters[11]){
 		@$filters[11]=~ s/\*/%/g;
-		$strcalc .= " AND items.holdingbranch like '" . @$filters[11] ."'" if ( @$filters[11] );
+		$strcalc .= " AND items.location like '" . @$filters[11] ."'" if ( @$filters[11] );
 	}
 	
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
