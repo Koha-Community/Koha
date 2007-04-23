@@ -81,9 +81,9 @@ sub recordpayment{
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
-  my $sth = $dbh->prepare("select * from accountlines
-  where (borrowernumber = ?) and (amountoutstanding<>0)
-  order by date");
+  my $sth = $dbh->prepare("SELECT * FROM accountlines
+  WHERE (borrowernumber = ?) AND (amountoutstanding<>0)
+  ORDER BY date");
   $sth->execute($borrowernumber);
   # offset transactions
   while (($accdata=$sth->fetchrow_hashref) and ($amountleft>0)){
@@ -95,20 +95,20 @@ sub recordpayment{
         $amountleft = 0;
      }
      my $thisacct = $accdata->{accountno};
-     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
-     where (borrowernumber = ?) and (accountno=?)");
+     my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
+     WHERE (borrowernumber = ?) AND (accountno=?)");
      $usth->execute($newamtos,$borrowernumber,$thisacct);
      $usth->finish;
-     $usth = $dbh->prepare("insert into accountoffsets
+     $usth = $dbh->prepare("INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
-     values (?,?,?,?)");
+     VALUES (?,?,?,?)");
      $usth->execute($borrowernumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
      $usth->finish;
   }
   # create new line
-  my $usth = $dbh->prepare("insert into accountlines
+  my $usth = $dbh->prepare("INSERT INTO accountlines
   (borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding)
-  values (?,?,now(),?,'Payment,thanks','Pay',?)");
+  VALUES (?,?,now(),?,'Payment,thanks','Pay',?)");
   $usth->execute($borrowernumber,$nextaccntno,0-$data,0-$amountleft);
   $usth->finish;
   UpdateStats($branch,'payment',$data,'','','',$borrowernumber);
@@ -142,35 +142,34 @@ sub makepayment{
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
   my $newamtos=0;
-  my $sth=$dbh->prepare("Select * from accountlines where  borrowernumber=? and accountno=?");
+  my $sth=$dbh->prepare("SELECT * FROM accountlines WHERE  borrowernumber=? AND accountno=?");
   $sth->execute($borrowernumber,$accountno);
   my $data=$sth->fetchrow_hashref;
   $sth->finish;
 
-  $dbh->do(<<EOT);
-        UPDATE  accountlines
+  $dbh->do("UPDATE  accountlines
         SET     amountoutstanding = 0
         WHERE   borrowernumber = $borrowernumber
           AND   accountno = $accountno
-EOT
+        ");
 
 #  print $updquery;
-  $dbh->do(<<EOT);
+  $dbh->do("
         INSERT INTO     accountoffsets
                         (borrowernumber, accountno, offsetaccount,
                          offsetamount)
         VALUES          ($borrowernumber, $accountno, $nextaccntno, $newamtos)
-EOT
+        ");
 
   # create new line
   my $payment=0-$amount;
-  $dbh->do(<<EOT);
+  $dbh->do("
         INSERT INTO     accountlines
                         (borrowernumber, accountno, date, amount,
                          description, accounttype, amountoutstanding)
         VALUES          ($borrowernumber, $nextaccntno, now(), $payment,
                         'Payment,thanks - $user', 'Pay', 0)
-EOT
+        ");
 
   # FIXME - The second argument to &UpdateStats is supposed to be the
   # branch code.
@@ -190,8 +189,6 @@ EOT
 Returns the next unused account number for the patron with the given
 borrower number.
 
-C<$dbh> is a DBI::db handle to the Koha database.
-
 =cut
 
 #'
@@ -201,8 +198,8 @@ sub getnextacctno {
   my $nextaccntno = 1;
   my $dbh = C4::Context->dbh;
   my $sth = $dbh->prepare("SELECT * FROM accountlines
-  WHERE (borrowernumber = ?)
-  ORDER BY accountno DESC");
+                                WHERE (borrowernumber = ?)
+                                ORDER BY accountno DESC");
   $sth->execute($borrowernumber);
   if (my $accdata=$sth->fetchrow_hashref){
     $nextaccntno = $accdata->{'accountno'} + 1;
@@ -222,8 +219,8 @@ sub getnextacctno {
 sub fixaccounts {
   my ($borrowernumber,$accountno,$amount)=@_;
   my $dbh = C4::Context->dbh;
-  my $sth=$dbh->prepare("Select * from accountlines where borrowernumber=?
-     and accountno=?");
+  my $sth=$dbh->prepare("SELECT * FROM accountlines WHERE borrowernumber=?
+     AND accountno=?");
   $sth->execute($borrowernumber,$accountno);
   my $data=$sth->fetchrow_hashref;
         # FIXME - Error-checking
@@ -245,14 +242,14 @@ sub returnlost{
   my ($borrowernumber,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
   my $borrower=GetMember($borrowernumber,'borrowernumber');
-  my $sth=$dbh->prepare("Update issues set returndate=now() where
-  borrowernumber=? and itemnumber=? and returndate is null");
+  my $sth=$dbh->prepare("UPDATE issues SET returndate=now() WHERE
+  borrowernumber=? AND itemnumber=? AND returndate IS NULL");
   $sth->execute($borrowernumber,$itemnum);
   $sth->finish;
   my @datearr = localtime(time);
   my $date = (1900+$datearr[5])."-".($datearr[4]+1)."-".$datearr[3];
   my $bor="$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
-  $sth=$dbh->prepare("Update items set paidfor=? where itemnumber=?");
+  $sth=$dbh->prepare("UPDATE items SET paidfor=? WHERE itemnumber=?");
   $sth->execute("Paid for by $bor $date",$itemnum);
   $sth->finish;
 }
@@ -346,13 +343,13 @@ sub fixcredit{
   if ($barcode ne ''){
     my $item=GetBiblioFromItemNumber('',$barcode);
     my $nextaccntno = getnextacctno($borrowernumber);
-    my $query="Select * from accountlines where (borrowernumber=?
-    and itemnumber=? and amountoutstanding > 0)";
+    my $query="SELECT * FROM accountlines WHERE (borrowernumber=?
+    AND itemnumber=? AND amountoutstanding > 0)";
     if ($type eq 'CL'){
-      $query.=" and (accounttype = 'L' or accounttype = 'Rep')";
+      $query.=" AND (accounttype = 'L' OR accounttype = 'Rep')";
     } elsif ($type eq 'CF'){
-      $query.=" and (accounttype = 'F' or accounttype = 'FU' or
-      accounttype='Res' or accounttype='Rent')";
+      $query.=" AND (accounttype = 'F' OR accounttype = 'FU' OR
+      accounttype='Res' OR accounttype='Rent')";
     } elsif ($type eq 'CB'){
       $query.=" and accounttype='A'";
     }
@@ -369,22 +366,22 @@ sub fixcredit{
         $amountleft = 0;
      }
           my $thisacct = $accdata->{accountno};
-     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
-     where (borrowernumber = ?) and (accountno=?)");
+     my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
+     WHERE (borrowernumber = ?) AND (accountno=?)");
      $usth->execute($newamtos,$borrowernumber,$thisacct);
      $usth->finish;
-     $usth = $dbh->prepare("insert into accountoffsets
+     $usth = $dbh->prepare("INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
-     values (?,?,?,?)");
+     VALUES (?,?,?,?)");
      $usth->execute($borrowernumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
      $usth->finish;
   }
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
-  my $sth = $dbh->prepare("select * from accountlines
-  where (borrowernumber = ?) and (amountoutstanding >0)
-  order by date");
+  my $sth = $dbh->prepare("SELECT * FROM accountlines
+  WHERE (borrowernumber = ?) AND (amountoutstanding >0)
+  ORDER BY date");
   $sth->execute($borrowernumber);
 #  print $query;
   # offset transactions
@@ -397,13 +394,13 @@ sub fixcredit{
         $amountleft = 0;
      }
      my $thisacct = $accdata->{accountno};
-     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
-     where (borrowernumber = ?) and (accountno=?)");
+     my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
+     WHERE (borrowernumber = ?) AND (accountno=?)");
      $usth->execute($newamtos,$borrowernumber,$thisacct);
      $usth->finish;
-     $usth = $dbh->prepare("insert into accountoffsets
+     $usth = $dbh->prepare("INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
-     values (?,?,?,?)");
+     VALUE (?,?,?,?)");
      $usth->execute($borrowernumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
      $usth->finish;
   }
@@ -432,9 +429,9 @@ sub refund{
   # begin transaction
   my $nextaccntno = getnextacctno($borrowernumber);
   # get lines with outstanding amounts to offset
-  my $sth = $dbh->prepare("select * from accountlines
-  where (borrowernumber = ?) and (amountoutstanding<0)
-  order by date");
+  my $sth = $dbh->prepare("SELECT * FROM accountlines
+  WHERE (borrowernumber = ?) AND (amountoutstanding<0)
+  ORDER BY date");
   $sth->execute($borrowernumber);
 #  print $amountleft;
   # offset transactions
@@ -448,13 +445,13 @@ sub refund{
      }
 #     print $amountleft;
      my $thisacct = $accdata->{accountno};
-     my $usth = $dbh->prepare("update accountlines set amountoutstanding= ?
-     where (borrowernumber = ?) and (accountno=?)");
+     my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
+     WHERE (borrowernumber = ?) AND (accountno=?)");
      $usth->execute($newamtos,$borrowernumber,$thisacct);
      $usth->finish;
-     $usth = $dbh->prepare("insert into accountoffsets
+     $usth = $dbh->prepare("INSERT INTO accountoffsets
      (borrowernumber, accountno, offsetaccount,  offsetamount)
-     values (?,?,?,?)");
+     VALUES (?,?,?,?)");
      $usth->execute($borrowernumber,$accdata->{'accountno'},$nextaccntno,$newamtos);
      $usth->finish;
   }
