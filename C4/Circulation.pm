@@ -67,7 +67,7 @@ Also deals with stocktaking.
 
 # FIXME subs that should probably be elsewhere
 push @EXPORT, qw(
-  &fixoverduesonreturn
+  &FixOverduesOnReturn
 );
 
 # subs to deal with issuing a book
@@ -1278,8 +1278,13 @@ sub AddReturn {
         }
     
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-    # fix up the overdues in accounts...
-        fixoverduesonreturn( $borrower->{'borrowernumber'},
+        # fix up the accounts.....
+        if ($iteminformation->{'itemlost'}) {
+                FixAccountForLostAndReturned($iteminformation, $borrower);
+                $messages->{'WasLost'} = 1;
+        }
+        # fix up the overdues in accounts...
+        FixOverduesOnReturn( $borrower->{'borrowernumber'},
             $iteminformation->{'itemnumber'} );
     
     # find reserves.....
@@ -1318,17 +1323,19 @@ sub AddReturn {
     return ( $doreturn, $messages, $iteminformation, $borrower );
 }
 
-=head2 fixoverdueonreturn
+=head2 FixOverduesOnReturn
 
-    &fixoverdueonreturn($brn,$itm);
+    &FixOverduesOnReturn($brn,$itm);
 
 C<$brn> borrowernumber
 
 C<$itm> itemnumber
 
+internal function, called only by AddReturn
+
 =cut
 
-sub fixoverduesonreturn {
+sub FixOverduesOnReturn {
     my ( $borrowernumber, $item ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1350,6 +1357,103 @@ sub fixoverduesonreturn {
     }
     $sth->finish();
     return;
+}
+
+=head2 FixAccountForLostAndReturned
+
+	&FixAccountForLostAndReturned($iteminfo,$borrower);
+
+Calculates the charge for a book lost and returned (Not exported & used only once)
+
+C<$iteminfo> is a hashref to iteminfo. Only {itemnumber} is used.
+
+C<$borrower> is a hashref to borrower. Only {borrowernumber is used.
+
+Internal function, called by AddReturn
+
+=cut
+
+sub FixAccountForLostAndReturned {
+	my ($iteminfo, $borrower) = @_;
+	my %env;
+	my $dbh = C4::Context->dbh;
+	my $itm = $iteminfo->{'itemnumber'};
+	# check for charge made for lost book
+	my $sth = $dbh->prepare("SELECT * FROM accountlines WHERE (itemnumber = ?) AND (accounttype='L' OR accounttype='Rep') ORDER BY date DESC");
+	$sth->execute($itm);
+	if (my $data = $sth->fetchrow_hashref) {
+	# writeoff this amount
+		my $offset;
+		my $amount = $data->{'amount'};
+		my $acctno = $data->{'accountno'};
+		my $amountleft;
+		if ($data->{'amountoutstanding'} == $amount) {
+		$offset = $data->{'amount'};
+		$amountleft = 0;
+		} else {
+		$offset = $amount - $data->{'amountoutstanding'};
+		$amountleft = $data->{'amountoutstanding'} - $amount;
+		}
+		my $usth = $dbh->prepare("UPDATE accountlines SET accounttype = 'LR',amountoutstanding='0'
+			WHERE (borrowernumber = ?)
+			AND (itemnumber = ?) AND (accountno = ?) ");
+		$usth->execute($data->{'borrowernumber'},$itm,$acctno);
+		$usth->finish;
+	#check if any credit is left if so writeoff other accounts
+		my $nextaccntno = getnextacctno(\%env,$data->{'borrowernumber'},$dbh);
+		if ($amountleft < 0){
+		$amountleft*=-1;
+		}
+		if ($amountleft > 0){
+		my $msth = $dbh->prepare("SELECT * FROM accountlines WHERE (borrowernumber = ?)
+							AND (amountoutstanding >0) ORDER BY date");
+		$msth->execute($data->{'borrowernumber'});
+	# offset transactions
+		my $newamtos;
+		my $accdata;
+		while (($accdata=$msth->fetchrow_hashref) and ($amountleft>0)){
+			if ($accdata->{'amountoutstanding'} < $amountleft) {
+			$newamtos = 0;
+			$amountleft -= $accdata->{'amountoutstanding'};
+			}  else {
+			$newamtos = $accdata->{'amountoutstanding'} - $amountleft;
+			$amountleft = 0;
+			}
+			my $thisacct = $accdata->{'accountno'};
+			my $usth = $dbh->prepare("UPDATE accountlines SET amountoutstanding= ?
+					WHERE (borrowernumber = ?)
+					AND (accountno=?)");
+			$usth->execute($newamtos,$data->{'borrowernumber'},'$thisacct');
+			$usth->finish;
+			$usth = $dbh->prepare("INSERT INTO accountoffsets
+				(borrowernumber, accountno, offsetaccount,  offsetamount)
+				VALUES
+				(?,?,?,?)");
+			$usth->execute($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos);
+			$usth->finish;
+		}
+		$msth->finish;
+		}
+		if ($amountleft > 0){
+			$amountleft*=-1;
+		}
+		my $desc="Book Returned ".$iteminfo->{'barcode'};
+		$usth = $dbh->prepare("INSERT INTO accountlines
+			(borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
+			VALUES (?,?,now(),?,?,'CR',?)");
+		$usth->execute($data->{'borrowernumber'},$nextaccntno,0-$amount,$desc,$amountleft);
+		$usth->finish;
+		$usth = $dbh->prepare("INSERT INTO accountoffsets
+			(borrowernumber, accountno, offsetaccount,  offsetamount)
+			VALUES (?,?,?,?)");
+		$usth->execute($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset);
+		$usth->finish;
+		$usth = $dbh->prepare("UPDATE items SET paidfor='' WHERE itemnumber=?");
+		$usth->execute($itm);
+		$usth->finish;
+	}
+	$sth->finish;
+	return;
 }
 
 =head2 GetItemIssue
