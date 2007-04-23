@@ -41,7 +41,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my $borr = GetMemberDetails( $borrowernumber );
 
 my @bordat;
 $bordat[0] = $borr;
@@ -49,7 +49,7 @@ $bordat[0] = $borr;
 $template->param( BORROWER_INFO => \@bordat );
 
 #get account details
-my ( $numaccts, $accts, $total ) = getboracctrecord( undef, $borr );
+my ( $total , $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
 
 for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
     $accts->[$i]{'date'} = format_date( $accts->[$i]{'date'} );

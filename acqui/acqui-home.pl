@@ -65,7 +65,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # budget
-my ( $flags, $homebranch ) = GetFlagsAndBranchFromBorrower($loggedinuser);
+my $borrower= GetBorrower($loggedinuser);
+my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my @results = GetBookFunds($homebranch);
 my $count = scalar @results;

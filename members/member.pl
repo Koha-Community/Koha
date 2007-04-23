@@ -72,11 +72,11 @@ my ($count,$results);
 
 if(length($member) == 1)
 {
-    ($count,$results)=BornameSearch($member,$orderby,"simple");
+    ($count,$results)=SearchBorrower($member,$orderby,"simple");
 }
 else
 {
-    ($count,$results)=BornameSearch($member,$orderby,"advanced");
+    ($count,$results)=SearchBorrower($member,$orderby,"advanced");
 }
 
 
@@ -84,7 +84,7 @@ my @resultsdata;
 my $background = 0;
 for (my $i=0; $i < $count; $i++){
   #find out stats
-  my ($od,$issue,$fines)=borrdata2($results->[$i]{'borrowernumber'});
+  my ($od,$issue,$fines)=GetBorrowerIssuesAndFines($results->[$i]{'borrowernumber'});
 
   my %row = (
     background => $background,

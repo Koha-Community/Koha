@@ -315,7 +315,7 @@ my %actions;
                                 $template->param(BOOKDETAILS => \@bookdetails);
                                 my %params;
                                 %params->{'borrowernumber'} = $overdue->{'borrowernumber'};
-                                my ($count, $acctlines, $total) = &getboracctrecord(\%params);
+                                my ($total, $acctlines, $count) = &GetBorrowerAcctRecord($overdue->{'borrowernumber'});
                                             $template->param(FINES_TOTAL => $total_fines);
                             $template->param(OWING => $total);
                             my $name= "$borrower->{'firstname'} $borrower->{'surname'}";

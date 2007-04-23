@@ -185,7 +185,8 @@ foreach my $thisbranch ( sort keys %$branches ) {
 $template->param( branchloop => \@branchloop );
 
 # build bookfund list
-my ($flags, $homebranch) = GetFlagsAndBranchFromBorrower($loggedinuser);
+my $borrower= GetBorrower($loggedinuser);
+my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my $count2;
 my @bookfund;

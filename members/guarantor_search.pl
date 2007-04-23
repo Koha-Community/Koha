@@ -65,15 +65,15 @@ my $background = 0;
 if ($member ne ''){
 	if(length($member) == 1)
 	{
-		($count,$results)=GuarantornameSearch($member,$orderby,"simple");
+		($count,$results)=SearchBorrower($member,$orderby,"simple",'A');
 	}
 	else
 	{
-		($count,$results)=GuarantornameSearch($member,$orderby,"advanced");
+		($count,$results)=SearchBorrower($member,$orderby,"advanced",'A');
 	}
 	for (my $i=0; $i < $count; $i++){
 	#find out stats
-	my ($od,$issue,$fines)=borrdata2($results->[$i]{'borrowerid'});
+	my ($od,$issue,$fines)=GetBorrowerIssuesAndFines($results->[$i]{'borrowerid'});
 	my $guarantorinfo=uc($results->[$i]{'surname'})." , ".ucfirst($results->[$i]{'firstname'});
 	my %row = (
 		background => $background,

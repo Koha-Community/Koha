@@ -46,12 +46,10 @@ if ( $borrowernumber eq '' ) {
 }
 
 # get borrower details
-my $data = borrdata( '', $borrowernumber );
+my $data = GetMember( $borrowernumber,'borrowernumber' );
 my $user = $input->remote_user;
 
 # get account details
-my %bor;
-$bor{'borrowernumber'} = $borrowernumber;
 my $branches = GetBranches();
 my $printers = GetPrinters();
 my $branch   = GetBranch( $input, $branches );
@@ -91,7 +89,7 @@ if ( $check == 0 ) {
         recordpayment( $borrowernumber, $total );
     }
 
-    my ( $numaccts, $accts, $total ) = getboracctrecord( '', \%bor );
+    my ( $total, $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
 
 #       creation d'une fonction qui va nous retourner le notify_id dans un tableau
 

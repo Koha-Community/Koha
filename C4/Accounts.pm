@@ -50,51 +50,9 @@ patron.
 =cut
 
 @ISA = qw(Exporter);
-@EXPORT = qw(&checkaccount &recordpayment &fixaccounts &makepayment &manualinvoice
+@EXPORT = qw(&recordpayment &fixaccounts &makepayment &manualinvoice
 &getnextacctno &reconcileaccount);
 
-=head2 checkaccount
-
-  $owed = &checkaccount($borrowernumber, $dbh, $date);
-
-Looks up the total amount of money owed by a borrower (fines, etc.).
-
-C<$borrowernumber> specifies the borrower to look up.
-
-C<$dbh> is a DBI::db handle for the Koha database.
-
-=cut
-
-#'
-sub checkaccount  {
-  #take borrower number
-  #check accounts and list amounts owing
-    my ($borrowernumber,$dbh,$date)=@_;
-    my $select="SELECT SUM(amountoutstanding) AS total
-            FROM accountlines
-        WHERE borrowernumber = ?
-            AND amountoutstanding<>0";
-    my @bind = ($borrowernumber);
-    if ($date && $date ne ''){
-    $select.=" AND date < ?";
-    push(@bind,$date);
-    }
-    #  print $select;
-    my $sth=$dbh->prepare($select);
-    $sth->execute(@bind);
-    my $data=$sth->fetchrow_hashref;
-    my $total = $data->{'total'} || 0;
-    $sth->finish;
-    # output(1,2,"borrower owes $total");
-    #if ($total > 0){
-    #  # output(1,2,"borrower owes $total");
-    #  if ($total > 5){
-    #    reconcileaccount($dbh,$borrowernumber,$total);
-    #  }
-    #}
-    #  pause();
-    return($total);
-}
 
 =head2 recordpayment
 
@@ -286,7 +244,7 @@ EOT
 sub returnlost{
   my ($borrowernumber,$itemnum)=@_;
   my $dbh = C4::Context->dbh;
-  my $borrower=borrdata('',$borrowernumber);
+  my $borrower=GetMember($borrowernumber,'borrowernumber');
   my $sth=$dbh->prepare("Update issues set returndate=now() where
   borrowernumber=? and itemnumber=? and returndate is null");
   $sth->execute($borrowernumber,$itemnum);

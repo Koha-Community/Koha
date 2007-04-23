@@ -59,10 +59,10 @@ my $category_type=$input->param('category_type');
 
  if ( $data{'surname'} eq '') 
  	{
- 		$data=borrdata('',$borrowernumber);
+ 		$data=GetMember($borrowernumber,'borrowernumber');
  		%data=%$data;
  	}
- my ($category_type,$description) = getcategorytype($data{'categorycode'});	
+ my $borrowercategory = GetBorrowercategory($data{'categorycode'});	
 
 $template->param(		borrowernumber  => $borrowernumber,#register number
 				#transform value  in capital or capital for first letter of the word
@@ -70,11 +70,11 @@ $template->param(		borrowernumber  => $borrowernumber,#register number
  				surname         => uc($data{'surname'}),
  				categorycode 	=> $data{'categorycode'},
 				title 		=> $data{'title'},
-				category_type	=> $category_type,
+				category_type	=> $borrowercategory ->{'category_type'},
 	# # 			
  				"title_".$data{'title'} 	    => " SELECTED ",			
  				dateofbirth	=> format_date($data{'dateofbirth'}),
- 				description	=>$description
+ 				description	=> $borrowercategory->{'description'}
 # 				
 				);
 	$template->param(Institution => 1) if ($category_type eq "I");

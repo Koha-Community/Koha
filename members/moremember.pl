@@ -78,7 +78,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 #start the page and read in includes
-my $data           = borrdata( '', $borrowernumber );
+my $data           = GetMember( $borrowernumber ,'borrowernumber');
 my $reregistration = $input->param('reregistration');
 
 if ( not defined $data ) {
@@ -96,9 +96,9 @@ if ( not defined $data ) {
         $borrowernumber, $data->{'dateenrolled'}
     )
 ) if ( $reregistration eq 'y' );
-my ( undef, undef, undef, $category_type ) =
-  getborrowercategory( $data->{'categorycode'} );
-  
+my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+
 # in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
 $template->param( $data->{'categorycode'} => 1 ); 
 
@@ -120,7 +120,7 @@ $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
 $data->{ &expand_sex_into_predicate( $data->{'sex'} ) } = 1;
 
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
-    my $data2 = borrdata( '', $data->{'guarantorid'} );
+    my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
     $data->{'address'}   = $data2->{'address'};
     $data->{'city'}      = $data2->{'city'};
     $data->{'B_address'} = $data2->{'B_address'};
@@ -140,7 +140,7 @@ if ( $category_type eq 'A' ) {
     # It looks like the $i is only being returned to handle walking through
     # the array, which is probably better done as a foreach loop.
     #
-    my ( $count, $guarantees ) = findguarantees( $data->{'borrowernumber'} );
+    my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
     my @guaranteedata;
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         push(
@@ -158,16 +158,15 @@ if ( $category_type eq 'A' ) {
 
 }
 else {
-    my ($guarantorid) = findguarantor( $data->{'borrowernumber'} );
-    ( $template->param( guarantor => 1 ) )
-      if ( ( $data->{'guarantorid'} > '0' ) );
-    if ( $guarantorid->{'borrowernumber'} ) {
-        $template->param(
-            guarantorborrowernumber => $guarantorid->{'borrowernumber'},
-            guarantorcardnumber     => $guarantorid->{'cardnumber'},
-            guarantorfirstname      => $guarantorid->{'firstname'},
-            guarantorsurname        => $guarantorid->{'surname'}
-        );
+    if ($data->{'guarantorid'}){
+      my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
+      $template->param( 
+              guarantor => 1,
+              guarantorborrowernumber => $guarantor->{'borrowernumber'},
+              guarantorcardnumber     => $guarantor->{'cardnumber'},
+              guarantorfirstname      => $guarantor->{'firstname'},
+              guarantorsurname        => $guarantor->{'surname'}
+          );
     }
 }
 
@@ -193,11 +192,8 @@ if ( C4::Context->preference("IndependantBranches") ) {
 $data->{'branchname'} =
   ( ( GetBranchDetail( $data->{'branchcode'} ) )->{'branchname'} );
 
-# Converts the categorycode to the description
-( $data->{'categorycode'}, undef, undef ) =
-  &getborrowercategory( $data->{'categorycode'} );
 
-my ( $numaccts, $accts, $total ) = getboracctrecord( '', \%bor );
+my ( $total, $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
 my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );
 my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 ( $template->param( lib1 => $lib1 ) ) if ($lib1);
@@ -205,7 +201,7 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 
 # current issues
 #
-my ( $count, $issue ) = borrissues($borrowernumber);
+my ( $count, $issue ) = GetPendingIssues($borrowernumber);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = ParseDate('today');
 my @issuedata;

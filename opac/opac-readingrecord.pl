@@ -69,7 +69,7 @@ if ( $limit eq 'full' ) {
 else {
     $limit = 50;
 }
-my ( $count, $issues ) = allissues( $borrowernumber, $order2, $limit );
+my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order2, $limit );
 
 # add the row parity
 #my $num = 0;

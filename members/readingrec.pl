@@ -33,7 +33,7 @@ my $input=new CGI;
 
 my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=borrdata('',$borrowernumber);
+my $data=GetMember($borrowernumber,'borrowernumber');
 my $order=$input->param('order');
 my $order2=$order;
 if ($order2 eq ''){
@@ -49,7 +49,7 @@ if ($limit){
 else {
   $limit=50;
 }
-my ($count,$issues)=allissues($borrowernumber,$order2,$limit);
+my ($count,$issues)=GetAllIssues($borrowernumber,$order2,$limit);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",

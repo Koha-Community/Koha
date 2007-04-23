@@ -34,7 +34,7 @@ my $input=new CGI;
 my $borrowernumber=$input->param('borrowernumber');
 
 #get borrower details
-my $data=borrdata('',$borrowernumber);
+my $data=GetMember($borrowernumber,'borrowernumber');
 my $add=$input->param('add');
 
 if ($add){

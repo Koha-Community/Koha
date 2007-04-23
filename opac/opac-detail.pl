@@ -110,7 +110,7 @@ foreach ( keys %{$dat} ) {
 my $reviews = getreviews( $biblionumber, 1 );
 foreach ( @$reviews ) {
     my $borrower_number_review = $_->{borrowernumber};
-    my $borrowerData           = GetMember('',$borrower_number_review);
+    my $borrowerData           = GetMember($borrower_number_review,'borrowernumber');
     # setting some borrower info into this hash
     $_->{title}     = $borrowerData->{'title'};
     $_->{surname}   = $borrowerData->{'surname'};

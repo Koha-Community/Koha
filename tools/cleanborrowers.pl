@@ -114,13 +114,14 @@ if ( $params->{'step3'} ) {
         if ( $radio eq 'trash' ) {
             my $i;
             for ( $i = 0 ; $i < $totalDel ; $i++ ) {
-                DeleteBorrower( $membersToDelete->[$i]->{'borrowernumber'} );
+                MoveMemberToDeleted( $membersToDelete->[$i]->{'borrowernumber'} );
+                DelMember( $membersToDelete->[$i]->{'borrowernumber'} );
             }
         }
         else {    # delete completly.
             my $i;
             for ( $i = 0 ; $i < $totalDel ; $i++ ) {
-               DelBorrowerCompletly($membersToDelete->[$i]->{'borrowernumber'});
+               DelMember($membersToDelete->[$i]->{'borrowernumber'});
             }
         }
         $template->param(

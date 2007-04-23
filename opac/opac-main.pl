@@ -68,7 +68,7 @@ if($limit) {
     );
 }
 
-my $borrower = GetMember( '', $borrowernumber );
+my $borrower = GetMember( $borrowernumber,'borrowernumber' );
 my @languages;
 my $counter = 0;
 my $langavail = getTranslatedLanguages('opac');

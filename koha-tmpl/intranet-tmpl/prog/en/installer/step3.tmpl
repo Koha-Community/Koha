@@ -1,4 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Web Installer &rsaquo; Step 3</title>
+<!--TMPL_IF Name="finish"--><meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl"><!--/TMPL_IF-->
 <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
 <div>
 <h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/en/images/koha.org-logo.gif" /></h1>
@@ -75,7 +76,10 @@ function Hide(link) {
 }
 </script>
 <!--/TMPL_IF-->
-
+<!--TMPL_IF Name="finish"-->
+  <h1>Congratulations, Installation complete</h1>
+  
+<!--/TMPL_IF-->
 <!--TMPL_IF Name="selectframeworks"-->
   <h2 align="center">Selecting Default Settings</h2>
   <form name="frameworkselection" method="post" action="install.pl">
@@ -98,7 +102,7 @@ function Hide(link) {
   <!--TMPL_LOOP Name="frameworks"-->
     <div style="border:1px;">
     <p>
-    <!--TMPL_IF Name="mandatory"--><input type="checkbox" Name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" checked />
+    <!--TMPL_IF Name="checked"--><input type="checkbox" Name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" checked />
     <!--TMPl_ELSE--><input type="checkbox" Name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" />
     <!--/TMPL_IF-->
     <!--TMPL_VAR Name="fwkdescription"-->
@@ -187,6 +191,6 @@ Alternatively, if you are upgrading from a previous version of Koha, you can <a 
 <a href="install.pl?step=3&amp;op=selectframeworks" class="button">Continue to Framework Selection</a>
   </div>
 <!--/TMPL_IF-->
-</div>
+
 </body>
 </html>

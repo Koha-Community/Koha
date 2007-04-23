@@ -69,7 +69,7 @@ my $date = sprintf( '%04d-%02d-%02d', Today() );
 
 if ($findborrower) {
     my ( $count, $borrowers ) =
-      BornameSearch($findborrower, 'cardnumber', 'web' );
+      SearchBorrower($findborrower, 'cardnumber', 'web' );
 
     my @borrowers = @$borrowers;
 

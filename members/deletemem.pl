@@ -107,7 +107,8 @@ $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcol
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-	DeleteBorrower($member);
+	MoveMemberToDeleted($member);
+	DelMember($member);
 	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 

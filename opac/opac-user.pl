@@ -92,7 +92,7 @@ foreach my $issue ( @$issues ) {
         $issue->{'reserved'} = 1;
     }
     
-    my ( $numaccts, $accts, $total ) = getboracctrecord( undef, $borr );
+    my ( $total , $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
     my $charges = 0;
     foreach my $ac (@$accts) {
         if ( $ac->{'itemnumber'} == $issue->{'itemnumber'} ) {

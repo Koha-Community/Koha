@@ -47,9 +47,10 @@ my $dbh = C4::Context->dbh;
 my $categorycode=$input->param('categorycode');
 my $category_type;
 $category_type = $input->param('category_type');
-
-my $desc;
-($category_type,$desc) = getcategorytype($categorycode) unless ($category_type or !($categorycode));
+unless ($category_type or !($categorycode)){
+  my $borrowercategory= GetBorrowercategory($categorycode);
+  $category_type = $borrowercategory->{'category_type'};
+}
 
 die "NO CATEGORY TYPE !" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
@@ -91,7 +92,7 @@ $template->param( "mandatory$_" => 1);
 }
 $template->param("add"=>1) if ($op eq 'add');
 $template->param( "checked" => 1) if ($nodouble eq 1);
-($borrower_data=borrdata('',$borrowernumber)) if($op eq 'modify');
+($borrower_data=GetMember($borrowernumber,'borrowernumber')) if($op eq 'modify');
 
 # if a add or modify is requested => check validity of data.
 if ($step eq 0){
@@ -110,17 +111,19 @@ if ($op eq 'add' or $op eq 'modify') {
 	# WARN : some tests must be done whatever the step, because the librarian can click on any tab.
 	#############test for member being unique #############
 	if ($op eq 'add'){
-		(my $category_type_send=$category_type ) if ($category_type eq 'I'); 
- 		my $check_category; # recover the category code of the doublon suspect borrowers
-	   ($check_member,$check_category)= checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
-	
-# 	recover the category type if the borrowers is a doublon	
-	($check_categorytype,undef)=getcategorytype($check_category);
+          my $category_type_send=$category_type if ($category_type eq 'I'); 
+          my $check_category; # recover the category code of the doublon suspect borrowers
+          ($check_member,$check_category)= checkuniquemember($category_type_send,$data{'surname'},$data{'firstname'},format_date_in_iso($data{'dateofbirth'}));
+          
+  # 	recover the category type if the borrowers is a doublon	
+          my $tmpborrowercategory=GetBorrowercategory($check_category);
+          $check_categorytype=$tmpborrowercategory->{'category_type'};
+          
 	}
 
 #recover all data from guarantor address phone ,fax... 
 if ($category_type eq 'C' and $guarantorid ne '' ){
-			my $guarantordata=getguarantordata($guarantorid);
+			my $guarantordata=GetMember($guarantorid);
 			$guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
 			if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
 				$data{'contactfirstname'}=$guarantordata->{'firstname'};	
@@ -155,9 +158,9 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
         my $dateofbirthmandatory=0;
         map {$dateofbirthmandatory=1 if $_ eq "dateofbirth"} @field_check;
         if ($category_type ne 'I' && $data{dateofbirth} && $dateofbirthmandatory) {
-          my $age = get_age(format_date_in_iso($data{dateofbirth}));
-          my (undef,$agelimitmin,$agelimitmax,undef)=getborrowercategory($data{'categorycode'});   
-          if (($age > $agelimitmax) or ($age < $agelimitmin)) {
+          my $age = GetAge(format_date_in_iso($data{dateofbirth}));
+          my $borrowercategory=GetBorrowercategory($data{'categorycode'});   
+          if (($age > $borrowercategory->{'upperagelimit'}) or ($age < $borrowercategory->{'dateofbirthrequired'})) {
             push @errors, 'ERROR_age_limitations';
             $nok = 1;
           }
@@ -166,27 +169,23 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 
 # STEP 2
 	if ($step eq 2) {
-	
-	
-			if ( ($data{'userid'} eq '')){
-				my $onefirstnameletter=substr($data{'firstname'},0,1);
-				my $fivesurnameletter=substr($data{'surname'},0,5);
-				$data{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
-			}
-			if ($op eq 'add' and $data{'dateenrolled'} eq ''){
- 				my $today= sprintf('%04d-%02d-%02d', Today());
-				#insert ,in field "dateenrolled" , the current date
-				$data{'dateenrolled'}=$today;
-				#if date expiry is null u must calculate the value only in this case
-				$data{'dateexpiry'} = calcexpirydate($data{'categorycode'},$today);
-			}
-			if ($op eq 'modify' ){
-			my $today= sprintf('%04d-%02d-%02d', Today());
-# 			if date expiry is null u must calculate the value only in this case
-			if ($data{'dateexpiry'} eq ''){
-			$data{'dateexpiry'} = calcexpirydate($data{'categorycode'},$today);
- 			}
-		}
+            if ( ($data{'userid'} eq '')){
+              my $onefirstnameletter=substr($data{'firstname'},0,1);
+              my $fivesurnameletter=substr($data{'surname'},0,5);
+              $data{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
+            }
+            if ($op eq 'add' and $data{'dateenrolled'} eq ''){
+              my $today= sprintf('%04d-%02d-%02d', Today());
+              #insert ,in field "dateenrolled" , the current date
+              $data{'dateenrolled'}=$today;
+              $data{'dateexpiry'} = GetExpiryDate($data{'categorycode'},$today);
+            }
+            if ($op eq 'modify' ){
+              unless ($data{'dateexpiry'}){
+                my $today= sprintf('%04d-%02d-%02d', Today());
+                $data{'dateexpiry'} = GetExpiryDate($data{'categorycode'},$today);
+              }
+            }
 	}
 # STEP 3
 	if ($step eq 3) {
@@ -196,7 +195,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 		if ($op eq 'modify'){
 			# test to know if another user have the same password and same login		
 			if ($loginexist eq 0) {
-				&modmember(%data);		
+				&ModMember(%data);		
 			}
 			else {
 				push @errors, "ERROR_login_exist";
@@ -208,7 +207,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 				push @errors, "ERROR_login_exist";
 				$nok=1;
 			} else {
-				$borrowernumber = &newmember(%data);
+				$borrowernumber = &AddMember(%data);
 			        if ($data{'organisations'}){				    
 				    # need to add the members organisations
 				    my @orgs=split(/\|/,$data{'organisations'});
@@ -245,7 +244,7 @@ if ($delete){
 	my $data;
 # test to now if u add or modify a borrower (modify =>to take all carateristic of the borrowers)
 	if (!$op and !$data{'surname'}) {
-		$data=borrdata('',$borrowernumber);
+		$data=GetMember($borrowernumber,'borrowernumber');
 		%data=%$data;
 	}
 	if (C4::Context->preference("IndependantBranches")) {

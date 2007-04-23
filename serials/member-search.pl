@@ -43,7 +43,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ($searchstring) {
-    my ( $count, $members ) = &BornameSearch( '', $searchstring, "surname" );
+    my ( $count, $members ) = &SearchBorrower( '', $searchstring, "surname" );
 
     $template->param(
         subscriptionid => $subscriptionid,

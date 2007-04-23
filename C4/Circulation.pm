@@ -26,7 +26,6 @@ use C4::Stats;
 use C4::Reserves2;
 use C4::Koha;
 use C4::Biblio;
-use C4::Accounts;
 use C4::Reserves2;
 use C4::Members;
 use C4::Date;
@@ -714,8 +713,8 @@ sub CanBookBeIssued {
     #
 
     # DEBTS
-    my $amount =
-      checkaccount( $borrower->{'borrowernumber'}, $dbh, $duedate );
+    my ($amount) =
+      GetBorrowerAcctRecord( $borrower->{'borrowernumber'}, $duedate );
     if ( C4::Context->preference("IssuingInProcess") ) {
         my $amountlimit = C4::Context->preference("noissuescharge");
         if ( $amount > $amountlimit && !$inprocess ) {
@@ -1661,7 +1660,7 @@ sub AddRenewal {
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
         my $accountno = getnextacctno( $borrowernumber );
-        my $item = GetBiblioFromItemNumbe(r$itemnumber);
+        my $item = GetBiblioFromItemNumber($itemnumber);
         $sth = $dbh->prepare(
                 "INSERT INTO accountlines
                     (borrowernumber,accountno,date,amount,

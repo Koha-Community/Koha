@@ -41,7 +41,7 @@ my $branch=$input->param('pickup');
 my @rank=$input->param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
-my $borrowernumber=borrdata($borrower,'');
+my $borrowernumber=GetMember($borrower,'cardnumber');
 my $checkitem=$input->param('checkitem');
 my $found;
 

@@ -48,12 +48,10 @@ my ($template, $loggedinuser, $cookie)
 
 my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=borrdata('',$borrowernumber);
+my $data=GetMember($borrowernumber,'borrowernumber');
 
 #get account details
-my %bor;
-$bor{'borrowernumber'}=$borrowernumber;
-my ($numaccts,$accts,$total)=getboracctrecord('',\%bor);
+my ($numaccts,$accts,$total)=GetBorrowerAcctRecord($borrowernumber);
 my $totalcredit;
 if($total <= 0){
 	$totalcredit = 1;
