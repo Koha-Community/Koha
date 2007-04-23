@@ -246,7 +246,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 #
 # find reserves
 #
-# my ($rescount,$reserves)=FindReserves('',$borrowernumber); #From C4::Reserves2
+# my ($rescount,$reserves)=FindReserves('',$borrowernumber); #From C4::Reserves
 # my @reservedata;
 # $toggle = 0;
 # foreach my $reserveline (@$reserves) {

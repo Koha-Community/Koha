@@ -760,7 +760,7 @@ sub GetItemsInfo {
         if ( $datedue eq '' ) {
             #$datedue="Available";
             my ( $restype, $reserves ) =
-              C4::Reserves2::CheckReserves( $data->{'itemnumber'} );
+              CheckReserves( $data->{'itemnumber'} );
             if ($restype) {
 
                 #$datedue=$restype;
@@ -3649,6 +3649,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.198  2007/04/23 15:21:17  tipaul
+# renaming currenttransfers to transferstoreceive
+#
 # Revision 1.197  2007/04/18 17:00:14  tipaul
 # removing all useless %env / $env
 #

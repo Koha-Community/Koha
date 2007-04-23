@@ -875,6 +875,9 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.56  2007/04/23 15:21:17  tipaul
+# renaming currenttransfers to transferstoreceive
+#
 # Revision 1.55  2007/04/17 08:48:00  tipaul
 # circulation cleaning continued: bufixing
 #
@@ -944,7 +947,7 @@ Joshua Ferraro <jmf at liblime dot com>
 # In this commit, I created a "fake" user when insecure=ON. It has a fake branch. You may find better to have the 1st branch in branch table instead of a fake one.
 #
 # Revision 1.43.2.8  2006/12/19 16:48:16  alaurin
-# reident programs, and adding branchcode value in reserves2
+# reident programs, and adding branchcode value in reserves
 #
 # Revision 1.43.2.7  2006/12/06 21:55:38  hdl
 # Adding ModZebrations for servers to get serverinfos in Context.pm

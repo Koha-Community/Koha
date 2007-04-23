@@ -43,7 +43,7 @@ my $CancelItemnumber=$input->param('CancelItemnumber');
 
 # 2 possibilitys : cancel an item reservation, or modify or cancel the queded list
 
-# 1) cancel an item reservation by fonction GlobalCancel (in reserves2.pm)
+# 1) cancel an item reservation by fonction GlobalCancel (in reserves.pm)
 if ($CancelBorrowerNumber) {
 	GlobalCancel($CancelItemnumber, $CancelBorrowerNumber);
 	$biblionumber[0] = $CancelBiblioNumber,
@@ -52,7 +52,7 @@ if ($CancelBorrowerNumber) {
 # 2) Cancel or modify the queue list of reserves (without item linked)
 else {
 	for (my $i=0;$i<$count;$i++){
-		UpdateReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves2
+		UpdateReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves
 	}
 }
 my $from=$input->param('from');

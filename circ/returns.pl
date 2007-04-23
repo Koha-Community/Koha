@@ -531,16 +531,3 @@ $template->param(
 
 # actually print the page!
 output_html_with_http_headers $query, $cookie, $template->output;
-
-sub cuecatbarcodedecode {
-    my ($barcode) = @_;
-    chomp($barcode);
-    my @fields = split( /\./, $barcode );
-    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
-    if ( $#results == 2 ) {
-        return $results[2];
-    }
-    else {
-        return $barcode;
-    }
-}

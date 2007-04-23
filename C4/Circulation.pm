@@ -68,6 +68,7 @@ Also deals with stocktaking.
 # FIXME subs that should probably be elsewhere
 push @EXPORT, qw(
   &FixOverduesOnReturn
+  &cuecatbarcodedecode
 );
 
 # subs to deal with issuing a book
@@ -99,9 +100,11 @@ push @EXPORT, qw(
 
 # subs to remove
 push @EXPORT, qw(
-  &decode
   &dotransfer
 );
+
+# FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
+# FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
 
 =head2 decode
 
@@ -116,9 +119,32 @@ returns it.
 
 =cut
 
-# FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
+sub cuecatbarcodedecode {
+    my ($barcode) = @_;
+    chomp($barcode);
+    my @fields = split( /\./, $barcode );
+    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
+    if ( $#results == 2 ) {
+        return $results[2];
+    }
+    else {
+        return $barcode;
+    }
+}
 
-# FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
+=head2 decode
+
+=head3 $str = &decode($chunk);
+
+=over 4
+
+=item Decodes a segment of a string emitted by a CueCat barcode scanner and
+returns it.
+
+=back
+
+=cut
+
 sub decode {
     my ($encoded) = @_;
     my $seq =
@@ -256,9 +282,6 @@ sub transferbook {
     return ( $dotransfer, $messages, $biblio );
 }
 
-# Not exported
-# FIXME - This is only used in &transferbook. Why bother making it a
-# separate function?
 sub dotransfer {
     my ( $itm, $fbr, $tbr ) = @_;
     
@@ -1668,11 +1691,11 @@ sub CanBookBeRenewed {
             $renewokay = 1;
         }
         $sth2->finish;
-        my ( $resfound, $resrec ) = C4::Reserves2::CheckReserves($itemnumber);
+        my ( $resfound, $resrec ) = CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
         }
-        ( $resfound, $resrec ) = C4::Reserves2::CheckReserves($itemnumber);
+        ( $resfound, $resrec ) = CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
         }

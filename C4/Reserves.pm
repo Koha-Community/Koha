@@ -37,7 +37,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
 
 =head1 NAME
 
-C4::Reserves2 - Koha functions for dealing with reservation.
+C4::Reserves - Koha functions for dealing with reservation.
 
 =head1 SYNOPSIS
 

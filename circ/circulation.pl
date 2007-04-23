@@ -728,19 +728,3 @@ $template->param(
     SpecifyDueDate     => C4::Context->preference("SpecifyDueDate")
 );
 output_html_with_http_headers $query, $cookie, $template->output;
-
-####################################################################
-# Extra subroutines,,,
-
-sub cuecatbarcodedecode {
-    my ($barcode) = @_;
-    chomp($barcode);
-    my @fields = split( /\./, $barcode );
-    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
-    if ( $#results == 2 ) {
-        return $results[2];
-    }
-    else {
-        return $barcode;
-    }
-}

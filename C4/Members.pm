@@ -442,7 +442,7 @@ sub patronflags {
         $flags{'ODUES'} = \%flaginfo;
     }
     my $itemswaiting =
-      C4::Reserves2::GetWaitingReserves( $patroninformation->{'borrowernumber'} );
+      GetWaitingReserves( $patroninformation->{'borrowernumber'} );
     my $nowaiting = scalar @$itemswaiting;
     if ( $nowaiting > 0 ) {
         my %flaginfo;
