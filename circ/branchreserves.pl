@@ -35,7 +35,7 @@ use Date::Calc qw(
   Add_Delta_Days
   Date_to_Days
 );
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Koha;
 use C4::Interface::CGI::Output;
 

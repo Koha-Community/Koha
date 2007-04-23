@@ -34,7 +34,7 @@ use Date::Calc qw/Today Date_to_Days/;
 use C4::Output;
 use C4::Interface::CGI::Output;
 use C4::Auth;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Biblio;
 use C4::Koha;
 use C4::Circulation;

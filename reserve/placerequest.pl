@@ -25,7 +25,7 @@ use strict;
 use C4::Biblio;
 use CGI;
 use C4::Output;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Circulation;
 use C4::Members;
 

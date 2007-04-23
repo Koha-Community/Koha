@@ -23,10 +23,10 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Stats;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Koha;
 use C4::Biblio;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Members;
 use C4::Date;
 use Date::Calc qw(
@@ -1173,19 +1173,6 @@ patron who last borrowed the book.
 
 =cut
 
-# FIXME - This API is bogus. There's no need to return $borrower and
-# $iteminformation; the caller can ask about those separately, if it
-# cares (it'd be inefficient to make two database calls instead of
-# one, but &GetMemberDetails and &getiteminformation can be
-# memoized if this is an issue).
-#
-# The ($doreturn, $messages) tuple is redundant: if the return
-# succeeded, that's all the caller needs to know. So &AddReturn can
-# return 1 and 0 on success and failure, and set
-# $C4::Circulation::Circ2::errmsg to indicate the error. Or it can
-# return undef for success, and an error message on error (though this
-# is more C-ish than Perl-ish).
-
 sub AddReturn {
     my ( $barcode, $branch ) = @_;
     my $dbh      = C4::Context->dbh;
@@ -1230,7 +1217,7 @@ sub AddReturn {
         if ($doreturn) {
             my $sth =
             $dbh->prepare(
-    "update issues set returndate = now() where (borrowernumber = ?) and (itemnumber = ?) and (returndate is null)"
+    "UPDATE issues SET returndate = now() WHERE (borrowernumber = ?) AND (itemnumber = ?) AND (returndate IS NULL)"
             );
             $sth->execute( $borrower->{'borrowernumber'},
                 $iteminformation->{'itemnumber'} );
@@ -1263,7 +1250,7 @@ sub AddReturn {
             if ( $tobranch eq C4::Context->userenv->{'branch'} ) {
                     my $sth =
                     $dbh->prepare(
-                            "update branchtransfers set datearrived = now() where itemnumber= ? AND datearrived IS NULL"
+                            "UPDATE branchtransfers SET datearrived = now() WHERE itemnumber= ? AND datearrived IS NULL"
                     );
                     $sth->execute( $iteminformation->{'itemnumber'} );
                     $sth->finish;

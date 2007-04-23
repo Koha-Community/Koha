@@ -1,7 +1,7 @@
 # -*- tab-width: 8 -*-
 # NOTE: This file uses standard 8-character tabs
 
-package C4::Reserves2;
+package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -41,7 +41,7 @@ C4::Reserves2 - Koha functions for dealing with reservation.
 
 =head1 SYNOPSIS
 
-  use C4::Reserves2;
+  use C4::Reserves;
 
 =head1 DESCRIPTION
 

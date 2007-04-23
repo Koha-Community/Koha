@@ -27,7 +27,7 @@ use Digest::MD5 qw(md5_base64);
 use Date::Calc qw/Today Add_Delta_YM/;
 use C4::Log; # logaction
 use C4::Overdues;
-use C4::Reserves2;
+use C4::Reserves;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 

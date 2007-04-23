@@ -27,7 +27,7 @@ use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Date;
 use C4::Circulation;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Members;
 use Date::Calc qw(
   Today

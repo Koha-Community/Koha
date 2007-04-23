@@ -42,7 +42,7 @@ use CGI;
 use C4::Members;
 use Date::Manip;
 use C4::Date;
-use C4::Reserves2;
+use C4::Reserves;
 use C4::Circulation;
 use C4::Koha;
 use C4::Letters;

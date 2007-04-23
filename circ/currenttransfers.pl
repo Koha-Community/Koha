@@ -37,7 +37,7 @@ use Date::Calc qw(
 );
 
 use C4::Koha;
-use C4::Reserves2;
+use C4::Reserves;
 
 my $input = new CGI;
 

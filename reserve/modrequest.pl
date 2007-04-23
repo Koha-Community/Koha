@@ -25,7 +25,7 @@
 use strict;
 use CGI;
 use C4::Output;
-use C4::Reserves2;
+use C4::Reserves;
 
 my $input = new CGI;
 #print $input->header;
