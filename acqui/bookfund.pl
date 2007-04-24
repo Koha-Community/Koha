@@ -21,7 +21,7 @@ use C4::Context;
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+use C4::Output;
 
 my $dbh      = C4::Context->dbh;
 my $input    = new CGI;

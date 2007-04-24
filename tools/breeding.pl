@@ -32,17 +32,14 @@ use strict;
 # standard or CPAN modules used
 use CGI;
 use DBI;
+use MARC::File::USMARC;
 
 # Koha modules used
 use C4::Context;
-use C4::Output;
-use C4::Interface::CGI::Output;
-use C4::Input;
-use C4::Biblio;
-use MARC::File::USMARC;
-
-use C4::Output;
 use C4::Auth;
+use C4::Input;
+use C4::Output;
+use C4::Biblio;
 use C4::Breeding;
 
 #------------------
@@ -103,6 +100,13 @@ my $file;
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
 # $Log$
+# Revision 1.3  2007/04/24 13:54:30  hdl
+# functions that were in C4::Interface::CGI::Output are now in C4::Output.
+# So this implies quite a change for files.
+# Sorry about conflicts which will be caused.
+# directory Interface::CGI should now be dropped.
+# I noticed that many scripts (reports ones, but also some circ/stats.pl or opac-topissues) still use Date::Manip.
+#
 # Revision 1.2  2007/03/09 15:47:55  tipaul
 # rel_3_0 moved to HEAD (introducing new files)
 #

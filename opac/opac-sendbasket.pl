@@ -23,7 +23,7 @@ use MIME::QuotedPrint;
 use MIME::Base64;
 use C4::Biblio;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Biblio;
 
 my $query = new CGI;

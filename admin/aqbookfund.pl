@@ -59,7 +59,6 @@ use C4::Koha;
 use C4::Context;
 use C4::Bookfund;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use C4::Date;
 
 my $dbh = C4::Context->dbh;

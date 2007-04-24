@@ -18,7 +18,7 @@
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+use C4::Output;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

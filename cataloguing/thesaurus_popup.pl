@@ -22,13 +22,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Auth;
 use CGI;
+use C4::Auth;
 use C4::Context;
-
 use C4::Output;
 use C4::Authorities;
-use C4::Interface::CGI::Output;
 # get all the data ....
 my $input = new CGI;
 my $result = $input->param('result');

@@ -33,14 +33,12 @@
 =cut
 
 use strict;
+use CGI;
+use Date::Manip;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Interface::CGI::Output;
-use C4::Interface::CGI::Template;
-use CGI;
 use C4::Members;
-use Date::Manip;
 use C4::Date;
 use C4::Reserves;
 use C4::Circulation;

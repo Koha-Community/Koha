@@ -12,7 +12,6 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Reserves;
 use C4::Circulation;
-use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Members;
 use C4::Biblio;

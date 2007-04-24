@@ -20,12 +20,10 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use CGI;
-use C4::Interface::CGI::Output;
-use C4::Interface::CGI::Template;
 use C4::Koha;
 use C4::Letters;
 use C4::Serials;

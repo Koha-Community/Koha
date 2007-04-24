@@ -19,13 +19,11 @@
 # script to display borrowers account details in the opac
 
 use strict;
-use C4::Output;
 use CGI;
 use C4::Members;
 use C4::Circulation;
 use C4::Auth;
-use C4::Interface::CGI::Output;
-
+use C4::Output;
 use C4::Date;
 
 my $query = new CGI;

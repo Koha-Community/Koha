@@ -65,11 +65,10 @@
 
 use strict;
 use CGI;
-use C4::Output;
 use C4::BookShelves;
 use C4::Biblio;
 use C4::Auth;
-use C4::Interface::CGI::Output;
+use C4::Output;
 
 my $query = new CGI;
 
@@ -281,6 +280,13 @@ sub shelves {
 
 #
 # $Log$
+# Revision 1.13  2007/04/24 13:54:29  hdl
+# functions that were in C4::Interface::CGI::Output are now in C4::Output.
+# So this implies quite a change for files.
+# Sorry about conflicts which will be caused.
+# directory Interface::CGI should now be dropped.
+# I noticed that many scripts (reports ones, but also some circ/stats.pl or opac-topissues) still use Date::Manip.
+#
 # Revision 1.12  2007/04/04 16:46:22  tipaul
 # HUGE COMMIT : code cleaning circulation.
 #

@@ -2,7 +2,7 @@
 
 # Script to manage the opac news.
 # written 11/04
-# Castañeda, Carlos Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina
+# Castaï¿½eda, Carlos Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina
 # Modified to include news to KOHA intranet - tgarip@neu.edu.tr NEU library -Cyprus
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,7 +27,6 @@ use C4::Auth;
 use C4::Koha;
 use C4::Context;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use C4::NewsChannels;
 use C4::Languages;
 use Date::Calc qw/Date_to_Days Today/;

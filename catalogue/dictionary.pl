@@ -20,7 +20,6 @@
 
 use strict;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use C4::Auth;
 use CGI;
 use C4::Search;
@@ -149,7 +148,7 @@ if ($op eq "do_search") {
 	my @authresults;
 	my $authnbresults;
 	while ((my $authtypecode) = $sth->fetchrow) {
-		my ($curauthresults,$nbresults) = authoritysearch($dbh,[''],[''],[''],['contains'],
+		my ($curauthresults,$nbresults) = SearchAuthorities([''],[''],[''],['contains'],
 														\@search,$startfrom*$resultsperpage, $resultsperpage,$authtypecode);
 		if (defined(@$curauthresults)) {
 			for (my $i = 0; $i < @$curauthresults ;$i++) {

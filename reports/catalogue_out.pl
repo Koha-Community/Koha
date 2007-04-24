@@ -20,13 +20,12 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Auth;
 use CGI;
+use C4::Auth;
 use C4::Context;
 use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
-use C4::Interface::CGI::Output;
 use C4::Circulation;
 use Date::Manip;
 

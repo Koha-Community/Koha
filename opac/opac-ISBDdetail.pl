@@ -47,7 +47,6 @@ require Exporter;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use CGI;
 use MARC::Record;
 use C4::Biblio;

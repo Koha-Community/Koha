@@ -99,8 +99,8 @@ if ( $check == 0 ) {
     my $numberofnotify = scalar(@notify);
     for ( my $j = 0 ; $j < scalar(@notify) ; $j++ ) {
         my @loop_pay;
-        my ( $numaccts, $accts, $total ) =
-          GetBorNotifyAcctRecord( '', \%bor, $notify[$j] );
+        my ( $total , $accts, $numaccts) =
+          GetBorNotifyAcctRecord( $borrowernumber, $notify[$j] );
         for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
             my %line;
             if ( $accts->[$i]{'amountoutstanding'} > 0 ) {
@@ -140,7 +140,7 @@ if ( $check == 0 ) {
         borrowernumber => $borrowernumber,
         total          => sprintf( "%.2f", $total )
     );
-    print "Content-Type: text/html\n\n", $template->output;
+    output_html_with_http_headers $input, $cookie, $template->output;
 
 }
 else {

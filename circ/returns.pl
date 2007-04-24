@@ -27,18 +27,17 @@ written 11/3/2002 by Finlay
 
 use strict;
 use CGI;
+use C4::Context;
+use C4::Auth;
+use C4::Output;
 use C4::Circulation;
 use C4::Date;
-use C4::Output;
 use C4::Print;
 use C4::Reserves;
-use C4::Auth;
 use C4::Biblio;
 use C4::Members;
-use C4::Interface::CGI::Output;
 use C4::Branch; # GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
-use C4::Context;
 
 my $query = new CGI;
 

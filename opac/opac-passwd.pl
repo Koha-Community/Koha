@@ -27,7 +27,7 @@ use C4::Context;
 use Digest::MD5 qw(md5_base64);
 use C4::Circulation;
 
-use C4::Interface::CGI::Output;
+use C4::Output;
 
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;

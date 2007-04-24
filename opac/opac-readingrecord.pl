@@ -27,7 +27,7 @@ use C4::Circulation;
 use C4::Date;
 use C4::Members;
 
-use C4::Interface::CGI::Output;
+use C4::Output;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

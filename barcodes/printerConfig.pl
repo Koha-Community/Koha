@@ -31,7 +31,6 @@ use C4::Auth;
 use PDF::API2;
 use PDF::API2::Page;
 use PDF::API2::Util;
-use C4::Interface::CGI::Output;
 
 # This function returns the path to deal with the correct files, considering
 # templates set and language.

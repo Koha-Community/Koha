@@ -5,7 +5,7 @@
 # use Install;
 use InstallAuth;
 use C4::Context;
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Languages;
 
 use strict; # please develop with the strict pragma

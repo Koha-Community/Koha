@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
-use C4::Interface::CGI::Output;
 use C4::Circulation;
 use Date::Calc qw(Delta_Days);
 

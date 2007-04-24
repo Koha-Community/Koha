@@ -22,16 +22,14 @@
 require Exporter;
 
 use strict;
-
 use CGI;
-use C4::Context;
-use C4::Output;
-use C4::Auth;
-
 use PDF::API2;
 use PDF::API2::Page;
 use PDF::API2::PDF::Utils;
-use C4::Interface::CGI::Output;
+
+use C4::Context;
+use C4::Output;
+use C4::Auth;
 
 # This function returns the path to deal with the correct files, considering
 # templates set and language.

@@ -22,7 +22,7 @@ require Exporter;
 use CGI;
 use C4::Auth;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Biblio;
 use C4::Serials;
 

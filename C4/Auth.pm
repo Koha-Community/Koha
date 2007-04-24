@@ -26,7 +26,6 @@ use Digest::MD5 qw(md5_base64);
 require Exporter;
 use C4::Context;
 use C4::Output;    # to get the template
-use C4::Interface::CGI::Output;
 use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches

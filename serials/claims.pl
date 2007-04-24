@@ -7,7 +7,6 @@ use C4::Serials;
 use C4::Acquisition;
 use C4::Output;
 use C4::Bookseller;
-use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Letters;
 

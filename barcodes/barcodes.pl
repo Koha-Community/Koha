@@ -3,7 +3,7 @@
 # script to generate items barcodes
 # written 07/04
 # by Veleda Matias - matias_veleda@hotmail.com - Physics Library UNLP Argentina and
-#    Castañeda Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina and
+#    Castaï¿½eda Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina and
 
 # This file is part of Koha.
 #
@@ -24,7 +24,6 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use C4::Context;
 use C4::Barcodes::PrinterConfig;
 

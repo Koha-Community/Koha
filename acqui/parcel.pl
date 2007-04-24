@@ -59,9 +59,8 @@ use C4::Auth;
 use C4::Acquisition;
 use C4::Bookseller;
 use C4::Biblio;
-use C4::Output;
 use CGI;
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Date;
 
 use strict;

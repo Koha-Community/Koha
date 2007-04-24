@@ -23,7 +23,6 @@ use C4::Circulation;
 use C4::Output;
 use C4::Auth;
 use C4::Print;
-use C4::Interface::CGI::Output;
 use C4::Koha;
 use C4::Branch; # GetBranches
 

@@ -28,7 +28,6 @@ use C4::Output;
 use C4::Reserves;
 use C4::Biblio;
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Branch; # GetBranches
 use C4::Koha;
 

@@ -115,12 +115,10 @@ if it is an order from an existing suggestion : the id of this suggestion.
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Output;
 use C4::Acquisition;
 use C4::Suggestions;
 use C4::Biblio;
 use C4::Output;
-use C4::Interface::CGI::Output;
 
 
 

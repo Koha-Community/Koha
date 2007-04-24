@@ -27,7 +27,6 @@ use C4::Biblio;             # to use &GetBiblioItemData &itemissues
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
 use C4::Auth;
-use C4::Interface::CGI::Output;
 use C4::Date;
 use C4::Circulation;  # to use itemissues
 

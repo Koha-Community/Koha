@@ -21,11 +21,10 @@
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Output;  # contains gettemplate
 use CGI;
 use C4::Auth;
 use C4::Biblio;
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Date;
 
 my $query=new CGI;

@@ -57,12 +57,11 @@ the basket number to know on which basket this script have to add a new order.
 use strict;
 use C4::Search;
 use CGI;
-use C4::Output;
 use C4::Bookseller;
 use C4::Biblio;
 
 use C4::Auth;
-use C4::Interface::CGI::Output;
+use C4::Output;
 use C4::Koha;
 
 my $input = new CGI;

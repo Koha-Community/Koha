@@ -32,7 +32,6 @@ use CGI;
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Today Date_to_Days/;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use C4::Auth;
 use C4::Reserves;
 use C4::Biblio;

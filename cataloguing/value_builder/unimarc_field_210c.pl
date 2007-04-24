@@ -24,12 +24,11 @@ use C4::AuthoritiesMarc;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use C4::Interface::CGI::Output;
 use CGI;
 use C4::Search;
 use MARC::Record;
 use C4::Koha;
-
+###TODO To rewrite in order to use SearchAuthorities
 
 =head1
 
@@ -64,10 +63,12 @@ my $function_name= "210c".(int(rand(100000))+1);
 #---- 200$a for isbn
 #---- 200$b for editor
 #---- 200$c (repeated) for collections
-my $sth = $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
-                        left join auth_header on auth_subfield_table.authid=auth_header.authid
-                        where authtypecode='EDITORS' and tag='200' and subfieldcode='a'");
-my $sth2 = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='b' and authid=?");
+ my $sth; 
+#= $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
+#                         left join auth_header on auth_subfield_table.authid=auth_header.authid
+#                         where authtypecode='EDITORS' and tag='200' and subfieldcode='a'");
+ my $sth2;
+ # = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='b' and authid=?");
 $sth->execute;
 my @editors;
 my $authoritysep = C4::Context->preference("authoritysep");
