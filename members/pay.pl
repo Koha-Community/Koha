@@ -89,7 +89,7 @@ if ( $check == 0 ) {
         recordpayment( $borrowernumber, $total );
     }
 
-    my ( $total, $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
+    my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
 #       creation d'une fonction qui va nous retourner le notify_id dans un tableau
 

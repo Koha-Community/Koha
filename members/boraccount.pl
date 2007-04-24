@@ -50,7 +50,7 @@ my $borrowernumber=$input->param('borrowernumber');
 my $data=GetMember($borrowernumber,'borrowernumber');
 
 #get account details
-my ($numaccts,$accts,$total)=GetBorrowerAcctRecord($borrowernumber);
+my ($numaccts,$accts,$total)=GetMemberAccountRecords($borrowernumber);
 my $totalcredit;
 if($total <= 0){
 	$totalcredit = 1;

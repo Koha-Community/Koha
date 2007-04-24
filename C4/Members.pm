@@ -55,15 +55,13 @@ This module contains routines for adding, modifying and deleting members/patrons
 
 #Get data
 push @EXPORT, qw(
-  &SearchBorrower 
+  &SearchMember 
   &GetMemberDetails
   &GetMember
   
   &GetGuarantees 
-  &findguarantor 
-  &GuarantornameSearch
   
-  &GetBorrowerIssuesAndFines
+  &GetMemberIssuesAndFines
   &GetPendingIssues
   &GetAllIssues
   
@@ -76,20 +74,20 @@ push @EXPORT, qw(
   &GetRoadTypes 
   &GetRoadTypeDetails 
   
-  &GetBorrowerAcctRecord
+  &GetMemberAccountRecords
   
   &GetborCatFromCatType 
   &GetBorrowercategory
   
   &GetBorNotifyAcctRecord
-  &GetMembeReregistration
+  &ExtendMemberSubscriptionTo 
   &GetSortDetails
   
-  &GetBorrowersTitles	
+  &GetTitles	
   &GetBorrowersWhoHaveNotBorrowedSince
   &GetBorrowersWhoHaveNeverBorrowed
   &GetBorrowersWithIssuesHistoryOlderThan
-  &GetBorrowersFromSurname 
+  &GetMembersFromSurname 
   
   &GetExpiryDate
 );
@@ -118,9 +116,9 @@ push @EXPORT, qw(
   &MoveMemberToDeleted
 );
 
-=item Searchborrower
+=item SearchMember
 
-  ($count, $borrowers) = &SearchBorrower($searchstring, $type,$category_type);
+  ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type);
 
 Looks up patrons (borrowers) by name.
 
@@ -135,7 +133,7 @@ C<$searchstring> is a space-separated list of search terms. Each term
 must match the beginning a borrower's surname, first name, or other
 name.
 
-C<&SearchBorrower> returns a two-element list. C<$borrowers> is a
+C<&SearchMember> returns a two-element list. C<$borrowers> is a
 reference-to-array; each element is a reference-to-hash, whose keys
 are the fields of the C<borrowers> table in the Koha database.
 C<$count> is the number of elements in C<$borrowers>.
@@ -145,7 +143,7 @@ C<$count> is the number of elements in C<$borrowers>.
 #'
 #used by member enquiries from the intranet
 #called by member.pl
-sub SearchBorrower {
+sub SearchMember {
     my ($searchstring, $orderby, $type,$category_type ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "";
@@ -322,9 +320,9 @@ sub GetMemberDetails {
         return undef;
     }
     my $borrower = $sth->fetchrow_hashref;
-    my ($amount) = GetBorrowerAcctRecord( $borrowernumber);
+    my ($amount) = GetMemberAccountRecords( $borrowernumber);
     $borrower->{'amountoutstanding'} = $amount;
-    my $flags = patronflags( $borrower, $dbh );
+    my $flags = patronflags( $borrower);
     my $accessflagshash;
 
     $sth = $dbh->prepare("select bit,flag from userflags");
@@ -355,7 +353,7 @@ sub GetMemberDetails {
  NOTE!: If you change this function, be sure to update the POD for
  &GetMemberDetails.
 
- $flags = &patronflags($patron, $dbh);
+ $flags = &patronflags($patron);
 
  $flags->{CHARGES}
         {message}    Message showing patron's credit or debt
@@ -386,7 +384,7 @@ sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
     my $dbh=C4::Context->dbh;
-    my ($amount) = GetBorrowerAcctRecord( $patroninformation->{'borrowernumber'});
+    my ($amount) = GetMemberAccountRecords( $patroninformation->{'borrowernumber'});
     if ( $amount > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge");
@@ -513,14 +511,14 @@ sub GetMember {
     }
 }
 
-=item GetBorrowerIssuesAndFines
+=item GetMemberIssuesAndFines
 
-  ($borrowed, $due, $fine) = &GetBorrowerIssuesAndFines($borrowernumber);
+  ($borrowed, $due, $fine) = &GetMemberIssuesAndFines($borrowernumber);
 
 Returns aggregate data about items borrowed by the patron with the
 given borrowernumber.
 
-C<&GetBorrowerIssuesAndFines> returns a three-element array. C<$borrowed> is the
+C<&GetMemberIssuesAndFines> returns a three-element array. C<$borrowed> is the
 number of books the patron currently has borrowed. C<$due> is the
 number of overdue items the patron currently has borrowed. C<$fine> is
 the total fine currently due by the borrower.
@@ -528,7 +526,7 @@ the total fine currently due by the borrower.
 =cut
 
 #'
-sub GetBorrowerIssuesAndFines {
+sub GetMemberIssuesAndFines {
     my ( $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query =
@@ -1088,13 +1086,13 @@ sub GetAllIssues {
 }
 
 
-=head2 GetBorrowerAcctRecord
+=head2 GetMemberAccountRecords
 
-  ($total, $acctlines, $count) = &GetBorrowerAcctRecord($borrowernumber);
+  ($total, $acctlines, $count) = &GetMemberAccountRecords($borrowernumber);
 
 Looks up accounting data for the patron with the given borrowernumber.
 
-C<&GetBorrowerAcctRecord> returns a three-element array. C<$acctlines> is a
+C<&GetMemberAccountRecords> returns a three-element array. C<$acctlines> is a
 reference-to-array, where each element is a reference-to-hash; the
 keys are the fields of the C<accountlines> table in the Koha database.
 C<$count> is the number of elements in C<$acctlines>. C<$total> is the
@@ -1103,7 +1101,7 @@ total amount outstanding for all of the account lines.
 =cut
 
 #'
-sub GetBorrowerAcctRecord {
+sub GetMemberAccountRecords {
     my ($borrowernumber,$date) = @_;
     my $dbh = C4::Context->dbh;
     my @acctlines;
@@ -1486,11 +1484,11 @@ sub add_member_orgs {
 
 }    # sub add_member_orgs
 
-=head2 GetBorrowersFromSurname
+=head2 GetMembersFromSurname
 
 =over 4
 
-\@resutlts = GetBorrowersFromSurname($surname)
+\@resutlts = GetMembersFromSurname($surname)
 this function get the list of borrower names like $surname.
 return :
 the table of results in @results
@@ -1499,7 +1497,7 @@ the table of results in @results
 
 =cut
 
-sub GetBorrowersFromSurname {
+sub GetMembersFromSurname {
     my ($searchstring) = @_;
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
@@ -1716,15 +1714,15 @@ sub GetRoadTypes {
 
 
 
-=head2 GetBorrowersTitles (OUEST-PROVENCE)
+=head2 GetTitles (OUEST-PROVENCE)
 
-  ($borrowertitle)= &GetBorrowersTitles();
+  ($borrowertitle)= &GetTitles();
 
 Looks up the different title . Returns array  with all borrowers title
 
 =cut
 
-sub GetBorrowersTitles {
+sub GetTitles {
     my @borrowerTitle = split /,|\|/,C4::Context->preference('BorrowersTitles');
     unshift( @borrowerTitle, "" );
     return ( \@borrowerTitle);

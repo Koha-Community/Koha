@@ -192,7 +192,7 @@ $data->{'branchname'} =
   ( ( GetBranchDetail( $data->{'branchcode'} ) )->{'branchname'} );
 
 
-my ( $total, $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
+my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );
 my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 ( $template->param( lib1 => $lib1 ) ) if ($lib1);

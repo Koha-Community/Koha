@@ -47,7 +47,7 @@ $bordat[0] = $borr;
 $template->param( BORROWER_INFO => \@bordat );
 
 #get account details
-my ( $total , $accts, $numaccts) = GetBorrowerAcctRecord( $borrowernumber );
+my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
 for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
     $accts->[$i]{'date'} = format_date( $accts->[$i]{'date'} );

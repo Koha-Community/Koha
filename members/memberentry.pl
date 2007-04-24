@@ -325,7 +325,7 @@ if ($delete){
 
 	my $default_borrowertitle;
 	$default_borrowertitle=$data{'title'} ;
- 	my($borrowertitle)=GetBorrowersTitles();
+ 	my($borrowertitle)=GetTitles();
 	my $borrotitlepopup = CGI::popup_menu(-name=>'title',
 					      -id => 'title',
 					      -values=>$borrowertitle,

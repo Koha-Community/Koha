@@ -141,7 +141,7 @@ my $borrowerslist;
 my $message;
 if ($findborrower) {
     my ( $count, $borrowers ) =
-      SearchBorrower($findborrower, 'cardnumber', 'web' );
+      SearchMember($findborrower, 'cardnumber', 'web' );
     my @borrowers = @$borrowers;
     if ( $#borrowers == -1 ) {
         $query->param( 'findborrower', '' );
@@ -163,7 +163,7 @@ my @lines;
 
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
-    my ( $od, $issue, $fines ) = GetBorrowerIssuesAndFines( $borrowernumber );
+    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
     # Warningdate is the date that the warning starts appearing
     my ( $today_year,   $today_month,   $today_day )   = Today();
@@ -248,7 +248,7 @@ if ($barcode) {
     }
     
 # FIXME If the issue is confirmed, we launch another time borrdata2, now display the issue count after issue 
-        my ( $od, $issue, $fines ) = GetBorrowerIssuesAndFines( $borrowernumber );
+        my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
         $template->param(
         issuecount   => $issue,
         );
