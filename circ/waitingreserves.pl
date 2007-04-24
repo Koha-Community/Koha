@@ -74,7 +74,7 @@ if ($item) {
     my $messages;
     my $nextreservinfo;
     my $waiting;
-    ( $messages, $nextreservinfo ) = GlobalCancel( $item, $borrowernumber );
+    ( $messages, $nextreservinfo ) = ModReserveCancelAll( $item, $borrowernumber );
 
     # 		if we have a result
     if ($nextreservinfo) {

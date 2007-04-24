@@ -266,7 +266,7 @@ if ($borrowernumber) {
 
     # new op dev
     # now we show the status of the borrower's reservations
-    my @borrowerreserv = GetReservations( 0, $borrowernumber );
+    my @borrowerreserv = GetReservesFromBorrowernumber$borrowernumber );
     my @reservloop;
     my @WaitingReserveLoop;
     

@@ -442,13 +442,13 @@ sub patronflags {
         }
         $flags{'ODUES'} = \%flaginfo;
     }
-    my $itemswaiting =
-      GetWaitingReserves( $patroninformation->{'borrowernumber'} );
-    my $nowaiting = scalar @$itemswaiting;
+    my @itemswaiting =
+      GetReservesFromBorrowernumber( $patroninformation->{'borrowernumber'},'W' );
+    my $nowaiting = scalar @itemswaiting;
     if ( $nowaiting > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Reserved items available";
-        $flaginfo{'itemlist'} = $itemswaiting;
+        $flaginfo{'itemlist'} = \@itemswaiting;
         $flags{'WAITING'}     = \%flaginfo;
     }
     return ( \%flags );

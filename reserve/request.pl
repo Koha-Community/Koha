@@ -97,7 +97,7 @@ if ($cardnumber) {
 # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
     my $number_reserves =
-      CountReservesFromBorrower( $borrowerinfo->{'borrowernumber'} );
+      GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
     if ( $number_reserves > C4::Context->preference('maxreserves') ) {
         $maxreserves = 1;
@@ -160,7 +160,7 @@ if ($borrowerslist) {
 }
 
 # get existing reserves .....
-my ( $count, $reserves ) = FindReserves($biblionumber);
+my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber);
 my $totalcount = $count;
 my $alreadyreserved;
 
@@ -259,7 +259,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         }
 
         # checking reserve
-        my ($reservedate,$reservedfor,$expectedAt) = GetFirstReserveDateFromItem($itemnumber);
+        my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($itemnumber);
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         if ( defined $reservedate ) {
@@ -326,7 +326,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 # existingreserves building
 my @reserveloop;
 my $branches = GetBranches();
-my ( $count, $reserves ) = FindReservesInQueue($biblionumber);
+my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber);
 foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
     my %reserve;
     my @optionloop;
@@ -350,7 +350,7 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
 
     if ( ( $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) ) {
         my $item = $res->{'itemnumber'};
-        $item = getiteminformation($item,undef);
+        $item = GetBiblioFromItemNumber($item,undef);
         $reserve{'wait'}= 1; 
         $reserve{'holdingbranch'}=$item->{'holdingbranch'};
         $reserve{'biblionumber'}=$item->{'biblionumber'};

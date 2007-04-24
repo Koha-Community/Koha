@@ -911,7 +911,7 @@ if ($borrower and $barcode){
             if ( $resbor eq $borrower->{'borrowernumber'} ) {
 
                 # The item is reserved by the current patron
-                FillReserve($res);
+                ModReserveFill($res);
             }
             elsif ( $restype eq "Waiting" ) {
 
@@ -929,7 +929,7 @@ if ($borrower and $barcode){
                 else {
 
        # set waiting reserve to first in reserve queue as book isn't waiting now
-                    UpdateReserve(
+                    ModReserve(
                         1,
                         $res->{'biblionumber'},
                         $res->{'borrowernumber'},
@@ -1235,7 +1235,7 @@ sub AddReturn {
                     $sth->execute( $iteminformation->{'itemnumber'} );
                     $sth->finish;
     #         now we check if there is a reservation with the validate of transfer if we have one, we can         set it with the status 'W'
-            SetWaitingStatus( $iteminformation->{'itemnumber'} );
+            ModReserveStatus( $iteminformation->{'itemnumber'},'W' );
             }
         else {
             $messages->{'WrongTransfer'} = $tobranch;

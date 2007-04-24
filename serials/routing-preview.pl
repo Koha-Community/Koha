@@ -47,7 +47,7 @@ if($ok){
     my $biblio = $subs->{'biblionumber'};
     
     # get existing reserves .....
-    my ($count,$reserves) = FindReserves($biblio);
+    my ($count,$reserves) = GetReservesFromBiblionumber($biblio);
     my $totalcount = $count;
     foreach my $res (@$reserves) {
         if ($res->{'found'} eq 'W') {
@@ -68,9 +68,9 @@ if($ok){
 
 #       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
 	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
-	    UpdateReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
+	    ModReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
         } else {
-        CreateReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
+        AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
 	}
     }
     

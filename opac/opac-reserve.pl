@@ -53,7 +53,7 @@ $template->param($bibdata);
 $template->param( biblionumber => $biblionumber );
 
 # get the rank number....
-my ( $rank, $reserves ) = FindReserves( $biblionumber, '' );
+my ( $rank, $reserves ) = GetReservesFromBiblionumber( $biblionumber);
 $template->param( reservecount => $rank );
 
 foreach my $res (@$reserves) {
@@ -147,8 +147,7 @@ foreach my $itm (@items) {
       if defined $itm->{'date_due'};
     $itm->{ $itm->{'publictype'} } = 1;
 
-    # FIXME CalcReserveFee is supposed to be internal-use-only
-    my $fee = CalcReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
+    my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
         'a', ( $itm->{'biblioitemnumber'} ) );
     $fee = sprintf "%.02f", $fee;
     $itm->{'reservefee'} = $fee;
@@ -216,7 +215,7 @@ if ( $query->param('item_types_selected') ) {
                 }
             }
             $fee +=
-              CalcReserveFee( undef, $borrowernumber, $biblionumber, 'o',
+              GetReserveFee( undef, $borrowernumber, $biblionumber, 'o',
                 \@reqbibs );
         }
         $proceed = 1;
@@ -254,11 +253,11 @@ elsif ( $query->param('place_reserve') ) {
                 push @reqbibs, $item->{'biblioitemnumber'};
             }
         }
-        CreateReserve( undef, $branch, $borrowernumber, $biblionumber, 'o',
+        AddReserve( $branch, $borrowernumber, $biblionumber, 'o',
             \@reqbibs, $rank, '', $title );
     }
     if ( $query->param('all') ) {
-        CreateReserve( undef, $branch, $borrowernumber, $biblionumber, 'a',
+        AddReserve( $branch, $borrowernumber, $biblionumber, 'a',
             undef, $rank, '', $title );
     }
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
@@ -296,7 +295,7 @@ else {
             debarred => 1
         );
     }
-    my ( $resnum, $reserves ) = FindReserves( '', $borrowernumber );
+    my ( $resnum, $reserves ) = GetReservesFromBorrowernumber( $borrowernumber );
     $template->param( RESERVES => $reserves );
     if ( $resnum >= $MAXIMUM_NUMBER_OF_RESERVES ) {
         $template->param( message => 1 );

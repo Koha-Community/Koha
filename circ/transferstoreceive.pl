@@ -106,7 +106,7 @@ foreach my $br ( keys %$branches ) {
             $getransf{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
 
             # 				we check if we have a reserv for this transfer
-            my @checkreserv = GetReservations( $num->{'itemnumber'} );
+            my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'} );
             if ( $checkreserv[0] ) {
                 my $getborrower =
                   GetMemberDetails( $checkreserv[1] );

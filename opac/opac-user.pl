@@ -141,7 +141,7 @@ $template->param( overdues_count => $overdues_count );
 my $branches = GetBranches();
 
 # now the reserved items....
-my ( $rcount, $reserves ) = FindReserves( undef, $borrowernumber );
+my ( $rcount, $reserves ) = GetReservesFromBorrowernumber( $borrowernumber );
 foreach my $res (@$reserves) {
     $res->{'reservedate'} = format_date( $res->{'reservedate'} );
     my $publictype = $res->{'publictype'};

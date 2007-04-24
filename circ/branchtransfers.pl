@@ -78,7 +78,7 @@ if ( $request eq "KillWaiting" ) {
 my $ignoreRs = 0;
 if ( $request eq "SetWaiting" ) {
     my $item = $query->param('itemnumber');
-    $tobranchcd  = ReserveWaiting( $item, $borrowernumber );
+    ModReserveAffect( $item, $borrowernumber );
     $ignoreRs    = 1;
     $setwaiting  = 1;
     $reqmessage  = 1;

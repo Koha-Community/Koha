@@ -113,7 +113,7 @@ if ( $query->param('resbarcode') ) {
     my $iteminfo   = GetBiblioFromItemNumber($item);
     my $diffBranchSend;
     
-#     addin in ReserveWaiting the possibility to check if the document is expected in this library or not,
+#     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
 # if not we send a value in reserve waiting for not implementting waiting status
 	if ($diffBranchReturned) {
 	$diffBranchSend = $diffBranchReturned;
@@ -122,9 +122,9 @@ if ( $query->param('resbarcode') ) {
 	$diffBranchSend = undef;
 	}
 		 
-    my $tobranchcd = ReserveWaiting( $item, $borrowernumber,$diffBranchSend);
+    ModReserveAffect( $item, $borrowernumber,$diffBranchSend);
 #   check if we have other reservs for this document, if we have a return send the message of transfer
-    my ( $messages, $nextreservinfo ) = OtherReserves($item);
+    my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
 
     my $branchname = GetBranchName( $messages->{'transfert'} );
     my ($borr) = GetMemberDetails( $nextreservinfo, 0 );

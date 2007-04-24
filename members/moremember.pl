@@ -242,24 +242,6 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     push( @issuedata, \%row );
 }
 
-#
-# find reserves
-#
-# my ($rescount,$reserves)=FindReserves('',$borrowernumber); #From C4::Reserves
-# my @reservedata;
-# $toggle = 0;
-# foreach my $reserveline (@$reserves) {
-# 	$reserveline->{'reservedate2'} = format_date($reserveline->{'reservedate'});
-# 	my $restitle;
-# 	my %row = %$reserveline;
-#         $row{toggle} = $toggle++%2;
-# 	if ($reserveline->{'constrainttype'} eq 'o'){
-# 		$restitle=GetReserveTitle($reserveline->{'biblionumber'},$reserveline->{'borrowernumber'},$reserveline->{'reservedate'},$reserveline->{'rtimestamp'});
-# 		%row =  (%row , %$restitle) if $restitle;
-# 	}
-# 	push (@reservedata, \%row);
-# }
-
 ##################################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
@@ -267,7 +249,7 @@ if ($borrowernumber) {
 
     # new op dev
     # now we show the status of the borrower's reservations
-    my @borrowerreserv = GetReservations( 0, $borrowernumber );
+    my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
     my @reservloop;
     foreach my $num_res (@borrowerreserv) {
         my %getreserv;
