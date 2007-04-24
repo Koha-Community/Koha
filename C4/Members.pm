@@ -120,13 +120,16 @@ push @EXPORT, qw(
 
 =item Searchborrower
 
-  ($count, $borrowers) = &SearchBorrower($searchstring, $type);
+  ($count, $borrowers) = &SearchBorrower($searchstring, $type,$category_type);
 
 Looks up patrons (borrowers) by name.
 
 BUGFIX 499: C<$type> is now used to determine type of search.
 if $type is "simple", search is performed on the first letter of the
 surname only.
+
+$category_type is used to get a specified type of user. 
+(mainly adults when creating a child.)
 
 C<$searchstring> is a space-separated list of search terms. Each term
 must match the beginning a borrower's surname, first name, or other
@@ -560,7 +563,7 @@ sub GetBorrowerIssuesAndFines {
 
 =item ModMember
 
-  ($borrowed, $due, $fine) = &ModMember($borrowernumber);
+  &ModMember($borrowernumber);
 
 Modify borrower's data
 
@@ -679,9 +682,10 @@ sub ModMember {
 
 =item AddMember
 
-  $borrowernumber = &ModMember(%borrower);
+  $borrowernumber = &AddMember(%borrower);
 
 insert new borrower into table
+Returns the borrowernumber
 
 =cut
 
@@ -815,7 +819,6 @@ sub changepassword {
         return 0;
     }
     else {
-
         #Everything is good so we can update the information.
         $sth =
           $dbh->prepare(
@@ -829,26 +832,6 @@ sub changepassword {
 }
 
 
-sub UpdateGuarantees {
-    my (%data) = @_;
-    my $dbh = C4::Context->dbh;
-    my ( $count, $guarantees ) = GetGuarantees( $data{'borrowernumber'} );
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-
-        # FIXME
-        # It looks like the $i is only being returned to handle walking through
-        # the array, which is probably better done as a foreach loop.
-        #
-        my $guaquery = qq|UPDATE borrowers 
-			  SET address='$data{'address'}',fax='$data{'fax'}',
- 			      B_city='$data{'B_city'}',mobile='$data{'mobile'}',city='$data{'city'}',phone='$data{'phone'}'
- 			  WHERE borrowernumber='$guarantees->[$i]->{'borrowernumber'}'
-		|;
-        my $sth3 = $dbh->prepare($guaquery);
-        $sth3->execute;
-        $sth3->finish;
-    }
-}
 
 =item fixup_cardnumber
 
@@ -966,6 +949,37 @@ sub GetGuarantees {
     return ( scalar(@$data), $data );
 }
 
+=head2 UpdateGuarantees
+
+  &UpdateGuarantees($parent_borrno);
+  
+
+C<&UpdateGuarantees> borrower data for an adulte and updates all the guarantees
+with the modified information
+
+=cut
+
+#'
+sub UpdateGuarantees {
+    my (%data) = @_;
+    my $dbh = C4::Context->dbh;
+    my ( $count, $guarantees ) = GetGuarantees( $data{'borrowernumber'} );
+    for ( my $i = 0 ; $i < $count ; $i++ ) {
+
+        # FIXME
+        # It looks like the $i is only being returned to handle walking through
+        # the array, which is probably better done as a foreach loop.
+        #
+        my $guaquery = qq|UPDATE borrowers 
+			  SET address='$data{'address'}',fax='$data{'fax'}',
+ 			      B_city='$data{'B_city'}',mobile='$data{'mobile'}',city='$data{'city'}',phone='$data{'phone'}'
+ 			  WHERE borrowernumber='$guarantees->[$i]->{'borrowernumber'}'
+		|;
+        my $sth3 = $dbh->prepare($guaquery);
+        $sth3->execute;
+        $sth3->finish;
+    }
+}
 =head2 GetPendingIssues
 
   ($count, $issues) = &GetPendingIssues($borrowernumber);
@@ -1134,7 +1148,7 @@ total amount outstanding for all of the account lines.
 =cut
 
 sub GetBorNotifyAcctRecord {
-    my ( $params, $notifyid ) = @_;
+    my ( $borrowernumber, $notifyid ) = @_;
     my $dbh = C4::Context->dbh;
     my @acctlines;
     my $numlines = 0;
@@ -1148,7 +1162,7 @@ sub GetBorNotifyAcctRecord {
 		|;
     my $sth = $dbh->prepare($query);
 
-    $sth->execute( $params->{'borrowernumber'}, $notifyid );
+    $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         $acctlines[$numlines] = $data;
@@ -1156,7 +1170,7 @@ sub GetBorNotifyAcctRecord {
         $total += $data->{'amountoutstanding'};
     }
     $sth->finish;
-    return ( $numlines, \@acctlines, $total );
+    return ( $total, \@acctlines, $numlines );
 }
 
 =head2 checkuniquemember (OUEST-PROVENCE)
