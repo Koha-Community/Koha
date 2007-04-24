@@ -1109,20 +1109,21 @@ sub GetBorrowerAcctRecord {
     my @acctlines;
     my $numlines = 0;
     my $strsth      = qq(
-        Select * from accountlines where
-borrowernumber=? order by date desc,timestamp desc
-    );
+SELECT * 
+FROM accountlines 
+WHERE borrowernumber=?);
     my @bind = ($borrowernumber);
     if ($date && $date ne ''){
-    $strsth.=" AND date < ?";
+    $strsth.="
+AND date < ? ";
     push(@bind,$date);
     }
-
+    $strsth.="
+ORDER BY date desc,timestamp DESC";
     my $sth= $dbh->prepare( $strsth );
-    $sth->execute( $borrowernumber);
+    $sth->execute( @bind );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-
         $acctlines[$numlines] = $data;
         $numlines++;
         $total += $data->{'amountoutstanding'};
