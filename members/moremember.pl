@@ -47,6 +47,7 @@ use C4::Circulation;
 use C4::Koha;
 use C4::Letters;
 use C4::Biblio;
+use C4::Reserves;
 use C4::Branch; # GetBranchName
 
 my $dbh = C4::Context->dbh;

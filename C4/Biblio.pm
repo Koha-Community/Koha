@@ -81,6 +81,7 @@ push @EXPORT, qw(
 push @EXPORT, qw(
   &ModBiblio
   &ModItem
+  &ModItemTransfer
   &ModBiblioframework
   &ModZebra
   &ModItemInMarc
@@ -420,6 +421,47 @@ sub ModItem {
     }
 }
 
+sub ModItemTransfer {
+    my ( $itemnumber, $frombranch, $tobranch ) = @_;
+    
+    my $dbh = C4::Context->dbh;
+    
+    #new entry in branchtransfers....
+    my $sth = $dbh->prepare(
+        "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
+        VALUES (?, ?, now(), $?)");
+    $sth->execute($itemnumber, $frombranch, $tobranch);
+    #update holdingbranch in items .....
+     $sth= $dbh->prepare(
+          "UPDATE items set holdingbranch = ? WHERE items.itemnumber = ?");
+    $sth->execute($tobranch,$itemnumber);
+    &ModDateLastSeen($itemnumber);
+    $sth = $dbh->prepare(
+        "SELECT biblionumber FROM items WHERE itemnumber=?"
+      );
+    $sth->execute($itemnumber);
+    while ( my ( $biblionumber ) = $sth->fetchrow ) {
+        &ModItemInMarconefield( $biblionumber, $itemnumber,
+            'items.holdingbranch', $tobranch );
+    }
+    return;
+}
+
+##New sub to dotransfer in marc tables as well. Not exported -TG 10/04/2006
+# sub domarctransfer {
+#     my ( $dbh, $itemnumber ) = @_;
+#     $itemnumber =~ s /\'//g;    ##itemnumber seems to come with quotes-TG
+#     my $sth =
+#       $dbh->prepare(
+#         "select biblionumber,holdingbranch from items where itemnumber=$itemnumber"
+#       );
+#     $sth->execute();
+#     while ( my ( $biblionumber, $holdingbranch ) = $sth->fetchrow ) {
+#         &ModItemInMarconefield( $biblionumber, $itemnumber,
+#             'items.holdingbranch', $holdingbranch );
+#     }
+#     return;
+# }
 =head2 ModBiblioframework
 
 =over
@@ -760,7 +802,7 @@ sub GetItemsInfo {
         if ( $datedue eq '' ) {
             #$datedue="Available";
             my ( $restype, $reserves ) =
-              CheckReserves( $data->{'itemnumber'} );
+              C4::Reserves::CheckReserves( $data->{'itemnumber'} );
             if ($restype) {
 
                 #$datedue=$restype;
@@ -3649,6 +3691,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.199  2007/04/24 09:07:53  tipaul
+# moving dotransfer to Biblio.pm::ModItemTransfer + some CheckReserves fixes
+#
 # Revision 1.198  2007/04/23 15:21:17  tipaul
 # renaming currenttransfers to transferstoreceive
 #

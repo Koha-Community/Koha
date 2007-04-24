@@ -65,7 +65,7 @@ my $tbr  = $input->param('tbr');
 
 # If we have a return of the form dotransfer, we launch the subroutine dotransfer
 if ($item) {
-    C4::Circulation::Circ2::dotransfer( $item, $fbr, $tbr );
+    C4::Circulation::Circ2::ModItemTransfer( $item, $fbr, $tbr );
 }
 
 # get the all the branches for reference

@@ -104,7 +104,7 @@ if ($item) {
 
 # 		if the document is not in his homebranch location and there is not reservation after, we transfer it
     if ( ( $fbr ne $tbr ) and ( not $nextreservinfo ) ) {
-        dotransfer( $item, $fbr, $tbr );
+        ModItemTransfer( $item, $fbr, $tbr );
     }
 }
 

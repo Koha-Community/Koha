@@ -47,7 +47,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { s
 
 =head1 NAME
 
-C4::Circulation::Circ2 - Koha circulation module
+C4::Circulation - Koha circulation module
 
 =head1 SYNOPSIS
 
@@ -96,11 +96,6 @@ push @EXPORT, qw(
   &GetTransfersFromTo
   &updateWrongTransfer
   &DeleteTransfer
-);
-
-# subs to remove
-push @EXPORT, qw(
-  &dotransfer
 );
 
 # FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
@@ -274,50 +269,12 @@ sub transferbook {
 
     #actually do the transfer....
     if ($dotransfer) {
-        dotransfer( $itemnumber, $fbr, $tbr );
+        ModItemTransfer( $itemnumber, $fbr, $tbr );
 
         # don't need to update MARC anymore, we do it in batch now
         $messages->{'WasTransfered'} = 1;
     }
     return ( $dotransfer, $messages, $biblio );
-}
-
-sub dotransfer {
-    my ( $itm, $fbr, $tbr ) = @_;
-    
-    my $dbh = C4::Context->dbh;
-    $itm = $dbh->quote($itm);
-    $fbr = $dbh->quote($fbr);
-    $tbr = $dbh->quote($tbr);
-    
-    #new entry in branchtransfers....
-    $dbh->do(
-"INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
-                    VALUES ($itm, $fbr, now(), $tbr)"
-    );
-
-    #update holdingbranch in items .....
-      $dbh->do(
-          "UPDATE items set holdingbranch = $tbr WHERE items.itemnumber = $itm");
-    &ModDateLastSeen($itm);
-    &domarctransfer( $dbh, $itm );
-    return;
-}
-
-##New sub to dotransfer in marc tables as well. Not exported -TG 10/04/2006
-sub domarctransfer {
-    my ( $dbh, $itemnumber ) = @_;
-    $itemnumber =~ s /\'//g;    ##itemnumber seems to come with quotes-TG
-    my $sth =
-      $dbh->prepare(
-        "select biblionumber,holdingbranch from items where itemnumber=$itemnumber"
-      );
-    $sth->execute();
-    while ( my ( $biblionumber, $holdingbranch ) = $sth->fetchrow ) {
-        &ModItemInMarconefield( $biblionumber, $itemnumber,
-            'items.holdingbranch', $holdingbranch );
-    }
-    return;
 }
 
 =head2 CanBookBeIssued
@@ -1324,7 +1281,7 @@ sub AddReturn {
         
         if ( ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
                     if (C4::Context->preference("AutomaticItemReturn") == 1) {
-                    dotransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
+                    ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
                     $messages->{'WasTransfered'} = 1;
                     warn "was transfered";
                     }
@@ -1989,7 +1946,7 @@ sub updateWrongTransfer {
         	$sth->finish;
 
 # second step create a new line of branchtransfer to the right location .
-	dotransfer($itemNumber, $FromLibrary, $waitingAtLibrary);
+	ModItemTransfer($itemNumber, $FromLibrary, $waitingAtLibrary);
 
 #third step changing holdingbranch of item
 	UpdateHoldingbranch($FromLibrary,$itemNumber);
