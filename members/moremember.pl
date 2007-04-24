@@ -116,7 +116,7 @@ if (   $data->{'debarred'}
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
 
-$data->{ &expand_sex_into_predicate( $data->{'sex'} ) } = 1;
+$data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
     my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
