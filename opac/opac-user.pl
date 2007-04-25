@@ -76,7 +76,7 @@ $template->param( BORROWER_INFO  => \@bordat );
 $template->param( borrowernumber => $borrowernumber );
 
 #get issued items ....
-my $issues = GetBorrowerIssues($borr);
+my ($countissues,$issues) = GetPendingIssues($borrowernumber);
 
 my $count          = 0;
 my $overdues_count = 0;

@@ -86,7 +86,6 @@ push @EXPORT, qw(
   &GetBorrowersWhoHaveNotBorrowedSince
   &GetBorrowersWhoHaveNeverBorrowed
   &GetBorrowersWithIssuesHistoryOlderThan
-  &GetMembersFromSurname 
   
   &GetExpiryDate
 );
@@ -994,14 +993,28 @@ C<$issues>.
 sub GetPendingIssues {
     my ($borrowernumber) = @_;
     my $dbh              = C4::Context->dbh;
+
     my $sth              = $dbh->prepare(
-        "Select * from issues,biblio,items where borrowernumber=?
-        and items.itemnumber=issues.itemnumber
-	and items.biblionumber=biblio.biblionumber
-	and issues.returndate is NULL order by date_due"
+   "SELECT * FROM issues 
+      LEFT JOIN items ON issues.itemnumber=items.itemnumber
+      LEFT JOIN biblio ON     items.biblionumber=biblio.biblionumber 
+      LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
+    WHERE
+      borrowernumber=? 
+      AND returndate IS NULL
+    ORDER BY issues.date_due"
     );
     $sth->execute($borrowernumber);
     my $data = $sth->fetchall_arrayref({});
+    my $today = POSIX::strftime("%Y%m%d", localtime);
+    foreach( @$data ) {
+        my $datedue = $_->{'date_due'};
+        $datedue =~ s/-//g;
+        if ( $datedue < $today ) {
+            $_->{'overdue'} = 1;
+        }
+    }
+    $sth->finish;
     return ( scalar(@$data), $data );
 }
 
@@ -1483,8 +1496,6 @@ sub add_member_orgs {
     $sth->finish();
 
 }    # sub add_member_orgs
-
-=head2 GetMembersFromSurname
 
 =head2 GetCities (OUEST-PROVENCE)
 

@@ -29,7 +29,6 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Output;
-use C4::Circulation;
 use C4::Auth;
 use C4::Members;
 
@@ -46,7 +45,7 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 my $member=$input->param('member');
 my %member2;
 $member2{'borrowernumber'}=$member;
-my $issues=GetBorrowerIssues(\%member2);
+my ($countissues,$issues)=GetPendingIssues($member);
 my $i=0;
 foreach (sort keys %$issues) {
 	$i++;

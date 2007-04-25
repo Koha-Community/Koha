@@ -368,7 +368,7 @@ if ($borrower) {
 # get each issue of the borrower & separate them in todayissues & previous issues
     my @todaysissues;
     my @previousissues;
-    my $issueslist = GetBorrowerIssues($borrower);
+    my ($countissues,$issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
 
     # split in 2 arrays for today & previous
     my $dbh = C4::Context->dbh;

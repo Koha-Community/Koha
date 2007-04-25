@@ -694,7 +694,7 @@ sub CanBookBeIssued {
 
     # DEBTS
     my ($amount) =
-      GetBorrowerAcctRecord( $borrower->{'borrowernumber'}, $duedate );
+      GetMemberAccountRecords( $borrower->{'borrowernumber'}, $duedate );
     if ( C4::Context->preference("IssuingInProcess") ) {
         my $amountlimit = C4::Context->preference("noissuescharge");
         if ( $amount > $amountlimit && !$inprocess ) {
@@ -1425,7 +1425,7 @@ sub FixAccountForLostAndReturned {
 
 =head2 GetItemIssue
 
-$issues = &GetBorrowerIssue($itemnumber);
+$issues = &GetItemIssue($itemnumber);
 
 Returns patrons currently having a book. nothing if item is not issued atm
 
@@ -1462,7 +1462,7 @@ sub GetItemIssue {
 
 =head2 GetItemIssues
 
-$issues = &GetBorrowerIssues($itemnumber, $history);
+$issues = &GetItemIssues($itemnumber, $history);
 
 Returns patrons that have issued a book
 
@@ -1542,8 +1542,6 @@ sub GetBorrowerIssues {
         if ( $datedue < $today ) {
             $data->{'overdue'} = 1;
         }
-        my $itemnumber = $data->{'itemnumber'};
-
         push @GetBorrowerIssues, $data;
     }
     $sth->finish;
