@@ -79,7 +79,7 @@ my ($template, $borrowernumber, $cookie)
                  debug => 1,
                  });
 
-my ($count,$results)=GetMembersFromSurname($searchfield) if $searchfield;
+my ($count,$results)=SearchMember($searchfield,"firstname","simple",) if $searchfield;
 my $toggle="0";
 my @loop_data =();
 for (my $i=0; $i < $count; $i++){

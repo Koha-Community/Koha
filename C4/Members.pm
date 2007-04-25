@@ -73,17 +73,16 @@ push @EXPORT, qw(
   &GetCities 
   &GetRoadTypes 
   &GetRoadTypeDetails 
+  &GetSortDetails
+  &GetTitles	
   
   &GetMemberAccountRecords
+  &GetBorNotifyAcctRecord
   
   &GetborCatFromCatType 
   &GetBorrowercategory
   
-  &GetBorNotifyAcctRecord
-  &ExtendMemberSubscriptionTo 
-  &GetSortDetails
   
-  &GetTitles	
   &GetBorrowersWhoHaveNotBorrowedSince
   &GetBorrowersWhoHaveNeverBorrowed
   &GetBorrowersWithIssuesHistoryOlderThan
@@ -95,7 +94,6 @@ push @EXPORT, qw(
 #Modify data
 push @EXPORT, qw(
   &ModMember
-  &fixup_cardnumber
   &changepassword
 );
   
@@ -106,16 +104,20 @@ push @EXPORT, qw(
 
 #Insert data
 push @EXPORT, qw(
-  &AddMember  
+  &AddMember
+  &add_member_orgs
+  &MoveMemberToDeleted
+  &ExtendMemberSubscriptionTo 
+);
+
+#Check data
+push @EXPORT, qw(
   &checkuniquemember 
   &checkuserpassword
   &fixEthnicity
   &ethnicitycategories 
-  &add_member_orgs
-  
-  &MoveMemberToDeleted
+  &fixup_cardnumber
 );
-
 =item SearchMember
 
   ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type);
@@ -197,14 +199,10 @@ sub SearchMember {
     #	warn "Q $orderby : $query";
     $sth->execute(@bind);
     my @results;
-    my $cnt = $sth->rows;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
+    my $data = $sth->fetchall_arrayref({});
 
-    #  $sth->execute;
     $sth->finish;
-    return ( $cnt, \@results );
+    return ( scalar(@$data), $data );
 }
 
 =head2 GetMemberDetails
@@ -1352,7 +1350,9 @@ sub GetBorrowercategory {
     my $dbh       = C4::Context->dbh;
     my $sth       =
       $dbh->prepare(
-"SELECT description,dateofbirthrequired,upperagelimit,category_type FROM categories WHERE categorycode = ?"
+"SELECT description,dateofbirthrequired,upperagelimit,category_type 
+ FROM categories 
+ WHERE categorycode = ?"
       );
     $sth->execute($catcode);
     my $data =
@@ -1486,39 +1486,6 @@ sub add_member_orgs {
 
 =head2 GetMembersFromSurname
 
-=over 4
-
-\@resutlts = GetMembersFromSurname($surname)
-this function get the list of borrower names like $surname.
-return :
-the table of results in @results
-
-=back
-
-=cut
-
-sub GetMembersFromSurname {
-    my ($searchstring) = @_;
-    my $dbh = C4::Context->dbh;
-    $searchstring =~ s/\'/\\\'/g;
-    my @data  = split( ' ', $searchstring );
-    my $count = @data;
-    my $query = qq|
-        SELECT   surname,firstname
-        FROM     borrowers
-        WHERE    (surname like ?)
-        ORDER BY surname
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute("$data[0]%");
-    my @results;
-    $count = 0;
-
-    my $data = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return ( scalar(@$data), $data );
-}
-
 =head2 GetCities (OUEST-PROVENCE)
 
   ($id_cityarrayref, $city_hashref) = &GetCities();
@@ -1609,7 +1576,7 @@ sub MoveMemberToDeleted {
     my @data = $sth->fetchrow_array;
     $sth->finish;
     $sth =
-      $dbh->prepare( "Insert into deletedborrowers values ("
+      $dbh->prepare( "INSERT INTO deletedborrowers VALUES ("
           . ( "?," x ( scalar(@data) - 1 ) )
           . "?)" );
     $sth->execute(@data);
@@ -1684,9 +1651,10 @@ codes, and a reference-to-hash, which maps the road type of the road .
 
 sub GetRoadTypes {
     my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT roadtypeid,road_type 
-		FROM roadtype 
-		ORDER BY road_type|;
+    my $query = qq|
+SELECT roadtypeid,road_type 
+FROM roadtype 
+ORDER BY road_type|;
     my $sth = $dbh->prepare($query);
     $sth->execute();
     my %roadtype;
@@ -1743,9 +1711,10 @@ C<&$roadtypeid>this is the value of roadtype s
 sub GetRoadTypeDetails {
     my ($roadtypeid) = @_;
     my $dbh          = C4::Context->dbh;
-    my $query        = qq|SELECT road_type 
-		FROM roadtype 
-		WHERE roadtypeid=?|;
+    my $query        = qq|
+SELECT road_type 
+FROM roadtype 
+WHERE roadtypeid=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute($roadtypeid);
     my $roadtype = $sth->fetchrow;
