@@ -53,6 +53,7 @@ This module provides the searching facilities for the Koha into a zebra catalog.
   &searchResults
   &getRecords
   &buildQuery
+  &NZgetRecords
 );
 
 # make all your functions, whether exported or not;
@@ -489,6 +490,8 @@ sub getRecords {
             }
         }
     }
+    use Data::Dumper;
+    warn Dumper($results_hashref);
     return ( undef, $results_hashref, \@facets_loop );
 }
 
@@ -1042,6 +1045,332 @@ sub searchResults {
     return @newresults;
 }
 
+
+#----------------------------------------------------------------------
+#
+# Non-Zebra GetRecords#
+#----------------------------------------------------------------------
+
+=item
+  NZgetRecords has the same API as zera getRecords, even if some parameters are not managed
+=cut
+
+sub NZgetRecords {
+    my (
+        $koha_query,     $federated_query,  $sort_by_ref,
+        $servers_ref,    $results_per_page, $offset,
+        $expanded_facet, $branches,         $query_type,
+        $scan
+    ) = @_;
+    my $result = NZanalyse($koha_query);
+#     use Data::Dumper;
+#     warn "==========".@$sort_by_ref[0];
+    return (undef,NZorder($result,@$sort_by_ref[0]),undef);
+}
+
+=item
+
+  NZanalyse : get a CQL string as parameter, and returns a list of biblionumber;title,biblionumber;title,...
+  the list is builded from inverted index in nozebra SQL table
+  note that title is here only for convenience : the sorting will be very fast when requested on title
+  if the sorting is requested on something else, we will have to reread all results, and that may be longer.
+
+=cut
+
+sub NZanalyse {
+    my ($string) = @_;
+    # if we have a ", replace the content to discard temporarily any and/or/not inside
+    my $commacontent;
+    if ($string =~/"/) {
+        $string =~ s/"(.*?)"/__X__/;
+        $commacontent = $1;
+#         print "commacontent : $commacontent\n";
+    }
+    # split the query string in 3 parts : X AND Y means : $left="X", $operand="AND" and $right="Y"
+    # then, call again NZanalyse with $left and $right
+    # (recursive until we find a leaf (=> something without and/or/not)
+    $string =~ /(.*)( and | or | not )(.*)/;
+    my $left = $1;
+    my $right = $3;
+    my $operand = $2;
+    # it's not a leaf, we have a and/or/not
+    if ($operand) {
+        # reintroduce comma content if needed
+        $right =~ s/__X__/"$commacontent"/ if $commacontent;
+        $left =~ s/__X__/"$commacontent"/ if $commacontent;
+#         print "noeud : $left / $operand / $right\n";
+        my $leftresult = NZanalyse($left);
+        my $rightresult = NZanalyse($right);
+        # OK, we have the results for right and left part of the query
+        # depending of operand, intersect, union or exclude both lists
+        # to get a result list
+        if ($operand eq ' and ') {
+            my @leftresult = split /,/, $leftresult;
+#             my @rightresult = split /,/,$leftresult;
+            my $finalresult;
+            # parse the left results, and if the biblionumber exist in the right result, save it in finalresult
+            # the result is stored twice, to have the same weight for AND than OR.
+            # example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
+            # result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
+            foreach (@leftresult) {
+                if ($rightresult =~ "$_,") {
+                    $finalresult .= "$_,$_,";
+                }
+            }
+            return $finalresult;
+        } elsif ($operand eq ' or ') {
+            # just merge the 2 strings
+            return $leftresult.$rightresult;
+        } elsif ($operand eq ' not ') {
+            my @leftresult = split /,/, $leftresult;
+#             my @rightresult = split /,/,$leftresult;
+            my $finalresult;
+            foreach (@leftresult) {
+                unless ($rightresult =~ "$_,") {
+                    $finalresult .= "$_,";
+                }
+            }
+            return $finalresult;
+        } else {
+            # this error is impossible, because of the regexp that isolate the operand, but just in case...
+            die "error : operand unknown : $operand for $string";
+        }
+    # it's a leaf, do the real SQL query and return the result
+    } else {
+        $string =~  s/__X__/"$commacontent"/ if $commacontent;
+        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\// /g;
+#         print "feuille : $string\n";
+        # parse the string in in operator/operand/value again
+        $string =~ /(.*)(=|>|>=|<|<=)(.*)/;
+        my $left = $1;
+        my $operator = $2;
+        my $right = $3;
+        my $results;
+        if ($operator) {
+            #do a specific search
+            my $dbh = C4::Context->dbh;
+            $operator='LIKE' if $operator eq '=' and $right=~ /%/;
+            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE indexname=? AND value $operator ?");
+#             print "$left / $operator / $right\n";
+            # split each word, query the DB and build the biblionumbers result
+            foreach (split / /,$right) {
+                my $biblionumbers;
+                $sth->execute($left,$_);
+                while (my $line = $sth->fetchrow) {
+                    $biblionumbers .= $line;
+                }
+                # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
+                if ($results) {
+                    my @leftresult = split /,/, $biblionumbers;
+                    my $temp;
+                    foreach (@leftresult) {
+                        if ($results =~ "$_,") {
+                            $temp .= "$_,$_,";
+                        }
+                    }
+                    $results = $temp;
+                } else {
+                    $results = $biblionumbers;
+                }
+            }
+        } else {
+            #do a complete search (all indexes)
+            my $dbh = C4::Context->dbh;
+            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE value LIKE ?");
+            # split each word, query the DB and build the biblionumbers result
+            foreach (split / /,$string) {
+                my $biblionumbers;
+                $sth->execute($_);
+                while (my $line = $sth->fetchrow) {
+                    $biblionumbers .= $line;
+                }
+                # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
+                if ($results) {
+                    my @leftresult = split /,/, $biblionumbers;
+                    my $temp;
+                    foreach (@leftresult) {
+                        if ($results =~ "$_,") {
+                            $temp .= "$_,$_,";
+                        }
+                    }
+                    $results = $temp;
+                } else {
+                    $results = $biblionumbers;
+                }
+            }
+        }
+        return $results;
+    }
+}
+
+sub NZorder {
+    my ($biblionumbers, $ordering) = @_;
+    # order title asc by default
+    $ordering = '1=36 <i' unless $ordering;
+    my $dbh = C4::Context->dbh;
+    #
+    # order by POPULARITY
+    #
+    if ($ordering =~ /1=9523/) {
+        my %result;
+        my %popularity;
+        # popularity is not in MARC record, it's builded from a specific query
+        my $sth = $dbh->prepare("select sum(issues) from items where biblionumber=?");
+        foreach (split /,/,$biblionumbers) {
+            my ($biblionumber,$title) = split /;/,$_;
+            $result{$biblionumber}=GetMarcBiblio($biblionumber);
+            $sth->execute($biblionumber);
+            my $popularity= $sth->fetchrow ||0;
+            # hint : the key is popularity.title because we can have
+            # many results with the same popularity. In this cas, sub-ordering is done by title
+            # we also have biblionumber to avoid bug for 2 biblios with the same title & popularity
+            # (un-frequent, I agree, but we won't forget anything that way ;-)
+            $popularity{sprintf("%10d",$popularity).$title.$biblionumber} = $biblionumber;
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+        if ($ordering eq '1=9523 >i') { # sort popularity DESC
+            foreach my $key (sort {$b <=> $a} (keys %popularity)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$popularity{$key}}->as_usmarc();
+            }
+        } else { # sort popularity ASC
+            foreach my $key (sort (keys %popularity)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$popularity{$key}}->as_usmarc();
+            }
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
+    #
+    # ORDER BY author
+    #
+    } elsif ($ordering eq '1=1003 <i'){
+        my %result;
+        foreach (split /,/,$biblionumbers) {
+            my ($biblionumber,$title) = split /;/,$_;
+            my $record=GetMarcBiblio($biblionumber);
+            my $author;
+            if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+                $author=$record->subfield('200','f');
+                $author=$record->subfield('700','a') unless $author;
+            } else {
+                $author=$record->subfield('100','a');
+            }
+            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+            # and we don't want to get only 1 result for each of them !!!
+            $result{$author.$biblionumber}=$record;
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+        if ($ordering eq '1=1003 <i') { # sort by title desc
+            foreach my $key (sort (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        } else { # sort by title ASC
+            foreach my $key (sort { $a <=> $b } (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
+    #
+    # ORDER BY callnumber
+    #
+    } elsif ($ordering eq '1=20 <i'){
+        my %result;
+        foreach (split /,/,$biblionumbers) {
+            my ($biblionumber,$title) = split /;/,$_;
+            my $record=GetMarcBiblio($biblionumber);
+            my $callnumber;
+            my ($callnumber_tag,$callnumber_subfield)=GetMarcFromKohaField($dbh,'items.itemcallnumber');
+            ($callnumber_tag,$callnumber_subfield)= GetMarcFromKohaField('biblioitems.callnumber') unless $callnumber_tag;
+            if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+                $callnumber=$record->subfield('200','f');
+            } else {
+                $callnumber=$record->subfield('100','a');
+            }
+            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+            # and we don't want to get only 1 result for each of them !!!
+            $result{$callnumber.$biblionumber}=$record;
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+        if ($ordering eq '1=1003 <i') { # sort by title desc
+            foreach my $key (sort (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        } else { # sort by title ASC
+            foreach my $key (sort { $a <=> $b } (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
+    } elsif ($ordering =~ /1=31/){ #pub year
+        my %result;
+        foreach (split /,/,$biblionumbers) {
+            my ($biblionumber,$title) = split /;/,$_;
+            my $record=GetMarcBiblio($biblionumber);
+            my ($publicationyear_tag,$publicationyear_subfield)=GetMarcFromKohaField($dbh,'biblioitems.publicationyear');
+            my $publicationyear=$record->subfield($publicationyear_tag,$publicationyear_subfield);
+            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+            # and we don't want to get only 1 result for each of them !!!
+            $result{$publicationyear.$biblionumber}=$record;
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+        if ($ordering eq '1=31 <i') { # sort by title desc
+            foreach my $key (sort (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        } else { # sort by title ASC
+            foreach my $key (sort { $a <=> $b } (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
+    #
+    # ORDER BY title
+    #
+    } else { 
+        # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
+        my %result;
+        foreach (split /,/,$biblionumbers) {
+            my ($biblionumber,$title) = split /;/,$_;
+            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+            # and we don't want to get only 1 result for each of them !!!
+            $result{$title.$biblionumber}=GetMarcBiblio($biblionumber);
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+        if ($ordering eq '1=36 <i') { # sort by title desc
+            foreach my $key (sort (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        } else { # sort by title ASC
+            foreach my $key (sort { $a <=> $b } (keys %result)) {
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+            }
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
+    }
+}
 END { }    # module clean-up code here (global destructor)
 
 1;

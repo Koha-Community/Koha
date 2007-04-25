@@ -1539,11 +1539,11 @@ sub GetMarcBiblio {
     $sth->execute($biblionumber);
     my ($marcxml) = $sth->fetchrow;
     MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
-#     $marcxml =~ s/\x1e//g;
-#     $marcxml =~ s/\x1f//g;
-#     $marcxml =~ s/\x1d//g;
-#     $marcxml =~ s/\x0f//g;
-#     $marcxml =~ s/\x0c//g;
+    $marcxml =~ s/\x1e//g;
+    $marcxml =~ s/\x1f//g;
+    $marcxml =~ s/\x1d//g;
+    $marcxml =~ s/\x0f//g;
+    $marcxml =~ s/\x0c//g;
     my $record = MARC::Record->new();
     $record = MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour')) if $marcxml;
     return $record;
@@ -3691,6 +3691,17 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.200  2007/04/25 16:26:42  tipaul
+# Koha 3.0 nozebra 1st commit : the script misc/migration_tools/rebuild_nozebra.pl build the nozebra table, and, if you set NoZebra to Yes, queries will be done through zebra. TODO :
+# - add nozebra table management on biblio editing
+# - the index table content is hardcoded. I still have to add some specific systempref to let the library update it
+# - manage pagination (next/previous)
+# - manage facets
+# WHAT works :
+# - NZgetRecords : has exactly the same API & returns as zebra getQuery, except that some parameters are unused
+# - search & sort works quite good
+# - CQL parser is better that what I thought I could do : title="harry and sally" and publicationyear>2000 not itemtype=LIVR should work fine
+#
 # Revision 1.199  2007/04/24 09:07:53  tipaul
 # moving dotransfer to Biblio.pm::ModItemTransfer + some CheckReserves fixes
 #

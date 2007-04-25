@@ -400,11 +400,15 @@ my $facets; # this object stores the faceted results that display on the left-ha
 my @results_array;
 my $results_hashref;
 
-eval {
-
-    ($error, $results_hashref, $facets) = getRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
-
-};
+if (C4::Context->preference('NoZebra')) {
+    eval {
+        ($error, $results_hashref, $facets) = NZgetRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+    };
+} else {
+    eval {
+        ($error, $results_hashref, $facets) = getRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+    };
+}
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
 
