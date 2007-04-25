@@ -1501,53 +1501,6 @@ sub GetItemIssues {
     return ( \@GetItemIssues );
 }
 
-=head2 GetBorrowerIssues
-
-$issues = &GetBorrowerIssues($borrower);
-
-Returns a list of books currently on loan to a patron.
-
-C<$borrower->{borrowernumber}> is the borrower number of the patron
-whose issues we want to list.
-
-C<&GetBorrowerIssues> returns a PHP-style array: C<$issues> is a
-reference-to-hash whose keys are integers in the range 1...I<n>, where
-I<n> is the number of items on issue (either today or before today).
-C<$issues-E<gt>{I<n>}> is a reference-to-hash whose keys are all of
-the fields of the biblio, biblioitems, items, and issues fields of the
-Koha database for that particular item.
-
-=cut
-
-sub GetBorrowerIssues {
-    my ( $borrower ) = @_;
-    my $dbh = C4::Context->dbh;
-    my @GetBorrowerIssues;
-    # get today date
-    my $today = POSIX::strftime("%Y%m%d", localtime);
-
-    my $sth = $dbh->prepare(
-        "SELECT * FROM issues 
-    LEFT JOIN items ON issues.itemnumber=items.itemnumber
-    LEFT JOIN biblio ON     items.biblionumber=biblio.biblionumber 
-    LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-    WHERE
-    borrowernumber=? AND returndate IS NULL
-    ORDER BY issues.date_due"
-    );
-    $sth->execute($borrower->{'borrowernumber'});
-    while ( my $data = $sth->fetchrow_hashref ) {
-        my $datedue = $data->{'date_due'};
-        $datedue =~ s/-//g;
-        if ( $datedue < $today ) {
-            $data->{'overdue'} = 1;
-        }
-        push @GetBorrowerIssues, $data;
-    }
-    $sth->finish;
-    return ( \@GetBorrowerIssues );
-}
-
 =head2 GetBiblioIssues
 
 $issues = GetBiblioIssues($biblionumber);
