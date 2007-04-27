@@ -1492,8 +1492,8 @@ sub bibdata {
     my $sth   = $dbh->prepare("
                  SELECT * , biblioitems.notes AS bnotes, biblio.notes
                 FROM biblio
-                LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
+                LEFT JOIN (biblioitems) ON (biblio.biblionumber = biblioitems.biblionumber)
+                LEFT JOIN (itemtypes) ON (biblioitems.itemtype = itemtypes.itemtype)
                 WHERE biblio.biblionumber = ?
                 AND biblioitems.biblionumber = biblio.biblionumber ");
 
@@ -2355,8 +2355,8 @@ sub bibitems {
                         itemtypes.*,
                         MIN(items.itemlost)        as itemlost,
                         MIN(items.dateaccessioned) as dateaccessioned
-                          FROM biblioitems, items
-                          LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
+                          FROM items,biblioitems
+                          LEFT JOIN (itemtypes) ON (biblioitems.itemtype = itemtypes.itemtype)
                          WHERE biblioitems.biblionumber     = ?
                            AND biblioitems.biblioitemnumber = items.biblioitemnumber
                       GROUP BY items.biblioitemnumber");
@@ -2388,7 +2388,7 @@ sub barcodes{
     #called from request.pl
     my ($biblioitemnumber)=@_;
     my $dbh = C4::Context->dbh;
-    my $sth=$dbh->prepare("SELECT barcode, itemlost, holdingbranch FROM items
+    my $sth=$dbh->prepare("SELECT barcode, itemlost, holdingbranch,itemnumber FROM items
                            WHERE biblioitemnumber = ?
                              AND (wthdrawn <> 1 OR wthdrawn IS NULL)");
     $sth->execute($biblioitemnumber);

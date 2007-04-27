@@ -561,7 +561,6 @@ if ($op eq "addbiblio") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = MARChtml2xml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
     my $record;
 	if (C4::Context->preference('TemplateEncoding') eq "iso-8859-1") {
         my %indicators;

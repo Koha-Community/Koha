@@ -353,7 +353,7 @@ warn "$value / $tag / $subfield";
 			require $plugin;
 			my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
 			my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
-			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255 DISABLE READONLY OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\"  size=47 maxlength=255  OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
 		} else {
 			$subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
 		}

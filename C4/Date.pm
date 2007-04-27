@@ -100,47 +100,58 @@ sub format_date_in_iso
         {
                 return "";
         }
-                
-        my $dateformat = get_date_format();
-        my ($year,$month,$day);
-        my @date;
-        my $tmpolddate=$olddate;
-        $tmpolddate=~s#/|\.|-|\\##g;
-        $dateformat="metric" if (index(":",$olddate)>0);
-        if ( $dateformat eq "us" )
-        {
-          ($month,$day,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
-          if ($month>0 && $day >0){
-                @date = Decode_Date_US($tmpolddate);
-          } else {
-            @date=($year, $month,$day)
-          }
-        }
-        elsif ( $dateformat eq "metric" )
-        {
-          ($day,$month,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
-          if ($month>0 && $day >0){
-                @date = Decode_Date_EU($tmpolddate);
-          } else {
-            @date=($year, $month,$day)
-          }
-        }
-        elsif ( $dateformat eq "iso" )
-        {
-          ($year,$month,$day)=split /-|\/|\.|:/,$olddate unless ($year && $month);
-          if ($month>0 && $day >0){
-            @date=($year, $month,$day) if (check_date($year,$month,$day));
-          } else {
-            @date=($year, $month,$day)
-          }
-        }
-        else
-        {
-           return "9999-99-99";
-        }
-
-	$newdate = sprintf("%04d-%02d-%02d",$date[0],$date[1],$date[2]);
-
-	return $newdate;
+        if (check_whether_iso($olddate)){
+          return $olddate;
+        } else {        my $dateformat = get_date_format();
+            my ($year,$month,$day);
+            my @date;
+            my $tmpolddate=$olddate;
+            $tmpolddate=~s#/|\.|-|\\##g;
+            $dateformat="metric" if (index(":",$olddate)>0);
+            if ( $dateformat eq "us" )
+            {
+            ($month,$day,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+            if ($month>0 && $day >0){
+                    @date = Decode_Date_US($tmpolddate);
+            } else {
+                @date=($year, $month,$day)
+            }
+            }
+            elsif ( $dateformat eq "metric" )
+            {
+            ($day,$month,$year)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+            if ($month>0 && $day >0){
+                    @date = Decode_Date_EU($tmpolddate);
+            } else {
+                @date=($year, $month,$day)
+            }
+            }
+            elsif ( $dateformat eq "iso" )
+            {
+            ($year,$month,$day)=split /-|\/|\.|:/,$olddate unless ($year && $month);
+            if ($month>0 && $day >0){
+                @date=($year, $month,$day) if (check_date($year,$month,$day));
+            } else {
+                @date=($year, $month,$day)
+            }
+            }
+            else
+            {
+            return "9999-99-99";
+            }
+    
+            $newdate = sprintf("%04d-%02d-%02d",$date[0],$date[1],$date[2]);
+    
+            return $newdate;
+	}
 }
+
+sub check_whether_iso
+{
+    my $olddate = shift;
+    my @olddate= split /\-/,$olddate ;
+    return 1 if (length($olddate[0])==4 && length($olddate[1])<=2 && length($olddate[2])<=2);
+    return 0;
+}
+
 1;

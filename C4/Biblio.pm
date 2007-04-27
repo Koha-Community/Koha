@@ -324,15 +324,31 @@ sub MARCfind_MARCbibid_from_oldbiblionumber {
 }
 
 sub MARCaddbiblio {
-
-# pass the MARC::Record to this function, and it will create the records in the marc tables
+    # pass the MARC::Record to this function, and it will create the records in the marc tables
 	my ($dbh,$record,$biblionumber,$frameworkcode,$bibid) = @_;
 	my @fields=$record->fields();
-# my $bibid;
 # adding main table, and retrieving bibid
 # if bibid is sent, then it's not a true add, it's only a re-add, after a delete (ie, a mod)
-    # if bibid empty => true add, find a new bibid number
-    unless ($bibid) {
+    # if bibid empty => true add, find a new bibid number  (and there are no items)
+    if ($bibid) {
+    	#shift the items' tagorders for this biblio so we don't overwrite item tags with biblio tags..
+    	my $sth = $dbh->prepare("SELECT tagfield FROM marc_subfield_structure WHERE kohafield LIKE 'items.%'");
+    	$sth->execute;
+    	my $itemtag = $sth->fetchrow_hashref->{tagfield};
+		my $save_items_sth = $dbh->prepare("SELECT subfieldid, tagorder FROM marc_subfield_table WHERE bibid=? AND tag=? ORDER BY tagorder");
+    	my $updatesth = $dbh->prepare("UPDATE marc_subfield_table SET tagorder=? WHERE subfieldid=?");
+		my $fieldcount = (scalar @fields) + 1 ;
+		my $itemtagorder = 0;
+    	$save_items_sth->execute($bibid,$itemtag);
+    	# for every item, update the tagorder
+   		 while (my ($subfieldid,$tagorder) = ($save_items_sth->fetchrow_array())) {
+        	if ($tagorder != $itemtagorder) {
+				$fieldcount++;
+				$itemtagorder = $tagorder;
+			}
+        	$updatesth->execute($fieldcount,$subfieldid);
+		}
+    } else {
         $dbh->do(
 "lock tables marc_biblio WRITE,marc_subfield_table WRITE, marc_word WRITE, marc_blob_subfield WRITE, stopwords READ"
         );
@@ -346,17 +362,23 @@ sub MARCaddbiblio {
         ($bibid) = $sth->fetchrow;
         $sth->finish;
     }
-    my $fieldcount = 0;
+    my $fieldcount = 1;
+    # save leader first
+    &MARCaddsubfield($dbh,$bibid,'000','',$fieldcount,'',1,$record->leader);
 
     # now, add subfields...
     foreach my $field (@fields) {
         $fieldcount++;
 		# make sure we're dealing with valid MARC tags
 		if ($field->tag =~ /^[0-9A-Za-z]{3}$/) {
+        
+            # save fixed fields
         if ( $field->tag() < 10 ) {
             &MARCaddsubfield( $dbh, $bibid, $field->tag(), '', $fieldcount, '',
                 1, $field->data() );
         }
+            
+            # save normal subfields
         else {
             my @subfields = $field->subfields();
             foreach my $subfieldcount ( 0 .. $#subfields ) {
@@ -374,9 +396,9 @@ sub MARCaddbiblio {
         }
 		}
     }
-	# save leader
-	&MARCaddsubfield($dbh,$bibid,'000','',$fieldcount+1,'',1,$record->leader);
+
     $dbh->do("unlock tables");
+    
     return $bibid;
 }
 
@@ -2582,130 +2604,130 @@ sub char_decode {
 
     # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
     if ( $encoding eq "UNIMARC" ) {
-#         s/\xe1/Æ/gm;
-        s/\xe2/Ð/gm;
-        s/\xe9/Ø/gm;
-        s/\xec/þ/gm;
-        s/\xf1/æ/gm;
-        s/\xf3/ð/gm;
-        s/\xf9/ø/gm;
-        s/\xfb/ß/gm;
-        s/\xc1\x61/à/gm;
-        s/\xc1\x65/è/gm;
-        s/\xc1\x69/ì/gm;
-        s/\xc1\x6f/ò/gm;
-        s/\xc1\x75/ù/gm;
-        s/\xc1\x41/À/gm;
-        s/\xc1\x45/È/gm;
-        s/\xc1\x49/Ì/gm;
-        s/\xc1\x4f/Ò/gm;
-        s/\xc1\x55/Ù/gm;
-        s/\xc2\x41/Á/gm;
-        s/\xc2\x45/É/gm;
-        s/\xc2\x49/Í/gm;
-        s/\xc2\x4f/Ó/gm;
-        s/\xc2\x55/Ú/gm;
-        s/\xc2\x59/Ý/gm;
-        s/\xc2\x61/á/gm;
-        s/\xc2\x65/é/gm;
-        s/\xc2\x69/í/gm;
-        s/\xc2\x6f/ó/gm;
-        s/\xc2\x75/ú/gm;
-        s/\xc2\x79/ý/gm;
-        s/\xc3\x41/Â/gm;
-        s/\xc3\x45/Ê/gm;
-        s/\xc3\x49/Î/gm;
-        s/\xc3\x4f/Ô/gm;
-        s/\xc3\x55/Û/gm;
-        s/\xc3\x61/â/gm;
-        s/\xc3\x65/ê/gm;
-        s/\xc3\x69/î/gm;
-        s/\xc3\x6f/ô/gm;
-        s/\xc3\x75/û/gm;
-        s/\xc4\x41/Ã/gm;
-        s/\xc4\x4e/Ñ/gm;
-        s/\xc4\x4f/Õ/gm;
-        s/\xc4\x61/ã/gm;
-        s/\xc4\x6e/ñ/gm;
-        s/\xc4\x6f/õ/gm;
-        s/\xc8\x41/Ä/gm;
-        s/\xc8\x45/Ë/gm;
-        s/\xc8\x49/Ï/gm;
-        s/\xc8\x61/ä/gm;
-        s/\xc8\x65/ë/gm;
-        s/\xc8\x69/ï/gm;
-        s/\xc8\x6F/ö/gm;
-        s/\xc8\x75/ü/gm;
-        s/\xc8\x76/ÿ/gm;
-        s/\xc9\x41/Ä/gm;
-        s/\xc9\x45/Ë/gm;
-        s/\xc9\x49/Ï/gm;
-        s/\xc9\x4f/Ö/gm;
-        s/\xc9\x55/Ü/gm;
-        s/\xc9\x61/ä/gm;
-        s/\xc9\x6f/ö/gm;
-        s/\xc9\x75/ü/gm;
-        s/\xca\x41/Å/gm;
-        s/\xca\x61/å/gm;
-        s/\xd0\x43/Ç/gm;
-        s/\xd0\x63/ç/gm;
+#         s/\xe1/ï¿½/gm;
+        s/\xe2/ï¿½/gm;
+        s/\xe9/ï¿½/gm;
+        s/\xec/ï¿½/gm;
+        s/\xf1/ï¿½/gm;
+        s/\xf3/ï¿½/gm;
+        s/\xf9/ï¿½/gm;
+        s/\xfb/ï¿½/gm;
+        s/\xc1\x61/ï¿½/gm;
+        s/\xc1\x65/ï¿½/gm;
+        s/\xc1\x69/ï¿½/gm;
+        s/\xc1\x6f/ï¿½/gm;
+        s/\xc1\x75/ï¿½/gm;
+        s/\xc1\x41/ï¿½/gm;
+        s/\xc1\x45/ï¿½/gm;
+        s/\xc1\x49/ï¿½/gm;
+        s/\xc1\x4f/ï¿½/gm;
+        s/\xc1\x55/ï¿½/gm;
+        s/\xc2\x41/ï¿½/gm;
+        s/\xc2\x45/ï¿½/gm;
+        s/\xc2\x49/ï¿½/gm;
+        s/\xc2\x4f/ï¿½/gm;
+        s/\xc2\x55/ï¿½/gm;
+        s/\xc2\x59/ï¿½/gm;
+        s/\xc2\x61/ï¿½/gm;
+        s/\xc2\x65/ï¿½/gm;
+        s/\xc2\x69/ï¿½/gm;
+        s/\xc2\x6f/ï¿½/gm;
+        s/\xc2\x75/ï¿½/gm;
+        s/\xc2\x79/ï¿½/gm;
+        s/\xc3\x41/ï¿½/gm;
+        s/\xc3\x45/ï¿½/gm;
+        s/\xc3\x49/ï¿½/gm;
+        s/\xc3\x4f/ï¿½/gm;
+        s/\xc3\x55/ï¿½/gm;
+        s/\xc3\x61/ï¿½/gm;
+        s/\xc3\x65/ï¿½/gm;
+        s/\xc3\x69/ï¿½/gm;
+        s/\xc3\x6f/ï¿½/gm;
+        s/\xc3\x75/ï¿½/gm;
+        s/\xc4\x41/ï¿½/gm;
+        s/\xc4\x4e/ï¿½/gm;
+        s/\xc4\x4f/ï¿½/gm;
+        s/\xc4\x61/ï¿½/gm;
+        s/\xc4\x6e/ï¿½/gm;
+        s/\xc4\x6f/ï¿½/gm;
+        s/\xc8\x41/ï¿½/gm;
+        s/\xc8\x45/ï¿½/gm;
+        s/\xc8\x49/ï¿½/gm;
+        s/\xc8\x61/ï¿½/gm;
+        s/\xc8\x65/ï¿½/gm;
+        s/\xc8\x69/ï¿½/gm;
+        s/\xc8\x6F/ï¿½/gm;
+        s/\xc8\x75/ï¿½/gm;
+        s/\xc8\x76/ï¿½/gm;
+        s/\xc9\x41/ï¿½/gm;
+        s/\xc9\x45/ï¿½/gm;
+        s/\xc9\x49/ï¿½/gm;
+        s/\xc9\x4f/ï¿½/gm;
+        s/\xc9\x55/ï¿½/gm;
+        s/\xc9\x61/ï¿½/gm;
+        s/\xc9\x6f/ï¿½/gm;
+        s/\xc9\x75/ï¿½/gm;
+        s/\xca\x41/ï¿½/gm;
+        s/\xca\x61/ï¿½/gm;
+        s/\xd0\x43/ï¿½/gm;
+        s/\xd0\x63/ï¿½/gm;
 
         # this handles non-sorting blocks (if implementation requires this)
         $string = nsb_clean($_);
     }
     elsif ( $encoding eq "USMARC" || $encoding eq "MARC21" ) {
         if (/[\xc1-\xff]/) {
-            s/\xe1\x61/à/gm;
-            s/\xe1\x65/è/gm;
-            s/\xe1\x69/ì/gm;
-            s/\xe1\x6f/ò/gm;
-            s/\xe1\x75/ù/gm;
-            s/\xe1\x41/À/gm;
-            s/\xe1\x45/È/gm;
-            s/\xe1\x49/Ì/gm;
-            s/\xe1\x4f/Ò/gm;
-            s/\xe1\x55/Ù/gm;
-            s/\xe2\x41/Á/gm;
-            s/\xe2\x45/É/gm;
-            s/\xe2\x49/Í/gm;
-            s/\xe2\x4f/Ó/gm;
-            s/\xe2\x55/Ú/gm;
-            s/\xe2\x59/Ý/gm;
-            s/\xe2\x61/á/gm;
-            s/\xe2\x65/é/gm;
-            s/\xe2\x69/í/gm;
-            s/\xe2\x6f/ó/gm;
-            s/\xe2\x75/ú/gm;
-            s/\xe2\x79/ý/gm;
-            s/\xe3\x41/Â/gm;
-            s/\xe3\x45/Ê/gm;
-            s/\xe3\x49/Î/gm;
-            s/\xe3\x4f/Ô/gm;
-            s/\xe3\x55/Û/gm;
-            s/\xe3\x61/â/gm;
-            s/\xe3\x65/ê/gm;
-            s/\xe3\x69/î/gm;
-            s/\xe3\x6f/ô/gm;
-            s/\xe3\x75/û/gm;
-            s/\xe4\x41/Ã/gm;
-            s/\xe4\x4e/Ñ/gm;
-            s/\xe4\x4f/Õ/gm;
-            s/\xe4\x61/ã/gm;
-            s/\xe4\x6e/ñ/gm;
-            s/\xe4\x6f/õ/gm;
-            s/\xe8\x45/Ë/gm;
-            s/\xe8\x49/Ï/gm;
-            s/\xe8\x65/ë/gm;
-            s/\xe8\x69/ï/gm;
-            s/\xe8\x76/ÿ/gm;
-            s/\xe9\x41/Ä/gm;
-            s/\xe9\x4f/Ö/gm;
-            s/\xe9\x55/Ü/gm;
-            s/\xe9\x61/ä/gm;
-            s/\xe9\x6f/ö/gm;
-            s/\xe9\x75/ü/gm;
-            s/\xea\x41/Å/gm;
-            s/\xea\x61/å/gm;
+            s/\xe1\x61/ï¿½/gm;
+            s/\xe1\x65/ï¿½/gm;
+            s/\xe1\x69/ï¿½/gm;
+            s/\xe1\x6f/ï¿½/gm;
+            s/\xe1\x75/ï¿½/gm;
+            s/\xe1\x41/ï¿½/gm;
+            s/\xe1\x45/ï¿½/gm;
+            s/\xe1\x49/ï¿½/gm;
+            s/\xe1\x4f/ï¿½/gm;
+            s/\xe1\x55/ï¿½/gm;
+            s/\xe2\x41/ï¿½/gm;
+            s/\xe2\x45/ï¿½/gm;
+            s/\xe2\x49/ï¿½/gm;
+            s/\xe2\x4f/ï¿½/gm;
+            s/\xe2\x55/ï¿½/gm;
+            s/\xe2\x59/ï¿½/gm;
+            s/\xe2\x61/ï¿½/gm;
+            s/\xe2\x65/ï¿½/gm;
+            s/\xe2\x69/ï¿½/gm;
+            s/\xe2\x6f/ï¿½/gm;
+            s/\xe2\x75/ï¿½/gm;
+            s/\xe2\x79/ï¿½/gm;
+            s/\xe3\x41/ï¿½/gm;
+            s/\xe3\x45/ï¿½/gm;
+            s/\xe3\x49/ï¿½/gm;
+            s/\xe3\x4f/ï¿½/gm;
+            s/\xe3\x55/ï¿½/gm;
+            s/\xe3\x61/ï¿½/gm;
+            s/\xe3\x65/ï¿½/gm;
+            s/\xe3\x69/ï¿½/gm;
+            s/\xe3\x6f/ï¿½/gm;
+            s/\xe3\x75/ï¿½/gm;
+            s/\xe4\x41/ï¿½/gm;
+            s/\xe4\x4e/ï¿½/gm;
+            s/\xe4\x4f/ï¿½/gm;
+            s/\xe4\x61/ï¿½/gm;
+            s/\xe4\x6e/ï¿½/gm;
+            s/\xe4\x6f/ï¿½/gm;
+            s/\xe8\x45/ï¿½/gm;
+            s/\xe8\x49/ï¿½/gm;
+            s/\xe8\x65/ï¿½/gm;
+            s/\xe8\x69/ï¿½/gm;
+            s/\xe8\x76/ï¿½/gm;
+            s/\xe9\x41/ï¿½/gm;
+            s/\xe9\x4f/ï¿½/gm;
+            s/\xe9\x55/ï¿½/gm;
+            s/\xe9\x61/ï¿½/gm;
+            s/\xe9\x6f/ï¿½/gm;
+            s/\xe9\x75/ï¿½/gm;
+            s/\xea\x41/ï¿½/gm;
+            s/\xea\x61/ï¿½/gm;
 
             # this handles non-sorting blocks (if implementation requires this)
             $string = nsb_clean($_);
@@ -3014,6 +3036,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.64.2.2  2007/04/27 13:08:28  tipaul
+# porting bugfixes from rel_2_2 to rel_2_2_7 for 2.2.9 release
+#
 # Revision 1.115.2.64.2.1  2007/02/12 10:12:49  toins
 # Commiting BUG FIX for 2.2.7.1.
 #
@@ -3181,7 +3206,7 @@ Paul POULAIN paul.poulain@free.fr
 # (Not all items fields mapped to MARC)
 #
 # Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
-# adding decoder for Ä string
+# adding decoder for ï¿½ string
 #
 # Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
 # * removing a useless & CPU consuming call to MARCgetbiblio
@@ -3194,7 +3219,7 @@ Paul POULAIN paul.poulain@free.fr
 # Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
 # * fixing a bug in subfield order when MARCgetbiblio
 # * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
-# * adding some diacritic decoding (Ä, Ü...)
+# * adding some diacritic decoding (ï¿½, ï¿½...)
 #
 # Revision 1.115.2.14  2005/06/27 23:24:06  hdl
 # Display dashed ISBN

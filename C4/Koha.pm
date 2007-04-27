@@ -516,9 +516,10 @@ sub getprinters {
 }
 sub getbranch ($$) {
     my($query, $branches) = @_; # get branch for this query from branches
-    my $branch = $query->param('branch');
-    ($branch) || ($branch = $query->cookie('branch'));
-    ($branches->{$branch}) || ($branch=(keys %$branches)[0]);
+    my $branch = $query->param('branch') || $query->cookie('branch');
+	if ( ( ! $branch) && C4::Context->userenv() ) {
+		$branch = C4::Context->userenv->{'branch'} ;
+	}
     return $branch;
 }
 

@@ -110,7 +110,7 @@ number of elements in C<@orders>.
 sub getbasketcontent {
 	my ($basketno,$supplier,$orderby)=@_;
 	my $dbh = C4::Context->dbh;
-	my $query="Select aqorderbreakdown.*,biblio.*,biblioitems.*,aqorders.*,biblio.title from aqorders,biblio,biblioitems
+	my $query="Select aqorderbreakdown.*,biblio.*,biblioitems.*,aqorders.*,biblio.title from biblio,biblioitems,aqorders
 	left join aqorderbreakdown on aqorderbreakdown.ordernumber=aqorders.ordernumber
 	where basketno='$basketno'
 	and biblio.biblionumber=aqorders.biblionumber and biblioitems.biblioitemnumber

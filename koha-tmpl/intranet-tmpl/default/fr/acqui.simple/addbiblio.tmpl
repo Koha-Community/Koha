@@ -22,7 +22,7 @@
         <!--  /TMPL_LOOP -->
 	</div>
 
-<! -- RESET PAGINATION -->
+<!-- RESET PAGINATION -->
 <!-- TMPL_LOOP name="BIG_LOOP" -->
 <!-- hide every tab except the 1st -->
 <!-- TMPL_IF name="number" -->
@@ -37,7 +37,7 @@
                         <p>Est-ce un doublon de <a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
                         <p>Vous devez soit :</p>
                         <ul>
-                            <li>S'il s'agit d'un <em>doublon</em> <a href="additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebibid" -->">Editer exemplaires</a> de la notice existante</li>
+                            <li>S'il s'agit d'un <em>doublon</em> <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->">Editer exemplaires</a> de la notice existante</li>
                             <li>Sinon, cliquer pour <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Confirmer que ce n'est pas un doublon</a></li>
                         </ul>
                     </div>
@@ -61,7 +61,7 @@
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!-- TMPL_IF NAME="visibility" -->
-                <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
+                <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')" title="<!-- TMPL_VAR name="marc_lib_plain" -->">
                     <!-- TMPL_VAR NAME="subfield" -->
                 </a>
             <!-- /TMPL_IF -->
@@ -281,7 +281,7 @@ function PopupZ3950() {
 		}
 	}
 	if(error < 4){
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
 	} else {
 		alert("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");
 	}

@@ -1218,7 +1218,7 @@ sub fixoverduesonreturn {
 	$sth->execute($brn,$itm);
 	# alter fine to show that the book has been returned
 	if (my $data = $sth->fetchrow_hashref) {
-		my $usth=$dbh->prepare("update accountlines set accounttype='F' where (borrowernumber = ?) and (itemnumber = ?) and (acccountno = ?)");
+		my $usth=$dbh->prepare("update accountlines set accounttype='F' where (borrowernumber = ?) and (itemnumber = ?) and (accountno = ?)");
 		$usth->execute($brn,$itm,$data->{'accountno'});
 		$usth->finish();
 	}

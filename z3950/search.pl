@@ -88,6 +88,7 @@ if ($op ne "do_search"){
 		$temploop{server}=$server->{host};
 		$temploop{id}=$server->{id};
 		$temploop{checked}=$server->{checked};
+		$temploop{name}=$server->{name};
 		push (@serverloop, \%temploop);
 	}
 	$template->param(isbn=>$isbn, issn=>$issn,title=>$title,author=>$author,
@@ -170,8 +171,14 @@ AGAIN:
 			for ($i=0; $i<(($numresults<5) ? ($numresults) : (5)) ; $i++) {
 				my $rec=$oResult[$k]->record($i); 										
 				my $marcrecord;
-				$marcdata = $rec->raw();											
-                $marcrecord= fixEncoding($marcdata);
+                                eval {
+                                    $marcdata = $rec->raw();
+                                };
+				if ($@) { 
+					warn "MARC::Record chokes on MARC from ZOOM.";
+					warn $@;
+					next;
+				}                $marcrecord= fixEncoding($marcdata);
 ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here

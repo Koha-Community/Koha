@@ -75,22 +75,22 @@ sub GetLateIssues {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($supplierid) {
-		$sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
-							FROM subscription, serial, biblio
-							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-							WHERE subscription.subscriptionid = serial.subscriptionid AND
-							((planneddate < now() and serial.STATUS =1) OR serial.STATUS = 3) and
-							subscription.aqbooksellerid=$supplierid and
-							biblio.biblionumber = subscription.biblionumber order by title
-							");
+            $sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
+                    FROM subscription, serial, biblio
+                    LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+                    WHERE subscription.subscriptionid = serial.subscriptionid AND
+                    ((planneddate < now() and serial.STATUS =1) OR serial.STATUS = 3) and
+                    subscription.aqbooksellerid=$supplierid and
+                    biblio.biblionumber = subscription.biblionumber order by title
+                    ");
 	} else {
 		$sth = $dbh->prepare("SELECT name,title,planneddate,serialseq,serial.subscriptionid
-							FROM subscription, serial, biblio
-							LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-							WHERE subscription.subscriptionid = serial.subscriptionid AND
-							((planneddate < now() and serial.STATUS <=3) OR serial.STATUS = 3) and
-							biblio.biblionumber = subscription.biblionumber order by title
-							");
+                    FROM subscription, serial, biblio
+                    LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+                    WHERE subscription.subscriptionid = serial.subscriptionid AND
+                    ((planneddate < now() and serial.STATUS <=3) OR serial.STATUS = 3) and
+                    biblio.biblionumber = subscription.biblionumber order by title
+                    ");
 	}
 	$sth->execute;
 	my @issuelist;

@@ -258,8 +258,8 @@ if (defined $href) {
     for my $msgid (keys %$href) {
 	if ($msgid =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/) {
 	    my $candidate = TmplTokenizer::charset_canon $2;
-	    die "Conflicting charsets in msgid: $charset_in vs $candidate\n"
-		    if defined $charset_in && $charset_in ne $candidate;
+# 	    die "Conflicting charsets in msgid: $charset_in vs $candidate\n"
+# 		    if defined $charset_in && $charset_in ne $candidate;
 	    $charset_in = $candidate;
 	}
     }
@@ -268,6 +268,8 @@ if (!defined $charset_in) {
     $charset_in = TmplTokenizer::charset_canon 'iso8859-1';
     warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
 }
+
+print "Charset : $charset_in\n";
 
 my $xgettext = './xgettext.pl';	# actual text extractor script
 my $st;

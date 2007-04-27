@@ -132,6 +132,7 @@ my $res;
 						my $tagsubf = $tag.$subfieldcode;
 						$calculated =~ s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
 					}
+					$calculated=~s/\{(.?.?.?.?)$tag.(.*?)\}//g;
 					# field builded, store the result
 					if ($calculated && !$hasputtextbefore) { # put textbefore if not done
 						$blocres .=$textbefore;
@@ -149,7 +150,7 @@ my $res;
 	}
 	$res.=$blocres;
 # }
-$res =~ s/\{(.*?)\}//g;
+# $res =~ s/\{(.*?)\}//g;
 $res =~ s/\\n/\n/g;
 $res =~ s/\n/<br\/>/g;
 # remove empty ()
