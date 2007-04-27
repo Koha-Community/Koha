@@ -235,7 +235,7 @@ foreach my $field (@fields) {
     }
 }
 my ( $holdingbrtagf, $holdingbrtagsubf ) =
-  &GetMarcFromKohaField( $dbh, "items.holdingbranch", $itemtype );
+  &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
 @big_array =
   sort { $a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf} } @big_array;
 

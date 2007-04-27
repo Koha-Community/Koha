@@ -1601,14 +1601,14 @@ sub ItemizeSerials {
         unless ($exists) {
             my $marcrecord = MARC::Record->new();
             my ( $tag, $subfield ) =
-              GetMarcFromKohaField( $dbh, "items.barcode", $fwk );
+              GetMarcFromKohaField( "items.barcode", $fwk );
             my $newField =
               MARC::Field->new( "$tag", '', '',
                 "$subfield" => $info->{barcode} );
             $marcrecord->insert_fields_ordered($newField);
             if ( $info->{branch} ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.homebranch",
+                  GetMarcFromKohaField( "items.homebranch",
                     $fwk );
 
                 #warn "items.homebranch : $tag , $subfield";
@@ -1623,7 +1623,7 @@ sub ItemizeSerials {
                     $marcrecord->insert_fields_ordered($newField);
                 }
                 ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.holdingbranch",
+                  GetMarcFromKohaField( "items.holdingbranch",
                     $fwk );
 
                 #warn "items.holdingbranch : $tag , $subfield";
@@ -1640,7 +1640,7 @@ sub ItemizeSerials {
             }
             if ( $info->{itemcallnumber} ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.itemcallnumber",
+                  GetMarcFromKohaField( "items.itemcallnumber",
                     $fwk );
 
                 #warn "items.itemcallnumber : $tag , $subfield";
@@ -1657,7 +1657,7 @@ sub ItemizeSerials {
             }
             if ( $info->{notes} ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.itemnotes", $fwk );
+                  GetMarcFromKohaField( "items.itemnotes", $fwk );
 
                 # warn "items.itemnotes : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
@@ -1673,7 +1673,7 @@ sub ItemizeSerials {
             }
             if ( $info->{location} ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.location", $fwk );
+                  GetMarcFromKohaField( "items.location", $fwk );
 
                 # warn "items.location : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
@@ -1689,7 +1689,7 @@ sub ItemizeSerials {
             }
             if ( $info->{status} ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.notforloan",
+                  GetMarcFromKohaField( "items.notforloan",
                     $fwk );
 
                 # warn "items.notforloan : $tag , $subfield";
@@ -1706,7 +1706,7 @@ sub ItemizeSerials {
             }
             if ( C4::Context->preference("RoutingSerials") ) {
                 my ( $tag, $subfield ) =
-                  GetMarcFromKohaField( $dbh, "items.dateaccessioned",
+                  GetMarcFromKohaField( "items.dateaccessioned",
                     $fwk );
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)

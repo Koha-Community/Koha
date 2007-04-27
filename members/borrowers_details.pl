@@ -26,14 +26,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use Date::Manip;
+use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-use CGI;
 use C4::Members;
 use C4::Koha;
-
-use Date::Manip;
 use C4::Date;
 use C4::Input;
 use C4::Log;
@@ -70,11 +69,9 @@ $template->param(		borrowernumber  => $borrowernumber,#register number
  				categorycode 	=> $data{'categorycode'},
 				title 		=> $data{'title'},
 				category_type	=> $borrowercategory ->{'category_type'},
-	# # 			
  				"title_".$data{'title'} 	    => " SELECTED ",			
  				dateofbirth	=> format_date($data{'dateofbirth'}),
  				description	=> $borrowercategory->{'description'}
-# 				
 				);
 	$template->param(Institution => 1) if ($category_type eq "I");
 	output_html_with_http_headers $input, $cookie, $template->output;

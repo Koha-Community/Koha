@@ -44,7 +44,7 @@ my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
-my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber","");
+my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 
 while ( my $record = $batch->next() ) {
 my $biblionumber=$record->field($tagfield)->subfield($biblionumtagsubfield);

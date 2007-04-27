@@ -28,8 +28,8 @@ while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
 sub MARCmodbiblionumber{
     my ($biblionumber,$biblioitemnumber,$record)=@_;
     
-    my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber","");
-    my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblioitemnumber","");
+    my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
+    my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField("biblio.biblioitemnumber","");
         
     my $update=0;
         my @tags = $record->field($tagfield);

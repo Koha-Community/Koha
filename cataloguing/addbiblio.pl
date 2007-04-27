@@ -127,7 +127,7 @@ sub MARCfindbreeding {
             return -1;
         } else {
             if (C4::Context->preference("z3950NormalizeAuthor") and C4::Context->preference("z3950AuthorAuthFields")){
-                my ($tag,$subfield) = GetMarcFromKohaField($dbh,"biblio.author");
+                my ($tag,$subfield) = GetMarcFromKohaField("biblio.author");
 #                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields = C4::Context->preference("z3950AuthorAuthFields");
                 my @auth_fields= split /,/,$auth_fields;
@@ -518,8 +518,8 @@ my ($biblioitemnumtagfield,$biblioitemnumtagsubfield,$bibitem,$biblioitemnumber)
 if ($biblionumber) {
     $is_a_modif=1;
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
-    ($biblionumtagfield,$biblionumtagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber",$frameworkcode);
-    ($biblioitemnumtagfield,$biblioitemnumtagsubfield) = &GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
+    ($biblionumtagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
+    ($biblioitemnumtagfield,$biblioitemnumtagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
     # search biblioitems value
     my $sth=$dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
     $sth->execute($biblionumber);

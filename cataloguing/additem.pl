@@ -87,7 +87,7 @@ if ($op eq "additem") {
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
     # if autoBarcode is ON, calculate barcode...
     if (C4::Context->preference('autoBarcode')) {
-        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField($dbh,"items.barcode");
+        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
         unless ($record->field($tagfield)->subfield($tagsubfield)) {
             my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
             $sth_barcode->execute;
@@ -175,8 +175,8 @@ my @fields = $temp->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
-my ($branchtagfield,$branchtagsubfield) = &GetMarcFromKohaField($dbh,"items.homebranch",$frameworkcode);
+my ($itemtagfield,$itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+my ($branchtagfield,$branchtagsubfield) = &GetMarcFromKohaField("items.homebranch",$frameworkcode);
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
@@ -206,7 +206,7 @@ foreach my $subfield_code  (keys(%witness)) {
         $big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
     }
 }
-my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField($dbh,"items.holdingbranch",$frameworkcode);
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$frameworkcode);
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
 # now, construct template !

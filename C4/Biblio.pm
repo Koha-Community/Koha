@@ -215,8 +215,8 @@ sub AddBiblio {
     # we build the new field with biblionumber and biblioitemnumber
     # we drop the original field
     # we add the new builded field.
-    ( my $biblio_tag, my $biblio_subfield ) = GetMarcFromKohaField($dbh,"biblio.biblionumber",$frameworkcode);
-    ( my $biblioitem_tag, my $biblioitem_subfield ) = GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber",$frameworkcode);
+    ( my $biblio_tag, my $biblio_subfield ) = GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
+    ( my $biblioitem_tag, my $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
 
     my $newfield;
 
@@ -502,7 +502,7 @@ sub ModItemInMarconefield {
     }
 
     my $record = GetMarcItem( $biblionumber, $itemnumber );
-    my ($tagfield, $tagsubfield) = GetMarcFromKohaField($dbh, $itemfield,'');
+    my ($tagfield, $tagsubfield) = GetMarcFromKohaField( $itemfield,'');
     if ($tagfield && $tagsubfield) {
         my $tag = $record->field($tagfield);
         if ($tag) {
@@ -531,7 +531,7 @@ sub ModItemInMarc {
     
     # get complete MARC record & replace the item field by the new one
     my $completeRecord = GetMarcBiblio($biblionumber);
-    my ($itemtag,$itemsubfield) = GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
+    my ($itemtag,$itemsubfield) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
     my $itemField = $ItemRecord->field($itemtag);
     my @items = $completeRecord->field($itemtag);
     foreach (@items) {
@@ -664,7 +664,7 @@ sub DelItem {
     $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
 
     #search item field code
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField($dbh,"items.itemnumber",$frameworkcode);
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
     my @fields = $record->field($itemtag);
     # delete the item specified
     foreach my $field (@fields) {
@@ -921,7 +921,7 @@ sub GetItemStatus {
     my $sth;
     $fwk = '' unless ($fwk);
     my ( $tag, $subfield ) =
-      GetMarcFromKohaField( $dbh, "items.notforloan", $fwk );
+      GetMarcFromKohaField( "items.notforloan", $fwk );
     if ( $tag and $subfield ) {
         my $sth =
           $dbh->prepare(
@@ -1000,7 +1000,7 @@ sub GetItemLocation {
     my $sth;
     $fwk = '' unless ($fwk);
     my ( $tag, $subfield ) =
-      GetMarcFromKohaField( $dbh, "items.location", $fwk );
+      GetMarcFromKohaField( "items.location", $fwk );
     if ( $tag and $subfield ) {
         my $sth =
           $dbh->prepare(
@@ -1502,7 +1502,7 @@ sub GetMarcStructure {
 
 =over 4
 
-($MARCfield,$MARCsubfield)=GetMarcFromKohaField($dbh,$kohafield,$frameworkcode);
+($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
 Returns the MARC fields & subfields mapped to the koha field 
 for the given frameworkcode
 
@@ -1511,7 +1511,7 @@ for the given frameworkcode
 =cut
 
 sub GetMarcFromKohaField {
-    my ( $dbh, $kohafield, $frameworkcode ) = @_;
+    my ( $kohafield, $frameworkcode ) = @_;
     return 0, 0 unless $kohafield;
     my $relations = C4::Context->marcfromkohafield;
     return (
@@ -1636,7 +1636,7 @@ sub GetMarcItem {
     $record = MARC::Record::new_from_xml( $marcxml, "utf8", $marcflavour );
     # now, find where the itemnumber is stored & extract only the item
     my ( $itemnumberfield, $itemnumbersubfield ) =
-      GetMarcFromKohaField( $dbh, 'items.itemnumber', '' );
+      GetMarcFromKohaField( 'items.itemnumber', '' );
     my @fields = $record->field($itemnumberfield);
     foreach my $field (@fields) {
         if ( $field->subfield($itemnumbersubfield) eq $itemnumber ) {
@@ -2228,7 +2228,7 @@ sub TransformMarcToKohaOneField {
 
     my $res = "";
     my ( $tagfield, $subfield ) =
-      GetMarcFromKohaField( "", $kohatable . "." . $kohafield,
+      GetMarcFromKohaField( $kohatable . "." . $kohafield,
         $frameworkcode );
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->tag() < 10 ) {
@@ -2477,7 +2477,7 @@ sub PrepareItemrecordDisplay {
     my $dbh = C4::Context->dbh;
     my $frameworkcode = &GetFrameworkCode( $bibnum );
     my ( $itemtagfield, $itemtagsubfield ) =
-      &GetMarcFromKohaField( $dbh, "items.itemnumber", $frameworkcode );
+      &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( $dbh, 1, $frameworkcode );
     my $itemrecord = GetMarcItem( $bibnum, $itemnum) if ($itemnum);
     my @loop_data;
@@ -2816,7 +2816,7 @@ sub MARCitemchange {
     my $dbh = C4::Context->dbh;
     
     my ( $tagfield, $tagsubfield ) =
-      GetMarcFromKohaField( $dbh, $itemfield, "" );
+      GetMarcFromKohaField( $itemfield, "" );
     if ( ($tagfield) && ($tagsubfield) ) {
         my $tag = $record->field($tagfield);
         if ($tag) {
@@ -3691,6 +3691,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.201  2007/04/27 14:00:49  hdl
+# Removing $dbh from GetMarcFromKohaField (dbh is not used in this function.)
+#
 # Revision 1.200  2007/04/25 16:26:42  tipaul
 # Koha 3.0 nozebra 1st commit : the script misc/migration_tools/rebuild_nozebra.pl build the nozebra table, and, if you set NoZebra to Yes, queries will be done through zebra. TODO :
 # - add nozebra table management on biblio editing

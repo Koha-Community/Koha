@@ -252,7 +252,7 @@ sub SendAlerts {
 		foreach (@$alerts) {
 			# and parse borrower ...
 			my $innerletter = $letter;
-			my $borinfo = GetMember('',$_->{'borrowernumber'});
+			my $borinfo = GetMember($_->{'borrowernumber'},'borrowernumber');
 			parseletter($innerletter,'borrowers',$_->{'borrowernumber'});
 			# ... then send mail
 			if ($borinfo->{emailaddress}) {
