@@ -1065,7 +1065,7 @@ sub NZgetRecords {
     my $result = NZanalyse($koha_query);
 #     use Data::Dumper;
 #     warn "==========".@$sort_by_ref[0];
-    return (undef,NZorder($result,@$sort_by_ref[0]),undef);
+    return (undef,NZorder($result,@$sort_by_ref[0],$results_per_page,$offset),undef);
 }
 
 =item
@@ -1204,9 +1204,11 @@ sub NZanalyse {
 }
 
 sub NZorder {
-    my ($biblionumbers, $ordering) = @_;
+    my ($biblionumbers, $ordering,$results_per_page,$offset) = @_;
     # order title asc by default
     $ordering = '1=36 <i' unless $ordering;
+    $results_per_page=20 unless $results_per_page;
+    $offset = 0 unless $offset;
     my $dbh = C4::Context->dbh;
     #
     # order by POPULARITY
@@ -1347,23 +1349,32 @@ sub NZorder {
     } else { 
         # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
         my %result;
+#         splice(@X,$results_per_page*(1+$offset));
+#         splice(@X,0,$results_per_page*$offset);
         foreach (split /,/,$biblionumbers) {
             my ($biblionumber,$title) = split /;/,$_;
             # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
             # and we don't want to get only 1 result for each of them !!!
-            $result{$title.$biblionumber}=GetMarcBiblio($biblionumber);
+            # hint & speed improvement : we can order without reading the record
+            # so order, and read records only for the requested page !
+            $result{$title.$biblionumber}=$biblionumber;
         }
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
         if ($ordering eq '1=36 <i') { # sort by title desc
             foreach my $key (sort (keys %result)) {
-                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         } else { # sort by title ASC
             foreach my $key (sort { $a <=> $b } (keys %result)) {
-                $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
+        }
+        # for the requested page, replace biblionumber by the complete record
+        # speed improvement : avoid reading too much things
+        for (my $counter=$offset;$counter<=$offset+$results_per_page;$counter++) {
+            $result_hash->{'RECORDS'}[$counter] = GetMarcBiblio($result_hash->{'RECORDS'}[$counter])->as_usmarc;
         }
         my $finalresult=();
         $result_hash->{'hits'} = $numbers;
