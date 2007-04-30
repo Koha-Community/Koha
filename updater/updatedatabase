@@ -1435,7 +1435,7 @@ my %tabledata = (
                 'type' => 1
             },
             explanation => "Minimum length for patron passwords",
-            type => 'YesNo',
+            type => 'Integer',
             value =>5,
         },
 
@@ -2208,6 +2208,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.100.2.54.2.3  2007/04/30 11:54:05  tipaul
+# fix for #1333 (MinPasswordLength error)
+#
 # Revision 1.100.2.54.2.2  2007/03/06 15:16:06  tipaul
 # MinPasswordLength
 #
