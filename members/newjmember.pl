@@ -131,6 +131,8 @@ for (my $i=0;$i<3;$i++){
 			($data{"sex_child_$i"} eq 'M') ? ($ident{'sex'}="Male") : ($ident{'sex'}="Female") ;
 			$ident{'school'}=$data{"school_child_$i"};
 			$ident{'notes'}=$data{"altnotes_child_$i"};
+			$ident{'joining'}=$data{"joining_child_$i"};
+			$ident{'expiry'}=$data{"expiry_child_$i"};
 			push(@identsloop, \%ident);
 		}
 	}

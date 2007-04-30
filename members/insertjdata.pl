@@ -25,7 +25,8 @@
 use CGI;
 use C4::Context;
 use C4::Input;
-use Date::Manip;
+# use Date::Manip;
+use C4::Date;
 use strict;
 
 my $input= new CGI;
@@ -60,11 +61,9 @@ for (my $i=0;$i<1;$i++){
 		where borrowernumber=$data{'borrowernumber'}";
 		#  print $query;
 	}elsif ($data{"cardnumber_child_$i"} ne ''){
-		my $dob=$data{"dateofbirth_child_$i"};
-		$dob=ParseDate($dob);
-		$dob=UnixDate($dob,'%Y-%m-%d');
-		$data{'joining'}=ParseDate("today");
-		$data{'joining'}=UnixDate($data{'joining'},'%Y-%m-%d');
+		my $dob=format_date_in_iso($data{"dateofbirth_child_$i"});
+		$data{'joining'}=format_date_in_iso($data{"joining_child_$i"});
+		my $expiry=format_date_in_iso($data{"expiry_child_$i"});
 		my $cardnumber=$data{"cardnumber_child_$i"};
 		my $bornum=$data{"bornumber_child_$i"};
 		my $firstname=$data{"firstname_child_$i"};
@@ -80,7 +79,7 @@ for (my $i=0;$i<1;$i++){
 		firstname,altnotes,dateofbirth,contactname,emailaddress,dateenrolled,streetcity,
 		altrelationship,othernames,phoneday,categorycode,city,area,phone,borrowernotes,altphone,surname,
 		initials,ethnicity,borrowernumber,guarantor,school,physstreet,sort1,sort2, branchcode)
-		values ('','$data{'expiry'}',
+		values ('','$expiry',
 		'$cardnumber',
 		'$sex','$data{'ethnotes'}','$data{'address'}','$data{'faxnumber'}',
 		'$firstname','$data{'altnotes'}','$dob','$data{'contactname'}','$data{'emailaddress'}',
