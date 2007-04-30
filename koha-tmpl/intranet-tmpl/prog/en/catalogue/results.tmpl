@@ -79,6 +79,7 @@
             </table>
             </form>
     
+            
             <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
             <table>
                 <tr>
@@ -98,15 +99,11 @@
             </table>
             </form>
         <!-- TMPL_ELSE -->
-            
-            <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="myform" id="mainform">
-            
+            <div class="searchresults">
+              <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="myform" id="mainform">
                 <!-- TMPL_IF NAME="searchdesc" -->
                     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
                 <!-- /TMPL_IF -->
-            
-                <div class="searchresults">
-                
                     <!-- RE-SORT START -->
                     <!-- TMPL_IF NAME="sort_by_loop" -->
                     <p>
@@ -120,13 +117,17 @@
                     </p>
                     <!-- /TMPL_IF -->
                     <!-- RESORT END -->
+              </form>
                     
                     <!-- ######### -->
                     
+                    <dl>
                     <!-- FACETS START -->
                     <!-- TMPL_IF NAME="opacfacets" -->
-                    <div id="facets" style="display:inline;" >
-                    <h2>Refine Your Search</h2>
+                    <dt id="facets">
+                    Refine Your Search
+                    </dt>
+                    <dd>
                     <ul>
                     <!-- TMPL_LOOP NAME="facets_loop" -->
                     <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
@@ -149,9 +150,43 @@
                     </li>
                     <!-- /TMPL_LOOP -->
                     </ul>
-                    </div>
+                    </dd>
                     <!-- /TMPL_IF -->
                     <!-- FACETS END -->
+                    
+                    <!-- BULKEDIT START -->
+                    <!--TMPL_IF Name="bulkedit"--> 
+                    <dt id="hbulkedit" onclick="var Elt=document.getElementById('parambulkedit');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
+                    Bulk edit
+                    </dt>
+                    <dd id="parambulkedit" style="display:none;">
+                      <form name="bulkedit" action="search.pl">
+                          <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" -->" />
+                          <input type="hidden" name="operation" value="bulkedit" />
+                          Search for Value :<input type="text" name="inputvalue" value=""/><br/>
+                          Subfield       <select name="tagsubfield">
+                          <!--TMPL_LOOP Name="tagsubfields"-->
+                            <option value="<!--TMPL_VAR Name="tagsubfield"-->"> <!--TMPL_VAR Name="tagsubfield"-->
+                            <!-- --<TMPL_VAR Name="tagdesc">--<TMPL_VAR Name="subfielddesc">-->
+                            </option>
+                          <!--/TMPL_LOOP -->
+                          </select><br/>
+                          Change to : <input type="text" name="targetvalue" value=""/><br/>
+                          Test only : <input type="checkbox" name="test" value="1"/><br/>
+                          <input type="Submit" name="Edit" value="Edit"/>
+                      </form>
+                    </dd>
+    <!-- TMPL_IF NAME="bulkeditresults" -->
+    <dd><em>
+        tagsubfield : <!-- TMPL_VAR NAME="countchanged" --> Change <!-- TMPL_VAR NAME="countchanged" --> To <!-- TMPL_VAR NAME="countchanged" --><br />
+        <!-- TMPL_VAR NAME="countchanged" --> biblios changed <br />
+        <!--TMPL_VAR Name="countunchanged"--> biblios unchanged<br />
+        <em>
+    </dd>
+    <!-- /TMPL_IF -->
+                    <!--/TMPL_IF--> 
+                    <!-- BULKEDIT END -->
+                    </dl>
                     
                     <!-- ######### -->
 
@@ -259,7 +294,6 @@
                         <!-- /TMPL_LOOP -->
                 </table>
                 </div>
-            </form>
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF NAME="PAGE_NUMBERS" -->
