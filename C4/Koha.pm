@@ -75,6 +75,8 @@ Koha.pm provides many functions for Koha scripts.
   &GetAuthorisedValues
   &FixEncoding
   &GetKohaAuthorisedValues
+  &GetManagedTagSubfields
+
   $DEBUG
   );
 
@@ -1184,6 +1186,39 @@ sub GetKohaAuthorisedValues {
   return \%values;
 }
 
+=head2 GetManagedTagSubfields
+
+=over 4
+
+$res = GetManagedTagSubfields();
+
+Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
+$forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
+$frameworkcode : the framework code to read
+
+=back
+
+=back
+
+=cut
+
+sub GetManagedTagSubfields{
+  my $dbh=C4::Context->dbh;
+  my $rq=$dbh->prepare(qq|
+SELECT 
+  DISTINCT CONCAT( marc_subfield_structure.tagfield, tagsubfield ) AS tagsubfield, 
+  marc_subfield_structure.liblibrarian as subfielddesc, 
+  marc_tag_structure.liblibrarian as tagdesc
+FROM marc_subfield_structure
+  LEFT JOIN marc_tag_structure 
+    ON marc_tag_structure.tagfield = marc_subfield_structure.tagfield
+    AND marc_tag_structure.frameworkcode = marc_subfield_structure.frameworkcode
+WHERE marc_subfield_structure.tab>=0
+ORDER BY tagsubfield|);
+  $rq->execute;
+  my $data=$rq->fetchall_arrayref({});
+  return $data;
+}
 
 1;
 
