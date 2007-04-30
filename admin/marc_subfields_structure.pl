@@ -237,7 +237,7 @@ if ($op eq 'add_form') {
 		$i++;
 	}
 	# add more_subfields empty lines for add if needed
-	for (my $i=1;$i<=$more_subfields;$i++) {
+	for (my $j=1;$j<=$more_subfields;$j++) {
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id => "tab$i",
@@ -257,19 +257,19 @@ if ($op eq 'add_form') {
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
 		$row_data{hidden} = "";
-		$row_data{repeatable} = CGI::checkbox( -name=> 'repeatable',
+		$row_data{repeatable} = CGI::checkbox( -name=> "repeatable$i",
 				-id => "repeatable$i",
 				-checked => '',
 				-value => 1,
 	 			-tabindex=>'',
 				-label => '');
-		$row_data{mandatory} = CGI::checkbox( -name=> 'mandatory',
+		$row_data{mandatory} = CGI::checkbox( -name=> "mandatory$i",
 			-id => "mandatory$i",
 			-checked => '',
 			-value => 1,
  			-tabindex=>'',
 			-label => '');
-		$row_data{isurl} = CGI::checkbox(-name => 'isurl',
+		$row_data{isurl} = CGI::checkbox(-name => "isurl$i",
 			-id => "isurl$i",
 			-checked => '',
 			-value => 1,
