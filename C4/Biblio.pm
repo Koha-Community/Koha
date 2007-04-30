@@ -2604,130 +2604,130 @@ sub char_decode {
 
     # 	$encoding = C4::Context->preference("marcflavour") unless $encoding;
     if ( $encoding eq "UNIMARC" ) {
-#         s/\xe1/�/gm;
-        s/\xe2/�/gm;
-        s/\xe9/�/gm;
-        s/\xec/�/gm;
-        s/\xf1/�/gm;
-        s/\xf3/�/gm;
-        s/\xf9/�/gm;
-        s/\xfb/�/gm;
-        s/\xc1\x61/�/gm;
-        s/\xc1\x65/�/gm;
-        s/\xc1\x69/�/gm;
-        s/\xc1\x6f/�/gm;
-        s/\xc1\x75/�/gm;
-        s/\xc1\x41/�/gm;
-        s/\xc1\x45/�/gm;
-        s/\xc1\x49/�/gm;
-        s/\xc1\x4f/�/gm;
-        s/\xc1\x55/�/gm;
-        s/\xc2\x41/�/gm;
-        s/\xc2\x45/�/gm;
-        s/\xc2\x49/�/gm;
-        s/\xc2\x4f/�/gm;
-        s/\xc2\x55/�/gm;
-        s/\xc2\x59/�/gm;
-        s/\xc2\x61/�/gm;
-        s/\xc2\x65/�/gm;
-        s/\xc2\x69/�/gm;
-        s/\xc2\x6f/�/gm;
-        s/\xc2\x75/�/gm;
-        s/\xc2\x79/�/gm;
-        s/\xc3\x41/�/gm;
-        s/\xc3\x45/�/gm;
-        s/\xc3\x49/�/gm;
-        s/\xc3\x4f/�/gm;
-        s/\xc3\x55/�/gm;
-        s/\xc3\x61/�/gm;
-        s/\xc3\x65/�/gm;
-        s/\xc3\x69/�/gm;
-        s/\xc3\x6f/�/gm;
-        s/\xc3\x75/�/gm;
-        s/\xc4\x41/�/gm;
-        s/\xc4\x4e/�/gm;
-        s/\xc4\x4f/�/gm;
-        s/\xc4\x61/�/gm;
-        s/\xc4\x6e/�/gm;
-        s/\xc4\x6f/�/gm;
-        s/\xc8\x41/�/gm;
-        s/\xc8\x45/�/gm;
-        s/\xc8\x49/�/gm;
-        s/\xc8\x61/�/gm;
-        s/\xc8\x65/�/gm;
-        s/\xc8\x69/�/gm;
-        s/\xc8\x6F/�/gm;
-        s/\xc8\x75/�/gm;
-        s/\xc8\x76/�/gm;
-        s/\xc9\x41/�/gm;
-        s/\xc9\x45/�/gm;
-        s/\xc9\x49/�/gm;
-        s/\xc9\x4f/�/gm;
-        s/\xc9\x55/�/gm;
-        s/\xc9\x61/�/gm;
-        s/\xc9\x6f/�/gm;
-        s/\xc9\x75/�/gm;
-        s/\xca\x41/�/gm;
-        s/\xca\x61/�/gm;
-        s/\xd0\x43/�/gm;
-        s/\xd0\x63/�/gm;
+#         s/\xe1/Æ/gm;
+        s/\xe2/Ð/gm;
+        s/\xe9/Ø/gm;
+        s/\xec/þ/gm;
+        s/\xf1/æ/gm;
+        s/\xf3/ð/gm;
+        s/\xf9/ø/gm;
+        s/\xfb/ß/gm;
+        s/\xc1\x61/à/gm;
+        s/\xc1\x65/è/gm;
+        s/\xc1\x69/ì/gm;
+        s/\xc1\x6f/ò/gm;
+        s/\xc1\x75/ù/gm;
+        s/\xc1\x41/À/gm;
+        s/\xc1\x45/È/gm;
+        s/\xc1\x49/Ì/gm;
+        s/\xc1\x4f/Ò/gm;
+        s/\xc1\x55/Ù/gm;
+        s/\xc2\x41/Á/gm;
+        s/\xc2\x45/É/gm;
+        s/\xc2\x49/Í/gm;
+        s/\xc2\x4f/Ó/gm;
+        s/\xc2\x55/Ú/gm;
+        s/\xc2\x59/Ý/gm;
+        s/\xc2\x61/á/gm;
+        s/\xc2\x65/é/gm;
+        s/\xc2\x69/í/gm;
+        s/\xc2\x6f/ó/gm;
+        s/\xc2\x75/ú/gm;
+        s/\xc2\x79/ý/gm;
+        s/\xc3\x41/Â/gm;
+        s/\xc3\x45/Ê/gm;
+        s/\xc3\x49/Î/gm;
+        s/\xc3\x4f/Ô/gm;
+        s/\xc3\x55/Û/gm;
+        s/\xc3\x61/â/gm;
+        s/\xc3\x65/ê/gm;
+        s/\xc3\x69/î/gm;
+        s/\xc3\x6f/ô/gm;
+        s/\xc3\x75/û/gm;
+        s/\xc4\x41/Ã/gm;
+        s/\xc4\x4e/Ñ/gm;
+        s/\xc4\x4f/Õ/gm;
+        s/\xc4\x61/ã/gm;
+        s/\xc4\x6e/ñ/gm;
+        s/\xc4\x6f/õ/gm;
+        s/\xc8\x41/Ä/gm;
+        s/\xc8\x45/Ë/gm;
+        s/\xc8\x49/Ï/gm;
+        s/\xc8\x61/ä/gm;
+        s/\xc8\x65/ë/gm;
+        s/\xc8\x69/ï/gm;
+        s/\xc8\x6F/ö/gm;
+        s/\xc8\x75/ü/gm;
+        s/\xc8\x76/ÿ/gm;
+        s/\xc9\x41/Ä/gm;
+        s/\xc9\x45/Ë/gm;
+        s/\xc9\x49/Ï/gm;
+        s/\xc9\x4f/Ö/gm;
+        s/\xc9\x55/Ü/gm;
+        s/\xc9\x61/ä/gm;
+        s/\xc9\x6f/ö/gm;
+        s/\xc9\x75/ü/gm;
+        s/\xca\x41/Å/gm;
+        s/\xca\x61/å/gm;
+        s/\xd0\x43/Ç/gm;
+        s/\xd0\x63/ç/gm;
 
         # this handles non-sorting blocks (if implementation requires this)
         $string = nsb_clean($_);
     }
     elsif ( $encoding eq "USMARC" || $encoding eq "MARC21" ) {
         if (/[\xc1-\xff]/) {
-            s/\xe1\x61/�/gm;
-            s/\xe1\x65/�/gm;
-            s/\xe1\x69/�/gm;
-            s/\xe1\x6f/�/gm;
-            s/\xe1\x75/�/gm;
-            s/\xe1\x41/�/gm;
-            s/\xe1\x45/�/gm;
-            s/\xe1\x49/�/gm;
-            s/\xe1\x4f/�/gm;
-            s/\xe1\x55/�/gm;
-            s/\xe2\x41/�/gm;
-            s/\xe2\x45/�/gm;
-            s/\xe2\x49/�/gm;
-            s/\xe2\x4f/�/gm;
-            s/\xe2\x55/�/gm;
-            s/\xe2\x59/�/gm;
-            s/\xe2\x61/�/gm;
-            s/\xe2\x65/�/gm;
-            s/\xe2\x69/�/gm;
-            s/\xe2\x6f/�/gm;
-            s/\xe2\x75/�/gm;
-            s/\xe2\x79/�/gm;
-            s/\xe3\x41/�/gm;
-            s/\xe3\x45/�/gm;
-            s/\xe3\x49/�/gm;
-            s/\xe3\x4f/�/gm;
-            s/\xe3\x55/�/gm;
-            s/\xe3\x61/�/gm;
-            s/\xe3\x65/�/gm;
-            s/\xe3\x69/�/gm;
-            s/\xe3\x6f/�/gm;
-            s/\xe3\x75/�/gm;
-            s/\xe4\x41/�/gm;
-            s/\xe4\x4e/�/gm;
-            s/\xe4\x4f/�/gm;
-            s/\xe4\x61/�/gm;
-            s/\xe4\x6e/�/gm;
-            s/\xe4\x6f/�/gm;
-            s/\xe8\x45/�/gm;
-            s/\xe8\x49/�/gm;
-            s/\xe8\x65/�/gm;
-            s/\xe8\x69/�/gm;
-            s/\xe8\x76/�/gm;
-            s/\xe9\x41/�/gm;
-            s/\xe9\x4f/�/gm;
-            s/\xe9\x55/�/gm;
-            s/\xe9\x61/�/gm;
-            s/\xe9\x6f/�/gm;
-            s/\xe9\x75/�/gm;
-            s/\xea\x41/�/gm;
-            s/\xea\x61/�/gm;
+            s/\xe1\x61/à/gm;
+            s/\xe1\x65/è/gm;
+            s/\xe1\x69/ì/gm;
+            s/\xe1\x6f/ò/gm;
+            s/\xe1\x75/ù/gm;
+            s/\xe1\x41/À/gm;
+            s/\xe1\x45/È/gm;
+            s/\xe1\x49/Ì/gm;
+            s/\xe1\x4f/Ò/gm;
+            s/\xe1\x55/Ù/gm;
+            s/\xe2\x41/Á/gm;
+            s/\xe2\x45/É/gm;
+            s/\xe2\x49/Í/gm;
+            s/\xe2\x4f/Ó/gm;
+            s/\xe2\x55/Ú/gm;
+            s/\xe2\x59/Ý/gm;
+            s/\xe2\x61/á/gm;
+            s/\xe2\x65/é/gm;
+            s/\xe2\x69/í/gm;
+            s/\xe2\x6f/ó/gm;
+            s/\xe2\x75/ú/gm;
+            s/\xe2\x79/ý/gm;
+            s/\xe3\x41/Â/gm;
+            s/\xe3\x45/Ê/gm;
+            s/\xe3\x49/Î/gm;
+            s/\xe3\x4f/Ô/gm;
+            s/\xe3\x55/Û/gm;
+            s/\xe3\x61/â/gm;
+            s/\xe3\x65/ê/gm;
+            s/\xe3\x69/î/gm;
+            s/\xe3\x6f/ô/gm;
+            s/\xe3\x75/û/gm;
+            s/\xe4\x41/Ã/gm;
+            s/\xe4\x4e/Ñ/gm;
+            s/\xe4\x4f/Õ/gm;
+            s/\xe4\x61/ã/gm;
+            s/\xe4\x6e/ñ/gm;
+            s/\xe4\x6f/õ/gm;
+            s/\xe8\x45/Ë/gm;
+            s/\xe8\x49/Ï/gm;
+            s/\xe8\x65/ë/gm;
+            s/\xe8\x69/ï/gm;
+            s/\xe8\x76/ÿ/gm;
+            s/\xe9\x41/Ä/gm;
+            s/\xe9\x4f/Ö/gm;
+            s/\xe9\x55/Ü/gm;
+            s/\xe9\x61/ä/gm;
+            s/\xe9\x6f/ö/gm;
+            s/\xe9\x75/ü/gm;
+            s/\xea\x41/Å/gm;
+            s/\xea\x61/å/gm;
 
             # this handles non-sorting blocks (if implementation requires this)
             $string = nsb_clean($_);
@@ -3036,6 +3036,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.115.2.64.2.3  2007/04/30 14:00:38  tipaul
+# I switched my desktop to mandriva 2007.1 with UTF-8 enabled, and it seems that caused some problems, once again in Biblio.pm char_decode sub.
+#
 # Revision 1.115.2.64.2.2  2007/04/27 13:08:28  tipaul
 # porting bugfixes from rel_2_2 to rel_2_2_7 for 2.2.9 release
 #
@@ -3085,678 +3088,3 @@ Paul POULAIN paul.poulain@free.fr
 # MARC::File::XML switched the API in 0.83, this code updates Koha --
 # it will break your record editing if you don't upgrade MARC::File::XML
 # to 0.83 on CPAN.
-#
-# Revision 1.115.2.52  2006/05/11 14:15:51  rangi
-# Adding version string
-#
-# Revision 1.115.2.51  2006/04/17 13:50:59  tgarip1957
-# Missing semicolon
-#
-# Revision 1.115.2.50  2006/04/13 05:49:23  kados
-# Partial fix for encoding problems in MARC editor.
-#
-# Revision 1.115.2.49  2006/04/10 19:53:44  kados
-# adds a quick sanity check to make sure we're dealing with valid MARC
-# tags (a client of mine had tags from a Dynix system that were '???' and
-# this was causing bulkmarcimport.pl to fail horribly. This fixes that
-# problem).
-#
-# Revision 1.115.2.48  2006/03/08 16:50:14  kados
-# re-adding paul's fix for improper XML characters.
-#
-# Revision 1.115.2.47  2006/03/08 16:39:01  kados
-# removing blank subfield values
-#
-# Revision 1.115.2.46  2006/03/08 16:31:04  kados
-# bugfix for Biblio.pm based on feedback from production system. previous
-# version was dropping subfields in cases where the previous tag in the
-# editor contained values (but only when multiple subfields existed in
-# both tags). This version will be tested again in production environment
-# to ensure it is actually fixed.
-#
-# Revision 1.115.2.44  2006/03/01 17:26:08  kados
-# Adding 'use MARC::File::XML' to routine ... needed for additem.pl to work
-# for some reason. This should be fixed.
-#
-# Revision 1.115.2.43  2006/03/01 14:36:31  kados
-# This seems to be a fully working version -- it supports repeated tags and
-# subfields, should preserve any order specified in the template, and also
-# preserves ALL indicators (not just one per tag set as with the previous
-# hash of indicators).
-#
-# Revision 1.115.2.42  2006/03/01 05:52:33  kados
-# Adds support for indicators (still seems to be buggy in some instances
-# of repeated tags)
-#
-# Revision 1.115.2.39  2006/03/01 04:52:08  rangi
-# More testing
-#
-# Revision 1.115.2.38  2006/03/01 04:43:25  rangi
-# Fixing it again, for testing
-#
-# Revision 1.115.2.37  2006/03/01 03:47:15  rangi
-# This may actually work .. hopefully anyway
-#
-# Revision 1.115.2.36  2006/03/01 03:09:15  rangi
-# Commiting for joshua to test
-#
-# Revision 1.115.2.35  2006/03/01 03:02:59  kados
-# some updates.
-#
-# Revision 1.115.2.34  2006/02/27 07:17:55  rangi
-# Hopefully a fix for a problem Joshua was having with blank tags being added
-#
-# Revision 1.115.2.33  2006/02/25 03:55:08  kados
-# Fixes bug with previous commit. addbiblio.pl should now correctly
-# NOT save fields that are empty.
-#
-# Revision 1.115.2.30  2006/02/20 09:18:57  thd
-# Reverse array filled with elements from repeated subfields from first to last
-# to avoid last to first concatenation of elements in Koha DB.
-#
-# Revision 1.115.2.29  2006/02/07 15:33:35  hdl
-# Adding a new system preference : serialsadditem
-#
-# Adding two functions in Biblio.pm : getitemlocation and getitemstatus (helpful to get location list and status list, status is supposed to be in relation with items.notforloan)
-#
-# Adding a new function in Bull.pm : serialsitemize which take serial id and item information and creates the item
-# Modifying statecollection to add a new line (used for data input)
-#
-# Revision 1.115.2.28  2006/01/30 16:06:26  hdl
-# BugFix : leader management was annoying for MARCadditem. Changing. Avoiding fields which tag is under 100. (Could be a simple different from 000) But in UNIMARC, fields under 100 donot have subfields.
-#
-# Some Improvements on notes and subject management
-#
-# Revision 1.115.2.27  2006/01/05 15:13:55  tipaul
-# bugfix with $0 subfield
-#
-# Revision 1.115.2.26  2005/12/14 13:08:47  tipaul
-# * fix for items.notes that is not correctly handled in the non-MARC part of the DB
-# * for an unknown reason, mysql fetchrow_hashref returns author BEFORE the title, even if you want it after that makes a problem for UNIMARC where we have 200 $atitle $fauthor => the record appears $f $a.
-# * handling better biblio/biblioitems creation from an acquisition : the biblio is deleted & recreated to avoid strange things like a repeated 200 field in UNIMARC.
-#
-# Revision 1.115.2.25  2005/10/28 13:46:50  doxulting
-# There was a bug : Even if you erased the marc field linked to additionalauthors.authors the additionalauthors stayed in database. Now : delete before recreating
-#
-# Revision 1.115.2.24  2005/10/26 16:37:24  doxulting
-# It was impossible to add a subfield with value : 0. Was a problem for loan status.
-#
-# Revision 1.115.2.23  2005/09/28 14:35:56  hdl
-# ordering search results by branch.
-# Adding independant Branch Management to getBranches in Koha.pm
-#
-# Revision 1.115.2.22  2005/09/14 10:05:12  tipaul
-# 2 bugfixes :
-# * leader alignment when leader is <24 => should be left aligned, not right !
-# * trailing , in an update recently modified
-#
-# Revision 1.115.2.21  2005/09/09 16:11:51  tipaul
-# adding missing fields in biblioitems update
-#
-# Revision 1.115.2.20  2005/09/01 13:43:33  hdl
-# Fixing a bug for marcimport.
-# Verifying that a record tag exists before getting its value
-#
-# Revision 1.115.2.19  2005/08/26 12:28:57  hdl
-# Adding a test on a temporary value before processing it in Biblio.pm
-# Adding branchcode fields to aqbookfund and aqbasket.
-#
-# Revision 1.115.2.18  2005/08/02 07:45:44  tipaul
-# fix for bug http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=1009
-# (Not all items fields mapped to MARC)
-#
-# Revision 1.115.2.17  2005/08/01 15:15:43  tipaul
-# adding decoder for � string
-#
-# Revision 1.115.2.16  2005/07/28 19:56:15  tipaul
-# * removing a useless & CPU consuming call to MARCgetbiblio
-# * Leader management.
-# If you create a MARC tag "000", with a subfield '@', it will be managed as the leader.
-# Seems to work correctly.
-#
-# Now going to create a plugin for leader()
-#
-# Revision 1.115.2.15  2005/07/19 15:25:40  tipaul
-# * fixing a bug in subfield order when MARCgetbiblio
-# * getting rid with the limit "biblionumber & biblioitemnumber must be in the same tag". So, we can put biblionumber in 001 (field that has no subfields, so we can't put biblioitemnumber in this field), and use biblionumber as identifier in the MARC biblio too. Still to be deeply tested.
-# * adding some diacritic decoding (�, �...)
-#
-# Revision 1.115.2.14  2005/06/27 23:24:06  hdl
-# Display dashed ISBN
-#
-# Revision 1.115.2.13  2005/05/31 12:44:26  tipaul
-# patch from Genji (Waylon R.) to update subjects in MARC tables when systempref has MARC=OFF
-#
-# Revision 1.115.2.12  2005/05/30 11:22:41  tipaul
-# fixing a bug : when a field was repeated, the last field was also repeated. (Was due to the "empty" field in html between fields : to separate fields, in html, an empty field is automatically added. in MARChtml2marc, this empty field was not discarded correctly)
-#
-# Revision 1.115.2.11  2005/05/25 15:48:43  tipaul
-# * removing my for variables already declared
-# * updating biblio.unititle  field as well as other fields in biblio table
-#
-# Revision 1.115.2.10  2005/05/25 09:30:50  hdl
-# Adding NEWmodbiblioframework feature
-# Used by addbiblio.pl when modifying a framework selection.
-#
-# Revision 1.115.2.9  2005/04/07 10:05:25  tipaul
-# adding / to the list of symbols that are replace by spaces for searches
-#
-# Revision 1.115.2.8  2005/03/25 16:23:49  tipaul
-# some improvements :
-# * return immediatly when a subfield is empty
-# * search duplicate on isbn must be done only when there is an isbn ;-)
-#
-# Revision 1.115.2.7  2005/03/10 15:52:28  tipaul
-# * adding glass to opac marc detail.
-# * changing glasses behaviour : It now appears only on subfields that have a "link" value. Avoid useless glasses and removes nothing. **** WARNING **** : if you don't change you MARC parameters, glasses DISAPPEAR, because no subfields have a link value. So you MUST "reactivate" them manually. If you want to enable the search glass on field 225$a (collection in UNIMARC), just put 225a to "link" field (Koha >> parameters >> framework >> 225 field >> subfield >> modify $a >> enter 225a in link input field (without quotes or anything else)
-# * fixing bug with libopac
-#
-# Revision 1.115.2.6  2005/03/09 15:56:01  tipaul
-# Changing MARCmoditem to be like MARCmodbiblio : a modif is a delete & create.
-# Longer, but solves problems with repeated subfields.
-#
-# The previous version was not buggy except under certain circumstances (a repeated subfield, that does not exist usually in items)
-#
-# Revision 1.115.2.5  2005/02/24 13:54:04  tipaul
-# exporting MARCdelsubfield sub. It's used in authority merging.
-# Modifying it too to enable deletion of all subfields from a given tag/subfield or just one.
-#
-# Revision 1.115.2.4  2005/02/17 12:44:25  tipaul
-# bug in acquisition : the title was also stored as subtitle.
-#
-# Revision 1.115.2.3  2005/02/10 13:14:36  tipaul
-# * multiple main authors are now correctly handled in simple (non-MARC) view
-#
-# Revision 1.115.2.2  2005/01/11 16:02:35  tipaul
-# in catalogue, modifs were not stored properly the non-MARC item DB. Affect only libraries without barcodes.
-#
-# Revision 1.115.2.1  2005/01/11 14:45:37  tipaul
-# bugfix : issn were not stored correctly in non-MARC DB on biblio modification
-#
-# Revision 1.115  2005/01/06 14:32:17  tipaul
-# improvement of speed for bulkmarcimport.
-# A sub had been forgotten to use the C4::Context->marcfromkohafield array, that caches DB datas.
-# this is only a little improvement for normal DB modif, but almost x2 the speed of bulkmarcimport... from 6records/seconds to more than 10.
-#
-# Revision 1.114  2005/01/03 10:48:33  tipaul
-# * bugfix for the search on a MARC detail, when you clic on the magnifying glass (caused an internal server error)
-# * partial support of the "linkage" MARC feature : if you enter a "link" on a MARC subfield, the magnifying glass won't search on the field, but on the linked field. I agree it's a partial support. Will be improved, but I need to investigate MARC21 & UNIMARC diffs on this topic.
-#
-# Revision 1.113  2004/12/10 16:27:53  tipaul
-# limiting the number of search term to 8. There was no limit before, but 8 words seems to be the upper limit mySQL can deal with (in less than a second. tested on a DB with 13 000 items)
-# In 2.4, a new DB structure will highly speed things and this limit will be removed.
-# FindDuplicate is activated again, the perf problems were due to this problem.
-#
-# Revision 1.112  2004/12/08 10:14:42  tipaul
-# * desactivate FindDuplicate
-# * fix from Genji
-#
-# Revision 1.111  2004/11/25 17:39:44  tipaul
-# removing useless &branches in package declaration
-#
-# Revision 1.110  2004/11/24 16:00:01  tipaul
-# removing sub branches (commited by chris for MARC=OFF bugfix, but sub branches is already in Acquisition.pm)
-#
-# Revision 1.109  2004/11/24 15:58:31  tipaul
-# * critical fix for acquisition (see RC3 release notes)
-# * critical fix for duplicate finder
-#
-# Revision 1.108  2004/11/19 19:41:22  rangi
-# Shifting branches() from deprecated C4::Catalogue to C4::Biblio
-# Allowing the non marc interface acquisitions to work.
-#
-# Revision 1.107  2004/11/05 10:15:27  tipaul
-# Improving FindDuplicate to find duplicate records on adding biblio
-#
-# Revision 1.106  2004/11/02 16:44:45  tipaul
-# new feature : checking for duplicate biblio.
-#
-# For instance, it's only done on ISBN only. Will be improved soon.
-#
-# When a duplicate is detected, the biblio is not saved, but the user is asked for a confirmations.
-#
-# Revision 1.105  2004/09/23 16:15:37  tipaul
-# indenting diff
-#
-# Revision 1.104  2004/09/16 15:06:46  tipaul
-# enabling # (| still possible too) for repeatable subfields
-#
-# Revision 1.103  2004/09/06 14:17:34  tipaul
-# some commented warning added + 1 major bugfix => drop empty fields, NOT fields containing 0
-#
-# Revision 1.102  2004/09/06 10:00:19  tipaul
-# adding a "location" field to the library.
-# This field is useful when the callnumber contains no information on the room where the item is stored.
-# With this field, we now have 3 levels of informations to find a book :
-# * the branch.
-# * the location.
-# * the callnumber.
-#
-# This should be versatile enough to solve any storing method.
-# This hack is quite simple, due to the nice Biblio.pm API. The MARC => koha db link is automatically managed. Just add the link in the parameters section.
-#
-# Revision 1.101  2004/08/18 16:01:37  tipaul
-# modifs to support frameworkcodes
-#
-# Revision 1.100  2004/08/13 16:37:25  tipaul
-# adding frameworkcode to API in some subs
-#
-# Revision 1.99  2004/07/30 13:54:50  doxulting
-# Beginning of serial commit
-#
-# Revision 1.98  2004/07/15 09:48:10  tipaul
-# * removing useless sub
-# * minor bugfix in moditem (managing homebranch & holdingbranch)
-#
-# Revision 1.97  2004/07/02 15:53:53  tipaul
-# bugfix (due to frameworkcode field)
-#
-# Revision 1.96  2004/06/29 16:07:10  tipaul
-# last sync for 2.1.0 release
-#
-# Revision 1.95  2004/06/26 23:19:59  rangi
-# Fixing modaddauthor, and adding getitemtypes.
-# Also tidying up formatting of code
-#
-# Revision 1.94  2004/06/17 08:16:32  tipaul
-# merging tag & subfield in marc_word for better perfs
-#
-# Revision 1.93  2004/06/11 15:38:06  joshferraro
-# Changes MARCaddword to index words >= 1 char ... needed for more accurate
-# searches using SearchMarc routines.
-#
-# Revision 1.92  2004/06/10 08:29:01  tipaul
-# MARC authority management (continued)
-#
-# Revision 1.91  2004/06/03 10:03:01  tipaul
-# * frameworks and itemtypes are independant
-# * in the MARC editor, showing the + to duplicate a tag only if the tag is repeatable
-#
-# Revision 1.90  2004/05/28 08:25:53  tipaul
-# hidding hidden & isurl constraints into MARC subfield structure
-#
-# Revision 1.89  2004/05/27 21:47:21  rangi
-# Fix for bug 787
-#
-# Revision 1.88  2004/05/18 15:23:49  tipaul
-# framework management : 1 MARC framework for each itemtype
-#
-# Revision 1.87  2004/05/18 11:54:07  tipaul
-# getitemtypes moved in Koha.pm
-#
-# Revision 1.86  2004/05/03 09:19:22  tipaul
-# some fixes for mysql prepare & execute
-#
-# Revision 1.85  2004/04/02 14:55:48  tipaul
-# renaming items.bulk field to items.itemcallnumber.
-# Will be used to store call number for libraries that don't use dewey classification.
-# Note it's related to ITEMS, not biblio.
-#
-# Revision 1.84  2004/03/24 17:18:30  joshferraro
-# Fixes bug 749 by removing the comma on line 1488.
-#
-# Revision 1.83  2004/03/15 14:31:50  tipaul
-# adding a minor check
-#
-# Revision 1.82  2004/03/07 05:47:31  acli
-# Various updates/fixes from rel_2_0
-# Fixes for bugs 721 (templating), 727, and 734
-#
-# Revision 1.81  2004/03/06 20:26:13  tipaul
-# adding seealso feature in MARC searches
-#
-# Revision 1.80  2004/02/12 13:40:56  tipaul
-# deleting subs duplicated by error
-#
-# Revision 1.79  2004/02/11 08:40:09  tipaul
-# synch'ing 2.0.0 branch and head
-#
-# Revision 1.78.2.3  2004/02/10 13:15:46  tipaul
-# removing 2 warnings
-#
-# Revision 1.78.2.2  2004/01/26 10:38:06  tipaul
-# dealing correctly "bulk" field
-#
-# Revision 1.78.2.1  2004/01/13 17:29:53  tipaul
-# * minor html fixes
-# * adding publisher in acquisition process (& ordering basket by publisher)
-#
-# Revision 1.78  2003/12/09 15:57:28  tipaul
-# rolling back to working char_decode sub
-#
-# Revision 1.77  2003/12/03 17:47:14  tipaul
-# bugfixes for biblio deletion
-#
-# Revision 1.76  2003/12/03 01:43:41  slef
-# conflict markers?
-#
-# Revision 1.75  2003/12/03 01:42:03  slef
-# bug 662 fixes securing DBI
-#
-# Revision 1.74  2003/11/28 09:48:33  tipaul
-# bugfix : misusing prepare & execute => now using prepare(?) and execute($var)
-#
-# Revision 1.73  2003/11/28 09:45:25  tipaul
-# bugfix for iso2709 file import in the "notforloan" field.
-#
-# But notforloan field called "loan" somewhere, so in case "loan" is used, copied to "notforloan" to avoid a bug.
-#
-# Revision 1.72  2003/11/24 17:40:14  tipaul
-# fix for #385
-#
-# Revision 1.71  2003/11/24 16:28:49  tipaul
-# biblio & item deletion now works fine in MARC editor.
-# Stores deleted biblio/item in the marc field of the deletedbiblio/deleteditem table.
-#
-# Revision 1.70  2003/11/24 13:29:55  tipaul
-# moving $id from beginning to end of file (70 commits... huge comments...)
-#
-# Revision 1.69  2003/11/24 13:27:17  tipaul
-# fix for #380 (bibliosubject)
-#
-# Revision 1.68  2003/11/06 17:18:30  tipaul
-# bugfix for #384
-#
-# 1st draft for MARC biblio deletion.
-# Still does not work well, but at least, Biblio.pm compiles & it should'nt break too many things
-# (Note the trash in the MARCdetail, but don't use it, please :-) )
-#
-# Revision 1.67  2003/10/25 08:46:27  tipaul
-# minor fixes for bilbio deletion (still buggy)
-#
-# Revision 1.66  2003/10/17 10:02:56  tipaul
-# Indexing only words longer than 2 letters. Was >=2 before, & 2 letters words usually means nothing.
-#
-# Revision 1.65  2003/10/14 09:45:29  tipaul
-# adding rebuildnonmarc.pl script : run this script when you change a link between marc and non MARC DB. It rebuilds the non-MARC DB (long operation)
-#
-# Revision 1.64  2003/10/06 15:20:51  tipaul
-# fix for 536 (subtitle error)
-#
-# Revision 1.63  2003/10/01 13:25:49  tipaul
-# seems a char encoding problem modified something in char_decode sub... changing back to something that works...
-#
-# Revision 1.62  2003/09/17 14:21:13  tipaul
-# fixing bug that makes a MARC biblio disappear when using full acquisition (order => recieve ==> MARC editor).
-# Before this 2 lines fix, the MARC biblio was deleted during recieve, and had to be entirely recreated :-(
-#
-# Revision 1.61  2003/09/17 10:24:39  tipaul
-# notforloan value in itemtype was overwritting notforloan value in a given item.
-# I changed this behaviour :
-# if notforloan is set for a given item, and NOT for all items from this itemtype, the notforloan is kept.
-# If notforloan is set for itemtype, it's used (and impossible to loan a specific item from this itemtype)
-#
-# Revision 1.60  2003/09/04 14:11:23  tipaul
-# fix for 593 (data duplication in MARC-DB)
-#
-# Revision 1.58  2003/08/06 12:54:52  tipaul
-# fix for publicationyear : extracting numeric value from MARC string, like for copyrightdate.
-# (note that copyrightdate still extracted to get numeric format)
-#
-# Revision 1.57  2003/07/15 23:09:18  slef
-# change show columns to use biblioitems bnotes too
-#
-# Revision 1.56  2003/07/15 11:34:52  slef
-# fixes from paul email
-#
-# Revision 1.55  2003/07/15 00:02:49  slef
-# Work on bug 515... can we do a single-side rename of notes to bnotes?
-#
-# Revision 1.54  2003/07/11 11:51:32  tipaul
-# *** empty log message ***
-#
-# Revision 1.52  2003/07/10 10:37:19  tipaul
-# fix for copyrightdate problem, #514
-#
-# Revision 1.51  2003/07/02 14:47:17  tipaul
-# fix for #519 : items.dateaccessioned imports incorrectly
-#
-# Revision 1.49  2003/06/17 11:21:13  tipaul
-# improvments/fixes for z3950 support.
-# * Works now even on ADD, not only on MODIFY
-# * able to search on ISBN, author, title
-#
-# Revision 1.48  2003/06/16 09:22:53  rangi
-# Just added an order clause to getitemtypes
-#
-# Revision 1.47  2003/05/20 16:22:44  tipaul
-# fixing typo in Biblio.pm POD
-#
-# Revision 1.46  2003/05/19 13:45:18  tipaul
-# support for subtitles, additional authors, subject.
-# This supports is only for MARC <-> OLD-DB link. It worked previously, but values entered as MARC were not reported to OLD-DB, neither values entered as OLD-DB were reported to MARC.
-# Note that some OLD-DB subs are strange (dummy ?) see OLDmodsubject, OLDmodsubtitle, OLDmodaddiauthor in C4/Biblio.pm
-# For example it seems impossible to have more that 1 addi author and 1 subtitle. In MARC it's not the case. So, if you enter more than one, I'm afraid only the LAST will be stored.
-#
-# Revision 1.45  2003/04/29 16:50:49  tipaul
-# really proud of this commit :-)
-# z3950 search and import seems to works fine.
-# Let me explain how :
-# * a "search z3950" button is added in the addbiblio template.
-# * when clicked, a popup appears and z3950/search.pl is called
-# * z3950/search.pl calls addz3950search in the DB
-# * the z3950 daemon retrieve the records and stores them in z3950results AND in marc_breeding table.
-# * as long as there as searches pending, the popup auto refresh every 2 seconds, and says how many searches are pending.
-# * when the user clicks on a z3950 result => the parent popup is called with the requested biblio, and auto-filled
-#
-# Note :
-# * character encoding support : (It's a nightmare...) In the z3950servers table, a "encoding" column has been added. You can put "UNIMARC" or "USMARC" in this column. Depending on this, the char_decode in C4::Biblio.pm replaces marc-char-encode by an iso 8859-1 encoding. Note that in the breeding import this value has been added too, for a better support.
-# * the marc_breeding and z3950* tables have been modified : they have an encoding column and the random z3950 number is stored too for convenience => it's the key I use to list only requested biblios in the popup.
-#
-# Revision 1.44  2003/04/28 13:07:14  tipaul
-# Those fixes solves the "internal server error" with MARC::Record 1.12.
-# It was due to an illegal contruction in Koha : we tried to retrive subfields from <10 tags.
-# That's not possible. MARC::Record accepted this in 0.93 version, but it was fixed after.
-# Now, the construct/retrieving is OK !
-#
-# Revision 1.43  2003/04/10 13:56:02  tipaul
-# Fix some bugs :
-# * worked in 1.9.0, but not in 1.9.1 :
-# - modif of a biblio didn't work
-# - empty fields where not shown when modifying a biblio. empty fields managed by the library (ie in tab 0->9 in MARC parameter table) MUST be entered, even if not presented.
-#
-# * did not work before :
-# - repeatable subfields now works correctly. Enter 2 subfields separated by | and they will be splitted during saving.
-# - dropped the last subfield of the MARC form :-(
-#
-# Internal changes :
-# - MARCmodbiblio now works by deleting and recreating the biblio. It's not perf optimized, but MARC is a "do_something_impossible_to_trace" standard, so, it's the best solution. not a problem for me, as biblio are rarely modified.
-# Note the MARCdelbiblio has been rewritted to enable deletion of a biblio WITHOUT deleting items.
-#
-# Revision 1.42  2003/04/04 08:41:11  tipaul
-# last commits before 1.9.1
-#
-# Revision 1.41  2003/04/01 12:26:43  tipaul
-# fixes
-#
-# Revision 1.40  2003/03/11 15:14:03  tipaul
-# pod updating
-#
-# Revision 1.39  2003/03/07 16:35:42  tipaul
-# * moving generic functions to Koha.pm
-# * improvement of SearchMarc.pm
-# * bugfixes
-# * code cleaning
-#
-# Revision 1.38  2003/02/27 16:51:59  tipaul
-# * moving prepare / execute to ? form.
-# * some # cleaning
-# * little bugfix.
-# * road to 1.9.2 => acquisition and cataloguing merging
-#
-# Revision 1.37  2003/02/12 11:03:03  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.36  2003/02/12 11:01:01  tipaul
-# Support for 000 -> 010 fields.
-# Those fields doesn't have subfields.
-# In koha, we will use a specific "trick" : fields <10 will have a "virtual" subfield : "@".
-# Note it's only virtual : when rebuilding the MARC::Record, the koha API handle correctly "@" subfields => the resulting MARC record has a 00x field without subfield.
-#
-# Revision 1.35  2003/02/03 18:46:00  acli
-# Minor factoring in C4/Biblio.pm, plus change to export the per-tag
-# 'mandatory' property to a per-subfield 'tag_mandatory' template parameter,
-# so that addbiblio.tmpl can distinguish between mandatory subfields in a
-# mandatory tag and mandatory subfields in an optional tag
-#
-# Not-minor factoring in acqui.simple/addbiblio.pl to make the if-else blocks
-# smaller, and to add some POD; need further testing for this
-#
-# Added function to check if a MARC subfield name is "koha-internal" (instead
-# of checking it for 'lib' and 'tag' everywhere); temporarily added to Koha.pm
-#
-# Use above function in acqui.simple/additem.pl and search.marc/search.pl
-#
-# Revision 1.34  2003/01/28 14:50:04  tipaul
-# fixing MARCmodbiblio API and reindenting code
-#
-# Revision 1.33  2003/01/23 12:22:37  tipaul
-# adding char_decode to decode MARC21 or UNIMARC extended chars
-#
-# Revision 1.32  2002/12/16 15:08:50  tipaul
-# small but important bugfix (fixes a problem in export)
-#
-# Revision 1.31  2002/12/13 16:22:04  tipaul
-# 1st draft of marc export
-#
-# Revision 1.30  2002/12/12 21:26:35  tipaul
-# YAB ! (Yet Another Bugfix) => related to biblio modif
-# (some warning cleaning too)
-#
-# Revision 1.29  2002/12/12 16:35:00  tipaul
-# adding authentification with Auth.pm and
-# MAJOR BUGFIX on marc biblio modification
-#
-# Revision 1.28  2002/12/10 13:30:03  tipaul
-# fugfixes from Dombes Abbey work
-#
-# Revision 1.27  2002/11/19 12:36:16  tipaul
-# road to 1.3.2
-# various bugfixes, improvments, and migration from acquisition.pm to biblio.pm
-#
-# Revision 1.26  2002/11/12 15:58:43  tipaul
-# road to 1.3.2 :
-# * many bugfixes
-# * adding value_builder : you can map a subfield in the marc_subfield_structure to a sub stored in "value_builder" directory. In this directory you can create screen used to build values with any method. In this commit is a 1st draft of the builder for 100$a unimarc french subfield, which is composed of 35 digits, with 12 differents values (only the 4th first are provided for instance)
-#
-# Revision 1.25  2002/10/25 10:58:26  tipaul
-# Road to 1.3.2
-# * bugfixes and improvements
-#
-# Revision 1.24  2002/10/24 12:09:01  arensb
-# Fixed "no title" warning when generating HTML documentation from POD.
-#
-# Revision 1.23  2002/10/16 12:43:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.22  2002/10/15 13:39:17  tipaul
-# removing Acquisition.pm
-# deleting unused code in biblio.pm, rewriting POD and answering most FIXME comments
-#
-# Revision 1.21  2002/10/13 11:34:14  arensb
-# Replaced expressions of the form "$x = $x <op> $y" with "$x <op>= $y".
-# Thus, $x = $x+2 becomes $x += 2, and so forth.
-#
-# Revision 1.20  2002/10/13 08:28:32  arensb
-# Deleted unused variables.
-# Removed trailing whitespace.
-#
-# Revision 1.19  2002/10/13 05:56:10  arensb
-# Added some FIXME comments.
-#
-# Revision 1.18  2002/10/11 12:34:53  arensb
-# Replaced &requireDBI with C4::Context->dbh
-#
-# Revision 1.17  2002/10/10 14:48:25  tipaul
-# bugfixes
-#
-# Revision 1.16  2002/10/07 14:04:26  tipaul
-# road to 1.3.1 : viewing MARC biblio
-#
-# Revision 1.15  2002/10/05 09:49:25  arensb
-# Merged with arensb-context branch: use C4::Context->dbh instead of
-# &C4Connect, and generally prefer C4::Context over C4::Database.
-#
-# Revision 1.14  2002/10/03 11:28:18  tipaul
-# Extending Context.pm to add stopword management and using it in MARC-API.
-# First benchmarks show a medium speed improvement, which  is nice as this part is heavily called.
-#
-# Revision 1.13  2002/10/02 16:26:44  tipaul
-# road to 1.3.1
-#
-# Revision 1.12.2.4  2002/10/05 07:09:31  arensb
-# Merged in changes from main branch.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12.2.3  2002/10/05 06:12:10  arensb
-# Added a whole mess of FIXME comments.
-#
-# Revision 1.12.2.2  2002/10/05 04:03:14  arensb
-# Added some missing semicolons.
-#
-# Revision 1.12.2.1  2002/10/04 02:24:01  arensb
-# Use C4::Connect instead of C4::Database, C4::Connect->dbh instead
-# C4Connect.
-#
-# Revision 1.12  2002/10/01 11:48:51  arensb
-# Added some FIXME comments, mostly marking duplicate functions.
-#
-# Revision 1.11  2002/09/24 13:49:26  tipaul
-# long WAS the road to 1.3.0...
-# coming VERY SOON NOW...
-# modifying installer and buildrelease to update the DB
-#
-# Revision 1.10  2002/09/22 16:50:08  arensb
-# Added some FIXME comments.
-#
-# Revision 1.9  2002/09/20 12:57:46  tipaul
-# long is the road to 1.4.0
-# * MARCadditem and MARCmoditem now wroks
-# * various bugfixes in MARC management
-# !!! 1.3.0 should be released very soon now. Be careful !!!
-#
-# Revision 1.8  2002/09/10 13:53:52  tipaul
-# MARC API continued...
-# * some bugfixes
-# * multiple item management : MARCadditem and MARCmoditem have been added. They suppose that ALL the MARC field linked to koha-item are in the same MARC tag (on the same line of MARC file)
-#
-# Note : it should not be hard for marcimport and marcexport to re-link fields from internal tag/subfield to "legal" tag/subfield.
-#
-# Revision 1.7  2002/08/14 18:12:51  tonnesen
-# Added copyright statement to all .pl and .pm files
-#
-# Revision 1.6  2002/07/25 13:40:31  tipaul
-# pod documenting the API.
-#
-# Revision 1.5  2002/07/24 16:11:37  tipaul
-# Now, the API...
-# Database.pm and Output.pm are almost not modified (var test...)
-#
-# Biblio.pm is almost completly rewritten.
-#
-# WHAT DOES IT ??? ==> END of Hitchcock suspens
-#
-# 1st, it does... nothing...
-# Every old API should be there. So if MARC-stuff is not done, the behaviour is EXACTLY the same (if there is no added bug, of course). So, if you use normal acquisition, you won't find anything new neither on screen or old-DB tables ...
-#
-# All old-API functions have been cloned. for example, the "newbiblio" sub, now has become :
-# * a "newbiblio" sub, with the same parameters. It just call a sub named OLDnewbiblio
-# * a "OLDnewbiblio" sub, which is a copy/paste of the previous newbiblio sub. Then, when you want to add the MARC-DB stuff, you can modify the newbiblio sub without modifying the OLDnewbiblio one. If we correct a bug in 1.2 in newbiblio, we can do the same in main branch by correcting OLDnewbiblio.
-# * The MARC stuff is usually done through a sub named MARCxxx where xxx is the same as OLDxxx. For example, newbiblio calls MARCnewbiblio. the MARCxxx subs use a MARC::Record as parameter.
-# The last thing to solve was to manage biblios through real MARC import : they must populate the old-db, but must populate the MARC-DB too, without loosing information (if we go from MARC::Record to old-data then back to MARC::Record, we loose A LOT OF ROWS). To do this, there are subs beginning by "NEWxxx" : they manage datas with MARC::Record datas. they call OLDxxx sub too (to populate old-DB), but MARCxxx subs too, with a complete MARC::Record ;-)
-#
-# In Biblio.pm, there are some subs that permits to build a old-style record from a MARC::Record, and the opposite. There is also a sub finding a MARC-bibid from a old-biblionumber and the opposite too.
-# Note we have decided with steve that a old-biblio <=> a MARC-Biblio.
-#
