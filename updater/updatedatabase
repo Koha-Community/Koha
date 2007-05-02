@@ -530,6 +530,14 @@ my %tabledata = (
             explanation         => 'Active this if you want NOT to use zebra (large libraries should avoid this parameters)',
             type                => 'YesNo',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'NoZebraIndexes',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => "Enter a specific hash for NoZebra indexes. Enter : 'indexname' => '100a,245a,500*','index2' => '...'",
+            type                => 'Free',
+        },
     ],
     userflags => [
         {
@@ -1993,6 +2001,15 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.163  2007/05/02 16:44:31  tipaul
+# NoZebra SQL index management :
+# * adding 3 subs in Biblio.pm
+# - GetNoZebraIndexes, that get the index structure in a new systempreference (added with this commit)
+# - _DelBiblioNoZebra, that retrieve all index entries for a biblio and remove in a variable the biblio reference
+# - _AddBiblioNoZebra, that add index entries for a biblio.
+# Note that the 2 _Add and _Del subs work only in a hash variable, to speed up things in case of a modif (ie : delete+add). The effective SQL update is done in the ModZebra sub (that existed before, and dealed with zebra index).
+# I think the code has to be more deeply tested, but it works at least partially.
+#
 # Revision 1.162  2007/04/30 16:16:50  tipaul
 # bugfix for updatedatabase : when there is no default value (NULL fields) + removing bibliothesaurus table+adding NoZebra systempref (False by default)
 #

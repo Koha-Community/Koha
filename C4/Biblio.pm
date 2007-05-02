@@ -113,6 +113,7 @@ push @EXPORT, qw(
   &TransformHtmlToXml
   &PrepareItemrecordDisplay
   &char_decode
+  &GetNoZebraIndexes
 );
 
 =head1 NAME
@@ -607,7 +608,11 @@ sub DelBiblio {
     }
     return $error if $error;
 
-    # Delete in Zebra
+    # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
+    # for at least 2 reasons :
+    # - we need to read the biblio if NoZebra is set (to remove it from the indexes
+    # - if something goes wrong, the biblio may be deleted from Koha but not from zebra
+    #   and we would have no way to remove it (except manually in zebra, but I bet it would be very hard to handle the problem)
     ModZebra($biblionumber,"delete_record","biblioserver");
 
     # delete biblio from Koha tables and save in deletedbiblio
@@ -2705,96 +2710,253 @@ sub ModZebra {
 # replaced by a zebraqueue table, that is filled with ModZebra to run.
 # the table is emptied by misc/cronjobs/zebraqueue_start.pl script
 
-my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
-$sth->execute($biblionumber,$server,$op);
-$sth->finish;
+    if (C4::Context->preference("NoZebra")) {
+        # lock the nozebra table : we will read index lines, update them in Perl process
+        # and write everything in 1 transaction.
+        # lock the table to avoid someone else overwriting what we are doing
+        $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE');
+        my %result; # the result hash that will be builded by deletion / add, and written on mySQL at the end, to improve speed
+        my $record= GetMarcBiblio($biblionumber);
+        if ($op eq 'specialUpdate') {
+            # OK, we have to add or update the record
+            # 1st delete (virtually, in indexes) ...
+            %result = _DelBiblioNoZebra($biblionumber,$record);
+            # ... add the record
+            %result=_AddBiblioNoZebra($biblionumber,$record, %result);
+        } else {
+            # it's a deletion, delete the record...
+            %result=_DelBiblioNoZebra($biblionumber,$record);
+        }
+        # ok, now update the database...
+        my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE indexname=? AND value=?");
+        foreach my $key (keys %result) {
+            foreach my $index (keys %{$result{$key}}) {
+                $sth->execute($result{$key}->{$index},$key,$index);
+            }
+        }
+    $dbh->do('UNLOCK TABLES');
 
-#
-#     my @Zconnbiblio;
-#     my $tried     = 0;
-#     my $recon     = 0;
-#     my $reconnect = 0;
-#     my $record;
-#     my $shadow;
-# 
-#   reconnect:
-#     $Zconnbiblio[0] = C4::Context->Zconn( $server, 0, 1 );
-# 
-#     if ( $server eq "biblioserver" ) {
-# 
-#         # it's unclear to me whether this should be in xml or MARC format
-#         # but it is clear it should be nabbed from zebra rather than from
-#         # the koha tables
-#         $record = GetMarcBiblio($biblionumber);
-#         $record = $record->as_xml_record() if $record;
-# #            warn "RECORD $biblionumber => ".$record;
-#         $shadow="biblioservershadow";
-# 
-#         #           warn "RECORD $biblionumber => ".$record;
-#         $shadow = "biblioservershadow";
-# 
-#     }
-#     elsif ( $server eq "authorityserver" ) {
-#         $record = C4::AuthoritiesMarc::XMLgetauthority( $dbh, $biblionumber );
-#         $shadow = "authorityservershadow";
-#     }    ## Add other servers as necessary
-# 
-#     my $Zpackage = $Zconnbiblio[0]->package();
-#     $Zpackage->option( action => $op );
-#     $Zpackage->option( record => $record );
-# 
-#   retry:
-#     $Zpackage->send("update");
-#     my $i;
-#     my $event;
-# 
-#     while ( ( $i = ZOOM::event( \@Zconnbiblio ) ) != 0 ) {
-#         $event = $Zconnbiblio[0]->last_event();
-#         last if $event == ZOOM::Event::ZEND;
-#     }
-# 
-#     my ( $error, $errmsg, $addinfo, $diagset ) = $Zconnbiblio[0]->error_x();
-#     if ( $error == 10000 && $reconnect == 0 )
-#     {    ## This is serious ZEBRA server is not available -reconnect
-#         warn "problem with zebra server connection";
-#         $reconnect = 1;
-#         my $res = system('sc start "Z39.50 Server" >c:/zebraserver/error.log');
-# 
-#         #warn "Trying to restart ZEBRA Server";
-#         #goto "reconnect";
-#     }
-#     elsif ( $error == 10007 && $tried < 2 )
-#     {    ## timeout --another 30 looonng seconds for this update
-#         $tried = $tried + 1;
-#         warn "warn: timeout, trying again";
-#         goto "retry";
-#     }
-#     elsif ( $error == 10004 && $recon == 0 ) {    ##Lost connection -reconnect
-#         $recon = 1;
-#         warn "error: reconnecting to zebra";
-#         goto "reconnect";
-# 
-#    # as a last resort, we save the data to the filesystem to be indexed in batch
-#     }
-#     elsif ($error) {
-#         warn
-# "Error-$server   $op $biblionumber /errcode:, $error, /MSG:,$errmsg,$addinfo \n";
-#         $Zpackage->destroy();
-#         $Zconnbiblio[0]->destroy();
-#         ModZebrafiles( $dbh, $biblionumber, $record, $op, $server );
-#         return;
-#     }
-#     if ( C4::Context->$shadow ) {
-#         $Zpackage->send('commit');
-#         while ( ( $i = ZOOM::event( \@Zconnbiblio ) ) != 0 ) {
-# 
-#             #waiting zebra to finish;
-#          }
-#     }
-#     $Zpackage->destroy();
+    } else {
+    #
+    # we use zebra, just fill zebraqueue table
+    #
+    my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
+    $sth->execute($biblionumber,$server,$op);
+    $sth->finish;
+    }
+}
+
+=head2 GetNoZebraIndexes
+
+=cut
+
+sub GetNoZebraIndexes {
+    my $index = C4::Context->preference('NoZebraIndexes');
+    my %indexes;
+    foreach my $line (split /('|"),/,$index) {
+        $line =~ /(.*)=>(.*)/;
+        my $index = substr($1,1); # get the index, don't forget to remove initial ' or "
+        my $fields = $2;
+        $index =~ s/'|"| //g;
+        $fields =~ s/'|"| //g;
+        $indexes{$index}=$fields;
+    }
+    return %indexes;
 }
 
 =head1 INTERNAL FUNCTIONS
+
+=head2 _DelBiblioNoZebra($biblionumber,$record);
+
+    function to delete a biblio in NoZebra indexes
+    This function does NOT delete anything in database : it reads all the indexes entries
+    that have to be deleted & delete them in the hash
+    The SQL part is done either :
+    - after the Add if we are modifying a biblio (delete + add again)
+    - immediatly after this sub if we are doing a true deletion.
+
+=cut
+
+
+sub _DelBiblioNoZebra {
+    my ($biblionumber,$record)=@_;
+    # Get the indexes
+    my $dbh = C4::Context->dbh;
+    # Get the indexes
+    my %index=GetNoZebraIndexes;
+    # get title of the record (to store the 10 first letters with the index)
+    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+    my $title = lc($record->subfield($titletag,$titlesubfield));
+    
+    my %result;
+    # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
+    $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    # limit to 10 char, should be enough, and limit the DB size
+    $title = substr($title,0,10);
+    #parse each field
+    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE indexname=? AND value=?');
+    foreach my $field ($record->fields()) {
+        #parse each subfield
+        next if $field->tag <10;
+        foreach my $subfield ($field->subfields()) {
+            my $tag = $field->tag();
+            my $subfieldcode = $subfield->[0];
+            my $indexed=0;
+            # check each index to see if the subfield is stored somewhere
+            # otherwise, store it in __RAW__ index
+            foreach my $key (keys %index) {
+#                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
+                if ($index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/) {
+                    $indexed=1;
+                    my $line= lc $subfield->[1];
+                    # remove meaningless value in the field...
+                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                    # ... and split in words
+                    foreach (split / /,$line) {
+                        next unless $_; # skip  empty values (multiple spaces)
+                        # if the entry is already here, do nothing, the biblionumber has already be removed
+                        unless ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                            # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
+                            $sth2->execute($key,$_);
+                            my $existing_biblionumbers = $sth2->fetchrow;
+                            # it exists
+                            if ($existing_biblionumbers) {
+                                warn " existing for $key $_: $existing_biblionumbers";
+                                $result{$key}->{$_} =$existing_biblionumbers;
+                                $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                            }
+                        }
+                    }
+                }
+            }
+            # the subfield is not indexed, store it in __RAW__ index anyway
+            unless ($indexed) {
+                my $line= lc $subfield->[1];
+                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                # ... and split in words
+                foreach (split / /,$line) {
+                    next unless $_; # skip  empty values (multiple spaces)
+                    # if the entry is already here, do nothing, the biblionumber has already be removed
+                    unless ($result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
+                        $sth2->execute('__RAW__',$_);
+                        my $existing_biblionumbers = $sth2->fetchrow;
+                        # it exists
+                        if ($existing_biblionumbers) {
+                            warn " existing for __RAW__ $_ : $existing_biblionumbers";
+                            $result{'__RAW__'}->{$_} =$existing_biblionumbers;
+                            $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return %result;
+}
+
+=head2 _DelBiblioNoZebra($biblionumber,$record);
+
+    function to delete a biblio in NoZebra indexes
+
+=cut
+
+
+sub _AddBiblioNoZebra {
+    my ($biblionumber,$record,%result)=@_;
+    my $dbh = C4::Context->dbh;
+    # Get the indexes
+    my %index=GetNoZebraIndexes;
+    # get title of the record (to store the 10 first letters with the index)
+    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+    my $title = lc($record->subfield($titletag,$titlesubfield));
+
+    # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
+    $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    # limit to 10 char, should be enough, and limit the DB size
+    $title = substr($title,0,10);
+    #parse each field
+    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE indexname=? AND value=?');
+    foreach my $field ($record->fields()) {
+        #parse each subfield
+        next if $field->tag <10;
+        foreach my $subfield ($field->subfields()) {
+            my $tag = $field->tag();
+            my $subfieldcode = $subfield->[0];
+            my $indexed=0;
+            # check each index to see if the subfield is stored somewhere
+            # otherwise, store it in __RAW__ index
+            foreach my $key (keys %index) {
+#                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
+                if ($index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/) {
+                    $indexed=1;
+                    my $line= lc $subfield->[1];
+                    # remove meaningless value in the field...
+                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                    # ... and split in words
+                    foreach (split / /,$line) {
+                        next unless $_; # skip  empty values (multiple spaces)
+                        # if the entry is already here, improve weight
+#                         warn "managing $_";
+                        if ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                            my $weight=$1+1;
+                            $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
+                        } else {
+                            # get the value if it exist in the nozebra table, otherwise, create it
+                            $sth2->execute($key,$_);
+                            my $existing_biblionumbers = $sth2->fetchrow;
+                            # it exists
+                            if ($existing_biblionumbers) {
+                                warn" existing : $existing_biblionumbers";
+                                $result{$key}->{$_} =$existing_biblionumbers;
+                                my $weight=$1+1;
+                                $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                                $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
+                            # create a new ligne for this entry
+                            } else {
+                                $dbh->do('INSERT INTO nozebra SET indexname='.$dbh->quote($key).',value='.$dbh->quote($_));
+                                $result{$key}->{$_}.="$biblionumber,$title-1;";
+                            }
+                        }
+                    }
+                }
+            }
+            # the subfield is not indexed, store it in __RAW__ index anyway
+            unless ($indexed) {
+                my $line= lc $subfield->[1];
+                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                # ... and split in words
+                foreach (split / /,$line) {
+                    next unless $_; # skip  empty values (multiple spaces)
+                    # if the entry is already here, improve weight
+                    if ($result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        my $weight=$1+1;
+                        $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                        $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
+                    } else {
+                        # get the value if it exist in the nozebra table, otherwise, create it
+                        $sth2->execute('__RAW__',$_);
+                        my $existing_biblionumbers = $sth2->fetchrow;
+                        # it exists
+                        if ($existing_biblionumbers) {
+                            $result{'__RAW__'}->{$_} =$existing_biblionumbers;
+                            my $weight=$1+1;
+                            $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
+                        # create a new ligne for this entry
+                        } else {
+                            $dbh->do('INSERT INTO nozebra SET indexname="__RAW__",value='.$dbh->quote($_));
+                            $result{'__RAW__'}->{$_}.="$biblionumber,$title-1;";
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return %result;
+}
+
 
 =head2 MARCitemchange
 
@@ -3505,7 +3667,7 @@ sub ModBiblioMarc {
 # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
     if ( $encoding eq "UNIMARC" ) {
         my $string;
-        if ( $record->subfield( 100, "a" ) ) {
+        if ( length($record->subfield( 100, "a" )) == 35 ) {
             $string = $record->subfield( 100, "a" );
             my $f100 = $record->field(100);
             $record->delete_field($f100);
@@ -3691,6 +3853,15 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.202  2007/05/02 16:44:31  tipaul
+# NoZebra SQL index management :
+# * adding 3 subs in Biblio.pm
+# - GetNoZebraIndexes, that get the index structure in a new systempreference (added with this commit)
+# - _DelBiblioNoZebra, that retrieve all index entries for a biblio and remove in a variable the biblio reference
+# - _AddBiblioNoZebra, that add index entries for a biblio.
+# Note that the 2 _Add and _Del subs work only in a hash variable, to speed up things in case of a modif (ie : delete+add). The effective SQL update is done in the ModZebra sub (that existed before, and dealed with zebra index).
+# I think the code has to be more deeply tested, but it works at least partially.
+#
 # Revision 1.201  2007/04/27 14:00:49  hdl
 # Removing $dbh from GetMarcFromKohaField (dbh is not used in this function.)
 #

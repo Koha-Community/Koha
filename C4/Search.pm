@@ -1454,26 +1454,21 @@ sub NZorder {
             $title =~ /(.*)-(\d)/;
             # get weight 
             my $ranking =$2;
-            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
-            # and we don't want to get only 1 result for each of them !!!
             # note that we + the ranking because ranking is calculated on weight of EACH term requested.
             # if we ask for "two towers", and "two" has weight 2 in biblio N, and "towers" has weight 4 in biblio N
             # biblio N has ranking = 6
-            $count_ranking{$biblionumber}=0 unless $count_ranking{$biblionumber};
             $count_ranking{$biblionumber} =+ $ranking;
         }
         # build the result by "inverting" the count_ranking hash
         # hing : as usual, we don't order by ranking only, to avoid having only 1 result for each rank. We build an hash on concat(ranking,biblionumber) instead
 #         warn "counting";
         foreach (keys %count_ranking) {
-            warn "$_ =".sprintf("%10d",$count_ranking{$_}).'-'.$_;
             $result{sprintf("%10d",$count_ranking{$_}).'-'.$_} = $_;
         }
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
             foreach my $key (sort {$b <=> $a} (keys %result)) {
-            warn "KEY : $key = ".$result{$key};
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         # for the requested page, replace biblionumber by the complete record
