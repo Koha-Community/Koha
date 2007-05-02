@@ -1225,11 +1225,11 @@ sub NZanalyse {
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-                    my @leftresult = split /,/, $biblionumbers;
+                    my @leftresult = split /;/, $biblionumbers;
                     my $temp;
                     foreach (@leftresult) {
-                        if ($results =~ "$_,") {
-                            $temp .= "$_,$_,";
+                        if ($results =~ "$_;") {
+                            $temp .= "$_;$_;";
                         }
                     }
                     $results = $temp;
@@ -1253,8 +1253,8 @@ sub NZanalyse {
                     my @leftresult = split /,/, $biblionumbers;
                     my $temp;
                     foreach (@leftresult) {
-                        if ($results =~ "$_,") {
-                            $temp .= "$_,$_,";
+                        if ($results =~ "$_;") {
+                            $temp .= "$_;$_;";
                         }
                     }
                     $results = $temp;
@@ -1270,7 +1270,7 @@ sub NZanalyse {
 sub NZorder {
     my ($biblionumbers, $ordering,$results_per_page,$offset) = @_;
     # order title asc by default
-    $ordering = '1=36 <i' unless $ordering;
+#     $ordering = '1=36 <i' unless $ordering;
     $results_per_page=20 unless $results_per_page;
     $offset = 0 unless $offset;
     my $dbh = C4::Context->dbh;
@@ -1282,8 +1282,8 @@ sub NZorder {
         my %popularity;
         # popularity is not in MARC record, it's builded from a specific query
         my $sth = $dbh->prepare("select sum(issues) from items where biblionumber=?");
-        foreach (split /,/,$biblionumbers) {
-            my ($biblionumber,$title) = split /;/,$_;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
             $result{$biblionumber}=GetMarcBiblio($biblionumber);
             $sth->execute($biblionumber);
             my $popularity= $sth->fetchrow ||0;
@@ -1314,8 +1314,8 @@ sub NZorder {
     #
     } elsif ($ordering eq '1=1003 <i'){
         my %result;
-        foreach (split /,/,$biblionumbers) {
-            my ($biblionumber,$title) = split /;/,$_;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
             my $record=GetMarcBiblio($biblionumber);
             my $author;
             if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
@@ -1349,8 +1349,8 @@ sub NZorder {
     #
     } elsif ($ordering eq '1=20 <i'){
         my %result;
-        foreach (split /,/,$biblionumbers) {
-            my ($biblionumber,$title) = split /;/,$_;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
             my $record=GetMarcBiblio($biblionumber);
             my $callnumber;
             my ($callnumber_tag,$callnumber_subfield)=GetMarcFromKohaField($dbh,'items.itemcallnumber');
@@ -1382,8 +1382,8 @@ sub NZorder {
         return $finalresult;
     } elsif ($ordering =~ /1=31/){ #pub year
         my %result;
-        foreach (split /,/,$biblionumbers) {
-            my ($biblionumber,$title) = split /;/,$_;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
             my $record=GetMarcBiblio($biblionumber);
             my ($publicationyear_tag,$publicationyear_subfield)=GetMarcFromKohaField($dbh,'biblioitems.publicationyear');
             my $publicationyear=$record->subfield($publicationyear_tag,$publicationyear_subfield);
@@ -1410,13 +1410,11 @@ sub NZorder {
     #
     # ORDER BY title
     #
-    } else { 
+    } elsif ($ordering =~ /1=36/) { 
         # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
         my %result;
-#         splice(@X,$results_per_page*(1+$offset));
-#         splice(@X,0,$results_per_page*$offset);
-        foreach (split /,/,$biblionumbers) {
-            my ($biblionumber,$title) = split /;/,$_;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
             # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
             # and we don't want to get only 1 result for each of them !!!
             # hint & speed improvement : we can order without reading the record
@@ -1444,8 +1442,52 @@ sub NZorder {
         $result_hash->{'hits'} = $numbers;
         $finalresult->{'biblioserver'} = $result_hash;
         return $finalresult;
+    } else {
+    #
+    # order by ranking
+    #
+        # we need 2 hashes to order by ranking : the 1st one to count the ranking, the 2nd to order by ranking
+        my %result;
+        my %count_ranking;
+        foreach (split /;/,$biblionumbers) {
+            my ($biblionumber,$title) = split /,/,$_;
+            $title =~ /(.*)-(\d)/;
+            # get weight 
+            my $ranking =$2;
+            # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+            # and we don't want to get only 1 result for each of them !!!
+            # note that we + the ranking because ranking is calculated on weight of EACH term requested.
+            # if we ask for "two towers", and "two" has weight 2 in biblio N, and "towers" has weight 4 in biblio N
+            # biblio N has ranking = 6
+            $count_ranking{$biblionumber}=0 unless $count_ranking{$biblionumber};
+            $count_ranking{$biblionumber} =+ $ranking;
+        }
+        # build the result by "inverting" the count_ranking hash
+        # hing : as usual, we don't order by ranking only, to avoid having only 1 result for each rank. We build an hash on concat(ranking,biblionumber) instead
+#         warn "counting";
+        foreach (keys %count_ranking) {
+            warn "$_ =".sprintf("%10d",$count_ranking{$_}).'-'.$_;
+            $result{sprintf("%10d",$count_ranking{$_}).'-'.$_} = $_;
+        }
+        # sort the hash and return the same structure as GetRecords (Zebra querying)
+        my $result_hash;
+        my $numbers=0;
+            foreach my $key (sort {$b <=> $a} (keys %result)) {
+            warn "KEY : $key = ".$result{$key};
+                $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
+            }
+        # for the requested page, replace biblionumber by the complete record
+        # speed improvement : avoid reading too much things
+        for (my $counter=$offset;$counter<=$offset+$results_per_page;$counter++) {
+            $result_hash->{'RECORDS'}[$counter] = GetMarcBiblio($result_hash->{'RECORDS'}[$counter])->as_usmarc;
+        }
+        my $finalresult=();
+        $result_hash->{'hits'} = $numbers;
+        $finalresult->{'biblioserver'} = $result_hash;
+        return $finalresult;
     }
 }
+
 END { }    # module clean-up code here (global destructor)
 
 1;
