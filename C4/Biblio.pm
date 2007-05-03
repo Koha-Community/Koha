@@ -371,7 +371,13 @@ sub ModBiblio {
     
     $frameworkcode = "" unless $frameworkcode;
 
-    # update the MARC record with the new record data
+    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+    my $oldRecord = GetMarcBiblio($biblionumber);
+    my @fields = $oldRecord->field($itemtag);
+    $record->append_fields(@fields);
+
+    # update the MARC record (that now contains biblio and items) with the new record data
     &ModBiblioMarc($record, $biblionumber, $frameworkcode );
 
     # load the koha-table data object
@@ -545,7 +551,7 @@ sub ModItemInMarc {
     my $sth = $dbh->prepare("update biblioitems set marc=?,marcxml=?  where biblionumber=?");
     $sth->execute( $completeRecord->as_usmarc(), $completeRecord->as_xml_record(),$biblionumber );
     $sth->finish;
-    ModZebra($biblionumber,"specialUpdate","biblioserver");
+    ModZebra($biblionumber,"specialUpdate","biblioserver",$completeRecord);
 }
 
 =head2 ModDateLastSeen
@@ -590,11 +596,11 @@ sub DelBiblio {
     # First make sure there are no items with issues are still attached
     my $sth =
       $dbh->prepare(
-        "SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
+        "SELECT itemnumber FROM items WHERE biblionumber=?");
     $sth->execute($biblionumber);
-    while ( my $biblioitemnumber = $sth->fetchrow ) {
-        my @issues = C4::Circulation::Circ2::itemissues($biblioitemnumber);
-        foreach my $issue (@issues) {
+    while ( my $itemnumber = $sth->fetchrow ) {
+        my $issues = GetItemIssues($itemnumber);
+        foreach my $issue (@$issues) {
             if (   ( $issue->{date_due} )
                 && ( $issue->{date_due} ne "Available" ) )
             {
@@ -613,7 +619,7 @@ sub DelBiblio {
     # - we need to read the biblio if NoZebra is set (to remove it from the indexes
     # - if something goes wrong, the biblio may be deleted from Koha but not from zebra
     #   and we would have no way to remove it (except manually in zebra, but I bet it would be very hard to handle the problem)
-    ModZebra($biblionumber,"delete_record","biblioserver");
+    ModZebra($biblionumber, "delete_record", "biblioserver", undef);
 
     # delete biblio from Koha tables and save in deletedbiblio
     $error = &_koha_delete_biblio( $dbh, $biblionumber );
@@ -2693,15 +2699,19 @@ sub PrepareItemrecordDisplay {
 
 =over 4
 
-ModZebra( $dbh, $biblionumber, $op, $server );
+ModZebra( $biblionumber, $op, $server, $newRecord );
 
+    $biblionumber is the biblionumber we want to index
+    $op is specialUpdate or delete, and is used to know what we want to do
+    $server is the server that we want to update
+    $newRecord is the MARC::Record containing the new record. It is usefull only when NoZebra=1, and is used to know what to add to the nozebra database. (the record in mySQL being, if it exist, the previous record, the one just before the modif. We need both : the previous and the new one.
 =back
 
 =cut
 
 sub ModZebra {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-    my ( $biblionumber, $op, $server ) = @_;
+    my ( $biblionumber, $op, $server, $newRecord ) = @_;
     my $dbh=C4::Context->dbh;
     #warn "SERVER:".$server;
 #
@@ -2722,7 +2732,7 @@ sub ModZebra {
             # 1st delete (virtually, in indexes) ...
             %result = _DelBiblioNoZebra($biblionumber,$record);
             # ... add the record
-            %result=_AddBiblioNoZebra($biblionumber,$record, %result);
+            %result=_AddBiblioNoZebra($biblionumber,$newRecord, %result);
         } else {
             # it's a deletion, delete the record...
             %result=_DelBiblioNoZebra($biblionumber,$record);
@@ -2731,6 +2741,7 @@ sub ModZebra {
         my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE indexname=? AND value=?");
         foreach my $key (keys %result) {
             foreach my $index (keys %{$result{$key}}) {
+                warn "UPDATING : $key , $index with :".$result{$key}->{$index};
                 $sth->execute($result{$key}->{$index},$key,$index);
             }
         }
@@ -2780,6 +2791,8 @@ sub GetNoZebraIndexes {
 
 sub _DelBiblioNoZebra {
     my ($biblionumber,$record)=@_;
+    
+    warn "DELETING".$record->as_formatted;
     # Get the indexes
     my $dbh = C4::Context->dbh;
     # Get the indexes
@@ -2812,6 +2825,7 @@ sub _DelBiblioNoZebra {
                     # remove meaningless value in the field...
                     $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
                     # ... and split in words
+                    warn "DELETING : $key / $tag / $subfieldcode / $line";
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, do nothing, the biblionumber has already be removed
@@ -2821,9 +2835,10 @@ sub _DelBiblioNoZebra {
                             my $existing_biblionumbers = $sth2->fetchrow;
                             # it exists
                             if ($existing_biblionumbers) {
-                                warn " existing for $key $_: $existing_biblionumbers";
+#                                 warn " existing for $key $_: $existing_biblionumbers";
                                 $result{$key}->{$_} =$existing_biblionumbers;
                                 $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
+                                warn "after cleaning : $key / $_ = ".$result{$key}->{$_};
                             }
                         }
                     }
@@ -3651,7 +3666,7 @@ Function exported, but should NOT be used, unless you really know what you're do
 
 sub ModBiblioMarc {
 
-# pass the MARC::Record to this function, and it will create the records in the marc tables
+# pass the MARC::Record to this function, and it will create the records in the marc field
     my ( $record, $biblionumber, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     my @fields = $record->fields();
@@ -3684,6 +3699,7 @@ sub ModBiblioMarc {
         }
     }
 #     warn "biblionumber : ".$biblionumber;
+    ModZebra($biblionumber,"specialUpdate","biblioserver",$record);
     $sth =
       $dbh->prepare(
         "update biblioitems set marc=?,marcxml=?  where biblionumber=?");
@@ -3691,7 +3707,6 @@ sub ModBiblioMarc {
         $biblionumber );
 #     warn $record->as_xml_record();
     $sth->finish;
-    ModZebra($biblionumber,"specialUpdate","biblioserver");
     return $biblionumber;
 }
 
@@ -3853,6 +3868,11 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.203  2007/05/03 15:16:02  tipaul
+# BUGFIX for : NoZebra
+# - NoZebra features : seems they work fine now (adding, modifying, deleting)
+# - Biblio edition major bugfix : before this commit editing a biblio resulted in an item removal in marcxml field
+#
 # Revision 1.202  2007/05/02 16:44:31  tipaul
 # NoZebra SQL index management :
 # * adding 3 subs in Biblio.pm
