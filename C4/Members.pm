@@ -1637,7 +1637,7 @@ sub ExtendMemberSubscriptionTo {
     my $dbh = C4::Context->dbh;
     unless ($date){
       $date=POSIX::strftime("%Y-%m-%d",localtime(time));
-      my $borrower = GetBorrower($borrowerid,'borrowernumber');
+      my $borrower = GetMember($borrowerid,'borrowernumber');
       $date = GetExpiryDate( $borrower->{'categorycode'}, $date );
     }
     my $sth = $dbh->do(<<EOF);

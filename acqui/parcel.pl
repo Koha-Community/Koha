@@ -73,7 +73,7 @@ my $count = scalar @booksellers;
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
-my $datereceived=$input->param('datereceived') || format_date(join "-",Date::Calc::Today());
+my $datereceived=format_date_in_iso($input->param('datereceived')) || format_date(join "-",Date::Calc::Today());
 my $code=$input->param('code');
 
 my ($template, $loggedinuser, $cookie)
