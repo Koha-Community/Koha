@@ -20,9 +20,9 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use CGI;
 use C4::Context;
 use C4::Output;
-use CGI;
 use C4::Branch; # GetBranchName
 use C4::Auth;
 use C4::Date;
@@ -37,7 +37,7 @@ use Date::Calc qw(
 );
 use C4::Reserves;
 use C4::Koha;
-use C4::Interface::CGI::Output;
+# use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 

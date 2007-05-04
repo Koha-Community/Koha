@@ -85,7 +85,6 @@ foreach my $br ( keys %$branches ) {
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
 #             use Data::Dumper;
 #             warn Dumper($gettitle);
-            warn "ITEM : ".$gettitle->{'title'};
             my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
             if ( $gettitle->{'holdingbranch'} eq $default ) {
                 my $getborrower =
@@ -118,7 +117,6 @@ foreach my $br ( keys %$branches ) {
                 $getreserv{'borrowermail'} = $getborrower->{'emailaddress'};
                 $getreserv{'borrowerphone'} = $getborrower->{'phone'};
                 push( @reservloop, \%getreserv );
-                warn "=".$getreserv{'title'}.">>".$gettitle->{'title'};
             }
         }
 
