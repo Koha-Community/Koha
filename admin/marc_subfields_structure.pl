@@ -277,8 +277,10 @@ if ( $op eq 'add_form' ) {
     }
 
     # add more_subfields empty lines for add if needed
-    for ( my $j = $i ; $j <= $more_subfields + $i ; $j++ ) {
+    for ( my $j = 1 ; $j <= 1 ; $j++ ) {
         my %row_data;    # get a fresh hash for the row data
+        $row_data{'subfieldcode'} = '';
+
         $row_data{tab} = CGI::scrolling_list(
             -name   => 'tab',
             -id     => "tab$j",
@@ -373,6 +375,8 @@ if ( $op eq 'add_form' ) {
         $row_data{toggle} = $toggle;
         $row_data{row}    = $j;
         push( @loop_data, \%row_data );
+        use Data::Dumper;
+        warn "push : ".Dumper(%row_data);
     }
     $template->param( 'use-heading-flags-p'      => 1 );
     $template->param( 'heading-edit-subfields-p' => 1 );
@@ -468,8 +472,7 @@ elsif ( $op eq 'delete_confirm' ) {
 "select * from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?"
       );
 
-    #FIXME : called with 2 bind variables when 3 are needed
-    $sth->execute( $tagfield, $tagsubfield );
+    $sth->execute( $tagfield, $tagsubfield, $frameworkcode );
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     $template->param(

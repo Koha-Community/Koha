@@ -56,6 +56,7 @@ The functions in this module deal with branches.
    &GetBranchInfo
    &ModBranchCategoryInfo
    &DelBranch
+   &DelBranchCategory
 );
 
 =head2 GetBranches
@@ -407,7 +408,7 @@ DeleteBranchCategory($categorycode);
 
 =cut
 
-sub DeleteBranchCategory {
+sub DelBranchCategory {
     my ($categorycode) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("delete from branchcategories where categorycode = ?");

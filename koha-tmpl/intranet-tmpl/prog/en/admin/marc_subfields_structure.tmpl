@@ -20,12 +20,13 @@
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Save Changes" />
     
-    <h3>Tag <!-- TMPL_VAR NAME="tagfield" --></h3>
-    <b>Edit subfields :</b>
+    <h2>Tag <!-- TMPL_VAR NAME="tagfield" --></h2>
     <div id="tabs">
+     <p>Edit subfield
         <!-- TMPL_LOOP NAME="loop" -->
-           <!-- TMPL_IF NAME="subfieldcode"-->
-               <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" />
+                <!-- TMPL_IF name="subfieldcode" -->
+                    <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" />
+                <!-- /TMPL_IF -->
                <a 
                     href="javascript:active('sub<!-- TMPL_VAR NAME='subfieldcode' -->');"
                     class="tab_inactive"
@@ -34,24 +35,25 @@
                 >
                     <!-- TMPL_VAR NAME="subfieldcode" -->
                </a>
-           <!-- /TMPL_IF -->
-           <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </p>
     </div>
     
     <div id="content" style="display:block">
         <!-- TMPL_LOOP NAME="loop" --> 
-        <!-- TMPL_IF NAME="subfieldcode"-->
         <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
         
         <h3>Basic constaints</h3>
-                <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
-                <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
-                <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
-                <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
-                <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
-                
-                <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
-               
+            <!-- TMPL_UNLESS name="subfieldcode" -->
+                <p>Subfield code: <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
+            <!-- /TMPL_UNLESS -->
+            <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
+            <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
+            <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
+            <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
+            <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
+            
+            <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
             <span id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
                 <h3>Advanced constraint</h3>
                 <p>
@@ -69,7 +71,6 @@
                 <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></p>
             </span>
         </div>
-        <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     </div>
     </form>

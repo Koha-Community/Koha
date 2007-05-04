@@ -1221,6 +1221,9 @@ sub NZanalyse {
         my $results;
         if ($operator) {
             #do a specific search
+            # automatic replace for short operator
+            $operator='title' if $operator eq 'ti';
+            $operator='author' if $operator eq 'au';
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE indexname=? AND value $operator ?");

@@ -1098,7 +1098,26 @@ my %indexes = (
         {
             indexname => 'branchcode',
             content   => 'branchcode',
-    
+            type => 'PRI',
+        }
+    ],
+    branchrelations => [
+        {
+            indexname => 'PRIMARY',
+            content => 'categorycode',
+            type => 'PRI',
+        }
+    ],
+    branchrelations => [
+        {    indexname => 'PRIMARY',
+            content => 'branchcode,categorycode',
+            type => 'PRI',
+        },
+        {    indexname => 'branchcode',
+            content => 'branchcode',
+        },
+        {    indexname => 'categorycode',
+            content => 'categorycode',
         }
     ],
     currency => [
@@ -1152,6 +1171,20 @@ my %foreign_keys = (
 #            onDelete => 'CASCADE|SET NULL|NO ACTION| RESTRICT',
 #         }
 #    ],
+    branchrelations => [
+        {    key => 'branchcode',
+            foreigntable => 'branches',
+            foreignkey => 'branchcode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+        {    key => 'categorycode',
+            foreigntable => 'branchcategories',
+            foreignkey => 'categorycode',
+            onUpdate => 'CASCADE',
+            onDelete => 'CASCADE',
+        },
+    ],
     shelfcontents => [
         {    key => 'shelfnumber',
             foreigntable => 'bookshelf',
@@ -2001,6 +2034,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.164  2007/05/04 16:24:09  tipaul
+# various bugfixes on parameters modules + adding default NoZebraIndexes systempreference if it's empty
+#
 # Revision 1.163  2007/05/02 16:44:31  tipaul
 # NoZebra SQL index management :
 # * adding 3 subs in Biblio.pm

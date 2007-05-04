@@ -90,6 +90,9 @@ my %tabsysprefs;
     $tabsysprefs{Stemming}="Catalogue";
     $tabsysprefs{WeightFields}="Catalogue";
     $tabsysprefs{expandedSearchOption}="Catalogue";
+    $tabsysprefs{NoZebra}="Catalogue";
+    $tabsysprefs{NoZebraIndexes}="Catalogue";
+    $tabsysprefs{ReceiveBackIssues}="Catalogue";
     
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -123,6 +126,7 @@ my %tabsysprefs;
     $tabsysprefs{borrowerRelationship}="Members";
     $tabsysprefs{BorrowersTitles}="Members";    
     $tabsysprefs{patronimages}="Members";
+    $tabsysprefs{MinPasswordLength}="Members";
     
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";

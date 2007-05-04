@@ -183,7 +183,7 @@ elsif ( $op eq 'delete_category' ) {
 elsif ( $op eq 'categorydelete_confirmed' ) {
 
     # actually delete branch and return to the main screen....
-    DeleteBranchCategory($categorycode);
+    DelBranchCategory($categorycode);
     $template->param( else => 1 );
     default("MESSAGE6",$template);
 

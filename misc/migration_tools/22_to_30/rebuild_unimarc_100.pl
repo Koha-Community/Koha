@@ -19,9 +19,9 @@ my $sth=$dbh->prepare("select biblionumber,timestamp from biblioitems");
 
 while (my ($biblionumber,$time)=$sth->fetchrow ){
 #   my $record;
-  my $record = GetMarcBiblio($biblionumber);
+    my $record = GetMarcBiblio($biblionumber);
 #print $record->as_marc;
-		MARCmodrecord($biblionumber,$record,$time);
+    MARCmodrecord($biblionumber,$record,$time);
 #
 }
 
@@ -43,14 +43,14 @@ sub MARCmodrecord {
         }
         substr($string,22,6,"frey50");
         unless ($record->subfield(100,"a")){
-            $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>$string));
+            $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>"$string"));
         }
 #     warn "APRES : ".$record->as_formatted;
     # delete all items related fields
     foreach ($record->field('995')) {
         $record->delete_field($_);
     }
-    if ($update){	
+    if ($update){
         &ModBiblioMarc($record,$biblionumber,'');
         print "$biblionumber \n";	
     }

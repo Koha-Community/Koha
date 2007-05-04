@@ -67,7 +67,7 @@ if ($res && $res2 && $tab==-1 && $tab2==-1) {
 
 # checks all item fields are in the same tag and in tab 10
 
-$sth = $dbh->prepare("select tagfield,tab,kohafield from marc_subfield_structure where kohafield like \"items.%\"");
+$sth = $dbh->prepare("select tagfield,tab,kohafield from marc_subfield_structure where kohafield like \"items.%\" and tab >=0");
 $sth->execute;
 my $field;
 ($res,$res2,$field) = $sth->fetchrow;
@@ -77,7 +77,7 @@ my $subtotal=0;
 #warn "TAGF : $tagfield";
 while (($res,$res2,$field) = $sth->fetchrow) {
 	# (ignore itemnumber, that must be in -1 tab)
-	if (($res ne $tagfield or $res2 ne $tab ) && $res2 ne -1) {
+	if (($res ne $tagfield) or ($res2 ne $tab)) {
 		$subtotal++;
 	}
 }
@@ -89,7 +89,7 @@ while (($res2) = $sth->fetchrow) {
 		$subtotal++;
 	}
 }
-if ($subtotal eq 0) {
+if ($subtotal == 0) {
 	$template->param(itemfields => 0);
 } else {
 	$template->param(itemfields => 1);
