@@ -181,48 +181,57 @@ $template->param(result=>\@results);
 
 sub SimpleSearch {
     my $query   = shift;
-    my @servers = @_;
-    my @results;
-    my @tmpresults;
-    my @zconns;
-    return ( "No query entered", undef ) unless $query;
-
-    #@servers = (C4::Context->config("biblioserver")) unless @servers;
-    @servers =
-      ("biblioserver") unless @servers
-      ;    # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
-
-    # Connect & Search
-    for ( my $i = 0 ; $i < @servers ; $i++ ) {
-        $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
-        $tmpresults[$i] =
-          $zconns[$i]
-          ->search( new ZOOM::Query::CCL2RPN( $query, $zconns[$i] ) );
-
-        # getting error message if one occured.
-        my $error =
-            $zconns[$i]->errmsg() . " ("
-          . $zconns[$i]->errcode() . ") "
-          . $zconns[$i]->addinfo() . " "
-          . $zconns[$i]->diagset();
-
-        return ( $error, undef ) if $zconns[$i]->errcode();
-    }
-    my $hits;
-    my $ev;
-    while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
-        $ev = $zconns[ $i - 1 ]->last_event();
-        if ( $ev == ZOOM::Event::ZEND ) {
-            $hits = $tmpresults[ $i - 1 ]->size();
+    if (C4::Context->preference('NoZebra')) {
+        my $result = NZorder(NZanalyse($query))->{'biblioserver'}->{'RECORDS'};
+        use Data::Dumper;
+        foreach (@$result) {
+            warn "$query :".@_;
         }
-        if ( $hits > 0 ) {
-            for ( my $j = 0 ; $j < $hits ; $j++ ) {
-                my $record = $tmpresults[ $i - 1 ]->record($j)->raw();
-                push @results, $record;
+        return (undef,$result);
+    } else {
+        my @servers = @_;
+        my @results;
+        my @tmpresults;
+        my @zconns;
+        return ( "No query entered", undef ) unless $query;
+    
+        #@servers = (C4::Context->config("biblioserver")) unless @servers;
+        @servers =
+        ("biblioserver") unless @servers
+        ;    # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
+    
+        # Connect & Search
+        for ( my $i = 0 ; $i < @servers ; $i++ ) {
+            $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
+            $tmpresults[$i] =
+            $zconns[$i]
+            ->search( new ZOOM::Query::CCL2RPN( $query, $zconns[$i] ) );
+    
+            # getting error message if one occured.
+            my $error =
+                $zconns[$i]->errmsg() . " ("
+            . $zconns[$i]->errcode() . ") "
+            . $zconns[$i]->addinfo() . " "
+            . $zconns[$i]->diagset();
+    
+            return ( $error, undef ) if $zconns[$i]->errcode();
+        }
+        my $hits;
+        my $ev;
+        while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
+            $ev = $zconns[ $i - 1 ]->last_event();
+            if ( $ev == ZOOM::Event::ZEND ) {
+                $hits = $tmpresults[ $i - 1 ]->size();
+            }
+            if ( $hits > 0 ) {
+                for ( my $j = 0 ; $j < $hits ; $j++ ) {
+                    my $record = $tmpresults[ $i - 1 ]->record($j)->raw();
+                    push @results, $record;
+                }
             }
         }
+        return ( undef, \@results );
     }
-    return ( undef, \@results );
 }
 
 # performs the search
@@ -1433,6 +1442,8 @@ sub NZorder {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         }
+        # limit the $results_per_page to result size if it's more
+        $results_per_page = $numbers-1 if $numbers < $results_per_page;
         # for the requested page, replace biblionumber by the complete record
         # speed improvement : avoid reading too much things
         for (my $counter=$offset;$counter<=$offset+$results_per_page;$counter++) {
@@ -1471,6 +1482,8 @@ sub NZorder {
             foreach my $key (sort {$b <=> $a} (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
+        # limit the $results_per_page to result size if it's more
+        $results_per_page = $numbers-1 if $numbers < $results_per_page;
         # for the requested page, replace biblionumber by the complete record
         # speed improvement : avoid reading too much things
         for (my $counter=$offset;$counter<=$offset+$results_per_page;$counter++) {
