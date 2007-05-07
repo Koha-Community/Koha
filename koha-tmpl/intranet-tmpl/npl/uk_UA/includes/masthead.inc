@@ -1,0 +1,2 @@
+<h1>Інтерфейс бібліотекаря у Коха<!-- TMPL_IF NAME="branchname" -->: <!-- TMPL_VAR name="branchname" --><!-- /TMPL_IF --></h1>
+<div id="help"><span class="loggedin"><!-- TMPL_IF NAME="loggedinusername" -->Зайдено у систему як:  <span class="loggedinusername"><!-- TMPL_VAR NAME="loggedinusername" --></span> | <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Вийти</a> | <!-- TMPL_ELSE -->Ви  не зайшли у систему | <!-- /TMPL_IF --></span><a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">[ ? ]</a></div>

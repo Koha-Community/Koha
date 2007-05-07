@@ -1,0 +1,166 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- керування системою<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<script language="javascript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isNum(v,maybenull) {
+var n = new Number(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function isDate(f) {
+	var t = Date.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.authtypecode.value.length==0) {
+		_alertString += "\n- " + _("Тип авторитетного джерела: код не задано ");
+	}
+	if (!(isNotNull(window.document.Aform.authtypetext,1))) {
+		_alertString += "\n- " + _("Відсутній опис");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</script>
+<div id="main">
+<!-- TMPL_IF NAME="add_form" -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+<div class="data"><table>
+	<!-- TMPL_IF NAME="authtypecode" -->
+		<caption>Зміна типу авторитетного джерела</caption>
+	<!-- TMPL_ELSE -->
+		<caption>Додати тип авторитетного джерела </caption>
+	<!-- /TMPL_IF -->
+	
+		<input type="hidden" name="op" value="add_validate" />
+		<input type="hidden" name="checked" value="0" />
+			<!-- TMPL_IF NAME="authtypecode" -->
+				<tr><th><label for="authtypecode">Тип авторитетного джерела <label><input type="hidden" id="authtypecode" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /></th><td><!-- TMPL_VAR NAME="authtypecode" --></td></tr>
+			<!-- TMPL_ELSE -->
+				<tr><th><label for="authtypecode">Тип авторитетного джерела <label></th><td><input type="text" id="authtypecode" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
+			<!-- /TMPL_IF -->
+			<tr><th>
+				<label for="authtypetext">Опис </label></th><td>
+				<input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->" />
+			</td></tr>
+			<tr><th>
+				<label for="summary">Зведення</label></th><td>
+				<textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea>
+			</td></tr>
+			<tr><th><label for="auth_tag_to_report">Повідомлена ознака</label></th><td>
+				<input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />
+				<div class="help">Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</div></td></tr>
+			</td></tr></table>
+			<p>
+				<!-- TMPL_IF NAME="authtypecode" -->
+		<input type="submit" value="Update Authority Type" class="submit" onclick="Check(this.form); return false;" />
+	<!-- TMPL_ELSE -->
+		<input type="submit" value="Add Authority Type" class="submit" onclick="Check(this.form); return false;" />
+	<!-- /TMPL_IF -->
+				
+			</p>
+			</div>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+<div class="details">
+	<h2>Визначення структури авторитетних значень для <!-- TMPL_VAR NAME="authtypetext" --> (<!-- TMPL_VAR NAME="authtypecode" -->)</h2>
+	<!-- TMPL_IF NAME="total" -->
+		<p>
+			<b>Цей запис використовується <!-- TMPL_VAR NAME="total" --> разів</b>
+		</p>
+	<!-- /TMPL_IF -->
+	<h3>Are you sure you want to delete this Authority Type?</h3>
+	<p>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed" />
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+			<input type="submit" value="Yes, Delete It" class="cancel" />
+		</form>
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="No, Don't Delete It" class="submit" />
+		</form>
+	</p>
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+<h1>Управління типами авторитетних джерел</h1>
+<p>Define authority types, then authority MARC structure in the same way you define itemtypes and biblio MARC tag structure. Authority values are managed through plugins</p>
+<table>
+	<tr>
+		<th>Код</th>
+		<th>Опис </th>
+		<th>Зведення</th>
+		<th>Повідомлена ознака</th>
+		<th>&nbsp;</th>
+		<th>Редагувати</th>
+		<th>Видалити</th>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>Структура по умовчанню</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td><a href="auth_tag_structure.pl">Структура MARC</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="loop" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="authtypecode" --></td>
+			<td><!-- TMPL_VAR NAME="authtypetext" --></td>
+			<td><!-- TMPL_VAR NAME="summary" --></td>
+			<td><!-- TMPL_VAR NAME="auth_tag_to_report" --></td>
+			<td><a href="auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->" class="button parameters" >Структура MARC</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" escape="HTML" -->">Редагувати</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" escape="HTML" -->">Видалити</a></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form" />
+	<input type="submit" class="submit" value="Додати тип авторитетного джерела ">
+</form>
+	<!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Наступні &gt;&gt;</a><!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

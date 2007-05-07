@@ -1,0 +1,63 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- система імпорту зображень відвідувачів<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Система імпорту зображень відвідувачів</h1>
+
+<!-- TMPL_IF name="total" -->
+<div class="details">
+	<h3>Розпаковування завершилося</h3>
+	<ul>
+    <li><!-- TMPL_VAR NAME="total" --> Scanned</li>
+	<li><!-- TMPL_VAR NAME="handled" --> Processed</li>
+	<li><ul><!-- TMPL_LOOP name="counts" -->
+	<li><!-- TMPL_VAR name="count" --> Зображення переміщені зі <!-- TMPL_VAR name="source" --> до <!-- TMPL_VAR name="dest" -->
+	<ul><!-- TMPL_LOOP name="filenames" -->
+		<li><!-- TMPL_VAR name="source" --> до <!-- TMPL_VAR name="dest" --></li>
+	<!-- /TMPL_LOOP --></ul>
+    <!-- /TMPL_LOOP --></li></ul></li></ul>
+</div>
+<!-- TMPL_ELSE -->
+<div class="details">
+<!-- TMPL_IF name="errors" -->
+	<!-- TMPL_LOOP name="errors" -->
+	<ul class="error">
+	<!-- TMPL_IF name="NOTZIP" -->
+		<li>Здається, завантажений файл не є zip-файлом. Розширення не '.zip'.</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="NOWRITETEMP" -->
+		<li>Цей сценарій не може створити/писати до необхідної тимчасової теки.</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="NOWRITEDEST" -->
+		<li>Цей сценарій не може писати до теки зі зображеннями відвідувачів.</li>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="EMPTYUPLOAD" -->
+		<li>Здається, завантажений файл порожній.</li>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<form method="post" action="/cgi-bin/koha/import/picture-upload.pl" enctype="multipart/form-data">
+    <div class="error"><h3>Попередження: ця можливість експериментальна. Це може і не працювати у Вас </h3></div>
+<h4>Instructions:</h4>
+<ol>
+	<li>Виберіть файл, щоб розпакувати його на сервері. Кожен jpg-файл, що міститься всередині, копіюватиметься на сервері у місце зі зображеннями відвідувачів.</li>
+	<li>Ви можете включати декілька пакетів зі зображеннями у zip-файл у окремих теках.</li>
+	<li>Повинен бути файл DATALINK.TXT або IDLINK.TXT для кожного пакету зі зображеннями, і повинен містити номер квитка та файл зображення відвідувача. Один відвідувач на рядок, відділений комами чи табуляціями. Лапки навколо полів ігноруватимуться.</li>
+</ol>
+<table>
+	<tr>
+		<th><label for="uploadfile">Виберіть zip-файл для розпаковування:  </label></th>
+		<td>
+			<input type="file" id="uploadfile" name="uploadfile" /><br />
+		</td>
+	</tr>
+</table>
+
+	<input type="submit" value="Розпакувати" class="submit">
+</form>
+</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

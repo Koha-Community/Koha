@@ -1,0 +1,178 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- відвідувачі:  <!-- TMPL_IF NAME="modify" -->Edit Record for <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- TMPL_ELSE -->Додати нового користувача -  <!-- TMPL_IF NAME="institution" -->Колективний <!-- /TMPL_IF -->Відвідувач<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+	<!-- TMPL_IF NAME="addAction" -->
+	<h1>
+		Додати нового користувача -  <!-- TMPL_IF NAME="institution" -->Колективний <!-- /TMPL_IF -->Відвідувач
+	</h1>
+	<!-- TMPL_ELSE -->
+	<h1>
+		Оновлення <!-- TMPL_IF NAME="institution" -->Колективний <!-- /TMPL_IF -->Дані про відвідувача
+</h1><h2><!-- TMPL_IF NAME="surname" --><!-- TMPL_VAR NAME="surname" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="firstname" -->, <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></h2>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF Name="NOK" -->
+		
+		<div class="error">
+		<h3>Missing Information</h3>
+			<p>Наступні поля мають заборонені значення. Виправіть їх та натисніть знову 'Гаразд': </p><ul>
+			<!-- TMPL_IF NAME="ERROR_surname" -->
+				<li><a href="#lastname">Прізвище </a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_firstname" -->
+				<li><a href="#firstname">Ім'я</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_gender" -->
+				<li><a href="#sex">Стать</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_address" -->
+				<li><a href="#address">Поштова адреса</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_city" -->
+				<li><a href="#city">Mailing Address City/State</a><br>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
+				<li><a href="#cardnumber">Номер квитка</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_invalid_cardnumber" -->
+				<li><a href="#cardnumber">Недійсний номер квитка</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_branch" -->
+				<li><a href="#branch">Відвідувач повинен бути у тому ж підрозділі, що й Ви</a></li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_date" -->
+				<li><a href="#expiry">Expiration date must fall AFTER enrollment date</a></li>
+			<!-- /TMPL_IF -->
+			</ul>
+		</div>
+	<!-- /TMPL_IF -->
+	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
+		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
+		<input type="hidden" name="type" value="borrowers">
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
+	<input type="hidden" name="actionType" value="<!-- TMPL_VAR NAME="actionType" -->">
+		<!-- TMPL_IF NAME="addAction" -->
+			<input type="hidden" name="op" value="add">
+		<!-- TMPL_ELSE -->
+			<input type="hidden" name="op" value="modify">
+		<!-- /TMPL_IF -->
+<div class="table members"><table>
+
+	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="title">Вітання: </label></th><td colspan="4"><!-- TMPL_VAR NAME="Mr" -->
+				<select name="title" id="title">
+					<option <!-- TMPL_VAR NAME="title_selected_ " --> value="">Без заголовку</option>
+					<option value="Miss" <!-- TMPL_VAR NAME="title_Miss" -->>Міс</option>
+					<option value="Mrs" <!-- TMPL_VAR NAME="title_Mrs" -->>Пані</option>
+					<option value="Ms" <!-- TMPL_VAR NAME="title_Ms" -->>Пані</option>
+					<option <!-- TMPL_VAR NAME="title_Mr" --> value="Mr" >Пан</option>
+					<option value="Dr" <!-- TMPL_VAR NAME="title_Dr" -->>Д-р</option>
+					<option value="Sir" <!-- TMPL_VAR NAME="title_Sir" -->>Сер</option>
+				</select>
+				</td></tr><!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="initials">Ініціали: </label></th><td colspan="4"><input type="text" id="initials" name="initials" size="5" value="<!-- TMPL_VAR NAME="initials" -->"></td></tr><!-- /TMPL_UNLESS -->
+
+	<tr><th><!-- TMPL_IF NAME="ERROR_surname" --><label for="surname" class="focus"><!-- TMPL_ELSE --><label for="surname"><!-- /TMPL_IF --><a name="lastname" id="lastname"><!-- TMPL_IF NAME="institution" -->Institution name:<!-- TMPL_ELSE -->Прізвище:  <!-- /TMPL_IF --></a></label></th><td><input type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->"<!-- TMPL_IF NAME="ERROR_surname" --> class="focus"<!-- /TMPL_IF -->></td>
+
+<!-- TMPL_UNLESS name="institution" --><th><!-- TMPL_IF NAME="ERROR_gender" --><label for="sex" class="focus"><!-- TMPL_ELSE --><label for="sex"><!-- /TMPL_IF --><a name="sex" id="sex">Стать:</a> </label></th><td><input type="radio" id="sex" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked="checked"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->>F <input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked="checked"<!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="ERROR_gender" --> class="focus"<!-- /TMPL_IF -->> M</td><!-- /TMPL_UNLESS -->
+</tr>
+
+	<!-- TMPL_UNLESS name="institution" --><tr><th><!-- TMPL_IF NAME="ERROR_firstname" --><label for="firstname" class="focus"><!-- TMPL_ELSE --><label for="firstname"><!-- /TMPL_IF --><a name="firstname" id="firstname">Ім'я: </a></label> </th><td><input type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->"<!-- TMPL_IF NAME="ERROR_firstname" --> class="focus"<!-- /TMPL_IF -->></td>
+
+<!-- TMPL_UNLESS name="institution" --><th><label for="dateofbirth">Дата народження:  </label></th><td><input type="text" id="dateofbirth" name="dateofbirth" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->"> (<!-- TMPL_VAR NAME="dateformat" -->)</td><!-- /TMPL_UNLESS -->
+</tr><!-- /TMPL_UNLESS -->
+					
+	<!-- TMPL_UNLESS name="institution" --><tr><th><label for="othernames">Обране ім'я: </label></th><td colspan="4"><input type="text" id="othernames" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->"></td></tr><!-- /TMPL_UNLESS -->
+
+	<tr><th>Адреси: </th><td colspan="4"><fieldset><legend>Поштова адреса</legend><!-- TMPL_IF NAME="ERROR_address" --><label for="streetaddress" class="focus"><!-- TMPL_ELSE --><label for="streetaddress"><!-- /TMPL_IF --><a name="address" id="address">Адреса: </a> </label>
+<!-- TMPL_IF NAME="ERROR_address" -->
+<input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->" class="focus" /><!-- TMPL_ELSE --><input type="text" id="streetaddress" name="streetaddress" size="25" value="<!-- TMPL_VAR NAME="address" -->" /><!-- /TMPL_IF -->
+
+<br><!-- TMPL_IF NAME="ERROR_city" --><label for="city" class="focus"><!-- TMPL_ELSE --><label for="city"><!-- /TMPL_IF --><a name="#city" id="#city">Місто, область: </a></label>
+<!-- TMPL_IF NAME="ERROR_city" -->
+<input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" class="focus" /><!-- TMPL_ELSE --><input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" /><!-- /TMPL_IF -->
+
+<br><label for="zipcode">Поштовий індекс: </label> <input type="text" id="zipcode" name="zipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="zipcode" -->" /></fieldset>
+
+<fieldset><legend>Фактична адреса (якщо інша)</legend>
+<label for="physstreet">Адреса: </label><input type="text" id="physstreet" name="physstreet" size="25" value="<!-- TMPL_VAR NAME="physstreet" -->" />
+<br><label for="streetcity">Місто, область:  </label><input type="text" id="streetcity" name="streetcity" size="20" value="<!-- TMPL_VAR NAME="streetcity" -->" />
+<br><label for="homezipcode">Поштовий індекс: </label><input type="text" id="homezipcode" name="homezipcode" size="20" maxlength="20" value="<!-- TMPL_VAR NAME="homezipcode" -->" /> 
+</fieldset>
+</td></tr>
+
+	<tr><th><label for="phone">Телефон (домашній): </label> </th><td colspan="4"><input type="text" id="phone" name="phone" size="20" value="<!-- TMPL_VAR NAME="phone" -->" /></td></tr>
+	<tr><th><label for="phoneday">Телефон (денний час): </label> </th><td colspan="4"><input type="text" id="phoneday" name="phoneday" size="20" value="<!-- TMPL_VAR NAME="phoneday" -->" /></td></tr>
+	<tr><th><label for="faxnumber">Факс: </label></th><td colspan="4"><input type="text" id="faxnumber" name="faxnumber" size="20" value="<!-- TMPL_VAR NAME="faxnumber" -->" /></td></tr>
+	<tr><th><label for="emailaddress">Електронна пошта: </label> </th><td colspan="4"><input type="text" id="emailaddress" name="emailaddress" size="40" value="<!-- TMPL_VAR NAME="emailaddress" -->" /></td></tr>
+			</tr>
+	<tr><th><label for="textmessaging">Повідомлення для відвідувача: </label><p> (з'являтиметься у електронічному каталозі)</p></th><td colspan="4"><textarea id="textmessaging" name="textmessaging" cols="30" rows="3"><!-- TMPL_VAR NAME="textmessaging" --></textarea></td></tr>
+	<tr><th><label for="borrowernotes">Примітка для обігу:</label> <p>(з'являтиметься у обігу)</p> </th><td colspan="4"><textarea id="borrowernotes" name="borrowernotes" cols="30" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea></td></tr>
+
+			<tr>
+				<!-- TMPL_IF NAME="addAction" -->
+					<th>Дата приєднання (якщо сьогодні, то залишіть пустим):  </th>
+					<td colspan="4"><input type="text" name="joining" size="12" maxlength="10" value="<!-- TMPL_VAR name="joining" -->" /></td>
+				<!-- TMPL_ELSE -->
+					<th>Дата приєднання:  </th>
+					<td colspan="4"><!-- TMPL_VAR name="joining" --></td>
+				<!-- /TMPL_IF -->
+			</tr>
+			<tr>
+				<th><a name="expiry" id="expiry">Дата закінчення терміну (для автоматичного обрахунку залишіть пустим):  </a></th>
+				<td><input type="text" name="expiry" size="12" maxlength="10" value="<!-- TMPL_VAR name="expiry" -->" /></td>
+			</tr>
+
+			</table></div>
+
+
+<!-- TMPL_UNLESS name="institution" -->
+		<div class="table members"><table>
+		<caption>Дані альтернативного контакту</caption>
+		<tr><th><label for="contactname">Ім'я: </label></th><td><input type="text" id="contactname"  name="contactname" size="40" value="<!-- TMPL_VAR NAME="contactname" -->"></td></tr>
+		<tr><th><label for="altphone">Телефон: </label> </th><td><input type="text" id="altphone" name="altphone" size="20" value="<!-- TMPL_VAR NAME="altphone" -->"></td></tr>
+		<tr><th><label for="altrelationship">Взаємовідношення:</label> </th><td><select id="altrelationship" name="altrelationship" size="1">
+					<!-- TMPL_LOOP NAME="relshiploop" -->
+						<option <!-- TMPL_VAR NAME="selected" -->><!-- TMPL_VAR NAME="relationship" --></option>
+					<!-- /TMPL_LOOP -->
+					</select></td></tr>
+		<tr><th><label for="altnotes">Нотатки:  </label></th><td><textarea id="altnotes" name="altnotes" cols="30" rows="3"><!-- TMPL_VAR NAME="altnotes" --></textarea></td></tr>
+		</table></div><!-- /TMPL_UNLESS -->
+
+<div class="table members"><table>
+	<caption>Позначки</caption>
+	<!-- TMPL_LOOP NAME="flagloop" -->
+	<tr><th><label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" --></label></th><td><input type="radio" id="<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Так <input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>Ні</td></tr>
+				<!-- /TMPL_LOOP -->
+</table></div>
+
+<div class="table members"><table>
+<caption>Дані про відвідувача</caption>
+	<!-- TMPL_UNLESS NAME="addAction" --><tr><th><label>Member Number:</label></th><td><span class="ex"><!-- TMPL_VAR NAME="member" --></span></td></tr><!-- /TMPL_UNLESS -->
+	<tr><th><label for="categorycode">Категорія:</label> </th><td><!-- TMPL_VAR NAME="catcodepopup" --></td></tr>
+	<tr><th><label for="branchcode"><a name="branch" id="branch">Підрозділ:</a></label></th><td><!-- TMPL_VAR NAME="CGIbranch" --></td></tr>	
+	<tr><th><label for="cardnumber"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->><a name="cardnumber" id="cardnumber">Номер квитка</a></label></th><td><input id="cardnumber" type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->"<!-- TMPL_IF NAME="ERROR_cardnumber" --> class="focus"<!-- /TMPL_IF --><!-- TMPL_IF NAME="ERROR_invalid_cardnumber" --> class="focus"<!-- /TMPL_IF -->></td></tr>
+</table>
+<table><caption>Додаткові поля</caption>
+	<tr><th><label for="sort1">Поле 1 (для сортування) </label></th><td><!-- TMPL_IF Name="CGIsort1" -->
+						<!-- TMPL_VAR Name="CGIsort1" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort1" id="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+					<!--/TMPL_IF --></td><td rowspan="2"><p>These fields are available for your own usage. They can be useful for statistical purposes</p></td></tr>
+	<tr><th><label for="sort2">Поле 2 (для сортування) </label></th><td><!-- TMPL_IF Name="CGIsort2" -->
+						<!-- TMPL_VAR Name="CGIsort2" -->
+					<!-- TMPL_ELSE -->
+						<input type="text" name="sort2" id="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+					<!--/TMPL_IF --></td></tr>
+</table>
+</div>
+
+<p>	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_IF NAME="addAction" -->
+	<input name="submit" type="submit" class="submit" value="Додати цього відвідувача"><!-- TMPL_ELSE --><input name="submit" type="submit" class="submit" value="Update This Patron" /><!-- /TMPL_IF --></p>
+	</form>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

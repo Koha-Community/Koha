@@ -1,0 +1,58 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- каталогізація: імпорт МАРК-записів<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Система МАРК-надходжень</h1>
+<h4>Імпорт до сховища</h4>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Результати імпорту: </p>
+<ul>
+	<li><!-- TMPL_VAR name="imported" --> імпортовано записів</li>
+	<li><!-- TMPL_VAR name="alreadyindb" --> not imported because already in catalog</li>
+	<li><!-- TMPL_VAR name="alreadyinfarm" --> not imported because already in the reservoir</li>
+	<li><!-- TMPL_VAR name="notmarcrecord" --> not imported because they seem not to be in MARC format (or ISBN/ISSN missing) !</li>
+	<li><!-- TMPL_VAR name="total" --> проаналізовано записів</li>
+	<li><a href="/cgi-bin/koha/admin-home.pl">Повернутися</a></li>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Виберіть файл для імпорту до сховища. Він буде проаналізований, і для кожного знайденого ISBN, новий малюк-запис буде створений у сховищі.</li>
+	<li>Якщо ISBN вже існує у сховищі, Ви можете вибрати, чи нехтувати новим записом чи записати поверх старого.</li>
+	<li>Ви можете ввести ім'я цього імпорту. Воно може бути корисно при створенні бібліотечного запису, щоб пам'ятати, звідки прийшли запропоновані МАРК-дані!</li>
+	<li>Звичайно, якщо ISBN вже існує у активній БД, бібліотечний запис буде проігноровано.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<div class="data"><table>
+	<tr>
+		<th><label for="uploadmarc">Виберіть файл для імпорту:  </label></th>
+		<td>
+			<input type="file" id="uploadmarc" name="uploadmarc" /><br />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="filename">Назва для цього імпортування:  </label></th>
+		<td>
+			<input type="text" id="filename" name="filename" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="syntax">Character encoding: </label></th>
+		<td>
+			<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		</td>
+	</tr>
+	<tr>
+		<th rowspan="2">If ISBNi is already in the reservoir: </th>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked="checked" /> Ігнорувати його, зберігши існуючий</td></tr>
+<tr><td>
+			<input type="radio" name="overwrite_biblio" value="1" /> Цей записати поверха існуючого</td>
+	</tr>
+</table></div><input type="submit" value="Імпортувати" class="submit">
+</form>
+<!-- /TMPL_IF -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

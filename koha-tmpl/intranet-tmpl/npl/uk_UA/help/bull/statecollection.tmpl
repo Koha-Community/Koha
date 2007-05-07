@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Online Help: Serials -- Issues and Summary<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="main-compact">
+	<h1>Serials issues and summary</h1>
+	<p>Цей екран ділиться на 2 частини</p>
+	<h2>The first part, Awaited or Late Subscription Issues</h2>
+	<p>The right part deals with issues. When you create a new subscription, the first issue is automatically calculated. When you want/need, you can define issues that have a new status:</p>
+	<ul>
+		<li><strong>Прибуває</strong>: when an book arrives, you can set it's status to "arrived". Then, the issue disappear from this list, and the number of the issue is added to the "arrived list" (on the left box)</li>
+		<li><strong>Затримка</strong>: means that the book is late and should be arrived. A books changed to "late" status stays on the issue list, and the next waited number is generated</li>
+		<li><strong>Відсутнє</strong>: means the book is not in the library but has been published (the library's copy has been lost, for example). The issue disappear from the list, and the number of the issue is added to the "missing list" (in the second box)</li>
+	</ul>
+<p>When you change an "awaited" issue to something else, the next awaited issue is automatically calculated. The issue list contains only awaited/late issues and the last five issues.</p>
+	<p><strong>Published on and planned for</strong>: for new issues, those values are automatically calculated. The first one is the published date. It is usually never modified. The second one is the date where you expect to receive the issue or have received it. Late issues depends on planned dates, while the published date is useful to order issues in serials summary: for a monthly issue, you can receive the february issue in april, but still need to know that the february issue has been published before the march one.</p>
+	<h2>Друга частина</h2>
+	<p>The second part contains six different pieces of information, that are automatically calculated for some of them, but that you can change<p>
+	<ul>
+		<li>Subscription beginning date: the date of the beginning of the first subscription. Should not be modified and is not modified automatically by subscriptions renewals</li>
+		<li>Subscription end date: must be entered manually when the subscription is definitely closed</li>
+		<li>Arrived numbers: the list of issues you have in your library. Automatically filled when a new number is marked "arrived". You can manually change this field if you want, for example, to change a long list (1,2,3,4,...,51) to a shorter one (1-51)</li>
+		<li>Missing numbers: the list of issues you don't have in your library, and that will never arrive (or have been lost). Automatically filled when a new number is marked "missing". You can manually change this field if you want, for example, to change a long list (1,2,3,4,...,51) to a shorter one (1-51)</li>
+		<li>OPAC note: the field that appears in the OPAC (with some other subscription information like beginning date and end date. This field must be filled manually. Nothing is put here automatically</li>
+		<li>OPAC note: the field that appears in the librarian interface (with some other subscription information like beginning date and end date. This field must be filled manually. Nothing is put here automatically.</li>
+	</ul>
+	<h2>Відновлення передплат</h2>
+	<p>Koha calculates automatically the end of the subscription (based on the start date and the number of issues received). when a subscription has ended, you can't change the status of the last "waited number" (as it's not waited in fact). To be able to "receive" this number, you must renew your subscription.</p>
+	<p>Renewing a subscription means that you define some information for the renewal. When that information has been filled, a suggestion is automatically created in Koha. This suggestion can be managed by the librarian that orders books, as any other order (= budget and bookseller are defined here).</p>
+	<p><i>Відзначте, що передплатне відновлення, зроблене  "бібліотекарем з періодичних видань", є невідкладним. Ми вирішили зберігати Коху такою простою, наскільки це можливо. Фактично, передплатне відновлення не буде невідкладним, але ми не хотіли додавати більшу складність.</i></p>
+	</p>
+
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

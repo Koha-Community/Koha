@@ -1,0 +1,68 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Summary for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- TMPL_INCLUDE NAME="doc-head-close-print.inc" -->
+
+<!-- main site -->
+<div id="main">
+<h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Зведення про обліковий рахунок: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a></h3>
+
+<ul><li><!-- TMPL_VAR NAME="streetaddress" --></li><li><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></li>
+<li><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->(немає телефонного номера на карточці)<!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="emailaddress" --><!-- TMPL_VAR NAME="emailaddress" --><!-- TMPL_ELSE -->(немає електронної пошти на карточці)<!-- /TMPL_IF --></li>
+</ul>
+
+<table>
+	<caption>Одиниці перевірені</caption>
+	<thead>
+	<tr>
+		<th>Заголовок</th>
+		<th>Автор</th>
+		<th>Формат</th>
+		<!-- Hide from NPL --><th>Плата</th><!-- /Hide from NPL -->
+		<th>Вартість відшкодування</th>
+		<th>Дата повернення</th>
+		<th>Стан</th>
+	</tr>
+	</thead>
+	<tfoot><tr><td colspan="4">Total Replacement Cost:</td><td class="sum"><!-- TMPL_VAR NAME="totalprice" --></td><td colspan="3">&nbsp;</td></tr></tfoot>
+<tbody>
+	<!-- TMPL_loop name="issueloop" -->
+	<tr<!-- TMPL_IF name="red" --> class="overdue"</TMPL_IF>>
+		<td>
+		<!-- TMPL_VAR NAME="title" -->
+		<a href="/cgi-bin/koha/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+		</a>
+		</td>
+		<td><!-- TMPL_VAR NAME="author" --></td>
+		<td><!-- TMPL_VAR NAME="itemtype" --></td>
+		<!-- Hide from NPL --><td class="credit"><!-- TMPL_VAR NAME="charge" --></td><!-- /Hide from NPL -->
+		<td class="credit"><!-- TMPL_VAR NAME="replacementprice" --></td>
+		<td><!-- TMPL_VAR NAME="date_due" --></td>
+		<td><!-- TMPL_IF NAME="red" -->Прострочено!<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	</tbody>
+	</table>
+	
+<table>
+	<caption>Одиниці на резервуванні</caption>
+	<tr>
+		<th>Заголовок</th>
+		<th>Автор</th>
+		<th>Формат</th>
+		<th>Запитано </th>
+	</tr>
+
+<!-- TMPL_loop name="reserveloop" -->
+	<tr>
+		<td><a href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a></td>
+		<td><!-- TMPL_VAR NAME="author" --></td>
+		<td><!-- TMPL_VAR NAME="description" --></td>
+		<td><!-- TMPL_VAR NAME="reservedate2" --></td>
+	</tr>
+	<!-- /tmpl_loop -->
+
+</table>
+
+</div>
+<!-- endmenu -->
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

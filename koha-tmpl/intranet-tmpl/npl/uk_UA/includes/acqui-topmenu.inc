@@ -1,0 +1,1 @@
+<div id="topmenu"><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Домівка каталогізації</a> | <a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Додати МАРК-запис</a> | <a href="/cgi-bin/koha/import/breeding.pl">Імпорт МАРК-записів</a> | <a href="/cgi-bin/koha/bull-home.pl">Періодичні видання</a></div>

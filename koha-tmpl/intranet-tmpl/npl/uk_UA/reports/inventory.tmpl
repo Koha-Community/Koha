@@ -1,0 +1,104 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Reports: Inventory<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+	<h1>Inventory Report</h1>
+	<form action="/cgi-bin/koha/reports/inventory.pl" method="post">
+	<div class="data">
+	<table>
+	<caption>Виберіть одиниці, які Ви хочете перевірити</caption>
+	<tr><th><label for="minlocation">Item Location (items.itemcallnumber) between:</label></th><td><input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> 
+			<label for="maxlocation">...and...</label>
+				<input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" /></td></tr>
+	<tr><th><label for="datelastseen">Не бачено з (рррр-мм-дд): </label></th><td><input type="text" name="datelastseen" id="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" size="10" maxlength="10" /></td></tr>
+	<tr><th><label for="pagesize">Items per Page: </label></th><td><input type="text" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" /></td></tr>
+	<tr><th><label for="offset">Beginning at Page: </label></th><td><input type="text" name="offset" id="offset" value="<!-- TMPL_VAR NAME="offset" -->" size="5" maxlength="5" /></td></tr>
+	</table>
+		<p>
+			<input type="submit" value="Generate Report" class="submit">
+		</p>
+	</form>
+	
+	<div class="data">
+		<form action="/cgi-bin/koha/reports/inventory.pl"  name="barcodefile" method="post">
+<table>
+<caption>Використання файлу штрих-коду</caption>
+<tr><th><label for="uploadbarcodes">Barcode filename:</label> </th><td><input type="file" id="uploadbarcodes" name="uploadbarcodes" /></td></tr>
+	<tr><th><label for="setdate">Set datelastseen to:</label></th> <td><input type="text" id="setdate" name="setdate" /></td></tr></table>
+<p><input type="submit" value="Виконати" class="submit"></p>
+		</form>
+		<!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> items modified: datelastseen set to <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
+		<!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> не вдається відкрити</p><!-- /TMPL_IF-->
+	</div>
+	<!--TMPL_LOOP Name="errorloop"--><p class="error"><!--TMPL_VAR Name="barcode"-->
+	<!--TMPL_IF Name="ERR_BARCODE"-->: штрих-код не знайдений<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_WTHDRAWN"-->: одиниця забрана<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_RET"-->: одиниця була у позиці. Вона була повернена перед позначенням, як побачена<!--/TMPL_IF-->
+	<!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"-->: одиниця була у позиці. не може бути повернута.<!--/TMPL_IF-->
+	</p><!-- /TMPL_LOOP-->
+	
+	<!-- TMPL_IF NAME="loop" -->
+	<form action="/cgi-bin/koha/reports/inventory.pl" method="post">
+	<input type="hidden" name="markseen" value="1" />
+	<input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" />
+	<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
+	<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
+	<input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
+	<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" />
+	
+	<table>
+		<tr>
+			<th>Побачено</th>
+			<th>Штрих-код</th>
+			<th>Шифр для замовлення</th>
+			<th>Заголовок</th>
+			<th>Автор</th>
+		</tr>
+<!--TMPL_LOOP Name="loop"-->
+		<tr>
+			<td>
+				<input type="checkbox" name="SEEN-<!-- TMPL_VAR NAME="itemnumber" -->" value="1" />
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="barcode" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="itemcallnumber" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="title" -->
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="author" -->
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<input type="submit" value="Позначити побачене" class="submit">
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="offset" -->
+	<form action="/cgi-bin/koha/reports/inventory.pl" method="post">
+		<input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" />
+		<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" /> 
+		<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
+		<input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
+		<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevoffset" -->" />
+		<input type="submit" value="&lt;&lt;&lt;" class="submit" />
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="nextoffset" -->
+	<form action="/cgi-bin/koha/reports/inventory.pl" method="post">
+		<input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> 
+		<input type="hidden" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
+		<input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
+		<input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
+		<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextoffset" -->" />
+		<input type="submit" value="&gt;&gt;&gt;" class="submit" />
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

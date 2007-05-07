@@ -1,0 +1,308 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- <!-- TMPL_IF NAME="categorycode" -->Редагування категорії<!-- TMPL_ELSE -->Додати категорію<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<!-- TMPL_IF NAME="add_form" -->
+        <script language="JavaScript" type="text/javascript">
+        //
+        function isNotNull(f,noalert) {
+                if (f.value.length ==0) {
+   return false;
+                }
+                return true;
+        }
+        //
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        //
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull==0 && v.value=='') {
+                return false;
+        }
+        return true;
+        }
+        //
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        //
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.categorycode.value.length==0) {
+                        _alertString += "- categorycode missing\n";
+                }
+//              alert(window.document.Aform.description.value);
+                if (!(isNotNull(window.document.Aform.description,1))) {
+                        _alertString += "- description missing\n";
+                }
+                if (!isNum(f.upperagelimit,0)) {
+                        _alertString += "- upperagelimit is not a number\n";
+                }
+                if (_alertString.length==0) {
+                        document.Aform.submit();
+                } else {
+                        alertString2 = "Form not submitted because of the following problem(s)\n";
+                        alertString2 += "------------------------------------------------------------------------------------\n\n";
+                        alertString2 += _alertString;
+                }
+        }
+        </script>
+
+        <!-- TMPL_IF NAME="categorycode" -->
+                <h1>Редагування категорії</h1>
+        <!-- TMPL_ELSE -->
+                <h1>Додати категорію</h1>
+        <!-- /TMPL_IF -->
+
+        <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+        <input type="hidden" name="op" value="add_validate">
+        <input type="hidden" name="checked" value=0>
+                        
+        <table>  
+        <!-- TMPL_IF NAME="categorycode" -->
+                <tr>
+                        <td>Шифр категорії</td>
+                        <td>
+                                <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" -->">
+                        </td>
+                </tr>
+        <!-- TMPL_ELSE -->
+                <tr>
+                        <td>Шифр категорії</td>
+                        <td>
+                                <input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)">
+                        </td>
+                </tr>
+        <!-- /TMPL_IF -->
+                <tr>
+                        <td>Опис </td>
+                        <td>
+                                <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR name="description" -->">
+                                &nbsp;
+                        </td>
+                </tr>
+                <tr>
+                        <td>Період реєстрації</td>
+                        <td>
+                                <input type="text" name="enrolmentperiod" value="<!-- TMPL_VAR name="enrolmentperiod" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Верхня межа віку</td>
+                        <td>
+                                <input type="text" name="upperagelimit" value="<!-- TMPL_VAR name="upperagelimit" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Обов'язковий вік</td>
+                        <td>
+                                <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR name="dateofbirthrequired" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Тип пені</td>
+                        <td>
+                                <input type="text" name="finetype" size="30" maxlength="30" value="<!-- TMPL_VAR name="finetype" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Об'єм</td>
+                        <td>
+                                <input type="text" name="bulk" value="<!-- TMPL_VAR name="bulk" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Плата за реєстрацію</td>
+                        <td>
+                                <input type="text" name="enrolmentfee" value="<!-- TMPL_VAR name="enrolmentfee" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Необхідність сповіщення про прострочення</td>
+                        <td>
+                                <input type="text" name="overduenoticerequired" value="<!-- TMPL_VAR name="overduenoticerequired" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Issue limit</td>
+                        <td>
+                                <input type="text" name="issuelimit" value="<!-- TMPL_VAR name="issuelimit" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>Плата за резервування</td>
+                        <td>
+                                <input type="text" name="reservefee" value="<!-- TMPL_VAR name="reservefee" -->">
+                        </td>
+                </tr>
+                <tr>
+                        <td>&nbsp;</td>
+                        <td>
+                                <input type="button" value="Гаразд" onclick="Check(this.form)" class="submit">
+                        </td>
+                </tr>
+        </table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="add_validate" -->
+        Дані записані
+        <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+                <input type="submit" value="Гаразд" class="submit">
+        </form>
+<!-- /TMPL_IF -->
+
+        ЗАГАЛОМ : <!-- TMPL_VAR name="categorycode" --> : <!-- TMPL_VAR name="total" --><br />
+                    
+        <table>
+                <tr>
+                        <td>
+                                <b>Шифр категорії</b>
+                        </td>
+                        <td>
+                                <!-- TMPL_VAR name="categorycode" -->
+                        </td>
+                </tr>
+                <form action="<!-- TMPL_VAR name=script_name -->" method="post">
+                        <input type="hidden" name="op" value="delete_confirmed">
+                        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" -->">
+                <tr>
+                        <td>Опис </td>
+                        <td><!-- TMPL_VAR name="description" --></td>
+                </tr>
+                <tr>
+                        <td>Період реєстрації</td>
+                        <td><!-- TMPL_VAR name="enrolmentperiod" --></td>
+                </tr>
+                <tr>
+                        <td>Верхня межа віку</td>
+                        <td><!-- TMPL_VAR name="upperagelimit" --></td>
+                </tr>
+                <tr>
+                        <td>Обов'язковий вік</td>
+                        <td><!-- TMPL_VAR name="dateofbirthrequired" --></td>
+                </tr>
+                <tr>
+                        <td>Тип пені</td>
+                        <td><!-- TMPL_VAR name="finetype" --></td>
+                </tr>
+                <tr>
+                        <td>Об'єм</td>
+                        <td><!-- TMPL_VAR name="bulk" --></td>
+                </tr>
+                <tr>
+                        <td>Плата за реєстрацію</td>
+                        <td><!-- TMPL_VAR name="enrolmentfee" --></td>
+                </tr>
+                <tr>
+                        <td>Необхідність сповіщення про прострочення</td>
+                        <td><!-- TMPL_VAR name="overduenoticerequired" --></td>
+                </tr>
+                <tr>
+                        <td>Issue limit</td>
+                        <td><!-- TMPL_VAR name="issuelimit" --></td>
+                </tr>
+                <tr>
+                        <td>Плата за резервування</td>
+                        <td><!-- TMPL_VAR name="reservefee" --></td>
+                </tr>
+                <!-- TMPL_IF NAME="totalgtzero" -->
+                <tr>
+                        <td colspan="2"><b>Цей запис використовується <!-- TMPL_VAR name="total" --> разів. Видалення не можливе</b></td>
+                </tr>
+               <tr>
+                        <td colspan=2>
+                                </form><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+                                <input type="submit" value="Гаразд" class="submit">
+                                </form>
+                        </td>
+                </tr>
+                <!-- TMPL_ELSE -->
+                <tr>
+                        <td colspan="2">ПІДТВЕРДІТЬ ВИДАЛЕННЯ</td>
+                </tr>
+                <tr>
+                        <td><input type="submit" value="ТАК"></form></td>
+                        <td><form action="<!-- TMPL_VAR name=script_name -->" method="post"><input type="submit" value="НІ" class="submit"></form></td>
+                </tr>
+                <!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME=delete_confirmed -->
+        data deleted
+        <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+        <input type="submit" value="Гаразд" class="submit">
+        </form>
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+        <h2>Управління категоріями</h2>
+        <!-- TMPL_IF NAME="searchfield" -->
+                Ви шукали за <!-- TMPL_VAR name="searchfield" -->
+        <!-- /TMPL_IF -->
+
+        <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+                <input type="text" name="description" value="<!-- TMPL_VAR name="searchfield" -->">
+                <input type="reset" name="reset" value="стерти" class="submit">
+        </form>
+
+        <table>
+                <tr>
+                        <th>Категорія</th>
+                        <th>Опис </th>
+                        <th>Реєстрація</th>
+                        <th>Верхня межа віку</th>
+                        <th>Обов'язковий вік</th>
+                        <th>Пеня</th>
+                        <th>Об'єм</th>
+                        <th>Плата</th>
+                        <th>Прострочення</th>
+                        <th>Issue Limit</th>
+                        <th>Резервування</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                </tr>
+                <!-- TMPL_LOOP NAME="loop" -->
+                <tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
+                        <td><!-- TMPL_VAR name="categorycode" --></td>
+                        <td><!-- TMPL_VAR name="description" --></td>
+                        <td><!-- TMPL_VAR name="enrolmentperiod" --></td>
+                        <td><!-- TMPL_VAR name="upperagelimit" --></td>
+                        <td><!-- TMPL_VAR name="dateofbirthrequired" --></td>
+                        <td><!-- TMPL_VAR name="finetype" --></td>
+                        <td><!-- TMPL_VAR name="bulk" --></td>
+                        <td><!-- TMPL_VAR name="enrolmentfee" --></td>
+                        <td><!-- TMPL_VAR name="overduenoticerequired" --></td>
+                        <td><!-- TMPL_VAR name="issuelimit" --></td>
+                        <td><!-- TMPL_VAR name="reservefee" --></td>
+                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR name="categorycode" -->">Редагувати</a></td>
+                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR name="categorycode" -->">Видалити</a></td></tr>
+                <!-- /TMPL_LOOP -->
+
+        </table>
+        <p><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+                <input type="hidden" name="op" value="add_form">
+                <input type="submit" class="button" value="Add Category"></a><br />
+        </form></p>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
+
+
+

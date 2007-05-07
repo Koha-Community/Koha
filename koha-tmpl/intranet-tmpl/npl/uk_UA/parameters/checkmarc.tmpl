@@ -1,0 +1,155 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- System Administration: MARC Check: 
+<!-- TMPL_IF name="total" --><!-- TMPL_VAR name="total" --> errors found<!-- TMPL_ELSE -->Configuration OK!<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="admin-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>MARC Checks</h1>
+<table>
+	<tr>
+		<th>Випробування</th>
+		<th>Результат</th>
+	</tr>
+<!-- -->
+<!-- TMPL_IF name="itemnum" -->
+	<tr>
+		<td>itemnum</td>
+		<td><ul><li>Поле itemnum (номер_одиниці) ПОВИННО бути спроектовано </li>
+			<li>Відповідне підполе ПОВИННЕ знаходитися у вкладці -1 (проігнорувати)</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>itemnum: поле itemnum (номер_одиниці) проектується на поле у вкладці -1</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="itemfields" -->
+	<tr>
+		<td>поля одиниці</td>
+		<td>ВСІ поля одиниць збереження ПОВИННІ: <br />
+			<ul><li>будуть проектуватися на таку ж ознаку,</li>
+			<li>і вони повинні цілком знаходитися у 10-тій вкладці (екземпляри)</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>Всі поля одиниці знаходяться в таких же ознаках та у вкладці одиниці</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+	<!-- TMPL_IF NAME="itemtags" -->
+		<tr>
+			<td><b>Ознака одиниці</b></td>
+			<td>Більш ніж 1 МАРК-ознака співвідноситься у вкладці (10) одиниць збереження: <!-- TMPL_VAR name="itemtags" --></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>Гаразд</td>
+			<td><i>Only 1 MARC tag mapped to items</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+	<!--  -->
+<!-- TMPL_IF name="itemtype" -->
+	<tr>
+		<td>itemtype НЕ спроектований</td>
+		<td>поле biblioitems.itemtype (тип_одиниці_для_бібліотечної_одиниці) ПОВИННЕ: <br />
+			<ul><li>проектуватися на МАРК-підполе </li>
+			<li>the correspounding subfield MUST have authorised_value=itemtype</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>biblioitems.itemtype (тип_одиниці_для_бібліотечної_одиниці) означено</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="itemtypes_empty" -->
+        <tr>
+                <td>itemtypes are empty</td>
+                <td>the itemtypes MUST<br />
+                        <ul><li>be filled</li>
+        </tr>
+<!-- TMPL_ELSE -->
+        <tr>
+                <td>Гаразд</td>
+                <td>itemtypes defined</td>
+        </tr>
+<!-- /TMPL_IF -->
+<!-- -->
+
+<!-- TMPL_IF name="branch" -->
+	<tr>
+		<td>homebranch НЕ спроектований</td>
+		<td>поле items.homebranch (домашній_підрозділ_для_одиниці) ПОВИННЕ: <br />
+			<ul><li>проектуватися на МАРК-підполе</li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>homebranch (домашній підрозділ) означений</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="holdingbranch" -->
+	<tr>
+		<td>holdingbranch НЕ спроектований</td>
+		<td>поле items.holdingbranch (підрозділ_збереження_для_одиниці) ПОВИННЕ: <br />
+			<ul><li>проектуватися на МАРК-підполе </li>
+			<li>the correspounding subfield MUST have authorised value=branches</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>holdingbranch (підрозділ зберігання) означений</td>
+	</tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="biblionumber" -->
+	<tr>
+		<td>biblio та biblionumber</td>
+		<td>поля biblio.biblionumber (номер_бібліотечного_запису) та biblioitems.biblioitemnumber (номер_бібліотечної_одиниці) ПОВИННІ:
+			<ul><li>проектуватися на МАРК-підполе</li>
+			<li>знаходитися в ТАКІЙ же ознаці (наприклад: 090$a та 090$b)</li>
+			<li>бути у вкладці -1</li></ul></td>
+	</tr>
+<!-- TMPL_ELSE -->
+	<tr>
+		<td>Гаразд</td>
+		<td>biblionumber (номер_бібліотечного_запису) та biblioitemnumber (номер_бібліотечної_одиниці) спроектовані правильно</td>
+	</tr>
+<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="frameworknull" -->
+		<tr>
+			<td><b>значення структури</b></td>
+			<td>є null (недійсне значення) у frameworkcode (коді_структури). Перевірте наступні таблиці<br/>
+				<li>виберіть * з marc_subfield_structure (структури_МАРК_підполів) де frameworkcode (код_структури) є NULL (НЕДІЙСНИЙ)</li>
+				<li>виберіть * з marc_tag_structure (структури_МАРК_ознак) де frameworkcode (код_структури) є NULL (НЕДІЙСНИЙ)</li>
+				<li>виберіть * з marc_biblio (бібліотечних_МАРК_записів) де frameworkcode (код_структури) є NULL (НЕДІЙСНИЙ)</li></td>
+		</tr>
+	<!-- TMPL_ELSE -->
+		<tr>
+			<td>Гаразд</td>
+			<td><i>немає NULL (недійсного) значення у frameworkcode (коді_структури)</i></td>
+		</tr>
+	<!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="total" -->
+	<tr>
+		<td>ЗАГАЛОМ</td>
+		<td>You have <!-- TMPL_VAR name="total" --> error(s) in your MARC configuration. Please fix them before using Koha</td>
+	</tr>
+</table>
+<!-- TMPL_ELSE -->
+	</table>
+		<p>З конфігурацією все ГАРАЗД, немає помилок у Вашій таблиці МАРК-параметрів</p>
+<!-- /TMPL_IF -->
+
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

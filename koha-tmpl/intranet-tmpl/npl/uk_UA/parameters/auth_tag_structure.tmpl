@@ -1,0 +1,178 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- керування системою<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Authority MARC framework for <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --><!-- TMPL_ELSE -->структура по умовчанню<!-- /TMPL_IF --></h1>
+<script language="javascript" type="text/javascript">
+	function _(s) { return s } // dummy function for gettext
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.tagfield.value.length==0) {
+			_alertString += "\n- " + _("номер ознаки відсутній");
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+	</script>
+
+<!-- TMPL_IF NAME="add_form" -->
+
+	<h1>
+	<!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<!-- TMPL_IF NAME="heading-modify-tag-p" -->Зміна ознаки<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="heading-add-tag-p" -->Додати ознаку<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+	</h1>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate" />
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		<p><label>Ознака<label><!-- TMPL_VAR NAME="searchfield" --></p>
+		<p><label>Текст для бібліотекарів </label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="80" maxlength="100" /></p>
+		<p><label>Текст для електронічного каталогу </label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="80" maxlength="100" /></p>
+		<p><label>Повторюване</label><!-- TMPL_VAR NAME="repeatable" --></p>
+		<p><label>Обов'язкове</label><!-- TMPL_VAR NAME="mandatory" --></p>
+		<p><label>Авторитетне джерело </label><!-- TMPL_VAR NAME="authorised_value" --> (якщо Ви задаєте тут значення, індикатори будуть обмежені списком авторитетних значень)</p>
+		<p><label>&nbsp;</label><input type="button" value="Гаразд" class="button" onclick="Check(this.form)"></p>
+	</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+
+<table>
+	<tr>
+		<td>ознака</td>
+		<td><!-- TMPL_VAR NAME="searchfield" --></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td>
+	</tr>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed" />
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+	<tr><td colspan="2" align="center">ПІДТВЕРДІТЬ ВИДАЛЕННЯ</td></tr>
+	<tr><td><input type="submit" value="ТАК"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="НІ" class="submit"></form></td></tr>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirmed" -->
+
+	Видалені дані
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="submit" value="Гаразд" class="submit">
+	</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="authtype_create" -->
+
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="authtype_create_confirm" />
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		Створення структури авторитетних значень для <!-- TMPL_VAR NAME="authtypecode" --> використовучи
+		<select name="existingauthtypecode">
+			<option value="">По умовчанню</option>
+		<!-- TMPL_LOOP NAME="existingauthtypeloop" -->
+			<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="authtypetext" --></option>
+		<!-- /TMPL_LOOP -->
+		</select>
+		<input type="submit" value="Гаразд" class="submit">
+	</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="else" -->
+<div id="bloc25">
+<h2>Виберіть структуру авторитетного джерела</h2>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<select name="authtypecode">
+		<option value="">По умовчанню</option>
+	<!-- TMPL_LOOP NAME="authtypeloop" -->
+		<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->>
+			<!-- TMPL_VAR NAME="authtypetext" -->
+		</option>
+	<!-- /TMPL_LOOP -->
+	</select>
+	<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+	<input type="submit" value="Гаразд" class="submit">
+</form>
+</div>
+<div id="bloc100">
+	<table>
+	<tr>
+		<th>Ознака</th>
+		<th>Мітка/ім'я</th>
+		<th>Повторюване</th>
+		<th>Обов'язкове</th>
+		<th>Авторитетні<br />значення</th>
+		<th>Підполя</th>
+		<th>Редагувати</th>
+		<th>Видалити</th>
+	<!-- TMPL_LOOP NAME="loop" -->
+	<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+		<td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
+		<td><!-- TMPL_VAR NAME="liblibrarian" --></td>
+		<td><!-- TMPL_IF NAME="repeatable" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_IF NAME="mandatory" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --></td>
+		<td><!-- TMPL_VAR NAME="authorised_value" --></td>
+		<td><a href="<!-- TMPL_VAR NAME="subfield_link" -->" class="button">підполя</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="edit" -->">Редагувати</a></td>
+		<td><a href="<!-- TMPL_VAR NAME="delete" -->">Видалити</a></td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form" />
+		<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		<input type="hidden" name="op" value="add_form" />
+		<input type="submit" class="submit" value="Додати ознаку">
+		<!-- TMPL_IF NAME="isprevpage" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">Previous Page</a>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="nextpage" -->
+			<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">Next Page</a>
+		<!-- /TMPL_IF -->
+	</form>
+</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

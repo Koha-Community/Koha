@@ -1,0 +1,1 @@
+<div id="topmenu"><a href="/cgi-bin/koha/admin-home.pl">Домівка керування системою</a> | <a href="/cgi-bin/koha/admin/systempreferences.pl">Системні налаштування</a></div>

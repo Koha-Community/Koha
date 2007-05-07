@@ -1,0 +1,27 @@
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<center>
+<!-- TMPL_IF NAME="BARCODE_EXISTS" -->
+	<font color="red">Штрих-код <b><!-- TMPL_VAR NAME="barcode" --></b> вже був призначений.</font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="ITEM_ERROR" -->
+	<font color="red">Помилка : <!-- TMPL_VAR NAME="error" --></font><p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="ITEM_CREATED" -->
+	<table border="1" align="center" cellpadding="10">
+		<tr><td bgcolor="yellow">
+			Одиниця додана зі штрих-кодом <!-- TMPL_VAR NAME="barcode" -->
+		</td></tr>
+	</table>
+<!-- /TMPL_IF -->
+<h1>Головне меню</h1>
+<ul>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=z3950">Пошук зі Z39.50</a>
+<!-- FIXME - The "$ENV{SCRIPT_NAME}" is evidently left over from when this
+     was in Perl.
+  -->
+<li><a href="$ENV{'SCRIPT_NAME'}?menu=uploadmarc">Завантаження МАРК-записів</a>
+</ul>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
