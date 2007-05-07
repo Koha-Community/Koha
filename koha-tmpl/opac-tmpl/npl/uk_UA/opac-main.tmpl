@@ -1,0 +1,120 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> -- каталог бібліотеки
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<div class="content-block">
+
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_ELSE --><div id="sidebar">
+<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+<h3>Вхід та перевірка Вашої облікової скриньки</h3>
+<p><label for="userid">Номер квитка: </label><!-- Hide from NPL --><input type="text" id="userid" size="10" name="userid" /><!-- /Hide from NPL --> <!-- Display for NPL // <input type="text" id="userid" size="10" name="userid" onblur="ValidateCode();" /> //Display for NPL --></p>
+<p><label for="password">Пароль: </label> <input type="password" id="password" size="10" name="password" /></p>
+<p><input type="submit" value="Вхід" class="submit"></p>
+</form></div>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/opac-search.pl">
+<h3>Пошук у бібліотечному каталозі</h3>
+<p>
+<label for="value">Ключові слова: </label>
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" size="27" name="value" id="value" /></p>
+		 <!--TMPL_IF Name="mylibraryfirst"--><p>
+				у підрозділі
+				<input type="hidden" name="marclist" value="items.holdingbranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+                <select name="value">
+                    <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
+            </p><!-- /TMPL_IF -->
+		<p><input type="submit" value="Пошук" class="submit"></p>
+		<p>
+			<a href="/cgi-bin/koha/opac-search.pl">Детальніший пошук (з додатковими можливостями)</a>
+		</p>
+		<!-- TMPL_UNLESS NAME="Disable_Dictionary" -->
+		<p>
+		<a href="/cgi-bin/koha/opac-authorities-home.pl">Пошук у заголовках авторитетних джерел</a>
+		</p>
+		<!-- /TMPL_UNLESS -->
+<!-- Display for NPL // <p>Find the latest additions: <br /><a href="/opac-format-search.php">Search by format and date</a></p> //Display for NPL -->
+	</form>
+	<!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
+</div>
+
+<div class="content-block">
+	<h3>Нові надходження</h3>
+<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<select name="value">
+					<option value="">Будь-який тип одиниці зберігання</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+								</option>
+						<!-- /TMPL_LOOP -->
+				</select> 
+			 Отримано: 
+			<input type="hidden" name="marclist" value="items.homebranch" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+                        <select name="value">
+                                <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+			<br>за останні <input type="text" name="desc_or_asc" size="3" /> днів
+			<input type="hidden" name="orderby" value="biblio.timestamp" />
+			<input type="submit" value="Пошук" class="submit">
+</form>
+</div>
+	
+<!-- TMPL_IF NAME="loggedinusername" -->
+<div class="content-block">
+<h3>Ви зареєстровані у системі як  <em><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></em> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Клацніть тут</a> якщо Ви не <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span><!-- /TMPL_LOOP --></h3>
+<p><a href="/cgi-bin/koha/opac-user.pl">моя бібліотечна домівка</a> | <a href="/cgi-bin/koha/opac-account.pl">мої пені</a> | 
+	<a href="/cgi-bin/koha/opac-userdetails.pl">мої персональні дані</a> | <a href="/cgi-bin/koha/opac-passwd.pl">змінити мій пароль</a>	<!-- TMPL_IF NAME="opacreadinghistory" -->| <a href="/cgi-bin/koha/opac-readingrecord.pl">моя історія читання</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">мої віртуальні полиці</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">пропозиції на придбання</a><!-- /TMPL_IF --></p>
+		<!-- TMPL_IF name="textmessaging"-->
+			<h3>Повідомлення від бібліотеки</h3>
+			<p class="error"><!-- TMPL_VAR name="textmessaging" --></p>
+		<!-- /TMPL_IF -->
+<form method="post" action="/cgi-bin/koha/opac-logout.pl">
+<p><input type="submit" class="submit" name="logout" value="Вийти"></p>
+</form>
+</div><!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="opaclanguagesdisplay" --><div class="content-block">
+	<h4 class="inline">Змінити мову інтерфейсу: </h3>
+	<form action="/cgi-bin/koha/changelanguage.pl" method="post" class="inline">
+		<select name="language">
+			<!-- TMPL_LOOP NAME="languages" -->
+				<option value="<TMPL_VAR NAME="language">"><!-- TMPL_VAR NAME="language" --></option>
+			<!-- /TMPL_LOOP -->
+		</select>
+		<input type="submit" value="Перемкнути" class="submit">
+	</form></div><!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

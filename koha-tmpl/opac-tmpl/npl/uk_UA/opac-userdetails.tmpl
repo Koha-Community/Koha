@@ -1,0 +1,85 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- персональні дані для: <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+
+<!--CONTENT-->
+<div id="main">
+<h2>Персональні дані: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
+
+<div class="form">
+<table>
+<tr><th>Ім'я: </th><td> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td></tr>
+<tr><th>
+Номер квитка: </th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
+</table>
+</div>
+
+<h3>Контактні дані</h3>
+<div class="form">
+<table>
+<tr><th>Поштова адреса: </th><td><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></td></tr>
+
+<tr><th>Постійна адреса: </th><td> <!-- TMPL_VAR NAME="altstreetaddress" -->, <!-- TMPL_VAR NAME="altcity" --></td></tr>
+
+<tr><th>Телефон (домашній):</th><td><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Телефон (денний час):</th><td><!-- TMPL_IF NAME="phoneday" --><!-- TMPL_VAR NAME="phoneday" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Факс:</th><td><!-- TMPL_IF NAME="faxnumber" --><!-- TMPL_VAR NAME="faxnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Електронічна пошта: </th><td><!-- TMPL_IF NAME="emailaddress" --><a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Текстове повідомлення: </th><td><!-- TMPL_IF NAME="textmessaging" --><!-- TMPL_VAR NAME="textmessaging" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+</table>
+</div>
+
+<h3>Деталі запису відвідувача</h3>
+<div class="form">
+<table><tr><th>Номер запису відвідувача: </th><td> <!-- TMPL_VAR NAME="borrowernumber" --></td></tr>
+
+<tr><th>Категорія запису відвідувача: </th><td>  <!-- TMPL_VAR NAME="categorycode" --></td></tr>
+
+<!-- <td>Area:</th><td>  <!-- TMPL_VAR NAME="area" --></td> -->
+
+<!-- <td>Fee:</th><td>  /year, Paid</td> -->
+
+<tr><th>Записано: </th><td><!-- TMPL_VAR NAME="dateenrolled" --></td></tr>
+
+<tr><th>Виписати: </th><td><!-- TMPL_VAR NAME="expiry" --></td></tr>
+
+<!-- TMPL_IF NAME="joiningbranch" --><tr><th>Joining Branch:</th><td><!-- TMPL_VAR NAME="joiningbranch" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></table>
+</div>
+
+
+<h3>Індивідуальні дані</h3>
+<div class="form">
+<table><tr><th>Дата народження:</th><td> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Стать:</th><td><!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr></table>
+</div>
+
+
+<h3>Дані альтернативного контакту: </h3>
+<div class="form">
+
+<table><tr><th>Дані альтернативного контакту: </th><td> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Телефон:</th><td> <!-- TMPL_IF NAME="altphone" --><!-- TMPL_VAR NAME="altphone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+
+<tr><th>Взаємовідношення:</th><td> <!-- TMPL_IF NAME="altrelationship" --><!-- TMPL_VAR NAME="altrelationship" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  </td></tr>
+
+<tr><th>Нотатки: </th><td> <!-- TMPL_IF NAME="altnotes" --><!-- TMPL_VAR NAME="altnotes" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr>
+
+<!-- <tr><th>Guarantor:</th><td> <!-- TMPL_IF NAME="guarantor" --><!-- TMPL_VAR NAME="guarantor" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr> --></table>
+
+</div>
+
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
+<input type="submit" name="Modify" value="Зміна Вашого запису" class="submit">
+</form>
+
+</div>
+</body>
+</html>

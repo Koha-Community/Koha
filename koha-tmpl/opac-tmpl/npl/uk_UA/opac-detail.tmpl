@@ -1,0 +1,228 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- подробиці для:  <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+<div class="details">
+<div class="detail-sidebar">
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Зображення обкладинки книги"></a><!-- TMPL_ELSE --><img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Зображення обкладинки книги"><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<div class="operations">
+<ul>
+<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Встановити резервування</a></li><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+<li><a class="detail" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Перегляд у МАРК</a></li>
+<!-- Hide from NPL --> <li><a class="isbd" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li> <!-- Hide from NPL -->
+<li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Друк</a></li>
+<!-- TMPL_IF name="virtualshelves" --><li><a class="shelf" href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Покласти на мою віртуальну полицю</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF name="opacbookbag" --><li><a class="cart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Додати до мого бібліотечного замовлення</a></li><!-- /TMPL_IF -->
+</ul>
+</div>
+<div class="further">
+<h4>Пошук за цим заголовком у: </h4>
+<ul><!-- Display for NPL // <li><a href="http://search3.webfeat.org/cgi-bin/webfeat.dll?Command=Search&BypassSessData=yes&noserial=1&Databases=wf_sirsdiscover,wf_elibrary2_e,wf_ebonline,wf_healthsourceconsumer,wf_masterfileprem,wf_newspapersource&wf_cat=0&Client_ID=oplin&wf_all_years=yes&wf_field1=wf_keyword&wf_term1=<!-- TMPL_VAR NAME="title" -->&rurl=http%3A//www.oplin.org/&wut_code=OH0156">Local Databases (OPLIN)</a></li> //Display for NPL -->
+<li><a href="http://www.google.com/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->+site:worldcatlibraries.org">інших бібліотеках (WorldCat)</a></li>
+<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">інших базах даних (Google Scholar)</a></li></ul></div>
+</div>
+<h2><!-- TMPL_VAR NAME="title" --></h2><!-- TMPL_LOOP NAME="subtitles" --><!-- TMPL_IF NAME="subtitle" --> <h3 class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></h3><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="author" --><h3 class="author">By <a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></h3><!-- /TMPL_IF --> 
+
+
+
+<table>
+<!-- TMPL_IF name="additional" --><tr><th>Додатковий(і) автор(и): </th><td><div class="notes"><!-- TMPL_VAR NAME="additional" --></div></td></tr><!-- /TMPL_IF -->
+
+<!-- TMPL_UNLESS NAME="MARCNOTES" -->
+
+<!-- TMPL_IF NAME="notes" -->
+<tr><th>Нотатки: </th><td><div class="notes"><!-- TMPL_VAR NAME="notes" --></div></td></tr><!-- /TMPL_IF -->
+
+<!-- /TMPL_UNLESS -->
+	
+<!-- TMPL_UNLESS NAME="MARCSUBJCTS" -->
+
+<!-- TMPL_IF name="subjects" --><tr><th>Тематика(и):</th><td><!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a>, <!-- /TMPL_LOOP --></td></tr><!-- /TMPL_IF -->
+
+<!-- /TMPL_UNLESS -->
+
+<!-- TMPL_IF NAME="MARCNOTES" -->
+		<tr>
+			<th>Нотатки:</th>
+			<td><ul><!-- TMPL_LOOP NAME="MARCNOTES" --><li><!-- TMPL_VAR NAME="marcnote" --></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="MARCSUBJCTS" -->
+		<tr>
+			<th>Споріднені зв'язки:</th>
+			<td><ul><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+							<!-- TMPL_IF name="linkvalue" -->
+								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR name="link" -->&amp;and_or=and&amp;operator==&amp;value=<!-- TMPL_VAR NAME="linkvalue" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
+							<!-- TMPL_ELSE -->
+								<li><a href="/cgi-bin/koha/opac-search.pl?op=do_search&amp;marclist=bibliosubject.subject&amp;and_or=and&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="marcsubjct" escape="HTML"-->"><!-- TMPL_VAR NAME="marcsubjct" --></a></li>
+							<!-- /TMPL_IF -->
+
+<!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="item_description" -->
+<tr>
+<th>Опис бібліотечної одиниці (зі сайту Amazon.com): </th>
+<td><ul><li><!-- TMPL_VAR NAME="item_description" --></li></ul></td></tr>
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_IF NAME="abstract" --><tr><th>Формат: </th><td><!-- TMPL_VAR NAME="abstract" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="copyrightdate" -->
+    <tr><th>Авторські права:</th><td><!-- TMPL_VAR NAME="copyrightdate" --></td></tr>
+<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="seriestitle" --><tr><th>Заголовок серіального видання: </th><td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.seriestitle&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="seriestitle" ESCAPE=URL -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="seriestitle" --></a><!-- TMPL_IF NAME="volume" --> : <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="isbn" -->
+	    <tr><th>ISBN: </th><td><!-- TMPL_VAR NAME="isbn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lccn" -->
+	    <tr><th>LCCN:</th><td><!-- TMPL_VAR NAME="lccn" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th>Видавець:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> </td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publicationyear" -->
+		<tr><th>Рік публікації: </th><td><!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th>Фізична характеристика: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+
+<!-- Hide from NPL --> <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+ <tr><th>№ запису: </th><td><!-- TMPL_VAR NAME="biblionumber" --></td></tr> <!-- /TMPL_LOOP --> <!-- Hide from NPL -->
+</table>
+<table>
+<!-- TMPL_IF NAME="MARCURLS" -->
+		<tr><th>Споріднені URL-посилання:  </th><td><ul><!-- TMPL_LOOP NAME="MARCURLS" --><li><a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="MARCURL" --></a></li><!-- /TMPL_LOOP --></ul></td></tr>
+	<!-- /TMPL_IF -->
+</table>
+<br clear="right" />
+</div>
+
+<!-- TMPL_IF NAME="ITEM_RESULTS" -->
+<div class="table"><table>
+<!--HOLDINGS INFORMATION HEADER TABLE ROWS-->
+<tr><!-- <th>&nbsp;</th> -->
+<th>Тип/формат</th>
+<th>Шифр для замовлення</th>
+<th>Розташування</th>
+<th>Стан</th>
+<th>Дата повернення</th>
+<th>Востаннє побачено</th>
+<!-- <th>Barcode</th> --></tr>
+<tbody>
+<!--INFORMATION ROWS-->
+<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+<tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
+				<td>
+					<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+					<!-- TMPL_IF name="itemcallnumber" -->
+						(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+					<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="datedue" -->
+						У позиці
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF name="notforloantext" -->
+							<!-- TMPL_VAR name="notforloantext" -->
+						<!-- TMPL_ELSE -->
+							<!-- TMPL_IF name="itemlost"-->
+								Item Lost
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Доступно<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				</td>
+<td><!-- TMPL_VAR NAME="datedue" --></td>
+<td><!-- TMPL_VAR NAME="datelastseen" --></td>
+<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> --></tr>
+<!-- /TMPL_LOOP -->
+</tbody>
+</table>
+<!-- TMPL_ELSE -->
+<table><tr><td>Немає наявних примірників.</td></tr></table>
+<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="subscriptionsnumber" -->
+		<p>This is a serial subscription (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR Name="subscriptionnotes"--> </p><!-- /TMPL_IF -->
+				<!--TMPL_IF Name="latestserials"-->
+				<p> The three latest issues related to this subscription:</p>
+				<table>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Чекають
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Прибувають
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Затримка
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Відсутнє
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Не випущено
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p> For more information: View a record of <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">this subscription's issues</a></p>
+ 	<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- Amazon Reviews -->
+<div id="itemReviews">
+        <h2>Огляди читачів на сайті Amazon: </h2>
+        <h4>
+	<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	<!-- TMPL_IF NAME="amazonisbn" -->
+		<a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="amazonisbn" -->&store=books">Додати свій власний огляд</a></h4>
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP --><br/>
+
+        <!-- TMPL_IF NAME="rating" -->
+        	<h4>Оцінка (зі сайту Amazon.com): </h4>
+		<div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
+
+		<!-- TMPL_LOOP NAME="REVIEWS" -->
+        	<div class="content_set">
+        	<!-- TMPL_IF NAME="summary" -->
+			<h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+        	<!-- /TMPL_IF -->
+        	<!-- TMPL_IF NAME="comment" -->
+        		<p><!-- TMPL_VAR NAME="comment" -->
+        	</p><!-- /TMPL_IF -->
+        	</div>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_ELSE -->
+
+	<div class="content_set">
+	<p class="error"> Даруйте, немає оглядів по цьому заголовку. </p>
+	</div>
+
+	<!-- /TMPL_IF -->
+</div> <!-- itemReviews -->
+<!-- /TMPL_IF-->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

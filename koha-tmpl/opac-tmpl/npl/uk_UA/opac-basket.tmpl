@@ -1,0 +1,88 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- Ваше бібліотечне замовлення<!-- TMPL_IF NAME="print_basket" --><!-- TMPL_INCLUDE NAME="doc-head-close-basket-print.inc" --><!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" --><!-- /TMPL_IF -->
+
+<div id="window">
+	<!-- TMPL_UNLESS NAME="print_basket" --><h3>Ваше бібліотечне замовлення</h3>
+	<!-- MENUS -->
+	<div class="menu">
+<!-- TMPL_IF NAME="verbose" -->
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon brief" onclick="showLess(); return false;" value="Стисло"></form>
+<!-- TMPL_ELSE -->
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon detail" onclick="showMore(); return false;" value="Подробиці"></form>
+<!-- /TMPL_IF -->
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon remove" onclick="delSelRecords(); return false;" value="Видалити позначені елементи"></form>
+
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon send" onclick="sendBasket(); return false;" value="Вислати"></form>
+
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon print" onclick="printBasket(); return false;" value="Друк"></form>
+
+		<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon trash" onclick="delBasket(); return false;" value="Очистити і зачинити"></form> 
+<form class="inline" action="opac-basket.pl" method="get"><input type="submit" class="icon close" onclick="quit(); return false;" value="Сховати вікно"></form>
+	</div><!-- /TMPL_UNLESS -->
+			
+
+<!-- TMPL_IF NAME="verbose" -->
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><div class="details">
+<h3><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a></h3>
+
+<table>
+				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td colspan="2"><form><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)"> Виберіть цю одиницю</label></form></td></tr><!-- /TMPL_UNLESS -->
+
+				<!-- TMPL_IF name="isbn" --><tr><th>ISBN: </th><td><!-- TMPL_VAR NAME="ISBN" --></td></tr><!-- /TMPL_IF -->
+						
+						<!-- TMPL_IF name="author" --><tr><th>Автор: </th><td> <!-- TMPL_VAR NAME="author" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="additional" --><tr><th>Додаткові автори: </th><td><!-- TMPL_VAR NAME="additional" --></td></tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="publishercode" -->
+	    <tr><th>Видавець:</th><td><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" --></td></tr>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="pages" -->
+	<tr><th>Деталі: </th><td><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></td></tr>
+<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="collection" --><tr><th>Зібрання:</th><td> <!-- TMPL_VAR NAME="seriestitle" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="subject" --><tr><th>Тематика:</th><td> <!-- TMPL_VAR NAME="subject" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="copyrightdate" --><tr><th>Авторські права:</th><td> <!-- TMPL_VAR NAME="copyrightdate" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --><tr><th>Нотатки: </th><td> <!-- TMPL_VAR NAME="notes" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="unititle" --><tr><th>Єдиний заголовок:</th><td> <!-- TMPL_VAR NAME="unititle" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="serial" --><tr><th>Періодичне видання:</th><td><!-- TMPL_VAR NAME="serial" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="dewey" --><tr><th>Індекс Дьюї (ДДК):</th><td><!-- TMPL_VAR name="dewey" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="classification" --><tr><th>Шифр для замовлення:</th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="lccn" --><tr><th>LCCN:</th><td> <!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="url" --><tr><th>Веб-адреса:</th><td> <!-- TMPL_VAR NAME="url" --></td></tr><!-- /TMPL_IF -->
+<tr><th>&nbsp;</th><td><a href="opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openBiblio('opac-reserve.pl',<!-- TMPL_VAR name="biblionumber" -->); return false;">Встановити резервування</a></td></tr>
+			</table>
+			
+			</div>
+							<table><tr>
+					<th>Розташування:  </th>
+					<th>Штрих-код:  </th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+					<tr>
+						<td>
+							<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> 
+							<!-- TMPL_IF name="itemcallnumber" -->
+								(<!-- TMPL_VAR NAME="itemcallnumber" -->)
+							<!-- /TMPL_IF -->
+						</td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+					</tr>
+				<!-- /TMPL_LOOP --></table>
+			<br>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+<table><!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+				<!-- BIBLIO RECORD TABLE -->
+<tr<!-- TMPL_IF NAME="even" --> class="highlight"<!-- /TMPL_IF -->><td><form><!-- TMPL_UNLESS NAME="print_basket" --><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></label><br><input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked);"><!-- /TMPL_UNLESS --></form></td><td><p><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_VAR NAME="author" -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" -->
+						<!-- TMPL_IF name="place" --> <!-- TMPL_VAR name="place" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --><p><!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
+					</p></td><td><!-- TMPL_VAR NAME="classification" --></td><td><a href="opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openBiblio('opac-reserve.pl',<!-- TMPL_VAR name="biblionumber" -->); return false;">Зарезервувати</a></td></tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="print_basket" -->
+<form name="myform"><input type="hidden" name="records"></form>
+<!-- /TMPL_UNLESS -->
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- покласти на мою віртуальну полицю<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="window">
+<h3>Додати <i><!-- TMPL_VAR NAME="title" --></i> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> на віртуальну полицю</h3><form action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="post">
+<!-- TMPL_IF NAME="CGIbookshelves" --><div class="details">
+<table>
+<caption>Вибрати віртуальну полицю: </caption>
+<tr><th><label for="shelfnumber">Покласти на існуючу полицю</label></th><td><!-- TMPL_VAR NAME="CGIbookshelves" --></td></tr>
+</table>
+</form>
+</div><h4>...або...</h4><!-- /TMPL_IF -->
+<div class="details">
+<table>
+<caption>Покласти на нову віртуальну полицю:</caption>
+<tr><th><label for="newbookshelf">Назва нової полиці: </label> </th><td><input type="text" id="newbookshelf" name="newbookshelf" maxlength="40" size="40">
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"></td></tr>
+<!-- Hide from NPL --><tr><th><label for="category">Тип полиці:  </label></th><td><select id="category" name="category">
+			<!-- TMPL_IF NAME="opacuserlogin" --><option value="1">Приватна</option>
+			<option value="2">Спільна</option><!-- /TMPL_IF -->
+			<option value="3">Вільна</option>
+		</select></td></tr><!-- /Hide from NPL -->
+</table>
+</div>
+	<p><input type="hidden" name="category" value="1" /><input type="submit" value="Покласти на мою віртуальну полицю" class="submit"></p></form>
+</div>
+</body>
+</html>

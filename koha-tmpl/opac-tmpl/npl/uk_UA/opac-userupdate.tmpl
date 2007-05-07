@@ -1,0 +1,39 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- оновлення даних для  <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<!--CONTENT-->
+
+<div id="main">
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
+<h3>Оновлення даних - <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h3>
+<p>Будь-ласка, зробіть необхідні зміни у Вашому обліковому записі. Пітвердивши цю форму Ви повідомите бібліотекаря, який і прийме ці зміни на постійно.</p>
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
+<input type="hidden" name="title" value="">
+<div class="form">
+<table>
+<tr><th><label for="surname">Прізвище </label></th><td><input id="surname" type="text"  size="25" value="<!-- TMPL_VAR name="surname" -->"  name="surname"></td></tr>
+
+<tr><th><label for="firstname">Ім'я </label></th><td><input id="firstname" type="text"  size="25" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname"></td></tr>
+
+<tr><th><label for="streetaddress">Поштова адреса</label></th><td><input id="streetaddress" type="text"  size="25" value="<!-- TMPL_VAR name="streetaddress" -->"  name="streetaddress"></td></tr>
+
+<tr><th><label for="city">Місто, область: </label></th><td><input id="city" type="text"  size="25" value="<!-- TMPL_VAR name="city" -->"  name="city"></td></tr>
+
+<tr><th><label for="phone">Домашній телефон </label></th><td><input id="phone" type="text"  size="25" value="<!-- TMPL_VAR name="phone" -->"  name="phone"></td></tr>
+
+<tr><th><label for="faxnumber">Робочий телефон/факс </label></th><td><input id="faxnumber"  type="text"  size="25" value="<!-- TMPL_VAR name="faxnumber" -->"  name="faxnumber"></td></tr>
+
+<tr><th><label for="emailaddress">Електронічна пошта </label></th><td><input id="emailaddress" type="text"  size="40" value="<!-- TMPL_VAR name="emailaddress" -->"  name="emailaddress"></td></tr>
+</table>
+</div>
+<p>Клацніть на кнопку 'Прийняти зміни' і бібліотекарю буде вислано електронного листа з Вашими оновленими даними. Потім Ви повернетеся до домівки читача.</p>
+<p><input type="submit" value="Прийняти зміни" class="submit"></p>
+</form>
+
+
+<!-- /TMPL_LOOP -->
+</div>
+</body>
+</html>

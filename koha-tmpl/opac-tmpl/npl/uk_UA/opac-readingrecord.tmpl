@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- бібліотечна домівка для користувача -   <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="main">
+<h3>Історія читання <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h3>
+
+<!-- TMPL_UNLESS NAME="count" -->
+Ви ніколи не позичали що-небудь у бібліотеці.
+<!-- TMPL_ELSE -->
+<table>
+<!-- TMPL_IF NAME="showfulllink" -->
+<tr><td colspan="4">Відображення усіх одиниць | <a href="opac-readingrecord.pl?limit=">Показати лише останні 50 одиниць</a></td></tr><!-- TMPL_ELSE -->
+<tr><td colspan="4">Показати останні 50 одиниць | <a href="opac-readingrecord.pl?limit=full">Відобразити усі одиниці</a></td></tr>
+<!-- /TMPL_IF --><tr>
+<tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Заголовок</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_UNLESS NAME="orderbyauthor"--></th>
+<th><!-- TMPL_UNLESS --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Автор </a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_UNLESS --></th>
+<th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Дата</a><!-- TMPL_ELSE -->Дата<!-- /TMPL_UNLESS --></th></tr>
+
+<!-- TMPL_LOOP NAME="READING_RECORD" -->
+
+<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+<td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+<td><!-- TMPL_VAR NAME="author" --></td>
+<td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Оформлено отримання)</em><!-- /TMPL_IF --></td>
+</tr>
+
+<!-- /TMPL_LOOP -->
+</table>
+
+<!-- /TMPL_UNLESS -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

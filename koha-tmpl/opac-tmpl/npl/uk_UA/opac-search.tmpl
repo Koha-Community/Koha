@@ -1,0 +1,162 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- детальніший пошук
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<!-- CONTENT -->
+<div id="main">
+<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
+<h1>Шукати у каталозі</h1>
+
+<div class="form">
+
+<div id="search-sidebar"><div class="sidebar-box">
+			<h3>Результати пошуку: </h3>
+			<p><label for="resultsperpage">Результатів на сторінку: </label>
+			<select name="resultsperpage" id="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select></p>
+		<p><label for="orderby">Впорядкувати за: </label>
+			<select name="orderby" id="orderby" size="1">
+				<option value="biblio.title">Заголовок</option>
+				<option value="biblio.author">Автор </option>
+				<option value="biblioitems.dewey">Індекс Дьюї (ДДК)</option>
+				<option value="biblioitems.publicationyear">Рік публікації </option>
+				<option value="biblioitems.publishercode">Видавець </option>
+			</select>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">по зростанню</option>
+				<option value="DESC">по спаданню</option>
+		</select>
+		</p>
+</div>
+</div>
+
+<table>
+<tr><th><label for="keyword">Ключове слово</label></th><td><input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+		<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="keyword" name="value" /></td></tr>
+<tr><th><label for="title">Заголовок</label></th><td><input type="hidden" name="marclist" value="biblio.title" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="title" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=opac&amp;index=title',1); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+<tr><th><label for="author">Автор </label></th><td><input type="hidden" name="marclist" value="biblio.author" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="author" name="value" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=opac&amp;index=author',2); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+<tr><th><label for="subject">Тематика</label></th><td>			
+			<input type="hidden" name="marclist" value="bibliosubject.subject" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />  
+			<input type="text" id="subject" name="value" size="35" /><!-- TMPL_UNLESS NAME="Disable_Dictionary" --><a href="#" onclick="Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=opac&amp;index=subject',3); return false;"><strong>...</strong></a><!-- /TMPL_UNLESS --></td></tr>
+<tr><th><label for="seriestitle">Заголовок серіального видання</label></th><td>			
+			<input type="hidden" name="marclist" value="biblio.seriestitle" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="seriestitle" name="value" size="35"/></td></tr>
+
+<tr><th><label for="itemtype">Формат</label></th><td><input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<select name="value"><option value="">Any Itemtype</option>
+			<!-- TMPL_LOOP name="itemtypeloop" --><option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option><!-- /TMPL_LOOP -->
+			</td></tr>
+<tr><th><label for="branch">Розташування</label></th><td><input type="hidden" name="marclist" value="items.homebranch" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />  
+				 <select name="value" id="branch">
+                    <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->"<!--TMPL_IF Name="selected"-->selected="selected"<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select></td></tr>
+</table>			
+<p><input type="submit" value="Пошук" class="submit"></p>
+<table>
+<caption>Other options:</caption>
+<tr><th><label for="barcode">Штрих-код</label></th><td>
+				<input type="hidden" name="marclist" value="items.barcode" />
+				<input type="hidden" name="and_or" value="and" />
+				<input type="hidden" name="excluding" value="" />
+				<input type="hidden" name="operator" value="=" />
+				<input type="text" id="barcode" name="value" size="14" maxlength="14" /></td></tr>
+<tr><th><label for="dewey">Шифр для замовлення</label></th><td><input type="hidden" name="marclist" value="biblioitems.dewey" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="start" />
+			<input type="text" id="dewey" name="value" /></td></tr>
+<tr><th><label for="isbn">ISBN</label></th><td><input type="hidden" name="marclist" value="biblioitems.isbn" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="start" />
+			<input type="text" id="isbn" name="value" /></td></tr>
+<tr><th><label for="publisher">Видавець </label></th><td><input type="hidden" name="marclist" value="biblioitems.publishercode" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="text" id="publisher" name="value" /></td></tr>
+<tr><th><label for="pubbetween">Опубліковано між</label></th><td><input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value=">=" />
+			<input type="text" id="pubbetween" name="value" size="6" maxlength="4" /></td></tr>
+<tr><th><label for="puband">...та</label></th><td><input type="hidden" name="marclist" value="biblioitems.publicationyear" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="<=" />
+			<input type="text" id="puband" name="value" size="6" maxlength="4" /></td></tr>
+</table>
+		<p><input type="submit" value="Пошук" class="submit"></p>
+	</div>
+</form>
+
+<div class="content-block">
+	<h3>Нові надходження</h3>
+<form name="f" method="post" action="/cgi-bin/koha/opac-search.pl">
+			<input type="hidden" name="marclist" value="biblioitems.itemtype" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+			<select name="value">
+					<option value="">Будь-який тип одиниці зберігання</option>
+						<!-- TMPL_LOOP name="itemtypeloop" -->
+								<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+								</option>
+						<!-- /TMPL_LOOP -->
+				</select> 
+			 Отримано: 
+			<input type="hidden" name="marclist" value="items.homebranch" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="=" />
+			<input type="hidden" name="op" value="do_search" />
+			<input type="hidden" name="type" value="opac" />
+                        <select name="value">
+                                <option value="">Будь-який підрозділ</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+			<br />за останні <input type="text" name="desc_or_asc" size="3" /> днів
+			<input type="hidden" name="orderby" value="biblio.timestamp" />
+			<input type="submit" value="Пошук" class="submit">
+</form>
+</div>
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

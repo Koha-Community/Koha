@@ -1,0 +1,278 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- МАРК-дані для запису №:  <!-- TMPL_VAR name="biblionumber" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<h2>Перегляд у МАРК</h2>
+<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" -->
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
+    <input type="submit" name="submit" value="Встановити резервування" class="icon reserve">
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form><!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
+<!-- Hide from NPL --><form class="inline" action="opac-ISBDdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon isbd" value="ISBD" /></form><!-- /Hide from NPL -->
+
+<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Звичайний вигляд"></form>
+
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Друк" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"></form>
+
+<!-- TMPL_IF name="virtualshelves" --><form class="inline" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="icon shelf" value="Покласти на мою віртуальну полицю" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"></form><!-- /TMPL_IF -->
+<!-- TMPL_IF name="opacbookbag" -->
+<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Додати до бібліотечного замовлення"></form><!-- /TMPL_IF -->
+
+<div class="tabbloc">
+	<div name="0XX" id="0XX" class="tab" style="visibility:visible">
+		<!-- TMPL_LOOP name="0XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="1XX" id="1XX" class="tab">
+		<!-- TMPL_LOOP name="1XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="2XX" id="2XX" class="tab">
+		<!-- TMPL_LOOP name="2XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="3XX" id="3XX" class="tab">
+		<!-- TMPL_LOOP name="3XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="4XX" id="4XX" class="tab">
+		<!-- TMPL_LOOP name="4XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="5XX" id="5XX" class="tab">
+		<!-- TMPL_LOOP name="5XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'></a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="6XX" id="6XX" class="tab">
+		<!-- TMPL_LOOP name="6XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="7XX" id="7XX" class="tab">
+		<!-- TMPL_LOOP name="7XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="8XX" id="8XX" class="tab">
+		<!-- TMPL_LOOP name="8XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->" title='Пошук за <!-- TMPL_VAR name="marc_value" -->'>?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+
+	<div name="9XX" id="9XX" class="tab">
+		<!-- TMPL_LOOP name="9XX" -->
+			<!-- TMPL_IF name="tag" -->
+				<p class="MARCtag">
+					<!-- TMPL_VAR name="tag" -->
+				</p>
+			<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP name="subfield" -->
+				<p>
+					<label class="labelsubfield">
+					<!-- TMPL_VAR NAME="marc_subfield" -->
+						<!-- TMPL_VAR name="marc_lib" -->
+					</label>
+					<!-- TMPL_VAR name="marc_value" -->
+					<!-- TMPL_IF name="link" -->
+						<a href="opac-search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->"title="Search on <!-- TMPL_VAR name="marc_value" -->">?</a>
+					<!-- /TMPL_IF --><br class="clear" />
+				</p>
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	</div>
+	
+	<div name="10XX" id="10XX" class="tab">
+		<h2>Одиниці</h2>
+		<table>
+				<tr>
+					<!-- TMPL_LOOP name="item_header_loop" -->
+						<th>
+							<!-- TMPL_VAR name="header_value" -->
+						</th>
+					<!-- /TMPL_LOOP -->
+				</tr>
+				<!-- TMPL_LOOP name="item_loop" -->
+					<tr>
+						<!-- TMPL_VAR name="item_value" -->
+					</tr>
+				<!-- /TMPL_LOOP -->
+		</table>
+	</div>
+</div>
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+	for (i=0; i <= 10 ; i++ ) {
+		ong = i+"XX";
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

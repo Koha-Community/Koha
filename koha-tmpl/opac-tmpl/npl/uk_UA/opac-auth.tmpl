@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- вхід у Вашу облікову скриньку
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<!--CONTENT-->
+<div id="main">
+<!-- TMPL_IF NAME="loginprompt" -->
+<!-- login prompt time-->
+<h3>Вхід у Вашу облікову скриньку</h3>
+<!-- TMPL_IF NAME="nopermission" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">Даруйте, система вважає, що Ви не маєте дозволу на доступ до цієї сторінки. </p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="timed_out" -->
+<!-- This is what is displayed if login has timed out -->
+<p class="error">Даруйте, Вашу сесію завершено, будь-ласка ввійдіть знову.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="different_ip" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">Ви пробуєте доступитися до Koha з іншої IP-адреси! Будь-ласка, ввійдіть знову.</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
+<!-- This is what is displayed if user doesnt have permission -->
+<p class="error">Ви ввійшли під невірним іменем користувача чи паролем. Будь-ласка, спробуйте знову! І пам'ятайте, імена користувачів та паролі чутливі до регістру.</p>
+<!-- /TMPL_IF -->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+<!-- /TMPL_LOOP -->
+<div class="form">
+<table>
+<tr><th><label for="userid">Ваш номер квитка</label></th><td>
+<!-- Hide from NPL --><input type="text"  size="25" id="userid"  name="userid" /><!-- /Hide from NPL -->
+<!-- Display for NPL // <input type="text"  size="25" id="userid"  name="userid" onblur="ValidateCode();" /> //Display for NPL --></td>
+<tr><th><label for="password">Пароль чи ПІН-код</label></th><td><input type="password"  size="25" id="password"  name="password" /></td>
+</table>
+<input type="submit" value="Вхід" class="submit"></div>
+  <h5>Ще не маєте пароля?</h5><p> Якщо Ви ще не маєте пароля, зупиніться наступного разу біля біля обігового столу бібліотеки. Ми успішно встановимо його для Вас.</p>
+<h5>Не маєте бібліотечного квитка?</h5><p> Якщо Ви не маєте бібліотечного квитка, зайдіть до Вашої місцевої бібліотеки та запишіться.  <!-- Display for NPL // Find out more about <a href="http://www.athenscounty.lib.oh.us/card.html">getting a library card</a>. //Display for NPL --></p>
+</form>
+
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

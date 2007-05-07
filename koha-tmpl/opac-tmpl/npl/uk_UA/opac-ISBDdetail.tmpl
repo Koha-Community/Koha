@@ -1,0 +1,69 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- ISBD
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+	<div class="details"><h3>ISBD</h3>
+	<p><!-- TMPL_VAR name="ISBD" --></p>
+	
+		<!-- TMPL_IF name="subscriptionsnumber" -->
+		<h2>Ми маємо <!-- TMPL_VAR name="subscriptionsnumber" --> передплат(у/и), пов'язан(у/і) з цим заголовком.</h2> 
+		<p>Нижче - список трьох найостанніших випусків: </p>
+		<!-- TMPL_LOOP Name="subscriptions" -->
+				<!-- TMPL_IF name="subscriptionnotes"-->
+					<h2><!--TMPL_VAR Name="subscriptionnotes"--> </h2>
+				<!-- /TMPL_IF -->
+				<!--TMPL_IF Name="latestserials"-->
+				<table>
+				<tr><th>Номер випуску</th><th>Дата</th><th>Стан</th></tr>
+				<!--TMPL_LOOP Name="latestserials"-->
+					<tr>
+						<td>
+							<!--TMPL_VAR Name="serialseq"-->
+						</td>
+						<td>
+							<!--TMPL_VAR Name="planneddate"-->
+						</td>
+						<td>
+							<!--TMPL_IF Name="status1"-->Pending
+							<!--TMPL_ELSE -->
+								<!-- TMPL_IF Name="status2"-->Прибувають
+								<!--TMPL_ELSE -->
+									<!-- TMPL_IF Name="status3"-->Затримка
+									<!--TMPL_ELSE -->
+										<!-- TMPL_IF Name="status4"-->Відсутнє
+										<!--TMPL_ELSE -->
+											<!-- TMPL_IF Name="status5"-->Не випущено
+											<!--/TMPL_IF-->
+										<!--/TMPL_IF-->
+									<!--/TMPL_IF-->
+								<!--/TMPL_IF-->
+							<!--/TMPL_IF-->
+						</td>
+					</tr>
+				<!--/TMPL_LOOP -->
+				</table>
+				<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+		<p>Для отримання більш конкретної інформації про історію передплати <a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">клацніть тут</a></p>
+ 	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><form action="/cgi-bin/koha/opac-reserve.pl" method="post" class="inline">
+    <input type="submit" name="submit" value="Встановити резервування" class="icon reserve">
+    <input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form><!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
+
+<form class="inline" action="opac-MARCdetail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon detail" value="Перегляд у МАРК"></form>
+
+<form class="inline" action="opac-detail.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon brief" value="Простий вигляд"></form>
+
+<form class="inline" action="opac-detailprint.pl" method="get"><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" /><input type="submit" class="icon print" value="Друк" onclick="Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->'); return false;"></form>
+<!-- TMPL_IF name="virtualshelves" -->
+<form class="inline" action="opac-addbookbybiblionumber.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="submit" class="icon shelf" value="Покласти на полицю" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"></form>
+<!-- /TMPL_IF -->
+<form class="inline"><input type="submit" class="icon cart" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->'); return false;" value="Додати до бібліотечного замовлення"></form>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

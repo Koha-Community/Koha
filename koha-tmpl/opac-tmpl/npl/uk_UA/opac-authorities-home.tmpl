@@ -1,0 +1,67 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- детальніший пошук
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead_adv.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+
+<h1>Пошук за авторитетним джерелом</h1>
+
+<form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="opac">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div class="details">
+		<h2>Пошук за
+			<select name="authtypecode">
+			<!-- TMPL_LOOP NAME="authtypesloop" -->
+			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+			<!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="authtypetext" --></option>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</h2>
+		<p>
+                        <label for="mainentryaoperator">Основне входження ($a тільки)</label>
+                        <select name="operator" id="mainentryaoperator">
+                                <option value="contains">містить</option>
+                                <option value="start">починається з</option>
+                        </select>
+                        <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+                        <input type="hidden" name="marclist" value="$a" />
+                        <input type="hidden" name="and_or" value="and" />
+                        <input type="hidden" name="excluding" value="" />
+                </p>
+                <p>
+                        <label for="mainentryoperator">Основне входження </label>
+                        <select name="operator" id="mainentryoperator">
+                                <option value="contains">містить</option>
+                                <option value="start">починається з</option>
+                        </select>
+                        <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+                        <input type="hidden" name="marclist" value="mainentry" />
+                        <input type="hidden" name="and_or" value="and" />
+                        <input type="hidden" name="excluding" value="" />
+                </p>
+		<p>
+                        <label for="anywhereoperator">Де-небудь</label>
+                        <select name="operator" id="">
+                                <option value="contains">містить</option>
+                                <option value="start">починається з</option>
+                        </select>
+                        <input type="text" name="value">
+                        <input type="hidden" name="marclist" value="" />
+                        <input type="hidden" name="and_or" value="and" />
+                        <input type="hidden" name="excluding" value="" />
+                        <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
+                        <input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->" />
+                </p>
+		<p>(додавайте символ % в кінці Вашого слова, щоб використовувати усікання справа: при введені <b>теор%</b> буде знайдено теорія та теорії)</p>
+		<p>
+			<input type="submit" value="Почати пошук" class="submit">
+		</p>
+	</div>
+</form>
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

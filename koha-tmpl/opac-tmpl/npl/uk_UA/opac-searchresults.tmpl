@@ -1,0 +1,107 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- <!-- TMPL_IF NAME="searchdesc" -->Results of Search for '<!-- TMPL_VAR NAME="searchdesc" -->'<!-- TMPL_ELSE -->Ви не зазначили жодного пошукового критерію<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<!-- TMPL_IF NAME="searchdesc" -->
+    <h3>Результати пошуку:  <span class="ex"><!-- TMPL_VAR NAME="searchdesc" --></span></h3>
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="searchnew" -->
+		<h3><span class="ex"><!-- TMPL_VAR name="itemtype" --></span> бібліотечних одиниць отримано за останні  <span class="ex"><!-- TMPL_VAR name="duration" --></span> days</h3>
+	<!-- TMPL_ELSE -->
+		<h3>Ви не зазначили жодного пошукового критерію</h3>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+	<div class="pages">
+			<!-- TMPL_IF NAME=displayprev -->
+				<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Попередні</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><span class="current"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE -->
+					<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Наступні &gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+			<div id="results"><!-- TMPL_IF name=total -->
+			Результати пошуку з <!-- TMPL_VAR NAME="from" --> по <!-- TMPL_VAR NAME="to" --> зі <!-- TMPL_VAR NAME="total" --> записів.
+			<!-- TMPL_ELSE -->
+			Нічого не знайдено.
+			<!-- /TMPL_IF --></div>
+	
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="total" -->
+<!-- TMPL_IF NAME="opacbookbag" -->
+<form action="opac-searchresults.pl" method="get" name="myform">
+<input type="submit" class="icon addchecked" value="Додати вибрані одиниці до бібліотечного замовлення" onclick="addMultiple(); return false;"> <input type="reset" value="Зняти відмітки" class="icon clearall"><!-- /TMPL_IF -->
+	<table>
+		<tr>
+			<th><!--TMPL_IF NAME="opacbookbag" --><a href="#" onclick="CheckAll(); return false;"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/checkall.gif" height="18" width="18" alt="Відмітити усе" title="Відмітити усе" border="0"></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></th>
+			<!-- TMPL_IF NAME="AmazonContent" -->
+			<th colspan="2">Заголовок</th>
+			<!-- TMPL_ELSE -->
+			<th>Заголовок</th>
+			<!-- /TMPL_IF -->
+			<th>Автор </th>
+			<th>Шифр для замовлення</th>
+			<th>Примірники</th>
+			<th>Доступно у</th>
+		</tr>
+		<!-- Actual Search Results -->
+		<!-- TMPL_LOOP NAME="results" -->
+			<tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
+			<td><!--TMPL_IF NAME="opacbookbag" --><label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!--TMPL_IF NAME="opacbookbag" --></label><br /><input type="checkbox" name="bibid" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_IF --></td>
+<!-- TMPL_IF NAME="AmazonContent" -->
+<td><div id="menu"> <a class="p1" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="Зображення обкладинки книги" class="thumbnail"><!--<img class="large"  src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01._PE_SCLZZZZZZZ_.jpg" title="Enlarged view of image" alt="Enlarged view of image" />
+--></a></div></td>
+<!-- /TMPL_IF -->
+
+				<td><!-- TMPL_IF name="BiblioDefaultViewmarc" --><a href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="HTML" --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="HTML" --></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="HTML" --></a><!-- /TMPL_IF --><!-- /TMPL_IF -->				
+			 <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="timestamp" --> <i>(змінено <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF --></td>
+					<td><a href="/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search"><!-- TMPL_VAR NAME="author" --></a></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
+				<td><!-- TMPL_VAR name="totitem" -->
+				</td><td><!-- TMPL_LOOP name="CN" --><!-- TMPL_VAR name="holdingbranch" --> <!-- TMPL_VAR name="location" --><!-- TMPL_IF name="cnt" -->(<!-- TMPL_VAR name="cnt" -->)<!--/TMPL_IF-->	<!-- TMPL_IF name="date_due" -->	<i>(Видано до <!-- TMPL_VAR name="date_due" -->)</i><!-- TMPL_ELSE --><!-- TMPL_IF name="itemcallnumber" --> (<!-- TMPL_VAR name="itemcallnumber" -->)<!-- /TMPL_IF --><!-- /TMPL_IF --><br /><!-- /TMPL_LOOP --></td></tr><!-- /TMPL_LOOP -->
+	</table>
+</form>
+
+<div class="pages">
+			<!-- TMPL_IF NAME=displayprev -->
+				<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE="URL" -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Попередні</a>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_LOOP NAME="numbers" -->
+				<!-- TMPL_IF NAME="highlight" --><span class="current"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE -->
+					<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			<!-- TMPL_IF NAME=displaynext -->
+				<a class="nav" href="opac-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;orderby=<!-- TMPL_VAR NAME="orderby" -->&amp;type=intranet&amp;op=do_search">Наступні &gt;&gt;</a>
+				<!-- /TMPL_IF --></div>
+
+<!-- TMPL_IF name="suggestion" -->
+<div class="note">Ви не знайшли того за чим шукали?<br />  Зробіть <a href="opac-suggestions.pl?op=add">пропозицію на придбання</a></div>
+<!-- /TMPL_IF -->
+
+</div> 
+
+
+
+<!-- TMPL_ELSE -->
+Даруйте, немає результатів.
+
+<!-- TMPL_IF name="suggestion" -->
+<div class="note">Ви не знайшли того за чим шукали?<br />  Зробіть <a href="opac-suggestions.pl?op=add">пропозицію на придбання</a></div>
+<!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

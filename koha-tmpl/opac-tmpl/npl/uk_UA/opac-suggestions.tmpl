@@ -1,0 +1,145 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- 
+<!-- TMPL_IF name="op_add" -->Ввести нову пропозицію на придбання<!-- /TMPL_IF -->
+<!-- TMPL_IF name="op_else" -->Пропозиції на придбання<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="main">
+<!-- TMPL_IF name="op_add" -->
+	<h1>Ввести нову пропозицію на придбання</h1>
+	<div class="details">
+	<p>Заповніть цю форму, щоб запропонувати для бібліотеки нове надбання. Ви будете проінформовані поштою, коли бібліотека задовольнить Вашу пропозицію на придбання</p>
+	<p>Жодне поле не є обов'язковим. Заповніть лиш те що Вам відомо. Поле "нотатки" використовуйте щоб подати додаткову інформацію.</p>
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+	<table>
+	<tr><th><label>Заголовок</label></th><td><input type="text" name="title" size="50" maxlentgh="80" /></td></tr>
+	<tr><th><label>Автор </label></th><td><input type="text" name="author" size="50" maxlength="80" /></td></tr>
+	<tr><th><label>Дата авторського права </label></th><td><input type="text" name="copyrightdate" size="4" maxlength="4" /></td></tr>
+	<tr><th><label>Видавець </label></th><td><input type="text" name="publishercode" size="50" maxlength="80" /></td></tr>
+	<tr><th><label>Нотатки </label></th><td><textarea name="note" rows="5" cols="40"></textarea></td></tr>
+	</table>
+		<p><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Подати мою пропозицію" class="submit"></p>
+	</form>
+	</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="op_else" -->
+	<h3>Пошук у пропозиціях для придбання</h3>
+	<!-- TMPL_IF NAME="suggestions_loop" -->
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+	<table>
+<tr>			<th><label for="title">Заголовок</label></th><td>
+					<input type="text" id="title" name="title" value="<!-- TMPL_VAR name="title"-->" />
+				</td></tr>
+			<tr><th><label for="author">Автор </label></th><td>
+					<input type="text" id="author" name="author" value="<!-- TMPL_VAR name="author" -->" />
+				</td></tr>
+			<tr><th><label for="publishercode">Видавець </label></th><td>
+					<input type="text" id="publishercode" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
+				</td></tr>
+			<tr><th><label for="status">Стан</label></th><td>
+<select name="status" id="status">
+						<option value="">Будь-який</option>
+						<!-- TMPL_IF name="ASKED" -->
+							<option value="ASKED" selected="selected">Запитується</option>
+						<!-- TMPL_ELSE -->
+							<option value="ASKED">Запитано</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ACCEPTED" -->
+							<option value="ACCEPTED" selected="selected">Прийнято</option>
+						<!-- TMPL_ELSE -->
+							<option value="ACCEPTED">Прийнято</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="ORDERED" -->
+							<option value="ORDERED" selected="selected">Замовлено</option>
+						<!-- TMPL_ELSE -->
+							<option value="ORDERED">Замовлено</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="REJECTED" -->
+							<option value="REJECTED" selected="selected">Відхилено</option>
+						<!-- TMPL_ELSE -->
+							<option value="REJECTED">Відхилено</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="AVAILABLE" -->
+							<option value="AVAILABLE" selected="selected">Доступно</option>
+						<!-- TMPL_ELSE -->
+							<option value="AVAILABLE">Доступно</option>
+						<!-- /TMPL_IF -->
+					</select>
+				</td></tr>
+			<tr><th><label for="suggestedbyme">Запропоновано</label></th><td>
+					<select id="suggestedbyme" name="suggestedbyme">
+						<!-- TMPL_IF NAME="suggestedbyme" --><option value="1" selected="selected"><!-- TMPL_ELSE --><option value="1"><!-- /TMPL_IF -->Я</option>
+						<!-- TMPL_UNLESS name="suggestedbyme" --><option value="0" selected="selected"><!-- TMPL_ELSE --><option value="0"><!-- /TMPL_UNLESS -->Хто-небудь</option>
+					</select>
+				</td></tr>
+		</table>
+		<p><input type="submit" class="submit" value="Шукати пропозиції"></p>
+
+		<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+			<input type="hidden" name="op" value="delete_confirm" />
+				<table>
+				<caption>Очікуючі пропозиції на придбання</caption>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Заголовок</th>
+			<th>Автор </th>
+			<th>&copy;</th>
+			<th>Видавець </th>
+			<th>Стан</th>
+			<th>Запропоновано</th>
+			<th>Керовано</th>
+			<th>Нотатка </th>
+		</tr>
+		<!-- TMPL_LOOP NAME="suggestions_loop" -->
+			<!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+				<td>
+					<input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="title" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="author" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR NAME="copyrightdate" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="publishercode" -->
+				</td>
+				<td>
+					<!-- TMPL_IF name="ASKED" -->Запитується<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="ORDERED" -->Замовлено бібліотекою<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="REJECTED" -->Пропозиція відхилена<!-- /TMPL_IF -->
+					<!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+				</td>
+				<td>
+					<!-- TMPL_VAR name="note" -->
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td colspan="9">
+				<input type="submit" class="icon delete" value="Видалити позначені елементи">
+			</td>
+		</tr>
+		</form>
+	</table>
+	<!-- TMPL_ELSE --><div class="content-block">Немає очікуючих на рішення пропозицій для придбання</div><!-- /TMPL_IF -->
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+		<input type="hidden" name="op" value="add" />
+		<input type="submit" class="icon add" value="Ввести нову пропозицію на придбання">
+	</form>
+	<p>Примітка: якщо Ви переглядаєте пропозиції на придбання, подані ким-небудь, то у результаті пошуку будуть лише <em>нові</em> пропозиції на придбання. Пропозиції, що розглядаються бібліотекарем, не показуватимуться.</p>
+<!-- /TMPL_IF -->
+</div>
+</body>
+</html>

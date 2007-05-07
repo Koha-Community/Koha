@@ -1,0 +1,141 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Каталог -- бібліотечна домівка для користувача -   <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead-user.inc" -->
+<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<!-- CONTENT -->
+<div id="main">
+<!-- TMPL_LOOP NAME="BORROWER_INFO" -->
+<h2>Вітання <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="print">(<a href="/cgi-bin/koha/opac-logout.pl">Клацніть тут</a> якщо Ви не <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
+<p>	<!-- Hide from NPL--> <a href="/cgi-bin/koha/opac-account.pl">мої пені</a> | <!-- Hide from NPL -->
+	<a href="/cgi-bin/koha/opac-userdetails.pl">мої персональні дані</a>		<!-- TMPL_IF name="OpacPasswordChange" --> | <a href="/cgi-bin/koha/opac-passwd.pl">змінити мій пароль</a> <!-- /TMPL_IF --><!-- TMPL_IF NAME="opacreadinghistory" -->| <a href="/cgi-bin/koha/opac-readingrecord.pl">моя історія читання</a><!-- /TMPL_IF -->	<!-- TMPL_IF name="virtualshelves" --> | <a href="/cgi-bin/koha/opac-shelves.pl" class="button">мої віртуальні полиці</a> <!-- /TMPL_IF --><!-- TMPL_IF name="suggestion" -->| <a href="/cgi-bin/koha/opac-suggestions.pl">пропозиції на придбання</a><!-- /TMPL_IF --></p>
+		<!-- TMPL_IF name="textmessaging"-->
+			<div class="error"><h3>Повідомлення від бібліотеки</h3>
+			<p><!-- TMPL_VAR name="textmessaging" --></p></div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="flagged" --><div class="error"><ul><!-- TMPL_IF NAME="debarred" --><li><strong>Будь-ласка, відзначте:</strong> Вашу облікову скриньку заблоковано. Зазвичай причиною для блокування облікової скриньки є застарілі прострочення або ж непогашені плати. Якщо на <a href="/cgi-bin/koha/opac-user.pl">сторінці Вашої облікової скриньки</a> виглядає, що все в межах правил, то, будь-ласка, проконсультуйтеся з бібліотекарем.</li><!--
+ /TMPL_IF -->
+ <!-- TMPL_IF NAME="gonenoaddress" --><li><strong>Будь-ласка, відзначте:</strong> Згідно нашим записам, ми не маємо оновлених <a href="/cgi-bin/koha/opac-userdetails.pl">даних для зв'язку</a> на Вашій карточці. Будь-ласка, зверніться до Вашої бібліотеки або ж використайте <a href="/cgi-bin/koha/opac-userdetails.pl">он-лайн форму для оновлення</a> щоб передати поточні дані (<em>зауважте</em>: може бути затримка у відновленні Вашої облікової скриньки, якщо Ви подаєте в он-лайн).</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lost" --><li><strong>Будь-ласка, відзначте: </strong> Ваш бібліотечний квиток зазначено, як втрачений або ж  вкрадений. Якщо це помилка, будь-ласка, принесіть свій квиток до обмінного столу Вашої місцевої бібліотеки і помилка буде виправлена.</li><!-- /TMPL_IF --></ul></div><!-- /TMPL_IF -->
+<!-- FINES BOX -->
+<!-- TMPL_IF NAME="amountoverfive" -->
+<div class="table"><table>
+<caption>Пеня та плати</caption>
+<tr><th colspan="2">Кількість</th></tr>
+<tr><td>You currently owe fines and charges amounting to:</td><td><a href="/cgi-bin/koha/opac-account.pl"><!-- TMPL_VAR NAME="amountoutstanding" --></a></td></tr>
+</table></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="amountoverzero" -->
+<div class="table"><table>
+<caption>Пеня та плати</caption>
+<tr><th colspan="2">Кількість</th></tr>
+<tr><td>You currently owe fines and charges amounting to:</td>
+ <td><a href="/cgi-bin/koha/opac-account.pl"><!-- TMPL_VAR NAME="amountoutstanding" --></a></td></tr>
+</table></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME"amountlessthanzero" -->
+<div class="table"><table>
+<caption>Credits</caption>
+<tr><th colspan="2">Кількість</th></tr>
+<tr><td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl"><!-- TMPL_VAR NAME="amountoutstanding" --></a></td></tr>
+</table></div>
+<!-- /TMPL_IF -->
+	
+<!-- /TMPL_LOOP -->
+
+<!-- TMPL_IF NAME="waiting_count" -->
+	<table>
+		<caption>Зарезервовані одиниці очікують</caption>
+		<tr>
+			<th colspan="2">Заголовок</th>
+			<th>Зарезервовано до дати</th>
+			<th>Pick Up Branch</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="WAITING" -->
+			<!-- TMPL_IF NAME="atdestination" --><tr>
+			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
+				<td>
+					<a href="opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
+<!-- TMPL_VAR NAME="author" --></span></td><td><!-- TMPL_VAR NAME="reservedate" --></td><td><!-- TMPL_IF NAME="atdestination" -->
+				<strong>Waiting</strong> at <!-- TMPL_VAR Name="branch" -->
+				<!-- TMPL_ELSE -->
+				In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" -->
+				<!-- /TMPL_IF --></td>
+			</tr><!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+	</table>
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_IF NAME="issues_count" -->
+<div class="table"><table>
+<caption>Видачі <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> загалом)</span></caption>
+<!-- ISSUES TABLE ROWS --><tr>
+<th colspan="2">Заголовок</th>
+<th>Шифр для замовлення</th>
+<th>Due</th>
+<th>Renew</th>
+<th>Fines</th>
+</tr>
+
+<!-- TMPL_LOOP NAME="ISSUES" -->
+
+<!-- TMPL_IF NAME="overdue" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /></td>
+<td><!-- Display for NPL // <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> //Display for NPL --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
+<!-- TMPL_VAR NAME="author" --></span></td>
+<td><!-- TMPL_VAR NAME="classification" --></td>
+<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
+<td>
+<!-- TMPL_IF NAME="status" -->
+<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a>
+<!-- TMPL_ELSE -->
+Not renewable
+<!-- /TMPL_IF -->
+</td>
+<td><!-- TMPL_IF NAME="charges" -->Так<!-- TMPL_ELSE -->Ні<!-- /TMPL_IF --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table></div>
+
+	<!-- TMPL_ELSE -->
+	<table>
+		<caption>Видачі</caption>
+		<tr><td>Ви ще нічого не отримували</td></tr>
+	</table>
+	<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="reserves_count" -->
+
+<div class="table"><table>
+<caption>Зарезервовано <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> загалом)</span></caption>
+<!-- RESERVES TABLE ROWS -->
+<tr>
+<th colspan="2">Заголовок</th>
+<th>Розміщено</th>
+<th>Місце забирання</th>
+<th>Стан</th>
+<!-- <th>Status</th> -->
+</tr>
+<!-- TMPL_LOOP NAME="RESERVES" -->
+<tr>
+<td><!-- TMPL_IF NAME="itemtype" --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+<td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="btitle" --></a><span class="item-details">
+<!-- TMPL_VAR NAME="author" --></span></td>
+<td><!-- TMPL_VAR NAME="reservedate" --></td>
+<td><!-- TMPL_VAR Name="branch" --></td>
+<td><!-- TMPL_IF NAME="atdestination" -->
+				<strong>Waiting</strong> at <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="holdingbranch" -->In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --><!-- /TMPL_IF --></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table></div>
+
+<p>Якщо Ви не потребуєте резервування, будь-ласка повідомте нас про це електронічною поштою, або ж прийдіть до обігового столу у бібліотеці щоб зняти з резервування.</p>
+
+<!-- /TMPL_IF -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
