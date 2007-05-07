@@ -54,8 +54,8 @@
 				<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR NAME="location-only" --><br><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="on-loan-p" -->У позику<br><!-- /TMPL_IF -->
 				<!-- TMPL_IF name="lost-p" -->Втрата<br><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="mending-p" -->Реставрація<br><!-- /TMPL_IF -->
-				<!-- TMPL_IF name="in-transit-p" -->У дорозі<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="mending-p" -->На реставрації<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="in-transit-p" -->В дорозі<br><!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
 				<!-- TMPL_VAR NAME="location" -->
 				<!-- /TMPL_IF -->
@@ -85,12 +85,12 @@
 	
 	<!-- TMPL_IF name="previous" -->
 	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="previous" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
-	&lt; Previous
+	&lt;&lt;Попередні
 	</a>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="offsetover" -->
 	<a href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="offset" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
-	Next &gt;
+	Наступні &gt;&gt;
 	</a>
 	<!-- /TMPL_IF -->
 </div>

@@ -4,7 +4,13 @@
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<h1 class="catalogue"><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <!-- TMPL_VAR NAME="class" --></h1>
 	<div class="bibliomenu">
-		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Редагувати бібліотечний запис </a> <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue"> Дублювати </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Редагувати одиницю зберігання </a> <a href="javascript:confirm_deletion()" class="button catalogue"> Видалити </a> <a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Повністю </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Нормальний </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати на полицю </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Друкувати </a>
+		<a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Редагувати бібліотечний запис </a> <a href="acqui.simple/addbiblio.pl?oldbiblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&op=duplicate" class="button catalogue"> Здублювати </a> <a href="acqui.simple/additem.pl?bibid=<!-- TMPL_VAR name="bibid"-->" class="button catalogue"> Редагувати одиницю </a>
+	
+		<!--TMPL_IF Name="candelete" --><a href="javascript:confirm_deletion()" class="button catalogue">
+			видалити
+		</a>
+		<!--/TMPL_IF -->
+		<a href="MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Повністю </a> <a href="detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> Нормальний </a> <a href="ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати на полицю </a> <a href="javascript:Dopop('detailprint.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Друкувати </a>
 		<!-- TMPL_IF name="subscriptionsnumber" -->
 		<a href="bull-home.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="button catalogue">
 			Передплата(и)
@@ -129,7 +135,7 @@
 					<!-- /TMPL_IF -->
 				</td>
 				<td><!-- TMPL_VAR NAME="datedue" -->
-				<!-- TMPL_IF name="reservestatus" -->Reserve <!-- TMPL_VAR name="reservestatus" --><!-- /TMPL_IF --></td>
+				<!-- TMPL_IF name="reservestatus" -->Зарезервовано <!-- TMPL_VAR name="reservestatus" --><!-- /TMPL_IF --></td>
 				<td><!-- TMPL_VAR NAME="datelastseen" --></td>
 				<td><a href="/cgi-bin/koha/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
 				<td><!-- TMPL_VAR NAME="volumeddesc" --></td>

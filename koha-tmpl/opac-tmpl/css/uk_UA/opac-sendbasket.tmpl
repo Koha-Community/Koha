@@ -3,7 +3,7 @@
 <END_SUBJECT>
 
 <HEADER>
-Привіт, тут кошик бібліотечних записів посилає <!-- TMPL_VAR name="email_sender" -->
+Вітання, оце <!-- TMPL_VAR name="email_sender" --> висилає кошик з бібліотечними записами 
 <END_HEADER>
 
 <FILENAME>
@@ -21,14 +21,14 @@ ISBN: <!-- TMPL_VAR NAME="ISBN" --><!-- /TMPL_IF --><!-- TMPL_IF name="subtitle"
 Зібрання: <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="subject" -->
 Тематика: <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" -->
 Рік авторського права: <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->
-Нотатки : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><!-- TMPL_IF name="unititle" -->
+Нотатки: <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><!-- TMPL_IF name="unititle" -->
 Єдиний заголовок: <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF name="serial" -->
 Періодичне видання: <!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><!-- TMPL_IF name="dewey" -->
 Індекс Дьюї (ДДК): <!-- TMPL_VAR name="dewey" --><!-- /TMPL_IF --><!-- TMPL_IF name="classification" -->
 Класифікація: <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><!-- TMPL_IF name="lccn" -->
 LCCN: <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
-Веб-адреса : <!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
-Одиниці :		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+Веб-адреса: <!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
+Одиниці: 		<!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 				<!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="barcode" -->
 <!-- /TMPL_LOOP -->
 ---------------------------------------------

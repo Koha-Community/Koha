@@ -3,9 +3,9 @@
 <div id="bloc20">
 	<h2>Сторінка зарезервування для <i><!-- TMPL_VAR NAME="title" --></i> (<!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF --> N&#176;<!-- TMPL_VAR name="biblionumber" -->)</h2>
 	<!-- TMPL_IF NAME="message" -->
-		<h2>Неможливо зарезервувати тому-що </h2>
+		<h2>Неможливо зарезервувати, тому що  </h2>
 		<ul>
-			<!-- TMPL_IF name="noreserve" --><li>Ви не можете резерувати у цій бібліотеці (можливість неактивізована)</li><!-- /TMPL_IF -->
+			<!-- TMPL_IF name="noreserve" --><li>Ви не можете резервувати у цій бібліотеці (можливість не активізована)</li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="too_much_oweing" --><li>Ви винні <!-- TMPL_VAR NAME="too_much_oweing" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="too_many_reserves" --><li>Ви не можете мати зарезервовано біль аніж <!-- TMPL_VAR NAME="too_many_reserves" -->.</li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="already_reserved" --><li>Цю одиницю Ви вже зарезервували.</li><!-- /TMPL_IF -->

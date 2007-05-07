@@ -112,15 +112,15 @@
 			var _alertString="";
 			var alertString2;
 			if (f.bookfundid.value.length==0) {
-				_alertString += "\n- " + _("Ідентифікатор книжкового фонду відсутній");
+				_alertString += "\n- " + _("ідентифікатор_книжкового_фонду (bookfundid) не заданий");
 			}
 			if (f.bookfundname.value.length==0) {
-				_alertString += "\n- " + _("Назва книжкового фонду відсутня");
+				_alertString += "\n- " + _("назва_книжкового_фонду (bookfundname) не задана");
 			}
 			if (_alertString.length==0) {
 				document.Aform.submit();
 			} else {
-				alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+				alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
 				alertString2 += "\n------------------------------------------------------------------------------------\n";
 				alertString2 += _alertString;
 				alert(alertString2);

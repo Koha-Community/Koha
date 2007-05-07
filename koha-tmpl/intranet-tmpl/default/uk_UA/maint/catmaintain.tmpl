@@ -3,7 +3,7 @@
 
 <!-- TMPL_IF NAME=allsub-p -->
 <!-- TMPL_LOOP NAME="loop" -->
-"<a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html -->"</a><br>
+"<a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="openWindow('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html -->"</a><br>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
@@ -46,7 +46,7 @@
 
 <!-- TMPL_IF NAME=finun-p -->
 Успішно відновлено
-<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Назад до ослуговування каталогу</a>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Назад до обслуговування каталогу</a>
 <!-- /TMPL_IF -->
 
 
@@ -62,7 +62,7 @@
 
 <!-- TMPL_IF NAME=updatetype-p -->
 Оновлено успішно
-<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Назад до ослуговування каталогу</a>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Назад до обслуговування каталогу</a>
 <!-- /TMPL_IF -->
 
 

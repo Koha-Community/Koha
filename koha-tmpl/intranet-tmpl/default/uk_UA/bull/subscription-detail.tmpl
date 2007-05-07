@@ -139,7 +139,7 @@
 		</table>
 </div>
 <div id="bloc25">
-	<h2 class="bull">Serial issues</h2>
+	<h2 class="bull">Випуски періодичних видань</h2>
 	<table class="small">
 	<tr>
 		<th class="bull">&nbsp;&nbsp;&nbsp;&nbsp;Номер випуску&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -160,7 +160,7 @@
 						Чекають
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status2" -->
-						Прибувають
+						Прибуває
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status3" -->
 						Затримка
@@ -182,9 +182,9 @@
 function _(s) { return s } // dummy function for gettext
 function confirm_deletion() {
 	<!-- TMPL_IF name="totalissues" -->
-		var is_confirmed = confirm(_('Ви вже зробили <!-- TMPL_VAR name="totalissues"--> отримань. Чи підтверджуєте видалення?'));
+		var is_confirmed = confirm(_('Ви вже зробили <!-- TMPL_VAR name="totalissues"--> отримань. Підтверджуєте видалення?'));
 	<!-- TMPL_ELSE -->
-		var is_confirmed = confirm(_('Чи ви бсправді хочете видалити цю передлату?'));
+		var is_confirmed = confirm(_('Чи ви справді хочете видалити цю передплату?'));
 	<!-- /TMPL_IF -->	
 	if (is_confirmed) {
 		window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";

@@ -16,9 +16,9 @@
 		//
 	</script>
 	<script type="text/javascript" language="javascript">
-	var MSG_BASKET_EMPTY = _("Корзина порожня");
-	var MSG_RECORD_IN_BASKET = _("Цей бібліотечний запис знаходиться вже у кошику");
-	var MSG_RECORD_ADDED = _("Бібліотечні записи додані до кошика");
+	var MSG_BASKET_EMPTY = _("Кошик пустий");
+	var MSG_RECORD_IN_BASKET = _("Цей бібліотечний запис вже знаходиться у кошику");
+	var MSG_RECORD_ADDED = _("Бібліотечні записи додані у кошик");
 	var MSG_NRECORDS_ADDED = _(" Бібліотечних записів додано");
 	var MSG_NRECORDS_IN_BASKET = _("вже у кошику");
 	var MSG_NO_RECORD_SELECTED = _("Не вибрано жодного бібліотечного запису");
@@ -32,9 +32,9 @@
 	<!-- MENUS -->
 	<div id="title">
 		<!-- TMPL_IF name="opacsmallimage" -->
-			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" alt="фірмовий знак Koha">
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" alt="фірмовий знак Коха">
 		<!-- TMPL_ELSE -->
-			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" alt="фірмовий знак Koha">
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" alt="фірмовий знак Коха">
 		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
 	</div>

@@ -17,7 +17,7 @@
 					<tr>
 						<td><!-- TMPL_IF name="manageshelf" --><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 						<td><!-- TMPL_VAR NAME="barcode" --></td>
-						<td><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><a class="transparent" href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
 						<td><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
@@ -81,7 +81,7 @@
 				<input type="hidden" name="shelves" value="1">
 				<h2>Додати полицю</h2>
 				<p><label>Ім'я </label><input type="text" name="addshelf" size="25"></p>
-				<p><label>Власник</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+				<p><label>Власник </label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
 				<p><label>Категорія</label>
 					<select name="category">
 						<option value="1">Приватна</option>
@@ -153,7 +153,7 @@
 			<h2>Видозміна полиці</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
 			<p><label>Ім'я </label><input type="text" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->"></p>
-			<p><label>Власник</label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
+			<p><label>Власник </label><input type="hidden" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></p>
 			<p><label>Категорія</label>
 				<select name="category">
 					<!-- TMPL_IF name="category1" -->

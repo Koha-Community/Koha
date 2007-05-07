@@ -16,9 +16,9 @@
 		//
 	</script>
 	<script type="text/javascript" language="javascript">
-	var MSG_BASKET_EMPTY = _("Корзина порожня");
-	var MSG_RECORD_IN_BASKET = _("Цей бібліотечний запис знаходиться вже у кошику");
-	var MSG_RECORD_ADDED = _("Бібліотечні записи додані до кошика");
+	var MSG_BASKET_EMPTY = _("Кошик пустий");
+	var MSG_RECORD_IN_BASKET = _("Цей бібліотечний запис вже знаходиться у кошику");
+	var MSG_RECORD_ADDED = _("Бібліотечні записи додані у кошик");
 	var MSG_NRECORDS_ADDED = _(" Бібліотечних записів додано");
 	var MSG_NRECORDS_IN_BASKET = _("вже у кошику");
 	var MSG_NO_RECORD_SELECTED = _("Не вибрано жодного бібліотечного запису");
@@ -47,9 +47,9 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="contains" />
-				Простий пошук : <input type="text" size="27" name="value" tabindex="1" /> 
+				Простий пошук: <input type="text" size="27" name="value" tabindex="1" /> 
             <!--TMPL_IF Name="mylibraryfirst"-->
-				<br />in Branch
+				<br />у підрозділі
 				<input type="hidden" name="marclist" value="items.holdingbranch" />
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
@@ -112,7 +112,7 @@
 				<!-- /TMPL_IF -->
 			</p>
 		<!-- TMPL_ELSE -->
-			<p><a href="/cgi-bin/koha/opac-user.pl">Зареєструйтеся у Koha</a> щоб отримати персональні налаштування.</p>
+			<p><a href="/cgi-bin/koha/opac-user.pl">Зареєструйтеся у Коха</a> щоб отримати персональні налаштування.</p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="opaclanguagesdisplay" -->
 			<form action="/cgi-bin/koha/changelanguage.pl" method="post">
@@ -133,7 +133,7 @@
 		<p class="copyright"><!-- TMPL_VAR NAME="opaccredits" --></p>
 	<!-- TMPL_ELSE -->
 		<p class="copyright">
-			Ця бібліотека керується вільною інтегрованою бібліотечною системою (АБІС) <a href="http://www.koha.org">Koha</a>, та дотримується веб-стандартів<a href="http://validator.w3.org/check/referer">
+			Ця бібліотека керується вільною інтегрованою бібліотечною системою (АБІС) <a href="http://www.koha.org">Коха</a>, та дотримується веб-стандартів<a href="http://validator.w3.org/check/referer">
 				<img src="http://www.w3.org/Icons/valid-xhtml10" alt="Вірний XHTML 1.0!" height="16" width="44">
 			</a>
 		</p>

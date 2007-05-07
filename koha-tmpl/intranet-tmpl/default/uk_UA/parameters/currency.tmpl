@@ -43,12 +43,12 @@
 							_alertString += "\n- " + _("Відсутнє ім'я валюти ");
 					}
 					if (f.rate.value.length==0) {
-							_alertString += "\n- " + _("Відсутній курс");
+							_alertString += "\n- " + _("Курс не задано");
 					}
 					if (_alertString.length==0) {
 							document.Aform.submit();
 					} else {
-							alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+							alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
 							alertString2 += "\n------------------------------------------------------------------------------------\n";
 							alertString2 += _alertString;
 							alert(alertString2);
@@ -59,7 +59,7 @@
 		<!-- TMPL_IF NAME="searchfield" -->
 			<h1 class="parameters">Редагування грошової одиниці</h1>
 		<!-- TMPL_ELSE -->
-			<h1 class="parameters">Додати грошову одиницію</h1>
+			<h1 class="parameters">Додати грошову одиницю</h1>
 		<!-- /TMPL_IF -->
 	
 			<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
@@ -180,7 +180,7 @@
 		<!-- /TMPL_iF -->
 	
 			<br>
-		<input type="submit" class="button parameters" value="Додати грошову одиницію" alt="Додати грошову одиницію">
+		<input type="submit" class="button parameters" value="Додати грошову одиницю" alt="Додати грошову одиницю">
 		<br>
 			</form>
 	

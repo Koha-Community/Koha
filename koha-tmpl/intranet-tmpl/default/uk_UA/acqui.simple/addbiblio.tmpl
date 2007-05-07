@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="marc-top.inc" -->
 	<form method="post" name="f" id="f" action="addbiblio.pl">
-<h1 class="catalogue"><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Редагування МАРК-запису з номером <!-- TMPL_VAR name="oldbiblionumber" --><!-- TMPL_ELSE -->Додати МАРК-запис<!-- /TMPL_IF --> Із структурою: <!--TMPL_VAR Name="framework" --></h1>
+<h1 class="catalogue"><!-- TMPL_IF NAME="oldbiblionumtagfield" -->Редагування МАРК-запису з номером <!-- TMPL_VAR name="oldbiblionumber" --><!-- TMPL_ELSE -->Додати МАРК-запис<!-- /TMPL_IF --> зі структурою: <!--TMPL_VAR Name="framework" --></h1>
 
 <div class="tabbed">
 		<input type="hidden" name="op" value="addbiblio" />
@@ -22,7 +22,7 @@
         <!--  /TMPL_LOOP -->
 	</div>
 
-<! -- RESET PAGINATION -->
+<!-- RESET PAGINATION -->
 <!-- TMPL_LOOP name="BIG_LOOP" -->
 <!-- hide every tab except the 1st -->
 <!-- TMPL_IF name="number" -->
@@ -37,7 +37,7 @@
                         <p>Чи це є дублікат <a href="../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?bib=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
                         <p>Виберіть той чи інший: </p>
                         <ul>
-                            <li>Якщо це <em>є</em> дублікатом, то <a href="additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebibid" -->">редагувати елементи</a> існуючого запису.</li>
+                            <li>Якщо це <em>є</em> дублікатом, то <a href="additem.pl?bibid=<!-- TMPL_VAR name="duplicatebibid" -->">редагувати елементи</a> існуючого запису.</li>
                             <li>Якщо ні, то клацніть <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Підтвердіть, що це не дублікат</a></li>
                         </ul>
                     </div>
@@ -56,12 +56,12 @@
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
             <!-- TMPL_VAR NAME="tag_lib" -->
             <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden"  value="" size="2" onchange="javascript:alert(this.value);AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="repeatable" --><a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="javascript:this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden"  value="" size="2" onchange="AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" ><!-- /TMPL_IF -->
         </p>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!-- TMPL_IF NAME="visibility" -->
-                <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
+                <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')" title="<!-- TMPL_VAR name="marc_lib_plain" -->">
                     <!-- TMPL_VAR NAME="subfield" -->
                 </a>
             <!-- /TMPL_IF -->
@@ -225,7 +225,7 @@ function Check(f) {
 	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
 	var alertString2;
 	if (total_errors!=0) {
-		alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+		alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
 		alertString2 += "\n------------------------------------------------------------------------------------\n";
 		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" обов'язкові ознаки порожні");
 		for (i=0; i<missing_mandatory_tags.length; i++)
@@ -281,7 +281,7 @@ function PopupZ3950() {
 		}
 	}
 	if(error < 4){
-	newin=window.open("../z3950/search.pl?bibid=<!-- TMPL_VAR NAME="bibid" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+	newin=window.open("../z3950/search.pl?oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
 	} else {
 		alert("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");
 	}

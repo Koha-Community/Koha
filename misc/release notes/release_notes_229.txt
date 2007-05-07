@@ -1,0 +1,9 @@
+* MAJOR bug in addbiblio and additem (Bug 1330). Previously, if you added a field to a biblio it would save it with the same tagorder as one of the items, and then editing an item would result in it being deleted.
+* fixed some SQL queries (mySQL5 errors. That does not mean koha 2.2.x is mySQL5 compliant, but that's some errors identified & fixed. Expect koha 2.2.9 to work with fewer problem under mySQL5)
+* fixed a SQL typo in overdues fixing on return (database was not properly updated)
+* Solved a problem where a plugin value(fixed fields...) would be lost when editing a record
+* fixed a bug in expiry date calculation
+* ENH in z3950 search : adding a test in search to avoid a system error if the server returns an invalid error (can happend, depending on z3950 server)
+* ENH: Added finer ISBD parsing to allow subfield values to contain {}.
+* ENH: removed an extra (& useless although harmless) call to MARChtml2xml
+* ENH: if branch unknown from Koha, take it from userenv, instead of first-defined. This will set branch to users registration branch if not explicitly set.

@@ -2,7 +2,7 @@
 <div id="mainbloc">
 <!-- TMPL_IF name="op_add" -->
 	<h1>Ввести нову пропозицію</h1>
-	<p>Заповніть цю форму, щоб запропонувати для бібліотеки нове придбання. Ви будете проінформовані поштою, коли бібліотека задоволить Вашу пропозицію</p>
+	<p>Заповніть цю форму, щоб запропонувати для бібліотеки нове придбання. Ви будете проінформовані поштою, коли бібліотека задовольнить Вашу пропозицію.</p>
 	<p>Жодне поле не є обов'язкове. Заповніть те що Вам відомо. Поле "Нотатка" може використовуватися на Ваш розсуд</p>
 	<form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
 		<input type="hidden" name="op" value="add_confirm">
@@ -83,7 +83,7 @@
 					<!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
 				</td>
 				<td>
-					<!-- TMPL_VAR name="usermanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
 				</td>
 				<td>
 					<!-- TMPL_VAR name="note" -->
@@ -106,7 +106,7 @@
 		<input type="hidden" name="op" value="add">
 		<input type="submit" class="button" value="Ввести нову пропозицію">
 	</form>
-	<p>Примітка : якщо Ви запитуєте пропозицію, зроблену ким-небудь, результат міститиме лише нові пропозиції. Пропозиції, що розглядаються бібліотекарем, не будуть показані.</p>
+	<p>Примітка: якщо Ви запитуєте пропозицію, зроблену ким-небудь, результат міститиме лише нові пропозиції. Пропозиції, що розглядаються бібліотекарем, не будуть показані.</p>
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

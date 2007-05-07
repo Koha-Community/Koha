@@ -6,7 +6,7 @@
 <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button bull" title="detail of the subscription">Передплата</a> <a href="/cgi-bin/koha/bull-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Передплати</a> <a href="/cgi-bin/koha/MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button bull" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Назад до бібліотечного запису</a>
 
 <div id="bloc25">
-<h2 class="bull">waited or late issues</h2>
+<h2 class="bull">очікувані випуски або випуски, що запізнюються</h2>
 	<form method="post" name="f" action="statecollection.pl">
 		<input type="hidden" name="op" value="serialchangestatus">
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->">
@@ -48,9 +48,9 @@
 						<option value="1" selected>Чекають</option>
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status2" -->
-						<option value="2" selected>Прибувають</option>
+						<option value="2" selected>Прибуває</option>
 					<!-- TMPL_ELSE -->
-						<option value="2">Прибувають</option>
+						<option value="2">Прибуває</option>
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status3" -->
 						<option value="3" selected>Затримка</option>
@@ -135,7 +135,7 @@
 			<td>
 				<input type="hidden" name="serialid" value="0">
 				<select name="status" size="1">
-						<option value="2">Прибувають</option>
+						<option value="2">Прибуває</option>
 						<option value="3" selected>Затримка</option>
 						<option value="4">Відсутнє</option>
 				</select>

@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
 <div id="bibliomenu">
-	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> Простий </a> <a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button"> Повний </a> <a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати до кошика </a> <a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue"> Роздрук </a>
+	<a href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> Простий </a> <a href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button"> Повний </a> <a href="opac-ISBDdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue"> ISBD </a> <a href="javascript:Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->')" class="button catalogue"> Додати на полицю </a> <a href="javascript:Dopop('opac-detailprint.pl?bib=<!-- TMPL_VAR name="biblionumber" -->')" class="button catalogue"> Роздрук </a>
 	<!-- TMPL_UNLESS NAME="norequests" -->
 		<a class="button" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->">
 			Запит
@@ -12,7 +12,7 @@
 	</a>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opacbookbag" -->
-	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Додати до кошика</a>
+	<a class="button" href="javascript:addRecord('<!-- TMPL_VAR NAME="biblionumber" ESCAPE=URL -->')">Додати у кошик</a>
 	<!-- /TMPL_IF -->
 </div>
 	<div class="tabs">

@@ -43,7 +43,7 @@
 							_alertString += "\n- " + _("ім'я сайту відсутнє");
 					}
 					if (f.host.value.length==0) {
-							_alertString += "\n- " + _("хост відсутній");
+							_alertString += "\n- " + _("host (сервер) не задано");
 					}
 					if (f.port.value.length==0) {
 							_alertString += "\n- " + _("порт відсутній");
@@ -52,18 +52,18 @@
 							_alertString += "\n- " + _("відсутня база даних");
 					}
 					if (isNaN(f.port.value)) {
-							_alertString += "\n- " + _("порт повинен бути числом");
+							_alertString += "\n- " + _("порт повинен бути номером");
 					}
 					if (isNaN(f.rank.value)) {
 							_alertString += "\n- " + _("ранґ повинен бути номером");
 					}
 					if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-							_alertString += "\n- " + _("перевіряльне повинно бути 0 або 1");
+							_alertString += "\n- " + _("перевірено, повинно бути 0 або 1");
 					}
 					if (_alertString.length==0) {
 							document.Aform.submit();
 					} else {
-							alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+							alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
 							alertString2 += "\n------------------------------------------------------------------------------------\n";
 							alertString2 += _alertString;
 							alert(alertString2);
@@ -113,7 +113,7 @@
 				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)">
 			</p>
 			<p>
-				<label class="label100">Ранг (порядок відображення)</label>
+				<label class="label100">Ранґ (порядок відображення)</label>
 				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)">
 			</p>
 			<p>
@@ -169,7 +169,7 @@
 				<td><!-- TMPL_VAR NAME="checked" --></td>
 			</tr>
 			<tr>
-				<td>Ранг</td>
+				<td>Ранґ</td>
 				<td><!-- TMPL_VAR NAME="rank" --></td>
 			</tr>
 			<tr>
@@ -207,7 +207,7 @@
 					<th>Ідентифікатор користувача</th>
 					<th>Пароль</th>
 					<th>Відмічено</th>
-					<th>Ранг</th>
+					<th>Ранґ</th>
 					<th>Синтаксис</th>
 					<th> </td>
 					<th> </td>

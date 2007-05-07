@@ -1,3 +1,31 @@
-INSERT INTO stopwords VALUES ('У');
+;#DELETE FROM stopwords;
+;#ALTER TABLE stopwords COLLATE utf8_unicode_ci;
+TRUNCATE stopwords;
+INSERT INTO stopwords VALUES ('АДЖЕ');
+INSERT INTO stopwords VALUES ('АВЖЕЖ');
 INSERT INTO stopwords VALUES ('В');
+INSERT INTO stopwords VALUES ('ДЕ');
+INSERT INTO stopwords VALUES ('ДЕЩО');
+INSERT INTO stopwords VALUES ('ДО');
 INSERT INTO stopwords VALUES ('Й');
+INSERT INTO stopwords VALUES ('ЛЕДВЕ');
+INSERT INTO stopwords VALUES ('МАЙЖЕ');
+INSERT INTO stopwords VALUES ('НА');
+INSERT INTO stopwords VALUES ('НАВІТЬ');
+INSERT INTO stopwords VALUES ('ОТЖЕ');
+INSERT INTO stopwords VALUES ('ОТОЖ');
+INSERT INTO stopwords VALUES ('ПІД');
+INSERT INTO stopwords VALUES ('ТАК');
+INSERT INTO stopwords VALUES ('ТАКИЙ');
+INSERT INTO stopwords VALUES ('ТАКОЖ');
+INSERT INTO stopwords VALUES ('ТЕ');
+INSERT INTO stopwords VALUES ('ТОБТО');
+INSERT INTO stopwords VALUES ('ТОЖ');
+INSERT INTO stopwords VALUES ('ТОЩО');
+INSERT INTO stopwords VALUES ('У');
+INSERT INTO stopwords VALUES ('ЦЕ');
+INSERT INTO stopwords VALUES ('ЩО');
+INSERT INTO stopwords VALUES ('ЯК');
+INSERT INTO stopwords VALUES ('ЯКИЙ');
+
+        

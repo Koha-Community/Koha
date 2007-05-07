@@ -3,7 +3,7 @@
  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Кошик електронного каталогу (OPAC)</title>
+	<title>Кошик електронного каталогу</title>
 	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
 	<!-- TMPL_IF name="opacstylesheet" -->
 		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
@@ -19,6 +19,6 @@
 		var MSG_NO_RECORD_SELECTED = _("Не вибрано жодного бібліотечного запису");
 		var MSG_NO_RECORD_ADDED = _("Не додано бібліотечного запису");
 		var MSG_CONFIRM_DEL_BASKET = _("Ви хочете спорожнити кошик ?");
-		var MSG_CONFIRM_DEL_RECORDS = _("Ви хочете видалити відібрані бібліотчечні записи ?");
+		var MSG_CONFIRM_DEL_RECORDS = _("Ви хочете видалити відібрані бібліотечні записи ?");
 	</SCRIPT>
 </head>

@@ -47,12 +47,12 @@
                         _alertString += "\n- " + _("відсутній опис");
                 }
                 if (!isNum(f.upperagelimit,0)) {
-                        _alertString += "\n- " + _("границя верхнього віку не є числом");
+                        _alertString += "\n- " + _("межа_верхнього_віку (upperagelimit) не є числом");
                 }
                 if (_alertString.length==0) {
                         document.Aform.submit();
                 } else {
-                        alertString2  = _("Форма не відіслана через наступні проблеми(у)");
+                        alertString2  = _("Форма не прийнята через наступну(і) проблему(и)");
                         alertString2 += "\n------------------------------------------------------------------------------------\n";
                         alertString2 += _alertString;
                 }
