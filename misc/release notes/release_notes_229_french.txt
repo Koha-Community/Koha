@@ -1,0 +1,71 @@
+NOTES DE VERSION
+================
+
+L'équipe internationale qui développe Koha continue à innover et vous propose une nouvelle version du SIGB sous licence libre. Cette nouvelle version est le fruit de plusieurs mois de travail rassemblant bibliothécaires et informaticiens du monde entier.
+
+Cette version n'apporte que des corrections de bugs et des améliorations très mineures.
+
+Bonne découverte et comme d'habitude : LISEZ ces notes de version attentivement !!!
+
+============================
+AVERTISSEMENT
+============================
+* L'interface bibliothécaire est testée seulement avec Mozilla-firefox. L'OPAC devrait fonctionner correctement avec n'importe quel navigateur. 
+* Durant l'installation, vous pouvez voir des avertissements au moment de la vérification des dépendances. Des choses du genre :
+"Too late to run INIT block at /usr/local/lib/perl/5.8.4/ZOOM.pm line 37."
+ou 
+"Subroutine PDF::API2::Resource::Font::Postscript::O_RDONLY redefined at /usr/share/perl/5.8/Exporter.pm line 65."
+
+Vous pouvez les ignorer.
+
+
+PROBLEMES CONNUS
+******
+* mySQL5.0 : Koha 2.2.9 n'est pas garanti pour mySQL 5.0 Un certain nombre de problèmes ont été corrigés, mais pas nécessairement tous. Rapportez tout problème, nous continuerons à améliorer les choses dans Koha 2.2.10.
+* N'utilisez pas d'espaces dans les codes des monnaies. Par exemple, utiliser USD et pas "US DOLLAR". Les espaces posent problèmes dans les acquisitions.
+
+Voir bugs.koha.org plus de bugs et d'information sur les bugs.
+
+=======
+CHANGEMENTS
+=======
+Il y a seulement des corrections de bug et des améliorations mineures dans cette version :
+* Bug majeur dans l'ajout de notices biblio et exemplaires (bug 1330). Précédemment, si vous ajoutiez un champ à une notice, il était enregistré avec le même numéro d'ordre qu'un exemplaire, et l'édition de l'exemplaire supprimait ce champ ajouté.
+* Quelques requètes SQL ont été rendues compatibles avec mySQL 5.
+* Correction d'une erreur de typo dans le calcul des amendes au retour de prêt (la base n'était pas correctement mise à jour)
+* Correction d'un problème dans les plugins (champs fixes), qui entrainait des pertes d'information à la modification de notices.
+* Bug dans des calculs de date (notamment l'expiration de l'abonnement)
+
+* Amélioration dans la recherche z3950 : ajout d'un test pour éviter une "erreur système" si le serveur renvoie une erreur invalide (ce qui peut arriver, cela dépend du serveur interrogé).
+* Amélioration de la grille ISBD qui autorise maintenant les {}
+* Amélioration légère des performances dans l'édition des notices (ca ne devrait pas être vraiment mesurable)
+* Amélioration si le site courant est inconnu de Koha, on prend celui du lecteur, pas le 1er défini dans la table. 
+
+=============
+TRADUCTIONS
+=============
+De nombreuses traductions ont été ajoutées et complétées. Certaines sont partielles, mais incluses dans cette version malgré tout.
+Voici la liste détaillée, langue par langue :
+interface PROFESSIONNELLE (INTRANET) 
+- ENGLISH : Templates npl et default
+- CHINESE : Templates default (60% traduit) et npl (95% chinese Classic et chinese Taïwan)
+- FRENCH  : Templates default (100% traduit)
+- ITALIAN : Templates default (95% traduit)
+- POLISH  : Templates default (30% traduit)
+- SPANISH : Templates default (60% argentin spanish, 95% spanish spain)
+- UKRANIAN: Templates default (95% traduit) et npl (60% traduit)
+
+OPAC (PUBLIC) interface
+- ENGLISH : Templates npl et css
+- CHINESE : Templates css (90% traduit, chinese Classic et Chinese Taïwan) et npl (90% pour les 2 également)
+- FRENCH :  Templates css available (100% traduit)
+- HUNGARIAN: Templates npl (90% traduit)
+- JAPANESE: Templates npl (95% traduit)
+- KOREAN  : Templates npl (95% traduit)
+- ITALIAN : Templates css (100% traduit)
+- POLISH  : Templates css (75% traduit)
+- SPANISH : Templates css (75% traduit)
+- UKRANIAN: Templates css (100% traduit) et npl (90% traduit)
+
+ATTENTION  : certaines nécessitent que la base soient en unicode, d'autre qu'elle soit en iso8859-1 (latin1). La plupart des bases en français sont en latin1 (je n'en connais qu'une en unicode, Frantiq)
+Cela pourrait entrainer des bizarreries dans l'encodage de certaines traductions. Notez que le problème sera réglé avec Koha 3.0 puisque tout lem onde sera en Unicode !
