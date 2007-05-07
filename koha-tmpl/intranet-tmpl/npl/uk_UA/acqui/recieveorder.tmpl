@@ -1,0 +1,100 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Receive Orders From Supplier <!-- TMPL_VAR name="name" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+
+<h1>Receive Orders From Supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+
+<!-- TMPL_IF NAME="count" --><p> <!-- TMPL_VAR NAME="count" --> пакетів знайдено</p><!--/TMPL_IF-->
+<div id="resultnumber">
+<!-- Row of numbers corresponding to search result pages -->
+<!-- TMPL_IF NAME="displayprev" -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra">&lt;&lt;</a>
+<!-- /TMPL_IF -->
+<!-- TMPL_LOOP NAME="numbers" -->
+	<!-- TMPL_IF NAME="highlight" --><span class="current"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><!-- TMPL_VAR NAME="number" --></a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="displaynext" -->
+	<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra">&gt;&gt;
+<!-- /TMPL_IF -->
+</div>
+
+<div id="resultlist">
+<!-- Search Results Table -->
+<!-- TMPL_IF NAME="count" -->
+<form method="post" action="recieveorder.pl">
+	<table>
+		<tr>
+			<th>Номер</th>
+			<th>Код</th>
+			<th>Дата отримання</th>
+			<th>Кількість одиниць</th>
+			<th>Кількість бібліотечних записів</th>
+			<th>Очікувані одиниці</th>
+</tr>
+		<tr>
+<th>&nbsp;<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></th><th><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" /></th>
+<th>Від: <input type="text" size="9" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->" /> <p>До: <input type="text" size="9" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->" /></th><th>&nbsp;</th><th>Сортувати за: <select name="orderby">
+<option value="aqorders.booksellerinvoicenumber"> Код</option>
+<option value="datereceived"> Дата отримання</option>
+<option value="datereceived desc"> Дата отримання, зворотньо</option>
+<option value="aqorders.booksellerinvoicenumber desc"> Код, зворотньо</option>
+</select><br />
+Результатів на сторінку: <select name="resultsperpage" value ="<!--TMPL_VAR Name="resultsperpage"-->" size="1">
+<option value="20">20</option>
+<option value="30">30</option>
+<option value="50">50</option>
+<option value="100">100</option>
+</select>
+</th><th><input type="submit" class="submit" value="Фільтр">
+</th>
+</tr>
+<!-- Actual Search Results -->
+<!-- TMPL_LOOP NAME="searchresults" -->
+	<!-- TMPL_IF NAME="even" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+			<td>
+				<a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" ESCAPE=URL --><!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="code" ESCAPE=URL --><!--/TMPL_IF-->">
+					<!-- TMPL_VAR NAME="number" -->
+				</a>
+			</td>
+			<td>
+				<!--TMPL_IF Name="code"--><!--TMPL_VAR Name="code" --><!--/TMPL_IF-->
+			</td>
+		<td><a href="/cgi-bin/koha/acqui/receive.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE=URL -->&amp;datereceived=<!-- TMPL_VAR NAME="raw_datereceived" ESCAPE=URL --><!--TMPL_IF Name="code"-->&amp;code=<!--TMPL_VAR Name="code" ESCAPE=URL --><!--/TMPL_IF-->">
+				<!-- TMPL_VAR NAME="datereceived" -->
+			</a></td>
+		<td> <!-- TMPL_VAR NAME="reccount" --> </td>
+		<td><!-- TMPL_VAR NAME="bibcount" -->
+		</td>
+		<td><!-- TMPL_VAR NAME="itemcount" -->
+		</td>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+</form>
+<!--/TMPL_IF-->
+	<div class="data">
+	<h2> Отримати новий пакет </h2>
+		<form method="get" action="receive.pl">
+		
+			<table><tr><th><input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
+			<label for="invoice">Код пакету</label></th>
+			<td><input type="text" size="20" id="invoice" name="invoice" /></td></tr>
+		
+	<!-- TMPL_IF NAME="GST" -->		<tr><th><label for="gst">ПДВ</label></th>
+		<td>	<input type="text" size="20" id="gst" name="gst" /></td></tr><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0" /><!-- /TMPL_IF -->
+		
+			<tr><th><label for="freight">Плата за перевезення</label></th>
+			<td><input type="text" size="20" id="freight" name="freight" /></td></tr>
+		</table>
+			<p><input type="submit" class="submit" value="Зберегти"></p>
+		
+		</form>
+	</div>
+
+
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

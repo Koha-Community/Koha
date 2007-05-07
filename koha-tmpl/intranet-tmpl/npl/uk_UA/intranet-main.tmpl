@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Домівка інтерфейсу бібліотекаря у Коха<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+	<div id="main">
+		<div id="menu"><dl>
+		<dt><a href="/cgi-bin/koha/circ/circulation.pl">
+			Обіг</a></dt>
+			<dd><ul><li><a href="/cgi-bin/koha/circ/circulation.pl">Видачі</a></li>  <li><a href="/cgi-bin/koha/circ/returns.pl">Повернення</a></li>  <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Переміщення</a></li>
+<li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Встановити підрозділ</a></li></ul></dd>
+<dt><a href="/cgi-bin/koha/members/members-home.pl">Відвідувачі</a></dt>
+			<dd>Start with a search to add, update, or delete a record, check accounts, &amp; renew items.
+	<form action="/cgi-bin/koha/members/member.pl" method="post">
+	<label for="member">Введіть ім'я або штрихкод</label><input id="member" type="text" size="25" name="member" />
+	<input type="submit" value="Пошук" class="submit">
+	</form></dd>
+	<dt><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Пошук у каталозі</a></dt>
+		<dd>Search bibilographic records
+<form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl"><input type="hidden" name="op" value="do_search" /><input type="hidden" name="type" value="intranet" /><input type="hidden" name="nbstatements" value="3" /><label for="keyword">Простий пошук:  </label><input type="hidden" name="marclist" value="" /><input type="hidden" name="and_or" value="and" /><input type="hidden" name="excluding" value="" /><input type="hidden" name="operator" value="contains" /><input type="text" id="keyword" name="value" size="25" /><input type="submit" value="Почати пошук" class="submit"></form>
+		<ul><li><a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;marc=1&amp;type=intranet">Детальніший пошук</a></li><!-- Display for NPL <li><a href="/item_report.php">Format Search</a></li> /Display for NPL --><li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Віртуальні полиці</a></li></ul>
+		</dd></dl></div>
+		<div id="submenu">
+<dl>
+<dt><a href="/cgi-bin/koha/acqui.simple/addbooks.pl">Каталогізація</a></dt>
+			<dd><ul>
+<!-- Display for NPL <li><a href="/cgi-bin/koha/acqui.simple/addbiblio-simple.pl">Enter Brief Record (Temp Cards)</a> </li> /Display for NPL -->
+<li><a href="/cgi-bin/koha/acqui.simple/addbiblio.pl">Advanced Cataloging</a></li>  <!-- Hide from NPL --><li><a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Надходження</a></li>
+<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Авторитетні джерела</a></li>
+<li><a href="/cgi-bin/koha/bull-home.pl">Періодичні видання</a></li> <!-- /Hide from NPL --></ul></dd></dl>
+
+<dl>
+<!-- Hide from NPL -->
+<dt><a href="/cgi-bin/koha/reports-home.pl">Облік та звіти
+			</a></dt>
+			<dd>Till reconciliation, overdues, and inventory</dd>
+<!-- /Hide from NPL -->
+</dl>
+<dl>
+<!-- Hide from NPL --><dt><a href="/cgi-bin/koha/admin-home.pl">Керування Коха</a></dt>
+<dd><ul><li><a href="/cgi-bin/koha/admin-home.pl">Домівка керування системою</a></li> <li><a href="/cgi-bin/koha/admin/systempreferences.pl">Системні налаштування</a></li> <li><a href="/cgi-bin/koha/barcodes/barcodes.pl">Утворення штрих-кодів</a></li> <li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Фонди одиниць зберігання</a></li> <li><a href="/cgi-bin/koha/import/breeding.pl">Import to reservoir</a>
+
+
+ <li><a href="/cgi-bin/koha/label-home.pl">Spine and Barcode Labels</a>
+
+
+</li></ul></dd> <!-- /Hide from NPL -->
+</dl>
+<br clear="both" /></div>
+            
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

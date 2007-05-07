@@ -1,0 +1,76 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Overdues<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main"><!-- the site -->
+
+<h2>Прострочені одиниці збереження на <!-- TMPL_VAR NAME="todaysdate" --></h2>
+
+	<form method="post" action="/cgi-bin/koha/overdue.pl">
+<div class="data">	<table>
+	<caption>Filter Results:</caption>
+	 	<tr><th scope="row"><label for="borname">Ім'я або номер квитка: </label></th><td><input type="text" name="borname" id="borname" value="<!--TMPL_VAR Name="borname"-->"></td></tr>
+		<tr><th scope="row"><label for="borcat">Код категорії позичальника:</label></th><td><select name="borcat" id="borcat"><option value="">Будь-яка</option>
+			<!-- TMPL_LOOP name="borcatloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="">Позначки позичальника:</label></th><td><!--TMPL_VAR Name="CGIflags" --></td></tr>
+	  	<tr><th scope="row"><label for="itemtype">Тип од. зб.: </label></th><td><select name="itemtype" id="itemtype"><option value="">Будь-яка</option>
+			<!-- TMPL_LOOP name="itemtypeloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="branch">Підрозділ: </label></th><td><select name="branch" id="branch">
+				<option value="">Будь-яка</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<!-- TMPL_IF name="selected" -->
+				<option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			</select></td></tr>
+		<tr><th scope="row"><label for="showall">Показувати будь-які одиниці видані зараз:</label></th><td><!--TMPL_IF Name="showall"--><input type="checkbox" name="showall" id="showall" value="показати" checked="checked"><!-- TMPL_ELSE --><input type="checkbox" name="showall" id="showall" value="показати"><!--/TMPL_IF--></td></tr>
+		<tr><th scope="row"><label for="order">Сортувати за</label></th><td><select name="order" id="order">
+<!--TMPL_IF name="order"-->
+	<option value="">Дата повернення</option>
+	<option selected="selected" value="borrower">Позичальник</option>
+<!-- TMPL_ELSE -->
+	<option selected="selected" value="">Дата повернення</option>
+	<option value="borrower">Позичальник</option>
+<!-- /TMPL_IF -->
+
+</select></td></tr>
+</table></div>
+			<input type="submit" value="Застосувати фільтр" class="submit">
+	</form>
+	</p>
+
+<table>
+	<tr>
+		<th>Дата повернення</th>
+		<th>Відвідувач</th>
+		<th>Телефон</th>
+		<th>Заголовок</th>
+		<th>Автор</th>
+	</tr>
+
+  <!-- TMPL_LOOP NAME="overdueloop" -->
+    <tr>
+      <td><!-- TMPL_VAR NAME="duedate" --></td>
+    <!-- TMPL_IF NAME="email" -->
+      <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a></td>
+    <!-- TMPL_ELSE -->
+      <td><!-- TMPL_VAR NAME="name" --></td>
+    <!-- /TMPL_IF -->
+      <td><!-- TMPL_VAR NAME="phone" --></td>
+      <td><!-- TMPL_VAR NAME="title" --></td>
+      <td><!-- TMPL_VAR NAME="author" --></td>
+    </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+
+</div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

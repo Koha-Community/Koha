@@ -1,0 +1,60 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Barcode Generator Printer Configuration<!-- TMPL_INCLUDE NAME="doc-head-barcodes-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+
+	<h1>Налаштування друкарки</h1>
+	<h3>Set the printer configuration corresponding to your environment</h3>
+	<div class="help"><ul class="notes">
+		<li>Set width and height of the label that you are going to work with.</li>
+		<li>Set your system's default DPI.</li>
+		<li>Set the page size.</li>
+		<li>Select how many columns and rows are in your page size.</li>
+		<li>Set the left margin bottom margin the page that you are going to use. This parameters will help to center the barcodes into the labels.</li>
+	</ul></div>
+
+	<form id="formulario" method="POST" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1">
+		<input type="hidden" name="saveSettings" value="1">
+		<div class="data"><table border="1" class="myTable">
+			<tr>
+				<th>Label width (in mm)</th>
+				<th>Label height (in mm)</th>
+				<th>System DPI</th>
+				<th>Розмір cторінки</th>
+				<th>Стовпці</th>
+				<th>Рядки</th>
+				<th>Margin Bottom (mm)</th>
+				<th>Поле зліва (у мм)</th>
+			<tr>
+  			<tr>
+				<td> <input id="labelWidth" type="text" name="labelWidth" size="5" value="<!-- TMPL_VAR NAME="LABEL_WIDTH" -->"></td>
+				<td><input id="labelHeigth" type="text" name="labelHeigth" size="5" value="<!-- TMPL_VAR NAME="LABEL_HEIGTH" -->"></td>
+				<td><input id="systemDpi" type="text" name="systemDpi" size="5" value="<!-- TMPL_VAR NAME="SYSTEM_DPI" -->"></td>
+				<td><select name="pageType" id="pageType" size="1">
+						<!-- TMPL_IF name="A4" -->
+							<option value="A4" selected>A4 (21 х 29,7 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="A4">A4 (21 х 29,7 см)</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Letter" -->
+							<option value="Letter" selected>Лист (21,59 х 27,94 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Letter">Лист (21,59 х 27,94 см)</option>
+						<!-- /TMPL_IF -->
+						<!-- TMPL_IF name="Legal" -->
+							<option value="Legal" selected>Legal (21,59 х 35,56 см)</option>
+				        <!-- TMPL_ELSE -->
+							<option value="Legal">Legal (21,59 х 35,56 см)</option>
+						<!-- /TMPL_IF -->
+		            </select></td>
+  			    <td><input id="columns" type="text" name="columns" size="5" value="<!-- TMPL_VAR NAME="COLUMNS" -->"></td>
+  			    <td><input id="rows" type="text" name="rows" size="5" value="<!-- TMPL_VAR NAME="ROWS" -->"></td>
+  			    <td><input id="marginBottom" type="text" name="marginBottom" size="5" value="<!-- TMPL_VAR NAME="MARGIN_TOP" -->"></td>
+  			    <td><input id="marginLeft" type="text" name="marginLeft" size="5" value="<!-- TMPL_VAR NAME="MARGIN_LEFT" -->"></td>
+  			</tr></table></div>
+<p>		<input type="submit" value="Зберегти встановлення" class="submit"></p>
+	</form>
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

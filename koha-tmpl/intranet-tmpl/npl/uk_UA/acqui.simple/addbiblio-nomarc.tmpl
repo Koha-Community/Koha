@@ -1,0 +1,36 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Cataloging: Add a Non-MARC Record<!-- TMPL_INCLUDE NAME="doc-head-close-addbiblio.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+
+<!-- TMPL_IF name="ERROR" -->
+<div class="error">Будь-ласка конкретизуйте заголовок</div>
+<!-- /TMPL_IF -->
+
+<form action="savebiblio.pl" method="post">
+<div class="data">
+<table>
+	<caption>Adding a new bibliographic record</caption>
+	<tr><th><label for="title">Заголовок:* </label></th><td><input name="title" id="title" type="text" size="40"> * Required</td>
+</tr>
+<tr><th><label for="subtitle">Підзаголовок: </label></th><td><input name="subtitle" id="subtitle" type="text" size="40"></td>
+</tr>
+<tr><th><label for="author">Автор: </label></th><td><input name="author" id="author" type="text" size="40"></td>
+</tr>
+<tr><th><label for="seriestitle">Заголовок серіального видання: </label><br>
+<i>(якщо застосовується)</i></th><td><input name="seriestitle" type="text" id="seriestitle" size="40"></td>
+</tr>
+<tr><th><label for="copyrightdate">Дата авторського права: </label></th><td><input id="copyrightdate" name="copyrightdate" type="text" size="40"></td>
+</tr>
+<tr><th><label for="abstract">Анотація: </label></th><td><textarea cols="30" id="abstract" rows="6" name="abstract"></textarea></td>
+</tr>
+<tr><th><label for="bib-notes">Нотатки: </label></th><td><textarea cols="30" rows="6" id="bib-notes" name="notes"></textarea></td>
+</tr>
+</table>
+<p><input type="submit" value="Add Record" class="submit" /></p>
+</div>
+</form>
+* Обов'язкове
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

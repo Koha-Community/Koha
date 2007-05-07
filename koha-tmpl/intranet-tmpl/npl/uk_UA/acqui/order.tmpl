@@ -1,0 +1,67 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Supplier Search Results<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main"><div class="results">Ви шукали за <span class="ex">supplier <!-- TMPL_VAR name="supplier" -->,</span> <!-- TMPL_VAR name="count" --> знайдено результатів пошуку</div>
+<table>
+<caption>Результати пошуку за постачальником</caption>
+<tr>
+	<th>Замовлення</th>
+	<th>Отримання</th>
+	<th>Company</th>
+	<th>Поличка замовлень</th>
+</tr>
+
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr>
+		<td><!-- TMPL_IF name="active" -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Додати замовлення</a><!-- TMPL_ELSE -->	Незадіяно<!-- /TMPL_IF -->
+		</td>
+		<td>
+			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Отримання</a>
+		</td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=display"><!-- TMPL_VAR name="name" --></a></td>
+		<td>
+<div class="data"><table>
+			     <!-- TMPL_IF name="loop_basket" -->
+					<tr>
+						<th scope="col">Поличка замовлень</th>
+						<th scope="col">Одиниці</th>
+						<th scope="col">Створено</th>
+						<th scope="col">Дата</th>
+						<th scope="col">&nbsp;</th>
+					</tr>
+				<!-- TMPL_ELSE -->
+				    <tr><td>Не заповнена поличка замовлень</td></tr>
+                <!-- /TMPL_IF -->
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><!-- TMPL_VAR NAME="total" --></td>
+							<td>
+								<!-- TMPL_VAR name="firstname" -->
+									<!-- TMPL_VAR name="surname" -->
+							</td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									Closed on: <!-- TMPL_VAR NAME="closedate" -->  <a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">View</a>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_IF name="active" -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">Змінити</a>
+									<!-- TMPL_ELSE -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->">Перегляд</a>
+									<!-- /TMPL_IF -->
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table></div>
+	</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<form action="supplier.pl" method="get">
+	<input type="hidden" name="supplierid" value="0" />
+	<input type="submit" class="submit" value="Add Supplier" /> 
+</form>
+</div><!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

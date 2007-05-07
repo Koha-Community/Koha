@@ -1,0 +1,30 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Patrons: Create Manual Invoice<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="members-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+
+<div id="main">
+<form class="inline" action="/cgi-bin/koha/maninvoice.pl" method="post"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" />
+	<div class="data"><table>
+	<caption>Ручна накладна</caption>
+	<tr><th>Номер позичальника</th><td><!-- TMPL_VAR Name="bornum" --></td></tr>
+	<tr><th>Тип </th><td><select name="type">
+<option value="L">Втрачена одиниця</option>
+<option value="F">Пеня</option>
+<option value="A">Плата за управління рахунком</option>
+<option value="N">Новий квиток</option>
+<option value="M">Всяка всячина</option>
+<option value="REF">Плата за повернення</option>
+</select></td></tr>
+	<tr><th>Номер од.зб. </th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th>Опис </th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th>Кількість </th><td>$<input type="text" name="amount" /></td></tr>
+	</table></div>
+<input type="submit" name="add" value="Add Charge" class="submit" />
+</form> <form class="inline" action="/cgi-bin/koha/boraccount.pl" method="get"><input type="hidden" name="bornum" value="<!-- TMPL_VAR Name="bornum" -->" /><input type="submit" class="cancel" value="Відміна"></form>
+
+
+</div>
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

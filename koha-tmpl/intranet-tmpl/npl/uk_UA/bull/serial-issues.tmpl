@@ -1,0 +1,113 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Subscription Details for <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Issues History</h1>	
+	<form class="inline" method="get" action="/cgi-bin/koha/bull-home.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit" value="Back to Subscriptions" /></form>
+	<form class="inline" method="get" action="/cgi-bin/koha/MARCdetail.pl">
+<input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="submit" class="submit" value="View Biblio Record" /></form>
+	<form class="inline" method="get" action="serial-issues.pl">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+<input type="hidden" name="selectview" value="full" />
+<input type="submit" class="submit" value="Complete view" /></form>
+
+	<!-- TMPL_LOOP name="subscription_LOOP" -->
+	
+	<div class="details">
+		<h2>Інформація про передплату для <!-- TMPL_VAR name="bibliotitle" --></h2>
+		<p>Це почалося зі <b><!-- TMPL_VAR name="histstartdate" --></b> та випускається кожен <b>
+		<!--TMPL_IF name="periodicity1" -->
+				день
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity2" -->
+				тиждень
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity3" -->
+				2 тижні
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity4" -->
+				3 тижні
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity5" -->
+				місяць
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity6" -->
+				2 місяці
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity7" -->
+				3 місяці
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity8" -->
+				квартал
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity9" -->
+				2 квартали
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity10" -->
+				рік
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="periodicity11" -->
+				2 роки
+		<!-- /TMPL_IF -->
+		</b>
+		<!--TMPL_IF name="arrival1" -->
+			на <b>Понеділок</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival2" -->
+			на <b>Вівторок</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival3" -->
+			на <b>Середа</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival4" -->
+			на <b>Четвер</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival5" -->
+			на <b>П'ятниця</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival6" -->
+			на <b>Субота</b>
+		<!-- /TMPL_IF -->
+		<!--TMPL_IF name="arrival7" -->
+			на <b>Неділя</b>
+		<!-- /TMPL_IF -->
+		для <b>
+			<!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> випусків<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> тижні<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> місяці<!-- /TMPL_IF -->
+			</b>
+		</p>
+		<p>Останнє відновлення передплати було <b><!-- TMPl_VAR name="startdate" --></b></p>
+		<!-- TMPL_IF name="enddate" --><p><b>This subscription is now ended. The last issue was received on <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF name="enddate" -->
+	<!--TMPL_UNLESS Name=fullinfo -->
+		<p><!-- TMPL_VAR name="notes" --></p>
+		<!-- TMPL_IF name="opacnote" -->
+			<h3>Звіт про випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="opacnote" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="recievedlist" -->
+			<h3>Отримані випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="recievedlist" -->
+			</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="missinglist" -->
+			<h3>Відсутні випуски</h2>
+			<p>
+				<!-- TMPL_VAR name="missinglist" -->
+			</p>
+		<!-- /TMPL_IF -->
+	</div>
+	<!-- /TMPL_UNLESS -->
+<!-- /TMPL_LOOP -->
+</div>
+
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

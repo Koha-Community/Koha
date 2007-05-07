@@ -1,0 +1,154 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- обіг: переміщення<!-- TMPL_INCLUDE NAME="doc-head-circ-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+<h1>Обіг: переміщення</h1>
+
+<!-- TMPL_IF Name="found" -->
+<h3 class="alert">Знайдено резервування<!-- TMPL_IF Name="waiting" --> (item is already <em>consigned</em>) <!-- /TMPL_IF --></h3>
+
+		<div class="items"><!-- TMPL_IF Name="waiting" -->
+		
+		<table>
+		<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+		<tr><th>Відвідувач:  </th><td>
+			<ul>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+			<li><!-- TMPL_VAR Name="surname" -->, <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR Name="firstname" --> </li>
+			<li><!-- TMPL_VAR Name="borstraddress" --><br />
+			<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
+			<li><!-- TMPL_VAR Name="borphone" --></li>
+			<!-- TMPL_IF NAME="boremail" --><li><!-- TMPL_VAR Name="boremail" --></a></li><!-- /TMPL_IF -->
+			</ul></td></tr>
+	<tr><th>Transfer to:</th><td><!-- TMPL_VAR Name="branchname" --></td></tr>
+		</table>
+<!-- /TMPL_IF -->
+
+		<!-- TMPL_IF Name="reserved" -->
+			<table>
+			<caption><a href="/cgi-bin/koha/detail.pl?type=intra&bib=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="itemtitle" --></a></caption>
+			<tr><th>Відвідувач:  </th><td>
+			<ul>
+						<li><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
+			<li><!-- TMPL_VAR Name="surname" -->, <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR Name="firstname" --> </li>
+			<li><!-- TMPL_VAR Name="borstraddress" --><br />
+			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
+			<li><!-- TMPL_VAR Name="borphone" --></li>
+			<!-- TMPL_IF NAME="boremail" --><li><!-- TMPL_VAR Name="boremail" --></a></li><!-- /TMPL_IF -->
+			</ul></td></tr>
+			<tr><th>Transfer to: </th><td><!-- TMPL_VAR Name="branchname" --></td></tr></table>
+			
+<!-- /TMPL_IF --></div>
+   
+<ul class="options">
+<li><form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+				<!-- TMPL_LOOP Name="trsfitemloop" -->
+					<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+					<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+					<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+				<!-- /TMPL_LOOP -->
+				<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+				<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="bornum" -->" />
+				<!-- TMPL_IF Name="waiting" --><input type="hidden" name="barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
+					<input type="hidden" name="request" value="KillWaiting" />
+					<input type="submit" value="Cancel reservation and then attempt transfer" class="cancel" />
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="reserved" --><input type="hidden" name="request" value="SetWaiting" />
+					<input type="submit" value="Set reserve to waiting and transfer book to <!-- TMPL_VAR Name="branchname" -->" class="submit" /><!-- /TMPL_IF -->
+			</form></li>
+
+		<!-- TMPL_IF Name="reserved" --><li><form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+
+			<!-- TMPL_LOOP Name="trsfitemloop" -->
+				<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+				<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+			<!-- /TMPL_LOOP -->
+
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="bornum" -->" />
+			<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
+			<input type="hidden" name="barcode" value=<!-- TMPL_VAR Name="barcode" --> />
+			<input type="hidden" name="request" value="KillReserved" />
+			<input type="submit" class="cancel" value="Cancel reservation and then attempt transfer" />
+			</form></li><!-- /TMPL_IF -->
+		
+		<li><form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
+			<input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR Name="tobranchcd" --> />
+			<input type="hidden" name="barcode" />
+			<!-- TMPL_LOOP Name="trsfitemloop" -->
+				<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+				<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+				<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+			<!-- /TMPL_LOOP -->
+			<input type="submit" value="Forget this item and return to transfers" class="submit" />
+			</form></li></ul>
+
+<!-- TMPL_ELSE -->
+
+	<!-- TMPL_IF NAME="allmessages" -->
+	<div class="error">
+	<ul>
+	<!-- TMPL_IF Name="reqmessage" -->
+		<!-- TMPL_IF Name="cancelled" -->
+			<li>Резервування скасовано</li>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="setwaiting" -->
+			<li>Одиниця повинна зараз чекати у підрозділі: <!-- TMPL_VAR Name="reqbrchname" --></li>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP Name="errmsgloop" -->
+		<!-- TMPL_IF Name="errbadcode" -->
+			<li>Немає одиниці зі штрих-кодом: <!-- TMPL_VAR Name="msg" --></li>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errispermanent" -->
+			<li>Будь-ласка, поверніть одиницю домашньому підрозділу: <!-- TMPL_VAR Name="msg" --></li>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errdesteqholding" -->
+			<li>Одиниця вже знаходиться у підрозділі призначення.</li>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF Name="errwasreturned" -->
+			<li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR Name="bornum" -->"><!-- TMPL_VAR Name="surname" -->, <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> (<!-- TMPL_VAR Name="borcnum" -->)</a> and has been returned.</li>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="wastransferred" --><li>Item has been transferred</li><!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</ul></div><!-- /TMPL_IF -->
+	<form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
+	<h3>Transfer</h3><div class="data">
+	<table>
+<tr><th>Enter Item Barcode</th><td><input name="barcode" size="14" maxlength="14" class="unfocus" onfocus="this.className='focus'" onblur="this.className='unfocus'" /></td></tr>
+<tr><th>Destination Branch:</th><td><select name="tobranchcd">
+			<!-- TMPL_LOOP Name="branchoptionloop" -->
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR Name="code" -->" selected="selected"><!-- TMPL_VAR Name="name" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR Name="code" -->"><!-- TMPL_VAR Name="name" --></option><!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+		</select></td></tr></table>
+	<input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
+	<!-- TMPL_LOOP Name="trsfitemloop" -->
+		<input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+		<input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+		<input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+	<!-- /TMPL_LOOP -->
+	<input type="submit" class="submit" value="Transfer" /></div>
+	</form>
+	
+	<!-- TMPL_IF Name="trsfitemloop" -->
+		<table>
+		<caption>Переміщені одиниці</caption>
+		<tr><th>Штрих-код</th><th>Заголовок</th><th>Автор</th><th>Тип </th><th>від</th><th>до</th></tr>
+		<!-- TMPL_LOOP Name="trsfitemloop" -->
+			<!-- TMPL_IF NAME="color" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+			<td><a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR Name="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR Name="barcode" --></a></td>
+			<td><!-- TMPL_VAR Name="title" --></td>
+			<td><!-- TMPL_VAR Name="author" --></td>
+			<td><!-- TMPL_VAR Name="itemtype" --></td>
+			<td><!-- TMPL_VAR Name="frbrname" --></td>
+			<td><!-- TMPL_VAR Name="tobrname" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

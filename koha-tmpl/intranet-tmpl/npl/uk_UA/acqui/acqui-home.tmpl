@@ -1,0 +1,107 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- надходження<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="acqui-full-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+
+<h1>Надходження</h1>
+	<!-- TMPL_IF name="nobudget" -->
+		<div class="error">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a></div>
+	<!-- TMPL_ELSE -->
+<div class="details">
+<form action="/cgi-bin/koha/acqui/order.pl" method="post"><table>
+<caption>Start, Recieve, or Modify Any Order</caption>
+<tr>
+	<th><label for="supplier">Supplier ID or Name</label></th>
+	<td><input type="text" size="25" name="supplier" id="supplier" /></td>
+</tr>
+</table>
+<input type="submit" class="submit" value="Пошук"> (hint: you must search for a supplier to add a new one)</form>
+<p>	<form action="histsearch.pl" method="get"><input type="submit" class="submit" value="Search Order History" /></form></p>
+</div>
+<!-- /TMPL_IF -->
+
+
+<!-- currencies-->
+<div class="details">
+<!-- TMPL_IF NAME="loop_currency" -->
+<h4>Грошові одиниці</h4>
+<!-- TMPL_ELSE -->
+<h4>No Currencies Configured</h4>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="loop_currency" -->
+<table>
+	<!-- TMPL_LOOP name="loop_currency" -->
+		<tr>
+			<th>
+				<label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
+			</th>
+			<td>	<form action="/cgi-bin/koha/currency.pl" method="post">
+	<input type="hidden" name="type" value="change" />
+				<input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />	</form>
+			</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table><input type="submit" class="submit" value="Update Exchange Rates" /><!-- /TMPL_IF -->
+<a href="/cgi-bin/koha/admin/currency.pl?op=add_form">Додати грошову одиницю</a>
+</div>
+
+<!-- suggestions -->
+<div class="details">
+	<h4>Pending Suggestions</h4>
+		<!-- TMPL_IF name="suggestion" -->
+			<!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage Suggestions</a>
+		<!-- TMPL_ELSE -->
+			Немає очікуючих пропозицій
+		<!-- /TMPL_IF -->
+</div>
+
+<!-- showbudget-->
+	<!-- TMPL_IF name="nobudget" -->
+		<div class="error">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a></div>
+	<!-- TMPL_ELSE -->
+	<table>
+		<caption>Budgets and Bookfunds</caption>
+			<tr>
+				<th>Витрати</th>
+				<th>від</th>
+				<th>до</th>
+				<th>Загалом</th>
+				<th>Витрачено</th>
+				<th>Зайнято</th>
+				<th>Дост.</th>
+			</tr>
+			<!-- TMPL_LOOP name="loop_budget" -->
+				<tr>
+					<td><!-- TMPL_VAR name="bookfundname" --></td>
+					<td><!-- TMPL_VAR name="startdate" --></td>
+					<td><!-- TMPL_VAR name="enddate" --></td>
+					<td><!-- TMPL_VAR name="budgetamount" --></td>
+					<td><!-- TMPL_VAR name="spent" --></td>
+					<td><!-- TMPL_VAR name="comtd" --></td>
+					<td><!-- TMPL_VAR name="avail" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+			<tr>
+				<tfoot>
+				<th colspan="3">Загалом</th>
+				<td><!-- TMPL_VAR name="total" --></td>
+				<td><!-- TMPL_VAR name="totspent" --></td>
+				<td><!-- TMPL_VAR name="totcomtd" --></td>
+				<td><!-- TMPL_VAR name="totavail" --></td>
+				</tfoot>
+			</tr>
+		</table><!-- /TMPL_IF -->
+<p>		Use your reload button [ctrl + r] to get the most recent figures.
+		Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
+
+<div class="help">
+		<h4>Допомога</h4> <p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
+		<p>Щоб замовити одиницю, Вам потрібно встановити, чи існує вже такий бібліотечний запис, і або додати одиницю, або створити новий бібліотечний запис і аж тоді додати одиницю.  </p>
+		<p>To start a new shopping basket with a new supplier return to this page and just start a new supplier search.</p>
+		<p>To close off a shopping basket click on "view shopping baskets" or search above, and the click on "confirm basket".</p>
+</div></div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

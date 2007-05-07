@@ -1,0 +1,279 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- <!-- TMPL_IF NAME=id -->Оновлення: <!-- TMPL_VAR name="name" --><!-- TMPL_ELSE -->Додати постачальника<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+<!--TMPL_IF Name="enter"-->
+<form action="updatesupplier.pl" method="post">
+<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+
+<!-- TMPL_IF NAME="id" -->
+	<h1>Оновлення: <!-- TMPL_VAR name="name" --></h1>
+<!-- TMPL_ELSE -->
+	<h1>Додати постачальника</h1>
+<!-- /TMPL_IF -->
+
+<div class="data"><table>
+	<caption>Company Details</caption>
+	<tr>
+		<th><label for="company">Назва компанії</label></td>
+		<td><input type="text" size="20" id="company"  name="company" value="<!-- TMPL_VAR name="name" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_postal">Поштова адреса</label></th>
+		<td>
+			<textarea name="company_postal" id="company_postal" cols="20" rows="3"><!-- TMPL_VAR name="postal" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="physical">Фізична адреса</label></th>
+		<td><textarea id="physical" name="physical" cols="20" rows="4"><!-- TMPL_VAR name="address1" --><!-- TMPL_VAR name="address2" --><!-- TMPL_VAR name="address3" --><!-- TMPL_VAR name="address4" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_phone">Телефон</label></th>
+		<td><input type="text" size="20" id="company_phone" name="company_phone" value="<!-- TMPL_VAR name="phone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_fax">Факс</label></th>
+		<td><input type="text" size="20" id="company_fax" name="company_fax" value="<!-- TMPL_VAR name="fax" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="website">Web Site</label></th>
+		<td><input type="text" size="20" name="website" id="website" value="<!-- TMPL_VAR name="url" -->" />
+		</td>
+	</tr>
+</table></div>
+<div class="data"><table>
+<caption>Contact Details</caption>
+	<tr>
+		<th><label for="company_contact_name">Відповідальна особа</label></th>
+		<td><input type="text" size="20" id="company_contact_name" name="company_contact_name" value="<!-- TMPL_VAR name="contact" -->" /></td>
+	</tr>
+	<tr>
+		<th><label for="company_contact_position">Посада</label></th>
+		<td><input type="text" size="20" id="company_contact_position" name="company_contact_position" value="<!-- TMPL_VAR name="contpos" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_phone">Телефон</label></th>
+		<td><input type="text" size="20" id="contact_phone" name="contact_phone" value="<!-- TMPL_VAR name="contphone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_phone_2">Додатковий телефон</label></th>
+		<td><input type="text" size="20" id="conatct_phone_2" name="contact_phone_2" value="<!-- TMPL_VAR name="contaltphone" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="contact_fax">Факс</label></th>
+		<td><input type="text" size="20" id="contact_fax"  name="contact_fax" value="<!-- TMPL_VAR name="contfax" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="company_email">Електронічна пошта</label></th>
+		<td><input type="text" size="20" id="company_email" name="company_email" value="<!-- TMPL_VAR name="contemail" -->" />
+		</td>
+	</tr>
+	<tr>
+		<th><label for="notes1">Нотатки </label></th>
+		<td><textarea id="notes1" name="notes" cols="20" rows="4"><!-- TMPL_VAR name="contnotes" --></textarea>
+		</td>
+	</tr>
+</table></div>
+
+<div class="data"><table>
+	<caption>Current Status</caption>
+	<tr>
+		<th><label for="status">Постачальником є</label></th>
+		<td><input type="radio" id="status" name="status" value="1"<!-- TMPL_IF name="active" --> checked="checked"<!-- /TMPL_IF --> />Задіяно <input type="radio" name="status" value="0"<!-- TMPL_UNLESS name="active" --> checked="checked"<!-- /TMPL_UNLESS --> />Незадіяно</td>
+	</tr>
+</table></div>
+
+<div class="data">
+<table>
+	<caption>Ordering Information</caption>
+	<tr>
+		<th><label for="publishers_imprints">Видавці та відбитки</label></th>
+		<td><textarea name="publishers_imprints" id="publishers_imprints" cols="20" rows="4"><!-- TMPL_VAR name="specialty" --></textarea>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="list_currency">Прейскурант у</label></th>
+		<td>
+			<select name="list_currency" id="list_currency" size="1">
+			<!-- TMPL_LOOP name="loop_pricescurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<th><label for="invoice_currency">У накладній ціни у</label></th>
+		<td>
+			<select name="invoice_currency" id="invoice_currency" size="1">
+			<!-- TMPL_LOOP name="loop_invoicecurrency" -->
+				<!-- TMPL_VAR name="currency" -->
+			<!-- /TMPL_LOOP -->
+			</select>
+		</td>
+	</tr>
+	<!-- TMPL_IF NAME="GST" --><tr>
+		<th><label for="gst">Облікується ПДВ</label></th>
+		<td>
+			<input type="radio" id="gst" name="gst" value="1"<!-- TMPL_IF name="gstreg" --> checked="checked"<!-- /TMPL_IF --> />Так <input type="radio" name="gst" value="0"<!-- TMPL_UNLESS name="gstreg" --> checked="checked"<!-- /TMPL_UNLESS --> />Ні
+		</td>
+	</tr>
+	<tr>
+		<th><label for="list_gst">Прейскурант включає ПДВ</label></th>
+		<td>
+			<input type="radio" id="list_gst" name="list_gst"<!-- TMPL_IF name="listincgst" --> checked="checked"<!-- /TMPL_IF --> />Так <input type="radio" name="list_gst" value="0"<!-- TMPL_UNLESS name="listincgst" --> checked="checked"<!-- /TMPL_UNLESS --> />Ні
+		</td>
+	</tr>
+	<tr>
+		<th><label for="invoice_gst">Накладна включає ПДВ</label></th>
+		<td>
+			<input type="radio" id="invoice_gst" name="invoice_gst" value="1"<!-- TMPL_IF name= "invoiceincgst" --> checked="checked"<!-- /TMPL_IF --> />Так <input type="radio" name="invoice_gst" value="0"<!-- TMPL_UNLESS name="invoiceincgst" --> checked="checked"<!-- /TMPL_UNLESS --> />Ні
+		</td>
+	</tr><!-- TMPL_ELSE -->
+	<input type="hidden" name="gst" value="0" />
+	<input type="hidden" name="list_gst" value="0" />
+	<input type="hidden" name="invoice_gst" value="0" />
+	<!-- /TMPL_IF -->
+	<tr>
+		<th><label for="discount">Обліковий відсоток</label></th>
+		<td><input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR name="discount" -->" /> %</td>
+	</tr>
+	<tr>
+		<th>
+			<label for="notes2">Нотатки </label></th><td>
+			<textarea cols="40" rows="4" name="notes" id="notes2"><!-- TMPL_VAR NAME="notes" --></textarea>
+</td>
+	</tr>
+</table>
+</div>
+<input type="submit" value="Зберегти зміни" class="submit">
+</form>
+
+<!--TMPL_ELSE-->
+
+	<h1>Інформація для: <!-- TMPL_VAR NAME="name" --></h1>
+<form class="inline" action="recieveorder.pl" method="get"><input type="hidden" name="supplierid" value="<!--TMPL_VAR Name="id"-->" /><input type="submit" class="submit" value="Receive Parcel" /></form>
+
+<form class="inline" action="order.pl" method="get"><input type="hidden" name="supplier" value="<!--TMPL_VAR Name="name"-->" /><input type="submit" class="submit" value="Manage Orders" /></form>
+
+<form class="inline" action="supplier.pl" method="get"><input type="hidden" name="supplierid" value="<!--TMPL_VAR Name="id"-->" /><input type="submit" class="submit" value="Edit Supplier" /></form>
+
+	<div class="data">
+	<table>
+		<caption>Company Details</caption>
+		<tr><th>
+			Company Name: </th><td>
+			<!-- TMPL_VAR NAME="name" -->
+		</td></tr>
+		<tr><th>
+			Поштова адреса: </th><td>
+				<!-- TMPL_VAR NAME="postal" -->
+		</td></tr>
+		<tr><th>
+			Фізична адреса:  </th><td>
+			<!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" -->
+		</td></tr>
+		<tr><th>
+			Телефон:  </th><td>
+			<!-- TMPL_VAR NAME="phone" -->
+		</td></tr>
+		<tr><th>
+			Факс: </th><td>
+			<!-- TMPL_VAR NAME="fax" -->
+		</td></tr>
+		<tr><th>
+			Website: </th><td>
+			<!-- TMPL_VAR NAME="url" -->
+		</td></tr>
+		</table>
+		
+		 <table><caption>Contact Dtails</caption>
+		<tr><th>
+			Contact Name: </th><td>
+			<!-- TMPL_VAR NAME="contact" -->
+		</td></tr>
+		<tr><th>
+			Position: </th><td>
+			<!-- TMPL_VAR NAME="contpos" -->
+		</td></tr>
+		<tr><th>
+			Телефон:  </th><td>
+			<!-- TMPL_VAR NAME="contphone" -->
+		</td></tr>
+		<tr><th>
+			Додатковий телефон:  </th><td>
+			<!-- TMPL_VAR NAME="contaltphone" -->
+		</td></tr>
+		<tr><th>
+			Факс: </th><td>
+			<!-- TMPL_VAR NAME="contfax" -->
+		</td></tr>
+		<tr><th>
+			Електронна пошта:  </th><td>
+			<!-- TMPL_VAR NAME="contemail" -->
+		</td></tr>
+		<tr><th>
+			Нотатки:  </th><td>
+			<!-- TMPL_VAR NAME="contnotes" -->
+		</td></tr>
+		</table>
+		
+		 <table><caption>Current Status</caption>
+		<tr><th>
+			Supplier is: </th><td>
+				<!-- TMPL_IF name="active" -->
+					Задіяно
+				<!-- TMPL_ELSE -->
+					Незадіяно
+				<!-- /TMPL_IF -->
+		</td></tr>
+		</table> 
+		
+		<table><caption>Ordering Information</caption>
+		<tr><th>
+			Publishers and Imprints: </th><td>
+			<!-- TMPL_VAR NAME="specialty" -->
+		</td></tr>
+		<tr><th>
+			List Prices are: </th><td><!--TMPL_VAR Name="listprice"-->
+		</td></tr>
+		<tr><th>
+			Invoice Prices are: </th><td><!--TMPL_VAR Name="invoiceprice"-->
+		</td></tr>
+<!-- TMPL_IF NAME="GST" -->		<tr><th>
+			GST Registered: </th><td>
+				<!-- TMPL_IF name="gstreg" -->Так<!--TMPL_ELSE-->Ні<!-- /TMPL_IF -->
+		</td></tr>
+		<tr><th>
+			List Item Price Includes GST: </th><td>
+				<!-- TMPL_IF name="listincgst" -->Так<!--TMPL_ELSE-->Ні<!-- /TMPL_IF -->
+		</td></tr>
+		<tr><th>
+			Invoice Item Price Includes GST: </th><td>
+				<!-- TMPL_IF name= "invoiceincgst" -->Так<!--TMPL_ELSE-->Ні<!-- /TMPL_IF -->
+		</td></tr><!-- /TMPL_IF -->
+		<tr><th>
+			Discount: </th><td>
+			<!-- TMPL_VAR NAME="discount" --> %
+		</td></tr>
+	<tr>
+		<th>Нотатки:  </th><td>
+		<!-- TMPL_VAR NAME="notes" -->
+</td>
+	</tr>
+	</table>
+</div>
+<!--/TMPL_IF-->
+
+</div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

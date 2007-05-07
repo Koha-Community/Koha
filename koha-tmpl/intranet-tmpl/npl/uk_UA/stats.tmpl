@@ -1,0 +1,34 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Statistics<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+	<div id="main">
+	<!-- TMPL_IF NAME="loop1" -->
+	<table>
+	<caption>Statistics</caption>
+		<tr>
+			<th>Найменування </th>
+			<th>Опис </th>
+			<th>Тип </th>
+			<th>Дата/час</th>
+			<th>Кількість </th>
+			<th>Підрозділ</th>
+		<tr>
+		<!-- TMPL_LOOP name="loop1" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<td><!-- TMPL_VAR NAME="description" --></td>
+			<td><!-- TMPL_VAR NAME="type" --></td>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><!-- TMPL_VAR NAME="amount" --></td>
+			<td><!-- TMPL_VAR NAME="branch" --></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		<p>Заплачено загалом: <!-- TMPL_VAR NAME="total" --><br>Загалом списано: <!-- TMPL_VAR NAME="totalw" --></p>
+	<!-- TMPL_ELSE -->
+	<h3>No statistics to report</h3>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

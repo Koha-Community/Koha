@@ -1,0 +1,79 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Shopping Basket For: <!-- TMPL_VAR name="bookselname" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+ <h1>Shopping Basket <!-- TMPL_VAR name="basketno" --> For: <!-- TMPL_VAR name="bookselname" --></h1>
+
+<a href="newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;sub=<!-- TMPL_VAR NAME="parsub" -->">Додати новий бібліотечний запис</a> | 
+	<a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Перегляд полички замовлень</a> | 
+	
+<form class="inline" action="/cgi-bin/koha/acqui/newbasket2.pl">
+<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
+<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
+<label for="acquisearch">Новий пошук:</label> <input type="text"  size="25" id="acquisearch" name="search" />
+<input type="submit" value="Пошук" class="submit"></form>
+
+
+<h3>You searched for <span class="ex">
+<!-- TMPL_LOOP name="loopsearch" -->
+	<!-- TMPL_VAR name="key" --> <!-- TMPL_VAR name="value" -->
+<!-- /TMPL_LOOP -->
+</span>
+</h3>
+<div id="results">Results <!-- TMPL_VAR name="dispnum" --> to <!-- TMPL_VAR name="offset2" --> of <!-- TMPL_VAR name="count" --> results displayed.
+
+<table>
+	<tr>
+		<th>Заголовок</th>
+		<th>Автор</th>
+		<th>&copy;</th>
+		<th>Count</th>
+		<th>Розташування</th>
+	</tr>
+
+<!-- TMPL_LOOP name="loopresult" -->
+	<tr bgcolor="<!-- TMPL_VAR name="toggle" -->">
+		<td>
+			<a href="/cgi-bin/koha/acqui/newbiblio.pl?sub=<!-- TMPL_VAR NAME="sub" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+					<!-- TMPL_VAR NAME="title" -->
+					</a>
+		</td>
+		<td>
+			<a href="/cgi-bin/koha/search.pl?author=<!-- TMPL_VAR name="word" -->&amp;type=<!-- TMPL_VAR name="type" -->">
+			<!-- TMPL_VAR name="author" -->
+			</a>
+		</td>
+		<td>
+			<!-- TMPL_VAR name="copyright" -->
+		</td>
+		<td>
+				<!-- TMPL_VAR NAME="itemcount" -->
+			</td>
+			<td>
+				<!-- TMPL_IF name="use-location-flags-p" -->
+				<!-- TMPL_IF name="location-only" --><!-- TMPL_VAR NAME="location-only" --><br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="on-loan-p" -->У позику<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="lost-p" -->Втрата<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="mending-p" -->На реставрації<br><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="in-transit-p" -->В дорозі<br><!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_VAR NAME="location" -->
+				<!-- /TMPL_IF -->
+			</td>
+	</tr>
+
+<!-- /TMPL_LOOP -->
+
+</table>
+	<!-- TMPL_IF name="previous" -->
+	<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR NAME="num" -->&amp;offset=<!-- TMPL_VAR NAME="previous" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;search=<!-- TMPL_VAR NAME="title" -->&amp;author=<!-- TMPL_VAR NAME="author" -->">
+	&lt;&lt;Попередні
+	</a>
+	<!-- /TMPL_IF -->
+<!-- TMPL_IF name="offsetover" -->
+<a class="nav" href="/cgi-bin/koha/acqui/newbasket2.pl?num=<!-- TMPL_VAR name="num" -->&amp;offset=<!-- TMPL_VAR name="offset" -->&amp;type=<!-- TMPL_VAR name="type" -->&amp;id=<!-- TMPL_VAR name="id" -->&amp;basket=<!-- TMPL_VAR name="basket" -->&amp;search=<!-- TMPL_VAR name="title" -->&amp;author=<!-- TMPL_VAR name="author" -->">Наступні &gt;&gt;</a>
+<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,0 +1,133 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Коха -- авторитетні джерела
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<div id="main-compact">
+	<h1>Результати пошуку за авторитетним джерелом</h1>
+	<div class="details">
+		<form name="f" action="/cgi-bin/koha/authorities/auth_finder.pl" method="post">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="type" value="intranet" />
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+	<div class="details">
+		<h2>Пошук за</h2>
+		<p>
+			<label for="authtypecode">Тип авторитетного джерела </label>
+			<!-- TMPL_VAR NAME="authtypecode" -->
+			<input type="hidden" id="authtypecode" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		</p>
+		<p>
+			<label for="mainentryaoperator">Основне входження ($a тільки)</label>
+			<select name="operator" id="mainentryaoperator">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+			<input type="hidden" name="marclist" value="$a" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+		</p>
+		<p>
+			<label for="mainentryoperator">Основне входження </label>
+			<select name="operator" id="mainentryoperator">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+			<input type="hidden" name="marclist" value="mainentry" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+		</p>
+		<p>
+			<label for="anywhereoperator">Де-небудь </label>
+			<select name="operator" id="">
+				<option value="contains">містить</option>
+				<option value="start">починається</option>
+			</select>
+			<input type="text" name="value">
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
+			<input type="hidden" name="tagid" value="<!-- TMPL_VAR NAME="tagid" -->" />
+		</p>
+        <p>(додавайте символ % в кінці Вашого слова, якщо Ви хочете використовувати усікання справа: при введені теор% буде знайдено теорія та теорії)</p>
+		<p>
+			<input type="submit" value="Почати пошук" class="submit">
+		</p>
+	</div>
+</form>
+	</div>
+
+		<div class="results">
+			<p>
+				<!-- TMPL_IF name="displayprev" -->
+					<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">&lt;&lt;Prev</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_LOOP NAME="numbers" -->
+					<!-- TMPL_IF name="highlight" -->
+						<span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
+					<!-- TMPL_ELSE -->
+						<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+				<!-- TMPL_IF name="displaynext" -->
+					<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+						Наступні &gt;&gt;</a>
+				<!-- /TMPL_IF -->
+			</p>
+			<p>
+				<!-- TMPL_IF name="total" -->
+					&nbsp;<b>Результати пошуку з <!-- TMPL_VAR NAME="from" --> до <!-- TMPL_VAR NAME="to" --> зі <!-- TMPL_VAR NAME="total" --></b><br><br>
+				<!-- TMPL_ELSE -->
+					&nbsp; Нічого не знайдено.<br>
+				<!-- /TMPL_IF -->
+			</p>
+		</div>
+		<div id="resultlist">
+			<table>
+				<tr>
+					<th width="80%">Authorized Headings</th>
+					<th width="10%">Використано</th>
+					<th width="10%">Отримати це!</th>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>
+						<a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=<!-- TMPL_VAR NAME="index" -->&amp;tagid=<!-- TMPL_VAR NAME="tagid" -->')" class="button authority">Очистити</a>
+					</td>
+				<!-- TMPL_LOOP NAME="result" -->
+					<tr>
+						<td><!-- TMPL_VAR NAME="summary" --></td>
+						<td><!-- TMPL_VAR NAME="used" --></td>
+						<td>
+						<a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->')">Вибрати</a>
+						</td>
+					</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+	
+		</div>
+		<div class="results">
+				<!-- TMPL_IF name="displayprev" -->
+					<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->&op=do_search&type=intranet">&lt;&lt; Попередній</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_LOOP NAME="numbers" -->
+					<!-- TMPL_IF name="highlight" -->
+						<span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
+					<!-- TMPL_ELSE -->
+						<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->&op=do_search&type=intranet"><!-- TMPL_VAR NAME="number" --></a>
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+				<!-- TMPL_IF name="displaynext" -->
+					<a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->&op=do_search&type=intranet">Наступні &gt;&gt;</a>
+				<!-- /TMPL_IF -->
+</div>
+
+<script language="JavaScript" type="text/javascript">
+
+function jumpfull(page)
+{	
+	window.open(page,'','width=10,height=10');
+}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

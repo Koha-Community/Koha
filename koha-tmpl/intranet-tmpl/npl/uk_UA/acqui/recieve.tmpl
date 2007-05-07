@@ -1,0 +1,98 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Receipt Summary for : <!-- TMPL_VAR name="name" -->, Invoice <!-- TMPL_VAR name="invoice" --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+	<h1>Receipt parcel for <em><!-- TMPL_VAR NAME="name" --></em></h1>
+	
+	<ul class="notes">
+		<li><strong>Invoice:</strong> <!-- TMPL_VAR NAME="invoice" --></li>
+        <li><strong>Дата:</strong> <!-- TMPL_VAR name="formatteddatereceived"--></li>
+	</ul>
+	
+	<div class="basket">
+	<h2> Одиниць у пакеті</h2>
+	<p>
+	<!-- TMPL_VAR NAME="countreceived" --> records received
+	</p>
+	
+	<table>
+		<tr>
+			<th>Поличка замовлень</th>
+			<th>Заголовок</th>
+			<th>Розрахункова вартість</th>
+			<th>Замовлена кількість</th>
+			<th>Вартість перевезення</th>
+			<th>Фактично</th>
+			<th>Кількість</th>
+			<th>Загалом</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="loop_received" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&catview=yes&datereceived=<!-- TMPL_VAR name="datereceived" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td></td>
+				<td class="number"><!-- TMPL_VAR NAME="unitprice" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="total" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		<tr>
+			<td colspan="5" rowspan="3">
+			&nbsp;
+			</td>
+			<td colspan="2" class="total"><b>GST:</b></td>
+			<td><!-- TMPL_VAR NAME="gst" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="total"><b>FREIGHT:</b></td>
+			<td><!-- TMPL_VAR NAME="freight" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="total"><b>TOTAL:</b></td>
+			<td><!-- TMPL_VAR NAME="grandtot" --></td>
+		</tr>
+	</table>
+	<div class="help">
+	<strong>Note: </strong>Підсумок знизу сторінки повинен бути в межах декількох копійок підсумку для накладної.
+	</div>
+	</div>
+	
+	<div class="basket">
+	<h2> Очікуючі замовлення </h2>
+		<form action="/cgi-bin/koha/acqui/acquire.pl">
+			<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
+			<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
+			<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
+			<input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+			
+			<b>Пошук за ISBN або заголовком:</b> <input type="text" size="25" name="recieve">
+		</form>
+	<p>
+	<form action="" method="get" name="orderform">
+	
+	<table class="small">
+		<tr>
+			<th>Поличка замовлень</th>
+			<th>Заголовок</th>
+			<th>Ordered</th>
+			<th>Отримано</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- TMPL_VAR NAME="countpending" --> lines
+		<!-- TMPL_LOOP NAME="loop_orders" -->
+			<tr bgcolor="<!-- TMPL_VAR NAME="color" -->">
+				<td class="number"><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><!-- TMPL_VAR NAME="title" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
+				<td class="number"><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+                <td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR name="datereceived"-->&catview=yes" class="button acquisition">Recieve</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+</div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

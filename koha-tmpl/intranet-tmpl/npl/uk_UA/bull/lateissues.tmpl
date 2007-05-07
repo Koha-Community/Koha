@@ -1,0 +1,44 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Serials Subscriptions<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-topmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-nav.inc" -->
+
+<div id="main">
+
+	<h1>Затримані випуски</h1>
+	<div class="details">
+		<form action="lateissues.pl" method="post">
+			<label for="supplierid">Choose a Supplier: </label><!-- TMPL_VAR name="CGIsupplier" -->
+				<!-- TMPL_IF name="phone" -->Телефон: <!-- TMPL_VAR name="phone" -->; <!-- /TMPL_IF -->
+				<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" -->; <!-- /TMPL_IF -->
+				<!-- TMPL_IF name="contemail" --><a href="mailto:<!-- TMPL_VAR name="contemail" -->"><!-- TMPL_VAR name="contemail" --></a><!-- /TMPL_IF -->
+			<input type="submit" value="Виконати" class="submit">
+		</form>
+	</div>
+	<table>
+		<tr>
+			<th>Заголовок</th>
+			<th>Номер випуску</th>
+			<th>Затримка з</th>
+			<th colspan="2">&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP name="lateissues" -->
+			<!-- TMPL_IF name="odd" -->
+			<tr>
+			<!-- TMPL_ELSE -->
+			<tr class="highlight">
+			<!-- /TMPL_IF -->
+			<td><!-- TMPL_IF name="Title" --><a href="/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->"><!-- TMPL_VAR name="Title" --></a><!-- /TMPL_IF --></td>
+					<td><!-- TMPL_VAR name="serialseq" --></td>
+					<td><!-- TMPL_VAR name="planneddate" --></td>
+					<td>
+						<a href="/cgi-bin/koha/bull/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Details</a></td><td>
+						<a href="/cgi-bin/koha/bull/statecollection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Отримання</a>
+					</td>
+						</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

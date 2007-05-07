@@ -1,0 +1,120 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Receipt Summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+
+<h1>Receipt Summary for: <i><!-- TMPL_VAR NAME="name" --></i> Invoice <i><!-- TMPL_VAR NAME="invoice" --></i></h1>
+
+	<!-- TMPL_IF name="count" -->
+		<form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
+		<h1><!-- TMPL_VAR NAME="ordernumber" --> - отримання замовлення</h1>
+		<h4>Замовлення на покупку для: <!-- TMPL_VAR NAME="name" --></h4>
+		<h5>Замовлення роміщене: <!-- TMPL_VAR NAME="date" --></h5>
+		<div class="box">
+				<h2>Catalogue Details</h2>
+			<table><tr>
+				<td><strong>Заголовок: </strong></td><td> 
+				<!-- TMPL_VAR NAME="title" -->
+			</td></tr>
+			<tr>
+				<td><strong>Автор: </strong></td><td>
+				<!-- TMPL_VAR NAME="author" -->
+			</td></tr>
+			<tr>
+				<td><strong>Дата авторського права: </strong></td><td>
+				<!-- TMPL_VAR NAME="copyrightdate" -->
+			</td></tr>
+			<tr>
+				<td><strong>Формат: </strong></td><td>
+				<!-- TMPL_VAR NAME="itemtype" -->
+			</td></tr>
+			<tr>
+				<td><strong>ISBN: </strong></td><td>
+				<!-- TMPL_VAR NAME="isbn" -->
+			</td></tr>
+			<tr>
+				<td><strong>Series:</strong></td><td>
+				<!-- TMPL_VAR NAME="seriestitle" -->
+			</td></tr></table>
+			<p>Enter barcode(s) and branch if you want to add item(s) immediatly</p>
+			<table><tr>
+				<td><label for="">Підрозділ:</label></td>
+				<td><!-- TMPL_VAR NAME="CGIbranch" --></td>
+			</tr>
+			<tr>
+				<td><label for="">Item Barcode: *</label></td>
+				<td><input type="text" size="20" name="barcode" value="<!-- TMPL_VAR name="barcode" -->" /></td>
+			</tr></table>
+		</div>
+		<div class="box">
+			<h2>Подробиці для обліку</h2>
+			<table><tr>
+				<td><strong>Bookfund:</strong></td><td>
+				<!-- TMPL_VAR NAME="bookfund" -->
+			</td></tr>
+			<tr>
+				<td><strong>Quantity Ordered:</strong></td><td>
+				<!-- TMPL_VAR NAME="quantity" -->
+				<input type="hidden" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
+			</td></tr>
+			<tr>
+				<td><label for="">Quantity Received: *</label></td>
+				<td><input type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+			</td></tr>
+			<tr>
+				<td><label for="">Replacement Cost:</label></td>
+				<td><input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
+			</td></tr>
+			<tr>
+				<td><strong>Budgeted Cost:</strong></td><td>
+				<!-- TMPL_VAR NAME="ecost" -->
+			</td></tr>
+			<tr>
+				<td><label for="">Actual Cost: *</label></td>
+				<td><input type="text" size="20" name="cost" value="<!-- TMPL_IF name="unitprice"--><!-- TMPL_VAR NAME="unitprice" --><!-- TMPL_ELSE --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF -->">
+			</td></tr>
+			<tr>
+				<td><strong>Invoice Number:</strong></td>
+					<td><!-- TMPL_VAR NAME="invoice" -->
+                <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+                <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived" -->">
+                </td></tr>
+			<tr>
+				<td><strong>Нотатки: </strong></td>
+				<td><!-- TMPL_VAR NAME="notes" -->
+			</td></tr></table>
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+				<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->">
+				<input type="hidden" name="biblioitemnum" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+				<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
+				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
+				<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
+<p><input type="submit" class="submit" value="Зберегти"> (that all costs are for 1 item)</p>
+		</div>
+		</form>
+	<!-- TMPL_ELSE -->
+		<table>
+		<tr>
+			<th>Поличка замовлень</th>
+			<th>ISBN</th>
+			<th>TITLE</th>
+			<th>AUTHOR</th>
+			<th>Кількість</th>
+			<th>Отримано</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="loop" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><!-- TMPL_VAR NAME="isbn" --></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td><!-- TMPL_VAR NAME="quantity" --></td>
+				<td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	<!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
