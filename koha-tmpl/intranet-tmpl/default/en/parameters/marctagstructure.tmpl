@@ -68,11 +68,11 @@
 		<p><label>Tag<label><!-- TMPL_IF Name="searchfield" -->
 		<!-- TMPL_VAR NAME="searchfield" -->
 		<!-- TMPL_ELSE -->
-		<input type="text" name="tagfield" value="" escape="HTML" -->
+		<input type="text" name="tagfield" value="" escape="HTML">
 		<!-- /TMPL_IF -->
 		</p>
-		<p><label>Lib for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="80" maxlength="100"></p>
-		<p><label>Lib for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="80" maxlength="100"></p>
+		<p><label>Description for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="80" maxlength="100"></p>
+		<p><label>Description for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="80" maxlength="100"></p>
 		<p><label>Repeatable</label><!-- TMPL_VAR NAME="repeatable" --></p>
 		<p><label>Mandatory</label><!-- TMPL_VAR NAME="mandatory" --></p>
 		<p><label>Authorised value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
@@ -124,7 +124,12 @@
 		<select name="frameworkcode">
 			<option value="">Default</option>
 		<!-- TMPL_LOOP NAME="frameworkloop" -->
-			<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="frameworktext" --></option>
+                    <!-- TMPL_IF NAME="selected" -->
+			<option value="<!-- TMPL_VAR NAME="value" -->" selected>
+                    <!-- TMPL_ELSE -->
+			<option value="<!-- TMPL_VAR NAME="value" -->" >
+                    <!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="frameworktext" --></option>
 		<!-- /TMPL_LOOP -->
 		</select>
 		<input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
