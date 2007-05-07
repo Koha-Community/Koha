@@ -1,24 +1,24 @@
 <!-- TMPL_INCLUDE Name="opac-top.inc" -->
 <div id="mainbloc">
 <!-- TMPL_IF Name="viewshelf" -->
-	<form>
+	<form action="/cgi-bin/koha/opac-shelves.pl" method="get">
 		<h1><!-- TMPL_VAR NAME="shelfname" --></h1>
 
 		<div>
 		<h2>Contenuto dello scaffale</h2>
 			<table class="small">
 				<tr colspan="4">
-					<th>rimuovi</th>
-					<th>codice a barre</th>
-					<th>titolo</th>
+					<th><!-- TMPL_IF name="manageshelf" -->Cancellare<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></th>
+					<th>Codice a barre</th>
+					<th>Titolo</th>
 					<th>Autore</th>
 				</tr>
 				<!-- TMPL_LOOP Name="itemsloop" -->
 					<tr>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="barcode" --></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><a class="transparent" href="opac-MARCdetail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="author" --></td>
+						<td><!-- TMPL_IF name="manageshelf" --><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+						<td><!-- TMPL_VAR NAME="barcode" --></td>
+						<td><a class="transparent" href="opac-detail.pl?bib=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+						<td><!-- TMPL_VAR NAME="author" --></td>
 					</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -34,7 +34,7 @@
 
 	<!-- TMPL_IF name="manageshelf" -->
 	<div class="bloc20">
-		<form>
+		<form action="/cgi-bin/koha/opac-shelves.pl" method="get">
 		<h2>Aggiungi un libro per codice a barre</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
 			<input type="hidden" name="modifyshelfcontents" value="1">
@@ -59,7 +59,7 @@
 		<!-- /TMPL_LOOP -->
 		<div class="bloc20">
 					<h2>Seleziona gli scaffali da eliminare</h2>
-					<form method="post">
+					<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 					<input type="hidden" name="shelves" value="1">
 						<!-- TMPL_LOOP Name="shelvesloop" -->
 						<!-- TMPL_IF name="canmanage" -->
@@ -67,7 +67,7 @@
 							<label>
 								<input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->">
 							</label>
-								<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a> (<!-- TMPL_VAR NAME="shelfbookcount" --> elemento/i)
+								<a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR name="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a> (<!-- TMPL_VAR NAME="shelfbookcount" --> volume(i))
 						</p>
 						<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
@@ -77,7 +77,7 @@
 					</form>
 		</div>
 		<div id="bloc60">
-			<form method="post">
+			<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 				<input type="hidden" name="shelves" value="1">
 				<h2>Aggiungi scaffale</h2>
 				<p><label>Nome</label><input type="text" name="addshelf" size="25"></p>
@@ -89,9 +89,9 @@
 						<option value="3">Gratis</option>
 					</select>
 				</p>
-				<ul> <li>Uno scaffale privato è gestito solo da te & può essere visto solo da te.</li>
-					<li> Un campo pubblico può essere visto da tutti, ma gestito solamente da te.</li>
-					<li> Un campo libero può essere gestito da parte di qualsiasi utente.</li>
+				<ul> <li>Uno scaffale privato  gestito solo da te & pu essere visto solo da te.</li>
+					<li> Un campo pubblico pu essere visto da tutti, ma gestito solamente da te.</li>
+					<li> Un campo libero pu&ograve; essere gestito da parte di qualsiasi operatore.</li>
 				</ul>
 				<p>
 					<input type="submit" value="Aggiungi un nuovo scaffale" class="button">
@@ -111,13 +111,13 @@
 					<th>Modifica</th>
 				</tr>
 				<!-- TMPL_LOOP Name="shelvesloop" -->
-				<tr>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+				<!-- TMPL_IF NAME="color" --><tr class="hilighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+					<td>
 						<a class="transparent" href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->">
 							<!-- TMPL_VAR NAME="shelfname" -->
 						</a>
 					</td>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+					<td>
 						<!-- TMPL_IF NAME="category1" -->
 							Privato
 						<!-- /TMPL_IF -->
@@ -128,14 +128,14 @@
 							Gratis
 						<!-- /TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
+					<td>
 						<!-- TMPL_VAR NAME="shelfbookcount" --> elementi/volumi
 					</td>
-					<!-- TMPL_IF name="mine" -->
-						<td<!-- TMPL_IF NAME="color" --> class="hilighted"<!-- /TMPL_IF -->>
-							<a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">Modifica</a> <!-- TMPL_VAR name="surname" --> <!-- TMPL_VAR name="firstname" -->
+					
+						<td>
+							<!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelf" -->" class="button">Modifica</a> <!-- TMPL_VAR name="surname" --> <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 						</td>
-					<!-- /TMPL_IF -->
+					
 				</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
@@ -148,7 +148,7 @@
 
 <!-- TMPL_IF name="edit" -->
 	<div class="bloc20">
-		<form method="post">
+		<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
 			<input type="hidden" name="op" value="modifsave">
 			<h2>Modifica scaffale</h2>
 			<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
@@ -173,9 +173,9 @@
 					<!-- /TMPL_IF -->
 				</select>
 			</p>
-			<p> <li>Uno scaffale privato è gestito solo da te & può essere visto solo da te.</li>
-				<li> Un campo pubblico può essere visto da tutti, ma gestito solamente da te.</li>
-				<li> Un campo libero può essere gestito da parte di qualsiasi utente.</li>
+			<p> <li>Uno scaffale privato  gestito solo da te & pu essere visto solo da te.</li>
+				<li> Un campo pubblico pu essere visto da tutti, ma gestito solamente da te.</li>
+				<li> Un campo libero pu&ograve; essere gestito da parte di qualsiasi operatore.</li>
 			</p>
 			<p>
 				<input type="submit" value="Salva" class="button">

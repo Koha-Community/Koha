@@ -18,7 +18,7 @@
 <tr>
 <td width=210 >
 <input type="image" name="submit" value="modifica" height=42 width=93 border=0 src="/images/modify-mem.gif">
-<input type="image" name="delete" value="rimuovi" height=42 width=93 border=0 src="/images/delete-mem.gif">
+<input type="image" name="delete" value="cancellare" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
 <b>Numero scheda:</b> <!-- TMPL_VAR NAME="biblionumber" --><br>
 <b>Tipo volume:</b> <!-- TMPL_VAR NAME="itemtype" --><br>
@@ -54,14 +54,14 @@
 <input type=hidden name=item value=<!-- TMPL_VAR NAME="itemnumber" -->>
 <input type=hidden name=type value=<!-- TMPL_VAR NAME="type" -->>
 <input type="image" name="submit" value="modifica" height=42 width=93 border=0 src="/images/modify-mem.gif">
-<input type="image" name="delete" value="rimuovi" height=42 width=93 border=0 src="/images/delete-mem.gif">
+<input type="image" name="delete" value="cancellare" height=42 width=93 border=0 src="/images/delete-mem.gif">
 <br>
 <b>Sezione di appartenenza:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
 <b>Ultimamente visto al banco in data:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
-<b>Prestato ultimamente a:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
+<b>Ultimo Prestito:</b> <!-- TMPL_VAR NAME="timestamp0" --><br>
 in prestito <!-- FIXME - What's this, then? -->
-<b>Prestato ultimamente a (1):</b> <!-- TMPL_VAR NAME="card0" --><br>
-<b>Prestato ultimamente a (2):</b> <!-- TMPL_VAR NAME="card1" --><br>
+<b>Ultimo utente 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+<b>Ultimo utente 1:</b> <!-- TMPL_VAR NAME="card1" --><br>
 <b>Attuale sezione di appartenenza:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
 <b>Costo di sostituzione:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
 <b>Volume disperso:</b> <!-- TMPL_VAR NAME="itemlost" --><br>
@@ -70,8 +70,8 @@ in prestito <!-- FIXME - What's this, then? -->
 <b>Rinnovi:</b> <!-- TMPL_VAR NAME="renewals" --><br>
 <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">Ultimo accesso</a> in data: <!-- TMPL_VAR NAME="dateaccessioned" --><br>
 <b>Annullato: <!-- TMPL_VAR NAME="wthdrawn" --><br>
-<a><a
-href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Prestiti Totali:</a></b><br>
+<b><a
+href=/cgi-bin/koha/bookcount.pl?&bib=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&itm=<!-- TMPL_VAR NAME="itemnumber" -->>Prestiti totali:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
 <b>Gruppo Numero:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
 <b>Numero scheda:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
 

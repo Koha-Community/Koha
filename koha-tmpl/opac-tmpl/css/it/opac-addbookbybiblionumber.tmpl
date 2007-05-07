@@ -4,10 +4,8 @@
 <p><label>Titolo</label><!-- TMPL_VAR NAME="title" --></p>
 <p><label>Autore</label><!-- TMPL_VAR NAME="author" --></p>
 <h2>Seleziona lo scaffale</h2>
-<form>
+<form action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="get">
 	<p><label>Aggiungi allo scaffale virtuale</label><!-- TMPL_VAR NAME="CGIbookshelves" --></p>
-</form>
-<form>
 <h2>o aggiungi ad un nuovo scaffale</h2>
 	<p><input type="text" name="newbookshelf" maxlength=40 size=40>
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">

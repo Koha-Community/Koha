@@ -1,9 +1,74 @@
-* MAJOR bug in addbiblio and additem (Bug 1330). Previously, if you added a field to a biblio it would save it with the same tagorder as one of the items, and then editing an item would result in it being deleted.
+RELEASE NOTES
+=============
+
+Koha is the first Open-Source Integrated Library System.
+
+Koha is a full-featured open-source ILS. Developed initially in New Zealand by Katipo Communications Ltd and first deployed in January of 2000 for Horowhenua Library Trust, it is currently maintained by a team of software providers and library technology staff from around the globe.
+
+Koha 2.2.9 is more than 250,000 lines of code (see : http://bureau.paulpoulain.com/cvslog/) , contributed by about 50 different developers (46, +translators).
+
+More than 100 libraries are registered as users on wiki.koha.org, and we are sure that at least 300 libraries use the software. There are 2 projects derived from Koha.
+
+========
+WARNINGS
+========
+* The librarian interface is tested only with Mozilla/Firefox. Should work (partially) with IE. OPAC should work fine with any browser.
+* during install, you may get some warnings during package dependency checkings. Something like : 
+"Too late to run INIT block at /usr/local/lib/perl/5.8.4/ZOOM.pm line 37."
+or 
+"Subroutine PDF::API2::Resource::Font::Postscript::O_RDONLY redefined at /usr/share/perl/5.8/Exporter.pm line 65."
+
+You can safely ignore them.
+
+KNOWN BUGS
+**********
+Critical/blocking :
+* mySQL5.0 : Koha 2.2.9 is NOT guaranteed to be compatible with mySQL 5.0. However some bugs are fixed in 2.2.9, so that should work at least partially. Report any problem encountered, we will continue to improve things in 2.2.10.
+* don't use spaces in currencies codes. Use USD, not US DOLLAR, for example. spaces breaks acquisition module.
+
+see bugs.koha.org for more information. Please report any problem in bugs.koha.org
+
+=======
+CHANGES
+=======
+There are only bugfixes and very minor enhancements in this release :
+* Major bug in addbiblio and additem (Bug 1330). Previously, if you added a field to a biblio it would save it with the same tagorder as one of the items, and then editing an item would result in it being deleted.
 * fixed some SQL queries (mySQL5 errors. That does not mean koha 2.2.x is mySQL5 compliant, but that's some errors identified & fixed. Expect koha 2.2.9 to work with fewer problem under mySQL5)
 * fixed a SQL typo in overdues fixing on return (database was not properly updated)
 * Solved a problem where a plugin value(fixed fields...) would be lost when editing a record
 * fixed a bug in expiry date calculation
+
 * ENH in z3950 search : adding a test in search to avoid a system error if the server returns an invalid error (can happend, depending on z3950 server)
 * ENH: Added finer ISBD parsing to allow subfield values to contain {}.
 * ENH: removed an extra (& useless although harmless) call to MARChtml2xml
 * ENH: if branch unknown from Koha, take it from userenv, instead of first-defined. This will set branch to users registration branch if not explicitly set.
+
+
+=============
+TRANSLATIONS
+=============
+Translations updates :
+A lot of translations have been updated & completed. Some are partials, but included in the release.
+Here is a detailled list, language by language :
+LIBRARIAN (INTRANET) interface
+- ENGLISH : Templates npl and default available (native language)
+- CHINESE : Templates default (60% translated) and npl (95% chinese Classic and chinese Taïwan)
+- FRENCH  : Templates default (100% translated)
+- ITALIAN : Templates default (95% translated)
+- POLISH  : Templates default (30% translated)
+- SPANISH : Templates default (60% argentin spanish, 95% spanish spain)
+- UKRANIAN: Templates default (95% translated) and npl (60% translated)
+
+OPAC (PUBLIC) interface
+- ENGLISH : Templates npl and css available (native language)
+- CHINESE : Templates css (90% translated, chinese Classic and Chinese Taïwan) and npl (90% for both too)
+- FRENCH :  Templates css available (100% translated)
+- HUNGARIAN: Templates npl (90% translated)
+- JAPANESE: Templates npl (95% translated)
+- KOREAN  : Templates npl (95% translated)
+- ITALIAN : Templates css (100% translated)
+- POLISH  : Templates css (75% translated)
+- SPANISH : Templates css (75% translated)
+- UKRANIAN: Templates css (100% translated) and npl (90% translated)
+
+BE CAREFUL with those translations : most requires that your database is unicode, some that it is latin1 (iso8859-15). So don't hesitate to check and remove any translation that would give strange results (in OPAC mainly, as in librarian interface the librarian can't change the language easily). The templates are in $KOHA/opac/htdocs/opac-tmpl/TEMPLATE/LANGUAGE. Note that the problem will be removed by koha 3, as everybody will be in unicode...

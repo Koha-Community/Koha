@@ -4,23 +4,47 @@
 	<div class="bloc20">
 		<h2>I dati registrati sono corretti?</h2>
 		<p>Tesserino biblioteca: <!-- TMPL_VAR NAME="cardnumber" --> </p>
-		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="title" -->) </p>
-		<p><!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
-		<p><!-- TMPL_VAR NAME="phone" --> (abitazione)</p>
-		<p><!-- TMPL_VAR NAME="faxnumber" --> (lavoro)</p>
+		<p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+		<p>Indirizzo ufficio: <!-- TMPL_VAR NAME="streetaddress" -->, <!-- TMPL_VAR NAME="city" --></p>
+		<p>Indirizzo di cara: <!-- TMPL_VAR name='physstreet' --></p>
+		<p><!-- TMPL_IF name="phone" -->Telefono abitazione: <!-- TMPL_VAR NAME="phone" --><!-- /TMPL_IF --></p>
+		<p><!-- TMPL_IF name="faxnumber" -->Fax: <!-- TMPL_VAR NAME="faxnumber" --><!-- /TMPL_IF --></p>
 		<p><!-- TMPL_VAR NAME="emailaddress" --></p>
 		<p><a href="/cgi-bin/koha/opac-userupdate.pl" class="button">Aggiorna il campo</a></p>
-	</div>
+		<!-- TMPL_IF name="OpacPasswordChange" -->
+			<p><a href="/cgi-bin/koha/opac-passwd.pl" class="button">Cambia la tua password</a></p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="textmessaging"-->
+			<h2>Messaggio dalla biblioteca</h2>
+			<!-- TMPL_VAR name="textmessaging" -->
+		<!-- /TMPL_IF --></div>
+		
+		<!-- TMPL_IF NAME="flagged" -->
+		<div class="bloc20">
+			<h2>Ci sono dei contrassegni tra i tuoi dati!</h2>
+			<!-- TMPL_IF NAME="debarred" -->
+				<p><strong>Prego annotare:</strong> Il tuo account &egrave; stato congelato. Di solito il congelamento di un acount avviene per mancati pagamenti o multe per danneggiamento. Se <a href="/cgi-bin/koha/opac-user.pl">la pagina del tuo account</a>.mostra il tuo account in bianco, per favore consulta un bibliotecario.</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="gonenoaddress" -->
+				<p><strong>Prego annotare:</strong> In accordo con le nostre registrazioni, noi non abbiamo aggiornato <a href="/cgi-bin/koha/opac-userdetails.pl">le informazioni sui contatti</a> su file. Prego contattate il vostro bibliotecario, o usate <a href="/cgi-bin/koha/opac-userupdate.pl">il modulo per l'aggiornamento in linea</a> per inviare le informazioni correnti (<em>Prego prendere nota:</em> potrebbe esservi un ritardo nell'aggiornamento dei vostri dati se effettuate l'invio in linea)</p>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="lost" -->
+				<p><strong>Prego annotare: </strong> Il tuo tesserino bibliotecario &egrave; stato contrassegnato come smarrito o rubato. Se questo &egrave; un errore, per favore presenta il tuo tesserino allo sportello della tua locale libreria e l' errore verr&agrave; corrretto.</p>
+			<!-- /TMPL_IF -->
+		</div>
+		<!-- /TMPL_IF -->
+
+	
 	<!-- TMPL_IF NAME="amountoverfive" -->
 	<div class="bloc20">
-		<h2>Risultano debiti e multe per <!-- TMPL_VAR NAME="amountoutstanding" --> a tuo carico.</b>
+		<h2>Risultano debiti e multe per <!-- TMPL_VAR NAME="amountoutstanding" --> a tuo carico</b>
 		<a href="/cgi-bin/koha/opac-account.pl" class="button">Vedi gli accounts</a>
 	</div>
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="amountoverzero" -->
 	<div class="bloc20">
-		<h2>Risultano debiti e multe per <!-- TMPL_VAR NAME="amountoutstanding" --> a tuo carico.</h2>
+		<h2>Risultano debiti e multe per <!-- TMPL_VAR NAME="amountoutstanding" --> a tuo carico</h2>
 		<a href="/cgi-bin/koha/opac-account.pl" class="button">Vedi gli accounts</a>
 	</div>
 	<!-- /TMPL_IF -->
@@ -34,67 +58,71 @@
 
 <!-- /TMPL_LOOP -->
 
-<!-- TMPL_IF NAME="waiting_count" -->
-<div class="bloc60">
-	<h2>I seguenti volumi prenotati sono in attesa:</h2>
-	<ul>
-		<!-- TMPL_LOOP NAME="WAITING" -->
-			<li><!-- TMPL_VAR NAME="btitle" -->, ritirare a: <b><!-- TMPL_VAR NAME="branch" --></b></li>
-		<!-- /TMPL_LOOP -->
-	</ul>
-</div>
-<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="waiting_count" -->
+	<div class="bloc60">
+		<h2>I seguenti volumi prenotati sono in attesa:</h2>
+		<ul>
+			<!-- TMPL_LOOP NAME="WAITING" -->
+				<li><!-- TMPL_VAR NAME="btitle" -->, ritirare a: <b><!-- TMPL_VAR NAME="branch" --></b></li>
+			<!-- /TMPL_LOOP -->
+		</ul>
+	</div>
+	<!-- /TMPL_IF -->
 
-<div class="bloc60">
-	<!-- TMPL_IF NAME="issues_count" -->
-		<h2>Hai attualmente <b><!-- TMPL_VAR NAME="issues_count" --></b> volumi in prestito.</h2>
-		<table>
+	<div class="bloc60">
+		<!-- TMPL_IF NAME="issues_count" -->
+			<h2>Hai attualmente <b><!-- TMPL_VAR NAME="issues_count" --></b> volumi in prestito.</h2>
+			<table>
+				<tr>
+					<th>Titolo</th>
+					<th>Autore</th>
+					<th>Data attesa per la restituzione</th>
+					<th>Tipo di volumi</th>
+					<th>Codice a barre</th>
+					<th>Addebiti</th>
+					<th>Rinnovabile</th>
+				</tr>
+				<!-- TMPL_LOOP NAME="ISSUES" -->
+					<!-- TMPL_IF name="overdue"-->
+						<tr class="problem">
+					<!-- TMPL_ELSE -->
+						<tr>
+					<!-- /TMPL_IF-->
+							<td><!-- TMPL_VAR NAME="title" --></td>
+							<td><!-- TMPL_VAR NAME="author" --></td>
+							<td><!-- TMPL_VAR NAME="date_due" --></td>
+							<td><!-- TMPL_VAR NAME="itemtype" --></td>
+							<td><!-- TMPL_VAR NAME="barcode" --></td>
+							<td><!-- TMPL_IF NAME="charges" -->S<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="status" -->S<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+						</tr>
+				<!-- /TMPL_LOOP -->
+			</table>
+		<!-- TMPL_ELSE -->
+			<h2>Non hai alcun volume in prestito.</h2>
+		<!-- /TMPL_IF -->
+	</div>
+
+	<!-- TMPL_IF NAME="reserves_count" -->
+	<div class="bloc60">
+		<h2>Hai attualmente <b><!-- TMPL_VAR NAME="reserves_count" --></b> volumi prenotati.</h2>
+		<table cellspacing="0" align="center">
 			<tr>
 				<th>Titolo</th>
 				<th>Autore</th>
-				<th>Data attesa per la restituzione</th>
-				<th>Tipo di volumi</th>
-				<th>Codice a barre</th>
-				<th>Addebiti</th>
-				<th>Rinnovabile</th>
+				<th>Data di prenotazione</th>
 			</tr>
-			<!-- TMPL_LOOP NAME="ISSUES" -->
-				<tr>
-					<td><!-- TMPL_VAR NAME="title" --></td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="date_due" --></td>
-					<td><!-- TMPL_VAR NAME="itemtype" --></td>
-					<td><!-- TMPL_VAR NAME="barcode" --></td>
-					<td><!-- TMPL_IF NAME="charges" -->Sí<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
-					<td><!-- TMPL_IF NAME="status" -->Sí<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+			<!-- TMPL_LOOP NAME="RESERVES" -->
+				<tr valign="top">
+				<td><!-- TMPL_VAR NAME="btitle" --></td>
+				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td><!-- TMPL_VAR NAME="reservedate" --></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-	<!-- TMPL_ELSE -->
-		<h2>Non hai alcun volume in prestito.</h2>
+		<br />
+	</div>
 	<!-- /TMPL_IF -->
-</div>
-
-<!-- TMPL_IF NAME="reserves_count" -->
-<div class="bloc60">
-	<h2>Hai attualmente <b><!-- TMPL_VAR NAME="reserves_count" --></b> volumi prenotati.</h2>
-	<table cellspacing="0" align="center">
-		<tr>
-			<th>Titolo</th>
-			<th>Autore</th>
-			<th>Data di prenotazione</th>
-		</tr>
-		<!-- TMPL_LOOP NAME="RESERVES" -->
-			<tr valign="top">
-			<td><!-- TMPL_VAR NAME="btitle" --></td>
-			<td><!-- TMPL_VAR NAME="author" --></td>
-			<td><!-- TMPL_VAR NAME="reservedate" --></td>
-			</tr>
-		<!-- /TMPL_LOOP -->
-	</table>
-	<br />
-</div>
-<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
 

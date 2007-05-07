@@ -269,7 +269,7 @@ if (!defined $charset_in) {
     warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
 }
 
-print "Charset : $charset_in\n";
+print "Charset for $str_file : $charset_in\n";
 
 my $xgettext = './xgettext.pl';	# actual text extractor script
 my $st;

@@ -9,38 +9,34 @@
 		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
 	<!-- /TMPL_IF -->
 	<title><!--TMPL_VAR name="LibraryName"--></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext
 		//
 	</script>
 	<script type="text/javascript" language="javascript">
-	var MSG_BASKET_EMPTY = _("Il cestino è vuoto");
-	var MSG_RECORD_IN_BASKET = _("Questa scheda è già nel cestino");
+	var MSG_BASKET_EMPTY = _("Il cestino  vuoto");
+	var MSG_RECORD_IN_BASKET = _("Questa scheda  gi nel cestino");
 	var MSG_RECORD_ADDED = _("Aggiunta scheda bibliografica al cestino");
-	var MSG_NRECORDS_ADDED = _(" Biblio(s) added");
-	var MSG_NRECORDS_IN_BASKET = _("già nel cestino");
+	var MSG_NRECORDS_ADDED = _("Scheda(e) bibliografica(e) aggiunta(e)");
+	var MSG_NRECORDS_IN_BASKET = _("gi nel cestino");
 	var MSG_NO_RECORD_SELECTED = _("Nessuna scheda bibliografica selezionata");
 	var MSG_NO_RECORD_ADDED = _("Nessuna scheda bibliografica aggiunta");
 	function Dopop(link) {
-		newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+		newin=window.open(link,'popup','width=700,height=500,toolbar=false,scrollbars=yes');
 	}
 	</script>
 </head>
 <body>
 	<!-- MENUS -->
-	<div id="menuline">
-		<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" height="50" alt="logo koha" style="float: left">
+	<div id="title">
+		<!-- TMPL_IF name="opacsmallimage" -->
+			<img src="<!-- TMPL_VAR name="opacsmallimage"-->" alt="logo koha">
+		<!-- TMPL_ELSE -->
+			<img src="<!-- TMPL_VAR name="themelang" -->/images/front-background-small.gif" alt="logo koha">
+		<!-- /TMPL_IF -->
 		<div class="SmallLibraryName"><!--TMPL_VAR name="LibraryName"--></div>
-		<span class="spacer">&nbsp;</span>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-main.pl" title="Pagina principale di Koha">Pagina principale</a>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-search.pl" title="Ricerca avanzata">Ricerca avanzata</a>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="/cgi-bin/koha/opac-user.pl" title="Pagina principale dell'utente">Pagina personale</a>
-		<span class="spacer">&nbsp;</span>
-		<a class="menu" href="javascript:openBasket()" title="Cestino schede bibliografiche">Cestino schede bibliografiche <span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a>
 	</div>
+	<!-- TMPL_INCLUDE name="menus.inc" -->
 	<!-- MAIN BODY OF PAGE -->

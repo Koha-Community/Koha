@@ -36,7 +36,7 @@ for my $spec (
     if ($lang ne 'ALL') {
             build_lang($theme,$module,$lang);
         } else {
-            foreach my $lang (('fr_FR', 'es_ES','it_IT','pl_PL','ta_MY','uk_UA','zh_TW','hu_HU', 'es_AR', )) {
+            foreach my $lang (( 'es_AR','es_ES','fr_FR','hu_HU','it_IT','jp_JP','kr_KR','pl_PL','ta_MY','uk_UA','zh_TW','zh_CN', )) {
                 build_lang($theme,$module,$lang);
             }
         }

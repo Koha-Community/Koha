@@ -4,8 +4,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Cestino OPAC</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang">/includes/opac.css">
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
+	<!-- TMPL_IF name="opacstylesheet" -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="opacstylesheet"-->" />
+	<!-- TMPL_ELSE -->
+		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang"-->/includes/opac.css" />
+	<!-- /TMPL_IF -->
 	<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
 	<script language="JavaScript" type="text/javascript">
 		function _(s) { return s } // dummy function for gettext

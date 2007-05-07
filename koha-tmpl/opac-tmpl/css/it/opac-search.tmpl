@@ -15,7 +15,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
 		</p>
 		<p>
 			<label class="label20">Titolo</label>
@@ -23,14 +23,24 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Autore</label> <input type="hidden" name="marclist" value="biblio.author" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Argomento</label>
@@ -38,7 +48,12 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />  
-			<input type="text" name="value" onchange="sql_update()" size="35" />
+			<input type="text" name="value" size="35" />
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('opac-dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
 			<label class="label20">Titolo del periodico</label>
@@ -46,7 +61,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" size="35"/>
+			<input type="text" name="value" size="35"/>
 		</p>
 		<p>
 			<label class="label20">Tipo di volume</label>
@@ -54,7 +69,13 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<!-- TMPL_VAR name="CGIitemtype" -->
+			<select name="value">
+				<option value="">Qualsiasi tipo di articolo</option>
+					<!-- TMPL_LOOP name="itemtypeloop" -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" -->
+							</option>
+					<!-- /TMPL_LOOP -->
+			</select>
 		</p>
 		<p>
 				<label class="label20">Sezione</label>
@@ -62,7 +83,12 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="=" />  
-				<!-- TMPL_VAR name="CGIbranch" -->
+                 <select name="value">
+                    <option value="">Qualsiasi sezione</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" <!--TMPL_IF Name="selected"-->selected<!--/TMPL_IF-->> <!-- TMPL_VAR name="branchname" -->  </option>
+                        <!-- /TMPL_LOOP -->
+                </select>
 		</p>
 	</div>
 	<div id="bloc20">
@@ -73,7 +99,7 @@
 				<input type="hidden" name="and_or" value="and" />
 				<input type="hidden" name="excluding" value="" />
 				<input type="hidden" name="operator" value="start" />
-				<input type="text" name="value" onchange="sql_update()" /> 
+				<input type="text" name="value" /> 
 		</p>
 		<p>
 			<label class="label20">Collocazione</label>
@@ -81,7 +107,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="start" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">ISBN</label>
@@ -89,7 +115,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="=" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Casa editrice</label>
@@ -97,7 +123,7 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="contains" />
-			<input type="text" name="value" onchange="sql_update()" />
+			<input type="text" name="value" />
 		</p>
 		<p>
 			<label class="label20">Pubblicato tra</label>
@@ -105,81 +131,63 @@
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value=">=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" /> e
+			<input type="text" name="value" size="6" maxlength="4" /> e
 			<input type="hidden" name="marclist" value="biblioitems.publicationyear" />
 			<input type="hidden" name="and_or" value="and" />
 			<input type="hidden" name="excluding" value="" />
 			<input type="hidden" name="operator" value="<=" />
-			<input type="text" name="value" size="6" maxlength="4" onchange="sql_update()" />
+			<input type="text" name="value" size="6" maxlength="4" />
 		</p>
-		<p>Risultati per pagina:
+		<p>
+			<label class="label20">Risultati per pagina</label>
 			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
 			</select>
 		</p>
-		<p>Ordinato da
+		<p>
+			<label class="label20">&nbsp;</label><input type="checkbox" value=1 name="exact">Ricerca esatta
+		</p>
+		<p>
+			<label class="label20">Ordinato da</label>
 			<select name="orderby" size="1">
 				<option value="biblio.title">Titolo</option>
 				<option value="biblio.author">Autore</option>
-				<option value="biblioitems.dewey">Dewey:</option>
+				<option value="biblioitems.dewey">Dewey</option>
 				<option value="biblioitems.publicationyear">Anno di pubblicazione</option>
 				<option value="biblioitems.publishercode">Casa editrice</option>
-				<option value="biblio.timestamp desc">Data di acquisto</option>
+				<option value="biblio.timestamp">Data di acquisto</option>
 			</select>
 		</p>
+		<p>
+			<label>&nbsp;</label>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Ascesa</option>
+				<option value="DESC">Discendente</option>
+			</select>
+		</p>		
+
 	</div>
 	<p>
 		<input type="submit" value="Inizia la ricerca" class="button catalogue">
-		<input type="reset" value="Clear all" class="button catalogue" />
+		<input type="reset" value="Cancella tutti" class="button catalogue">
 	</p>
 	<div id="bloc60">
 		<h2>Suggerimenti</h2>
 		<h3>Titolo</h3>
-		<p>È possibile selezionare un titolo completo o parte di esso. La ricerca verrà effettuata anche tra i sottotitoli ed altri campi analoghi.</p>
+		<p>E' possibile selezionare un titolo completo o parte di esso. La ricerca verr&agrave; effettuata anche tra i sottotitoli ed altri campi correlati</p>
 		<h3>Autore</h3>
-		<p>È possibile selezionare un nome o un cognome. La ricerca verrà effettuata anche tra gli autori supplementari ed altri campi analoghi (traduttore, illustratore...)</p>
-		<p>Si ricorda che un titolo può essere relativo ad un effettivo autore (Victor Hugo), o ad una collaborazione, gruppo, o collezione di autori (CNRS, Biblioteca del Congresso)</p>
+		<p> possibile selezionare un nome o un cognome. La ricerca verr effettuata anche tra gli autori supplementari ed altri campi analoghi (traduttore, illustratore...)</p>
+		<p>Si ricorda che un titolo pu essere relativo ad un effettivo autore (Victor Hugo), o ad una collaborazione, gruppo, o collezione di autori (CNRS, Biblioteca del Congresso)</p>
 		<h3>Sezioni</h3>
-		<p>Seleziona una sezione se desideri limitare la ricerca ad una sezione specifica. Di norma, la ricerca viene effettuata su tutte le sezioni della biblioteca.</p>
+		<p>Seleziona una sezione se desideri limitare la ricerca ad una sezione specifica. Di norma, la ricerca viene effettuata su tutte le sezioni della biblioteca</p>
 		<h3>Ricerca parziale</h3>
-		<p>Verrà effettuata una ricerca su ogni parola immessa. Le stringhe vuote verranno ignorate. Selezionando, ad esempio, "the two towers" nel campo "titolo", la lista dei risultati conterrà tutti i volumi contenenti "two" e "tower" nel titolo. La stringa "the" verrà ignorata.</p>
-		<p>Se desideri specificare l'inizio di una parola, aggiungi un * o un % alla fine della parola. Ad esempio "due torri*" cercherà "le due torri", "due torri bianche", "una torre e due città"</p>
+		<p>Verr effettuata una ricerca su ogni parola immessa. Le stringhe vuote verranno ignorate. Selezionando, ad esempio, "the two towers" nel campo "titolo", la lista dei risultati conterr tutti i volumi contenenti "two" e "tower" nel titolo. La stringa "the" verr ignorata.</p>
+		<p>Se desideri specificare l'inizio di una parola, aggiungi un * o un % alla fine della parola. Ad esempio "due torri*" cercher "le due torri", "due torri bianche", "una torre e due citt"</p>
+		<h3>Ricerca sul dizionario</h3>
+		<p>se fai click su ... sulla destra del titolo/autore/argomento, puoi ricercare i valori esistenti nella biblioteca.</p>
 	</div>
 </form>
-
-<script type="text/javascript">
-function sql_update() {
-document.f.sql.value="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-			document.f.sql.value = document.f.sql.value+
-										document.f.and_or[i].value + ' (' +
-										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + ' ' +
-										document.f.operator[i].value + ' ' +
-										'\''+document.f.value[i].value + '\') ';
-		}
-	}
-}
-
-function AddStatement() {
-
-	document.forms[0].op.value="AddStatement";
-	document.f.submit();
-}
-
-function PopupSuggestion() {
-    var strQuery="";
-	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.value[i].value.length>0) {
-		    strQuery += " "+document.f.value[i].value;
-		}
-	}
-	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-</script>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
