@@ -4,7 +4,7 @@
 <html>
 <head>
 <title>KOHA: OPAC Szukaj w katalogu</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
 
 </head>
 <body text="black" bgcolor="white" link="#0000ff" vlink="#3366cc" Alink="#cc3300"
@@ -46,7 +46,6 @@ marginheight=0 marginwidth=0 leftmargin=0 topmargin=0 >
 	    onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-join.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'">
 	    <img src="<!-- TMPL_VAR name="themelang" -->/images/menu-join.gif" width=54 height=30 alt="Zapisy" hspace=0 vspace=0 border=0 name="menu-join"></a>
 	<!-- /TMPL_IF -->
-
 	<a href="/cgi-bin/koha/mainpage.pl"
 	onMouseOver="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/mouseover-home.gif'" 		onMouseOut="document.mouseover.src='<!-- TMPL_VAR name="themelang" -->/images/holder.gif'"><img src="<!-- TMPL_VAR name="themelang" -->/images/menu-home.gif" width=60 height=30 alt="Początek" hspace=0 vspace=0 border=0 name="menu-home"></a></td>
 

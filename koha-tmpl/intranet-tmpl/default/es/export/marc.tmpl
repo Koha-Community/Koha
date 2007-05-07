@@ -1,15 +1,26 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<center>
-<FONT SIZE=6><em>Koha admin page</em></FONT><br /><br /><br />
-Export in MARC format the following biblios :
-<form method="post">
-<p>from biblio number : <input type="text" name="start_bib">
-to biblio number : <input type="text" name="end_bib"></p>
-<input type="hidden" name="op" value="export">
-<input type="submit" value="Export">
-</form>
-
-<p>(leave blank to export every biblio)</p>
-<p>Note : the items are NOT exported by this tool</p>
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<div id="mainbloc">
+<h1>Exportaci&oacute;n de registro MARC</h1>
+	<div id="bloc25">
+		<h2 class="parameters">Seleccione el archivo a importar:</h2>
+		<form method="post">
+			<p>de n&uacute;mero de biblio : <input type="text" name="start_bib"> a n&uacute;mero de biblio : <input type="text" name="end_bib"></p>
+			<p>Tipo de Documento : <!--TMPL_VAR Name="CGIitemtype"--></p>
+			<p>Sede:  <select name="branch">
+			<option value="">Predeterminado</option>
+                        <!-- TMPL_LOOP name="branchloop" -->
+                                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name
+="branchname" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+</p>
+			<p>de n&uacute;mero de art&iacute;culo : <input type="text" name="start_callnumber"> a n&uacute;mero de art&iacute;culo : <input type="text" name="end_callnumber"></p>
+			<p>Limitar a <input type="text" name="limit"> primeros art&iacute;culos</p>
+			<p>Nota : los art&iacute;culos son exportados por esta herramienta</p>
+			<input type="hidden" name="op" value="export">
+			<input type="submit" value="Exportar" class="button">
+		</form>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

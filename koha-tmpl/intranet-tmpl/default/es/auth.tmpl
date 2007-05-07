@@ -1,42 +1,42 @@
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
 
-<TMPL_IF NAME="nopermission">
+<!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesn't have permission -->
-<h2>Usted no tiene permisos para acceder a la página seleccionada</h2>
-</TMPL_IF>
+<h2>Lo siento, Koha no cree que usted tenga permiso para ver esta p&aacute;gina.</h2>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="timed_out">
+<!-- TMPL_IF NAME="timed_out" -->
 <!-- This is what is displayed if login has timed out -->
-<h2>Su sesión ha expirado, por favor ingrese su Identificacón y clave nuevamente</h2>
-</TMPL_IF>
+<h2>Lo siento, su sesi&oacute;n ya ha terminado. Por favor, reg&iacute;strese nuevamente.</h2>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="different_ip">
+<!-- TMPL_IF NAME="different_ip" -->
 <!-- This is what is displayed if user's IP has changed -->
-<h2>Usted está accediendo a Koha desde otro número de IP, por favor Identifiquese nuevamente</h2>
-</TMPL_IF>
+<h2>Tiene acceso a Koha sobre una direcci&oacute;n de ip diferente! Por favor reg&iacute;strese otra vez.</h2>
+<!-- /TMPL_IF -->
 
-<TMPL_IF NAME="invalid_username_or_password">
+<!-- TMPL_IF NAME="invalid_username_or_password" -->
 <!-- This is what is displayed if the username or password doesn't work -->
-<h2>Usted ha ingresado una Identificación o Clave incorrecta. Por favor reintente</h2>
-</TMPL_IF>
+<h2>Ha ingresado un nombre de usuario o una clave incorrecta. Por favor intentelo nuevamente.</h2>
+<!-- /TMPL_IF -->
 
 
-<TMPL_IF NAME="loginprompt">
+<!-- TMPL_IF NAME="loginprompt" -->
 <!-- login prompt time-->
 
-<center>
 
-<form action='<TMPL_VAR NAME="url">' method="post">
-<TMPL_LOOP NAME="INPUTS">
-  <input type="hidden" name='<TMPL_VAR NAME="name">' value='<TMPL_VAR NAME="value">'>
-</TMPL_LOOP>
-<table border="0" cellpadding="10" cellspacing="0" width="60%">
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+<!-- TMPL_LOOP NAME="INPUTS" -->
+  <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->">
+<!-- /TMPL_LOOP -->
+<table border="0" cellpadding="10" cellspacing="0" width="60%" align="center">
     <tr><td align="center" valign="top">
 
     <table border="0" bgcolor="#dddddd" cellpadding="10" cellspacing="0">
-    <tr><th colspan="2" background="/images/background-mem.gif"><font size="+2">Ingreso al software Koha</font></th></tr>
-    <tr><td>Identificación:</td><td><input name="userid"></td></tr>
+    <tr><th colspan="2"><font size="+2">Entrar a Koha</font></th></tr>
+    <tr><td>N&uacute;mero de Carnet:</td><td><input name="userid"></td></tr>
     <tr><td>Clave:</td><td><input type="password" name="password"></td></tr>
-    <tr><td colspan="2" align="center"><input type="submit" value="Enviar"></td></tr>
+    <tr><td colspan="2" align="center"><input type="submit" value="entrar"></td></tr>
     </table>
     </td><td align="center" valign="top">
 
@@ -46,4 +46,4 @@
 </form>
 
 
-</TMPL_IF>
+<!-- /TMPL_IF -->

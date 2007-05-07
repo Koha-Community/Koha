@@ -1,39 +1,57 @@
-<HTML>
-
-<!-- startmenu -->
-<TMPL_VAR NAME="startmenureport">
-
-<!-- the site -->
-
-<FONT SIZE=6><em>Items atrasados en su devolución hasta fecha <TMPL_VAR NAME="todaysdate"></em></FONT><br><P>
-
-<TABLE  cellspacing=0 cellpadding=5 border=1 align=center>
-  <TR VALIGN=TOP>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Dia Limite</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Patron</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Telefono</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Titulo</b></td>
-    <TD  bgcolor="99cc33" background="/images/background-mem.gif"><b>Autor</b></td>
-  </tr>
-
-  <TMPL_LOOP NAME=overdueloop>
-    <tr>
-      <td><TMPL_VAR NAME="duedate"></td>
-    <TMPL_IF NAME=email>
-      <td><a href="mailto:<TMPL_VAR NAME="email">?subject=Prestamo Atrasado: <TMPL_VAR NAME="title">"><TMPL_VAR NAME="name"></a></td>
-    <TMPL_ELSE>
-      <td><TMPL_VAR NAME="name"></td>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME="phone"></td>
-      <td><TMPL_VAR NAME="title"></td>
-      <td><TMPL_VAR NAME="author"></td>
-    </tr>
-  </TMPL_LOOP>
-</table>
-
-
-<!-- endmenu -->
-<TMPL_VAR NAME="endmenureport">
-
-</body>
-</HTML>
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<div id="mainbloc">
+	<h1 class="reports">Ejemplares atrasados en fecha <!-- TMPL_VAR NAME="todaysdate" --></h1>
+	<form method="post" action="/cgi-bin/koha/overdue.pl">
+	<p>Filtrar por :<br />
+	 	<div class="label100">Nombre o n&uacute;mero de carnet :</div> <input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"><br />
+		<div class="label100">Categor&iacute;a de usuario :</div><select name="borcat" id="borcat"><option value="">Cualquiera</option>
+			<!-- TMPL_LOOP name="borcatloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select><br />
+		<div class="label100">Permisos de usuario :</div><!--TMPL_VAR Name="CGIflags" --><br />
+	  	<div class="label100">Tipo de art&iacute;culo :</div><select name="itemtype" id="itemtype"><option value="">Cualquiera</option>
+			<!-- TMPL_LOOP name="itemtypeloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
+			<!-- /TMPL_LOOP -->
+			</select><br />
+		<div class="label100">Sede :</div><select name="branch" id="branch">
+				<option value="">Cualquiera</option>
+			<!-- TMPL_LOOP name="branchloop" -->
+				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+<br />
+		<div class="label100">Mostrar art&iacute;culos actualmente prestados:</div><input type="checkbox" name="showall" value="mostrar" checked="checked"><br /><br />
+		<div class="label100">Ordenar por</div><select name="order" tabindex="0" size="1" id="order">
+<option <!--TMPL_UNLESS name="order"-->selected<!-- /TMPL_UNLESS--> value="">Fecha de Devoluci&oacute;n</option>
+<option <!--TMPL_IF name="order"-->selected<!-- /TMPL_IF--> value="borrower">Usuario</option>
+</select><br />
+			<input type="submit" value="Aplicar Filtro" class="button reports">
+	</form>
+	</p>
+	
+	<table>
+	<tr>
+		<th class="reports">Fecha de Devoluci&oacute;n </th>
+		<th class="reports">Usuario </th>
+		<th class="reports">Tel&eacute;fono</th>
+		<th class="reports">T&iacute;tulo / Autor</th>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="overdueloop" -->
+		<tr>
+			<td><!-- TMPL_VAR NAME="duedate" --></td>
+			<!-- TMPL_IF NAME="email" -->
+			<td><a href="members/moremember.pl?bornum=<!-- TMPL_VAR name="bornum" -->"><!-- TMPL_VAR NAME="name" --></a> <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><i>(correo)</i></a>
+			</td>
+			<!-- TMPL_ELSE -->
+			<td><!-- TMPL_VAR NAME="name" --></td>
+			<!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="phone" --></td>
+			<td><p><b><!-- TMPL_VAR NAME="title" --></b>, <!-- TMPL_VAR NAME="author" --></p></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->

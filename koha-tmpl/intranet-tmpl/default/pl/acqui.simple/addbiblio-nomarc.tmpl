@@ -1,55 +1,36 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
-<FONT SIZE=6><em>Dodawanie nowego Opisu</em></FONT><br>
-
-<table bgcolor="#ffcc00" width="80%" cellpadding="5">
-  <tr>
-  <td><FONT SIZE=5>Sekcja Pierwsza: Informacja Copyright </font></td>
-  </tr>
-</table>
-
-<!-- TMPL_IF NAME="ERROR" -->
-<p />
-<center>
-<font color="#FF0000">Proszę Podać Tytuł</font>
-</center>
-<!-- /TMPL_IF -->
-
-<FORM action="savebiblio.pl" method="post">
-<table align="center">
-<tr>
-<td>Tytuł: *</td>
-<td><INPUT name="title" size="40" /></td>
-</tr>
-<tr>
-<td>Podtytuł:</td>
-<td><INPUT name="subtitle" size="40" /></td>
-</tr>
-<tr>
-<td>Autor:</td>
-<td><INPUT name="author" size="40" /></td>
-</tr>
-<tr valign="top">
-<td>Tytuł Serii:<br />
-<i>(jeśli dotyczy)</i></td>
-<td><INPUT name="seriestitle" size="40" /></td>
-</tr>
-<tr>
-<td>Data Copyright</td>
-<td><INPUT name="copyrightdate" size="40" /></td>
-</tr>
-<tr valign="top">
-<td>Streszczenie:</td>
-<td><textarea cols="30" rows="6" name="abstract"></textarea></td>
-</tr>
-<tr valign="top">
-<td>Uwagi:</td>
-<td><textarea cols="30" rows="6" name="notes"></textarea></td>
-</tr>
-<tr valign="top">
-<td colspan="2"><center><input type="submit" value="Prześlij"></center></td>
-</tr>
-</table>
-</FORM>
-* Wymagane
+<div id="mainbloc">
+	<h1 class="catalogue">Dodawanie nowego Opisu</h1>
+	
+	<div id="bloc60">
+		<h2 class="catalogue">Sekcja Pierwsza: Informacja Copyright </h2>
+	
+		<!-- TMPL_IF NAME="ERROR" -->
+			<p class="problem">Proszę Podać Tytuł</p>
+		<!-- /TMPL_IF -->
+		
+		<form action="savebiblio.pl" method="post">
+		<p><label class="label100">Tytuł: *</label><input name="title" size="40" /></p>
+		<p><label class="label100">Podtytuł:</label><input name="subtitle" size="40" /></p>
+		<p><label class="label100">Autor:</label><input name="author" size="40" /></p>
+		<p>Dodatkowi Autorzy: <i>Jeden Autor na wiersz</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="additionalauthors" cols="30" rows="6"></textarea>
+		</p>
+		</p>
+		<p>Tytuł Serii: <i>(jeśli dotyczy)</i></p>
+		<p><label class="label100">&nbsp;</label><input name="seriestitle" size="40" /></p>
+		<p>Hasła Tematyczne: <i>Jedno hasło tematyczne na wiersz</i></p>
+		<p><label class="label100">&nbsp;</label>
+			<textarea class="form-box-textarea2" name="subjectheadings" cols="30" rows="6"></textarea>
+		</p>
+		<label class="label100">Data Copyright</label><input name="copyrightdate" size="40" /></p>
+		<label class="label100">Streszczenie:</label><textarea cols="30" rows="6" name="abstract"></textarea></p>
+		<label class="label100">Uwagi:</label><textarea cols="30" rows="6" name="notes"></textarea></p>
+		<p><input type="submit" value="Prześlij" class="button catalogue"></p>
+		</form>
+		* Wymagane
+	</div>
+</div>
 <!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->

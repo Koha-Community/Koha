@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
 
-<script>
+<script language="javascript" type="text/javascript">
 function _(s) { return s } // dummy function for gettext
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function isNotNull(f,noalert) {
@@ -44,9 +44,6 @@ function Check(f) {
 	if (!(isNotNull(window.document.Aform.description,1))) {
 		_alertString += "\n- " + _("Brak opisu");
 	}
-	if ((!isNum(f.loanlength,0)) && f.loanlength.value.length > 0) {
-		_alertString += "\n- " + _("Długość wypożyczenia nie jest cyfrą");
-	}
 	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
 		_alertString += "\n- " + _("Opłata wynajmu nie jest cyfrą");
 	}
@@ -59,118 +56,111 @@ function Check(f) {
 		alert(alertString2);
 	}
 }
-</SCRIPT>
-<!-- TMPL_IF name="add_form" -->
-	<!-- TMPL_IF name="itemtype" -->
-		<h1>Zmień rodzaj pozycji</h1>
+</script>
+<div id="mainbloc">
+<!-- TMPL_IF NAME="add_form" -->
+	<!-- TMPL_IF NAME="itemtype" -->
+		<h1 class="parameters">Zmień rodzaj pozycji</h1>
 	<!-- TMPL_ELSE -->
-		<h1>Dodaj typ materiału</h1>
+		<h1 class="parameters">Dodaj typ materiału</h1>
 	<!-- /TMPL_IF -->
-	<form action='<!-- TMPL_VAR name="script_name" -->' name=Aform method=post>
-		<input type=hidden name=op value='add_validate'>
-		<input type=hidden name=checked value=0>
-		<table>
-			<!-- TMPL_IF name="itemtype" -->
-				<tr><td>Typ pozycji</td><td><input type=hidden name=itemtype value=<!-- TMPL_VAR name="itemtype" -->><!-- TMPL_VAR name="itemtype" --></td></tr>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate">
+		<input type="hidden" name="checked" value="0">
+			<!-- TMPL_IF NAME="itemtype" -->
+				<p><label class="label100">Typ pozycji<label><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="itemtype" --></p>
 			<!-- TMPL_ELSE -->
-				<tr><td>Typ pozycji</td><td><input type=text name=itemtype size=6 maxlength=4 onBlur="toUC(this)"></td></tr>
+				<p><label class="label100">Typ pozycji<label><input type="text" name="itemtype" size="6" maxlength="4" onblur="toUC(this)"></p>
 			<!-- /TMPL_IF -->
-			<tr>
-				<td>Wyjaśnienie</td>
-				<td><input type=text name=description size=40 maxlength=80 value='<!-- TMPL_VAR name="description" escape=HTML -->'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td>Nie na wynos</td>
-				<td>
-					<!-- TMPL_IF name="notforloan" -->
-						<input type=checkbox name=notforloan checked value=1>
-					<!-- TMPL_ELSE -->
-						<input type=checkbox name=notforloan value=1>
-					<!-- /TMPL_IF -->
-					Jeśli zaznaczone to żaden dokument tego typu nie może być wypożyczony. Jeśli pozostawiony pusty, to każdy dokument tego typu może być wypożyczony, chyba, że dla konkretnego egzemplarza ustawiono flagę &quot;nienawynos.&quot;
-				</td>
-			</tr>
-			<tr>
-				<td>Okres wypożyczenia</td>
-				<td>
-					<input type=text name=loanlength size=10 value='<!-- TMPL_VAR name="loanlength" -->'> ma znaczenie tylko wtedy gdy &quot;nie na wynos&quot; jest puste
-				</td>
-			</tr>
-			<tr>
-				<td>Wolno przedłużać</td>
-				<td><input type=checkbox name=renewalsallowed <!-- TMPL_IF name="renewalsallowed" -->checked<!-- /TMPL_IF --> value=1></td>
-			</tr>
-			<tr>
-				<td>Opłata wynajmu</td>
-				<td><input type=text name=rentalcharge size=10 value='<!-- TMPL_VAR name="rentalcharge" -->'></td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><INPUT type=button value='OK' onClick='Check(this.form)'></td>
-			</tr>
-		</table>
+			<p>
+				<label class="label100">Wyjaśnienie</label>
+				<input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" escape=HTML -->">
+			</p>
+			<p>
+				<label class="label100">Nie na wynos</label>
+				<!-- TMPL_IF NAME="notforloan" -->
+					<input type="checkbox" name="notforloan" checked value="1">
+				<!-- TMPL_ELSE -->
+					<input type="checkbox" name="notforloan" value="1">
+				<!-- /TMPL_IF -->
+				Jeśli zaznaczone to żaden dokument tego typu nie może być wypożyczony. Jeśli pozostawiony pusty, to każdy dokument tego typu może być wypożyczony, chyba, że dla konkretnego egzemplarza ustawiono flagę &quot;nienawynos.&quot;
+			</p>
+			<p>
+				<label class="label100" name="renewalsallowed">Number of renewals allowed</label>
+				<input type="text" name="renewalsallowed" value="<!-- TMPL_VAR NAME="renewalsallowed" -->">
+			</p>
+			<p>
+				<label class="label100">Opłata wynajmu</label>
+				<input type="text" name="rentalcharge" size="10" value="<!-- TMPL_VAR NAME="rentalcharge" -->">
+			</p>
+			<p>
+				<input type="button" value="OK" class="button" onclick="Check(this.form)">
+			</p>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="delete_confirm" -->
-	<TABLE bg="#99cc33">
-		<tr>
-			<th>Typ pozycji</th>
-			<th><!-- TMPL_VAR name="itemtype" --></th>
-		</tr>
-	<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-		<input type=hidden name=op value=delete_confirmed><input type=hidden name=itemtype value='<!-- TMPL_VAR name="itemtype" -->'>
-	<tr><td>Wyjaśnienie</td><td><!-- TMPL_VAR name="description" --></td></tr>
-	<tr><td>Okres wypożyczenia</td><td><!-- TMPL_VAR name="loanlength" --></td></tr>
-	<tr><td>Przedłużenia</td><td><!-- TMPL_IF name="renewalsallowed" -->Możliwe<!-- TMPL_ELSE -->Nie możliwe<!-- /TMPL_IF --></td></tr>
-	<tr><td>Opłata wynajmu</td><td><!-- TMPL_VAR name="rentalcharge" --></td></tr>
-	<!-- TMPL_IF name="total" -->
-		<tr><td colspan=2 align=center><b>Ten rekord był w użyciu <!-- TMPL_VAR name="total" --> razy. Wymazanie nie jest możliwe</b></td></tr>
-		<tr><td colspan=2></form><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value=OK></form></td></tr>
+<!-- TMPL_IF NAME="delete_confirm" -->
+		<p><label>Typ pozycji</label><!-- TMPL_VAR NAME="itemtype" --></p>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->">
+	<p><label>Wyjaśnienie</label><!-- TMPL_VAR NAME="description" --></p>
+	<p><label>Przedłużenia</label><!-- TMPL_IF NAME="renewalsallowed" -->Możliwe<!-- TMPL_ELSE -->Nie możliwe<!-- /TMPL_IF --></p>
+	<p><lable>Opłata wynajmu</label><!-- TMPL_VAR NAME="rentalcharge" --></p>
+	<!-- TMPL_IF NAME="total" -->
+		<p>
+			<b>Ten rekord był w użyciu <!-- TMPL_VAR NAME="total" --> razy. Wymazanie nie jest możliwe</b>
+		</p>
+		<p>
+			</form>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="OK" class="button parameters"></form>
+		</p>
 	<!-- TMPL_ELSE -->
-		<tr><td colspan=2 align=center>POTWIERDŹ WYMAZANIE</td></tr>
-		<tr><td><input type=submit value="TAK"></form></td><td><form action='<!-- TMPL_VAR name="script_name" -->' method=post><input type=submit value="NIE"></form></td></tr>
+		<p>POTWIERDŹ WYMAZANIE</p>
+		<p>
+			<input type="submit" value="TAK" class="button parameters"></form>
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NIE" class="button parameters"></form>
+		</p>
 	<!-- /TMPL_IF -->
 
-	</table>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="else" -->
-<h1>Typ Pozycji - zarządzanie</h1>
-<table border='1' cellpadding='5' cellspacing='0' width='550'>
+<!-- TMPL_IF NAME="else" -->
+<h1 class="parameters">Typ Pozycji - zarządzanie</h1>
+<table>
 	<tr>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Kod</b></th>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Wyjaśnienie</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Okres wypożyczenia</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Przedłużalność</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif"><b>Opłata</b></td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Edytuj</td>
-		<td background="<!-- TMPL_VAR NAME='themelang' -->/images/background-mem.gif">Wymaż</td>
+		<th class="parameters">Kod</th>
+		<th class="parameters">Wyjaśnienie</th>
+		<th class="parameters">not for loan</th>
+		<th class="parameters">Przedłużalność</th>
+		<th class="parameters">Opłata</th>
+		<th class="parameters">Edytuj</th>
+		<th class="parameters">Wymaż</th>
 	</tr>
-	<!-- TMPL_LOOP name="loop" -->
+	<!-- TMPL_LOOP NAME="loop" -->
 		<tr>
-			<td><!-- TMPL_VAR name="itemtype" --></td>
-			<td><!-- TMPL_VAR name="description" --></td>
-			<td><!-- TMPL_VAR name="loanlength" --></td>
-			<td><!-- TMPL_IF name="renewalsallowed" -->Tak<!-- TMPL_ELSE -->Nie<!-- /TMPL_IF --></td>
-			<td><!-- TMPL_VAR name="rentalcharge" --></td>
-			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-			<td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
+			<td><!-- TMPL_VAR NAME="itemtype" --></td>
+			<td><!-- TMPL_VAR NAME="description" --></td>
+			<td><!-- TMPL_IF NAME="notforloan" -->Tak<!-- /TMPL_IF --></td>
+			<td><!-- TMPL_UNLESS name="notforloan" -->
+					<!-- TMPL_IF NAME="renewalsallowed" -->
+						<!-- TMPL_VAR name="renewalsallowed" --> time(s)
+					<!-- TMPL_ELSE -->
+						Nie
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_UNLESS -->
+			</td>
+			<td><!-- TMPL_UNLESS name="notforloan" --><!-- TMPL_VAR NAME="rentalcharge" --><!-- /TMPL_UNLESS --></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&itemtype=<!-- TMPL_VAR NAME="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png"  width="32" hspace="0" vspace="0" border="0"></a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&itemtype=<!-- TMPL_VAR NAME="itemtype" escape="HTML" -->"><img src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png" width="32" hspace="0" vspace="0" border="0"></a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-<input type=hidden name=op value=add_form>
-<br>
-<table width=40%>
-	<tr>
-		<td width="33%">
-			<input type=submit class="button" value="Dodaj typ materiału" title="Dodaj typ materiału" alt="Dodaj typ materiału">
-		</td>
-		<td width=33%><!-- TMPL_IF name="previous" --><a href="<!-- TMPL_VAR name=previous -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border=0></a><!-- /TMPL_IF --></td>
-		<td width=33%><!-- TMPL_IF name="next" --><a href="<!-- TMPL_VAR name=next -->"><input type=image src="<!-- TMPL_VAR name="interface" -->/<!-- TMPL_VAR name="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border=0></a><!-- /TMPL_IF --></td>
-	</tr>
-</table>
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form">
+	<input type="submit" class="button parameters" value="Dodaj typ materiału" title="Dodaj typ materiału" alt="Dodaj typ materiału">
+	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="wstecz" alt="wstecz" border="0"></a><!-- /TMPL_IF --></td>
+	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->"><input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="dalej" alt="dalej" border="0"></a><!-- /TMPL_IF --></td>
 </form>
+</div>
 <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

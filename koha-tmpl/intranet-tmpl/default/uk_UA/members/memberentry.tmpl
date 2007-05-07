@@ -105,7 +105,11 @@
 			<tr>
 				<td colspan="2">
 				<!-- TMPL_UNLESS name="institution" -->
-					<input type="radio" name="sex" value="F"<!-- TMPL_IF NAME="female" --> checked<!-- /TMPL_IF -->>F  <input type="radio" name="sex" value="M"<!-- TMPL_UNLESS name="female" --> checked<!-- /TMPL_UNLESS -->> M
+                                    <!-- TMPL_IF NAME="female" -->
+					<input type="radio" name="sex" value="F" checked>Female  <input type="radio" name="sex" value="M" > Male
+                                    <!-- TMPL_ELSE -->
+					<input type="radio" name="sex" value="F">Female  <input type="radio" name="sex" value="M" checked> Male
+                                    <!-- /TMPL_IF -->
 				<!-- /TMPL_UNLESS -->
 
 				</td>

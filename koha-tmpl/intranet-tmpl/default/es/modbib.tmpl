@@ -1,64 +1,63 @@
-<TMPL_INCLUDE Name="cat-top.inc">
+<!-- TMPL_INCLUDE Name="cat-top.inc" -->
 
-<a href="modwebsites.pl?biblionumber=<TMPL_VAR Name="biblionumber">">Modificación de Links del Sitio</a>
+<a href="modwebsites.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Modificar Enlaces Web</a>
 <form action="updatebiblio.pl" method="post" name="f">
-<input type="hidden" name="biblionumber" value="<TMPL_VAR Name="biblionumber">">
-<input type="hidden" name="biblioitemnumber" value="<TMPL_VAR Name="biblioitemnumber">">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
 <table border="0" cellspacing="0" cellpadding="5">
 <tr valign="top">
 <td>Autor</td>
-<td><input type="text" name="author" value="<TMPL_VAR Name="author" ESCAPE=HTML>"></td>
+<td><input type="text" name="author" value="<!-- TMPL_VAR NAME="author" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Título</td>
-<td><input type="text" name="title" value="<TMPL_VAR Name="title" ESCAPE=HTML>"></td>
+<td>T&iacute;tulo</td>
+<td><input type="text" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Abstract</td>
-<td><textarea name="abstract" cols="40" rows="4"><TMPL_VAR Name="abstract"></textarea></td>
+<td>Resumen</td>
+<td><textarea name="abstract" cols="40" rows="4"><!-- TMPL_VAR NAME="abstract" --></textarea></td>
 </tr>
 <tr valign="top">
-<td>Materias/Descriptores</td>
-<td><textarea name="subject" cols="40" rows="4"><TMPL_VAR Name="subject"></textarea>
-<a href="javascript:Dopop()">...</a>
+<td>Tema</td>
+<td><textarea name="subject" cols="40" rows="4"><!-- TMPL_VAR NAME="subject" --></textarea>
 </td>
 </tr>
 <tr valign="top">
-<td>Fecha Copyright</td>
-<td><input type="text" name="copyrightdate" value="<TMPL_VAR Name="copyrightdate" ESCAPE=HTML>"></td>
+<td>Fecha de Copyright</td>
+<td><input type="text" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Título de la serie</td>
-<td><input type="text" name="seriestitle" value="<TMPL_VAR Name="seriestitle" ESCAPE=HTML>"></td>
+<td>T&iacute;tulo de Serie</td>
+<td><input type="text" name="seriestitle" value="<!-- TMPL_VAR NAME="seriestitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Otro Autor</td>
-<td><input type="text" name="additionalauthor" value="<TMPL_VAR Name="additionalauthor" ESCAPE=HTML>"></td>
+<td>Autor Adicional</td>
+<td><input type="text" name="additionalauthor" value="<!-- TMPL_VAR NAME="additionalauthor" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Subtítulo</td>
-<td><input type="text" name="subtitle" value="<TMPL_VAR Name="subtitle" ESCAPE=HTML>"></td>
+<td>Subt&iacute;tulo</td>
+<td><input type="text" name="subtitle" value="<!-- TMPL_VAR NAME="subtitle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
-<td>Título unificado</td>
-<td><input type="text" name="unititle" value="<TMPL_VAR Name="untitle" ESCAPE=HTML>"></td>
+<td>T&iacute;tulo unificado</td>
+<td><input type="text" name="unititle" value="<!-- TMPL_VAR NAME="unititle" ESCAPE=HTML -->"></td>
 </tr>
 <tr valign="top">
 <td>Notas</td>
-<td><textarea name="notes" cols="40" rows="4"><TMPL_VAR Name="notes" ESCAPE=HTML></textarea></td>
+<td><textarea name="notes" cols="40" rows="4"><!-- TMPL_VAR NAME="notes" ESCAPE=HTML --></textarea></td>
 </tr>
 <tr valign="top">
-<td>Número Inventario</td>
-<td><input type="text" name="serial" value="<TMPL_VAR Name="serial" ESCAPE=HTML>"></td>
+<td>Serie</td>
+<td><input type="text" name="serial" value="<!-- TMPL_VAR NAME="serial" ESCAPE=HTML -->"></td>
 </tr>
 </table>
 <br>
-<input type="submit" name="submit" value="Save Changes">
+<input type="submit" name="submit" value="Guardar Cambios">
 </form>
-<script>
+<script language="javascript" type="text/javascript">
 function Dopop() {
         newin=window.open("thesaurus_popup.pl?subject="+document.f.subject.value,"thesaurus",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 
-<TMPL_INCLUDE Name="cat-bottom.inc">
+<!-- TMPL_INCLUDE Name="cat-bottom.inc" -->

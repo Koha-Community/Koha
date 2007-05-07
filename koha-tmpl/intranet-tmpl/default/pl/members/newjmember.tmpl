@@ -1,85 +1,116 @@
 <!-- TMPL_INCLUDE Name="members-top.inc" -->
-
-<!-- TMPL_IF Name="NOK" -->
-	<!-- TMPL_VAR Name="string" -->
-<!-- TMPL_ELSE -->
-	<H1> Potwierdź Wpis </H1>
-	<!-- TMPL_LOOP Name="identsloop" -->
-		<!-- TMPL_IF Name="cardchild" -->
-			<table border=0 cellspacing=0 cellpadding=5>
-				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-					<td background="<!-- TMPL_VAR Name="image" -->">
-					<B> NOWY CZYTELNIK </B>
-					</td>
-					<td>
-					&nbsp;
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Nazwa</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="name" -->
-					</td>
-				</tr>
-				<tr valign=top bgcolor="<!-- TMPL_VAR Name="main" -->" >
-					<td background="<!-- TMPL_VAR Name="image" -->">
-					<B> DANE CZŁONKOWSKIE </B>
-					</td>
-					<td>
-					&nbsp;
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Numer Członkowski</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="bornum" -->
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Data urodzenia</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="dob" -->
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Płeć</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="sex" -->
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Szkoła</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="school" -->
-					</td>
-				</tr>
-				<tr valign=top bgcolor="white" >
-					<td>
-					<B>Uwagi Ogólne</B>
-					</td>
-					<td>
-					<!-- TMPL_VAR Name="notes" -->
-					</td>
-				</tr>
-			</TABLE><p>
-		<!-- /TMPL_IF -->
-  <!-- /TMPL_LOOP -->
-	<form action="/cgi-bin/koha/members/insertjdata.pl" method=post>
-		<!-- TMPL_LOOP NAME=inputsloop -->
-			<input type=hidden name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
-		<!-- /TMPL_LOOP -->
-		<input type=submit name=submit value="prześlij">
-	</form>
-<!-- /TMPL_IF -->
-
+<div id="mainbloc">
+	<!-- TMPL_IF Name="NOK" -->
+	<h3>The following fields were entered incorrectly.  Please go back and correct them.</h3>
+	<ul>
+		<!-- TMPL_IF NAME="cardnumber_missing" --><li>Please enter a library card number.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="firstname_missing" --><li>Please enter the patron's first name.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="surname_missing" --><li>Please enter the patron's last name.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="dob_missing" --><li>Please enter the patron's date of birth.</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="gender_missing" --><li>Please enter the patron's gender.</li><!-- /TMPL_IF -->
+	</ul>
+	<!-- TMPL_ELSE -->
+		<h1> Potwierdź Wpis </h1>
+		<!-- TMPL_LOOP Name="identsloop" -->
+			<!-- TMPL_IF Name="cardchild" -->
+				<table border="0" cellspacing="0" cellpadding="5">
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> NOWY CZYTELNIK </b>
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Nazwa</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="name" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="<!-- TMPL_VAR NAME="main" -->" >
+						<td background="<!-- TMPL_VAR NAME="image" -->">
+						<b> DANE CZŁONKOWSKIE </b>
+						</td>
+						<td>
+						&nbsp;
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Numer Członkowski</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="bornum" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Barcode Number</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="cardchild" -->
+						</td>
+					</tr>					
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Data urodzenia</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="dob" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Płeć</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="sex" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Szkoła</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="school" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Uwagi Ogólne</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="notes" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Joining date</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="joining" -->
+						</td>
+					</tr>
+					<tr valign="top" bgcolor="white" >
+						<td>
+						<b>Expiry date</b>
+						</td>
+						<td>
+						<!-- TMPL_VAR NAME="expiry" -->
+						</td>
+					</tr>
+				</table><p>
+			<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+		<form action="/cgi-bin/koha/members/insertjdata.pl" method="post">
+			<!-- TMPL_LOOP NAME="inputsloop" -->
+				<input type="hidden" name="<!-- TMPL_VAR NAME="key" -->" value="<!-- TMPL_VAR NAME="value" -->">
+			<!-- /TMPL_LOOP -->
+			<input type="submit" name="submit" value="prześlij" class="button members">
+		</form>
+	<!-- /TMPL_IF -->
+</div>
 <!-- TMPL_INCLUDE Name="members-bottom.inc" -->

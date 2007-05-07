@@ -189,19 +189,35 @@ function check(f) {
 		</p>
 		<p>
 			<label class="label100">Асигнована вартість</label>
-			<input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+			<!-- TMPL_IF name="close" -->
+                            <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly >
+			<!-- TMPL_ELSE -->
+                            <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->">
+			<!--/TMPL_IF-->
 		</p>
 <!-- TMPL_IF NAME="GST" -->		<p>
 			<label class="label100">Асигноване ПДВ</label>
-			<input type="text" size="20" name="GST" value="<!-- TMPL_VAR NAME="GST" -->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+			<!-- TMPL_IF name="close" -->
+                            <input type="text" size="20" name="GST" value="<!-- TMPL_VAR NAME="GST" -->" readonly >
+			<!-- TMPL_ELSE -->
+                            <input type="text" size="20" name="GST" value="<!-- TMPL_VAR NAME="GST" -->" >
+			<!--/TMPL_IF-->
 		</p><!-- TMPL_ELSE --><input type="hidden" name="GST" value="0"><!-- /TMPL_IF -->
 		<p>
 			<label class="label100"><b>АСИГНОВАНО ЗАГАЛОМ</b></label>
-			<input type="text" size="20" name="total" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+			<!-- TMPL_IF name="close" -->
+                            <input type="text" size="20" name="total" value="" readonly >
+                        <!-- TMPL_ELSE -->
+                            <input type="text" size="20" name="total" value="" readonly >
+			<!--/TMPL_IF-->
 		</p>
 		<p>
 			<label class="label100">Фактична вартість</label>
-			<input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF-->>
+			<!-- TMPL_IF name="close" -->
+                            <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" readonly >
+			<!-- TMPL_ELSE -->
+                            <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" >
+			<!--/TMPL_IF-->
 		</p>
 		<p>
 			<label class="label100"><i>Код пакету</i></label>

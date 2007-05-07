@@ -1,80 +1,158 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<FONT SIZE=6><em>Shopping Basket <TMPL_VAR name="basket"> for <a href=supplier.pl?id=<TMPL_VAR name="booksellerid">></a> <TMPL_VAR name="name"></em></FONT><br />
-(Our Reference: <TMPL_VAR name="entrydate">, #<TMPL_VAR name="basket">, authorised by: <TMPL_VAR name="authorisedby">)<br />
-<CENTER>
-<!--<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
-<b>Search ISBN, Title or Author:</b> <INPUT TYPE="text"  SIZE="25"   NAME="recieve">
-</form> -->
-<p>
-<FORM ACTION="/cgi-bin/koha/acqui/modorders.pl" method=post name=orderform>
-<table border=0 cellspacing=0 cellpadding=5>
-	<tr valign=top bgcolor="#ffdf61">
-		<td width="5%"><b>Order</b></td>
-		<td width="10%"><b>Isbn</b></td>
-		<td width="30%"><b>Title</b></td>
-		<td width="20%"><b>Author</b></td>
-		<td width="6%"><b>$ rrp</b></td>
-		<td width="8%"><b>$est</b></td>
-		<td width="8%"><b>Qty</b></td>
-		<td width="8%"><b>Total</b></td>
-	</tr>
-	<TMPL_LOOP name="books_loop">
-		<tr valign=top bgcolor="<TMPL_VAR name="color">">
-			<td><TMPL_VAR name="ordernumber"></td>
-			<td><TMPL_VAR name="isbn"></td>
-			<td><a href="newbiblio.pl?ordnum=<TMPL_VAR name="ordernumber">&id=<TMPL_VAR name="booksellerid">&basket=<TMPL_VAR name="basket">"><TMPL_VAR name="title"></a></td>
-			<td><TMPL_VAR name="author"></td>
-			<td><input type=text name=rrp<TMPL_VAR name="i"> size=6 value="<TMPL_VAR name="rrp">"></td>
-			<td><input type=text name=eup<TMPL_VAR name="i"> size=6 value="<TMPL_VAR name="ecost">"></td>
-			<td><input type=text name=quantity<TMPL_VAR name="i"> size=6 value="<TMPL_VAR name="quantity">" onchange='update(this.form)'></td>
-			<td><input type=text name=total<TMPL_VAR name="i"> size=10 value=<TMPL_VAR name="line_total">></td>
-			<input type=hidden name=ordnum<TMPL_VAR name="i"> value=<TMPL_VAR name="ordernumber">>
-			<input type=hidden name=bibnum<TMPL_VAR name="i"> value=<TMPL_VAR name="biblionumber">>
-		</tr>
-	</TMPL_LOOP>
-	<input type=hidden name=number value=<TMPL_VAR name="count">>
-	<input type=hidden name=basketno value="<TMPL_VAR name="basket">">
-	<tr valign=top bgcolor=white>
-		<td colspan=6 rowspan=3  bgcolor="#ffdf61">
-  			<b>HELP</b><br>
-  			To cancel an order, just change the quantity to 0 and click "save changes".<br>
-			To change any of the catalogue or accounting information attached to an order,  click on the title.<br>
-		</td>
-  		<td><b>SubTotal</b></td>
-  		<td>$<input type=text name=subtotal size=10 value=<TMPL_VAR name="sub_total">></td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td><b>GST</b></td>
-		<td>$<input type=text name=gst size=10 value=<TMPL_VAR name="gist">></td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td><b>TOTAL</b></td>
-		<td>$<input type=text name=grandtotal size=10 value=<TMPL_VAR name="grand_total">></td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td></td>
-		<td colspan=3>
-			<input type=image  name=submit src=/images/save-changes.gif border=0 width=187 height=42 align=right>
+<div id="mainbloc">
+	<h1 class="acquisition"><!-- TMPL_UNLESS name="basketno" -->Nuevo <!-- /TMPL_UNLESS -->carrito de compra <b><!-- TMPL_VAR NAME="basketno" --> </b>para <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1><br />
+	<!-- TMPL_UNLESS name="closedate" -->
+	<!-- TMPL_IF name="basketno" -->
+		<div id="bloc25">
+			<h2 class="acquisition doNotPrint">Canasta info</h2>
+			<p class="doNotPrint"><label class="label100">Administrado por<label><!-- TMPL_VAR NAME="authorisedbyname" --></p>
+			<p><label class="label100">N&uacute;mero de Canasta<label> <!-- TMPL_VAR NAME="basketno" --></p>
+			<p><label class="label100">abierto sobre<label> <!-- TMPL_VAR NAME="creationdate" --></p>
+			<!-- TMPL_IF name="closedate" -->
+				Cerrada el <!-- TMPL_VAR name="closedate" -->
+			<!-- TMPL_ELSE -->
+			<p class="doNotPrint"><a href="/cgi-bin/koha/acqui/order.pl?op=close&amp;basket=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->" class="button acquisition">Cesta cerrada</a></p>
+			<!-- /TMPL_IF -->
+		</div>
+    <!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
+		<div id="bloc25">
+			<p><!-- TMPL_VAR name="name" --></p>
+			<p><!-- TMPL_VAR name="postal" --></p>
+			<p><!-- TMPL_VAR name="address2" --></p>
+			<p><!-- TMPL_VAR name="address3" --></p>
+			<p><!-- TMPL_VAR name="address4" --></p>
+		</div>
+		<div id="bloc25" style="float:right">
+		   <p><!-- TMPL_VAR name="branchname" --></p>
+		   <p><!-- TMPL_VAR name="branchaddress1" --></p>
+		   <p><!-- TMPL_VAR name="branchaddress2" --></p>
+		   <p><!-- TMPL_VAR name="branchaddress3" --></p>
+	     </div>
+	
+	<div id="bloc100">
+	<h2 class="acquisition">Pedido</h2>
+	<!-- TMPL_IF name="books_loop" -->
+		<table>
+			<tr valign="top" bgcolor="#ffdf61">
+				<th class="acquisition doNotPrint">Pedido</th>
+				<th class="acquisition">Editor<span class="doNotPrint"><a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=biblioitems.publishercode" class="acquisition">[Pedido]</a></span></th>
+				<th class="acquisition">T&iacute;tulo</th>
+				<th class="acquisition doNotPrint" title="Costo Recomendado de Restituci&oacute;n:">RRP</th>
+				<th class="acquisition">est</th>
+				<th class="acquisition">Cant</th>
+				<th class="acquisition">Total</th>
+				<th class="acquisition doNotPrint">Fondo <a href="basket.pl?basket=<!-- TMPL_VAR name="basketno" -->&order=aqorderbreakdown.bookfundid,biblioitems.publishercode">[orden]</a></th>
+				<!-- TMPL_IF name="active" -->
+		              <!-- TMPL_UNLESS name="closedate" -->
+                        <th class="acquisition doNotPrint">Borrar</th>
+                        <th class="acquisition doNotPrint">Editar</th>
+                    <!-- /TMPL_UNLESS -->
+				<!-- /TMPL_IF -->
+			</tr>
+			<!-- TMPL_LOOP NAME="books_loop" -->
+				<!-- TMPL_IF name="odd" -->
+				<tr class="hilighted">
+				<!-- TMPL_ELSE -->
+				<tr>
+				<!-- /TMPL_IF -->
+					<td class="doNotPrint"><!-- TMPL_VAR NAME="ordernumber" --></td>
+					<td><!-- TMPL_VAR NAME="publishercode" --></td>
+					<!-- TMPL_IF name="closedate" -->
+						<td>
+							<b><!-- TMPL_VAR NAME="title" --></b><br/>
+								<!-- TMPL_VAR NAME="author" -->
+								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF name="notes" --><p class="doNotPrint"><i><!--TMPL_VAR name="notes" --></i></p><!-- /TMPL_IF -->
+						</td>
+					<!-- TMPL_ELSE -->
+						<td>
+							<a href="newbiblio.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="title" --></a><br/>
+								<!-- TMPL_VAR NAME="author" -->
+								<!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
+								<!-- TMPL_IF name="notes" --></p><p class="doNotPrint"><i><!--TMPL_VAR name="notes" --></i><!-- /TMPL_IF -->
+						</td>
+					<!-- /TMPL_IF -->
+					<td class="doNotPrint number"><p><!-- TMPL_VAR NAME="rrp" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="ecost" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="quantity" --></p></td>
+					<td class="number"><p><!-- TMPL_VAR NAME="line_total" --></p></td>
+					<td class="doNotPrint"><p><!-- TMPL_VAR NAME="bookfundid" --></p></td>
+					<!-- TMPL_IF name="active" -->
+		              <!-- TMPL_UNLESS name="closedate" -->
+                        <td class="doNotPrint">
+                                <a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblio=<!-- TMPL_VAR NAME="biblionumber" -->">
+                                    <img src="/intranet-tmpl/default/images/edittrash.png" alt="Borrar del carrito" title="Borrar del carrito" width="32" hspace="0" vspace="0" border="0">
+                                </a>
+                            </td>
+                            <td class="doNotPrint">
+                                <a href="newbiblio.pl?sub=&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&biblio=<!-- TMPL_VAR NAME="biblionumber" -->&ordnum=<!-- TMPL_VAR NAME="ordernumber" --><!--TMPL_IF name="closedate"-->&close=1<!--/TMPL_IF -->">
+                                    <img src="/intranet-tmpl/default/images/fileopen.png" alt="Editar" title="Borrar del carrito" width="32" hspace="0" vspace="0" border="0">
+                                </a>
+                            </td>
+                        <!-- /TMPL_UNLESS -->
+					<!-- /TMPL_IF -->
+				</tr>
+			<!-- /TMPL_LOOP -->
+			<input type="hidden" name="number" value=<!-- TMPL_VAR NAME="count" -->>
+			<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+			<tr>
+				<td class="acquisition doNotPrint">
+					&nbsp;
+				</td>
+				<td class="acquisition">
+					&nbsp;
+				</td>
+				<td class="acquisition number">
+					<!-- TMPL_IF NAME="GST" --><p>Sub total</p>
+					<p>GST</p><!-- /TMPL_IF -->
+					<p>TOTAL (<!-- TMPL_VAR NAME="currency" -->)</p>
+				</td>
+				<td class="acquisition number">
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR NAME="sub_total_est" --></p>
+					<p><!-- TMPL_VAR NAME="gist_est" --></p><!-- /TMPL_IF -->
+					<p><!-- TMPL_VAR NAME="grand_total_est" --></p>
+				</td>
+				<td class="doNotPrint acquisition">
+					<!-- TMPL_IF NAME="GST" --><p>&nbsp;</p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition number">
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR name="qty_total" --></p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
+					<p>&nbsp;</p>
+				</td>
+				<td class="acquisition number">
+					<!-- TMPL_IF NAME="GST" --><p><!-- TMPL_VAR NAME="sub_total" --></p>
+					<p><!-- TMPL_VAR NAME="gist" --></p><!-- /TMPL_IF -->
+					<p><!-- TMPL_VAR NAME="grand_total" --></p>
+				</td>
+				<td colspan="3" class="acquisition">
+					<!-- TMPL_IF NAME="GST" --><p>&nbsp;</p>
+					<p>&nbsp;</p><!-- /TMPL_IF -->
+					<p>&nbsp;</p>
+				</td>
+			</tr>
+		</table>
+	<!-- TMPL_ELSE -->
+		<p>Canasta vac&iacute;a</p>
+	<!-- /TMPL_IF -->
+	</div>
+	<!-- TMPL_IF name="active" -->
+		<!-- TMPL_UNLESS name="closedate" -->
+		<div id="bloc25">
+			<h2 class="acquisition doNotPrint">A&ntilde;adir l&iacute;nea de orden</h2>
+			<form action="/cgi-bin/koha/acqui/newbasket2.pl" method="post">
+				<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->">
+				<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->">
+				<p class="doNotPrint" >de un art&iacute;culo existente: </b><input type="text"  size="25"   name="search"><input type="submit" class="button acquisition" value="Buscar"></p>
+				<p class="doNotPrint">o <a href="/cgi-bin/koha/acqui/suggestion-select.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition"> a partir de una sugerencia </a> <a href="/cgi-bin/koha/acqui/newbiblio.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition"> Nuevo art&iacute;culo</a>
+				</p>
 			</form>
-		</td>
-	</tr>
-	<tr valign=top bgcolor=white>
-		<td colspan=9>
-			<FORM ACTION="/cgi-bin/koha/acqui/newbasket2.pl" method=post>
-				<input type=hidden name=id value="<TMPL_VAR name="id">">
-				<input type=hidden name=basket value="<TMPL_VAR name="basket">">
-				<b> Add order : enter keyword or title: </b><INPUT TYPE="text"  SIZE="25"   NAME="search">
-			</form>
-		</td>
-	</tr>
-
-</table>
-</CENTER>
-
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+		</div>
+		<!-- /TMPL_UNLESS -->
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

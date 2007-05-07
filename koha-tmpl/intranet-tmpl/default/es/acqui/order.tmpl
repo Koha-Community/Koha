@@ -1,47 +1,68 @@
-<TMPL_INCLUDE name="acquisitions-top.inc">
-<FONT SIZE=6><em>Supplier Search Results</em></FONT><br />
-<a href="supplier.pl?id=0"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add supplier" ALT="Add" BORDER=0 ></a>
-<CENTER>
-You searched on <b>supplier <TMPL_VAR name="supplier">,</b> <TMPL_VAR name="count"> results found<p>
-<table border=0 cellspacing=0 cellpadding=5 width="80%">
-<tr valign=top bgcolor="#ffdf61">
-	<td width="10%"><b>Order</b></td>
-	<td width="10%"><b>Recieve<b></td>
-	<td width="30%"><b>Company</b></td>
-	<td width="50%">
-		<table width="100%" border=0 cellspacing=0 cellpadding=5>
-			<tr>
-				<td width="15%"><b>Basket</b></td>
-				<td width="15%"><b>Items</b></td>
-				<td width="40%"><b>Staff</b></td>
-				<td width="30%"><b>Date</b></td>
-			</tr>
-		</table>
-	</td>
+<!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
+<div id="mainbloc">
+<h1 class="acquisition">Usted busc&oacute; <b>proveedor <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> resultados encontrados</h1>
+<div id="bloc100">
+<table>
+<tr>
+	<th class="acquisition">Pedido</th>
+	<th class="acquisition">Recibir</th>
+	<th class="acquisition">Proveedor</th>
+	<th class="acquisition">CANASTA</th>
 </tr>
 
-<TMPL_LOOP name="loop_suppliers">
-	<tr valign=top bgcolor=<TMPL_VAR name="color">>
+<!-- TMPL_LOOP name="loop_suppliers" -->
+	<tr valign="top">
 		<td>
-			<a href="basket.pl?id=<TMPL_VAR name="id">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_send.png" title="Add order" ALT="Add" BORDER=0 ></a>
+			<!-- TMPL_IF name="active" -->
+				<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_send.png" title="A&ntilde;adir Orden" alt="A&ntilde;adir" border=0></a>
+			<!-- TMPL_ELSE -->
+				Inactivo
+			<!-- /TMPL_IF -->
 		</td>
 		<td>
-			<a href="recieveorder.pl?id=<TMPL_VAR name="id">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/mail_get.png" title="recieve" ALT="Add" BORDER=0 ></a>
+			<a href="recieveorder.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><img src="<!-- TMPL_VAR NAME='interface' -->/<!-- TMPL_VAR name="theme" -->/images/mail_get.png" title="recibir" alt="A&ntilde;adir" border=0></a>
 		</td>
-		<td><a href="supplier.pl?id=<TMPL_VAR name="id">"><TMPL_VAR name="name"></a></td>
+		<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->&op=display"><!-- TMPL_VAR name="name" --></a></td>
 		<td>
-			<table width="100%" cellspacing=0 cellpadding=5 border=0>
-				<TMPL_LOOP name="loop_basket">
+			<table>
+			     <!-- TMPL_IF name="loop_basket" -->
 					<tr>
-						<td width="15%"><a href="/cgi-bin/koha/acqui/basket.pl?basket=<TMPL_VAR name="basketno">"><TMPL_VAR name="basketno"></a></td>
-						<td width="15%"><TMPl_VAR name="total"></td>
-						<td width="40%"><TMPL_VAR name="authorisedby"></td>
-						<td width="30%"><TMPL_VAR name="entrydate"></td>
+						<th class="acquisition">CANASTA</th>
+						<th class="acquisition">Ejemplares</th>
+						<th class="acquisition">Creado por</th>
+						<th class="acquisition">Fecha</th>
+						<th class="acquisition">&nbsp;</th>
 					</tr>
-				</TMPL_LOOP>
-			</table>
-	</tr>
-</TMPL_LOOP>
-</table>
-</CENTER>
-<TMPL_INCLUDE name="acquisitions-bottom.inc">
+				<!-- TMPL_ELSE -->
+				    </p>Sin cesta pendiente</p>
+                <!-- /TMPL_IF -->
+					<!-- TMPL_LOOP NAME="loop_basket" -->
+						<tr>
+							<td><!-- TMPL_VAR NAME="basketno" --></a></td>
+							<td><TMPL_VAR NAME="total"></td>
+							<td>
+								<!-- TMPL_VAR name="firstname" -->
+									<!-- TMPL_VAR name="surname" -->
+							</td>
+							<td><!-- TMPL_VAR NAME="creationdate" --></td>
+							<td>
+								<!-- TMPL_IF name="closedate" -->
+									cerrado el <!-- TMPL_VAR NAME="closedate" --> <a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Ver</a>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_IF name="active" -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Modificar</a>
+									<!-- TMPL_ELSE -->
+										<a href="/cgi-bin/koha/acqui/basket.pl?basket=<!-- TMPL_VAR NAME="basketno" -->" class="button acquisition">Ver</a>
+									<!-- /TMPL_IF -->
+								<!-- /TMPL_IF -->
+							</td>
+						</tr>
+					<!-- /TMPL_LOOP -->
+				</table>
+		</tr>
+	<!-- /TMPL_LOOP -->
+	</table>
+	</div>
+	<a class="button acquisition" href="supplier.pl?supplierid=0">A&ntilde;adir proveedor</a>
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

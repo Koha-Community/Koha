@@ -1,6 +1,6 @@
-<!-- TMPL_INCLUDE NAME="acquisitions-top.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 <div id="mainbloc">
-	<h1 class="acquisition">Zarządzanie Opisem MARC</h1>
+	<h1 class="catalogue">Zarządzanie Opisem MARC</h1>
 	<!-- TMPL_IF name="noitemsfound" -->
 		<font color="red" size="4">Nie znaleziono egzemplarzy</font>
 	<!-- /TMPL_IF -->
@@ -10,22 +10,48 @@
 	
 	<div id="bloc25">
 		<form action="isbnsearch.pl">
-			<h2 class="acquisition">Zeskanuj lub wpisz numer ISBN/ISSN, aby dodać nowy opis/egzemplarz</h2>
-				<p><label class="label20">ISBN</label> <input type="text" name="isbn" /></p>
-				<p><label class="label20">Tytuł</label> <input type="text" name="title" /></p>
-				<p><input type="submit" value="Idź" class="button acquisition"></p>
-			<!-- TMPL_IF NAME="NOTMARC" -->
-				<p><a href="addbiblio-nomarc.pl" class="button acquisition">Wprowadź od podstaw</a></p>
-			<!-- TMPL_ELSE -->
-				<p><a href="addbiblio.pl" class="button acquisition">Wprowadź od podstaw</a></p>
-			<!-- /TMPL_IF -->
+			<h2 class="catalogue">Zeskanuj lub wpisz numer ISBN/ISSN, aby dodać nowy opis/egzemplarz</h2>
+			<p>
+				<label class="label100" for="title">Tytuł</label>
+				<input type="hidden" name="marclist" value="biblio.title">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="title" size="35">
+			</p>
+			<p>
+				<label class="label100" for="title">ISBN</label>
+				<input type="hidden" name="marclist" value="biblioitems.isbn">
+	
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="start">
+				<input type="text" name="value" id="title" size="35">
+			</p>
+			<p><input type="submit" value="Idź" class="button catalogue"></p>
 		</form>
+		<!-- TMPL_IF NAME="NOTMARC" -->
+			<p><a href="addbiblio-nomarc.pl" class="button catalogue">Wprowadź od podstaw</a></p>
+		<!-- TMPL_ELSE -->
+			<p>
+				<form action="addbiblio.pl" method="post">
+					<select name="frameworkcode">
+						<option value="">Default</option>
+						<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+					<input type="submit" value="Wprowadź od podstaw" class="button catalogue">
+				</form>
+			</p>
+		<!-- /TMPL_IF -->
 	</div>
 	<div id="bloc25">
-		<h2 class="acquisition">Podpowiedź</h2>
+		<h2 class="catalogue">Podpowiedź</h2>
 		<p>Po odnalezieniu i wyświetleniu numeru ISBN lub tytułu z bazy opisów, bedzie można dokonać modyfikacji.<br/>
-				Jeśli ISBN lub tytuł zostaną odnalezione w rezerwuarze opisów to zostanie on wyswietlony i opis zostanie dodany.<br/>
+				If the ISBN or title is found in the reservoir, it will be retrieved and a biblio will be added.<br/>
 				W przeciwnym razie, opis można dodać od podstaw.</p>
 	</div>
 </div>
-<!-- TMPL_INCLUDE NAME="acquisitions-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->

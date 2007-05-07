@@ -1,149 +1,261 @@
-<TMPL_INCLUDE NAME="parameters-top.inc">
-
-<script>
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
+<!-- TMPL_INCLUDE NAME="parameters-top.inc" -->
+<div id="mainbloc">
+	<script language="JavaScript" type="text/javascript">
+		function _(s) { return s } // dummy function for gettext
+		//
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
 		}
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
+		//
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
 		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
+		//
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
 			return false;
 		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.variable.value.length==0) {
-			_alertString += "- variable missing\n";
+		return true;
 		}
-		if (f.value.value.length==0) {
-			_alertString += "- value missing\n";
+		//
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
 		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
-			alertString2 += _alertString;
-			alert(alertString2);
+		//
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.variable.value.length==0) {
+				_alertString += "\n- " + _("falta la variable ");
+			}
+			if (f.value.value.length==0) {
+				_alertString += "\n- " + _("falta el valor ");
+			}
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("El Formulario no fue procesado debido a los siguientes problemas");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
 		}
-	}
-	</SCRIPT>
-
-<TMPL_IF name="add_form">
-<!-------------------------------------------------------------------------------------------------->
-	<TMPL_IF NAME=modify>
-		<h1>Modify a system preference</h1>
-	<TMPL_ELSE>
-		<H1>Add a system preference</H1>
-	</TMPL_IF>
-	<form action='<TMPL_VAR name="script_name">' name=Aform method=post>
-	<input type=hidden name=op value='add_validate'>
+		</script>
+	
+	<!-- TMPL_IF NAME="add_form" -->
+	
+		<!-- TMPL_IF NAME="modify" -->
+			<h1>Modificar preferencias del sistema</h1>
+		<!-- TMPL_ELSE -->
+			<h1>A&ntilde;adir una preferencia del sistema</h1>
+		<!-- /TMPL_IF -->
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+		<div id="bloc25">
+			<h2 class="parameters"><input type="text" name="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->"></h2>
+			<input type="hidden" name="op" value="add_validate">
+			<p>
+			<!-- TMPL_IF NAME="searchfield" -->
+				<label>Variable</label><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
+			<!-- TMPL_ELSE -->
+				<label>Variable</label><input type="text" name="variable" size="60">
+			<!-- /TMPL_IF -->
+			</p>
+			<p><label>Valor</label>
+				<!-- TMPL_IF NAME="type-free" -->
+					<input type="text" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" size="<!-- TMPL_VAR NAME="fieldlength" -->">
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-textarea" -->
+					<textarea name="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-choice" -->
+					<select name="value">
+						<!-- TMPL_LOOP NAME="options" -->
+							<option value="<!-- TMPL_VAR NAME="option" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="type-yesno" -->
+					<input type="radio" name="value" value="1"<!-- TMPL_IF NAME="value-yes" --> checked<!-- /TMPL_IF -->>Si <input type="radio" name="value" value="0"<!-- TMPL_IF NAME="value-no" --> checked<!-- /TMPL_IF -->>No
+				<!-- /TMPL_IF -->
+	
+			</p>
+			<p><label>&nbsp;</label><input type="submit" value="ACEPTAR" class="button"></p>
+		</div>
+		<div id="bloc25">
+			<h2 class="parameters">Dato interno de Koha (No deber&iacute;a tener razones para cambiar los valores predeterminados)</h2>
+			<p>Tipo de variable: <input type="text" name="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"> (Choice,YesNo,Integer,Textarea,Float,Themes,Languages)</p>
+			Opciones variables : <input type="text" name="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="80" maxlength="80"> (lista selecta para Choice (separado por |) y columnas|filas para Texarea)
+		</div>
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	
+		Datos guardados
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="ACEPTAR">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	
+	<table border="0" cellspacing="0" cellpadding="2">
+		<tr valign="top" bgcolor="#99cc33">
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b>Variable</b></td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif"><b><!-- TMPL_VAR NAME="searchfield" --></b></td>
+		</tr>
+		<tr><td>Valor</td><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+		<tr><td colspan="2" align="center">CONFIRMAR BORRADO</td></tr>
+		<tr><td><input type="submit" value="SI"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO"></form></td></tr>
+	</table>
+	
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	
+		Datos borrados
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="submit" value="ACEPTAR">
+		</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="else" -->
+	<h1>Administraci&oacute;n de Preferencias del Sistema</h1>
 	<table>
-	<TMPL_IF NAME=searchfield>
-		<tr><td>Variable</td><td><TMPL_VAR name="searchfield"><input type=hidden name=variable value='<TMPL_VAR NAME=searchfield>'></td></tr>
-	<TMPL_ELSE>
-		<tr><td>Variable</td><td><input type=text name=variable></td></tr>
-	</TMPL_IF>
-	<tr><td>Value</td><td><input type=text name=value value='<TMPL_VAR name="value" escape=HTML>'></td></tr>
-	<tr><td>Explanation</td><td><input type=text name=explanation size=80 value='<TMPL_VAR name="explanation" escape=HTML>'></td></tr>
-	<tr><td>&nbsp;</td><td><INPUT type=button value='OK' onClick='Check(this.form)'></td></tr>
+		<tr>
+			<td>
+				<!--TMPL_IF Name="Admin"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin" class="button">Administraci&oacute;n
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Administraci&oacute;n
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Acquisitions"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions" class="button">Adquisiciones
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Adquisiciones
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Authorities"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities" class="button">Autoridades
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Autoridades
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Librarian"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet" class="button">Intranet
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet">Intranet
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Catalogue"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue" class="button">Cat&aacute;logo
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Cat&aacute;logo
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Circulation"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation" class="button">Circulaci&oacute;n
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulaci&oacute;n
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Members"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members" class="button">Usuarios
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Usuarios
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="OPAC"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC" class="button">OPAC
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+			<td>
+				<!--TMPL_IF Name="Others"-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=" class="button">Otros
+					</a>
+				<!--TMPL_ELSE-->
+					<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=">Otros
+					</a>
+				<!--/TMPL_IF-->
+			</td>
+		</tr>
+	</table>
+	<table>
+	<!-- TMPL_LOOP NAME="loop" -->
+		<!-- TMPL_IF NAME="toggle" -->
+			<tr valign="top" class="hilighted">
+		<!-- TMPL_ELSE -->
+			<tr valign="top">
+		<!-- /TMPL_IF -->
+		<td>
+			<p><b><!-- TMPL_VAR NAME="variable" -->:</b> <!-- TMPL_VAR NAME="value" --></p>
+			<p align="right"><i>(<!-- TMPL_VAR NAME="explanation" -->)</i></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="edit" -->" class="button parameters">Modificar</a></p>
+		</td>
+		<td>
+			<p><a href="<!-- TMPL_VAR NAME="delete" -->" class="button parameters">Borrar</a></p>
+		</td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="add_form">
+	</table>
+	<table width="40%">
+		<tr>
+			<td width="50%"><!-- TMPL_VAR NAME="previous" --></td>
+			<td width="50%"><!-- TMPL_VAR NAME="next" --></td>
+		</tr>
 	</table>
 	</form>
-</TMPL_IF>
-
-<TMPL_IF name="add_validate">
-<!-------------------------------------------------------------------------------------------------->
-	Data recorded
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=submit value=OK>
+	
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form">
+		<input type="submit" class="button" value="A&ntilde;adir una Preferencia del Sistema">
 	</form>
-</TMPL_IF>
+	
+	<!-- /TMPL_IF -->
+</div>
 
-<TMPL_IF name="delete_confirm">
-<!-------------------------------------------------------------------------------------------------->
-<table border=0 cellspacing=0 cellpadding=2>
-	<tr valign=top bgcolor=#99cc33>
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
-		<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b><TMPL_VAR name="searchfield"></b></td>
-	</tr>
-	<tr><td>Value</td><td><TMPL_VAR name="Tvalue"></td></tr>
-	<form action='<TMPL_VAR name="script_name">' method=post><input type=hidden name=op value=delete_confirmed><input type=hidden name=searchfield value='<TMPL_VAR name="searchfield">'>
-	<tr><td colspan=2 align=center>CONFIRM DELETION</td></tr>
-	<tr><td><INPUT type=submit value='YES'></form></td><td><form action='$script_name' method=post><input type=submit value=NO></form></td></tr>
-</table>
-
-</TMPL_IF>
-
-<TMPL_IF name="delete_confirmed">
-<!-------------------------------------------------------------------------------------------------->
-	Data deleted
-	<form action='<TMPL_VAR name="script_name">' method=post>
-	<input type=submit value=OK>
-	</form>
-</TMPL_IF>
-
-<!-------------------------------------------------------------------------------------------------->
-<TMPL_IF name="else">
-<h1>System preferences admin</h1>
-<form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
-	<input type=text name=searchfield value="">
-	<input type=reset name=reset value="clr">
-</form>
-<TMPL_VAR name="searchfield">
-<table border=0 cellspacing=0 cellpadding=2>
-<tr valign=top bgcolor=#99cc33>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Variable</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Value</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif"><b>Explanation</b></td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
-	<td background="<TMPL_VAR NAME='themelang'>/images/background-mem.gif">&nbsp;</td>
-<TMPL_LOOP name="loop">
-</tr valign=top bgcolor='<TMPL_VAR name="bgcolor">'>
-	<td><TMPL_VAR name="variable"></td>
-	<td><TMPL_VAR name="value"></td>
-	<td><TMPL_VAR name="explanation"></td>
-	<td><a href="<TMPL_VAR name="edit">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/fileopen.png"  width=32 hspace=0 vspace=0 border=0></a></td>
-	<td><a href="<TMPL_VAR name="delete">"><img src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/edittrash.png" width=32 hspace=0 vspace=0 border=0></a></td>
-</tr>
-</TMPL_LOOP>
-<form action='<TMPL_VAR name="script_name">' method=post>
-<input type=hidden name=op value=add_form>
-</table>
-<table width=40%>
-	<tr>
-		<td width=50%><TMPL_VAR name="previous"></td>
-		<td width=50%><TMPL_VAR name="next"></td>
-	</tr>
-</table>
-<br><input type=image src="<TMPL_VAR NAME='interface'>/<TMPL_VAR name="theme">/images/filenew.png" title="Add system parameter" ALT="Add" BORDER=0 ><br>
-</form>
-
-</TMPL_IF>
-
-
-<TMPL_INCLUDE NAME="parameters-bottom.inc">
+<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->

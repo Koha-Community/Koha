@@ -1,32 +1,32 @@
-<HTML>
+<html>
 
-<TMPL_VAR NAME=startmenuissue>
+<!-- TMPL_VAR NAME="startmenuissue" -->
 
 <p>
-Each box needs to be filled in with fine,time to start charging,charging cycle<br>
-eg 1,7,7 = $1 fine, after 7 days, every 7 days.<p>
+Cada campo debe ser llenado con plazo para iniciar la cuenta, ciclo de renovaci&oacute;n de la cuenta<br>
+por ej 1,7,7 = $1 de multa, despu&eacute;s de 7 d&iacute;as, cada 7 d&iacute;as.<p>
 
 <table>
   <tr bgcolor="white">
-    <TMPL_LOOP NAME=firstrowloop>
-      <td><TMPL_VAR NAME=description></td>
-    </TMPL_LOOP>
+    <!-- TMPL_LOOP NAME="firstrowloop" -->
+      <td><!-- TMPL_VAR NAME="description" --></td>
+    <!-- /TMPL_LOOP -->
   </tr>
-  <form action=/cgi-bin/koha/updatecharges.pl method=post>
-  <TMPL_LOOP NAME=tablebodyloop>
+  <form action="/cgi-bin/koha/updatecharges.pl" method="post">
+  <!-- TMPL_LOOP NAME="tablebodyloop" -->
     <tr bgcolor="whitw">
-      <td><TMPL_VAR NAME=description></td>
-      <TMPL_LOOP NAME=rowloop>
-        <td><input type=text name="<TMPL_VAR NAME=name>" value="<TMPL_VAR NAME=value>" size=6></td>
-      </TMPL_LOOP>
+      <td><!-- TMPL_VAR NAME="description" --></td>
+      <!-- TMPL_LOOP NAME="rowloop" -->
+        <td><input type="text" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" size="6"></td>
+      <!-- /TMPL_LOOP -->
     </tr>
-  </TMPL_LOOP>
+  <!-- /TMPL_LOOP -->
 </table>
 
-<input type=submit>
+<input type="submit">
 </form>
 
-<TMPL_VAR NAME=endmenuissue>
+<!-- TMPL_VAR NAME="endmenuissue" -->
 
 </body>
-</HTML>
+</html>

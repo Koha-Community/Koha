@@ -1,100 +1,81 @@
-<!-- TMPL_INCLUDE name="about-top.inc" -->
+<!-- TMPL_INCLUDE NAME="about-top.inc" -->
 
-<!-- TMPL_VAR NAME=about -->
-
-<p>Dane o bie偶膮cej wersji Koha dla zg艂aszania b艂臋d贸w (lub og贸lnego zainteresowania).
-
-<center>
-<table border=1>
-	<tr bgcolor="white">
-		<td width=25%>Wersja Koha:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=kohaVersion --></td>
-	</tr>
-	<tr bgcolor="white">
-		<td>Wersja SO (wynik z 'uname' -a):</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=osVersion --></td>
-	</tr>
-	<tr bgcolor="white">
-		<td>Wersja Perla:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=perlVersion --></td>
-	</tr>
-	<tr bgcolor="white">
-		<td>Wersja MYSQL:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=mysqlVersion --></td>
-	</tr>
-	<tr bgcolor="white">
-		<td>Wersja Apache:</td>
-		<td><!-- TMPL_VAR ESCAPE=HTML NAME=apacheVersion --></td>
-	</tr>
-	<tr>
- 		<td valign="top">Uznanie</td>
-		<td>
-			<h3>Zasadnicza dru偶yna</h3>
-			<table width=100%>
-				<tr>
-					<td width="50%">
-						Pat Eyler, Kaitiaki<br/>
-						Paul Poulain, mened偶er wersji 2.0 (programista MARC)<br/>
-						Joshua Ferraro & the Nelsonville Public Library (sponsorzy funkcji MARC))<br/>
-						Steve Tonnesen (wczesne prace MARC, pomys艂 P贸艂ek wirtualnych, KohaCD)<br/>
-						Nicholas Rosasco, (Sk艂ad dokumentacji)<br/>
-						Mike Hansen<br/>
-						MJ Ray and Turo Technology LLP, Anglia (kontrola jako艣ci, instalator i aktualizacja)<br/>
-						Nicolas Morin, T艂umaczenie francuskie<br/>
-					</td>
-					<td width="50%" valign="top">
-						<b>Horowhenua Library Trust</b><br/>
-						Rosalie Blake, Kierowniczka bibliotek<br/>
-						Jo Ransom<br/>
-						<b>Katipo Communications</b><br/>
-						Rachel Hamilton-Williams, G艂贸wny Mened偶er (Webmasterka)<br/>
-						Chris Cormack, mened偶er wersji 1.2<br/>
-						and Simon Blake, Amanda Atkins, Operations Manager, Olwen Williams, Finlay Thompson, Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine<br/>
-					</td>
-				</tr>
-			</table>
-			<h3>Uznania dla</h3>
-			<table width=100%>
-				<tr>
-					<td width="33%">
-						Adam Thick<br/>
-						Andrew Hooper<br/>
-						Al Banks<br/>
-						Ambrose Li<br/>
-						Andrew Arensburger<br/>
-						Benedykt P. Barszcz (Polish for 2.0)<br/>
-						Brig C. McCoy<br/>
-						Daniel Holth<br/>
-						David Strainchamps<br/>
-						Dorian Meid<br/>
-					</td>
-					<td width="33%">
-						Ed Summers<br/>
-						Florian Bischof<br/>
-						Francisco M. Marzoa Alonso<br/>
-						Glen Stewart<br/>
-						Henri-Damien Laurent<br/>
-						J茅rome Vizcaino (Esiee School)<br/>
-						Kip DeGraaf<br/>
-						Marco Gaiarin<br/>
-						Md. Aftabuddin<br/>
-						Michaes Herman<br/>
-					</td>
-					<td width="33%">
-						Michel Lerenard (Szko艂a Esiee)<br/>
-						Mike Johnson<br/>
-						Mike Mylonas<br/>
-						Pierre Cauchois (Szko艂a Esiee)<br/>
-						Pawel Skuza (Polski dla 1.2)<br/>
-						Regula Sebastiao<br/>
-						Roger Buck<br/>
-						Ron Wickersham<br/>
-						Sebastiaan Durand<br/>
-					</td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-</center>
-<!-- TMPL_INCLUDE name="about-bottom.inc" -->
+<div id="mainbloc">
+	<!-- TMPL_VAR NAME="about" -->  <h1>Data about the current version of Koha for bug reports (or general interest).</h1>
+	<div id="bloc25">
+		<h2>Server information</h2>
+		<p><label class="label100">Koha version</label><!-- TMPL_VAR ESCAPE=HTML name="kohaVersion" --></p>
+		<p><label class="label100">OS version ('uname -a')</label><!-- TMPL_VAR ESCAPE=HTML name="osVersion" --></p>
+		<p><label class="label100">Perl version</label><!-- TMPL_VAR ESCAPE=HTML name="perlVersion" --></p>
+		<p><label class="label100">MySQL version</label><!-- TMPL_VAR ESCAPE=HTML name="mysqlVersion" --></p>
+		<p><label class="label100">Apache version</label><!-- TMPL_VAR ESCAPE=HTML name="apacheVersion" --></p>
+	</div>
+	<div id="bloc25">
+		<h2>Special thanks to the following libraries</h2>
+		<p><b>Horowhenua Library Trust</b>, New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)</p>
+		<p>The <b>Nelsonville Public Library</b>, USA, Ohio (MARC support funding)</p>
+		<p><b>EMN (Ecole des Mines de Nantes)</b>, France (Suggestion, stats modules and improved ldap support funding)</p>
+		<p><b>ENSMP (Ecole Nationale Sup閞ieure des Mines de Paris)</b>, France (biblio frameworks, MARC authorities, OPAC basket, Serials support funding)</p>
+	</div>
+	<div id="bloc25">
+		<h2>Core team for 2.2</h2>
+		<p><b>Rachel Hamilton-Williams</b>, Kaitiaki</p>
+		<p><b>Paul Poulain</b>, 2.2 release manager (MARC developer)</p>
+		<p>Stephen Hedges, Owen Leonard, Joshua Ferraro (<b>Nelsonville Public Library</b>)</p>
+		<p><b>Katipo Communications</b> (Koha 1.0 developers)</p>
+		<ul>
+			<p>Rachel Hamilton-Williams, G艂贸wny Mened偶er (Webmasterka)</p>
+			<p>Chris Cormack, mened偶er wersji 1.2</p>
+			<p>and Simon Blake, Amanda Atkins, Operations Manager, Olwen Williams, Finlay Thompson,</p>
+			<p>Gynn Lomax, Richard Anderson, Jeremy Blake, Rebecca Holden, Olive T. Canine</p>
+		</ul>
+		<p>Emiliano Marmonti, Mat韆s Veleda & Sebastian Cata馿da <b>La Plata University, Argentina</b> (barcode printing)</p>
+		<p>MJ Ray and <b>Turo Technology LLP</b>, (quality control, installer &amp; updater, 2.0 release maintainer)</p>
+		<p>Nicholas Rosasco, (Sk艂ad dokumentacji)</p>
+		<p>Mike Hansen</p>
+		<p><b>Pate Eyler</b> (Kaitiaki from 2002 to 2004)</p>
+	</div>
+	<div id="bloc25">
+	<h2>Uznania dla</h2>
+					<p>Adam Thick</p>
+					<p>Andrew Hooper</p>
+					<p>Al Banks</p>
+					<p>Ambrose Li (translation tool)</p>
+					<p>Andrew Arensburger (the small &amp; great C4::Context module)</p>
+					<p>Benedykt P. Barszcz (Polish for 2.0)</p>
+					<p>Brig C. McCoy</p>
+					<p>Daniel Holth</p>
+					<p>David Strainchamps</p>
+					<p>Dorian Meid (German translation)</p>
+					<p>doXulting (Matthieu Branlat) OPAC basket</p>
+					<p>Ed Summers (Some code and Perl packages like MARC::Record)</p>
+					<p>Esiee School (J閞ome Vizcaino, Michel Lerenard, Pierre Cauchois)</p>
+					<p>Florian Bischof</p>
+					<p>Francisco M. Marzoa Alonso</p>
+					<p>Glen Stewart</p>
+					<p>Henri-Damien Laurent</p>
+					<p>Jo Ransom</p>
+					<p>Kip DeGraaf</p>
+					<p>Marco Gaiarin</p>
+					<p>Md. Aftabuddin</p>
+					<p>Michaes Herman</p>
+					<p>Mike Johnson</p>
+					<p>Mike Mylonas</p>
+					<p>Nicolas Morin (French Translation in 2.0)</p>
+					<p>Pawel Skuza (Polski dla 1.2)</p>
+					<p>Regula Sebastiao</p>
+					<p>Roger Buck</p>
+					<p>Ron Wickersham</p>
+					<p>Sebastiaan Durand</p>
+					<p>Steve Tonnesen (wczesne prace MARC, pomys艂 P贸艂ek wirtualnych, KohaCD)</p>
+					<p>Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)</p>
+	</div>
+	<div id="bloc25">
+	<h2>Translation</h2>
+		<p><label>Francuski</label>Pascale Nalon (ENSMP) and Jean Yves Lemaire (Chatel Saint Germain)</p>
+		<p><label>Chinese</label>Ambrose Li</p>
+		<p><label>Spanish</label>Andres Tarallo</p>
+		<p><label>Italian</label>Giuseppe Angilella</p>
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="about-bottom.inc" -->

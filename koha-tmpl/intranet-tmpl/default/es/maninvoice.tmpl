@@ -1,25 +1,25 @@
-<TMPL_INCLUDE Name="members-top.inc">
-
-<Center><h3>Factura Manual</h3></center>
-<form action=/cgi-bin/koha/maninvoice.pl method=post>
-<table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name=bornum value="<TMPL_VAR Name="bornum">">
-<tr><td><b>Id del Usuario<b></td><td><TMPL_VAR Name="bornum"></td></tr>
-<tr><td><b>Tipo</b></td><Td>
-<select name=type>
-<option value=L>Item perdido</option>
-<option value=F>Fine</option>
-<option value=A>Cargo por Administración</option>
-<option value=N>Tarjeta Nueva</option>
-<option value=M>Sundry</option>
-<option value=REF>Cash Refund</option>
-</select>
-</td></tr>
-<tr><td><b>Numero de Item</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>Descripción</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>Monto</b></td><td><input type=text name=amount></td></tr>
-<tr><td><input type=submit name=add value=Add></td></tr>
-</table>
-</form>
-
-<TMPL_INCLUDE Name="members-bottom.inc">
+<!-- TMPL_INCLUDE Name="members-top.inc" -->
+<div id="mainbloc">
+	<h1 class="member">Factura Manual</h1>
+	<form action="/cgi-bin/koha/maninvoice.pl" method="post">
+	<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+	<p><label class="label100">N&uacute;mero de usuario </label><!-- TMPL_VAR NAME="bornum" --></p>
+	<p>
+		<label class="label100"><b>Tipo</label>
+		<select name="type">
+			<option value="L">Ejemplar perdido</option>
+			<option value="F">Cuenta</option>
+			<option value="A">Costo de administraci&oacute;n de cuenta</option>
+			<option value="N">Nuevo Carnet</option>
+			<option value="M">Sundry</option>
+			<option value="REF">Devoluci&oacute;n en Efectivo</option>
+		</select>
+	</p>
+	<p><label class="label100">N&uacute;mero de ejemplar</label><input type="text" name="itemnum"></p>
+	<p><label class="label100">Descripci&oacute;n</label><input type="text" name="desc" size="50"></p>
+	<p><label class="label100">Monto</label><input type="text" name="amount"></p>
+	<p><label class="label100"><input type="submit" class="button" name="add" value="A&ntilde;adir"></p>
+	</table>
+	</form>
+</div>
+<!-- TMPL_INCLUDE Name="members-bottom.inc" -->

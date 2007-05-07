@@ -1,48 +1,62 @@
-<HTML>
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+<h1>B&uacute;squeda de Usuarios</h1>
 
-<TMPL_INCLUDE NAME="members-top.inc">
+<div class="bloc100">
+	<div class="bloctitle">Buscar</div>
+	<form action="/cgi-bin/koha/members/member.pl" method="post">
+		<input type="text" name="member" value="<!-- TMPL_VAR NAME="member" -->"> ordenado por 
+		<select name="orderby">
+			<option value="surname,firstname">Apellidos</option>
+			<option value="cardnumber">N&uacute;mero de Carnet</option>
+		</select>
+		<input type="submit" class="button" value="ACEPTAR">
+	</form>
+</div>
 
-<FONT SIZE=6><em>B&uacute;squeda de Usuarios</em></FONT><br>
-
-<form action="/cgi-bin/koha/member.pl" method=post>
-  <input type=text name="member" value="<TMPL_VAR NAME=member>">
-  <input type=reset name="reset" value="clr">
-</form>
-
-Usted busc&oacute; <TMPL_VAR NAME=member><p>
-<table>
-  <tr bgcolor="#99cc33">
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Id</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Apellido</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Nombre</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Categor&iacute;a</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Direcci&oacute;n</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>OD/Pr&eacute;stamos</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Deudas</b></td>
-    <td background="<TMPL_VAR name="themelang">/images/background-mem.gif"><b>Notas</b></td>
-  </tr>
-
-  <TMPL_LOOP NAME=resultsloop>
-    <TMPL_IF NAME="__ODD__">
-    <TR bgcolor="#ffffcc">
-    <TMPL_ELSE>
-    <TR bgcolor=white>
-    </TMPL_IF>
-      <td><TMPL_VAR NAME=cardnumber></td>
-      <td><a href="/cgi-bin/koha/moremember.pl?bornum=<TMPL_VAR NAME=borrowernumber>"><TMPL_VAR NAME=surname></td>
-      <td><TMPL_VAR NAME=firstname></a></td>
-      <td><TMPL_VAR NAME=categorycode></td>
-      <td><TMPL_VAR NAME=streetaddress> <TMPL_VAR NAME=city></td>
-      <td><TMPL_VAR NAME=odissue></td>
-      <td><TMPL_VAR NAME=fines></td>
-      <td><TMPL_VAR NAME=borrowernotes></td>
-    </tr>
-  </TMPL_LOOP>
-</table>
-
-<form action=/cgi-bin/koha/simpleredirect.pl method=post>
-<input type=image src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/filenew.png"  ALT="Agregar Usuario" BORDER=0 ></a>
-<INPUT TYPE="radio" name="chooseform" value="adult" checked>Adulto
-<INPUT TYPE="radio" name="chooseform" value="organisation" >Organizaci&oacute;n
-</form>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<div class="bloc100">
+	<div class="bloctitle">Usted busc&oacute; <!-- TMPL_VAR NAME="member" --></div>
+	<p class="resultcount"><!-- TMPL_VAR Name ="numresults" --> usuarios encontrados.
+	 </p>
+	<table>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Carnet</th>
+			<th>Nombre</th>
+			<th>Sede</th>
+			<th>Categor&iacute;a</th>
+			<th>Atrasados/Pr&eacute;stamos</th>
+			<th>Costos</th>
+			<th>Control1</th>
+			<th>Control2</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="resultsloop" -->
+			<!-- TMPL_IF NAME="background" -->
+				<tr bgcolor="#ffffcc">
+			<!-- TMPL_ELSE -->
+				<tr bgcolor="white">
+			<!-- /TMPL_IF -->
+				<td><!-- TMPL_VAR NAME="count" --></td>
+				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
+				<td>
+					<p><a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <b><!-- TMPL_VAR NAME="firstname" --></b></a></p>
+					<p><!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" --></p>
+					<p><i><!-- TMPL_VAR NAME="borrowernotes" --></i></p>
+				</td>
+				<td><!-- TMPL_VAR name="branchcode" --></td>
+				<td><!-- TMPL_VAR NAME="categorycode" --></td>
+				<td><!-- TMPL_VAR NAME="odissue" --></td>
+				<td><!-- TMPL_VAR NAME="fines" --></td>
+				<td><!-- TMPL_VAR NAME="sort1" --></td>
+				<td><!-- TMPL_VAR NAME="sort2" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+	</table>
+	<form action="/cgi-bin/koha/members/memberentry.pl" method="post">
+	<input type="submit" class="button" value="A&ntilde;adir usuario" title="A&ntilde;adir usuario" alt="A&ntilde;adir usuario">
+	<input type="radio" name="categorycode" value="" checked>Adulto <input type="radio" name="categorycode" value="I" >Instituci&oacute;n
+	<input type="hidden" name="actionType" value="Add">
+	</form>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

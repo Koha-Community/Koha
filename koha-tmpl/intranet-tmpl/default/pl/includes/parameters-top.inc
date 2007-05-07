@@ -1,39 +1,46 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
 <title>KOHA: INTRANET: Parametry</title>
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<!-- End of additions -->
 
-<style>
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
+<!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+
+<style type="text/css">
 .parameters {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
+	background-image:none;
 	}
 a.parameters:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 </style>
 </head>
 <body>
 
-<!------------------------MENUS-------------------------------->
-<div id="menubar">
-		<span class="koha">KOHA</span>
-			<a class="home" href="/cgi-bin/koha/mainpage.pl">Początek</a> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Katalog</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Członkowie</a> <a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Gromadzenie</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Wypożyczalnia</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Raporty</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Parametry</a> <a class="about" href="/cgi-bin/koha/about.pl">O nas</a>
-</div>
-<div id="submenu">
-	<span class="koha">opcje &gt;&gt;&nbsp;&nbsp;</span>
-	<a href="/cgi-bin/koha/admin/aqbookfund.pl" class="submenu">Fundusze</a> <a href="/cgi-bin/koha/admin/authorised_values.pl" class="submenu2">Wartość autoryz</a> <a href="/cgi-bin/koha/admin/thesaurus.pl" class="submenu">Tezaurus</a> <a href="/cgi-bin/koha/admin/currency.pl" class="submenu2">Waluty</a> <a href="/cgi-bin/koha/admin/printers.pl" class="submenu">Drukarki</a>
-</div>
+<script language="JavaScript" type="text/javascript">
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE name="menus.inc" -->
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Wyloguj</a>]</p>
+    <p class="user">Zalogowano jako: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Wyloguj</a>]</p>
 <!-- TMPL_ELSE -->
-    <p align=left><a href=/cgi-bin/koha/opac-user.pl>Zaloguj do</a> Systemu Koha</p>
+    <p class="user"><a href="/cgi-bin/koha/opac-user.pl">Zaloguj do</a> Systemu Koha</p>
 <!-- /TMPL_IF -->

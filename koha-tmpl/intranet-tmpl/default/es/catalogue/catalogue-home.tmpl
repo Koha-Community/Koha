@@ -1,115 +1,50 @@
-<TMPL_IF name="opac">
-	<TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-	<TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF NAME="opac" -->
+	<!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+	<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
 
-<!-- ----------------------- MAIN BODY OF PAGE ------------------------ -->
-<FORM ACTION="/cgi-bin/koha/search.pl" method=post>
-  <FONT SIZE=6><em>B&uacute;squeda en Cat&aacute;logo</em></FONT> 
-  <CENTER>
+<div id="mainbloc">
+<form action="/cgi-bin/koha/search.pl" method="post">
 
-<TABLE align="left" width="40%" cellspacing=0 cellpadding=5 border=0 >
-	<TR VALIGN=TOP>
-		<TD>C&oacute;digo</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="itemnumber"></td>
-		<td><b> &nbsp; &nbsp; O</b></TD>
-      </TR>
-	<!-- <TR VALIGN=TOP>
-	<TD>ISBN</TD> <TD><INPUT TYPE="text"  SIZE="25"   NAME="isbn"></TD></TR>
-	-->
-	<TR VALIGN=TOP>
-		<TD colspan=2 >&nbsp; </td>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD  bgcolor="99cc33" background="/images/background-mem.gif" colspan=2> 
-          <b>AYUDA</b><br>
-          <b>Buscando:</b>Al usar m&aacute;s campos para su b&uacute;squeda(ej 
-          Keyword + author + class) la har&aacute; m&aacute;s lenta. 
-          <p> <b><a href=/cgi-bin/koha/maint/catmaintain.pl target=window0>Mantenimiento 
-            del Cat&aacute;logo:</a></b> Para agregar un <b>nuevo</b> libro o 
-            &iacute;tem ir a<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions"> 
-            adquisiciones</a>.
-          <p> Para<b> solicitar, modificar o eliminar</b> un libro o &iacute;tem 
-            primero b&uacute;squelo aqu&iacute;. 
-        </td>
-	</TR>
-</table>
+<h1 class="catalogue">B&uacute;squeda en el Cat&aacute;logo</h1>
 
 
+<div id="bloc25">
+<h2 class="catalogue">Buscar</h2>
+		<p><label class="label100" for="keyword">Palabras Clave:</label><input type="text"  size="25" id="keyword"  name="keyword"></p>
 
-<TABLE border=0>
-	<TR VALIGN=TOP>
-		<TD>Palabras Claves</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="keyword"></TD>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>T&iacute;tulo</TD>
-		<TD><INPUT TYPE="text"  SIZE="25" NAME="title"></TD>
-		<td rowspan=2>
-			<input type=radio name=ttype value=normal checked>Normal<br/>
-			<input type=radio name=ttype value=exact>
-          Exacta </td>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>Autor</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="author"></TD>
-	</TR>
-	<TR VALIGN=TOP>
-		<TD>Ilustrador</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="illustrator"></TD>
-	</TR>
-		<TR VALIGN=TOP>
-		<TD>Dewey</TD><TD><INPUT TYPE="text"  SIZE="25"   NAME="dewey"></TD>
-	</TR>
+		<p><label class="label100" for="title">T&iacute;tulo:</label><input type="text" id="title"  size="25" name="title"></p>
 
-	<TR VALIGN=TOP>
-	    <TD>Clase</TD>
-		<td>
-			<select name="class" size="1">
-			<option value="">Any
-			<TMPL_VAR name="classlist">
-			</select>
-		</td>
-	</tr>
-	<!-- <TR VALIGN=TOP>
-	<td>Branch</td><td><select name=branch>
-	<option value="F">Foxton
-	</select>
-	</td></tr> -->
+		<p><label class="label100" for="author">Autor:</label><input type="text"  size="25" id="author"  name="author"></p>
 
-	<!-- <TD>Pub Date (before)</TD> <TD><INPUT TYPE="text"  SIZE="8"   NAME="date-before"> &nbsp; &nbsp; (after) <INPUT TYPE="text"  SIZE="8"   NAME="date-after"></TD></TR>
-	-->
-	<TR VALIGN=TOP>
-	    <TD><b>O</b></TD>
-	</TR>
+		<p><label class="label100" for="illustrator">Ilustrador:</label><input type="text"  size="25" id="illustrator"  name="illustrator"></p>
+		
+		<p><label class="label100" for="dewey">Dewey:</label></td><td><input type="text"  size="25" id="dewey"  name="dewey"></p>
 
-	<TR VALIGN=TOP>
-		<TD>Tema</TD>
-		<TD><INPUT TYPE="text"  SIZE="25"   NAME="subject"></TD>
-	</TR>
-	<tr>
-		<TD colspan=3>
-			<table width="100%" cellpadding=0 cellspacing=0>
-				<tr align="center">
-					<td>
-						<input type="hidden" name="type" value="intra">
-						<INPUT TYPE="image"  alt="Start Search" src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/2rightarrow.png" BORDER=0 >
-					</td>
-					<td>
-						
-                <INPUT TYPE="reset"  VALUE= "Borrar">
-					</td>
-					
-              <td> <a href=/cgi-bin/koha/shelves.pl>Estanter&iacute;as Virtuales 
-                </a> </td>
-				</tr>
-			</table>
-		</TD>
-	</TR>
-</TABLE>
-	</center></FORM><CENTER>
-	<p>
-	</CENTER>
-<!--#include virtual="/includes/cat-bottom.inc" -->
+<p>		<label class="label100" for="class">Clase:</label><select name="class" id="class" size="1">
+			<option value=""> Cualquier <!-- TMPL_VAR NAME="classlist" -->
+			</select></p>
+			
+					<p><label class="label100">Estilo de b&uacute;squeda:</label><input type="radio" name="ttype" id=" ttype" value="normal" checked>Normal <input type="radio" name="ttype" value="exact">Exacta</p>
+			</div>
+			
+	<div id="bloc25">
+		<h2 class="catalogue">B&uacute;squeda de C&oacute;digo de barras</h2>
+		<p>
+		<label class="label100" for="itemnumber">C&oacute;digo de barras</label><input type="text"  size="25" id="itemnumber" name="itemnumber"></p>
+</div>
+
+<div id="bloc25">
+<h2 class="catalogue">B&uacute;squeda de Tema</h2>
+<p><label class="label100" for="subject">Tema:</label><input type="text"  size="25"  id="subject" name="subject"><input type="hidden" name="type" value="intra"></p></div>
+
+<div id="block25"><p><input type="submit" class="button catalogue" value="Iniciar b&uacute;squeda">
+						<input type="reset" value="Limpiar" class="button catalogue">
+						<a href="/cgi-bin/koha/shelves.pl" class="button catalogue">Estantes Virtuales</a></p></div>
+
+	</form>
+
+	</div>
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
 

@@ -1,178 +1,46 @@
-<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html>
 <head>
 <title>KOHA: INTRANET: Par&aacute;metros</title>
-</head>
-<body text="black" bgcolor="white" link="#0000ff" vlink="#0000ff" "3366cc" Alink="#cc3300"
-marginheight=0 marginwidth=0 leftmargin=0 topmargin=0>
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<!-- End of additions -->
 
-<style>
-#menubar {
-	border-top:1px solid #666;
-}
-.koha {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	text-align:center;
-	background-image:url("<TMPL_VAR name="themelang">/images/background-mem.gif");
-	}
+<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
+<!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
 
-a.home {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.home:hover {
-	background-color: #339933;
-	color: #000000;
-	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
-	}
-a.catalogue {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	margin:0;
-	}
-a.catalogue:hover {
-	background-color: #ad11ad;
-	color: #000000;
-	text-decoration: none;
-	font-weight: normal;
-	font-weight: bold;
-	margin:0;
-	}
-a.members {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.members:hover {
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+
+<style type="text/css">
+.parameters {
 	background-color: #86c268;
-	color: #000000;
-	text-decoration: none;
-	font-weight: bold;
-	}
-
-a.acquisition:hover {
-	background-color: #ffdf61;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-a.acquisition {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color:#777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.reports {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color: #777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.reports:hover {
-	background-color: #6b7cbe;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-a.circulation {
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
-	color: #777777;
-	padding:4px;
-	font-weight: bold;
-	}
-a.circulation:hover {
-	background-color: #be6170;
-	color: #000000;
-	text-decoration: normal;
-	font-weight: bold;
-	}
-a.parameters {
-	background-color: #86c268;
-	font-weight: normal;
-	text-decoration: none;
-	cursor: hand;
 	color: #FFFFFF;
-	padding:4px;
-	font-weight: bold;
+	text-decoration: normal;
+	background-image:none;
 	}
 a.parameters:hover {
 	background-color: #86c268;
 	color: #FFFFFF;
 	text-decoration: normal;
-	font-weight: bold;
 	}
 </style>
+</head>
+<body>
 
-<!------------------------MENUS-------------------------------->
-<table cellpadding=0 cellspacing=0 width="100%" border=0>
-<tr height="45">
-	<td valign="bottom" align="left">
-		<table bgcolor="dddddd" width="100%" cellpadding=0 cellspacing=0>
-		<tr>
-			<td>
-			<div id="menubar">
-			<table cellpadding=0 cellspacing=0  border=0 height=29 width=85%>
-				<tr>
-					<td class="koha"><b>KOHA</b></td>
-					<td>
-						<a class="home" href="/cgi-bin/koha/mainpage.pl">Home</a>
-					</td>
+<script language="JavaScript" type="text/javascript">
+function Help() {
+	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+</script>
 
-                  <td> <a class="catalogue" href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Cat&aacute;logo</a>
-                  </td>
-
-                  <td> <a class="members" href="/cgi-bin/koha/members-home.pl">Usuarios</a></td>
-					
-                  <td> <a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Adqusiciones</a></td>
-					<td>
-						<a class="acquisition" href="/cgi-bin/koha/loadmodules.pl?module=MARC">Marc</a>
-					</td>
-					
-                  <td> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulaci&oacute;n</a></td>
-					
-                  <td> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Informes</a></td>
-					
-                  <td> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Par&aacute;metros</a></td>
-					
-                  <td> <a class="parameters" href="/cgi-bin/koha/about.pl">Acerca</a></td>
-				</TR>
-			</TABLE>
-			</div>
-		</td></tr></table>
-	</TD>
-</tr>
-</table>
-<BLOCKQUOTE>
-<TMPL_IF NAME="loggedinuser">
-    
-  <p align=left>Registrado como: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/mainpage.pl?logout.x=1>Salir</a>]</p>
-<TMPL_ELSE>
-    
-  <p align=left><a href=/cgi-bin/koha/opac-user.pl>Ingresar</a> a Koha</p>
-</TMPL_IF>
-</blockquote>
+<!-- TMPL_INCLUDE name="menus.inc" -->
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <p class="user">Registrado como: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Salir</a>]</p>
+<!-- TMPL_ELSE -->
+    <p class="user"><a href="/cgi-bin/koha/opac-user.pl">Entrar</a> a Koha</p>
+<!-- /TMPL_IF -->

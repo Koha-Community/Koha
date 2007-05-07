@@ -1,191 +1,246 @@
-<HTML>
-<TITLE>Bienvenido al Software Koha</TITLE>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+	<title>BIENVENIDO A LA INTRANET DE KOHA </title>
+	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/intranet-main.css">
+	<!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->"><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><!-- /TMPL_IF -->
+<!-- JAVASCRIPT SCRIPTS -->
+	<script language="JavaScript" type="text/javascript">
+		var IE = document.all?true:false;
+		if (!IE) document.captureEvents(Event.MOUSEMOVE)
+		document.onmousemove = getMouseXY;
+		var mouseX = 0;
+		var mouseY = 0;
+		function getMouseXY(e) {
+			if (IE) {
+				mouseX = event.clientX + document.body.scrollLeft;
+				mouseY = event.clientY + document.body.scrollTop;
+			}
+			else {
+				mouseX = e.pageX;
+				mouseY = e.pageY;
+			}  
+			if (mouseX < 0){mouseX = 0;}
+			if (mouseY < 0){mouseY = 0;}  
+			return true;
+		}
+		function MM_findObj(n, d) { //v4.0
+			var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+			d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+			if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+			for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+			if(!x && document.getElementById) x=document.getElementById(n); return x;
+		}
+		function SetOn(item) {
+			for(i=1;i<=7;i++) {
+				SetOff(i);
+			}
+			if (!(layer = MM_findObj('Hint' + item))) return;
+			layer.style.visibility = 'visible';
+		}
+		function SetOff(item) {
+			if (!(layer = MM_findObj('Hint' + item))) return;
+			layer.style.visibility = 'hidden';
+		}
+		function addauthority() {
+			X = document.forms["f"].authtype.value;
+			window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
+		}
+		function searchauthority() {
+			X = document.forms["f"].authtype2.value;
+			Y = document.forms["f"].value.value;
+			window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+		}
+	</script>
+	<script language="javascript" type="text/javascript">
+	var blnOk=true;
+	function Load() {
+		if(document.body.style.backgroundColor!="") { blnOk=false; }
+		if(document.body.style.color!="") { blnOk=false; }
+		if(document.body.style.marginTop!="") { blnOk=false; }
+		if(blnOk) {
+			for(i=1;i<=6;i++) {
+				SetOff(i);
+			}
+
+			}
+		}
+	</script>
+
+</head>
+<body onload="Load();">
+<div id="mainbloc">
+	<div class="image">
+		<p class="kohalogo">Koha</p>
+		<p class="kohalogo2">Sistema de Biblioteca de C&oacute;digo Abierto</p>
+		<p class="kohalogo2">Interfaz para bibliotecarios</p>
+		<hr width="50%" />
+		<p class="kohalogo2">Koha : regalo, donaci&oacute;n o contribuci&oacute;n</p>
+	</div>
+	<div id="menus">
+<!-- RIGHT (disappearing) BLOC -->
+		<div id="Hint1" class="hint">
+			<h1 class="catalogue">Cat&aacute;logo</h1>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=search&marc=1&amp;type=intranet" class="catalogue">Buscar en el Cat&aacute;logo</a>
+				<p>Buscar un registro. Cuando este registro sea encontrado, puede verificar su estado, reservarlo, o ver d&oacute;nde est&aacute;</p>
+			<a href="/cgi-bin/koha/loadmodules.pl?module=addbiblio&amp;type=intranet" class="catalogue">A&ntilde;adir art&iacute;culo</a>
+				<p>A&ntilde;adir un art&iacute;culo directamente al cat&aacute;logo de la biblioteca</p>
+			<a class="catalogue" href="/cgi-bin/koha/bull-home.pl">Series</a>
+				<p>Administre suscripciones a series y pr&eacute;stamos</p>
+			<a href="/cgi-bin/koha/bookshelves/shelves.pl" class="catalogue">Estantes Virtuales</a>
+				<p>Los estantes virtuales pueden ser usados por el bibliotecario o los patrones para construir bibliotecas virtuales dentro de una "real". El estante virtual puede ser usado por un profesor para ayudar a sus estudiantes a buscar la informaci&oacute;n sobre un tema espec&iacute;fico. Esto puede ser usado por una biblioteca para definir "los libros m&aacute;s valiosos para &lt;alguna categor&iacute;a de patr&oacute;n&gt;"</p>
+			<!-- TMPL_IF NAME="NOTMARC" -->
+				<form action="/cgi-bin/koha/loadmodules.pl" method="post">
+					<input type="hidden" name="module" value="search">
+					<input type="hidden" name="type" value="intranet">
+					<input type="text" name="keyword" size="27">
+					<input type="reset" value="Borrar"><br>
+					<p>Escriba en el campo y presione la tecla Enter.</p>
+					<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue">B&uacute;squeda Avanzada (M&aacute;s opciones)</a><br>
+				</form>
+			<!-- /TMPL_IF -->
+		</div>
+		<div id="Hint2" class="hint">
+			<h1 class="members">Usuarios</h1>
+			<h2 class="members">Buscar</h2>
+			<form action="/cgi-bin/koha/members/member.pl" method="post">
+				<input type="text" size="27" name="member">
+				<input type="submit" value="ACEPTAR"><br>
+				<p>Escriba en el campo y presione la tecla Enter.</p>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
+			</form>
+
+			<a href="/cgi-bin/koha/members/members-home.pl" class="members">P&aacute;gina principal de Usuarios</a>
+			<p>Ir a la p&aacute;gina principal de usuarios</p>
+			<a href="/cgi-bin/koha/members/memberentry.pl?actionType=Add" class="members">A&ntilde;adir usuario</a>
+			<p>A&ntilde;adir un usuario a la biblioteca. El usuario puede ser vinculado con cualquiera de las sedes del sistema. El o ella pueden, tambi&eacute;n, tener hijos.</p>
+			<a href="/cgi-bin/koha/members/memberentry.pl?categorycode=I&actionType=Add" class="members">A&ntilde;adir Instituci&oacute;n</a>
+			<p>A&ntilde;adir una instituci&oacute;n a la biblioteca. Este tipo de usuario no tiene la misma informaci&oacute;n que presenta un usuario "f&iacute;sico".</p>
+		</div>
+		
+		<div id="Hint3" class="hint">
+			<h1 class="acquisition">Adquisiciones</h1>
+			Pida art&iacute;culos, reciba pedidos, establezca presupuestos...
+			<form action="/cgi-bin/koha/acqui/order.pl" method="post">
+			Nombre del Proveedor : <input type="text"  size="25"   name="supplier">
+			<input type="submit" class="button acquisition" value="ACEPTAR">
+			</form>
+			<p>o <a href="acqui/histsearch.pl" class="button acquisition">Busque en el historial de pedidos</a></p>
+			
+		</div>
+		<div id="Hint4" class="hint">
+			<h1 class="reports">Informes</h1>
+			Todos los informes del sistema
+			<div id="bloc25">
+			<h2 class="reports">Estad&iacute;sticas</h2>
+			<ul>
+			<li>sobre cat&aacute;logo
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/inventory.pl">Inventario</a></p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Cat&aacute;logo por tipo de art&iacute;culo</a></p>
+			<li>sobre pr&eacute;stamos
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/stats.pl?time=yesterday">Hasta la reconciliaci&oacute;n:</a>  Informe diario (ayer)</p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/stats.pl?time=today">Hasta la reconciliaci&oacute;n:</a> Informe diario (hoy)</p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/overdue.pl">Ejemplares atrasados</a></p>
+			</ul>
+			</div>
+			<div id="bloc25">
+			<h2 class="reports">Estad&iacute;sticas Compuestas</h2>
+			<table>
+			<tr>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/acquisitions_stats.pl">Adquisiciones</a></td>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/borrowers_stats.pl">Usuarios</a></td>
+			</tr>
+			<tr>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/catalogue_stats.pl">Cat&aacute;logo</a></td>
+			<td class="little"><a class="reports little" href="/cgi-bin/koha/reports/issues_stats.pl">Circulaci&oacute;n</a></td>
+			</tr>
+			</table>
+			</div>
+			<div id="bloc25">
+			<h2 class="reports">Infomes principales</h2>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/bor_issues_top.pl">Los usuarios con m&aacute;s pr&eacute;stamos</a></p>
+				<p class="little"><a class="reports little" href="/cgi-bin/koha/reports/cat_issues_top.pl">Los ejemplares m&aacute;s prestados</a></p>
+			</div>
+		</div>
+		
+		<div id="Hint5" class="hint">
+			<h1 class="authority">Autoridades</h1>
+			Administraci&oacute;n de autoridades &amp; b&uacute;squedas
+			<form name="f" >
+				<h2 >
+					<select name="authtype">
+					<!-- TMPL_LOOP NAME="authtypesloop" -->
+						<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR NAME="authtypetext" -->
+						</option>
+					<!-- /TMPL_LOOP -->
+					</select>
+					<a href="javascript:addauthority()" class="authority">A&ntilde;adir Autoridad</a>
+				</h2>
+				<h2>Buscar <input type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->"> en
+					<select name="authtype2">
+					<!-- TMPL_LOOP NAME="authtypesloop" -->
+						<option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR NAME="authtypetext" -->
+						</option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</h2>
+				<input type="hidden" name="marclist" value="">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="hidden" name="op" value="do_search">
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/holder.gif" width="1" height="12" alt="" hspace="0" vspace="0">
+				<a href="javascript:searchauthority()" class="authority">
+					Buscar
+				</a>
+			</form>
+		</div>
+		<div id="Hint6" class="hint">
+			<h1 class="parameters">Par&aacute;metros</h1>
+			<h2 class="parameters"><a href="barcodes/barcodes.pl">Generador de C&oacute;digo de barras</a></h2>
+			<h2 class="parameters"><a href="admin/aqbookfund.pl">Fondos Bibliogr&aacute;ficos</a></h2>
+			<h2 class="parameters"><a href="import/breeding.pl">Importar al dep&oacute;sito</a></h2>
+		</div>
+		<div id="Hint7" class="hint">
+			<h1 class="circulation">Circulaci&oacute;n</h1>
+			Trabaje en el mostrador con pr&eacute;stamos y devoluciones usando solamente un lector de c&oacute;digo de barras y un rat&oacute;n
+				<h2 class="circulation">
+					Pr&eacute;stamo
+				</h2>
+				<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+					<p>Inserte N&uacute;mero de carnet del usuario o parte de su apellidos <input name="findborrower">
+					<input type="submit" value="ACEPTAR" class="button circulation"></p>
+				</form>
+				<h2 class="circulation">
+					Devoluci&oacute;n
+				</h2>
+				<form method="post" action="/cgi-bin/koha/circ/returns.pl">
+				<p>Inserte el C&oacute;digo de Barras del ejemplar</p>
+				<label class="label20">C&oacute;digo de barras del ejemplar:</label><input name="barcode" size="10">
+				<input type="submit" value="ACEPTAR" class="button circulation">
+				</form>
+
+		</div>
+<!-- MAIN MENU -->
+		<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" class="acquisition" onMouseOver="SetOn(3);">Adquisiciones</a><br/>
+		
+		<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet" class="catalogue" onMouseOver="SetOn(1);">Cat&aacute;logo</a><br/>
+		
+		<a href="/cgi-bin/koha/circ/circulation.pl" class="circulation" onMouseOver="SetOn(7);">Circulaci&oacute;n</a><br/>
+		
+		<a href="/cgi-bin/koha/members/members-home.pl" class="members" onMouseOver="SetOn(2);">Usuarios</a><br/>
+		
+		<a href="/cgi-bin/koha/authorities/authorities-home.pl" class="reports" onMouseOver="SetOn(5);">Autoridades</a><br/>
+		
+		<a href="/cgi-bin/koha/reports-home.pl" class="reports" onMouseOver="SetOn(4);">Informes</a><br/>
+		
+		<a href="/cgi-bin/koha/admin-home.pl" class="parameters" onMouseOver="SetOn(6);">Par&aacute;metros</a><br/>
 
 
-<style type="text/css">
-<!--
-input{font-size:16px}
 
--->
-
-</style>
-<script language=javascript>
-<!--
-if (document.images){
-search=new Image;
-search.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif"
-members=new Image;
-members.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif"
-acquisitions=new Image;
-acquisitions.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif"
-reports=new Image;
-reports.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif"
-circulation=new Image;
-circulation.src ="<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif"
-}
-//-->
-</script>
-
-</HEAD>
-
-<BODY
-	BGCOLOR="#99cc33"
-	text="black"
-
-
-	alink="#663366"
-	leftmargin=0
-	topmargin=0
-	marginheight=0
-	marginwidth=0 >
-
-<center>
-<table cellspacing=0 cellpadding=0 border=0 >
-
-  <tr valign=top >
-	<td background="<TMPL_VAR NAME='themelang'>/images/koha-front-background.gif"><img src="/images/holder.gif"
-	width=1 height=420 align=left alt=" " hspace=0 vspace=0 >
-	<table cellspacing=0 cellpadding=0 border=0 >
-		<!----ROW THAT SETS THE GRID FOR THE REST OF THE TABLE--->
-		<tr valign=top >
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=150 height=42
-			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
-			alt=" " hspace=0 vspace=0 ></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=25 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=30 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=20 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=10 height=42
-			alt=" " hspace=0 vspace=0></td>
-			<td background=""><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=90 height=42
-			alt=" " hspace=0 vspace=0></td>
-		</tr>
-
-<!--------CATALOGUE SEARCH----->
-
-		<tr valign=top >
-			<td background="" colspan=5><img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
-			width=1 height=1 hspace=0 vspace=0></td>
-
-			<td background="" colspan=5><a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet" onMouseOver="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-search.gif'" 		onMouseOut="if(document.images)document.search.src='<TMPL_VAR NAME='themelang'>/images/front-search.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-search.gif" width=320 	height=37 name="search"
-			hspace=0 vspace=0 border=0></a></td>
-		</tr>
-		<FORM ACTION="/cgi-bin/koha/loadmodules.pl" method=post>
-		<tr valign=top >
-			<td background="" rowspan=3 align="right" colspan=5>
-				<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif"
-				width=1 height=35
-				alt=" " hspace=0 vspace=0><br>
-				<img src="<TMPL_VAR NAME='themelang'>/images/koha-front-koha.gif" width=200 height=128
-				alt="Koha: Horowhenua Library Trust" hspace=0 vspace=0></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=3>
-				<input type="hidden" name="module" value="search">
-				<input type="hidden" name="type" value="intranet">
-				<input type=text size="27" name="keyword"><input type=reset value="clr"><br>
-
-			<font size=1 face="arial,helvetica" ><b>Escriba en la linea de ingreso y oprima Enter</b><br>
-			<a href="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">
-			<font size=2 face="arial narrow,arial,helvetica">
-			<img src="<TMPL_VAR NAME='themelang'>/images/front-arrow-purple.gif" width=27 height=22
-			alt="-" hspace=0 vspace=0 border=0 align=middle >Búsqueda avanzada (mas opciones)</a><br>
-
-			<img src="/images/holder.gif" width=1 height=8
-			alt=" " hspace=0 vspace=0></td>
-
-		</tr>
-		</form>
-
-		<!--------MEMBER SEARCH----->
-
-		<tr valign=top >
-			<td></td>
-			<form action="/cgi-bin/koha/member.pl" method=post >
-			<td background=""  colspan=4>
-				<a href="/cgi-bin/koha/members-home.pl" onMouseOver="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-member.gif'" 		onMouseOut="if(document.images)document.member.src='<TMPL_VAR NAME='themelang'>/images/front-member.gif'">
-				<img src="<TMPL_VAR NAME='themelang'>/images/front-member.gif" width=304 height=37 name="member"
-				hspace=0 vspace=0 border=0>
-			</td>
-
-		</tr>
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<form action="/cgi-bin/koha/member.pl" method=post >
-
-			<td background="" colspan=3 >
-			<input type=text size="27" name="member">
-			<input type=reset value="clr"><br>
-			<font size=1 face="arial,helvetica" ><b>Escriba en la línea de ingreso y oprima Enter</b><br>
-			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0></td>
-
-		</tr>
-
- <!--------ACQUISITIONS----->
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=5><A href="/cgi-bin/koha/loadmodules.pl?module=acquisitions" onMouseOver="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-acquisitions.gif'" 		onMouseOut="if(document.images)document.acquisitions.src='<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-acquisitions.gif" width=320 		height=36 name="acquisitions"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-
-
-		</tr>
-
-
-<!--------REPORTS----->
-		<tr valign=top >
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=6> <A href="/cgi-bin/koha/reports-home.pl" onMouseOver="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-reports.gif'" 		onMouseOut="if(document.images)document.reports.src='<TMPL_VAR NAME='themelang'>/images/front-reports.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-reports.gif" width=346 		height=37 name="reports"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-		</tr>
-
-<!--------ADMIN----->
-		<tr valign=top >
-
-			<td></td>
-			<td></td>
-			<td></td>
-			<td background="" colspan=7> <A href="/cgi-bin/koha/admin-home.pl" onMouseOver="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-admin.gif'" 		onMouseOut="if(document.images)document.admin.src='<TMPL_VAR NAME='themelang'>/images/front-admin.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-admin.gif" width=346 		height=37 name="admin"
-			hspace=0 vspace=0 border=0></a><br>
-			<img src="<TMPL_VAR NAME='themelang'>/images/holder.gif" width=1 height=12
-			alt=" " hspace=0 vspace=0 ></td>
-
-
-		</tr>
-
-<!--------CIRCULATION----->
-		<tr valign=top >
-
-			<td></td>
-			<td background="" colspan=9> <A href="/cgi-bin/koha/circ/circulation.pl" onMouseOver="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-mouseover-circulation.gif'" 		onMouseOut="if(document.images)document.circulation.src='<TMPL_VAR NAME='themelang'>/images/front-circulation.gif'"><img src="<TMPL_VAR NAME='themelang'>/images/front-circulation.gif" width=346 		height=37 name="circulation"
-			hspace=0 vspace=0 border=0></a>
-			</td>
-		</tr>
-	</table>
-	</td>
-</tr>
-</table>
-</center>
+	</div>
+</div>
 </body>
 </html>

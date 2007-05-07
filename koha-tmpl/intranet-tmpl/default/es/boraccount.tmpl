@@ -1,50 +1,37 @@
-<TMPL_INCLUDE NAME="members-top.inc">
-
-<!-- The manual invoice and credit buttons -->
-
-<FONT SIZE=6><em>Cuenta de <TMPL_VAR NAME=firstname> <TMPL_VAR NAME=surname></em></FONT><P>
-<a href="/cgi-bin/koha/maninvoice.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-invoice.gif border=0></a>
-&nbsp;
-<a href="/cgi-bin/koha/mancredit.pl?bornum=<TMPL_VAR NAME=bornum>"><image src=/images/create-man-credit.gif border=0></a>
-<center>
-<p>
-
-<!-- The table with the account items -->
-
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 >
-
-  <TR VALIGN=TOP>
-    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=2><B>Cargos en la cuenta</TD>
-    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=1><B>Monto</TD>
-    <td  bgcolor="#99cc33" background="/images/background-mem.gif" colspan=1><B>Aun se debe</TD>
-  </TR>
-
-  <TMPL_LOOP NAME=accounts>
-
-    <tr VALIGN=TOP>
-      <td><TMPL_VAR NAME=date></td>
-      <td><TMPL_VAR NAME=description><TMPL_IF NAME=printtitle> <TMPL_VAR NAME=title></TMPL_IF></td>
-      <td><TMPL_VAR NAME=amount></td>
-      <td><TMPL_VAR NAME=amountoutstanding></td>
-    </tr>
-
-  </TMPL_LOOP>
-
-  <tr VALIGN=TOP  >
-    <td></td>
-    <td colspan=2><b>Total actual:</b></td>
-    <td><b><TMPL_VAR NAME=total></b></td>
-  </tr>
-
-</table>
-
-<br clear=all>
-<p> &nbsp; </p>
-
-<!-- endmenu (member) -->
-
-<TMPL_INCLUDE NAME="members-bottom.inc">
-
-</body>
-</HTML>
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+	<!-- The manual invoice and credit buttons -->
+	
+	<h1>Cuenta para <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a></h1><P>
+	<a class="button" href="/cgi-bin/koha/maninvoice.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Crear Factura manual</a> &nbsp; <a class="button" href="/cgi-bin/koha/mancredit.pl?bornum=<!-- TMPL_VAR NAME="bornum" -->">Crear Cr&eacute;dito Manual </a>
+	<!-- The table with the account items -->
+	
+	<table>
+	
+	<tr>
+		<th>Cuentas &amp; Cargos</th>
+		<th>MONTO</th>
+		<th>TODAVIA DEBE</th>
+	</tr>
+	
+	<!-- TMPL_LOOP NAME="accounts" -->
+	
+		<tr>
+		<td><!-- TMPL_VAR NAME="date" --> <!-- TMPL_VAR NAME="description" --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+		<td><!-- TMPL_VAR NAME="amount" --></td>
+		<td><!-- TMPL_VAR NAME="amountoutstanding" --></td>
+		</tr>
+	
+	<!-- /TMPL_LOOP -->
+	
+	<tr>
+		<th>Deuda Total</th>
+		<th colspan="2"><!-- TMPL_VAR NAME="total" --></th>
+	</tr>
+	
+	</table>
+	
+	<!-- endmenu (member) -->
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->
 

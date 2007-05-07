@@ -1,67 +1,48 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
+<div id="mainbloc">
+<h1>Usuarios</h1>
 
-<FONT SIZE=6><em>Usuarios</em></FONT><P>
-
-
-<img src="<TMPL_VAR name="themelang">/images/numbers-mem-1.gif"   WIDTH=45  HEIGHT=44   ALT="1"
-hspace=5 align=left BORDER=0>
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-<tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FORM ACTION="/cgi-bin/koha/member.pl" method=post><FONT SIZE=4>
-<b>B&uacute;squeda de Usuarios</B>
-</FONT>
-<INPUT TYPE="text" size=50 name=member >
-<BR>
-Renueve Items, vea, agregue, modifique y borre registros, todo empezando con esta b&uacute;squeda.<BR>
-Ingrese el nombre de un usuario, parte del nombre,  o n&uacute;mero en el campo de arriba y presione <BR>
-la tecla ENTER para activar la b&uacute;squeda
-</td></form><tr>
-</table>
-
-<P>
-
-<img src="<TMPL_VAR name="themelang">/images/numbers-mem-2.gif"   WIDTH=45  HEIGHT=44   ALT="2"
-hspace=5 align=left BORDER=0>
-
-
-<table border=1 cellspacing=0 cellpadding=10 height="100" >
-<tr VALIGN=TOP  >
-<td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><FONT SIZE=4>
-<b>Listar Usuarios</B>
-</FONT>
-</td></form><tr>
-<TR VALIGN=TOP>
-<TD><CENTER><B>
-<A HREF="/cgi-bin/koha/member.pl?member=a">A</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=b">B</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=c">C</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=d">D</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=e">E</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=f">F</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=g">G</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=h">H</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=i">I</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=j">J</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=k">K</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=l">L</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=m">M</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=n">N</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=o">O</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=p">P</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=q">Q</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=r">R</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=s">S</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=t">T</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=u">U</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=v">V</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=w">W</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=x">X</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=y">Y</a> ||
-<A HREF="/cgi-bin/koha/member.pl?member=z">Z</a>
-
-</B>
-</TD></TR></TABLE>
-
-<P>
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<div id="bloc25">
+	<div class="bloctitle">B&uacute;squeda de Usuarios</div>
+	<form action="/cgi-bin/koha/members/member.pl" method="post">
+		<p><input type="text" size="30" name="member" > ordenado por 
+		<select name="orderby">
+			<option value="surname,firstname">Apellidos</option>
+			<option value="cardnumber">N&uacute;mero de Carnet</option>
+		</select>
+		<input type="submit" class="button" value="ACEPTAR">
+		<p>Renovar Items, ver, a&ntilde;adir, modificar y borrar registros, todo empezando con esta b&uacute;squeda.</p>
+		<p>Escriba el nombre del usuario, parte del nombre o n&uacute;mero de identificaci&oacute;n en el campo de arriba y presione la tecla Aceptar para iniciar la b&uacute;squeda</p>
+	</form>
+</div>
+<div id="bloc25">
+			<div class="bloctitle">Listar Usuarios</div>
+			<a href="/cgi-bin/koha/members/member.pl?member=a">A</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=b">B</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=c">C</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=d">D</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=e">E</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=f">F</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=g">G</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=h">H</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=i">I</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=j">J</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=k">K</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=l">L</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=m">M</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=n">N</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=o">O</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=p">P</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=q">Q</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=r">R</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=s">S</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=t">T</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=u">U</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=v">V</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=w">W</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=x">X</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=y">Y</a> ||
+			<a href="/cgi-bin/koha/members/member.pl?member=z">Z</a>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

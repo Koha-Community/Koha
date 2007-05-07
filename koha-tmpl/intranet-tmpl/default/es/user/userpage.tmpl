@@ -1,24 +1,24 @@
-<TMPL_INCLUDE NAME="members-top.inc">
+<!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
-<TMPL_IF NAME="loggedinuser">
-	<p align=left>Logged in as: <TMPL_VAR NAME="loggedinuser"> [<a href=/cgi-bin/koha/logout.pl>Log Out</a>]</p>
+<!-- TMPL_IF NAME="loggedinuser" -->
+	<p align=left>Registrado como: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Salir</a>]</p>
 	<p>
 	<center>
-	<h3>This page is just a mock up</h3>
+	<h3>Esta p&aacute;gina es s&oacute;lo una prueba</h3>
 
 	<table border=0 cellspacing=15>
 	<tr><td valign=top>
 
 	<table border=1 cellpadding=10>
-	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Reserves</font></th></tr>
+	<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Reservas</font></th></tr>
 	<tr><td>
-	<b>You have the following books waiting to be picked up:</b>
+	<b>Los siguientes libros est&aacute;n esperando a ser retirados:</b>
 	<ul>
 	<li>The Great Mom Swap by Betsy Hanes at Main Library
 	<li>Between Brothers by Irene Morck at Main Library
 	</ul>
 	<p>
-	<b>You have the following requests for items on loan:</b>
+	<b>Tiene las siguientes solicitudes de art&iacute;culos prestados:</b>
 	<ul>
 	<li>The Amazing Apple Book by Paulette Bourgeois
 	<li>Tracey the Great by Alan Cliburn
@@ -29,36 +29,36 @@
 
 	</td><td valign=top>
 
-		<form method=post>
+		<form method="post">
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>User Preferences</font></th></tr>
-		<tr><td align =center>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Preferencias del usuario</font></th></tr>
+		<tr><td align ="center">
 		<table border=0 cellpadding=5>
-			<tr><td>Language</td><td>
+			<tr><td>Idioma</td><td>
 			<select name=language>
-			<option value=english>English
-			<option value=english>French
-			<option value=english>German
-			<option value=english>Polish
+			<option value=english>Ingl&eacute;s
+			<option value=english>Franc&eacute;s
+			<option value=english>Alem&aacute;n
+			<option value=english>Polaco
 			</select>
 			</td></tr>
-			<tr><td>E-mail Address</td><td><input name=email size=30 value=<TMPL_VAR NAME=loggedinuser>@mylibrary.com></td></tr>
-			<tr><td>Preferred Branch<br>for reserve pickups</td><td>
+			<tr><td>Direcci&oacute;n de Correo electr&oacute;nico</td><td><input type= name=email size=30 value="<!-- TMPL_VAR NAME=loggedinuser -->@mibiblioteca.com"></td></tr>
+			<tr><td>Sede Preferida<br>para las recolecciones de reservas</td><td>
 			<select name=pickupbranch>
-			<option value=MAIN>Main Library
-			<option value=SEDGE>Sedgewick Library
-			<option value=HANSEN selected>Rick Hansen Library
+			<option value=MAIN>Biblioteca Central
+			<option value=SEDGE>Biblioteca Sedgewick
+			<option value=HANSEN selected>Biblioteca Rick Hansen
 			<option value=CAT>Cataline Library
 			</select>
 			</td></tr>
 			<tr><td colspan=2>
-			<input name=specialeventsbyemail type=checkbox checked> Notify me about Special Events by email<br>
-			<input name=overduesbyemail type=checkbox checked> Notify me about overdues by email<br>
-			<input name=recordreadingrecord type=checkbox> Keep a record of books I have read<br>
-			<input name=recordreadingrecord type=checkbox> Allow library staff to see my reading record<br>
+			<input name="specialeventsbyemail" type="checkbox" checked> Notificarme de Eventos Especiales por email<br>
+			<input name="overduesbyemail" type="checkbox" checked> Notificarme acerca de retrasos por email<br>
+			<input name="recordreadingrecord" type="checkbox"> Mantenga un registro de los libros que he leido<br>
+			<input name="recordreadingrecord" type="checkbox"> Permitir al personal de la biblioteca ver mi registro de lectura<br>
 			</td></tr>
 			<tr><td align=center colspan=2>
-			<input type=submit value="Set Preferences">
+			<input type=submit value="Establecer Preferencias">
 			</td>
 			</tr>
 		</table>
@@ -70,20 +70,20 @@
 	</table>
 
 	</center>
-<TMPL_ELSE>
+<!-- TMPL_ELSE -->
 	<center>
 	<form method=post>
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>User Preferences</font></th></tr>
-		<tr><td>Name:</td><td><input name="userid"></td></tr>
-		<tr><td>Password:</td><td><input type=password name=password></td></tr>
-		<tr><td align=center colspan=2>
-		    <input type=submit value="Login">
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif" colspan=2><font size=+2>Preferencias del usuario</font></th></tr>
+		<tr><td>Nombre:</td><td><input name="userid"></td></tr>
+		<tr><td>Clave:</td><td><input type="password" name="password"></td></tr>
+		<tr><td align="center" colspan=2>
+		    <input type="submit" value="Entrar">
 		</td>
 		</tr>
 	    </table>
 	</form>
 	</center>
-</TMPL_IF>
+<!-- /TMPL_IF -->
 
-<TMPL_INCLUDE NAME="members-bottom.inc">
+<!-- TMPL_INCLUDE NAME="members-bottom.inc" -->

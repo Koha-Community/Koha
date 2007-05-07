@@ -1,131 +1,216 @@
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-top.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-top.inc">
-</TMPL_IF>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-top.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-top.inc" -->
+<!-- /TMPL_IF -->
+<div id="mainbloc">
 
-<center>
+<h1 class="catalogue">B&uacute;squeda en el Cat&aacute;logo</h1>
 
-<form name="f" method="post">
-<input type="hidden" name="type" value="intranet">
-	<table border=0 cellspacing=0 cellpadding=2>
-		<tr
-		<TMPL_IF NAME="opac">
-			bgcolor="#ad11ad"
-				bgcolor="#99cccc" background="/images/background-opac.gif"
-			<TMPL_ELSE>
-				bgcolor="#ad11ad"
-			</TMPL_IF>
-		>
-			<th colspan=6>Search</th>
-		</tr>
-		<tr align="center">
-			<td colspan=6>
-			<div name="sql">
-			<input type="hidden" name="op" value="do_search">
-			<textarea name="sql" rows=5 cols=80 disabled readonly></textarea>
-			</td>
-		</tr>
-
-		<!-- 000000000000000000000000000000000000000000000000000000 -->
-		<tr>
-			<td>
-				<input type=hidden name="and_or" value="">&nbsp;
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
-				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">not</option>
-				</select>
-			</td>
-			<td>
-				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">equals</option>
-					<option value=">">is more than</option>
-					<option value=">=">is more than or equal to</option>
-					<option value="<">is less than</option>
-					<option value="<=">is less than or equal to</option>
-					<option value="start">starts with</option>
-					<option value="contains">contains</option>
-				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr>
-			<td>
+<form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl">
+	<input type="hidden" name="op" value="do_search">
+	<input type="hidden" name="type" value="intranet">
+	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+	<div class="bloc25">
+		<h2 class="catalogue">Buscar</h2>
+		<p>
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+			<label class="label100" for="keyword">Cualquier palabra</label>
+			<input type="hidden" name="marclist" value="">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" id="keyword" onchange="sql_update()" size="35">
+		</p>
+		<p>
+			<label class="label100" for="title">T&iacute;tulo</label>
+			<input type="hidden" name="marclist" value="biblio.title">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label100" for="author">Autor</label> <input type="hidden" name="marclist" value="biblio.author">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label100" for="subject">Tema</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">  
+			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
+		</p>
+		<p>
+			<label class="label100" for="itemtype">Tipo de art&iacute;culo</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="=">
+			<!-- TMPL_VAR name="CGIitemtype" -->
+		</p>
+		<p>
+				<label class="label100" for="branch">Sede</label>
+				<input type="hidden" name="marclist" value="items.holdingbranch">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="=">  
+				<!-- TMPL_VAR name="CGIbranch" -->
+		</p>
+	</div>
+	<div class="bloc25">
+		<h2 class="catalogue">Otras opciones</h2>
+		<p>
+				<label class="label100" for="barcode">C&oacute;digo de barras del ejemplar</label>
+				<input type="hidden" name="marclist" value="items.barcode">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="barcode" onchange="sql_update()"> 
+		</p>
+		<p>
+			<label class="label100" for="callno">N&uacute;mero del art&iacute;culo</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="start">
+			<input type="text" name="value" id="callno" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label100" for="isbn">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="=">
+			<input type="text" name="value" id="isbn" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label100" for="publisher">Editor</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" id="publisher" onchange="sql_update()">
+		</p>
+	</div>
+	<div id="bloc100">
+		<h2 class="catalogue">M&aacute;s Campos</h2>
+		<!-- TMPL_LOOP NAME="statements" -->
+			<p>
 				<select name="and_or" size="1" onchange="sql_update()">
-					<option value="and">and</option>
-					<option value="or">or</option>
+					<option value="and">y</option>
+					<option <!-- TMPL_IF NAME="or" -->selected <!-- /TMPL_IF -->value="or">o</option>
 				</select>
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
+				<!-- TMPL_VAR NAME="marclist" -->
 				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">not</option>
+					<option value="0"> </option>
+					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->value="1">no</option>
 				</select>
-			</td>
-			<td>
 				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">equals</option>
-					<option value=">">is more than</option>
-					<option value=">=">is more than or equal to</option>
-					<option value="<">is less than</option>
-					<option value="<=">is less than or equal to</option>
-					<option value="start">starts with</option>
-					<option value="contains">contains</option>
+					<option <!-- TMPL_IF NAME="contains" -->selected<!-- /TMPL_IF --> value="contains">Contiene</option>
+					<option <!-- TMPL_IF NAME="eq" -->selected<!-- /TMPL_IF --> value="=">Es igual a</option>
+					<option <!-- TMPL_IF NAME="start" -->selected<!-- /TMPL_IF --> value="start">Comienza con</option>
+					<option <!-- TMPL_IF NAME="gt" -->selected<!-- /TMPL_IF --> value=">">Es mayor que</option>
+					<option <!-- TMPL_IF NAME="ge" -->selected<!-- /TMPL_IF --> value=">=">Es mayor o igual a</option>
+					<option <!-- TMPL_IF NAME="lt" -->selected<!-- /TMPL_IF --> value="<">Es menor que</option>
+					<option <!-- TMPL_IF NAME="le" -->selected<!-- /TMPL_IF --> value="<=">Es menor o igual a</option>
 				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr>
-			<td>
-				<select name="and_or" size="1" onchange="sql_update()">
-					<option value="and">and</option>
-					<option value="or">or</option>
-				</select>
-			</td>
-			<td><TMPL_VAR name="marclist"></td>
-			<td>
-				<select name="excluding" size="1" onchange="sql_update()">
-					<option value=""> </option>
-					<option value="not">not</option>
-				</select>
-			</td>
-			<td>
-				<select name="operator" size="1" onchange="sql_update()">
-					<option value="=">equals</option>
-					<option value=">">is more than</option>
-					<option value=">=">is more than or equal to</option>
-					<option value="<">is less than</option>
-					<option value="<=">is less than or equal to</option>
-					<option value="start">starts with</option>
-					<option value="contains">contains</option>
-				</select>
-			</td>
-			<td><input type="text" name="value" onChange="sql_update()"></td>
-		</tr>
-		<tr><td colspan=5 align=center><input type="submit" value="OK"></td></tr>
-	</table>
+				<input type="text" name="value" onChange="sql_update()" <!-- TMPL_IF NAME="value" -->value="<!-- TMPL_VAR NAME="value" -->"<!-- /TMPL_IF -->>
+			</p>
+		<!-- /TMPL_LOOP -->
+		<p>
+		<input type="button" value="A&ntilde;adir criterio" onclick="AddStatement()" class="button catalogue">
+		Advertencia : el campo "contiene" NO funciona si introduce 2 letras o menos.</p>
+	</div>
+	<div class="bloc25">
+		<p><textarea name="sql" rows="3" cols="70" disabled readonly></textarea></p>
+		<p>Resultados por p&aacute;gina :
+			<select name="resultsperpage" size="1">
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		Ordenado por
+			<select name="orderby" size="1">
+				<option value="biblio.title">T&iacute;tulo</option>
+				<option value="biblio.author">Autor</option>
+				<option value="biblioitems.dewey">Dewey</option>
+				<option value="biblioitems.publicationyear">A&ntilde;o de Publicaci&oacute;n</option>
+				<option value="biblioitems.publishercode">Editor</option>
+			</select>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Ascendente</option>
+				<option value="DESC">Descendente</option>
+			</select>
+		</p>
+		<p>
+			<input type="submit" value="Iniciar b&uacute;squeda" class="button catalogue">
+			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Sugerencia del deletreo</a>
+		</p>
+	</div>
 </form>
-<script>
+
+<script language="javascript" type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
 	for (i=0 ; i<document.f.marclist.length ; i++) {
-		if (document.f.marclist[i].value != '') {
+		if (document.f.value[i].value.length>0) {
 			document.f.sql.value = document.f.sql.value+
 										document.f.and_or[i].value + ' (' +
 										document.f.excluding[i].value + ' ' +
-										document.f.marclist[i].value + '' +
-										document.f.operator[i].value + '' +
+										document.f.marclist[i].value + ' ' +
+										document.f.operator[i].value + ' ' +
 										'\''+document.f.value[i].value + '\') ';
 		}
 	}
 }
+
+function AddStatement() {
+
+	document.forms['f'].op.value="AddStatement";
+	document.f.submit();
+}
+
+function Dopop(link,i) {
+	var searchstring=document.forms['f'].value[i].value;
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+
+function PopupSuggestion() {
+    var strQuery="";
+	for (i=0 ; i<document.f.marclist.length ; i++) {
+		if (document.f.value[i].value.length>0) {
+		    strQuery += " "+document.f.value[i].value;
+		}
+	}
+	newin=window.open("suggest.pl?Q="+strQuery,"Suggestions",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+
 </script>
-<TMPL_IF NAME="opac">
-    <TMPL_INCLUDE NAME="opac-bottom.inc">
-<TMPL_ELSE>
-    <TMPL_INCLUDE NAME="cat-bottom.inc">
-</TMPL_IF>
+</div>
+<!-- TMPL_IF NAME="opac" -->
+    <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
+<!-- /TMPL_IF -->
+

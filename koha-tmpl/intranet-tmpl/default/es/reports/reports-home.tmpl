@@ -1,16 +1,46 @@
-<TMPL_INCLUDE NAME="reports-top.inc">
-<!-------------------------MAIN BODY OF PAGE-------------------------->
-
-<FONT SIZE=6><em>Reportes</em></FONT><br>
-
+<!-- TMPL_INCLUDE NAME="reports-top.inc" -->
+<!-- ------------------------MAIN BODY OF PAGE------------------------ -->
+<div id="mainbloc">
 
 
-
-<ul><li><a href=/cgi-bin/koha/stats.pl?time=yesterday>Till Reconciliation:</a> Reporte Diario (ayer)
-<li><a href=/cgi-bin/koha/stats.pl?time=today>Till Reconciliation:</a> Reporte Diario (hoy)
-
-
-
-</ul>
-<TMPL_INCLUDE NAME="reports-bottom.inc">
+<h1 class="reports">Informes</h1>
+<div id="bloc25">
+	<h2 class="reports">Estad&iacute;sticas Compuestas</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Adquisiciones</a></li>
+		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Usuarios</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Cat&aacute;logo</a></li>
+		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulaci&oacute;n</a></li>
+	</ul>
+</div>
+<div id="bloc25">
+	<h2 class="reports">Infomes principales</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Los usuarios con m&aacute;s pr&eacute;stamos</a></li>
+		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Los ejemplares m&aacute;s prestados</a></li>
+	</ul>
+	<h2 class="reports">Forasteros</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Usuarios sin pr&eacute;stamos</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">El ejemplar no est&aacute; prestado</a></li>
+	</ul>
+</div>
+<div id="bloc25">
+	<h2 class="reports">Otro estado</h2>
+	<p>sobre cat&aacute;logo</p>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/inventory.pl">Inventario</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Cat&aacute;logo por tipo de art&iacute;culo</a></li>
+	</ul>
+	<p>sobre pr&eacute;stamos</p>
+	<ul>
+		<li><a href="/cgi-bin/koha/stats.pl?time=yesterday">Till Reconciliation:</a> Informe diario (ayer)</li>
+		<li><a href="/cgi-bin/koha/stats.pl?time=today">Till Reconciliation:</a> Informe diario (hoy)</li>
+		<li><a href="/cgi-bin/koha/overdue.pl">Ejemplares atrasados</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Pr&eacute;stamos por categor&iacute;a de usuario</a></li>
+		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Tiempo de pr&eacute;stamo medio</a></li>
+	</ul>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
 

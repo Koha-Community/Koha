@@ -7,79 +7,112 @@
 
 <h1 class="catalogue">Szukaj w katalogu </h1>
 
-<form name="f" method="post">
+<form name="f" method="post" action="/cgi-bin/koha/search.marc/search.pl">
 	<input type="hidden" name="op" value="do_search">
 	<input type="hidden" name="type" value="intranet">
 	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-	<div id="bloc25">
+	<div class="bloc25">
 		<h2 class="catalogue">Szukaj </h2>
 		<p>
-			<label class="label20">Słowo kluczowe</label>
+			<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+			<label class="label100" for="keyword">Any word</label>
 			<input type="hidden" name="marclist" value="">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="text" name="value" id="keyword" onchange="sql_update()" size="35">
 		</p>
 		<p>
-			<label class="label20">Tytuł</label>
+			<label class="label100" for="title">Tytuł</label>
 			<input type="hidden" name="marclist" value="biblio.title">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="text" name="value" id="title" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.title&amp;type=intranet&amp;index=1',1)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
-			<label class="label20">autor</label> <input type="hidden" name="marclist" value="biblio.author">
+			<label class="label100" for="author">Autor</label> <input type="hidden" name="marclist" value="biblio.author">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="text" name="value" id="author" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=biblio.author&amp;type=intranet&amp;index=2',2)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
-	<p>
-				<label class="label20">Kod Paskowy </label>
-				<input type="hidden" name="marclist" value="items.barcode">
-				<input type="hidden" name="and_or" value="and">
-				<input type="hidden" name="excluding" value="">
-				<input type="hidden" name="operator" value="contains">
-				<input type="text" name="value" onchange="sql_update()">
-	</p>
-	</div>
-	<div id="bloc25">
-		<h2 class="catalogue">Szukaj </h2>
 		<p>
-			<label class="label20">Ilustrator</label>
-			<input type="hidden" name="marclist" value="biblioitems.illus">
+			<label class="label100" for="subject">Temat</label>
+			<input type="hidden" name="marclist" value="bibliosubject.subject">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
+			<input type="hidden" name="operator" value="contains">  
+			<input type="text" name="value" id="subject" onchange="sql_update()" size="35">
+			<!-- TMPL_UNLESS Name="Disable_Dictionary" -->
+				<a href="javascript:Dopop('dictionary.pl?marclist=bibliosubject.subject&amp;type=intranet&amp;index=3',3)" class="button catalogue">
+					...
+				</a>
+			<!-- /TMPL_UNLESS -->
 		</p>
 		<p>
-			<label class="label20">Dewey</label><input type="hidden" name="marclist" value="biblioitems.dewey">
-			<input type="hidden" name="and_or" value="and">
-			<input type="hidden" name="excluding" value="">
-			<input type="hidden" name="operator" value="contains">
-			<input type="text" name="value" onchange="sql_update()">
-		</p>
-		<p>
-			<label class="label20">Typ Pozycji</label> <input type="hidden" name="marclist" value="biblioitems.itemtype">
+			<label class="label100" for="itemtype">Typ Pozycji</label>
+			<input type="hidden" name="marclist" value="biblioitems.itemtype">
 			<input type="hidden" name="and_or" value="and">
 			<input type="hidden" name="excluding" value="">
 			<input type="hidden" name="operator" value="=">
 			<!-- TMPL_VAR name="CGIitemtype" -->
 		</p>
-						<p>
-				<label class="label20">oddział</label>
+		<p>
+				<label class="label100" for="branch">Oddział</label>
 				<input type="hidden" name="marclist" value="items.holdingbranch">
 				<input type="hidden" name="and_or" value="and">
 				<input type="hidden" name="excluding" value="">
-				<input type="hidden" name="operator" value="=">
+				<input type="hidden" name="operator" value="=">  
 				<!-- TMPL_VAR name="CGIbranch" -->
-	</p>
-
+		</p>
 	</div>
-	<div id="bloc25">
+	<div class="bloc25">
+		<h2 class="catalogue">Other options</h2>
+		<p>
+				<label class="label100" for="barcode">Item barcode</label>
+				<input type="hidden" name="marclist" value="items.barcode">
+				<input type="hidden" name="and_or" value="and">
+				<input type="hidden" name="excluding" value="">
+				<input type="hidden" name="operator" value="contains">
+				<input type="text" name="value" id="barcode" onchange="sql_update()"> 
+		</p>
+		<p>
+			<label class="label100" for="callno">Call Number</label>
+			<input type="hidden" name="marclist" value="items.itemcallnumber">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="start">
+			<input type="text" name="value" id="callno" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label100" for="isbn">ISBN</label>
+			<input type="hidden" name="marclist" value="biblioitems.isbn">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="=">
+			<input type="text" name="value" id="isbn" onchange="sql_update()">
+		</p>
+		<p>
+			<label class="label100" for="publisher">Wydawca</label>
+			<input type="hidden" name="marclist" value="biblioitems.publishercode">
+			<input type="hidden" name="and_or" value="and">
+			<input type="hidden" name="excluding" value="">
+			<input type="hidden" name="operator" value="contains">
+			<input type="text" name="value" id="publisher" onchange="sql_update()">
+		</p>
+	</div>
+	<div id="bloc100">
 		<h2 class="catalogue">Więcej pól</h2>
 		<!-- TMPL_LOOP NAME="statements" -->
 			<p>
@@ -87,7 +120,7 @@
 					<option value="and">i</option>
 					<option <!-- TMPL_IF NAME="or" -->selected <!-- /TMPL_IF -->value="or">lub</option>
 				</select>
-				<!-- TMPL_VAR name="marclist" -->
+				<!-- TMPL_VAR NAME="marclist" -->
 				<select name="excluding" size="1" onchange="sql_update()">
 					<option value="0"> </option>
 					<option <!-- TMPL_IF NAME="not" -->selected <!-- /TMPL_IF -->value="1">nie</option>
@@ -105,17 +138,13 @@
 			</p>
 		<!-- /TMPL_LOOP -->
 		<p>
-		<input type="button catalogue" value="Dodaj kryteria" onclick="AddStatement()" class="button catalogue">
-		Ostrzeżenie: deklaracja "zawiera" nie działa jeśli występują jedynie 2 lub mniej literek
+		<input type="button" value="Dodaj kryteria" onclick="AddStatement()" class="button catalogue">
+		Ostrzeżenie: deklaracja "zawiera" nie działa jeśli występują jedynie 2 lub mniej literek</p>
 	</div>
-	<div id="bloc25">
-		<p>
-			<div name="sql">
-				<textarea name="sql" rows=3 cols=70 disabled readonly></textarea>
-			</div>
-		</p>
+	<div class="bloc25">
+		<p><textarea name="sql" rows="3" cols="70" disabled readonly></textarea></p>
 		<p>Liczba wyświetleń na stronę:
-			<select align="right" name="resultsperpage" size="1">
+			<select name="resultsperpage" size="1">
 				<option value="20">20</option>
 				<option value="50">50</option>
 				<option value="100">100</option>
@@ -128,15 +157,19 @@
 				<option value="biblioitems.publicationyear">Rok publikacji</option>
 				<option value="biblioitems.publishercode">Wydawca</option>
 			</select>
+			<select name="desc_or_asc" size="1">
+				<option value="ASC">Ascending</option>
+				<option value="DESC">Descending</option>
+			</select>
 		</p>
 		<p>
 			<input type="submit" value="Szukaj" class="button catalogue">
-			<a href="javascript:PopupSuggestion()" class="button catalogue">Sugestie</a>
+			<a href="/cgi-bin/koha/search.marc/suggest.pl" onclick="PopupSuggestion(); return false;" class="button catalogue">Spelling suggestion</a>
 		</p>
 	</div>
 </form>
 
-<script>
+<script language="javascript" type="text/javascript">
 function sql_update() {
 document.f.sql.value="";
 	for (i=0 ; i<document.f.marclist.length ; i++) {
@@ -153,9 +186,15 @@ document.f.sql.value="";
 
 function AddStatement() {
 
-	document.forms[0].op.value="AddStatement";
+	document.forms['f'].op.value="AddStatement";
 	document.f.submit();
 }
+
+function Dopop(link,i) {
+	var searchstring=document.forms['f'].value[i].value;
+	newin=window.open(link+'&amp;search='+searchstring,"popup",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
 
 function PopupSuggestion() {
     var strQuery="";

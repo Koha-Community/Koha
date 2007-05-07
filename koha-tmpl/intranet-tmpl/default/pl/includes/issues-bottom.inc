@@ -1,22 +1,17 @@
-<br clear=all>
+<br clear="all">
 <p> &nbsp; </p>
 
-
-</BLOCKQUOTE>
-
-<CENTER>
-<FONT SIZE=2  face="arial, helvetica">
-<A HREF="/cgi-bin/koha/mainpage.pl">Początek</a> ||
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=search&type=intranet">Katalog</a> ||
-<A HREF="/cgi-bin/koha/members-home.pl">Czytelnicy</a> ||
-<A HREF="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Gromadzenie</a> ||
-<A HREF="/cgi-bin/koha/circ/circulation.pl">Cyrkulacja</a> ||
-<A HREF="/cgi-bin/koha/reports-home.pl">Raporty</a> ||
-<A HREF="/cgi-bin/koha/admin-home.pl">Parametry</a> ||
-<A HREF="/cgi-bin/koha/about.pl">O nas</a> || 
+<div class="center">
+<a href="/cgi-bin/koha/mainpage.pl">Początek</a> ||
+<a href="/cgi-bin/koha/loadmodules.pl?module=search&amp;type=intranet">Katalog</a> ||
+<a href="/cgi-bin/koha/members/members-home.pl">Czytelnicy</a> ||
+<a href="/cgi-bin/koha/loadmodules.pl?module=acquisitions">Gromadzenie</a> ||
+<a href="/cgi-bin/koha/circ/circulation.pl">Cyrkulacja</a> ||
+<a href="/cgi-bin/koha/reports-home.pl">Raporty</a> ||
+<a href="/cgi-bin/koha/admin-home.pl">Parametry</a> ||
+<a href="/cgi-bin/koha/about.pl">O nas</a> || 
 Pomoc
-</FONT>
-</CENTER>
-</BODY>
+</div>
 
-</HTML>
+</body>
+</html>

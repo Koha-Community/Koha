@@ -1,22 +1,20 @@
 <!-- TMPL_INCLUDE Name="members-top.inc" -->
-
-<Center><h3>Kredyt</h3></center>
-<form action=/cgi-bin/koha/mancredit.pl method=post>
-<table cellpadding=2 cellspacing=0 border=0>
-<input type=hidden name="bornum" value="<!-- TMPL_VAR Name="bornum" -->">
-<tr><td><b>Numer Czytelnika<b></td><td><!-- TMPL_VAR Name="bornum" --></td></tr>
-<tr><td><b>Typ</b></td><Td>
-<select name=type>
-<option value=C>Kredyt</option>
-<option value=BAY>Baycorp Adjustment</option>
-<option value=WORK>Odpracowany</option>
-</select>
-</td></tr>
-<tr><td><b>Numer pozycji</b></td><td><input type=text name=itemnum></td></tr>
-<tr><td><b>Wyjaśnienie</b></td><td><input type=text name=desc size=50></td></tr>
-<tr><td><b>Kwota</b></td><td><input type=text name=amount></td></tr>
-<tr><td><input type=submit name=add value="Dodaj"></td></tr>
-</table>
-</form>
-
+<div id="mainbloc">
+	<h1 class="member">Kredyt</h1>
+	<form action="/cgi-bin/koha/mancredit.pl" method="post">
+		<input type="hidden" name="bornum" value="<!-- TMPL_VAR NAME="bornum" -->">
+		<p><label class="label100">Numer Czytelnika</label><!-- TMPL_VAR NAME="bornum" --></p>
+		<p><label class="label100">Typ</label>
+			<select name="type">
+				<option value="C">Kredyt</option>
+				<option value="BAY">Baycorp Adjustment</option>
+				<option value="WORK">Odpracowany</option>
+			</select>
+		</p>
+		<p><label class="label100">Numer pozycji</label><input type="text" name="itemnum"></p>
+		<p><label class="label100">Wyjaśnienie</label><input type="text" name="desc" size="50"></p>
+		<p><label class="label100">Kwota</label><input type="text" name="amount"></p>
+		<p><input type="submit" name="add" value="Dodaj" class="button"></p>
+	</form>
+</div>
 <!-- TMPL_INCLUDE Name="members-bottom.inc" -->

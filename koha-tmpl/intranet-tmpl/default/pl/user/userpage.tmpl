@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="members-top.inc" -->
 
 <!-- TMPL_IF NAME="loggedinuser" -->
-	<p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href=/cgi-bin/koha/logout.pl>Wyloguj</a>]</p>
+	<p align=left>Zalogowano jako: <!-- TMPL_VAR NAME="loggedinuser" --> [<a href="/cgi-bin/koha/logout.pl">Wyloguj</a>]</p>
 	<p>
 	<center>
 	<h3>Ta strona jest tylko projektem</h3>
@@ -10,7 +10,7 @@
 	<tr><td valign=top>
 
 	<table border=1 cellpadding=10>
-	<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Rezerwacje</font></th></tr>
+	<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Rezerwacje</font></th></tr>
 	<tr><td>
 	<b>Czekają na Ciebie nastepujące pozycje do odebrania:</b>
 	<ul>
@@ -18,7 +18,7 @@
 	<li>Between Brothers by Irene Morck at Main Library
 	</ul>
 	<p>
-	<b>You have the following requests for items on loan:</b>
+	<b>Trzymasz następujące pozycje, które zarezerwowano:</b>
 	<ul>
 	<li>The Amazing Apple Book by Paulette Bourgeois
 	<li>Tracey the Great by Alan Cliburn
@@ -29,10 +29,10 @@
 
 	</td><td valign=top>
 
-		<form method=post>
+		<form method="post">
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif><font size=+2>Preferencje Użytkownika</font></th></tr>
-		<tr><td align =center>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif"><font size="+2">Preferencje Użytkownika</font></th></tr>
+		<tr><td align ="center">
 		<table border=0 cellpadding=5>
 			<tr><td>Język</td><td>
 			<select name=language>
@@ -42,7 +42,7 @@
 			<option value=english>Polski
 			</select>
 			</td></tr>
-			<tr><td>Adres E-mail</td><td><input name=email size=30 value=<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com></td></tr>
+			<tr><td>Adres E-mail</td><td><input name=email size=30 value="<!-- TMPL_VAR NAME=loggedinuser -->@mylibrary.com"></td></tr>
 			<tr><td>Preferowany Oddział<br>for reserve pickups</td><td>
 			<select name=pickupbranch>
 			<option value=MAIN>Biblioteka Główna
@@ -52,10 +52,10 @@
 			</select>
 			</td></tr>
 			<tr><td colspan=2>
-			<input name=specialeventsbyemail type=checkbox checked> Powiadom mnie o Ważnych Wydarzeniach  e-mailem<br>
-			<input name=overduesbyemail type=checkbox checked> Powiadom mnie o zaległych e-mailem<br>
-			<input name=recordreadingrecord type=checkbox> Zatrzymaj historię książek, które czytałem/am.<br>
-			<input name=recordreadingrecord type=checkbox> Zezwalaj pracownikom biblioteki na przeglądanie historii wypożyczeń<br>
+			<input name="specialeventsbyemail" type="checkbox" checked> Powiadom mnie o Ważnych Wydarzeniach  e-mailem<br>
+			<input name="overduesbyemail" type="checkbox" checked> Powiadom mnie o zaległych e-mailem<br>
+			<input name="recordreadingrecord" type="checkbox"> Zatrzymaj historię książek, które czytałem/am.<br>
+			<input name="recordreadingrecord" type="checkbox"> Zezwalaj pracownikom biblioteki na przeglądanie historii wypożyczeń<br>
 			</td></tr>
 			<tr><td align=center colspan=2>
 			<input type=submit value="Ustaw preferencje">
@@ -74,11 +74,11 @@
 	<center>
 	<form method=post>
 		<table border=1 cellpadding=10>
-		<tr><th bgcolor=#99cccc background=/images/background-opac.gif colspan=2><font size=+2>Preferencje Użytkownika</font></th></tr>
+		<tr><th bgcolor="#99cccc" background="/images/background-opac.gif" colspan=2><font size=+2>Preferencje Użytkownika</font></th></tr>
 		<tr><td>Nazwisko:</td><td><input name="userid"></td></tr>
-		<tr><td>Hasło:</td><td><input type=password name=password></td></tr>
-		<tr><td align=center colspan=2>
-		    <input type=submit value="Login">
+		<tr><td>Hasło:</td><td><input type="password" name="password"></td></tr>
+		<tr><td align="center" colspan=2>
+		    <input type="submit" value="Login">
 		</td>
 		</tr>
 	    </table>

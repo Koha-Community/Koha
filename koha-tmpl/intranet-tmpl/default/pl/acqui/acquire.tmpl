@@ -1,162 +1,118 @@
 <!-- TMPL_INCLUDE name="acquisitions-top.inc" -->
 
-<div align=right>
-Faktura: <!-- TMPL_VAR name="invoice" --><br>
-Przyjęte przez: <!-- TMPL_VAR name="user" --><br>
-<!-- TMPL_VAR name="date" -->
-</div>
-<h1>Receipt Summary for: <i><!-- TMPL_VAR name="name" --></i> Faktura <i><!-- TMPL_VAR name="invoice" --></i></h1>
-<CENTER>
+<div id="mainbloc">
+<h1 class="acquisition">Receipt Summary for: <i><!-- TMPL_VAR NAME="name" --></i> Faktura <i><!-- TMPL_VAR NAME="invoice" --></i></h1>
 
-
-<!-- TMPL_IF name="count" -->
-	<script language="javascript" type="text/javascript">
-	<!--
-	function messenger(X,Y,etc){
-	win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
-	win.focus();
-	win.document.close();
-	win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size=2><p><br>");
-	win.document.write(etc);
-	win.document.write("<center><form><input type=button onclick='self.close()' value=Close></form></center>");
-	win.document.write("</font></body></html>");
-	}
-	//-->
-	</script>
-	<form action="/cgi-bin/koha/acqui/finishreceive.pl" method=post>
-	<h1><!-- TMPL_VAR name="ordernumber" --> - Przyjmij Zamówienie</h1><br>
-	Koszyk zakupów dla: <!-- TMPL_VAR name="name" -->
-	<br> Zamówienie złożone: <!-- TMPL_VAR name="date" -->
-	<P>
-	<CENTER>
-	<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width="40%">
-		<tr valign=top bgcolor="#99cc33" >
-			<td background="<!-- TMPL_VAR name="themelang" -->/images/background-mem.gif" colspan=2>
-				<B>SZCZEGÓŁY KATALOGU</B>
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD><b>Tytuł*</b></td>
-			<td><input type=text size=20 name=title value="<!-- TMPL_VAR name="title" -->" >
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Autor</td>
-			<td><input type=text size=20 name=author value="<!-- TMPL_VAR name="author" -->" >
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Data Copyright</td>
-			<td><input type=text size=20 name=copyright value="<!-- TMPL_VAR name="copyrightdate" -->" >
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Format</td>
-			<td><!-- TMPL_VAR name="CGIitemtype" --></td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>ISBN</td>
-			<td><input type=text size=20 name=ISBN value="<!-- TMPL_VAR name="isbn" -->"></td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Seria</td>
-			<td><input type=text size=20 name=Series value="<!-- TMPL_VAR name="seriestitle" -->"></td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Oddział</td>
-			<td><!-- TMPL_VAR name="CGIbranch" --></td>
-		</tr>
-		<TR VALIGN=TOP bgcolor="#ffffcc" >
-			<TD><B>Kod kreskowy pozycji *</B></td>
-			<td><input type=text size=20 name=barcode value="<!-- TMPL_VAR name="barcode" -->"></td>
-		</tr>
-		<TR VALIGN=TOP bgcolor="#ffffcc" >
-			<TD><B>Oznaczenie tomowe (dla serii) *</B></td>
-			<td><input type=text size=20 name=volinf></td>
-		</tr>
-		<TR VALIGN=TOP>
-			<td colspan=2 align="center">
-				<input type=hidden name=biblio value=<!-- TMPL_VAR name="biblionumber" -->>
-				<input type=hidden name=ordnum value=<!-- TMPL_VAR name="ordernumber" -->>
-				<input type=hidden name=biblioitemnum value=<!-- TMPL_VAR name="biblioitemnumber" -->>
-				<input type=hidden name=id value="<!-- TMPL_VAR name="booksellerid" -->">
-				<input type=hidden name=freight value="<!-- TMPL_VAR name="freight" -->">
-				<input type=hidden name=gst value="<!-- TMPL_VAR name="gst" -->">
-				<!-- TMPL_IF name="catview" -->
-					<input type="submit" class="button" value="Zapisz">
-				<!-- TMPL_ELSE -->
-					<a class="button" href=/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!-- TMPL_VAR name="ordernumber" -->&id=<!-- TMPL_VAR name="booksellerid" -->>Edytuj</a>
-				<!-- /TMPL_IF -->
-			</td>
-		</tr>
-	</table>
-	<table border=1 cellspacing=0 cellpadding=5 width="40%">
-		<tr valign=top bgcolor="#99cc33">
-			<td background="<TMPL_VAR name="themelang">/images/background-mem.gif" colspan=2><B>SZCZEGÓŁY RACHUNKU</B></td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD><B>Fundusz Książkowy *</B></td>
-			<td><!-- TMPL_VAR name="CGIbookfund" -->
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Zamówiona ilość</td>
-			<td><input type=text size=20 name=quantity value="<!-- TMPL_VAR name="quantity" -->">
-			</td>
-		</tr>
-		<TR VALIGN=TOP bgcolor="#ffffcc">
-			<TD><B>Otrzymana ilość *</B></td>
-			<td><input type=text size=20 name=quantityrec value="<!-- TMPL_VAR name="quantityreceived" -->">
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Koszt wymiany</td>
-			<td><input type=text size=20 name=rrp value="<!-- TMPL_VAR name="rrp" -->">
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Koszt zaplanowane </td>
-			<td><input type=text size=20 name=ecost value="<!-- TMPL_VAR name="ecost" -->"></td>
-		</tr>
-		<TR VALIGN=TOP bgcolor="#ffffcc">
-			<TD><B>Faktyczny Koszt*</B></td>
-			<td><input type=text size=20 name=cost value="<!-- TMPL_VAR name="unitprice" -->"></td>
-		</tr>
-		<TR VALIGN=TOP bgcolor="#ffffcc">
-			<TD>Numer Faktury</td>
-			<td>
-				<!-- TMPL_VAR name="invoice" -->
-				<input type=hidden name=invoice value="<!-- TMPL_VAR name="invoice" -->">
-			</td>
-		</tr>
-		<TR VALIGN=TOP>
-			<TD>Uwagi</td>
-			<td><input type=text size=20 name=notes value="<!-- TMPL_VAR name="notes" -->"></td>
-		</tr>
-	</table>
-	</form>
-	</center>
-	<br clear=all>
-	<p> &nbsp; </p>
-<!-- TMPL_ELSE -->
-	<br />
-	<center>
-	<table width="80%">
-	<tr valign=top bgcolor="#ffdf61">
-		<td><b>Koszyk</b></td>
-		<td><b>ISBN</b></td>
-		<td><b>TYTUŁ</b></td>
-		<td><b>AUTOR</b></td>
-		<td><b>Ilość</b></td>
-		<td><b>Otrzymane</b></td>
-	</tr>
-	<!-- TMPL_LOOP name="loop" -->
+	<!-- TMPL_IF name="count" -->
+		<form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
+		<h1 class="acquisition"><!-- TMPL_VAR NAME="ordernumber" --> - Przyjmij Zamówienie</h1>
+		Koszyk zakupów dla: <!-- TMPL_VAR NAME="name" -->
+		<br> Zamówienie złożone: <!-- TMPL_VAR NAME="date" -->
+		<div id="bloc25">
+				<h2 class="acquisition">catalogue details</h2>
+			<p>
+				<label class="label100">Tytuł </label>
+				<!-- TMPL_VAR NAME="title" -->
+			</p>
+			<p>
+				<label class="label100">Autor</label>
+				<!-- TMPL_VAR NAME="author" -->
+			</p>
+			<p>
+				<label class="label100">Data Copyright</label>
+				<!-- TMPL_VAR NAME="copyrightdate" -->
+			</p>
+			<p>
+				<label class="label100">Format</label>
+				<!-- TMPL_VAR NAME="itemtype" -->
+			</p>
+			<p>
+				<label class="label100">ISBN</label>
+				<!-- TMPL_VAR NAME="isbn" -->
+			</p>
+			<p>
+				<label class="label100">Seria</label>
+				<!-- TMPL_VAR NAME="seriestitle" -->
+			</p>
+			<p>Enter barcode(s) and branch if you want to add item(s) immediatly</p>
+			<p>
+				<label class="label100">Oddział</label>
+				<!-- TMPL_VAR NAME="CGIbranch" -->
+			</p>
+			<p>
+				<label class="label100">Kod kreskowy pozycji *</label>
+				<input type=text size=20 name=barcode value="<!-- TMPL_VAR name="barcode" -->">
+			</p>
+		</div>
+		<div id="bloc25">
+			<h2 class="acquisition">Accounting details</h2>
+			<p>
+				<label class="label100">Fundusz Książkowy</label>
+				<!-- TMPL_VAR NAME="bookfund" -->
+			</p>
+			<p>
+				<label class="label100">Zamówiona ilość</label>
+				<!-- TMPL_VAR NAME="quantity" -->
+				<input type="hidden" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->">
+			</p>
+			<p>
+				<label class="label100">Otrzymana ilość *</label>
+				<input type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->">
+			</p>
+			<p>
+				<label class="label100">Koszt wymiany</label>
+				<input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->">
+			</p>
+			<p>
+				<label class="label100">Koszt zaplanowane </label>
+				<!-- TMPL_VAR NAME="ecost" -->
+			</p>
+			<p>
+				<label class="label100">Faktyczny Koszt*</label>
+				<input type="text" size="20" name="cost" value="<!-- TMPL_IF name="unitprice"--><!-- TMPL_VAR NAME="unitprice" --><!-- TMPL_ELSE --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF -->">
+			</p>
+			<p>
+				<label class="label100">Numer Faktury</label>
+					<!-- TMPL_VAR NAME="invoice" -->
+                <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->">
+                <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived" -->">
+                </p>
+			<p>
+				<label class="label100">Uwagi</label>
+				<!-- TMPL_VAR NAME="notes" -->
+			</p>
+			<p>
+				<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+				<input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->">
+				<input type="hidden" name="biblioitemnum" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+				<input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
+				<input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->">
+				<input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->">
+                <input type="submit" class="button acquisition" value="Zapisz"> (that all costs are for 1 item)
+			</p>
+		</div>
+		</form>
+	<!-- TMPL_ELSE -->
+		<table>
 		<tr>
-			<TD><!-- TMPL_VAR name="basketno" --></td>
-			<TD><!-- TMPL_VAR name="isbn" --></td>
-			<td><a href=acquire.pl?recieve=<!-- TMPL_VAR name="ordernumber" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->&invoice=<!-- TMPL_VAR name="invoice" -->&freight=<!-- TMPL_VAR name="freight" -->&gst=<!-- TMPL_VAR name="gst" -->&id=<!-- TMPL_VAR name="id" -->><!-- TMPL_VAR name="title" --></a></td>
-			<td><!-- TMPL_VAR name="author" --></td>
-			<td><!-- TMPL_VAR name="quantity" --></td>
-			<td><!-- TMPL_VAR name="quantityrecieved" --></td>
+			<th class="acquisition">Koszyk</th>
+			<th class="acquisition">ISBN</th>
+			<th class="acquisition">TYTUŁ</th>
+			<th class="acquisition">AUTOR</th>
+			<th class="acquisition">Ilość</th>
+			<th class="acquisition">Otrzymane</th>
 		</tr>
-	<!-- /TMPL_LOOP -->
-	</table>
-<!-- /TMPL_IF -->
+		<!-- TMPL_LOOP NAME="loop" -->
+			<tr>
+				<td><!-- TMPL_VAR NAME="basketno" --></td>
+				<td><!-- TMPL_VAR NAME="isbn" --></td>
+				<td><a href="acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+				<td><!-- TMPL_VAR NAME="author" --></td>
+				<td><!-- TMPL_VAR NAME="quantity" --></td>
+				<td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE name="acquisitions-bottom.inc" -->

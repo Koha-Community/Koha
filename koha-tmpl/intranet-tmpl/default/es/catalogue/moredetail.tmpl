@@ -1,98 +1,76 @@
-<TMPL_INCLUDE NAME="cat-top.inc">
+<!-- TMPL_INCLUDE NAME="cat-top.inc" -->
 
-<center>
-<br>
-<TMPL_LOOP NAME="BIBITEM_DATA">
-<a href=/cgi-bin/koha/request.pl?bib=<TMPL_VAR NAME="biblionumber">
-<img src=<TMPL_VAR name="themelang">/images/requests.gif width=120 height=42 border=0 align=right border=0></a>
-<FONT SIZE=6><em><a
-href=/cgi-bin/koha/detail.pl?bib=<TMPL_VAR NAME="biblionumber">&type=intra><TMPL_VAR NAME="title">
-(<TMPL_VAR NAME="author">)</a></em></FONT><P>
-<p>
-<form action=/cgi-bin/koha/modbibitem.pl>
-<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
-<input type=hidden name=biblio value=<TMPL_VAR NAME="biblionumber">>
-<!-------------------BIBLIO ITEM------------>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left>
-<TR VALIGN=TOP>
-        <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif" 
-          ><B><TMPL_VAR NAME="biblioitemnumber"> GRUPO - <TMPL_VAR NAME="description"> 
-          </b> </TD>
-</TR>
-<tr VALIGN=TOP  >
-<TD width=210 >
-<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png">
-<INPUT TYPE="image" name="delete"  VALUE="delete"border=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
-<br>
-<FONT SIZE=2  face="arial, helvetica">
-<b>Biblionumber:</b> <TMPL_VAR NAME="biblionumber"><br>
-          <b>Tipo de Item:</b> <TMPL_VAR NAME="itemtype"><br>
-<b>URL:</b> <TMPL_VAR NAME="url"><br>
-          <b>Plazo de Pr&eacute;stamo:</b> <TMPL_VAR NAME="loanlength"><br>
-          <b>Costo de renta:</b> <TMPL_VAR NAME="rentalcharge"><br>
-          <b>Clasificaci&oacute;n:</b> <TMPL_VAR NAME="classification"><TMPL_VAR NAME="dewey"><TMPL_VAR NAME="subclass"><br>
-<b>ISBN:</b> <TMPL_VAR NAME="isbn"><br>
-          <b>Editor:</b> <TMPL_VAR NAME="publishercode"> <br>
-          <b>Lugar:</b> <TMPL_VAR NAME="place"><br>
-          <b>Fecha:</b> <TMPL_VAR NAME="publicationyear"><br>
-          <b>Volumen:</b> <TMPL_VAR NAME="volumeddesc"><br>
-          <b>P&aacute;ginas:</b> <TMPL_VAR NAME="pages"><br>
-          <b>Ilustrado:</b> <TMPL_VAR NAME="illus"><br>
-          <b>Tama&ntilde;o:</b> <TMPL_VAR NAME="size"><br>
-          <b>Notas:</b> <TMPL_VAR NAME="bnotes"><br>
-          <b>N&uacute;mero de Items:</b> <TMPL_VAR NAME="count"> </font> </TD>
-</tr>
-</table>
+<div id="mainbloc">
+	<div id="bloc25">
+	<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
+		<h2 class="catalogue">
+			<a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra">
+				<!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+			</a>
+		</h2>
+		<p>
+		<form action="/cgi-bin/koha/modbibitem.pl" method="post">
+			<input type="hidden" name="bibitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
+			<input type="hidden" name="biblio" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+			<p><!-- TMPL_VAR NAME="biblioitemnumber" --> GRUPO - <!-- TMPL_VAR NAME="description" --> </p>
+			<p><b>Biblionumber:</b> <!-- TMPL_VAR NAME="biblionumber" --></p>
+			<p><b>Tipo de art&iacute;culo:</b> <!-- TMPL_VAR NAME="itemtype" --></p>
+			<p><b>URL:</b> <!-- TMPL_VAR NAME="url" --></p>
+			<p><b>Per&iacute;odo de pr&eacute;stamo:</b> <!-- TMPL_VAR NAME="loanlength" --></p>
+			<p><b>Costo por pr&eacute;stamo:</b> <!-- TMPL_VAR NAME="rentalcharge" --></p>
+			<p><b>Clasificaci&oacute;n:</b> <!-- TMPL_VAR NAME="classification" --><!-- TMPL_VAR NAME="dewey" --><!-- TMPL_VAR NAME="subclass" --></p>
+			<p><b>ISBN:</b> <!-- TMPL_VAR NAME="isbn" --></p>
+			<p><b>Editor:</b> <!-- TMPL_VAR NAME="publishercode" --> </p>
+			<p><b>Lugar:</b> <!-- TMPL_VAR NAME="place" --></p>
+			<p><b>Fecha:</b> <!-- TMPL_VAR NAME="publicationyear" --></p>
+			<p><b>Volumen:</b> <!-- TMPL_VAR NAME="volumeddesc" --></p>
+			<p><b>P&aacute;ginas:</b> <!-- TMPL_VAR NAME="pages" --></p>
+			<p><b>Ilus:</b> <!-- TMPL_VAR NAME="illus" --></p>
+			<p><b>Tama&ntilde;o:</b> <!-- TMPL_VAR NAME="size" --></p>
+			<p><b>Notas:</b> <!-- TMPL_VAR NAME="bnotes" --></p>
+			<p><b>Nro. de Art&iacute;culos:</b> <!-- TMPL_VAR NAME="count" --></p>
+		</form>
+		<input type="image" name="submit" value="Modificar" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
+		<input type="image" name="delete" value="borrar" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
+		<a class="button" href="/cgi-bin/koha/request.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Reservas</a>
+	<!-- /TMPL_LOOP -->
+	</div>
+<!-- TMPL_LOOP NAME="ITEM_DATA" -->
+<div id="bloc25">
+	<h2 class="catalogue">CODIGO DE BARRAS <!-- TMPL_VAR NAME="barcode" --></h2>
+	<form action="/cgi-bin/koha/moditem.pl" method="post">
+	<input type="hidden" name="bibitem" value=<!-- TMPL_VAR NAME="biblioitemnumber" -->>
+	<input type="hidden" name="item" value=<!-- TMPL_VAR NAME="itemnumber" -->>
+	<input type="hidden" name="type" value=<!-- TMPL_VAR NAME="type" -->>
+	<input type="image" name="submit" value="Modificar" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/fileopen.png">
+	<input type="image" name="delete" value="borrar" border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/edittrash.png">
+	<br>
+	<b>Sede Propietaria:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+	<b>Sede Actual:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+	<b>Visto por &uacute;ltima vez:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
+	<b>&Uacute;ltimo prestado:</b> <!-- TMPL_VAR NAME="datelastborrowed" --><br>
+	<b>Estado del Ejemplar:</b> <!-- TMPL_IF NAME="issue" -->E-mail: <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Disponible <!-- /TMPL_IF --><br>
+	<!-- TMPL_IF NAME="issue" --><b>Fecha Devoluci&oacute;n:</b> <!-- TMPL_VAR NAME="date_due" --><br><!-- /TMPL_IF -->
+	<b>&Uacute;ltimo Usuario 1:</b> <!-- TMPL_VAR NAME="card0" --><br>
+	<b>&Uacute;ltimo Usuario 2:</b> <!-- TMPL_VAR NAME="card1" --><br>
+	<b>Precio de reemplazo:</b> <!-- TMPL_VAR NAME="replacementprice" --><br>
+	<b>Ejemplar perdido:</b> <!-- TMPL_IF NAME="itemlost" -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br>
+	<b>Pagado por:</b> <!-- TMPL_VAR NAME="paidfor" --><br>
+	<b>Notas:</b> <!-- TMPL_VAR NAME="itemnotes" --><br>
+	<b>Renovaciones:</b> <!-- TMPL_VAR NAME="renewals" --><br>
+	<b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes"> Fecha de Acceso:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
+	<b>Cancelado:</b> <!-- TMPL_IF NAME="wthdrawn" -->Si<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br>
+	<b><a
+	href="/cgi-bin/koha/bookcount.pl?&amp;bib=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total de pr&eacute;stamos:</a></b> <!-- TMPL_VAR NAME="issues" --><br>
+	<b>N&uacute;mero de Grupo:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
+	<b>N&uacute;mero de libro:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
+	</h2>
+</div>
 </form>
-</TMPL_LOOP>
-<TMPL_LOOP NAME="ITEM_DATA">
-<img src="<TMPL_VAR name="themelang">/images/holder.gif" width=16 height=300 align=left>
-<TABLE  CELLSPACING=0  CELLPADDING=5 border=1 align=left width=220 >
-<TR VALIGN=TOP>
-      <td  bgcolor="99cc33" background="<TMPL_VAR name="themelang">/images/background-mem.gif"><B>CODIGO<TMPL_VAR NAME="barcode"></b></TD>
-</TR>
-<tr VALIGN=TOP>
-<TD width=220>
-<form action=/cgi-bin/koha/moditem.pl method=post>
-<input type=hidden name=bibitem value=<TMPL_VAR NAME="biblioitemnumber">>
-<input type=hidden name=item value=<TMPL_VAR NAME="itemnumber">>
-<input type=hidden name=type value=<TMPL_VAR NAME="type">>
-<INPUT TYPE="image" name="submit"  VALUE="modify" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/fileopen.png">
-<INPUT TYPE="image" name="delete"  VALUE="delete" BORDER=0 src="<TMPL_VAR name="interface">/<TMPL_VAR name="theme">/images/edittrash.png">
-<br>
-          <FONT SIZE=2  face="arial, helvetica"> <b>Biblioteca Depositaria:</b> 
-          <TMPL_VAR NAME="homebranch"><br>
-          <b>Visto por &uacute;ltima vez:</b> <TMPL_VAR NAME="datelastseen"><br>
-          <b>Prestado por &uacute;ltima vez:</b> <TMPL_VAR NAME="timestamp0"><br>
-          <!-- on issue bit -->
-          <b>Ultimo Usuario 1:</b> <TMPL_VAR NAME="card0"><br>
-          <b>Ultimo Usuario 2:</b> <TMPL_VAR NAME="card1"><br>
-          <b>Biblioteca Actual:</b> <TMPL_VAR NAME="holdingbranch"><br>
-          <b>Precio de Reposici&oacute;n:</b> <TMPL_VAR NAME="replacementprice"><br>
-          <b>Item perdido:</b> <TMPL_VAR NAME="itemlost"><br>
-          <b>Adquirido por:</b> <TMPL_VAR NAME="paidfor"><br>
-          <b>Notas:</b> <TMPL_VAR NAME="itemnotes"><br>
-          <b>Renovaciones:</b> <TMPL_VAR NAME="renewals"><br>
-          <b><a href="/cgi-bin/koha/acqui/acquire.pl?recieve=<TMPL_VAR NAME="ordernumber">&biblio=<TMPL_VAR NAME="biblionumber">&invoice=<TMPL_VAR NAME="booksellerinvoicenumber">&catview=yes"> 
-          Fecha de Acceso</a>:<TMPL_VAR NAME="dateaccessioned"><br>
-          <b>Cancelado: <TMPL_VAR NAME="wthdrawn"><br>
-          <b><a
-href=/cgi-bin/koha/bookcount.pl?&bib=<TMPL_VAR NAME="biblionumber">&bi=<TMPL_VAR NAME="biblioitemnumber">&itm=<TMPL_VAR NAME="itemnumber">>Total 
-          Pr&eacute;stamos :</a></b> <TMPL_VAR NAME="issues"><br>
-          <b>N&uacute;mero de Grupo:</b> <TMPL_VAR NAME="biblioitemnumber"> <br>
-          <b>N&uacute;mero de Biblioteca:</b> <TMPL_VAR NAME="biblionumber"> <br>
+<!-- /TMPL_LOOP -->
 
-
-
-</b></b></font>
-</form></TD>
-</tr>
-</table>
-
-</TMPL_LOOP>
-
-</center><p><center>
-
+<p>
+</form>
 </center>
 
-<TMPL_INCLUDE NAME="cat-bottom.inc">
+<!-- TMPL_INCLUDE NAME="cat-bottom.inc" -->
