@@ -1,0 +1,19 @@
+<!-- TMPL_INCLUDE name="auth-search-top.inc" -->
+<title>Unimarc-конструктор поля 225a</title>
+</head>
+<body>
+<div id="mainbloc">
+	<form name="f_pop" onSubmit="javascript:report()">
+		<h2 class="authority">Зібрання</h2>
+		<p><label>Вибір зібрання</label><!-- TMPL_VAR name="collection" --></p>
+		<input type="submit" value="Гаразд" class="button authority"></p>
+	</form>
+</div>
+<script>
+	function report() {
+		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
+		self.close();
+		return false;
+	}
+</script>
+<!-- TMPL_INCLUDE name="auth-search-bottom.inc" -->

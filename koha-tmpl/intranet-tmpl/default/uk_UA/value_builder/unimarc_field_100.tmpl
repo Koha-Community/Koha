@@ -1,0 +1,647 @@
+<html>
+<head>
+<title>Unimarc-конструктор поля 100</title>
+</head>
+<body>
+<form name="f_pop" onSubmit="javascript:report()">
+<table>
+	<tr>
+		<td>Дата вводу запису до файлу</td>
+		<td><input type="text" name="f1" maxlength=8 size=9 value="<!-- TMPL_VAR name="f1" -->"></td>
+	</tr>
+	<tr>
+		<td>Код типу дати публікації </td>
+		<td>
+			<select name="f2" size="1">
+	    <!-- TMPL_IF name="f2 " -->
+              <option value=" " SELECTED>Немає</option>
+                 <!-- TMPL_ELSE -->
+                    <option value=" ">Немає</option>
+
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f2a" -->
+				<option value="a" SELECTED>Поточне серіальне видання</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Поточне серіальне видання</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>Серіальне видання, яке більше не публікується</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Серіальне видання, яке більше не публікується</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>Серіальне видання з невизначеним статусом</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Серіальне видання з невизначеним статусом</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2d" -->
+				<option value="d" SELECTED>Монографія, яка видається повністю або видається протягом одного календарного року</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Монографія, яка видається повністю або видається протягом одного календарного року</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2e" -->
+				<option value="e" SELECTED>Репродукований документ</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Репродукований документ</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f2f" -->
+				<option value="f"
+				SELECTED>Монографія, дата публікації якої точно не відома</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Монографія, дата публікації якої точно не відома</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f2g" -->
+				<option value="g"
+				SELECTED>Монографія, публікація якої триває більше одного календарного року</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Монографія, публікація якої триває більше одного календарного року</option>
+			<!-- /TMPL_IF -->
+			
+			
+			<!-- TMPL_IF name="f2h" -->
+				<option value="h"
+				SELECTED>Монографія з фактичною датою публікації та датою надання копірайту/ привілею</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Монографія з фактичною датою публікації та датою надання копірайту/ привілею</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f2i" -->
+				<option value="i"
+				SELECTED>Документ (монографія) з датою виходу/ випуску та датою виробництва</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">Документ (монографія) з датою виходу/ випуску та датою виробництва</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f2j" -->
+				<option value="j"
+				SELECTED>Документ з точною датою публікації</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">Документ з точною датою публікації </option>
+			<!-- /TMPL_IF -->
+			
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Дата публікації 1</td>
+		<td><input type="text" name="f3" maxlength=4 size=5 value="<!-- TMPL_VAR name="f3" -->"></td>
+	</tr>
+	<tr>
+	<td>Дата публікації 2</td>
+	<td><input type="text" name="f4" maxlength=4 size=5
+		value="<!-- TMPL_VAR name="f4" -->"></td>
+        
+	</tr>
+	<tr>
+		<td>Код цільового призначення 1</td>
+		<td>
+			<select name="f5" size="1">
+	    <!-- TMPL_IF name="f5 " -->
+              <option value=" " SELECTED>Немає</option>
+                 <!-- TMPL_ELSE -->
+                    <option value=" ">Немає</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5a" -->
+				<option value="a" SELECTED>Для дітей та юнацтва, загальний </option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Для дітей та юнацтва, загальний</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5b" -->
+				<option value="b"
+	SELECTED>Для дітей дошкільного віку (0-5 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Для дітей дошкільного віку (0-5 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" SELECTED>Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" SELECTED>Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5e" -->
+				<option value="e" SELECTED>Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f5k" -->
+				<option value="k"
+				SELECTED>Для дорослих, наукова</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Для дорослих, наукова</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5m" -->
+				<option value="m"
+				SELECTED>Для дорослих, загального змісту</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Для дорослих, загального змісту</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f5u" -->
+				<option value="u"
+				SELECTED>Невідомо</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Невідомо</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Код цільового призначення 2</td>
+		<td>
+			<select name="f6" size="1">
+	    <!-- TMPL_IF name="f6 " -->
+              <option value=" " SELECTED>Немає</option>
+                 <!-- TMPL_ELSE -->
+                    <option value=" ">Немає</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" SELECTED>Для дітей та юнацтва, загальний </option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Для дітей та юнацтва, загальний</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6b" -->
+				<option value="b"
+	SELECTED>Для дітей дошкільного віку (0-5 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Для дітей дошкільного віку (0-5 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6c" -->
+				<option value="c" SELECTED>Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6d" -->
+				<option value="d" SELECTED>Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6e" -->
+				<option value="e" SELECTED>Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f6k" -->
+				<option value="k"
+				SELECTED>Для дорослих, наукова</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Для дорослих, наукова</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f6m" -->
+				<option value="m"
+				SELECTED>Для дорослих, загального змісту</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Для дорослих, загального змісту</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f6u" -->
+				<option value="u"
+				SELECTED>Невідомо</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Невідомо</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Код цільового призначення 3</td>
+		<td>
+			<select name="f7" size="1">
+	    <!-- TMPL_IF name="f7 " -->
+              <option value=" " SELECTED>Немає</option>
+                 <!-- TMPL_ELSE -->
+                    <option value=" ">Немає</option>
+
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7a" -->
+				<option value="a" SELECTED>Для дітей та юнацтва, загальний </option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Для дітей та юнацтва, загальний</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7b" -->
+				<option value="b"
+	SELECTED>Для дітей дошкільного віку (0-5 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Для дітей дошкільного віку (0-5 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7c" -->
+				<option value="c" SELECTED>Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Для дітей молодшого шкільного віку (5-9 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7d" -->
+				<option value="d" SELECTED>Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Для дітей середнього шкільного віку, підлітків (9-14 років)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7e" -->
+				<option value="e" SELECTED>Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Для дітей старшого шкільного віку, юнацтва (14-20 років)</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f7k" -->
+				<option value="k"
+				SELECTED>Для дорослих, наукова</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">Для дорослих, наукова</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f7m" -->
+				<option value="m"
+				SELECTED>Для дорослих, загального змісту</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">Для дорослих, загального змісту</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f7u" -->
+				<option value="u"
+				SELECTED>Невідомо</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Невідомо</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>Код урядової публікації</td>
+		<td>
+			<select name="f8" size="1">
+                   <!-- TMPL_IF name="f8 " -->
+                                <option value=" " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">Немає</option>
+                        <!-- /TMPL_IF -->
+		<!-- TMPL_IF name="f8a" -->
+				<option value="a" SELECTED>Національний/федеральний</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">Національний/федеральний</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8b" -->
+				<option value="b" SELECTED>Автономна республіка/провінція/штат тощо</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Автономна республіка/провінція/штат тощо</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8c" -->
+				<option value="c" SELECTED>Область/графство/департамент тощо</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Область/графство/департамент тощо</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8d" -->
+				<option value="d"
+				SELECTED>Місцевий (муніципальний тощо)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">Місцевий (муніципальний тощо)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8e" -->
+				<option value="e"
+				SELECTED>Міжтериторіальний (міжурядові організації нижче найвищого рівня)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">Міжтериторіальний (міжурядові організації нижче найвищого рівня)</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f8f" -->
+				<option value="f"
+				SELECTED>Міжурядовий</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">Міжурядовий</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8g" -->
+				<option value="g"
+				SELECTED>Уряд у вигнанні або нелегальний уряд</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">Уряд у вигнанні або нелегальний уряд</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f8h" -->
+				<option value="h"
+				SELECTED>Рівень не визначено</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">Рівень не визначено</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8u" -->
+				<option value="u"
+				SELECTED>Невідомо</option>
+			<!-- TMPL_ELSE -->
+				<option value="u">Невідомо</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8y" -->
+				<option value="y"
+				SELECTED>Неурядова публікація</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Неурядова публікація</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8z" -->
+				<option value="z"
+				SELECTED>Інший адміністративний рівень</option>
+			<!-- TMPL_ELSE -->
+				<option value="z">Інший адміністративний рівень</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td>Код модифікації запису</td>
+		<td>
+			<select name="f9" size="1">
+	                  <!-- TMPL_IF name="f9 " -->
+                                <option value=" " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">Немає</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f90" -->
+				<option value="0" SELECTED>Немодіфікований запис</option>
+			<!-- TMPL_ELSE -->
+				<option value="0">Немодіфікований запис</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f91" -->
+				<option value="1" SELECTED>Модифікований запис</option>
+			<!-- TMPL_ELSE -->
+				<option value="1">Модифікований запис</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+
+	<tr>
+	<td>Мова посилань, довідок, приміток тощо каталогізатора</td>
+	<td><input type="text" name="f10" maxlength=3 size=4
+		value="<!-- TMPL_VAR name="f10" -->"></td>
+        
+	</tr>
+
+
+
+	<tr>
+		<td>Код транслітерації</td>
+		<td>
+			<select name="f11" size="1">
+	                  <!-- TMPL_IF name="f11 " -->
+                                <option value=" " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">Немає</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f11a" -->
+				<option value="a" SELECTED>ISO-правила транслітерації</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">ISO-правила транслітерації</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11b" -->
+				<option value="b" SELECTED>Інші</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">Інші</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11c" -->
+				<option value="c"
+		SELECTED>Одночасне використання ISO та інших стандартів транслітерації</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">Одночасне використання ISO та інших стандартів транслітерації</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f11y" -->
+				<option value="y" SELECTED>Правила транслітерації на застосовувалися</option>
+			<!-- TMPL_ELSE -->
+				<option value="y">Правила транслітерації на застосовувалися</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+	<td>Набори символів (обов'язкове) 1</td>
+		<td>
+			<select name="f12" size="1">
+	   <!-- TMPL_IF name="f12  " -->
+                                <option value="  " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value="  ">Немає</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f1201" -->
+				<option value="01" SELECTED>ISO 646, версія IRV (основний латинський набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="01">ISO 646, версія IRV (основний латинський набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1202" -->
+				<option value="02" SELECTED>ISO реєстрація #37 (основний кириличний набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="02">ISO реєстрація #37 (основний кириличний набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1203" -->
+				<option value="03"
+		SELECTED>ISO 5426 (розширений латинський набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="03">ISO 5426 (розширений латинський набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1204" -->
+				<option value="04" SELECTED>ISO DIS 5427 (розширений кириличний набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="04">ISO DIS 5427 (розширений кириличний набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1205" -->
+				<option value="05" SELECTED>ISO 5428 (грецький набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="05">ISO 5428 (грецький набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1206" -->
+				<option value="06" SELECTED>ISO 6438 (набір кодований африканських символів)</option>
+			<!-- TMPL_ELSE -->
+				<option value="06">ISO 6438 (набір кодований африканських символів)</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+
+        
+	</tr>
+	<tr>
+	<td>Набори символів (обов'язкове) 2</td>
+		<td>
+			<select name="f13" size="1">
+	   <!-- TMPL_IF name="f13  " -->
+                                <option value="  " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value="  ">Немає</option>
+                        <!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f1301" -->
+				<option value="01" SELECTED>ISO 646, версія IRV (основний латинський набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="01">ISO 646, версія IRV (основний латинський набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1302" -->
+				<option value="02" SELECTED>ISO реєстрація #37 (основний кириличний набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="02">ISO реєстрація #37 (основний кириличний набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1303" -->
+				<option value="03"
+		SELECTED>ISO 5426 (розширений латинський набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="03">ISO 5426 (розширений латинський набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1304" -->
+				<option value="04" SELECTED>ISO DIS 5427 (розширений кириличний набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="04">ISO DIS 5427 (розширений кириличний набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1305" -->
+				<option value="05" SELECTED>ISO 5428 (грецький набір)</option>
+			<!-- TMPL_ELSE -->
+				<option value="05">ISO 5428 (грецький набір)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1306" -->
+				<option value="06" SELECTED>ISO 6438 (набір кодований африканських символів)</option>
+			<!-- TMPL_ELSE -->
+				<option value="06">ISO 6438 (набір кодований африканських символів)</option>
+			<!-- /TMPL_IF -->
+			</select>
+		</td>
+
+        
+	</tr>
+
+	<tr>
+	<td>Додаткові набори символів</td>
+	<td><input type="text" name="f14" maxlength=4 size=5
+		value="<!-- TMPL_VAR name="f14" -->"></td>
+        
+	</tr>
+
+	<tr>
+	<td>Графіка назви</td>
+	<td>
+	<select name="f15" size="1">
+	   <!-- TMPL_IF name="f15  " -->
+                                <option value="  " SELECTED>Немає</option>
+                        <!-- TMPL_ELSE -->
+                                <option value="  ">Немає</option>
+                        <!-- /TMPL_IF -->
+
+	<!-- TMPL_IF name="f15ba" -->
+				<option value="ba" SELECTED>латинська</option>
+			<!-- TMPL_ELSE -->
+				<option value="ba">латинська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ca" -->
+				<option value="ca" SELECTED>кирилична</option>
+			<!-- TMPL_ELSE -->
+				<option value="ca">кирилична</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f15da" -->
+				<option value="da" SELECTED>Japonais -
+				alphabet non precise</option>
+			<!-- TMPL_ELSE -->
+				<option value="da">японська — невизначена графіка</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f15db" -->
+				<option value="db" SELECTED>японська — канджи</option>
+			<!-- TMPL_ELSE -->
+				<option value="db">японська — канджи</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f15dc" -->
+				<option value="dc" SELECTED>японська — кана</option>
+			<!-- TMPL_ELSE -->
+				<option value="dc">японська — кана</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ea" -->
+				<option value="ea" SELECTED>китайська</option>
+			<!-- TMPL_ELSE -->
+				<option value="ea">китайська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15fa" -->
+				<option value="fa" SELECTED>арабська</option>
+			<!-- TMPL_ELSE -->
+				<option value="fa">арабська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ga" -->
+				<option value="ga" SELECTED>грецька</option>
+			<!-- TMPL_ELSE -->
+				<option value="ga">грецька</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ha" -->
+				<option value="ha" SELECTED>іврит</option>
+			<!-- TMPL_ELSE -->
+				<option value="ha">іврит</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ia" -->
+				<option value="ia" SELECTED>тайська</option>
+			<!-- TMPL_ELSE -->
+				<option value="ia">тайська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ja" -->
+				<option value="ja" SELECTED>деванагарі</option>
+			<!-- TMPL_ELSE -->
+				<option value="ja">деванагарі</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15ka" -->
+				<option value="ka" SELECTED>корейська</option>
+			<!-- TMPL_ELSE -->
+				<option value="ka">корейська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15la" -->
+				<option value="la" SELECTED>тамільська</option>
+			<!-- TMPL_ELSE -->
+				<option value="la">тамільська</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15zz" -->
+				<option value="zz" SELECTED>інша</option>
+			<!-- TMPL_ELSE -->
+				<option value="zz">інша</option>
+			<!-- /TMPL_IF -->
+			</select>
+
+
+	</td>
+        
+	</tr>
+	
+	<tr><td colspan=2><input type="submit" value="Гаразд"></td></tr>
+</table>
+</form>
+<script>
+	function report() {
+
+		document.f_pop.f1.value=document.f_pop.f1.value+'        ';
+		document.f_pop.f3.value=document.f_pop.f3.value+'    ';
+		document.f_pop.f4.value=document.f_pop.f4.value+'    ';
+		document.f_pop.f10.value=document.f_pop.f10.value+'   ';
+		document.f_pop.f14.value=document.f_pop.f14.value+'    ';
+
+		
+
+document.f_pop.f1.value=document.f_pop.f1.value.substring(0,8);
+document.f_pop.f3.value=document.f_pop.f3.value.substring(0,4);
+document.f_pop.f4.value=document.f_pop.f4.value.substring(0,4);
+document.f_pop.f10.value=document.f_pop.f10.value.substring(0,3);
+document.f_pop.f14.value=document.f_pop.f14.value.substring(0,4);
+
+
+		opener.document.f.field_value[<!-- TMPL_VAR
+		name="index" -->].value= document.f_pop.f1.value +
+		document.f_pop.f2.value +document.f_pop.f3.value
+		+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value;
+		self.close();
+		return false;
+	}
+</script>
+</body>
+</html>
