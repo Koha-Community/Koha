@@ -91,7 +91,7 @@ if($delays1  and $delays2  and $delays3)  {
         UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
         my $getnotifyid=CheckExistantNotifyid($borrower->{'borrowernumber'},$datedue);
     
-        my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},1);
+        my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},1,$datedue);
             if ($update eq '0'){
                         if ($getnotifyid eq '0'){
                             $starter=GetNextIdNotify($reference,$borrower->{'borrowernumber'});
@@ -118,7 +118,7 @@ if($delays1  and $delays2  and $delays3)  {
         if ($daycount >= $delays2 && $daycount < $delays3){
         my $debarred2=GetOverduerules($borrower->{'categorycode'},2);
         (UpdateBorrowerDebarred($borrower->{'borrowernumber'}))if(($debarred2 eq '1' ) and ($debarredstatus eq '0'));
-        my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},2);
+       my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},2,$datedue);
         if ($update eq '0'){
         UpdateAccountLines(undef,2,$borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'});
         }
@@ -129,7 +129,7 @@ if($delays1  and $delays2  and $delays3)  {
         if ($daycount >= $delays3  ){
             my $debarred3=GetOverduerules($borrower->{'categorycode'},3);
             (UpdateBorrowerDebarred($borrower->{'borrowernumber'}))if(($debarred3 eq '1' ) and ($debarredstatus eq '0'));
-            my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},3);
+            my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},3,$datedue);
             if ($update eq '0'){
                     UpdateAccountLines(undef,3,$borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'});
             }

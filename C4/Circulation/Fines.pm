@@ -901,18 +901,22 @@ C<$notify_level> contains the accountline level
 =cut
 
 sub CheckAccountLineLevelInfo {
-    my($borrowernumber,$itemnumber,$level) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=    qq|SELECT count(*)
-            FROM accountlines
-            WHERE borrowernumber =?
-            AND itemnumber = ?
-            AND notify_level=?|;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber,$itemnumber,$level);
-        my ($exist)=$sth->fetchrow;
-        $sth->finish;
-        return($exist);
+    my($borrowernumber,$itemnumber,$level,$datedue) = @_;
+	my @formatdate;
+ 	@formatdate=split('-',$datedue);
+ 	$datedue=$formatdate[2]."/".$formatdate[1]."/".$formatdate[0];
+	my $dbh = C4::Context->dbh;
+    	my $query=	qq|SELECT count(*) 
+			FROM accountlines 
+			WHERE borrowernumber =?
+			AND itemnumber = ?
+			AND notify_level=?
+ 			AND description like ?|;
+	my $sth=$dbh->prepare($query);
+     	$sth->execute($borrowernumber,$itemnumber,$level,"%$datedue%");
+    	my ($exist)=$sth->fetchrow;
+    	$sth->finish;
+    	return($exist);
 }
 
 =item GetOverduerules
@@ -1013,23 +1017,28 @@ C<$date_due> contains the date of item return
 =cut
 
 sub CheckExistantNotifyid {
-     my($borrowernumber,$date_due) = @_;
-     my $dbh = C4::Context->dbh;
-         my $query =  qq|SELECT notify_id FROM issues,accountlines
-             WHERE accountlines.borrowernumber =?
-             AND issues.itemnumber= accountlines.itemnumber
-              AND date_due = ?|;
-    my $sth=$dbh->prepare($query);
-         $sth->execute($borrowernumber,$date_due);
-         my ($exist)=$sth->fetchrow;
-         $sth->finish;
-         if ($exist eq '')
-    {
-    return(0);
-    }else
-        {
-    return($exist);
-    }
+    my($borrowernumber,$date_due) = @_;
+ 	my $dbh = C4::Context->dbh;
+  	my @formatdate;
+  	@formatdate=split('-',$date_due);
+  	$date_due=$formatdate[2]."/".$formatdate[1]."/".$formatdate[0];
+	my $query =  qq|SELECT notify_id FROM accountlines 
+     			WHERE description like ?
+     			AND borrowernumber =?
+    			AND( accounttype='FU'  OR accounttype='F' )
+                           AND notify_id != 0
+   			AND notify_id != 1|;
+ 	my $sth=$dbh->prepare($query);
+       	$sth->execute("%$date_due%",$borrowernumber);
+     	my ($exist)=$sth->fetchrow;
+     	$sth->finish;
+     	if ($exist eq '')
+	{
+	return(0);
+	}else
+	    {
+	return($exist);
+	}
 }
 
 =item CheckAccountLineItemInfo
