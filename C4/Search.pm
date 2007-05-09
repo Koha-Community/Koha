@@ -558,6 +558,7 @@ sub buildQuery {
             my $weight_fields = C4::Context->parameters("WeightFields") || 0;
 
             if ( $operands[$i] ) {
+			$operand =~ s/^(and|or|not)//i;
 
 # STEMMING FIXME: need to refine the field weighting so stemmed operands don't disrupt the query ranking
                 if ($stemming) {
