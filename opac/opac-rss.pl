@@ -11,6 +11,23 @@ use C4::Search;
 use C4::Koha;
 use C4::Biblio;
 
+# Copyright 2007 Paul POULAIN
+#
+# This file is part of Koha
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 =head1 NAME
 
 opac-search.pl : script to have RSS feeds automatically on each OPAC search
@@ -72,7 +89,7 @@ if (-e "rss/$filename") {
     my $rdf_stamp = $rss->{'channel'}->{'dc'}->{'date'};
     $rdf_stamp =~ /(.*)-(.*)-(.*):(.*):(.*):(.*)/;
     my ($stamp_year,$stamp_month,$stamp_day,$stamp_hour,$stamp_min,$stamp_sec) = ($1,$2,$3,$4,$5,$6);
-    # if less than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
+    # if more than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
     unless (($year-$stamp_year >0) or ($month-$stamp_month >0) or ($day-$stamp_day >0) or ($hour-$stamp_hour >0) or ($min-$stamp_min >30)) {
         $RDF_update_needed =0;
     }
