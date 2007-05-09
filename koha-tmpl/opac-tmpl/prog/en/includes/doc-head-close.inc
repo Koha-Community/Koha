@@ -1,5 +1,8 @@
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TMPL_IF name="RSS" -->
+    <link rel="alternate" type="application/rss+xml" title="VNUNet.fr - Actualit&eacute;s" href="<!-- TMPL_VAR name="site_url"-->/opac-rss.pl?q=<!-- TMPL_VAR name="searchdesc"-->">
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="opacstylesheet" -->
         <style type="text/css"> 
             @import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);

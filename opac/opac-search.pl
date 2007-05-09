@@ -440,16 +440,15 @@ my $facets
 my @results_array;
 my $results_hashref;
 
-eval {
-
-    ( $error, $results_hashref, $facets ) = getRecords(
-        $koha_query,     $federated_query,  \@sort_by,
-        \@servers,       $results_per_page, $offset,
-        $expanded_facet, $branches,         $query_type,
-        $scan
-    );
-
-};
+if (C4::Context->preference('NoZebra')) {
+    eval {
+        ($error, $results_hashref, $facets) = NZgetRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+    };
+} else {
+    eval {
+        ($error, $results_hashref, $facets) = getRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+    };
+}
 if ( $@ || $error ) {
     $template->param( query_error => $error . $@ );
 
@@ -550,6 +549,9 @@ my $RequestOnOpac;
 if (C4::Context->preference("RequestOnOpac")) {
 	$RequestOnOpac = 1;
 }
+# get site URL (for RSS link)
+$cgi->url() =~ /(.*)\/(.*)/;
+my $site_url = $1;
 
 $template->param(
 
@@ -563,6 +565,8 @@ $template->param(
     scan_use     => $scan,
     search_error => $error,
     RequestOnOpac	 => $RequestOnOpac,
+    RSS=> 1,
+    site_url => $site_url,
 );
 ## Now let's find out if we have any supplemental data to show the user
 #  and in the meantime, save the current query for statistical purposes, etc.

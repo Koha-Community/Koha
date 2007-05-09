@@ -183,10 +183,6 @@ sub SimpleSearch {
     my $query   = shift;
     if (C4::Context->preference('NoZebra')) {
         my $result = NZorder(NZanalyse($query))->{'biblioserver'}->{'RECORDS'};
-        use Data::Dumper;
-        foreach (@$result) {
-            warn "$query :".@_;
-        }
         return (undef,$result);
     } else {
         my @servers = @_;
@@ -272,7 +268,6 @@ sub getRecords {
             $query_to_use = $federated_query;
         }
 
-        #          warn "HERE : $query_type => $query_to_use";
         # check if we've got a query_type defined
         eval {
             if ($query_type)
@@ -500,8 +495,6 @@ sub getRecords {
             }
         }
     }
-    use Data::Dumper;
-    warn Dumper($results_hashref);
     return ( undef, $results_hashref, \@facets_loop );
 }
 
