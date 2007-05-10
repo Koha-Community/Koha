@@ -990,7 +990,7 @@ if ($borrower and $barcode){
         if ($date) {
             $dateduef = $date;
         }
-
+	$dateduef=CheckValidDatedue($dateduef,$iteminformation->{'itemnumber'},$env->{'branchcode'});
        # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
         if ( C4::Context->preference('ReturnBeforeExpiry')
             && $dateduef gt $borrower->{dateexpiry} )
@@ -1921,6 +1921,85 @@ sub UpdateHoldingbranch {
         	$sth->finish;
         
 	
+}
+=head2 CheckValidDatedue
+
+$newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
+this function return a new date due after checked if it's a repeatable or special holiday
+C<$date_due>   = returndate calculate with no day check
+C<$itemnumber>  = itemnumber
+C<$branchcode>  = localisation of issue 
+=cut
+sub CheckValidDatedue{
+my ($date_due,$itemnumber,$branchcode)=@_;
+my @datedue=split('-',$date_due);
+my $years=$datedue[0];
+my $month=$datedue[1];
+my $day=$datedue[2];
+my $dow;
+for (my $i=0;$i<2;$i++){
+	$dow=Day_of_Week($years,$month,$day);
+	($dow=0) if ($dow>6);
+	my $result=CheckRepeatableHolidays($itemnumber,$dow,$branchcode);
+	my $countspecial=CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
+		if (($result ne '0') or ($countspecial ne '0') ){
+		$i=0;
+		(($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
+		}
+	}
+my $newdatedue=$years."-".$month."-".$day;
+return $newdatedue;
+}
+=head2 CheckRepeatableHolidays
+
+$countrepeatable = CheckRepeatableHoliday($itemnumber,$week_day,$branchcode);
+this function check if the date due is a repeatable holiday
+C<$date_due>   = returndate calculate with no day check
+C<$itemnumber>  = itemnumber
+C<$branchcode>  = localisation of issue 
+
+=cut
+
+sub CheckRepeatableHolidays{
+my($itemnumber,$week_day,$branchcode)=@_;
+my $dbh = C4::Context->dbh;
+my $query = qq|SELECT count(*)  
+	FROM repeatable_holidays 
+	WHERE branchcode=?
+	AND weekday=?|;
+my $sth = $dbh->prepare($query);
+$sth->execute($branchcode,$week_day);
+my $result=$sth->fetchrow;
+$sth->finish;
+return $result;
+}
+
+
+=head2 CheckSpecialHolidays
+
+$countspecial = CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
+this function check if the date is a special holiday
+C<$years>   = the years of datedue
+C<$month>   = the month of datedue
+C<$day>     = the day of datedue
+C<$itemnumber>  = itemnumber
+C<$branchcode>  = localisation of issue 
+=cut
+sub CheckSpecialHolidays{
+my ($years,$month,$day,$itemnumber,$branchcode) = @_;
+my $dbh = C4::Context->dbh;
+my $query=qq|SELECT count(*) 
+	     FROM `special_holidays`
+	     WHERE year=?
+	     AND month=?
+	     AND day=?
+             AND branchcode=?
+	    |;
+my $sth = $dbh->prepare($query);
+$sth->execute($years,$month,$day,$branchcode);
+my $countspecial=$sth->fetchrow ;
+$sth->finish;
+return $countspecial;
 }
 
 1;
