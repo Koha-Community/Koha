@@ -1145,7 +1145,10 @@ sub NZgetRecords {
 =cut
 
 sub NZanalyse {
-    my ($string) = @_;
+    my ($string,$server) = @_;
+    # $server contains biblioserver or authorities, depending on what we search on.
+    warn "querying : $string on $server";
+    $server='biblioserver' unless $server;
     # if we have a ", replace the content to discard temporarily any and/or/not inside
     my $commacontent;
     if ($string =~/"/) {
@@ -1156,32 +1159,32 @@ sub NZanalyse {
     # split the query string in 3 parts : X AND Y means : $left="X", $operand="AND" and $right="Y"
     # then, call again NZanalyse with $left and $right
     # (recursive until we find a leaf (=> something without and/or/not)
-    $string =~ /(.*)( and | or | not )(.*)/;
+    $string =~ /(.*)( and | or | not | AND | OR | NOT )(.*)/;
     my $left = $1;
     my $right = $3;
-    my $operand = $2;
+    my $operand = lc($2);
     # it's not a leaf, we have a and/or/not
     if ($operand) {
         # reintroduce comma content if needed
         $right =~ s/__X__/"$commacontent"/ if $commacontent;
         $left =~ s/__X__/"$commacontent"/ if $commacontent;
-#         print "noeud : $left / $operand / $right\n";
-        my $leftresult = NZanalyse($left);
-        my $rightresult = NZanalyse($right);
+#         warn "node : $left / $operand / $right\n";
+        my $leftresult = NZanalyse($left,$server);
+        my $rightresult = NZanalyse($right,$server);
         # OK, we have the results for right and left part of the query
         # depending of operand, intersect, union or exclude both lists
         # to get a result list
         if ($operand eq ' and ') {
-            my @leftresult = split /,/, $leftresult;
-#             my @rightresult = split /,/,$leftresult;
+            my @leftresult = split /;/, $leftresult;
+#             my @rightresult = split /;/,$leftresult;
             my $finalresult;
             # parse the left results, and if the biblionumber exist in the right result, save it in finalresult
             # the result is stored twice, to have the same weight for AND than OR.
             # example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
             # result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
             foreach (@leftresult) {
-                if ($rightresult =~ "$_,") {
-                    $finalresult .= "$_,$_,";
+                if ($rightresult =~ "$_;") {
+                    $finalresult .= "$_;$_;";
                 }
             }
             return $finalresult;
@@ -1189,12 +1192,12 @@ sub NZanalyse {
             # just merge the 2 strings
             return $leftresult.$rightresult;
         } elsif ($operand eq ' not ') {
-            my @leftresult = split /,/, $leftresult;
-#             my @rightresult = split /,/,$leftresult;
+            my @leftresult = split /;/, $leftresult;
+#             my @rightresult = split /;/,$leftresult;
             my $finalresult;
             foreach (@leftresult) {
-                unless ($rightresult =~ "$_,") {
-                    $finalresult .= "$_,";
+                unless ($rightresult =~ "$_;") {
+                    $finalresult .= "$_;";
                 }
             }
             return $finalresult;
@@ -1206,28 +1209,32 @@ sub NZanalyse {
     } else {
         $string =~  s/__X__/"$commacontent"/ if $commacontent;
         $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\// /g;
-#         print "feuille : $string\n";
+#         warn "leaf : $string\n";
         # parse the string in in operator/operand/value again
         $string =~ /(.*)(=|>|>=|<|<=)(.*)/;
         my $left = $1;
         my $operator = $2;
         my $right = $3;
         my $results;
-            # automatic replace for short operator
-            $left='title' if $left eq 'ti';
-            $left='author' if $left eq 'au';
+        # automatic replace for short operators
+        $left='title' if $left eq 'ti';
+        $left='author' if $left eq 'au';
+        $left='koha-Auth-Number' if $left eq 'an';
         if ($operator) {
             #do a specific search
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
-            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE indexname=? AND value $operator ?");
-#             print "$left / $operator / $right\n";
+            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value $operator ?");
+            warn "$left / $operator / $right\n";
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$right) {
                 my $biblionumbers;
-                $sth->execute($left,$_);
+                next unless $_;
+#                 warn "EXECUTE : $server, $left, $_";
+                $sth->execute($server, $left, $_);
                 while (my $line = $sth->fetchrow) {
                     $biblionumbers .= $line;
+#                     warn "result : $line";
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
@@ -1246,17 +1253,19 @@ sub NZanalyse {
         } else {
             #do a complete search (all indexes)
             my $dbh = C4::Context->dbh;
-            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE value LIKE ?");
+            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND value LIKE ?");
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$string) {
+#                 warn "search on all indexes on $_";
                 my $biblionumbers;
-                $sth->execute($_);
+                next unless $_;
+                $sth->execute($server, $_);
                 while (my $line = $sth->fetchrow) {
                     $biblionumbers .= $line;
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-                    my @leftresult = split /,/, $biblionumbers;
+                    my @leftresult = split /;/, $biblionumbers;
                     my $temp;
                     foreach (@leftresult) {
                         if ($results =~ "$_;") {
@@ -1269,6 +1278,7 @@ sub NZanalyse {
                 }
             }
         }
+#         warn "return : $results for LEAF : $string";
         return $results;
     }
 }
@@ -1303,7 +1313,7 @@ sub NZorder {
         my $result_hash;
         my $numbers=0;
         if ($ordering eq '1=9523 >i') { # sort popularity DESC
-            foreach my $key (sort {$b <=> $a} (keys %popularity)) {
+            foreach my $key (sort {$b cmp $a} (keys %popularity)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$popularity{$key}}->as_usmarc();
             }
         } else { # sort popularity ASC
@@ -1337,12 +1347,12 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=1003 <i') { # sort by title desc
+        if ($ordering eq '1=1003 <i') { # sort by author desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
-        } else { # sort by title ASC
-            foreach my $key (sort { $a <=> $b } (keys %result)) {
+        } else { # sort by author ASC
+            foreach my $key (sort { $a cmp $b } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         }
@@ -1378,7 +1388,7 @@ sub NZorder {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         } else { # sort by title ASC
-            foreach my $key (sort { $a <=> $b } (keys %result)) {
+            foreach my $key (sort { $a cmp $b } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         }
@@ -1400,12 +1410,12 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=31 <i') { # sort by title desc
+        if ($ordering eq '1=31 <i') { # sort by pubyear desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
-        } else { # sort by title ASC
-            foreach my $key (sort { $a <=> $b } (keys %result)) {
+        } else { # sort by pub year ASC
+            foreach my $key (sort { $b cmp $a } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         }
@@ -1435,7 +1445,7 @@ sub NZorder {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         } else { # sort by title ASC
-            foreach my $key (sort { $a <=> $b } (keys %result)) {
+            foreach my $key (sort { $b cmp $a } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         }
@@ -1476,7 +1486,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-            foreach my $key (sort {$b <=> $a} (keys %result)) {
+            foreach my $key (sort {$b cmp $a} (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
         # limit the $results_per_page to result size if it's more

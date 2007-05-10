@@ -14,7 +14,7 @@ use strict;
 $|=1; # flushes output
 
 # limit for database dumping
-my $limit = "LIMIT 500";
+my $limit;# = "LIMIT 500";
 my $directory;
 my $skip_export;
 my $keep_export;

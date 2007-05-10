@@ -68,7 +68,7 @@ my $query = $cgi->param('q');
 $query =~ s/:/=/g;
 
 # the number of lines to retrieve
-my $size=$cgi->param('size') || 20;
+my $size=$cgi->param('size') || 50;
 
 # the filename of the cached rdf file.
 my $filename = md5_base64($query);

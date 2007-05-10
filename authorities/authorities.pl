@@ -392,7 +392,6 @@ if ($op eq "add") {
 	#warn $record->as_formatted;
 	# check for a duplicate
 	my ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
-warn "duplicate:$duplicateauthid,$duplicateauthvalue";	
 	my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
 # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
 	if (!$duplicateauthid or $confirm_not_duplicate) {

@@ -92,128 +92,221 @@ returns ref to array result and count of results returned
 
 =cut
 sub SearchAuthorities {
-  my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
-  my $dbh=C4::Context->dbh;
-  my $query;
-  my $attr;
-    # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
-    # the authtypecode. Then, search on $a of this tag_to_report
-    # also store main entry MARC tag, to extract it at end of search
-  my $mainentrytag;
-  ##first set the authtype search and may be multiple authorities
-  my $n=0;
-  my @authtypecode;
-  my @auths=split / /,$authtypecode ;
-  foreach my  $auth (@auths){
-    $query .=" \@attr 1=Authority/format-id \@attr 5=100 ".$auth; ##No truncation on authtype
-    push @authtypecode ,$auth;
-    $n++;
-  }
-  if ($n>1){
-    $query= "\@or ".$query;
-  }
-  
-  my $dosearch;
-  my $and;
-  my $q2;
-  for(my $i = 0 ; $i <= $#{$value} ; $i++)
-  {
-    if (@$value[$i]){
-    ##If mainentry search $a tag
-        if (@$tags[$i] eq "mainmainentry") {
-          $attr =" \@attr 1=Heading ";
-        }elsif (@$tags[$i] eq "mainentry") {
-          $attr =" \@attr 1=Heading-Entity ";
-        }else{
-          $attr =" \@attr 1=Any ";
-        }
-        if (@$operator[$i] eq 'is') {
-            $attr.=" \@attr 4=1  \@attr 5=100 ";##Phrase, No truncation,all of subfield field must match
-        }elsif (@$operator[$i] eq "="){
-            $attr.=" \@attr 4=107 ";           #Number Exact match
-        }elsif (@$operator[$i] eq "start"){
-            $attr.=" \@attr 4=1 \@attr 5=1 ";#Phrase, Right truncated
-        } else {
-            $attr .=" \@attr 5=1  ";## Word list, right truncated, anywhere
-        }
-        $and .=" \@and " ;
-        $attr =$attr."\"".@$value[$i]."\"";
-        $q2 .=$attr;
-    $dosearch=1;
-    }#if value
-  }
-  ##Add how many queries generated
-  $query= $and.$query.$q2;
-  ## Adding order
-  $query=' @or  @attr 7=1 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingAsc");
-  $query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingDsc");
-  warn $query;
-  
-  $offset=0 unless $offset;
-  my $counter = $offset;
-  $length=10 unless $length;
-  my @oAuth;
-  my $i;
-  $oAuth[0]=C4::Context->Zconn("authorityserver" , 1);
-  my $Anewq= new ZOOM::Query::PQF($query,$oAuth[0]);
-  my $oAResult;
-  $oAResult= $oAuth[0]->search($Anewq) ; 
-  while (($i = ZOOM::event(\@oAuth)) != 0) {
-      my $ev = $oAuth[$i-1]->last_event();
-      last if $ev == ZOOM::Event::ZEND;
-  }
-  my($error, $errmsg, $addinfo, $diagset) = $oAuth[0]->error_x();
-  if ($error) {
-    warn  "oAuth error: $errmsg ($error) $addinfo $diagset\n";
-    goto NOLUCK;
-  }
-
-  my $nbresults;
-  $nbresults=$oAResult->size();
-  my $nremains=$nbresults;    
-  my @result = ();
-  my @finalresult = ();
-
-  if ($nbresults>0){
-
-  ##Find authid and linkid fields
-  ##we may be searching multiple authoritytypes.
-  ## FIXME this assumes that all authid and linkid fields are the same for all authority types
-  # my ($authidfield,$authidsubfield)=GetAuthMARCFromKohaField($dbh,"auth_header.authid",$authtypecode[0]);
-  # my ($linkidfield,$linkidsubfield)=GetAuthMARCFromKohaField($dbh,"auth_header.linkid",$authtypecode[0]);
-    while (($counter < $nbresults) && ($counter < ($offset + $length))) {
+    my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
+#     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
+    my $dbh=C4::Context->dbh;
+    if (C4::Context->preference('NoZebra')) {
     
-      ##Here we have to extract MARC record and $authid from ZEBRA AUTHORITIES
-      my $rec=$oAResult->record($counter);
-      my $marcdata=$rec->raw();
-      my $authrecord;    
-      my $separator=C4::Context->preference('authoritysep');
-      $authrecord = MARC::File::USMARC::decode($marcdata);
-      my $authid=$authrecord->field('001')->data(); 
-      my $summary=BuildSummary($authrecord,$authid,$authtypecode);
-      my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
-      my $sth = $dbh->prepare($query_auth_tag);
-      $sth->execute($authtypecode);
-      my $auth_tag_to_report = $sth->fetchrow;
-      my %newline;
-      $newline{summary} = $summary;
-      $newline{authid} = $authid;
-      $newline{even} = $counter % 2;
-      $counter++;
-      push @finalresult, \%newline;
-    }## while counter
-  ###
-   for (my $z=0; $z<@finalresult; $z++){
-        my  $count=CountUsage($finalresult[$z]{authid});
-        $finalresult[$z]{used}=$count;
-   }# all $z's
-
-  }## if nbresult
-NOLUCK:
-# $oAResult->destroy();
-# $oAuth[0]->destroy();
-
-    return (\@finalresult, $nbresults);
+        #
+        # build the query
+        #
+        my $query;
+        my @auths=split / /,$authtypecode ;
+        foreach my  $auth (@auths){
+            $query .="AND auth_type= $auth ";
+        }
+        $query =~ s/^AND //;
+        my $dosearch;
+        for(my $i = 0 ; $i <= $#{$value} ; $i++)
+        {
+            if (@$value[$i]){
+                if (@$tags[$i] eq "mainmainentry") {
+                    $query .=" AND mainmainentry";
+                }elsif (@$tags[$i] eq "mainentry") {
+                    $query .=" AND mainentry";
+                } else {
+                    $query .=" AND ";
+                }
+                if (@$operator[$i] eq 'is') {
+                    $query.=(@$tags[$i]?"=":""). '"'.@$value[$i].'"';
+                }elsif (@$operator[$i] eq "="){
+                    $query.=(@$tags[$i]?"=":""). '"'.@$value[$i].'"';
+                }elsif (@$operator[$i] eq "start"){
+                    $query.=(@$tags[$i]?"=":"").'"'.@$value[$i].'%"';
+                } else {
+                    $query.=(@$tags[$i]?"=":"").'"'.@$value[$i].'%"';
+                }
+                $dosearch=1;
+            }#if value
+        }
+        #
+        # do the query (if we had some search term
+        #
+        if ($dosearch) {
+#             warn "QUERY : $query";
+            my $result = C4::Search::NZanalyse($query,'authorityserver');
+#             warn "result : $result";
+            my %result;
+            foreach (split /;/,$result) {
+                my ($authid,$title) = split /,/,$_;
+                # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
+                # and we don't want to get only 1 result for each of them !!!
+                # hint & speed improvement : we can order without reading the record
+                # so order, and read records only for the requested page !
+                $result{$title.$authid}=$authid;
+            }
+            # sort the hash and return the same structure as GetRecords (Zebra querying)
+            my @finalresult = ();
+            my $numbers=0;
+            if ($sortby eq 'HeadingDsc') { # sort by mainmainentry desc
+                foreach my $key (sort {$b cmp $a} (keys %result)) {
+                    push @finalresult, $result{$key};
+#                     warn "push..."$#finalresult;
+                    $numbers++;
+                }
+            } else { # sort by mainmainentry ASC
+                foreach my $key (sort (keys %result)) {
+                    push @finalresult, $result{$key};
+#                     warn "push..."$#finalresult;
+                    $numbers++;
+                }
+            }
+            # limit the $results_per_page to result size if it's more
+            $length = $numbers-1 if $numbers < $length;
+            # for the requested page, replace authid by the complete record
+            # speed improvement : avoid reading too much things
+            for (my $counter=$offset;$counter<=$offset+$length;$counter++) {
+#                 $finalresult[$counter] = GetAuthority($finalresult[$counter])->as_usmarc;
+                my $separator=C4::Context->preference('authoritysep');
+                my $authrecord = MARC::File::USMARC::decode(GetAuthority($finalresult[$counter])->as_usmarc);
+                my $authid=$authrecord->field('001')->data(); 
+                my $summary=BuildSummary($authrecord,$authid,$authtypecode);
+                my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
+                my $sth = $dbh->prepare($query_auth_tag);
+                $sth->execute($authtypecode);
+                my $auth_tag_to_report = $sth->fetchrow;
+                my %newline;
+                $newline{used}=CountUsage($authid);
+                $newline{summary} = $summary;
+                $newline{authid} = $authid;
+                $newline{even} = $counter % 2;
+                $finalresult[$counter]= \%newline;
+            }
+            return (\@finalresult, $numbers);
+        } else {
+            return;
+        }
+    } else {
+        my $query;
+        my $attr;
+            # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
+            # the authtypecode. Then, search on $a of this tag_to_report
+            # also store main entry MARC tag, to extract it at end of search
+        my $mainentrytag;
+        ##first set the authtype search and may be multiple authorities
+        my $n=0;
+        my @authtypecode;
+        my @auths=split / /,$authtypecode ;
+        foreach my  $auth (@auths){
+            $query .=" \@attr 1=Authority/format-id \@attr 5=100 ".$auth; ##No truncation on authtype
+            push @authtypecode ,$auth;
+            $n++;
+        }
+        if ($n>1){
+            $query= "\@or ".$query;
+        }
+        
+        my $dosearch;
+        my $and;
+        my $q2;
+        for(my $i = 0 ; $i <= $#{$value} ; $i++)
+        {
+            if (@$value[$i]){
+            ##If mainentry search $a tag
+                if (@$tags[$i] eq "mainmainentry") {
+                $attr =" \@attr 1=Heading ";
+                }elsif (@$tags[$i] eq "mainentry") {
+                $attr =" \@attr 1=Heading-Entity ";
+                }else{
+                $attr =" \@attr 1=Any ";
+                }
+                if (@$operator[$i] eq 'is') {
+                    $attr.=" \@attr 4=1  \@attr 5=100 ";##Phrase, No truncation,all of subfield field must match
+                }elsif (@$operator[$i] eq "="){
+                    $attr.=" \@attr 4=107 ";           #Number Exact match
+                }elsif (@$operator[$i] eq "start"){
+                    $attr.=" \@attr 4=1 \@attr 5=1 ";#Phrase, Right truncated
+                } else {
+                    $attr .=" \@attr 5=1  ";## Word list, right truncated, anywhere
+                }
+                $and .=" \@and " ;
+                $attr =$attr."\"".@$value[$i]."\"";
+                $q2 .=$attr;
+            $dosearch=1;
+            }#if value
+        }
+        ##Add how many queries generated
+        $query= $and.$query.$q2;
+        ## Adding order
+        $query=' @or  @attr 7=1 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingAsc");
+        $query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingDsc");
+        
+        $offset=0 unless $offset;
+        my $counter = $offset;
+        $length=10 unless $length;
+        my @oAuth;
+        my $i;
+        $oAuth[0]=C4::Context->Zconn("authorityserver" , 1);
+        my $Anewq= new ZOOM::Query::PQF($query,$oAuth[0]);
+        my $oAResult;
+        $oAResult= $oAuth[0]->search($Anewq) ; 
+        while (($i = ZOOM::event(\@oAuth)) != 0) {
+            my $ev = $oAuth[$i-1]->last_event();
+            last if $ev == ZOOM::Event::ZEND;
+        }
+        my($error, $errmsg, $addinfo, $diagset) = $oAuth[0]->error_x();
+        if ($error) {
+            warn  "oAuth error: $errmsg ($error) $addinfo $diagset\n";
+            goto NOLUCK;
+        }
+        
+        my $nbresults;
+        $nbresults=$oAResult->size();
+        my $nremains=$nbresults;    
+        my @result = ();
+        my @finalresult = ();
+        
+        if ($nbresults>0){
+        
+        ##Find authid and linkid fields
+        ##we may be searching multiple authoritytypes.
+        ## FIXME this assumes that all authid and linkid fields are the same for all authority types
+        # my ($authidfield,$authidsubfield)=GetAuthMARCFromKohaField($dbh,"auth_header.authid",$authtypecode[0]);
+        # my ($linkidfield,$linkidsubfield)=GetAuthMARCFromKohaField($dbh,"auth_header.linkid",$authtypecode[0]);
+            while (($counter < $nbresults) && ($counter < ($offset + $length))) {
+            
+            ##Here we have to extract MARC record and $authid from ZEBRA AUTHORITIES
+            my $rec=$oAResult->record($counter);
+            my $marcdata=$rec->raw();
+            my $authrecord;
+            my $separator=C4::Context->preference('authoritysep');
+            $authrecord = MARC::File::USMARC::decode($marcdata);
+            my $authid=$authrecord->field('001')->data(); 
+            my $summary=BuildSummary($authrecord,$authid,$authtypecode);
+            my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
+            my $sth = $dbh->prepare($query_auth_tag);
+            $sth->execute($authtypecode);
+            my $auth_tag_to_report = $sth->fetchrow;
+            my %newline;
+            $newline{summary} = $summary;
+            $newline{authid} = $authid;
+            $newline{even} = $counter % 2;
+            $counter++;
+            push @finalresult, \%newline;
+            }## while counter
+        ###
+        for (my $z=0; $z<@finalresult; $z++){
+                my  $count=CountUsage($finalresult[$z]{authid});
+                $finalresult[$z]{used}=$count;
+        }# all $z's
+        
+        }## if nbresult
+        NOLUCK:
+        # $oAResult->destroy();
+        # $oAuth[0]->destroy();
+        
+        return (\@finalresult, $nbresults);
+    }
 }
 
 =head2 CountUsage 
@@ -227,21 +320,26 @@ counts Usage of Authid in bibliorecords.
 
 =cut
 sub CountUsage {
-  my ($authid) = @_;
-  ### try ZOOM search here
-  my $oConnection=C4::Context->Zconn("biblioserver",1);
-  my $query;
-  $query= "an=".$authid;
-  
-  my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-  my $result;
-  while ((my $i = ZOOM::event([ $oConnection ])) != 0) {
-      my $ev = $oConnection->last_event();
-      if ($ev == ZOOM::Event::ZEND) {
-          $result = $oResult->size();
-      }
-  }
-  return ($result);
+    my ($authid) = @_;
+    if (C4::Context->preference('NoZebra')) {
+        # Read the index Koha-Auth-Number for this authid and count the lines
+        my $result = C4::Search::NZanalyse("an=$authid");
+        return scalar split /;/,$result;
+    } else {
+        ### ZOOM search here
+        my $oConnection=C4::Context->Zconn("biblioserver",1);
+        my $query;
+        $query= "an=".$authid;
+        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
+        my $result;
+        while ((my $i = ZOOM::event([ $oConnection ])) != 0) {
+            my $ev = $oConnection->last_event();
+            if ($ev == ZOOM::Event::ZEND) {
+                $result = $oResult->size();
+            }
+        }
+        return ($result);
+    }
 }
 
 =head2 CountUsageChildren 
@@ -402,7 +500,7 @@ sub AddAuthority {
   ##Both authid and authtypecode is expected to be in the same field. Modify if other requirements arise
     $record->add_fields('001',$authid) unless $record->field('001');
     $record->add_fields('152','','','b'=>$authtypecode) unless $record->field('152');
-    warn $record->as_formatted;
+#     warn $record->as_formatted;
     $dbh->do("lock tables auth_header WRITE");
     $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc) values (?,now(),?,?)");
     $sth->execute($authid,$authtypecode,$record->as_usmarc);    
@@ -417,8 +515,7 @@ sub AddAuthority {
       $sth->finish;
   }
   $dbh->do("unlock tables");
-  ModZebra($authid,'specialUpdate',"authorityserver");
-
+  ModZebra($authid,'specialUpdate',"authorityserver",$record);
   return ($authid);
 }
 
@@ -439,7 +536,7 @@ sub DelAuthority {
     my ($authid) = @_;
     my $dbh=C4::Context->dbh;
 
-    ModZebra($authid,"recordDelete","authorityserver");
+    ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid));
     $dbh->do("delete from auth_header where authid=$authid") ;
 
 }
@@ -950,50 +1047,54 @@ sub merge {
         push @tags_using_authtype,$tagfield."9" ;
     }
 
-  # now, find every biblio using this authority
-  my $oConnection=C4::Context->Zconn("biblioserver");
-  my $query;
-  $query= "an= ".$mergefrom;
-  my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-  my $count=$oResult->size() if  ($oResult);
-  my @reccache;
-  my $z=0;
-  while ( $z<$count ) {
-  my $rec;
-          $rec=$oResult->record($z);
-      my $marcdata = $rec->raw();
-  push @reccache, $marcdata;
-  $z++;
-  }
-  $oResult->destroy();
-  foreach my $marc(@reccache){
-    my $update;
-    my $marcrecord;
-    $marcrecord = MARC::File::USMARC::decode($marc);
-    foreach my $tagfield (@tags_using_authtype){
-      $tagfield=substr($tagfield,0,3);
-      my @tags = $marcrecord->field($tagfield);
-      foreach my $tag (@tags){
-        my $tagsubs=$tag->subfield("9");
-    #warn "$tagfield:$tagsubs:$mergefrom";
-        if ($tagsubs== $mergefrom) {
-          $tag->update("9" =>$mergeto);
-          foreach my $subfield (@record_to) {
-    #        warn "$subfield,$subfield->[0],$subfield->[1]";
-            $tag->update($subfield->[0] =>$subfield->[1]);
-          }#for $subfield
+    if (C4::Context->preference('NoZebra')) {
+        warn "MERGE TO DO";
+    } else {
+        # now, find every biblio using this authority
+        my $oConnection=C4::Context->Zconn("biblioserver");
+        my $query;
+        $query= "an= ".$mergefrom;
+        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
+        my $count=$oResult->size() if  ($oResult);
+        my @reccache;
+        my $z=0;
+        while ( $z<$count ) {
+        my $rec;
+                $rec=$oResult->record($z);
+            my $marcdata = $rec->raw();
+        push @reccache, $marcdata;
+        $z++;
         }
-        $marcrecord->delete_field($tag);
-        $marcrecord->add_fields($tag);
-        $update=1;
-      }#for each tag
-    }#foreach tagfield
-    my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
-    if ($update==1){
-      &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},GetFrameworkCode($oldbiblio->{'biblionumber'})) ;
+        $oResult->destroy();
+        foreach my $marc(@reccache){
+            my $update;
+            my $marcrecord;
+            $marcrecord = MARC::File::USMARC::decode($marc);
+            foreach my $tagfield (@tags_using_authtype){
+            $tagfield=substr($tagfield,0,3);
+            my @tags = $marcrecord->field($tagfield);
+            foreach my $tag (@tags){
+                my $tagsubs=$tag->subfield("9");
+            #warn "$tagfield:$tagsubs:$mergefrom";
+                if ($tagsubs== $mergefrom) {
+                $tag->update("9" =>$mergeto);
+                foreach my $subfield (@record_to) {
+            #        warn "$subfield,$subfield->[0],$subfield->[1]";
+                    $tag->update($subfield->[0] =>$subfield->[1]);
+                }#for $subfield
+                }
+                $marcrecord->delete_field($tag);
+                $marcrecord->add_fields($tag);
+                $update=1;
+            }#for each tag
+            }#foreach tagfield
+            my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
+            if ($update==1){
+            &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},GetFrameworkCode($oldbiblio->{'biblionumber'})) ;
+            }
+            
+        }#foreach $marc
     }
-      
-  }#foreach $marc
   # now, find every other authority linked with this authority
 #   my $oConnection=C4::Context->Zconn("authorityserver");
 #   my $query;
@@ -1056,6 +1157,14 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.46  2007/05/10 14:45:15  tipaul
+# Koha NoZebra :
+# - support for authorities
+# - some bugfixes in ordering and "CCL" parsing
+# - support for authorities <=> biblios walking
+#
+# Seems I can do what I want now, so I consider its done, except for bugfixes that will be needed i m sure !
+#
 # Revision 1.45  2007/04/06 14:48:45  hdl
 # Code Cleaning : AuthoritiesMARC.
 #

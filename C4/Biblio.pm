@@ -2712,6 +2712,7 @@ ModZebra( $biblionumber, $op, $server, $newRecord );
 sub ModZebra {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
     my ( $biblionumber, $op, $server, $newRecord ) = @_;
+#     warn "ModZebra with : ( $biblionumber, $op, $server, $newRecord )";
     my $dbh=C4::Context->dbh;
     #warn "SERVER:".$server;
 #
@@ -2724,36 +2725,42 @@ sub ModZebra {
         # lock the nozebra table : we will read index lines, update them in Perl process
         # and write everything in 1 transaction.
         # lock the table to avoid someone else overwriting what we are doing
-        $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE');
+        $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE, auth_types WRITE, auth_header WRITE');
         my %result; # the result hash that will be builded by deletion / add, and written on mySQL at the end, to improve speed
-        my $record= GetMarcBiblio($biblionumber);
+        my $record;
+        if ($server eq 'biblioserver') {
+            $record= GetMarcBiblio($biblionumber);
+        } else {
+            $record= C4::AuthoritiesMarc::GetAuthority($biblionumber);
+        }
         if ($op eq 'specialUpdate') {
             # OK, we have to add or update the record
             # 1st delete (virtually, in indexes) ...
-            %result = _DelBiblioNoZebra($biblionumber,$record);
+            %result = _DelBiblioNoZebra($biblionumber,$record,$server);
             # ... add the record
-            %result=_AddBiblioNoZebra($biblionumber,$newRecord, %result);
+            %result=_AddBiblioNoZebra($biblionumber,$newRecord, $server, %result);
         } else {
             # it's a deletion, delete the record...
-            %result=_DelBiblioNoZebra($biblionumber,$record);
+#             warn "DELETE the record $biblionumber on $server".$record->as_formatted;
+            %result=_DelBiblioNoZebra($biblionumber,$record,$server);
         }
         # ok, now update the database...
-        my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE indexname=? AND value=?");
+        my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE server=? AND indexname=? AND value=?");
         foreach my $key (keys %result) {
             foreach my $index (keys %{$result{$key}}) {
-                warn "UPDATING : $key , $index with :".$result{$key}->{$index};
-                $sth->execute($result{$key}->{$index},$key,$index);
+#                 warn "UPDATING : $server $key , $index with :".$result{$key}->{$index};
+                $sth->execute($result{$key}->{$index}, $server, $key, $index);
             }
         }
     $dbh->do('UNLOCK TABLES');
 
     } else {
-    #
-    # we use zebra, just fill zebraqueue table
-    #
-    my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
-    $sth->execute($biblionumber,$server,$op);
-    $sth->finish;
+        #
+        # we use zebra, just fill zebraqueue table
+        #
+        my $sth=$dbh->prepare("insert into zebraqueue  (biblio_auth_number ,server,operation) values(?,?,?)");
+        $sth->execute($biblionumber,$server,$op);
+        $sth->finish;
     }
 }
 
@@ -2777,7 +2784,7 @@ sub GetNoZebraIndexes {
 
 =head1 INTERNAL FUNCTIONS
 
-=head2 _DelBiblioNoZebra($biblionumber,$record);
+=head2 _DelBiblioNoZebra($biblionumber,$record,$server);
 
     function to delete a biblio in NoZebra indexes
     This function does NOT delete anything in database : it reads all the indexes entries
@@ -2785,21 +2792,33 @@ sub GetNoZebraIndexes {
     The SQL part is done either :
     - after the Add if we are modifying a biblio (delete + add again)
     - immediatly after this sub if we are doing a true deletion.
+    $server can be 'biblioserver' or 'authorityserver' : it indexes biblios or authorities (in the same table, $server being part of the table itself
 
 =cut
 
 
 sub _DelBiblioNoZebra {
-    my ($biblionumber,$record)=@_;
+    my ($biblionumber, $record, $server)=@_;
     
-    warn "DELETING".$record->as_formatted;
     # Get the indexes
     my $dbh = C4::Context->dbh;
     # Get the indexes
-    my %index=GetNoZebraIndexes;
-    # get title of the record (to store the 10 first letters with the index)
-    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
-    my $title = lc($record->subfield($titletag,$titlesubfield));
+    my %index;
+    my $title;
+    if ($server eq 'biblioserver') {
+        %index=GetNoZebraIndexes;
+        # get title of the record (to store the 10 first letters with the index)
+        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+        $title = lc($record->subfield($titletag,$titlesubfield));
+    } else {
+        # for authorities, the "title" is the $a mainentry
+        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
+        warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
+        $title = $record->subfield($authref->{auth_tag_to_report},'a');
+        $index{'mainmainentry'}= $authref->{'auth_tag_to_report'}.'a';
+        $index{'mainentry'}    = $authref->{'auth_tag_to_report'}.'*';
+        $index{'auth_type'}    = '152b';
+    }
     
     my %result;
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
@@ -2807,7 +2826,7 @@ sub _DelBiblioNoZebra {
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
-    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE indexname=? AND value=?');
+    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
     foreach my $field ($record->fields()) {
         #parse each subfield
         next if $field->tag <10;
@@ -2823,22 +2842,20 @@ sub _DelBiblioNoZebra {
                     $indexed=1;
                     my $line= lc $subfield->[1];
                     # remove meaningless value in the field...
-                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
                     # ... and split in words
-                    warn "DELETING : $key / $tag / $subfieldcode / $line";
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, do nothing, the biblionumber has already be removed
                         unless ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
                             # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
-                            $sth2->execute($key,$_);
+                            $sth2->execute($server,$key,$_);
                             my $existing_biblionumbers = $sth2->fetchrow;
                             # it exists
                             if ($existing_biblionumbers) {
 #                                 warn " existing for $key $_: $existing_biblionumbers";
                                 $result{$key}->{$_} =$existing_biblionumbers;
                                 $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                                warn "after cleaning : $key / $_ = ".$result{$key}->{$_};
                             }
                         }
                     }
@@ -2847,18 +2864,17 @@ sub _DelBiblioNoZebra {
             # the subfield is not indexed, store it in __RAW__ index anyway
             unless ($indexed) {
                 my $line= lc $subfield->[1];
-                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
                 # ... and split in words
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
                     # if the entry is already here, do nothing, the biblionumber has already be removed
                     unless ($result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/) {
                         # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
-                        $sth2->execute('__RAW__',$_);
+                        $sth2->execute($server,'__RAW__',$_);
                         my $existing_biblionumbers = $sth2->fetchrow;
                         # it exists
                         if ($existing_biblionumbers) {
-                            warn " existing for __RAW__ $_ : $existing_biblionumbers";
                             $result{'__RAW__'}->{$_} =$existing_biblionumbers;
                             $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
                         }
@@ -2878,20 +2894,33 @@ sub _DelBiblioNoZebra {
 
 
 sub _AddBiblioNoZebra {
-    my ($biblionumber,$record,%result)=@_;
+    my ($biblionumber, $record, $server, %result)=@_;
     my $dbh = C4::Context->dbh;
     # Get the indexes
-    my %index=GetNoZebraIndexes;
-    # get title of the record (to store the 10 first letters with the index)
-    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
-    my $title = lc($record->subfield($titletag,$titlesubfield));
+    my %index;
+    my $title;
+    if ($server eq 'biblioserver') {
+        %index=GetNoZebraIndexes;
+        # get title of the record (to store the 10 first letters with the index)
+        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+        $title = lc($record->subfield($titletag,$titlesubfield));
+    } else {
+#     warn "server : $server";
+        # for authorities, the "title" is the $a mainentry
+        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
+        warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
+        $title = $record->subfield($authref->{auth_tag_to_report},'a');
+        $index{'mainmainentry'}=$authref->{auth_tag_to_report}.'a';
+        $index{'mainentry'}    = $authref->{auth_tag_to_report}.'*';
+        $index{'auth_type'}    = '152b';
+    }
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
-    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE indexname=? AND value=?');
+    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
     foreach my $field ($record->fields()) {
         #parse each subfield
         next if $field->tag <10;
@@ -2907,7 +2936,7 @@ sub _AddBiblioNoZebra {
                     $indexed=1;
                     my $line= lc $subfield->[1];
                     # remove meaningless value in the field...
-                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
                     # ... and split in words
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
@@ -2919,18 +2948,18 @@ sub _AddBiblioNoZebra {
                             $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
                         } else {
                             # get the value if it exist in the nozebra table, otherwise, create it
-                            $sth2->execute($key,$_);
+                            $sth2->execute($server,$key,$_);
                             my $existing_biblionumbers = $sth2->fetchrow;
                             # it exists
                             if ($existing_biblionumbers) {
-                                warn" existing : $existing_biblionumbers";
                                 $result{$key}->{$_} =$existing_biblionumbers;
                                 my $weight=$1+1;
                                 $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
                                 $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
                             # create a new ligne for this entry
                             } else {
-                                $dbh->do('INSERT INTO nozebra SET indexname='.$dbh->quote($key).',value='.$dbh->quote($_));
+#                             warn "INSERT : $server / $key / $_";
+                                $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).', indexname='.$dbh->quote($key).',value='.$dbh->quote($_));
                                 $result{$key}->{$_}.="$biblionumber,$title-1;";
                             }
                         }
@@ -2940,7 +2969,7 @@ sub _AddBiblioNoZebra {
             # the subfield is not indexed, store it in __RAW__ index anyway
             unless ($indexed) {
                 my $line= lc $subfield->[1];
-                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=/ /g;
+                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
                 # ... and split in words
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
@@ -2951,7 +2980,7 @@ sub _AddBiblioNoZebra {
                         $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
                     } else {
                         # get the value if it exist in the nozebra table, otherwise, create it
-                        $sth2->execute('__RAW__',$_);
+                        $sth2->execute($server,'__RAW__',$_);
                         my $existing_biblionumbers = $sth2->fetchrow;
                         # it exists
                         if ($existing_biblionumbers) {
@@ -2961,7 +2990,7 @@ sub _AddBiblioNoZebra {
                             $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
                         # create a new ligne for this entry
                         } else {
-                            $dbh->do('INSERT INTO nozebra SET indexname="__RAW__",value='.$dbh->quote($_));
+                            $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).',  indexname="__RAW__",value='.$dbh->quote($_));
                             $result{'__RAW__'}->{$_}.="$biblionumber,$title-1;";
                         }
                     }
@@ -3174,7 +3203,7 @@ sub _koha_modify_biblioitem {
 
     $dbh->do($query);
     if ( $dbh->errstr ) {
-        warn "$query";
+        warn "ERROR in _koha_modify_biblioitem $query";
     }
 }
 
@@ -3868,6 +3897,14 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.204  2007/05/10 14:45:15  tipaul
+# Koha NoZebra :
+# - support for authorities
+# - some bugfixes in ordering and "CCL" parsing
+# - support for authorities <=> biblios walking
+#
+# Seems I can do what I want now, so I consider its done, except for bugfixes that will be needed i m sure !
+#
 # Revision 1.203  2007/05/03 15:16:02  tipaul
 # BUGFIX for : NoZebra
 # - NoZebra features : seems they work fine now (adding, modifying, deleting)
