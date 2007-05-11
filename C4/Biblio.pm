@@ -1750,7 +1750,7 @@ sub GetMarcSubjects {
         $label =~ s/su/ /g;
         $label =~ s/://g;
         $label =~ s/-to//g;
-        $label =~ s/and//g;
+        $label =~ s/ and //g;
         push @marcsubjcts,
           {
             label => $label,
@@ -3897,6 +3897,11 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.205  2007/05/11 16:04:03  btoumi
+# bug fix:
+# problem in  displayed label link  with subject in detail.tmpl
+# ex: label random => rdom
+#
 # Revision 1.204  2007/05/10 14:45:15  tipaul
 # Koha NoZebra :
 # - support for authorities
