@@ -26,6 +26,7 @@ use C4::Reserves;
 use C4::Output;
 use C4::Date;
 use C4::Context;
+use C4::Members;
 use C4::Branch; # GetBranches
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
