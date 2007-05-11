@@ -855,7 +855,8 @@ sub AddIssue {
     my ( $borrower, $barcode, $date, $cancelreserve ) = @_;
     
     my $dbh = C4::Context->dbh;
-if ($borrower and $barcode){
+my $barcodecheck=CheckValidBarcode($barcode);
+if ($borrower and $barcode and $barcodecheck ne '0'){
 #   my ($borrower, $flags) = &GetMemberDetails($borrowernumber, 0);
     # find which item we issue
     my $item = GetItem('', $barcode);
@@ -2000,6 +2001,20 @@ $sth->execute($years,$month,$day,$branchcode);
 my $countspecial=$sth->fetchrow ;
 $sth->finish;
 return $countspecial;
+}
+
+sub CheckValidBarcode{
+my ($barcode) = @_;
+my $dbh = C4::Context->dbh;
+my $query=qq|SELECT count(*) 
+	     FROM items 
+             WHERE barcode=?
+	    |;
+my $sth = $dbh->prepare($query);
+$sth->execute($barcode);
+my $exist=$sth->fetchrow ;
+$sth->finish;
+return $exist;
 }
 
 1;
