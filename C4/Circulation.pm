@@ -35,6 +35,8 @@ use Date::Calc qw(
   Add_Delta_YM
   Add_Delta_DHMS
   Date_to_Days
+  Day_of_Week
+  Add_Delta_Days	
 );
 use POSIX qw(strftime);
 use C4::Branch; # GetBranches
@@ -991,7 +993,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
         if ($date) {
             $dateduef = $date;
         }
-	$dateduef=CheckValidDatedue($dateduef,$iteminformation->{'itemnumber'},$env->{'branchcode'});
+	$dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
        # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
         if ( C4::Context->preference('ReturnBeforeExpiry')
             && $dateduef gt $borrower->{dateexpiry} )
