@@ -63,71 +63,6 @@ function popup(link) {
 	<h1>Serial Collection information for<br/> <em><!-- TMPL_VAR name="bibliotitle" --></em></h1>
 <!-- /TMPL_UNLESS -->
 
-<div id="action">
-<!--TMPL_IF Name="subscr"-->
-  <a href="serials-collection.pl?biblionumber=<!--TMPL_VAR Name="biblionumber" -->">See any subscription attached to this biblio</a>
-<!--/TMPL_IF-->
-<!--TMPL_UNLESS Name="onesubscription"-->
-<!--TMPL_LOOP Name="subscriptions"-->
-	<span title="#<!-- TMPL_VAR name="subscriptionid" -->--<!--TMPL_IF name="periodicity1" -->
-                        1/day
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity2" -->
-                        1/week
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity3" -->
-                        1/2 weeks
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity4" -->
-                        1/3 weeks
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity5" -->
-                        1/Month
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity6" -->
-                        1/2 Months (6/year)
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity7" -->
-                        1/quarter
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity8" -->
-                        1/quarter
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity9" -->
-                        2/year
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity10" -->
-                        1/year
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity11" -->
-                        1/2 years
-                <!-- /TMPL_IF -->--
-                <!-- TMPL_IF name="numberpattern1" -->
-                    Number
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern2" -->
-                    Volume, Number, Issue
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern3" -->
-                    Volume, Number
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern4" -->
-                    Volume, Issue
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern5" -->
-                    Number, Issue
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern6" -->
-                    Seasonal only
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="numberpattern7" -->
-                    None of the above
-                <!-- /TMPL_IF -->--<!-- TMPL_VAR name="branchcode" -->
-                --<!-- TMPL_VAR name="callnumber" -->--<!-- TMPL_VAR name="notes" -->">
-                <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a> </span>
-<!--/TMPL_LOOP -->
-<!--/TMPL_UNLESS-->
-</div>
 <!--TMPL_IF Name="subscriptions"-->
 <font size ="-2">
 <table>
@@ -147,7 +82,7 @@ function popup(link) {
 </tr>
 <!--TMPL_LOOP Name="subscriptions"-->
 	<tr>
-      <td>#<!-- TMPL_VAR name="subscriptionid" --> </td>
+      <td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">#<!-- TMPL_VAR name="subscriptionid" --></a> </td>
       <td>         <!--TMPL_IF name="periodicity1" -->
                         1/day
                 <!-- /TMPL_IF -->
@@ -218,6 +153,10 @@ function popup(link) {
 
       </tr>
 <!--/TMPL_LOOP -->
+<!--TMPL_IF Name="subscr"-->
+<tr ><td colspan="7">  <a href="serials-collection.pl?biblionumber=<!--TMPL_VAR Name="biblionumber" -->">See any subscription attached to this biblio</a></td>
+</tr>
+<!--/TMPL_IF-->
 </table>
 </font>
 <!--/TMPL_IF -->
@@ -231,7 +170,6 @@ function popup(link) {
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-<!--    <a class="tabsubs" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>-->
     </div>
 
 <form name="edition" action="serials-edit.pl">
@@ -241,7 +179,6 @@ function popup(link) {
  <!--TMPL_ELSE -->
     <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="content_hidden">
  <!--/TMPL_IF -->
-<p><input type="submit" value="Edit serials"></p>
         <table width="400px">
             <tr>
 <!--TMPL_UNLESS Name="onesubscription"-->
@@ -295,7 +232,19 @@ function popup(link) {
                   <!--TMPL_IF Name="subscriptionexpired"-->
                   <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled />
                   <!--TMPL_ELSE-->
-                  <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" onclick="javascript:addsubscriptionid();"/>
+                    <!--TMPL_IF Name="status1"-->
+                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" onclick="javascript:addsubscriptionid();"/>
+                    <!--TMPL_ELSE -->
+                    <!--TMPL_IF Name="status3"-->
+                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" onclick="javascript:addsubscriptionid();"/>
+                    <!--TMPL_ELSE -->
+                      <!--TMPL_IF Name="status4"-->
+                      <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" onclick="javascript:addsubscriptionid();"/>
+                      <!--TMPL_ELSE -->
+                      <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" onclick="javascript:addsubscriptionid();"/>
+                      <!--/TMPL_IF-->           
+                    <!--/TMPL_IF-->           
+                    <!--/TMPL_IF-->           
                   <!--/TMPL_IF -->
                 </td>
             </tr>
