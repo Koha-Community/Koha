@@ -101,6 +101,12 @@ unless (@serialids){
   }
 }
 
+unless (scalar(@serialids)){
+  my $string="serials-collection.pl?subscriptionid=".join(",",@subscriptionids);
+  $string=~s/,$//;
+ warn $string; 
+  print $query->redirect($string);
+}
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/serials-edit.tmpl",
                 query => $query,
