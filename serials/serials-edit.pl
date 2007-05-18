@@ -117,6 +117,7 @@ foreach my $tmpserialid (@serialids){
   $data->{planneddate}=format_date($data->{planneddate});
   push @serialdatalist,$data;
 }
+my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});
 
 my @newserialloop;
 my @subscriptionloop;
@@ -249,6 +250,7 @@ $template->param(serialsadditems =>C4::Context->preference("serialsadditems"));
 
 
 $template->param(
+            bibliotitle => $bibdata->{'title'},
             biblionumber =>$serialdatalist[0]->{'biblionumber'},
             serialslist => \@serialdatalist,
             intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
