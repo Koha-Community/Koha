@@ -338,7 +338,7 @@ my $dbh = C4::Context->dbh;
 my $query = qq|SELECT *  
     FROM issues
     WHERE itemnumber=?
-|;
+    AND returndate IS NULL|;
 my $sth = $dbh->prepare($query);
 $sth->execute($itemnumber);
 my ($issuesinfo)=$sth->fetchrow_hashref;
