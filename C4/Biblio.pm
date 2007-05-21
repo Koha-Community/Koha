@@ -58,6 +58,7 @@ push @EXPORT, qw(
   &GetItemLocation
   &GetLostItems
   &GetItemsForInventory
+  &GetItemsCount
 
   &GetMarcNotes
   &GetMarcSubjects
@@ -3879,6 +3880,28 @@ sub set_service_options {
     return $serviceOptions;
 }
 
+=head2 GetItemsCount
+
+$count = &GetItemsCount( $biblionumber);
+this function return count of item with $biblionumber
+=cut
+
+sub GetItemsCount {
+    my ( $biblionumber ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = qq|SELECT count(*)
+ 		  FROM  items 
+ 		  WHERE biblionumber=?|;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my $count = $sth->fetchrow;  
+    $sth->finish;
+    return ($count);
+}
+
+
+
+
 END { }    # module clean-up code here (global destructor)
 
 1;
@@ -3897,6 +3920,10 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.206  2007/05/21 08:44:17  btoumi
+# add security when u delete biblio :
+# u must delete linked items before delete biblio
+#
 # Revision 1.205  2007/05/11 16:04:03  btoumi
 # bug fix:
 # problem in  displayed label link  with subject in detail.tmpl

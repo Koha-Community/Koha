@@ -116,6 +116,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+#count of item linked
+my $itemcount = GetItemsCount($biblionumber);
+$template->param( count => $itemcount);
+
 #Getting the list of all frameworks
 my $queryfwk =
   $dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
