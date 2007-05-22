@@ -221,15 +221,17 @@
             <th scope="col">Return</th>
         </tr>
     
-        <!-- tmpl_loop name="issueloop" -->
-                <!-- TMPL_IF NAME="toggle" -->
+        <!-- TMPL_LOOP name="issueloop" -->
+          <!-- TMPL_IF name="overdue" -->
+        <tr class="problem">
+          <!-- TMPL_ELSE -->
+            <!-- TMPL_IF name="toggle" -->
         <tr class="highlight">
-                <!-- TMPL_ELSE -->
-                <tr>
-                <!-- /TMPL_IF -->
+            <!-- TMPL_ELSE -->
+        <tr>
+            <!-- /TMPL_IF -->
+          <!-- /TMPL_IF -->
             <td>
-                <!-- TMPL_IF name="red" --><span class="overdue"><!-- /TMPL_IF -->
-                <!-- TMPL_IF name="red" --></span><!-- /TMPL_IF -->
                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                     <!-- TMPL_VAR NAME="title" -->
                 </a>
