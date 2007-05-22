@@ -505,7 +505,7 @@ my $framework=CGI::scrolling_list(
             -multiple => 0 );
 $template->param( framework => $framework, breedingid => $breedingid);
 
-$tagslib = &GetMarcStructure($dbh,1,$frameworkcode);
+$tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record=-1;
 my $encoding="";
 $record = GetMarcBiblio( $biblionumber ) if ($biblionumber);

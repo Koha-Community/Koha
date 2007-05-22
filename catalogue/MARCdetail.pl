@@ -100,7 +100,7 @@ my $popup        =
   ;    # if set to 1, then don't insert links, it's just to show the biblio
 my $subscriptionid = $query->param('subscriptionid');
 
-my $tagslib = &GetMarcStructure($dbh,1,$frameworkcode);
+my $tagslib = &GetMarcStructure(1,$frameworkcode);
 
 my $record = GetMarcBiblio($biblionumber);
 
@@ -295,7 +295,7 @@ foreach my $field (@fields) {
         push( @big_array, \%this_row );
     }
 }
-my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField($dbh,"items.holdingbranch",$frameworkcode);
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$frameworkcode);
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
 #fill big_row with missing datas

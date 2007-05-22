@@ -74,7 +74,7 @@ This function modify the @$fields array and add related fields to search on.
 
 sub findseealso {
     my ( $dbh, $fields ) = @_;
-    my $tagslib = GetMarcStructure( $dbh, 1 );
+    my $tagslib = GetMarcStructure( 1 );
     for ( my $i = 0 ; $i <= $#{$fields} ; $i++ ) {
         my ($tag)      = substr( @$fields[$i], 1, 3 );
         my ($subfield) = substr( @$fields[$i], 4, 1 );

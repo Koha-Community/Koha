@@ -56,7 +56,7 @@ my $dbh = C4::Context->dbh;
 
 my $biblionumber = $query->param('biblionumber');
 my $itemtype     = &GetFrameworkCode($biblionumber);
-my $tagslib      = &GetMarcStructure( $dbh, 0, $itemtype );
+my $tagslib      = &GetMarcStructure( 0, $itemtype );
 
 my $record = GetMarcBiblio($biblionumber);
 

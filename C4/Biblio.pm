@@ -1415,10 +1415,9 @@ sub GetBiblioItemInfosOf {
 
 =over 4
 
-$res = GetMarcStructure($dbh,$forlibrarian,$frameworkcode);
+$res = GetMarcStructure($forlibrarian,$frameworkcode);
 
 Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
-$dbh : DB handler
 $forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
 $frameworkcode : the framework code to read
 
@@ -1429,7 +1428,8 @@ $frameworkcode : the framework code to read
 =cut
 
 sub GetMarcStructure {
-    my ( $dbh, $forlibrarian, $frameworkcode ) = @_;
+    my ( $forlibrarian, $frameworkcode ) = @_;
+    my $dbh=C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
     my $sth;
     my $libfield = ( $forlibrarian eq 1 ) ? 'liblibrarian' : 'libopac';
@@ -2490,7 +2490,7 @@ sub PrepareItemrecordDisplay {
     my $frameworkcode = &GetFrameworkCode( $bibnum );
     my ( $itemtagfield, $itemtagsubfield ) =
       &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my $tagslib = &GetMarcStructure( $dbh, 1, $frameworkcode );
+    my $tagslib = &GetMarcStructure( 1, $frameworkcode );
     my $itemrecord = GetMarcItem( $bibnum, $itemnum) if ($itemnum);
     my @loop_data;
     my $authorised_values_sth =
@@ -3920,6 +3920,10 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.207  2007/05/22 08:51:19  hdl
+# Changing GetMarcStructure signature.
+# Deleting first parameter $dbh
+#
 # Revision 1.206  2007/05/21 08:44:17  btoumi
 # add security when u delete biblio :
 # u must delete linked items before delete biblio
