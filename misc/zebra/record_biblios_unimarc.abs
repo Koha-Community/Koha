@@ -23,22 +23,58 @@ systag sysno rank
 xpath disable
 
 all any
-melm 008		 date-entered-on-file:n:range(data,0,6),date-entered-on-file:s:range(data,0,6),date1:n:range(data,7,4),date1:s:range(data,7,4),date2:n:range(data,11,4),date2:s:range(data,11,4),ff8-22:w:range(data,22,1),language:w:range(data,35,3),ff8-33:w:range(data,33,1),ff8-34:w:range(data,34,1)
-
-melm 007		ff7-00:w:range(data,0,1),ff7-01:w:range(data,1,1),ff7-02:w:range(data,2,1)
-
-melm 010$a		ISBN:w
-# wrong ISBN
-melm 010$z		ISBN:w
-melm 011$a		ISSN:w
-# cancelled ISSN
-melm 011$y		ISSN:w
-# wrong ISSN
-melm 011$z		ISSN:w
-
-# Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
 melm 001        Local-number,Local-number:n
+# Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
 melm 090$9      Local-number,Local-number:n
+
+melm 010$a    Standard-Number,ISBN:w
+# wrong ISBN
+melm 010$z    Standard-Number,ISBN:w
+melm 011$a    Standard-Number,ISSN:w
+# cancelled ISSN
+melm 011$y    Standard-Number,ISSN:w
+# wrong ISSN
+melm 011$z    ISSN:w
+
+melm 200$b      Material-type,Koha-ItemType
+
+
+#melm 100$9   Cross-Reference !:w
+melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),Date-of-publication:n:range(data,9,4),Date-of-publication:n:range(data,13,4),Date-of-publication:s:range(data,9,4),Date-of-publication:s:range(data,13,4),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2)
+#,char-encoding:n:range(data,30,2),script-title:n:range(data,34,2)
+melm 101     Language
+melm 102$a     Country-heading
+
+#Field 105 Description
+#Illustration codes 4
+#Form of contents codes 4
+#Conference or meeting code 1
+#Festschrift indicator 1
+#Index indicator 1
+#Literature code 1
+#Biography code   1
+melm 105$a     Illustration-code:w:range(data,0,4),Content-type:w:range(data,4,1),Content-type:w:range(data,5,1),Content-type:w:range(data,6,1),Content-type:w:range(data,7,1),Conference-code:w:range(data,8,1),Festschrift-indicator:w:range(data,9,1),Index-indicator:w:range(data,10,1),Literature-Code:w:range(data,11,1),Biography-Code:w:range(data,12,1)
+
+melm 106$a     Material-type
+
+#Field 110 Description
+#Name of Data Element                  Number of characters                 Character Positions
+#Type of serial designator              1                                   0
+#Frequency of issue                     1                                   1
+#Regularity                             1                                   2
+#Type of material code                  1                                   3
+#Nature of contents code                3                                   4-6
+#Conference publication indicator       1                                   7
+#Title page availability codes          1                                   8
+#Index availability code                1                                   9
+#Cumulative index availability code   1                                   10
+melm 110$a     Type-Of-Serial:w:range(data,0,1),Frequency-code:w:range(data,1,1),Regularity-code:w:range(data,2,1),Content-type:w:range(data,3,1),Content-type:w:range(data,4,3),Conference-publication-Code:w:range(data,7,1),Title-Page-availability-Code:w:range(data,8,1),Index-availability-Code:w:range(data,9,1),Cumulative-Index-availability-Code:w:range(data,10,1)
+
+melm 115$a     Video-mt:w:range(data,0,1)
+
+melm 116$a     Graphics-type:w:range(data,0,1),Graphics-support:w:range(data,1,1),Graphics-support:w:range(data,2,1),
+
+
 melm 680$b		LC-call-number:s
 melm 680		LC-call-number
 #melm 001		Identifier-standard:w
@@ -60,11 +96,16 @@ melm 700$9      	Koha-Auth-Number,Koha-Auth-Number:n
 melm 700$a		author
 melm 700		author,author:p
 
+melm 701$9        Koha-Auth-Number,Koha-Auth-Number:n
 melm 701		author,author:p
+melm 702$9        Koha-Auth-Number,Koha-Auth-Number:n
 melm 702		author,author:p
 # collective author
+melm 710$9        Koha-Auth-Number,Koha-Auth-Number:n
 melm 710		author,author:p
+melm 711$9        Koha-Auth-Number,Koha-Auth-Number:n
 melm 711		author,author:p
+melm 712$9        Koha-Auth-Number,Koha-Auth-Number:n
 melm 712		author,author:p
 
 ############## TITLE ##################
@@ -77,7 +118,18 @@ melm 200$d		title:w,title:p
 # subtitle
 melm 200$e		title:w,title:p
 
+melm 205    Title !:w,!:p
 
+melm 208    Serials !:w,!:p
+melm 207    Printed-Music !:w,!:p
+
+
+
+melm 210$a    Place-Publication !:w,!:p
+melm 210$c    Publisher   !:w,!:p
+melm 210$d    Date-of-Publication,Date-of-Publication,Date !:y
+
+melm 215        Physical-detail
 
 #Series
 melm 225$a      Title-series
@@ -96,7 +148,124 @@ melm 225$x      ISSN
 
 melm 230$a      Electronic-Ressource
 
+########## NOTES #################
+melm 300$a    Note  !:w,!:p
+melm 301$a    Note  !:w,!:p
+melm 302$a    Note  !:w,!:p
+melm 303$a    Note  !:w,!:p
+melm 304$a    Note  !:w,!:p
+melm 305$a    Note  !:w,!:p
+melm 306$a    Note  !:w,!:p
+melm 307$a    Note  !:w,!:p
+melm 308    Note  !:w,!:p
+melm 308$a    Note  !:w,!:p
+melm 310$a    Note  !:w,!:p
+melm 311$a    Note  !:w,!:p
+melm 312$a    Note  !:w,!:p
+melm 313$a    Note  !:w,!:p
+melm 314$a    Note  !:w,!:p
+melm 315$a    Note  !:w,!:p
+melm 316$a    Note  !:w,!:p
+melm 317$a    Note  !:w,!:p
+melm 318$a    Note  !:w,!:p
+melm 320$a    Note  !:w,!:p
+melm 321$a    Note  !:w,!:p
+melm 322$a    Note  !:w,!:p
+melm 323$a    Note  !:w,!:p
+melm 324$a    Note  !:w,!:p
+melm 325$a    Note  !:w,!:p
+melm 326$a    Note  !:w,!:p
+melm 327$a    Note  !:w,!:p
+melm 328    Note,Thesis-Note  !:w,!:p
+melm 328$a    Note  !:w,!:p
+melm 330$a    Abstract,Note !:w,!:p
+melm 332$a    Note  !:w,!:p
+melm 333$a    Note  !:w,!:p
+melm 336$a    Note  !:w,!:p
+melm 337$a    Note  !:w,!:p
+melm 345$a    Note  !:w,!:p
+
+############## 4XX - LINKING ##################
+# Authorities Title
+melm 400$t    Title
+melm 401$t    Title
+melm 403$t    Title,Title-Uniform
+melm 410$t    Title
+melm 412$t    Title
+melm 413$t    Title
+melm 414$t    Title
+melm 415$t    Title
+melm 416$t    Title
+melm 417$t    Title
+melm 418$t    Title
+melm 419$t    Title
+melm 420$t    Title
+melm 430$t    Title
+melm 431$t    Title
+melm 432$t    Title
+melm 440$t    Title
+melm 441$t    Title
+melm 445$t    Title
+melm 400$d    Date-of-Publication
+melm 401$d    Date-of-Publication
+melm 403$d    Date-of-Publication
+melm 410$d    Date-of-Publication
+melm 412$d    Date-of-Publication
+melm 413$d    Date-of-Publication
+melm 414$d    Date-of-Publication
+melm 415$d    Date-of-Publication
+melm 416$d    Date-of-Publication
+melm 417$d    Date-of-Publication
+melm 418$d    Date-of-Publication
+melm 419$d    Date-of-Publication
+melm 420$d    Date-of-Publication
+melm 430$d    Date-of-Publication
+melm 431$d    Date-of-Publication
+melm 432$d    Date-of-Publication
+melm 440$d    Date-of-Publication
+melm 441$d    Date-of-Publication
+melm 445$d    Date-of-Publication
+melm 400    Link
+melm 401    Link
+melm 403    Link
+melm 410    Link
+melm 412    Link
+melm 413    Link
+melm 414    Link
+melm 415    Link
+melm 416    Link
+melm 417    Link
+melm 418    Link
+melm 419    Link
+melm 420    Link
+melm 430    Link
+melm 431    Link
+melm 432    Link
+melm 440    Link
+melm 441    Link
+melm 445    Link
+
 # authorities title
+melm 500$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 501$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 503$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 510$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 512$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 513$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 514$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 515$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 516$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 517$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 518$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 519$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 520$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 530$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 531$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 532$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 540$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 541$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 545$9    Koha-Auth-Number,Koha-Auth-Number:n
+
 melm 500		title
 melm 501		title
 melm 503		title
@@ -116,10 +285,6 @@ melm 532		title
 melm 540		title
 melm 541		title
 melm 545		title
-
-melm 210$a		Place-publication	!:w,!:p
-melm 210$x		Publisher		!:w,!:p
-melm 210$d		Date,Date:s,		!:y
 
 
 ########## NOTES #################
@@ -192,16 +357,16 @@ melm 610		subject-heading
 melm 676$a		Dewey-classification:w,Dewey-classification:s
 
 #############"# item information (based on 995) ###############
-#melm 995$j		LC-card-number:s
+melm 995$j		LC-card-number:s
 
-#melm 995$k		Call-Number
+melm 995$k		Call-Number
 melm 995$k		Local-classification
 
 #melm 952$a		Local-classification
 #melm 995$a		Record-source
 melm 995$a		Host-item
-#melm 995$c		Host-item
-#melm 995$d		Host-item
+melm 995$c		Record-Source
+melm 995$d		Record-Source
 melm 995$f		Stock-number
 melm 995$s      popularity:n,popularity:s
 #melm 952$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
