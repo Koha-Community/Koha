@@ -475,7 +475,6 @@ sub _new_Zconn {
     my $user = $context->{"serverinfo"}->{$server}->{"user"};
     my $servername = $context->{"config"}->{$server};
     my $password = $context->{"serverinfo"}->{$server}->{"password"};
-    warn "server:$server servername :$servername host:$host";
     retry:
     eval {
         # set options
@@ -875,6 +874,14 @@ Joshua Ferraro <jmf at liblime dot com>
 =cut
 
 # $Log$
+# Revision 1.57  2007/05/22 09:13:55  tipaul
+# Bugfixes & improvements (various and minor) :
+# - updating templates to have tmpl_process3.pl running without any errors
+# - adding a drupal-like css for prog templates (with 3 small images)
+# - fixing some bugs in circulation & other scripts
+# - updating french translation
+# - fixing some typos in templates
+#
 # Revision 1.56  2007/04/23 15:21:17  tipaul
 # renaming currenttransfers to transferstoreceive
 #

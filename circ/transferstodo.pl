@@ -75,11 +75,11 @@ my @branchesloop;
 foreach my $br ( keys %$branches ) {
     my @reservloop;
     my %branchloop;
-    $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
-    $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
     my @getreserves =
       GetReservesToBranch( $branches->{$br}->{'branchcode'} );
     if (@getreserves) {
+        $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
+        $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
         foreach my $num (@getreserves) {
             my %getreserv;
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
@@ -124,19 +124,12 @@ foreach my $br ( keys %$branches ) {
         if (@reservloop) {
             $branchloop{'reserv'} = \@reservloop;
         }
-
         # 		else, we unset the value of the branchcode .
         else {
             $branchloop{'branchcode'} = 0;
         }
     }
-    else {
-
-# 	if we don't have a retrun from reservestobranch we unset branchname and branchcode
-        $branchloop{'branchname'} = 0;
-        $branchloop{'branchcode'} = 0;
-    }
-    push( @branchesloop, \%branchloop );
+    push( @branchesloop, \%branchloop ) if %branchloop;
 }
 
 $template->param(

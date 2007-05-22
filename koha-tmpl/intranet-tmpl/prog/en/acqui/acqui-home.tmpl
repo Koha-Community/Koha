@@ -66,12 +66,13 @@
 <!-- /TMPL_IF -->
 </div>
 
-<div id="acqui_acqui_home_budgets">
     <!-- TMPL_IF name="nobudget" -->
     <!-- TMPL_ELSE -->
     <h2>Budgets and Funds</h2>
     <a href="/cgi-bin/koha/admin/aqbookfund.pl" title="[ Manage Bookfunds ]">[ Manage ]</a>
-    <table>
+    <div id="BudgetsAndFunds">
+    <table id="accounts">
+        <thead>
         <tr>
             <th>Budgets</th>
             <th>Total</th>
@@ -79,6 +80,8 @@
             <th>Comtd</th>
             <th>Avail</th>
         </tr>
+        </thead>
+        <tbody>
         <!-- TMPL_LOOP name="loop_budget" -->
             <tr>
                 <td><!-- TMPL_VAR name="bookfundname" --></td>
@@ -88,16 +91,19 @@
                 <td><!-- TMPL_VAR name="avail" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
+        </tbody>
+        <tfooter>
         <tr>
-            <td>Total</td>
-            <td><!-- TMPL_VAR name="total" --></td>
-            <td><!-- TMPL_VAR name="totspent" --></td>
-            <td><!-- TMPL_VAR name="totcomtd" --></td>
-            <td><!-- TMPL_VAR name="totavail" --></td>
+            <th>Total</td>
+            <th><!-- TMPL_VAR name="total" --></th>
+            <th><!-- TMPL_VAR name="totspent" --></th>
+            <th><!-- TMPL_VAR name="totcomtd" --></th>
+            <th><!-- TMPL_VAR name="totavail" --></th>
         </tr>
+        </tfooter>
     </table>
+    </div>
     <!-- /TMPL_IF -->
-</div>
 <div id="acqui_acqui_home_hints">
     <p>Use your reload button [ctrl + r] to get the most recent figures.
     Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>

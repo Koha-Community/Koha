@@ -125,11 +125,11 @@ Item Types Administration
           <label for="notforloan">Not for loan</label>
         </th>
         <td>
-          <input type="checkbox" id="notforloan" name="notforloan"
-  <!-- TMPL_IF name="notforloan" -->
-              checked="checked"
-  <!-- /TMPL_IF -->
-                value="1">
+            <!-- TMPL_IF name="notforloan" -->
+                <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
+            <!-- TMPL_ELSE -->
+                <input type="checkbox" id="notforloan" name="notforloan" value="1" />
+            <!-- /TMPL_IF -->
           (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)
         </td>
       </tr>

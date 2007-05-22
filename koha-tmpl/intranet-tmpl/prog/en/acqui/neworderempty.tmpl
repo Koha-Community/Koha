@@ -214,7 +214,11 @@ if (quantity ==0) {
             </p>
             <p>
                 <label>Budgeted Cost</label>
-                <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->"<!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF--> />
+                <!-- TMPL_IF name="close" -->
+                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly  />
+                <!-- TMPL_ELSE -->
+                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
+                <!--/TMPL_IF-->
             </p>
             <!-- TMPL_IF NAME="GST"-->
             <p>

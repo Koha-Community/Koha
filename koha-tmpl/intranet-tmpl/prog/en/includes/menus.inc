@@ -1,3 +1,6 @@
+<div id="kohalogo">
+    <img src="/intranet-tmpl/prog/images/koha-logo.png" height="60px"/>
+</div>
 <div id="onlinehelp">
     <a href="#" onclick="javascript:window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes');">[?]</a>
 </div>
@@ -8,15 +11,15 @@
     <ul>
        <li>
        <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-        <label for="navfindborrower">Iss<span class="accesskey">u</span>e to:</label>
-            <input id="navfindborrower" name="findborrower" type="text" size="10" accesskey="u" />
+        <label for="navfindborrower">Issue to:</label>
+            <input id="navfindborrower" name="findborrower" type="text" size="10" />
             <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
             <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
             <input type="submit" class="submit" value="OK" />
        </form>
        </li>
        <li>
-        <a accesskey="r" href="/cgi-bin/koha/circ/returns.pl"><span class="accesskey">R</span>eturns</a>
+        <a accesskey="r" href="/cgi-bin/koha/circ/returns.pl">Returns</a>
        </li>
         <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
      </ul>
@@ -25,7 +28,7 @@
     <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a>
     <ul>
         <li><form action="/cgi-bin/koha/members/member.pl" method="post">
-           <label for="navmember">Sear<span class="accesskey">c</span>h:&nbsp;</label>
+           <label for="navmember">Search:&nbsp;</label>
            <input id="navmember" type="text" size="10" name="member" />
            <input type="submit" value="OK" class="submit" />
             </form>
@@ -39,7 +42,7 @@
                         <form name="searchform" method="get" action="/cgi-bin/koha/catalogue/search.pl" id="searchform">
                         <input type="hidden" name="idx" value="" />
                         <label for="navkeyword">
-                            <span class="accesskey">S</span>earch:&nbsp;
+                            Search:&nbsp;
                         </label><input type="text" id="navkeyword" name="q" size="10" accesskey="s" />
                         <input type="submit" value=" OK " class="submit" />
                         </form>

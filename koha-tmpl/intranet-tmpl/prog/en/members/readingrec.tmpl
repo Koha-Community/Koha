@@ -32,18 +32,41 @@
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
 <!-- TMPL_IF NAME="toggle" -->
-<tr class="highlight">
+    <tr class="highlight">
 <!-- TMPL_ELSE -->
-<tr>
+    <tr>
 <!-- /TMPL_IF -->
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
- 		<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" --></a>
-	</td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->>
- 		<!-- TMPL_VAR name="author" -->
-	</td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="classification" --></td>
-	<td<!-- TMPL_IF NAME="returndate" --><!-- TMPL_ELSE --> class="onissue"<!-- /TMPL_IF -->><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR name="returndate" --><!-- TMPL_ELSE -->Checked Out<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="returndate" -->
+            <td>
+        <!-- TMPL_ELSE --> 
+            <td class="onissue" >
+        <!-- /TMPL_IF -->
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                <!-- TMPL_VAR name="title" -->
+            </a>
+        </td>
+        <!-- TMPL_IF NAME="returndate" -->
+            <td>
+        <!-- TMPL_ELSE -->
+            <td class="onissue">
+        <!-- /TMPL_IF -->
+        <!-- TMPL_VAR name="author" --></td>
+	<!-- TMPL_IF NAME="returndate" -->
+            <td>
+        <!-- TMPL_ELSE -->
+            <td class="onissue">
+        <!-- /TMPL_IF -->
+        <!-- TMPL_VAR NAME="classification" --></td>
+        <!-- TMPL_IF NAME="returndate" -->
+            <td>
+        <!-- TMPL_ELSE -->
+            <td class="onissue">
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="returndate" -->
+            <!-- TMPL_VAR name="returndate" -->
+        <!-- TMPL_ELSE -->
+            Checked Out
+        <!-- /TMPL_IF -->
 	</td>
 </tr>
 <!-- /TMPL_LOOP -->

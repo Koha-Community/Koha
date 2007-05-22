@@ -6,11 +6,10 @@
 <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
 <!--------------------------MAIN BODY OF PAGE-------------------------->
-<h1>Serial Edition: <!-- TMPL_VAR name="bibliotitle" --></h1>
+<h1>Serial Edition <!-- TMPL_VAR name="bibliotitle" --></h1>
 <form method="post" name="f" action="serials-edit.pl" >
 <!--onsubmit="return barcode_check()">-->
 <div id="action">
-    <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onClick="Check(this.form)" -->
     <a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a>
     <!--TMPL_LOOP Name="subscriptions"-->
     <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a>
@@ -245,6 +244,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 <!-- /TMPL_LOOP -->
 
 </table>
+    <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onClick="Check(this.form)" -->
 </div>
 </form>
 

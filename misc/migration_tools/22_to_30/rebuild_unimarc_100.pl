@@ -17,10 +17,12 @@ my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("select biblionumber,timestamp from biblioitems");
 	$sth->execute();
 
+$|=1; # flushes output
+print "Creating/updating field 100 if needed\n";
 while (my ($biblionumber,$time)=$sth->fetchrow ){
 #   my $record;
     my $record = GetMarcBiblio($biblionumber);
-#print $record->as_marc;
+# print $record->as_formatted;
     MARCmodrecord($biblionumber,$record,$time);
 #
 }
@@ -28,7 +30,7 @@ while (my ($biblionumber,$time)=$sth->fetchrow ){
 sub MARCmodrecord {
     my ($biblionumber,$record,$time)=@_;
 #     warn "AVANT : ".$record->as_formatted;
-    my $update=0;
+        my $update=0;
         $record->leader('     nac  22     1u 4500');
         $update=1;
         my $string;
@@ -45,14 +47,9 @@ sub MARCmodrecord {
         unless ($record->subfield(100,"a")){
             $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>"$string"));
         }
-#     warn "APRES : ".$record->as_formatted;
-    # delete all items related fields
-    foreach ($record->field('995')) {
-        $record->delete_field($_);
-    }
     if ($update){
         &ModBiblioMarc($record,$biblionumber,'');
-        print "$biblionumber \n";	
+        print "\r$biblionumber" unless ( $biblionumber % 100 );
     }
 
 }

@@ -660,9 +660,9 @@ function check_input(e){
 <input type="hidden" name="issuesexpected1" value="0">
 
 
-<div>
-    <h2>Subscription information <br />for subscription #<!--TMPL_VAR name="subscriptionid"--></h2>
-    <table border="0" cellspacing="5" cellpadding="0">
+<div id="subscription_form">
+    <h2>Subscription information for subscription #<!--TMPL_VAR name="subscriptionid"--></h2>
+    <table>
         <tr>
             <td>Librarian:</td>
             <td><!-- TMPL_VAR name="loggedinusername" --></td>
@@ -725,10 +725,11 @@ function check_input(e){
         </tr>
     </table>
 <div>
+<div id="subscription_form_planning">
     <h2>Planning</h2>
-    <table border="0" cellspacing="5" cellpadding="0">
+    <table>
         <tr>
-            <td><label>First Issue ETA:</label></td>
+            <td>First Issue ETA:</td>
             <td>
                 <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="button2" style="cursor: pointer;"  />
                 <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="startdate" -->" size=13 maxlength=10 id="acqui_date" style="border-width: 0px;" />
@@ -755,7 +756,7 @@ function check_input(e){
             </td>
         </tr>
         <tr>
-            <td><label">Frequency: (*)</label></td>
+            <td>Frequency: (*)</td>
             <td>
                 <select name="periodicity" size="1" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
                 <option value="" selected>-- please choose --</option>
@@ -823,9 +824,7 @@ function check_input(e){
             </td>
         </tr>
         <tr>
-            <td>
-                <label>Numbering Pattern:</label>
-            </td>
+            <td>Numbering Pattern:</td>
             <td>
                 <select name="numbering_pattern" size="1" id="numberpattern" onchange="num_pattern()">
                     <option value="" selected>-- please choose --</option>
@@ -870,7 +869,7 @@ function check_input(e){
             </td>
         </tr>
         <tr>
-            <td><label>Begins On: (*)</label></td>
+            <td>Begins On: (*)</td>
             <td>
                 <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="button1" style="cursor: pointer;"  />
                 <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size=13 maxlength=10 id="beginning_date" style="border-width: 0px;">
@@ -978,39 +977,42 @@ function check_input(e){
         </div>
         </td></tr>
     </table>
+</div>
 <!--TMPL_IF Name="history"-->
+<div id="subscription_form_history">
     <h2>History</h2>
-    <table border="0" cellspacing="5" cellpadding="0">
-		<tr>
-          <td><label>Starting date:</label></td>
+    <table>
+        <tr>
+          <td>Starting date:</td>
           <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"> (the date of the 1st subscription)</td>
         </tr>
-		<tr>
-          <td><label>Ending date:</label></td>
+        <tr>
+          <td>Ending date:</td>
           <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->">(if empty : subscription still active)</td>
         </tr>
         <tr>
-            <td><label>Recieved issues</label></td>
+            <td>Recieved issues</td>
             <td><textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></td>
         </tr>
         <tr>
-            <td><label>Missing issues</label></td>
-            <td><textarea name="missinglist" cols="60" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></td>
+            <td>Missing issues</td>
+            <td><textarea name="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea></td>
         </tr>
         <tr>
-            <td><label>Opac's notes</label></td>
+            <td>Opac's notes</td>
             <td><textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></td>
         </tr>
         <tr>
-            <td><label>Librarian notes</label></td>
-            <td><textarea name="librariannote" cols="60" rows="2"><!-- TMPL_VAR name="librariannote" --></textarea></td>
+            <td>Librarian notes</td>
+            <td><textarea name="librariannote" cols="60" rows="5"><!-- TMPL_VAR name="librariannote" --></textarea></td>
         </tr>
     </table>
+</div>
 <!--/TMPL_IF-->
 <!-- TMPL_IF name="mod" -->
-    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" class="button">
+    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w">
 <!-- TMPL_ELSE -->
-    <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" class="button">
+    <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w">
 <!-- /TMPL_IF -->
 </form>
 </div>

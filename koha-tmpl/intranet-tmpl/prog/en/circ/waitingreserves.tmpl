@@ -7,7 +7,7 @@
 <h1>Circulation: Branch Reserves</h1>
 
 <div id="mainbloc">
-        <h1 class="circulation">Reserves of your library the : <!-- TMPL_VAR NAME="show_date" --></h1>
+        <h2 class="circulation">Reserves of your library the : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
                 <div>
                                 <h2>Reserve find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
@@ -77,7 +77,7 @@
                         <!-- /TMPL_LOOP -->
                 </table>
                 <!-- TMPL_ELSE -->
-                    <b>No reserve found.</b>
+                    <p><b>No reserve found.</b></p>
                 <!-- /TMPL_IF -->
         </div>
         <!-- /TMPL_UNLESS -->

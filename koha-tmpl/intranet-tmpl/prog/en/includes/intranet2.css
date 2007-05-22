@@ -1,18 +1,31 @@
 body {
     font-family : Verdana, Geneva, Arial, sans-serif;
     font-size : .9em;
-    background-color:white;
+    color:#494949;
+    background: url( /intranet-tmpl/prog/images/css_header.png );
+    background-repeat:repeat-x;
+    background-color:#EDF5FA;
 }
 
+h1 {
+    margin:0px;
+}
 h2 {
     display:block;
     clear:left;
-/*     float:none; */
+    margin:0px 0px 10px 10px;
 }
+
+h3 {
+    display:block;
+    clear:left;
+    margin:0px 0px 0px 10px;
+}
+
 table {
     border-collapse : inherit;
     border : 1px solid #CCCCCC;
-    margin : 1em 0;
+    margin : 1em 0 1em 20px;
     border-collapse:collapse;
 }
 
@@ -41,7 +54,7 @@ th[scope=row] {
 }
 
 p {
-    margin:0px 0px 0px 0px;
+    margin:0px 0px 0px 20px;
 }
 input {
     font-size:0.9em;
@@ -51,13 +64,23 @@ select {
     font-size:0.9em;
 }
 
+fieldset {
+        border : 1px solid #bbb;
+        display: inline;
+        vertical-align: top;
+}
+
 input[type=submit], input[type=button], input[type=reset] {
-    background: url( /intranet-tmpl/prog/images/fade-butt.png );
-    border: 3px double #999;
-    border-left-color: #ccc;
-    border-top-color: #ccc;
-    color: #333;
-    padding: 0.25em;
+    border:0px;
+    color: #0072b9;
+    font-weight:bold;
+    background: url( /intranet-tmpl/prog/images/bg-tab.png );
+    font-size : 0.8em;
+    padding:3px;
+    text-decoration:none;
+    display:inline;
+    cursor:pointer;
+    margin-left:20px;
 }
 
 label {
@@ -72,6 +95,15 @@ label {
 
 p {
 clear:left;
+}
+
+a {
+    text-decoration:none;
+    color:#027ac6;
+}
+a:hover {
+    text-decoration:underline;
+    color:#0072b9;
 }
 .searchresults table tr:hover{
     background-color: #CCFFFF;
@@ -155,20 +187,18 @@ legend {
 
 /* the Koha logo (top left) */
 #kohalogo {
-    position:absolute;
+    position:fixed;
     left:20px;
     top:20px;
 }
-
 /* MAIN MENU STYLES */
 #mainmenu {
     display:block;
     position:fixed;
-/*     float:left; */
     font-weight : normal;
+    margin-top:20px;
     margin-right: 5px;
     padding-right: 5px;
-    border-right:1px solid black;
     font-size:0.9em;
 }
 
@@ -178,7 +208,7 @@ legend {
     padding-left :5px;
     text-decoration:none;
     font-weight:bold;
-    color:black;
+    color:#027ac6;
 }
 
 
@@ -188,7 +218,7 @@ legend {
     padding-left :5px;
     text-decoration:none;
     font-weight:bold;
-    background-color:#6699CC;
+    background-color:#027ac6;
     color:white;
 }
 
@@ -198,7 +228,7 @@ legend {
     padding-left :5px;
     text-decoration:none;
     font-weight:normal;
-    color:black;
+    color:#027ac6;
 }
 
 #mainmenu ul a:hover {
@@ -207,7 +237,7 @@ legend {
     padding-left :5px;
     text-decoration:none;
     font-weight:normal;
-    background-color:#6699CC;
+    background-color:#027ac6;
     color:white;
 }
 
@@ -216,6 +246,7 @@ legend {
     padding-left:20px;
     margin-bottom:0px;
     margin-top:0px;
+    color:#027ac6;
 }
 
 #mainmenu li {
@@ -224,107 +255,120 @@ legend {
     margin-left:0px;
     margin-bottom:0px;
     margin-top:0px;
+    color:#027ac6;
 }
 
 #mainmenu label {
     width:4em;
 }
 
+#mainmenu h3 {
+    color:white;
+    font-size:1.2em;
+    margin:10px 0px 10px 0px ;
+}
+
+#mainmenu input {
+    border:0px;
+    border-bottom:1px solid #027ac6;
+}
+#mainmenu input[type=submit], input[type=button], input[type=reset] {
+    margin-left:0px;
+    border-bottom:0px;
+}
+
+
 /* submenus styles */
 #submenu {
-    margin-left:25%;
+    position:absolute;
+    top:10px;
+    left:220px;
 }
 
 #submenu a {
     margin:5px;
     text-decoration:none;
-    color:#6699CC;
+    color:white;
 }
 
 #submenu a:hover {
     margin:5px;
-    background-color:#6699CC;
-    color:white;
+    background-color:white;
+    color:#027ac6;
 }
 
 /*Action button*/
 #action {
-    /*float:right;*/
+    float:right;
 }
 
 #action a {
-    background-color: #6699CC;
-    color:white;
+    color: #0072b9;
+    font-weight:bold;
+    background: url( /intranet-tmpl/prog/images/bg-tab.png );
     font-size : 0.8em;
-    border: 2px outset;
-    font-weight : bold;
-    margin:5px 0px 0px 0px;
     padding:3px;
+    margin-bottom:2px;
     text-decoration:none;
-    display:inline;
-}
-
-#action a:hover {
-    border: 2px inset;
-    color: #6699CC;
-    background-color:white;
+    display:block;
 }
 
 /*edit action*/
 #action .edit {
-	display:inline;
-	margin-right:5px;
+    display:inline;
+    margin-bottom:10px;
 }
 
 #action .edit a {
-    background-color : #6699CC;
+    background:none;
+    background-color : #0072b9;
     color : white;
-    margin-top: 1px;
 }
 
 #action .edit a:hover {
-    border: 2px inset;
-    color: #6699CC;
-    background-color:white;
+    cursor:pointer;
 }
 
 #action .view {
 	display:inline;
-	margin-right:5px;
+	margin-bottom:5px;
 }
 
 #action .view a {
-    background-color : #CECEFF;
+    background:none;
+    background-color : #5ab5ee;
     color : white;
     margin-top: 1px;
 }
 
 #action .view a:hover {
-    border: 2px inset;
-    color: #CECEFF;
-    background-color:white;
+    cursor:pointer;
 }
 
 #action .others {
-	display:inline;
-	margin-right:5px;
+    display:inline;
+    margin-bottom:5px;
 }
 
 #action .others a {
-    background-color : #6699AA;
+    background:none;
+    background-color : #2385C2;
     color : white;
     margin-top: 1px;
 }
 
 #action .others a:hover {
-    border: 2px inset;
-    color: #6699AA;
-    background-color:white;
+    cursor:pointer;
 }
 
 /* Main body style */
 #main {
-    margin-left:25%;
+    margin-left:220px;
+    margin-top:75px;
+    padding:5px;
+    padding-bottom:100px;
+    background-color:white;
+    border:1px solid #bbb;
 }
 
 /* facets bloc */
@@ -346,19 +390,6 @@ legend {
 #facets dd {
     border:1px solid #CCCCCC;
 }
-/* bulkedit bloc */
-/*#bulkedit {
-    margin-top: 15px;
-    margin-left: 15px;
-    border:1px solid #CCCCCC;
-}
-
-#bulkedit h2 {
-    background-color:#CCCCCC;
-    margin:0px;
-    padding:0px;
-    font-size:1.1em;
-}*/
 
 /* the USER information block */
 #librarian_information {
@@ -391,7 +422,9 @@ legend {
 }
 
 #onlinehelp {
-    float:right;
+    position:absolute;
+    top:0px;
+    right:10px;
 }
 
 /* the design of the INactives tab buttons (all other tabs) */
@@ -427,14 +460,12 @@ legend {
 /* styles for the 11 content blocks */
 /* the property for hidden tabs */
 .content_hidden {
-    height:0px; /* you propably don't need to change this one */
     visibility:hidden; /* you propably don't need to change this one */
     display:none;
 }
 
 /* the property for the displayed tab */
 .content_visible {
-    height:0px; /* you propably don't need to change this one */
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
@@ -481,11 +512,4 @@ a.info:hover span {
     text-align: center;
     color: white;
     padding: 2px;
-}
-
-fieldset {
-        border : 1px solid #374b73;
-        display: inline;
-        float:left;
-        vertical-align:top;
 }

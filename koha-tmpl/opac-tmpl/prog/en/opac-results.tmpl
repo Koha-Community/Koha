@@ -128,12 +128,12 @@ Error :
         <!-- RESORT END -->
 </form>
         <!-- ######### -->
-        
         <!-- FACETS START -->
         <!-- TMPL_IF NAME="opacfacets" -->
-        <div id="facets" style="display:inline;" >
-            <h2>Refine Your Search</h2>
-            <ul>
+        <div id="facets" >
+            <dl>
+            <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Refine Your Search</dt>
+            <dd id="facets_list" style="display:none">
                 <!-- TMPL_LOOP NAME="facets_loop" -->
                 <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
                     <ul>
@@ -155,6 +155,7 @@ Error :
                 </li>
                 <!-- /TMPL_LOOP -->
             </ul>
+            </dd>
         </div>
         <!-- /TMPL_IF -->
         <!-- FACETS END -->
@@ -236,7 +237,7 @@ Error :
                         </p>
                         <!-- /TMPL_IF -->
                     </td>
-                    <td style="white-space: nowrap">
+                    <td>
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
                             <!-- TMPL_LOOP NAME="items_loop" -->

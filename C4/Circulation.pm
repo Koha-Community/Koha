@@ -1193,7 +1193,7 @@ sub AddReturn {
     #     new op dev : if the book returned in an other branch update the holding branch
     
     # update issues, thereby returning book (should push this out into another subroutine
-        $borrower = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+        $borrower = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
     
     # case of a return of document (deal with issues and holdingbranch)
     
@@ -1217,7 +1217,7 @@ sub AddReturn {
                     $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
             }
         ModDateLastSeen( $iteminformation->{'itemnumber'} );
-        ($borrower) = GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+        ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
         
         # fix up the accounts.....
         if ( $iteminformation->{'itemlost'} ) {
@@ -1260,7 +1260,7 @@ sub AddReturn {
     # find reserves.....
     #     if we don't have a reserve with the status W, we launch the Checkreserves routine
         my ( $resfound, $resrec ) =
-        CheckReserves( $iteminformation->{'itemnumber'} );
+        C4::Reserves::CheckReserves( $iteminformation->{'itemnumber'} );
         if ($resfound) {
             $resrec->{'ResFound'}   = $resfound;
             $messages->{'ResFound'} = $resrec;

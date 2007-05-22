@@ -437,7 +437,7 @@ sub ModItemTransfer {
     #new entry in branchtransfers....
     my $sth = $dbh->prepare(
         "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
-        VALUES (?, ?, now(), $?)");
+        VALUES (?, ?, now(), ?)");
     $sth->execute($itemnumber, $frombranch, $tobranch);
     #update holdingbranch in items .....
      $sth= $dbh->prepare(
@@ -3920,6 +3920,14 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.208  2007/05/22 09:13:54  tipaul
+# Bugfixes & improvements (various and minor) :
+# - updating templates to have tmpl_process3.pl running without any errors
+# - adding a drupal-like css for prog templates (with 3 small images)
+# - fixing some bugs in circulation & other scripts
+# - updating french translation
+# - fixing some typos in templates
+#
 # Revision 1.207  2007/05/22 08:51:19  hdl
 # Changing GetMarcStructure signature.
 # Deleting first parameter $dbh

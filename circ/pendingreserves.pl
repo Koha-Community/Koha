@@ -25,7 +25,6 @@ use C4::Output;
 use CGI;
 use C4::Auth;
 use C4::Date;
-use C4::Interface::CGI::Output;
 
 my $input = new CGI;
 my $order = $input->param('order');

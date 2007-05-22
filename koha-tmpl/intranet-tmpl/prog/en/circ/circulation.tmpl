@@ -756,13 +756,11 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <td><!-- TMPL_VAR NAME="classification" --></td>
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
-        <input type="checkbox"
-                name="items[]"
-                value="<!-- TMPL_VAR NAME="itemnumber" -->"
-    <!-- TMPL_IF NAME="od" -->
-            checked="checked"
-    <!-- /TMPL_IF -->
-        />
+        <!-- TMPL_IF NAME="od" -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked"/>
+        <!-- TMPL_ELSE -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <!-- /TMPL_IF -->
         <input type="checkbox"
                 name="all_items[]"
                 value="<!-- TMPL_VAR NAME="itemnumber" -->"
@@ -808,19 +806,12 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <td><!-- TMPL_VAR NAME="classification" --></td>
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
-        <input type="checkbox"
-                name="items[]"
-                value="<!-- TMPL_VAR NAME="itemnumber" -->"
-    <!-- TMPL_IF NAME="od" -->
-            checked="checked"
-    <!-- /TMPL_IF -->
-        />
-        <input type="checkbox"
-                name="all_items[]"
-                value="<!-- TMPL_VAR NAME="itemnumber" -->"
-            checked="checked"
-                style="display: none;"
-        />
+        <!-- TMPL_IF NAME="od" -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+        <!-- TMPL_ELSE -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <!-- /TMPL_IF -->
+        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
     </tr>
     <!-- /TMPL_LOOP --> <!-- previssues -->
@@ -865,7 +856,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
     *  This function activate the numlayer div.
     */
     function active(numlayer){
-        for (i=0; i &lt;= 1 ; i++ ) {
+        for (i=0; i <= 1 ; i++ ) {
             var tab;
             try{
                 tab = document.getElementById(i+'XX');

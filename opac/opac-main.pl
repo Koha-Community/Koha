@@ -62,7 +62,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if($limit) {
     my $recentacquiloop = GetRecentAcqui($limit);
-    warn Data::Dumper::Dumper($recentacquiloop);
+#     warn Data::Dumper::Dumper($recentacquiloop);
     $template->param(
         recentacquiloop => $recentacquiloop,
     );

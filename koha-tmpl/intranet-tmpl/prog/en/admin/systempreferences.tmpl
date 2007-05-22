@@ -77,7 +77,7 @@
             <tr><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label></td><td><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td>
             <!-- TMPL_ELSE --><td><label for="variable">Variable</label></td><td><input type="text" name="variable" id="variable" size="60" /></td><!-- /TMPL_IF --></tr>
             <tr><td><label for="value">Value</label></td><td><!-- TMPL_IF NAME="type-free" -->
-                    <textarea id="value" name="value"cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+                    <textarea id="value" name="value" cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type-textarea" -->
                     <textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
@@ -85,7 +85,11 @@
                 <!-- TMPL_IF NAME="type-choice" -->
                     <select name="value" id="value">
                         <!-- TMPL_LOOP NAME="options" -->
-                            <option value="<!-- TMPL_VAR NAME="option" -->"<!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="option" --></option>
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR NAME="option" -->" selected="selected">
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR NAME="option" -->">
+                            <!-- /TMPL_IF --><!-- TMPL_VAR NAME="option" --></option>
                         <!-- /TMPL_LOOP -->
                     </select>
                 <!-- /TMPL_IF -->

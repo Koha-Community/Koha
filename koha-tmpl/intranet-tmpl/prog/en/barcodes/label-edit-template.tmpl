@@ -48,9 +48,11 @@ Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_d
 
 Units: <select name="units">
     <!-- TMPL_LOOP NAME="units" -->
-        <option value="<!-- TMPL_VAR NAME="unit" -->"
-            <!-- TMPL_IF NAME="selected" --> selected  <!-- /TMPL_IF -->
-        ><!-- TMPL_VAR NAME="desc" --></option>
+        <!-- TMPL_IF NAME="selected" -->
+            <option value="<!-- TMPL_VAR NAME="unit" -->" selected >
+        <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="unit" -->">
+        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="desc" --></option>
     <!-- /TMPL_LOOP -->
 </select>
 

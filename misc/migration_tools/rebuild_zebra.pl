@@ -14,7 +14,7 @@ use strict;
 $|=1; # flushes output
 
 # limit for database dumping
-my $limit;# = "LIMIT 500";
+my $limit;# = "LIMIT 1000";
 my $directory;
 my $skip_export;
 my $keep_export;
@@ -38,8 +38,8 @@ my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory
 
 my $kohadir = C4::Context->config('intranetdir');
 my $dbh = C4::Context->dbh;
-my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField($dbh,"biblio.biblionumber","");
-my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField($dbh,"biblioitems.biblioitemnumber","");
+my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
+my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
 print "some informations\n";
 print "=================\n";
@@ -183,7 +183,7 @@ if ($authorities) {
         }
         $created_dir_or_file++;
     }
-    unless (-f "$authorityserverdir/tab/sort-string-utf_french.chr") {
+    unless (-f "$authorityserverdir/tab/sort-string-utf.chr") {
         system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
@@ -290,7 +290,7 @@ rank:rank-1
         $sth->execute();
         my $i=0;
         while (my ($authid) = $sth->fetchrow) {
-            my $record = AUTHgetauthority($dbh,$authid);
+            my $record = GetAuthority($authid);
             print ".";
             print "\r$i" unless ($i++ %100);
             print OUT $record->as_usmarc();
@@ -304,7 +304,6 @@ rank:rank-1
     print "====================\n";
     print "REINDEXING zebra\n";
     print "====================\n";
-warn ">>>>>>>>>>>>>>>".C4::Context->zebraconfig('authorityserver')->{config};
     system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities init") if ($reset);
     system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities update $directory/authorities");
     system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities commit");
@@ -373,7 +372,7 @@ if ($biblios) {
         }
         $created_dir_or_file++;
     }
-    unless (-f "$biblioserverdir/tab/sort-string-utf_french.chr") {
+    unless (-f "$biblioserverdir/tab/sort-string-utf.chr") {
         system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
@@ -481,8 +480,8 @@ rank:rank-1
         my $i=0;
         while (my ($biblionumber) = $sth->fetchrow) {
             my $record = GetMarcBiblio($biblionumber);
-            warn $record->as_formatted;
-die if $record->subfield('090','9') eq 11;
+#             warn $record->as_formatted;
+# die if $record->subfield('090','9') eq 11;
     #         print $record;
             # check that biblionumber & biblioitemnumber are stored in the MARC record, otherwise, add them & update the biblioitems.marcxml data.
             my $record_correct=1;
@@ -558,7 +557,6 @@ die if $record->subfield('090','9') eq 11;
     print "====================\n";
     print "REINDEXING zebra\n";
     print "====================\n";
-warn ">>>>>>>>>>>>>".C4::Context->zebraconfig('biblioserver')->{config};
     system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios init") if ($reset);
     system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios update $directory/biblios");
     system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit");

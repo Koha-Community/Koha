@@ -136,7 +136,7 @@ function irregularity(){
 -->
 </script>
     <h1>Subscription #<!--TMPL_VAR name="subscriptionid"--></h1>
-    <!--TMPL_IF Name="abouttoexpire"--><div class="problem">Subscription is by its end.<br />It should be renewed now.</div><!--/TMPL_IF-->
+    <!--TMPL_IF Name="abouttoexpire"--><div class="problem">Subscription is by its end. It should be renewed now.</div><!--/TMPL_IF-->
     <div id="action">
         <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
         <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>
@@ -154,11 +154,10 @@ function irregularity(){
             </a>
         <!-- /TMPL_UNLESS -->
     </div>
-    <br />
-    <fieldset>
-        <legend>Subscription information</legend>
+    <div id="subscription_info">
+        <h2>Subscription information</h2>
         <p><label>Librarian identity:</label> <!-- TMPL_VAR name="librarian" --></p>
-        <p><label>Supplier:</label> <a href="/cgi-bin/koha/acqui/supplier.pl?id=<!-- TMPL_VAR name="aqbooksellerid"-->"><!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</a></p>
+        <p><label>Supplier:</label> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="aqbooksellerid"-->"><!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</a></p>
         <p><label>Biblio:</label> <i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="bibliotitle" --></a></p><br />
 <!-- TMPL_IF name="branchcode" --><p><label>Branch :</label> <!-- TMPL_VAR name="branchcode" -->&nbsp;</p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="callnumber" --><p><label>Call Number:</label> <!-- TMPL_VAR name="callnumber" -->&nbsp;</p><!-- /TMPL_IF -->
@@ -166,10 +165,9 @@ function irregularity(){
         <!-- TMPL_IF name="notes" --><p><label>Notes:</label> <!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="internalnotes" --><p><label>Management Notes:</label> <!-- TMPL_VAR name="internalnotes" --></p><!-- /TMPL_IF -->
         
-    </fieldset>
-    <form name="f">
-    <fieldset>
-        <legend>Planning</legend>
+    </div>
+    <div id="subscription_planning">
+        <h2>Planning</h2>
             <p><label>Beginnning date:</label> <!-- TMPL_VAR name="startdate" -->
             </p>
             <p><label>Frequency (*):</label>
@@ -206,7 +204,12 @@ function irregularity(){
                 <!--TMPL_IF name="periodicity11" -->
                         1/2 years
                 <!-- /TMPL_IF -->
-              Manual history : <input type="checkbox" <!--TMPL_IF Name="manualhistory"-->checked<!--/TMPL_IF--> disabled>
+              Manual history :
+                <!--TMPL_IF Name="manualhistory"-->
+                    <input type="checkbox" checked disabled>
+                <!-- TMPL_ELSE -->
+                    <input type="checkbox" disabled>
+                <!--/TMPL_IF-->
             </p>
             <p><label>Number Pattern:</label>
                 <!-- TMPL_IF name="numberpattern1" -->
@@ -231,16 +234,7 @@ function irregularity(){
                     None of the above
                 <!-- /TMPL_IF -->
             </p>
-            <table cellpadding="0" cellspacing="0">
-            <tr><td>&nbsp;</td>
-                <td align="right"><input type="text" name="xfield" style="border:0px solid #FFFFFF; text-align:center;" /></td>
-            <!--TMPL_IF NAME="lastvalue2"-->
-                <td align="right"><input type="text" name="yfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
-            <!--/TMPL_IF-->
-            <!--TMPL_IF NAME="lastvalue3"-->
-                <td align="right"><input type="text" name="zfield" style="border:0px solid #FFFFFF; text-align:center;"></td>
-            <!--/TMPL_IF-->
-            </tr>
+            <table>
             <tr><td><p><label>Starting with:</label></p></td>
                 <td align="center"><!--TMPL_VAR NAME="lastvalue1"--></td>
             <!--TMPL_IF NAME="lastvalue2"-->
@@ -276,112 +270,114 @@ function irregularity(){
             <p><label>Begins on:</label>
                 <!--TMPL_VAR name="startdate" -->
             </p>
-            </form>
         <!-- TMPL_IF name="numberlength" --><p><label>Number of issues:</label> <!-- TMPL_VAR name="numberlength" --></p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="weeklength" --><p><label>Number of weeks:</label> <!-- TMPL_VAR name="weeklength" --></p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="monthlength" --><p><label>Number of months:</label> <!-- TMPL_VAR name="monthlength" --></p><!-- /TMPL_IF -->
-    </fieldset>
-    <h2>Numbering calculation</h2>
-    <p><label>Numbering formula:</label> <!-- TMPL_VAR name="numberingmethod" --></p>
-    <table>
+    </div>
+    <div id="subscription_numbering">
+        <h2>Numbering calculation</h2>
+        <p><label>Numbering formula:</label> <!-- TMPL_VAR name="numberingmethod" --></p>
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                <th>X</th>
+                <th>Y</th>
+                <th>Z</th>
+                </tr>
+                <tr>
+                    <td>Add</td>
+                    <td>
+                        <!-- TMPL_VAR name="add1" -->
+                    </td>
+                    <td>
+                        <!-- TMPL_VAR name="add2" -->
+                    </td>
+                    <td>
+                        <!-- TMPL_VAR name="add3" -->
+                    </td>
+                </tr>
+                <tr>
+                    <td>once every</td>
+                    <td><!-- TMPL_VAR name="every1" --></td>
+                    <td><!-- TMPL_VAR name="every2" --></td>
+                    <td><!-- TMPL_VAR name="every3" --></td>
+                </tr>
+                <tr>
+                    <td>When more than</td>
+                    <td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
+                        <i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
+                    <td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
+                        <i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
+                    <td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
+                        <i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
+                </tr>
+                <tr>
+                    <td>Set back to</td>
+                    <td><!-- TMPL_VAR name="setto1" --></td>
+                    <td><!-- TMPL_VAR name="setto2" --></td>
+                    <td><!-- TMPL_VAR name="setto3" --></td>
+                </tr>
+                <tr>
+                    <td>
+                            Last value
+                    </td>
+                    <td><!-- TMPL_VAR name="lastvalue1" --></td>
+                    <td><!-- TMPL_VAR name="lastvalue2" --></td>
+                    <td><!-- TMPL_VAR name="lastvalue3" --></td>
+                </tr>
+            </table>
+    </div>
+    <div id="subscription_issues">
+        <h2>Serial issues</h2>
+        <table>
         <tr>
-            <th>&nbsp;</th>
-            <th>X</th>
-            <th>Y</th>
-            <th>Z</th>
-            </tr>
-            <tr>
-                <td>Add</td>
-                <td>
-                    <!-- TMPL_VAR name="add1" -->
-                </td>
-                <td>
-                    <!-- TMPL_VAR name="add2" -->
-                </td>
-                <td>
-                    <!-- TMPL_VAR name="add3" -->
-                </td>
-            </tr>
-            <tr>
-                <td>once every</td>
-                <td><!-- TMPL_VAR name="every1" --></td>
-                <td><!-- TMPL_VAR name="every2" --></td>
-                <td><!-- TMPL_VAR name="every3" --></td>
-            </tr>
-            <tr>
-                <td>When more than</td>
-                <td><!-- TMPL_VAR name="whenmorethan1" --> <!-- TMPL_IF name="innerloop1" --><br/>
-                    <i>(is <!-- TMPL_VAR name="innerloop1" -->)</i><!-- /TMPL_IF --></td>
-                <td><!-- TMPL_VAR name="whenmorethan2" --> <!-- TMPL_IF name="innerloop2" --><br/>
-                    <i>(is <!-- TMPL_VAR name="innerloop2" -->)</i><!-- /TMPL_IF --></td>
-                <td><!-- TMPL_VAR name="whenmorethan3" --> <!-- TMPL_IF name="innerloop3" --><br/>
-                    <i>(is <!-- TMPL_VAR name="innerloop3" -->)</i><!-- /TMPL_IF --></td>
-            </tr>
-            <tr>
-                <td>Set back to</td>
-                <td><!-- TMPL_VAR name="setto1" --></td>
-                <td><!-- TMPL_VAR name="setto2" --></td>
-                <td><!-- TMPL_VAR name="setto3" --></td>
-            </tr>
+            <th>Issue number</th>
+            <th>Planned date</th>
+            <th>Status</th>
+        </tr>
+        <!-- TMPL_LOOP name="serialslist" -->
             <tr>
                 <td>
-                        Last value
+                    <!-- TMPL_VAR name="serialseq" -->
                 </td>
-                <td><!-- TMPL_VAR name="lastvalue1" --></td>
-                <td><!-- TMPL_VAR name="lastvalue2" --></td>
-                <td><!-- TMPL_VAR name="lastvalue3" --></td>
+                <td>
+                    <!-- TMPL_VAR name="planneddate" -->
+                </td>
+                <td>
+                        <!--TMPL_IF name="status1" -->
+                            Waited
+                        <!-- /TMPL_IF -->
+                        <!--TMPL_IF name="status2" -->
+                            Arrived
+                        <!-- /TMPL_IF -->
+                        <!--TMPL_IF name="status3" -->
+                            Late
+                        <!-- /TMPL_IF -->
+                        <!--TMPL_IF name="status4" -->
+                            Missing
+                        <!-- /TMPL_IF -->
+                </td>
             </tr>
+        <!-- /TMPL_LOOP -->
         </table>
-</fieldset>
-<fieldset>
-    <legend>Serial issues</legend>
-    <table cellpadding="0" cellspacing="0">
-    <tr>
-        <th>Issue number</th>
-        <th>Planned date</th>
-        <th>Status</th>
-    </tr>
-    <!-- TMPL_LOOP name="serialslist" -->
+    </div>
+    <div id="subscription_summary">
+        <h2>Subscription summary</h2>
+        <table cellpadding="0" cellspacing="0">
         <tr>
-            <td>
-                <!-- TMPL_VAR name="serialseq" -->
-            </td>
-            <td>
-                <!-- TMPL_VAR name="planneddate" -->
-            </td>
-            <td>
-                    <!--TMPL_IF name="status1" -->
-                        Waited
-                    <!-- /TMPL_IF -->
-                    <!--TMPL_IF name="status2" -->
-                        Arrived
-                    <!-- /TMPL_IF -->
-                    <!--TMPL_IF name="status3" -->
-                        Late
-                    <!-- /TMPL_IF -->
-                    <!--TMPL_IF name="status4" -->
-                        Missing
-                    <!-- /TMPL_IF -->
-            </td>
-        </tr>
-    <!-- /TMPL_LOOP -->
-    </table>
-	<h3>Subscription summary</h3>
-      <table cellpadding="0" cellspacing="0">
-        <tr>
-          <td><label>Start Date :</label></td>
-          <td> <!-- TMPL_VAR name="histstartdate" --> </td>
+            <td><label>Start Date :</label></td>
+            <td> <!-- TMPL_VAR name="histstartdate" --> </td>
         </tr>
         <tr>
-          <td><label>End Date :</label></td>
-          <td> <!-- TMPL_VAR name="enddate" --></td>
+            <td><label>End Date :</label></td>
+            <td> <!-- TMPL_VAR name="enddate" --></td>
         </tr>
-		<tr><td><label>Recieved issues</label></td><td><!-- TMPL_VAR name="recievedlist" --></td></tr>
-		<tr><td><label>Missing issues</label></td><td><!-- TMPL_VAR name="missinglist" --></td></tr>
-		<tr><td><label>Librarian's note</label></td><td><!-- TMPL_VAR name="librariannote" --></td></tr>
-		<tr><td><label>Opac's note</label></td><td><!-- TMPL_VAR name="opacnote" --></td></tr>
-      </table>
-</fieldset>
+                <tr><td><label>Recieved issues</label></td><td><!-- TMPL_VAR name="recievedlist" --></td></tr>
+                <tr><td><label>Missing issues</label></td><td><!-- TMPL_VAR name="missinglist" --></td></tr>
+                <tr><td><label>Librarian's note</label></td><td><!-- TMPL_VAR name="librariannote" --></td></tr>
+                <tr><td><label>Opac's note</label></td><td><!-- TMPL_VAR name="opacnote" --></td></tr>
+        </table>
+    </div>
 </div>
 <script type="text/javascript">
 function _(s) { return s } // dummy function for gettext

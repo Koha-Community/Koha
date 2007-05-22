@@ -257,7 +257,7 @@
                 You Searched for <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->
 
-        <form action="<TMP_VAR NAME="script_name">" method="post">
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                 <input type="text" name="description" value="<!-- TMPL_VAR NAME=searchfield -->">
                 <input type="reset" name="reset" value="clr">
         </form>
@@ -292,7 +292,7 @@
                         <td><!-- TMPL_VAR NAME="issuelimit" --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
                         <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></t$                </tr>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td></tr>
                 <!-- /TMPL_LOOP -->
 
         </table>

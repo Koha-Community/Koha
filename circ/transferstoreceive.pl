@@ -70,12 +70,12 @@ my @branchesloop;
 foreach my $br ( keys %$branches ) {
     my @transferloop;
     my %branchloop;
-    $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
-    $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
     my @gettransfers =
       GetTransfersFromTo( $branches->{$br}->{'branchcode'}, $default );
 
     if (@gettransfers) {
+        $branchloop{'branchname'} = $branches->{$br}->{'branchname'};
+        $branchloop{'branchcode'} = $branches->{$br}->{'branchcode'};
         foreach my $num (@gettransfers) {
             my %getransf;
 
@@ -125,13 +125,7 @@ foreach my $br ( keys %$branches ) {
       # 		If we have a return of reservloop we put it in the branchloop sequence
         $branchloop{'reserv'} = \@transferloop;
     }
-    else {
-
-# 	if we don't have a retrun from reservestobranch we unset branchname and branchcode
-        $branchloop{'branchname'} = 0;
-        $branchloop{'branchcode'} = 0;
-    }
-    push( @branchesloop, \%branchloop );
+    push( @branchesloop, \%branchloop ) if %branchloop;
 }
 
 $template->param(

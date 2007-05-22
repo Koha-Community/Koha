@@ -10,52 +10,61 @@
 
 
 <div id="mainbloc">
-	<h1>Transfers to do <!-- TMPL_VAR NAME="show_date" --></h1>
-	<div id="resultlist">
-	<!-- TMPL_LOOP NAME="branchesloop" -->
-		<!-- TMPL_IF NAME="branchcode" -->
-		<table>
-		<tr>
-			<th class="circulation" colspan="5">Reserves in wait to the library : <!-- TMPL_VAR NAME="branchname" --> </th>
-		</tr>
-		<tr>
-			<th class="circulation">Date of reserve</th>
-			<th class="circulation">Title</th>
-			<th class="circulation">Borrower</th>
-			<th class="circulation">Localisation</th>
-			<th class="circulation">Action</th>
-		</tr>
-		<!-- TMPL_LOOP NAME="reserv" -->
-			<tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
-				<td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve over <!-- /TMPL_IF --></td>
-				<td>
-					<p>
-						<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
-						&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
-						<br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-					</p>
-				</td>
-				<td>
-					<p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
-				<!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
-	<!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
-					</p>
-				</td>
-				<td><p><!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
-				<td>
-				<form name="dotransfer" action="waitingreservestransfers.pl" method="post">
-						<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-						<input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->">
-						<input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="branchcode" -->">
-				<input type="submit" value="Transfer this document">
-				</form>
-				</td>	
-			</tr>
-		<!-- /TMPL_LOOP -->	
-		</table>
-		<br><br>
-		<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
-	</div>
+    <h1>Transfers to do <!-- TMPL_VAR NAME="show_date" --></h1>
+    <!-- TMPL_IF name="branchesloop" -->
+    <div id="resultlist">
+        <!-- TMPL_LOOP NAME="branchesloop" -->
+            <!-- TMPL_IF NAME="branchcode" -->
+            <table>
+            <tr>
+                <th colspan="5">Reserves in wait to the library : <!-- TMPL_VAR NAME="branchname" --> </th>
+            </tr>
+            <tr>
+                <th>Date of reserve</th>
+                <th>Title</th>
+                <th>Borrower</th>
+                <th>Localisation</th>
+                <th>Action</th>
+            </tr>
+            <!-- TMPL_LOOP NAME="reserv" -->
+                <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
+                    <td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve over <!-- /TMPL_IF --></td>
+                    <td>
+                            <p>
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                                    &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
+                                    <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
+                            </p>
+                    </td>
+                    <td>
+                        <p>
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br />
+                            <!-- TMPL_VAR NAME="borrowerphone" --><br />
+                            <!-- TMPL_IF NAME="borrowermail" -->
+                                <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+                                    <!-- TMPL_VAR NAME="borrowermail" -->
+                                </a>
+                            <!--/TMPL_IF-->
+                        </p>
+                    </td>
+                    <td><p><!-- TMPL_VAR NAME="holdingbranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
+                    <td>
+                    <form name="dotransfer" action="waitingreservestransfers.pl" method="post">
+                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
+                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="branchcode" -->" />
+                    <input type="submit" value="Transfer this document" />
+                    </form>
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+            </table>
+            <br><br>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    <!-- TMPL_ELSE -->
+        <p>No transfers to do</p>
+    <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

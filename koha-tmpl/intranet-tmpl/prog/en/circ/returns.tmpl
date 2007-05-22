@@ -5,6 +5,8 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
+<h1>Circulation &rsaquo; Returns</h1>
+
 <!-- case of a mistake in transfert loop -->
 <!-- TMPL_IF Name="WrongTransfer" -->
     <h3 class="problem">This item should not be in this library !</h3>
@@ -47,22 +49,15 @@
 <!-- TMPL_IF Name="found" -->
 <!-- case of a reservation found, and display info -->
     <!-- TMPL_IF Name="waiting" -->
-        <h3>Waiting Reserve Found in your library</h3>
-        <table>
-        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
-        <tr>
-            <th>Patron: </th>
-            <td>
-            <ul>
-                <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
-                <li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
-                <li><!-- TMPL_VAR Name="borstraddress" --><br />
-                <!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
-                <li><!-- TMPL_VAR Name="borphone" --></li>
-            </ul>
-            </td>
-        </tr>
-        </table>
+        <h2>Waiting Reserve Found in your library for <!-- TMPL_VAR Name="title" --></h2>
+        <p>Patron: 
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+                <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> (<!-- TMPL_VAR Name="borcnum" -->)
+            </a>
+            , <!-- TMPL_VAR Name="borstraddress" -->
+            <!-- TMPL_VAR NAME="borzip" --> <!-- TMPL_VAR Name="borcity" -->
+            <!-- TMPL_VAR Name="borphone" -->
+        </p>
         <form method="post" action="returns.pl" name="mainform" id="mainform">
             <input type="submit" value="Confirm" />
             <!-- TMPL_LOOP Name="inputloop" -->
@@ -146,30 +141,28 @@
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
         <!-- TMPL_IF Name="transfertodo"-->
-            <h3>Reserve at an other library, transfer to do</h3>
+            <h2>Reserve at an other library, transfer to do</h2>
         <!-- TMPL_ELSE -->
-            <h3>Waiting reserve found in your library</h3>
+            <h2>Waiting Reserve Found in your library</h2>
         <!-- /TMPL_IF -->
-        <table>
-            <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
-            <tr>
-                <th>Patron: </th>
-                <td>
-                    <ul>
-                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borcnum" --></a></li>
-                    <li><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> </li>
-                    <li><!-- TMPL_VAR Name="borstraddress" --><br />
-                    <!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
-                    <li><!-- TMPL_VAR Name="borphone" --></li>
-                    </ul>
-                </td>
-            </tr>
-            <!-- TMPL_IF name="transfertodo" -->
-                <tr><th>Transfer to:</th><td><!-- TMPL_VAR Name="destbranchname" --></td></tr>
-            <!-- /TMPL_IF -->     
-        </table>
+        <p>Title:  <!-- TMPL_VAR Name="title" --></p>
+        <p>Patron: 
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+                <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> (<!-- TMPL_VAR Name="borcnum" -->)
+            </a>
+            , <!-- TMPL_VAR Name="borstraddress" -->
+            <!-- TMPL_VAR NAME="borzip" --> <!-- TMPL_VAR Name="borcity" -->
+            <!-- TMPL_VAR Name="borphone" -->
+        </p>
+        <!-- TMPL_IF name="transfertodo" -->
+            <p>Transfer to: <!-- TMPL_VAR Name="destbranchname" --></p>
+        <!-- /TMPL_IF -->
         <form method="post" action="returns.pl" name="mainform" id="mainform">
-            <input type="submit" value="Confirm" />
+            <!-- TMPL_IF name="transfertodo" -->
+                <input type="submit" value="Confirm reserve and transfer" />
+            <!-- TMPL_ELSE -->
+                <input type="submit" value="Confirm reserve" />
+            <!-- /TMPL_IF -->
             <!-- TMPL_LOOP Name="inputloop" -->
                     <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                     <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -183,7 +176,6 @@
     <!-- /TMPL_IF -->
 
 <!-- TMPL_ELSE -->
-    <h1>Circulation &rsaquo; Returns</h1>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
             <fieldset>
             <legend>Enter item barcode</legend>
@@ -239,7 +231,7 @@
     </table>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF Name="riloop" -->
-    <h2>Returned Items</h2>
+    <h2>Returned items</h2>
     <table>
         <tr>
             <th>Title</th>
