@@ -118,7 +118,13 @@ if($query) {
 my $toggle=0;
 my ($title,$isbn);
 # fill isbn or title, depending on what has been entered
-$isbn=$query if $query =~ /\d/;
+#u must do check on isbn because u can find number in beginning of title
+#check is on isbn legnth 13 for new isbn and 10 for old isbn
+my $querylength=length($query);
+ if ($query =~ /\d/ and ($querylength eq 13 or $querylength eq 10))
+{
+$isbn=$query;
+}
 $title=$query unless $isbn;
 my ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn ) if $query;
 my @breeding_loop = ();
