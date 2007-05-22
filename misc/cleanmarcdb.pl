@@ -42,7 +42,7 @@ my $cleansubfield = $dbh->prepare("delete from marc_subfield_table where tag=? a
 my $cleanword = $dbh->prepare("delete from marc_word where tag=? and subfieldid=?");
 
 # get tags structure
-my $tags = GetMarcStructure($dbh,1);
+my $tags = GetMarcStructure(1);
 foreach my $tag (sort keys(%{$tags})) {
 	foreach my $subfield (sort keys(%{$tags->{$tag}})) {
 		next if $subfield eq "lib";
