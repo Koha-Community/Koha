@@ -1,0 +1,251 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Catalogue <!-- TMPL_VAR NAME="LibraryNameTitle" --> <!-- TMPL_IF Name="viewshelf" -->Contenu de <!-- TMPL_VAR Name="shelfname" --><!-- TMPL_ELSE -->Liste des étagères virtuelles<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<!-- TMPL_INCLUDE NAME="usermenu.inc" -->
+
+<!-- TMPL_IF Name="viewshelf" -->
+
+<h3>Contenu de <!-- TMPL_VAR Name="shelfname" --></h3>
+
+<a class="button" href="/cgi-bin/koha/opac-shelves.pl">Retour aux étagères virtuelles</a>
+
+<!-- TMPL_IF name="manageshelf" -->
+ | <a class="button" href="/cgi-bin/koha/opac-shelves.pl?op=modif&shelf=<!-- TMPL_VAR Name="shelfnumber" -->">
+ Modifier cette étagère</a>
+<!-- /TMPL_IF -->
+
+<form action="/cgi-bin/koha/opac-shelves.pl"
+      method="POST"
+      name="mainform"
+      onsubmit="return checkForm(this);">
+    
+    <!-- TMPL_IF NAME="itemsloop" -->
+    <table>
+        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
+        <input type="hidden" name="modifyshelfcontents" value="1" />
+            <tr>
+                <th>
+                    <a style="color:white;" href="/cgi-bin/koha/opac-shelves.pl" onclick="CheckAll(); return false;">Tout cocher</a>
+                </th>
+                <th>&nbsp;</th>
+                <th>Titre</th>
+                <th>Auteur</th>
+                <th>Cote</th>
+            </tr>
+        <!-- TMPL_LOOP Name="itemsloop" -->
+            <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
+                    <td>
+                        <input type="checkbox" name="MOD-<!-- TMPL_VAR Name="itemnumber" -->" />
+                        <input type="hidden" name="ModBiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+                    </td>
+                    <td>
+                        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+                    </td>
+                    <td>
+                         <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                                        <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                            <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                        </a>
+                                    <!-- TMPL_ELSE -->
+                                        <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                                            <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                            </a>
+                                        <!-- TMPL_ELSE -->
+                                            <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
+                                            </a>
+                                        <!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
+                        </a>
+                    </td>
+                    <td><!-- TMPL_VAR Name="author" --></td>
+                    <td><!-- TMPL_VAR NAME="classification" --></td>
+        </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+    <!-- TMPL_ELSE -->
+    <b>Cette étagère  est vide.</b>
+    <!-- TMPL_UNLESS NAME="itemsloop" -->
+        <input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" />
+        <input type="hidden" name="shelves" value="1" />
+        <input type="submit" class="icon delete" value="Supprimer cette étagère" onclick="return confirmDelete('Are you sure you want to delete this shelf?')">
+        <!-- /TMPL_UNLESS -->
+        <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="manageshelf" -->
+        <!-- TMPL_IF NAME="itemsloop" -->
+            <h2>Avec les éléments cochés</h2>
+            <p>
+            <label for="check-remove">retirer</label>
+            <input id="check-remove"
+                   type="checkbox"
+                   name="remove"
+                   />
+            </p>
+            <p>
+            <label for="check-addbb">Ajouter à mon panier</label>
+            <input id="check-addbb"
+                   type="checkbox"
+                   name="addToBookBag"
+                   />
+            </p>
+            <p><input type="submit"
+                   value=" GO "
+                   />
+            </p>
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+</form>
+    <!-- TMPL_IF name="manageshelf" -->
+
+<br />
+<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
+    <table>
+        <tr><th colspan="2">Ajouter un document à cette étagère par Code à barres</th></tr>
+        <tr>
+            <td>
+                <label for="addbarcode">Code à barres :</label>
+            </td>
+            <td>
+                <input name="addbarcode" type="text" id="addbarcode" size="14" maxlength="14" />
+                <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
+                <input type="hidden" name="modifyshelfcontents" value="1" />
+                <input type="submit" value=" Add " />
+            </td>
+        </tr>
+    </table>
+</form>
+<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF Name="shelves" -->
+        <!-- TMPL_IF Name="status1" -->
+            <p class="error"><!-- TMPL_VAR Name="string1" --></p>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_LOOP Name="paramsloop" -->
+            <!-- TMPL_IF Name="status" -->
+                <p class="error"><!-- TMPL_VAR Name="string" --></p>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+    <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
+        <input type="hidden" name="shelves" value="1">
+        <h3>Créer une étagère virtuelle</h3>
+        <table>
+        <tr><th scope="row"><label for="addshelf">Nom de l'étagère :</label> </th><td> <input id="addshelf" type="text" name="addshelf" size="25"></td></tr>
+        <tr><th scope="row"><label for="owner">Propriétaire :</label> </th><td><input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR name="loggedinuser" -->"><!-- TMPL_VAR name="loggedinusername" --></td></tr>
+        <tr><th scope="row"><label for="category">Catégorie :</label> </th><td><select name="category" id="category">
+                                    <option value="1">Privé</option>
+                                    <option value="2">Public</option>
+                                    <option value="3">Libre</option>
+                                    </select></td></tr></table>
+        <ul><li>A <strong>privé</strong> étagère virtuelle est gérée et être vue par vous seul.</li><li> A <strong>public</strong> étagère virtuelle peut être gérée  par vous seul mais êtrevue par tout le monde.</li>
+            <li> A <strong>libre</strong> étagère virtuelle peut être gérée par tout le monde.</li></ul>
+                                <p><input type="submit" value="Créer une étagère"></p>
+                    </form>
+    
+        <!-- TMPL_IF NAME="shelvesloop" -->
+        <form method="post" action="/cgi-bin/koha/opac-shelves.pl" name="mainform">
+                    <input type="hidden" name="shelves" value="1" />
+                    <h3>Supprimer étagère(s) virtuelle(s)</h3>
+                    <table>
+                        <tr><th>&nbsp;</th><th>Nom de l'étagère</th><th>Contient</th></tr>
+                        <!-- TMPL_LOOP Name="shelvesloop" -->
+                        <!-- TMPL_IF name="canmanage" -->
+                        <tr>
+                            <td><input type="checkbox" name="DEL-<!-- TMPL_VAR Name="shelf" -->" /></td><td><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_VAR Name="shelfbookcount" --> document(s)</td></tr>
+                        <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    </table>
+        <input type="submit" value="Supprimer les étagères cochées"></form>
+        <!-- /TMPL_IF -->
+        <p><form class="inline" action="opac-shelves.pl" method="get"><input type="submit" value="Retour aux étagères virtuelles"></form></p>
+
+    <!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="edit" -->
+        <form method="post">
+            <input type="hidden" name="op" value="modifsave">
+            <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
+<h3>Modifiez l'étagère virtuelle <!-- TMPL_VAR name="shelfname"--></h3>
+            <table>
+            <tr><td><label for="shelfname">Nom de l'étagère : </label></td><td><input type="text" id="shelfname" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></td></tr>
+            <tr><td><label for="owner">Propriétaire : </label></td><td><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></td></tr>
+            <tr><td><label for="category">Catégorie : </label></td><td><select id="category" name="category">
+                    <!-- TMPL_IF name="category1" -->
+                        <option value="1" selected>Privé</option>
+                    <!-- TMPL_ELSE -->
+                        <option value="1">Privé</option>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="category2" -->
+                        <option value="2" selected>Public</option>
+                    <!-- TMPL_ELSE -->
+                        <option value="2">Public</option>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="category3" -->
+                        <option value="3" selected>Libre</option>
+                    <!-- TMPL_ELSE -->
+                        <option value="3">Libre</option>
+                    <!-- /TMPL_IF -->
+                </select></td></tr>
+            </table>
+            <ul><li>A <strong>privé</strong> étagère virtuelle est gérée par vous seul, et peut être vue <strong>seulement</strong> par vous.</li>
+                <li> A <strong>public</strong> étagère virtuelle peut être vue par <strong>tout le monde</strong>, mais gérée uniquement par vous.</li>
+                <li>A <strong>libre</strong> étagère virtuelle peut-être gérée par <strong>tout</strong> utilisateur.</li></ul>
+            <p><input type="submit" value="Enregistrer les modifications"></p>
+
+        </form>
+<!-- /TMPL_IF -->
+<h3>Etagères virtuelles</h3>
+
+<table>
+<tr><th>Nom de l'étagère</th><th>Catégorie</th><th>Nombre de documents</th><th>&nbsp;</th></tr>
+<!-- TMPL_LOOP Name="shelvesloop" -->
+<tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_IF NAME="category1" -->Privé<!-- /TMPL_IF --><!-- TMPL_IF NAME="category2" -->Public<!-- /TMPL_IF --><!-- TMPL_IF NAME="category3" -->Libre<!-- /TMPL_IF --></td><td><!-- TMPL_VAR Name="shelfbookcount" --> document(s)</td><td><!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Modifiez</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        <p><form action="/cgi-bin/koha/opac-shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Créer ou Supprimer une (des) étagère(s)"></form></p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<br clear="both" />
+
+<script type="text/javascript" language="javascript">
+    // Set the focus the barcode input if it exists.
+    var barcodeInput;
+    if (barcodeInput = document.getElementById('addbarcode')) {
+        barcodeInput.focus();
+    }
+    /**
+     *  Function checkForm
+     *  This function check the form beform submited it.
+     *  If there are items to add to bookbag then add it there.
+     */
+    function checkForm(form){
+        if( form.addToBookBag.checked ) { // add to BookBag
+            AddCheckedToBookBag(form);
+        }
+        return true;
+    }
+
+    /**
+     *  Function AddCheckedToBookBag
+     *  This function add the checked item to bookbag.
+     */
+        function AddCheckedToBookBag(form) {
+            var inputs = form.getElementsByTagName('input');
+            for(var i=0,num=inputs.length; i < num; i++){
+                var input = inputs[i].getAttribute('type');
+                if (input == "checkbox") {
+                    if( inputs[i].checked ) {
+                        var itemnumber   = inputs[i].getAttribute('name');
+                        var regexp       = /MOD-/;
+                        if(itemnumber.match(regexp)){
+                            var biblionumber = inputs[i+1].value;
+                            addRecord(biblionumber,null,1); // function from basket.js
+                        }
+                    }
+                }
+            }
+        }
+</script>
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->

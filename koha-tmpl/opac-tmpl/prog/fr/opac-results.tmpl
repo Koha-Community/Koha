@@ -2,9 +2,9 @@
 <!-- TMPL_VAR NAME="LibraryNameTitle" -->
 
 <!-- TMPL_IF NAME="searchdesc" -->
-    Results of Search for '<!-- TMPL_VAR NAME="searchdesc" -->'
+    Résultat(s) pour la recherche de <!-- TMPL_VAR NAME="searchdesc" -->
 <!-- TMPL_ELSE -->
-    You did not specify any search criteria
+    Vous n'avez précisé aucun critère de recherche
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -13,7 +13,7 @@
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
 <!-- TMPL_IF NAME="koha_spsuggest" -->
-<div style="font-size: 12px;">Did you mean:
+<div style="font-size: 12px;">Vouliez-vous dire :
     <ul style="list-style: none;">
         <!-- TMPL_LOOP NAME="SPELL_SUGGEST" -->
         <li>
@@ -25,26 +25,26 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="total" -->
-<h3><!-- TMPL_VAR NAME="total" --> results found for '<!-- TMPL_VAR NAME="searchdesc" -->'. <a href="http://o15.bureau.paulpoulain.com/cgi-bin/koha/opac-search.pl">[ Perform a new search ]</a></h3>
+<h3><!-- TMPL_VAR NAME="total" --> réponses trouvées pour '<!-- TMPL_VAR NAME="searchdesc" -->' <a href="http://o15.bureau.paulpoulain.com/cgi-bin/koha/opac-search.pl">[Nouvelle recherche]</a></h3>
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="searchdesc" -->
-<h3> No Result found !</h3>
+<h3> Pas de réponse !</h3>
 <p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
+    Aucun résultat ne correspond à votre recherche <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> dans le catalogue de <!-- TMPL_VAR NAME="LibraryName" -->
 </p>
-<a href="/cgi-bin/koha/opac-search.pl" title="New search">Perform a new search</a>
+<a href="/cgi-bin/koha/opac-search.pl" title="Nouvelle Recherche">Nouvelle recherche</a>
 <!-- TMPL_ELSE -->
-<h3> No result found !</h3>
+<h3> Pas de résultat !</h3>
 <p>
-    You did not specify any search criteria.
+    Vous n'avez précisé aucun critère de recherche.
 </p>
-<a href="/cgi-bin/koha/opac-search.pl" title="New search">Perform a new search</a>
+<a href="/cgi-bin/koha/opac-search.pl" title="Nouvelle Recherche">Nouvelle recherche</a>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="query_error" -->
 <br /><br />
-Error :
+Erreur :
 <span  class="problem">
     <!-- TMPL_VAR NAME="query_error" -->
 </span>
@@ -53,29 +53,29 @@ Error :
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
-<h1>Scan Index:</h1>
+<h1>Parcourir l'index :</h1>
 <form action="/cgi-bin/koha/opac-search.pl" method="POST">
     <table>
         <tr>
             <td>
-                Scan Index for: <input type="text" name="qf" id="scan-index" size="35" value="" />
+                Parcourir l'index pour : <input type="text" name="qf" id="scan-index" size="35" value="" />
             </td>
         </tr>
         <tr>
             <td>
-                <label for="scan-index">Indexed in:</label>
+                <label for="scan-index">Répertorié dans :</label>
                 <select name="idx" id="scan-index">
-                    <option value="">Any Word</option>
-                    <option value="any/phr:">Any Phrase</option>
-                    <option value="ti:">Title</option>
-                    <option value="ti,phr:">Title Phrase</option>
-                    <option value="au,phr:">Author</option>
-                    <option value="su:">Subject</option>
-                    <option value="su,phr:">Subject Phrase</option>
-                    <option value="se:">Series</option>
-                    <option value="pb:">Publisher</option>
+                    <option value="">N'importe quel mot</option>
+                    <option value="any/phr:">N'importe quelle expression</option>
+                    <option value="ti:">Titre</option>
+                    <option value="ti,phr:">Expression titre</option>
+                    <option value="au,phr:">Auteur</option>
+                    <option value="su:">Sujet</option>
+                    <option value="su,phr:">Expression sujet</option>
+                    <option value="se:">Collections</option>
+                    <option value="pb:">Editeur</option>
                     <option value="nt:">Notes</option>
-                    <option value="se:">Series Title</option>
+                    <option value="se:">Titre de collections</option>
                     <option value="sn:">ISBN</option>
                     <option value="ss:">ISSN</option>
                 </select>
@@ -88,8 +88,8 @@ Error :
 <form action="/cgi-bin/koha/opac-search.pl" method="POST">
     <table>
         <tr>
-            <th>Term/Phrase</th>
-            <th>Count</th>
+            <th>Terme/Expression</th>
+            <th>Nombre</th>
         </tr>
         <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
         <tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
@@ -116,9 +116,9 @@ Error :
         <!-- RE-SORT START -->
         <!-- TMPL_IF NAME="sort_by_loop" -->
         <p>
-            Re-sort results
+            Trier les résultats
             <select id="sort_by" name="sort_by" onChange="javascript:document.myform.submit();">
-                <option value="">Field-weighted, Relevance Ranked</option>
+                <option value="">Champ de tri, classé par pertinence</option>
                 <!-- TMPL_LOOP NAME="sort_by_loop" -->
                 <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
                 <!-- /TMPL_LOOP -->
@@ -132,22 +132,20 @@ Error :
         <!-- TMPL_IF NAME="opacfacets" -->
         <div id="facets" >
             <dl>
-            <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Refine Your Search</dt>
+            <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Affinez votre recherche</dt>
             <dd id="facets_list" style="display:none">
                 <!-- TMPL_LOOP NAME="facets_loop" -->
                 <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
                     <ul>
                         <!-- TMPL_LOOP NAME="facets" -->
                         <li>
-                            <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
-                                <!-- TMPL_VAR NAME="facet_label_value" -->
-                            </a> (<!-- TMPL_VAR NAME="facet_count" -->)
+                            <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->"> <!-- TMPL_VAR NAME="facet_label_value" --> </a> (<!-- TMPL_VAR NAME="facet_count" -->)
                         </li>
                         <!-- /TMPL_LOOP -->
                         <!-- TMPL_IF NAME="expandable" -->
                         <li class="showmore">
                             <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
-                                Show More
+                                En voir plus
                             </a>
                         </li>
                         <!-- /TMPL_IF -->
@@ -165,16 +163,16 @@ Error :
         <!-- TABLE RESULTS START -->
         <!-- TMPL_IF name="opacbookbag" -->
             <form action="opac-searchresults.pl" method="get" name="bookbag_form">
-            <input type="submit" class="button" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
-            <input type="reset" value="Clear All" class="button" />
+            <input type="submit" class="button" value="Ajouter à mon panier" onclick="addMultiple(); return false;"> 
+            <input type="reset" value="Effacer" class="button">
         <!-- /TMPL_IF -->
         <table>
             <tr>
                 <th><input type="checkbox" name="select_all" onClick="SelectAll()" /></th>
-                <th>Title</th>
-                <th>Location</th>
+                <th>Titre</th>
+                <th>Localisation</th>
                 <!-- TMPL_IF NAME="RequestOnOpac" -->
-                <th>Reservation</th>
+                <th>Réservation</th>
                 <!-- /TMPL_IF -->
             </tr>
             <!-- Actual Search Results -->
@@ -186,7 +184,7 @@ Error :
             <!-- /TMPL_IF -->
                     <td>
                         <!-- TMPL_IF name="opacbookbag" -->
-                            <input type="checkbox" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to book bag" />
+                            <input type="checkbox" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Ajouter à mon panier">
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="AmazonContent" -->
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
@@ -233,7 +231,7 @@ Error :
                             <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
+                            <!-- TMPL_IF name="timestamp" --> <i>(modifié le <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                         </p>
                         <!-- /TMPL_IF -->
                     </td>
@@ -245,28 +243,26 @@ Error :
                                 <!-- TMPL_IF name="itemcallnumber" --> <i>(<!-- TMPL_VAR name="itemcallnumber" -->)</i><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="location" --> <i>(<!-- TMPL_VAR name="location" -->)</i><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="classification" -->
-                                    <i>(<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
-                                        <!-- TMPL_VAR NAME="classification" -->
-                                    </a>)</i>
+                                    <i>(<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->"> <!-- TMPL_VAR NAME="classification" --> </a>)</i>
                                 <!-- /TMPL_IF -->
                                 <br />
                             <!-- /TMPL_LOOP -->
                         </span>
                         <!-- /TMPL_IF -->
                         <span class="unavailable">
-                            <!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->),<br /> <!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="onloancount" --> En prêt (<!-- TMPL_VAR NAME="onloancount" -->),<br /> <!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="wthdrawncount" --> Retiré (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="itemlostcount" --> Perdu (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="orderedcount" --> En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
                         </span>
                     </td>
                     <!-- TMPL_IF NAME="RequestOnOpac" -->
                     <td>
                         <!-- TMPL_IF NAME="norequests" -->
-                        Not Reserveable
+                        Non réservable
                         <!-- TMPL_ELSE -->
                         <a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                            Reserves
+                            Réservation
                         </a>
                         <!-- /TMPL_IF -->
                     </td>
@@ -283,7 +279,7 @@ Error :
         <!-- Row of numbers corresponding to search result pages -->
         <!-- TMPL_IF NAME="previous_page_offset" -->
         <a class="nav" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="previous_page_offset" -->">
-            &lt;&lt; Previous
+            &lt;&lt;Précédent
         </a>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="PAGE_NUMBERS" -->
@@ -297,7 +293,7 @@ Error :
         <!-- /TMPL_LOOP -->
         <!-- TMPL_IF NAME="next_page_offset" -->
         <a class="nav" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="next_page_offset" -->">
-            Next &gt;&gt;
+            Suivant >>
         </a>
         <!-- /TMPL_IF -->
     </div>

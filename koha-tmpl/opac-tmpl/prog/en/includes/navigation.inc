@@ -32,25 +32,27 @@
             <!-- /TMPL_IF -->
         </ul>
         <br />
-    <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="/cgi-bin/koha/opac-user.pl"><b>User Info</b></a>
-        <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b></li>
-        <li><a href="/cgi-bin/koha/opac-logout.pl?logout=Log Out">Log Out</a></li>
-    <!-- TMPL_ELSE -->
-           <form action="/cgi-bin/koha/opac-user.pl" method="POST" name="auth" id="auth">
-            <li>
-                <label for="userid">Login:</label>
-                <input type="text" id="userid" size="10" name="userid" />
-            </li>
-            <li>
-                <label for="password">Pass: </label>
-                <input type="password" id="password" size="10" name="password" />
-            </li>
-            <li>
-                <input type="submit" value="Log In" class="submit" />
-            </li>
-            </form>
-    <!-- /TMPL_IF -->
+    <div id="login">
+        <!-- TMPL_IF NAME="loggedinusername" -->
+            <a href="/cgi-bin/koha/opac-user.pl"><b>User Info</b></a>
+            <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b></li>
+            <li><a href="/cgi-bin/koha/opac-logout.pl?logout=Log Out">Log Out</a></li>
+        <!-- TMPL_ELSE -->
+            <form action="/cgi-bin/koha/opac-user.pl" method="POST" name="auth" id="auth">
+                <li>
+                    <label for="userid">Login:</label>
+                    <input type="text" id="userid" size="10" name="userid" />
+                </li>
+                <li>
+                    <label for="password">Pass: </label>
+                    <input type="password" id="password" size="10" name="password" />
+                </li>
+                <li>
+                    <input type="submit" value="Log In" class="submit" />
+                </li>
+                </form>
+        <!-- /TMPL_IF -->
+    </div>
  </div>
 
  <div id="main"> <!-- MAIN Body start here -->

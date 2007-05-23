@@ -1,0 +1,142 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalogue -- Réservation(s) <!-- TMPL_VAR NAME="title" --> de <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<!-- TMPL_IF NAME="message" -->
+    <!-- TMPL_IF NAME="GNA" -->
+    <p class="problem">
+        <strong>Désolé</strong>, vous ne pouvez pas faire de réservations, parce que vos <a href="/cgi-bin/koha/opac-userdetails.pl">coordonnées</a> ne sont pas à jour.
+    </p>
+    <p class="problem">Prière de contacter votre bibliothécaire ou d'utiliser <a href="/cgi-bin/koha/opac-userupdate.pl">la mise à jour en ligne</a> pour nous transmettre les informations en cours(<em>Veuillez prendre note</em> qu'il peut y avoir un délai pour la mise à jour de votre compte si vous le faites en ligne)
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="lost" -->
+    <p class="problem">
+        <strong>Désolé</strong>, vous ne pouvez pas faire de réservations parce que votre carte de bibliothèque a été signalée comme perdue ou volée.
+    </p>
+    <p class="problem">
+        Si c'est une erreur, prière d'apporter votre carte à la banque de prêt de votre bibliothèque et l'erreur sera corrigée.
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="debarred" -->
+    <p class="error">
+        <strong>Désolé</strong>, vous ne pouvez pas faire de réservations parce que votre compte a été bloqué.
+    </p>
+    <p class="problem">En général, la suspension d'un compte est due à des retards anciens ou à des frais de détérioration. Si <a href="/cgi-bin/koha/opac-user.pl">votre page personnelle</a> montre que votre compte est à jour, merci de contacter un bibliothécaire.
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="too_much_oweing" -->
+    <p class="problem">
+        Désolé, vous ne pouvez pas faire de réservations parce que vous devez <!-- TMPL_VAR NAME="too_much_oweing" -->
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="too_many_reserves" -->
+        <p class="error">Désolé, vous ne pouvez faire plus de <!-- TMPL_VAR NAME="too_many_reserves" --> réservations.
+        </p>
+        <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="already_reserved" -->
+    <p class="problem">
+        Vous avez déjà une réservation en cours pour ce document.
+        <form action="/cgi-bin/koha/opac-detail.pl" method="POST">
+            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+            <input type="submit" class="icon back" value="Retournez à l'écran des exemplaires">
+        </form>
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="no_items_selected" -->
+    <p class="problem">
+        Vous devez sélectionner au moins un type de document.
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="no_branch_selected" -->
+    <p class="error">
+        Vous devez sélectionner une annexe de retrait !
+    </p>
+    <!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="select_item_types" -->
+<!-- The first time round you select which bibitems you want -->
+<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+<input type="hidden" name="item_types_selected" value="1">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<h2>Détails de la réservation</h2>
+<div class="form">
+<table>
+   <tr><th>Réservation : </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span><!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></td></tr>
+    <tr><th>Pour :</th><td><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></td></tr>
+
+    <tr><th>A retirer à :</th><td><select name="branch" id="branch">
+        <option>-- Prière de sélectionner votre site --</option>
+        <!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
+</select></td></tr>
+</table>
+
+<!-- TMPL_IF NAME="onlyone" -->
+<!-- If there is only one type -->
+
+<p><input type="submit" class="submit" value="Suivant >>">
+<input type="hidden" name="all" value="1"></p>
+</form>
+
+<!-- TMPL_ELSE -->
+<!-- If there is more than one type -->
+
+    <h4>Choisissez un exemplaire...</h4>
+        <p>
+            <input id="checknextavailable" type="checkbox" name="all" value="prochain disponible">
+            <label for="checknextavailable">Prochain exemplaire disponible (tout support)</label>
+        </p>
+    <h4>
+     ...ou sélectionnez les types de documents souhaités
+    </h4>
+
+<!-- TMPL_LOOP NAME="TYPE_ROWS" -->
+<ul><!-- TMPL_LOOP NAME="ROW" -->
+<li><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" class="checkbox"><!-- TMPL_VAR NAME="description" --></li>
+<!-- /TMPL_LOOP -->
+</ul><!-- /TMPL_LOOP -->
+<!-- <table>
+    <tr>
+    <th>Number of Copies</th><th>Requests already received for this title</th> <th>Items curently on issue, due back</th></tr>
+    <td><!-- TMPL_VAR NAME="itemcount" --></td>
+    <td><!-- TMPL_VAR NAME="reservecount" --></td>
+     <td><!-- TMPL_LOOP NAME="ITEMS" --><!-- TMPL_VAR NAME="date_due" -->, <!-- /TMPL_LOOP --></td>
+</table> -->
+</div>
+<p><input type="submit" class="submit" value="Confirmer la réservation >>"></p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- end of the first form -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="item_types_selected" -->
+<!-- if the bibitems have already been selected -->
+<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+<input type="hidden" name="place_reserve" value="1">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><h3>Confirmer la réservation</h3>
+<div class="details">
+    <table>
+        <tr><th>Titre : </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span></td></tr>
+
+<!-- TMPL_IF NAME="all" -->
+        <tr><th>Type de document : </th><td>Tous<input type="hidden" name="all" value="1"></td></tr>
+<!-- TMPL_ELSE -->
+        <tr><th>Types de document : </th><td><!-- TMPL_LOOP NAME="TYPES" -->
+<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" -->;
+<!-- /TMPL_LOOP --></td></tr>
+
+<!-- /TMPL_IF -->
+        <tr><th>Lieu de retrait : </th><td><!-- TMPL_VAR NAME="branchname" --><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"></td></tr>
+</table>
+</div>
+<p><input type="submit" value="Finaliser et localiser la réservation" class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();"></p>
+
+</FORM>
+
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->
