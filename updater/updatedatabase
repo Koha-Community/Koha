@@ -1571,14 +1571,14 @@ my %column_change = (
 $sth = $dbh->prepare("show table status");
 $sth->execute;
 while ( my $table = $sth->fetchrow_hashref ) {
-     if ($table->{Engine} ne 'InnoDB') {
-         $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
-         print "moving $table->{Name} to InnoDB\n";
-     }
     next if $table->{Name} eq 'marc_word';
     next if $table->{Name} eq 'marc_subfield_table';
     next if $table->{Name} eq 'auth_word';
     next if $table->{Name} eq 'auth_subfield_table';
+     if ($table->{Engine} ne 'InnoDB') {
+         $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
+         print "moving $table->{Name} to InnoDB\n";
+     }
     unless ($table->{Collation} =~ /^utf8/) {
          print "moving $table->{Name} to utf8\n";
         $dbh->do("ALTER TABLE $table->{Name} CONVERT TO CHARACTER SET utf8");
@@ -2034,6 +2034,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.165  2007/05/23 16:33:10  tipaul
+# skip move to innoDB for the 4 22 tables, that are used to store MARC records, are useless in Koha 3.0 The process is very very long, so the updatedatabase should speed up a lot (by long I mean 1 hour on my Dual core with SCSI disk, for a 50 000 biblios long table
+#
 # Revision 1.164  2007/05/04 16:24:09  tipaul
 # various bugfixes on parameters modules + adding default NoZebraIndexes systempreference if it's empty
 #
