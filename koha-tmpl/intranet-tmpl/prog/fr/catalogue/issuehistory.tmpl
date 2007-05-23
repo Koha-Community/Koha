@@ -1,0 +1,105 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Historique des prêts</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+    <h1>Historique de prêt pour <!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) </h1>
+
+<!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
+    
+<div class="searchresults">
+    <!-- TMPL_IF NAME="issues" -->
+        <br />
+        <b>A été prêté <!-- TMPL_VAR NAME="total" --> fois</b>
+        <table>
+            <th>
+                Date
+            </th>
+            <th>
+                Nom de famille
+            </th>
+            <th>
+                Prénom
+            </th>
+            <th>
+                Site de prêt
+            </th>
+            <th>
+                Renouvellement
+            </th>
+            <th>
+                Date de retour
+            </th>
+            <th>
+                Date de retour
+            </th>
+        <!-- TMPL_LOOP NAME="issues" -->
+            <tr>
+                <td>
+                    <!-- TMPL_IF NAME="timestamp" -->
+                        <!-- TMPL_VAR NAME="timestamp" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="surname" -->
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+                            <!-- TMPL_VAR NAME="surname" -->
+                        </a>
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="firstname" -->
+                        <!-- TMPL_VAR NAME="firstname" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="issuingbranch" -->
+                        <!-- TMPL_VAR NAME="issuingbranch" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="renewals"-->
+                        OUI<br />
+                        <small>
+                            <!-- TMPL_IF NAME="lastreneweddate" -->
+                                dernier prêt le : <!-- TMPL_VAR NAME="lastreneweddate" -->
+                            <!-- /TMPL_IF -->
+                        </small>
+                    <!-- TMPL_ELSE -->
+                        NON
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="date_due" -->
+                        <!-- TMPL_VAR NAME="date_due" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="returndate" -->
+                        <!-- TMPL_VAR NAME="returndate" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </td>
+           </tr>
+        <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+        <br />
+        <b><!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) <span class="problem">n'a jamais été emprunté.</span></b>
+        
+    <!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

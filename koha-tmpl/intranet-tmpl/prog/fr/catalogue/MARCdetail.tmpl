@@ -1,0 +1,408 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Détails du catalogue MARC</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+
+<!-- TMPL_UNLESS name="popup" -->
+    <h1>
+        Notice MARC : <!-- TMPL_VAR NAME="biblionumber" -->
+    </h1>
+    
+<!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
+
+<!-- /TMPL_UNLESS -->
+
+    <p><b>Avec la grille : <!--TMPL_VAR Name="framework" --></b></p>
+    
+    <div id="tabs">
+        <!-- TMPL_IF NAME="0XX" -->
+            <a href="javascript:active(0)" class="tab_active" id="link0">0</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="1XX" -->
+            <a href="javascript:active(1)" class="tab_inactive" id="link1">1</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="2XX" -->
+            <a href="javascript:active(2)" class="tab_inactive" id="link2">2</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="3XX" -->
+            <a href="javascript:active(3)" class="tab_inactive" id="link3">3</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="4XX" -->
+            <a href="javascript:active(4)" class="tab_inactive" id="link4">4</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="5XX" -->
+            <a href="javascript:active(5)" class="tab_inactive" id="link5">5</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="6XX" -->
+            <a href="javascript:active(6)" class="tab_inactive" id="link6">6</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="7XX" -->
+            <a href="javascript:active(7)" class="tab_inactive" id="link7">7</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="8XX" -->
+            <a href="javascript:active(8)" class="tab_inactive" id="link8">8</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="9XX" -->
+            <a href="javascript:active(9)" class="tab_inactive" id="link9">9</a>
+        <!-- /TMPL_IF -->
+        <a href="javascript:active(10)" class="tab_inactive" id="link10">Exemplaires</a>
+    </div>
+
+    <div name="0XX" id="0XX" class="content_visible">
+        <!-- TMPL_LOOP NAME="0XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p class="tag">
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p class="subfield">
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="1XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="1XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="2XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="2XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="3XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="3XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="4XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="4XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div  id="5XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="5XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="6XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="6XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div  id="7XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="7XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="8XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="8XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="9XX" class="content_hidden">
+        <!-- TMPL_LOOP NAME="9XX" -->
+                <!-- TMPL_IF name="tag" -->
+                    <p>
+                        <!-- TMPL_VAR NAME="tag" -->
+                    </p>
+                <!-- TMPL_ELSE -->
+                    <br />
+                <!-- /TMPL_IF -->
+            <!-- TMPL_LOOP NAME="subfield" -->
+                <p>
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF name="link" -->
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=<!-- TMPL_VAR NAME="link" -->&amp;operator==&amp;type=intranet&amp;value=<!-- TMPL_VAR NAME="marc_value" ESCAPE=URL -->">
+                            <img border="0" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/filefind.png" height="15" title='Autorité numéro <!-- TMPL_VAR name="authid" -->'>
+                        </a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="authority" -->
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button catalogue">Autor.</a>
+                    <!-- /TMPL_IF -->
+                </p>
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    </div>
+    
+    <div id="10XX" class="content_hidden">
+        <br/>
+        <table class="noborder">
+                <tr>
+                    <!-- TMPL_LOOP NAME="item_header_loop" -->
+                        <th class="noborder">
+                            <!-- TMPL_VAR NAME="header_value" -->
+                        </th>
+                    <!-- /TMPL_LOOP -->
+                </tr>
+                <!-- TMPL_LOOP NAME="item_loop" -->
+                    <tr>
+                        <!-- TMPL_VAR NAME="item_value" -->
+                    </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+    </div>
+<script language="JavaScript" type="text/javascript">
+function active(numlayer)
+{
+    for (i=0; i <= 10 ; i++ ) {
+        var tab = document.getElementById(i+'XX');
+        if (numlayer==i) {
+            tab.setAttribute("class","content_visible");
+            var tabactive=document.getElementById('link'+i);
+            tabactive.removeAttribute("class");
+            tabactive.setAttribute("class","tab_active");
+        } else {
+            tab.setAttribute("class","content_hidden");
+            try {
+                var tabactive=document.getElementById('link'+i);
+                tabactive.removeAttribute("class");
+                tabactive.setAttribute("class","tab_inactive");
+            }
+            catch(e){};
+        }
+    }
+}
+
+function confirm_deletion(count) {
+    //     var is_confirmed = confirm('Are you sure you want to delete this biblio?');
+//     if (is_confirmed) {
+//         window.location="../cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
+//     }
+ var is_confirmed;
+	if (count>0){
+		    is_confirmed= alert('you have [ '+ count +' ] item(s) linked \n you must delete all items before delete this biblio');
+		    }
+        else{
+		    is_confirmed= confirm('Are you sure you want to delete this biblio? ');
+	}
+
+    
+     if (is_confirmed) {
+        if (count=0){
+// 	window.location="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
+	window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
+	}
+		
+    }
+    }
+
+function Dopop(link) {
+    newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function Changefwk(FwkList) {
+var fwk = FwkList.options[FwkList.selectedIndex].value;
+window.location = "MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+}
+function Addbiblio(op) {
+var fwk = document.forms['f'].Frameworks.options[document.forms['f'].Frameworks.selectedIndex].value;
+window.location = "../cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
+}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

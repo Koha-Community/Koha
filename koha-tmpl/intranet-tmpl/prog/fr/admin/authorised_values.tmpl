@@ -1,0 +1,100 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration système <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Gestion des valeurs autorisées<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<!-- TMPL_IF name="add_form" -->
+	<h1>
+	   <!-- TMPL_IF name="action_modify" -->Modifier la valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Ajout valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Ajouter une catégorie<!-- /TMPL_IF -->
+	</h1>
+	<form class="inline" action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+        <table>
+        <tr>
+            <th><label for="category">Catégorie</label></th>
+            <td><!-- TMPL_VAR name="category" --></td>
+        </tr>
+        <tr>
+            <th><label for="authorised_value">Valeur autorisée</label></th>
+            <td><input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" /></td>
+        </tr>
+        <tr>
+            <th><label for="lib">Description</label></th>
+            <td><input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" /></td>
+        </tr>
+        </table>
+        <input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+        <input type="submit" value="Valider">
+    </form>
+    <form class="inline" action="/cgi-bin/koha/admin/authorised_values.pl" method="get"><input type="submit" value="Annuler et retourner à valeurs autorisées"></form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="delete_confirm" -->
+<!-- -->
+<h3>Confirmer la suppression</h3>
+<table>
+	<tr>
+		<td>Variable</td>
+		<td>Description</td>
+		<td><!-- TMPL_VAR name="searchfield" --></td>
+	</tr>
+	<tr><td>Valeur</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	</table>
+	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed" />
+		<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Confirmer la suppression"></form> <form class="inline" action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Ne pas supprimer"></form>
+<!-- /TMPL_IF -->
+
+<!-- -->
+<!-- TMPL_IF name="else" -->
+
+<h1>Gestion des valeurs autorisées</h1>
+<p>Cette table est utilisée dans la définition de MARC. Vous pouvez définir autant de catégories que vous le souhaitez, et autant de valeurs autorisées que vous souhaitez dans chaque catégorie.</p>
+<p>Lorsque vous déterminez la structure des sous-champs MARC, vous pouvez lier un sous-champ à une catégorie de valeurs autorisées.</p>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Voir catégorie :  </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Valider"></form>
+<table>
+<tr>
+	<th>Catégorie</th>
+	<th>Valeur autorisée</th>
+	<th>Description</th>
+	<th>Modifier</th>
+	<th>Supprimer</th>
+	</tr>
+<!-- TMPL_LOOP name="loop" -->
+<tr>
+	<td><!-- TMPL_VAR name="category" --></td>
+	<td><!-- TMPL_VAR name="authorised_value" --></td>
+	<td><!-- TMPL_VAR name="lib" --></td>
+	<td><a href="<!-- TMPL_VAR name="edit" -->">Modifier</a></td>
+	<td><a href="<!-- TMPL_VAR name="delete" -->">Supprimer</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+<!-- TMPL_IF NAME="isprevpage" -->
+<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+	<input type="submit" value="&lt;&lt; Page précédente"></form>
+<!-- /TMPL_IF --> 
+
+<div id="action">
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=<!-- TMPL_VAR NAME="category" -->">Ajouter une nouvelle valeur dans <!-- TMPL_VAR name="category" --></a> <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Ajouter une nouvelle catégorie</a>
+</div>
+
+<!-- TMPL_IF NAME="nextpage" -->
+<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+	<input type="submit" value="Page suivante >>"></form>
+<!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

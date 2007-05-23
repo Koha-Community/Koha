@@ -1,0 +1,12 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Périodiques</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<h1>Recherche catalogue</h1>
+
+<form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="post">
+    <input type="hidden" name="op" value="do_search" />
+    <input type="hidden" name="type" value="intranet" />
+    <label for="q">Tous les mots</label>
+    <input type="text" id="q"  name="q" />
+    <input type="submit" value="Rechercher">
+</form>

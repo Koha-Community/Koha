@@ -1,0 +1,50 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Recherche lecteur &rsaquo;  <!-- TMPL_VAR name="bookselname" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+<!--
+
+function add_member(subscriptionid,borrowernumber){
+     var myurl = "routing.pl?subscriptionid="+subscriptionid+"&borrowernumber="+borrowernumber+"&op=add";
+     window.opener.location.href = myurl;
+}
+
+//-->
+</script>
+
+<div class="popup-block">
+<h1>Recherche d'adhérent</h1>
+
+<p>
+<form name="search" action="/cgi-bin/koha/serials/member-search.pl" method="post">
+<input type="text" name="member" size="30" />
+<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->">
+<input type="submit" class="button" value="Rechercher">
+</form>
+</p>
+<!-- TMPL_IF NAME="memberloop" -->
+<div class="searchresults">
+<table cellspacing="0" cellpadding="0" border="0" width="480" class="collapse">
+<tr><th class="cell-header">Nom</th>
+    <th class="cell-header">Localisation</th>
+    <th class="cell-header">Ajouter</th></tr>
+<!-- TMPL_LOOP NAME="memberloop" -->
+<tr><td class="cell"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
+    <td class="cell"><!-- TMPL_VAR NAME="streetaddress" --></td>
+    <td class="cell"><a onclick="add_member(<!-- TMPL_VAR
+NAME="subscriptionid" -->,<!-- TMPL_VAR NAME="borrowernumber" -->); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;op=add">Ajouter</a></td></tr>
+<!-- /TMPL_LOOP -->
+        </table></td></tr>
+</table>
+</div>
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="member" -->
+        <p>Pas de réponse</p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<br />
+<p><a href="javascript:window.close()" class="button">Fermer</a></p>
+</div>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

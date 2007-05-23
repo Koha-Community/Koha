@@ -1,0 +1,20 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Périodiques &rsaquo;  Recherche fournisseur</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  window.close();
+}
+</script>
+
+<h1>Recherche fournisseur pour un abonnement à un périodique</h1>
+    <form action="/cgi-bin/koha/serials/acqui-search-result.pl" method="POST">
+        <label for="text">Nom du fournisseur :  </label>
+        <input id="text" type="text"  size="25"   name="supplier">
+        <input type="submit" class="button serial" value="OK">
+    </form>

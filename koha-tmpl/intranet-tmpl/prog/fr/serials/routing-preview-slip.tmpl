@@ -1,0 +1,22 @@
+<!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+
+<div id="slip-block">
+<table cellspacing="0" cellpadding="0" border="0" class="collapse routingslip">
+<tr><td class="cell" colspan="3"><h3><!-- TMPL_VAR NAME="libraryname" --></h3></td></tr>
+<tr><td class="cell" colspan="3"><b>Titre : </b> <!-- TMPL_VAR NAME="title" --><br />
+<!-- TMPL_VAR NAME="issue" --></td></tr>
+<tr><td class="cell"><b>Nom/Localisation</b></td>
+    <td class="cell"><b>Date de retour</b></td></tr>
+<!-- TMPL_LOOP NAME="memberloop" -->
+        <tr><td class="name"><b><!-- TMPL_VAR NAME="name" --></b> <!-- TMPL_VAR NAME="location" --></td>
+            <td class="date">&nbsp;</td></tr>
+<!-- /TMPL_LOOP -->
+</table>
+<p><b>Remarques : </b> Prière de rendre ce périodique rapidement, d'autres l'attendent.
+<br /><!-- TMPL_VAR NAME="routingnotes" --></p>
+   <div id="slip-block-links">
+   <a class="button" href="javascript:window.print();self.close()"> Imprimer </a> &nbsp;<a class="button" href="javascript:self.close()">Fermer</a>
+   </div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

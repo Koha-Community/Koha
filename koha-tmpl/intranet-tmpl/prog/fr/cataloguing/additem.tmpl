@@ -1,0 +1,121 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Catalogage &rsaquo; exemplaires pour la notice bibliographique <!-- TMPL_VAR name="biblionumber" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+
+
+<h1>Exemplaires pour <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> par <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Notice #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
+
+<div id="action">
+    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"> Modifier notice biblio <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Vue normale</a> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"> Vue complète</a> <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"> ISBD </a>
+</div>
+
+<div id="cataloguing_additem_itemlist">
+    <form method="post" action="additem.pl" name="f">
+    <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_IF name="item_loop" -->
+        <h2>Exemplaire(s) existant(s)</h2>
+        <table>
+            <tr>
+                <!-- TMPL_LOOP NAME="item_header_loop" -->
+                    <th>
+                        <!-- TMPL_VAR NAME="header_value" -->
+                    </th>
+                <!-- /TMPL_LOOP -->
+                <th colspan="2">&nbsp;</th>
+            </tr>
+                <!-- TMPL_LOOP NAME="item_loop" -->
+                <tr>
+                    <!-- TMPL_VAR NAME="item_value" -->
+                    <td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modifier</a></td>
+                    <td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Supprimer</a></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+    <!-- /TMPL_IF -->
+</div>
+
+<div id="cataloguing_additem_newitem">
+    <!-- TMPL_IF name="opisadd" -->
+        <h2>Nouvel exemplaire</h2>
+    <!-- TMPL_ELSE -->
+        <h2>Modifier exemplaire</h2>
+    <!-- /TMPL_IF -->	
+        <!-- TMPL_LOOP NAME="item" -->
+            <p>
+                <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+                <!-- TMPL_VAR NAME="marc_value" -->
+                <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+                <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+            </p>
+        <!-- /tmpl_loop -->
+    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <!-- TMPL_IF name="barcode_not_unique" -->
+        ERREUR : Code à barres déjà utilisé !
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="opisadd" -->
+    <input type="button" value="Valider l'exemplaire" onclick="Check(this.form)" accesskey="w">
+    <!-- TMPL_ELSE -->
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <input type="button" value="Valider les modifications" onclick="Check(this.form)" accesskey="w">
+    <!-- /TMPL_IF -->
+    </form>
+
+<script language="JavaScript" type="text/javascript">
+function _(s) { return s } // dummy function for gettext
+function active(numlayer)
+{
+    for (i=10; i < 11 ; i++ ) {
+        ong = i+"XX";
+            link = "link"+i;
+        if (numlayer==i) {
+            document.getElementById(ong).style.visibility="visible";
+            document.getElementById(link).style.backgroundColor="#11AA11";
+            document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
+        } else {
+            document.getElementById(ong).style.visibility="hidden";
+            document.getElementById(link).style.backgroundColor="#FFFFFF";
+            document.getElementById(link).style.backgroundImage="";
+        }
+    }
+}
+function Check(f) {
+    var total_errors=0;
+//	alert(f.field_value.length);
+    for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+            document.getElementById("error"+i).style.backgroundColor="#FF0000";
+            total_errors++;
+        } else {
+//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+        }
+    }
+    var alertString2;
+    if (total_errors==0) {
+        document.f.submit();
+    } else {
+        alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += "\n- "+ total_errors+_("champs obligatoires vides (voir les sous-champs en gras)");
+        alert(alertString2);
+    }
+}
+function Dopop(link,i) {
+    defaultvalue=document.forms[0].field_value[i].value;
+    newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function confirm_deletion(biblionumber,itemnumber) {
+    var is_confirmed = confirm(_('Êtes vous sûr de vouloir supprimer cet exemplaire ?'));
+    if (is_confirmed) {
+    window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
+    }
+}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

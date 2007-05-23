@@ -1,0 +1,211 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration système
+<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modifier une préférence système <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter une préférence système<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Donnée ajoutée<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du paramètre '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Paramètres supprimés<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Préférences<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<!-- TMPL_IF NAME="add_form" -->
+    <h1>
+        <!-- TMPL_IF NAME="use-heading-flags-p" -->
+            <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Modifier les restrictions des sous-champs MARC<!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_VAR NAME="action" -->
+        <!-- /TMPL_IF -->
+    </h1>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+    <input type="submit" value="Valider les modifications">
+    
+    <h2>Champ : <!-- TMPL_VAR NAME="tagfield" --></h2>
+    <div id="tabs">
+     <p>Modifier les sous-champs
+        <!-- TMPL_LOOP NAME="loop" -->
+                <!-- TMPL_IF name="subfieldcode" -->
+                    <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" />
+                <!-- /TMPL_IF -->
+               <a 
+                    href="javascript:active('sub<!-- TMPL_VAR NAME='subfieldcode' -->');"
+                    class="tab_inactive"
+                    id="sub<!-- TMPL_VAR NAME="subfieldcode" -->"
+                    title="<!-- TMPL_VAR NAME="liblibrarian" -->"
+                >
+                    <!-- TMPL_VAR NAME="subfieldcode" -->
+               </a>
+        <!-- /TMPL_LOOP -->
+    </p>
+    </div>
+    
+    <div id="content" style="display:block">
+        <!-- TMPL_LOOP NAME="loop" --> 
+        <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+        
+        <h3>Éditeur des restrictions</h3>
+            <!-- TMPL_UNLESS name="subfieldcode" -->
+                <p>Sous-champ <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
+            <!-- /TMPL_UNLESS -->
+            <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Texte pour le bibliothécaire</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
+            <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Texte pour l'OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
+            <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Répétable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
+            <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Obligatoire</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
+            <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Géré dans l'onglet</label><!-- TMPL_VAR NAME="tab" --> (ignore signifie que le sous-champ n'est PAS géré par Koha)</p>
+            
+            <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">Éditeur des restrictions</a>
+            <span id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+                <h3>Restrictions MARC</h3>
+                <p>
+                    <label for="defaultvalue">Valeurs par défaut</label>
+                    <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" />
+                </p>
+                <p><label for="hidden">caché</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (voir aide en ligne)</label></p>
+                <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Est une URL</label> <!-- TMPL_VAR NAME="isurl" --> (coché, indique que le sous-champ est une URL valide et peut être cliqué</p>
+                <p><label>Lien</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple : 200b)</p>
+                <p><label>Autres options :  <p>(en choisir un)</p></label>
+                    <p><label>Valeur autorisée</label><!-- TMPL_VAR NAME="authorised_value" --></p>
+                    <p><label>Thésaurus</label><!-- TMPL_VAR NAME="authtypes" --></p>
+                    <p><label>Plugin</label><!-- TMPL_VAR NAME="value_builder" --></p>
+                </p>
+                <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Lien Koha</label><!-- TMPL_VAR NAME="kohafield" --></p>
+            </span>
+        </div>
+        <!-- /TMPL_LOOP -->
+    </div>
+    </form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirm" -->
+
+<table>
+<caption>Confirmer la suppression du sous-champ <!-- TMPL_VAR NAME="tagsubfield" --> ?</span></caption>
+    <tr>
+        <th>Sous-champ</th>
+        <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
+    </tr>
+    <p>Description <!-- TMPL_VAR NAME="liblibrarian" --></p>
+</table>
+            <form class="inline" action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+                <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+                <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" /><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Oui, supprimer ce sous-champ">
+            </form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />	<input type="submit" value="Non, ne pas supprimer">
+            </form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="delete_confirmed" -->
+
+    Donnée supprimée
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+    <input type="submit" value="OK" />
+    </form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="else" -->
+<h1>Gestion de la structure des sous-champs MARC pour <!-- TMPL_VAR NAME="tagfield" --> (Grille <!--TMPL_VAR NAME="frameworkcode" -->)</h1>
+<p>Cette page montre les sous-champs associés au champ sélectionné.Vous pouvez modifier les sous-champs ou en ajouter de nouveaux en cliquant sur "Modifier les sous-champs". </p>
+<p>La colonne <b>Champ Koha</b> montre que le sous-champ est lié à un champ Koha. Koha peut présenter une interface MARC ou une interface Koha. Ce lien assure la synchronisation des deux modes (dans la base de données), de cette façon vous pouvez passer du mode MARC au mode non-MARC facilement.</p>
+
+<table>
+<tr>
+    <th>Sous-champ</th>
+    <th>Texte</th>
+    <th>Restricteurs</th>
+    <th>Supprimer</th>
+<!-- TMPL_LOOP NAME="loop" -->
+<!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+    <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
+    <td>
+        <!-- TMPL_IF NAME="subfield_ignored" -->
+            <i><!-- TMPL_VAR NAME="liblibrarian" --></i>
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_VAR NAME="liblibrarian" -->
+        <!-- /TMPL_IF -->
+    </td>
+    <td>
+        <!-- TMPL_IF NAME="subfield_ignored" -->
+            <i>sous-champ ignoré</i>
+        <!-- TMPL_ELSE -->
+            Onglet : <!-- TMPL_VAR NAME="tab" -->,
+            <!-- TMPL_IF NAME="kohafield" --> | Champ Koha : <!-- TMPL_VAR NAME="kohafield" -->, <!--/TMPL_IF -->
+            <!-- TMPL_IF NAME="repeatable" -->Répétable, <!-- TMPL_ELSE -->Non répétable<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="mandatory" -->Obligatoire, <!-- TMPL_ELSE -->Facultatif,<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="seealso" --> | Voir aussi : <!-- TMPL_VAR NAME="seealso" -->,<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="hidden" -->caché<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="isurl" -->est une URL<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="authorised_value" --> | Valeur autorisée : <!-- TMPL_VAR NAME="authorised_value" -->,<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="authtypecode" --> | Autorité : <!-- TMPL_VAR NAME="authtypecode" -->,<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="value_builder" --> | Plugin : <!-- TMPL_VAR NAME="value_builder" -->,<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="link" --> | Lien : <!-- TMPL_VAR NAME="link" -->,<!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+    </td>
+    <td><a href="<!-- TMPL_VAR NAME="delete" -->">Supprimer</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
+    <input type="hidden" name="op" value="add_form" />
+    <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="edit_tagfield" -->" />
+    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="edit_frameworkcode" -->" />
+    <input type="submit" value="Modifier les sous-champs">
+</form>
+<form class="inline" action="marctagstructure.pl" method="get">
+    <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+    <input type="submit" value="Retour structure MARC">
+</form>
+<!-- TMPL_IF NAME="previous" -->
+    <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="précédent" alt="précédent" border="0">
+    </a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="next" -->
+    <!-- TMPL_VAR NAME="next" -->
+        <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="suivant" alt="suivant" border="0">
+    </a>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<script language="JavaScript" type="text/javascript">
+
+function active(numlayer){
+    var contentdiv   = document.getElementById("content");
+    var subfields    = contentdiv.getElementsByTagName("div");
+    var numSubfield  = subfields.length;
+    var tabs = document.getElementById("tabs").getElementsByTagName('a');
+
+    // all others must be hidden
+    for (i=0; i < numSubfield ; i++ ) {
+        if (subfields[i].getAttribute('id') == "content_"+numlayer) {
+        
+            // display this subfield
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_visible");
+            
+            // change css class
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_active");
+            
+        } else {
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_inactive");
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_hidden");
+        }
+    }
+}
+
+
+function displayMoreConstraint(numlayer){
+    var thisdiv = document.getElementById(numlayer);
+    if(thisdiv.getAttribute("class") == "content_hidden"){
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_visible");
+    } else {
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_hidden");
+    }
+}
+
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

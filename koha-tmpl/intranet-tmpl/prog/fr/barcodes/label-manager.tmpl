@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Impression étiquettes et code-barres</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="label-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+<div id="main">
+<h1>Etiquettes à imprimer</h1>
+<p>
+        L'impression commencera à la <b>ligne <!-- TMPL_VAR NAME="startrow" --></b><br />
+        L'impression utilisera <b> <!-- TMPL_VAR NAME="sheets"--> feuilles</b><br />
+        Actuellement  <b><!-- TMPL_VAR NAME="labels_remaining"--> lignes</b> réparties sur <b> <!-- TMPL_VAR NAME="sheets"--> feuilles</b>
+</p>
+
+<!-- TMPL_IF NAME="resultsloop" -->
+<h2>Exemplaires</h2>
+<table>
+<tr>
+        <th>Numéro de l'étiquette</th>
+        <th>Abrégé</th>
+        <th>Type de document</th>
+        <th>Supprimer</th>
+</tr>
+<!-- TMPL_LOOP NAME="resultsloop" -->
+<tr>
+        <td>
+                <!-- TMPL_VAR NAME="labelno" -->
+        </td>
+        <td>
+                <b> <a href="/cgi-bin/koha/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> <!-- TMPL_VAR NAME="title" -->:</a></b> <!-- TMPL_VAR NAME="author" --> : <!-- TMPL_VAR NAME="isbn" -->  <!-- TMPL_VAR NAME="barcode" -->
+        </td>
+        <td>
+                <!-- TMPL_VAR NAME="itemtype" -->
+        </td>
+        <td>
+                <a href="/cgi-bin/koha/barcodes/label-manager.pl?op=delete&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Supprimer</a>
+        </td>
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+
+<p><br />
+        <a href="#" onclick="Plugin(); return false;">Ajouter exemplaire</a> &nbsp;&nbsp; <a href="/cgi-bin/koha/barcodes/label-print.pl">Aperçu</a> &nbsp;&nbsp;<a href="/cgi-bin/koha/barcodes/label-manager.pl?op=deleteall">Tout supprimer</a>
+</p>
+ <!-- TMPL_ELSE -->
+        <a href="#" onclick="Plugin(); return false;">Nouvel exemplaire</a>
+<!-- /TMPL_IF -->
+</form>
+</div>
+
+<script type="text/javascript">
+function Plugin() {
+	window.open('label-item-search.pl','FindABibIndex','width=500,height=400,toolbar=no,scrollbars=yes');
+}
+</script>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

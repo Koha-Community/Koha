@@ -1,0 +1,49 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Commentaires en attente d'approbation</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!--TMPL_INCLUDE NAME="menu-reviews.inc" -->
+
+<h1>Commentaires</h1>
+
+<!-- TMPL_IF NAME="reviews" -->
+<table>
+    <tr>
+        <th>
+            Auteurs
+        </th>
+        <th>
+            Sur le document
+        </th>
+        <th>
+            Commentaire
+        </th>
+        <th>
+            &nbsp;
+        </th>
+    </tr>
+    <!-- TMPL_LOOP NAME="reviews" -->
+    <tr>
+        <td>
+            <!-- TMPL_VAR NAME="surname" -->
+            <!-- TMPL_VAR NAME="firstname" -->
+        </td>
+        <td>
+            <!-- TMPL_VAR NAME="bibliotitle" -->
+        </td>
+        <td>
+            <!-- TMPL_VAR NAME="review" -->
+        </td>
+        <td>
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Approuver</a> |
+            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Supprimer</a>
+        </td>
+    </tr>
+    <!-- /TMPL_LOOP -->
+</table>
+<!-- TMPL_ELSE -->
+<b>Aucun commentaire à approuver ou supprimer.</b>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

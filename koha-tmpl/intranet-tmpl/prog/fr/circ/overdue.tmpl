@@ -1,0 +1,32 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Document(s) en retard au <!-- TMPL_VAR NAME="todaysdate" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!--TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-circ.inc"-->
+<h2>Document(s) en retard au <!-- TMPL_VAR NAME="todaysdate" --></h2>
+
+<div class="searchresults">
+<table>
+<tr>
+    <th>Date de retour</th>
+    <th>Adhérent</th>
+    <th>Titre</th>
+</tr>
+
+<!-- TMPL_LOOP NAME="overdueloop" -->
+    <tr>
+        <td width="15%"><!-- TMPL_VAR NAME="duedate" --></td>
+        <!-- TMPL_IF NAME="email" -->
+        <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"> <!-- TMPL_VAR NAME="name" --> </a> (<!-- TMPL_VAR NAME="phone" -->)</td>
+        <!-- TMPL_ELSE -->
+        <td><!-- TMPL_VAR NAME="name" --> (<!-- TMPL_VAR NAME="phone" -->)</td>
+        <!-- /TMPL_IF -->
+        <td>
+            <p><!-- TMPL_VAR NAME="title" --></p>
+            <p><!-- TMPL_VAR NAME="author" --></p>
+        </td>
+    </tr>
+<!-- /TMPL_LOOP -->
+</table>
+</div>
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

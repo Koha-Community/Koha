@@ -48,7 +48,6 @@
                         </form>
                      </li>
                     <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li>
-                    <li><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Reviews</a></li>
                 </ul>
                 <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
@@ -75,26 +74,25 @@
     <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
     <!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/about.pl">About Koha</a>
-    <!-- TMPL_IF NAME="loggedinusername" -->
-    <ul>
-    <li>
-        <b> Login information</b> :
-    </li>
-    </ul>
-    <ul>
-     <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b></li>
-        <li> Library : <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
-        <!-- TMPL_IF NAME="AutoLocation" -->
-            <li>autolocate activated</li>
-    <!-- TMPL_ELSE -->
-        <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Change Settings</a></li>
-    <!-- /TMPL_IF -->
-    </ul>
-    
-    <ul>
-        <li><a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a></li>
-    </ul>
-    <!-- /TMPL_IF -->
+    <div id="login">
+        <!-- TMPL_IF NAME="loggedinusername" -->
+        <ul>
+        <li>
+            <b> Login information</b>
+        </li>
+        <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b>
+            at <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
+            <!-- TMPL_IF NAME="AutoLocation" -->
+                <li>autolocate activated</li>
+        <!-- TMPL_ELSE -->
+            <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Change Settings</a></li>
+        <!-- /TMPL_IF -->
+        </ul>
+        <ul>
+            <li><a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a></li>
+        </ul>
+        <!-- /TMPL_IF -->
+    </div>
     <!-- TMPL_IF NAME="IntranetNav" -->
         <!-- TMPL_VAR NAME="IntranetNav" -->
     <!-- /TMPL_IF -->

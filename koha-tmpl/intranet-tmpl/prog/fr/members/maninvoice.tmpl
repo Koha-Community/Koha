@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Adhérents &rsaquo; créer une facture manuelle</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+
+
+<form action="/cgi-bin/koha/members/maninvoice.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
+	<table>
+	<caption>Facture manuelle</caption>
+	<tr><th scope="row">N° d'adhérent</th><td><!-- TMPL_VAR Name="borrowernumber" --></td></tr>
+	<tr><th scope="row">Type</th><td><select name="type">
+<option value="L">Exemplaire perdu</option>
+<option value="F">Amende</option>
+<option value="A">Gestion de la comptabilité des cotisations</option>
+<option value="N">Nouvelle carte</option>
+<option value="M">Divers</option>
+<option value="REF">Règlement en liquide</option>
+</select></td></tr>
+	<tr><th scope="row">Numéro d'exemplaire</th><td><input type="text" name="itemnum" /></td></tr>
+	<tr><th scope="row">Description</th><td><input type="text" name="desc" size="50" /></td></tr>
+	<tr><th scope="row">Montant</th><td><input type="text" name="amount" /> €</td></tr>
+	</table>
+<input type="submit" name="add" value="Ajouter  frais">
+</form>
+
+<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" /><input type="submit" value="Annuler"></form>
+
+
+
+
+<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->

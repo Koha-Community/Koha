@@ -1,0 +1,879 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Circulation
+<!-- TMPL_IF NAME="borrowernumber" -->
+&rsaquo; : En prêt à, <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
+<!-- /TMPL_IF --></title>
+
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+<!-- TMPL_IF NAME="borrowernumber" -->
+    <h1>Prêts</h1>
+<!-- TMPL_ELSE -->
+    <h1>Circulation &rsaquo; Prêts</h1>
+<!-- /TMPL_IF -->
+
+<!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
+<!-- Branch: <a href="/cgi-bin/koha/circ/selectbranchprinter.pl" title="change"><!-- TMPL_VAR NAME="branchname"--></a>
+<!-- TMPL_IF name="printername" --> | Printer: <!-- TMPL_VAR NAME="printername" --><!-- /TMPL_IF -->-->
+
+<!-- TMPL_IF NAME="borrowernumber" -->
+
+<div id="BorrowerDetails">
+        <fieldset>
+            <legend><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+            </legend>
+            (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->"> détails </a> / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ&categorycode=<!-- TMPL_VAR name="categorycode" -->">modifier</a>)
+        <p>
+        <!--TMPL_IF Name="warndeparture"--><p class="problem"> L'adhésion expire bientôt.</p><!--/TMPL_IF-->
+        <!-- TMPL_IF NAME="streetaddress"-->
+            <!-- TMPL_VAR NAME="streetaddress" -->,
+        <!-- TMPL_ELSE -->
+            <span class="problem">Pas d'adresse enregistrée pour cet adhérent.</span>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="city" -->
+            <!-- TMPL_VAR NAME="city" -->
+        <!-- TMPL_ELSE -->
+            Pas de commune enregistrée
+        <!-- /TMPL_IF -->
+<!--TMPL_IF NAME="phone" -->
+        <!-- TMPL_VAR NAME="phone" -->
+    <!-- TMPL_ELSE -->
+        <span class="problem">Pas de téléphone enregistré.</span>
+    <!-- /TMPL_IF -->
+    </p>
+    <!-- TMPL_IF NAME="emailaddress" -->
+    <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a>
+    <!-- /TMPL_IF -->
+    <p>Catégorie : <!-- TMPL_VAR name="categorycode" --></p>
+    </fieldset>
+    <!-- TMPL_IF NAME="overduecount" -->
+        <span class="problem"><b><big>Cet adhérent a <!-- TMPL_VAR name="overduecount" --> document(s) en retard</big></b></span>
+    <!--/TMPL_IF-->
+    <!-- TMPL_IF NAME="flagged" -->
+        <fieldset>
+            <legend class="problem">Mise en garde</legend>
+            <!-- TMPL_IF NAME="gna" -->
+                <p>Adresse : l'adresse de l'adhérent semble erronée</p>
+            <!-- /TMPL_IF -->
+        
+            <!-- TMPL_IF NAME="lost" -->
+                <p>Perdue : la carte de l'adhérent semble perdue</p>
+            <!-- /TMPL_IF -->
+        
+            <!-- TMPL_IF NAME="dbarred" -->
+                <p>
+                Suspendu : L'adhérent est suspendu <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&destination=circ&status=0">Lever la suspension</a>
+                </p>
+            <!-- /TMPL_IF -->
+        
+            <!-- TMPL_IF name="odues" -->
+            <p>
+                <!-- TMPL_IF name="nonreturns" -->
+            Retards : Voir les éléments surlignés <a href="JavaScript:active(1)">ci-dessous</a>
+                <!-- /TMPL_IF -->
+            </p>
+            <!-- /TMPL_IF --> <!-- odues -->
+        
+            <!-- TMPL_IF NAME="charges" -->
+            <p>
+            Amendes : L'adhérent a des <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">amendes pour retard</a>.Effectuer <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">le règlement</a>
+            </p>
+            <!-- /TMPL_IF -->
+            <!-- this part must be removed if we keep the new waiting infos display-->
+            <!-- TMPL_IF NAME="waiting" -->
+            <p>
+            Réservations en attente : 
+                <!-- TMPL_LOOP name="itemswaiting" -->
+                <li>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR name="title" --></a> (<!-- TMPL_VAR name="barcode" --> -- <!-- TMPL_VAR name="branchname" -->)
+                </li>
+                <!-- /TMPL_LOOP --> <!-- itemswaiting -->
+            </p>
+            <!-- /TMPL_IF --> <!-- waiting -->
+            <!-- end of this part must be removed if we keep the new waiting infos display-->
+        
+            <!-- TMPL_IF name="notes" -->
+            <p>Notes : <!-- TMPL_VAR name="notesmsg" --></p>
+            <!-- /TMPL_IF --> <!-- notes -->
+        </fieldset>
+    <!-- /TMPL_IF --> <!-- flagged -->
+
+</div> <!-- id=BorrowerDetails -->
+<!-- TMPL_ELSE --> <!-- borrowernumber -->
+
+<!-- TMPL_UNLESS NAME="CGIselectborrower"-->
+<!-- No card entered yet -->
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
+<fieldset id="circ_circulation_borrower_search">
+    <legend>Recherche d'un adhérent</legend>
+
+    <p>
+    <label for="findborrower">Entrer le n° de carte d'adhérent ou une partie du nom :  </label>
+    <input id="findborrower" name="findborrower" type="text" size="40"/>
+    </p>
+
+    <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+    <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
+    <input type="submit" value="Valider">
+</fieldset>
+</form>
+<!-- /TMPL_UNLESS -->
+<!-- /TMPL_IF --> <!-- borrowernumber -->
+
+<!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
+<fieldset id="circ_circulation_needsconfirmation">
+<legend>Confirmer le prêt</legend>
+
+<ul>
+<!-- TMPL_IF NAME="DEBT" -->
+    <li>L'adhérent doit <!-- TMPL_VAR name="DEBT" --> €</li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="RENEW_ISSUE" -->
+    <li>Document actuellement en prêt à cet adhérent. Renouveler ?</li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+    <li>Exemplaire mis de côté pour <!-- TMPL_VAR NAME="RESERVE_WAITING" --></li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="RESERVED" -->
+    <li>Exemplaire en réservation pour <!-- TMPL_VAR NAME="RESERVED" --></li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
+    <li>Exemplaire (<!-- TMPL_VAR NAME="getTitleMessageIteminfo" -->) prêté à <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" --> .Retourner et prêter ?</li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="TOO_MANY" -->
+    <li>Trop de prêts en cours (prétés / maximum : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
+<!-- /TMPL_IF -->
+</ul>
+
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+    
+<!-- TMPL_IF NAME="RESERVED" -->
+    <p>
+    <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
+    <label for="cancelreserve">Annuler réservation</label>
+    </p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="RESERVE_WAITING" -->
+    <p>
+    <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
+    <label for="cancelreserve">Annuler réservation</label>
+    </p>
+<!-- /TMPL_IF -->
+
+    <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
+    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+    <input type="hidden" name="issueconfirmed" value="1" />
+    <input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" />
+    <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
+    <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
+    <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+
+    <div id="action">
+    <input type="submit" value="Confirmer le prêt" accesskey="y">
+    </div>
+
+</form>
+
+<form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+
+    <div id="action">
+    <input type="submit" value="Ne pas prêter" accesskey="n">
+    </div>
+</form>
+
+</fieldset>
+
+<!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
+
+<!-- TMPL_IF NAME="issued" -->
+<p>Exemplaire en prêt</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="message" -->
+<p>
+Pas d'adhérent trouvé pour <!-- TMPL_VAR name="message" --> <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A"/>Inscription adulte</a> <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C"/>Inscription enfant</a>  
+</p>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="CGIselectborrower" -->
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
+<fieldset id="circ_circulation_selectborrower">
+    <legend>Sélection d'un adhérent</legend>
+
+    <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+    <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
+
+    <p>
+    <label for="borrowernumber">Sélectionner un adhérent :  </label>
+    <!-- TMPL_VAR name="CGIselectborrower" -->
+    </p>
+
+    <p><input type="submit" value="Sélectionner"></p>
+
+    <p>
+    Adhérent pas trouvé ? <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A"/>Inscription adulte</a> <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C"/>Inscription enfant</a> ou <a href="JavaScript:back();">Essayer une autre recherche</a>
+    </p>
+</fieldset>
+</form>
+<!-- TMPL_ELSE --> <!-- CGIselectborrower -->
+
+<!-- BARCODE ENTRY -->
+
+<!-- TMPL_IF NAME="borrowernumber" -->
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
+<fieldset id="circ_circulation_issue">
+    <legend>Prêter un document</legend>
+
+    <p>
+    <label for="barcode">Code à barres de l'exemplaire :  </label><input type="text" name="barcode" size="14" />
+    
+        <!-- RESULT OF ISSUING REQUEST -->
+        <!-- TMPL_IF NAME="IMPOSSIBLE" -->
+        <ul>
+        <!-- TMPL_IF NAME="INVALID_DATE" -->
+            <li><span class="problem">La date de retour n'est pas correcte</span></li>
+        <!-- /TMPL_IF -->  
+        <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
+            <li><span class="problem">Le code à barres est inconnu</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
+            <li><span class="problem">Exemplaire exclu du prêt</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="WTHDRAWN" -->
+            <li><span class="problem">L'exemplaire est supprimé</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="GNA" -->
+            <li><span class="problem">L'adresse de l'adhérent semble erronée</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="CARD_LOST" -->
+            <li><span class="problem">La carte d'adhérent est perdue</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="DEBARRED" -->
+            <li><span class="problem">L'adhérent est suspendu</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
+            <li><span class="problem">Pas de renouvellement supplémentaire possible</span></li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="EXPIRED" -->
+            <li><span class="problem">La carte d'adhérent a expiré</span></li>
+        <!-- /TMPL_IF -->
+        </ul>
+</p>
+    <!-- TMPL_IF NAME="memberofinstution" -->
+    <p><!-- TMPL_VAR NAME="CGIorganisations" --></p>
+    <!-- /TMPL_IF -->
+
+    <!--/TMPL_IF --> <!-- impossible -->
+    <p><label for="day">Spécifier une date de retour :  </label>
+        <select name="day" id="day">
+            <option value="0">Jour</option>
+            <!-- TMPL_IF NAME="day1" -->
+                <option value="1" selected="selected">1</option>
+            <!-- TMPL_ELSE -->
+                <option value="1">1</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day2" -->
+                <option value="2" selected="selected">2</option>
+            <!-- TMPL_ELSE -->
+                <option value="2">2</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day3" -->
+                <option value="3" selected="selected">3</option>
+            <!-- TMPL_ELSE -->
+                <option value="3">3</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day4" -->
+                <option value="4" selected="selected">4</option>
+            <!-- TMPL_ELSE -->
+                <option value="4">4</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day5" -->
+                <option value="5" selected="selected">5</option>
+            <!-- TMPL_ELSE -->
+                <option value="5">5</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day6" -->
+                <option value="6" selected="selected">6</option>
+            <!-- TMPL_ELSE -->
+                <option value="6">6</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day7" -->
+                <option value="7" selected="selected">7</option>
+            <!-- TMPL_ELSE -->
+                <option value="7">7</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day8" -->
+                <option value="8" selected="selected">8</option>
+            <!-- TMPL_ELSE -->
+                <option value="8">8</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day9" -->
+                <option value="9" selected="selected">9</option>
+            <!-- TMPL_ELSE -->
+                <option value="9">9</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day10" -->
+                <option value="10" selected="selected">10</option>
+            <!-- TMPL_ELSE -->
+                <option value="10">10</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day11" -->
+                <option value="11" selected="selected">11</option>
+            <!-- TMPL_ELSE -->
+                <option value="11">11</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day12" -->
+                <option value="12" selected="selected">12</option>
+            <!-- TMPL_ELSE -->
+                <option value="12">12</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day13" -->
+                <option value="13" selected="selected">13</option>
+            <!-- TMPL_ELSE -->
+                <option value="13">13</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day14" -->
+                <option value="14" selected="selected">14</option>
+            <!-- TMPL_ELSE -->
+                <option value="14">14</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day15" -->
+                <option value="15" selected="selected">15</option>
+            <!-- TMPL_ELSE -->
+                <option value="15">15</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day16" -->
+                <option value="16" selected="selected">16</option>
+            <!-- TMPL_ELSE -->
+                <option value="16">16</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day17" -->
+                <option value="17" selected="selected">17</option>
+            <!-- TMPL_ELSE -->
+                <option value="17">17</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day18" -->
+                <option value="18" selected="selected">18</option>
+            <!-- TMPL_ELSE -->
+                <option value="18">18</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day19" -->
+                <option value="19" selected="selected">19</option>
+            <!-- TMPL_ELSE -->
+                <option value="19">19</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day20" -->
+                <option value="20" selected="selected">20</option>
+            <!-- TMPL_ELSE -->
+                <option value="20">20</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day21" -->
+                <option value="21" selected="selected">21</option>
+            <!-- TMPL_ELSE -->
+                <option value="21">21</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day22" -->
+                <option value="22" selected="selected">22</option>
+            <!-- TMPL_ELSE -->
+                <option value="22">22</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day23" -->
+                <option value="23" selected="selected">23</option>
+            <!-- TMPL_ELSE -->
+                <option value="23">23</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day24" -->
+                <option value="24" selected="selected">24</option>
+            <!-- TMPL_ELSE -->
+                <option value="24">24</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day25" -->
+                <option value="25" selected="selected">25</option>
+            <!-- TMPL_ELSE -->
+                <option value="25">25</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day26" -->
+                <option value="26" selected="selected">26</option>
+            <!-- TMPL_ELSE -->
+                <option value="26">26</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day27" -->
+                <option value="27" selected="selected">27</option>
+            <!-- TMPL_ELSE -->
+                <option value="27">27</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day28" -->
+                <option value="28" selected="selected">28</option>
+            <!-- TMPL_ELSE -->
+                <option value="28">28</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day29" -->
+                <option value="29" selected="selected">29</option>
+            <!-- TMPL_ELSE -->
+                <option value="29">29</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day30" -->
+                <option value="30" selected="selected">30</option>
+            <!-- TMPL_ELSE -->
+                <option value="30">30</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="day31" -->
+                <option value="31" selected="selected">31</option>
+            <!-- TMPL_ELSE -->
+                <option value="31">31</option>
+            <!-- /TMPL_IF -->
+            </select>
+        
+        <select name="month">
+            <option value="0">Mois</option>
+            <!-- TMPL_IF NAME="month1" -->
+                <option value="1" selected="selected">Janv</option>
+            <!-- TMPL_ELSE -->
+                <option value="1">Janv</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month2" -->
+                <option value="2" selected="selected">Fév.</option>
+            <!-- TMPL_ELSE -->
+                <option value="2">Fév.</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month3" -->
+                <option value="3" selected="selected">Mars</option>
+            <!-- TMPL_ELSE -->
+                <option value="3">Mars</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month4" -->
+                <option value="4" selected="selected">Avr</option>
+            <!-- TMPL_ELSE -->
+                <option value="4">Avr</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month5" -->
+                <option value="5" selected="selected">Mai</option>
+            <!-- TMPL_ELSE -->
+                <option value="5">Mai</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month6" -->
+                <option value="6" selected="selected">Juin</option>
+            <!-- TMPL_ELSE -->
+                <option value="6">Juin</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month7" -->
+                <option value="7" selected="selected">Juil</option>
+            <!-- TMPL_ELSE -->
+                <option value="7">Juil</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month8" -->
+                <option value="8" selected="selected">Août</option>
+            <!-- TMPL_ELSE -->
+                <option value="8">Août</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month9" -->
+                <option value="9" selected="selected">Sept</option>
+            <!-- TMPL_ELSE -->
+                <option value="9">Sept</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month10" -->
+                <option value="10" selected="selected">Oct</option>
+            <!-- TMPL_ELSE -->
+                <option value="10">Oct</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month11" -->
+                <option value="11" selected="selected">Nov</option>
+            <!-- TMPL_ELSE -->
+                <option value="11">Nov</option>
+            <!-- /TMPL_IF -->
+            
+            <!-- TMPL_IF NAME="month12" -->
+                <option value="12" selected="selected">Dcbre</option>
+            <!-- TMPL_ELSE -->
+                <option value="12">Dcbre</option>
+            <!-- /TMPL_IF -->
+        </select>
+            
+        <select name="year">
+            <option value="0">Année</option>
+            <!-- TMPL_IF NAME="year2007" -->
+                <option value="2007" selected="selected">2007</option>
+            <!-- TMPL_ELSE -->
+                <option value="2007">2007</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="year2008" -->
+                <option value="2008" selected="selected">2008</option>
+            <!-- TMPL_ELSE -->
+                <option value="2008">2008</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="year2009" -->
+                <option value="2009" selected="selected">2009</option>
+            <!-- TMPL_ELSE -->
+                <option value="2009">2009</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="year2010" -->
+                <option value="2010" selected="selected">2010</option>
+            <!-- TMPL_ELSE -->
+                <option value="2010">2010</option>
+            <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="year2011" -->
+                <option value="2011" selected="selected">2011</option>
+            <!-- TMPL_ELSE -->
+                <option value="2011">2011</option>
+            <!-- /TMPL_IF --> 	
+        </select>
+        
+        <label for="stickyduedate">
+	<!-- TMPL_IF NAME="stickyduedate" -->
+            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> checked />
+            Conserver la date de retour pour cet emprunteur
+<!-- TMPL_ELSE -->
+            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />
+<!-- /TMPL_IF -->
+            </label>
+        </p>
+
+    <input type="hidden" name="day" value="0" />
+    <input type="hidden" name="month" value="0" />
+    <input type="hidden" name="year" value="0" />
+    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+    <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+    <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
+    <input type="hidden" name="print" value="maybe" />
+    <!-- TMPL_IF NAME="CHARGES" -->
+    <input type="hidden" name="charges" value="yes" />
+    <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
+    <!-- /TMPL_IF -->
+
+    <div id="action">
+    <input type="submit" value="Prêt">
+    </div>
+
+</fieldset>
+</form>
+
+<!-- TMPL_IF NAME="WaitingReserveLoop" -->	
+<fieldset id="circ_circulation_issue">
+    <legend class="problem">Réservations en attente</legend>
+        Cet adhérent à une réservation en attente :  
+        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
+        <p>
+            <ul> 
+                <li> <!-- TMPL_VAR NAME="title"--> (<!-- TMPL_VAR NAME="itemtype"-->), auteur : <!-- TMPL_VAR NAME="author"-->, réservé le : <!-- TMPL_VAR NAME="reservedate"--> 
+            <!-- TMPL_IF NAME="waitingat" -->
+                Exemplaire en attente à : <!-- TMPL_VAR NAME="waitingat" -->	
+            <!-- /TMPL_IF -->
+                </li>
+            </ul>
+        </p>
+    <!-- /TMPL_LOOP -->
+</fieldset>
+
+<!-- /TMPL_IF -->
+
+<div id="tabs">
+    <h2><!-- TMPL_VAR NAME="firstname"--> <!-- TMPL_VAR NAME="surname"--> (<!-- TMPL_VAR NAME="cardnumber"-->)a</h2>
+    <!-- TMPL_IF NAME="countreserv"-->
+        <a href="javascript:active(0)" class="tab_inactive" id="link0">
+            <!--TMPL_VAR NAME="countreserv"--> réservation(s)
+        </a>
+    <!-- TMPL_ELSE -->
+        <a href="#" class="tab_inactive">
+            0 Réservation(s)
+        </a>
+    <!-- /TMPL_IF -->
+    
+    <!--TMPL_IF NAME="issuecount"-->
+        <a href="javascript:active(1)" class="tab_inactive" id="link1">
+            <!-- TMPL_VAR NAME="issuecount"--> prêt(s)
+        </a>
+    <!-- TMPL_ELSE -->
+        <a href="#" class="tab_inactive">
+            0 prêt(s)
+        </a>
+    <!-- /TMPL_IF -->
+</div>
+
+<!-- TMPL_IF NAME="reservloop" -->
+<div id="0XX" class="content_hidden">
+    <table>
+        <tr>
+            <th>Date de réservation</th>
+            <th>Code à barres</th>
+            <th>Titre</th>
+            <th>Auteur</th>
+            <th>Localisation</th>
+        </tr>
+        <!-- TMPL_LOOP NAME="reservloop" -->
+        <tr class="<!-- TMPL_VAR NAME="color" -->">
+                    <td>
+                        <!-- TMPL_VAR NAME="reservedate" -->
+                    </td>
+                    <td>
+                        <!-- TMPL_IF name="barcodereserv" -->
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="waitingposition" -->
+                        Ce document <b> <!-- TMPL_VAR NAME="waitingposition" --> </b> :  est en attente
+                        <!-- /TMPL_IF -->
+                    </td>
+                    <td>
+                        <!-- TMPL_VAR NAME="title" --> (<b><!-- TMPL_VAR NAME="itemtype" --></b>) 
+
+                        <!-- TMPL_IF name="waiting" -->
+                        <br/>
+                        <i>Ce document est disponible</i>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="transfered" -->
+                        <br/>
+                        <i>Ce document a été transféré du site : <!-- TMPL_VAR NAME="frombranch" --> le : <!-- TMPL_VAR NAME="datesent" --> </i>
+                        <!-- /TMPL_IF -->
+
+                        <!-- TMPL_IF name="nottransfered" -->
+                        <br/>
+                        <i>Ce document n'a pas encore été transféré du site : <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <!-- /TMPL_IF -->
+                
+                    </td>
+                    <td><!-- TMPL_VAR NAME="author" --></td>
+                    <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+</div>
+<!-- /TMPL_IF --> <!-- reservesloop -->
+
+<!-- /TMPL_IF --> <!-- borrowernumber -->
+
+<!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
+<!-- TMPL_IF NAME="borrowernumber" -->
+<div id="1XX">
+    <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
+    <p>
+    <a href="JavaScript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page')"> Imprimer la page</a> / <a href=# onclick="javascript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Imprimer un reçu</a>
+    </p>
+    
+    <input type="hidden" value="circ" name="destination" />
+    <input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+    
+<!-- TMPL_IF NAME="todayissues" -->
+    <table>
+    <tr>
+        <th>Titre</th>
+        <th>Date de retour</th>
+        <th>Type de document</th>
+        <th>Cote n°</th>
+        <th>Code à barres</th>
+        <th>Renouvellement</th>
+    </tr>
+    
+    <tr>
+        <th colspan="6"><a name="today" id="today">Prêts du jour</a></th>
+    </tr>
+    <!-- TMPL_LOOP NAME="todayissues" -->
+    <!-- TMPL_IF NAME="togglecolor" -->
+    <tr>
+    <!-- TMPL_ELSE -->
+    <tr class="highlight">
+    <!-- /TMPL_IF -->
+        <td>
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
+        <br /><!-- TMPL_VAR NAME="author" --> - <!-- TMPL_VAR name="itemnotes" -->
+        </td>
+        <td><!-- TMPL_VAR NAME="dd" --></td>
+        <td>
+            <!-- TMPL_VAR NAME="itemtype" -->
+            <!-- TMPL_IF NAME="itemtype_image" -->
+            <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
+            <!-- /TMPL_IF -->
+        </td>
+        <td><!-- TMPL_VAR NAME="classification" --></td>
+        <td><!-- TMPL_VAR NAME="barcode" --></td>
+        <td>
+        <!-- TMPL_IF NAME="od" -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked"/>
+        <!-- TMPL_ELSE -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <!-- /TMPL_IF -->
+        <input type="checkbox"
+                name="all_items[]"
+                value="<!-- TMPL_VAR NAME="itemnumber" -->"
+            checked="checked"
+                style="display: none;"
+        />
+        </td>
+    </tr>
+    <!-- /TMPL_LOOP --> <!-- todayissues -->
+    <!-- /TMPL_IF --> <!-- todayissues -->
+<!-- TMPL_IF NAME="previssues" -->
+    <table>
+    <tr>
+        <th>Titre</th>
+        <th>Date de retour</th>
+        <th>Type de document</th>
+        <th>Cote n°</th>
+        <th>Code à barres</th>
+        <th>Renouvellement</th>
+    </tr>
+    <tr>
+        <th colspan="6"><a name="previous" id="previous">Prêts précédents</a></th>
+    </tr>
+    <!-- TMPL_LOOP NAME="previssues" -->
+    <!-- TMPL_IF NAME="togglecolor" -->
+        <tr>
+    <!-- TMPL_ELSE -->
+        <tr class="highlight">
+    <!-- /TMPL_IF -->
+        <td>
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
+        <br/><!-- TMPL_VAR NAME="author" --> - <!-- TMPL_VAR name="itemnotes" -->
+        </td>
+        <td>
+        <!-- TMPL_VAR NAME="dd" -->
+        </td>
+        <td>
+            <!-- TMPL_VAR NAME="itemtype" -->
+            <!-- TMPL_IF NAME="itemtype_image" -->
+            <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
+            <!-- /TMPL_IF -->
+        </td>
+        <td><!-- TMPL_VAR NAME="classification" --></td>
+        <td><!-- TMPL_VAR NAME="barcode" --></td>
+        <td>
+        <!-- TMPL_IF NAME="od" -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+        <!-- TMPL_ELSE -->
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <!-- /TMPL_IF -->
+        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
+        </td>
+    </tr>
+    <!-- /TMPL_LOOP --> <!-- previssues -->
+<!-- /TMPL_IF --> <!-- previssues -->
+    </table>
+
+    <div id="action">
+    <input type="submit" name="renew_checked" value="Renouveler le(s) document(s) coché(s)">
+    <input type="submit" name="renew_all" value="Tout renouveler">
+    </div>
+</form>
+</div>
+<!-- /TMPL_IF --> <!-- borrowernumber -->
+<!--/TMPL_IF -->
+
+<script type="text/JavaScript" language="JavaScript">
+    
+    /**
+    *  _(s)
+    *  This function is used to localised.
+    */
+    function _(s) {
+        return s;
+    }
+    /**
+    *  MoreBorrowerDetails();
+    *  This function displays or not borrower information.
+    */
+    function MoreBorrowerDetails() {
+        var div = document.getElementById('BorrowerDetails');
+        if(div.getAttribute('class') == "content_visible"){
+            div.removeAttribute('class');
+            div.setAttribute('class',"content_hidden");
+        }
+        else {
+            div.setAttribute('class',"content_visible");
+            div.setAttribute('style',"height:180px;");
+        }
+    }
+    /**
+    *  active(numlayer)
+    *  This function activate the numlayer div.
+    */
+    function active(numlayer){
+        for (i=0; i <= 1 ; i++ ) {
+            var tab;
+            try{
+                tab = document.getElementById(i+'XX');
+                tab.getAttribute('id'); // that throw an exception.
+            }
+            catch(e){
+                continue; // go to the next step.
+            }
+            if (numlayer==i) {
+                tab.setAttribute("class","content_visible");
+                var tabactive=document.getElementById('link'+i);
+                tabactive.removeAttribute("class");
+                tabactive.setAttribute("class","tab_active");
+            } else {
+                tab.setAttribute("class","content_hidden");
+                try {
+                    var tabactive=document.getElementById('link'+i);
+                    tabactive.removeAttribute("class");
+                    tabactive.setAttribute("class","tab_inactive");
+                }
+                catch(e){};
+            }
+        }
+    }
+
+    <!-- TMPL_IF NAME="borrowernumber" -->
+        document.mainform.barcode.focus(); // set the focus to the barcode entry.
+    <!-- TMPL_ELSE -->
+        document.mainform.findborrower.focus(); // set the focus to te form to search a borrower
+    <!-- /TMPL_IF -->
+
+</script>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

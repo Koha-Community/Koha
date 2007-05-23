@@ -1,0 +1,35 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Périodiques &rsaquo; Selection fournisseur</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<h1>Résultat de recherche fournisseur</h1>
+<h2>Vous recherchiez le <b>fournisseur <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> résultat(s) trouvé(s)</h2>
+
+<div class="searchresults">
+<!-- TMPL_IF NAME="loop_suppliers" -->
+<table>
+	<tr>
+		<th>Fournisseur</th>
+		<th>Sélectionner</th>
+	</tr>
+	<!-- TMPL_LOOP name="loop_suppliers" -->
+		<tr>
+			<td><!-- TMPL_VAR name="name" --></td>
+			<td><a href="#" onclick="javascript:GetIt(<!-- TMPL_VAR NAME="aqbooksellerid" -->,'<!--  TMPL_VAR escape="URL" NAME="name" -->')">Le choisir !</td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+    <br />
+    <a href="javascript:back();">Nouvelle recherche</a>
+</div>
+
+<script type="text/javascript" language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  window.close();
+}
+</script>
+

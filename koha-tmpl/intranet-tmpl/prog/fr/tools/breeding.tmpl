@@ -1,0 +1,58 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Catalogage &rsaquo; importation MARC</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+
+<h1>Acquisition de données MARC</h1>
+<h4>Importer dans le réservoir</h4>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>Résultats de l'importation : </p>
+<ul>
+	<li><!-- TMPL_VAR name="imported" --> notices importées</li>
+	<li><!-- TMPL_VAR name="alreadyindb" --> non importé, parce que déjà dans le catalogue</li>
+	<li><!-- TMPL_VAR name="alreadyinfarm" --> non importé, parce que déjà dans le réservoir</li>
+	<li><!-- TMPL_VAR name="notmarcrecord" --> non importé parce qu'ils ne semblent pas être au format MARC (ou ISBN/ ISSN manquant) !</li>
+	<li><!-- TMPL_VAR name="total" --> notices traitées</li>
+	<li><a href="/cgi-bin/koha/admin-home.pl">Retour</a></li>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Sélectionner un fichier à importer dans le réservoir.Il sera analysé, et pour chaque ISBN trouvé, une nouvelle notice sera créée dans le réservoir.</li>
+	<li>Si un ISBN existe déjà dans le réservoir, vous pouvez choisir soit d'ignorer la nouvelle notice soit d'écraser l'ancienne.</li>
+	<li>Vous pouvez donner un nom à cette importation. Cela peut être utile, lors de la création d'une notice, pour vous rappeler d'où vient la notice MARC proposée !</li>
+	<li>Bien sûr, si l'ISBN existe déjà dans la base de données active, la notice sera ignorée.</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<table>
+	<tr>
+		<th scope="row"><label for="uploadmarc">Sélectionnez le fichier à importer :  </label></th>
+		<td>
+			<input type="file" id="uploadmarc" name="uploadmarc" /><br />
+		</td>
+	</tr>
+	<tr>
+		<th scope="row"><label for="filename">Nom de cette importation :  </label></th>
+		<td>
+			<input type="text" id="filename" name="filename" />
+		</td>
+	</tr>
+	<tr>
+		<th scope="row"><label for="syntax">Format des données : </label></th>
+		<td>
+			<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" rowspan="2">Si l'ISBN est déjà dans le réservoir :  </th>
+		<td><input type="radio" name="overwrite_biblio" value="0" checked="checked" /> Ignorer celle-ci, garder l'existante</td></tr>
+<tr><td>
+			<input type="radio" name="overwrite_biblio" value="1" /> Écraser la notice existante avec celle-ci</td>
+	</tr>
+</table><input type="submit" value="Importer">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

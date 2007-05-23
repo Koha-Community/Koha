@@ -39,16 +39,19 @@
     </fieldset>
 <!-- /REMOTE DATABASES -->
 <!-- /TMPL_IF -->
-<!-- TMPL_ELSE -->
-<h3>Search the catalogue:</h3>
 <!-- /TMPL_IF -->
 
 <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset>
-    <!-- TMPL_IF NAME="expanded_options" --><legend>Search For: </legend><!-- /TMPL_IF --> 
+    <legend>Search For: </legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
 
-        <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_IF NAME="search_boxes_label" --><p style="text-indent: 4.5em;"><!-- TMPL_ELSE --><p><!-- /TMPL_IF --><!-- TMPL_ELSE --><p><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="expanded_options" -->
+            <!-- TMPL_IF NAME="scan_index" -->
+                <p><label for='scan'>Scan Indexes</label><input type='checkbox' name='scan' id='scan' value='1'/></p>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+            <p>
         <!-- TMPL_IF NAME="expanded_options" -->
             <select name='op'>
                 <option value='and' selected='selected'>and</option>
@@ -84,26 +87,28 @@
 
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value=""/>
-            <!-- TMPL_IF NAME="expanded_options" -->
-        <!-- TMPL_IF NAME="scan_index" --><input type='checkbox' name='scan' id='scan' value='1'/><label for='scan'>Scan Indexes</label><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="expanded_options" -->
+            <!-- TMPL_IF NAME="add_field" -->
+                <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
             <!-- /TMPL_IF -->
-        </p>
+        <!-- /TMPL_IF -->
 
     <!-- /TMPL_LOOP -->
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
-<fieldset style="margin-right:20%">
-    <legend>Itemtype limit to any of the following:</legend>
-    <p>
+    <div id="itemtypelist">
+    <h2>Itemtype limit to any of the following:</h2>
+    <table>
+        <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
-        <input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" title="<!--TMPL_VAR Name="description" -->"/>
-        <!-- TMPL_UNLESS name="count5" --></p><p><!-- /TMPL_UNLESS -->
+        <td><p>
+        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/>&nbsp;
+        <!--TMPL_VAR Name="description" --></p></td>
+        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
-      </p>
-    </p>
-</fieldset>
-
+      </tr>
+    </table>
+    </div>
 <!-- TMPL_IF NAME="expanded_options" -->
 <!-- BASIC LIMITS -->
 <!--TMPL_IF Name="usmarc"-->

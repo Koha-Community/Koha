@@ -1,0 +1,17 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Impossible de supprimer l'adhérent</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+	<h3>Impossible de supprimer cet adhérent</h3>
+		<!-- TMPL_IF name="ItemsOnIssues" -->
+			Cet adhérent a <!-- TMPL_VAR name="ItemsOnIssues" --> document(s) en prêt.
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="charges -->
+			Cet adhérent a <!-- TMPL_VAR name="charges" --> d'amendes.
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF name="guarantees" -->
+			L'enregistrement de l'adhérent a des comptes-enfant rattachés.
+		<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

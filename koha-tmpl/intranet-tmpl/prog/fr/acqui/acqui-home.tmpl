@@ -1,0 +1,121 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Acquisitions</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+
+<h1>Acquisitions</h1>
+<div id="acqui_acqui_home_order">
+    <fieldset>
+        <legend>Créer, réceptionner, modifier une commande</legend>
+    <!-- TMPL_IF name="nobudget" -->
+        <span class="problem">Vous devez définir un budget (module paramètres)</span>
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+            <p><label for="supplier">Fournisseur </label><input type="text" size="25" name="supplier" id="supplier" />
+            <input type="submit" value="Rechercher">
+            </p>
+        </form>
+    <!-- TMPL_ELSE -->
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+            <p><label for="supplier">Fournisseur </label><input type="text" size="25" name="supplier" id="supplier" />
+            <input type="submit" value="Rechercher">
+            </p>
+        </form>
+    <!-- /TMPL_IF -->
+    </fieldset>
+</div>
+<div id="acqui_acqui_home_suggestions">
+    <fieldset>
+    <legend>Suggestions en attente</legend>
+        <!-- TMPL_IF name="suggestion" -->
+            <!--TMPL_VAR NAME="suggestion" --> suggestions en attente <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Traiter les suggestions</a>
+        <!-- TMPL_ELSE -->
+            <p>Pas de suggestions en attente</p>
+        <!-- /TMPL_IF -->
+    </fieldset>
+</div>
+
+
+<div id="acqui_acqui_home_currency">
+<!-- TMPL_IF NAME="loop_currency" -->
+    <h2>Taux de change</h2>
+    <form action="/cgi-bin/koha/acqui/currency.pl">
+    <table>
+        <tr>
+            <th>Devise</th>
+            <th>Taux</th>
+        </tr>
+        <!-- TMPL_LOOP name="loop_currency" -->
+            <tr>
+                <td>
+                    <label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
+                </td>
+                <td>
+                        <input type="hidden" name="type" value="change" />
+                        <input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
+                </td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+    <input type="submit" value="Valider le taux de change">
+    </form>
+<!-- TMPL_ELSE -->
+    <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button acquisition">
+    Ajouter une devise
+    </a>
+<!-- /TMPL_IF -->
+</div>
+
+    <!-- TMPL_IF name="nobudget" -->
+    <!-- TMPL_ELSE -->
+    <h2>Budgets et postes budgétaires</h2>
+    <a href="/cgi-bin/koha/admin/aqbookfund.pl" title="[Gérer les postes budgétaires]">[ Géré par ]</a>
+    <div id="BudgetsAndFunds">
+    <table id="accounts">
+        <thead>
+        <tr>
+            <th>Budgets</th>
+            <th>Total</th>
+            <th>Dépensé</th>
+            <th>Engagé</th>
+            <th>Dispo.</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- TMPL_LOOP name="loop_budget" -->
+            <tr>
+                <td><!-- TMPL_VAR name="bookfundname" --></td>
+                <td><!-- TMPL_VAR name="budgetamount" --></td>
+                <td><!-- TMPL_VAR name="spent" --></td>
+                <td><!-- TMPL_VAR name="comtd" --></td>
+                <td><!-- TMPL_VAR name="avail" --></td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+        </tbody>
+        <tfooter>
+        <tr>
+            <th>Total</td>
+            <th><!-- TMPL_VAR name="total" --></th>
+            <th><!-- TMPL_VAR name="totspent" --></th>
+            <th><!-- TMPL_VAR name="totcomtd" --></th>
+            <th><!-- TMPL_VAR name="totavail" --></th>
+        </tr>
+        </tfooter>
+    </table>
+    </div>
+    <!-- /TMPL_IF -->
+<div id="acqui_acqui_home_hints">
+    <p>Utilisez le bouton rafraîchir pour avoir les chiffres les plus récents.Les chiffres communiqués le sont à titre indicatif, dans la mesure où des taux de change affecteront le montant réellement payé.</p>
+    
+    <h2>Aide</h2>
+    <p>Pour démarrer une acquisition, que ce soit une commande, un achat local ou un don commencez par chercher le fournisseur, dont on vous demandera de vérifier les informations puis entrez votre nom, ce qui sélectionnera un panier d'achat pour vous.(pourquoi cela devez-vous vous demander...parce que nous voulons être sûrs que c'est réellement vous qui commandez - Pas seulement votre ordinateur).</p>
+    <p>Pour commander un document, vous avez besoin de déterminer soit  qu'une notice existe déjà puis d'y ajouter l'exemplaire, soit de créer une nouvelle notice et d'y ajouter l'exemplaire.  </p>
+    <p>Pour débuter un nouveau panier d'achat chez un autre fournisseur retournez à cette page et commencez simplement une nouvelle recherche de fournisseur.</p>
+    <p>Pour fermer un panier de commande cliquez sur "voir les paniers de commande "ou cherchez au dessus, et cliquez alors sur "valider le panier".</p>
+</div>
+
+<script type="text/JavaScript">
+    document.findsupplier.supplier.focus();
+</script>
+
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
