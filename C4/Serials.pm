@@ -1052,9 +1052,9 @@ sub GetExpirationDate {
 
 # we don't do the same test if the subscription is based on X numbers or on X weeks/months
 #     warn "SUBSCRIPTIONID :$subscriptionid";
-     use Data::Dumper; warn Dumper($subscription);
+#      use Data::Dumper; warn Dumper($subscription);
 
-         warn "dateCHECKRESERV :".$subscription->{startdate};
+#          warn "dateCHECKRESERV :".$subscription->{startdate};
     if ( $subscription->{numberlength} ) {
         #calculate the date of the last issue.
         my $length = $subscription->{numberlength};
@@ -1763,20 +1763,12 @@ sub HasSubscriptionExpired {
                   || (!$res));
       return 0;
     } else {
-      if ($subscription->{numberlength}){
-	my $query = qq|
-            SELECT count(*)
-            FROM   serial
-            WHERE  subscriptionid=?
-	    AND serial.publisheddate>?
-        |;
-	my $sth=$dbh->prepare($query);
-	$sth->execute($subscriptionid, $subscription->{startdate});
-	my ($countreceived)=$sth->fetchrow;
-	return 1 if ($countreceived) >$subscription->{numberlentgh}-3;
-	return 0;
+      if ($subscription->{'numberlength'}){
+        my $countreceived=countissuesfrom($subscriptionid,$subscription->{'startdate'});
+      	return 1 if ($countreceived >$subscription->{'numberlentgh'});
+	      return 0;
       } else {
-	return 0;
+	      return 0;
       }
     }
     return 0;
@@ -2269,6 +2261,32 @@ sub getroutinglist {
     return ( $count, @routinglist );
 }
 
+=head2 countissuesfrom
+
+=over 4
+
+$result = &countissuesfrom($subscriptionid,$startdate)
+
+
+=back
+
+=cut
+
+sub countissuesfrom {
+    my ($subscriptionid,$startdate) = @_;
+    my $dbh              = C4::Context->dbh;
+    my $query = qq|
+            SELECT count(*)
+            FROM   serial
+            WHERE  subscriptionid=?
+            AND serial.publisheddate>?
+        |;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($subscriptionid, $startdate);
+    my ($countreceived)=$sth->fetchrow;
+    return $countreceived;  
+}
+
 =head2 abouttoexpire
 
 =over 4
@@ -2288,38 +2306,43 @@ sub abouttoexpire {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    my $expirationdate   = GetExpirationDate($subscriptionid);
-    my $sth =
-      $dbh->prepare(
-        "select max(planneddate) from serial where subscriptionid=?");
-    $sth->execute($subscriptionid);
-    my ($res) = $sth->fetchrow ;
-    warn "date expiration : ".$expirationdate." date courante ".$res;
-    my @res=split /-/,$res;
-    my @endofsubscriptiondate=split/-/,$expirationdate;
     my $per = $subscription->{'periodicity'};
-    my $x;
-    if ( $per == 1 ) {$x=7;}
-    if ( $per == 2 ) {$x=7; }
-    if ( $per == 3 ) {$x=14;}
-    if ( $per == 4 ) { $x = 21; }
-    if ( $per == 5 ) { $x = 31; }
-    if ( $per == 6 ) { $x = 62; }
-    if ( $per == 7 || $per == 8 ) { $x = 93; }
-    if ( $per == 9 )  { $x = 190; }
-    if ( $per == 10 ) { $x = 365; }
-    if ( $per == 11 ) { $x = 730; }
-    my @datebeforeend=Add_Delta_Days(  $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2],
-                  - (3 * $x)) if (@endofsubscriptiondate);
-            # warn "DATE BEFORE END: $datebeforeend";
-    return 1 if ( @res && 
-                  (@datebeforeend && 
-                      Delta_Days($res[0],$res[1],$res[2],
-                      $datebeforeend[0],$datebeforeend[1],$datebeforeend[2]) <= 0) && 
-                  (@endofsubscriptiondate && 
-                      Delta_Days($res[0],$res[1],$res[2],
-                      $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) >= 0) );
-    return 0;
+    if ($per>0){
+      my $expirationdate   = GetExpirationDate($subscriptionid);
+      my $sth =
+        $dbh->prepare(
+          "select max(planneddate) from serial where subscriptionid=?");
+      $sth->execute($subscriptionid);
+      my ($res) = $sth->fetchrow ;
+      warn "date expiration : ".$expirationdate." date courante ".$res;
+      my @res=split /-/,$res;
+      my @endofsubscriptiondate=split/-/,$expirationdate;
+      my $per = $subscription->{'periodicity'};
+      my $x;
+      if ( $per == 1 ) {$x=7;}
+      if ( $per == 2 ) {$x=7; }
+      if ( $per == 3 ) {$x=14;}
+      if ( $per == 4 ) { $x = 21; }
+      if ( $per == 5 ) { $x = 31; }
+      if ( $per == 6 ) { $x = 62; }
+      if ( $per == 7 || $per == 8 ) { $x = 93; }
+      if ( $per == 9 )  { $x = 190; }
+      if ( $per == 10 ) { $x = 365; }
+      if ( $per == 11 ) { $x = 730; }
+      my @datebeforeend=Add_Delta_Days(  $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2],
+                    - (3 * $x)) if (@endofsubscriptiondate);
+              # warn "DATE BEFORE END: $datebeforeend";
+      return 1 if ( @res && 
+                    (@datebeforeend && 
+                        Delta_Days($res[0],$res[1],$res[2],
+                        $datebeforeend[0],$datebeforeend[1],$datebeforeend[2]) <= 0) && 
+                    (@endofsubscriptiondate && 
+                        Delta_Days($res[0],$res[1],$res[2],
+                        $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) >= 0) );
+      return 0;
+   } elsif ($subscription->{numberlength}>0) {
+    return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
+   } else {return 0}
 }
 
 =head2 old_newsubscription
@@ -2562,7 +2585,7 @@ skipped then the returned date will be 2007-05-10
 return :
 $resultdate - then next date in the sequence
 
-FIXME : have to replace Date::Manip by Date::Calc in this function to improve performances.
+Return 0 if periodicity==0
 
 =cut
 sub in_array { # used in next sub down
@@ -2587,6 +2610,9 @@ sub GetNextDate(@) {
     my @resultdate;
 
     #       warn "DOW $dayofweek";
+    if ( $subscription->{periodicity} == 0 ) {
+      return 0;
+    }  
     if ( $subscription->{periodicity} == 1 ) {
         my $dayofweek = Day_of_Week( $year,$month, $day );
         for ( my $i = 0 ; $i < @irreg ; $i++ ) {
