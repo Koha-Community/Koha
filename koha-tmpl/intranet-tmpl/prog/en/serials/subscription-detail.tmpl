@@ -140,7 +140,7 @@ function irregularity(){
     <div id="action">
         <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
         <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>
-        <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew</a>
+        <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew </a>
         <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Receive</a>
         <a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Serial Collection</a>
         <!-- TMPL_IF NAME="routing" -->
@@ -213,7 +213,7 @@ function irregularity(){
             </p>
             <p><label>Number Pattern:</label>
                 <!-- TMPL_IF name="numberpattern1" -->
-                    Number
+                    Number only
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="numberpattern2" -->
                     Volume, Number, Issue
@@ -235,7 +235,7 @@ function irregularity(){
                 <!-- /TMPL_IF -->
             </p>
             <table>
-            <tr><td><p><label>Starting with:</label></p></td>
+            <tr><td><p>Starting with:</p></td>
                 <td align="center"><!--TMPL_VAR NAME="lastvalue1"--></td>
             <!--TMPL_IF NAME="lastvalue2"-->
                 <td align="center">&nbsp; 
@@ -248,7 +248,7 @@ function irregularity(){
                 </td>
             <!--/TMPL_IF-->
             </tr>
-            <tr><td><p><label>Rollover:</label></p></td>
+            <tr><td><p>Rollover:</p></td>
                 <td align="center">&nbsp;</td>
             <!--TMPL_IF NAME="whenmorethan2"-->
                 <td align="center">&nbsp; 
