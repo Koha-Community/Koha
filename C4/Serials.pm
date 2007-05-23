@@ -1052,8 +1052,9 @@ sub GetExpirationDate {
 
 # we don't do the same test if the subscription is based on X numbers or on X weeks/months
 #     warn "SUBSCRIPTIONID :$subscriptionid";
-#     use Data::Dumper; warn Dumper($subscription);
+     use Data::Dumper; warn Dumper($subscription);
 
+         warn "dateCHECKRESERV :".$subscription->{startdate};
     if ( $subscription->{numberlength} ) {
         #calculate the date of the last issue.
         my $length = $subscription->{numberlength};
@@ -1064,7 +1065,6 @@ sub GetExpirationDate {
         }
     }
     elsif ( $subscription->{monthlength} ){
-#         warn "dateCHECKRESERV :".$subscription->{startdate};
         my @date=split (/-/,$subscription->{startdate});
         my @enddate = Add_Delta_YM($date[0],$date[1],$date[2],0,$subscription->{monthlength});
         $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
@@ -1745,20 +1745,40 @@ sub HasSubscriptionExpired {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    my $expirationdate   = GetExpirationDate($subscriptionid);
-    my $query = qq|
+    if ($subscription->{periodicity}){
+      my $expirationdate   = GetExpirationDate($subscriptionid);
+      my $query = qq|
             SELECT max(planneddate)
             FROM   serial
             WHERE  subscriptionid=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
-    my ($res) = $sth->fetchrow  ;
-    my @res=split (/-/,$res);
-    my @endofsubscriptiondate=split(/-/,$expirationdate);
-    return 1 if ( (@endofsubscriptiondate && Delta_Days($res[0],$res[1],$res[2],
+      |;
+      my $sth = $dbh->prepare($query);
+      $sth->execute($subscriptionid);
+      my ($res) = $sth->fetchrow  ;
+      my @res=split (/-/,$res);
+# warn "date expiration :$expirationdate";
+      my @endofsubscriptiondate=split(/-/,$expirationdate);
+      return 1 if ( (@endofsubscriptiondate && Delta_Days($res[0],$res[1],$res[2],
                   $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) <= 0)
                   || (!$res));
+      return 0;
+    } else {
+      if ($subscription->{numberlength}){
+	my $query = qq|
+            SELECT count(*)
+            FROM   serial
+            WHERE  subscriptionid=?
+	    AND serial.publisheddate>?
+        |;
+	my $sth=$dbh->prepare($query);
+	$sth->execute($subscriptionid, $subscription->{startdate});
+	my ($countreceived)=$sth->fetchrow;
+	return 1 if ($countreceived) >$subscription->{numberlentgh}-3;
+	return 0;
+      } else {
+	return 0;
+      }
+    }
     return 0;
 }
 
@@ -2274,7 +2294,7 @@ sub abouttoexpire {
         "select max(planneddate) from serial where subscriptionid=?");
     $sth->execute($subscriptionid);
     my ($res) = $sth->fetchrow ;
-#     warn "date expiration : ".$expirationdate." date courante ".$res;
+    warn "date expiration : ".$expirationdate." date courante ".$res;
     my @res=split /-/,$res;
     my @endofsubscriptiondate=split/-/,$expirationdate;
     my $per = $subscription->{'periodicity'};

@@ -1602,11 +1602,11 @@ sub CanBookBeRenewed {
             $renewokay = 1;
         }
         $sth2->finish;
-        my ( $resfound, $resrec ) = CheckReserves($itemnumber);
+        my ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
         }
-        ( $resfound, $resrec ) = CheckReserves($itemnumber);
+        ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
         }

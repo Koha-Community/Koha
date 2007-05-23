@@ -300,7 +300,7 @@ sub plugin {
                                 from=>$from,
                                 to=>$to,
                                 numbers=>\@numbers,
-                                searchdesc=> $searchdesc,
+                                search=> $search,
                                 $defaultview => 1,
                                 Search =>0
                                 );

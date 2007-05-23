@@ -228,11 +228,11 @@ my $cnt;
 my $imgdir = getitemtypeimagesrc();
 foreach my $thisitemtype (sort keys %$itemtypes) {
     my %row =(  number=>$cnt++,
-                imageurl=>$imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'},
+                imageurl=> $itemtypes->{$thisitemtype}->{'imageurl'}?($imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'}):"",
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
-                count5 => $cnt % 5,
+                count5 => $cnt % 4,
             );
     $selected = 0 if ($selected) ;
     push @itemtypesloop, \%row;

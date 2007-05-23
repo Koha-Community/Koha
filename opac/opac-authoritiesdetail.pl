@@ -53,7 +53,7 @@ my $query = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $authid       = $query->param('authid');
-my $authtypecode = &AUTHfind_authtypecode( $authid );
+my $authtypecode = &GetAuthTypeCode( $authid );
 my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
 # open template

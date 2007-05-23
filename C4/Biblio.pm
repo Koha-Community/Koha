@@ -1455,9 +1455,6 @@ sub GetMarcStructure {
           ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
           # why the hell do we need to explicitly decode utf8 ? 
           # that's a good question, but we must do it...
-          use utf8;
-          utf8::decode($res->{$tag}->{lib});
-#           warn "$liblibrarian";
         $res->{$tab}->{tab}        = "";            # XXX
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
@@ -3920,6 +3917,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.209  2007/05/23 16:19:40  tipaul
+# various bugfixes (minor) and french translation updated
+#
 # Revision 1.208  2007/05/22 09:13:54  tipaul
 # Bugfixes & improvements (various and minor) :
 # - updating templates to have tmpl_process3.pl running without any errors

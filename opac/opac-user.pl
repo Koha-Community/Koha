@@ -141,8 +141,8 @@ $template->param( overdues_count => $overdues_count );
 my $branches = GetBranches();
 
 # now the reserved items....
-my ( $rcount, $reserves ) = GetReservesFromBorrowernumber( $borrowernumber );
-foreach my $res (@$reserves) {
+my @reserves  = GetReservesFromBorrowernumber( $borrowernumber );
+foreach my $res (@reserves) {
     $res->{'reservedate'} = format_date( $res->{'reservedate'} );
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
@@ -152,12 +152,15 @@ foreach my $res (@$reserves) {
     $res->{'reserves_title'} = $biblioData->{'title'};
 }
 
-$template->param( RESERVES       => $reserves );
-$template->param( reserves_count => $rcount );
+use Data::Dumper;
+warn Dumper(@reserves);
+
+$template->param( RESERVES       => \@reserves );
+$template->param( reserves_count => $#reserves+1 );
 
 my @waiting;
 my $wcount = 0;
-foreach my $res (@$reserves) {
+foreach my $res (@reserves) {
     if ( $res->{'itemnumber'} ) {
         my $item = GetItem( $res->{'itemnumber'});
         $res->{'holdingbranch'} =
