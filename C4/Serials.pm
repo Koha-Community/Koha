@@ -1745,7 +1745,7 @@ sub HasSubscriptionExpired {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    if ($subscription->{periodicity}){
+    if ($subscription->{periodicity}>0){
       my $expirationdate   = GetExpirationDate($subscriptionid);
       my $query = qq|
             SELECT max(planneddate)
