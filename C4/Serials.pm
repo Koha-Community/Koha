@@ -1055,36 +1055,40 @@ sub GetExpirationDate {
 #      use Data::Dumper; warn Dumper($subscription);
 
 #          warn "dateCHECKRESERV :".$subscription->{startdate};
-    if ( $subscription->{numberlength} ) {
-        #calculate the date of the last issue.
-        my $length = $subscription->{numberlength};
-#         warn "ENDDATE ".$enddate;
-        for ( my $i = 1 ; $i <= $length ; $i++ ) {
-            $enddate = GetNextDate( $enddate, $subscription );
-#             warn "AFTER ENDDATE ".$enddate;
-        }
-    }
-    elsif ( $subscription->{monthlength} ){
-        my @date=split (/-/,$subscription->{startdate});
-        my @enddate = Add_Delta_YM($date[0],$date[1],$date[2],0,$subscription->{monthlength});
-        $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
-    } elsif ( $subscription->{weeklength} ){
-        my @date=split (/-/,$subscription->{startdate});
-#         warn "dateCHECKRESERV :".$subscription->{startdate};
-#### An other way to do it
-#         if ( $subscription->{weeklength} ){
-#           my ($weeknb,$year)=Week_of_Year(@startdate);
-#           $weeknb += $subscription->{weeklength};
-#           my $weeknbcalc= $weeknb % 52;
-#           $year += int($weeknb/52);
-# #           warn "year : $year weeknb :$weeknb weeknbcalc $weeknbcalc";
-#           @endofsubscriptiondate=Monday_of_Week($weeknbcalc,$year);
-#         }
-        my @enddate = Add_Delta_Days($date[0],$date[1],$date[2],$subscription->{weeklength}*7);
-        $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
-    }
-#     warn "date de fin :$enddate";
-    return $enddate;
+    if ($subscription->{periodicity}){
+      if ( $subscription->{numberlength} ) {
+          #calculate the date of the last issue.
+          my $length = $subscription->{numberlength};
+  #         warn "ENDDATE ".$enddate;
+          for ( my $i = 1 ; $i <= $length ; $i++ ) {
+              $enddate = GetNextDate( $enddate, $subscription );
+  #             warn "AFTER ENDDATE ".$enddate;
+          }
+      }
+      elsif ( $subscription->{monthlength} ){
+          my @date=split (/-/,$subscription->{startdate});
+          my @enddate = Add_Delta_YM($date[0],$date[1],$date[2],0,$subscription->{monthlength});
+          $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
+      } elsif ( $subscription->{weeklength} ){
+          my @date=split (/-/,$subscription->{startdate});
+  #         warn "dateCHECKRESERV :".$subscription->{startdate};
+  #### An other way to do it
+  #         if ( $subscription->{weeklength} ){
+  #           my ($weeknb,$year)=Week_of_Year(@startdate);
+  #           $weeknb += $subscription->{weeklength};
+  #           my $weeknbcalc= $weeknb % 52;
+  #           $year += int($weeknb/52);
+  # #           warn "year : $year weeknb :$weeknb weeknbcalc $weeknbcalc";
+  #           @endofsubscriptiondate=Monday_of_Week($weeknbcalc,$year);
+  #         }
+          my @enddate = Add_Delta_Days($date[0],$date[1],$date[2],$subscription->{weeklength}*7);
+          $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
+      }
+  #     warn "date de fin :$enddate";
+      return $enddate;
+    } else {
+      return 0;  
+    }  
 }
 
 =head2 CountSubscriptionFromBiblionumber
@@ -1482,8 +1486,8 @@ Note : we have to update the recievedlist and missinglist on subscriptionhistory
 =cut
 
 sub NewIssue {
-    my ( $serialseq, $subscriptionid, $biblionumber, $status, $publisheddate,
-        $planneddate, $notes )
+    my ( $serialseq, $subscriptionid, $biblionumber, $status, 
+        $planneddate, $publisheddate, $notes )
       = @_;
     ### FIXME biblionumber CAN be provided by subscriptionid. So Do we STILL NEED IT ?
     
