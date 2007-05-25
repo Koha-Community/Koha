@@ -170,7 +170,9 @@ $res =~ s/\n/<br\/>/g;
 
 # remove empty ()
 $res =~ s/\(\)//g;
-
+# count of item linked with biblio
+my $itemcount = GetItemsCount($biblionumber);
+$template->param( count => $itemcount);
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
  
 if ($subscriptionsnumber) {
