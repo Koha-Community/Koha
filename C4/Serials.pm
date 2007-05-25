@@ -98,7 +98,8 @@ sub GetSuppliersWithLateIssues {
     my $dbh   = C4::Context->dbh;
     my $query = qq|
         SELECT DISTINCT id, name
-        FROM            subscription, serial
+        FROM            subscription 
+	LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
         LEFT JOIN       aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
         WHERE           subscription.subscriptionid = serial.subscriptionid
         AND             (planneddate < now() OR serial.STATUS = 3 OR serial.STATUS = 4)
