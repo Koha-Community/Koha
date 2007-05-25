@@ -14,7 +14,7 @@ use strict;
 $|=1; # flushes output
 
 # limit for database dumping
-my $limit;# = "LIMIT 1000";
+my $limit;# = "LIMIT 1";
 my $directory;
 my $skip_export;
 my $keep_export;
@@ -204,13 +204,13 @@ if ($authorities) {
         $created_dir_or_file++;
     }
     
-    unless (-f C4::Context->zebraconfig('authorityserver')->{ccl2rpn}) {
+    unless (-f "$authorityserverdir/etc/ccl.properties") {
 #         system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
         system("cp -f $kohadir/misc/zebra/ccl.properties $authorityserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;
     }
-    unless (-f C4::Context->zebraconfig('authorityserver')->{cql2rpn}) {
+    unless (-f "$authorityserverdir/etc/pqf.properties") {
 #         system("cp -f $kohadir/misc/zebra/pqf.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
         system("cp -f $kohadir/misc/zebra/pqf.properties $authorityserverdir/etc/pqf.properties");
         print "Info: copied pqf.properties\n";
@@ -392,13 +392,13 @@ if ($biblios) {
         print "Info: copied default.idx\n";
         $created_dir_or_file++;
     }
-    unless (-f C4::Context->zebraconfig('biblioserver')->{ccl2rpn}) {
+    unless (-f "$biblioserverdir/etc/ccl.properties") {
 #         system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
         system("cp -f $kohadir/misc/zebra/ccl.properties $biblioserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;
     }
-    unless (-f C4::Context->zebraconfig('biblioserver')->{cql2rpn}) {
+    unless (-f "$biblioserverdir/etc/pqf.properties") {
 #         system("cp -f $kohadir/misc/zebra/pqf.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
         system("cp -f $kohadir/misc/zebra/pqf.properties $biblioserverdir/etc/pqf.properties");
         print "Info: copied pqf.properties\n";
