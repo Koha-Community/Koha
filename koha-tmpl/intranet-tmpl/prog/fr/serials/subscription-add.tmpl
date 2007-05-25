@@ -674,8 +674,8 @@ function check_input(e){
         <tr>
             <td><label>Notice bibliographique</label></td>
             <td>
-                <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8"> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>) <a href="#" onClick="Plugin(f)">Rechercher notice biblio</a> |
-                <!--TMPL_UNLESS Name="mod"--><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Créer une notice</a><!--/TMPL_UNLESS-->
+                <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8"> (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>) <a href="#" onClick="Plugin(f)">Rechercher notice biblio</a> <!--TMPL_UNLESS Name="mod"--> |
+                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Créer une notice</a><!--/TMPL_UNLESS-->
             </td>
         </tr>
         <tr>

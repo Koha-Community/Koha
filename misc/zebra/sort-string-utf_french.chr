@@ -2,41 +2,44 @@
 #
 # $Id$
 
+encoding utf-8
+
 # Define the basic value-set. *Beware* of changing this without re-indexing
 # your databases.
-lowercase {0-9}{a-y}üzæäøöå
-uppercase {0-9}{A-Y}ÜZÆÄØÖÅ
+lowercase {0-9}aÃ¦Ã¤Ã¥Ã¢Ã bcdeÃ©ÃªÃ¨Ã«fghiÃ®Ã¯jklmnoÃ´Ã¶pqrstuÃ¼Ã»Ã¹vwxyÅ·Ã¿zÃ¸
+uppercase {0-9}AÃ†Ã„Ã‚Ã€Ã…BCDEÃŠÃ‹Ã‰ÃˆFGHIÃÃJKLMNOÃ–Ã”PQRSTUÃœÃ›VWXYÅ¶Å¸ZÃ˜
 
 # Breaking characters
 
-# Characters to be considered equivalent for searching purposes.
+space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~
 
-equivalent æä(ae)
-equivalent øö(oe)
-equivalent å(aa)
-#equivalent uü
+# Characters to be considered equivalent for searching purposes.
+equivalent Ã¦Ã¤(ae)
+equivalent Ã¸Ã¶(oe)
+equivalent Ã¥(aa)
+#equivalent uÃ¼
 equivalent y(i)
 
 # Supplemental mappings
 
-map (&auml;)       ä
-map (&aelig;)      æ
-map (&oslash;)     ø
-map (&aring;)      å
-map (&ouml;)       ö
-map (&Auml;)       Ä
-map (&Aelig;)      Æ
-map (&Oslash;)     Ø
-map (&Aring;)      Å
-map (&Ouml;)       Ö
+map (&auml;)       Ã¤
+map (&aelig;)      Ã¦
+map (&oslash;)     Ã¸
+map (&aring;)      Ã¥
+map (&ouml;)       Ã¶
+map (&Auml;)       Ã„
+map (&Aelig;)      Ã†
+map (&Oslash;)     Ã˜
+map (&Aring;)      Ã…
+map (&Ouml;)       Ã–
 
-map (âàáäÂÀÂ)		a
-map (êèéëÊÈÉË)		e
-map (îïíÎÏ)		i
-map (ôöóÔÖ)		o
-map (ûùüÛÜ)       u
-map (ç)       c
-#map (y)   i
+map Ã¢Ã Ã¡Ã¤Ã‚Ã€Ã‚		a
+map ÃªÃ¨Ã©Ã«ÃŠÃˆÃ‰Ã‹		e
+map Ã®Ã¯Ã­ÃÃ		i
+map Ã´Ã¶Ã³Ã”Ã–		o
+map Ã»Ã¹Ã¼Ã›Ãœ       u
+map Ã§       c
+#map y   i
 
 #map (Aa)	(AA)
 
@@ -48,4 +51,3 @@ map (^Un\s)      @
 map (^Une\s)     @
 map (^De\s)     @
 map (^Des\s)     @
-
