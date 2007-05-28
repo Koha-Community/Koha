@@ -46,7 +46,7 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
                 my $marc = GetMarcBiblio($biblionumber);
                 $marcxml = $marc->as_xml_record() if $marc;
             } elsif ($server eq "authorityserver") {
-                $marcxml =C4::AuthoritiesMarc::XMLgetauthority($dbh,$biblionumber);
+                $marcxml =C4::AuthoritiesMarc::GetAuthorityXML($biblionumber);
             }
             if ($verbose) {
                 if ($marcxml) {
