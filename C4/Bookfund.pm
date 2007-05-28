@@ -205,7 +205,7 @@ sub GetCurrencies {
 
 =head3 GetBookFundBreakdown
 
-( $spent, $comtd ) = &GetBookFundBreakdown( $id, $year, $start, $end );
+( $spent, $comtd ) = &GetBookFundBreakdown( $id, $start, $end );
 
 returns the total comtd & spent for a given bookfund, and a given year
 used in acqui-home.pl
@@ -213,7 +213,7 @@ used in acqui-home.pl
 =cut
 
 sub GetBookFundBreakdown {
-    my ( $id, $year, $start, $end ) = @_;
+    my ( $id, $start, $end ) = @_;
     my $dbh = C4::Context->dbh;
 
     # if no start/end dates given defaut to everything
