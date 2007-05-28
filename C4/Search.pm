@@ -957,25 +957,24 @@ sub searchResults {
             else {
                 $norequests = 0;
                 if ( $item->{'homebranch'} ) {
-                    $items->{ $item->{'homebranch'} }->{count}++;
+                    $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{count}++;
                 }
 
                 # Last resort
                 elsif ( $item->{'holdingbranch'} ) {
                     $items->{ $item->{'homebranch'} }->{count}++;
                 }
-                $items->{ $item->{homebranch} }->{itemcallnumber} =
-                $item->{itemcallnumber};
-                $items->{ $item->{homebranch} }->{location} =
-                $item->{location};
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
             }
         }    # notforloan, item level and biblioitem level
         for my $key ( keys %$items ) {
 
             #warn "key: $key";
             my $this_item = {
-                branchname     => $branches{$key},
-                branchcode     => $key,
+                branchname     => $branches{$items->{$key}->{branchcode}},
+                branchcode     => $items->{$key}->{branchcode},
                 count          => $items->{$key}->{count},
                 itemcallnumber => $items->{$key}->{itemcallnumber},
                 location => $items->{$key}->{location},

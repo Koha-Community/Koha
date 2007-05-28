@@ -235,7 +235,7 @@ my @itemtypesloop;
 my $selected = 1;
 my $cnt;
 my $imgdir = getitemtypeimagesrc();
-foreach my $thisitemtype ( sort keys %$itemtypes ) {
+foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row = (
         number   => $cnt++,
         imageurl => $imgdir . "/" . $itemtypes->{$thisitemtype}->{'imageurl'},
