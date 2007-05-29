@@ -79,7 +79,7 @@ if ($op eq "renew") {
 
 my $subscription= GetSubscription($subscriptionid);
 
-$template->param(startdate => format_date(GetExpirationDate($subscriptionid)),
+$template->param(startdate => format_date(GetExpirationDate($subscriptionid)||POSIX::strftime("%Y-%m-%d",localtime)),
                 numberlength => $subscription->{numberlength},
                 weeklength => $subscription->{weeklength},
                 monthlength => $subscription->{monthlength},
