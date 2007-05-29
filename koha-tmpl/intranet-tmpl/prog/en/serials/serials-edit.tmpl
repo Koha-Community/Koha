@@ -57,7 +57,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
         </td>
         <td>
-            <!--TMPL_IF Name="subscriptionexpired"-->
+            <!--TMPL_IF EXPR="subscriptionexpired and status1"-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled >
             <!--TMPL_ELSE-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" OnChange="javascript:if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
