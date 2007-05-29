@@ -91,17 +91,19 @@
     <!-- /TMPL_LOOP -->
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
-<div id="advsearch-itemtype">
-<fieldset>
-<legend>Itemtype to: match any of the following </legend>
-    <table><tr>
-    <!--TMPL_LOOP Name="itemtypeloop"-->
-    <td><p><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" /> <!--TMPL_VAR Name="description" --></p></td>
-    <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
-    <!--/TMPL_LOOP-->
+    <div id="advsearch-itemtype">
+    <h2>Itemtype limit to any of the following:</h2>
+    <table>
+        <tr>
+      <!--TMPL_LOOP Name="itemtypeloop"-->
+        <td><p>
+        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/>&nbsp;
+        <!--TMPL_VAR Name="description" --></p></td>
+        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
+      <!--/TMPL_LOOP-->
+      </tr>
     </table>
-    </fieldset>
-</div>
+    </div>
 <!-- TMPL_IF NAME="expanded_options" -->
     <!-- BASIC LIMITS -->
     <!--TMPL_IF Name="usmarc"-->

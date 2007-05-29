@@ -104,7 +104,8 @@ my @todayoverduesloop;
 my $counter = 0;
 
 my @getoverdues = GetOverduesForBranch( $default, $location );
-
+use Data::Dumper;
+warn "HERE : $default / $location".Dumper(@getoverdues);
 # search for location authorised value
 my ($tag,$subfield) = GetMarcFromKohaField('items.location','');
 my $tagslib = &GetMarcStructure(1,'');
