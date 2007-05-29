@@ -7,7 +7,7 @@
 
 
 <script language="JavaScript" type="text/javascript">
-showlayer(<!-- TMPL_VAR NAME="yearmax"-->);
+showlayer('<!-- TMPL_VAR NAME="yearmax"-->');
 
 function showlayer(numlayer)
 {
@@ -164,9 +164,9 @@ function popup(link) {
     <!-- TMPL_LOOP NAME="years" -->
         <!-- TMPL_IF NAME="year" -->
         <!-- TMPL_IF NAME="first" -->
-            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_active" href="javascript:showlayer(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_active" href="javascript:showlayer('<!-- TMPL_VAR NAME="year" -->')"><!-- TMPL_VAR NAME="year" --></a>
         <!-- TMPL_ELSE -->
-            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_inactive" href="javascript:showlayer(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_inactive" href="javascript:showlayer('<!-- TMPL_VAR NAME="year" -->')"><!-- TMPL_VAR NAME="year" --></a>
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
