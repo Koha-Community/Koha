@@ -1598,15 +1598,11 @@ sub CanBookBeRenewed {
         if ( my $data2 = $sth2->fetchrow_hashref ) {
             $renews = $data2->{'renewalsallowed'};
         }
-        if ( $renews && $renews > $data1->{'renewals'} ) {
+        if ( $renews && $renews >= $data1->{'renewals'} ) {
             $renewokay = 1;
         }
         $sth2->finish;
         my ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
-        if ($resfound) {
-            $renewokay = 0;
-        }
-        ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
         }
