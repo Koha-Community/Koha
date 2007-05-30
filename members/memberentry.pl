@@ -259,8 +259,8 @@ if ($delete){
 	} else {
 		$template->param( updtype => 'M');
 	}
-	my $cardnumber=$data{'cardnumber'};
-	$cardnumber=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
+#	my $cardnumber=$data{'cardnumber'};
+	$data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
 	if ($data{'sex'} eq 'F'){
 		$template->param(female => 1);
 	}
