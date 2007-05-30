@@ -194,6 +194,7 @@
     <table>
         <tr>
             <th scope="col">Titre</th>
+            <th scope="col">Code à barres</th>
             <th scope="col">Date de retour</th>
             <th scope="col">Type de document</th>
             <th scope="col">Frais</th>
@@ -212,13 +213,17 @@
         <tr>
             <!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
-            <td>
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                    <!-- TMPL_VAR NAME="title" -->
-                </a>
-                <!-- TMPL_VAR name="author" -->
-            </td>
             <td><!-- TMPL_VAR NAME="date_due" --></td>
+            <td>
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                    <!-- TMPL_VAR NAME="title" -->
+                </a></p>
+                <p><!-- TMPL_VAR name="author" -->
+                    <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="publicationyear" -->- <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+                </p>
+            </td>
+            <td><!-- TMPL_VAR NAME="barcode" --></td>
             <td>
                 <!-- TMPL_VAR NAME="itemtype_description" -->
                 <!-- TMPL_IF NAME="itemtype_image" -->
@@ -255,9 +260,9 @@
         </tr>
         <!-- /tmpl_loop -->
         <tr>
-            <td colspan="3">Coût total de remplacement :</td>
+            <td colspan="5">Coût total de remplacement :</td>
             <td><!-- TMPL_VAR NAME="totalprice" --></td>
-            <td colspan="3">&nbsp;</td>
+            <td colspan="2">&nbsp;</td>
         </tr>
         </table>
         <div>

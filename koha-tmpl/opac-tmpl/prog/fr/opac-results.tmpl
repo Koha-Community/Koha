@@ -225,8 +225,8 @@ Erreur :
                             <!-- TMPL_ELSE -->
                             &nbsp;
                             <!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                            <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                             <!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -240,11 +240,15 @@ Erreur :
                         <span class="available">
                             <!-- TMPL_LOOP NAME="items_loop" -->
                                 <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchname" -->
-                                <!-- TMPL_IF name="itemcallnumber" --> <i>(<!-- TMPL_VAR name="itemcallnumber" -->)</i><!-- /TMPL_IF -->
-                                <!-- TMPL_IF name="location" --> <i>(<!-- TMPL_VAR name="location" -->)</i><!-- /TMPL_IF -->
+                                <i>
+                                <!-- TMPL_IF name="location" --> <!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
+                                <!-- TMPL_IF name="itemcallnumber" --> <!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="classification" -->
-                                    <i>(<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->"> <!-- TMPL_VAR NAME="classification" --> </a>)</i>
+                                    <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
+                                        <!-- TMPL_VAR NAME="classification" -->
+                                    </a>
                                 <!-- /TMPL_IF -->
+                                </i>
                                 <br />
                             <!-- /TMPL_LOOP -->
                         </span>

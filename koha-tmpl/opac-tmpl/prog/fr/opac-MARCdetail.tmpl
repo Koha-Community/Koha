@@ -5,22 +5,25 @@
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
 <div id="action">
-    <!-- TMPL_UNLESS NAME="norequests" -->
-    	<!-- TMPL_IF NAME="RequestOnOpac" -->
-    <a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-        Faire une Réservation
-    </a>
-    	<!-- /TMPL_IF -->
-    <!-- /TMPL_UNLESS -->
-    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Vue normale</a> <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a><a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Imprimer</a>
-    <!-- TMPL_IF name="virtualshelves" -->
-    <a href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-        Ajouter à mon étagère virtuelle
-    </a>
+
+<!-- TMPL_UNLESS NAME="norequests" -->
+	<!-- TMPL_IF NAME="RequestOnOpac" -->
+		<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+		Faire une Réservation
+		</a>
+	<!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
+        <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue MARC </a> <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> ISBD</a> <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"> Imprimer </a>
+<!-- TMPL_IF name="virtualshelves" -->
+    <!-- TMPL_IF NAME="loggedinusername" -->
+        <a href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Ajouter à mon étagère virtuelle
+        </a>
     <!-- /TMPL_IF -->
-    <a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-        Ajouter à mon panier
-    </a>
+<!-- /TMPL_IF -->
+        <a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Ajouter à mon panier
+        </a>
 </div>
 
 <h1>Vue MARC</h1>

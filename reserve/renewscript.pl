@@ -48,9 +48,14 @@ my $borrowernumber = $input->param("borrowernumber");
 
 foreach my $itemno (@data) {
     #check status before renewing issue
+    warn "CanBookbeRenewed";
     if (CanBookBeRenewed($borrowernumber,$itemno)){
+	warn "$itemno can be renewed for $borrowernumber";
         AddRenewal($borrowernumber,$itemno);
-    }
+	warn "renewal added";
+    }else {
+	warn "cannot renew";
+	}
 }
 
 #

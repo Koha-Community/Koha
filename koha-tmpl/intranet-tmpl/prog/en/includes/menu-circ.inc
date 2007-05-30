@@ -1,7 +1,4 @@
 <div id="submenu">
-    <a href="/cgi-bin/koha/circ/circulation.pl">Issues</a>
-    <a href="/cgi-bin/koha/circ/returns.pl">Returns</a>
-    <a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a>
     <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set branch</a>
     <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="reserves waiting to have an item affected">Pending reserves</a>
     <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="reserves waiting for member pickup">Waiting reserves</a>
