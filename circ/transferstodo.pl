@@ -137,5 +137,4 @@ $template->param(
     show_date    => format_date($todaysdate)
 );
 
-print "Content-Type: text/html\n\n", $template->output;
-
+output_html_with_http_headers $input, $cookie, $template->output;
