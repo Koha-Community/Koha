@@ -117,7 +117,7 @@ my ($template, $loggedinuser, $cookie)
 							f17 => $f17,
 							"f17$f17" => $f17,
 					);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

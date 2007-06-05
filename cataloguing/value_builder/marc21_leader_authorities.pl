@@ -97,7 +97,7 @@ my ($template, $loggedinuser, $cookie)
 							"f19$f19" => 1,
 							"f2023" => $f2023,
 					);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

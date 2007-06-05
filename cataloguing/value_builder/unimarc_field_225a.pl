@@ -152,7 +152,7 @@ my ($input) = @_;
 												);
 	$template->param(index => $index,
 							collection => $collection);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

@@ -79,7 +79,7 @@ my ($template, $loggedinuser, $cookie)
 	$template->param(index => $index,
 							"f1$f1" => $f1
  );
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

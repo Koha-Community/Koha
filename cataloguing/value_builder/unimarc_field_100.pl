@@ -54,7 +54,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
     defaultvalue=document.forms['f'].field_value[i].value;
-    newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -121,7 +121,7 @@ sub plugin {
         "f14"     => $f14,
         "f15$f15" => 1
     );
-    print $input->header( -cookie => $cookie ), $template->output;
+    print $input->header( -type => 'utf-8', -cookie => $cookie ), $template->output;
 }
 
 1;

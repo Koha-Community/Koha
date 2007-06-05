@@ -85,7 +85,7 @@ my ($template, $loggedinuser, $cookie)
 			 f2 => $f2,
 			 f3 => $f3,
 			 f4 => $f4);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

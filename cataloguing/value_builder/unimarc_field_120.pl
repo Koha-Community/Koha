@@ -97,7 +97,7 @@ my ($template, $loggedinuser, $cookie)
 							"f8$f8" => 1,
 							"f9$f9" => 1,
 							"f10$f10" => 1);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

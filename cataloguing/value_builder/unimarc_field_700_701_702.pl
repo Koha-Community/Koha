@@ -151,7 +151,7 @@ sub plugin {
 							b => $b,
 							c => $c,
 							f => $f,);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

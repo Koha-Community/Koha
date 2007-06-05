@@ -89,7 +89,7 @@ my ($input) = @_;
 							index2 => $index2,
 							"f1_$result" => "f1_".$result,
 							);
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

@@ -123,7 +123,7 @@ warn "Dans ce cas clea nous fait un f17 => $f17\n";
 			 "f20$f20" => 1,
 			 "f21$f21" => 1
 );
-	print $input->header(-cookie => $cookie),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;
