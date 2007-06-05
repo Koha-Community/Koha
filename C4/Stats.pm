@@ -21,7 +21,6 @@ package C4::Stats;
 
 use strict;
 require Exporter;
-use DBI;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -50,7 +49,10 @@ the Koha database, which acts as an activity log.
 =cut
 
 @ISA    = qw(Exporter);
-@EXPORT = qw(&UpdateStats);
+@EXPORT = qw(
+    &UpdateStats
+    &TotalPaid
+);
 
 =item UpdateStats
 
@@ -87,6 +89,36 @@ sub UpdateStats {
         $other,     $itemnum, $itemtype, $borrowernumber,
     );
     $sth->finish;
+}
+
+# Otherwise, it'd need a POD.
+sub TotalPaid {
+    my ( $time, $time2, $spreadsheet ) = @_;
+    $time2 = $time unless $time2;
+    my $dbh   = C4::Context->dbh;
+    my $query = "SELECT * FROM statistics,borrowers
+  WHERE statistics.borrowernumber= borrowers.borrowernumber
+  AND (statistics.type='payment' OR statistics.type='writeoff') ";
+    if ( $time eq 'today' ) {
+        $query = $query . " AND datetime = now()";
+    }
+    else {
+        $query .= " AND datetime > '$time'";
+    }
+    if ( $time2 ne '' ) {
+        $query .= " AND datetime < '$time2'";
+    }
+    if ($spreadsheet) {
+        $query .= " ORDER BY branch, type";
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @results;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push @results, $data;
+    }
+    $sth->finish;
+    return (@results);
 }
 
 1;
