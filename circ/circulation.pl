@@ -70,7 +70,7 @@ my $borrowernumber = $query->param('borrowernumber');
 
 # new op dev the branch and the printer are now defined by the userenv
 my $branch  = C4::Context->userenv->{'branch'};
-my $printer = C4::Context->userenv->{'branchprinter'};
+$printer = C4::Context->userenv->{'branchprinter'};
 
 # If Autolocated is not activated, we show the Circulation Parameters to chage settings of librarian
     if (C4::Context->preference("AutoLocation") ne 1)
