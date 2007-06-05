@@ -435,7 +435,7 @@ function irregularity_check(){
             }
             error=errortext;
         } else {
-            errortext +=expected+_("numéro(s) attendu(s)")+rollover+_("sont entrés. <br \\/>Merci de signaler à quelle(s) date(s) vous n'attendez pas de numéro <br \\/>");
+            errortext +=expected+_("uméro(s) attendu(s)")+rollover+_("sont entrés. <br \\/>Merci de signaler à quelle(s) date(s) vous n'attendez pas de numéro <br \\/>");
             var count=0;
             for(var i=rollover;i<expected;i++){
                 errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
@@ -447,11 +447,11 @@ function irregularity_check(){
         }
     }
     if(toobig){
-        errortext +=expectedover+_("numéro(s) attendu(s)")+rollover+_("sont entrés.<br \\/>Vous sembler avoir signalé plus de numéros par an que prévu.");
+        errortext +=expectedover+_("uméro(s) attendu(s)")+rollover+_("sont entrés.<br \\/>Vous sembler avoir signalé plus de numéros par an que prévu.");
         error=errortext;
     }
     if(error.length ==0){
-        error=_('Pas d'irrégularités détectées');
+        error=_('Pas d irrégularités détectées');
     }
     display_example(expected);
     document.getElementById("irregularity").innerHTML = error;

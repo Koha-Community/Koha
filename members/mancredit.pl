@@ -59,7 +59,7 @@ if ($add){
                     surname  => $data->{'surname'},
     );
 	print $input->header(
-	    -type => guesstype($template->output),
+	    -type => 'utf-8',
 	    -cookie => $cookie
 	),$template->output;
 

@@ -132,6 +132,7 @@ if ($op eq 'add_form') {
 			push (@value_builder,$line);
 		}
 	}
+        @value_builder= sort {$a cmp $b} @value_builder;
 	closedir DIR;
 
 	# build values list
@@ -240,14 +241,8 @@ if ($op eq 'add_form') {
 			-checked => $data->{'isurl'}?'checked':'',
 			-value => 1,
 			-label => '');
-		$row_data{link} = CGI::checkbox( -name => "link$i",
-			-id => "link$i",
-			-checked => $data->{'link'}?'checked':'',
-			-value => 1,
-			-label => '');
 		$row_data{row} = $i;
 		$row_data{toggle} = $toggle;
-		# $row_data{link} = CGI::escapeHTML($data->{'link'});
 		push(@loop_data, \%row_data);
 		$i++;
 	}
@@ -345,12 +340,6 @@ if ($op eq 'add_form') {
 		 			-tabindex=>'',
 					-multiple=>0,
 					);
-		$row_data{link} = CGI::checkbox( -name => "link",
-			-id => "link$i",
-			-checked => '',
-			-value => 1,
-			-label => '');
-		# $row_data{link} = CGI::escapeHTML($data->{'link'});
 		$row_data{toggle} = $toggle;
 		$row_data{row} = $i;
 		push(@loop_data, \%row_data);
@@ -369,12 +358,12 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl, link)
-									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
+									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
-	my @kohafield		= $input->param('kohafield');
+	my @kohafield		= ''.$input->param('kohafield');
 	my @tab				= $input->param('tab');
 	my @seealso		= $input->param('seealso');
 	my @hidden;
@@ -385,7 +374,6 @@ if ($op eq 'add_form') {
 	my $authtypecode	= $input->param('authtypecode');
 	my @frameworkcodes	= $input->param('frameworkcode');
 	my @value_builder	=$input->param('value_builder');
-	my @link		=$input->param('link');
 	for (my $i=0; $i<= $#tagsubfield ; $i++) {
 		my $tagfield			=$input->param('tagfield');
 		my $tagsubfield		=$tagsubfield[$i];
@@ -402,7 +390,6 @@ if ($op eq 'add_form') {
 		my $value_builder=$value_builder[$i];
 		my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
-		my $link = $input->param("link$i")?1:0;
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
 				$sth->execute($authtypecode,
@@ -420,7 +407,6 @@ if ($op eq 'add_form') {
                               $value_builder,
                               $hidden,
                               $isurl,
-                              $link,
 					      );
 			}
 		}
@@ -485,7 +471,6 @@ if ($op eq 'add_form') {
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{hidden}	= $results->[$i]{'hidden'} if($results->[$i]{'hidden'} gt "000") ;
 		$row_data{isurl}	= $results->[$i]{'isurl'};
-		$row_data{link}	= $results->[$i]{'link'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&authtypecode=$authtypecode";
 		$row_data{toggle} = $toggle;
 		if ($row_data{tab} eq -1) {

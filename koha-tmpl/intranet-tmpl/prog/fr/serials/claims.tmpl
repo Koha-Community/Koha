@@ -28,7 +28,8 @@ function Setorder(myorder){
 
 	<p>
 	<form name="claims" action="claims.pl" method="post">
-	<!-- TMPL_VAR name="CGIsupplier" -->
+    <!-- TMPL_VAR name="CGIsupplier" -->
+    <input type="submit" value="OK" />
 			<!-- TMPL_IF name="phone" -->Téléphone : <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="booksellerfax" -->Fax : <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
@@ -53,7 +54,7 @@ function Setorder(myorder){
 
 		<!-- TMPL_IF NAME="missingissues" -->
 		<h3>Liste des numéros attendus, en retard et manquants</h3>
-		<table cellpadding="0" cellspacing="0" border="0" class="collapse">
+		<table>
 			<tr>
                 <!--TMPL_IF Name=letter-->
                 <th class="cell-header">&nbsp;</th>
@@ -69,7 +70,7 @@ function Setorder(myorder){
 				<tr>
 					<!--TMPL_IF Name=letter-->
 					<td class="cell">
-                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';">
+                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';" />
 					</td>
                     <!--/TMPL_IF-->
 					<td class="cell">
@@ -98,7 +99,7 @@ function Setorder(myorder){
 			<!-- /TMPL_LOOP -->
 		</table>
 		<!-- TMPL_ELSE -->
-		<p>Il n'y a pas de numéros manquants à réclamer</p>
+		<p>Select a supplier</p>
 		<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF Name="singlesupplier"-->
@@ -134,7 +135,7 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
 		Email : <!-- TMPL_VAR NAME="contemail" --><br />
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="accountnumber" -->
-		A/C: <!-- TMPL_VAR NAME="accountnumber" --></p>
+		A/C : <!-- TMPL_VAR NAME="accountnumber" --></p>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="contact" -->
 		<p>Cher <!-- TMPL_VAR NAME="contact" --></p>
@@ -146,7 +147,7 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
 	<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="missingissues" -->
 		<h3>Liste des numéros attendus, en retard et manquants</h3>
-		<table cellpadding="0" cellspacing="4" border="0" width="550" class="collapse">
+		<table>
 			<tr>
 				<td class="cell"><b>Fournisseur<b></td>
 				<td class="cell"><b>Titre</b></td>

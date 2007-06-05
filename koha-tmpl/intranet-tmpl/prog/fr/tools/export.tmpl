@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-</title>Koha &rsaquo; Exportation de notice MARC</title>
+<title>Koha &rsaquo; Exportation de notice MARC</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
 
-<h2>Sélectionnez les notices à exporter : </h2>
+<h1>Sélectionnez les notices à exporter : </h1>
 <p>
-    <b>Remarque : les exemplaires sont exportés par cet outil.</b>
+    <b>Note : The items are exported by this tool unless specified.</b>
 </p>
 
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
@@ -15,15 +15,17 @@
     <legend>
         Notices
     </legend>
-    	<p>
-    	    <label for="start">à partir de la notice numéro</label>
-    	    <input id="start" type="text" name="StartingBiblionumber" size="5" />
-    	    <label for="end">à la notice N° : </label>
-    	    <input id="end" type="text" name="EndingBiblionumber" size="5" />
-    	</p>
-    	
-    	<p>
-    	    <label for="itemtypes" >Type document</label>
+        <p>
+            <label for="start">à partir de la notice numéro</label>
+            <input id="start" type="text" name="StartingBiblionumber" size="5" />
+        <p>
+        </p>
+            <label for="end">à la notice N° : </label>
+            <input id="end" type="text" name="EndingBiblionumber" size="5" />
+        </p>
+        
+        <p>
+            <label for="itemtypes" >Type document</label>
             <select name="itemtype">
                 <option value="">-- Tout --</option>
                 <!-- TMPL_LOOP NAME="itemtypeloop" -->
@@ -33,53 +35,57 @@
                     </option>
                 <!-- /TMPL_LOOP -->
             </select>
-    	</p>
-    	
-    	<p>
-    	    <label for="branch">Site</label>
-    	    <select id="branch" name="branch">
-    	    <option value="">-- Tout --</option>
+        </p>
+        
+        <p>
+            <label for="branch">Site</label>
+            <select id="branch" name="branch">
+            <option value="">-- Tout --</option>
                 <!-- TMPL_LOOP name="branchloop" -->
                     <option value="<!-- TMPL_VAR name="value" -->"
-                     <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
+                    <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->>
                         <!-- TMPL_VAR name="branchname" -->
                     </option>
                     <!-- /TMPL_LOOP -->
                 </select>
         </p>
-    	<p>
-    	    <label for="startcn">à partir de la cote</label>
-    	    <input id="startcn" type="text" name="start_callnumber" size="5" />
-        	<label for="endcn">à la cote :  </label>
-        	<input id="endcn" type="text" name="end_callnumber" size="5" />
+        <p>
+            <label for="startcn">à partir de la cote</label>
+            <input id="startcn" type="text" name="start_callnumber" size="5" />
+        </p>
+        <p>
+            <label for="endcn">à la cote :  </label>
+            <input id="endcn" type="text" name="end_callnumber" size="5" />
         </p>
     </fieldset>
     <fieldset>
     <legend>
         Options
     </legend>
+        <p>
         <label for="dont_export_item">Ne pas exporter les exemplaires</label>
         <input id="dont_export_item" type="checkbox" name="dont_export_item" />
-        <br />
+        </p>
+        <p>
         <label for="dont_export_fields">Ne pas exporter les champs</label>
         <input id="dont_export_fields" type="text" name="dont_export_fields" /> <i>séparé par un blanc. (par exemple : 100a 200 606)</i>
-        <br />
+        </p>
     </fieldset>
     <fieldset>
     <legend>
         Format de sortie
     </legend>
-    	<p>
-    	    <label for="output_format">en </label>
-    	    <select id="output_format" name="output_format">
-    	        <option value="marc">marc</option>
-    	        <option value="xml">xml</option>
-    	    </select>
-    	    format.
-    	</p>
-	</fieldset>
-	<input type="hidden" name="op" value="export" />
-	<input type="submit" value="Exportation" class="button">
+        <p>
+            <label for="output_format">en </label>
+            <select id="output_format" name="output_format">
+                <option value="marc">marc</option>
+                <option value="xml">xml</option>
+            </select>
+            format.
+        </p>
+    </fieldset>
+    <input type="hidden" name="op" value="export" />
+    <input type="submit" value="Exportation" class="button">
 </form>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

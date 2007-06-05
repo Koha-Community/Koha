@@ -78,9 +78,9 @@
         <!-- TMPL_IF NAME="loggedinusername" -->
         <ul>
         <li>
-            <b> Login information</b>
+            <b> Information de connexion</b>
         </li>
-        <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b>  at <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
+        <li>Connecté en tant que : <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b> à <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
             <!-- TMPL_IF NAME="AutoLocation" -->
                 <li>autolocalisation activée</li>
         <!-- TMPL_ELSE -->

@@ -138,7 +138,7 @@ function irregularity(){
     <h1>Abonnement N°<!--TMPL_VAR name="subscriptionid"--></h1>
     <!--TMPL_IF Name="abouttoexpire"--><div class="problem">L'abonnement va expirer. Il faut le renouveller.</div><!--/TMPL_IF-->
     <div id="action">
-        <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>  <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>  <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew </a>  <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Receive</a>  <a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Serial Collection</a>
+        <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Modifier</a> <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Dupliquer</a> <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renouveller</a> <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Bulletiner</a><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Etat de collection</a>
         <!-- TMPL_IF NAME="routing" -->
         <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Modifier la liste de circulation</a>
         <!-- TMPL_ELSE -->
@@ -209,7 +209,7 @@ function irregularity(){
             </p>
             <p><label>Modèle de numérotation : </label>
                 <!-- TMPL_IF name="numberpattern1" -->
-                    Number only
+                    Nombre seulement
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="numberpattern2" -->
                     Volume, Numéro, Fascicule

@@ -60,10 +60,8 @@ my $authtypecode = &GetAuthTypeCode($authid);
 my $tagslib = &GetTagsLabels(1,$authtypecode);
 
 my $auth_type = GetAuthType($authtypecode);
- warn "XX = ".$auth_type->{auth_tag_to_report};
 
 my $record =GetAuthority($authid);
-  warn "record auth :".$record->as_formatted;
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/blinddetail-biblio-search.tmpl",

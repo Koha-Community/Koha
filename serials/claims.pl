@@ -17,7 +17,6 @@ my $op = $input->param('op');
 my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $order = $input->param('order');
-warn "order :$order";
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 
@@ -28,9 +27,14 @@ foreach my $supplierid (keys %supplierlist){
 	push @select_supplier, $supplierid
 }
 
-my @letters = GetLetters("claimissues");
+my $letters = GetLetters("claimissues");
+my @letters;
+foreach (keys %$letters){
+    push @letters ,{code=>$_,name=> $letters->{$_}};
+}
+
 my $letter=((scalar(@letters)>1)||($letters[0]->{name}||$letters[0]->{code}));
-my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order);
+my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order) if $supplierid;
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-values   => \@select_supplier,

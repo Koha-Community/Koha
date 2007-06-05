@@ -29,7 +29,6 @@ use C4::Date;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
-#use C4::Interface::CGI::Output;
 use Date::Calc qw(
   Today
   Add_Delta_Days

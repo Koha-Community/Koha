@@ -155,6 +155,7 @@ if ( $op eq 'add_form' ) {
             push( @value_builder, $line );
         }
     }
+    @value_builder= sort {$a cmp $b} @value_builder;
     closedir DIR;
 
     # build values list
