@@ -55,7 +55,7 @@ InstallAuth - Authenticates Koha users for Install process
 			  });
 
   print $query->header(
-    -type => guesstype($template->output),
+    -type => 'utf-8',
     -cookie => $cookie
   ), $template->output;
 
@@ -373,7 +373,7 @@ sub checkauth {
         -expires => ''
     );
     print $query->header(
-        -type   => guesstype( $template->output ),
+        -type   => 'utf-8',
         -cookie => $cookie
       ),
       $template->output;

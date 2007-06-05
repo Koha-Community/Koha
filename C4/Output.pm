@@ -54,10 +54,8 @@ push @EXPORT, qw(
 
 #Output
 push @EXPORT, qw(
-		&guesscharset
-		&guesstype
-		&output_html_with_http_headers
-		);
+                &output_html_with_http_headers
+                );
 
 
 #FIXME: this is a quick fix to stop rc1 installing broken
@@ -315,42 +313,6 @@ sub pagination_bar {
     return $pagination_bar;
 }
 
-
-=item guesscharset
-
-   &guesscharset($output)
-
-"Guesses" the charset from the some HTML that would be output.
-
-C<$output> is the HTML page to be output. If it contains a META tag
-with a Content-Type, the tag will be scanned for a language code.
-This code is returned if it is found; undef is returned otherwise.
-
-This function only does sloppy guessing; it will be confused by
-unexpected things like SGML comments. What it basically does is to
-grab something that looks like a META tag and scan it.
-
-=cut
-
-sub guesscharset ($) {
-    my($html) = @_;
-    my $charset = undef;
-    local($`, $&, $', $1, $2, $3);
-    # FIXME... These regular expressions will miss a lot of valid tags!
-    if ($html =~ /<meta\s+http-equiv=(["']?)Content-Type\1\s+content=(["'])text\/html\s*;\s*charset=([^\2\s\r\n]+)\2\s*(?:\/?)>/is) {
-        $charset = $3;
-    } elsif ($html =~ /<meta\s+content=(["'])text\/html\s*;\s*charset=([^\1\s\r\n]+)\1\s+http-equiv=(["']?)Content-Type\3\s*(?:\/?)>/is) {
-        $charset = $2;
-    }
-    return $charset;
-} # guess
-
-sub guesstype ($) {
-    my($html) = @_;
-    my $charset = guesscharset($html);
-    return defined $charset? "text/html; charset=$charset": "text/html";
-}
-
 =item output_html_with_http_headers
 
    &output_html_with_http_headers($query, $cookie, $html)
@@ -364,7 +326,7 @@ corresponds to the HTML page $html.
 sub output_html_with_http_headers ($$$) {
     my($query, $cookie, $html) = @_;
     print $query->header(
-	-type   => guesstype($html),
+	-type   => 'utf-8',
 	-cookie => $cookie,
     ), $html;
 }
