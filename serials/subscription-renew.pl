@@ -45,7 +45,6 @@ Id of the subscription this script has to renew
 
 =cut
 
-
 use strict;
 require Exporter;
 use CGI;
@@ -59,38 +58,48 @@ use C4::Output;
 use C4::Serials;
 
 my $query = new CGI;
-my $dbh = C4::Context->dbh;
+my $dbh   = C4::Context->dbh;
 
-my $op = $query->param('op');
+my $op             = $query->param('op');
 my $subscriptionid = $query->param('subscriptionid');
-my $done = 0; # for after form has been submitted
-my ($template, $loggedinuser, $cookie)
-        = get_template_and_user({template_name => "serials/subscription-renew.tmpl",
-                query => $query,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {serials => 1},
-                debug => 1,
-                });
-if ($op eq "renew") {
-    ReNewSubscription($subscriptionid,$loggedinuser,$query->param('startdate'),$query->param('numberlength'),$query->param('weeklength'),$query->param('monthlength'),$query->param('note'));
-    $done = 1;
+my $done = 0;    # for after form has been submitted
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "serials/subscription-renew.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { serials => 1 },
+        debug           => 1,
+    }
+);
+
+if ( $op eq "renew" ) {
+    ReNewSubscription(
+        $subscriptionid,             $loggedinuser,
+        $query->param('startdate'),  $query->param('numberlength'),
+        $query->param('weeklength'), $query->param('monthlength'),
+        $query->param('note')
+    );
+    $query->redirect('/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid='.$subscriptionid);
+    exit;
 }
 
-my $subscription= GetSubscription($subscriptionid);
+my $subscription = GetSubscription($subscriptionid);
 
-$template->param(startdate => format_date(GetExpirationDate($subscriptionid)||POSIX::strftime("%Y-%m-%d",localtime)),
-                numberlength => $subscription->{numberlength},
-                weeklength => $subscription->{weeklength},
-                monthlength => $subscription->{monthlength},
-                subscriptionid => $subscriptionid,
-                bibliotitle => $subscription->{bibliotitle},
-                $op => 1,
-                done => $done,
-                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-                IntranetNav => C4::Context->preference("IntranetNav"),
-            );
+$template->param(
+    startdate => format_date(
+             GetExpirationDate($subscriptionid)
+          || POSIX::strftime( "%Y-%m-%d", localtime )
+    ),
+    numberlength   => $subscription->{numberlength},
+    weeklength     => $subscription->{weeklength},
+    monthlength    => $subscription->{monthlength},
+    subscriptionid => $subscriptionid,
+    bibliotitle    => $subscription->{bibliotitle},
+    $op            => 1,
+    done           => $done,
+);
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
