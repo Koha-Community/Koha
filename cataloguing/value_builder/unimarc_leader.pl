@@ -47,7 +47,10 @@ return 1;
 }
 
 function Blur$function_name(subfield_managed) {
-	return 1;
+    if (document.forms['f'].field_value[subfield_managed].value.length != 24) {
+        alert('leader has an incorrect size: ' + document.forms['f'].field_value[subfield_managed].value.length + ' instead of 24 chars');
+    }
+    return 1;
 }
 
 function Clic$function_name(i) {

@@ -293,6 +293,12 @@ rank:rank-1
             my $record = GetAuthority($authid);
             print ".";
             print "\r$i" unless ($i++ %100);
+            # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
+            # otherwise, if it's wron, zebra will fail miserabily (and never index what is after the failing record)
+            my $leader=$record->leader;
+            substr($leader,0,5)='     ';
+            substr($leader,10,7)='22     ';
+            $record->leader(substr($leader,0,24));
             print OUT $record->as_usmarc();
         }
         close(OUT);
@@ -475,7 +481,7 @@ rank:rank-1
         open(OUT,">:utf8 ","$directory/biblios/export") or die $!;
         my $dbh=C4::Context->dbh;
         my $sth;
-        $sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber $limit");
+        $sth=$dbh->prepare("select biblionumber from biblioitems where biblionumber >54000 order by biblionumber $limit");
         $sth->execute();
         my $i=0;
         while (my ($biblionumber) = $sth->fetchrow) {
@@ -546,6 +552,12 @@ rank:rank-1
             }
             print ".";
             print "\r$i" unless ($i++ %100);
+            # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
+            # otherwise, if it's wron, zebra will fail miserabily (and never index what is after the failing record)
+            my $leader=$record->leader;
+            substr($leader,0,5)='     ';
+            substr($leader,10,7)='22     ';
+            $record->leader(substr($leader,0,24));
             print OUT $record->as_usmarc();
         }
         close(OUT);

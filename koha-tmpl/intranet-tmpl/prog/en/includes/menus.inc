@@ -1,11 +1,12 @@
 <div id="kohalogo">
     <img src="/intranet-tmpl/prog/images/koha-logo.png" height="60px"/>
+    <h3><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h3>
 </div>
 <div id="onlinehelp">
     <a href="#" onclick="javascript:window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes');">[?]</a>
 </div>
 <div id="mainmenu">
-<h3><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h3>
+
     <!-- TMPL_IF NAME="CAN_user_circulate" -->
     <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
     <ul>
@@ -56,13 +57,11 @@
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
-        <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
     </ul>
+    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="CAN_user_catalogue" -->
-    <ul>
-    <li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
-    </ul>
+    <!-- TMPL_IF NAME="CAN_user_reports" -->
+        <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_parameters" -->
     <a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a>

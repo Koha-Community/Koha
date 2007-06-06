@@ -260,7 +260,7 @@ sub get_template_and_user {
             OpacTopissue       => C4::Context->preference("OpacTopissue"),
             OpacAuthorities    => C4::Context->preference("OpacAuthorities"),
             OpacBrowser        => C4::Context->preference("OpacBrowser"),
-            RequestOnOpac        => C4::Context->preference("RequestOnOpac"),
+            RequestOnOpac      => C4::Context->preference("RequestOnOpac"),
             reviewson          => C4::Context->preference("reviewson"),
             hide_marc          => C4::Context->preference("hide_marc"),
             patronimages       => C4::Context->preference("patronimages"),

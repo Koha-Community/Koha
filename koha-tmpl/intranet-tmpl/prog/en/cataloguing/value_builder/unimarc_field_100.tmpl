@@ -700,42 +700,42 @@
     var fields          = doc.f.field_value;
     var NbFields        = fields.length;
 
-    GetPublicationDate(); // running directly.
-
-    /**
-     *  GetPublicationDate.
-     *  This function get the publication date if it's writen on 210d
-     */
-    function GetPublicationDate() {
-        var PublicationDate = null;
-        
-        for (i=0 ; i<NbFields ; i++) {
-            if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
-                if (doc.f.field_value[i].value != ""){
-                    PublicationDate = doc.f.field_value[i].value;
-                    document.getElementById('pubdate1').value = PublicationDate;
-                }
-                return;
-            }
-        }
-    }
-    
-    /**
-     *  SetPublicationDate.
-     *  This function set the publication date here
-     */
-    function SetPublicationDate() {
-        var PublicationDate = document.getElementById('pubdate1').value;
-        if (PublicationDate == "    " || !PublicationDate){
-            return ;
-        }
-        for (i=0 ; i<NbFields ; i++) {
-            if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
-                doc.f.field_value[i].value = PublicationDate;
-                break;
-            }
-        }
-    }
+//     GetPublicationDate(); // running directly.
+// 
+//     /**
+//      *  GetPublicationDate.
+//      *  This function get the publication date if it's writen on 210d
+//      */
+//     function GetPublicationDate() {
+//         var PublicationDate = null;
+//         
+//         for (i=0 ; i<NbFields ; i++) {
+//             if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
+//                 if (doc.f.field_value[i].value != ""){
+//                     PublicationDate = doc.f.field_value[i].value;
+//                     document.getElementById('pubdate1').value = PublicationDate;
+//                 }
+//                 return;
+//             }
+//         }
+//     }
+//     
+//     /**
+//      *  SetPublicationDate.
+//      *  This function set the publication date here
+//      */
+//     function SetPublicationDate() {
+//         var PublicationDate = document.getElementById('pubdate1').value;
+//         if (PublicationDate == "    " || !PublicationDate){
+//             return ;
+//         }
+//         for (i=0 ; i<NbFields ; i++) {
+//             if (doc.f.tag[i].value == '210' && doc.f.subfield[i].value == 'd') {
+//                 doc.f.field_value[i].value = PublicationDate;
+//                 break;
+//             }
+//         }
+//     }
     
     function report() {
 
@@ -756,7 +756,7 @@
         document.f_pop.f2.value +document.f_pop.f3.value
         +document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value;
         
-        SetPublicationDate();
+//         SetPublicationDate();
         self.close();
         return false;
     }

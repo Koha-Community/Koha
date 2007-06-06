@@ -502,16 +502,16 @@ sub AddAuthority {
     $record->add_fields('152','','','b'=>$authtypecode) unless $record->field('152');
 #     warn $record->as_formatted;
     $dbh->do("lock tables auth_header WRITE");
-    $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc) values (?,now(),?,?)");
-    $sth->execute($authid,$authtypecode,$record->as_usmarc);    
+    $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
+    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml);
     $sth->finish;
   }else{
       $record->add_fields('001',$authid) unless ($record->field('001'));
       $record->add_fields('100',$authid) unless ($record->field('100'));
       $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
       $dbh->do("lock tables auth_header WRITE");
-      my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
-      $sth->execute($record->as_usmarc,$authid);
+      my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
+      $sth->execute($record->as_usmarc,$record->as_xml,$authid);
       $sth->finish;
   }
   $dbh->do("unlock tables");
@@ -1157,6 +1157,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.47  2007/06/06 13:08:35  tipaul
+# bugfixes (various), handling utf-8 without guessencoding (as suggested by joshua, fixing some zebra config files -for french but should be interesting for other languages-
+#
 # Revision 1.46  2007/05/10 14:45:15  tipaul
 # Koha NoZebra :
 # - support for authorities

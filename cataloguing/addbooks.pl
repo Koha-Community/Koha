@@ -71,6 +71,7 @@ foreach my $thisframeworkcode (keys %$frameworks) {
 
 # Searching the catalog.
 if($query) {
+    # find results
     my ($error, $marcresults) = SimpleSearch($query);
 
     if (defined $error) {
@@ -79,38 +80,13 @@ if($query) {
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
-
+    # format output
     my $total = scalar @$marcresults;
-    my @results;
-
-    for(my $i=0;$i<$total;$i++) {
-        my %resultsloop;
-        my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-        my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
-    
-        #hilight the result
-        $biblio->{'title'} =~ s/$query/<span class=term>$&<\/span>/gi;
-        $biblio->{'subtitle'} =~ s/$query/<span class=term>$&<\/span>/gi;
-        $biblio->{'biblionumber'} =~ s/$query/<span class=term>$&<\/span>/gi;
-        $biblio->{'author'} =~ s/$query/<span class=term>$&<\/span>/gi;
-        $biblio->{'publishercode'} =~ s/$query/<span class=term>$&<\/span>/gi;
-        $biblio->{'publicationyear'} =~ s/$query/<span class=term>$&<\/span>/gi;
-    
-        #build the hash for the template.
-        $resultsloop{highlight}       = ($i % 2)?(1):(0);
-        $resultsloop{title}           = $biblio->{'title'};
-        $resultsloop{subtitle}        = $biblio->{'subtitle'};
-        $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
-        $resultsloop{author}          = $biblio->{'author'};
-        $resultsloop{publishercode}   = $biblio->{'publishercode'};
-        $resultsloop{publicationyear} = $biblio->{'publicationyear'};
-
-        push @results, \%resultsloop;
-    }
+    my @newresults = searchResults($query, $total, $total , 0, @$marcresults);
     $template->param(
         total => $total,
         query => $query,
-        resultsloop => \@results,
+        resultsloop => \@newresults,
     );
 }
 

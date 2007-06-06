@@ -55,13 +55,14 @@
     <!-- /TMPL_IF -->
     <div>
     <!-- TMPL_LOOP NAME="subfield_loop" -->
+        <p class="subfield">
         <!-- TMPL_IF NAME="visibility" -->
             <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
                 <!-- TMPL_VAR NAME="subfield" -->
             </a>
         <!-- /TMPL_IF -->
-        <p class="subfield">
         <div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
+            <p>
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
                 <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield"> 
             <!-- /TMPL_UNLESS -->

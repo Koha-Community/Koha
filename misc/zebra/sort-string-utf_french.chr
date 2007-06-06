@@ -6,12 +6,12 @@ encoding utf-8
 
 # Define the basic value-set. *Beware* of changing this without re-indexing
 # your databases.
-lowercase {0-9}aæäåâàbcdeéêèëfghiîïjklmnoôöpqrstuüûùvwxyŷÿzø
-uppercase {0-9}AÆÄÂÀÅBCDEÊËÉÈFGHIÎÏJKLMNOÖÔPQRSTUÜÛVWXYŶŸZØ
+lowercase {0-9}aæbcdefghijklmnopqrstuvwxyzø
+uppercase {0-9}AÆBCDEFGHIJKLMNOPQRSTUVWXYZØ
 
 # Breaking characters
 
-space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~
+space {\001-\040}!"#$%&'\()*+,-/:;<=>?@\[\\]^_`\{|}~
 
 # Characters to be considered equivalent for searching purposes.
 equivalent æä(ae)
@@ -22,16 +22,16 @@ equivalent y(i)
 
 # Supplemental mappings
 
-map (&auml;)       ä
+map (&auml;)       a
 map (&aelig;)      æ
 map (&oslash;)     ø
-map (&aring;)      å
-map (&ouml;)       ö
-map (&Auml;)       Ä
+map (&aring;)      a
+map (&ouml;)       o
+map (&Auml;)       A
 map (&Aelig;)      Æ
 map (&Oslash;)     Ø
-map (&Aring;)      Å
-map (&Ouml;)       Ö
+map (&Aring;)      A
+map (&Ouml;)       O
 
 map âàáäÂÀÂ		a
 map êèéëÊÈÉË		e
