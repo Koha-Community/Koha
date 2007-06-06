@@ -43,9 +43,6 @@ my $reviews = getreviews( $biblionumber, 1 );
 $template->param(
     reviews => $reviews,
     title   => $biblio->{'title'},
-    OpacCloud            => C4::Context->preference("OpacCloud"),
-    OpacTopissue         => C4::Context->preference("OpacTopissue"),
-    OpacAuthorities      => C4::Context->preference("OpacAuthorities"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

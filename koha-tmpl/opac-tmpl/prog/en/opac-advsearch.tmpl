@@ -44,10 +44,18 @@
 
     <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset>
-    <legend>Search For:</legend>
+    <legend>Search for:</legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
     
-        <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_IF NAME="search_boxes_label" --><p style="text-indent: 4.5em;"><!-- TMPL_ELSE --><p><!-- /TMPL_IF --><!-- TMPL_ELSE --><p><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="expanded_options" -->
+            <!-- TMPL_IF NAME="search_boxes_label" -->
+                <p style="text-indent: 4.5em;">
+            <!-- TMPL_ELSE -->
+                <p>
+            <!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+            <p>
+        <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
             <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
@@ -85,19 +93,19 @@
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value=""/>
         <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="scan_index" --><!-- TMPL_VAR NAME="scan_index" --><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="scan_index" --><input type='checkbox' name='scan' id='scan' value='1'/> Scan Indexes<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
     <div id="advsearch-itemtype">
-    <h2>Itemtype limit to any of the following:</h2>
+    <h3>Itemtype limit to any of the following:</h3>
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
         <td><p>
-        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/>&nbsp;
+        <input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
         <!--TMPL_VAR Name="description" --></p></td>
         <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
@@ -108,8 +116,8 @@
     <!-- BASIC LIMITS -->
     <!--TMPL_IF Name="usmarc"-->
         <fieldset>
-        <legend>Limit type to: match any of the following</legend>
-        <table class="itemtypes">
+            <legend>Limit type to: match any of the following</legend>
+            <table class="itemtypes">
                 <tr>
                     <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t"/><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
                     <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
@@ -128,9 +136,9 @@
                 </tr>
                 
                 </table>
-    </fieldset>
-    <!-- /TYPE LIMITS -->
-    <div id="sidebar">
+        </fieldset>
+        <!-- /TYPE LIMITS -->
+        <div id="sidebar">
         <!-- SUBTYPE LIMITS -->
             <fieldset>
             <legend>Subtype limits</legend><p>
@@ -197,8 +205,8 @@
     </fieldset>
     <!--/TMPL_IF -->
     <!--TMPL_IF Name="UNIMARC" -->
-    <div id="sidebar">
-    <!-- SUBTYPE LIMITS -->
+        <div id="sidebar">
+        <!-- SUBTYPE LIMITS -->
             <fieldset>
             <legend>Champs Cod&eacute;s</legend>
             <p>
@@ -400,8 +408,8 @@
                 <option value="Graphics-support:z">Autres</option>
             </select>
             </p>
-    
     </fieldset>
+    </div>
     <!--/TMPL_IF-->
 <!--/TMPL_IF-->
 <!-- AVAILABILITY LIMITS -->

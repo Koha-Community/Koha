@@ -242,7 +242,7 @@ foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtype
         code     => $thisitemtype,
         selected => $selected,
         description => $itemtypes->{$thisitemtype}->{'description'},
-        count5      => $cnt % 5,
+        count5      => $cnt % 4,
     );
     $selected = 0 if ($selected);
     push @itemtypesloop, \%row;
@@ -292,8 +292,7 @@ if ( $template_name eq "opac-advsearch.tmpl" ) {
               {
                 indexes            => $this_index,
                 search_boxes_label => "<span class='labels'>Search for:</span>",
-                scan_index         =>
-"<input type='checkbox' name='scan' id='scan' value='1'/><label for='scan'>Scan Indexes</label>",
+                scan_index         => 1,
               };
 
         }
@@ -344,9 +343,6 @@ if ( $template_name eq "opac-advsearch.tmpl" ) {
     my $sort_by_loop = displaySortby($sort_by);
     $template->param(
         sort_by_loop => $sort_by_loop,
-        OpacCloud            => C4::Context->preference("OpacCloud"),
-        OpacTopissue         => C4::Context->preference("OpacTopissue"),
-        OpacAuthorities      => C4::Context->preference("OpacAuthorities"),
      );
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
