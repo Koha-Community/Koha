@@ -96,7 +96,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name => "catalogue/ISBDdetail.tmpl",
         query         => $query,
         type          => "intranet",
-        debug         => 1,
+	authnotrequired => 0,
+	flagsrequired   => { catalogue => 1 },
     }
 );
 
