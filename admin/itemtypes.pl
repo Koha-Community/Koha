@@ -200,18 +200,14 @@ if ($op eq 'add_form') {
             ";
         my $sth=$dbh->prepare($query);
 	    $sth->execute(
-	    $input->param('itemtype'),
-        $input->param('description'),
-	    $input->param('renewalsallowed'),
-        $input->param('rentalcharge'),
-		$input->param('notforloan') ? 1 : 0,
-            $input->param('image') eq 'removeImage'
-            ? undef
-            : $input->param('image') eq 'remoteImage'
-                ? $input->param('remoteImage')
-                : $input->param('image'),
-        $input->param('summary'),
-        );
+                $input->param('itemtype'),
+                $input->param('description'),
+                $input->param('renewalsallowed'),
+                $input->param('rentalcharge'),
+                $input->param('notforloan') ? 1 : 0,
+                $input->param('image') eq 'removeImage' ? '' : $input->param('image') eq 'remoteImage' ? $input->param('remoteImage') : $input->param('image'),
+                $input->param('summary'),
+            );
     }
     
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
