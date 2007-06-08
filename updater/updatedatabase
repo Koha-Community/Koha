@@ -566,7 +566,7 @@ my %tabledata = (
         {
             uniquefieldrequired => 'id',
             category            => 'SUGGEST',
-            authorised_value    => 'Not enoug budget',
+            authorised_value    => 'Not enough budget',
             lib                 => 'This book it too much expensive',
         }
     ],
@@ -935,6 +935,14 @@ my %fielddefinitions = (
         {
             field    => 'issue_date',
             type    => 'date',
+            null    => 'NULL',
+            key        => '',
+            default    => '',
+            extra    => '',
+        },
+        {
+            field    => 'homebranch',
+            type    => 'varchar(10)',
             null    => 'NULL',
             key        => '',
             default    => '',
@@ -2034,6 +2042,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.166  2007/06/08 09:40:12  toins
+# bug fix : items.homebranch must be VARCHAR(10)
+#
 # Revision 1.165  2007/05/23 16:33:10  tipaul
 # skip move to innoDB for the 4 22 tables, that are used to store MARC records, are useless in Koha 3.0 The process is very very long, so the updatedatabase should speed up a lot (by long I mean 1 hour on my Dual core with SCSI disk, for a 50 000 biblios long table
 #
