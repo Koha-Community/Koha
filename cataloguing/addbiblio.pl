@@ -559,7 +559,7 @@ if ($op eq "addbiblio") {
             ($biblionumber,$oldbibitemnum) = AddBiblio($record,$frameworkcode);
         }
     # now, redirect to additem page
-        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+        print $input->redirect("/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
         exit;
     } else {
     # it may be a duplicate, warn the user and do nothing
