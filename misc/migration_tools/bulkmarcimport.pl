@@ -182,9 +182,9 @@ my $dbh = C4::Context->dbh;
 
 if ($delete) {
     print "deleting biblios\n";
-    $dbh->do("delete from biblio");
-    $dbh->do("delete from biblioitems");
-    $dbh->do("delete from items");
+    $dbh->do("truncate biblio");
+    $dbh->do("truncate biblioitems");
+    $dbh->do("truncate items");
 }
 if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
