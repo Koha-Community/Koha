@@ -1474,7 +1474,7 @@ sub NZorder {
             # note that we + the ranking because ranking is calculated on weight of EACH term requested.
             # if we ask for "two towers", and "two" has weight 2 in biblio N, and "towers" has weight 4 in biblio N
             # biblio N has ranking = 6
-            $count_ranking{$biblionumber} =+ $ranking;
+            $count_ranking{$biblionumber} += $ranking;
         }
         # build the result by "inverting" the count_ranking hash
         # hing : as usual, we don't order by ranking only, to avoid having only 1 result for each rank. We build an hash on concat(ranking,biblionumber) instead

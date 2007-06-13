@@ -939,7 +939,7 @@ sub ModReserveMinusPriority {
             AND priority > 0
             AND cancellationdate IS NULL
     ";
-    my $sth_upd = $dbh->prepare($query);
+    $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $biblionumber );
     $sth_upd->finish;
     $sth_upd->finish;

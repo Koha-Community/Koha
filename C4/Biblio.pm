@@ -270,8 +270,7 @@ sub AddBiblio {
     }
 
     # now add the record
-    my $biblionumber =
-      ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+    $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
       
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio") 
         if C4::Context->preference("CataloguingLog");
@@ -385,7 +384,7 @@ sub ModBiblio {
     my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
 
     # modify the other koha tables
-    my $biblionumber = _koha_modify_biblio( $dbh, $oldbiblio );
+    $biblionumber = _koha_modify_biblio( $dbh, $oldbiblio );
     _koha_modify_biblioitem( $dbh, $oldbiblio );
 
     return 1;
@@ -1420,8 +1419,6 @@ $res = GetMarcStructure($forlibrarian,$frameworkcode);
 Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
 $forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
 $frameworkcode : the framework code to read
-
-=back
 
 =back
 
@@ -3917,6 +3914,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.210  2007/06/13 13:03:34  toins
+# removing warn compilation.
+#
 # Revision 1.209  2007/05/23 16:19:40  tipaul
 # various bugfixes (minor) and french translation updated
 #
