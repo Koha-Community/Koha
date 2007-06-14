@@ -109,17 +109,18 @@ if ($do_it) {
 	my %select_catcode;
 	my @select_catcode;
 	push @select_catcode,"";
-	$select_catcode{""} = "";
-	while (my ($catcode, $description) =$req->fetchrow) {
-		push @select_catcode, $catcode;
-		$select_catcode{$catcode} = $description
-	}
-	my $CGICatCode=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select_catcode,
-				-labels   => \%select_catcode,
-				-size     => 1,
-				-multiple => 0 );
+	$select_catcode{""} ="";
+ 	while (my ($catcode, $description) =$req->fetchrow) {
+ 		push @select_catcode, $catcode;
+ 		$select_catcode{$catcode} = $description;
+ 	}
+ 	my $CGICatCode=CGI::scrolling_list( -name     => 'Filter',
+ 				-id => 'Filter',
+ 				-values   => \@select_catcode,
+ 				-labels   => \%select_catcode,
+ 				-size     => 1,
+ 				-multiple => 0 );
+
 	
 my $branches = GetBranches;
 my @branchloop;
@@ -185,7 +186,7 @@ foreach my $thisbranch (keys %$branches) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
-	$template->param(CGICatcode => $CGICatCode,
+	$template->param(		CGICatCode => $CGICatCode,
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
