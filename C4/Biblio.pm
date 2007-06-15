@@ -1416,7 +1416,7 @@ sub GetBiblioItemInfosOf {
 
 $res = GetMarcStructure($forlibrarian,$frameworkcode);
 
-Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
+Returns a reference to a big hash of hash, with the Marc structure for the given frameworkcode
 $forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
 $frameworkcode : the framework code to read
 
@@ -1731,6 +1731,17 @@ sub GetMarcSubjects {
         my $label = "su:";
         my $flag = 0;
         for my $subject_subfield ( @subfields ) {
+            if (
+                $marcflavour ne 'MARC21'
+                and (
+                    ($subject_subfield->[0] eq '3') or
+                    ($subject_subfield->[0] eq '4') or
+                    ($subject_subfield->[0] eq '5')
+                )
+            )
+            {
+                next;
+            }
             my $code = $subject_subfield->[0];
             $label .= $subject_subfield->[1] . " and su-to:" unless ( $code == 9 );
             if ( $code == 9 ) {
@@ -1788,15 +1799,26 @@ sub GetMarcAuthors {
         my $count_auth = 0;
         my $and ;
         for my $authors_subfield (@subfields) {
-        	if ($count_auth ne '0'){
-        	$and = " and au:";
-        	}
+            if (
+                $marcflavour ne 'MARC21'
+                and (
+                    ($authors_subfield->[0] eq '3') or
+                    ($authors_subfield->[0] eq '4') or
+                    ($authors_subfield->[0] eq '5')
+                )
+            )
+            {
+                next;
+            }
+            if ($count_auth ne '0'){
+                $and = " and au:";
+            }
             $count_auth++;
-            my $subfieldcode     = $authors_subfield->[0];
-            my $value            = $authors_subfield->[1];
-            $hash{'tag'}         = $field->tag;
-            $hash{value}        .= $value . " " if ($subfieldcode != 9) ;
-            $hash{link}        .= $value if ($subfieldcode eq 9);
+            my $subfieldcode = $authors_subfield->[0];
+            my $value        = $authors_subfield->[1];
+            $hash{tag}       = $field->tag;
+            $hash{value}    .= $value . " " if ($subfieldcode != 9) ;
+            $hash{link}     .= $value if ($subfieldcode eq 9);
         }
         push @marcauthors, \%hash;
     }
@@ -3914,6 +3936,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.211  2007/06/15 09:40:06  toins
+# do not get $3 $4 and $5 on GetMarcSubjects GetMarcAuthors on unimarc flavour.
+#
 # Revision 1.210  2007/06/13 13:03:34  toins
 # removing warn compilation.
 #
