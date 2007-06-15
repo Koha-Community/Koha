@@ -743,6 +743,22 @@ my %fielddefinitions = (
             default    => '',
             extra    => '',
         },
+        {
+            field   => 'dewey',
+            type    => 'varchar(30)',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+    ],
+    deletedbiblioitems => [
+        {
+            field   => 'dewey',
+            type    => 'varchar(30)',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
     ],
     branches =>  [
         {
@@ -2042,6 +2058,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.167  2007/06/15 13:09:08  toins
+# bugfix : bibliotitems.dewey & deletedbiblioitems.dewey mustn't be double(8,6).
+#
 # Revision 1.166  2007/06/08 09:40:12  toins
 # bug fix : items.homebranch must be VARCHAR(10)
 #
