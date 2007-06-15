@@ -1219,6 +1219,7 @@ sub NZanalyse {
         $left='title' if $left eq 'ti';
         $left='author' if $left eq 'au';
         $left='publisher' if $left eq 'pb';
+        $left='subject' if $left eq 'su';
         $left='koha-Auth-Number' if $left eq 'an';
         if ($operator) {
             #do a specific search
