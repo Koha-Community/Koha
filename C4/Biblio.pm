@@ -1996,14 +1996,11 @@ sub TransformHtmlToXml {
     my $xml = MARC::File::XML::header('UTF-8');
     if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
         MARC::File::XML->default_record_format('UNIMARC');
-        use POSIX qw(strftime);
-        my $string = strftime( "%Y%m%d", localtime(time) );
-        $string = sprintf( "%-*s", 35, $string );
-        substr( $string, 22, 6, "frey50" );
-        $xml .= "<datafield tag=\"100\" ind1=\"\" ind2=\"\">\n";
-        $xml .= "<subfield code=\"a\">$string</subfield>\n";
-        $xml .= "</datafield>\n";
-    }
+        }
+    # in UNIMARC, field 100 contains the encoding
+    # check that there is one, otherwise the 
+    # MARC::Record->new_from_xml will fail (and Koha will die)
+    my $unimarc_and_100_exist=0;
     my $prevvalue;
     my $prevtag = -1;
     my $first   = 1;
@@ -2017,6 +2014,7 @@ sub TransformHtmlToXml {
         if ( !utf8::is_utf8( @$values[$i] ) ) {
             utf8::decode( @$values[$i] );
         }
+        $unimarc_and_100_exist=1 if C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a";
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $j++ unless ( @$tags[$i] eq "" );
             if ( !$first ) {
@@ -2087,6 +2085,15 @@ sub TransformHtmlToXml {
         }
         $prevtag = @$tags[$i];
     }
+    if (C4::Context->preference('marcflavour') and !$unimarc_and_100_exist) {
+        use POSIX qw(strftime);
+        my $string = strftime( "%Y%m%d", localtime(time) );
+        $string = sprintf( "%-*s", 35, $string );
+        substr( $string, 22, 6, "frey50" );
+        $xml .= "<datafield tag=\"100\" ind1=\"\" ind2=\"\">\n";
+        $xml .= "<subfield code=\"a\">$string</subfield>\n";
+        $xml .= "</datafield>\n";
+    } 
     $xml .= MARC::File::XML::footer();
 
     return $xml;
@@ -3936,6 +3943,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.212  2007/06/15 13:44:44  tipaul
+# some fixes (and only fixes)
+#
 # Revision 1.211  2007/06/15 09:40:06  toins
 # do not get $3 $4 and $5 on GetMarcSubjects GetMarcAuthors on unimarc flavour.
 #

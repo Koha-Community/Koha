@@ -66,8 +66,8 @@ $data->{'dewey'}=$dewey;
 
 my @results;
 
-my (@items)= itemissues($bi);
-my $count=@items;
+my $items= GetItemIssues($bi);
+my $count=@$items;
 $data->{'count'}=$count;
 
 my $ordernum = GetOrderNumber($biblionumber,$bi);
@@ -75,7 +75,7 @@ my $order = GetOrder($ordernum);
 
 $results[0]=$data;
 
-foreach my $item (@items){
+foreach my $item (@$items){
     $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
@@ -94,7 +94,7 @@ foreach my $item (@items){
 }
 
 $template->param(BIBITEM_DATA => \@results);
-$template->param(ITEM_DATA => \@items);
+$template->param(ITEM_DATA => \@$items);
 $template->param(loggedinuser => $loggedinuser);
 
 output_html_with_http_headers $query, $cookie, $template->output;

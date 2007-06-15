@@ -55,7 +55,7 @@ unless (%index) {
         'biblionumber' =>'0909',
         'itemtype' => '200b',
         'language' => '101a',
-        'publisher' => '210x',
+        'publisher' => '210c',
         'date' => '210d',
         'note' => '300a,301a,302a,303a,304a,305a,306az,307a,308a,309a,310a,311a,312a,313a,314a,315a,316a,317a,318a,319a,320a,321a,322a,323a,324a,325a,326a,327a,328a,330a,332a,333a,336a,337a,345a',
         'Koha-Auth-Number' => '6009,6019,6029,6039,6049,6059,6069,6109,7009,7019,7029,7109,7119,7129',
@@ -147,15 +147,20 @@ while (my ($biblionumber) = $sth->fetchrow) {
         }
     }
 }
+print "\nInserting records...\n";
+$i=0;
 my $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('biblioserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
         if (length($result{$key}->{$index}) > 1000000) {
             print "very long index (".length($result{$key}->{$index}).")for $key / $index. update mySQL config file if you have an error just after this warning (max_paquet_size parameter)\n";
         }
+        print "\r$i";
+        $i++;
         $sth->execute($key,$index,$result{$key}->{$index});
     }
 }
+print "\nbiblios done\n";
 
 print "\n***********************************\n";
 print "***** building AUTHORITIES indexes *****\n";
@@ -237,12 +242,17 @@ while (my ($authid) = $sth->fetchrow) {
         }
     }
 }
+print "\nInserting...\n";
+$i=0;
 my $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('authorityserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
         if (length($result{$key}->{$index}) > 1000000) {
             print "very long index (".length($result{$key}->{$index}).")for $key / $index. update mySQL config file if you have an error just after this warning (max_paquet_size parameter)\n";
         }
+        print "\r$i";
+        $i++;
         $sth->execute($key,$index,$result{$key}->{$index});
     }
 }
+print "\nauthorities done\n";

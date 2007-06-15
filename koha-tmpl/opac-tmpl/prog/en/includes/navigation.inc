@@ -31,7 +31,6 @@
                 <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
         </ul>
-        <br />
  </div>
 
  <div id="main"> <!-- MAIN Body start here -->

@@ -46,9 +46,11 @@ die;
 #
 ###################################
 
+$max_digits=3 unless $max_digits;
 $field =~ /(\d\d\d)(.?)/;
 my $browser_tag = $1;
 my $browser_subfield = $2;
+warn "browser : $browser_tag / $browser_subfield";
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
 
 my $dbh = C4::Context->dbh;
@@ -107,13 +109,16 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
 
 # fills the browser table
 if ($browser_tag) {
+    print "inserting datas in browser table\n";
     # read existing classification table is possible
     my $classification;
-    if (C4::Context->preference('opaclanguages') eq 'en' && $browser_tag eq '676' & $browser_subfield eq 'a') {
+    if (C4::Context->preference('opaclanguages') eq 'fr' && $browser_tag eq '676' & $browser_subfield eq 'a') {
         $classification = dewey_french();
     }
-    
+    $classification = dewey_french();
     # calculate end node...
+    use Data::Dumper;
+    warn "==>".Dumper(%browser_result);
     foreach (keys %browser_result) {
         my $father = substr($_,0,-1);
         $browser_result{$father}->{notendnode}=1;

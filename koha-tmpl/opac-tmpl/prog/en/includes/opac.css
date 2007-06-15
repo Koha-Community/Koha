@@ -47,7 +47,8 @@ label {
     display:block;
     float:left;
     margin-right:0.2em;
-    width:7em;
+    width:10em;
+    font-size:0.8em;
 }
 
 a:link, a:visited, a:active {
@@ -149,16 +150,19 @@ tr.highlight td, tr.highlight th {
     text-align:left;
     font-size:150%;
     font-weight:bold;
-    margin-bottom:25px;
+    margin-bottom:5px;
 }
 
 /* The image on the top-left (the logo) */
 #masthead-image {
-    position:fixed;
-    padding-left:0px;
-    padding-top:0px;
+    position:absolute;
+    left:10px;
+    top:10px;
+    background-color:white;
 }
+
 #masthead-image img {
+    background-color:white;
 }
 
 /* the itemtype list in advanced search */
@@ -184,14 +188,18 @@ tr.highlight td, tr.highlight th {
 
 /* the content part of every page */
 #main {
-    margin-left:20%;
+    margin-left:15%;
     margin-bottom:0px;
 }
 
 /* the main menu (home, adv search) */
+
 #menu {
-    position:fixed;
-    padding:0px;
+    position:absolute;
+    padding:10px;
+    left:0px;
+    top:100px;
+    width:12%;
     font-size:0.8em;
     font-weight:bold;
     color:#384b73;
@@ -204,34 +212,42 @@ tr.highlight td, tr.highlight th {
     text-decoration:none;
     color:#384b73;
     white-space: nowrap;
+    margin:0px;
+    padding:0px;
 }
 #menu ul a:hover {
     display:block;
-    margin:5px 5px 0px 5px;
-    padding :5px 5px 0px 5px;
+    margin:0;
+    padding :0;
     text-decoration:none;
     color:#990033;
     white-space: nowrap;
 }
 #menu ul {
     padding-left:0px;
-    margin-bottom:0px;
-    margin-top:0px;
+    margin:0;
+    padding-bottom:0px;
 }
 #menu li {
     list-style-type:none;
+    margin:0px;
+    padding-bottom:10px;
 }
+
 
 
 /***************/
 /* login block */
 /***************/
 #login {
-    position:fixed;
-    bottom:0px;
+    position:absolute;
+    left:0px;
+    bottom:10px;
     font-size:0.8em;
-    background-color : #cccccc;
+    background-color : #dddddd;
     padding:10px;
+    margin-right:84%;
+    width:12%;
 }
 #login input {
     font-size:0.8em;

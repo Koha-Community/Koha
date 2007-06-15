@@ -118,6 +118,7 @@ if ($step && $step==1){
   unless (eval {require Digest::MD5})      { push @missing,{name=>"Digest::MD5"} };
   unless (eval {require MARC::Record})     { push @missing,{name=>"MARC::Record"} };
   unless (eval {require Mail::Sendmail})   { push @missing,{name=>"Mail::Sendmail",usagemail=>1} };
+  unless (eval {require List::MoreUtils})              { push @missing,{name=>"List::MoreUtils"} };
 # The following modules are not mandatory, depends on how the library want to use Koha
   unless (eval {require PDF::API2})   { 
           if ($#missing>=0) { # only when $#missing >= 0 so this isn't fatal

@@ -97,32 +97,31 @@ sub MARCfindbreeding {
     my ($file,$marc,$encoding) = $sth->fetchrow;
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-	if ($record->field('010')){ 
-	foreach my $field ($record->field('010'))
-		{
-			foreach my $subfield ($field->subfield('a')){
-  				my $newisbn = $field->subfield('a');
- 				$newisbn =~ s/-//g;
- 				$field->update( 'a' => $newisbn );
-				
-						
-			}
-# 			$record->insert_fields_ordered($record->field('010'));
-		}		
-	}
-    	
-    if ($record->subfield(100,'a')){
- 	my $f100a=$record->subfield(100,'a');
- 	my $f100 = $record->field(100);
- 	my $f100temp = $f100->as_string;
- 	$record->delete_field($f100);
- 	if (length($f100temp)>28){
- 	substr($f100temp,26,2,"50");
- 	$f100->update('a' => $f100temp);
- 	my $f100 = MARC::Field->new('100','','','a' => $f100temp);
- 	$record->insert_fields_ordered($f100);
- 	}
-    }
+        if ($record->field('010')){ 
+            foreach my $field ($record->field('010'))
+            {
+                foreach my $subfield ($field->subfield('a')){
+                    my $newisbn = $field->subfield('a');
+                    $newisbn =~ s/-//g;
+                    $field->update( 'a' => $newisbn );
+                }
+    # 			$record->insert_fields_ordered($record->field('010'));
+            }		
+        }
+        warn "AVANT : ".$record->as_formatted;
+        if ($record->subfield(100,'a')) {
+            my $f100a=$record->subfield(100,'a');
+            my $f100 = $record->field(100);
+            my $f100temp = $f100->as_string;
+            $record->delete_field($f100);
+            if (length($f100temp)>28) {
+                substr($f100temp,26,2,"50");
+                $f100->update('a' => $f100temp);
+                my $f100 = MARC::Field->new('100','','','a' => $f100temp);
+                $record->insert_fields_ordered($f100);
+            }
+        }
+        warn "APRES: ".$record->as_formatted;
         if (ref($record) eq undef) {
             return -1;
         } else {
