@@ -27,6 +27,7 @@ use Test::Harness;
 # Please make the test name the same as the module name where possible
 
 my @tests=(
+	't/Accounts.t',
 	't/format.t',
 	't/Input.t',
 	't/koha.t',
@@ -41,6 +42,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.2  2007/06/17 23:35:36  rangi
+# Working on unit tests
+#
 # Revision 1.1  2002/11/22 09:05:18  tipaul
 # moving non koha-running files to misc dir
 #
