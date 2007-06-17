@@ -28,6 +28,8 @@ use Test::Harness;
 
 my @tests=(
 	't/Accounts.t',
+	't/Acquisition.t',
+	't/Amazon.t',
 	't/format.t',
 	't/Input.t',
 	't/koha.t',
@@ -42,6 +44,10 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.3  2007/06/17 23:44:04  rangi
+# Simple compile only test for C4::Amazon
+# Needs tests written for the 2 functions in it.
+#
 # Revision 1.2  2007/06/17 23:35:36  rangi
 # Working on unit tests
 #
