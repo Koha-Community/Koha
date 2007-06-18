@@ -30,6 +30,10 @@ my @tests=(
 	't/Accounts.t',
 	't/Acquisition.t',
 	't/Amazon.t',
+	't/AuthoritiesMarc.t',
+	't/Auth.t',
+	't/Auth_with_ldap.t',
+	't/Barcodes_PrinterConfig.t',
 	't/format.t',
 	't/Input.t',
 	't/koha.t',
@@ -44,6 +48,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.4  2007/06/18 00:51:10  rangi
+# Continuing to add tests
+#
 # Revision 1.3  2007/06/17 23:44:04  rangi
 # Simple compile only test for C4::Amazon
 # Needs tests written for the 2 functions in it.
