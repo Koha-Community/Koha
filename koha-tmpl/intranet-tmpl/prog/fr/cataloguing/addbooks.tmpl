@@ -49,15 +49,21 @@
 <!-- TMPL_VAR NAME="total"--> réponses trouvées dans le catalogue.
 <div class="searchresults">
     <table>
-    <tr>
-       <th>Titre</th>
-    </tr>
-    <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
+            <th>Titre</th>
+            <th>Localisation</th>
+            <th>&nbsp;</th>
+        </tr>
+    <!-- TMPL_LOOP NAME="resultsloop" -->
+        <!-- TMPL_IF name="even" -->
+            <tr class="highlight">
+        <!-- TMPL_ELSE -->
+            <tr>
+        <!-- /TMPL_IF -->
             <td>
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                <p>
                     <!-- TMPL_VAR NAME="title" -->
-                </a>
+                <!-- TMPL_VAR NAME="subtitle" -->
                 <!-- TMPL_IF name="summary" -->
                     <p><!-- TMPL_VAR name="summary" --></p>
                 <!-- TMPL_ELSE -->
@@ -76,7 +82,36 @@
                         <!-- TMPL_IF name="timestamp" --> <i>(modifié le <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                     </p>
                 <!-- /TMPL_IF -->
-</tr>
+                </td>
+                <td>
+                    <!-- TMPL_IF NAME="items_loop" -->
+                        <span class="available">
+                        <!-- TMPL_LOOP NAME="items_loop" -->
+                            <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchname" -->
+                            <i>
+                        <!-- TMPL_IF name="location" --><!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="itemcallnumber" --><!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->
+                            <!-- TMPL_IF name="classification" -->
+                            <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
+                                <!-- TMPL_VAR NAME="classification" -->
+                            </a>
+                        <!-- /TMPL_IF -->
+                        </i>
+                            <br />
+                        <!-- /TMPL_LOOP -->
+                        </span>
+                    <!-- /TMPL_IF -->
+                    <span class="unavailable">
+                        <!-- TMPL_IF NAME="onloancount" --> En prêt (<!-- TMPL_VAR NAME="onloancount" -->)<br /> <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="wthdrawncount" --> Exemplaire retiré (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="itemlostcount" --> Perdu (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="orderedcount" --> En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
+                    </span>
+                </td>
+                <td>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Editer notice</a>
+                </td>
+            </tr>
     <!-- /TMPL_LOOP -->
     </table>
 </div>

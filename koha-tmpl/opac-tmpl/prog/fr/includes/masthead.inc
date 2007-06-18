@@ -9,3 +9,11 @@
 <div id="masthead">
         <!-- TMPL_VAR NAME="LibraryName" -->
 </div>
+<div id="opac-main-search">
+    <label for="masthead_search">Rechercher</label>
+    <form name="searchform" method="POST" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+        <input type="text" name="q" style="width: 30%;"/>
+        <input type="submit" value="Rechercher" class="submit">
+    </form>
+    <a href="/cgi-bin/koha/opac-search.pl">plus d'options de recherche</a>
+</div>

@@ -43,10 +43,18 @@
 
     <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset>
-    <legend>Rechercher par :</legend>
+    <legend>Rechercher :</legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
     
-        <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_IF NAME="search_boxes_label" --><p style="text-indent: 4.5em;"><!-- TMPL_ELSE --><p><!-- /TMPL_IF --><!-- TMPL_ELSE --><p><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="expanded_options" -->
+            <!-- TMPL_IF NAME="search_boxes_label" -->
+                <p style="text-indent: 4.5em;">
+            <!-- TMPL_ELSE -->
+                <p>
+            <!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+            <p>
+        <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
             <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Mot de la notice</option>
@@ -84,19 +92,19 @@
         </select>
         <input type="text" size="30" name="q" title="Saisissez les termes de la recherche" value="">
         <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="scan_index" --><!-- TMPL_VAR NAME="scan_index" --><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="scan_index" --><input type='checkbox' name='scan' id='scan' value='1'/> Parcourir l'index<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Ajouter un autre champ">[+]</a><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
     <div id="advsearch-itemtype">
-    <h2>Itemtype limit to any of the following:</h2>
+    <h3>Limiter le type de document à :</h3>
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
         <td><p>
-        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/>&nbsp;
+        <input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
         <!--TMPL_VAR Name="description" --></p></td>
         <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
@@ -107,8 +115,8 @@
     <!-- BASIC LIMITS -->
     <!--TMPL_IF Name="usmarc"-->
         <fieldset>
-        <legend>Limiter le type à : sélectionner ci-dessous</legend>
-        <table class="itemtypes">
+            <legend>Limiter le type à : sélectionner ci-dessous</legend>
+            <table class="itemtypes">
                 <tr>
                     <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t"/><label for="mc-bks" title="Livres, pamphlets, rapports techniques, manuscrits, Textes de lois, Mémoires et thèses"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Livres">Livres</label></td>
                     <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Films, Enregistrements vidéos, Film fixe, Diapositives, Transparents, Photos, Cartes, Graphiques, Dessins"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Documents visuels">Documents visuels</label></td>
@@ -127,9 +135,9 @@
                 </tr>
                 
                 </table>
-    </fieldset>
-    <!-- /TYPE LIMITS -->
-    <div id="sidebar">
+        </fieldset>
+        <!-- /TYPE LIMITS -->
+        <div id="sidebar">
         <!-- SUBTYPE LIMITS -->
             <fieldset>
             <legend>Limites secondaires</legend><p>
@@ -196,8 +204,8 @@
     </fieldset>
     <!--/TMPL_IF -->
     <!--TMPL_IF Name="UNIMARC" -->
-    <div id="sidebar">
-    <!-- SUBTYPE LIMITS -->
+        <div id="sidebar">
+        <!-- SUBTYPE LIMITS -->
             <fieldset>
             <legend>Critères annexes</legend>
             <p>
@@ -399,8 +407,8 @@
                 <option value="Graphics-support:z">Autres</option>
             </select>
             </p>
-    
     </fieldset>
+    </div>
     <!--/TMPL_IF-->
 <!--/TMPL_IF-->
 <!-- AVAILABILITY LIMITS -->

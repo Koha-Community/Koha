@@ -66,6 +66,7 @@ return false;
 <!-- ------------------------------------------------------------------------ -->
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate">
+	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
         <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
         <h2><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modifier le champ<!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Ajouter un champ<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h2>
     <p><label>Champ</label><!-- TMPL_VAR NAME="searchfield" -->&nbsp;</p>
