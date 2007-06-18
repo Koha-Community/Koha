@@ -40,13 +40,30 @@ my @tests=(
 	't/BookShelves.t',
 	't/Boolean.t',
 	't/Breeding.t',
-	
-	't/format.t',
+	't/Calendar.t',
+	't/Circulation.t',
+	't/Context.t',
+	't/Date.t',	
 	't/Input.t',
 	't/koha.t',
+	't/Labels.t',
+	't/Languages.t',
+	't/Letters.t',
+	't/Log.t',
+	't/Maintainance.t',
+	't/Members.t',
+	't/NewsChannels.t',
 	't/output.t',
-	't/require.t',
-	
+	't/Overdues.t',
+	't/Print.t',
+	't/Record.t',
+	't/Reserves.t',
+	't/Review.t',
+	't/Search.t',
+	't/Serials.t',
+	't/Stats.t',
+	't/Suggestions.t',
+	't/Z3950.t'
 );
 
 
@@ -55,6 +72,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.7  2007/06/18 03:20:19  rangi
+# Finishing up the last of the tests
+#
 # Revision 1.6  2007/06/18 01:58:24  rangi
 # Continuing on my tests mission
 #
