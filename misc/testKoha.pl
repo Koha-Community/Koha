@@ -34,6 +34,9 @@ my @tests=(
 	't/Auth.t',
 	't/Auth_with_ldap.t',
 	't/Barcodes_PrinterConfig.t',
+	't/Biblio.t',
+	't/Bookfund.t'
+	't/Bookseller.t',
 	't/format.t',
 	't/Input.t',
 	't/koha.t',
@@ -48,6 +51,9 @@ runtests (@tests);
 exit;
 
 # $Log$
+# Revision 1.5  2007/06/18 01:34:50  rangi
+# More test files
+#
 # Revision 1.4  2007/06/18 00:51:10  rangi
 # Continuing to add tests
 #
