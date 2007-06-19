@@ -326,8 +326,9 @@ corresponds to the HTML page $html.
 sub output_html_with_http_headers ($$$) {
     my($query, $cookie, $html) = @_;
     print $query->header(
-	-type   => 'text/html; charset=utf-8',
-	-cookie => $cookie,
+        -type    => 'text/html'
+        -charset => 'UTF-8',
+        -cookie  => $cookie,
     ), $html;
 }
 
