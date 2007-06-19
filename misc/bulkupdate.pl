@@ -110,18 +110,19 @@ if(not $process_marcxml){
         
         eval{
             my $record = MARC::Record->new_from_xml($marcxml,'UTF-8');
-            my $field = $record->field('010');
-            my $subfield = $field->subfield('a');
-            if($subfield){
-                my $isbn = $subfield;
-                $isbn =~ s/\-//g;
-                $field->update('a' => $isbn);
-                $marcxml = $record->as_xml('UTF-8');
-                
-                # Update
-                my $sth = $dbh->prepare($update_marcxml);
-                $sth->execute($marcxml,$biblioitemnumber);
-            }
+            my @field = $record->field('010');
+	    foreach my $field (@field){
+		    my $subfield = $field->subfield('a');
+		    if($subfield){
+			my $isbn = $subfield;
+			$isbn =~ s/\-//g;
+			$field->update('a' => $isbn);
+		    }
+	    }
+	    $marcxml = $record->as_xml('UTF-8');
+	    # Update
+	    my $sth = $dbh->prepare($update_marcxml);
+	    $sth->execute($marcxml,$biblioitemnumber);
         };
         if($@){
             print "\n /!\\ pb getting $biblioitemnumber : $@";
