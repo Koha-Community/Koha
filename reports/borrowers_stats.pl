@@ -28,6 +28,7 @@ use C4::Koha;
 use C4::Acquisition;
 use C4::Output;
 use C4::Circulation;
+use C4::Input;
 
 =head1 NAME
 
@@ -132,23 +133,43 @@ foreach my $thisbranch (keys %$branches) {
             );
     push @branchloop, \%row;
 }
-	
-	$req = $dbh->prepare( "select distinctrow sort1 from borrowers order by sort1");
-	$req->execute;
-	my @select_sort1;
-	push @select_sort1,"";
-	my $hassort1;
-	while (my ($value) =$req->fetchrow) {
-		if ($value) {
-			$hassort1=1;
-			push @select_sort1, $value;
-		}
-	}
-	my $CGIsort1=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
-				-values   => \@select_sort1,
-				-size     => 1,
-				-multiple => 0 );
+ 	$req = $dbh->prepare( "select distinctrow zipcode from borrowers order by zipcode");
+ 	$req->execute;
+ 	my @select_zipcode;
+ 	push @select_zipcode,"";
+ 	while (my ($value) =$req->fetchrow) {
+ 		if ($value) {
+ 			push @select_zipcode, $value;
+ 		}
+ 	}
+# 
+ 	my $CGIZipCode=CGI::scrolling_list( -name     => 'Filter',
+ 				-id => 'Filter',
+ 				-values   => \@select_zipcode,
+ 				-size     => 1,
+ 				-multiple => 0 );
+
+	$req = $dbh->prepare( "SELECT authorised_value,lib FROM authorised_values WHERE category='Bsort1' order by lib");
+ 	$req->execute;
+ 	my @select_sort1;
+	my %select_sort1;
+ 	push @select_sort1,"";
+	$select_sort1{""}="";
+ 	my $hassort1;
+ 	while (my ($auth_value,$lib) =$req->fetchrow) {
+ 		if ($auth_value) {
+ 			$hassort1=1;
+ 			push @select_sort1, $auth_value;
+			$select_sort1{$auth_value}=$lib
+ 		}
+ 	}
+# 
+ 	my $CGIsort1=CGI::scrolling_list( -name     => 'Filter',
+ 				-id => 'Filter',
+ 				-values   => \@select_sort1,
+				-labels	=>\%select_sort1,
+ 				-size     => 1,
+ 				-multiple => 0 );
 	
 	$req = $dbh->prepare( "select distinctrow sort2 from borrowers order by sort2");
 	$req->execute;
@@ -186,7 +207,9 @@ foreach my $thisbranch (keys %$branches) {
 				-values   => \@dels,
 				-size     => 1,
 				-multiple => 0 );
+
 	$template->param(		CGICatCode => $CGICatCode,
+					CGIZipCode => $CGIZipCode,
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
