@@ -66,10 +66,9 @@ return false;
 <!-- ------------------------------------------------------------------------ -->
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate">
-	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
         <h2><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modify tag<!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Add tag<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h2>
-    <p><label>Tag</label><!-- TMPL_VAR NAME="searchfield" -->&nbsp;</p>
+	 <p><label>Tag</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3"/></p>    
     <p><label for="liblibrarian">Label for lib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="40" maxlength="100"></p>
     <p><label for="libopac">Label for opac</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="40" maxlength="100"></p>
     <p><label for="repeatable">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
@@ -200,6 +199,7 @@ return false;
     <input type="hidden" name="op" value="add_form">
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="add_form">
+	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->">
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
         <input type="submit" value="Add Tag" />
     </form>
