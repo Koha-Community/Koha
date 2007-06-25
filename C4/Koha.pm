@@ -1137,8 +1137,8 @@ sub FixEncoding {
             foreach my $subfield ($field->subfields()){
             if ($createdfield){
                 if (($newField->tag eq '100')) {
-                substr($subfield->[1],26,2,"0103") if ($targetcharset eq "latin1");
-                substr($subfield->[1],26,4,"5050") if ($targetcharset eq "utf8");
+                    substr($subfield->[1],26,2,"0103") if ($targetcharset eq "latin1");
+                    substr($subfield->[1],26,4,"5050") if ($targetcharset eq "utf8");
                 }
                 map {C4::Biblio::char_decode($_,"UNIMARC")} @$subfield;
                 $newField->add_subfields($subfield->[0]=>$subfield->[1]);
