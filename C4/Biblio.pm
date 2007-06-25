@@ -1992,11 +1992,10 @@ $xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, $ind_tag )
 =cut
 
 sub TransformHtmlToXml {
-    my ( $tags, $subfields, $values, $indicator, $ind_tag ) = @_;
+    my ( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type ) = @_;
     my $xml = MARC::File::XML::header('UTF-8');
-    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-        MARC::File::XML->default_record_format('UNIMARC');
-        }
+    $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
+    MARC::File::XML->default_record_format($auth_type);
     # in UNIMARC, field 100 contains the encoding
     # check that there is one, otherwise the 
     # MARC::Record->new_from_xml will fail (and Koha will die)
@@ -2006,6 +2005,16 @@ sub TransformHtmlToXml {
     my $first   = 1;
     my $j       = -1;
     for ( my $i = 0 ; $i <= @$tags ; $i++ ) {
+        if (C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a") {
+            # if we have a 100 field and it's values are not correct, skip them.
+            # if we don't have any valid 100 field, we will create a default one at the end
+            my $enc = substr( @$values[$i], 26, 2 );
+            if ($enc eq '01' or $enc eq '50' or $enc eq '03') {
+                $unimarc_and_100_exist=1;
+            } else {
+                next;
+            }
+        }
         @$values[$i] =~ s/&/&amp;/g;
         @$values[$i] =~ s/</&lt;/g;
         @$values[$i] =~ s/>/&gt;/g;
@@ -2014,7 +2023,6 @@ sub TransformHtmlToXml {
         if ( !utf8::is_utf8( @$values[$i] ) ) {
             utf8::decode( @$values[$i] );
         }
-        $unimarc_and_100_exist=1 if C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a";
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $j++ unless ( @$tags[$i] eq "" );
             if ( !$first ) {
@@ -2086,16 +2094,19 @@ sub TransformHtmlToXml {
         $prevtag = @$tags[$i];
     }
     if (C4::Context->preference('marcflavour') and !$unimarc_and_100_exist) {
+#     warn "SETTING 100 for $auth_type";
         use POSIX qw(strftime);
         my $string = strftime( "%Y%m%d", localtime(time) );
+        # set 50 to position 26 is biblios, 13 if authorities
+        my $pos=26;
+        $pos=13 if $auth_type eq 'UNIMARCAUTH';
         $string = sprintf( "%-*s", 35, $string );
-        substr( $string, 22, 6, "frey50" );
+        substr( $string, $pos , 6, "50" );
         $xml .= "<datafield tag=\"100\" ind1=\"\" ind2=\"\">\n";
         $xml .= "<subfield code=\"a\">$string</subfield>\n";
         $xml .= "</datafield>\n";
     } 
     $xml .= MARC::File::XML::footer();
-
     return $xml;
 }
 
@@ -3943,6 +3954,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.213  2007/06/25 15:01:45  tipaul
+# bugfixes on unimarc 100 handling (the field used for encoding)
+#
 # Revision 1.212  2007/06/15 13:44:44  tipaul
 # some fixes (and only fixes)
 #

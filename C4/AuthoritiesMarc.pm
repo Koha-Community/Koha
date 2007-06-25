@@ -227,7 +227,7 @@ sub SearchAuthorities {
                 }elsif (@$operator[$i] eq "start"){
                     $attr.=" \@attr 4=1 \@attr 5=1 ";#Phrase, Right truncated
                 } else {
-                    $attr .=" \@attr 5=1  ";## Word list, right truncated, anywhere
+                    $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
                 $and .=" \@and " ;
                 $attr =$attr."\"".@$value[$i]."\"";
@@ -503,7 +503,7 @@ sub AddAuthority {
 #     warn $record->as_formatted;
     $dbh->do("lock tables auth_header WRITE");
     $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
-    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml);
+    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record);
     $sth->finish;
   }else{
       $record->add_fields('001',$authid) unless ($record->field('001'));
@@ -511,7 +511,7 @@ sub AddAuthority {
       $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
       $dbh->do("lock tables auth_header WRITE");
       my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
-      $sth->execute($record->as_usmarc,$record->as_xml,$authid);
+      $sth->execute($record->as_usmarc,$record->as_xml_record,$authid);
       $sth->finish;
   }
   $dbh->do("unlock tables");
@@ -544,14 +544,13 @@ sub DelAuthority {
 sub ModAuthority {
   my ($authid,$record,$authtypecode,$merge)=@_;
   my $dbh=C4::Context->dbh;
-  my ($oldrecord)=&GetAuthority($authid);
-  if ($oldrecord eq $record) {
-      return;
-  }
-  my $sth=$dbh->prepare("update auth_header set marc=? where authid=?");
+#   my ($oldrecord)=&GetAuthority($authid);
+#   if ($oldrecord eq $record) {
+#       return;
+#   }
+#   my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
   #Now rewrite the $record to table with an add
   $authid=AddAuthority($record,$authid,$authtypecode);
-
 
 ### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
 ### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
@@ -568,7 +567,7 @@ sub ModAuthority {
       print AUTH $authid;
       close AUTH;
   } else {
-      &merge($authid,$record,$authid,$record);
+#        &merge($authid,$record,$authid,$record);
   }
   return $authid;
 }
@@ -588,11 +587,9 @@ sub GetAuthorityXML {
   my ( $authid ) = @_;
   my $dbh=C4::Context->dbh;
   my $sth =
-      $dbh->prepare("select marc from auth_header where authid=? "  );
+      $dbh->prepare("select marcxml from auth_header where authid=? "  );
   $sth->execute($authid);
-  my ($marc)=$sth->fetchrow;
-  $marc=MARC::File::USMARC::decode($marc);
-  my $marcxml=$marc->as_xml_record();
+  my ($marcxml)=$sth->fetchrow;
   return $marcxml;
 
 }
@@ -608,13 +605,14 @@ Returns MARC::Record of the authority passed in parameter.
 
 =cut
 sub GetAuthority {
-  my ($authid)=@_;
-  my $dbh=C4::Context->dbh;
-  my $sth=$dbh->prepare("select marc from auth_header where authid=?");
-  $sth->execute($authid);
-  my ($marc) = $sth->fetchrow;
-  my $record=MARC::File::USMARC::decode($marc);
-  return ($record);
+    my ($authid)=@_;
+    my $dbh=C4::Context->dbh;
+    my $sth=$dbh->prepare("select marcxml from auth_header where authid=?");
+    $sth->execute($authid);
+    my ($marcxml) = $sth->fetchrow;
+    my $record=MARC::Record->new_from_xml($marcxml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
+    $record->encoding('UTF-8');
+    return ($record);
 }
 
 =head2 GetAuthType 
@@ -1157,6 +1155,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.48  2007/06/25 15:01:45  tipaul
+# bugfixes on unimarc 100 handling (the field used for encoding)
+#
 # Revision 1.47  2007/06/06 13:08:35  tipaul
 # bugfixes (various), handling utf-8 without guessencoding (as suggested by joshua, fixing some zebra config files -for french but should be interesting for other languages-
 #

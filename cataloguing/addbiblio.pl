@@ -108,7 +108,6 @@ sub MARCfindbreeding {
     # 			$record->insert_fields_ordered($record->field('010'));
             }		
         }
-        warn "AVANT : ".$record->as_formatted;
         if ($record->subfield(100,'a')) {
             my $f100a=$record->subfield(100,'a');
             my $f100 = $record->field(100);
@@ -121,7 +120,6 @@ sub MARCfindbreeding {
                 $record->insert_fields_ordered($f100);
             }
         }
-        warn "APRES: ".$record->as_formatted;
         if (ref($record) eq undef) {
             return -1;
         } else {

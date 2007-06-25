@@ -350,7 +350,6 @@ my $authtypecode = $input->param('authtypecode');
 my $dbh = C4::Context->dbh;
 $authtypecode = &GetAuthTypeCode($authid) if !$authtypecode;
 
-
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tmpl",
 			     query => $input,
@@ -376,7 +375,6 @@ if ($authid) {
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "add") {
 #------------------------------------------------------------------------------------------------------------------------------
-
 	# rebuild
 	my @tags = $input->param('tag');
 	my @subfields = $input->param('subfield');
@@ -384,9 +382,8 @@ if ($op eq "add") {
 	# build indicator hash.
 	my @ind_tag = $input->param('ind_tag');
 	my @indicator = $input->param('indicator');
-	my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+	my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'UNIMARCAUTH');
 #     warn $record->as_formatted;
-# 	warn $xml;
 	my $record=MARC::Record->new_from_xml($xml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
 	$record->encoding('UTF-8');
 	#warn $record->as_formatted;
@@ -397,7 +394,7 @@ if ($op eq "add") {
 	if (!$duplicateauthid or $confirm_not_duplicate) {
 # warn "noduplicate";
           if ($is_a_modif ) {	
-            $authid=ModAuthority($authid,$record,$authtypecode,1);		
+            ModAuthority($authid,$record,$authtypecode,1);
           } else {
             ($authid) = AddAuthority($record,$authid,$authtypecode);
           }
@@ -405,7 +402,7 @@ if ($op eq "add") {
           exit;
  	} else {
 	# it may be a duplicate, warn the user and do nothing
-            build_tabs ($template, $record, $dbh,$encoding);
+            build_tabs($template, $record, $dbh, $encoding);
             build_hidden_data;
             $template->param(authid =>$authid,
                             duplicateauthid     => $duplicateauthid,
