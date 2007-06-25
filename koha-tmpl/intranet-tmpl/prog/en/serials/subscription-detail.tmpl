@@ -138,21 +138,23 @@ function irregularity(){
     <h1>Subscription #<!--TMPL_VAR name="subscriptionid"--></h1>
     <!--TMPL_IF Name="abouttoexpire"--><div class="problem">Subscription is by its end. It should be renewed now.</div><!--/TMPL_IF-->
     <div id="action">
-        <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
-        <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>
-        <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew </a>
-        <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Receive</a>
-        <a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Serial Collection</a>
-        <!-- TMPL_IF NAME="routing" -->
-        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Edit Routing List</a>
-        <!-- TMPL_ELSE -->
-        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&op=new">Create Routing List</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_UNLESS name="totalissues" -->
+        <div class="edit">
+            <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
+            <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>
+            <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew </a>
+            <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Receive</a>
             <a href="javascript:confirm_deletion()">
-                delete
+                Delete
             </a>
-        <!-- /TMPL_UNLESS -->
+        </div>
+        <div class="view">
+            <a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Serial Collection</a>
+            <!-- TMPL_IF NAME="routing" -->
+            <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Edit Routing List</a>
+            <!-- TMPL_ELSE -->
+            <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&op=new">Create Routing List</a>
+            <!-- /TMPL_IF -->
+        </div>
     </div>
     <div id="subscription_info">
         <h2>Subscription information</h2>
