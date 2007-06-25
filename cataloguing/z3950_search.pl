@@ -100,21 +100,18 @@ if ($op ne "do_search"){
     my $s=0;
                             
     if ($isbn || $issn) {
-		$attr='1=7';
-#          warn "isbn : $isbn";
-		$term=$isbn if ($isbn);
-		$term=$issn if ($issn);
-	} elsif ($title) {
-		$attr='1=4 ';
-        utf8::decode($title);
-        $title=~tr/������/aaaeeeeiioouu/;
-		$term=$title;
-	} elsif ($author) {
-		$attr='1=1003';
-        utf8::decode($author);
-        $author=~tr/������/aaaeeeeiioouu/;
-		$term=$author;
-	}
+            $attr='1=7';
+            $term=$isbn if ($isbn);
+            $term=$issn if ($issn);
+        } elsif ($title) {
+            $attr='1=4 ';
+            utf8::decode($title);
+            $term=$title;
+        } elsif ($author) {
+            $attr='1=1003';
+            utf8::decode($author);
+            $term=$author;
+        }
 
     my $query="\@attr $attr \"$term\"";	
     warn "query ".$query if $DEBUG;
@@ -164,39 +161,40 @@ AGAIN:
             warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n" if $DEBUG;
             
         } else {
-          my $numresults=$oResult[$k]->size() ;
-          my $i;
-          my $result='';
-          if ($numresults>0){
-              for ($i=0; $i<(($numresults<20) ? ($numresults) : (20)) ; $i++) {
-                  my $rec=$oResult[$k]->record($i);
-                  my $marcrecord;
-                  $marcdata = $rec->raw();
-                  $marcrecord= FixEncoding($marcdata);
-  ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
-  ## In HEAD i change everything to UTF-8
-  # In rel2_2 i am not sure what encoding is so no character conversion is done here
-  ##Add necessary encoding changes to here -TG
-                  my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"");
-                  $oldbiblio->{isbn} =~ s/ |-|\.//g,
-                  $oldbiblio->{issn} =~ s/ |-|\.//g,
-                  my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid)=ImportBreeding($marcdata,1,$serverhost[$k],$encoding[$k],$random);
-                  my %row_data;
-                  if ($i % 2) {
-                      $toggle="#ffffcc";
-                  } else {
-                      $toggle="white";
-                  }
-                  $row_data{toggle} = $toggle;
-                  $row_data{server} = $serverhost[$k];
-                  $row_data{isbn} = $oldbiblio->{isbn};
-                  $row_data{title} =$oldbiblio->{title};
-                  $row_data{author} = $oldbiblio->{author};
-                  $row_data{breedingid} = $breedingid;
-                  $row_data{biblionumber}=$biblionumber;
-                  push (@breeding_loop, \%row_data);
-              }# upto 5 results
-          }#$numresults
+        my $numresults=$oResult[$k]->size() ;
+        my $i;
+        my $result='';
+        if ($numresults>0){
+            for ($i=0; $i<(($numresults<20) ? ($numresults) : (20)) ; $i++) {
+                my $rec=$oResult[$k]->record($i);
+                my $marcrecord;
+                $marcdata = $rec->raw();
+                $marcrecord= FixEncoding($marcdata);
+                warn "MARC : ".$marcrecord->as_formatted;
+####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
+## In HEAD i change everything to UTF-8
+# In rel2_2 i am not sure what encoding is so no character conversion is done here
+##Add necessary encoding changes to here -TG
+                my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"");
+                $oldbiblio->{isbn} =~ s/ |-|\.//g,
+                $oldbiblio->{issn} =~ s/ |-|\.//g,
+                my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported,$breedingid)=ImportBreeding($marcdata,1,$serverhost[$k],$encoding[$k],$random);
+                my %row_data;
+                if ($i % 2) {
+                    $toggle="#ffffcc";
+                } else {
+                    $toggle="white";
+                }
+                $row_data{toggle} = $toggle;
+                $row_data{server} = $serverhost[$k];
+                $row_data{isbn} = $oldbiblio->{isbn};
+                $row_data{title} =$oldbiblio->{title};
+                $row_data{author} = $oldbiblio->{author};
+                $row_data{breedingid} = $breedingid;
+                $row_data{biblionumber}=$biblionumber;
+                push (@breeding_loop, \%row_data);
+            }# upto 5 results
+        }#$numresults
         }
     }# if $k !=0
     $numberpending=$nremaining-1;
