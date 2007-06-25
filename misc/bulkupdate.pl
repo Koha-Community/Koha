@@ -30,11 +30,11 @@ use MARC::File::XML;
 use MARC::Record;
 use Getopt::Long;
 
-my ( $process_marcxml, $process_isbn, $help) = (0,0,0);
+my ( $no_marcxml, $no_isbn, $help) = (0,0,0);
 
 GetOptions(
-    'noisbn'    => \$process_isbn,
-    'noxml'     => \$process_marcxml,
+    'noisbn'    => \$no_isbn,
+    'noxml'     => \$no_marcxml,
     'h'       => \$help,
     'help'    => \$help,
 );
@@ -55,7 +55,7 @@ if($help){
 }
 
 my $cpt_isbn = 0;
-if(not $process_isbn){
+if(not $no_isbn){
 
     my $query_isbn = "
         SELECT biblioitemnumber,isbn FROM biblioitems WHERE isbn IS NOT NULL
@@ -75,7 +75,7 @@ if(not $process_isbn){
         # suppression des tirets de l'isbn
         my $isbn    = $data->[1];
         if($isbn){
-            $isbn =~ s/\-//g;
+            $isbn =~ s/-//g;
             
             #update 
             my $sth = $dbh->prepare($update_isbn);
@@ -86,7 +86,7 @@ if(not $process_isbn){
     print "$cpt_isbn updated";
 }
 
-if(not $process_marcxml){
+if(not $no_marcxml){
     
     my $query_marcxml = "
         SELECT biblioitemnumber,marcxml FROM biblioitems WHERE isbn IS NOT NULL
@@ -109,17 +109,17 @@ if(not $process_marcxml){
         my $marcxml = $data->[1];
         
         eval{
-            my $record = MARC::Record->new_from_xml($marcxml,'UTF-8');
+            my $record = MARC::Record->new_from_xml($marcxml);
             my @field = $record->field('010');
 	    foreach my $field (@field){
-		    my $subfield = $field->subfield('a');
-		    if($subfield){
-			my $isbn = $subfield;
-			$isbn =~ s/\-//g;
-			$field->update('a' => $isbn);
-		    }
+                my $subfield = $field->subfield('a');
+                if($subfield){
+                    my $isbn = $subfield;
+                    $isbn =~ s/-//g;
+                    $field->update('a' => $isbn);
+                }
 	    }
-	    $marcxml = $record->as_xml('UTF-8');
+	    $marcxml = $record->as_xml;
 	    # Update
 	    my $sth = $dbh->prepare($update_marcxml);
 	    $sth->execute($marcxml,$biblioitemnumber);
