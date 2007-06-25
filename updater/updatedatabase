@@ -596,7 +596,7 @@ my %fielddefinitions = (
             field    => 'id',
             type    => 'int(11)',
             null    => 'NOT NULL',
-            key        => '',
+            key        => 'PRI',
             default    => '',
             extra    => 'auto_increment',
         },
@@ -997,6 +997,15 @@ my %fielddefinitions = (
             key    => '',
             extra  => '',
         },
+    ],
+    marc_breeding => [
+        {
+            field => 'marc',
+            type  => 'LONGBLOB',
+            null  => 'NULL',
+            key    => '',
+            extra  => '',
+        }
     ],
     marc_subfield_structure => [
         {
@@ -2058,6 +2067,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.168  2007/06/25 15:02:31  tipaul
+# missing field declaration
+#
 # Revision 1.167  2007/06/15 13:09:08  toins
 # bugfix : bibliotitems.dewey & deletedbiblioitems.dewey mustn't be double(8,6).
 #
