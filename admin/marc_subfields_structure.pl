@@ -377,7 +377,6 @@ if ( $op eq 'add_form' ) {
         $row_data{row}    = $j;
         push( @loop_data, \%row_data );
         use Data::Dumper;
-        warn "push : ".Dumper(%row_data);
     }
     $template->param( 'use-heading-flags-p'      => 1 );
     $template->param( 'heading-edit-subfields-p' => 1 );
