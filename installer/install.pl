@@ -223,7 +223,7 @@ if ($step && $step==1){
     foreach my $file (@fnames){
 #      warn $file;
       undef $/;
-      my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
+      my $strcmd="mysql ".($info{hostname}?" -h $info{hostname} ":"").($info{port}?" -P $info{port} ":"").($info{user}?" -u $info{user} ":"").($info{password}?" -p$info{password}":"")." $info{dbname} ";
       my $error = qx($strcmd < $file 2>&1);
       my @file = split qr(\/|\\),$file;
       $lang=$file[scalar(@file)-3] unless ($lang);
@@ -336,9 +336,10 @@ if ($step && $step==1){
     #Import data structure and show errors if any
     my $filename="kohastructure.sql";
     undef $/;
-	my $str = qx(mysql -h $info{hostname} -P $info{port} -u $info{user} -p$info{password} $info{dbname} <$filename 2>&1);
-	$str=~s/\n|\r/<br \/>/g;
-	$template->param("error"=>$str ,
+    my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
+    my $str = qx($strcmd < $filename 2>&1);
+    $str=~s/\n|\r/<br \/>/g;
+    $template->param("error"=>$str ,
 	                 "$op"=> 1, );
   } else {
     #Check if there are enough tables.

@@ -339,7 +339,7 @@ sub checkauth {
 
     my $dbh     = C4::Context->dbh;
     unless (C4::Context->preference('Version')){
-      print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+      print $query->redirect("/cgi-bin/koha/installer/install.pl");
       exit;
     }
     my $timeout = C4::Context->preference('timeout');
