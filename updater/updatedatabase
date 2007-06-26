@@ -52,21 +52,6 @@ $|=1; # flushes output
 
 # Tables to add if they don't exist
 my %requiretables = (
-    categorytable       => "(categorycode char(5) NOT NULL default '',
-                             description text default '',
-                             itemtypecodes text default '',
-                             PRIMARY KEY (categorycode)
-                            )",
-    subcategorytable       => "(subcategorycode char(5) NOT NULL default '',
-                             description text default '',
-                             itemtypecodes text default '',
-                             PRIMARY KEY (subcategorycode)
-                            )",
-    mediatypetable       => "(mediatypecode char(5) NOT NULL default '',
-                             description text default '',
-                             itemtypecodes text default '',
-                             PRIMARY KEY (mediatypecode)
-                            )",
     action_logs     => "(
                     `timestamp` TIMESTAMP NOT NULL ,
                     `user` INT( 11 ) NOT NULL ,
@@ -174,10 +159,6 @@ my %requiretables = (
                             approved tinyint,
                             datereviewed datetime,
                             PRIMARY KEY (reviewid)
-                            )",
-    borrowers_to_borrowers  => "(
-                            borrower1 integer,
-                            borrower2 integer
                             )",
     subscriptionroutinglist=>"(
                              routingid integer NOT NULL auto_increment,
@@ -2067,6 +2048,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.170  2007/06/26 13:25:37  tipaul
+# removing some useless tables from updatedatabase
+#
 # Revision 1.169  2007/06/26 09:23:26  tipaul
 # improving OpacBrowser systempref explanation
 #
