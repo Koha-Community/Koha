@@ -428,7 +428,7 @@ my %tabledata = (
             value               => '1',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation         => 'Enable / Disable cloud link on OPAC',
+            explanation         => 'Enable / Disable cloud link on OPAC (Require to run misc/cronjobs/build_browser_and_cloud.pl on the server)',
             type                => 'YesNo',
         },
        {
@@ -437,7 +437,7 @@ my %tabledata = (
             value               => '1',
             forceupdate         => { 'explanation' => 1,
                                      'type' => 1},
-            explanation         => 'Enable/Disable browser link on OPAC (needs to set misc/cronjob/build_browser.pl)',
+            explanation         => 'Enable/Disable browser link on OPAC (Require to run misc/cronjobs/build_browser_and_cloud.pl on the server)',
             type                => 'YesNo',
         },
        {
@@ -2067,6 +2067,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.169  2007/06/26 09:23:26  tipaul
+# improving OpacBrowser systempref explanation
+#
 # Revision 1.168  2007/06/25 15:02:31  tipaul
 # missing field declaration
 #
