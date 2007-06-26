@@ -238,7 +238,7 @@ sub getRecords {
         $expanded_facet, $branches,         $query_type,
         $scan
     ) = @_;
-
+    warn "Query : $koha_query";
     my @servers = @$servers_ref;
     my @sort_by = @$sort_by_ref;
 
@@ -1427,7 +1427,7 @@ sub NZorder {
     #
     # ORDER BY title
     #
-    } elsif ($ordering =~ /1=36/) { 
+    } elsif ($ordering =~ /1=4/) { 
         # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
         my %result;
         foreach (split /;/,$biblionumbers) {
@@ -1441,7 +1441,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=36 <i') { # sort by title desc
+        if ($ordering eq '1=4 <i') { # sort by title desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }

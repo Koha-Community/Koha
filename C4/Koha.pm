@@ -791,8 +791,8 @@ sub displaySortby {
             value => "1=32 &lt;i",
             label => "&nbsp;&nbsp;&nbsp;Acquisition Date: Oldest to Newest"
         },
-        { value => "1=36 &lt;i", label => "Title (A-Z)" },
-        { value => "1=36 &gt;i", label => "Title (Z-A)" },
+        { value => "1=4 &lt;i", label => "Title (A-Z)" },
+        { value => "1=4 &gt;i", label => "Title (Z-A)" },
     ];
     for my $hash (@$sort_by_loop) {
 
