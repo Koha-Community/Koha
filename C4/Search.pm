@@ -988,7 +988,8 @@ sub searchResults {
         $oldbiblio->{itemlostcount} = $itemlost_count;
         $oldbiblio->{bindingcount}  = $itembinding_count;
         $oldbiblio->{orderedcount}  = $ordered_count;
-
+        $oldbiblio->{isbn}          =~ s/-//g; # deleting - in isbn to enable amazon content 
+        
 # FIXME
 #  Ugh ... this is ugly, I'll re-write it better above then delete it
 #     my $norequests = 1;
