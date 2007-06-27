@@ -927,7 +927,6 @@ sub GetNextSeq {
         $calculated,    $newlastvalue1, $newlastvalue2, $newlastvalue3,
         $newinnerloop1, $newinnerloop2, $newinnerloop3
     );
-  use Data::Dumper; warn Dumper($val);  
     my $pattern = $val->{numberpattern};
     my @seasons = ( 'nothing', 'Winter', 'Spring', 'Summer', 'Autumn' );
     my @southern_seasons = ( '', 'Summer', 'Autumn', 'Winter', 'Spring' );
@@ -1206,12 +1205,12 @@ sub ModSerialStatus {
         my $val = $sth->fetchrow_hashref;
 
         # next issue number
-    warn "Next Seq";    
+#     warn "Next Seq";    
         my (
             $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3
         ) = GetNextSeq($val);
-    warn "Next Seq End";    
+#     warn "Next Seq End";    
 
         # next date (calculated from actual date & frequency parameters)
 #         warn "publisheddate :$publisheddate ";
