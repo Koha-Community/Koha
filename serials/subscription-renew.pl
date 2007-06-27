@@ -81,8 +81,8 @@ if ( $op eq "renew" ) {
         $query->param('weeklength'), $query->param('monthlength'),
         $query->param('note')
     );
-    $query->redirect('/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid='.$subscriptionid);
-    exit;
+     print $query->redirect('/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid='.$subscriptionid);
+     exit;
 }
 
 my $subscription = GetSubscription($subscriptionid);
