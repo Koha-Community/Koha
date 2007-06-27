@@ -369,10 +369,11 @@ sub GetSubscription {
         C4::Context->userenv && 
         C4::Context->userenv->{'flags'} != 1){
 #       warn "flags: ".C4::Context->userenv->{'flags'};
-      $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
+      $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
     }
-#      warn "query : $query";
+#       warn "query : $query";
     my $sth = $dbh->prepare($query);
+#       warn "subsid :$subscriptionid";
     $sth->execute($subscriptionid);
     my $subs = $sth->fetchrow_hashref;
     return $subs;
@@ -1441,31 +1442,31 @@ sub ReNewSubscription {
       = @_;
     my $dbh          = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
-    my $query        = qq|
-        SELECT *
-        FROM   biblio,biblioitems
-        WHERE  biblio.biblionumber=biblioitems.biblionumber
-        AND    biblio.biblionumber=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $subscription->{biblionumber} );
-    my $biblio = $sth->fetchrow_hashref;
-    NewSuggestion(
-        $user,             $subscription->{bibliotitle},
-        $biblio->{author}, $biblio->{publishercode},
-        $biblio->{note},   '',
-        '',                '',
-        '',                '',
-        $subscription->{biblionumber}
-    );
+#     my $query        = qq|
+#         SELECT *
+#         FROM   biblio,biblioitems
+#         WHERE  biblio.biblionumber=biblioitems.biblionumber
+#         AND    biblio.biblionumber=?
+#     |;
+#     my $sth = $dbh->prepare($query);
+#     $sth->execute( $subscription->{biblionumber} );
+#     my $biblio = $sth->fetchrow_hashref;
+#     NewSuggestion(
+#         $user,             $subscription->{bibliotitle},
+#         $biblio->{author}, $biblio->{publishercode},
+#         $biblio->{note},   '',
+#         '',                '',
+#         '',                '',
+#         $subscription->{biblionumber}
+#     );
 
     # renew subscription
-    $query = qq|
+    my $query = qq|
         UPDATE subscription
         SET    startdate=?,numberlength=?,weeklength=?,monthlength=?
         WHERE  subscriptionid=?
     |;
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute( format_date_in_iso($startdate),
         $numberlength, $weeklength, $monthlength, $subscriptionid );
         
