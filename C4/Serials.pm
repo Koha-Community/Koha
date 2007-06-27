@@ -1153,7 +1153,7 @@ sub ModSubscriptionHistory {
 
 =over 4
 
-ModSerialStatus($serialid,$serialseq, $publisheddate,$planneddate,$status,$notes)
+ModSerialStatus($serialid,$serialseq, $planneddate,$publisheddate,$status,$notes)
 
 This function modify the serial status. Serial status is a number.(eg 2 is "arrived")
 Note : if we change from "waited" to something else,then we will have to create a new "waited" entry
@@ -1163,7 +1163,7 @@ Note : if we change from "waited" to something else,then we will have to create 
 =cut
 
 sub ModSerialStatus {
-    my ( $serialid, $serialseq, $publisheddate, $planneddate, $status, $notes )
+    my ( $serialid, $serialseq,  $planneddate,$publisheddate, $status, $notes )
       = @_;
 
     #It is a usual serial
@@ -1442,23 +1442,23 @@ sub ReNewSubscription {
       = @_;
     my $dbh          = C4::Context->dbh;
     my $subscription = GetSubscription($subscriptionid);
-#     my $query        = qq|
-#         SELECT *
-#         FROM   biblio,biblioitems
-#         WHERE  biblio.biblionumber=biblioitems.biblionumber
-#         AND    biblio.biblionumber=?
-#     |;
-#     my $sth = $dbh->prepare($query);
-#     $sth->execute( $subscription->{biblionumber} );
-#     my $biblio = $sth->fetchrow_hashref;
-#     NewSuggestion(
-#         $user,             $subscription->{bibliotitle},
-#         $biblio->{author}, $biblio->{publishercode},
-#         $biblio->{note},   '',
-#         '',                '',
-#         '',                '',
-#         $subscription->{biblionumber}
-#     );
+     my $query        = qq|
+         SELECT *
+         FROM   biblio,biblioitems
+         WHERE  biblio.biblionumber=biblioitems.biblionumber
+        AND    biblio.biblionumber=?
+     |;
+     my $sth = $dbh->prepare($query);
+     $sth->execute( $subscription->{biblionumber} );
+     my $biblio = $sth->fetchrow_hashref;
+     NewSuggestion(
+         $user,             $subscription->{bibliotitle},
+         $biblio->{author}, $biblio->{publishercode},
+         $biblio->{note},   '',
+         '',                '',
+         '',                '',
+         $subscription->{biblionumber}
+     );
 
     # renew subscription
     my $query = qq|
@@ -1478,7 +1478,7 @@ sub ReNewSubscription {
 
 =over 4
 
-NewIssue($serialseq,$subscriptionid,$biblionumber,$status, $publisheddate, $planneddate)
+NewIssue($serialseq,$subscriptionid,$biblionumber,$status, $planneddate, $publisheddate,  $notes)
 
 Create a new issue stored on the database.
 Note : we have to update the recievedlist and missinglist on subscriptionhistory for this subscription.
