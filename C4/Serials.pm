@@ -927,6 +927,7 @@ sub GetNextSeq {
         $calculated,    $newlastvalue1, $newlastvalue2, $newlastvalue3,
         $newinnerloop1, $newinnerloop2, $newinnerloop3
     );
+  use Data::Dumper; warn Dumper($val);  
     my $pattern = $val->{numberpattern};
     my @seasons = ( 'nothing', 'Winter', 'Spring', 'Summer', 'Autumn' );
     my @southern_seasons = ( '', 'Summer', 'Autumn', 'Winter', 'Spring' );
@@ -935,63 +936,44 @@ sub GetNextSeq {
     $newlastvalue2 = $val->{lastvalue2};
     $newlastvalue3 = $val->{lastvalue3};
 
-    if ( $newlastvalue3 > 0 ) {    # if x y and z columns are used
-        $newlastvalue3 = $newlastvalue3 + 1;
-        if ( $newlastvalue3 > $val->{whenmorethan3} ) {
-            $newlastvalue3 = $val->{setto3};
-            $newlastvalue2++;
-            if ( $newlastvalue2 > $val->{whenmorethan2} ) {
-                $newlastvalue1++;
-                $newlastvalue2 = $val->{setto2};
-            }
-        }
-        $calculated =~ s/\{X\}/$newlastvalue1/g;
-        if ( $pattern == 6 ) {
-            if ( $val->{hemisphere} == 2 ) {
-                my $newlastvalue2seq = $southern_seasons[$newlastvalue2];
-                $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
-            }
-            else {
-                my $newlastvalue2seq = $seasons[$newlastvalue2];
-                $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
-            }
-        }
-        else {
-            $calculated =~ s/\{Y\}/$newlastvalue2/g;
-        }
-        $calculated =~ s/\{Z\}/$newlastvalue3/g;
+  $newlastvalue1 = $val->{lastvalue1};
+  # check if we have to increase the new value.
+  $newinnerloop1 = $val->{innerloop1}+1;
+  $newinnerloop1=0 if ($newinnerloop1 >= $val->{every1});
+  $newlastvalue1 += $val->{add1} if ($newinnerloop1<1); # <1 to be true when 0 or empty.
+  $newlastvalue1=$val->{setto1} if ($newlastvalue1>$val->{whenmorethan1}); # reset counter if needed.
+  $calculated =~ s/\{X\}/$newlastvalue1/g;
+  
+  $newlastvalue2 = $val->{lastvalue2};
+  # check if we have to increase the new value.
+  $newinnerloop2 = $val->{innerloop2}+1;
+  $newinnerloop2=0 if ($newinnerloop2 >= $val->{every2});
+  $newlastvalue2 += $val->{add2} if ($newinnerloop2<1); # <1 to be true when 0 or empty.
+  $newlastvalue2=$val->{setto2} if ($newlastvalue2>$val->{whenmorethan2}); # reset counter if needed.
+  if ( $pattern == 6 ) {
+    if ( $val->{hemisphere} == 2 ) {
+       my $newlastvalue2seq = $southern_seasons[$newlastvalue2];
+       $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
     }
-    if ( $newlastvalue2 > 0 && $newlastvalue3 < 1 )
-    {    # if x and y columns are used
-        $newlastvalue2 = $newlastvalue2 + 1;
-        if ( $newlastvalue2 > $val->{whenmorethan2} ) {
-            $newlastvalue2 = $val->{setto2};
-            $newlastvalue1++;
-        }
-        $calculated =~ s/\{X\}/$newlastvalue1/g;
-        if ( $pattern == 6 ) {
-            if ( $val->{hemisphere} == 2 ) {
-                my $newlastvalue2seq = $southern_seasons[$newlastvalue2];
-                $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
-            }
-            else {
-                my $newlastvalue2seq = $seasons[$newlastvalue2];
-                $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
-            }
-        }
-        else {
-            $calculated =~ s/\{Y\}/$newlastvalue2/g;
-        }
+    else {
+       my $newlastvalue2seq = $seasons[$newlastvalue2];
+       $calculated =~ s/\{Y\}/$newlastvalue2seq/g;
     }
-    if ( $newlastvalue1 > 0 && $newlastvalue2 < 1 && $newlastvalue3 < 1 )
-    {    # if column x only
-        $newlastvalue1 = $newlastvalue1 + 1;
-        if ( $newlastvalue1 > $val->{whenmorethan1} ) {
-            $newlastvalue1 = $val->{setto2};
-        }
-        $calculated =~ s/\{X\}/$newlastvalue1/g;
-    }
-    return ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3 );
+  }
+  else {
+    $calculated =~ s/\{Y\}/$newlastvalue2/g;
+  }
+  
+  
+  $newlastvalue3 = $val->{lastvalue3};
+  # check if we have to increase the new value.
+  $newinnerloop3 = $val->{innerloop3}+1;
+  $newinnerloop3=0 if ($newinnerloop3 >= $val->{every3});
+  $newlastvalue3 += $val->{add3} if ($newinnerloop3<1); # <1 to be true when 0 or empty.
+  $newlastvalue3=$val->{setto3} if ($newlastvalue3>$val->{whenmorethan3}); # reset counter if needed.
+  $calculated =~ s/\{Z\}/$newlastvalue3/g;
+    
+  return ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3 );
 }
 
 =head2 GetSeq
@@ -1224,10 +1206,12 @@ sub ModSerialStatus {
         my $val = $sth->fetchrow_hashref;
 
         # next issue number
+    warn "Next Seq";    
         my (
             $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3
         ) = GetNextSeq($val);
+    warn "Next Seq End";    
 
         # next date (calculated from actual date & frequency parameters)
 #         warn "publisheddate :$publisheddate ";
@@ -2320,7 +2304,7 @@ sub abouttoexpire {
           "select max(planneddate) from serial where subscriptionid=?");
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow ;
-      warn "date expiration : ".$expirationdate." date courante ".$res;
+#       warn "date expiration : ".$expirationdate." date courante ".$res;
       my @res=split /-/,$res;
       my @endofsubscriptiondate=split/-/,$expirationdate;
       my $per = $subscription->{'periodicity'};
