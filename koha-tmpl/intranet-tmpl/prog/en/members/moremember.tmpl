@@ -132,7 +132,7 @@
     <!-- /TMPL_IF -->  	
     <p><label>Fax: </label><!-- TMPL_VAR NAME="fax" --></p>
     <!-- TMPL_UNLESS NAME="I"-->
-    <p><label>E-mail address:</label><!-- TMPL_VAR NAME="email" --></p>
+    <p><label>E-mail address:</label><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
     <p><label>Date of birth:</label><!-- TMPL_VAR NAME="dateofbirth" --></p>
     <p><label>Sex:</label><!-- TMPL_VAR NAME="sex" --></p>
     <!-- /TMPL_UNLESS -->
