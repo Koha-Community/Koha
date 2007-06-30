@@ -248,7 +248,14 @@ if ($op eq 'serialchangestatus') {
         }
       }
     }
-    print $query->redirect("serials-collection.pl?biblionumber=".$serialdatalist[0]->{biblionumber});
+    ### FIXME this part of code is not very pretty. Nor is it very efficient... There MUST be a more perlish way to write it. But it works.     
+    my $redirect ="serials-home.pl?";
+    $redirect.=join("&",map{"serialseq=".$_} @serialseqs);
+    $redirect.="&".join("&",map{"planneddate=".$_} @planneddates);
+    $redirect.="&".join("&",map{"publisheddate=".$_} @publisheddates);
+    $redirect.="&".join("&",map{"status=".$_} @status);
+    $redirect.="&".join("&",map{"notes=".$_} @notes);
+    print $query->redirect("$redirect");
 }
 
 $template->param(serialsadditems =>C4::Context->preference("serialsadditems"));

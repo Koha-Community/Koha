@@ -55,6 +55,12 @@ my $routing       = $query->param('routing');
 my $searched      = $query->param('searched');
 my $biblionumber  = $query->param('biblionumber');
 
+my @serialseqs = $query->param('serialseq');
+my @planneddates = $query->param('planneddate');
+my @publisheddates = $query->param('publisheddate');
+my @status = $query->param('status');
+my @notes = $query->param('notes');
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "serials/serials-home.tmpl",
@@ -66,6 +72,24 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+if (@serialseqs){
+  my @information;
+  my $index;
+  foreach my $seq (@serialseqs){
+    if ($seq){
+      ### FIXME  This limitation that a serial must be given a title may not be very efficient for some library who do not update serials titles.
+      push @information,
+        { serialseq=>$seq,
+          publisheddate=>$publisheddates[$index],   
+          planneddate=>$planneddates[$index],   
+          notes=>$notes[$index],   
+          status=>$status[$index]
+        }     
+    }   
+    $index++; 
+  } 
+  $template->param('information'=>\@information);
+}
 my @subscriptions;
 if ($searched){
     @subscriptions = GetSubscriptions( $title, $ISSN, $biblionumber );
