@@ -5,6 +5,50 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
 
+
+<!--TMPL_IF Name="information"-->
+<div id="information">
+Serials updated :
+<table>
+  <tr>
+    <th>
+      Serialseq
+    </th>
+    <th>
+      Status
+    </th>
+    <th>
+      Publisheddate
+    </th>
+    <th>
+      Planneddate
+    </th>
+    <th>
+      Notes
+    </th>
+  </tr>  
+<!--TMPL_LOOP Name="information"-->
+  <tr>
+    <td>
+      <!--TMPL_VAR Name="serialseq"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="status"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="publisheddate"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="planneddate"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="notes"-->
+    </td>
+  </tr>  
+<!--/TMPL_LOOP -->
+</table>
+</div>
+<!--/TMPL_IF-->
 <h1>Serials subscription</h1>
 <div id="serials_home">
 	<h2>Search existing subscription</h2>
