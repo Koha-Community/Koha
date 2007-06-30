@@ -526,7 +526,7 @@ sub GetSubscriptionsFromBiblionumber {
     if (C4::Context->preference('IndependantBranches') && 
         C4::Context->userenv && 
         C4::Context->userenv->{'flags'} != 1){
-       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
+       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
     }
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
@@ -793,7 +793,7 @@ sub GetSerials2 {
     my $query = qq|
                  SELECT   serialid,serialseq, status, planneddate, publisheddate,notes
                  FROM     serial 
-                 WHERE    subscriptionid=$subscription AND status=$status 
+                 WHERE    subscriptionid=$subscription AND status IN ($status)
                  ORDER BY publisheddate,serialid DESC
                     |;
 #     warn $query;
