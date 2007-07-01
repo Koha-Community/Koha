@@ -275,6 +275,7 @@ sub transferbook {
 
         # don't need to update MARC anymore, we do it in batch now
         $messages->{'WasTransfered'} = 1;
+		ModDateLastSeen( $itemnumber );
     }
     return ( $dotransfer, $messages, $biblio );
 }
