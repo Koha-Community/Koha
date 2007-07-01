@@ -334,13 +334,14 @@ if ($step && $step==1){
     $template->param($op=>1)
   }elsif ($op && $op eq 'importdatastructure'){
     #Import data structure and show errors if any
-    my $filename="kohastructure.sql";
-    undef $/;
-    my $strcmd="mysql ".($info{hostname}?"-h $info{hostname} ":"").($info{port}?"-P $info{port} ":"").($info{user}?"-u $info{user} ":"").($info{password}?"-p$info{password}":"")." $info{dbname} ";
-    my $str = qx($strcmd < $filename 2>&1);
-    $str=~s/\n|\r/<br \/>/g;
-    $template->param("error"=>$str ,
+	#Uses DBI to read the file [MJR 2007-07-01]
+    my $dbh= DBI->connect("DBI:$info{dbms}:$info{dbname}:$info{hostname}".($info{port}?":$info{port}":""),$info{'user'}, $info{'password'});
+    open(INPUT,"<kohastructure.sql");
+    map { $dbh->do($_); } split(/;/,join('',<INPUT>));
+    close(INPUT);
+	$template->param("error"=>$dbh->errstr ,
 	                 "$op"=> 1, );
+    $dbh->disconnect;
   } else {
     #Check if there are enough tables.
     # Version 2_2 was 74 tables, so we check if there is more than 75
