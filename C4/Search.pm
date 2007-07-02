@@ -975,7 +975,7 @@ sub searchResults {
             my $this_item = {
                 branchname     => $branches{$items->{$key}->{branchcode}},
                 branchcode     => $items->{$key}->{branchcode},
-                count          => $items->{$key}->{count},
+                count          => $items->{$key}->{count}==1 ?"":$items->{$key}->{count},
                 itemcallnumber => $items->{$key}->{itemcallnumber},
                 location => $items->{$key}->{location},
             };
