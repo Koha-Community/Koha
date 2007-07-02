@@ -125,18 +125,13 @@ sub Getoverdues {
     );
     $sth->execute;
 
-    # FIXME - Use push @results
-    my $i = 0;
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
-        $results[$i] = $data;
-        $i++;
+        push @results, $data;
     }
     $sth->finish;
 
-    #  print @results;
-    # FIXME - Bogus API.
-    return ( $i, \@results );
+    return \@results;
 }
 
 =head2 checkoverdues
