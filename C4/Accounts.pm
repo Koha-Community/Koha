@@ -273,7 +273,7 @@ should be the empty string.
 sub manualinvoice{
   my ($borrowernumber,$itemnum,$desc,$type,$amount,$user)=@_;
   my $dbh = C4::Context->dbh;
-  my $notifyid;
+  my $notifyid=0;
   my $insert;
   $itemnum=~ s/ //g;
   my $accountno=getnextacctno($borrowernumber);
