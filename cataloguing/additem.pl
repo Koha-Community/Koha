@@ -83,7 +83,7 @@ if ($op eq "additem") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
     # if autoBarcode is ON, calculate barcode...
     if (C4::Context->preference('autoBarcode')) {
@@ -144,7 +144,7 @@ if ($op eq "additem") {
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
 #    my $itemnumber = $input->param('itemnumber');
-    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag);
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
         my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
