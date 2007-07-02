@@ -6,9 +6,7 @@
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-<script language="javascript" type="text/javascript">
-    function _(s) { return s } // dummy function for gettext
-</script>
+
 	<!-- TMPL_IF NAME="add" -->
 	<h1>
 		Inscription d'un enfant (étape <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
@@ -133,7 +131,11 @@
 		<label>
 		<!-- /TMPL_IF-->
 		Nom de famille</label>
+		<! --TMPL_IF NAME="uppercasesurnames" -->                                
 		<input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+        <!-- TMPL_ELSE -->                       
+		<input style="text-transform:capitalize;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >   
+        <!-- /TMPL_IF --> 
 		</p>
 		<p>
 		<!-- TMPL_IF NAME="mandatoryfirstname" -->

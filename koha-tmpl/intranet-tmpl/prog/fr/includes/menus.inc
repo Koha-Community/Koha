@@ -54,7 +54,7 @@
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
     <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Catalogage</a>
     <ul>
-        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Ajout notice MARC</a></li>
+        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Ajout notice</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a></li>
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Périodiques</a></li>
     </ul>

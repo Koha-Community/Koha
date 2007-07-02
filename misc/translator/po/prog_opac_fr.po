@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: prog_opac_fr\n"
-"POT-Creation-Date: 2007-06-06 15:39+0200\n"
-"PO-Revision-Date: 2007-06-06 15:40+0200\n"
+"POT-Creation-Date: 2007-07-02 10:24+0200\n"
+"PO-Revision-Date: 2007-07-02 10:27+0200\n"
 "Last-Translator: paul POULAIN <paul@koha-fr.org>\n"
 "Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -195,7 +195,7 @@ msgstr "%s Catalogue -- Votre panier"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:9
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiessearchresultlist.tmpl:52
 #, c-format
 msgid "%s biblios"
@@ -285,7 +285,7 @@ msgstr "&ldquo;%s&rdquo;"
 msgid "&lt;&lt;"
 msgstr "&lt;&lt;"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:288
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:287
 msgid "&lt;&lt; Previous"
 msgstr "&lt;&lt;Précédent"
 
@@ -392,7 +392,7 @@ msgstr ""
 "droite : <b>théor%</b> renverra à théorie & théorique)"
 
 #. %1$s: TMPL_VAR name=timestamp
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:235
 #, c-format
 msgid "(modified on %s)"
 msgstr "(modifié le %s)"
@@ -508,10 +508,8 @@ msgstr "3 semaines"
 msgid "6 months"
 msgstr "6 mois"
 
-#. For the first occurrence,
 #. %1$s: TMPL_VAR name=subtitle
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-detailprint.tmpl:6
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:234
 #, c-format
 msgid ": %s"
 msgstr ": %s"
@@ -521,7 +519,7 @@ msgstr ": %s"
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-topissues.tmpl:82
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-topissues.tmpl:84
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:232
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:235
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:234
 #, c-format
 msgid "; %s"
 msgstr "; %s"
@@ -540,11 +538,19 @@ msgid "<a1> %s </a> (%s)"
 msgstr "<a1> %s </a> (%s)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-detail.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-ISBDdetail.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-MARCdetail.tmpl:16
 #, c-format
 msgid "<a1> MARC View </a> <a2> ISBD </a> <a3> Print </a>"
-msgstr "<a1> Vue MARC </a> <a2> ISBD</a> <a3> Imprimer </a>"
+msgstr "<a1> Vue MARC </a> <a2> Vue ISBD</a> <a3> Imprimer </a>"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-ISBDdetail.tmpl:16
+#, c-format
+msgid "<a1> MARC View </a> <a2> Normal </a> <a3> Print </a>"
+msgstr "<a1> Vue MARC </a> <a2> Vue simple</a> <a3> Imprimer </a>"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-MARCdetail.tmpl:16
+#, c-format
+msgid "<a1> Normal </a> <a2> ISBD </a> <a3> Print </a>"
+msgstr "<a1> Vue MARC </a> <a2> Vue ISBD</a> <a3> Imprimer </a>"
 
 #. %1$s: TMPL_VAR name=facet_label_value
 #. %2$s: TMPL_VAR name=facet_count
@@ -606,7 +612,7 @@ msgstr "<b>Documents sélectionnés :</b> <a1> Retirer </a>"
 #. A
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:5
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:19
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:21
 msgid "A &quot;shopping cart&quot; for your selections"
 msgstr "Un \"panier\" pour vos sélections"
 
@@ -726,7 +732,7 @@ msgstr "Autres types de contenus"
 msgid "Adult"
 msgstr "Adulte"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:5
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:4
 msgid "Advanced Search"
 msgstr "Recherche avancée"
 
@@ -835,13 +841,9 @@ msgstr "Auteur :"
 msgid "Authorities"
 msgstr "Autorités"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:10
-msgid "Authorities Headings"
-msgstr "Vedettes autorités"
-
 #. %1$s: TMPL_VAR name=authid
 #. %2$s: TMPL_VAR name=authtypetext
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:59
 #, c-format
 msgid "Authority #%s (%s)"
 msgstr "Autorité #%s (%s)"
@@ -966,7 +968,7 @@ msgid "Bois"
 msgstr "Bois"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:19
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:21
 msgid "Book Bag"
 msgstr "Panier"
 
@@ -1011,9 +1013,9 @@ msgstr "Brevet"
 msgid "Brief Display"
 msgstr "Affichage abrégé"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:7
-msgid "Browse Catalogue"
-msgstr "Feuilleter le catalogue"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:5
+msgid "Browse catalogue:"
+msgstr "Feuilleter le catalogue :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-browser.tmpl:7
 msgid "Browse our catalogue"
@@ -1980,7 +1982,7 @@ msgid "Lois et decrets"
 msgstr "Lois et décrets"
 
 #. %1$s: TMPL_VAR name=itemlostcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:261
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:260
 #, c-format
 msgid "Lost (%s)"
 msgstr "Perdu (%s)"
@@ -2136,6 +2138,11 @@ msgstr "Mes listes de livres"
 msgid "Name:"
 msgstr "Nom :"
 
+#. A
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:46
+msgid "Narrower terms"
+msgstr "Terme spécifique"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-advsearch.tmpl:383
 msgid "Negatif photo"
 msgstr "Négatif photo"
@@ -2152,7 +2159,7 @@ msgstr "Nouvelle Recherche"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-reserve.tmpl:81
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:302
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:301
 msgid "Next &gt;&gt;"
 msgstr "Suivant >>"
 
@@ -2253,7 +2260,7 @@ msgid "Not Published"
 msgstr "Pas paru"
 
 #
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:268
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:267
 msgid "Not Reserveable"
 msgstr "Non réservable"
 
@@ -2305,7 +2312,10 @@ msgid "Number"
 msgstr "N° de parution"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authorities-home.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-topissues.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-advsearch.tmpl:445
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-tags_subject.tmpl:13
 msgid "OK"
 msgstr "OUI"
@@ -2317,13 +2327,13 @@ msgid "On issue to %s"
 msgstr "En prêt à (%s)"
 
 #. %1$s: TMPL_VAR name=onloancount
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:259
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:258
 #, c-format
 msgid "On loan (%s),"
 msgstr "En prêt (%s),"
 
 #. %1$s: TMPL_VAR name=orderedcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:262
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:261
 #, c-format
 msgid "On order (%s)"
 msgstr "En commande (%s)"
@@ -2665,7 +2675,7 @@ msgstr "Date de réservation"
 msgid "Reserved Items Waiting"
 msgstr "Documents réservés en attente"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:271
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:270
 msgid "Reserves"
 msgstr "Réservation"
 
@@ -2792,13 +2802,12 @@ msgstr "Parcourir l'index"
 #. INPUT type=submit name=do
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-advsearch.tmpl:445
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:13
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-recacquisitions.tmpl:35
 msgid "Search"
 msgstr "Rechercher"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:3
 msgid "Search Home"
 msgstr "Recherche simple"
 
@@ -2970,7 +2979,6 @@ msgid "Standard Number"
 msgstr "Numéro normalisé"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authorities-home.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-dictionary.tmpl:11
 msgid "Start search"
 msgstr "Rechercher"
@@ -2992,10 +3000,6 @@ msgstr "Situation"
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:73
 msgid "Subject"
 msgstr "Sujet"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:16
-msgid "Subject Cloud"
-msgstr "Nuage de sujets"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:74
 msgid "Subject Phrase"
@@ -3058,7 +3062,7 @@ msgstr "Suggéré par"
 msgid "Suggestion declined"
 msgstr "Suggestion rejetée"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:32
 msgid "Suggestions"
 msgstr "Suggestions"
 
@@ -3104,6 +3108,11 @@ msgstr "Tables généalogiques"
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-advsearch.tmpl:198
 msgid "Technical reports"
 msgstr "Rapports techniques"
+
+#. A
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-authoritiesdetail.tmpl:43
+msgid "Term"
+msgstr "Terme"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:91
 msgid "Term/Phrase"
@@ -3207,10 +3216,6 @@ msgstr "Titre :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-advsearch.tmpl:392
 msgid "Toile"
 msgstr "Toile"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:13
-msgid "Top Issues"
-msgstr "Palmarès"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-account.tmpl:26
 msgid "Total Due"
@@ -3379,7 +3384,7 @@ msgstr "Verre"
 msgid "View Full Heading"
 msgstr "Voir la vedette en entier"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-shelves.tmpl:199
 msgid "Virtual Shelves"
 msgstr "Etagères virtuelles"
@@ -3434,7 +3439,7 @@ msgid "With selected items :"
 msgstr "Avec les éléments cochés"
 
 #. %1$s: TMPL_VAR name=wthdrawncount
-#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:260
+#: ../../koha-tmpl/opac-tmpl/prog/en/opac-results.tmpl:259
 #, c-format
 msgid "Withdrawn (%s),"
 msgstr "Retiré (%s),"
@@ -3636,6 +3641,22 @@ msgstr "disponible à"
 #, c-format
 msgid "by %s"
 msgstr "par %s"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:17
+msgid "by cloud"
+msgstr "par nuage sujet"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:11
+msgid "by headings"
+msgstr "par autorités"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:8
+msgid "by hierarchy"
+msgstr "par hiérarchie"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:14
+msgid "by top issues"
+msgstr "par palmarès"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/opac-shelves.tmpl:192
 msgid "by you."

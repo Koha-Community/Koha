@@ -138,17 +138,17 @@ function irregularity(){
     <h1>Abonnement N°<!--TMPL_VAR name="subscriptionid"--></h1>
     <!--TMPL_IF Name="abouttoexpire"--><div class="problem">L'abonnement va expirer. Il faut le renouveller.</div><!--/TMPL_IF-->
     <div id="action">
-        <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Modifier</a> <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Dupliquer</a> <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renouveller</a> <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1">Bulletiner</a><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Etat de collection</a>
-        <!-- TMPL_IF NAME="routing" -->
-        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Modifier la liste de circulation</a>
-        <!-- TMPL_ELSE -->
-        <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&op=new">Créer une liste de circulation</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_UNLESS name="totalissues" -->
-            <a href="javascript:confirm_deletion()">
-                Supprimer
-            </a>
-        <!-- /TMPL_UNLESS -->
+        <div class="edit">
+            <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Modifier</a> <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Dupliquer</a> <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renouveller</a> <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Bulletiner</a><a href="javascript:confirm_deletion()">Supprimer</a>
+        </div>
+        <div class="view">
+            <a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Etat de collection</a>
+            <!-- TMPL_IF NAME="routing" -->
+            <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Modifier la liste de circulation</a>
+            <!-- TMPL_ELSE -->
+            <a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&op=new">Créer une liste de circulation</a>
+            <!-- /TMPL_IF -->
+        </div>
     </div>
     <div id="subscription_info">
         <h2>Informations sur l'abonnement</h2>
@@ -376,7 +376,6 @@ function irregularity(){
     </div>
 </div>
 <script type="text/javascript">
-function _(s) { return s } // dummy function for gettext
 function confirm_deletion() {
     var is_confirmed = confirm(_('Êtes vous sur de vouloir supprimer cet abonnement ?'));
     if (is_confirmed) {

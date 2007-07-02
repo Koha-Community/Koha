@@ -1,17 +1,11 @@
 <script language="JavaScript" type="text/javascript">
 
-/**
- *  _(s)
- *  This function is used just for localisation
- */
-function _(s) { return s; }
-
 function CheckDate(field) {
 var d = field.value;
 if (d!="") {
        // this function checks id date is like JJ/MM/AAAA
-      var amin = 1900; // année mini
-      var amax = 2100; // année maxi
+      var amin = 1900; // annï¿½e mini
+      var amax = 2100; // annï¿½e maxi
       
       var date = d.split("/");
       

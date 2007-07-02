@@ -1,5 +1,3 @@
-function _(s) { return s; }
-
 // this function checks id date is like DD/MM/YYYY
 function CheckDate(field) {
 var d = field.value;

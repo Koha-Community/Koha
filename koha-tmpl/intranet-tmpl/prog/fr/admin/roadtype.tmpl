@@ -105,49 +105,48 @@
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 <script language="javascript" type="text/javascript">
-		function _(s) { return s } // dummy function for gettext
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNotNull(f,noalert) {
-			if (f.value.length == 0) {
-		return false;
-			}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function toUC(f) {
-			var x=f.value.toUpperCase();
-			f.value=x;
-			return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNum(v,maybenull) {
-		var n = new Number(v.value);
-		if (isNaN(n)) {
-			return false;
-			}
-		if (maybenull == 0 && v.value =='') {
-			return false;
-		}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isDate(f) {
-			var t = Date.parse(f.value);
-			if (isNaN(t)) {
-				return false;
-			}
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function Check(f) {
-			var ok=1;
-			var _alertString="";
-			var alertString2;
-			if (f.road_type.value.length == 0  ) {
-				_alertString += "\n- " + _("Type de voie");
-				alert(_alertString);	
-			}
-			else{
-			document.Aform.submit();
-			}
-		}
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNotNull(f,noalert) {
+                if (f.value.length == 0) {
+        return false;
+                }
+        return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function toUC(f) {
+                var x=f.value.toUpperCase();
+                f.value=x;
+                return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+                return false;
+                }
+        if (maybenull == 0 && v.value =='') {
+                return false;
+        }
+        return true;
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function isDate(f) {
+                var t = Date.parse(f.value);
+                if (isNaN(t)) {
+                        return false;
+                }
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        function Check(f) {
+                var ok=1;
+                var _alertString="";
+                var alertString2;
+                if (f.road_type.value.length == 0  ) {
+                        _alertString += "\n- " + _("Type de voie");
+                        alert(_alertString);	
+                }
+                else{
+                document.Aform.submit();
+                }
+        }
 </script>

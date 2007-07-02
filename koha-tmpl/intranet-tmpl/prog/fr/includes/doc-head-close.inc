@@ -13,3 +13,6 @@
 </style>
 </head>
 <body>
+<script language="JavaScript" type="text/javascript">
+    function _(s) { return s } // dummy function for gettext
+</script>

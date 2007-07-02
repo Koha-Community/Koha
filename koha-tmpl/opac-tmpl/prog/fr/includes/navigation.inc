@@ -1,20 +1,22 @@
 <div id="menu">
-        <ul>
             <!-- TMPL_VAR NAME="OpacNav" -->
             <li><a href="/cgi-bin/koha/opac-main.pl">Recherche simple</a></li>
             <li><a href="/cgi-bin/koha/opac-search.pl">Recherche avancée</a></li>
+            <li>Feuilleter le catalogue :</li>
+            <ul>
             <!-- TMPL_IF name="OpacBrowser" -->
-                <li><a href="/cgi-bin/koha/opac-browser.pl">Feuilleter le catalogue</a></li>
+                <li><a href="/cgi-bin/koha/opac-browser.pl">par hiérarchie</a></li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="OpacAuthorities" -->
-                <li><a href="/cgi-bin/koha/opac-authorities-home.pl">Vedettes autorités</a></li>
+                <li><a href="/cgi-bin/koha/opac-authorities-home.pl">par autorités</a></li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="OpacTopissue" -->
-                <li><a href="/cgi-bin/koha/opac-topissues.pl">Palmarès</a></li>
+                <li><a href="/cgi-bin/koha/opac-topissues.pl">par palmarès</a></li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="OpacCloud" -->
-                <li><a href="/cgi-bin/koha/opac-tags_subject.pl">Nuage de sujets</a></li>
+                <li><a href="/cgi-bin/koha/opac-tags_subject.pl">par nuage sujet</a></li>
             <!-- /TMPL_IF -->
+            </ul>
             <li>
                 <a href="#" onclick="javascript:openBasket();" title='Un "panier" pour vos sélections'>Panier<span id="basket">
                     <script language="javascript" type="text/javascript">
@@ -30,7 +32,6 @@
                     <li><a href="opac-suggestions.pl">Suggestions</a></li>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
-        </ul>
  </div>
 
  <div id="main"> <!-- MAIN Body start here -->

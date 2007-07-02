@@ -48,7 +48,7 @@ a.catalogue:hover {
 	<a href="/cgi-bin/koha/catalogue/search.pl" class="submenu2">Recherche</a> <a href="/cgi-bin/koha/bookshelves/shelves.pl" class="submenu">Etagères viruelles</a> <a href="/cgi-bin/koha/cataloguing/addbiblio.pl" class="submenu2">Ajout notice</a> <a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Mise à jour catalogue</a>
 </div>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <p align="left">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Se Déconnecter</a>]</p>
+    <p align="left">Connecté en tant que : <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Quitter</a>]</p>
 <!-- TMPL_ELSE -->
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Se connecter</a> à Koha</p>
 <!-- /TMPL_IF -->

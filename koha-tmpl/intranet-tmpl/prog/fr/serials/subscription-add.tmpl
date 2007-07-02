@@ -17,7 +17,6 @@
 
 <script type="text/javascript" language="javascript">
 <!--
-    function _(s) { return s } // dummy function for gettext
 
 // the english words used in display purposes
 var text = new Array(_('Numéro'),_('Volume'),_('Prêt'),_('Mois'),_('Semaine'),_('Commence par : '),_('Retour à : '),_('Choisir hémisphère : '),_('Nord'),_('Sud'),
@@ -435,7 +434,7 @@ function irregularity_check(){
             }
             error=errortext;
         } else {
-            errortext +=expected+_("uméro(s) attendu(s)")+rollover+_("sont entrés. <br \\/>Merci de signaler à quelle(s) date(s) vous n'attendez pas de numéro <br \\/>");
+            errortext +=expected+_("numéro(s) attendu(s)")+rollover+_("sont entrés. <br \\/>Merci de signaler à quelle(s) date(s) vous n'attendez pas de numéro <br \\/>");
             var count=0;
             for(var i=rollover;i<expected;i++){
                 errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
@@ -447,7 +446,7 @@ function irregularity_check(){
         }
     }
     if(toobig){
-        errortext +=expectedover+_("uméro(s) attendu(s)")+rollover+_("sont entrés.<br \\/>Vous sembler avoir signalé plus de numéros par an que prévu.");
+        errortext +=expectedover+_("numéro(s) attendu(s)")+rollover+_("sont entrés.<br \\/>Vous sembler avoir signalé plus de numéros par an que prévu.");
         error=errortext;
     }
     if(error.length ==0){

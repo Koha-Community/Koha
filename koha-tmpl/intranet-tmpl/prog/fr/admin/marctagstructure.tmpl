@@ -11,7 +11,6 @@
 
 <h1>Gestion de la structure des champs MARC pour <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->Grille MARC par défaut<!-- /TMPL_IF --></h1>
 <script language="javascript" type="text/javascript">
-    function _(s) { return s } // dummy function for gettext
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function isNotNull(f,noalert) {
         if (f.value.length ==0) {
@@ -66,10 +65,9 @@ return false;
 <!-- ------------------------------------------------------------------------ -->
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate">
-	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
-        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
         <h2><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modifier le champ<!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Ajouter un champ<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h2>
-    <p><label>Champ</label><!-- TMPL_VAR NAME="searchfield" -->&nbsp;</p>
+	 <p><label>Champ</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3"/></p>    
     <p><label for="liblibrarian">Texte pour bib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="40" maxlength="100"></p>
     <p><label for="libopac">Texte pour OPAC</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="40" maxlength="100"></p>
     <p><label for="repeatable">Répétable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
@@ -199,6 +197,7 @@ return false;
     <input type="hidden" name="op" value="add_form">
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="add_form">
+	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->">
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
         <input type="submit" value="Ajouter un champ">
     </form>

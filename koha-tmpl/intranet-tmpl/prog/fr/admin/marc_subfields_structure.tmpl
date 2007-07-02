@@ -24,9 +24,6 @@
     <div id="tabs">
      <p>Modifier les sous-champs
         <!-- TMPL_LOOP NAME="loop" -->
-                <!-- TMPL_IF name="subfieldcode" -->
-                    <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" />
-                <!-- /TMPL_IF -->
                <a 
                     href="javascript:active('sub<!-- TMPL_VAR NAME='subfieldcode' -->');"
                     class="tab_inactive"
@@ -44,9 +41,11 @@
         <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
         
         <h3>Éditeur des restrictions</h3>
-            <!-- TMPL_UNLESS name="subfieldcode" -->
-                <p>Sous-champ <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
-            <!-- /TMPL_UNLESS -->
+                <!-- TMPL_IF name="subfieldcode" -->
+                    <p>Sous-champ <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
+                <!-- TMPL_ELSE -->
+                    <p>Sous-champ <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
+            <!-- /TMPL_IF -->
             <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Texte pour le bibliothécaire</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
             <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Texte pour l'OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
             <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Répétable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>

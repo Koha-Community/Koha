@@ -126,7 +126,11 @@
         <label>
         <!-- /TMPL_IF-->
         Nom de famille</label>
-        <input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+		<! --TMPL_IF NAME="uppercasesurnames" -->                                
+		<input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+        <!-- TMPL_ELSE -->                       
+		<input style="text-transform:capitalize;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >   
+        <!-- /TMPL_IF --> 
         </p>
         <p>
         <!-- TMPL_IF NAME="mandatoryfirstname" -->
