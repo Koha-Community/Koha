@@ -1985,8 +1985,12 @@ sub TransformKohaToMarcOneField {
 
 =over 4
 
-$xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, $ind_tag )
+$xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type )
 
+$auth_type contains :
+- nothing : rebuild a biblio, un UNIMARC the encoding is in 100$a pos 26/27
+- UNIMARCAUTH : rebuild an authority. In UNIMARC, the encoding is in 100$a pos 13/14
+- ITEM : rebuild an item : in UNIMARC, 100$a, it's in the biblio ! (otherwise, we would get 2 100 fields !)
 =back
 
 =cut
@@ -2000,6 +2004,7 @@ sub TransformHtmlToXml {
     # check that there is one, otherwise the 
     # MARC::Record->new_from_xml will fail (and Koha will die)
     my $unimarc_and_100_exist=0;
+    $unimarc_and_100_exist=1 if $auth_type eq 'ITEM'; # if we rebuild an item, no need of a 100 field
     my $prevvalue;
     my $prevtag = -1;
     my $first   = 1;
@@ -3954,6 +3959,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.214  2007/07/02 09:13:22  tipaul
+# unimarc bugfix : the encoding is in field 100 in UNIMARC. when TransformHTMLtoXML on an item, you must not automatically add a 100 field in items, otherwise there will be 2 100 fields in the biblio, which is wrong
+#
 # Revision 1.213  2007/06/25 15:01:45  tipaul
 # bugfixes on unimarc 100 handling (the field used for encoding)
 #
