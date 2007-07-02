@@ -15,7 +15,7 @@
 
 <!-- TMPL_LOOP NAME="overdueloop" -->
     <tr>
-        <td width="15%"><!-- TMPL_VAR NAME="duedate" --></td>
+        <td><!-- TMPL_VAR NAME="duedate" --></td>
         <!-- TMPL_IF NAME="email" -->
         <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a> (<!-- TMPL_VAR NAME="phone" -->)</td>
         <!-- TMPL_ELSE -->
