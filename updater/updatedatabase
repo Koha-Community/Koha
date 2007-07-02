@@ -519,6 +519,14 @@ my %tabledata = (
             explanation         => "Enter a specific hash for NoZebra indexes. Enter : 'indexname' => '100a,245a,500*','index2' => '...'",
             type                => 'Free',
         },
+        {
+            uniquefieldrequired => 'variable',
+            variable            => 'uppercasesurnames',
+            value               => '0',
+            forceupdate         => {'explanation' => 1, 'type' => 1},
+            explanation         => "Force Surnames to be uppercase",
+            type                => 'YesNo',
+        },
     ],
     userflags => [
         {
@@ -2048,6 +2056,9 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.171  2007/07/02 02:30:16  rangi
+# Fix for bug 1296, making surnames uppercase a systems preference
+#
 # Revision 1.170  2007/06/26 13:25:37  tipaul
 # removing some useless tables from updatedatabase
 #

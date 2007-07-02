@@ -83,6 +83,8 @@ my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
 my $borrower_data;
 
+$template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
+
 #function  to automatic setup the mandatory  fields (visual with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);

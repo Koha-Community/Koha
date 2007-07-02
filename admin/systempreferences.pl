@@ -127,7 +127,8 @@ my %tabsysprefs;
     $tabsysprefs{BorrowersTitles}="Members";    
     $tabsysprefs{patronimages}="Members";
     $tabsysprefs{MinPasswordLength}="Members";
-    
+    $tabsysprefs{uppercasesurnames}="Members";
+
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";
     $tabsysprefs{AmazonContent}="OPAC";
