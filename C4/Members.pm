@@ -1620,6 +1620,8 @@ sub DelMember {
        WHERE borrowernumber = ?
    ";
     $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    $sth->finish;
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","DELETE",$borrowernumber,"") 
         if C4::Context->preference("BorrowersLog");
     return $sth->rows;

@@ -46,10 +46,7 @@ my $member=$input->param('member');
 my %member2;
 $member2{'borrowernumber'}=$member;
 my ($countissues,$issues)=GetPendingIssues($member);
-my $i=0;
-foreach (sort keys %$issues) {
-	$i++;
-}
+
 my ($bor,$flags)=GetMemberDetails($member,'');
 if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
@@ -66,8 +63,8 @@ my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
 $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
-if ($i > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
-warn"je suis rentre dans la boucle";
+if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
+
 	my ($template, $borrowernumber, $cookie)
 		= get_template_and_user({template_name => "members/deletemem.tmpl",
 					query => $input,
@@ -78,8 +75,8 @@ warn"je suis rentre dans la boucle";
 					});
 	#   print $input->header;
 	$template->param(borrowernumber => $member);
-	if ($i >0) {
-		$template->param(ItemsOnIssues => $i);
+	if ($countissues >0) {
+		$template->param(ItemsOnIssues => $countissues);
 	}
 	if ($flags->{'CHARGES'} ne '') {
 		$template->param(charges => $flags->{'CHARGES'}->{'message'});
