@@ -61,7 +61,7 @@ my $tagslib = &GetTagsLabels(1,$authtypecode);
 
 my $auth_type = GetAuthType($authtypecode);
 
-my $record =GetAuthority($authid);
+my $record =GetAuthority($authid) if $authid;
 # open template
 my ($template, $loggedinuser, $cookie)
 		= get_template_and_user({template_name => "authorities/blinddetail-biblio-search.tmpl",
