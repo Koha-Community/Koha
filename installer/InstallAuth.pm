@@ -300,7 +300,7 @@ sub checkauth {
                     C4::Context->config('user'),
                     C4::Context->config('user'),
                     "",
-                    "SUPER",
+                    "NO_LIBRARY_SET",
                     1,""
                 );
                 $envcookie = $query->cookie(

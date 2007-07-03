@@ -579,7 +579,7 @@ sub checkauth {
                     C4::Context->config('user'),
                     C4::Context->config('user'),
                     "",
-                    "SUPER",
+                    "NO_LIBRARY_SET",
                     1,
                     C4::Context->preference('KohaAdminEmailAddress')
                 );
