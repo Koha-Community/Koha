@@ -1,5 +1,5 @@
 <div id="submenu">
-    <a href="/cgi-bin/koha/tools/tools-home.pl">Home</a>
+    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools Home</a>
     <a href="/cgi-bin/koha/tools/holidays.pl">Holidays</a>
     <a href="/cgi-bin/koha/tools/koha-news.pl">News</a>
     <a href="/cgi-bin/koha/tools/inventory.pl">Inventory/stocktaking</a>
