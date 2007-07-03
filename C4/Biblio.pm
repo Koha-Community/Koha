@@ -1727,9 +1727,10 @@ sub GetMarcSubjects {
     foreach my $field ( $record->fields ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields = $field->subfields();
-        my $link;
-        my $label = "su:";
+        my $link = "su:";
+        my $label;
         my $flag = 0;
+        my $authoritysep=C4::Context->preference("authoritysep");
         for my $subject_subfield ( @subfields ) {
             if (
                 $marcflavour ne 'MARC21'
@@ -1743,20 +1744,17 @@ sub GetMarcSubjects {
                 next;
             }
             my $code = $subject_subfield->[0];
-            $label .= $subject_subfield->[1] . " and su-to:" unless ( $code == 9 );
+            $label .= $subject_subfield->[1].$authoritysep unless ( $code == 9 );
+            $link  .= $subject_subfield->[1] . " and su-to:" unless ( $code == 9 );
             if ( $code == 9 ) {
                 $link = "Koha-Auth-Number:".$subject_subfield->[1];
                 $flag = 1;
             }
             elsif ( ! $flag ) {
-                $link = $label;
                 $link =~ s/ and\ssu-to:$//;
             }
         }
-        $label =~ s/su/ /g;
-        $label =~ s/://g;
-        $label =~ s/-to//g;
-        $label =~ s/ and //g;
+         $label =~ s/$authoritysep$//;
         push @marcsubjcts,
           {
             label => $label,
@@ -3959,6 +3957,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.215  2007/07/03 09:33:05  tipaul
+# if you just replace su by a space in subjects, you'll replace jesus by je s, which is strange for users. this fix solves the problem and introduces authoritysep systempref as separator of subfields, for a better identification of where the authority starts and end
+#
 # Revision 1.214  2007/07/02 09:13:22  tipaul
 # unimarc bugfix : the encoding is in field 100 in UNIMARC. when TransformHTMLtoXML on an item, you must not automatically add a 100 field in items, otherwise there will be 2 100 fields in the biblio, which is wrong
 #
