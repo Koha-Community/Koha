@@ -339,6 +339,7 @@ sub checkauth {
 
     my $dbh     = C4::Context->dbh;
     unless (C4::Context->preference('Version')){
+      warn "No Version string in sysprefs, redirecting to Installer";
       print $query->redirect("/cgi-bin/koha/installer/install.pl");
       exit;
     }
