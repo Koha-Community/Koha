@@ -17,16 +17,16 @@
 		<h3>Default values</h3>
 		<p> If a cell is not filled, the 1st of the following value is searched :</p>
 		<ul>
-			<li>same branch and same borrower category, itemtype *</li>
-			<li>same branch and same itemtype, borrower category *</li>
-			<li>same itemtype and borrower category, branch *</li>
-			<li>branch * and itemtype *, same borrower category</li>
-			<li>branch * and borrower category *, same itemtype </li>
-			<li>branch * and borrower category *, itemtype *</li>
+			<li>same library and same patron category, itemtype *</li>
+			<li>same patron and same itemtype, patron category *</li>
+			<li>same itemtype and patron category, library *</li>
+			<li>library * and itemtype *, same patron category</li>
+			<li>library * and patron category *, same itemtype </li>
+			<li>library * and patron category *, itemtype *</li>
 		</ul>
 	
 		<form method="post" action="/cgi-bin/koha/admin/finesrules.pl">
-		<label for="branch">Select a branch :</label>
+		<label for="branch">Select a library :</label>
 			<select id="branch" name="branch">
 				<option value="">Default</option>
 			<!-- TMPL_LOOP NAME="branchloop" -->

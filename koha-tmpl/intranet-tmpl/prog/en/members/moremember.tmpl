@@ -1,13 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Borrower's Details</title>
+<title>Koha &rsaquo; Patron Details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
 <!-- TMPL_IF NAME="unknowuser" -->
-    This borrower doesn't exist anymore.<a href="javascript:back();">Go Back</a>
+    This patron doesn't exist.<a href="javascript:back();">Go Back</a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a> &rsaquo; <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
+<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
 
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->"/> 
@@ -73,7 +73,7 @@
 <!-- TMPL_IF NAME="flagged" -->
     <ul>
         <!-- TMPL_IF NAME="debarred" -->
-            <li>Borrower is debarred 
+            <li>Patron is restricted
             <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post">
                 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
                 <input type="hidden" name="status" value="0" />
@@ -81,14 +81,14 @@
             </form>
             </li>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="gonenoaddress" --><li>Borrower's address is in doubt.</li><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="lost" --><li>Borrower's card has been reported lost.</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="gonenoaddress" --><li>Patron's address is in doubt.</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="lost" --><li>Patron's card has been reported lost.</li><!-- /TMPL_IF -->
     </ul>
 
 <!-- /TMPL_IF -->
 
 <fieldset>
-<legend>Borrower information</legend>
+<legend>Patron information</legend>
     <!-- TMPL_UNLESS NAME="I" -->
     <p><label>Title:</label><!-- TMPL_VAR NAME="title" -->&nbsp;</p> 
     <p><label>First name:</label><!-- TMPL_VAR NAME="firstname" --></p>
@@ -140,7 +140,7 @@
 </fieldset>
 <fieldset>
     <legend>Library use</legend>
-    <p><label>Borrower number:</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
+    <p><label>Patron number:</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
     <p><label>Category:</label><!-- TMPL_VAR NAME="description" --></p>
     <p><label>Registration date:</label><!-- TMPL_VAR NAME="dateenrolled" --></p>
     <p><label>Relation:</label><!-- TMPL_VAR NAME="relationship" --></p>
@@ -169,7 +169,7 @@
 	<p><label>OPAC password: </label><span class="problem">Undefined &nbsp;</span></p> 
    <!--/TMPL_IF --> 
 	<p><label>Circulation notes:</label><!-- TMPL_VAR name="borrowernotes" --> &nbsp;</p>
-    <p><label>Borrower message:</label><!-- TMPL_VAR NAME="opacnote" --> &nbsp;</p>
+    <p><label>Message to Patron:</label><!-- TMPL_VAR NAME="opacnote" --> &nbsp;</p>
 </fieldset>
 <!-- TMPL_UNLESS NAME="P" -->
 <!-- TMPL_UNLESS NAME="I" -->
@@ -292,7 +292,7 @@
     </div>
 <!-- TMPL_IF NAME="reservloop" -->
 <div id="circ_circulation_issue">
-	<h2>Borrower current reserves</h2>
+	<h2>Patron current reserves</h2>
 	<table>
 		<tr>
 			<th>Reserve date</th>

@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Organisation Borrower Management</title>
+<title>Koha &rsaquo; Organisation Patron Management</title>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/includes/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -9,11 +9,11 @@
 
     <!-- TMPL_IF NAME="opadd" -->
         <h1>
-                Add organisation borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+                Add organisation patron (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
         </h1>
         <!-- TMPL_ELSE -->
         <h1 >
-                Modify organisation borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+                Modify organisation patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
         </h1>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="check_member" -->
@@ -301,14 +301,14 @@
                 </p>
         </fieldset>
         <fieldset>
-                <legend>Borrower list</legend>
+                <legend>Patron list</legend>
                 <p>
                         <!-- TMPL_IF NAME="mandatorycontactnote" -->
                                 <label style="font-weight:bold">
                         <!--TMPL_ELSE-->
                                 <label>
                         <!-- /TMPL_IF-->
-                        Persons that can issue books</label>
+                         Can check out books</label>
                         <textarea  name="contactnote" cols="70" rows="2"   ><!-- TMPL_VAR NAME="contactnote" --></textarea>	
                 </p>
         <fieldset>

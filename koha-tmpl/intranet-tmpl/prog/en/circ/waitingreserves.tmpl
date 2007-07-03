@@ -4,14 +4,14 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
-<h1>Circulation: Branch Reserves</h1>
+<h1>Circulation: Library Holds</h1>
 
 <div id="mainbloc">
-        <h2 class="circulation">Reserves of your library the : <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2 class="circulation">Holds for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
                 <div>
-                                <h2>Reserve find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
-                        <p>This documen is reserved by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please put this document in transfer .
+                                <h2>Hold find for(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
+                        <p>This hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this hold.
                         </p>
                         <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
                                 <input type="submit" class="button circulation">
@@ -20,9 +20,9 @@
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="waiting" -->
                 <div id="bloc25">
-                                <h2 class="circulation">This document is in Waiting status</h2>
-                        <p>This document (<!-- TMPL_VAR NAME="nextreservtitle" -->) is reserved by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
-                        Please keep this document for the next reserve .
+                                <h2 class="circulation">This hold is waiting</h2>
+                        <p>This hold (<!-- TMPL_VAR NAME="nextreservtitle" -->) was placed by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
+                        Please retain this hold.
                         </p>
                         <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
                                 <input type="submit">
@@ -34,18 +34,18 @@
             <!-- TMPL_IF NAME="reserveloop" -->
                 <table>
                 <tr>
-                        <th class="circulation" colspan="5">Reserves of your library</th>
+                        <th class="circulation" colspan="5">Holds at your library</th>
                 </tr>
                 <tr>
                         <th class="circulation">Available since</th>
                         <th class="circulation">Title</th>
-                        <th class="circulation">Borrower</th>
+                        <th class="circulation">Patron</th>
                         <th class="circulation">Localisation</th>
                         <th class="circulation">Action</th>
                 </tr>
                         <!-- TMPL_LOOP NAME="reserveloop" -->
                                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
-                                        <td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve Over <!-- /TMPL_IF --></td>
+                                        <td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold Over <!-- /TMPL_IF --></td>
                                         <td>
                                                 <p>
                                                         <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
@@ -77,7 +77,7 @@
                         <!-- /TMPL_LOOP -->
                 </table>
                 <!-- TMPL_ELSE -->
-                    <p><b>No reserve found.</b></p>
+                    <p><b>No hold found.</b></p>
                 <!-- /TMPL_IF -->
         </div>
         <!-- /TMPL_UNLESS -->

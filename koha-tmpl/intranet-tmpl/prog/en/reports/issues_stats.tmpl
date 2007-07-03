@@ -13,7 +13,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
     <!-- TMPL_LOOP NAME="mainloop" -->
-        <h1>Issues statistics </h1>
+        <h1>Checkouts statistics </h1>
         <!-- TMPL_IF NAME="loopfilter" -->
             <p>Filtered on</p>
             <ul>
@@ -59,7 +59,7 @@
         </table>
     <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-    <h1>Issues statistics </h1>
+    <h1>Checkouts statistics </h1>
     <form method="post">
     <table>
         <thead>
@@ -175,7 +175,7 @@
                 </td>
         </tr>
         <tr >
-            <td>Borrower Category</td>
+            <td>Patron Category</td>
             <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
             <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
             <td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
@@ -206,7 +206,7 @@
         </tr>
         <!-- TMPL_IF Name="hassort1" -->
             <tr class="hilighted"> 
-                    <td>Borrower sort1</td>
+                    <td>Patron sort1</td>
                     <td><input type="radio" name="Line" value="borrowers.sort1" /></td>
                     <td><input type="radio" name="Column" value="borrowers.sort1" /></td>
                     <td><!-- TMPL_VAR NAME="CGISort1" --> </td>
@@ -214,7 +214,7 @@
         <!-- /TMPL_IF -->
         <!-- TMPL_IF Name="hassort2" -->
             <!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
-                <td>Borrower sort2</td>
+                <td>Patron sort2</td>
                 <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
                 <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
                 <td><!-- TMPL_VAR NAME="CGISort2" --> </td>
@@ -224,7 +224,7 @@
         </tbody>
     </table>
         <h3> Cell value </h3>
-            <p><input type="radio" name="Cellvalue" value="1" checked="checked" /> Count issues </p>
+            <p><input type="radio" name="Cellvalue" value="1" checked="checked" /> Count checkouts </p>
             <p><input type="radio" name="Cellvalue" value="3" /> Circulation rate </p>
         <h3> Output </h3>
         <input type="radio" checked name="output" value="screen" /> To screen into the browser

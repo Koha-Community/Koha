@@ -13,7 +13,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Borrowers statistics</h1>
+		<h1>Patrons statistics</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -57,7 +57,7 @@
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Borrowers statistics</h1>
+	<h1>Patrons statistics</h1>
 	<form method="post">
 	<table>
 		<thead>
@@ -70,13 +70,13 @@
 		</thead>
 		<tbody>
 			<tr class="hilighted">
-			<td>Borrower category</td>
+			<td>Patron category</td>
 			<td><input type="radio" name="Line" value="categorycode" /></td>
 			<td><input type="radio" name="Column" value="categorycode" /></td>
 			<td ><!-- TMPL_VAR NAME="CGICatCode" --></td>
 			</tr>
 			<tr>
-			<td>Borrower status</td>
+			<td>Patron status</td>
 			<td></td>
 			<td></td>
 			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td>

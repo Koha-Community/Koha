@@ -34,14 +34,14 @@ if (document.form.alreadyreserved.value == "1"){
 }
 
 if (count_reserv == "0"){
-		msg += ("- Please select a document to reserve\n");
+		msg += ("- Please select an item to place a hold\n");
 }
 if (count_reserv >= "2"){
 		msg += ("- You can select only one type of document\n by item, or by the first item returned\n");
 }
 
 if (alreadyreserved > "0"){
-		msg += ("- This borrower had already reserved this document\n Please cancel the previous reserve first \n");
+		msg += ("- This patron had already placed a hold on this item\n Please cancel the previous hold first \n");
 }
 
 	if (msg == "") return(true);
@@ -53,15 +53,15 @@ if (alreadyreserved > "0"){
 </script>
 <!-- TMPL_IF NAME="messagetransfert" -->
 		<div>
-				<h2>Reserve find for the document(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
-			<p>This documen is reserved by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please put this document in transfer .
+				<h2>Hold found for (<!-- TMPL_VAR NAME="nextreservtitle" -->), please transfer</h2>
+			<p>Hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this item.
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
 				<input type="submit" class="button circulation">
 			</form>
 		</div>
 	<!-- /TMPL_IF -->
-<h1>Reserves</h1>
+<h1>Holds</h1>
 
   <h2>Biblio informations</h2>
     <p><label>Title: </label><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
@@ -72,7 +72,7 @@ if (alreadyreserved > "0"){
     <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onSubmit="request.pl" name="getborrower">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
                 <p>
-                <label>Member</label>
+                <label>Patron</label>
                 <input type="text" size="20" name="findborrower"> (type card number or part of a name)
                 </p>
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->">
@@ -86,16 +86,16 @@ if (alreadyreserved > "0"){
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF NAME="maxreserves" -->
     <p class="problem">
-      <label><u>Too many reserves</u></label>
-      Currently, this member has too much active reserves.
+      <label><u>Too many holds</u></label>
+      Currently, this patron has too many holds.
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="expiry" -->
     <br>
     <p class="problem">
-      <label>Expired card</label>
-      The card of this member is expired
+      <label>Expired account</label>
+      This patron's account has expired
     </p>
     <!-- /TMPL_IF -->
 
@@ -109,12 +109,12 @@ if (alreadyreserved > "0"){
     <!-- TMPL_IF NAME="alreadyreserved" -->			
     <p class="problem">
       <label>Operation can be make</label>
-      This borrower had already make a reserve for this document
+      This patron already has a hold on this item
     </p>
     <!-- /TMPL_IF -->
 
   <!-- TMPL_IF NAME="messageborrower" -->
-    <div class="problem">Carrefull,there is no borrower with this name, Please, try an other </div>
+    <div class="problem">No patron with this name, Please, try an other </div>
   <!-- /TMPL_IF -->
     <h3>Reserve properties</h3>
         <form action="placerequest.pl" method="post" onSubmit="return check();" name="form">
@@ -124,7 +124,7 @@ if (alreadyreserved > "0"){
         <input type="hidden" name="type" value="str8">
         <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->">
         <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->">
-        <p><label>Member</label>
+        <p><label>Patron</label>
             <!-- TMPL_IF NAME="cardnumber"-->
                 <!-- TMPL_VAR NAME="borrowersurname" --> <!-- TMPL_VAR NAME="borrowerfirstname" -->
                 (card number: <!--  TMPL_VAR NAME="cardnumber" -->)
@@ -245,7 +245,7 @@ if (alreadyreserved > "0"){
     <table>
       <tr>
         <th>Priority</th>
-        <th>Member</th>
+        <th>Patron</th>
         <th>Notes</th>
         <th>Date</th>
         <th>Pick up location</th>

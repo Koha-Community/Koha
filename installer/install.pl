@@ -226,6 +226,7 @@ if ($step && $step==1){
     my %hashlevel;
    # sort by filename -> prepend with numbers to specify order of insertion. 
     my @fnames = sort { my @aa = split /\/|\\/, ($a); my @bb = split /\/|\\/, ($b); $aa[-1] lt $bb[-1] } $query->param('framework')  ;
+	$dbh->do('SET FOREIGN_KEY_CHECKS=0');
     my $request=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
     $request->execute;
     my ($systempreference)=$request->fetchrow;
@@ -264,6 +265,7 @@ if ($step && $step==1){
     $template->param("fwklanguage"=>$fwk_language,
                      "list"=>\@list);
     $template->param("$op"=>1);
+	$dbh->do('SET FOREIGN_KEY_CHECKS=1');
   } elsif ( $op && $op eq 'selectframeworks'){
     #Framework Selection
     #sql data for import are supposed to be located in misc/sql-datas/<language>/<level>

@@ -12,7 +12,7 @@
     <ul>
        <li>
        <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-        <label for="navfindborrower">Issue to:</label>
+        <label for="navfindborrower">Check out to:</label>
             <input id="navfindborrower" name="findborrower" type="text" size="10" />
             <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
             <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
@@ -20,13 +20,13 @@
        </form>
        </li>
        <li>
-        <a accesskey="r" href="/cgi-bin/koha/circ/returns.pl">Returns</a>
+        <a accesskey="r" href="/cgi-bin/koha/circ/returns.pl">Check in</a>
        </li>
         <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li>
      </ul>
      <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_borrowers" -->
-    <a href="/cgi-bin/koha/members/members-home.pl">Borrowers</a>
+    <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
     <ul>
         <li><form action="/cgi-bin/koha/members/member.pl" method="post">
            <label for="navmember">Search:&nbsp;</label>

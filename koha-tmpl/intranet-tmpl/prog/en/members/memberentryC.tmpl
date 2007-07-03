@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Child Borrower Management</title>
+<title>Koha &rsaquo; Child Patron Management</title>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/includes/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -9,11 +9,11 @@
 
 	<!-- TMPL_IF NAME="add" -->
 	<h1>
-		Add child borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add child patron (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify child borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify child patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -41,7 +41,7 @@
 				<p>login/password already exist</p>
 			<!-- /TMPL_IF -->
  			<!-- TMPL_IF NAME="ERROR_age_limitations" -->
-                                Borrower is too young or too old for this category
+                                Patron is too young or too old for this category
                         <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
@@ -111,7 +111,7 @@
 				 <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
 			</p>	
 	<fieldset id="memberentry_identity">
-		<legend>Borrower identity</legend>
+		<legend>Patron identity</legend>
 		<p>
 		<!-- TMPL_IF NAME="female" -->
 		<input type="radio" name="sex" value="F" checked>Female
@@ -202,7 +202,7 @@
 	</p>
 	</fieldset>
 	<fieldset id="memberentry_identity">
-		<legend>Borrower type</legend>
+		<legend>Patron type</legend>
 		<p>
 		    <!-- TMPL_IF NAME="catcodepopup" -->
 			    <label>Category</label>

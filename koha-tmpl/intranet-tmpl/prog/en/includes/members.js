@@ -43,7 +43,7 @@ var msg2;
 if (  document.form.check_member.value==1){
 	if (document.form.categorycode.value != "I"){
 		
-		msg1 += ("Warning  !!!! Duplicate borrower!!!!");
+		msg1 += ("Warning  !!!! Duplicate patron!!!!");
 		alert(msg1);
 	check_form_borrowers(0);
 	document.form.submit();
@@ -138,7 +138,7 @@ if (nav < document.form.step.value) {
 			}
 		}
 	}
-//borrowers form 2 test if u chcked no to the quetsion of double 
+//patrons form to test if you chcked no to the quetsion of double 
  	if (document.form.step.value==2 && statut!=1 && document.form.check_member.value > 0 )
 	{
 		
@@ -146,7 +146,7 @@ if (nav < document.form.step.value) {
 			if (!(document.form_double.answernodouble.checked)){
 					
 				message ="";
-					message_champ+=("Please confirm suspicious duplicate borrower !!! ");
+					message_champ+=("Please confirm suspicious duplicate patron !!! ");
 					statut=1;
 					document.form.nodouble.value=0;
 			}

@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation
 <!-- TMPL_IF NAME="borrowernumber" -->
-&rsaquo; Issuing to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->
+&rsaquo; Checking out to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->
 (<!-- TMPL_VAR NAME="cardnumber" -->)
 <!-- /TMPL_IF --></title>
 
@@ -9,9 +9,9 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 <!-- TMPL_IF NAME="borrowernumber" -->
-    <h1>Issues</h1>
+    <h1>Checkouts</h1>
 <!-- TMPL_ELSE -->
-    <h1>Circulation &rsaquo; Issues</h1>
+    <h1>Circulation &rsaquo; Checkouts</h1>
 <!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
@@ -31,7 +31,7 @@
         <!-- TMPL_IF NAME="streetaddress"-->
             <!-- TMPL_VAR NAME="streetaddress" -->,
         <!-- TMPL_ELSE -->
-            <span class="problem">No address stored for borrower.</span>
+            <span class="problem">No address stored for patron.</span>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="city" -->
             <!-- TMPL_VAR NAME="city" -->
@@ -65,7 +65,7 @@
         
             <!-- TMPL_IF NAME="dbarred" -->
                 <p>
-                Debarred: Patron is debarred <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&destination=circ&status=0">Lift Debarment</a>
+                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&destination=circ&status=0">Lift restriction</a>
                 </p>
             <!-- /TMPL_IF -->
         
@@ -80,7 +80,7 @@
             <!-- TMPL_IF NAME="charges" -->
             <p>
             Fines: Patron has 
-            <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">outstanding fines</a>.
+            <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines</a>.
             Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a>
             </p>
             <!-- /TMPL_IF -->
@@ -111,10 +111,10 @@
 <!-- No card entered yet -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
 <fieldset id="circ_circulation_borrower_search">
-    <legend>Search for a borrower</legend>
+    <legend>Search for a patron</legend>
 
     <p>
-    <label for="findborrower">Enter borrower card number or partial name: </label>
+    <label for="findborrower">Enter patron card number or partial name: </label>
     <input id="findborrower" name="findborrower" type="text" size="40"/>
     </p>
 
@@ -128,7 +128,7 @@
 
 <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 <fieldset id="circ_circulation_needsconfirmation">
-<legend>Please Confirm Issue</legend>
+<legend>Please Confirm Checkout</legend>
 
 <ul>
 <!-- TMPL_IF NAME="DEBT" -->
@@ -152,7 +152,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="TOO_MANY" -->
-    <li>Too many issues (already issued / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
+    <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
 <!-- /TMPL_IF -->
 </ul>
 
@@ -181,7 +181,7 @@
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
 
     <div id="action">
-    <input type="submit" value="Confirm Issue" accesskey="y" />
+    <input type="submit" value="Confirm Checkout" accesskey="y" />
     </div>
 
 </form>
@@ -190,7 +190,7 @@
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 
     <div id="action">
-    <input type="submit" value="Don't Issue" accesskey="n" />
+    <input type="submit" value="Don't Checkout" accesskey="n" />
     </div>
 </form>
 
@@ -199,7 +199,7 @@
 <!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
 
 <!-- TMPL_IF NAME="issued" -->
-<p>Item issued</p>
+<p>Item Checked out</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="message" -->
@@ -214,13 +214,13 @@ No patron matched <!-- TMPL_VAR name="message" -->
 <!-- TMPL_IF NAME="CGIselectborrower" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
 <fieldset id="circ_circulation_selectborrower">
-    <legend>Borrower selection</legend>
+    <legend>Patron selection</legend>
 
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
 
     <p>
-    <label for="borrowernumber">Select a borrower: </label>
+    <label for="borrowernumber">Select a patron: </label>
     <!-- TMPL_VAR name="CGIselectborrower" -->
     </p>
 
@@ -241,10 +241,10 @@ No patron matched <!-- TMPL_VAR name="message" -->
 <!-- TMPL_IF NAME="borrowernumber" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
-    <legend>Issue an item</legend>
+    <legend>Checkout an item</legend>
 
     <p>
-    <label for="barcode">Enter Item Barcode: </label><input type="text" name="barcode" size="14" />
+    <label for="barcode">Enter tem barcode: </label><input type="text" name="barcode" size="14" />
     
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
@@ -273,7 +273,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="DEBARRED" -->
-            <li><span class="problem">Patron is debarred</span></li>
+            <li><span class="problem">Patron is restricted</span></li>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
@@ -587,7 +587,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <label for="stickyduedate">
 	<!-- TMPL_IF NAME="stickyduedate" -->
             <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> checked />
-            Remember due date for this borrower
+            Remember due date for this patron
 <!-- TMPL_ELSE -->
             <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />
 <!-- /TMPL_IF -->
@@ -615,14 +615,14 @@ No patron matched <!-- TMPL_VAR name="message" -->
 
 <!-- TMPL_IF NAME="WaitingReserveLoop" -->	
 <fieldset id="circ_circulation_issue">
-    <legend class="problem">Waiting reserves</legend>
-        This borrower has a waiting reservation : 
+    <legend class="problem">Holds waiting</legend>
+        This patron has holds waiting:
         <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
         <p>
             <ul> 
                 <li> <!-- TMPL_VAR NAME="title"--> (<!-- TMPL_VAR NAME="itemtype"-->), author : <!-- TMPL_VAR NAME="author"-->, reserved the : <!-- TMPL_VAR NAME="reservedate"--> 
             <!-- TMPL_IF NAME="waitingat" -->
-                document waiting at : <!-- TMPL_VAR NAME="waitingat" -->	
+                waiting at : <!-- TMPL_VAR NAME="waitingat" -->	
             <!-- /TMPL_IF -->
                 </li>
             </ul>
@@ -675,7 +675,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="waitingposition" -->
-                        Waiting position for this document :
+                        Hold priority :
                         <b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
                         <!-- /TMPL_IF -->
                     </td>
@@ -684,17 +684,17 @@ No patron matched <!-- TMPL_VAR name="message" -->
 
                         <!-- TMPL_IF name="waiting" -->
                         <br/>
-                        <i>This document is available</i>
+                        <i>This hold is available</i>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" -->
                         <br/>
-                        <i>This document has been transfered from library : 
+                        <i>This hold has been transfered from library : 
                         <!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="nottransfered" -->
                         <br/>
-                        <i>This document hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <i>This hold hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
                         <!-- /TMPL_IF -->
                 
                     </td>
@@ -733,7 +733,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
     </tr>
     
     <tr>
-        <th colspan="6"><a name="today" id="today">Today issues</a></th>
+        <th colspan="6"><a name="today" id="today">Today checkouts</a></th>
     </tr>
     <!-- TMPL_LOOP NAME="todayissues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
@@ -782,7 +782,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <th>Renew?</th>
     </tr>
     <tr>
-        <th colspan="6"><a name="previous" id="previous">Previous issues</a></th>
+        <th colspan="6"><a name="previous" id="previous">Previous checkouts</a></th>
     </tr>
     <!-- TMPL_LOOP NAME="previssues" -->
     <!-- TMPL_IF NAME="togglecolor" -->

@@ -17,7 +17,7 @@
                 <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="title" --></a>
         </td>
     </tr>
-    <tr><th>Reserved for: </th>
+    <tr><th>Hold for: </th>
     <td>
     <!-- TMPL_IF Name="wborcnum"-->
         <ul>
@@ -49,7 +49,7 @@
 <!-- TMPL_IF Name="found" -->
 <!-- case of a reservation found, and display info -->
     <!-- TMPL_IF Name="waiting" -->
-        <h2>Waiting Reserve Found in your library for <!-- TMPL_VAR Name="title" --></h2>
+        <h2>Waiting Hold Found in your library for <!-- TMPL_VAR Name="title" --></h2>
         <p>Patron: 
             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
                 <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> (<!-- TMPL_VAR Name="borcnum" -->)
@@ -70,7 +70,7 @@
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="diffbranch" -->
-        <h3>Reserve needing transfert found</h3>
+        <h3>Hold needing transfer found</h3>
         <table>
             <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
             <tr>
@@ -141,9 +141,9 @@
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
         <!-- TMPL_IF Name="transfertodo"-->
-            <h2>Reserve at an other library, transfer to do</h2>
+            <h2>Hold placed for another library, please transfer</h2>
         <!-- TMPL_ELSE -->
-            <h2>Waiting Reserve Found in your library</h2>
+            <h2>Waiting Hold Found in your library</h2>
         <!-- /TMPL_IF -->
         <p>Title:  <!-- TMPL_VAR Name="title" --></p>
         <p>Patron: 
@@ -159,9 +159,9 @@
         <!-- /TMPL_IF -->
         <form method="post" action="returns.pl" name="mainform" id="mainform">
             <!-- TMPL_IF name="transfertodo" -->
-                <input type="submit" value="Confirm reserve and transfer" />
+                <input type="submit" value="Confirm hold and transfer" />
             <!-- TMPL_ELSE -->
-                <input type="submit" value="Confirm reserve" />
+                <input type="submit" value="Confirm hold" />
             <!-- /TMPL_IF -->
             <!-- TMPL_LOOP Name="inputloop" -->
                     <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />

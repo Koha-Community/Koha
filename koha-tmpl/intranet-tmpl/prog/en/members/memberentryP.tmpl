@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Professional Borrower Management</title>
+<title>Koha &rsaquo; Professional Patron Management</title>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/includes/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -8,16 +8,16 @@
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
     <!-- TMPL_IF NAME="opadd" -->
-    <h1>Add professional borrower (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></h1>
+    <h1>Add professional patron (step <!-- TMPL_VAR NAME="step" -->) <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></h1>
     <!-- TMPL_ELSE -->
-    <h1>Modify professional borrower <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></h1>
+    <h1>Modify professional patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></h1>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="check_member" -->
         <!-- TMPL_IF NAME="step_2" -->
     <p>
     <form name="form_double">
         <div id="problem">
-            Duplicate borrower suspected 
+            Duplicate patron suspected 
             <a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" class="borrowers_button">Details</a>
             Duplicate ? 
             <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&category_type=<!--TMPL_VAR NAME="check_categorytype"-->" class="borrowers_button">Yes</a> 
@@ -37,7 +37,7 @@
             login already exists
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="ERROR_age_limitations" -->
-            Borrower age is wrong for this category
+            Patron age is wrong for this category
             <!-- /TMPL_IF -->
         </div>
     <!-- /TMPL_IF -->
@@ -106,7 +106,7 @@
             <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
     </p>    
     <fieldset id="memberentry_identity">
-        <legend>Borrower identity</legend>
+        <legend>Patron identity</legend>
         <p>
         <!-- TMPL_IF NAME="female" -->
         <input type="radio" name="sex" value="F" checked>Female
@@ -186,13 +186,13 @@
         </p>
     </fieldset>
     <fieldset id="memberentry_identity">
-        <legend>Borrower type</legend>
+        <legend>Patron type</legend>
         <p>
     <!-- TMPL_IF NAME="catcodepopup" -->
                 <label>Category</label>
                 <!-- TMPL_VAR NAME="catcodepopup" -->
             <!-- TMPL_ELSE -->
-                <span class="problem">There is no category type to add a Professional borrower.</span>
+                <span class="problem">There is no category type to add a Professional patron.</span>
                 Please <a href="/cgi-bin/koha/admin/categorie.pl">create one</a>
                  
             <!-- /TMPL_IF -->

@@ -44,8 +44,8 @@
 NAME="biblionumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modify</a> |
         <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Delete</a>
 	<br />
-	<b>Home Branch:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
-	<b>Current Branch:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
+	<b>Home Library:</b> <!-- TMPL_VAR NAME="homebranch" --><br>
+	<b>Current Library:</b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
 	<b>Last seen:</b> <!-- TMPL_VAR NAME="datelastseen" --><br>
 	<b>Last borrowed:</b> <!-- TMPL_VAR NAME="datelastborrowed" --><br>
 	<b>Item Status:</b> <!-- TMPL_IF NAME="issue" -->On issue to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Available <!-- /TMPL_IF --><br>

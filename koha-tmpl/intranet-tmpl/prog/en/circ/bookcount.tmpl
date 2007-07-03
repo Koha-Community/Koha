@@ -10,18 +10,18 @@
 <div class="tabitem"><form action="/cgi-bin/koha/catalogue/detail.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->"><input type="hidden" name="type" value="intra"><input type="submit" class="submit" value="Brief Display"></form> <form action="/cgi-bin/koha/catalogue/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->"><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->"> <input type="submit" class="submit" value="Item Details"></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="/cgi-bin/koha/reserve/request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="biblionumber"> <input type="submit" value="Place Reserve" class="submit"></form><!-- /TMPL_IF --></div>
 <div class="data">
 <table>
-		<tr><th>Home Branch: </th><td> <!-- TMPL_VAR Name="homebranch" --> </td></tr>
-		<tr><th>Current Branch: </th><td> <!-- TMPL_VAR Name="holdingbranch" --></td></tr>
-		<tr><th>Date arrived at current branch: </th><td> <!-- TMPL_VAR Name="lastdate" --> </td></tr>
+		<tr><th>Home Library: </th><td> <!-- TMPL_VAR Name="homebranch" --> </td></tr>
+		<tr><th>Current Library: </th><td> <!-- TMPL_VAR Name="holdingbranch" --></td></tr>
+		<tr><th>Date arrived at current library: </th><td> <!-- TMPL_VAR Name="lastdate" --> </td></tr>
 		<tr><th>Number of issues since since the above date :</th><td> <!-- TMPL_VAR Name="count" --> </td></tr>
 </table>
 </div>
 <div class="table">
 		<table>
 			<tr>
-				<th> Branch</th>
-				<th> No. of Issues</th>
-				<th> Last seen at branch</th>
+				<th>Library</th>
+				<th>No. of times checked out</th>
+				<th>Library last seen at</th>
 			</tr>
 			<!-- TMPL_LOOP Name="branchloop" -->
 				<tr>

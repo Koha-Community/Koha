@@ -18,7 +18,7 @@ function Dopop(link) {
 }
 </script>
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Top <!-- TMPL_VAR NAME="limit"--> List borrowers for Issues</h1>
+		<h1>Top <!-- TMPL_VAR NAME="limit"--> List patrons for Checkouts</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -28,7 +28,7 @@ function Dopop(link) {
 		
 		<table>
 			<tr >
-				<th>Rank/Borrowers</th>
+				<th>Rank/Patronss</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
@@ -36,7 +36,7 @@ function Dopop(link) {
 			<tr >
 				<th>&nbsp;</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
-					<th>Borrower</th>
+					<th>Patron</th>
 					<th>Issues count</th>
 				<!-- /TMPL_LOOP -->
 			</tr>
@@ -59,7 +59,7 @@ function Dopop(link) {
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Top List borrowers for Issues</h1>
+	<h1>Patrons who checked out the most items</h1>
 	<form method="post">
 	
 	<table>
@@ -241,7 +241,7 @@ function Dopop(link) {
 			<tr class="hilighted">
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
-				<td>Borrower Category</td>
+				<td>Patron Category</td>
 				<td><input type="text" name="Filter" value="" /></td>
 			</tr>
 			<tr>

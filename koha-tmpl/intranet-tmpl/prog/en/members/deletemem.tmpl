@@ -1,17 +1,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Can't Delete Borrower</title>
+<title>Koha &rsaquo; Can't Delete Patron</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
-	<h3>Cannot Delete Borrower</h3>
+	<h3>Cannot Delete Patron</h3>
 		<!-- TMPL_IF name="ItemsOnIssues" -->
-			Borrower has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.
+			Patron has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="charges -->
-			Borrower has <!-- TMPL_VAR name="charges" --> in fines.
+			Patron has <!-- TMPL_VAR name="charges" --> in fines.
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="guarantees" -->
-			Borrower's record has guaranteed accounts attached.
+			Patron's record has guaranteed accounts attached.
 		<!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

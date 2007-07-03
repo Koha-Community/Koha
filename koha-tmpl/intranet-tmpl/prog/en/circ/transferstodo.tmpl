@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation
 <!-- TMPL_IF Name="borrowernumber" -->
-: Issuing to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->
+: Checkout to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->
 (<!-- TMPL_VAR NAME="cardnumber" -->)
 <!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -17,18 +17,18 @@
             <!-- TMPL_IF NAME="branchcode" -->
             <table>
             <tr>
-                <th colspan="5">Reserves in wait to the library : <!-- TMPL_VAR NAME="branchname" --> </th>
+                <th colspan="5">Holds waiting for: <!-- TMPL_VAR NAME="branchname" --> </th>
             </tr>
             <tr>
-                <th>Date of reserve</th>
+                <th>Date of hold</th>
                 <th>Title</th>
-                <th>Borrower</th>
+                <th>Patron</th>
                 <th>Localisation</th>
                 <th>Action</th>
             </tr>
             <!-- TMPL_LOOP NAME="reserv" -->
                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
-                    <td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Reserve over <!-- /TMPL_IF --></td>
+                    <td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold over <!-- /TMPL_IF --></td>
                     <td>
                             <p>
                                     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>

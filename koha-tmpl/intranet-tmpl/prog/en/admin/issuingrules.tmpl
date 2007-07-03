@@ -16,15 +16,15 @@
 		<h3>Default values</h3>
 		<p> If a cell is not filled, the 1st of the following value is searched :</p>
 		<ul>
-			<li>same branch and same borrower category, itemtype *</li>
-			<li>same branch and same itemtype, borrower category *</li>
-			<li>same itemtype and borrower category, branch *</li>
+			<li>same library and same patron category, itemtype *</li>
+			<li>same library and same itemtype, patron category *</li>
+			<li>same itemtype and patron category, library *</li>
 			<li>everywhere</li>
 			<li>If nothing is set, default is 21,5 (hardcoded)</li>
 		</ul>
 	</div>
 		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
-		<label for="branch">Select a branch :</label>
+		<label for="branch">Select a library :</label>
 			<select id="branch" name="branch">
 				<option value="">Default</option>
 			<!-- TMPL_LOOP NAME="branchloop" -->
@@ -36,7 +36,7 @@
 			<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
 			
 			<table>
-			<caption>Defining issuing rules for <!-- TMPL_VAR NAME="branch" --></caption>
+			<caption>Defining circulation rules for <!-- TMPL_VAR NAME="branch" --></caption>
 			<tr>
 				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th scope="col"><!-- TMPL_VAR NAME="in_title" --></th><!-- /TMPL_LOOP -->
 			</tr>

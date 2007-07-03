@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Reserve</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Holds</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
@@ -13,7 +13,7 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
-<h1>Pending reserves as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
+<h1>Pending holds as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
 <div id="filters">
 <br />
 <form method="post" >
@@ -93,8 +93,8 @@ Calendar.setup(
 <input type="submit" value="Go" class="submit">
 </p>
 </form>
-<p>The following reserves have not be affected to any item.</p>
-<p>Please go in the shelves, pickup a book and do a return on them :</p>
+<p>The following holds have not been filled.</p>
+<p>Please retrieve them and check them in</p>
 </div>
 
 <div class="searchresults">
@@ -105,7 +105,7 @@ Calendar.setup(
             Priority
             <a href="/cgi-bin/koha/circ/reserve.pl?order=priority">Sort</a>
         </th>
-        <th >Reserve Date
+        <th >Hold Date
             <a href="/cgi-bin/koha/circ/reserve.pl?order=date">Sort</a>
         </th>
         <th >Patron
@@ -114,8 +114,8 @@ Calendar.setup(
         <th >Title
         <a href="/cgi-bin/koha/circ/reserve.pl?order=biblio">Sort</a>
         </th>
-        <th >
-            Location
+        <th>
+            Library
         </th>
     </tr>
     

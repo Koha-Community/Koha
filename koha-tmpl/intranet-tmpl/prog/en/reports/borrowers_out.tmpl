@@ -13,7 +13,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
     <!-- TMPL_LOOP NAME="mainloop" -->
-        <h1>Borrowers with No Issues</h1>
+        <h1>Patrons with No. Checkouts</h1>
         <!-- TMPL_IF NAME="loopfilter"-->
             <p>Filtered on</p>
             <!-- TMPL_LOOP NAME="loopfilter" -->
@@ -23,7 +23,7 @@
         
         <table>
             <tr >
-                <th>Num/Borrowers</th>
+                <th>Num/Patronss</th>
                 <!-- TMPL_LOOP NAME="loopcol" -->
                     <th><!-- TMPL_VAR NAME="coltitle" --></th>
                 <!-- /TMPL_LOOP -->
@@ -42,7 +42,7 @@
         </table>
     <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-    <h1>Borrowers with no Issues</h1>
+    <h1>Patrons with no Checkouts</h1>
     <form method="post">
     
     <table>
@@ -79,7 +79,7 @@
             <tr class="hilighted">
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
-                <td>Borrower category</td>
+                <td>Patron category</td>
                 <td><input type="text" name="Filter" value="" /></td>
             </tr>
             <tr class="hilighted">
