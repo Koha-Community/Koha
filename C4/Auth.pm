@@ -338,9 +338,15 @@ sub checkauth {
     $type = 'opac' unless $type;
 
     my $dbh     = C4::Context->dbh;
+    # check that database and koha version are the same
     unless (C4::Context->preference('Version')){
-      warn "No Version string in sysprefs, redirecting to Installer";
+      warn "Install required, redirecting to Installer";
       print $query->redirect("/cgi-bin/koha/installer/install.pl");
+      exit;
+    }
+    if (C4::Context->preference('Version') < C4::Context->config("kohaversion")){
+      warn "Database update needed, redirecting to Installer. Database is ".C4::Context->preference('Version')." and Koha is : ".C4::Context->config("kohaversion");
+      print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
       exit;
     }
     my $timeout = C4::Context->preference('timeout');

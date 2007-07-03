@@ -203,6 +203,15 @@ if ($step && $step==1){
 } elsif ($step && $step==3){
   my $op=$query->param('op');
   if ($op && $op eq 'finish'){
+    if (C4::Context->preference('Version')) {
+        warn "UPDATE Version";
+      my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+      $finish->execute(C4::Context->config("kohaversion"));
+    } else {
+        warn "INSERT Version";
+      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')");
+      $finish->execute(C4::Context->config("kohaversion"));
+    }
     # Installation is finished.
     # We just deny anybody acess to install
     # And we redirect people to mainpage.
