@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','a','LC control number','',0,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','z','Canceled/invalid LC control number','',1,0,0,NULL,NULL,NULL);
 INSERT INTO auth_subfield_structure (authtypecode, tagfield, tagsubfield, liblibrarian, libopac, repeatable, mandatory, tab, authorised_value, value_builder, seealso) VALUES ('','010','8','Field link and sequence number','',1,0,0,NULL,NULL,NULL);
