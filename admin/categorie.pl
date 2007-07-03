@@ -111,10 +111,17 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
+	my $is_a_modif = $input->param("is_a_modif");
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace categories (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?)");
-	$sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
-	$sth->finish;
+	if ($is_a_modif) {
+            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
+            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type','categorycode'));
+            $sth->finish;
+        } else {
+            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?)");
+            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
+            $sth->finish;
+        }
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=categorie.pl\"></html>";
 	exit;
 
@@ -181,7 +188,6 @@ if ($op eq 'add_form') {
 				category_type => $results->[$i]{'category_type'},
 				"type_".$results->[$i]{'category_type'} => 1,
 				toggle => $toggle );
-				warn "ICI".	$results->[$i]{'category_type'};
 		push @loop, \%row;
 		if ( $toggle eq 0 )
 		{

@@ -87,7 +87,7 @@
 	<table>
 	<!-- TMPL_IF NAME="categorycode" -->
 	<tr><th>Category code</th><td><!-- TMPL_VAR NAME="categorycode" -->
-				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /></td></tr>
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="hidden" name="is_a_modif" value="1" /></td></tr>
 	<!-- TMPL_ELSE -->
 	<tr><th>Category code</th><td><input type="text" name="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
 	<!-- /TMPL_IF -->
