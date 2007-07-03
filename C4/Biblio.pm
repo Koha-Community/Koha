@@ -1606,7 +1606,6 @@ sub GetAuthorisedValueDesc {
 
     #---- "true" authorized value
     my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
     if ( $category ne "" ) {
         my $sth =
           $dbh->prepare(
@@ -3957,6 +3956,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.217  2007/07/03 13:47:44  tipaul
+# fixing some display bugs (itemtype not properly returned and a html table bug that makes items appear strangely
+#
 # Revision 1.216  2007/07/03 09:40:58  tipaul
 # return itemtype description properly
 #
