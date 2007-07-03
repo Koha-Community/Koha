@@ -1,6 +1,6 @@
 <div id="submenu">
     <p>
-        <a href="/cgi-bin/koha/admin/branches.pl">Branches</a>
+        <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a>
         <a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds</a>
         <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a>
         <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a>

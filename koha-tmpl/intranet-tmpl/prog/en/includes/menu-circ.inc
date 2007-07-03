@@ -1,5 +1,5 @@
 <div id="submenu">
-    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set branch</a>
+    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
     <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="reserves waiting to have an item affected">Pending reserves</a>
     <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="reserves waiting for member pickup">Waiting reserves</a>
     <a href="/cgi-bin/koha/circ/transferstodo.pl" title="transfers to do from your library">Transfers to do</a>
