@@ -1601,7 +1601,7 @@ sub GetAuthorisedValueDesc {
 
     #---- itemtypes
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-        return getitemtypeinfo($value);
+        return getitemtypeinfo($value)->{description};
     }
 
     #---- "true" authorized value
@@ -3957,6 +3957,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.216  2007/07/03 09:40:58  tipaul
+# return itemtype description properly
+#
 # Revision 1.215  2007/07/03 09:33:05  tipaul
 # if you just replace su by a space in subjects, you'll replace jesus by je s, which is strange for users. this fix solves the problem and introduces authoritysep systempref as separator of subfields, for a better identification of where the authority starts and end
 #
