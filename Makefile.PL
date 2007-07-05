@@ -29,8 +29,11 @@ Makefile.PL - Koha packager and installer
 
 =head1 SYNOPSIS
 
-perl Makefile.PL
-make
+	perl Makefile.PL
+	make
+	sudo make install
+	make manifest tardist
+	make manifest zipdist
 
 =head1 DESCRIPTION
 
@@ -76,7 +79,7 @@ to generate initial configuration files.
 WriteMakefile(
 
     NAME => 'koha',
-    VERSION => strftime('2.9.%Y%m%d%H'),
+    VERSION => strftime('2.9.%Y%m%d%H',gmtime),
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
