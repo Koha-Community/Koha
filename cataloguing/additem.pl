@@ -237,100 +237,100 @@ my $i=0;
 my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by lib");
 
 foreach my $tag (sort keys %{$tagslib}) {
-    my $previous_tag = '';
+  my $previous_tag = '';
 # loop through each subfield
-    foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-        next if subfield_is_koha_internal_p($subfield);
-        next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
-        my %subfield_data;
-        $subfield_data{tag}=$tag;
-        $subfield_data{subfield}=$subfield;
+  foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
+    next if subfield_is_koha_internal_p($subfield);
+    next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
+    my %subfield_data;
+    $subfield_data{tag}=$tag;
+    $subfield_data{subfield}=$subfield;
 #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-        $subfield_data{marc_lib}="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".substr($tagslib->{$tag}->{$subfield}->{lib},0,12)."</span>";
-        $subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
-        $subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
-        $subfield_data{hidden}= "display:none" if $tagslib->{$tag}->{$subfield}->{hidden};
-        my ($x,$value);
-        ($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
-        $value =~ s/"/&quot;/g;
-        #testing branch value if IndependantBranches.
-        my $test = (C4::Context->preference("IndependantBranches")) &&
-                    ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
-                    (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
+    $subfield_data{marc_lib}="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".substr($tagslib->{$tag}->{$subfield}->{lib},0,12)."</span>";
+    $subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+    $subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+    $subfield_data{hidden}= "display:none" if $tagslib->{$tag}->{$subfield}->{hidden};
+    my ($x,$value);
+    ($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
+    $value =~ s/"/&quot;/g;
+    #testing branch value if IndependantBranches.
+    my $test = (C4::Context->preference("IndependantBranches")) &&
+              ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
+              (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
 #         print $input->redirect(".pl?biblionumber=$biblionumber") if ($test);
         # search for itemcallnumber if applicable
-        if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
-            my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
-            my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
+    if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
+      my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
+      my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
 			my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
 			my $temp2 = $temp->field($CNtag);
 			if ($temp2) {
 				$value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
 #remove any trailing space incase one subfield is used
-			$value=~s/^\s+|\s+$//g;
-            }
-        }
-        if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
-            my @authorised_values;
-            my %authorised_lib;
-            # builds list, depending on authorised value...
-            #---- branch
-            if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-                if ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags} != 1)){
-                        my $sth=$dbh->prepare("select branchcode,branchname from branches where branchcode = ? order by branchname");
-                        $sth->execute(C4::Context->userenv->{branch});
-                        push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-                        while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-                            push @authorised_values, $branchcode;
-                            $authorised_lib{$branchcode}=$branchname;
-                        }
-                } else {
-                    my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
-                    $sth->execute;
-                    push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-                    while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
-                        push @authorised_values, $branchcode;
-                        $authorised_lib{$branchcode}=$branchname;
-                    }
-                }
-            #----- itemtypes
-            } elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
-                my $sth=$dbh->prepare("select itemtype,description from itemtypes order by description");
-                $sth->execute;
-                push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-                while (my ($itemtype,$description) = $sth->fetchrow_array) {
-                    push @authorised_values, $itemtype;
-                    $authorised_lib{$itemtype}=$description;
-                }
-            #---- "true" authorised value
-            } else {
-                $authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
-                push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
-                while (my ($value,$lib) = $authorised_values_sth->fetchrow_array) {
-                    push @authorised_values, $value;
-                    $authorised_lib{$value}=$lib;
-                }
-            }
-            $subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
-                                                                        -values=> \@authorised_values,
-                                                                        -default=>"$value",
-                                                                        -labels => \%authorised_lib,
-                                                                        -size=>1,
-                                                                         -tabindex=>'',
-                                                                        -multiple=>0,
-                                                                        );
-        } elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-            $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
-            #"
-        } elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
-            my $plugin="value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
-            require $plugin;
-            my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
-            my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
-            $subfield_data{marc_value}="<input type=\"text\" value=\"$value\" name=\"field_value\"  size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+        $value=~s/^\s+|\s+$//g;
+      }
+    }
+    if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
+      my @authorised_values;
+      my %authorised_lib;
+      # builds list, depending on authorised value...
+      #---- branch
+      if ($tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+        if ((C4::Context->preference("IndependantBranches")) && (C4::Context->userenv->{flags} != 1)){
+          my $sth=$dbh->prepare("select branchcode,branchname from branches where branchcode = ? order by branchname");
+          $sth->execute(C4::Context->userenv->{branch});
+          push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+          while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+              push @authorised_values, $branchcode;
+              $authorised_lib{$branchcode}=$branchname;
+          }
         } else {
-            $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+          my $sth=$dbh->prepare("select branchcode,branchname from branches order by branchname");
+          $sth->execute;
+          push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+          while (my ($branchcode,$branchname) = $sth->fetchrow_array) {
+              push @authorised_values, $branchcode;
+              $authorised_lib{$branchcode}=$branchname;
+          }
         }
+        #----- itemtypes
+        } elsif ($tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes") {
+            my $sth=$dbh->prepare("select itemtype,description from itemtypes order by description");
+            $sth->execute;
+            push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+            while (my ($itemtype,$description) = $sth->fetchrow_array) {
+                push @authorised_values, $itemtype;
+                $authorised_lib{$itemtype}=$description;
+            }
+      #---- "true" authorised value
+      } else {
+          $authorised_values_sth->execute($tagslib->{$tag}->{$subfield}->{authorised_value});
+          push @authorised_values, "" unless ($tagslib->{$tag}->{$subfield}->{mandatory});
+          while (my ($authvalue,$lib) = $authorised_values_sth->fetchrow_array) {
+              push @authorised_values, $authvalue;
+              $authorised_lib{$authvalue}=$lib;
+          }
+      }
+      $subfield_data{marc_value}= CGI::scrolling_list(-name=>'field_value',
+                                                                  -values=> \@authorised_values,
+                                                                  -default=>"$value",
+                                                                  -labels => \%authorised_lib,
+                                                                  -size=>1,
+                                                                    -tabindex=>'',
+                                                                  -multiple=>0,
+                                                                  );
+    } elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
+      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+          #"
+    } elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
+      my $plugin="value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
+      require $plugin;
+      my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
+      my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
+      $subfield_data{marc_value}="<input type=\"text\" value=\"$value\" name=\"field_value\"  size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+    } else {
+      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+    }
 #        $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
         push(@loop_data, \%subfield_data);
         $i++
