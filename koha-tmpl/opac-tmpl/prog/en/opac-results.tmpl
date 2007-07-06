@@ -204,16 +204,16 @@ Error :
                         <p>
                             <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
                             <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
                             </a> <!-- TMPL_VAR NAME="subtitle" -->
                             <!-- TMPL_ELSE -->
                             <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
                             <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
                             </a> <!-- TMPL_VAR NAME="subtitle" -->
                             <!-- TMPL_ELSE -->
                             <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
                             </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
@@ -240,7 +240,7 @@ Error :
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
                             <!-- TMPL_LOOP NAME="items_loop" -->
-                                <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchname" -->
+                                <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchcode" -->
                                 <i>
                                 <!-- TMPL_IF name="location" --> <!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="itemcallnumber" --> <br /><!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->

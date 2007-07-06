@@ -3,7 +3,7 @@
     Catalog -- Advanced Search
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="masthead-basic.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
 
@@ -418,7 +418,11 @@
         <label>Branch</label><select name="limit" id="branchloop">
         <option value="">All branches</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
+        <!--TMPL_IF Name="selected"-->
+        <option value="<!-- TMPL_VAR NAME='value' -->" selected><!-- TMPL_VAR NAME='branchname' --></option>
+        <!--TMPL_ELSE-->    
         <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
+        <!--/TMPL_IF-->    
         <!-- /TMPL_LOOP -->
         </select>
         </p>
