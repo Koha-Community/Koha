@@ -68,38 +68,29 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $record;
-if ( C4::Context->preference("AuthDisplayHierarchy") ) {
-    my $trees = BuildUnimarcHierarchies($authid);
-
-    #   warn "trees :$trees";
-    my @trees = split /;/, $trees;
-    push @trees, $trees unless (@trees);
-    my @loophierarchies;
-    foreach my $tree (@trees) {
-
-        #     warn "tree :$tree";
-
-        my @tree = split /,/, $tree;
-        push @tree, $tree unless (@tree);
-        my $cnt = 0;
-        my @loophierarchy;
-        foreach my $element (@tree) {
-
-            #       warn "tree :$element";
-            my %cell;
-            my $elementdata = GetAuthority( $element );
-            $record = $elementdata if ( $authid == $element );
-            push @loophierarchy,
-              BuildUnimarcHierarchy( $elementdata, "child" . $cnt, $authid );
-            $cnt++;
-        }
-        push @loophierarchies, { 'loopelement' => \@loophierarchy };
-        $template->param(
-            'displayhierarchy' =>
-              C4::Context->preference("AuthDisplayHierarchy"),
-            'loophierarchies' => \@loophierarchies,
-        );
+if (C4::Context->preference("AuthDisplayHierarchy")){
+  my $trees=BuildUnimarcHierarchies($authid);
+  my @trees = split /;/,$trees ;
+  push @trees,$trees unless (@trees);
+  my @loophierarchies;
+  foreach my $tree (@trees){
+    my @tree=split /,/,$tree;
+    push @tree,$tree unless (@tree);
+    my $cnt=0;
+    my @loophierarchy;
+    foreach my $element (@tree){
+      my $cell;
+      my $elementdata = GetAuthority($element);
+      $record= $elementdata if ($authid==$element);
+      push @loophierarchy, BuildUnimarcHierarchy($elementdata,"child".$cnt, $authid);
+      $cnt++;
     }
+    push @loophierarchies, { 'loopelement' =>\@loophierarchy};
+  }
+  $template->param(
+    'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
+    'loophierarchies' =>\@loophierarchies,
+  );
 }
 else {
     $record = GetAuthority( $authid );

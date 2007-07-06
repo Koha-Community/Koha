@@ -221,13 +221,15 @@ query parser.
 my $branches = GetBranches();
 my @branch_loop;
 for my $branch_hash ( keys %$branches ) {
+    my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
     push @branch_loop,
       {
         value      => "branch: $branch_hash",
         branchname => $branches->{$branch_hash}->{'branchname'},
+        selected => $selected
       };
 }
-$template->param( branchloop => \@branch_loop, );
+$template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
 
 # load the itemtypes (Called Collection Codes in the template -- used for circ rules )
 my $itemtypes = GetItemTypes;

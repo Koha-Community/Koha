@@ -138,7 +138,19 @@ $template->param( issues_count => $count );
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
 
+# load the branches
 my $branches = GetBranches();
+my @branch_loop;
+for my $branch_hash ( keys %$branches ) {
+    my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
+    push @branch_loop,
+      {
+        value      => "branch: $branch_hash",
+        branchname => $branches->{$branch_hash}->{'branchname'},
+        selected => $selected
+      };
+}
+$template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
 
 # now the reserved items....
 my @reserves  = GetReservesFromBorrowernumber( $borrowernumber );
@@ -152,8 +164,8 @@ foreach my $res (@reserves) {
     $res->{'reserves_title'} = $biblioData->{'title'};
 }
 
-use Data::Dumper;
-warn Dumper(@reserves);
+# use Data::Dumper;
+# warn Dumper(@reserves);
 
 $template->param( RESERVES       => \@reserves );
 $template->param( reserves_count => $#reserves+1 );

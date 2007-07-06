@@ -92,14 +92,19 @@ $template->param(do_it => 1,
                 results_loop => \@results,
                 );
 
-my $branches = GetBranches;
-my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-        my %row =(value => $thisbranch,
-                    branchname => $branches->{$thisbranch}->{'branchname'},
-                        );
-        push @branchloop, \%row;
+# load the branches
+my $branches = GetBranches();
+my @branch_loop;
+for my $branch_hash ( keys %$branches ) {
+    my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
+    push @branch_loop,
+      {
+        value      => "branch: $branch_hash",
+        branchname => $branches->{$branch_hash}->{'branchname'},
+        selected => $selected
+      };
 }
+$template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
 
 #doctype
 my $itemtypes = GetItemTypes;
@@ -112,8 +117,7 @@ foreach my $thisitemtype (keys %$itemtypes) {
 }
 
 $template->param(
-                branchloop =>\@branchloop,
-                itemtypeloop =>\@itemtypeloop,
+                 itemtypeloop =>\@itemtypeloop,
                 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
