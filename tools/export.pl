@@ -33,8 +33,8 @@ my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
 
 if ($op eq "export") {
-
-    print $query->header('Content-Type: text/marc');
+	print $query->header(   -type => 'application/octet-stream', 
+		-attachment=>'koha.mrc');
     
     my $StartingBiblionumber  = $query->param("StartingBiblionumber");
     my $EndingBiblionumber    = $query->param("EndingBiblionumber");
