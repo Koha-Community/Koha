@@ -442,8 +442,6 @@ sub _get_final_languages {
 
 __END__
 
-=back
-
 =head1 AUTHOR
 
 Joshua Ferraro

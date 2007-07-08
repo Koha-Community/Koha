@@ -1224,8 +1224,6 @@ ORDER BY tagsubfield|);
 
 __END__
 
-=back
-
 =head1 AUTHOR
 
 Koha Team

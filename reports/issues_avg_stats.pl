@@ -35,8 +35,7 @@ plugin that shows a stats on borrowers
 
 =head1 DESCRIPTION
 
-
-=over2
+=over 2
 
 =cut
 

@@ -769,8 +769,6 @@ sub DelOrder {
 
 =back
 
-=back
-
 =head2 FUNCTIONS ABOUT PARCELS
 
 =over 2
