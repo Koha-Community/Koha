@@ -43,6 +43,9 @@
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
 				<p>login/password already exist</p>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
+				<p>Cardnumber already in use</p>
+			<!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="ERROR_age_limitations" -->
                                 Patron is too young or too old for this category
                         <!-- /TMPL_IF -->
@@ -138,7 +141,7 @@
 		<label>
 		<!-- /TMPL_IF-->
 		Surname</label>
-		<! --TMPL_IF NAME="uppercasesurnames" -->
+		<!-- TMPL_IF NAME="uppercasesurnames" -->
 		<input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
 		<!-- TMPL_ELSE -->
 		<input style="text-transform:capitalize;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >

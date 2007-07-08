@@ -116,6 +116,7 @@ push @EXPORT, qw(
   &fixEthnicity
   &ethnicitycategories 
   &fixup_cardnumber
+	&checkcardnumber
 );
 =item SearchMember
 
@@ -1234,6 +1235,22 @@ sub checkuniquemember {
     }
 }
 
+sub checkcardnumber {
+	my ($cardnumber) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($cardnumber);
+	if (my $data= $sth->fetchrow_hashref()){
+		return 1;
+	}
+	else {
+		return 0;
+	}
+	$sth->finish();
+}  
+
+
 =head2 getzipnamecity (OUEST-PROVENCE)
 
 take all info from table city for the fields city and  zip
@@ -1606,6 +1623,7 @@ This function remove directly a borrower whitout writing it on deleteborrower.
 sub DelMember {
     my $dbh            = C4::Context->dbh;
     my $borrowernumber = shift;
+	warn "in delmember with $borrowernumber";
     return unless $borrowernumber;    # borrowernumber is mandatory.
 
     my $query = qq|DELETE 
@@ -1619,7 +1637,7 @@ sub DelMember {
        FROM borrowers
        WHERE borrowernumber = ?
    ";
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     $sth->finish;
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","DELETE",$borrowernumber,"") 

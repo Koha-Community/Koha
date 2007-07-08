@@ -83,6 +83,7 @@ my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
 my $borrower_data;
 
+
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
 #function  to automatic setup the mandatory  fields (visual with css)
@@ -148,6 +149,10 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 	# CHECKS step by step
 # STEP 1
     if ($step eq 1) {
+		if (checkcardnumber($cardnumber)){ 
+			push @errors, 'ERROR_cardnumber';
+			$nok = 1;
+		} 
         ###############test to take the right zipcode and city name ##############
         if ( $guarantorid eq ''){
           if ($select_city){
