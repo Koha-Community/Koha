@@ -313,7 +313,7 @@ function PopupZ3950() {
 
 function Changefwk(FwkList) {
   var fwk = FwkList.options[FwkList.selectedIndex].value;
-  window.location = "addbiblio.pl?biblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&breedingid=<!-- TMPL_VAR name="breedingid" -->&frameworkcode="+fwk;
+  window.location = "addbiblio.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&breedingid=<!-- TMPL_VAR name="breedingid" -->&frameworkcode="+fwk;
 }
 
 function openAuth(tagid,authtype,X) {
