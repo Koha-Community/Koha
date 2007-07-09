@@ -94,7 +94,8 @@ sub get_authorised_value_desc ($$$$$$) {
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
-my $frameworkcode = GetFrameworkCode( $biblionumber );
+my $frameworkcode = $query->param('frameworkcode');
+$frameworkcode = GetFrameworkCode( $biblionumber ) unless ($frameworkcode);
 my $popup        =
   $query->param('popup')
   ;    # if set to 1, then don't insert links, it's just to show the biblio
