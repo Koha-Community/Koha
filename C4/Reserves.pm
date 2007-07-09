@@ -290,7 +290,7 @@ sub GetReservesFromBorrowernumber {
     while ( my $data = $sth->fetchrow_hashref ) {
         push @borrowerreserv, $data;
     }
-    return @borrowerreserv;
+    return \@borrowerreserv;
 }
 #-------------------------------------------------------------------------------------
 
