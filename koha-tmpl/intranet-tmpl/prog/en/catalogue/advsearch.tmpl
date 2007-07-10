@@ -86,7 +86,7 @@
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
 
         </select>
-        <input type="text" size="30" name="q" title="Enter search terms" value=""/>
+        <input id="search_box" type="text" size="30" name="q" title="Enter search terms" value=""/>
         <!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="add_field" -->
                 <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
@@ -457,17 +457,21 @@
 </form>
 
 <script type="text/JavaScript" language="JavaScript">
-	/**
-	 *  Function add_field();
-     *  This function allows to display a new field to search.
-     */
-	function add_field() {
-		var ButtonPlus = document.getElementById('ButtonPlus');
-		var line       = ButtonPlus.parentNode;
-		var dad        = line.parentNode;
-		dad.appendChild(line.cloneNode(true));
-		line.removeChild(ButtonPlus);
-	}
+
+document.getElementById('search_box').focus(); // auto focus on the search input.
+
+/**
+ *  Function add_field();
+ *  This function allows to display a new field to search.
+ */
+function add_field() {
+    var ButtonPlus = document.getElementById('ButtonPlus');
+    var line       = ButtonPlus.parentNode;
+    var dad        = line.parentNode;
+    dad.appendChild(line.cloneNode(true));
+    line.removeChild(ButtonPlus);
+}
+
 </script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
