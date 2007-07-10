@@ -58,16 +58,25 @@ C4::Breeding : script to add a biblio in marc_breeding table.
 @ISA = qw(Exporter);
 @EXPORT = qw(&ImportBreeding &BreedingSearch);
 
-sub  ImportBreeding {
+=head2 ImportBreeding
+
+	ImportBreeding($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random);
+
+	TODO description
+
+=cut
+
+sub ImportBreeding {
     my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random) = @_;
     my @marcarray = split /\x1D/, $marcrecords;
+    
     my $dbh = C4::Context->dbh;
     my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
     my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-    my $searchbreeding = $dbh->prepare("select id from marc_breeding
-where isbn=? and title=?");
+    my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=? and title=?");
     my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random) values(?,?,?,?,?,?,?)");
     my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=? where id=?");
+    
     $encoding = C4::Context->preference("marcflavour") unless $encoding;
     # fields used for import results
     my $imported=0;
@@ -77,7 +86,9 @@ where isbn=? and title=?");
     my $breedingid;
     for (my $i=0;$i<=$#marcarray;$i++) {
         my $marcrecord = FixEncoding($marcarray[$i]."\x1D");
+        
         my @warnings = $marcrecord->warnings();
+        
         if (scalar($marcrecord->fields()) == 0) {
             $notmarcrecord++;
         } else {
@@ -99,15 +110,14 @@ where isbn=? and title=?");
                 ($biblioitemnumber) = $searchisbn->fetchrow;
             } else {
                 if ($oldbiblio->{issn}) {
-                                $searchissn->execute($oldbiblio->{issn});
-                                ($biblioitemnumber) = $searchissn->fetchrow;
-                                }
+                    $searchissn->execute($oldbiblio->{issn});
+                	($biblioitemnumber) = $searchissn->fetchrow;
+                }
             }
             if ($biblioitemnumber) {
                 $alreadyindb++;
             } else {
                 # search in breeding farm
-# 				my $breedingid;
                 if ($oldbiblio->{isbn}) {
                     $searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
                     ($breedingid) = $searchbreeding->fetchrow;
@@ -115,16 +125,16 @@ where isbn=? and title=?");
                     $searchbreeding->execute($oldbiblio->{issn},$oldbiblio->{title});
                     ($breedingid) = $searchbreeding->fetchrow;
                 }
-                if ($breedingid && $overwrite_biblio eq 0) {
+                if ($breedingid && $overwrite_biblio eq '0') {
                     $alreadyinfarm++;
                 } else {
                     my $recoded;
                     $recoded = $marcrecord->as_usmarc();
-                    if ($breedingid && $overwrite_biblio eq 1) {
+                    if ($breedingid && $overwrite_biblio eq '1') {
                         $replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,$isbnlength),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random,$breedingid);
                     } else {
                         $insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,$isbnlength),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random);
-                    $breedingid=$dbh->{'mysql_insertid'};
+                    	$breedingid=$dbh->{'mysql_insertid'};
                     }
                     $imported++;
                 }
@@ -135,7 +145,7 @@ where isbn=? and title=?");
 }
 
 
-=item BreedingSearch
+=head2 BreedingSearch
 
 ($count, @results) = &BreedingSearch($title,$isbn,$random);
 C<$title> contains the title,
