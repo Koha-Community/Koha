@@ -28,7 +28,6 @@ use C4::Koha;
 use C4::Acquisition;
 use C4::Output;
 use C4::Circulation;
-use C4::Input;
 
 =head1 NAME
 
@@ -48,6 +47,7 @@ my $column = $input->param("Column");
 my @filters = $input->param("Filter");
 my $digits = $input->param("digits");
 my $borstat = $input->param("status");
+my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
@@ -63,7 +63,7 @@ my ($template, $borrowernumber, $cookie)
 				});
 $template->param(do_it => $do_it);
 if ($do_it) {
-	my $results = calculate($line, $column, $digits, $borstat, \@filters);
+	my $results = calculate($line, $column, $digits, $borstat,$borstat1 ,\@filters);
 	if ($output eq "screen"){
 		$template->param(mainloop => $results);
 		output_html_with_http_headers $input, $cookie, $template->output;
@@ -124,7 +124,12 @@ if ($do_it) {
 	
 my $branches = GetBranches;
 my @branchloop;
+my @select_branch;
+#my %select_branches;
+push @select_branch,"";
+#$select_branches{""}="";
 foreach my $thisbranch (keys %$branches) {
+	push @select_branch,$thisbranch;
    # my $selected = 1 if $thisbranch eq $branch;
     my %row =(value => $thisbranch,
 #                selected => $selected,
@@ -132,6 +137,14 @@ foreach my $thisbranch (keys %$branches) {
             );
     push @branchloop, \%row;
 }
+    my $CGIBranch=CGI::scrolling_list( -name     => 'Filter',
+                             -id => 'Filter',
+                             -values   => \@select_branch,
+#                             -labels   => \%select_branches,
+                             -size     => 1,
+                             -multiple => 0 );
+
+
  	$req = $dbh->prepare( "select distinctrow zipcode from borrowers order by zipcode");
  	$req->execute;
  	my @select_zipcode;
@@ -147,6 +160,7 @@ foreach my $thisbranch (keys %$branches) {
  				-values   => \@select_zipcode,
  				-size     => 1,
  				-multiple => 0 );
+
 
 	$req = $dbh->prepare( "SELECT authorised_value,lib FROM authorised_values WHERE category='Bsort1' order by lib");
  	$req->execute;
@@ -209,13 +223,15 @@ foreach my $thisbranch (keys %$branches) {
 
 	$template->param(		CGICatCode => $CGICatCode,
 					CGIZipCode => $CGIZipCode,
+#					CGIBranch => $CGIBranch,
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
 					hassort2 => $hassort2,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice,
-					CGIBranch => @branchloop
+					CGIBranch => $CGIBranch
+#					CGIBranch => \@branchloop
 					);
 
 }
@@ -224,7 +240,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 sub calculate {
-	my ($line, $column, $digits, $status, $filters) = @_;
+	my ($line, $column, $digits, $status, $activity, $filters) = @_;
 	my @mainloop;
 	my @loopfooter;
 	my @loopcol;
@@ -238,38 +254,45 @@ sub calculate {
 # Filters
  	my $linefilter = "";
 #	warn "filtres ".@filters[0];
-#	warn "filtres ".@filters[1];
-#	warn "filtres ".@filters[2];
-#	warn "filtres ".@filters[3];
+#	warn "filtres ".@filters[4];
+#	warn "filtres ".@filters[5];
+#	warn "filtres ".@filters[6];
+
 	
  	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
  	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
- 	$linefilter = @$filters[2] if ($line =~ /branccode/ ) ;
- 	$linefilter = @$filters[3] if ($line =~ /sort1/ ) ;
- 	$linefilter = @$filters[4] if ($line =~ /sort2/ ) ;
+ 	$linefilter = @$filters[2] if ($line =~ /branchcode/ ) ;
+ 	$linefilter = @$filters[5] if ($line =~ /sort1/ ) ;
+ 	$linefilter = @$filters[6] if ($line =~ /sort2/ ) ;
 # 
  	my $colfilter = "";
  	$colfilter = @$filters[0] if ($column =~ /categorycode/);
  	$colfilter = @$filters[1] if ($column =~ /zipcode/);
  	$colfilter = @$filters[2] if ($column =~ /branchcode/);
- 	$colfilter = @$filters[3] if ($column =~ /sort1/);
- 	$colfilter = @$filters[4] if ($column =~ /sort2/);
+ 	$colfilter = @$filters[5] if ($column =~ /sort1/);
+ 	$colfilter = @$filters[6] if ($column =~ /sort2/);
 
 	my @loopfilter;
-	for (my $i=0;$i<=3;$i++) {
+	for (my $i=0;$i<=6;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			$cell{filter} .= @$filters[$i];
 			$cell{crit} .="Cat Code " if ($i==0);
 			$cell{crit} .="Zip Code" if ($i==1);
 			$cell{crit} .="Branchcode" if ($i==2);
-			$cell{crit} .="Sort1" if ($i==3);
-			$cell{crit} .="Sort2" if ($i==4);
+			$cell{crit} .="Date of Birth" if ($i==3);
+			$cell{crit} .="Date of Birth" if ($i==4);
+			$cell{crit} .="Sort1" if ($i==5);
+			$cell{crit} .="Sort2" if ($i==6);
 			push @loopfilter, \%cell;
 		}
 	}
 	if ($status) {
 		push @loopfilter,{crit=>"Status",filter=>$status}
+	}
+		
+	if ($activity) {
+		push @loopfilter,{crit=>"Activity",filter=>$activity};
 	}
 # 1st, loop rows.
 	my $linefield;
@@ -360,12 +383,20 @@ sub calculate {
 	@$filters[1]=~ s/\*/%/g if (@$filters[1]);
 	$strcalc .= " AND zipcode like '" . @$filters[1] ."'" if ( @$filters[1] );
 	@$filters[2]=~ s/\*/%/g if (@$filters[2]);
-	$strcalc .= " AND sort1 like '" . @$filters[2] ."'" if ( @$filters[2] );
+	$strcalc .= " AND branchcode like '" . @$filters[2] ."'" if ( @$filters[2] );
 	@$filters[3]=~ s/\*/%/g if (@$filters[3]);
-	$strcalc .= " AND sort2 like '" . @$filters[3] ."'" if ( @$filters[3] );
+	$strcalc .= " AND dateofbirth > '" . @$filters[3] ."'" if ( @$filters[3] );
+	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
+	$strcalc .= " AND dateofbirth < '" . @$filters[4] ."'" if ( @$filters[4] );
+	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
+	$strcalc .= " AND sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
+	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
+	$strcalc .= " AND sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
+	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from issues where timestamp > ' 2007-01-01')" if ($activity eq 'active');
+	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from issues where timestamp > ' 2007-01-01')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
 	$strcalc .= " group by $linefield, $colfield";
-#	warn "". $strcalc;
+	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 #	warn "filling table";
