@@ -227,6 +227,10 @@ sub get_template_and_user {
             hide_marc          => C4::Context->preference("hide_marc"),
             patronimages       => C4::Context->preference("patronimages"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+            advancedMARCEditor => C4::Context->preference("advancedMARCEditor"),
+            suggestion => C4::Context->preference("suggestion"),
+            virtualshelves => C4::Context->preference("virtualshelves"),
+            LibraryName => C4::Context->preference("LibraryName"),
         );
     }
     else {
