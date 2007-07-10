@@ -84,21 +84,6 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
 	if ($data ne '') {
 		$template->param(guarantees => 1);
 	}
-# 	print "<table border=1>";
-# 	if ($i > 0){
-# 		print "<TR><TD>Items on Issue</td><td align=right>$i</td></tr>";
-# 	}
-# 	if ($flags->{'CHARGES'} ne ''){
-# 		print "<TR><TD>Charges</td><td>$flags->{'CHARGES'}->{'message'}</tr>";
-# 	}
-# 	if ($data ne ''){
-# 		print "<TR><TD>Guarantees</td></tr>";
-# 	}
-# 	print "</table>";
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
