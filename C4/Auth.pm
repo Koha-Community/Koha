@@ -119,7 +119,7 @@ sub get_template_and_user {
         $in->{'authnotrequired'},
         $in->{'flagsrequired'},
         $in->{'type'}
-    );
+    ) unless ($in->{'template_name'}=~/maintenance/);
 
     my $borrowernumber;
     my $insecure = C4::Context->preference('insecure');
@@ -222,6 +222,7 @@ sub get_template_and_user {
             TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
             AmazonContent      => C4::Context->preference("AmazonContent"),
             LibraryName        => C4::Context->preference("LibraryName"),
+            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginBranchname    => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
             AutoLocation       => C4::Context->preference("AutoLocation"),
             hide_marc          => C4::Context->preference("hide_marc"),
@@ -231,6 +232,7 @@ sub get_template_and_user {
             suggestion => C4::Context->preference("suggestion"),
             virtualshelves => C4::Context->preference("virtualshelves"),
             LibraryName => C4::Context->preference("LibraryName"),
+            KohaAdminEmailAddress     => "" . C4::Context->preference("KohaAdminEmailAddress"),
         );
     }
     else {
@@ -240,6 +242,7 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 	$template->param(
+            KohaAdminEmailAddress     => "" . C4::Context->preference("KohaAdminEmailAddress"),
             suggestion     => "" . C4::Context->preference("suggestion"),
             virtualshelves => "" . C4::Context->preference("virtualshelves"),
             OpacNav        => "" . C4::Context->preference("OpacNav"),
@@ -256,6 +259,7 @@ sub get_template_and_user {
             AmazonContent => "" . C4::Context->preference("AmazonContent"),
             LibraryName   => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle   => "" . $LibraryNameTitle,
+            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginBranchname    => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"", 
             OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
             opacreadinghistory => C4::Context->preference("opacreadinghistory"),
@@ -344,13 +348,23 @@ sub checkauth {
     my $dbh     = C4::Context->dbh;
     # check that database and koha version are the same
     unless (C4::Context->preference('Version')){
-      warn "Install required, redirecting to Installer";
-      print $query->redirect("/cgi-bin/koha/installer/install.pl");
+      if ($type ne 'opac'){
+        warn "Install required, redirecting to Installer";
+        print $query->redirect("/cgi-bin/koha/installer/install.pl");
+      } else {
+        warn "OPAC Install required, redirecting to maintenance";
+        print $query->redirect("/cgi-bin/koha/maintenance.pl");
+      }       
       exit;
     }
     if (C4::Context->preference('Version') < C4::Context->config("kohaversion")){
+      if ($type ne 'opac'){
       warn "Database update needed, redirecting to Installer. Database is ".C4::Context->preference('Version')." and Koha is : ".C4::Context->config("kohaversion");
-      print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+        print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+      } else {
+      warn "OPAC :Database update needed, redirecting to maintenance. Database is ".C4::Context->preference('Version')." and Koha is : ".C4::Context->config("kohaversion");
+        print $query->redirect("/cgi-bin/koha/maintenance.pl");
+      }       
       exit;
     }
     my $timeout = C4::Context->preference('timeout');
