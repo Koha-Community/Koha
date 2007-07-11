@@ -44,7 +44,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 my $sth =
   $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
 
