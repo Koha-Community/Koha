@@ -347,9 +347,12 @@ if ($step && $step==1){
     #Import data structure and show errors if any
 	#Uses DBI to read the file [MJR 2007-07-01]
     my $dbh= DBI->connect("DBI:$info{dbms}:$info{dbname}:$info{hostname}".($info{port}?":$info{port}":""),$info{'user'}, $info{'password'});
-    open(INPUT,"<kohastructure.sql");
-    map { $dbh->do($_); } split(/;/,join('',<INPUT>));
-    close(INPUT);
+      open(INPUT,"<kohastructure.sql");
+      my $file=do{ local $/=undef; <INPUT>};
+      my @commands=split(/;/,$file);
+      pop @commands;   
+      map { $dbh->do($_)} @commands;
+      close(INPUT);
 	$template->param("error"=>$dbh->errstr ,
 	                 "$op"=> 1, );
     $dbh->disconnect;
@@ -382,11 +385,12 @@ if ($step && $step==1){
   $template->param(languages=>\@languages);
   if ($dbh){
     my $rq=$dbh->prepare("SELECT * from systempreferences WHERE variable='Version'");
-    $rq->execute;
-    my ($version)=$rq->fetchrow;
-    if ($version){
-      $query->redirect("install.pl?step=3");
-    }
+    if ($rq->execute){
+      my ($version)=$rq->fetchrow;
+      if ($version){
+        $query->redirect("install.pl?step=3");
+      }
+    }  
   }
 }
 output_html_with_http_headers $query, $cookie, $template->output;

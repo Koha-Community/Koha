@@ -1,31 +1,17 @@
--- MySQL dump 10.11
+-- MySQL dump 10.9
 --
--- Host: localhost    Database: rel3_edit
+-- Host: localhost    Database: koha30test
 -- ------------------------------------------------------
--- Server version	5.0.32-Debian_3-log
+-- Server version	4.1.22
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
--- Koha Database Structure
--- 3.0 pre-release
--- March 2007 
--- 
--- IMPORTANT: 
--- Turning off foreign key checks for import speed.
--- If you edit this file, run it with foreign key checks ON before committing!
---
-
--- SET AUTOCOMMIT = 0;
--- SET FOREIGN_KEY_CHECKS=0;
 
 --
 -- Table structure for table `accountlines`
@@ -38,8 +24,8 @@ CREATE TABLE `accountlines` (
   `itemnumber` int(11) default NULL,
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
-  `description` text,
-  `dispute` text,
+  `description` mediumtext,
+  `dispute` mediumtext,
   `accounttype` varchar(5) default NULL,
   `amountoutstanding` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
@@ -48,8 +34,8 @@ CREATE TABLE `accountlines` (
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
-  CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -75,7 +61,7 @@ CREATE TABLE `action_logs` (
   `user` int(11) NOT NULL default '0',
   `module` text,
   `action` text,
-  `object` int(11) default '0',
+  `object` int(11) default NULL,
   `info` text,
   PRIMARY KEY  (`timestamp`,`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -106,7 +92,7 @@ CREATE TABLE `aqbasket` (
   `closedate` date default NULL,
   `booksellerid` int(11) NOT NULL default '1',
   `authorisedby` varchar(10) default NULL,
-  `booksellerinvoicenumber` text,
+  `booksellerinvoicenumber` mediumtext,
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
   CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE
@@ -119,7 +105,7 @@ CREATE TABLE `aqbasket` (
 DROP TABLE IF EXISTS `aqbookfund`;
 CREATE TABLE `aqbookfund` (
   `bookfundid` varchar(5) NOT NULL default '''''',
-  `bookfundname` text,
+  `bookfundname` mediumtext,
   `bookfundgroup` varchar(5) default NULL,
   `branchcode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`bookfundid`,`branchcode`)
@@ -131,36 +117,36 @@ CREATE TABLE `aqbookfund` (
 
 DROP TABLE IF EXISTS `aqbooksellers`;
 CREATE TABLE `aqbooksellers` (
-  `id` int(11) NOT NULL default '0',
-  `name` text,
-  `address1` text,
-  `address2` text,
-  `address3` text,
-  `address4` text,
+  `id` int(11) NOT NULL auto_increment,
+  `name` mediumtext,
+  `address1` mediumtext,
+  `address2` mediumtext,
+  `address3` mediumtext,
+  `address4` mediumtext,
   `phone` varchar(30) default NULL,
-  `accountnumber` text,
-  `othersupplier` text,
+  `accountnumber` mediumtext,
+  `othersupplier` mediumtext,
   `currency` varchar(3) NOT NULL default '',
   `deliverydays` smallint(6) default NULL,
   `followupdays` smallint(6) default NULL,
   `followupscancel` smallint(6) default NULL,
-  `specialty` text,
-  `booksellerfax` text,
-  `notes` text,
-  `bookselleremail` text,
-  `booksellerurl` text,
+  `specialty` mediumtext,
+  `booksellerfax` mediumtext,
+  `notes` mediumtext,
+  `bookselleremail` mediumtext,
+  `booksellerurl` mediumtext,
   `contact` varchar(100) default NULL,
-  `postal` text,
+  `postal` mediumtext,
   `url` varchar(255) default NULL,
   `contpos` varchar(100) default NULL,
   `contphone` varchar(100) default NULL,
   `contfax` varchar(100) default NULL,
   `contaltphone` varchar(100) default NULL,
   `contemail` varchar(100) default NULL,
-  `contnotes` text,
+  `contnotes` mediumtext,
   `active` tinyint(4) default NULL,
-  `listprice` varchar(10) default '',
-  `invoiceprice` varchar(10) default '',
+  `listprice` varchar(10) default NULL,
+  `invoiceprice` varchar(10) default NULL,
   `gstreg` tinyint(4) default NULL,
   `listincgst` tinyint(4) default NULL,
   `invoiceincgst` tinyint(4) default NULL,
@@ -171,8 +157,8 @@ CREATE TABLE `aqbooksellers` (
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
-  CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `aqbooksellers_ibfk_1` FOREIGN KEY (`listprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `aqbooksellers_ibfk_2` FOREIGN KEY (`invoiceprice`) REFERENCES `currency` (`currency`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -186,8 +172,8 @@ CREATE TABLE `aqbudget` (
   `enddate` date default NULL,
   `budgetamount` decimal(13,2) default NULL,
   `aqbudgetid` tinyint(4) NOT NULL auto_increment,
-  `branchcode` varchar(4) NOT NULL default '',
-  PRIMARY KEY  (`aqbudgetid`,`branchcode`)
+  `branchcode` varchar(4) default NULL,
+  PRIMARY KEY  (`aqbudgetid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -203,8 +189,8 @@ CREATE TABLE `aqorderbreakdown` (
   `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
   KEY `bookfundid` (`bookfundid`),
-  CONSTRAINT `aqorderbreakdown_ibfk_2` FOREIGN KEY (`bookfundid`) REFERENCES `aqbookfund` (`bookfundid`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `aqorderbreakdown_ibfk_2` FOREIGN KEY (`bookfundid`) REFERENCES `aqbookfund` (`bookfundid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -217,7 +203,7 @@ CREATE TABLE `aqorderdelivery` (
   `deliverynumber` smallint(6) NOT NULL default '0',
   `deliverydate` varchar(18) default NULL,
   `qtydelivered` smallint(6) default NULL,
-  `deliverycomments` text
+  `deliverycomments` mediumtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -228,22 +214,22 @@ DROP TABLE IF EXISTS `aqorders`;
 CREATE TABLE `aqorders` (
   `ordernumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) default NULL,
-  `title` text,
+  `title` mediumtext,
   `entrydate` date default NULL,
   `quantity` smallint(6) default NULL,
   `currency` varchar(3) default NULL,
   `listprice` decimal(28,6) default NULL,
   `totalamount` decimal(28,6) default NULL,
   `datereceived` date default NULL,
-  `booksellerinvoicenumber` text,
+  `booksellerinvoicenumber` mediumtext,
   `freight` decimal(28,6) default NULL,
   `unitprice` decimal(28,6) default NULL,
   `quantityreceived` smallint(6) default NULL,
   `cancelledby` varchar(10) default NULL,
   `datecancellationprinted` date default NULL,
-  `notes` text,
-  `supplierreference` text,
-  `purchaseordernumber` text,
+  `notes` mediumtext,
+  `supplierreference` mediumtext,
+  `purchaseordernumber` mediumtext,
   `subscription` tinyint(1) default NULL,
   `serialid` varchar(30) default NULL,
   `basketno` int(11) default NULL,
@@ -258,8 +244,8 @@ CREATE TABLE `aqorders` (
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
-  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -273,10 +259,10 @@ CREATE TABLE `auth_header` (
   `datecreated` date NOT NULL default '0000-00-00',
   `datemodified` date default NULL,
   `origincode` varchar(20) default NULL,
+  `authtrees` mediumtext,
   `marc` blob,
   `linkid` bigint(20) default NULL,
-  `authtrees` text,
-  `marcxml` text NOT NULL,
+  `marcxml` longtext NOT NULL,
   PRIMARY KEY  (`authid`),
   KEY `origincode` (`origincode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -298,12 +284,11 @@ CREATE TABLE `auth_subfield_structure` (
   `authorised_value` varchar(10) default NULL,
   `value_builder` varchar(80) default NULL,
   `seealso` varchar(255) default NULL,
-  `hidden` tinyint(1) unsigned NOT NULL default '0',
-  `isurl` tinyint(1) unsigned NOT NULL default '0',
-  `link` varchar(80) default NULL,
-  `frameworkcode` varchar(8) NOT NULL default '',
-  `kohafield` varchar(40) default NULL,
+  `isurl` tinyint(1) default NULL,
+  `hidden` tinyint(3) NOT NULL default '0',
   `linkid` tinyint(1) NOT NULL default '0',
+  `kohafield` varchar(45) NOT NULL default '',
+  `frameworkcode` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -355,26 +340,8 @@ CREATE TABLE `auth_types` (
   `authtypecode` varchar(10) NOT NULL default '',
   `authtypetext` varchar(255) NOT NULL default '',
   `auth_tag_to_report` varchar(3) NOT NULL default '',
-  `summary` text NOT NULL,
+  `summary` mediumtext NOT NULL,
   PRIMARY KEY  (`authtypecode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `auth_word`
---
-
-DROP TABLE IF EXISTS `auth_word`;
-CREATE TABLE `auth_word` (
-  `authid` bigint(20) NOT NULL default '0',
-  `tagsubfield` varchar(4) NOT NULL default '',
-  `tagorder` tinyint(4) NOT NULL default '1',
-  `subfieldorder` tinyint(4) NOT NULL default '1',
-  `word` varchar(255) NOT NULL default '',
-  `sndx_word` varchar(255) NOT NULL default '',
-  KEY `authid` (`authid`),
-  KEY `marc_search` (`tagsubfield`,`word`),
-  KEY `word` (`word`),
-  KEY `sndx_word` (`sndx_word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -398,16 +365,16 @@ CREATE TABLE `authorised_values` (
 DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` (
   `biblionumber` int(11) NOT NULL default '0',
-  `author` text,
-  `title` text,
-  `unititle` text,
-  `notes` text,
+  `frameworkcode` varchar(4) NOT NULL default '',
+  `author` mediumtext,
+  `title` mediumtext,
+  `unititle` mediumtext,
+  `notes` mediumtext,
   `serial` tinyint(1) default NULL,
-  `seriestitle` text,
+  `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `abstract` text,
-  `frameworkcode` varchar(4) default NULL,
+  `abstract` mediumtext,
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -429,9 +396,9 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblioanalysis`;
 CREATE TABLE `biblioanalysis` (
-  `analyticaltitle` text,
+  `analyticaltitle` mediumtext,
   `biblionumber` int(11) NOT NULL default '0',
-  `analyticalauthor` text
+  `analyticalauthor` mediumtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -442,10 +409,10 @@ DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` (
   `biblioitemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
-  `volume` text,
-  `number` text,
+  `volume` mediumtext,
+  `number` mediumtext,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(10) default NULL,
+  `itemtype` varchar(4) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` varchar(30) default '',
@@ -454,27 +421,30 @@ CREATE TABLE `biblioitems` (
   `publishercode` varchar(255) default NULL,
   `volumedate` date default NULL,
   `volumeddesc` varchar(255) default NULL,
+  `seriestitle` text NOT NULL,
+  `seriesissn` text NOT NULL,
+  `seriesvolume` text NOT NULL,
+  `editionstatement` text NOT NULL,
+  `editionreponsability` text NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `illus` varchar(255) default NULL,
   `pages` varchar(255) default NULL,
-  `notes` text,
+  `notes` mediumtext,
   `size` varchar(255) default NULL,
   `place` varchar(255) default NULL,
   `lccn` varchar(25) default NULL,
   `marc` blob,
   `url` varchar(255) default NULL,
-  `marcxml` text,
   `lcsort` varchar(25) default NULL,
-  `ccode` varchar(4) default '',
+  `ccode` varchar(4) default NULL,
+  `marcxml` longtext NOT NULL,
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
-  KEY `itemtype` (`itemtype`),
   KEY `isbn` (`isbn`),
   KEY `publishercode` (`publishercode`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 --
 -- Table structure for table `bookshelf`
@@ -506,31 +476,31 @@ CREATE TABLE `borexp` (
 DROP TABLE IF EXISTS `borrowers`;
 CREATE TABLE `borrowers` (
   `borrowernumber` int(11) NOT NULL auto_increment,
-  `cardnumber` varchar(16) NOT NULL default '',
-  `surname` text NOT NULL,
+  `cardnumber` varchar(16) default NULL,
+  `surname` mediumtext NOT NULL,
   `firstname` text,
-  `title` text,
-  `othernames` text,
+  `title` mediumtext,
+  `othernames` mediumtext,
   `initials` text,
   `streetnumber` varchar(10) default NULL,
   `streettype` varchar(50) default NULL,
-  `address` text NOT NULL,
+  `address` mediumtext NOT NULL,
   `address2` text,
-  `city` text NOT NULL,
+  `city` mediumtext NOT NULL,
   `zipcode` varchar(25) default NULL,
-  `email` text,
+  `email` mediumtext,
   `phone` text,
   `mobile` varchar(50) default NULL,
-  `fax` text,
-  `B_streetnumber` varchar(10) default NULL,
-  `B_streettype` varchar(50) default NULL,
+  `fax` mediumtext,
   `emailpro` text,
   `phonepro` text,
+  `B_streetnumber` varchar(10) default NULL,
+  `B_streettype` varchar(50) default NULL,
   `B_address` varchar(100) default NULL,
-  `B_city` text,
+  `B_city` mediumtext,
   `B_zipcode` varchar(25) default NULL,
   `B_email` text,
-  `B_phone` text,
+  `B_phone` mediumtext,
   `dateofbirth` date default NULL,
   `branchcode` varchar(10) NOT NULL default '',
   `categorycode` varchar(10) NOT NULL default '',
@@ -539,11 +509,11 @@ CREATE TABLE `borrowers` (
   `gonenoaddress` tinyint(1) default NULL,
   `lost` tinyint(1) default NULL,
   `debarred` tinyint(1) default NULL,
-  `contactname` text,
+  `contactname` mediumtext,
   `contactfirstname` text,
   `contacttitle` text,
   `guarantorid` int(11) default NULL,
-  `borrowernotes` text,
+  `borrowernotes` mediumtext,
   `relationship` varchar(100) default NULL,
   `ethnicity` varchar(50) default NULL,
   `ethnotes` varchar(255) default NULL,
@@ -551,18 +521,16 @@ CREATE TABLE `borrowers` (
   `password` varchar(30) default NULL,
   `flags` int(11) default NULL,
   `userid` varchar(30) default NULL,
-  `opacnote` text,
+  `opacnote` mediumtext,
   `contactnote` varchar(255) default NULL,
   `sort1` varchar(80) default NULL,
   `sort2` varchar(80) default NULL,
-  `textmessaging` varchar(30) default NULL,
-  `homezipcode` varchar(25) default NULL,
   UNIQUE KEY `cardnumber` (`cardnumber`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
-  CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`),
-  CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+  CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
+  CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -582,8 +550,8 @@ CREATE TABLE `borrowers_to_borrowers` (
 DROP TABLE IF EXISTS `branchcategories`;
 CREATE TABLE `branchcategories` (
   `categorycode` varchar(4) NOT NULL default '',
-  `categoryname` text,
-  `codedescription` text,
+  `categoryname` mediumtext,
+  `codedescription` mediumtext,
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -594,16 +562,16 @@ CREATE TABLE `branchcategories` (
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` (
   `branchcode` varchar(10) NOT NULL default '',
-  `branchname` text NOT NULL,
-  `branchaddress1` text,
-  `branchaddress2` text,
-  `branchaddress3` text,
-  `branchphone` text,
-  `branchfax` text,
-  `branchemail` text,
+  `branchname` mediumtext NOT NULL,
+  `branchaddress1` mediumtext,
+  `branchaddress2` mediumtext,
+  `branchaddress3` mediumtext,
+  `branchphone` mediumtext,
+  `branchfax` mediumtext,
+  `branchemail` mediumtext,
   `issuing` tinyint(4) default NULL,
-  `branchip` varchar(15) default '',
-  `branchprinter` varchar(100) default '',
+  `branchip` varchar(15) default NULL,
+  `branchprinter` varchar(100) default NULL,
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -613,8 +581,13 @@ CREATE TABLE `branches` (
 
 DROP TABLE IF EXISTS `branchrelations`;
 CREATE TABLE `branchrelations` (
-  `branchcode` varchar(4) default NULL,
-  `categorycode` varchar(4) default NULL
+  `branchcode` varchar(4) NOT NULL default '',
+  `categorycode` varchar(4) NOT NULL default '',
+  PRIMARY KEY  (`branchcode`,`categorycode`),
+  KEY `branchcode` (`branchcode`),
+  KEY `categorycode` (`categorycode`),
+  CONSTRAINT `branchrelations_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `branchrelations_ibfk_2` FOREIGN KEY (`categorycode`) REFERENCES `branchcategories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -628,13 +601,13 @@ CREATE TABLE `branchtransfers` (
   `frombranch` varchar(10) NOT NULL default '',
   `datearrived` datetime default NULL,
   `tobranch` varchar(10) NOT NULL default '',
-  `comments` text,
+  `comments` mediumtext,
   KEY `frombranch` (`frombranch`),
   KEY `tobranch` (`tobranch`),
   KEY `itemnumber` (`itemnumber`),
-  CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchtransfers_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -643,12 +616,13 @@ CREATE TABLE `branchtransfers` (
 
 DROP TABLE IF EXISTS `catalogueentry`;
 CREATE TABLE `catalogueentry` (
-  `catalogueentry` text NOT NULL,
+  `catalogueentry` mediumtext NOT NULL,
   `entrytype` varchar(2) default NULL,
-  `see` text,
-  `seealso` text,
-  `seeinstead` text,
-  `biblionumber` int(11) default NULL
+  `see` mediumtext,
+  `seealso` mediumtext,
+  `seeinstead` mediumtext,
+  `biblionumber` int(11) default NULL,
+  KEY `entrytype` (`entrytype`,`catalogueentry`(250))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -658,7 +632,7 @@ CREATE TABLE `catalogueentry` (
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE `categories` (
   `categorycode` varchar(10) NOT NULL default '',
-  `description` text,
+  `description` mediumtext,
   `enrolmentperiod` smallint(6) default NULL,
   `upperagelimit` smallint(6) default NULL,
   `dateofbirthrequired` tinyint(1) default NULL,
@@ -730,17 +704,16 @@ CREATE TABLE `currency` (
 DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` (
   `biblionumber` int(11) NOT NULL default '0',
-  `author` text,
-  `title` text,
-  `unititle` text,
-  `notes` text,
+  `author` mediumtext,
+  `title` mediumtext,
+  `unititle` mediumtext,
+  `notes` mediumtext,
   `serial` tinyint(1) default NULL,
-  `seriestitle` text,
+  `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `marc` blob,
-  `abstract` text,
-  `frameworkcode` varchar(4) default NULL,
+  `abstract` mediumtext,
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -753,10 +726,10 @@ DROP TABLE IF EXISTS `deletedbiblioitems`;
 CREATE TABLE `deletedbiblioitems` (
   `biblioitemnumber` int(11) NOT NULL default '0',
   `biblionumber` int(11) NOT NULL default '0',
-  `volume` text,
-  `number` text,
+  `volume` mediumtext,
+  `number` mediumtext,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(10) default NULL,
+  `itemtype` varchar(4) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` double(8,6) default NULL,
@@ -768,13 +741,12 @@ CREATE TABLE `deletedbiblioitems` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `illus` varchar(255) default NULL,
   `pages` varchar(255) default NULL,
-  `notes` text,
+  `notes` mediumtext,
   `size` varchar(255) default NULL,
   `lccn` varchar(25) default NULL,
-  `marc` text,
+  `marc` mediumtext,
   `url` varchar(255) default NULL,
   `place` varchar(255) default NULL,
-  `marcxml` text,
   `lcsort` varchar(25) default NULL,
   `ccode` varchar(4) default NULL,
   PRIMARY KEY  (`biblioitemnumber`),
@@ -790,43 +762,43 @@ DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` (
   `borrowernumber` int(11) NOT NULL default '0',
   `cardnumber` varchar(9) NOT NULL default '',
-  `surname` text NOT NULL,
+  `surname` mediumtext NOT NULL,
   `firstname` text,
-  `title` text,
-  `othernames` text,
+  `title` mediumtext,
+  `othernames` mediumtext,
   `initials` text,
   `streetnumber` varchar(10) default NULL,
   `streettype` varchar(50) default NULL,
-  `address` text NOT NULL,
+  `address` mediumtext NOT NULL,
   `address2` text,
-  `city` text NOT NULL,
+  `city` mediumtext NOT NULL,
   `zipcode` varchar(25) default NULL,
-  `email` text,
+  `email` mediumtext,
   `phone` text,
   `mobile` varchar(50) default NULL,
-  `fax` text,
-  `B_streetnumber` varchar(10) default NULL,
-  `B_streettype` varchar(50) default NULL,
+  `fax` mediumtext,
   `emailpro` text,
   `phonepro` text,
+  `B_streetnumber` varchar(10) default NULL,
+  `B_streettype` varchar(50) default NULL,
   `B_address` varchar(100) default NULL,
-  `B_city` text,
+  `B_city` mediumtext,
   `B_zipcode` varchar(25) default NULL,
   `B_email` text,
-  `B_phone` text,
+  `B_phone` mediumtext,
   `dateofbirth` date default NULL,
   `branchcode` varchar(4) NOT NULL default '',
-  `categorycode` varchar(10) default NULL,
+  `categorycode` varchar(2) default NULL,
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
   `gonenoaddress` tinyint(1) default NULL,
   `lost` tinyint(1) default NULL,
   `debarred` tinyint(1) default NULL,
-  `contactname` text,
+  `contactname` mediumtext,
   `contactfirstname` text,
   `contacttitle` text,
   `guarantorid` int(11) default NULL,
-  `borrowernotes` text,
+  `borrowernotes` mediumtext,
   `relationship` varchar(100) default NULL,
   `ethnicity` varchar(50) default NULL,
   `ethnotes` varchar(255) default NULL,
@@ -834,16 +806,12 @@ CREATE TABLE `deletedborrowers` (
   `password` varchar(30) default NULL,
   `flags` int(11) default NULL,
   `userid` varchar(30) default NULL,
-  `opacnote` text,
+  `opacnote` mediumtext,
   `contactnote` varchar(255) default NULL,
   `sort1` varchar(80) default NULL,
   `sort2` varchar(80) default NULL,
-  `textmessaging` varchar(30) default NULL,
-  `homezipcode` varchar(25) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
-  KEY `cardnumber` (`cardnumber`),
-  KEY `categorycode` (`categorycode`),
-  KEY `branchcode` (`branchcode`)
+  KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -876,17 +844,17 @@ CREATE TABLE `deleteditems` (
   `reserves` smallint(6) default NULL,
   `restricted` tinyint(1) default NULL,
   `binding` decimal(28,6) default NULL,
-  `itemnotes` text,
+  `itemnotes` mediumtext,
   `holdingbranch` varchar(4) default NULL,
   `interim` tinyint(1) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `marc` blob,
-  `paidfor` text,
+  `paidfor` mediumtext,
   `location` varchar(80) default NULL,
   `itemcallnumber` varchar(30) default NULL,
-  `onloan` date default NULL,
-  `Cutterextra` varchar(45) default NULL,
-  `issue_date` date default '0000-00-00',
+  `onloan` date default '0000-00-00',
+  `cutterextra` varchar(45) default NULL,
+  `issue_date` date default NULL,
   `itype` varchar(10) default NULL,
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `barcode` (`barcode`),
@@ -912,22 +880,22 @@ CREATE TABLE `ethnicity` (
 
 DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` (
-  `borrowernumber` int(11) default '0',
-  `itemnumber` int(11) default '0',
+  `borrowernumber` int(11) default NULL,
+  `itemnumber` int(11) default NULL,
   `date_due` date default NULL,
-  `branchcode` varchar(10) default '',
+  `branchcode` varchar(10) default NULL,
   `issuingbranch` varchar(18) default NULL,
-  `issuedate` date NOT NULL default '0000-00-00',
   `returndate` date default NULL,
   `lastreneweddate` date default NULL,
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `issuedate` date NOT NULL default '0000-00-00',
   KEY `issuesborridx` (`borrowernumber`),
   KEY `issuesitemidx` (`itemnumber`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
-  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -936,8 +904,8 @@ CREATE TABLE `issues` (
 
 DROP TABLE IF EXISTS `issuingrules`;
 CREATE TABLE `issuingrules` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `itemtype` varchar(10) NOT NULL default '',
+  `categorycode` varchar(2) NOT NULL default '',
+  `itemtype` varchar(4) NOT NULL default '',
   `restrictedtype` tinyint(1) default NULL,
   `rentaldiscount` decimal(28,6) default NULL,
   `reservecharge` decimal(28,6) default NULL,
@@ -952,8 +920,8 @@ CREATE TABLE `issuingrules` (
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`),
-  CONSTRAINT `issuingrules_ibfk_2` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `issuingrules_ibfk_2` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -977,7 +945,7 @@ CREATE TABLE `items` (
   `datelastseen` date default NULL,
   `multivolume` tinyint(1) default NULL,
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) default '0',
+  `notforloan` tinyint(1) default NULL,
   `itemlost` tinyint(1) default NULL,
   `wthdrawn` tinyint(1) default NULL,
   `itemcallnumber` varchar(30) default NULL,
@@ -986,23 +954,24 @@ CREATE TABLE `items` (
   `reserves` smallint(6) default NULL,
   `restricted` tinyint(1) default NULL,
   `binding` decimal(28,6) default NULL,
-  `itemnotes` text,
-  `holdingbranch` varchar(10) default '',
-  `paidfor` text,
+  `itemnotes` mediumtext,
+  `holdingbranch` varchar(10) default NULL,
+  `paidfor` mediumtext,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `location` varchar(80) default NULL,
-  `onloan` date default NULL,
-  `Cutterextra` varchar(45) default NULL,
-  `issue_date` date default '0000-00-00',
-  `itype` varchar(10) default '',
+  `onloan` date default '0000-00-00',
+  `cutterextra` varchar(45) default NULL,
+  `issue_date` date default NULL,
+  `itype` varchar(10) default NULL,
   PRIMARY KEY  (`itemnumber`),
   KEY `itembarcodeidx` (`barcode`),
   KEY `itembinoidx` (`biblioitemnumber`),
   KEY `itembibnoidx` (`biblionumber`),
   KEY `homebranch` (`homebranch`),
   KEY `holdingbranch` (`holdingbranch`),
-  CONSTRAINT `items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE,
-  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`biblioitemnumber`) REFERENCES `biblioitems` (`biblioitemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `items_ibfk_2` FOREIGN KEY (`homebranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE,
+  CONSTRAINT `items_ibfk_3` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1023,10 +992,10 @@ CREATE TABLE `itemsprices` (
 DROP TABLE IF EXISTS `itemtypes`;
 CREATE TABLE `itemtypes` (
   `itemtype` varchar(10) NOT NULL default '',
-  `description` text,
+  `description` mediumtext,
   `renewalsallowed` smallint(6) default NULL,
   `rentalcharge` double(16,4) default NULL,
-  `notforloan` smallint(6) default '0',
+  `notforloan` smallint(6) default NULL,
   `imageurl` varchar(200) default NULL,
   `summary` text,
   PRIMARY KEY  (`itemtype`),
@@ -1118,7 +1087,7 @@ CREATE TABLE `marc_breeding` (
   `isbn` varchar(10) NOT NULL default '',
   `title` varchar(128) default NULL,
   `author` varchar(80) default NULL,
-  `marc` text NOT NULL,
+  `marc` longblob,
   `encoding` varchar(40) NOT NULL default '',
   `z3950random` varchar(40) default NULL,
   PRIMARY KEY  (`id`),
@@ -1150,6 +1119,7 @@ CREATE TABLE `marc_subfield_structure` (
   `link` varchar(80) default NULL,
   `defaultvalue` text,
   PRIMARY KEY  (`frameworkcode`,`tagfield`,`tagsubfield`),
+  KEY `kohafield_2` (`kohafield`),
   KEY `tab` (`frameworkcode`,`tab`),
   KEY `kohafield` (`frameworkcode`,`kohafield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1176,7 +1146,8 @@ CREATE TABLE `marc_subfield_table` (
   KEY `subfieldorder` (`subfieldorder`),
   KEY `subfieldcode` (`subfieldcode`),
   KEY `subfieldvalue` (`subfieldvalue`),
-  KEY `tagorder` (`tagorder`)
+  KEY `tagorder` (`tagorder`),
+  KEY `marc_speed` (`tag`,`subfieldcode`,`subfieldvalue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1193,26 +1164,6 @@ CREATE TABLE `marc_tag_structure` (
   `authorised_value` char(10) default NULL,
   `frameworkcode` char(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `marc_word`
---
-
-DROP TABLE IF EXISTS `marc_word`;
-CREATE TABLE `marc_word` (
-  `bibid` bigint(20) NOT NULL default '0',
-  `tagsubfield` varchar(4) NOT NULL default '',
-  `tagorder` tinyint(4) NOT NULL default '1',
-  `subfieldorder` tinyint(4) NOT NULL default '1',
-  `word` varchar(255) NOT NULL default '',
-  `sndx_word` varchar(255) NOT NULL default '',
-  KEY `bibid` (`bibid`),
-  KEY `tagorder` (`tagorder`),
-  KEY `subfieldorder` (`subfieldorder`),
-  KEY `word` (`word`),
-  KEY `sndx_word` (`sndx_word`),
-  KEY `Search_Marc` (`tagsubfield`,`word`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1266,7 +1217,7 @@ CREATE TABLE `opac_news` (
   `lang` varchar(4) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `expirationdate` date default NULL,
-  `number` int(11) default '0',
+  `number` int(11) default NULL,
   PRIMARY KEY  (`idnew`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1277,7 +1228,7 @@ CREATE TABLE `opac_news` (
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
   `branchcode` varchar(255) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
+  `categorycode` varchar(2) NOT NULL default '',
   `delay1` int(4) default '0',
   `letter1` varchar(20) default NULL,
   `debarred1` char(1) default '0',
@@ -1288,21 +1239,6 @@ CREATE TABLE `overduerules` (
   `letter3` varchar(20) default NULL,
   `debarred3` int(1) default '0',
   PRIMARY KEY  (`branchcode`,`categorycode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `phrase_log`
---
-
-DROP TABLE IF EXISTS `phrase_log`;
-CREATE TABLE `phrase_log` (
-  `phr_phrase` varchar(100) NOT NULL default '',
-  `phr_resultcount` int(11) NOT NULL default '0',
-  `phr_ip` varchar(30) NOT NULL default '',
-  `user` varchar(45) default NULL,
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `actual` text NOT NULL,
-  KEY `phr_ip` (`phr_ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1360,20 +1296,20 @@ CREATE TABLE `reserves` (
   `notificationdate` date default NULL,
   `reminderdate` date default NULL,
   `cancellationdate` date default NULL,
-  `reservenotes` text,
+  `reservenotes` mediumtext,
   `priority` smallint(6) default NULL,
   `found` char(1) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `itemnumber` int(11) default NULL,
-  `waitingdate` date default '0000-00-00',
+  `waitingdate` date default NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
-  CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `reserves_ibfk_4` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1415,10 +1351,10 @@ CREATE TABLE `serial` (
   `status` tinyint(4) NOT NULL default '0',
   `planneddate` date NOT NULL default '0000-00-00',
   `notes` text,
-  `itemnumber` text,
-  `routingnotes` text,
   `publisheddate` date default NULL,
-  `claimdate` date default '0000-00-00',
+  `itemnumber` text,
+  `claimdate` date default NULL,
+  `routingnotes` text,
   PRIMARY KEY  (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1431,7 +1367,7 @@ CREATE TABLE `sessionqueries` (
   `sessionID` varchar(255) NOT NULL default '',
   `userid` varchar(100) NOT NULL default '',
   `ip` varchar(18) NOT NULL default '',
-  `url` text NOT NULL
+  `url` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1459,8 +1395,8 @@ CREATE TABLE `shelfcontents` (
   `dateadded` timestamp NULL default NULL,
   KEY `shelfnumber` (`shelfnumber`),
   KEY `itemnumber` (`itemnumber`),
-  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `shelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `bookshelf` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `shelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `bookshelf` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1491,10 +1427,10 @@ CREATE TABLE `statistics` (
   `proccode` varchar(4) default NULL,
   `value` double(16,4) default NULL,
   `type` varchar(16) default NULL,
-  `other` text,
+  `other` mediumtext,
   `usercode` varchar(10) default NULL,
   `itemnumber` int(11) default NULL,
-  `itemtype` varchar(10) default NULL,
+  `itemtype` varchar(4) default NULL,
   `borrowernumber` int(11) default NULL,
   `associatedborrower` int(11) default NULL,
   KEY `timeidx` (`datetime`)
@@ -1528,7 +1464,6 @@ CREATE TABLE `subcategorytable` (
 DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
   `biblionumber` int(11) NOT NULL default '0',
-  `manualhistory` tinyint(1) NOT NULL default '0',
   `subscriptionid` int(11) NOT NULL auto_increment,
   `librarian` varchar(100) default '',
   `startdate` date default '0000-00-00',
@@ -1541,7 +1476,7 @@ CREATE TABLE `subscription` (
   `periodicity` tinyint(4) default '0',
   `dow` varchar(100) default '',
   `numberingmethod` varchar(100) default '',
-  `notes` text,
+  `notes` mediumtext,
   `status` varchar(100) NOT NULL default '',
   `add1` int(11) default '0',
   `every1` int(11) default '0',
@@ -1563,14 +1498,15 @@ CREATE TABLE `subscription` (
   `lastvalue3` int(11) default NULL,
   `issuesatonce` tinyint(3) NOT NULL default '1',
   `firstacquidate` date NOT NULL default '0000-00-00',
+  `manualhistory` tinyint(1) NOT NULL default '0',
   `irregularity` text,
   `letter` varchar(20) default NULL,
   `numberpattern` tinyint(3) default '0',
   `distributedto` text,
-  `callnumber` text,
-  `hemisphere` tinyint(3) default '0',
-  `branchcode` varchar(12) NOT NULL default '''''',
   `internalnotes` longtext,
+  `callnumber` text,
+  `branchcode` varchar(12) NOT NULL default '',
+  `hemisphere` tinyint(3) default '0',
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1615,7 +1551,7 @@ CREATE TABLE `suggestions` (
   `suggestedby` int(11) NOT NULL default '0',
   `managedby` int(11) default NULL,
   `STATUS` varchar(10) NOT NULL default '',
-  `note` text,
+  `note` mediumtext,
   `author` varchar(80) default NULL,
   `title` varchar(80) default NULL,
   `copyrightdate` smallint(6) default NULL,
@@ -1641,7 +1577,7 @@ DROP TABLE IF EXISTS `systempreferences`;
 CREATE TABLE `systempreferences` (
   `variable` varchar(50) NOT NULL default '',
   `value` text,
-  `options` text,
+  `options` mediumtext,
   `explanation` text,
   `type` varchar(20) default NULL,
   PRIMARY KEY  (`variable`)
@@ -1680,7 +1616,8 @@ CREATE TABLE `userflags` (
   `bit` int(11) NOT NULL default '0',
   `flag` char(30) default NULL,
   `flagdesc` char(255) default NULL,
-  `defaulton` int(11) default NULL
+  `defaulton` int(11) default NULL,
+  PRIMARY KEY  (`bit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1690,8 +1627,8 @@ CREATE TABLE `userflags` (
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `usercode` varchar(10) default NULL,
-  `username` text,
-  `password` text,
+  `username` mediumtext,
+  `password` mediumtext,
   `level` smallint(6) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1703,8 +1640,8 @@ DROP TABLE IF EXISTS `websites`;
 CREATE TABLE `websites` (
   `websitenumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) NOT NULL default '0',
-  `title` text,
-  `description` text,
+  `title` mediumtext,
+  `description` mediumtext,
   `url` varchar(255) default NULL,
   PRIMARY KEY  (`websitenumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1716,14 +1653,14 @@ CREATE TABLE `websites` (
 DROP TABLE IF EXISTS `z3950queue`;
 CREATE TABLE `z3950queue` (
   `id` int(11) NOT NULL auto_increment,
-  `term` text,
+  `term` mediumtext,
   `type` varchar(10) default NULL,
   `startdate` int(11) default NULL,
   `enddate` int(11) default NULL,
   `done` smallint(6) default NULL,
   `results` longblob,
   `numrecords` int(11) default NULL,
-  `servers` text,
+  `servers` mediumtext,
   `identifier` varchar(30) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1759,15 +1696,15 @@ CREATE TABLE `z3950servers` (
   `db` varchar(255) default NULL,
   `userid` varchar(255) default NULL,
   `password` varchar(255) default NULL,
-  `name` text,
-  `description` text NOT NULL,
+  `name` mediumtext,
   `id` int(11) NOT NULL auto_increment,
   `checked` smallint(6) default NULL,
   `rank` int(11) default NULL,
   `syntax` varchar(80) default NULL,
-  `position` enum('primary','secondary','') NOT NULL default 'primary',
   `icon` text,
+  `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
+  `description` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1784,12 +1721,6 @@ CREATE TABLE `zebraqueue` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
--- SET FOREIGN_KEY_CHECKS = 1;
--- COMMIT;
--- SET AUTOCOMMIT = 1;
-
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
@@ -1798,4 +1729,3 @@ CREATE TABLE `zebraqueue` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2007-03-12 16:24:34
