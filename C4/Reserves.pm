@@ -29,7 +29,8 @@ use C4::Biblio;
 use C4::Search;
 use C4::Circulation;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
+
 my $library_name = C4::Context->preference("LibraryName");
 
 # set the version for version checking
@@ -45,7 +46,7 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 =head1 DESCRIPTION
 
-this modules provides somes functions to deal with reservations.
+  this modules provides somes functions to deal with reservations.
 
 =head1 FUNCTIONS
 
@@ -61,12 +62,12 @@ this modules provides somes functions to deal with reservations.
   &GetReservesFromItemnumber
   &GetReservesFromBiblionumber
   &GetReservesFromBorrowernumber
-  GetReservesForBranch
-  GetReservesToBranch
+  &GetReservesForBranch
+  &GetReservesToBranch
   &GetReserveCount
   &GetReserveFee
-  GetReservesForBranch
-  GetReservesToBranch
+  &GetReservesForBranch
+  &GetReservesToBranch
   &GetOtherReserves
   
   &ModReserveFill
@@ -83,7 +84,7 @@ this modules provides somes functions to deal with reservations.
 
 =item AddReserve
 
-AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
+    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
 
 =cut
 
@@ -245,6 +246,14 @@ sub GetReservesFromBiblionumber {
     return ( $#results + 1, \@results );
 }
 
+=item GetReservesFromItemnumber
+
+ ( $reservedate, $borrowernumber, $branchcode ) = GetReservesFromItemnumber($itemnumber);
+
+   TODO :: Description here
+
+=cut
+
 sub GetReservesFromItemnumber {
     my ( $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
@@ -260,6 +269,13 @@ sub GetReservesFromItemnumber {
     my ( $reservedate, $borrowernumber,$branchcode ) = $sth_res->fetchrow_array;
     return ( $reservedate, $borrowernumber, $branchcode );
 }
+
+=item GetReservesFromBorrowernumber
+
+	$borrowerreserv = GetReservesFromBorrowernumber($borrowernumber,$tatus);
+	
+	TODO :: Descritpion
+=cut
 
 sub GetReservesFromBorrowernumber {
     my ( $borrowernumber, $status ) = @_;
@@ -369,6 +385,14 @@ sub GetOtherReserves {
     return ( $messages, $nextreservinfo );
 }
 
+=item GetReserveFee
+
+$fee = GetReserveFee($borrowernumber,$biblionumber,$constraint,$biblionumber);
+
+Calculate the fee for a reserve
+
+=cut
+
 sub GetReserveFee {
     my ($borrowernumber, $biblionumber, $constraint, $bibitems ) = @_;
 
@@ -463,12 +487,10 @@ sub GetReserveFee {
             }
         }
     }
-
-    #  print "fee $fee";
     return $fee;
 }
 
-=head2 GetReservesToBranch
+=item GetReservesToBranch
 
 @transreserv = GetReservesToBranch( $frombranch );
 
@@ -497,7 +519,7 @@ sub GetReservesToBranch {
     return (@transreserv);
 }
 
-=head2 GetReservesForBranch
+=item GetReservesForBranch
 
 @transreserv = GetReservesForBranch($frombranch);
 
@@ -1087,14 +1109,6 @@ sub _Findgroupreserve {
     $sth->finish;
     return @results;
 }
-
-=item GetReserveFee
-
-$fee = GetReserveFee($borrowernumber,$biblionumber,$constraint,$biblionumber);
-
-Calculate the fee for a reserve
-
-=cut
 
 =back
 

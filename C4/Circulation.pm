@@ -42,7 +42,7 @@ use POSIX qw(strftime);
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };

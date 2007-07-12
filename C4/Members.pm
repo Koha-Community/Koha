@@ -29,7 +29,7 @@ use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
+our ($VERSION,@ISA,@EXPORT,@EXPORT_OK);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
@@ -1637,7 +1637,7 @@ sub DelMember {
        FROM borrowers
        WHERE borrowernumber = ?
    ";
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     $sth->finish;
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","DELETE",$borrowernumber,"") 
