@@ -287,10 +287,8 @@ sub GetReservesFromBorrowernumber {
         $sth->execute($borrowernumber);
     }
     my @borrowerreserv;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @borrowerreserv, $data;
-    }
-    return \@borrowerreserv;
+    my $data = $sth->fetchall_arrayref({});
+    return @$data;
 }
 #-------------------------------------------------------------------------------------
 
