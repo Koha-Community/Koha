@@ -26,7 +26,6 @@ use C4::Context;
 use C4::Output;
 
 my $input = new CGI;
-my $plugin_name=$input->param("plugin_name");
 my $plugin_name="cataloguing/value_builder/".$input->param("plugin_name");
 
 # opening plugin. Just check wether we are on a developper computer on a production one
