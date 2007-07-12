@@ -160,17 +160,17 @@
     </div>
     <h2>Editing preferences for <!-- TMPL_VAR name="tab" --> module</h2>
     <!-- TMPL_VAR NAME="searchfield" -->
-    <table>
+    <table width="80%">
     <tr>
         <th>Variable</th>
         <th>Value</th>
-        <th colspan="3">Explanation</th>
+        <th colspan="3" width="30%">Explanation</th>
     </tr>
     <!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
         <td><!-- TMPL_VAR NAME="variable" --></td>
         <td><!-- TMPL_VAR NAME="value" --></td>
-        <td><!-- TMPL_VAR NAME="explanation" --></td>
+        <td width="20%"><!-- TMPL_VAR NAME="explanation" --></td>
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
     </tr>
