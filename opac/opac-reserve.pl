@@ -296,12 +296,12 @@ else {
             debarred => 1
         );
     }
-    my $reserves = GetReservesFromBorrowernumber( $borrowernumber );
-    $template->param( RESERVES => $reserves );
+    my @reserves = GetReservesFromBorrowernumber( $borrowernumber );
+    $template->param( RESERVES => \@reserves );
     if ( scalar(@$reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
         $template->param( message => 1 );
         $noreserves = 1;
-        $template->param( too_many_reserves => scalar(@$reserves));
+        $template->param( too_many_reserves => scalar($reserves));
     }
     foreach my $res (@$reserves) {
         if ( $res->{'biblionumber'} == $biblionumber ) {
