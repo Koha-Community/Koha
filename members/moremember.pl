@@ -251,8 +251,12 @@ if ($borrowernumber) {
     # now we show the status of the borrower's reservations
     my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
     my @reservloop;
+    
     foreach my $num_res (@borrowerreserv) {
+		next if not scalar @$num_res;
+    
         my %getreserv;
+        
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
