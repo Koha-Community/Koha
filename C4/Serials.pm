@@ -972,7 +972,8 @@ sub GetNextSeq {
   $newlastvalue3=$val->{setto3} if ($newlastvalue3>$val->{whenmorethan3}); # reset counter if needed.
   $calculated =~ s/\{Z\}/$newlastvalue3/g;
     
-  return ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3 );
+  return ( $calculated, $newlastvalue1, $newlastvalue2, $newlastvalue3 ,
+           $newinnerloop1, $newinnerloop2, $newinnerloop3);
 }
 
 =head2 GetSeq
