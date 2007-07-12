@@ -646,8 +646,8 @@ sub GetSubscriptions {
                 FROM   subscription,biblio,biblioitems
                 WHERE  biblio.biblionumber = biblioitems.biblionumber
                     AND biblio.biblionumber= subscription.biblionumber
-                    AND (biblio.title LIKE ? or biblioitems.issn = ?)
-            |;
+                    AND (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
+            
             if (C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
                 C4::Context->userenv->{'flags'} != 1){
@@ -655,7 +655,7 @@ sub GetSubscriptions {
             }
             $query.=" ORDER BY title";
             $sth = $dbh->prepare($query);
-            $sth->execute( "%$title%", $ISSN );
+            $sth->execute( $ISSN );
         }
         else {
             if ($ISSN) {
@@ -682,8 +682,9 @@ sub GetSubscriptions {
                     FROM   subscription,biblio,biblioitems
                     WHERE  biblio.biblionumber = biblioitems.biblionumber
                         AND biblio.biblionumber=subscription.biblionumber
-                        AND biblio.title LIKE ?
-                );
+                        ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
+                
+                warn $query;       
                 if (C4::Context->preference('IndependantBranches') && 
                     C4::Context->userenv && 
                     C4::Context->userenv->{'flags'} != 1){
@@ -691,7 +692,7 @@ sub GetSubscriptions {
                 }
                 $query.=" ORDER BY title";
                 $sth = $dbh->prepare($query);
-                $sth->execute( "%" . $title . "%" );
+                $sth->execute;
             }
         }
     }
@@ -739,7 +740,7 @@ sub GetSerials {
       "SELECT serialid,serialseq, status, publisheddate, planneddate,notes 
                         FROM   serial
                         WHERE  subscriptionid = ? AND status NOT IN (2,4,5) 
-                        ORDER BY publisheddate,serialid DESC";
+                        ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     while ( my $line = $sth->fetchrow_hashref ) {
@@ -755,7 +756,7 @@ sub GetSerials {
        FROM     serial
        WHERE    subscriptionid = ?
        AND      (status in (2,4,5))
-       ORDER BY publisheddate,serialid DESC
+       ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC
       ";
     $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
