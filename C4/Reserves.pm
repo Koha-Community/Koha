@@ -286,7 +286,6 @@ sub GetReservesFromBorrowernumber {
         ");
         $sth->execute($borrowernumber);
     }
-    my @borrowerreserv;
     my $data = $sth->fetchall_arrayref({});
     return @$data;
 }
