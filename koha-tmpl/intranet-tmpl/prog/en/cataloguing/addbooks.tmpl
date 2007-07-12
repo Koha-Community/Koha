@@ -10,12 +10,14 @@
 		No items found
 	<!-- /TMPL_IF -->
 	
-<h2>Search Existing Records</h2>
+<h3>Search Existing Records</h3>
 <div id="addbooks_search">
 	<form name="search" action="addbooks.pl">
+		<p>
         <label for="q">Search the catalog: </label>
         <input id="q" type="text"  size="25"   name="q" />
         <input type="submit" value="search">
+        </p>
 	</form>
 </div>
 <div id="addbooks_add_without_search">
@@ -24,8 +26,9 @@
 			<input type="submit" value="Add Record Without Search" />
 		</form>
 	<!-- TMPL_ELSE -->
+		<br />
 		<form name="f" action="addbiblio.pl" method="post">
-		<h2>Create a Blank Bibliographic Record</h2>
+		<h3>Create a Blank Bibliographic Record</h3>
 		<p>
 			<label for="frameworkcode">Choose a Framework:</label>
 			<select name="frameworkcode" id="frameworkcode">
@@ -46,7 +49,9 @@
 <!-- display the search results -->
 
 <!-- TMPL_IF NAME="total"-->
+<br />
 <!-- TMPL_VAR NAME="total"--> Results found in catalogue.
+<!-- TMPL_VAR name='pagination_bar'-->
 <div class="searchresults">
     <table>
         <tr>
@@ -115,14 +120,17 @@
     </table>
 </div>
 <!-- TMPL_ELSE -->
-    <b>No Result found in catalogue.</b>
-    <!-- TMPL_IF NAME="error" -->
-        Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span>
+    <!-- TMPL_IF name='query'-->
+        <b>No Result found in catalogue.</b>
+        <!-- TMPL_IF NAME="error" -->
+            Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF name='query'-->
 <div id="searchresult-breeding">
-    <h2>Biblios in reservoir</h2>
+    <h3>Biblios in reservoir</h3>
     <!-- TMPL_IF name="breeding_loop" -->
         <table>
             <tr>
@@ -141,7 +149,7 @@
                 <!-- TMPL_IF NAME="NOTMARC" -->
                                     
                 <!-- TMPL_ELSE -->
-                <td><a href="addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
+                <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
                 <!-- /TMPL_IF -->
             </tr>
             <!-- /TMPL_LOOP -->
@@ -150,6 +158,8 @@
     <p>None</p>
     <!-- /TMPL_IF -->
 </div>
+<!-- /TMPL_IF -->
+
 <script type="text/JavaScript">
     document.search.q.focus();
 </script>

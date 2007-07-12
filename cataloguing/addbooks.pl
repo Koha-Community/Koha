@@ -2,19 +2,6 @@
 
 # $Id$
 
-#
-# Modified saas@users.sf.net 12:00 01 April 2001
-# The biblioitemnumber was not correctly initialised
-# The max(barcode) value was broken - koha 'barcode' is a string value!
-# - If left blank, barcode value now defaults to max(biblionumber)
-
-#
-# TODO
-#
-# Add info on biblioitems and items already entered as you enter new ones
-#
-# Add info on biblioitems and items already entered as you enter new ones
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -32,13 +19,18 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+=head1 cataloguing:addbooks.pl
+
+	TODO
+
+=cut
+
 use strict;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
 use C4::Breeding;
 use C4::Output;
-
 use C4::Koha;
 use C4::Search;
 
@@ -46,7 +38,10 @@ my $input = new CGI;
 
 my $success = $input->param('biblioitem');
 my $query   = $input->param('q');
-my @value = $input->param('value');
+my @value   = $input->param('value');
+my $page    = $input->param('page') || 1;
+my $results_per_page = 20;
+
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -62,46 +57,56 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get framework list
 my $frameworks = getframeworks;
 my @frameworkcodeloop;
-foreach my $thisframeworkcode (keys %$frameworks) {
-	my %row =(value => $thisframeworkcode,
-				frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-			);
-	push @frameworkcodeloop, \%row;
+foreach my $thisframeworkcode ( keys %$frameworks ) {
+    my %row = (
+        value         => $thisframeworkcode,
+        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
+    );
+    push @frameworkcodeloop, \%row;
 }
 
 # Searching the catalog.
-if($query) {
-    # find results
-    my ($error, $marcresults) = SimpleSearch($query);
+if ($query) {
 
-    if (defined $error) {
-        $template->param(error => $error);
-        warn "error: ".$error;
+    # find results
+    my ( $error, $marcresults ) = SimpleSearch($query);
+
+    if ( defined $error ) {
+        $template->param( error => $error );
+        warn "error: " . $error;
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
+
     # format output
     my $total = scalar @$marcresults;
-    my @newresults = searchResults($query, $total, $total , 0, @$marcresults);
+    my @newresults = searchResults( $query, $total, $results_per_page, $page, @$marcresults );
+    
     $template->param(
-        total => $total,
-        query => $query,
+        total       => $total,
+        query       => $query,
         resultsloop => \@newresults,
+        pagination_bar => pagination_bar(
+				"/cgi-bin/koha/cataloguing/addbooks.pl?q=$query&",
+				 getnbpages( $total, $results_per_page ),
+    	    	$page,
+        		'page'
+        	),
     );
 }
 
 # fill with books in breeding farm
-my $toggle=0;
-my ($title,$isbn);
+my $toggle = 0;
+my ( $title, $isbn );
+
 # fill isbn or title, depending on what has been entered
 #u must do check on isbn because u can find number in beginning of title
 #check is on isbn legnth 13 for new isbn and 10 for old isbn
-my $querylength=length($query);
- if ($query =~ /\d/ and ($querylength eq 13 or $querylength eq 10))
-{
-$isbn=$query;
+my $querylength = length($query);
+if ( $query =~ /\d/ and ( $querylength eq 13 or $querylength eq 10 ) ) {
+    $isbn = $query;
 }
-$title=$query unless $isbn;
+$title = $query unless $isbn;
 my ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn ) if $query;
 my @breeding_loop = ();
 for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
@@ -118,11 +123,12 @@ for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
     $row_data{file}   = $resultsbr[$i]->{'file'};
     $row_data{title}  = $resultsbr[$i]->{'title'};
     $row_data{author} = $resultsbr[$i]->{'author'};
-    push ( @breeding_loop, \%row_data );
+    push( @breeding_loop, \%row_data );
 }
 
-$template->param( frameworkcodeloop => \@frameworkcodeloop,
-                  breeding_loop => \@breeding_loop,
-              );
+$template->param(
+    frameworkcodeloop => \@frameworkcodeloop,
+    breeding_loop     => \@breeding_loop,
+);
 
 output_html_with_http_headers $input, $cookie, $template->output;
