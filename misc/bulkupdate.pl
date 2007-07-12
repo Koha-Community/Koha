@@ -35,8 +35,8 @@ my ( $no_marcxml, $no_isbn, $help) = (0,0,0);
 GetOptions(
     'noisbn'    => \$no_isbn,
     'noxml'     => \$no_marcxml,
-    'h'       => \$help,
-    'help'    => \$help,
+    'h'         => \$help,
+    'help'      => \$help,
 );
 
 
@@ -102,27 +102,31 @@ if(not $no_marcxml){
     
     while (my $data = $sth->fetchrow_arrayref){
         
-        my $biblioitemnumber = $data->[0];
+       my $biblioitemnumber = $data->[0];
        print "\rremoving '-' on marcxml for biblioitemnumber $biblioitemnumber";
         
         # suppression des tirets de l'isbn dans la notice
         my $marcxml = $data->[1];
         
         eval{
-            my $record = MARC::Record->new_from_xml($marcxml);
+            my $record = MARC::Record->new_from_xml($marcxml,'UTF-8','UNIMARC');
             my @field = $record->field('010');
+            my $flag = 0;
 	    foreach my $field (@field){
                 my $subfield = $field->subfield('a');
                 if($subfield){
                     my $isbn = $subfield;
                     $isbn =~ s/-//g;
                     $field->update('a' => $isbn);
+                    $flag = 1;
                 }
 	    }
-	    $marcxml = $record->as_xml;
-	    # Update
-	    my $sth = $dbh->prepare($update_marcxml);
-	    $sth->execute($marcxml,$biblioitemnumber);
+            if($flag){
+                $marcxml = $record->as_xml;
+                # Update
+                my $sth = $dbh->prepare($update_marcxml);
+                $sth->execute($marcxml,$biblioitemnumber);
+            }
         };
         if($@){
             print "\n /!\\ pb getting $biblioitemnumber : $@";
