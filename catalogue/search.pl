@@ -445,7 +445,8 @@ for (my $i=0;$i<=@servers;$i++) {
     my $server = $servers[$i];
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
-        my @newresults = searchResults( $search_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
+        my $page = $cgi->param('page') || 0;
+        my @newresults = searchResults( $search_desc,$hits,$results_per_page,$page,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
@@ -453,24 +454,31 @@ for (my $i=0;$i<=@servers;$i++) {
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
 
-            my @page_numbers;
-            my $pages = ceil($hits / $results_per_page);
-            my $current_page_number = 1;
-            $current_page_number = ($offset / $results_per_page + 1) if $offset;
-            my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
-            my $next_page_offset = $offset + $results_per_page;
-            for (my $j=1; $j<=$pages;$j++) {
-                my $this_offset = (($j*$results_per_page)-$results_per_page);
-                my $this_page_number = $j;
-                my $highlight = 1 if ($this_page_number == $current_page_number);
-                if ($this_page_number <= $pages) {
-                push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
-                }
-            }
-            $template->param(PAGE_NUMBERS => \@page_numbers,
-                            previous_page_offset => $previous_page_offset,
-                            next_page_offset => $next_page_offset) unless $pages < 2;
-        }
+#             my @page_numbers;
+#             my $pages = ceil($hits / $results_per_page);
+#             my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
+#             my $next_page_offset = $offset + $results_per_page;
+#             for (my $j=1; $j<=$pages;$j++) {
+#                 my $this_offset = (($j*$results_per_page)-$results_per_page);
+#                 my $this_page_number = $j;
+#                 my $highlight = 1 if ($this_page_number == $current_page_number);
+#                 if ($this_page_number <= $pages) {
+#                 push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+#                 }
+#             }
+#             $template->param(PAGE_NUMBERS => \@page_numbers,
+#                             previous_page_offset => $previous_page_offset,
+#                             next_page_offset => $next_page_offset) unless $pages < 2;
+
+			$template->param(
+				pagination_bar => pagination_bar(
+             		"/cgi-bin/koha/catalogue/search.pl?q=$search_desc&",
+             		getnbpages($hits, $results_per_page),
+             		$page,
+             		'page'
+				),
+			);
+         }
     } # end of the if local
     else {
         # check if it's a z3950 or opensearch source
