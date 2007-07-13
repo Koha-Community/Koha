@@ -56,7 +56,6 @@ my $count;
 my $toggle;
 my $record;
 my $oldbiblio;
-my $dbh = C4::Context->dbh;
 my $errmsg;
 my @serverloop = ();
 my @serverhost;
@@ -205,11 +204,8 @@ else {
                         $notmarcrecord, $alreadyindb, $alreadyinfarm,
                         $imported,      $breedingid
                       )
-                      = ImportBreeding( $marcdata, 1, $serverhost[$k],
-                        $encoding[$k], $random );
-                        
-                        $encoding[$k], $random ));
-                        
+                      = ImportBreeding( $marcdata, 1, $serverhost[$k], $encoding[$k], $random );
+
                     my %row_data;
                     if ( $i % 2 ) {
                         $toggle = "#ffffcc";
