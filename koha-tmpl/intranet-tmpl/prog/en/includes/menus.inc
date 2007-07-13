@@ -1,5 +1,5 @@
 <div id="kohalogo">
-    <img src="/intranet-tmpl/prog/images/koha-logo.png" height="60px"/>
+    <img src="/intranet-tmpl/prog/images/koha-logo-white.png" height="60px"/>
     <h3><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h3>
 </div>
 <div id="onlinehelp">
