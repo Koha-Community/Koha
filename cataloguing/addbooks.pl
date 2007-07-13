@@ -77,6 +77,13 @@ if ($query) {
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
+    
+	if(not defined $marcresults){
+		$template->param(query => $query);
+		warn "no result found";
+		output_html_with_http_headers $input, $cookie, $template->output;
+        exit;
+	}
 
     # format output
     my $total = scalar @$marcresults;
