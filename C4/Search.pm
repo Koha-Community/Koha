@@ -91,7 +91,6 @@ sub findseealso {
 
 sub FindDuplicate {
     my ($record) = @_;
-    return;
     my $dbh = C4::Context->dbh;
     my $result = TransformMarcToKoha( $dbh, $record, '' );
     my $sth;
@@ -111,19 +110,30 @@ sub FindDuplicate {
         $result->{title} =~ s /\(//g;
         $result->{title} =~ s /\)//g;
         $query = "ti,ext=$result->{title}";
+        $query .= " and mt=$result->{itemtype}" if ($result->{itemtype});    
+        if ($result->{author}){
+          $result->{author} =~ s /\\//g;
+          $result->{author} =~ s /\"//g;
+          $result->{author} =~ s /\(//g;
+          $result->{author} =~ s /\)//g;
+          $query .= " and au,ext=$result->{author}";
+        }     
     }
-    my ($possible_duplicate_record) =
-      C4::Biblio::getRecord( "biblioserver", $query, "usmarc" ); # FIXME :: hardcoded !
-    if ($possible_duplicate_record) {
+    my ($error,$searchresults) =
+      SimpleSearch($query); # FIXME :: hardcoded !
+    my @results;
+    foreach my $possible_duplicate_record (@$searchresults) {
         my $marcrecord =
           MARC::Record->new_from_usmarc($possible_duplicate_record);
         my $result = TransformMarcToKoha( $dbh, $marcrecord, '' );
         
         # FIXME :: why 2 $biblionumber ?
-        return $result->{'biblionumber'}, $result->{'biblionumber'},
-          $result->{'title'}
-          if $result;
+        if ($result){
+          push @results, $result->{'biblionumber'};
+          push @results, $result->{'title'};
+        }
     }
+    return @results;  
 }
 
 =head2 SimpleSearch
