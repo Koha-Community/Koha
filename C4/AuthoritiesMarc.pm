@@ -753,6 +753,20 @@ sub BuildSummary{
   my $dbh=C4::Context->dbh;
   my $authref = GetAuthType($authtypecode);
   my $summary = $authref->{summary};
+  my %language;
+  $language{'fre'}="Français";
+  $language{'eng'}="Anglais";
+  $language{'ger'}="Allemand";
+  $language{'ita'}="Italien";
+  $language{'spa'}="Espagnol";
+  my %thesaurus;
+  $thesaurus{'1'}="Peuples";
+  $thesaurus{'2'}="Anthroponymes";
+  $thesaurus{'3'}="Oeuvres";
+  $thesaurus{'4'}="Chronologie";
+  $thesaurus{'5'}="Lieux";
+  $thesaurus{'6'}="Sujets";
+  #thesaurus a remplir
   my @fields = $record->fields();
   my $reported_tag;
   # if the library has a summary defined, use it. Otherwise, build a standard one
@@ -779,35 +793,58 @@ sub BuildSummary{
     }
     $summary =~ s/\[(.*?)]//g;
     $summary =~ s/\n/<br>/g;
-    } else {
-      my $heading; # = $authref->{summary};
-      my $altheading;
-      my $seeheading;
-      my $see;
-      my @fields = $record->fields();
-      if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
-      # construct UNIMARC summary, that is quite different from MARC21 one
-          # accepted form
-          foreach my $field ($record->field('2..')) {
-              $heading.= $field->as_string();
-          }
-          # rejected form(s)
-          foreach my $field ($record->field('4..')) {
-              $summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-              $summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-          }
-          # see :
-          foreach my $field ($record->field('5..')) {
-              $summary.= "&nbsp;&nbsp;&nbsp;<i>".$field->as_string()."</i><br/>";
-              $summary.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$heading."<br/>";
-          }
-          # // form
-          foreach my $field ($record->field('7..')) {
-              $seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";
-              $altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-              $altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$heading."<br />";
-          }
-          $summary = "<b>".$heading."</b><br />".$seeheading.$altheading.$summary;
+  } else {
+    my $heading; 
+    my $authid; 
+    my $altheading;
+    my $seealso;
+    my $broaderterms;
+    my $narrowerterms;
+    my $see;
+    my $seeheading;
+        my $notes;
+    my @fields = $record->fields();
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+    # construct UNIMARC summary, that is quite different from MARC21 one
+      # accepted form
+      foreach my $field ($record->field('2..')) {
+        $heading.= $field->subfield('a');
+                $authid=$field->subfield('3');
+      }
+      # rejected form(s)
+      foreach my $field ($record->field('3..')) {
+        $notes.= '<span class="note">'.$field->subfield('a')."</span>\n";
+      }
+      foreach my $field ($record->field('4..')) {
+        my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : " if ($field->subfield('2'));
+        $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+      }
+      # see :
+      foreach my $field ($record->field('5..')) {
+            
+        if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
+          $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+        } elsif (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'h')){
+          $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+        } elsif ($field->subfield('a')) {
+          $seealso.= '<span class="RT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+        }
+      }
+      # // form
+      foreach my $field ($record->field('7..')) {
+        my $lang = substr($field->subfield('8'),3,3);
+        $seeheading.= '<span class="langue"> En '.$language{$lang}.' : </span><span class="OT"> '.$field->subfield('a')."</span><br />\n";  
+      }
+            $broaderterms =~s/-- \n$//;
+            $narrowerterms =~s/-- \n$//;
+            $seealso =~s/-- \n$//;
+            $see =~s/-- \n$//;
+      $summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+      $summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
+      $summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
+      $summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
+      $summary.= '<p><div class="label">EP : '.$see.'</div></p>' if ($see);
+      $summary.= '<p><div class="label">'.$seeheading.'</div></p>' if ($seeheading);
       } else {
       # construct MARC21 summary
           foreach my $field ($record->field('1..')) {
@@ -854,8 +891,8 @@ sub BuildSummary{
           }
           $summary.=$heading.$seeheading.$altheading;
       }
-    }
-return $summary;
+  }
+  return $summary;
 }
 
 =head2 BuildUnimarcHierarchies
@@ -1155,6 +1192,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.49  2007/07/16 15:45:28  hdl
+# Adding Summary for UNIMARC authorities
+#
 # Revision 1.48  2007/06/25 15:01:45  tipaul
 # bugfixes on unimarc 100 handling (the field used for encoding)
 #
