@@ -60,6 +60,7 @@ use C4::Serials;
 my $query = new CGI;
 my $dbh   = C4::Context->dbh;
 
+my $mode           = $query->param('mode');
 my $op             = $query->param('op');
 my $subscriptionid = $query->param('subscriptionid');
 my $done = 0;    # for after form has been submitted
@@ -80,9 +81,7 @@ if ( $op eq "renew" ) {
         $query->param('startdate'),  $query->param('numberlength'),
         $query->param('weeklength'), $query->param('monthlength'),
         $query->param('note')
-    );
-     print $query->redirect('/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid='.$subscriptionid);
-     exit;
+    );  
 }
 
 my $subscription = GetSubscription($subscriptionid);
@@ -98,7 +97,7 @@ $template->param(
     subscriptionid => $subscriptionid,
     bibliotitle    => $subscription->{bibliotitle},
     $op            => 1,
-    done           => $done,
+    popup          => ($query->param('mode')eq "popup"),  
 );
 
 # Print the page
