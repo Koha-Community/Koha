@@ -11,59 +11,8 @@
 var text = new Array('Number','Volume','Issue','Month','Week','Starting with:','Rollover at:','Choose Hemisphere:','Northern','Southern',
 'Autumn','Winter','Spring','Summer','Fall','Season','Year');
 
-// common pre defined number patterns
-// function num_pattern() {
-// var patternchoice = '<!--TMPL_VAR NAME='numberpattern'-->';
-//     switch(patternchoice){
-//     case "2":
-//         options(text[1],text[0],text[2]);
-//         irregularity();
-//         display_table(0);
-//         break;
-//     case "3":
-//         options(text[1],text[0]);
-//         irregularity();
-//         display_table(0);
-//         break;
-//     case "4":
-//         options(text[1],text[2]);
-//         irregularity();
-//         display_table(0);
-//         break;
-//     case "5":
-//         options(text[0],text[2]);
-//         irregularity();
-//         display_table(0);
-//         break;
-//     case "6":
-//         var d = new Date();
-//         var sYear = d.getFullYear();
-//         // options_seasons(text[15],sYear);
-//         irregularity();
-//         is_season = 1;
-//         display_table(0);
-//         break;
-//     case "7":
-//         display_table(1);
-//         irregularity();
-//         break;
-//     default:
-//         options(text[0]);
-//         irregularity();
-//         display_table(0);
-//         break;
-//     }
-// }
-// 
-// function display_table(n) {
-//     if(n==1){
-//         document.getElementById("basetable").style.display = 'block';
-//     } else {
-//         document.getElementById("basetable").style.display = 'none';
-//     }
-// }
 
-// to dispaly the options section
+// to display the options section
 function options(x,y,z){
 var textbox = '';
     // alert("X: "+x+"Y: "+y+"Z: "+z);
@@ -141,7 +90,7 @@ function irregularity(){
         <div class="edit">
             <a href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
             <a href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a>
-            <a href="subscription-renew.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Renew </a>
+            <a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew </a>
             <a href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Receive</a>
             <a href="javascript:confirm_deletion()">
                 Delete
@@ -173,8 +122,23 @@ function irregularity(){
             <p><label>Beginnning date:</label> <!-- TMPL_VAR name="startdate" -->
             </p>
             <p><label>Frequency (*):</label>
+                <!--TMPL_IF name="periodicity16" -->
+                        Without regularity
+                <!-- /TMPL_IF -->
+                <!--TMPL_IF name="periodicity32" -->
+                        Irregular
+                <!-- /TMPL_IF -->
+                <!--TMPL_IF name="periodicity" -->
+                        Unknown
+                <!-- /TMPL_IF -->
+                <!--TMPL_IF name="periodicity12" -->
+                        2/day
+                <!-- /TMPL_IF -->
                 <!--TMPL_IF name="periodicity1" -->
                         1/day
+                <!-- /TMPL_IF -->
+                <!--TMPL_IF name="periodicity13" -->
+                        3/week
                 <!-- /TMPL_IF -->
                 <!--TMPL_IF name="periodicity2" -->
                         1/week
@@ -228,6 +192,9 @@ function irregularity(){
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="numberpattern5" -->
                     Number, Issue
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="numberpattern8" -->
+                    Year/Number
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="numberpattern6" -->
                     Seasonal only
@@ -335,6 +302,7 @@ function irregularity(){
         <tr>
             <th>Issue number</th>
             <th>Planned date</th>
+            <th>Published date</th>
             <th>Status</th>
         </tr>
         <!-- TMPL_LOOP name="serialslist" -->
@@ -344,6 +312,9 @@ function irregularity(){
                 </td>
                 <td>
                     <!-- TMPL_VAR name="planneddate" -->
+                </td>
+                <td>
+                    <!-- TMPL_VAR name="publisheddate" -->
                 </td>
                 <td>
                         <!--TMPL_IF name="status1" -->
@@ -388,8 +359,8 @@ function confirm_deletion() {
         window.location="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&op=del";
     }
 }
-function popup(link) {
-    newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+function popup(subscriptionid) {
+    newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 
 // window.onload = num_pattern();
