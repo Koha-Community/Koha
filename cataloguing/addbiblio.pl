@@ -463,6 +463,7 @@ my $biblionumber=$input->param('biblionumber'); # if biblionumber exists, it's a
 my $breedingid = $input->param('breedingid');
 my $z3950 = $input->param('z3950');
 my $op = $input->param('op');
+my $mode = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh = C4::Context->dbh;
 
@@ -541,7 +542,7 @@ if ($op eq "addbiblio") {
 #         die;
     }
     # check for a duplicate
-    my ($duplicatebiblionumber,$duplicatebiblionumber,$duplicatetitle) = FindDuplicate($record) if ($op eq "addbiblio") && (!$is_a_modif);
+    my ($duplicatebiblionumber,$duplicatetitle) = FindDuplicate($record) if (!$is_a_modif);
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if (!$duplicatebiblionumber or $confirm_not_duplicate) {
@@ -556,8 +557,24 @@ if ($op eq "addbiblio") {
             ($biblionumber,$oldbibitemnum) = AddBiblio($record,$frameworkcode);
         }
     # now, redirect to additem page
+        if ($mode ne "popup"){
         print $input->redirect("/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
         exit;
+        } else {
+          $template->param(
+            biblionumber => $biblionumber,
+            done         =>1,
+            popup        =>1
+          );
+          $template->param( title => $record->subfield('200',"a") ) if ($record ne "-1" && C4::Context->preference('marcflavour') =~/unimarc/i);
+          $template->param( title => $record->title() ) if ($record ne "-1" && C4::Context->preference('marcflavour') eq "usmarc");
+          $template->param(
+                  popup => $mode,
+                  itemtype => $frameworkcode, # HINT: if the library has itemtype = framework, itemtype is auto filled !
+                  );
+          output_html_with_http_headers $input, $cookie, $template->output;
+          exit;     
+        }        
     } else {
     # it may be a duplicate, warn the user and do nothing
         build_tabs ($template, $record, $dbh,$encoding);
@@ -652,6 +669,7 @@ if ($op eq "addbiblio") {
 }
 $template->param( title => $record->title() ) if ($record ne "-1");
 $template->param(
+        popup => $mode,
         frameworkcode => $frameworkcode,
         itemtype => $frameworkcode, # HINT: if the library has itemtype = framework, itemtype is auto filled !
         hide_marc => C4::Context->preference('hide_marc'),
