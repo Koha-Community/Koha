@@ -54,7 +54,7 @@ Error :
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
 <h1>Scan Index:</h1>
-<form action="/cgi-bin/koha/opac-search.pl" method="POST">
+<form action="/cgi-bin/koha/opac-search.pl" method="post">
     <table>
         <tr>
             <td>
@@ -85,7 +85,7 @@ Error :
     </table>
 </form>
 
-<form action="/cgi-bin/koha/opac-search.pl" method="POST">
+<form action="/cgi-bin/koha/opac-search.pl" method="post">
     <table>
         <tr>
             <th>Term/Phrase</th>
@@ -105,7 +105,7 @@ Error :
 </form>
 <!-- TMPL_ELSE -->
 
-<form action="/cgi-bin/koha/opac-search.pl" method="POST" name="myform" id="mainform">
+<form action="/cgi-bin/koha/opac-search.pl" method="post" name="myform" id="mainform">
     
     <!-- TMPL_IF NAME="searchdesc" -->
     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />

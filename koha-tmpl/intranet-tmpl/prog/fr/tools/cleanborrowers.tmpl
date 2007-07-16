@@ -18,7 +18,7 @@
 <!-- TMPL_IF NAME="step1" -->
 <!-- step 1 START -->
 <div id="step1">
-    <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="POST">
+    <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
     <legend>Qu'est-ce que vous voulez faire ?</legend>
         <input id="checkborrower" type="checkbox" name="checkbox" value="adhérent" checked="true">
@@ -68,7 +68,7 @@
         <br />
         </b>
         <br />
-        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="POST" onsubmit="return checkForm2(this);">
+        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
             <!-- TMPL_IF NAME="totalToDelete" -->
                 Que voulez-vous faire des adhérents supprimés ?<br />
                 <label for="delete">Supprimer complètement ces adhérents</label>

@@ -9,7 +9,7 @@
     <!-- /TMPL_IF --> to a virtual shelf
 </h1>
 
-<form name="f1" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
+<form name="f1" method="post" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
     
     <b>Select an existing shelf</b>
@@ -20,7 +20,7 @@
     <input type="submit" value="Add to virtual shelf" class="submit" />
 </form>
 <p>...or...</p>
-<form name="f2" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
+<form name="f2" method="post" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
     <b>Add to a new shelf:</b>
         <p>
             <label for="newbookshelf">

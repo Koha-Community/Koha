@@ -20,7 +20,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="CGIbookshelves"-->
-<form name="f1" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="POST">
+<form name="f1" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="post">
     <p><b>Select an Existing Bookshelf</b></p>
     <label>Add to virtual shelf</label> <!-- TMPL_VAR NAME="CGIbookshelves" -->
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
@@ -30,7 +30,7 @@
 <p>...or...</p>
 <!-- /TMPL_IF -->
 
-<form name="f2" method="POST" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl">
+<form name="f2" method="post" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl">
     <b>Add to a New Bookshelf:</b>
         <p>
             <label for="newbookshelf">

@@ -11,7 +11,7 @@
 </div>
 <div id="opac-main-search">
     Search
-    <form name="searchform" method="POST" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+    <form name="searchform" method="post" action="/cgi-bin/koha/opac-search.pl" id="searchform">
         <input type="text" name="q" style="width: 30%;"/>
         <input type="submit" value="OK" class="submit" />
     </form>
