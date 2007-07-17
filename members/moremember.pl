@@ -230,10 +230,6 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     #check item is not reserved
     my ( $restype, $reserves ) = CheckReserves( $issue->[$i]{'itemnumber'} );
     if ($restype) {
-
-#		print "<TD><a href=/cgi-bin/koha/reserve/request.pl?biblionumber=$issue->[$i]{'biblionumber'}>On Request - no renewals</a></td></tr>";
-#  } elsif ($issue->[$i]->{'renewals'} > 0) {
-#      print "<TD>Previously Renewed - no renewals</td></tr>";
         $row{'norenew'} = 1;
     }
     else {
@@ -251,16 +247,20 @@ if ($borrowernumber) {
     # now we show the status of the borrower's reservations
     my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
     my @reservloop;
-    
     foreach my $num_res (@borrowerreserv) {
-		next if not scalar @$num_res;
+        eval{
+            scalar @$num_res;
+        };
+        if($@){
+            next;
+        }
     
         my %getreserv;
         
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
-          GetTransfers( $num_res->{'itemnumber'} );
+            GetTransfers( $num_res->{'itemnumber'} );
 
         $getreserv{waiting}       = 0;
         $getreserv{transfered}    = 0;
@@ -293,7 +293,7 @@ if ($borrowernumber) {
         {
             $getreserv{nottransfered}   = 1;
             $getreserv{nottransferedby} =
-              GetBranchName( $getiteminfo->{'holdingbranch'} );
+                GetBranchName( $getiteminfo->{'holdingbranch'} );
         }
 
 # 		if we don't have a reserv on item, we put the biblio infos and the waiting position
@@ -307,7 +307,7 @@ if ($borrowernumber) {
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
             $getreserv{itemcallnumber}  = '----------';
-	     $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
+            $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
         }
 
         push( @reservloop, \%getreserv );
