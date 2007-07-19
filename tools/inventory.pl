@@ -31,8 +31,8 @@ my $input = new CGI;
 my $minlocation=$input->param('minlocation') || 'A';
 my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless $maxlocation;
+my $location=$input->param('location');
 my $datelastseen = $input->param('datelastseen');
-$datelastseen = format_date_in_iso($datelastseen);
 my $offset = $input->param('offset');
 my $markseen = $input->param('markseen');
 $offset=0 unless $offset;
@@ -42,7 +42,7 @@ my $uploadbarcodes = $input->param('uploadbarcodes');
 my $branchcode = $input->param('branchcode');
 my $op = $input->param('op');
 # warn "uploadbarcodes : ".$uploadbarcodes;
-
+# use Data::Dumper; warn Dumper($input);
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "tools/inventory.tmpl",
                 query => $input,
@@ -60,10 +60,37 @@ for my $branch_hash (keys %$branches) {
 	                   branchname => $branches->{$branch_hash}->{'branchname'}, 
 	                   selected => ($branch_hash eq $branchcode?1:0)};	
 }
+ 
+my @authorised_value_list;
+my $authorisedvalue_categories;
+
+my $dbh=C4::Context->dbh;
+my $rqauthcategorie=$dbh->prepare("select authorised_value from marc_subfield_structure where frameworkcode=? and kohafield='items.location'");
+my $rq=$dbh->prepare("select frameworkcode from biblio_framework");
+$rq->execute;
+while (my ($fwkcode)=$rq->fetchrow){
+  $rqauthcategorie->execute($fwkcode);
+  while (my ($authcat)=$rqauthcategorie->fetchrow){
+    if ($authcat && $authorisedvalue_categories!~/\b$authcat\W/){
+      $authorisedvalue_categories.="$authcat ";
+      my $data=GetAuthorisedValues($authcat);
+      foreach my $value (@$data){
+        $value->{selected}=1 if ($value->{authorised_value} eq ($location));
+      }      
+      push @authorised_value_list,@$data;
+    }  
+  }
+}
+
+
+ 
 $template->param(branchloop => \@branch_loop,
+                authorised_values=>\@authorised_value_list,   
                 DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
                 minlocation => $minlocation,
                 maxlocation => $maxlocation,
+                location=>$location,
+                branchcode=>$branchcode,      
                 offset => $offset,
                 pagesize => $pagesize,
                 datelastseen => $datelastseen,
@@ -73,8 +100,8 @@ $template->param(branchloop => \@branch_loop,
                 );
 if ($uploadbarcodes && length($uploadbarcodes)>0){
     my $dbh=C4::Context->dbh;
-    my $date=format_date($input->param('setdate'));
-    $date = format_date("today") unless $date;
+    my $date=format_date_in_iso($input->param('setdate'));
+    $date = format_date_in_iso("today") unless $date;
 # 	warn "$date";
     my $strsth="update items set (datelastseen = $date) where items.barcode =?";
     my $qupdate = $dbh->prepare($strsth);
@@ -109,7 +136,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
     $qupdate->finish;
     $qonloan->finish;
     $qwthdrawn->finish;
-    $template->param(date=>$date,Number=>$count);
+    $template->param(date=>format_date($date),Number=>$count);
 # 	$template->param(errorfile=>$errorfile) if ($errorfile);
     $template->param(errorloop=>\@errorloop) if (@errorloop);
 }else{
@@ -119,9 +146,14 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
                 &ModDateLastSeen($1);
             }
         }
+        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$datelastseen,$branchcode,$offset,$pagesize);
+        $template->param(loop =>$res,
+                        nextoffset => ($offset+$pagesize),
+                        prevoffset => ($offset?$offset-$pagesize:0),
+                        );
     }
     if ($op) {
-        my $res = GetItemsForInventory($minlocation,$maxlocation,$datelastseen,$branchcode,$offset,$pagesize);
+        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$datelastseen,$branchcode,$offset,$pagesize);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
