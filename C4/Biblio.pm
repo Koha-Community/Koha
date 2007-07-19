@@ -1114,10 +1114,11 @@ offset & size can be used to retrieve only a part of the whole listing (defaut b
 =cut
 
 sub GetItemsForInventory {
-    my ( $minlocation, $maxlocation, $datelastseen, $branch, $offset, $size ) = @_;
+    my ( $minlocation, $maxlocation,$location, $datelastseen, $branch, $offset, $size ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($datelastseen) {
+        $datelastseen=format_date_in_iso($datelastseen);  
         my $query =
                 "SELECT itemnumber,barcode,itemcallnumber,title,author,datelastseen
                  FROM items
@@ -1125,6 +1126,7 @@ sub GetItemsForInventory {
                  WHERE itemcallnumber>= ?
                    AND itemcallnumber <=?
                    AND (datelastseen< ? OR datelastseen IS NULL)";
+        $query.= " AND items.location=".$dbh->quote($location) if $location;
         $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
         $query .= " ORDER BY itemcallnumber,title";
         $sth = $dbh->prepare($query);
@@ -1137,6 +1139,7 @@ sub GetItemsForInventory {
                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
                 WHERE itemcallnumber>= ?
                   AND itemcallnumber <=?";
+        $query.= " AND items.location=".$dbh->quote($location) if $location;
         $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
         $query .= " ORDER BY itemcallnumber,title";
         $sth = $dbh->prepare($query);
@@ -1145,6 +1148,7 @@ sub GetItemsForInventory {
     my @results;
     while ( my $row = $sth->fetchrow_hashref ) {
         $offset-- if ($offset);
+        $row->{datelastseen}=format_date($row->{datelastseen});
         if ( ( !$offset ) && $size ) {
             push @results, $row;
             $size--;
@@ -1543,15 +1547,17 @@ sub GetMarcBiblio {
     my $sth          =
       $dbh->prepare("select marcxml from biblioitems where biblionumber=? ");
     $sth->execute($biblionumber);
-    my ($marcxml) = $sth->fetchrow;
-    MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
-    $marcxml =~ s/\x1e//g;
-    $marcxml =~ s/\x1f//g;
-    $marcxml =~ s/\x1d//g;
-    $marcxml =~ s/\x0f//g;
-    $marcxml =~ s/\x0c//g;
+     my ($marcxml) = $sth->fetchrow;
+     MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
+     $marcxml =~ s/\x1e//g;
+     $marcxml =~ s/\x1f//g;
+     $marcxml =~ s/\x1d//g;
+     $marcxml =~ s/\x0f//g;
+     $marcxml =~ s/\x0c//g;
+#   warn $marcxml;
     my $record = MARC::Record->new();
-    $record = MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour')) if $marcxml;
+     $record = MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour')) if $marcxml;
+#      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
     return $record;
 }
 
@@ -2022,9 +2028,9 @@ sub TransformHtmlToXml {
         @$values[$i] =~ s/>/&gt;/g;
         @$values[$i] =~ s/"/&quot;/g;
         @$values[$i] =~ s/'/&apos;/g;
-        if ( !utf8::is_utf8( @$values[$i] ) ) {
-            utf8::decode( @$values[$i] );
-        }
+#         if ( !utf8::is_utf8( @$values[$i] ) ) {
+#             utf8::decode( @$values[$i] );
+#         }
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $j++ unless ( @$tags[$i] eq "" );
             if ( !$first ) {
@@ -3956,6 +3962,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.218  2007/07/19 07:40:08  hdl
+# Adding selection by location for inventory
+#
 # Revision 1.217  2007/07/03 13:47:44  tipaul
 # fixing some display bugs (itemtype not properly returned and a html table bug that makes items appear strangely
 #
