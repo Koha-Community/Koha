@@ -55,6 +55,9 @@
         <!-- TMPL_VAR NAME="subtitle" --> ;
         <!-- /TMPL_LOOP -->
         &nbsp;
+        <!-- TMPL_IF name="seriestitle" --><!-- TMPL_VAR name="seriestitle" --><!--/TMPL_IF-->
+        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
+        <!-- TMPL_VAR name="volumedesc" -->&nbsp;
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="author" -->
@@ -69,9 +72,12 @@
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
         <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->">
             <!-- TMPL_VAR NAME="value" -->
-        </a>&nbsp;
+        </a>&nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
     </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="editionstatement" -->
+    <p><label><b>Edit. statement:</b></label><!-- TMPL_VAR name="editionstatement" --><!-- TMPL_IF name="editionresponsability" -->/<!-- TMPL_VAR name="editionresponsability" --><!-- /TMPL_IF-->&nbsp;</p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="illus" -->
     <p><label><b>Illus:</b></label><!-- TMPL_VAR name="illus" -->&nbsp;</p>
@@ -79,7 +85,7 @@
     <!-- TMPL_IF name="publishercode" -->
     <p><label><b>Published by :</b></label>
         <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
-            <!-- TMPL_VAR NAME="publishercode" -->
+            <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF-->
         </a>&nbsp;
     </p>
     <!-- /TMPL_IF -->
@@ -96,11 +102,20 @@
     <!-- TMPL_IF name="issn" -->
     <p><label><b>ISSN:</b></label><!-- TMPL_VAR NAME="issn" -->&nbsp;</p>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="seriestitle" -->
+    <!-- TMPL_IF name="collectiontitle" -->
     <p><label><b>Collection: </b></label>
-        <!-- TMPL_VAR NAME="seriestitle" -->
-        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
-        <!-- TMPL_VAR name="volumedesc" -->&nbsp;
+        <!-- TMPL_VAR NAME="collectiontitle" -->
+        <!-- TMPL_IF name="collectionissn" -->, ISSN <!-- TMPL_VAR name="collectionissn" -->    <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="collectionvolume" -->; <!-- TMPL_VAR name="collectionvolume" --> <!-- /TMPL_IF -->
+        &nbsp;
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="unititles" -->
+    <p><label><b>Uniform titles:</b></label>
+        <!-- TMPL_LOOP name="unititles" -->
+        <!-- TMPL_VAR NAME="unititle" --> ;
+        <!-- /TMPL_LOOP -->
+        &nbsp;
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="MARCSUBJCTS" -->
@@ -108,7 +123,7 @@
     <p>
         <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
         <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
-        &nbsp;
+        &nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
     </p>
     <!-- /TMPL_IF -->
@@ -127,9 +142,6 @@
     <p><label><b>Notes: </b></label><!-- TMPL_VAR NAME="notes" --></p>
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="unititle" -->
-    <p><label><b>Alt title: </b></label><!-- TMPL_VAR NAME="unititle" --></p>
-    <!-- /TMPL_IF -->
     <!-- TMPL_IF name="classification" -->
     <p><label><b>classification:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
     <!-- /TMPL_IF -->
@@ -139,7 +151,7 @@
     <!-- TMPL_IF name="URLS" -->
     <p><label><b>URL: </b></label>
         <!-- TMPL_LOOP name="URLS" -->
-        <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
+        <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
     </p>
     <!-- /TMPL_IF -->
