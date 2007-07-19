@@ -101,6 +101,7 @@
             <!-- ######### -->
             <div id="facets">
                 <dl>
+                <!-- TMPL_IF NAME="NoZebra" -->
                 <!-- FACETS START -->
                 <!-- TMPL_IF NAME="opacfacets" -->
                     <dt id="facets1" onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
@@ -132,6 +133,7 @@
                     </dd>
                 <!-- /TMPL_IF -->
                 <!-- FACETS END -->
+                <!-- /TMPL_IF --> <!-- NoZebra -->
                 <!-- BULKEDIT START -->
                 <!--TMPL_IF Name="bulkedit"--> 
                     <dt id="hbulkedit" onclick="var Elt=document.getElementById('parambulkedit');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
