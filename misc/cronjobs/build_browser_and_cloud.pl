@@ -54,7 +54,6 @@ warn "browser : $browser_tag / $browser_subfield";
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
 
 my $dbh = C4::Context->dbh;
-my $starttime = time();
 
 my $i=0;
 $|=1; # flushes output
@@ -78,7 +77,14 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
     $i++;
     print "." unless $batch;
     #now, parse the record, extract the item fields, and store them in somewhere else.
-    my $Koharecord = GetMarcBiblio($biblionumber);
+    my $Koharecord;
+    eval{
+	    $Koharecord = GetMarcBiblio($biblionumber);
+    };
+    if($@){
+	    warn 'pb when getting biblio '.$i.' : '.$@;
+	    next;
+    }
     # deal with BROWSER part
     if ($browser_tag) { 
         foreach my $browsed_field ($Koharecord->subfield($browser_tag,$browser_subfield)) {
@@ -117,8 +123,8 @@ if ($browser_tag) {
     }
     $classification = dewey_french();
     # calculate end node...
-    use Data::Dumper;
-    warn "==>".Dumper(%browser_result);
+    #use Data::Dumper;
+    #warn "==>".Dumper(%browser_result);
     foreach (keys %browser_result) {
         my $father = substr($_,0,-1);
         $browser_result{$father}->{notendnode}=1;
