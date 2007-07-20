@@ -20,6 +20,7 @@ package C4::Biblio;
 use strict;
 
 require Exporter;
+use utf8;
 use C4::Context;
 use MARC::Record;
 use MARC::File::USMARC;
@@ -27,7 +28,6 @@ use MARC::File::XML;
 use ZOOM;
 use C4::Koha;
 use C4::Date;
-use utf8;
 use C4::Log; # logaction
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -274,7 +274,7 @@ sub AddBiblio {
       
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio") 
         if C4::Context->preference("CataloguingLog");
-      
+
     return ( $biblionumber, $biblioitemnumber );
 }
 
@@ -1120,7 +1120,7 @@ sub GetItemsForInventory {
     if ($datelastseen) {
         $datelastseen=format_date_in_iso($datelastseen);  
         my $query =
-                "SELECT itemnumber,barcode,itemcallnumber,title,author,datelastseen
+                "SELECT itemnumber,barcode,itemcallnumber,title,author,biblio.biblionumber,datelastseen
                  FROM items
                    LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
                  WHERE itemcallnumber>= ?
@@ -1134,7 +1134,7 @@ sub GetItemsForInventory {
     }
     else {
         my $query ="
-                SELECT itemnumber,barcode,itemcallnumber,title,author,datelastseen
+                SELECT itemnumber,barcode,itemcallnumber,biblio.biblionumber,title,author,datelastseen
                 FROM items 
                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
                 WHERE itemcallnumber>= ?
@@ -1502,7 +1502,7 @@ sub GetMarcStructure {
         $res->{$tag}->{$subfield}->{seealso}          = $seealso;
         $res->{$tag}->{$subfield}->{hidden}           = $hidden;
         $res->{$tag}->{$subfield}->{isurl}            = $isurl;
-        $res->{$tag}->{$subfield}->{link}             = $link;
+        $res->{$tag}->{$subfield}->{'link'}           = $link;
         $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
     }
     return $res;
@@ -3941,9 +3941,6 @@ sub GetItemsCount {
     return ($count);
 }
 
-
-
-
 END { }    # module clean-up code here (global destructor)
 
 1;
@@ -3962,6 +3959,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
+# Revision 1.219  2007/07/20 14:02:57  hdl
+# Adding biblio.biblionumber to GetItemsfor Inventory
+#
 # Revision 1.218  2007/07/19 07:40:08  hdl
 # Adding selection by location for inventory
 #
