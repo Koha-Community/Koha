@@ -1750,9 +1750,9 @@ sub GetMarcSubjects {
             }
             my $code = $subject_subfield->[0];
             $label .= $subject_subfield->[1].$authoritysep unless ( $code == 9 );
-            $link  .= $subject_subfield->[1] . " and su-to:" unless ( $code == 9 );
+            $link  .= " and su-to:".$subject_subfield->[1]  unless ( $code == 9 );
             if ( $code == 9 ) {
-                $link = "Koha-Auth-Number:".$subject_subfield->[1];
+                $link = "an:".$subject_subfield->[1];
                 $flag = 1;
             }
             elsif ( ! $flag ) {
@@ -3959,8 +3959,9 @@ Joshua Ferraro jmf@liblime.com
 
 # $Id$
 # $Log$
-# Revision 1.219  2007/07/20 14:02:57  hdl
-# Adding biblio.biblionumber to GetItemsfor Inventory
+# Revision 1.220  2007/07/20 15:43:16  hdl
+# Bug Fixing GetMarcSubjects.
+# Links parameters were mixed.
 #
 # Revision 1.218  2007/07/19 07:40:08  hdl
 # Adding selection by location for inventory
