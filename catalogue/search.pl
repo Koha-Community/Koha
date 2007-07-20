@@ -336,9 +336,9 @@ my $params = $cgi->Vars;
 my @sort_by;
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 # load the sort_by options for the template
-my $sort_by = $params->{'sort_by'};
-my $sort_by_loop = displaySortby($sort_by);
-$template->param(sort_by_loop => $sort_by_loop);
+# my $sort_by = $params->{'sort_by'};
+# my $sort_by_loop = displaySortby($sort_by);
+# $template->param(sort_by_loop => $sort_by_loop);
 #
 # Use the servers defined, or just search our local catalog(default)
 my @servers;
@@ -469,10 +469,13 @@ for (my $i=0;$i<=@servers;$i++) {
 #             $template->param(PAGE_NUMBERS => \@page_numbers,
 #                             previous_page_offset => $previous_page_offset,
 #                             next_page_offset => $next_page_offset) unless $pages < 2;
-
+      my $link="/cgi-bin/koha/catalogue/search.pl?q=$search_desc&";
+      foreach my $sort (@sort_by){      
+        $link.="&sort_by=".$sort."&";
+      }        
 			$template->param(
 				pagination_bar => pagination_bar(
-             		"/cgi-bin/koha/catalogue/search.pl?q=$search_desc&",
+             		$link,
              		getnbpages($hits, $results_per_page),
              		$page,
              		'page'
