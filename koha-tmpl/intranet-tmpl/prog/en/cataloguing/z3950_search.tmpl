@@ -57,15 +57,16 @@
         <th>&nbsp;</th>
     </tr>
     <!-- TMPL_IF name="breeding_loop" -->
-    <!-- TMPL_LOOP name="breeding_loop" --> 
+    <!-- TMPL_LOOP name="breeding_loop" -->
+        <!-- TMPL_IF NAME="breedingid" -->
         <tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
             <td><!-- TMPL_VAR name="server" --></td>
             <td><!-- TMPL_VAR NAME="title" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
-        
         </tr>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     <!-- TMPL_ELSE -->
         <tr><td colspan="6">Nothing found</td></tr>
@@ -77,8 +78,8 @@
 <!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> servers to search</h3><!-- /TMPL_IF -->
 <script language="JavaScript" type="text/javascript">
     function Import(GetThisOne,biblionumber) {
-        opener.document.location= "../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
-        self.close();
+        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
+        window.close();
         return false;
     }
 </script>
