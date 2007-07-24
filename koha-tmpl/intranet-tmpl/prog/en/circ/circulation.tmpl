@@ -38,10 +38,10 @@
         <!-- TMPL_ELSE -->
             No city stored.
         <!-- /TMPL_IF -->
-<!--TMPL_IF NAME="phone" -->
+    <!--TMPL_IF NAME="phone" -->
         <!-- TMPL_VAR NAME="phone" -->
     <!-- TMPL_ELSE -->
-        <span class="problem">No phone stored.</span>
+        <span class="problem">No phone stored.</span>    
     <!-- /TMPL_IF -->
     </p>
     <!-- TMPL_IF NAME="emailaddress" -->
@@ -696,7 +696,6 @@ No patron matched <!-- TMPL_VAR name="message" -->
                         <br/>
                         <i>This hold hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
                         <!-- /TMPL_IF -->
-                
                     </td>
                     <td><!-- TMPL_VAR NAME="author" --></td>
                     <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
@@ -705,7 +704,6 @@ No patron matched <!-- TMPL_VAR name="message" -->
     </table>
 </div>
 <!-- /TMPL_IF --> <!-- reservesloop -->
-
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
@@ -713,8 +711,8 @@ No patron matched <!-- TMPL_VAR name="message" -->
 <div id="1XX">
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
     <p>
-    <a href="JavaScript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page')">Print Page</a>
-    / <a href=# onclick="javascript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Print Slip</a>
+    <span class="click" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page')">Print Page</span>
+    / <span class="click" onclick="javascript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Print Slip</span>
     </p>
     
     <input type="hidden" value="circ" name="destination" />
