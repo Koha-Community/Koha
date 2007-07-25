@@ -1633,7 +1633,7 @@ C<$datedue> should be in the form YYYY-MM-DD.
 
 sub AddRenewal {
 
-    my ( $borrowernumber, $itemnumber, $datedue ) = @_;
+    my ( $borrowernumber, $itemnumber, $branch ,$datedue ) = @_;
     my $dbh = C4::Context->dbh;
 
     # If the due date wasn't specified, calculate it by adding the
@@ -1650,7 +1650,7 @@ sub AddRenewal {
         my ( $due_year, $due_month, $due_day ) =
           Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
         $datedue = "$due_year-$due_month-$due_day";
-
+	$datedue=CheckValidDatedue($datedue,$itemnumber,$branch);
     }
 
     # Find the issues record for this book
@@ -1942,7 +1942,8 @@ for (my $i=0;$i<2;$i++){
 	($dow=0) if ($dow>6);
 	my $result=CheckRepeatableHolidays($itemnumber,$dow,$branchcode);
 	my $countspecial=CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
-		if (($result ne '0') or ($countspecial ne '0') ){
+	my $countspecialrepeatable=CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
+		if (($result ne '0') or ($countspecial ne '0') or ($countspecialrepeatable ne '0') ){
 		$i=0;
 		(($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
 		}
@@ -2001,6 +2002,33 @@ my $countspecial=$sth->fetchrow ;
 $sth->finish;
 return $countspecial;
 }
+
+=head2 CheckRepeatableSpecialHolidays
+
+$countspecial = CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
+this function check if the date is a repeatble special holidays
+C<$month>   = the month of datedue
+C<$day>     = the day of datedue
+C<$itemnumber>  = itemnumber
+C<$branchcode>  = localisation of issue 
+=cut
+sub CheckRepeatableSpecialHolidays{
+my ($month,$day,$itemnumber,$branchcode) = @_;
+my $dbh = C4::Context->dbh;
+my $query=qq|SELECT count(*) 
+	     FROM `repeatable_holidays`
+	     WHERE month=?
+	     AND day=?
+             AND branchcode=?
+	    |;
+my $sth = $dbh->prepare($query);
+$sth->execute($month,$day,$branchcode);
+my $countspecial=$sth->fetchrow ;
+$sth->finish;
+return $countspecial;
+}
+
+
 
 sub CheckValidBarcode{
 my ($barcode) = @_;

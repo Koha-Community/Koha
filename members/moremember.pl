@@ -90,7 +90,8 @@ if ( not defined $data ) {
 
 # re-reregistration function to automatic calcul of date expiry
 (
-    $data->{'dateexpiry'} = GetMembeReregistration(
+#     $data->{'dateexpiry'} = GetMembeReregistration(
+ $data->{'dateexpiry'} = ExtendMemberSubscriptionTo(
         $data->{'categorycode'},
         $borrowernumber, $data->{'dateenrolled'}
     )
@@ -330,7 +331,7 @@ $picture = "/borrowerimages/" . $borrowernumber . ".jpg";
 if ( -e $htdocs . "$picture" ) {
     $template->param( picture => $picture );
 }
-
+my $branch=C4::Context->userenv->{'branch'};
 
 $template->param($data);
 
@@ -338,6 +339,7 @@ $template->param(
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
     reregistration   => $reregistration,
+    branch	     => $branch,	
     totalprice       => sprintf( "%.2f", $totalprice ),
     totaldue         => sprintf( "%.2f", $total ),
     issueloop        => \@issuedata,

@@ -39,7 +39,7 @@ if ($input->param('renew_all')) {
 else {
     @data = $input->param('items[]');
 }
-
+my $branch=$input->param('branch');
 #
 # renew items
 #
@@ -51,7 +51,7 @@ foreach my $itemno (@data) {
 #    warn "CanBookbeRenewed";
     if (CanBookBeRenewed($borrowernumber,$itemno)){
 #	warn "$itemno can be renewed for $borrowernumber";
-        AddRenewal($borrowernumber,$itemno);
+        AddRenewal($borrowernumber,$itemno,$branch);
 #	warn "renewal added";
 #    }else {
 #	warn "cannot renew";
