@@ -1090,6 +1090,7 @@ my ($countchanged, $listunchanged) = EditBiblios($results->{RECORD}, $tagsubfiel
 $template->param(countchanged => $countchanged, loopunchanged=>$listunchanged);
 
 =cut
+
 sub EditBiblios{
   my ($listbiblios,$tagsubfield,$initvalue,$targetvalue,$test)=@_;
   my $countmatched;
@@ -1128,8 +1129,10 @@ sub EditBiblios{
 # Non-Zebra GetRecords#
 #----------------------------------------------------------------------
 
-=item
+=head2 NZgetRecords
+
   NZgetRecords has the same API as zera getRecords, even if some parameters are not managed
+
 =cut
 
 sub NZgetRecords {
@@ -1140,12 +1143,10 @@ sub NZgetRecords {
         $scan
     ) = @_;
     my $result = NZanalyse($koha_query);
-#     use Data::Dumper;
-#     warn "==========".@$sort_by_ref[0];
     return (undef,NZorder($result,@$sort_by_ref[0],$results_per_page,$offset),undef);
 }
 
-=item
+=head2 NZanalyse
 
   NZanalyse : get a CQL string as parameter, and returns a list of biblionumber;title,biblionumber;title,...
   the list is builded from inverted index in nozebra SQL table
@@ -1232,6 +1233,7 @@ sub NZanalyse {
         $left='publisher' if $left eq 'pb';
         $left='subject' if $left eq 'su';
         $left='koha-Auth-Number' if $left eq 'an';
+        $left='keyword' if $left eq 'kw';
         if ($operator) {
             #do a specific search
             my $dbh = C4::Context->dbh;
@@ -1268,7 +1270,7 @@ sub NZanalyse {
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND value LIKE ?");
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$string) {
-#                 warn "search on all indexes on $_";
+                #warn "search on all indexes on $_";
                 my $biblionumbers;
                 next unless $_;
                 $sth->execute($server, $_);
@@ -1294,6 +1296,15 @@ sub NZanalyse {
         return $results;
     }
 }
+
+=head2 NZorder
+
+  $finalresult = NZorder($biblionumbers, $ordering,$results_per_page,$offset);
+  
+  TODO :: Description
+
+=cut
+
 
 sub NZorder {
     my ($biblionumbers, $ordering,$results_per_page,$offset) = @_;
