@@ -27,7 +27,7 @@ use C4::Search;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -319,12 +319,14 @@ counts Usage of Authid in bibliorecords.
 =back
 
 =cut
+
 sub CountUsage {
     my ($authid) = @_;
     if (C4::Context->preference('NoZebra')) {
         # Read the index Koha-Auth-Number for this authid and count the lines
         my $result = C4::Search::NZanalyse("an=$authid");
-        return scalar split /;/,$result;
+        my @tab = split /;/,$result;
+        return scalar @tab;
     } else {
         ### ZOOM search here
         my $oConnection=C4::Context->Zconn("biblioserver",1);
@@ -1192,6 +1194,9 @@ Paul POULAIN paul.poulain@free.fr
 
 # $Id$
 # $Log$
+# Revision 1.50  2007/07/26 15:14:05  toins
+# removing warn compilation.
+#
 # Revision 1.49  2007/07/16 15:45:28  hdl
 # Adding Summary for UNIMARC authorities
 #
