@@ -23,13 +23,13 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Output;
-use vars qw($VERSION @ISA @EXPORT);
+our ($VERSION,@ISA,@EXPORT);
 
 $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
 
 =head1 NAME
 
-C4::Koha - Perl Module containing convenience functions for Koha scripts
+    C4::Koha - Perl Module containing convenience functions for Koha scripts
 
 =head1 SYNOPSIS
 
@@ -38,7 +38,7 @@ C4::Koha - Perl Module containing convenience functions for Koha scripts
 
 =head1 DESCRIPTION
 
-Koha.pm provides many functions for Koha scripts.
+    Koha.pm provides many functions for Koha scripts.
 
 =head1 FUNCTIONS
 
@@ -86,8 +86,8 @@ my $DEBUG = 0;
 
   $slash_date = &slashifyDate($dash_date);
 
-Takes a string of the form "DD-MM-YYYY" (or anything separated by
-dashes), converts it to the form "YYYY/MM/DD", and returns the result.
+    Takes a string of the form "DD-MM-YYYY" (or anything separated by
+    dashes), converts it to the form "YYYY/MM/DD", and returns the result.
 
 =cut
 
@@ -102,7 +102,7 @@ sub slashifyDate {
 
 =head2 DisplayISBN
 
-my $string = DisplayISBN( $isbn );
+    my $string = DisplayISBN( $isbn );
 
 =cut
 
@@ -128,7 +128,7 @@ sub DisplayISBN {
     my $seg2;
     if ( substr( $x, 0, 2 ) <= 19 ) {
 
-        #         if(sTmp2 < 10) sTmp2 = "0" sTmp2;
+        # if(sTmp2 < 10) sTmp2 = "0" sTmp2;
         $seg2 = substr( $x, 0, 2 );
     }
     elsif ( substr( $x, 0, 3 ) <= 699 ) {
@@ -173,31 +173,30 @@ build a HTML select with the following code :
 
 =head3 in PERL SCRIPT
 
-my $itemtypes = GetItemTypes;
-my @itemtypesloop;
-foreach my $thisitemtype (sort keys %$itemtypes) {
-    my $selected = 1 if $thisitemtype eq $itemtype;
-    my %row =(value => $thisitemtype,
-                selected => $selected,
-                description => $itemtypes->{$thisitemtype}->{'description'},
-            );
-    push @itemtypesloop, \%row;
-}
-$template->param(itemtypeloop => \@itemtypesloop);
+    my $itemtypes = GetItemTypes;
+    my @itemtypesloop;
+    foreach my $thisitemtype (sort keys %$itemtypes) {
+        my $selected = 1 if $thisitemtype eq $itemtype;
+        my %row =(value => $thisitemtype,
+                    selected => $selected,
+                    description => $itemtypes->{$thisitemtype}->{'description'},
+                );
+        push @itemtypesloop, \%row;
+    }
+    $template->param(itemtypeloop => \@itemtypesloop);
 
 =head3 in TEMPLATE
 
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
-    <select name="itemtype">
-        <option value="">Default</option>
-    <!-- TMPL_LOOP name="itemtypeloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
-    <!-- /TMPL_LOOP -->
-    </select>
-    <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
-    <input type="submit" value="OK" class="button">
-</form>
-
+    <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+        <select name="itemtype">
+            <option value="">Default</option>
+        <!-- TMPL_LOOP name="itemtypeloop" -->
+            <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+        <input type="submit" value="OK" class="button">
+    </form>
 
 =cut
 
