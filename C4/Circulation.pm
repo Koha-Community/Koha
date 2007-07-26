@@ -838,7 +838,7 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 =item C<$date> contains the max date of return. calculated if empty.
 
 AddIssue does the following things :
-- step 0�: check that there is a borrowernumber & a barcode provided
+- step 01: check that there is a borrowernumber & a barcode provided
 - check for RENEWAL (book issued & being issued to the same patron)
     - renewal YES = Calculate Charge & renew
     - renewal NO  = 
@@ -870,9 +870,9 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
     # get biblioinformation for this item
     my $biblio = GetBiblioFromItemNumber($item->{itemnumber});
 
-#
-# check if we just renew the issue.
-#
+    #
+    # check if we just renew the issue.
+    #
     if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
         # we renew, do we need to add some charge ?
         my ( $charge, $itemtype ) = GetIssuingCharges(

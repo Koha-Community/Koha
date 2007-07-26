@@ -118,6 +118,7 @@ push @EXPORT, qw(
   &fixup_cardnumber
 	&checkcardnumber
 );
+
 =item SearchMember
 
   ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type);
@@ -440,8 +441,7 @@ sub patronflags {
         }
         $flags{'ODUES'} = \%flaginfo;
     }
-    my @itemswaiting =
-      GetReservesFromBorrowernumber( $patroninformation->{'borrowernumber'},'W' );
+    my @itemswaiting = GetReservesFromBorrowernumber( $patroninformation->{'borrowernumber'},'W' );
     my $nowaiting = scalar @itemswaiting;
     if ( $nowaiting > 0 ) {
         my %flaginfo;

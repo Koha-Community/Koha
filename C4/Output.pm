@@ -54,8 +54,8 @@ push @EXPORT, qw(
 
 #Output
 push @EXPORT, qw(
-                &output_html_with_http_headers
-                );
+    &output_html_with_http_headers
+);
 
 
 #FIXME: this is a quick fix to stop rc1 installing broken
