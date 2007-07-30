@@ -28,6 +28,10 @@ use C4::Koha;
 use C4::Acquisition;
 use C4::Output;
 use C4::Circulation;
+use Date::Calc qw(
+  Today
+  Add_Delta_YM
+  );
 
 =head1 NAME
 
@@ -46,6 +50,7 @@ my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->param("Filter");
 my $digits = $input->param("digits");
+my $period = $input->param("period");
 my $borstat = $input->param("status");
 my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
@@ -294,6 +299,10 @@ sub calculate {
 	if ($activity) {
 		push @loopfilter,{crit=>"Activity",filter=>$activity};
 	}
+# year of activity
+	my ( $period_year, $period_month, $period_day )=Add_Delta_YM( Today(),-$period, 0);
+	my $newperioddate=$period_year."-".$period_month."-".$period_day;
+	warn "PERIOD".$period;
 # 1st, loop rows.
 	my $linefield;
 	if (($line =~/zipcode/) and ($digits)) {
@@ -392,8 +401,8 @@ sub calculate {
 	$strcalc .= " AND sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
 	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
 	$strcalc .= " AND sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
-	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from issues where timestamp > ' 2007-01-01')" if ($activity eq 'active');
-	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from issues where timestamp > ' 2007-01-01')" if ($activity eq 'nonactive');
+	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
+	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
 	$strcalc .= " group by $linefield, $colfield";
 	warn "". $strcalc;

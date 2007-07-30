@@ -81,6 +81,25 @@
 			<td></td>
 			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></td>
 			</tr>
+			<tr>
+			<td>Patron activity</td>
+			<td></td>
+			<td></td>
+			<td ><select name="activity"><option value=""> </option><option value="active">active</option><option value="nonactive">no active</option></td>
+			</tr>
+
+			<tr class="hilighted">
+			<td>&nbsp;</td>
+			<td colspan="2"><select name="period">
+			<option value ="1">1</option>
+			<option value ="2">2</option>
+			<option value ="3">3</option>
+			</select>
+			years of activity 
+			</td>
+			<td>&nbsp;</td>
+			</tr>
+
 			<tr class="hilighted">
 			<td>
 			Zip Code
@@ -108,6 +127,79 @@
 			</td>
 			<td>&nbsp;</td>
 			</tr>
+			<tr class="hilighted">
+			<td>
+			Branch
+			</td>
+			<td><input type="radio" name="Line" value="branchcode" /></td>
+			<td><input type="radio" name="Column" value="branchcode" /></td>
+			<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+			</tr>
+
+		          <tr class="hilighted">
+                <td>Date of Birth</td>
+                <td></td>
+                <td></td>
+                <td > From <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+                    <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+                    <script language="JavaScript" type="text/javascript">
+                    function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('to').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                                return true;
+                        } else {
+                                return false;
+                        }
+                        }
+                    Calendar.setup(
+                        {
+                            inputField : "from",
+                            ifFormat : "%Y-%m-%d",
+                            button : "openCalendarFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                        }
+                    );
+                    </script>
+                    To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+                        <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+                        <script type="text/javascript">
+                            function validate2(date) {
+                                var day = date.getDate();
+                                var month = date.getMonth() + 1;
+                                var year = date.getFullYear();
+                                var weekDay = date.getDay();
+                                var dayMonth = month + '-' + day;
+                                var dateString = year + '-' + month + '-' + day;
+                                var dateFrom = document.getElementById('from').value.split("-");
+                                var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                                if (limitDate > date) {
+                                        return true;
+                                } else {
+                                        return false;
+                                }
+                            }
+
+                            Calendar.setup(
+                                {
+                                    inputField : "to",
+                                    ifFormat : "%Y-%m-%d",
+                                    button : "openCalendarTo",
+                                    disableFunc : validate2,
+                                    dateStatusFunc : validate2
+                                }
+                            );
+                        </script>
+                    </td>
+                </tr>
+
 			<!-- TMPL_IF name="hassort1" -->
 				<tr>
 				<td>Sort1</td>
