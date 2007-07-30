@@ -302,7 +302,7 @@ sub calculate {
 # year of activity
 	my ( $period_year, $period_month, $period_day )=Add_Delta_YM( Today(),-$period, 0);
 	my $newperioddate=$period_year."-".$period_month."-".$period_day;
-	warn "PERIOD".$period;
+#	warn "PERIOD".$period;
 # 1st, loop rows.
 	my $linefield;
 	if (($line =~/zipcode/) and ($digits)) {
@@ -405,7 +405,7 @@ sub calculate {
 	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
 	$strcalc .= " group by $linefield, $colfield";
-	warn "". $strcalc;
+#	warn "". $strcalc;
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 #	warn "filling table";
