@@ -13,10 +13,16 @@
 		<td>Illustration 1:</td>
 		<td>
 			<select name="f1" size="1">
+			<!-- TMPL_IF name="f1|" -->
+            	           <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+            	           <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Illustrations</option>
@@ -38,16 +44,13 @@
 			<!-- TMPL_ELSE -->
 				<option value="d">cartes marines</option>
 			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f1e" -->
 				<option value="e" SELECTED>plans</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">plans</option>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>plans</option>
-			<!-- TMPL_ELSE -->
-				<option value="e">plans</option>
-			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f1f" -->
 				<option value="f" SELECTED>Planches</option>
 			<!-- TMPL_ELSE -->
@@ -109,10 +112,16 @@
 		<td>Illustration 2:</td>
 		<td>
 			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Illustrations</option>
@@ -205,10 +214,16 @@
 		<td>Illustration 3:</td>
 		<td>
 			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Illustrations</option>
@@ -301,10 +316,16 @@
 		<td>Illustration 4:</td>
 		<td>
 			<select name="f4" size="1">
+			<!-- TMPL_IF name="f4|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Illustrations</option>
@@ -398,10 +419,16 @@
 	<tr>		<td>Type d'ouvrage de reference 1:</td>
 		<td>
 			<select name="f5" size="1">
+                        <!-- TMPL_IF name="f5|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Bibliographie</option>
@@ -478,31 +505,17 @@
 				<option value="n">Lois et decrets</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f5o" -->
 				<option value="o" SELECTED>Table numerique</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">Table numerique</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f5p" -->
 				<option value="p" SELECTED>Rapport technique</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">Rapport techique</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f5q" -->
 				<option value="q" SELECTED>Sujet d'examen</option>
@@ -519,10 +532,17 @@
 			<!-- TMPL_ELSE -->
 				<option value="s">Traite</option>
 			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f5t" -->
-				<option value="t" SELECTED>Bande dessinee</option>
+				<option value="t" SELECTED>Bande déssinée</option>
 			<!-- TMPL_ELSE -->
-				<option value="t">Bande dessinee</option>
+				<option value="t">Bande déssinée</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5v" -->
+				<option value="v" SELECTED>Mémoires ou thèses reproduits</option>
+			<!-- TMPL_ELSE -->
+				<option value="v">Mémoires ou thèses reproduits</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5z" -->
@@ -531,13 +551,20 @@
 				<option value="z">Autres</option>
 			<!-- /TMPL_IF -->
 			</select>
-		</td>		<td>Type d'ouvrage de reference 2:</td>
+		</td>
+		<td>Type d'ouvrage de reference 2:</td>
 		<td>
 			<select name="f6" size="1">
-	<!-- TMPL_IF name="f6 " -->
-										<option value=" " SELECTED>None</option>
+			<!-- TMPL_IF name="f6|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
+			<!-- TMPL_IF name="f6 " -->
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6a" -->
@@ -615,31 +642,17 @@
 				<option value="n">Lois et decrets</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f6o" -->
 				<option value="o" SELECTED>Table numerique</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">Table numerique</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f6p" -->
 				<option value="p" SELECTED>Rapport technique</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">Rapport techique</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f6q" -->
 				<option value="q" SELECTED>Sujet d'examen</option>
@@ -671,10 +684,16 @@
 		</td></tr><tr>		<td>Type d'ouvrage de reference 3:</td>
 		<td>
 			<select name="f7" size="1">
+			<!-- TMPL_IF name="f7|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>Bibliographie</option>
@@ -751,31 +770,17 @@
 				<option value="n">Lois et decrets</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f7o" -->
 				<option value="o" SELECTED>Table numerique</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">Table numerique</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f7p" -->
 				<option value="p" SELECTED>Rapport technique</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">Rapport techique</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f7q" -->
 				<option value="q" SELECTED>Sujet d'examen</option>
@@ -804,14 +809,22 @@
 				<option value="z">Autres</option>
 			<!-- /TMPL_IF -->
 			</select>
-		</td>		<td>Type d'ouvrage de reference 4:</td>
+		</td>
+                  <td>Type d'ouvrage de reference 4:</td>
 		<td>
 			<select name="f8" size="1">
-			<!-- TMPL_IF name="f8 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="f8|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+                        
+                        <!-- TMPL_IF name="f8 " -->
+                            <option value=" " SELECTED>valeur non requise</option>
+                        <!-- TMPL_ELSE -->
+                            <option value=" ">valeur non requise</option>
+                        <!-- /TMPL_IF -->
+                        
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>Bibliographie</option>
 			<!-- TMPL_ELSE -->
@@ -887,31 +900,17 @@
 				<option value="n">Lois et decrets</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f8o" -->
 				<option value="o" SELECTED>Table numerique</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">Table numerique</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f8p" -->
 				<option value="p" SELECTED>Rapport technique</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">Rapport techique</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f8q" -->
 				<option value="q" SELECTED>Sujet d'examen</option>
@@ -945,111 +944,84 @@
   <tr>
         <td>Colloque ou congres:</td>
                 <td>
-                        <select name="f9" size="1">
-	                        <!-- TMPL_IF name="f9 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f90" -->
-                                <option value="0"
-				SELECTED>Le document n'est pas un
-				colloque ou un congres</optio\
-n>
-                        <!-- TMPL_ELSE -->
-                                <option
-				value="0">Le document n'est pas un
-				colloque ou un congres</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f91" -->
-                                <option value="1"
-				SELECTED>Le document est un colloque
-				ou un congres</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="1">Le document est un
-				colloque ou un congres</option>
-                        <!-- /TMPL_IF -->
-
+                <select name="f9" size="1">
+               	<!-- TMPL_IF name="f1|" -->
+            		<option value="|" SELECTED>|- Caractère de remplissage</option>
+	            <!-- TMPL_ELSE -->
+    	        	<option value="|">|- Caractère de remplissage</option>
+        	    <!-- /TMPL_IF -->
+        	    
+	            <!-- TMPL_IF name="f90" -->
+    	            <option value="0" SELECTED>0- Le document n'est pas un colloque ou un congres</option>
+        	    <!-- TMPL_ELSE -->
+                    <option value="0">0- Le document n'est pas un colloque ou un congres</option>
+                <!-- /TMPL_IF -->
+                
+                <!-- TMPL_IF name="f91" -->
+                    <option value="1" SELECTED>1- Le document est un colloque	ou un congres</option>
+                <!-- TMPL_ELSE -->
+                    <option value="1">1- Le document est un colloque ou un congres</option>
+                <!-- /TMPL_IF -->
         </tr>
-  <tr>
+        
+	    <tr>
+	    
         <td>Melanges</td>
                 <td>
-                        <select name="f10" size="1">
-                        <!-- TMPL_IF name="f10 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f100" -->
-                                <option value="0"
-				SELECTED>Document pas constitue de melanges</optio\
-n>
-                        <!-- TMPL_ELSE -->
-                                <option
-				value="0">Document pas constitue de melanges</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f101" -->
-                                <option value="1"
-				SELECTED>Le document est constitue de melanges</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="1">Le document est
-  constitue de melanges</option>
-                        <!-- /TMPL_IF -->
-
+                <select name="f10" size="1">
+                <!-- TMPL_IF name="f10|" -->
+                    <option value="|" SELECTED>|- Caractère de remplissage</option>
+                <!-- TMPL_ELSE -->
+                    <option value="|">|- Caractère de remplissage</option>
+                <!-- /TMPL_IF -->
+                        
+                <!-- TMPL_IF name="f100" -->
+                        <option value="0" SELECTED>Document pas constitue de melanges</option>
+                <!-- TMPL_ELSE -->
+                        <option	value="0">Document pas constitue de melanges</option>
+                <!-- /TMPL_IF -->
+                
+                <!-- TMPL_IF name="f101" -->
+                        <option value="1" SELECTED>Le document est constitue de melanges</option>
+                <!-- TMPL_ELSE -->
+                        <option value="1">Le document est constitue de melanges</option>
+                <!-- /TMPL_IF -->
         </tr>
-
-
   <tr>
         <td>Index</td>
                 <td>
                         <select name="f11" size="1">
-                        <!-- TMPL_IF name="f11 " -->
-                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_IF name="f11|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
                         <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
+                            <option value="|">|- Caractère de remplissage</option>
                         <!-- /TMPL_IF -->
-
+                        
                         <!-- TMPL_IF name="f110" -->
-                                <option value="0"
-				SELECTED>Document qui ne contient pas d'index</optio\
-n>
+                                <option value="0"SELECTED>Document qui ne contient pas d'index</option>
                         <!-- TMPL_ELSE -->
-                                <option
-				value="0">Document qui ne contient pas
-        d'index</option>
+                                <option	value="0">Document qui ne contient pas d'index</option>
                         <!-- /TMPL_IF -->
+                        
                         <!-- TMPL_IF name="f111" -->
-                                <option value="1"
-				SELECTED>Le document contient un index</option>
+                                <option value="1" SELECTED>Le document contient un index</option>
                         <!-- TMPL_ELSE -->
-                                <option value="1">Le document contient
-        un index</option>
+                                <option value="1">Le document contient un index</option>
                         <!-- /TMPL_IF -->
-
         </tr>
-
-
-
-
-
-
   <tr>
         <td>Genre litteraire</td>
                 <td>
                         <select name="f12" size="1">
-                        <!-- TMPL_IF name="f12 " -->
-                                <option value=" " SELECTED>None</option>
+                        <!-- TMPL_IF name="f12|" -->
+                        <option value="|" SELECTED>|- Caractère de remplissage</option>
                         <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
+                            <option value="|">|- Caractère de remplissage</option>
                         <!-- /TMPL_IF -->
-
                         <!-- TMPL_IF name="f12a" -->
-                                <option value="a"
-				SELECTED>fiction, roman</option>
+                                <option value="a" SELECTED>fiction, roman</option>
                         <!-- TMPL_ELSE -->
-                                <option
-				value="a">fiction, roman</option>
+                                <option	value="a">fiction, roman</option>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="f12b" -->
@@ -1100,20 +1072,19 @@ n>
                        <option value="z">formes variees ou
                        autres formes litteraires</option>
                         <!-- /TMPL_IF -->
-			
-
         </tr>
 
   <tr>
         <td>Biographie</td>
                 <td>
-
                         <select name="f13" size="1">
-                        <!-- TMPL_IF name="f13 " -->
-                                <option value=" " SELECTED>None</option>
+                        
+                        <!-- TMPL_IF name="f13|" -->
+                        <option value="|" SELECTED>|- Caractère de remplissage</option>
                         <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
+                            <option value="|">|- Caractère de remplissage</option>
                         <!-- /TMPL_IF -->
+                        
                         <!-- TMPL_IF name="f13y" -->
                                 <option value="y"
 				SELECTED>C'est pas une biographie</option>
@@ -1149,23 +1120,19 @@ n>
                                 <option value="d">Contient des
                                 informations biographiques</option>
                         <!-- /TMPL_IF -->
-
-
-
-
         </tr>
-
-
 
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value +document.f_pop.f9.value +document.f_pop.f10.value +document.f_pop.f11.value +document.f_pop.f12.value +document.f_pop.f13.value;
-		self.close();
-		return false;
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value = document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value +document.f_pop.f9.value +document.f_pop.f10.value +document.f_pop.f11.value +document.f_pop.f12.value +document.f_pop.f13.value;
+            window.close();
+            return false;
 	}
 </script>
 </body>

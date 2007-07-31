@@ -32,6 +32,7 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
@@ -39,7 +40,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "124c".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -51,8 +52,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_124c.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 124c\",'width=1000,height=375,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_124c.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 124c\",'width=1000,height=375,toolbar=false,scrollbars=yes');
 
 }
 </script>

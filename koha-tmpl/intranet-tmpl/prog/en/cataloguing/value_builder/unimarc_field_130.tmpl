@@ -13,11 +13,6 @@
 		<td>Presentation materielle:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Carte a fenetre</option>
 			<!-- TMPL_ELSE -->
@@ -69,11 +64,7 @@
 		<td>Polarite:</td>
 		<td>
 			<select name="f2" size="1">
-			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Positif</option>
 			<!-- TMPL_ELSE -->
@@ -100,10 +91,11 @@
 		<td>Dimensions:</td>
 		<td>
 			<select name="f3" size="1">
+
 			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>8 mm (microfilm)</option>
@@ -165,12 +157,7 @@
 	<tr>
 		<td>Rapport de reduction:</td>
 		<td>
-			<select name="f4" size="1">
-			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+			<select name="f4" size="1">		
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Faible reduction</option>
 			<!-- TMPL_ELSE -->
@@ -219,11 +206,6 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 		<td>Couleur:</td>
 		<td>
 			<select name="f6" size="1">
-			<!-- TMPL_IF name="f6 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>Monochrome</option>
 			<!-- TMPL_ELSE -->
@@ -250,11 +232,6 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 		<td>Emulsion:</td>
 		<td>
 			<select name="f7" size="1">
-			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>Sel d'argent</option>
 			<!-- TMPL_ELSE -->
@@ -296,11 +273,6 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 		<td>Generation (copies):</td>
 		<td>
 			<select name="f8" size="1">
-			<!-- TMPL_IF name="f8 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>Premiere generation (master)</option>
 			<!-- TMPL_ELSE -->
@@ -332,11 +304,6 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 		<td>Support de film:</td>
 		<td>
 			<select name="f9" size="1">
-			<!-- TMPL_IF name="f9 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9a" -->
 				<option value="a" SELECTED>Support de securite</option>
 			<!-- TMPL_ELSE -->
@@ -362,18 +329,15 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-
 	    document.f_pop.f5.value=document.f_pop.f5.value+'   ';
-
-
-
 	    document.f_pop.f5.value=document.f_pop.f5.value.substring(0,3);
-
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value ;
-		self.close();
-		return false;
+	    var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value ;
+	    window.close();
+	    return false;
 	}
 </script>
 </body>

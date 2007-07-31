@@ -13,11 +13,11 @@
 		<td>Copie (generation)</td>
 		<td>
 			<select name="f1" size="1">
-   <!-- TMPL_IF name="f1 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Original</option>
 			<!-- TMPL_ELSE -->
@@ -66,11 +66,12 @@
 		<td>Elements de production (montage)</td>
 		<td>
 			<select name="f2" size="1">
-   <!-- TMPL_IF name="f2 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Epreuve</option>
 			<!-- TMPL_ELSE -->
@@ -134,17 +135,15 @@
 		</td>
 	</tr>
 
-
-
 	<tr>
 		<td>Categories fines de couleurs (films)</td>
 		<td>
 	<select name="f3" size="1">
-   <!-- TMPL_IF name="f3 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f3|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Trois couches de pigment</option>
@@ -158,24 +157,17 @@
 				<option value="b">Deux couleurs, simple bande</option>
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f3c" -->
 				<option value="c" SELECTED>Indeterminee, 2 couleurs</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">Indeterminee, 2 couleurs</option>
-	
 			<!-- /TMPL_IF -->
-
-
 
 			<!-- TMPL_IF name="f3d" -->
 				<option value="d" SELECTED>Indeterminee, 3 couleurs</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">Indeterminee, 3 couleurs</option>
-	
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f3e" -->
 				<option value="e" SELECTED>Trois bandes de couleur</option>
@@ -283,10 +275,7 @@
 				<option value="z" SELECTED>Autre</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autre</option>
-	
 			<!-- /TMPL_IF -->
-
-
 				</select>
 		</td>
 	</tr>
@@ -296,11 +285,12 @@
 		<td>Emulsion (polarite)</td>
 		<td>
 			<select name="f4" size="1">
-   <!-- TMPL_IF name="f4 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Positif</option>
 			<!-- TMPL_ELSE -->
@@ -330,28 +320,24 @@
 				<option value="z" SELECTED>Autre</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autre</option>
-
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 
-
 	<tr>
 		<td>Support de film</td>
 		<td>
 			<select name="f5" size="1">
-   <!-- TMPL_IF name="f5 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
+			<!-- TMPL_IF name="f5|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Securite (triacetate)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Securite (triacetate)</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5b" -->
@@ -380,15 +366,12 @@
 
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f5x" -->
 				<option value="x" SELECTED>Support composite</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">Support composite</option>
 
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f5z" -->
 				<option value="z" SELECTED>Autre</option>
@@ -398,23 +381,17 @@
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
-
         </tr>
-
-
-
-
-
 
 	<tr>
 		<td>Type de sonorisation</td>
 		<td>
 			<select name="f6" size="1">
-   <!-- TMPL_IF name="f6 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>Monaural</option>
@@ -449,8 +426,6 @@
 
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f6x" -->
 				<option value="x" SELECTED>Non applicable</option>
 			<!-- TMPL_ELSE -->
@@ -476,11 +451,11 @@
 		<td>Type de film ou d'epreuve (tirage)</td>
 		<td>
 			<select name="f7" size="1">
-   <!-- TMPL_IF name="f7 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f7|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>Procede par imbibition</option>
@@ -515,15 +490,12 @@
 
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f7x" -->
 				<option value="x" SELECTED>Non applicable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">Non applicable</option>
 
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f7z" -->
 				<option value="z" SELECTED>Autres</option>
@@ -536,16 +508,15 @@
 
         </tr>
 
-
 	<tr>
 		<td>Etat de la copie (deterioration)</td>
 		<td>
 			<select name="f8" size="1">
-   <!-- TMPL_IF name="f8 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f8|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>Nitrate - odeur suspecte</option>
@@ -625,11 +596,11 @@
 		<td>Etat de la version (completude)</td>
 		<td>
 			<select name="f9" size="1">
-   <!-- TMPL_IF name="f9 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9a" -->
 				<option value="a" SELECTED>Incomplet</option>
@@ -658,13 +629,9 @@
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
-
         </tr>
 
-
-
-
-   <tr>
+   		<tr>
                 <td>Date d'enregistrement</td>
                 <td>Annee <input type="text" name="f10" maxlength=4 size=5 value="<!-- TMPL_VAR name="f10" -->"></td>
                 <td>mois <input type="text" name="f11" maxlength=2 size=3 value="<!-- TMPL_VAR name="f11" -->"></td>
@@ -673,14 +640,16 @@
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-document.f_pop.f10.value=document.f_pop.f10.value+'    ';
-document.f_pop.f10.value=document.f_pop.f10.value.substring(0,4);
-document.f_pop.f11.value=document.f_pop.f11.value+'  ';
-document.f_pop.f11.value=document.f_pop.f11.value.substring(0,2);
+            document.f_pop.f10.value=document.f_pop.f10.value+'    ';
+            document.f_pop.f10.value=document.f_pop.f10.value.substring(0,4);
+            document.f_pop.f11.value=document.f_pop.f11.value+'  ';
+            document.f_pop.f11.value=document.f_pop.f11.value.substring(0,2);
 
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value;
+	    var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value;
 		self.close();
 		return false;
 	}

@@ -12,12 +12,7 @@
 	<tr>
 		<td>Hemisphere:</td>
 		<td>
-			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+			<select name="f1" size="1">            
 			<!-- TMPL_IF name="f1w" -->
 				<option value="w" SELECTED>Ouest</option>
 			<!-- TMPL_ELSE -->
@@ -59,23 +54,21 @@
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
-	function report() {
-document.f_pop.f2.value=document.f_pop.f2.value+'   ';
-document.f_pop.f3.value=document.f_pop.f3.value+'  ';
-document.f_pop.f4.value=document.f_pop.f4.value+'  ';
+<script type="text/javascript">
+    function report() {
+        document.f_pop.f2.value=document.f_pop.f2.value+'   ';
+        document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+        document.f_pop.f4.value=document.f_pop.f4.value+'  ';
+        document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
+        document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+        document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
 
-
-
-document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
-document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
-document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
-
-
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value;
-		self.close();
-		return false;
-	}
+        var doc   = opener.document; 
+        var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value;
+        window.close();
+        return false;
+    }
 </script>
 </body>
 </html>

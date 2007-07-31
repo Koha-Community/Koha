@@ -35,6 +35,7 @@ use C4::Koha;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";
@@ -56,7 +57,7 @@ the 3 scripts are inserted after the <input> in the html code
 =cut
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "003".(int(rand(100000))+1);
+my $function_name= $field_number;
 
 # find today's date
 my $org = C4::Context->preference('MARCOrgCode');
@@ -67,6 +68,8 @@ function Blur$function_name(index) {
 }
 
 function Focus$function_name(subfield_managed) {
+        // TODO FIXME :: HTML code has changed
+
 	for (i=0 ; i<document.f.field_value.length ; i++) {
                 if (document.f.tag[i].value == '040' && document.f.subfield[i].value == 'd') {
                         document.f.field_value[i].value = '$org';

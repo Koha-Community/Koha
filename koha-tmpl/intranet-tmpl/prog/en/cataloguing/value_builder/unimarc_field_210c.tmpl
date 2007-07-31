@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<!-- TMPL_INCLUDE NAME="auth-search-top.inc" -->
 <div id="mainbloc">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <h1 class="authority">Authority search results</h1>
@@ -110,7 +109,10 @@ function report(index,summary)
 {    
     var regexp= /(\d* -+ *)(.*)/;
     var result=summary.match(regexp);
-    opener.document.f.field_value[index].value=result[2];
+    var doc   = opener.document; 
+    var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+
+    field.value = result[2];
     self.close();
 }
 </script>

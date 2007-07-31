@@ -45,7 +45,7 @@ This plug-in deals with unimarc field 700-4 (
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "7004".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res  = "
 <script>
 function Focus$function_name(index) {
@@ -57,7 +57,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(subfield_managed) {
-	defaultvalue=document.forms['f'].field_value[1].value;
+	defaultvalue=document.getElementById(\"$field_number\").value;
 	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_700-4.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value builder\",'width=500,height=400,toolbar=false,scrollbars=yes');
 
 }

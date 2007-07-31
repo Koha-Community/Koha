@@ -32,33 +32,33 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+    my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+    return "";
 }
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "110".(int(rand(100000))+1);
-my $res="
-<script>
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
-
-function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_110.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 110\",'width=700,height=600,toolbar=false,scrollbars=yes');
-
-}
-</script>
-";
-
-return ($function_name,$res);
+    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+    my $res="
+    <script type='text/javascript'>
+    function Focus$field_number() {
+        return 1;
+    }
+    
+    function Blur$field_number() {
+            return 1;
+    }
+    
+    function Clic$field_number() {
+            defaultvalue=document.getElementById(\"$field_number\").value;
+            window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_110.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 110\",'width=700,height=600,toolbar=false,scrollbars=yes');
+    
+    }
+    </script>
+    ";
+    
+    return ($field_number,$res);
 }
 sub plugin {
 my ($input) = @_;
@@ -85,15 +85,15 @@ my ($template, $loggedinuser, $cookie)
  	my $f9 = substr($result,10,1);
 
 	$template->param(index => $index,
-							"f1$f1" => 1,
-							"f2$f2" => 1,
-							"f3$f3" => 1,
-							"f4$f4" => 1,
-							 f5 => $f5,
-							"f6$f6" => 1,
-							"f7$f7" => 1,
-							"f8$f8" => 1,
-							"f9$f9" => 1
+                        "f1$f1" => 1,
+                        "f2$f2" => 1,
+                        "f3$f3" => 1,
+                        "f4$f4" => 1,
+                            f5 => $f5,
+                        "f6$f6" => 1,
+                        "f7$f7" => 1,
+                        "f8$f8" => 1,
+                        "f9$f9" => 1
  );
         output_html_with_http_headers $input, $cookie, $template->output;
 }
