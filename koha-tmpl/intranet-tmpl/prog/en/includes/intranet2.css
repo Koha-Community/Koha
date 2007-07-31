@@ -66,9 +66,9 @@ select {
 }
 
 fieldset {
-        border : 1px solid #bbb;
-        display: inline;
-        vertical-align: top;
+    border : 1px solid #bbb;
+    display: inline;
+    vertical-align: top;
 }
 
 input[type=submit], input[type=button], input[type=reset] {
@@ -89,7 +89,6 @@ label {
     vertical-align:top;
     display:block;
     float:left;
-/*     text-align:right; */
     width:10em;
     margin-right:0.2em;
 }
@@ -119,6 +118,14 @@ tr.highlight td, tr.highlight th {
     text-decoration:none;
 }
 
+.click{
+    cursor:pointer;
+    color: #027ac6;/*blue*/
+}
+.click:hover{   
+    text-decoration:underline;
+}
+
 #problem {
     color: red;
     background-color:white;
@@ -146,6 +153,13 @@ legend {
     margin:10px;
 }
 
+.toogle{
+	background-color:#ffffcc;
+}
+
+.pages{
+	margin:.7em;
+}
 /* css styles for reserves color alerts */
 .onloan {
     background-color: #FFED3D;
@@ -463,8 +477,9 @@ legend {
 #tabs a {
     color:white;
     text-decoration:none;
-    padding-right:10px;
-    padding-left:10px;
+    padding-right:1.2em;
+    padding-left:1.2em;
+    -moz-border-radius:4px;
 }
 
 /* specify that we to do when the mouse is on 1 button */
@@ -473,8 +488,8 @@ legend {
 }
 
 #tabs {
-    margin-top:45px;
-    margin-bottom:5px;
+    margin-top:35px;
+    margin-bottom:20px;
 }
 
 /* styles for the 11 content blocks */
@@ -490,21 +505,9 @@ legend {
     display:block;
 }
 
-/* the style of tag description */
-p.tag {
-    font-weight:bold;
-}
-/* the style of subfield paragraph */
-p.subfield {
-    
-}
-
-
-
 .lineSelected {
     background-color:yellow;
 }
-
 
 /* display more informations with css layer */
 a.info {
@@ -551,3 +554,116 @@ a.info:hover span {
 #itemtypelist p {
     margin:0px;
 }
+
+/* MARC Editor stylesheet */
+
+/* the style of tag description */
+div.tag_title {
+    font-weight:bold;
+}
+
+div.tag_title span {
+    display:inline;
+    letter-spacing:5px;
+    font-size:1.2em;
+    text-transform: capitalize;
+    color : #027ac6;
+}
+
+div.tag_title a:hover{
+    text-decoration:none;
+}
+
+div.tag {
+    margin-bottom:1.8em;
+}
+
+.subfield_line{
+    margin-left:1.1em;
+}
+
+.CursorHelp{
+    cursor:help;
+}
+
+.buttonDot{
+    cursor:help;
+}
+
+.buttonUp {
+    cursor: crosshair;
+    color: grey;
+    font-size: .8em;
+}
+
+.labelsubfield{
+    min-width:210px;
+    display:inline;
+}
+
+.subfield_mandatory{
+    color:red;
+}
+
+.subfield_not_filled {
+    width:506px;
+    color:darkblue;
+    background-color:#ffe5ed;
+    border:1px solid #ffe5ed;
+    border-bottom:1px solid red;
+    padding:0.15em;
+}
+
+.line_not_filled{
+    margin-left:1.1em;
+    background-color:#ffe5ed;
+    border:1px solid red;
+}
+
+.indicator{
+    width:20px;
+    color:darkblue;
+    background-color: #ffffff;
+    border:1px dotted #a4cde6;
+    padding:0.15em;
+}
+
+.indicator:focus {
+    background-color:#fdfde3;
+    border-bottom:1px solid darkblue;
+    width:20px;
+    color:darkblue;
+}
+
+.input_marceditor {
+    width:506px;
+    color:darkblue;
+    background-color:#ffffff;
+    border:1px solid #ffffff;
+    border-bottom:1px solid lightgray;
+    padding:0.15em;
+}
+
+.input_marceditor:focus{
+    background-color:#fdfde3;
+    border-bottom:1px solid darkblue;
+    width:506px;
+    color:darkblue;
+}
+
+.tag{
+    padding-bottom:1.1em;
+/*     border-bottom:1px dotted #a4cde6; */
+}
+
+.buttonPlus {
+    cursor: crosshair;
+    color: grey; 
+    font-size: 80%;
+}
+
+/*.flat{
+    border:0px;
+}*/
+
+/* End of Marc Editor stylesheet */
