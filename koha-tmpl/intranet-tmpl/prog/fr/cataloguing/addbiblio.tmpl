@@ -20,8 +20,6 @@
  Avec la grille : <!--TMPL_VAR Name="framework" -->
 
         <input type="hidden" name="op" value="addbiblio" />
-		<input type="hidden" name="repeat_field" />
-        <input type="hidden" name="addfield_field" />
         <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
         <input type="hidden" name="breedingid" value="<!-- TMPL_VAR NAME="breedingid" -->" />
@@ -317,20 +315,8 @@ function Changefwk(FwkList) {
 }
 
 function openAuth(tagid,authtype,X) {
-// 	defaultid=document.getElementById(subfieldid);
-//     alert("X"+X);
     Y=X.parentNode.getAttribute("id");
-//     alert("tagid"+Y);
-	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
-}
-
-
-function AddField(field,cntrepeatfield) {
-	document.forms['f'].op.value = "addfield";
-	document.forms['f'].addfield_field.value=field;
-	document.forms['f'].repeat_field.value=cntrepeatfield;
-	//alert(document.forms['f'].repeat_field.value);
-	document.f.submit();
+    window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 function cloneSubfield(index) {
@@ -349,7 +335,6 @@ function cloneSubfield(index) {
         CloneButtonPlus = clone.getElementsByTagName('a')[0];
         CloneButtonPlus.setAttribute('onclick',"cloneSubfield('" + index + index + "')");
         var buttonUp = clone.getElementsByTagName('img')[0];
-//         alert(buttonUp.getAttribute('id'));
         buttonUp.setAttribute('onclick',"upSubfield('" + index + index + "')");
     }
     catch(e){

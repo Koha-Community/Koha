@@ -1,16 +1,5 @@
 #!/usr/bin/perl
 
-use strict;    # always use
-
-use XML::RSS;
-use Digest::MD5 qw(md5_base64);
-use POSIX qw(ceil floor);
-use Date::Calc qw(Today_and_Now Delta_YMDHMS);
-use C4::Context;
-use C4::Search;
-use C4::Koha;
-use C4::Biblio;
-
 # Copyright 2007 Paul POULAIN
 #
 # This file is part of Koha
@@ -28,9 +17,20 @@ use C4::Biblio;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;    # always use
+
+use XML::RSS;
+use Digest::MD5 qw(md5_base64);
+use POSIX qw(ceil floor);
+use Date::Calc qw(Today_and_Now Delta_YMDHMS);
+use C4::Context;
+use C4::Search;
+use C4::Koha;
+use C4::Biblio;
+
 =head1 NAME
 
-opac-search.pl : script to have RSS feeds automatically on each OPAC search
+opac-rss.pl : script to have RSS feeds automatically on each OPAC search
 
 =head1 SYNOPSIS
 
@@ -68,78 +68,92 @@ my $query = $cgi->param('q');
 $query =~ s/:/=/g;
 
 # the number of lines to retrieve
-my $size=$cgi->param('size') || 50;
+my $size = $cgi->param('size') || 50;
 
 # the filename of the cached rdf file.
 my $filename = md5_base64($query);
-my $rss = new XML::RSS (version => '1.0');
+my $rss = new XML::RSS( version => '1.0' );
 
 # the site URL
 my $url = $cgi->url();
 $url =~ s/opac-rss\.pl.*//;
 $url =~ /(http:\/\/.*?)\//;
-my $short_url=$1;
+my $short_url = $1;
 
-my $RDF_update_needed=1;
-    my ($year,$month,$day, $hour,$min,$sec) = Today_and_Now();
+my $RDF_update_needed = 1;
+my ( $year, $month, $day, $hour, $min, $sec ) = Today_and_Now();
 
-if (-e "rss/$filename") {
+if ( -e "rss/$filename" ) {
     $rss->parsefile("rss/$filename");
-    # check if we have to rebuild the RSS feed (once every 30mn), or just return the actual rdf
+
+# check if we have to rebuild the RSS feed (once every 30mn), or just return the actual rdf
     my $rdf_stamp = $rss->{'channel'}->{'dc'}->{'date'};
     $rdf_stamp =~ /(.*)-(.*)-(.*):(.*):(.*):(.*)/;
-    my ($stamp_year,$stamp_month,$stamp_day,$stamp_hour,$stamp_min,$stamp_sec) = ($1,$2,$3,$4,$5,$6);
-    # if more than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
-    unless (($year-$stamp_year >0) or ($month-$stamp_month >0) or ($day-$stamp_day >0) or ($hour-$stamp_hour >0) or ($min-$stamp_min >30)) {
-        $RDF_update_needed =0;
+    my (
+        $stamp_year, $stamp_month, $stamp_day,
+        $stamp_hour, $stamp_min,   $stamp_sec
+    ) = ( $1, $2, $3, $4, $5, $6 );
+
+# if more than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
+    unless ( ( $year - $stamp_year > 0 )
+        or ( $month - $stamp_month > 0 )
+        or ( $day - $stamp_day > 0 )
+        or ( $hour - $stamp_hour > 0 )
+        or ( $min - $stamp_min > 30 ) )
+    {
+        $RDF_update_needed = 0;
     }
 }
 
 if ($RDF_update_needed) {
-#     warn "RDF update in progress";
+
+    #     warn "RDF update in progress";
     $rss->channel(
-                title        => "Koha : $query",
-                description  => C4::Context->preference("LibraryName"),
-                link => $short_url,
-                dc => {
-                    date       => "$year-$month-$day:$hour:$min:$sec",
-                    subject    => "Koha",
-                    creator    => C4::Context->preference("LibraryName"),
-                    rights     => "Copyright $year" ,
-                    language   => C4::Context->preference("opaclanguages"),
-                },
+        title       => "Koha : $query",
+        description => C4::Context->preference("LibraryName"),
+        link        => $short_url,
+        dc          => {
+            date     => "$year-$month-$day:$hour:$min:$sec",
+            subject  => "Koha",
+            creator  => C4::Context->preference("LibraryName"),
+            rights   => "Copyright $year",
+            language => C4::Context->preference("opaclanguages"),
+        },
     );
-    
+
     my $total;    # the total results for the whole set
-    my ($error, $marcresults) = SimpleSearch($query);
-    
+    my ( $error, $marcresults ) = SimpleSearch($query);
+
     my $hits = scalar @$marcresults;
-    $hits=$size if $hits > $size;
+    $hits = $size if $hits > $size;
     my @results;
-    for(my $i=0;$i<$hits;$i++) {
+    for ( my $i = 0 ; $i < $hits ; $i++ ) {
         my %resultsloop;
-        my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-        my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
-        # check if the entry is already in the feed. Otherwise, pop the $line th line and add this new one.
-        my $already_in_feed=0;
-        foreach (@{$rss->{'items'}}) {
-            if ($_->{'link'} =~ /biblionumber=$biblio->{'biblionumber'}/) {
-                $already_in_feed=1;
+        my $marcrecord = MARC::File::USMARC::decode( $marcresults->[$i] );
+        my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
+
+# check if the entry is already in the feed. Otherwise, pop the $line th line and add this new one.
+        my $already_in_feed = 0;
+        foreach ( @{ $rss->{'items'} } ) {
+            if ( $_->{'link'} =~ /biblionumber=$biblio->{'biblionumber'}/ ) {
+                $already_in_feed = 1;
             }
         }
         unless ($already_in_feed) {
-            pop(@{$rss->{'items'}}) if (@{$rss->{'items'}} >= $size);
-            $rss->add_item(title => $biblio->{'title'},
-                            description => $biblio->{'author'},
-                            link        => "$url/opac-detail.pl?biblionumber=".$biblio->{'biblionumber'},
-                            mode =>'insert',
+            pop( @{ $rss->{'items'} } ) if ( @{ $rss->{'items'} } >= $size );
+            $rss->add_item(
+                title       => $biblio->{'title'},
+                description => $biblio->{'author'},
+                link        => "$url/opac-detail.pl?biblionumber="
+                  . $biblio->{'biblionumber'},
+                mode => 'insert',
             );
         }
     }
+
     # save the rss feed.
     $rss->save("rss/$filename");
-} else {
-#     warn "RDF CACHE used"
 }
-print $cgi->header(-type => "application/rss+xml");
+
+print $cgi->header( -type => "application/rss+xml" );
 print $rss->as_string;
