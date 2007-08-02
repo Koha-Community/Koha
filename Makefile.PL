@@ -134,6 +134,7 @@ WriteMakefile(
 'XML::LibXML' => 1.59,
 'XML::SAX::ParserFactory' => 1.01,
 'XML::Simple' => 2.14,
+'XML::RSS' => 1.31,
 'ZOOM' => 0,
         },
 
