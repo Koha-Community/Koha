@@ -47,7 +47,7 @@
                 <!-- /TMPL_IF -->
                 
                 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&title=<!-- TMPL_VAR NAME="title"-->&author=<!-- TMPL_VAR NAME="author"-->" >
-                    Issue history
+                    Circulation history
                 </a>
   
                 <!-- TMPL_IF NAME="CAN_user_parameters"-->
