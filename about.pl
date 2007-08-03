@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+ 
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -15,11 +15,10 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
 use strict;
 require Exporter;
 
-use C4::Output;  # contains gettemplate
+use C4::Output;    # contains gettemplate
 use C4::Auth;
 use C4::Context;
 use CGI;
@@ -27,33 +26,37 @@ use LWP::Simple;
 use XML::Simple;
 
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "about.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "about.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => 1 },
+        debug           => 1,
+    }
+);
 
-my $kohaVersion = C4::Context->config("kohaversion");
-my $osVersion = `uname -a`;
-my $perlVersion = $];
-my $mysqlVersion = `mysql -V`;
-my $apacheVersion =  `httpd -v`;
-$apacheVersion =  `httpd2 -v` unless $apacheVersion;
+my $kohaVersion   = C4::Context->config("kohaversion");
+my $osVersion     = `uname -a`;
+my $perlVersion   = $];
+my $mysqlVersion  = `mysql -V`;
+my $apacheVersion = `httpd -v`;
+$apacheVersion = `httpd2 -v` unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
+
 # $apacheVersion =  (`/usr/sbin/apache2 -V`)[0];
 
 $template->param(
-					kohaVersion => $kohaVersion,
-					osVersion          => $osVersion,
-					perlVersion        => $perlVersion,
-					mysqlVersion       => $mysqlVersion,
-					apacheVersion      => $apacheVersion,
-                                        zebraVersion       => $zebraVersion,
-		);
+    kohaVersion   => $kohaVersion,
+    osVersion     => $osVersion,
+    perlVersion   => $perlVersion,
+    mysqlVersion  => $mysqlVersion,
+    apacheVersion => $apacheVersion,
+    zebraVersion  => $zebraVersion,
+);
 
+<<<<<<< HEAD:about.pl
 my @component_names =
     qw/MARC::File::XML   MARC::Charset     Class::Accessor
        LWP::Simple       XML::Simple       Net::Z3950
@@ -63,14 +66,24 @@ my @component_names =
        DBI               Net::Z3950::ZOOM
        Date::Calc
       /;
+=======
+my @component_names = qw/MARC::File::XML   MARC::Charset     Class::Accessor
+  LWP::Simple       XML::Simple       Net::Z3950
+  Event             Net::LDAP         PDF::API2
+  Mail::Sendmail    MARC::Record      Digest::MD5
+  HTML::Template    DBD::mysql        Date::Manip
+  DBI               Smart::Comments   Net::Z3950::ZOOM
+  Date::Calc
+  /;
+>>>>>>> perltidy:about.pl
 
 my @components = ();
 
-foreach my $component (sort @component_names) {
+foreach my $component ( sort @component_names ) {
     my $version;
-    if (eval "require $component") {
+    if ( eval "require $component" ) {
         $version = $component->VERSION;
-        if ($version eq '' ) {
+        if ( $version eq '' ) {
             $version = 'unknown';
         }
     }
@@ -78,7 +91,7 @@ foreach my $component (sort @component_names) {
         $version = 'module is missing';
     }
 
-    push (
+    push(
         @components,
         {
             name    => $component,
@@ -87,8 +100,6 @@ foreach my $component (sort @component_names) {
     );
 }
 
-$template->param(
-    components => \@components
-);
+$template->param( components => \@components );
 
 output_html_with_http_headers $query, $cookie, $template->output;
