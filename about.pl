@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+ö#!/usr/bin/perl
  
 # This file is part of Koha.
 #
@@ -56,7 +56,7 @@ $template->param(
     zebraVersion  => $zebraVersion,
 );
 
-<<<<<<< HEAD:about.pl
+
 my @component_names =
     qw/MARC::File::XML   MARC::Charset     Class::Accessor
        LWP::Simple       XML::Simple       Net::Z3950
@@ -66,16 +66,6 @@ my @component_names =
        DBI               Net::Z3950::ZOOM
        Date::Calc
       /;
-=======
-my @component_names = qw/MARC::File::XML   MARC::Charset     Class::Accessor
-  LWP::Simple       XML::Simple       Net::Z3950
-  Event             Net::LDAP         PDF::API2
-  Mail::Sendmail    MARC::Record      Digest::MD5
-  HTML::Template    DBD::mysql        Date::Manip
-  DBI               Smart::Comments   Net::Z3950::ZOOM
-  Date::Calc
-  /;
->>>>>>> perltidy:about.pl
 
 my @components = ();
 
