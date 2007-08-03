@@ -19,9 +19,9 @@ use CGI;
 use C4::Context;
 use C4::Output;
 
-my $query = new CGI;
+my $query     = new CGI;
 my $sessionID = $query->cookie('sessionID');
-my $dbh = C4::Context->dbh;
+my $dbh       = C4::Context->dbh;
 
 # Check that this is the ip that created the session before deleting it
 my $sth = $dbh->prepare("select userid,ip from sessions where sessionID=?");
