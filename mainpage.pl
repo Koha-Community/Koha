@@ -29,8 +29,10 @@ my $query     = new CGI;
 my $authtypes = getauthtypes;
 my @authtypesloop;
 
-foreach my $thisauthtype ( sort { $authtypes->{$a} <=> $authtypes->{$b} }
-    keys %$authtypes )
+foreach my $thisauthtype (
+    sort { $authtypes->{$a} <=> $authtypes->{$b} }
+    keys %$authtypes
+  )
 {
     my %row = (
         value        => $thisauthtype,
@@ -46,9 +48,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => {
-        catalogue        => 1,
-        circulate        => 1,
-        borrowers        => 1,
+            catalogue => 1,
+            circulate => 1,
+            borrowers => 1,
         },
     }
 );
@@ -60,7 +62,7 @@ $template->param(
     authtypesloop => \@authtypesloop
 );
 
-my $all_koha_news = &GetNewsToDisplay("koha");
+my $all_koha_news   = &GetNewsToDisplay("koha");
 my $koha_news_count = scalar @$all_koha_news;
 
 $template->param(
