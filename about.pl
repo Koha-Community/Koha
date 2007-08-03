@@ -55,8 +55,6 @@ $template->param(
     apacheVersion => $apacheVersion,
     zebraVersion  => $zebraVersion,
 );
-
-
 my @component_names =
     qw/MARC::File::XML   MARC::Charset     Class::Accessor
        LWP::Simple       XML::Simple       Net::Z3950
