@@ -60,7 +60,7 @@ my @component_names =
        Event             Net::LDAP         PDF::API2
        Mail::Sendmail    MARC::Record      Digest::MD5
        HTML::Template    DBD::mysql        Date::Manip
-       DBI               Smart::Comments   Net::Z3950::ZOOM
+       DBI               Net::Z3950::ZOOM
        Date::Calc
       /;
 
