@@ -1374,13 +1374,11 @@ CREATE TABLE `sessionqueries` (
 -- Table structure for table `sessions`
 --
 
-DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE `sessions` (
-  `sessionID` varchar(255) NOT NULL default '',
-  `userid` varchar(255) default NULL,
-  `ip` varchar(16) default NULL,
-  `lasttime` int(11) default NULL,
-  PRIMARY KEY  (`sessionID`)
+DROP TABLE IF EXISTS sessions;                         
+CREATE TABLE sessions (
+  `id` char(32) NOT NULL,
+  `a_session` text NOT NULL,
+  UNIQUE KEY id (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
