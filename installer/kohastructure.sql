@@ -1633,6 +1633,20 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `websites`
+--
+
+DROP TABLE IF EXISTS `websites`;
+CREATE TABLE `websites` (
+  `websitenumber` int(11) NOT NULL auto_increment,
+  `biblionumber` int(11) NOT NULL default '0',
+  `title` mediumtext,
+  `description` mediumtext,
+  `url` varchar(255) default NULL,
+  PRIMARY KEY  (`websitenumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `z3950queue`
 --
 
