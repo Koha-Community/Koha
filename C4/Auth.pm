@@ -340,7 +340,7 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-	# warn "Checking Auth";
+
 # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -425,7 +425,7 @@ sub checkauth {
             close L;
         }
         if ($userid) {
-			# warn "here $userid";
+			warn "here $userid";
             if ( $lasttime < time() - $timeout ) {
 
                 # timed logout
