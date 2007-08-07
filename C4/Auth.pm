@@ -22,6 +22,8 @@ package C4::Auth;
 
 use strict;
 use Digest::MD5 qw(md5_base64);
+use CGI::Session;
+
 
 require Exporter;
 use C4::Context;
@@ -387,34 +389,32 @@ sub checkauth {
 
         # Using Basic Authentication, no cookies required
         $cookie = $query->cookie(
-            -name    => 'sessionID',
+            -name    => 'CGISESSID',
             -value   => '',
             -expires => ''
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie('sessionID') ) {
+    elsif ( $sessionID = $query->cookie("CGISESSID")) {
+		my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+	    
         C4::Context->_new_userenv($sessionID);
-        if ( my %hash = $query->cookie('userenv') ) {
-            C4::Context::set_userenv(
-                $hash{number},       $hash{id},
-                $hash{cardnumber},   $hash{firstname},
-                $hash{surname},      $hash{branch},
-                $hash{branchname},   $hash{flags},
-                $hash{emailaddress}, $hash{branchprinter}
+		if ($session){
+			C4::Context::set_userenv(
+                $session->param('number'),       $session->param('id'),
+                $session->param('cardnumber'),   $session->param('firstname'),
+                $session->param('surname'),      $session->param('branch'),
+                $session->param('branchname'),   $session->param('flags'),
+                $session->param('emailaddress'), $session->param('branchprinter')
             );
         }
-        my ( $ip, $lasttime );
-
-        ( $userid, $ip, $lasttime ) =
-          $dbh->selectrow_array(
-            "SELECT userid,ip,lasttime FROM sessions WHERE sessionid=?",
-            undef, $sessionID );
+        my $ip=$session->param('ip');
+        $userid = $session->param('id');
+		my $lasttime = $session->param('lasttime');
         if ($logout) {
 
             # voluntary logout the user
-            $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
-                undef, $sessionID );
+			$session->delete;
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
@@ -425,12 +425,12 @@ sub checkauth {
             close L;
         }
         if ($userid) {
+			warn "here $userid";
             if ( $lasttime < time() - $timeout ) {
 
                 # timed logout
                 $info{'timed_out'} = 1;
-                $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
-                    undef, $sessionID );
+				$session->delete();
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
@@ -446,8 +446,7 @@ sub checkauth {
                 $info{'oldip'}        = $ip;
                 $info{'newip'}        = $ENV{'REMOTE_ADDR'};
                 $info{'different_ip'} = 1;
-                $dbh->do( "DELETE FROM sessions WHERE sessionID=?",
-                    undef, $sessionID );
+				$session->delete();
                 C4::Context->_unset_userenv($sessionID);
                 $sessionID = undef;
                 $userid    = undef;
@@ -459,13 +458,9 @@ sub checkauth {
                 close L;
             }
             else {
-                $cookie = $query->cookie(
-                    -name    => 'sessionID',
-                    -value   => $sessionID,
-                    -expires => ''
+                $cookie = $query->cookie(CGISESSID => $session->id
                 );
-                $dbh->do( "UPDATE sessions SET lasttime=? WHERE sessionID=?",
-                    undef, ( time(), $sessionID ) );
+				$session->param('lasttime',time());
                 $flags = haspermission( $dbh, $userid, $flagsrequired );
                 if ($flags) {
                     $loggedin = 1;
@@ -477,30 +472,20 @@ sub checkauth {
         }
     }
     unless ($userid) {
-        $sessionID = int( rand() * 100000 ) . '-' . time();
+		my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});		
+		my $sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
         if ($return) {
-            $dbh->do( "DELETE FROM sessions WHERE sessionID=? AND userid=?",
-                undef, ( $sessionID, $userid ) );
-            $dbh->do(
-"INSERT INTO sessions (sessionID, userid, ip,lasttime) VALUES (?, ?, ?, ?)",
-                undef,
-                ( $sessionID, $userid, $ENV{'REMOTE_ADDR'}, time() )
-            );
             open L, ">>/tmp/sessionlog";
             my $time = localtime( time() );
             printf L "%20s from %16s logged in  at %30s.\n", $userid,
               $ENV{'REMOTE_ADDR'}, $time;
             close L;
-            $cookie = $query->cookie(
-                -name    => 'sessionID',
-                -value   => $sessionID,
-                -expires => ''
-            );
+            $cookie = $query->cookie(CGISESSID => $sessionID);
             if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
                 $loggedin = 1;
             }
@@ -574,39 +559,34 @@ sub checkauth {
                         $branchname    = $branches->{$br}->{'branchname'};
                     }
                 }
-                my $hash = C4::Context::set_userenv(
-                    $borrowernumber, $userid,    $cardnumber,
-                    $firstname,      $surname,   $branchcode,
-                    $branchname,     $userflags, $emailaddress,
-                    $branchprinter,
-                );
-
-                $envcookie = $query->cookie(
-                    -name    => 'userenv',
-                    -value   => $hash,
-                    -expires => ''
-                );
+				
+				$session->param('number',$borrowernumber);
+				$session->param('id',$userid);
+				$session->param('cardnumber',$cardnumber);
+				$session->param('firstname',$firstname);
+				$session->param('surname',$surname);
+				$session->param('branch',$branchcode);
+				$session->param('branchname',$branchname);
+				$session->param('flags',$userflags);
+				$session->param('emailaddress',$emailaddress);
+                $session->param('ip',$session->remote_addr());
+				$session->param('lasttime',time());
             }
             elsif ( $return == 2 ) {
 
                 #We suppose the user is the superlibrarian
-                my $hash = C4::Context::set_userenv(
-                    0,
-                    0,
-                    C4::Context->config('user'),
-                    C4::Context->config('user'),
-                    C4::Context->config('user'),
-                    "",
-                    "NO_LIBRARY_SET",
-                    1,
-                    C4::Context->preference('KohaAdminEmailAddress')
-                );
-                $envcookie = $query->cookie(
-                    -name    => 'userenv',
-                    -value   => $hash,
-                    -expires => ''
-                );
-            }
+				$session->param('number',0);
+				$session->param('id',C4::Context->config('user'));
+				$session->param('cardnumber',C4::Context->config('user'));
+				$session->param('firstname',C4::Context->config('user'));
+				$session->param('surname',C4::Context->config('user'),);
+				$session->param('branch','NO_LIBRARY_SET');
+				$session->param('branchname','NO_LIBRARY_SET');
+				$session->param('flags',1);
+				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+                $session->param('ip',$session->remote_addr());
+				$session->param('lasttime',time());
+			}
         }
         else {
             if ($userid) {
@@ -620,21 +600,13 @@ sub checkauth {
     # finished authentification, now respond
     if ( $loggedin || $authnotrequired || ( defined($insecure) && $insecure ) )
     {
-
         # successful login
         unless ($cookie) {
-            $cookie = $query->cookie(
-                -name    => 'sessionID',
-                -value   => '',
-                -expires => ''
+            $cookie = $query->cookie( CGISESSID => ''
             );
         }
-        if ($envcookie) {
-            return ( $userid, [ $cookie, $envcookie ], $sessionID, $flags );
-        }
-        else {
-            return ( $userid, $cookie, $sessionID, $flags );
-        }
+		return ( $userid, $cookie, $sessionID, $flags );
+
     }
 
     # else we have a problem...
@@ -678,11 +650,8 @@ sub checkauth {
         LibraryName => => C4::Context->preference("LibraryName"),
     );
     $template->param( \%info );
-    $cookie = $query->cookie(
-        -name    => 'sessionID',
-        -value   => $sessionID,
-        -expires => ''
-    );
+#    $cookie = $query->cookie(CGISESSID => $session->id
+#   );
     print $query->header(
         -type   => 'utf-8',
         -cookie => $cookie
