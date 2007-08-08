@@ -91,8 +91,7 @@ foreach my $thisbranch (keys %$branches) {
 =cut
 
 sub GetBranches {
-
-    my $onlymine=@_;
+    my ($onlymine)=@_;
     # returns a reference to a hash of references to ALL branches...
     my %branches;
     my $dbh = C4::Context->dbh;
