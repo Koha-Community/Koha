@@ -193,7 +193,6 @@ if ( $count == 1 ) {
         unitprice             => $results[0]->{'unitprice'},
         invoice               => $invoice,
         daterecieved          => $daterecieved,
-        notes                 => $results[0]->{'notes'},
         intranetcolorstylesheet =>
           C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
