@@ -1,4 +1,4 @@
-ö#!/usr/bin/perl
+ï¿½#!/usr/bin/perl
  
 # This file is part of Koha.
 #
@@ -43,6 +43,7 @@ my $perlVersion   = $];
 my $mysqlVersion  = `mysql -V`;
 my $apacheVersion = `httpd -v`;
 $apacheVersion = `httpd2 -v` unless $apacheVersion;
+$apacheVersion = `apache2 -v` unless $apacheVersion; # path for ubuntu
 my $zebraVersion = `zebraidx -V`;
 
 # $apacheVersion =  (`/usr/sbin/apache2 -V`)[0];
