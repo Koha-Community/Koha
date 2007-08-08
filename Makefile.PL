@@ -86,6 +86,7 @@ WriteMakefile(
     PREREQ_PM => {
 'CGI' => 3.15,
 'CGI::Carp' => 1.29,
+'CGI::Session' => '4.10',
 'DBI' => 1.53,
 'Data::Dumper' => 2.121_08,
 'Data::Random' => 0.05,
