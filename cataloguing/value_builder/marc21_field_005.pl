@@ -56,11 +56,10 @@ the 3 scripts are inserted after the <input> in the html code
 =cut
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "210c".(int(rand(100000))+1);
+my $function_name= $field_number;
 
 # find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-                                                               localtime(time);
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 $year +=1900;
 $mon +=1;
 if (length($mon)==1) {
@@ -88,6 +87,8 @@ function Blur$function_name(index) {
 }
 
 function Focus$function_name(subfield_managed) {
+        // TODO FIXME :: HTML code has changed
+
 	for (i=0 ; i<document.f.field_value.length ; i++) {
                 if (document.f.tag[i].value == '005') {
                         document.f.field_value[i].value = '$date';

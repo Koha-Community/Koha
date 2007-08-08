@@ -39,7 +39,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "140".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -51,8 +51,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_140.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 140\",'width=1000,height=575,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_140.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 140\",'width=1000,height=575,toolbar=false,scrollbars=yes');
 
 }
 </script>
@@ -98,7 +98,6 @@ my ($template, $loggedinuser, $cookie)
 	my $f20 = substr($result,24,1);
 	my $f21 = substr($result,25 ,1);
 
-warn "Dans ce cas clea nous fait un f17 => $f17\n";
 
 	$template->param(index => $index,
 			 "f1$f1" => 1,

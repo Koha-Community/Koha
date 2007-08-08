@@ -30,7 +30,7 @@ use C4::Authorities;
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "100".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -42,8 +42,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(index) {
-	defaultvalue=document.f.field_value[index].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_700_701_702.pl&index=\"+index+\"&result=\"+defaultvalue,\"unimarc 700\",'width=700,height=300,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_700_701_702.pl&index=$field_number&result=\"+defaultvalue,\"unimarc 700\",'width=700,height=300,toolbar=false,scrollbars=yes');
 
 }
 </script>

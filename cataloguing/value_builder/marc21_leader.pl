@@ -40,18 +40,14 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "100".(int(rand(100000))+1);
+my $function_name= $field_number
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
-    for (i=0 ; i<document.f.field_value.length ; i++) {
-		if (document.f.tag[i].value == '000') {
-			if (!document.f.field_value[i].value) {
-				document.f.field_value[i].value = '     nam a22     7a 4500';
-			}
-		}
-	}
-return 1;
+    if(!document.getElementById(\"$field_number\").value){
+        document.getElementById(\"$field_number\").value = '     nam a22     7a 4500';
+    }
+    return 1;
 }
 
 function Blur$function_name(subfield_managed) {
@@ -59,8 +55,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_leader.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_leader.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>

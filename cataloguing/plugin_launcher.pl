@@ -22,7 +22,6 @@
 use strict;
 use CGI;
 use C4::Context;
-
 use C4::Output;
 
 my $input = new CGI;

@@ -272,9 +272,10 @@ sub GetReservesFromItemnumber {
 
 =item GetReservesFromBorrowernumber
 
-	$borrowerreserv = GetReservesFromBorrowernumber($borrowernumber,$tatus);
-	
-	TODO :: Descritpion
+    $borrowerreserv = GetReservesFromBorrowernumber($borrowernumber,$tatus);
+    
+    TODO :: Descritpion
+    
 =cut
 
 sub GetReservesFromBorrowernumber {

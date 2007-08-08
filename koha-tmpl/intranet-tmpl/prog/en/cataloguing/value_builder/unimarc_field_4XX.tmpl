@@ -1,190 +1,103 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- TMPL_IF Name="fillinput"-->
-</head>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Cataloging &rsaquo; 4XX plugin</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_IF NAME='fillinput' -->
 	<body>
-		<script language="JavaScript" type="text/javascript">
-		
-			function go() {
-			var index_start = <!-- TMPL_VAR NAME="index" -->;
-			var whichfield = opener.opener.document.f.tag[index_start].value;
-			i=index_start
-			// go forward, until reaching the end of the field.
-			while (i<opener.opener.document.f.field_value.length) {
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_9" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '0') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_0" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'a') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_a" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'c') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_c" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'd') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_d" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'e') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_e" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'h') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_h" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'i') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_i" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'p') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_p" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 't') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_t" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'u') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_u" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'v') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_v" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'x') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_x" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'y') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_y" -->";
-				}
-				if (opener.opener.document.f.tag[i].value != whichfield) {
-					i=opener.opener.document.f.field_value.length;
-				}
-				i++;
-			}
-			// go backward until the beginning of the field
-			i=index_start
-			while (i>=0) {
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '0') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_0">";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == '9') {
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_9">";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'a') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_a" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'c') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_c" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'd') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_d" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'e') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_e" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'h') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_h" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'i') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_i" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'p') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_p" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 't') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_t" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'u') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_u" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'v') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_v" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'x') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_x" -->";
-				}
-				if (opener.opener.document.f.tag[i].value == whichfield && opener.opener.document.f.subfield[i].value == 'y') 
-				{
-					opener.opener.document.f.field_value[i].value = "<!-- TMPL_VAR NAME="subfield_value_y" -->";
-				}
-				if (opener.opener.document.f.tag[i].value != whichfield) {
-					i=0;
-				}
-				i--;
-			}
-				return false;
-			}
-		</script>
-		<script language="javascript" type="text/javascript">
-			window.onload = go();
-			opener.close();
-			self.close();
-		</script>
+        <script language="javascript" type="text/javascript">
+
+            function go() {
+
+                var index_start = "<!-- TMPL_VAR NAME='index' -->";
+                var whichfield;
+                try {
+                        whichfield = opener.opener.document.getElementById(index_start);
+                } catch(e) {
+                        return;
+                }
+                
+                // browse all its subfields
+
+                var subfields = whichfield.parentNode.getElementsByTagName('input');
+
+                var re = /^tag_\d*_code_/;
+                for(var i=0, len = subfields.length ; i< len ; i++) {
+                    if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
+                        var code     = subfields[i];
+                        var subfield = subfields[i+1];
+                        
+                        if(code.value == '9'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_9" -->';
+                        }
+                        if(code.value == '0'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_0" -->';
+                        }
+                        if(code.value == 'a'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_a" -->';
+                        }
+                        if(code.value == 'c'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_c" -->';
+                        }
+                        if(code.value == 'd'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_d" -->';
+                        }
+                        if(code.value == 'e'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_e" -->';
+                        }
+                        if(code.value == 'h'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_h" -->';
+                        }
+                        if(code.value == 'i'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_i" -->';
+                        }
+                        if(code.value == 'p'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_p" -->';
+                        }
+                        if(code.value == 't'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_t" -->';
+                        }
+                        if(code.value == 'u'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_u" -->';
+                        }
+                        if(code.value == 'v'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_v" -->';
+                        }
+                        if(code.value == 'x'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_x" -->';
+                        }
+                        if(code.value == 'y'){
+                                subfield.value = '<!-- TMPL_VAR NAME="subfield_value_y" -->';
+                        }
+                    }
+                }
+                    return false;
+            }
+                
+            window.onload = go();
+            opener.close();
+            window.close();
+        </script>
 	</body>
 <!-- TMPL_ELSE -->
-		<title>KOHA:INTRANET_:_Biblio_Search</title>
-	
-	<script language="JavaScript" type="text/javascript">
-	function Help() {
-		newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
-	}
-	
-	</script>
-	
-	<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/intranet.css">
-	</head>
-	
 	<body>
-		<script>
+		<script type="text/javascript">
+			
+// 			document.getElementById('searchbox').focus();
+		
 			function report(value2report) {
-				if (document.f_pop.result.value.length==0) {
-					document.f_pop.result.value = value2report;
-				} else {
-					document.f_pop.result.value = document.f_pop.result.value+'|'+value2report;
-				}
-				return true;
+                            if (document.f_pop.result.value.length==0) {
+                                    document.f_pop.result.value = value2report;
+                            } else {
+                                    document.f_pop.result.value = document.f_pop.result.value+'|'+value2report;
+                            }
+                            return true;
 			}
-		</script>
-		<script>
 			function finish() {
-				opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.result.value;
-				self.close();
-				return false;
+                            opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.result.value;
+                            self.close();
+                            return false;
 			}
 		</script>
-	<!-- MENUS -->
-	<!-- TMPL_IF NAME="loggedinusername" -->
-		<p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
-	<!-- TMPL_ELSE -->
-		<p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
-	<!-- /TMPL_IF -->
     </head>
-	<div id="main">
 	<h1>KOHA : INTRANET : Catalogue </h1>
 	<!--TMPL_IF Name = "Search"-->
 		<div id="unimarc_field_4XX_search">
@@ -196,8 +109,8 @@
 				<input type="hidden" name="index" value="<!--TMPL_VAR Name="index" -->">
 				<input type="hidden" name="result" value="unimarc field 4 <!--TMPL_VAR Name="index" -->">
 				<input type="hidden" name="op" value="do_search">
-				<label class="label100" for="keyword">Any word</label>
-				<input type="text" name="search" id="keyword" size="35">
+				<label class="label100" for="searchbox">Any word</label>
+				<input type="text" name="search" id="searchbox" size="35">
 			</p>
 			<p>
 				<input type="submit" value="Start search">
@@ -225,18 +138,18 @@
 				</tr>
 				<!-- TMPL_LOOP NAME="result" -->
 				<tr>
-					<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
-								<!-- TMPL_IF name="MARC_ON" -->
-									<a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML"--></a>
-								<!-- TMPL_ELSE -->
-									<a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a>				<!-- /TMPL_IF -->
-							<p><!-- TMPL_VAR NAME="author" -->
-							<!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
-							<!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
-						</p>
+                                    <td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+                                                            <!-- TMPL_IF name="MARC_ON" -->
+                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML"--></a>
+                                                            <!-- TMPL_ELSE -->
+                                                                    <a_class="transparent resultlist" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a>				<!-- /TMPL_IF -->
+                                                    <p><!-- TMPL_VAR NAME="author" -->
+                                                    <!-- TMPL_IF NAME="publishercode" -->- <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
+                                                    <!-- TMPL_IF NAME="place" --> ; <!-- TMPL_VAR NAME="place" --><!-- /TMPL_IF -->
+                                                    <!-- TMPL_IF NAME="pages" --> - <!-- TMPL_VAR NAME="pages" --><!-- /TMPL_IF -->
+                                                    <!-- TMPL_IF NAME="notes" --> : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF -->
+                                                    <!-- TMPL_IF NAME="size" --> ; <!-- TMPL_VAR NAME="size" --><!-- /TMPL_IF -->
+                                            </p>
 					</td>
 					<td align="center" <!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
 						<!-- TMPL_VAR NAME="totitem" -->
@@ -251,26 +164,47 @@
 						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&index=<!--TMPL_VAR Name="index"-->&bibnum=<!--TMPL_VAR Name="biblionumber"-->&type=intranet&op=fillinput')">Clear Field</a>
                       <!--/TMPL_IF-->
 					</td>
-	
 				</tr>
 				<!-- /TMPL_LOOP -->
 			</table>
 		</div>
 		<div id="resultnumber">
-			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt;Previous</a><!-- /TMPL_IF -->
-				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
+			<p>
+				<!-- TMPL_IF NAME="displayprev" -->
+				<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
+					&lt;&lt;Previous
+				</a>
+				<!-- /TMPL_IF -->
+
+				<!-- TMPL_LOOP NAME="numbers" -->
+					<!-- TMPL_IF NAME="highlight" -->
+						<span class="highlight">
+							<!-- TMPL_VAR NAME="number" -->
+						</span>
+					<!-- TMPL_ELSE -->
+						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
+							<!-- TMPL_VAR NAME="number" -->
+						</a>
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+
+				<!-- TMPL_IF NAME="displaynext" -->
+				<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">
+					Next&gt;&gt;
+				</a>
+				<!-- /TMPL_IF -->
+			</p>
 		</div>
 	
 		<script language="JavaScript" type="text/javascript">
 		
-		function jumpfull(page)
-		{	
+		function jumpfull(page){	
 			window.open(page,'','fullscreen,scrollbars');
 		}
 		</script>
 		
 	<!--/TMPL_IF-->
-	</div>
-	</body>
-<!--/TMPL_IF -->
+
+</body>
+<!-- /TMPL_IF -->
 </html>

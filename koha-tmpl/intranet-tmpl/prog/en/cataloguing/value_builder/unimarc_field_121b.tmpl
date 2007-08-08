@@ -13,11 +13,6 @@
 		<td>Altitude du capteur:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Terrestre</option>
 			<!-- TMPL_ELSE -->
@@ -38,11 +33,7 @@
 		<td>Orientation du capteur :</td>
 		<td>
 			<select name="f2" size="1">
-			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Oblique faible</option>
 			<!-- TMPL_ELSE -->
@@ -67,11 +58,7 @@
 		<td>Qualite de l'image:</td>
 		<td>
 			<select name="f4" size="1">
-			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Faible</option>
 			<!-- TMPL_ELSE -->
@@ -97,11 +84,7 @@
 		<td>Couverture nuageuse exprimee en huitieme:</td>
 		<td>
 			<select name="f5" size="1">
-			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f51" -->
 				<option value="1" SELECTED>1/8</option>
 			<!-- TMPL_ELSE -->
@@ -148,21 +131,14 @@
 		       <td>Qualite de l'image:</td>
                 <td>
                         <select name="f6" size="1">
-                        <!-- TMPL_IF name="f6 " -->
-                                <option value=" "
-                SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="f6-" -->
-                                <option value="-"
-                SELECTED>Inferieure au cm</option>
+                                <option value="-" SELECTED>Inferieure au cm</option>
                         <!-- TMPL_ELSE -->
                                 <option value="-">Inferieure au cm</option>
                         <!-- /TMPL_IF -->
+                        
                         <!-- TMPL_IF name="f61" -->
-                                <option value="1"
-                SELECTED>1</option>
+                                <option value="1" SELECTED>1</option>
                         <!-- TMPL_ELSE -->
                                 <option value="1">1</option>
                         <!-- /TMPL_IF -->
@@ -229,11 +205,7 @@
                         </select>
                 
 			<select name="f7" size="1">
-			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f7c" -->
 				<option value="c" SELECTED>Centimetres</option>
 			<!-- TMPL_ELSE -->
@@ -286,7 +258,9 @@ document.f_pop.f3.value=document.f_pop.f3.value+'  ';
 document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 
 
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value;
+	    var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value;
 		self.close();
 		return false;
 	}

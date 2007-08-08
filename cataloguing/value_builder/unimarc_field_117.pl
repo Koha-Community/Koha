@@ -39,26 +39,25 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "117".(int(rand(100000))+1);
 my $res="
 <script>
-function Focus$function_name(subfield_managed) {
+function Focus$field_number(subfield_managed) {
 return 1;
 }
 
-function Blur$function_name(subfield_managed) {
+function Blur$field_number(subfield_managed) {
 	return 1;
 }
 
-function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_117.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 117\",'width=600,height=225,toolbar=false,scrollbars=yes');
+function Clic$field_number(i) {
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_117.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 117\",'width=600,height=225,toolbar=false,scrollbars=yes');
 
 }
 </script>
 ";
 
-return ($function_name,$res);
+return ($field_number,$res);
 }
 sub plugin {
 my ($input) = @_;

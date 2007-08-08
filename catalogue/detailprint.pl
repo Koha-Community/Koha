@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# NOTE: Use standard 8-space tabs for this file (indents are 4 spaces)
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -27,17 +26,17 @@ use C4::Biblio;
 use C4::Output;
 use C4::Date;
 
-my $query=new CGI;
-my $type=$query->param('type');
-($type) || ($type='intra');
+my $query = new CGI;
+my $type  = $query->param('type');
+($type) || ( $type = 'intra' );
 
-my $biblionumber=$query->param('biblionumber');
+my $biblionumber = $query->param('biblionumber');
 
 # change back when ive fixed request.pl
-my @items = GetItemsInfo($biblionumber, $type);
+my @items = GetItemsInfo( $biblionumber, $type );
 my $norequests = 1;
 foreach my $itm (@items) {
-     $norequests = 0 unless $itm->{'notforloan'};
+    $norequests = 0 unless $itm->{'notforloan'};
 }
 
 my $dat         = GetBiblioData($biblionumber);
@@ -45,54 +44,51 @@ my $record      = GetMarcBiblio($biblionumber);
 my $addauthor   = GetMarcAuthors($record,C4::Context->preference("marcflavour"));
 my $authorcount = scalar @$addauthor;
 
-$dat->{'additional'} ="";
+$dat->{'additional'} = "";
 foreach (@$addauthor) {
-        $dat->{'additional'} .= "|" . $_->{'a'};
-} # for
+    $dat->{'additional'} .= "|" . $_->{'a'};
+}    # for
 
-
-$dat->{'count'}=@items;
+$dat->{'count'}      = @items;
 $dat->{'norequests'} = $norequests;
 
 my @results;
 
-$results[0]=$dat;
+$results[0] = $dat;
 
-my $resultsarray=\@results;
-my $itemsarray=\@items;
+my $resultsarray = \@results;
+my $itemsarray   = \@items;
 
-my $startfrom=$query->param('startfrom');
-($startfrom) || ($startfrom=0);
+my $startfrom = $query->param('startfrom');
+($startfrom) || ( $startfrom = 0 );
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name   => ('catalogue/detailprint.tmpl'),
-    query           => $query,
-    type            => "intranet",
-    authnotrequired => ($type eq 'opac'),
-    flagsrequired   => {catalogue => 1},
-    });
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => ('catalogue/detailprint.tmpl'),
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => ( $type eq 'opac' ),
+        flagsrequired   => { catalogue => 1 },
+    }
+);
 
-my $count=1;
+my $count = 1;
 
 # now to get the items into a hash we can use and whack that thru
 
+my $nextstartfrom = ( $startfrom + 20 < $count - 20 ) ? ( $startfrom + 20 ) : ( $count - 20 );
+my $prevstartfrom = ( $startfrom - 20 > 0 ) ? ( $startfrom - 20 ) : (0);
 
-my $nextstartfrom=($startfrom+20<$count-20) ? ($startfrom+20) : ($count-20);
-my $prevstartfrom=($startfrom-20>0) ? ($startfrom-20) : (0);
-$template->param(startfrom => $startfrom+1,
-                        endat => $startfrom+20,
-                        numrecords => $count,
-                        nextstartfrom => $nextstartfrom,
-                        prevstartfrom => $prevstartfrom,
-                        BIBLIO_RESULTS => $resultsarray,
-                        ITEM_RESULTS => $itemsarray,
-                        loggedinuser => $loggedinuser,
-                        biblionumber => $biblionumber,
-                        );
+$template->param(
+    startfrom      => $startfrom + 1,
+    endat          => $startfrom + 20,
+    numrecords     => $count,
+    nextstartfrom  => $nextstartfrom,
+    prevstartfrom  => $prevstartfrom,
+    BIBLIO_RESULTS => $resultsarray,
+    ITEM_RESULTS   => $itemsarray,
+    loggedinuser   => $loggedinuser,
+    biblionumber   => $biblionumber,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
-
-# Local Variables:
-# tab-width: 8
-# End:

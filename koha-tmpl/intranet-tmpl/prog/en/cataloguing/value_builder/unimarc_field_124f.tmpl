@@ -13,11 +13,6 @@
 		<td>Nom du satellite pour la teledetection:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1  " -->
-				<option value="  " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1aa" -->
 				<option value="aa" SELECTED>Tiros</option>
 			<!-- TMPL_ELSE -->
@@ -113,13 +108,13 @@
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-
-
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value;
-		self.close();
-		return false;
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value;
+	    self.close();
+	    return false;
 	}
 </script>
 </body>

@@ -76,15 +76,15 @@ if (C4::Context->preference("RequestOnOpac")) {
 
 my $norequests = 1;
 foreach my $itm (@items) {
-    $norequests = 0
-      unless ( ( $itm->{'wthdrawn'} )
-        || ( $itm->{'itemlost'} )
-        || ( $itm->{'itemnotforloan'} )
-        || ( !$itm->{'itemnumber'} ) );
-    $itm->{ $itm->{'publictype'} } = 1;
+     $norequests = 0 && $norequests
+       if ( (not $itm->{'wthdrawn'} )
+          || (not $itm->{'itemlost'} )
+         || (not $itm->{'itemnotforloan'} )
+         || ($itm->{'itemnumber'} ) );
+     $itm->{ $itm->{'publictype'} } = 1;
 }
 
-$template->param( norequests => $norequests, );
+$template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
 
 ## get notes and subjects from MARC record
     my $dbh              = C4::Context->dbh;

@@ -13,11 +13,7 @@
 		<td>Type de disque, cylindre ou bande magnetique:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Gravure directe</option>
 			<!-- TMPL_ELSE -->
@@ -74,11 +70,7 @@
 		<td>Type de document:</td>
 		<td>
 			<select name="f2" size="1">
-			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f2u" -->
 				<option value="u" SELECTED>Inconnu</option>
 			<!-- TMPL_ELSE -->
@@ -155,11 +147,6 @@
 		<td>Type de gravure:</td>
 		<td>
 			<select name="f3" size="1">
-			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Gravure laterale ou combinee</option>
 			<!-- TMPL_ELSE -->
@@ -189,7 +176,10 @@
 	function report() {
 
 
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value ;
+		var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value ;
 		self.close();
 		return false;
 	}

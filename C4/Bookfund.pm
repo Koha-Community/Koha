@@ -257,25 +257,21 @@ sub GetBookFundBreakdown {
                 subscription,title,itemtype,aqorders.biblionumber,
                 aqorders.booksellerinvoicenumber,
                 quantity-quantityreceived AS tleft,
-                aqorders.ordernumber AS ordnum,entrydate,budgetdate,
-                booksellerid,aqbasket.basketno
-        FROM    aqorderbreakdown,
-                aqbasket,
-                aqorders
+                aqorders.ordernumber AS ordnum,entrydate,budgetdate
+        FROM    aqorders
         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
+        LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         WHERE   bookfundid=?
-            AND aqorders.ordernumber=aqorderbreakdown.ordernumber
-            AND aqorders.basketno=aqbasket.basketno
             AND (budgetdate >= ? AND budgetdate < ?)
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
     ";
 
     $sth = $dbh->prepare($query);
+#      warn "$start $end";     
     $sth->execute( $id, $start, $end );
 
-    my $comtd;
+    my $comtd=0;
 
-    my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         my $left = $data->{'tleft'};
         if ( !$left || $left eq '' ) {
@@ -287,6 +283,7 @@ sub GetBookFundBreakdown {
             $data->{'left'} = $left;
             $comtd += $subtotal;
         }
+#         use Data::Dumper; warn Dumper($data);    
     }
 
     $sth->finish;

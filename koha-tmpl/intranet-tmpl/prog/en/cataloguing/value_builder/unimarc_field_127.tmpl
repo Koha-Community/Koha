@@ -41,7 +41,10 @@ document.f_pop.f2.value=document.f_pop.f2.value.substring(0,2);
 document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 
 
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
+		var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
 		self.close();
 		return false;
 	}

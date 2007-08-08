@@ -94,6 +94,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    $title = quotemeta $title;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
@@ -174,13 +175,19 @@ my %result;
 while (my ($authid) = $sth->fetchrow) {
     $i++;
     print "\r$i";
-    my $record = GetAuthority($authid);
-
+    my $record;
+    eval{
+        $record = GetAuthority($authid);
+    };
+    if($@){
+        print "  There was some pb getting authnumber : ".$authid."\n";
+        next;
+    }
+    
     my %index;
     # for authorities, the "title" is the $a mainentry
     my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
-    use Data::Dumper;
-#     warn "for $authid / ".$record->as_formatted. "Dumper : ".Dumper($authref);
+
     warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
     my $title = $record->subfield($authref->{auth_tag_to_report},'a');
     $index{'mainmainentry'}= $authref->{'auth_tag_to_report'}.'a';
@@ -189,6 +196,7 @@ while (my ($authid) = $sth->fetchrow) {
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    $title = quotemeta $title;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
