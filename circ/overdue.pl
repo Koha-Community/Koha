@@ -117,7 +117,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
 }
 
 $template->param(
-    todaysdate  => $todaysdate,
+    todaysdate  => format_date($todaysdate),
     overdueloop => \@overduedata
 );
 
