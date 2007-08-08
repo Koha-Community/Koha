@@ -162,7 +162,7 @@ elsif ($op eq 'add_validate') {
             $input->param('branchcode')||''
         );
     }
-    $input->redirect('aqbookfund.pl');
+    $input->redirect('/cgi-bin/koha/aqbookfund.pl');
 # END $OP eq ADD_VALIDATE
 }
 ################## DELETE_CONFIRM ##################################
