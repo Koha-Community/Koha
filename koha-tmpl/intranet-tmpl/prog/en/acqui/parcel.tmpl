@@ -22,14 +22,14 @@
     <form action="" method="get" name="orderform">
     <table>
         <tr>
-            <th class="acquisition">BASKET</th>
-            <th class="acquisition">Summary</th>
-            <th class="acquisition">QTY ordered</th>
-            <th class="acquisition">Est Cost</th>
-            <th class="acquisition">ACTUAL</th>
-            <th class="acquisition">P&amp;P</th>
-            <th class="acquisition">QTY received</th>
-            <th class="acquisition">TOTAL</th>
+            <th>BASKET</th>
+            <th>Summary</th>
+            <th>QTY ordered</th>
+            <th>Est Cost</th>
+            <th>ACTUAL</th>
+            <th>P&amp;P</th>
+            <th>QTY received</th>
+            <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_received" -->
             <tr>
@@ -48,12 +48,12 @@
             </tr>
         <!-- /TMPL_LOOP -->
         <tr>
-            <th class="acquisition" colspan="3"></th>
-            <th class="acquisition">SUBTOTALS</th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalprice" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalfreight" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalquantity" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="tototal" --></th>
+            <th colspan="3"></th>
+            <th>SUBTOTALS</th>
+            <th><!-- TMPL_VAR NAME="totalprice" --></th>
+            <th><!-- TMPL_VAR NAME="totalfreight" --></th>
+            <th><!-- TMPL_VAR NAME="totalquantity" --></th>
+            <th><!-- TMPL_VAR NAME="tototal" --></th>
         </tr>
         <tr>
             <td colspan="5">
@@ -82,13 +82,13 @@
     </form>
     <table> <caption>or select a pending orders</caption>
         <tr>
-            <th class="acquisition">BASKET</th>
-            <th class="acquisition">Summary</th>
-            <th class="acquisition">Est. Cost</th>
-            <th class="acquisition">P&amp;P</th>
-            <th class="acquisition">QTY Ordered</th>
-            <th class="acquisition">QTY</th>
-            <th class="acquisition">TOTAL</th>
+            <th>BASKET</th>
+            <th>Summary</th>
+            <th>QTY Ordered</th>
+            <th>Est. Cost</th>
+            <th>P&amp;P</th>
+            <th>QTY recieved</th>
+            <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_orders" -->
             <tr>
@@ -99,9 +99,9 @@
                 <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
+                <td><!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="unitprice" --></td>
                 <td></td>
-                <td><!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
             </tr>
