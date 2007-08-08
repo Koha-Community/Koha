@@ -121,6 +121,7 @@ foreach my $tmpserialid (@serialids){
   my $data=GetSerialInformation($tmpserialid);
   $data->{publisheddate}=format_date($data->{publisheddate});
   $data->{planneddate}=format_date($data->{planneddate});
+  $data->{'editdisable'}=(HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'});
   push @serialdatalist,$data;
 }
 my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});
@@ -135,12 +136,14 @@ foreach my $subscriptionid (@subscriptionids){
       PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
   }
   $cell->{'subscriptionid'}=$subscriptionid;
-  $cell->{'subscriptionexpired'}=HasSubscriptionExpired($subscriptionid);
   $cell->{'itemid'}       = "NNEW";
   $cell->{'serialid'}     = "NEW";
   $cell->{'issuesatonce'}   = 1;
   push @newserialloop,$cell;
-  push @subscriptionloop, {'subscriptionid'=>$subscriptionid};
+  push @subscriptionloop, {'subscriptionid'=>$subscriptionid,
+                           'abouttoexpire'=>abouttoexpire($subscriptionid),
+                           'subscriptionexpired'=>HasSubscriptionExpired($subscriptionid),
+  };
 }
 $template->param(newserialloop=>\@newserialloop);
 $template->param(subscriptions=>\@subscriptionloop);
@@ -248,13 +251,18 @@ if ($op eq 'serialchangestatus') {
         }
       }
     }
-    ### FIXME this part of code is not very pretty. Nor is it very efficient... There MUST be a more perlish way to write it. But it works.     
-    my $redirect ="serials-home.pl?";
-    $redirect.=join("&",map{"serialseq=".$_} @serialseqs);
-    $redirect.="&".join("&",map{"planneddate=".$_} @planneddates);
-    $redirect.="&".join("&",map{"publisheddate=".$_} @publisheddates);
-    $redirect.="&".join("&",map{"status=".$_} @status);
-    $redirect.="&".join("&",map{"notes=".$_} @notes);
+#     ### FIXME this part of code is not very pretty. Nor is it very efficient... There MUST be a more perlish way to write it. But it works.     
+#     my $redirect ="serials-home.pl?";
+#     $redirect.=join("&",map{"serialseq=".$_} @serialseqs);
+#     $redirect.="&".join("&",map{"planneddate=".$_} @planneddates);
+#     $redirect.="&".join("&",map{"publisheddate=".$_} @publisheddates);
+#     $redirect.="&".join("&",map{"status=".$_} @status);
+#     $redirect.="&".join("&",map{"notes=".$_} @notes);
+
+     my $redirect ="serials-collection.pl?";
+     my %hashsubscription;
+     map{$hashsubscription{$_}=1} @subscriptionids;       
+     $redirect.=join("&",map{"subscriptionid=".$_} sort keys %hashsubscription);
     print $query->redirect("$redirect");
 }
 

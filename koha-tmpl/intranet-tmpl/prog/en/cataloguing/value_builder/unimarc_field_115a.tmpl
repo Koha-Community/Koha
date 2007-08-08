@@ -13,11 +13,11 @@
 		<td>Type de document</td>
 		<td>
 			<select name="f1" size="1">
-   <!-- TMPL_IF name="f1 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Film</option>
@@ -42,8 +42,7 @@
 
    <tr>
                 <td>Longueur</td>
-                <td><input type="text" name="f2" maxlength=3 size=4 value="<!--
- TMPL_VAR name="f2" -->"></td>
+                <td><input type="text" name="f2" maxlength=3 size=4 value="<!-- TMPL_VAR name="f2" -->"></td>
 
 	</tr>
 
@@ -52,11 +51,11 @@
 		<td>Couleur</td>
 		<td>
 	<select name="f3" size="1">
-   <!-- TMPL_IF name="f3 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Noir et blanc</option>
@@ -70,16 +69,12 @@
 				<option value="b">Couleur</option>
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f3c" -->
 				<option value="c" SELECTED>Combinaison de noir et blanc et de couleur</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">Combinaison de noir et blanc et de couleur</option>
 	
 			<!-- /TMPL_IF -->
-
-
 
 			<!-- TMPL_IF name="f3u" -->
 				<option value="u" SELECTED>Inconnu</option>
@@ -88,7 +83,6 @@
 	
 			<!-- /TMPL_IF -->
 
-
 			<!-- TMPL_IF name="f3z" -->
 				<option value="z" SELECTED>Autre (sepia, colorie)</option>
 			<!-- TMPL_ELSE -->
@@ -96,23 +90,20 @@
 	
 			<!-- /TMPL_IF -->
 
-
 				</select>
 		</td>
 	</tr>
-
 
 	<tr>
 		<td>Son</td>
 		<td>
 			<select name="f4" size="1">
-   <!-- TMPL_IF name="f4 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f4a" -->
+			<!-- TMPL_IF name="f4|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+                	<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Son sur le document</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Son sur le document</option>
@@ -146,12 +137,11 @@
 		<td>Support son</td>
 		<td>
 			<select name="f5" size="1">
-   <!-- TMPL_IF name="f5 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
+			<!-- TMPL_IF name="f5|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Piste son optique sur le film</option>
 			<!-- TMPL_ELSE -->
@@ -184,16 +174,13 @@
 				<option value="g">Piste son optique et magnetique sur le film</option>
 
 			<!-- /TMPL_IF -->
-
-
-
+			
 			<!-- TMPL_IF name="f5h" -->
 				<option value="h" SELECTED>Bande video</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">Bande video</option>
 
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f5i" -->
 				<option value="i" SELECTED>Videodisque</option>
@@ -202,8 +189,6 @@
 
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f5u" -->
 				<option value="u" SELECTED>Inconnu</option>
 			<!-- TMPL_ELSE -->
@@ -211,14 +196,12 @@
 
 			<!-- /TMPL_IF -->
 
-
 			<!-- TMPL_IF name="f5e" -->
 				<option value="e" SELECTED>Bande magnetique audio en bobine</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">Bande magnetique audio en bobine</option>
 
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f5f" -->
 				<option value="f" SELECTED>Bande magnetique audio en cassette</option>
@@ -240,29 +223,22 @@
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
-
         </tr>
-
-
-
-
-
 
 	<tr>
 		<td>Largeur ou dimension</td>
 		<td>
 			<select name="f6" size="1">
-   <!-- TMPL_IF name="f6 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>Films et bandes de film => 8 mm</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Films et bandes de film => 8mm</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6b" -->
@@ -281,160 +257,122 @@
 				<option value="d" SELECTED>Films et bandes de film => 16 mm</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">Films et bandes de film => 16 mm</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6e" -->
 				<option value="e" SELECTED>Films et bandes de film => 28 mm</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">Films et bandes de film => 28 mm</option>
-
 			<!-- /TMPL_IF -->
-
-
 
 			<!-- TMPL_IF name="f6f" -->
 				<option value="f" SELECTED>Films et bandes de film => 35 mm</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">Films et bandes de film => 35 mm</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f6g" -->
 				<option value="g" SELECTED>Films et bandes de film => 70 mm</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">Films et bandes de film => 70 mm</option>
-
 			<!-- /TMPL_IF -->
-
-
 
 			<!-- TMPL_IF name="f6k" -->
 				<option value="k" SELECTED>Diapositives (5.5*5.5 cm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="k">Diapositives (5.5*5.5 cm)</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f6l" -->
 				<option value="l" SELECTED>Diapositives (5*5 cm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="l">Diapositives (5*5 cm)</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f6m" -->
 				<option value="m" SELECTED>Bandes video 3/4 de pouce (2 cm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="m">Bandes video 3/4 de pouce (2 cm)</option>
-
 			<!-- /TMPL_IF -->
+			
 			<!-- TMPL_IF name="f6n" -->
 				<option value="n" SELECTED>Bandes video 1/4 de pouce (1/2 cm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="n">Bandes video 1/4 de pouce (1/2 cm)</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6o" -->
 				<option value="o" SELECTED>Bandes video 2 pouces (1 cm 1/3) </option>
 			<!-- TMPL_ELSE -->
 				<option value="o">Bandes video 2 pouces (1 cm 1/3)</option>
-
 			<!-- /TMPL_IF -->
-
-
-
 
 			<!-- TMPL_IF name="f6p" -->
 				<option value="p" SELECTED>Bandes video 1 pouce (2 cm 1/2)</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">Bandes video 1 pouce (2 cm 1/2)</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f6q" -->
 				<option value="q" SELECTED>Bandes video 2 pouces (5 cm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="q">Bandes video 2 pouces (5 cm)</option>
-
 			<!-- /TMPL_IF -->
-
-
-
 
 			<!-- TMPL_IF name="f6r" -->
 				<option value="r" SELECTED>Transparents 8 * 10 pouces (20 * 25 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="r">Transparents 8 * 10 pouces (20 * 25 cm)
-</option>
-
+				<option value="r">Transparents 8 * 10 pouces (20 * 25 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6s" -->
 				<option value="s" SELECTED>Transparents 4 * 5 pouces (10 * 12.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="s">Transparents 4 * 5 pouces (10 * 12.5 cm)
-</option>
+				<option value="s">Transparents 4 * 5 pouces (10 * 12.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6t" -->
 				<option value="t" SELECTED>Transparents 5 * 7 pouces (12.5 * 17.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="t">Transparents 5 * 7 pouces (12.5 * 17.5 cm)
-</option>
+				<option value="t">Transparents 5 * 7 pouces (12.5 * 17.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6u" -->
 				<option value="u" SELECTED>Transparents 7 * 7 pouces (17.5 * 17.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Transparents 7 * 7 pouces (17.5 * 17.5 cm)
-</option>
+				<option value="u">Transparents 7 * 7 pouces (17.5 * 17.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6v" -->
 				<option value="v" SELECTED>Transparents 8 * 8 pouces (20 * 20 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="v">Transparents 8 * 8 pouces (20 * 20 cm)
-</option>
+				<option value="v">Transparents 8 * 8 pouces (20 * 20 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6w" -->
 				<option value="w" SELECTED>Transparents 9 * 9 pouces (22.5 * 22.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="w">Transparents 8 * 10 pouces (20 * 25 cm)
-</option>
+				<option value="w">Transparents 8 * 10 pouces (20 * 25 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6x" -->
 				<option value="x" SELECTED>Transparents 10 * 10 pouces (25 * 25 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Transparents 10 * 10 pouces (25 * 25 cm)
-</option>
-
+				<option value="x">Transparents 10 * 10 pouces (25 * 25 cm)</option>
 			<!-- /TMPL_IF -->
-
-
 				</select>
 		</td>
-
         </tr>
-
 
 	<tr>
 		<td>Presentation materielle</td>
 		<td>
 			<select name="f7" size="1">
-   <!-- TMPL_IF name="f7 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
+			<!-- TMPL_IF name="f7|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>Film en bobine</option>
 			<!-- TMPL_ELSE -->
@@ -468,40 +406,29 @@
 
 			<!-- /TMPL_IF -->
 
-
-
 			<!-- TMPL_IF name="f7h" -->
 				<option value="h" SELECTED>Film en courtes bandes</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">Films en courtes bandes</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f7i" -->
 				<option value="i" SELECTED>Autres types de films fixes</option>
 			<!-- TMPL_ELSE -->
 				<option value="i">Autres types de films fixes</option>
-
 			<!-- /TMPL_IF -->
-
-
 
 			<!-- TMPL_IF name="f7j" -->
 				<option value="j" SELECTED>Film fixe en rouleau</option>
 			<!-- TMPL_ELSE -->
 				<option value="j">Film fixe en rouleau</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f7k" -->
 				<option value="k" SELECTED>Diapositives, jeu de diapositives, vues stereoscopiques</option>
 			<!-- TMPL_ELSE -->
 				<option value="k">Diapositives, jeu de diapositives, vues stereoscopiques</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f7l" -->
 				<option value="l" SELECTED>Transparents</option>
@@ -513,47 +440,37 @@
 				<option value="u" SELECTED>Inconnu</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">Inconnu</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7x" -->
 				<option value="x" SELECTED>Ce n'est pas un film ou un document projetable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">Ce n'est pas un film ou un document projetable</option>
-
 			<!-- /TMPL_IF -->
-
-
-
 
 			<!-- TMPL_IF name="f7z" -->
 				<option value="z" SELECTED>Autres presentations materielles</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autres presentations materielles</option>
-
 			<!-- /TMPL_IF -->
-
 				</select>
 		</td>
-
         </tr>
-
 
 	<tr>
 		<td>Technique: video, film</td>
 		<td>
-			<select name="f8" size="1">
-   <!-- TMPL_IF name="f8 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+		<select name="f8" size="1">
+			<!-- TMPL_IF name="f8|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>Animation</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Animation</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8b" -->
@@ -598,17 +515,16 @@
 		<td>Format du film</td>
 		<td>
 			<select name="f9" size="1">
-   <!-- TMPL_IF name="f9 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f9|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9a" -->
 				<option value="a" SELECTED>Format normalise avec son (format reduit)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Format normalise avec son (format reduit)</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9b" -->
@@ -627,58 +543,45 @@
 				<option value="d" SELECTED>Anamorphose (ecran panoramique)</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">Anamorphose (ecran panoramique)</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9e" -->
 				<option value="e" SELECTED>Format normalise muet</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">Format normalise muet</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9f" -->
 				<option value="f" SELECTED>Autre format en grand ecran</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">Autre format en grand ecran</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f9x" -->
 				<option value="x" SELECTED>Ce n'est pas un film</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">Ce n'es pas un film</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f9u" -->
 				<option value="u" SELECTED>Inconnu</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">Inconnu</option>
-
 			<!-- /TMPL_IF -->
 
 				</select>
 		</td>
-
         </tr>
-
-
-
-
-
 
 	<tr>
 		<td>Materiel d'accompagnement 1</td>
 		<td>
 			<select name="f10" size="1">
-   <!-- TMPL_IF name="f10 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f10|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10a" -->
 				<option value="a" SELECTED>Cliche tire du film</option>
@@ -720,14 +623,11 @@
 
 			<!-- /TMPL_IF -->
 
-
 			<!-- TMPL_IF name="f10g" -->
 				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">Partition ou autre presentation de musique</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f10h" -->
 				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
@@ -739,7 +639,6 @@
 				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autres materiels d'accompagnement</option>
-
 			<!-- /TMPL_IF -->
 
 				</select>
@@ -747,17 +646,16 @@
 		<td>Materiel d'accompagnement 2</td>
 		<td>
 			<select name="f11" size="1">
-   <!-- TMPL_IF name="f11 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
+			<!-- TMPL_IF name="f11|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f11a" -->
 				<option value="a" SELECTED>Cliche tire du film</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Cliche tire du film</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11b" -->
@@ -776,7 +674,6 @@
 				<option value="d" SELECTED>Programme et pressbook</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">Programme et pressbook</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11e" -->
@@ -790,17 +687,13 @@
 				<option value="f" SELECTED>Manuel d'instruction</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">Manuel d'instruction</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f11g" -->
 				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">Partition ou autre presentation de musique</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f11h" -->
 				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
@@ -817,25 +710,22 @@
 
 				</select>
 		</td>
-
         </tr>
-
 
 	<tr>
 		<td>Materiel d'accompagnement 3</td>
 		<td>
 			<select name="f12" size="1">
-   <!-- TMPL_IF name="f12 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f12|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12a" -->
 				<option value="a" SELECTED>Cliche tire du film</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Cliche tire du film</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12b" -->
@@ -868,17 +758,13 @@
 				<option value="f" SELECTED>Manuel d'instruction</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">Manuel d'instruction</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f12g" -->
 				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">Partition ou autre presentation de musique</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f12h" -->
 				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
@@ -890,7 +776,6 @@
 				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autres materiels d'accompagnement</option>
-
 			<!-- /TMPL_IF -->
 
 				</select>
@@ -898,17 +783,16 @@
 		<td>Materiel d'accompagnement 4</td>
 		<td>
 			<select name="f13" size="1">
-   <!-- TMPL_IF name="f13 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f13|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13a" -->
 				<option value="a" SELECTED>Cliche tire du film</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Cliche tire du film</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13b" -->
@@ -974,17 +858,16 @@
 <tr>		<td>Presentation materielle: video</td>
 		<td>
 			<select name="f14" size="1">
-   <!-- TMPL_IF name="f14 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f14|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14a" -->
 				<option value="a" SELECTED>Cartouche video</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Cartouche video</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14b" -->
@@ -1003,7 +886,6 @@
 				<option value="d" SELECTED>bobine video</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">bobine video</option>
-
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14e" -->
@@ -1017,15 +899,12 @@
 				<option value="x" SELECTED>Ce n'est pas une video</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">Ce n'est pas une video</option>
-
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f14z" -->
 				<option value="z" SELECTED>Autre type de video</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autre type de video</option>
-
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
@@ -1033,17 +912,16 @@
 <tr>		<td>Format : video</td>
 		<td>
 			<select name="f15" size="1">
-   <!-- TMPL_IF name="f15 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15a" -->
 				<option value="a" SELECTED>Beta</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">Beta</option>
-	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15b" -->
@@ -1076,7 +954,6 @@
 				<option value="f" SELECTED>Quadruplex</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">Quadruplex</option>
-
 			<!-- /TMPL_IF -->
 
 
@@ -1120,7 +997,6 @@
 				<option value="z" SELECTED>Autre</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">Autre</option>
-
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
@@ -1128,18 +1004,17 @@
 <tr>		<td>Support de l'emulsion</td>
 		<td>
 			<select name="f16" size="1">
-      <!-- TMPL_IF name="f16 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f16|" -->
+            		<option value="|" SELECTED>|- Caractère de remplissage</option>
+	            <!-- TMPL_ELSE -->
+    	        	<option value="|">|- Caractère de remplissage</option>
+        	    <!-- /TMPL_IF -->
 
-			<!-- TMPL_IF name="f16a" -->
-				<option value="a" SELECTED>Film de securite</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">Film de securite</option>
-	
-			<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f16a" -->
+					<option value="a" SELECTED>Film de securite</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">Film de securite</option>
+				<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16b" -->
 				<option value="b" SELECTED>Support film autre que film de securite</option>
@@ -1187,12 +1062,12 @@
 <tr>		<td>Support secondaire</td>
 		<td>
 			<select name="f17" size="1">
-			<!-- TMPL_IF name="f17 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-	
-			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f17|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f17a" -->
 				<option value="a" SELECTED>Carton</option>
 			<!-- TMPL_ELSE -->
@@ -1264,12 +1139,11 @@
 <tr>		<td>Normes de diffusion des enregistrements video</td>
 		<td>
 			<select name="f18" size="1">
-			<!-- TMPL_IF name="f18 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-	
-			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f18|" -->
+            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            <!-- TMPL_ELSE -->
+            	<option value="|">|- Caractère de remplissage</option>
+            <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f18a" -->
 				<option value="a" SELECTED>405 lignes</option>
 			<!-- TMPL_ELSE -->
@@ -1309,13 +1183,15 @@
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-document.f_pop.f2.value=document.f_pop.f2.value+'   ';
-document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
+        document.f_pop.f2.value=document.f_pop.f2.value+'   ';
+        document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
 
-		opener.document.f.field_value[<!-- TMPL_VAR
-		name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value;
+        var doc   = opener.document; 
+        var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+        field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value+document.f_pop.f6.value+document.f_pop.f7.value+document.f_pop.f8.value+document.f_pop.f9.value+document.f_pop.f10.value+document.f_pop.f11.value+document.f_pop.f12.value+document.f_pop.f13.value+document.f_pop.f14.value+document.f_pop.f15.value+document.f_pop.f16.value+document.f_pop.f17.value+document.f_pop.f18.value;
 		self.close();
 		return false;
 	}

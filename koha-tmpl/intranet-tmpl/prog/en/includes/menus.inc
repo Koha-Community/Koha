@@ -80,7 +80,7 @@
             <b> Login information</b>
         </li>
         <li>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b>
-            at <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
+            at <b><!-- TMPL_VAR NAME="LoginBranchnameShort" --></b></li>
             <!-- TMPL_IF NAME="AutoLocation" -->
                 <li>autolocate activated</li>
         <!-- TMPL_ELSE -->

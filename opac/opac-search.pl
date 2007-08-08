@@ -342,10 +342,8 @@ if ( $template_name eq "opac-advsearch.tmpl" ) {
 
     # load the sort_by options for the template
     my $sort_by      = $cgi->param('sort_by');
-    my $sort_by_loop = displaySortby($sort_by);
-    $template->param(
-        sort_by_loop => $sort_by_loop,
-     );
+    $sort_by=$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
+    $template->param( sort_by => $sort_by);
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -366,8 +364,8 @@ my @sort_by;
 
 # load the sort_by options for the template
 my $sort_by      = $params->{'sort_by'};
-my $sort_by_loop = displaySortby($sort_by);
-$template->param( sort_by_loop => $sort_by_loop );
+$sort_by=~$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
+$template->param( sort_by => $sort_by);
 
 #
 # Use the servers defined, or just search our local catalog(default)
@@ -420,12 +418,11 @@ my $expanded_facet = $params->{'expand'};
 # Define some global variables
 my $error;          # used for error handling
 my $search_desc;    # the query expressed in terms that humans understand
-my $koha_query
-  ; # the query expressed in terms that zoom understands with field weighting and stemming
+my $koha_query; # the query expressed in terms that zoom understands with field weighting and stemming
 my $federated_query;
-my $query_type
-  ; # usually not needed, but can be used to trigger ccl, cql, or pqf queries if set
+my $query_type; # usually not needed, but can be used to trigger ccl, cql, or pqf queries if set
 my @results;
+
 ## I. BUILD THE QUERY
 ( $error, $search_desc, $koha_query, $federated_query, $query_type ) =
   buildQuery( $query, \@operators, \@operands, \@indexes, \@limits );
@@ -433,8 +430,7 @@ my @results;
 # warn "query : $koha_query";
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total;    # the total results for the whole set
-my $facets
-  ; # this object stores the faceted results that display on the left-hand of the results page
+my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my @results_array;
 my $results_hashref;
 
@@ -558,8 +554,7 @@ $template->param(
     searchdesc           => $search_desc,
     opacfacets           => 1,
     facets_loop          => $facets,
-    "BiblioDefaultView"
-      . C4::Context->preference("BiblioDefaultView") => 1,
+    "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
     scan_use     => $scan,
     search_error => $error,
     RequestOnOpac	 => $RequestOnOpac,

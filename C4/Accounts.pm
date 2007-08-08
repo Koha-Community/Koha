@@ -357,16 +357,10 @@ sub manualinvoice {
         my $sth = $dbh->prepare(
             "INSERT INTO  accountlines
                         (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber,notify_id)
-        VALUES (?, ?, now(), ?,?, ?,?,?,?)"
-        );
-
-#     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $data->{'itemnumber'});
-        $sth->execute( $borrowernumber, $accountno, $amount, $desc, $type,
-            $amountleft, $itemnum, $notifyid );
-    }
-    else {
-        my $sth = $dbh->prepare(
-            "INSERT INTO  accountlines
+        VALUES (?, ?, now(), ?,?, ?,?,?,?)");
+     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$notifyid) || return $sth->errstr;
+  } else {
+    my $sth=$dbh->prepare("INSERT INTO  accountlines
             (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,notify_id)
             VALUES (?, ?, now(), ?, ?, ?, ?,?)"
         );

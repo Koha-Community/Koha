@@ -13,11 +13,6 @@
 		<td>Indicateur de couleur:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Monochrome</option>
 			<!-- TMPL_ELSE -->
@@ -33,11 +28,6 @@
 		<td>Indicateur d'index:</td>
 		<td>
 			<select name="f2" size="1">
-			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Index ou
 				liste present dans le document
@@ -75,11 +65,7 @@
 		<td>Indicateur de texte:</td>
 		<td>
 			<select name="f3" size="1">
-			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Texte sur
 				le document meme</option>
@@ -107,9 +93,9 @@
 		<td>
 			<select name="f4" size="1">
 			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>Courbes de niveau</option>
@@ -192,9 +178,9 @@
 		<td>
 			<select name="f5" size="1">
 			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Courbes de niveau</option>
@@ -276,11 +262,13 @@
 		<td>Code de representation du relief 3:</td>
 		<td>
 			<select name="f6" size="1">
-			<!-- TMPL_IF name="f6 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        
+                        <!-- TMPL_IF name="f6 " -->
+                                <option value=" " SELECTED>valeur non requise</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">valeur non requise</option>
+                        <!-- /TMPL_IF -->
+                        
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>Courbes de niveau</option>
 			<!-- TMPL_ELSE -->
@@ -361,11 +349,12 @@
 		<td>Code de representation du relief 4:</td>
 		<td>
 			<select name="f7" size="1">
-			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="f7 " -->
+                                <option value=" " SELECTED>valeur non requise</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">valeur non requise</option>
+                        <!-- /TMPL_IF -->
+                        
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>Courbes de niveau</option>
 			<!-- TMPL_ELSE -->
@@ -446,11 +435,7 @@
 	<tr>		<td>Projection:</td>
 		<td>
 			<select name="f8" size="1">
-			<!-- TMPL_IF name="f8  " -->
-				<option value="  " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f8aa" -->
 				<option value="aa" SELECTED>Aitoff</option>
 			<!-- TMPL_ELSE -->
@@ -534,20 +519,11 @@
 				Lambert</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f8cd" -->
 				<option value="cd" SELECTED>Conique (simple)</option>
 			<!-- TMPL_ELSE -->
 				<option value="cd">Conique (simple)</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
-
 
 			<!-- TMPL_IF name="f8ce" -->
 				<option value="ce" SELECTED>Bipolaire
@@ -555,11 +531,6 @@
 			<!-- TMPL_ELSE -->
 				<option value="ce">Bipolaire de Miller</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f8cf" -->
 				<option value="cf" SELECTED>De Lisle</option>
@@ -768,21 +739,15 @@
 				<option value="zz">Autre type connu</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			</select>
 
-
-
-
-		</td></tr><tr>		<td>Meridien de reference 1:</td>
+		</td></tr><tr><td>Meridien de reference 1:</td>
 		<td>
 			<select name="f9" size="1">
-	<!-- TMPL_IF name="f9  " -->
-										<option value="  " SELECTED>None</option>
+			<!-- TMPL_IF name="f9  " -->
+				<option value="  " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
+				<option value="  ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9aa" -->
@@ -863,31 +828,17 @@
 				<option value="an">Ile de Fer (Iles Canaries)</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f9ao" -->
 				<option value="ao" SELECTED>Helsinky (Finlande)</option>
 			<!-- TMPL_ELSE -->
 				<option value="ao">Helsinky (Finlande)</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f9ap" -->
 				<option value="ap" SELECTED>Istambul (Turquie)</option>
 			<!-- TMPL_ELSE -->
 				<option value="ap">Istambul (Turquie)</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
 
 			<!-- TMPL_IF name="f9aq" -->
 				<option value="aq"
@@ -910,9 +861,6 @@
 			<!-- TMPL_ELSE -->
 				<option value="at">Madras (Inde)</option>
 			<!-- /TMPL_IF -->
-
-
-
 
 			<!-- TMPL_IF name="f9ba" -->
 				<option value="ba" SELECTED>Madrid (Espagne)</option>
@@ -1040,24 +988,16 @@
 				<option value="zz">Autre</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
-
 			</select>
-
-
 
 		</td></tr><tr>		<td>Meridien de reference 2:</td>
 		<td>
 			<select name="f10" size="1">
-	<!-- TMPL_IF name="f10  " -->
-										<option value="  " SELECTED>None</option>
+            
+			<!-- TMPL_IF name="f10  " -->
+				<option value="  " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10aa" -->
@@ -1138,32 +1078,18 @@
 				<option value="an">Ile de Fer (Iles Canaries)</option>
 			<!-- /TMPL_IF -->
 
-
-
-
 			<!-- TMPL_IF name="f10ao" -->
 				<option value="ao" SELECTED>Helsinky (Finlande)</option>
 			<!-- TMPL_ELSE -->
 				<option value="ao">Helsinky (Finlande)</option>
 			<!-- /TMPL_IF -->
 
-
-
-
-
-
-
 			<!-- TMPL_IF name="f10ap" -->
 				<option value="ap" SELECTED>Istambul (Turquie)</option>
 			<!-- TMPL_ELSE -->
 				<option value="ap">Istambul (Turquie)</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
-
+			
 			<!-- TMPL_IF name="f10aq" -->
 				<option value="aq"
 				SELECTED>Julianehaab (Groenland)</option>
@@ -1185,9 +1111,6 @@
 			<!-- TMPL_ELSE -->
 				<option value="at">Madras (Inde)</option>
 			<!-- /TMPL_IF -->
-
-
-
 
 			<!-- TMPL_IF name="f10ba" -->
 				<option value="ba" SELECTED>Madrid (Espagne)</option>
@@ -1314,30 +1237,19 @@
 			<!-- TMPL_ELSE -->
 				<option value="zz">Autre</option>
 			<!-- /TMPL_IF -->
-
-
-
-
-
-
-
-
 			</select>
-
-
-
 		</td></tr>
-
 
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value +document.f_pop.f9.value +document.f_pop.f10.value;
-		self.close();
-		return false;
+	    var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value +document.f_pop.f9.value +document.f_pop.f10.value;
+	    self.close();
+	    return false;
 	}
 </script>
 </body>

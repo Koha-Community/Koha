@@ -56,7 +56,7 @@ the 3 scripts are inserted after the <input> in the html code
 =cut
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "210c".(int(rand(100000))+1);
+my $function_name= $field_number;
 #---- build editors list.
 #---- the editor list is built from the "EDITORS" thesaurus
 #---- this thesaurus category must be filled as follow :
@@ -115,7 +115,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(subfield_managed) {
-    defaultvalue=escape(document.forms['f'].field_value[subfield_managed].value);
+    defaultvalue=escape(document.getElementById(\"$field_number\").value);
     newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
 }
 </script>

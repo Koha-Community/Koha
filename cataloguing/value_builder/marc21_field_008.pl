@@ -33,6 +33,7 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 # find today's date
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time); 
 
@@ -45,10 +46,12 @@ sub plugin_parameters {
 
 sub plugin_javascript {
 	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name= "100".(int(rand(100000))+1);
+	my $function_name= $field_number;
 	my $res="
 <script>
 function Focus$function_name(subfield_managed) {
+    // TODO FIXME :: HTML code has changed
+
     for (i=0 ; i<document.f.field_value.length ; i++) {
         if (document.f.tag[i].value == '008') {
             if (!document.f.field_value[i].value) {
@@ -64,8 +67,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>

@@ -25,8 +25,6 @@ use C4::Auth;
 use CGI;
 use C4::Context;
 
-use C4::Search;
-use C4::Output;
 
 =head1
 
@@ -41,26 +39,30 @@ sub plugin_parameters {
 
 sub plugin_javascript {
     my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
-    my $function_name = "100" . ( int( rand(100000) ) + 1 );
     my $res           = "
-<script>
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-    return 1;
-}
-
-function Clic$function_name(i) {
-    defaultvalue=document.forms['f'].field_value[i].value;
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
-
-}
-</script>
+        <script type='text/javascript'>
+            function Focus$field_number() {
+                return 1;
+            }
+            
+            function Blur$field_number() {
+                return 1;
+            }
+            
+            function Clic$field_number(i) {
+                var defaultvalue;
+                try {
+                    defaultvalue = document.getElementById(i).value;
+                } catch(e) {
+                    alert('error when getting '+i);
+                    return;
+                }
+                window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_100.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+            }
+        </script>
 ";
 
-    return ( $function_name, $res );
+    return ( $field_number, $res );
 }
 
 sub plugin {

@@ -7,22 +7,24 @@
 	<title>Thesaurus_search</title>
 </head>
 <body>
-	<script>
-		function report(value2report) {
-			if (document.f_pop.result.value.length==0) {
-				document.f_pop.result.value = value2report;
-			} else {
-				document.f_pop.result.value = document.f_pop.result.value+'|'+value2report;
-			}
-			return true;
-		}
-	</script>
-	<script>
-		function finish() {
-			opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.result.value;
-			self.close();
-			return false;
-		}
+	<script type="text/javascript">
+            function report(value2report) {
+                //alert('report');
+                if (document.f_pop.result.value.length==0) {
+                        document.f_pop.result.value = value2report;
+                } else {
+                        document.f_pop.result.value = document.f_pop.result.value+'|'+value2report;
+                }
+                return true;
+            }
+
+            function finish() {
+                //alert(opener.document.getElementById("<!-- TMPL_VAR name="index" -->").value);
+                //alert(document.f_pop.result.value);
+                opener.document.getElementById("<!-- TMPL_VAR name="index" -->").value = document.f_pop.result.value;
+                window.close();
+                return false;
+            }
 	</script>
 	<form name="f_pop" action="cataloguing/plugin_launcher.pl" method="post">
 		<input type="hidden" name="plugin_name" value="unimarc_field_60X.pl">

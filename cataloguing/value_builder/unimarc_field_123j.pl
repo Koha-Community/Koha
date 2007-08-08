@@ -32,50 +32,55 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+	return "";
 }
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "123j".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res="
-<script>
-function Focus$function_name(subfield_managed) {
-return 1;
+    <script>
+        function Focus$function_name(subfield_managed) {
+        	return 1;
+        }
+
+        function Blur$function_name(subfield_managed) {
+        	return 1;
+        }
+
+        function Clic$function_name(i) {
+        	defaultvalue=document.getElementById(\"$field_number\").value;
+        	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_123j.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 123j\",'width=800,height=400,toolbar=false,scrollbars=yes');
+
+        }
+    </script>
+    ";
+
+	return ($function_name,$res);
 }
 
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
-
-function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_123j.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 123j\",'width=800,height=400,toolbar=false,scrollbars=yes');
-
-}
-</script>
-";
-
-return ($function_name,$res);
-}
 sub plugin {
-my ($input) = @_;
+	my ($input) = @_;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
 
 
 	my $dbh = C4::Context->dbh;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_123j.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
+	my ($template, $loggedinuser, $cookie)
+    = get_template_and_user(
+    	{
+    		template_name => "cataloguing/value_builder/unimarc_field_123j.tmpl",
+			query => $input,
+			type => "intranet",
+			authnotrequired => 0,
+			flagsrequired => {editcatalogue => 1},
+			debug => 1,
+		}
+	);
 	my $f1 = substr($result,0,1);
 	my $f2 = substr($result,1,3);
 	my $f3 = substr($result,4,2);

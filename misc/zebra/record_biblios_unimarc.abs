@@ -92,21 +92,22 @@ melm 200$f		author:w,author:p,author:s
 # other authors
 melm 200$g		author:w,author:p
 # physical author
-melm 700$9      	Koha-Auth-Number,Koha-Auth-Number:n
-melm 700$a		author:w
-melm 700		author:w,author:p
+melm 700$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 700$a    author,Author-name-personal                                                       !:w,!:p
+melm 700    author,Author-name-personal                                                       !:w,!:p
 
 melm 701$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 701		author:w,author:p
+melm 701    author,Author-name-personal                                                       !:w,!:p
 melm 702$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 702		author:w,author:p
+melm 702    author,Author-name-personal                                                       !:w,!:p
 # collective author
 melm 710$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 710		author:w,author:p
+melm 710    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
 melm 711$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 711		author:w,author:p
+melm 711    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
 melm 712$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 712		author:w,author:p
+melm 712    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
+
 
 ############## TITLE ##################
 # main title
@@ -206,25 +207,25 @@ melm 432$t    Title
 melm 440$t    Title
 melm 441$t    Title
 melm 445$t    Title
-melm 400$d    Date-of-Publication
-melm 401$d    Date-of-Publication
-melm 403$d    Date-of-Publication
-melm 410$d    Date-of-Publication
-melm 412$d    Date-of-Publication
-melm 413$d    Date-of-Publication
-melm 414$d    Date-of-Publication
-melm 415$d    Date-of-Publication
-melm 416$d    Date-of-Publication
-melm 417$d    Date-of-Publication
-melm 418$d    Date-of-Publication
-melm 419$d    Date-of-Publication
-melm 420$d    Date-of-Publication
-melm 430$d    Date-of-Publication
-melm 431$d    Date-of-Publication
-melm 432$d    Date-of-Publication
-melm 440$d    Date-of-Publication
-melm 441$d    Date-of-Publication
-melm 445$d    Date-of-Publication
+melm 400$d    Date-of-Publication !:n,!:s
+melm 401$d    Date-of-Publication !:n,!:s
+melm 403$d    Date-of-Publication !:n,!:s
+melm 410$d    Date-of-Publication !:n,!:s
+melm 412$d    Date-of-Publication !:n,!:s
+melm 413$d    Date-of-Publication !:n,!:s
+melm 414$d    Date-of-Publication !:n,!:s
+melm 415$d    Date-of-Publication !:n,!:s
+melm 416$d    Date-of-Publication !:n,!:s
+melm 417$d    Date-of-Publication !:n,!:s
+melm 418$d    Date-of-Publication !:n,!:s
+melm 419$d    Date-of-Publication !:n,!:s
+melm 420$d    Date-of-Publication !:n,!:s
+melm 430$d    Date-of-Publication !:n,!:s
+melm 431$d    Date-of-Publication !:n,!:s
+melm 432$d    Date-of-Publication !:n,!:s
+melm 440$d    Date-of-Publication !:n,!:s
+melm 441$d    Date-of-Publication !:n,!:s
+melm 445$d    Date-of-Publication !:n,!:s
 melm 400    Link
 melm 401    Link
 melm 403    Link
@@ -333,11 +334,11 @@ melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n
 
-melm 600$a		author
+melm 600$a		author,Author-name-personal                                                       !:w,!:p
 melm 600		subject-heading,subject-heading:p
-melm 601$a		author
+melm 601$a		author,Author-name-personal                                                       !:w,!:p
 melm 601		subject-heading,subject-heading:p
-melm 604$a		author
+melm 604$a		author,Author-name-personal                                                       !:w,!:p
 melm 604$t		title
 melm 610$t		title
 melm 605$a		title
@@ -368,5 +369,6 @@ melm 995$c		Branch,Record-Source
 melm 995$d		Branch,Record-Source
 melm 995$f		Stock-number
 melm 995$s      popularity:n,popularity:s
+melm 995$n    onloan:d,onloan:n,onloan:s
 #melm 952$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
 #melm 952		Local-classification

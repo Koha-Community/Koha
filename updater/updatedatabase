@@ -739,6 +739,49 @@ my %fielddefinitions = (
             default => '',
             extra   => '',
         },
+        {
+            field   => 'publicationyear',
+            type    => 'text',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'collectiontitle',
+            type    => 'mediumtext',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'collectionissn',
+            type    => 'mediumtext',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'collectionvolume',
+            type    => 'mediumtext',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'editionstatement',
+            type    => 'text',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+        {
+            field   => 'editionresponsability',
+            type    => 'text',
+            null    => 'null',
+            default => '',
+            extra   => '',
+        },
+              
     ],
     deletedbiblioitems => [
         {
@@ -2056,6 +2099,15 @@ $sth->finish;
 exit;
 
 # $Log$
+# Revision 1.172  2007/07/19 10:21:22  hdl
+# Adding some new fields to biblioitems:
+# collectiontitle
+# collectionissn
+# collectionvolume
+#
+#
+# Changing publicationyear to text.
+#
 # Revision 1.171  2007/07/02 02:30:16  rangi
 # Fix for bug 1296, making surnames uppercase a systems preference
 #

@@ -48,6 +48,7 @@ if ($op eq 'del') {
 
 }
 my $subs = &GetSubscription($subscriptionid);
+# use Data::Dumper; warn $subscriptionid; warn Dumper($subs);
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)

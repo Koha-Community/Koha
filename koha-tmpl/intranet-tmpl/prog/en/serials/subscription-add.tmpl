@@ -137,6 +137,28 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.getElementById("more_options").innerHTML = '';
         document.f.irreg_check.value=1; 
         break;
+    case "8":
+        var d = new Date();
+        var sYear = d.getFullYear();
+        document.f.add1.value=1;
+        document.f.add2.value=1;
+        document.f.add3.value='';
+        document.f.every1.value=12;
+        document.f.every2.value=1;
+        document.f.every3.value='';
+        document.f.whenmorethan1.value=9999999;
+        document.f.whenmorethan2.value=12;
+        document.f.whenmorethan3.value='';
+        document.f.setto1.value=0;
+        document.f.setto2.value=1;
+        document.f.setto3.value='';
+        document.f.lastvalue1.value=sYear;
+        document.f.lastvalue2.value='1';
+        document.f.lastvalue3.value='';
+        document.f.periodicity.value=1;
+        document.f.numberingmethod.value=_('{X}/{Y}');
+        display_table(0);
+        break;
     default:
         document.f.add1.value=1;
         document.f.add2.value='';
@@ -352,10 +374,24 @@ function irregularity_check(){
     var expected; 
     var errortext = _("<b>Warning irregularity detected<\/b><br \/>");
     switch(periodicity){
+    case "12":
+        if(rollover < 730) expected =730;
+        if(rollover > 730) {
+            expectedover=730;
+            toobig=1;
+        }
+        break;
     case "1":
         if(rollover < 365) expected =365;
         if(rollover > 365) {
             expectedover=365;
+            toobig=1;
+        }
+        break;
+    case "13":
+        if(rollover < 156) expected =156;
+        if(rollover > 156) {
+            expectedover=156;
             toobig=1;
         }
         break;
@@ -426,7 +462,7 @@ function irregularity_check(){
         break;
     }
     if(expected){
-        if(expected == 365){
+        if(expected == 365 || expected==730){
             var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
             errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
             for(var j=0;j<daynames.length;j++){
@@ -676,7 +712,7 @@ function check_input(e){
                 <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8"> 
                 (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)
                 <a href="#" onClick="Plugin(f)">Search for Biblio</a> <!--TMPL_UNLESS Name="mod"--> |
-                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Create Biblio</a><!--/TMPL_UNLESS-->
+                <a href="#" onClick="Create_biblio(f)">Create Biblio</a><!--/TMPL_UNLESS-->
             </td>
         </tr>
         <tr>
@@ -759,12 +795,36 @@ function check_input(e){
             <td>
                 <select name="periodicity" size="1" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
                 <option value="" selected>-- please choose --</option>
-                <option value="">Unknown</option>
+                <!-- TMPL_IF name="periodicity16" -->
+                <option value="16" selected>Without Periodicity</option>
+                <!-- TMPL_ELSE -->
+                    <option value="16">Without Periodicity</option>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="periodicity48" -->
+                <option value="48" selected>Unknown</option>
+                <!-- TMPL_ELSE -->
+                <option value="48">Unknown</option>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="periodicity32" -->
+                <option value="32" selected>Irregular</option>
+                <!-- TMPL_ELSE -->
+                    <option value="32">Irregular</option>
+                <!-- /TMPL_IF -->
 
+                <!-- TMPL_IF name="periodicity12" -->
+                    <option value="12" selected>2/day</option>
+                <!-- TMPL_ELSE -->
+                    <option value="12">2/day</option>
+                <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity1" -->
                     <option value="1" selected>1/day</option>
                 <!-- TMPL_ELSE -->
                     <option value="1">1/day</option>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="periodicity13" -->
+                    <option value="13" selected>3/week</option>
+                <!-- TMPL_ELSE -->
+                    <option value="13">3/week</option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity2" -->
                     <option value="2" selected>1/week</option>
@@ -857,6 +917,11 @@ function check_input(e){
                     <!-- TMPL_ELSE -->
                         <option value="6">Seasonal only</option>
                     <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="numberpattern8" -->
+                        <option value="8" selected>Year/Number</option>
+                    <!-- TMPL_ELSE -->
+                        <option value="8">Year/Number</option>
+                    <!-- /TMPL_IF -->          
                     <!-- TMPL_IF name="numberpattern7" -->
                         <option value="7" selected>None of the above</option>
                     <!-- TMPL_ELSE -->
@@ -1020,6 +1085,10 @@ function check_input(e){
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 <script language="JavaScript" type="text/javascript">
+function Create_biblio(f)
+{
+   window.open('/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup','FindABibIndex','width=1024,height=768,toolbar=no,scrollbars=yes');
+}
 
 function Plugin(f)
 {

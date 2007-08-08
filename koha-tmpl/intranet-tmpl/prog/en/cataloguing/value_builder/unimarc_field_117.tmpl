@@ -13,11 +13,12 @@
 		<td>Presentation materielle</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1  " -->
-				<option value="  " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
-			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1|" -->
+            	           <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f1aa" -->
 				<option value="aa" SELECTED>Trousse pedagogique</option>
 			<!-- TMPL_ELSE -->
@@ -67,10 +68,8 @@
 			<!-- TMPL_IF name="f1ai" -->
 				<option value="ai" SELECTED>Outils et equipements</option>
 			<!-- TMPL_ELSE -->
-				<option value="ai">Outils et equipements</option>
-	
+				<option value="ai">Outils et equipements</option>	
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f1aj" -->
 				<option value="aj" SELECTED>Armes</option>
@@ -224,10 +223,16 @@
 		<td>Materiau 1</td>
 		<td>
 			<select name="f2" size="1">
+			<!-- TMPL_IF name="f2|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f2  " -->
-				<option value="  " SELECTED>None</option>
+				<option value="  " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
+				<option value="  ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2aa" -->
 				<option value="aa" SELECTED>Terre cuite</option>
@@ -397,10 +402,16 @@
 		<td>Materiau 2</td>
 		<td>
 			<select name="f3" size="1">
+			<!-- TMPL_IF name="f3|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+            
 			<!-- TMPL_IF name="f3  " -->
-				<option value="  " SELECTED>None</option>
+				<option value="  " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
+				<option value="  ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3aa" -->
@@ -571,11 +582,16 @@
 		<td>Materiau 3</td>
 		<td>
 			<select name="f4" size="1">
-			<!-- TMPL_IF name="f4  " -->
-				<option value="  " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
-			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f4|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="f4  " -->
+                                <option value="  " SELECTED>valeur non requise</option>
+                        <!-- TMPL_ELSE -->
+                                <option value="  ">valeur non requise</option>
+                        <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4aa" -->
 				<option value="aa" SELECTED>Terre cuite</option>
 			<!-- TMPL_ELSE -->
@@ -734,24 +750,21 @@
 				<option value="zz" SELECTED>Autre</option>
 			<!-- TMPL_ELSE -->
 				<option value="zz">Autre</option>
-	
 			<!-- /TMPL_IF -->
 
 				</select>
 		</td>
 	</tr>
 
-
-
 	<tr>
 		<td>Couleur</td>
 		<td>
 	<select name="f5" size="1">
-			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="f5|" -->
+                            <option value="|" SELECTED>|- Caractère de remplissage</option>
+                        <!-- TMPL_ELSE -->
+                            <option value="|">|- Caractère de remplissage</option>
+                        <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Monochrome</option>
@@ -799,11 +812,13 @@
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
 </form>
-<script>
+<script type="text/javascript">
 	function report() {
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value;
-		self.close();
-		return false;
+	    var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value =  document.f_pop.f1.value +document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value+document.f_pop.f5.value;
+	    self.close();
+	    return false;
 	}
 </script>
 </body>

@@ -13,8 +13,11 @@
     <a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a>
     <!--TMPL_LOOP Name="subscriptions"-->
     <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a>
-    <!--/TMPL_LOOP-->
-    <!-- <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="all subscriptions on <!-- TMPL_VAR name="bibliotitle" -->">Search All Subscriptions</a> -->
+        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF name="subscriptionexpired"--><a href="#" onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--/TMPL_IF-->
+      <!--/TMPL_LOOP-->
     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a>
 </div>
 <!--TMPL_IF Name="barcode_not_unique" -->
@@ -57,7 +60,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
         </td>
         <td>
-            <!--TMPL_IF EXPR="subscriptionexpired and status1"-->
+            <!--TMPL_IF name="editdisable"-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled >
             <!--TMPL_ELSE-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" OnChange="javascript:if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >

@@ -42,8 +42,28 @@ if ($add){
     my $desc=$input->param('desc');
     my $amount=$input->param('amount');
     my $type=$input->param('type');
-    manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
-    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    my $error=manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
+	if ($error){
+		my ($template, $loggedinuser, $cookie)
+		  = get_template_and_user({template_name => "members/maninvoice.tmpl",
+					query => $input,
+					type => "intranet",
+					authnotrequired => 0,
+					flagsrequired => {borrowers => 1},
+					debug => 1,
+					});
+		if ($error =~ /FOREIGN KEY/ && $error =~ /itemnumber/){
+			$template->param('ITEMNUMBER' => 1);
+		}
+		$template->param('ERROR' => $error);
+		print $input->header(
+			-type => 'utf-8',
+			-cookie => $cookie
+		),$template->output;
+	}
+	else {
+		print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+	}
 } else {
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "members/maninvoice.tmpl",

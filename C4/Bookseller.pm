@@ -107,20 +107,18 @@ sub GetBooksellersWithLateOrders {
     if ( $dbdriver eq "mysql" ) {
         $strsth = "
             SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-            FROM aqorders, aqbasket
+            FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-            WHERE aqorders.basketno = aqbasket.basketno
-                AND (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)
+            WHERE (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)
                 AND (datereceived = '' OR datereceived IS NULL))
         ";
     }
     else {
         $strsth = "
             SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-            FROM aqorders, aqbasket
+            FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
             LEFT JOIN aqbooksellers ON aqbasket.aqbooksellerid = aqbooksellers.id
-            WHERE aqorders.basketno = aqbasket.basketno
-                AND (closedate < (CURDATE( )-(INTERVAL $delay DAY)))
+            WHERE (closedate < (CURDATE( )-(INTERVAL $delay DAY)))
                 AND (datereceived = '' OR datereceived IS NULL))
         ";
     }

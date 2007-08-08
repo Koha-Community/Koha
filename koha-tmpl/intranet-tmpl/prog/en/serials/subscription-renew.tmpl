@@ -2,8 +2,18 @@
 <title>Koha &rsaquo; Serials Subscription renew#<!-- TMPL_VAR name="subscriptionid" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!--TMPL_IF Name="renew"-->
+ <div id="mainbloc">
+  Subscription renewed.
+  
+  <script type="text/javascript">
+  <!--
+  opener.document.location.reload();
+  self.close();
+  //-->
+  </script>
+</div>
+<!--TMPL_ELSE-->
 <div id="mainbloc">
 
 <h1 class="serial">subscription renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
@@ -23,15 +33,7 @@
 	</div>
 </form>
 </div>
-
-        <!-- TMPL_IF NAME="done" -->
-	<script type="text/javascript">
-	<!--
-	opener.document.location.reload();
-	self.close();
-	//-->
-	</script>
-	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
 

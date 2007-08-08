@@ -32,77 +32,81 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+    my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
+    return "";
 }
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "116".(int(rand(100000))+1);
-my $res="
+    my ( $dbh, $record, $tagslib, $field_number, $tabloop ) = @_;
+    my $res = "
 <script>
-function Focus$function_name(subfield_managed) {
-return 1;
+function Focus$field_number(subfield_managed) {
+    return 1;
 }
 
-function Blur$function_name(subfield_managed) {
-	return 1;
+function Blur$field_number(subfield_managed) {
+    return 1;
 }
 
-function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_116.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 116\",'width=1200,height=600,toolbar=false,scrollbars=yes');
+function Clic$field_number(i) {
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_116.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 116\",'width=1200,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>
 ";
 
-return ($function_name,$res);
+    return ( $field_number, $res );
 }
+
 sub plugin {
-my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result');
+    my ($input) = @_;
+    my $index   = $input->param('index');
+    my $result  = $input->param('result');
 
-	my $dbh = C4::Context->dbh;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_116.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
- 	my $f1 = substr($result,0,1);
- 	my $f2 = substr($result,1,1);
- 	my $f3 = substr($result,2,1);
- 	my $f4 = substr($result,3,1);
+    my $dbh = C4::Context->dbh;
+    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name => "cataloguing/value_builder/unimarc_field_116.tmpl",
+            query         => $input,
+            type          => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { editcatalogue => 1 },
+            debug           => 1,
+        }
+    );
+    my $f1 = substr( $result, 0, 1 );
+    my $f2 = substr( $result, 1, 1 );
+    my $f3 = substr( $result, 2, 1 );
+    my $f4 = substr( $result, 3, 1 );
 
- 	my $f5 = substr($result,4,2);
- 	my $f6 = substr($result,6,2);
- 	my $f7 = substr($result,8,2);
+    my $f5 = substr( $result, 4, 2 );
+    my $f6 = substr( $result, 6, 2 );
+    my $f7 = substr( $result, 8, 2 );
 
- 	my $f8 = substr($result,10,2);
- 	my $f9 = substr($result,12,2);
- 	my $f10 = substr($result,14,2);
+    my $f8  = substr( $result, 10, 2 );
+    my $f9  = substr( $result, 12, 2 );
+    my $f10 = substr( $result, 14, 2 );
 
- 	my $f11 = substr($result,16,2);
+    my $f11 = substr( $result, 16, 2 );
 
-	$template->param(index => $index,
-							"f1$f1" => 1,
-							"f2$f2" => 1,
-							"f3$f3" => 1,
-							"f4$f4" => 1,
-							"f5$f5" => 1,
-							"f6$f6" => 1,
-							"f7$f7" => 1,
-							"f8$f8" => 1,
- 							"f9$f9" => 1,
- 							"f10$f10" => 1,
- 							"f11$f11" => 1
- );
-        output_html_with_http_headers $input, $cookie, $template->output;
+    $template->param(
+        index     => $index,
+        "f1$f1"   => 1,
+        "f2$f2"   => 1,
+        "f3$f3"   => 1,
+        "f4$f4"   => 1,
+        "f5$f5"   => 1,
+        "f6$f6"   => 1,
+        "f7$f7"   => 1,
+        "f8$f8"   => 1,
+        "f9$f9"   => 1,
+        "f10$f10" => 1,
+        "f11$f11" => 1
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;

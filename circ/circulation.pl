@@ -694,7 +694,7 @@ $template->param(
     emailaddress      => $borrower->{'emailaddress'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
-    phone             => $borrower->{'phone'},
+    phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     amountold         => $amountold,
     barcode           => $barcode,

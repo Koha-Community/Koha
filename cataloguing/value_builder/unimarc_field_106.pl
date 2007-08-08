@@ -42,30 +42,29 @@ my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= "106".(int(rand(100000))+1);
 my $res="
 <script>
-function Focus$function_name(subfield_managed) {
+function Focus$field_number() {
 return 1;
 }
 
-function Blur$function_name(subfield_managed) {
+function Blur$field_number() {
 	return 1;
 }
 
-function Clic$function_name(i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_106.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 106\",'width=500,height=400,toolbar=false,scrollbars=yes');
+function Clic$field_number() {
+        defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_106.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 106\",'width=500,height=400,toolbar=false,scrollbars=yes');
 
 }
 </script>
 ";
 
-return ($function_name,$res);
+return ($field_number,$res);
 }
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
 
-warn ("Je suis quand meme ici\n");
 	my $dbh = C4::Context->dbh;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_106.tmpl",

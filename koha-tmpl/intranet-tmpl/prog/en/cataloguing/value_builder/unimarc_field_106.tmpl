@@ -13,12 +13,7 @@
 		<td>Texte presentation physique</td>
 		<td>
 			<select name="f1" size="1">
-	                        <!-- TMPL_IF name="f1 " -->
-                                <option value=" " SELECTED>None</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">None</option>
-                        <!-- /TMPL_IF -->
-
+            
 			<!-- TMPL_IF name="f1r" -->
 				<option value="r" SELECTED>Impression normale</option>
 			<!-- TMPL_ELSE -->
@@ -34,9 +29,7 @@
 				<option value="e" SELECTED>Journal</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">Journal</option>
-	
 			<!-- /TMPL_IF -->
-
 
 			<!-- TMPL_IF name="f1f" -->
 				<option value="f" SELECTED>Caractere braille et moon</option>
@@ -83,11 +76,12 @@
 </form>
 <script>
 	function report() {
-
-		opener.document.f.field_value[<!-- TMPL_VAR
-		name="index" -->].value= document.f_pop.f1.value;
-		self.close();
-		return false;
+        var doc   = opener.document; 
+        var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+    
+        field.value = document.f_pop.f1.value;
+        self.close();
+        return false;
 	}
 </script>
 </body>

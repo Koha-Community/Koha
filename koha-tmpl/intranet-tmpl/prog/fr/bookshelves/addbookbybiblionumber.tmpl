@@ -8,7 +8,7 @@
     <!-- /TMPL_IF --> dans une étagère virtuelle
 </h1>
 
-<form name="f1" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
+<form name="f1" method="post" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
     
     <b>Sélectionner une étagère existante</b>
@@ -19,7 +19,7 @@
     <input type="submit" value="Ajouter à l'étagère virtuelle" class="submit">
 </form>
 <p>...ou...</p>
-<form name="f2" method="POST" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
+<form name="f2" method="post" action="/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl">
     <b>Ajouter à une nouvelle étagère virtuelle :</b>
         <p>
             <label for="newbookshelf">

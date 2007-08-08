@@ -2,7 +2,11 @@
         <p><a href="/cgi-bin/koha/opac-user.pl">my summary</a>
         <a href="/cgi-bin/koha/opac-account.pl">my fines</a>
         <a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a>
+        
+        <!-- TMPL_IF NAME="OpacPasswordChange" -->
         <a href="/cgi-bin/koha/opac-passwd.pl">change my password</a>
+        <!-- /TMPL_IF -->
+        
         <!-- TMPL_IF NAME="opacreadinghistory" -->
              <a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a>
         <!-- /TMPL_IF -->

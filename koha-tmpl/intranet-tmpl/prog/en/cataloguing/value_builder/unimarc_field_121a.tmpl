@@ -13,11 +13,7 @@
 		<td>Dimensions physiques:</td>
 		<td>
 			<select name="f1" size="1">
-			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+
 			<!-- TMPL_IF name="f1a" -->
 				<option value="a" SELECTED>Bi-dimensionnel</option>
 			<!-- TMPL_ELSE -->
@@ -33,10 +29,11 @@
 		<td>Image cartographique originale 1:</td>
 		<td>
 			<select name="f2" size="1">
+            
 			<!-- TMPL_IF name="f2 " -->
-				<option value=" " SELECTED>None</option>
+				<option value=" " SELECTED>valeur non requise</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
+				<option value=" ">valeur non requise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2a" -->
 				<option value="a" SELECTED>Manuelle et
@@ -69,14 +66,15 @@
 				teledetection passive</option>
 			<!-- /TMPL_IF -->
 			</select>
-		</td>		<td>Image cartographique originale 2:</td>
+		</td><td>Image cartographique originale 2:</td>
 		<td>
 			<select name="f3" size="1">
-			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="f3 " -->
+                                <option value=" " SELECTED>valeur non requise</option>
+                        <!-- TMPL_ELSE -->
+                                <option value=" ">valeur non requise</option>
+                        <!-- /TMPL_IF -->
+                        
 			<!-- TMPL_IF name="f3a" -->
 				<option value="a" SELECTED>Manuelle et
 				par releve</option>
@@ -94,29 +92,20 @@
 				<option value="c">Par ordinateur</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3d" -->
-				<option value="d" SELECTED>Par
-				technique de teledetection active</option>
+				<option value="d" SELECTED>Par technique de teledetection active</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Par technique de
-				teledetection active</option>
+				<option value="d">Par technique de teledetection active</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3e" -->
-				<option value="e" SELECTED>Par
-				technique de teledetection passive</option>
+				<option value="e" SELECTED>Par technique de teledetection passive</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Par technique de
-				teledetection passive</option>
+				<option value="e">Par technique de teledetection passive</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
 		<td>Support physique:</td>
 		<td>
 			<select name="f4" size="1">
-			<!-- TMPL_IF name="f4  " -->
-				<option value="  " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value="  ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4aa" -->
 				<option value="aa" SELECTED>Papier</option>
 			<!-- TMPL_ELSE -->
@@ -230,11 +219,6 @@
 		<td>Mode de realisation technique:</td>
 		<td>
 			<select name="f5" size="1">
-			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
 				<option value="a" SELECTED>Manuscrit</option>
 			<!-- TMPL_ELSE -->
@@ -246,9 +230,9 @@
 				<option value="b">Imprime</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5c" -->
-				<option value="c" SELECTED>Photographie</option>
+				<option value="c" SELECTED>c- Photocopie</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Photographie</option>
+				<option value="c">c- Photocopie</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5d" -->
 				<option value="d" SELECTED>Microphotographie</option>
@@ -278,11 +262,6 @@
 		<td>Forme de reproduction:</td>
 		<td>
 			<select name="f6" size="1">
-			<!-- TMPL_IF name="f6 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>Manuscrit</option>
 			<!-- TMPL_ELSE -->
@@ -316,34 +295,25 @@
 		<td>Reperes geodesiques:</td>
 		<td>
 			<select name="f7" size="1">
-			<!-- TMPL_IF name="f7 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7a" -->
-				<option value="a" SELECTED>Pas de repere</option>
+				<option value="a" SELECTED>a- Pas de repère</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Pas de repere</option>
+				<option value="a">a- Pas de repère</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7b" -->
-				<option value="b" SELECTED>Repere mais
-				sans systeme de coordonnees</option>
+				<option value="b" SELECTED>b- Repere mais sans système de coordonnées</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Repere mais sans
-				systeme de coordonnees</option>
+				<option value="b">b- Repere mais sans système de coordonnées</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7c" -->
-				<option value="c" SELECTED>Repere avec
-				systeme de coordonnees</option>
+				<option value="c" SELECTED>c- Repère avec système de coordonnées</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Repere avec systeme
-				de coordonnees</option>
+				<option value="c">c- Repere avec systeme de coordonnees</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>x- Non applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">x- Non applicable</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -352,11 +322,6 @@
 		<td>Forme materielle d'edition:</td>
 		<td>
 			<select name="f8" size="1">
-			<!-- TMPL_IF name="f8 " -->
-				<option value=" " SELECTED>None</option>
-			<!-- TMPL_ELSE -->
-				<option value=" ">None</option>
-			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>Publication
 				autonome</option>
@@ -403,7 +368,10 @@
 <script>
 	function report() {
 
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value= document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value;
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value =  document.f_pop.f1.value + document.f_pop.f2.value +document.f_pop.f3.value +document.f_pop.f4.value +document.f_pop.f5.value +document.f_pop.f6.value +document.f_pop.f7.value +document.f_pop.f8.value;
 		self.close();
 		return false;
 	}

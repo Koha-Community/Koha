@@ -53,8 +53,8 @@ function addsubscriptionid()
     string=string.substring(0,string.length -1);
     document.edition.subscriptionid.value=string;
 }
-function popup(link) {
-    newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+function popup(subscriptionid) {
+    newin=window.open('subscription-renew.pl?mode=popup&subscriptionid='+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
 
@@ -143,9 +143,9 @@ function popup(link) {
         <td> <!-- TMPL_VAR name="notes" -->        <!--TMPL_IF name="subscriptionexpired"--><br /><span class="problem"> Subscription Expired</span>
         <!--/TMPL_IF-->
         </td>
-        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->')">Renew</a></td>
+        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
         <!--TMPL_ELSE-->
-        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->')">Renew</a></td>
+        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
         <!--TMPL_ELSE-->
         <td> &nbsp;</td>
         <!--/TMPL_IF-->

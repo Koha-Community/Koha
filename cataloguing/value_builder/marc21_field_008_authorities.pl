@@ -33,8 +33,7 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 
 =cut
 # find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-                                                               localtime(time);
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 $year = substr($year,1,2);
 $mon +=1;
 my $date = "$year-$mon-$mday";
@@ -53,7 +52,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "100".(int(rand(100000))+1);
+my $function_name= $field_number;
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
@@ -65,8 +64,8 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	defaultvalue=document.forms[0].field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	defaultvalue=document.getElementById(\"$field_number\").value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>

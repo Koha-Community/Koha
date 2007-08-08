@@ -16,12 +16,15 @@
         <!-- TMPL_IF name="closedate" --><p><label>Closed On: </label> <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
         </table>
         <!-- TMPL_UNLESS name="closedate" -->
-        <form action="/cgi-bin/koha/acqui/booksellers.pl" method="get">
-            <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
-            <input type="hidden" name="supplier" value="<!-- TMPL_VAR name="booksellerid" -->" />
-            <input type="hidden" name="op" value="close" />
-            <input type="submit" value="Close this Basket" />
-        </form>
+        <p><a href="javascript:confirm_close()" class="button">Close this basket</a></p>
+        <script>
+            function confirm_close() {
+                var is_confirmed = confirm(_('Are you sure you want to close this basket?'));
+                if (is_confirmed) {
+                    window.location = "/cgi-bin/koha/acqui/booksellers.pl?op=close&basketno=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->";
+                }
+            }
+        </script>
         <!-- /TMPL_UNLESS -->
     </div>
     

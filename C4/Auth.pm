@@ -54,12 +54,15 @@ C4::Auth - Authenticates Koha users
   my $query = new CGI;
 
   my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({template_name   => "opac-main.tmpl",
-                             query           => $query,
-			     type            => "opac",
-			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
-			  });
+    = get_template_and_user(
+        {
+            template_name   => "opac-main.tmpl",
+            query           => $query,
+	    type            => "opac",
+	    authnotrequired => 1,
+	    flagsrequired   => {borrow => 1},
+	}
+    );
 
   print $query->header(
     -type => 'utf-8',
@@ -89,12 +92,15 @@ C4::Auth - Authenticates Koha users
 =item get_template_and_user
 
   my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name   => "opac-main.tmpl",
-                             query           => $query,
-			     type            => "opac",
-			     authnotrequired => 1,
-			     flagsrequired   => {borrow => 1},
-			  });
+    = get_template_and_user(
+        {
+           template_name   => "opac-main.tmpl",
+           query           => $query,
+	   type            => "opac",
+	   authnotrequired => 1,
+	   flagsrequired   => {borrow => 1},
+	}
+    );
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
     to C<&checkauth> (in this module) to perform authentification.
@@ -114,7 +120,6 @@ C4::Auth - Authenticates Koha users
 
 sub get_template_and_user {
     my $in       = shift;
-	warn "GET Template";
     my $template =
       gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
@@ -218,23 +223,24 @@ sub get_template_and_user {
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-            intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-            IntranetNav        => C4::Context->preference("IntranetNav"),
-            intranetuserjs     => C4::Context->preference("intranetuserjs"),
-            TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
-            AmazonContent      => C4::Context->preference("AmazonContent"),
-            LibraryName        => C4::Context->preference("LibraryName"),
-            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
-            LoginBranchname    => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
-            AutoLocation       => C4::Context->preference("AutoLocation"),
-            hide_marc          => C4::Context->preference("hide_marc"),
-            patronimages       => C4::Context->preference("patronimages"),
+            intranetstylesheet      => C4::Context->preference("intranetstylesheet"),
+            IntranetNav             => C4::Context->preference("IntranetNav"),
+            intranetuserjs          => C4::Context->preference("intranetuserjs"),
+            TemplateEncoding        => C4::Context->preference("TemplateEncoding"),
+            AmazonContent           => C4::Context->preference("AmazonContent"),
+            LibraryName             => C4::Context->preference("LibraryName"),
+            LoginBranchcode         => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchname         => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
+            LoginBranchnameShort    => substr((C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),0,10),
+            AutoLocation            => C4::Context->preference("AutoLocation"),
+            hide_marc               => C4::Context->preference("hide_marc"),
+            patronimages            => C4::Context->preference("patronimages"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-            advancedMARCEditor => C4::Context->preference("advancedMARCEditor"),
-            suggestion => C4::Context->preference("suggestion"),
-            virtualshelves => C4::Context->preference("virtualshelves"),
-            LibraryName => C4::Context->preference("LibraryName"),
-            KohaAdminEmailAddress     => "" . C4::Context->preference("KohaAdminEmailAddress"),
+            advancedMARCEditor      => C4::Context->preference("advancedMARCEditor"),
+            suggestion              => C4::Context->preference("suggestion"),
+            virtualshelves          => C4::Context->preference("virtualshelves"),
+            LibraryName             => C4::Context->preference("LibraryName"),
+            KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
         );
     }
     else {
@@ -244,36 +250,36 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
 	$template->param(
-            KohaAdminEmailAddress     => "" . C4::Context->preference("KohaAdminEmailAddress"),
-            suggestion     => "" . C4::Context->preference("suggestion"),
-            virtualshelves => "" . C4::Context->preference("virtualshelves"),
-            OpacNav        => "" . C4::Context->preference("OpacNav"),
-            opacheader     => "" . C4::Context->preference("opacheader"),
-            opaccredits    => "" . C4::Context->preference("opaccredits"),
-            opacsmallimage => "" . C4::Context->preference("opacsmallimage"),
-            opaclargeimage => "" . C4::Context->preference("opaclargeimage"),
-            opaclayoutstylesheet => "". C4::Context->preference("opaclayoutstylesheet"),
-            opaccolorstylesheet => "". C4::Context->preference("opaccolorstylesheet"),
-            opaclanguagesdisplay => "". C4::Context->preference("opaclanguagesdisplay"),
-            opacuserlogin    => "" . C4::Context->preference("opacuserlogin"),
-            opacbookbag      => "" . C4::Context->preference("opacbookbag"),
-            TemplateEncoding => "". C4::Context->preference("TemplateEncoding"),
-            AmazonContent => "" . C4::Context->preference("AmazonContent"),
-            LibraryName   => "" . C4::Context->preference("LibraryName"),
-            LibraryNameTitle   => "" . $LibraryNameTitle,
-            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
-            LoginBranchname    => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"", 
-            OpacPasswordChange => C4::Context->preference("OpacPasswordChange"),
-            opacreadinghistory => C4::Context->preference("opacreadinghistory"),
-            opacuserjs         => C4::Context->preference("opacuserjs"),
-            OpacCloud          => C4::Context->preference("OpacCloud"),
-            OpacTopissue       => C4::Context->preference("OpacTopissue"),
-            OpacAuthorities    => C4::Context->preference("OpacAuthorities"),
-            OpacBrowser        => C4::Context->preference("OpacBrowser"),
-            RequestOnOpac      => C4::Context->preference("RequestOnOpac"),
-            reviewson          => C4::Context->preference("reviewson"),
-            hide_marc          => C4::Context->preference("hide_marc"),
-            patronimages       => C4::Context->preference("patronimages"),
+            KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
+            suggestion             => "" . C4::Context->preference("suggestion"),
+            virtualshelves         => "" . C4::Context->preference("virtualshelves"),
+            OpacNav                => "" . C4::Context->preference("OpacNav"),
+            opacheader             => "" . C4::Context->preference("opacheader"),
+            opaccredits            => "" . C4::Context->preference("opaccredits"),
+            opacsmallimage         => "" . C4::Context->preference("opacsmallimage"),
+            opaclargeimage         => "" . C4::Context->preference("opaclargeimage"),
+            opaclayoutstylesheet   => "". C4::Context->preference("opaclayoutstylesheet"),
+            opaccolorstylesheet    => "". C4::Context->preference("opaccolorstylesheet"),
+            opaclanguagesdisplay   => "". C4::Context->preference("opaclanguagesdisplay"),
+            opacuserlogin          => "" . C4::Context->preference("opacuserlogin"),
+            opacbookbag            => "" . C4::Context->preference("opacbookbag"),
+            TemplateEncoding       => "". C4::Context->preference("TemplateEncoding"),
+            AmazonContent          => "" . C4::Context->preference("AmazonContent"),
+            LibraryName            => "" . C4::Context->preference("LibraryName"),
+            LibraryNameTitle       => "" . $LibraryNameTitle,
+            LoginBranchcode        => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchname        => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"", 
+            OpacPasswordChange     => C4::Context->preference("OpacPasswordChange"),
+            opacreadinghistory     => C4::Context->preference("opacreadinghistory"),
+            opacuserjs             => C4::Context->preference("opacuserjs"),
+            OpacCloud              => C4::Context->preference("OpacCloud"),
+            OpacTopissue           => C4::Context->preference("OpacTopissue"),
+            OpacAuthorities        => C4::Context->preference("OpacAuthorities"),
+            OpacBrowser            => C4::Context->preference("OpacBrowser"),
+            RequestOnOpac          => C4::Context->preference("RequestOnOpac"),
+            reviewson              => C4::Context->preference("reviewson"),
+            hide_marc              => C4::Context->preference("hide_marc"),
+            patronimages           => C4::Context->preference("patronimages"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
         );
     }
@@ -383,7 +389,7 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags );
+    my ( $userid, $cookie, $sessionID, $flags, $envcookie );
     my $logout = $query->param('logout.x');
     if ( $userid = $ENV{'REMOTE_USER'} ) {
 
@@ -545,14 +551,10 @@ sub checkauth {
 #  new op dev :
 # launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
                 my $ip       = $ENV{'REMOTE_ADDR'};
-				# if they specify at login, use that
-				if ($query->param('branch')) {
- 				$branchcode  = $query->param('branch');
-				$branchname = GetBranchName($branchcode);
-				}
                 my $branches = GetBranches();
                 my @branchesloop;
                 foreach my $br ( keys %$branches ) {
+
                     # 		now we work with the treatment of ip
                     my $domain = $branches->{$br}->{'branchip'};
                     if ( $domain && $ip =~ /^$domain/ ) {
@@ -591,17 +593,7 @@ sub checkauth {
                 $session->param('ip',$session->remote_addr());
 				$session->param('lasttime',time());
 			}
- 			if ($session){
-            	C4::Context::set_userenv(
-                $session->param('number'),       $session->param('id'),
-                $session->param('cardnumber'),   $session->param('firstname'),
-                $session->param('surname'),      $session->param('branch'),
-                $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter')
-            	);
-        	}		
         }
-
         else {
             if ($userid) {
                 $info{'invalid_username_or_password'} = 1;
@@ -631,16 +623,8 @@ sub checkauth {
         my $value = $query->param($name);
         push @inputs, { name => $name, value => $value };
     }
-    # get the branchloop, which we need for authetication
-	use C4::Branch;
-    my $branches = GetBranches();
-    my @branch_loop;
-    for my $branch_hash (keys %$branches) {
-                push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
-    }
 
     my $template = gettemplate( $template_name, $type, $query );
-    $template->param(branchloop => \@branch_loop,);
     $template->param(
         INPUTS               => \@inputs,
         suggestion           => C4::Context->preference("suggestion"),

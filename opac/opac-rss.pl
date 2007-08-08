@@ -1,16 +1,5 @@
 #!/usr/bin/perl
 
-use strict;    # always use
-
-use XML::RSS;
-use Digest::MD5 qw(md5_base64);
-use POSIX qw(ceil floor);
-use Date::Calc qw(Today_and_Now Delta_YMDHMS);
-use C4::Context;
-use C4::Search;
-use C4::Koha;
-use C4::Biblio;
-
 # Copyright 2007 Paul POULAIN
 #
 # This file is part of Koha
@@ -28,9 +17,20 @@ use C4::Biblio;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;    # always use
+
+use XML::RSS;
+use Digest::MD5 qw(md5_base64);
+use POSIX qw(ceil floor);
+use Date::Calc qw(Today_and_Now Delta_YMDHMS);
+use C4::Context;
+use C4::Search;
+use C4::Koha;
+use C4::Biblio;
+
 =head1 NAME
 
-opac-search.pl : script to have RSS feeds automatically on each OPAC search
+opac-rss.pl : script to have RSS feeds automatically on each OPAC search
 
 =head1 SYNOPSIS
 
@@ -153,10 +153,6 @@ if ($RDF_update_needed) {
 
     # save the rss feed.
     $rss->save("rss/$filename");
-}
-else {
-
-    #     warn "RDF CACHE used"
 }
 print $cgi->header( -type => "application/rss+xml" );
 print $rss->as_string;

@@ -68,7 +68,7 @@ my $frameworkcode = &GetFrameworkCode($biblionumber);
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio($biblionumber);
-# warn "==>".$record->as_formatted;
+warn "==>".$record->as_formatted;
 my $oldrecord = TransformMarcToKoha($dbh,$record);
 my $itemrecord;
 my $nextop="additem";

@@ -1,11 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Patrons &rsaquo; Create Manual Invoice</title>
+<title>Koha &rsaquo; Borrowers &rsaquo; Create Manual Invoice</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
-
+<!-- TMPL_IF NAME="ERROR" -->
+<!-- TMPL_IF NAME="ITEMNUMBER" -->
+  ERROR an invalid itemnumber was entered, please hit back and try again
+<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
 	<table>
 	<caption>Manual Invoice</caption>
@@ -27,7 +31,7 @@
 
 <form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" /><input type="submit" value="Cancel" /></form>
 
-
+<!-- /TMPL_IF -->
 
 
 <!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
