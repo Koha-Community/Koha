@@ -380,7 +380,8 @@ push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limi
 my $query = $params->{'q'};
 my $scan = $params->{'scan'};
 my $results_per_page = $params->{'count'} || 20;
-my $offset = $params->{'offset'} || 0;
+my $page = $cgi->param('page') || 1;
+my $offset = ($page-1)*$results_per_page;
 my $hits;
 my $expanded_facet = $params->{'expand'};
 
@@ -446,7 +447,7 @@ for (my $i=0;$i<=@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults( $search_desc,$hits,$results_per_page,$page,@{$results_hashref->{$server}->{"RECORDS"}});
+        my @newresults = searchResults( $search_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
