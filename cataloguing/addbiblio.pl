@@ -302,8 +302,9 @@ sub create_input {
     }
     
     $subfield_data{visibility} = "display:none;"
-        unless ( ( $tagslib->{$tag}->{$subfield}->{hidden} % 2 == 0 )
-            or $value ne '' );    #check parity
+        if (    ($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne ''
+            or ($value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory})
+        );
     
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {

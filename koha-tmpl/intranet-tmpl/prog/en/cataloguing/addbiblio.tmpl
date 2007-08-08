@@ -111,9 +111,8 @@
             <!-- /TMPL_UNLESS -->
 
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-	            <!-- TMPL_VAR NAME="tag_lib" -->
+	            <a onClick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
             <!-- /TMPL_UNLESS -->
-
             <!-- TMPL_IF name="repeatable" -->
                 <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')">+</span>
             <!-- /TMPL_IF -->
@@ -322,6 +321,21 @@ function openAuth(tagid,authtype,X) {
     Y=X.parentNode.getAttribute("id");
 //     alert("tagid"+Y);
 	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+
+function ExpandField(index) {
+    var original = document.getElementById(index); //original <div>
+    var divs = original.getElementsByTagName('div');
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+            if (divs[i].style.display == 'block') {
+                divs[i].style.display = 'none';
+            } else {
+                divs[i].style.display = 'block';
+            }
+        }
+    }
 }
 
 /**
