@@ -183,10 +183,7 @@ CREATE TABLE `aqbudget` (
 DROP TABLE IF EXISTS `aqorderbreakdown`;
 CREATE TABLE `aqorderbreakdown` (
   `ordernumber` int(11) default NULL,
-  `linenumber` int(11) default NULL,
-  `branchcode` char(4) default NULL,
   `bookfundid` char(5) NOT NULL default '',
-  `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
   KEY `bookfundid` (`bookfundid`),
   CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -294,27 +291,6 @@ CREATE TABLE `auth_subfield_structure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `auth_subfield_table`
---
-
-DROP TABLE IF EXISTS `auth_subfield_table`;
-CREATE TABLE `auth_subfield_table` (
-  `subfieldid` bigint(20) unsigned NOT NULL auto_increment,
-  `authid` bigint(20) unsigned NOT NULL default '0',
-  `tag` varchar(3) NOT NULL default '',
-  `tagorder` tinyint(4) NOT NULL default '1',
-  `tag_indicator` varchar(2) NOT NULL default '',
-  `subfieldcode` char(1) NOT NULL default '',
-  `subfieldorder` tinyint(4) NOT NULL default '1',
-  `subfieldvalue` varchar(255) default NULL,
-  PRIMARY KEY  (`subfieldid`),
-  KEY `authid` (`authid`),
-  KEY `tag` (`tag`),
-  KEY `subfieldcode` (`subfieldcode`),
-  KEY `subfieldvalue` (`subfieldvalue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `auth_tag_structure`
 --
 
@@ -391,17 +367,6 @@ CREATE TABLE `biblio_framework` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `biblioanalysis`
---
-
-DROP TABLE IF EXISTS `biblioanalysis`;
-CREATE TABLE `biblioanalysis` (
-  `analyticaltitle` mediumtext,
-  `biblionumber` int(11) NOT NULL default '0',
-  `analyticalauthor` mediumtext
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `biblioitems`
 --
 
@@ -457,16 +422,6 @@ CREATE TABLE `virtualshelves` (
   `owner` char(80) default NULL,
   `category` char(1) default NULL,
   PRIMARY KEY  (`shelfnumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `borexp`
---
-
-DROP TABLE IF EXISTS `borexp`;
-CREATE TABLE `borexp` (
-  `borrowernumber` int(11) default NULL,
-  `newexp` date default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -531,16 +486,6 @@ CREATE TABLE `borrowers` (
   KEY `branchcode` (`branchcode`),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `borrowers_to_borrowers`
---
-
-DROP TABLE IF EXISTS `borrowers_to_borrowers`;
-CREATE TABLE `borrowers_to_borrowers` (
-  `borrower1` int(11) default NULL,
-  `borrower2` int(11) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -611,21 +556,6 @@ CREATE TABLE `branchtransfers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `catalogueentry`
---
-
-DROP TABLE IF EXISTS `catalogueentry`;
-CREATE TABLE `catalogueentry` (
-  `catalogueentry` mediumtext NOT NULL,
-  `entrytype` varchar(2) default NULL,
-  `see` mediumtext,
-  `seealso` mediumtext,
-  `seeinstead` mediumtext,
-  `biblionumber` int(11) default NULL,
-  KEY `entrytype` (`entrytype`,`catalogueentry`(250))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `categories`
 --
 
@@ -657,21 +587,6 @@ CREATE TABLE `categorytable` (
   `description` text,
   `itemtypecodes` text,
   PRIMARY KEY  (`categorycode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `charges`
---
-
-DROP TABLE IF EXISTS `charges`;
-CREATE TABLE `charges` (
-  `charge_id` varchar(5) NOT NULL default '',
-  `description` text NOT NULL,
-  `amount` decimal(28,6) NOT NULL default '0.000000',
-  `min` int(4) NOT NULL default '0',
-  `max` int(4) NOT NULL default '0',
-  `level` int(1) NOT NULL default '0',
-  PRIMARY KEY  (`charge_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -975,17 +890,6 @@ CREATE TABLE `items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `itemsprices`
---
-
-DROP TABLE IF EXISTS `itemsprices`;
-CREATE TABLE `itemsprices` (
-  `itemnumber` int(11) default NULL,
-  `price1` decimal(28,6) default NULL,
-  `price2` decimal(28,6) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `itemtypes`
 --
 
@@ -1048,33 +952,6 @@ CREATE TABLE `letter` (
   PRIMARY KEY  (`module`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `marc_biblio`
---
-
-DROP TABLE IF EXISTS `marc_biblio`;
-CREATE TABLE `marc_biblio` (
-  `bibid` bigint(20) unsigned NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default '0',
-  `datecreated` date NOT NULL default '0000-00-00',
-  `datemodified` date default NULL,
-  `origincode` char(20) default NULL,
-  `frameworkcode` char(4) NOT NULL default '',
-  PRIMARY KEY  (`bibid`),
-  KEY `origincode` (`origincode`),
-  KEY `biblionumber` (`biblionumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `marc_blob_subfield`
---
-
-DROP TABLE IF EXISTS `marc_blob_subfield`;
-CREATE TABLE `marc_blob_subfield` (
-  `blobidlink` bigint(20) NOT NULL auto_increment,
-  `subfieldvalue` longtext NOT NULL,
-  PRIMARY KEY  (`blobidlink`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `marc_breeding`
@@ -1125,32 +1002,6 @@ CREATE TABLE `marc_subfield_structure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `marc_subfield_table`
---
-
-DROP TABLE IF EXISTS `marc_subfield_table`;
-CREATE TABLE `marc_subfield_table` (
-  `subfieldid` bigint(20) unsigned NOT NULL auto_increment,
-  `bibid` bigint(20) unsigned NOT NULL default '0',
-  `tag` varchar(3) NOT NULL default '',
-  `tagorder` int(11) NOT NULL default '1',
-  `tag_indicator` varchar(2) NOT NULL default '',
-  `subfieldcode` char(1) NOT NULL default '',
-  `subfieldorder` tinyint(4) NOT NULL default '1',
-  `subfieldvalue` varchar(255) default NULL,
-  `valuebloblink` bigint(20) default NULL,
-  PRIMARY KEY  (`subfieldid`),
-  KEY `bibid` (`bibid`),
-  KEY `tag` (`tag`),
-  KEY `tag_indicator` (`tag_indicator`),
-  KEY `subfieldorder` (`subfieldorder`),
-  KEY `subfieldcode` (`subfieldcode`),
-  KEY `subfieldvalue` (`subfieldvalue`),
-  KEY `tagorder` (`tagorder`),
-  KEY `marc_speed` (`tag`,`subfieldcode`,`subfieldvalue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `marc_tag_structure`
 --
 
@@ -1164,18 +1015,6 @@ CREATE TABLE `marc_tag_structure` (
   `authorised_value` char(10) default NULL,
   `frameworkcode` char(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `marcrecorddone`
---
-
-DROP TABLE IF EXISTS `marcrecorddone`;
-CREATE TABLE `marcrecorddone` (
-  `isbn` char(40) default NULL,
-  `issn` char(40) default NULL,
-  `lccn` char(40) default NULL,
-  `controlnumber` char(40) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1356,18 +1195,6 @@ CREATE TABLE `serial` (
   `claimdate` date default NULL,
   `routingnotes` text,
   PRIMARY KEY  (`serialid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `sessionqueries`
---
-
-DROP TABLE IF EXISTS `sessionqueries`;
-CREATE TABLE `sessionqueries` (
-  `sessionID` varchar(255) NOT NULL default '',
-  `userid` varchar(100) NOT NULL default '',
-  `ip` varchar(18) NOT NULL default '',
-  `url` mediumtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1593,19 +1420,6 @@ CREATE TABLE `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `uploadedmarc`
---
-
-DROP TABLE IF EXISTS `uploadedmarc`;
-CREATE TABLE `uploadedmarc` (
-  `id` int(11) NOT NULL auto_increment,
-  `marc` longblob,
-  `hidden` smallint(6) default NULL,
-  `name` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `userflags`
 --
 
@@ -1616,71 +1430,6 @@ CREATE TABLE `userflags` (
   `flagdesc` char(255) default NULL,
   `defaulton` int(11) default NULL,
   PRIMARY KEY  (`bit`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `usercode` varchar(10) default NULL,
-  `username` mediumtext,
-  `password` mediumtext,
-  `level` smallint(6) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `websites`
---
-
-DROP TABLE IF EXISTS `websites`;
-CREATE TABLE `websites` (
-  `websitenumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default '0',
-  `title` mediumtext,
-  `description` mediumtext,
-  `url` varchar(255) default NULL,
-  PRIMARY KEY  (`websitenumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `z3950queue`
---
-
-DROP TABLE IF EXISTS `z3950queue`;
-CREATE TABLE `z3950queue` (
-  `id` int(11) NOT NULL auto_increment,
-  `term` mediumtext,
-  `type` varchar(10) default NULL,
-  `startdate` int(11) default NULL,
-  `enddate` int(11) default NULL,
-  `done` smallint(6) default NULL,
-  `results` longblob,
-  `numrecords` int(11) default NULL,
-  `servers` mediumtext,
-  `identifier` varchar(30) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `z3950results`
---
-
-DROP TABLE IF EXISTS `z3950results`;
-CREATE TABLE `z3950results` (
-  `id` int(11) NOT NULL auto_increment,
-  `queryid` int(11) default NULL,
-  `server` varchar(255) default NULL,
-  `startdate` int(11) default NULL,
-  `enddate` int(11) default NULL,
-  `results` longblob,
-  `numrecords` int(11) default NULL,
-  `numdownloaded` int(11) default NULL,
-  `highestseen` int(11) default NULL,
-  `active` smallint(6) default NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `query_server` (`queryid`,`server`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
