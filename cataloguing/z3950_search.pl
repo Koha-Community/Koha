@@ -82,8 +82,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param( frameworkcode => $frameworkcode, );
 
 if ( $op ne "do_search" ) {
-    # FIXME : remove sql queries & put that in a specific package (Z3950.pm ?, but it's unused atm)
-    my $sth = $dbh->prepare("SELECT  id,host,checked FROM z3950servers ORDER by host");
+    my $sth = $dbh->prepare("select id,host,checked from z3950servers  order by host");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(

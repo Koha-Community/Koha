@@ -1,0 +1,7 @@
+Dear Library Member
+According to the library's records, you or your children have the following 
+overdue items borrowed from a Horowhenua Library and not yet returned. 
+Please return them immediately to avoid increasing fines.
+
+<TMPL_LOOP NAME=BOOKDETAILS><TMPL_VAR NAME=DATE_DUE>	<TMPL_VAR NAME=TITLE>	<TMPL_VAR NAME=ITEMTYPE> <TMPL_IF NAME=FINE>$<TMPL_VAR NAME=FINE></TMPL_IF>
+</TMPL_LOOP>

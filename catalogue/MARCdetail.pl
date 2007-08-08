@@ -234,8 +234,8 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                         $subfield_data{authority} = $fields[$x_i]->subfield(9);
                     }
                     $subfield_data{marc_value} =
-                      GetAuthorisedValueDesc( $fields[$x_i]->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib );
+                      get_authorised_value_desc( $tagslib, $fields[$x_i]->tag(),
+                        $subf[$i][0], $subf[$i][1], '', $dbh );
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
                 $subfield_data{marc_tag}      = $fields[$x_i]->tag();

@@ -1,0 +1,17 @@
+Invoice for lost book(s)
+This is an invoice for the replacement cost of items you
+or your children borrowed from the library which have not been returned.
+
+<TMPL_LOOP NAME=BOOKDETAILS><TMPL_VAR NAME=DATE_DUE>	<TMPL_VAR NAME=TITLE>	<TMPL_VAR NAME=ITEMTYPE>	<TMPL_IF NAME=FINE>$<TMPL_VAR NAME=FINE></TMPL_IF>	<TMPL_IF NAME=REP>$<TMPL_VAR NAME=REP></TMPL_IF>
+</TMPL_LOOP>
+
+Total Owing: $<TMPL_VAR NAME=OWING>
+
+
+If you return all overdue items, the total owing in fines will be $<TMPL_VAR
+NAME=FINES_TOTAL>
+
+Please deal with this matter immediately. If you need more time to search or pay, or you think a mistake 
+has been made, please contact the library straight away. If you do not respond to this letter,  this 
+account will be handed to a debt collection agency.
+
