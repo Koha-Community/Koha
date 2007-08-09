@@ -48,7 +48,7 @@
                         <input type="submit" value=" OK " class="submit" />
                         </form>
                      </li>
-                    <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Virtual Shelves</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Virtual Shelves</a></li>
                 </ul>
                 <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->

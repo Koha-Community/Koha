@@ -223,18 +223,17 @@ sub get_template_and_user {
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-            intranetstylesheet      => C4::Context->preference("intranetstylesheet"),
-            IntranetNav             => C4::Context->preference("IntranetNav"),
-            intranetuserjs          => C4::Context->preference("intranetuserjs"),
-            TemplateEncoding        => C4::Context->preference("TemplateEncoding"),
-            AmazonContent           => C4::Context->preference("AmazonContent"),
-            LibraryName             => C4::Context->preference("LibraryName"),
-            LoginBranchcode         => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
-            LoginBranchname         => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
-            LoginBranchnameShort    => substr((C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),0,10),
-            AutoLocation            => C4::Context->preference("AutoLocation"),
-            hide_marc               => C4::Context->preference("hide_marc"),
-            patronimages            => C4::Context->preference("patronimages"),
+            intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+            IntranetNav        => C4::Context->preference("IntranetNav"),
+            intranetuserjs     => C4::Context->preference("intranetuserjs"),
+            TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
+            AmazonContent      => C4::Context->preference("AmazonContent"),
+            LibraryName        => C4::Context->preference("LibraryName"),
+            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchname    => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
+            AutoLocation       => C4::Context->preference("AutoLocation"),
+            hide_marc          => C4::Context->preference("hide_marc"),
+            patronimages       => C4::Context->preference("patronimages"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
             advancedMARCEditor      => C4::Context->preference("advancedMARCEditor"),
             suggestion              => C4::Context->preference("suggestion"),
@@ -346,7 +345,7 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-
+	# warn "Checking Auth";
 # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -389,7 +388,7 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags, $envcookie );
+    my ( $userid, $cookie, $sessionID, $flags );
     my $logout = $query->param('logout.x');
     if ( $userid = $ENV{'REMOTE_USER'} ) {
 
@@ -431,7 +430,7 @@ sub checkauth {
             close L;
         }
         if ($userid) {
-			warn "here $userid";
+			# warn "here $userid";
             if ( $lasttime < time() - $timeout ) {
 
                 # timed logout
@@ -551,10 +550,14 @@ sub checkauth {
 #  new op dev :
 # launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
                 my $ip       = $ENV{'REMOTE_ADDR'};
+				# if they specify at login, use that
+				if ($query->param('branch')) {
+ 				$branchcode  = $query->param('branch');
+				$branchname = GetBranchName($branchcode);
+				}
                 my $branches = GetBranches();
                 my @branchesloop;
                 foreach my $br ( keys %$branches ) {
-
                     # 		now we work with the treatment of ip
                     my $domain = $branches->{$br}->{'branchip'};
                     if ( $domain && $ip =~ /^$domain/ ) {
@@ -593,7 +596,17 @@ sub checkauth {
                 $session->param('ip',$session->remote_addr());
 				$session->param('lasttime',time());
 			}
+ 			if ($session){
+            	C4::Context::set_userenv(
+                $session->param('number'),       $session->param('id'),
+                $session->param('cardnumber'),   $session->param('firstname'),
+                $session->param('surname'),      $session->param('branch'),
+                $session->param('branchname'),   $session->param('flags'),
+                $session->param('emailaddress'), $session->param('branchprinter')
+            	);
+        	}		
         }
+
         else {
             if ($userid) {
                 $info{'invalid_username_or_password'} = 1;
@@ -623,8 +636,16 @@ sub checkauth {
         my $value = $query->param($name);
         push @inputs, { name => $name, value => $value };
     }
+    # get the branchloop, which we need for authetication
+	use C4::Branch;
+    my $branches = GetBranches();
+    my @branch_loop;
+    for my $branch_hash (keys %$branches) {
+                push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
+    }
 
     my $template = gettemplate( $template_name, $type, $query );
+    $template->param(branchloop => \@branch_loop,);
     $template->param(
         INPUTS               => \@inputs,
         suggestion           => C4::Context->preference("suggestion"),

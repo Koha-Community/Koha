@@ -38,7 +38,7 @@
         </p>
         
         <p>
-            <label for="branch">Branch</label>
+            <label for="branch">Library</label>
             <select id="branch" name="branch">
             <option value="">-- All --</option>
                 <!-- TMPL_LOOP name="branchloop" -->
@@ -69,7 +69,7 @@
         <p>
         <label for="dont_export_fields">Don't export fields</label>
         <input id="dont_export_fields" type="text" name="dont_export_fields" />
-        <i>splitted by a blank. (for example: 100a 200 606)</i>
+        <i>seperate by a blank. (e.g.: 100a 200 606)</i>
         </p>
     </fieldset>
     <fieldset>
@@ -83,6 +83,9 @@
                 <option value="xml">xml</option>
             </select>
             format.
+        </p>
+        <p>
+        <label for="filename">Filename:</label><input id="filename" tyle=text" name="filename" value="koha.mrc" />
         </p>
     </fieldset>
     <input type="hidden" name="op" value="export" />

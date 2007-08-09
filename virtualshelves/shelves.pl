@@ -24,7 +24,7 @@
 
 =head1 DESCRIPTION
 
-    this script is used to script to provide bookshelf management
+    this script is used to script to provide virtualshelf management
 
 =head1 CGI PARAMETERS
 
@@ -65,7 +65,7 @@
 
 use strict;
 use CGI;
-use C4::BookShelves;
+use C4::VirtualShelves;
 use C4::Biblio;
 use C4::Auth;
 use C4::Output;
@@ -74,7 +74,7 @@ my $query = new CGI;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "bookshelves/shelves.tmpl",
+        template_name   => "virtualshelves/shelves.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
@@ -86,12 +86,14 @@ if ( $query->param('modifyshelfcontents') ) {
     my $shelfnumber = $query->param('viewshelf');
     my $barcode     = $query->param('addbarcode');
     my ($item) = GetItem( 0, $barcode );
+	my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
+
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
-        AddToShelf( $item->{'itemnumber'}, $shelfnumber );
+        AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
             if (/REM-(\d*)/) {
-                my $itemnumber = $1;
-                DelFromShelf( $itemnumber, $shelfnumber );
+                my $biblionumber = $1;
+                DelFromShelf( $biblionumber, $shelfnumber );
             }
         }
     }
@@ -124,6 +126,7 @@ SWITCH: {
         last SWITCH;
     }
     if ( $query->param('viewshelf') ) {
+
         #check that the user can view the shelf
         my $shelfnumber = $query->param('viewshelf');
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
@@ -132,8 +135,9 @@ SWITCH: {
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
                 viewshelf   => $query->param('viewshelf'),
-                manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
-                itemsloop   => $items,
+                manageshelf =>
+                  &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
+                itemsloop => $items,
             );
         }
         last SWITCH;
@@ -154,47 +158,44 @@ SWITCH: {
                     }
                 );
             }
-    }
-    my @paramsloop;
-    foreach ( $query->param() ) {
-        my %line;
-        if (/DEL-(\d+)/) {
-            my $delshelf = $1;
-            my ( $status, $count ) = DelShelf($delshelf);
-            if ($status) {
-                $line{'status'} = $status;
-                $line{'count'}  = $count;
-            }
         }
+        my @paramsloop;
+        foreach ( $query->param() ) {
+            my %line;
+            if (/DEL-(\d+)/) {
+                my $delshelf = $1;
+                my ( $status, $count ) = DelShelf($delshelf);
+                if ($status) {
+                    $line{'status'} = $status;
+                    $line{'count'}  = $count;
+                }
+            }
 
-        #if the shelf is not deleted, %line points on null
-        push( @paramsloop, \%line );
-    }
-    $template->param( paramsloop => \@paramsloop );
-    my ($shelflist) = GetShelves( $loggedinuser, 2 );
-    my $color = '';
-    my @shelvesloop;
-    foreach my $element ( sort keys %$shelflist ) {
-        my %line;
-        ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
-        $line{'toggle'}         = $color;
-        $line{'shelf'}          = $element;
-        $line{'shelfname'}      = $shelflist->{$element}->{'shelfname'};
-        $line{'shelfbookcount'} = $shelflist->{$element}->{'count'};
-        push( @shelvesloop, \%line );
-    }
-    $template->param(
-        shelvesloop => \@shelvesloop,
-        shelves     => 1,
-    );
+            #if the shelf is not deleted, %line points on null
+            push( @paramsloop, \%line );
+        }
+        $template->param( paramsloop => \@paramsloop );
+        my ($shelflist) = GetShelves( $loggedinuser, 2 );
+        my $color = '';
+        my @shelvesloop;
+        foreach my $element ( sort keys %$shelflist ) {
+            my %line;
+            ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
+            $line{'toggle'}            = $color;
+            $line{'shelf'}             = $element;
+            $line{'shelfname'}         = $shelflist->{$element}->{'shelfname'};
+            $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
+            push( @shelvesloop, \%line );
+        }
+        $template->param(
+            shelvesloop => \@shelvesloop,
+            shelves     => 1,
+        );
         last SWITCH;
     }
 }
 
-($shelflist) =
-  GetShelves( $loggedinuser, 2 )
-  ;    # rebuild shelflist in case a shelf has been added
-
+my $shelflist = GetShelves( $loggedinuser, 2 );
 my $color = '';
 my @shelvesloop;
 my $numberCanManage = 0;
@@ -205,22 +206,22 @@ foreach my $element ( sort keys %$shelflist ) {
     $line{'toggle'}    = $color;
     $line{'shelf'}     = $element;
     $line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
-    $line{ "category" . $shelflist->{$element}->{'category'} } = 1;
+    $line{"viewcategory$shelflist->{$element}->{'category'}"} = 1;
     $line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
-    $line{'shelfbookcount'} = $shelflist->{$element}->{'count'};
-    $line{'canmanage'} =  ShelfPossibleAction( $loggedinuser, $element, 'manage' );
+    $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
+    $line{'canmanage'} =
+      ShelfPossibleAction( $loggedinuser, $element, 'manage' );
     $line{'firstname'} = $shelflist->{$element}->{'firstname'}
-        unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+      unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
     $line{'surname'} = $shelflist->{$element}->{'surname'}
-        unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-    
+      unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
     $numberCanManage++ if $line{'canmanage'};
-    
-        push( @shelvesloop, \%line );
+    push( @shelvesloop, \%line );
 }
 
 $template->param(
     shelvesloop     => \@shelvesloop,
+
     numberCanManage => $numberCanManage,
 );
 
@@ -266,10 +267,10 @@ sub shelves {
     foreach my $element ( sort keys %$shelflist ) {
         my %line;
         ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
-        $line{'toggle'}         = $color;
-        $line{'shelf'}          = $element;
-        $line{'shelfname'}      = $shelflist->{$element}->{'shelfname'};
-        $line{'shelfbookcount'} = $shelflist->{$element}->{'count'};
+        $line{'toggle'}            = $color;
+        $line{'shelf'}             = $element;
+        $line{'shelfname'}         = $shelflist->{$element}->{'shelfname'};
+        $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
         push( @shelvesloop, \%line );
     }
     $innertemplate->param(
@@ -304,13 +305,13 @@ sub shelves {
 # - adding syspref: BiblioDefaultView.
 #
 # Revision 1.9.2.7  2006/12/14 17:22:55  toins
-# bookshelves work perfectly with mod_perl and are cleaned.
+# virtualshelves work perfectly with mod_perl and are cleaned.
 #
 # Revision 1.9.2.6  2006/12/13 10:06:05  toins
 # fix a mod_perl specific bug.
 #
 # Revision 1.9.2.5  2006/12/11 17:10:06  toins
-# fixing some bugs on bookshelves.
+# fixing some bugs on virtualshelves.
 #
 # Revision 1.9.2.4  2006/11/30 18:23:51  toins
 # theses scripts don't need to use C4::Search.

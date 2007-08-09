@@ -25,7 +25,7 @@
 
 =head1 DESCRIPTION
 
-    this script is used to script to provide bookshelf management
+    this script is used to script to provide virtualshelf management
 
 =head1 CGI PARAMETERS
 
@@ -67,10 +67,11 @@
 use strict;
 use CGI;
 use C4::Output;
-use C4::BookShelves;
+use C4::VirtualShelves;
 use C4::Circulation;
 use C4::Auth;
 use C4::Output;
+use C4::Biblio;
 
 my $query = new CGI;
 
@@ -87,13 +88,14 @@ if ( $query->param('modifyshelfcontents') ) {
     my $shelfnumber = $query->param('viewshelf');
     my $barcode     = $query->param('addbarcode');
     my ($item) = GetItemnumberFromBarcode($barcode);
+	my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
-        AddToShelf( $item->{'itemnumber'}, $shelfnumber );
+        AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
             if (/MOD-(\d*)/) {
-                my $itemnumber = $1;
+                my $biblionumber = $1;
                 if ( $query->param('remove') eq "on" ) {
-                    DelFromShelf( $itemnumber, $shelfnumber );
+                    DelFromShelf( $biblionumber, $shelfnumber );
                 }
             }
         }
@@ -183,7 +185,7 @@ SWITCH: {
         $line{'toggle'}         = $color;
         $line{'shelf'}          = $element;
         $line{'shelfname'}      = $shelflist->{$element}->{'shelfname'};
-        $line{'shelfbookcount'} = $shelflist->{$element}->{'count'};
+        $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
         push( @shelvesloop, \%line );
     }
     $template->param(
@@ -208,7 +210,7 @@ foreach my $element ( sort keys %$shelflist ) {
         $line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
         $line{ "category" . $shelflist->{$element}->{'category'} } = 1;
         $line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $line{'shelfbookcount'} = $shelflist->{$element}->{'count'};
+        $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
         $line{'canmanage'}      =
           ShelfPossibleAction( $loggedinuser, $element, 'manage' );
         $line{'firstname'} = $shelflist->{$element}->{'firstname'}
@@ -265,13 +267,13 @@ output_html_with_http_headers $query, $cookie, $template->output;
 # add the link to "BiblioDefaultView systempref" and not to opac-detail.pl
 #
 # Revision 1.8.2.7  2006/12/14 17:22:55  toins
-# bookshelves work perfectly with mod_perl and are cleaned.
+# virtualshelves work perfectly with mod_perl and are cleaned.
 #
 # Revision 1.8.2.6  2006/12/14 16:04:25  toins
 # sync with intranet.
 #
 # Revision 1.8.2.5  2006/12/11 17:10:06  toins
-# fixing some bugs on bookshelves.
+# fixing some bugs on virtualshelves.
 #
 # Revision 1.8.2.4  2006/12/07 15:42:15  toins
 # synching opac & intranet.

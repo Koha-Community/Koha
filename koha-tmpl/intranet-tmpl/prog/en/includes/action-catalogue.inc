@@ -28,7 +28,7 @@
             </div>
             
             <div class="others">
-                <a href="#" onclick="JavaScript:window.open('/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_bookshelf','width=500,height=400,toolbar=false,scrollbars=yes'); return false;">
+                <a href="#" onclick="JavaScript:window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes'); return false;">
                     Add to shelf
                 </a>
                 <a href="/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
