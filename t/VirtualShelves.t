@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# This file is a test script for C4::BookShelves.pm
+# This file is a test script for C4::VirtualShelves.pm
 # Author : Antoine Farnault, antoine@koha-fr.org
 #
 
@@ -53,16 +53,16 @@ while(my $biblionumber = $sth->fetchrow){
 }
 
 # ---
-my $delete_bookshelf = qq/
-    DELETE FROM  bookshelf WHERE 1
+my $delete_virtualshelf = qq/
+    DELETE FROM  virtualshelf WHERE 1
 /;
-my $delete_bookshelfcontent =qq/
+my $delete_virtualshelfcontent =qq/
     DELETE  FROM  shelfcontents WHERE 1
 /;
 
-my $sth = $dbh->prepare($delete_bookshelf);
+my $sth = $dbh->prepare($delete_virtualshelf);
 $sth->execute;
-my $sth = $dbh->prepare($delete_bookshelfcontent);
+my $sth = $dbh->prepare($delete_virtualshelfcontent);
 $sth->execute;
 # ---
 
@@ -72,9 +72,9 @@ $sth->execute;
 #
 #----------------------------------------------------------------------#
 
-use C4::BookShelves;
-my $version = C4::BookShelves->VERSION;
-print "\n----------Testing C4::BookShelves version ".$version."--------\n";
+use C4::VirtualShelves;
+my $version = C4::VirtualShelves->VERSION;
+print "\n----------Testing C4::VirtualShelves version ".$version."--------\n";
 
 ok($version);   # First test: the module is loaded & the version is readable.
 

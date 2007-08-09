@@ -1,7 +1,7 @@
 # -*- tab-width: 8 -*-
 # Please use 8-character tabs for this file (indents are every 4 characters)
 
-package C4::BookShelves;
+package C4::VirtualShelves;
 
 # $Id$
 
@@ -33,17 +33,17 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
 
 =head1 NAME
 
-C4::BookShelves - Functions for manipulating Koha virtual bookshelves
+C4::VirtualShelves - Functions for manipulating Koha virtual virtualshelves
 
 =head1 SYNOPSIS
 
-  use C4::BookShelves;
+  use C4::VirtualShelves;
 
 =head1 DESCRIPTION
 
-This module provides functions for manipulating virtual bookshelves,
-including creating and deleting bookshelves, and adding and removing
-items to and from bookshelves.
+This module provides functions for manipulating virtual virtualshelves,
+including creating and deleting virtualshelves, and adding and removing
+items to and from virtualshelves.
 
 =head1 FUNCTIONS
 
@@ -69,13 +69,13 @@ my $dbh = C4::Context->dbh;
   $shelflist = &GetShelves($owner, $mincategory);
   ($shelfnumber, $shelfhash) = each %{$shelflist};
 
-Looks up the virtual bookshelves, and returns a summary. C<$shelflist>
-is a reference-to-hash. The keys are the bookshelf numbers
+Looks up the virtual virtualshelves, and returns a summary. C<$shelflist>
+is a reference-to-hash. The keys are the virtualshelves numbers
 (C<$shelfnumber>, above), and the values (C<$shelfhash>, above) are
 themselves references-to-hash, with the following keys:
 
-C<mincategory> : 2 if the list is for "look". 3 if the list is for "Select bookshelf for adding a book".
-bookshelves of the owner are always selected, whatever the category
+C<mincategory> : 2 if the list is for "look". 3 if the list is for "Select virtualshelves for adding a virtual".
+virtualshelves of the owner are always selected, whatever the category
 
 =over 4
 
@@ -85,7 +85,7 @@ A string. The name of the shelf.
 
 =item C<$shelfhash-E<gt>{count}>
 
-The number of books on that bookshelf.
+The number of virtuals on that virtualshelves.
 
 =back
 
@@ -100,14 +100,14 @@ sub GetShelves {
     my ( $owner, $mincategory ) = @_;
 
     my $query = qq(
-        SELECT bookshelf.shelfnumber, bookshelf.shelfname,owner,surname,firstname,bookshelf.category,
-               count(shelfcontents.itemnumber) as count
-        FROM   bookshelf
-            LEFT JOIN   shelfcontents ON bookshelf.shelfnumber = shelfcontents.shelfnumber
-            LEFT JOIN   borrowers ON bookshelf.owner = borrowers.borrowernumber
+        SELECT virtualshelves.shelfnumber, virtualshelves.shelfname,owner,surname,firstname,virtualshelves.category,
+               count(virtualshelfcontents.biblionumber) as count
+        FROM   virtualshelves
+            LEFT JOIN   virtualshelfcontents ON virtualshelves.shelfnumber = virtualshelfcontents.shelfnumber
+            LEFT JOIN   borrowers ON virtualshelves.owner = borrowers.borrowernumber
         WHERE  owner=? OR category>=?
-        GROUP BY bookshelf.shelfnumber
-        ORDER BY bookshelf.category, bookshelf.shelfname, borrowers.firstname, borrowers.surname
+        GROUP BY virtualshelves.shelfnumber
+        ORDER BY virtualshelves.category, virtualshelves.shelfname, borrowers.firstname, borrowers.surname
     );
     my $sth = $dbh->prepare($query);
     $sth->execute( $owner, $mincategory );
@@ -134,10 +134,10 @@ sub GetShelves {
 
   (shelfnumber,shelfname,owner,category) = &GetShelf($shelfnumber);
 
-Looks up information about the contents of virtual bookshelf number
+Looks up information about the contents of virtual virtualshelves number
 C<$shelfnumber>
 
-Returns the database's information on 'bookshelf' table.
+Returns the database's information on 'virtualshelves' table.
 
 =cut
 
@@ -145,7 +145,7 @@ sub GetShelf {
     my ($shelfnumber) = @_;
     my $query = qq(
         SELECT shelfnumber,shelfname,owner,category
-        FROM   bookshelf
+        FROM   virtualshelves
         WHERE  shelfnumber=?
     );
     my $sth = $dbh->prepare($query);
@@ -157,7 +157,7 @@ sub GetShelf {
 
   $itemlist = &GetShelfContents($shelfnumber);
 
-Looks up information about the contents of virtual bookshelf number
+Looks up information about the contents of virtual virtualshelves number
 C<$shelfnumber>.
 
 Returns a reference-to-array, whose elements are references-to-hash,
@@ -170,23 +170,22 @@ sub GetShelfContents {
     my ( $shelfnumber ) = @_;
     my @itemlist;
     my $query =
-       " SELECT itemnumber
-         FROM   shelfcontents
+       " SELECT biblionumber
+         FROM   virtualshelfcontents
          WHERE  shelfnumber=?
-         ORDER BY itemnumber
+         ORDER BY biblionumber
        ";
     my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
     my $sth2 = $dbh->prepare("
-        SELECT biblio.*,biblioitems.* FROM items 
-            LEFT JOIN biblio on items.biblionumber=biblio.biblionumber
-            LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
-        WHERE items.itemnumber=?"
+        SELECT biblio.*,biblioitems.* FROM biblio
+            LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber
+        WHERE biblio.biblionumber=?"
     );
-    while ( my ($itemnumber) = $sth->fetchrow ) {
-        $sth2->execute($itemnumber);
+    while ( my ($biblionumber) = $sth->fetchrow ) {
+        $sth2->execute($biblionumber);
         my $item = $sth2->fetchrow_hashref;
-        $item->{'itemnumber'}=$itemnumber;
+        $item->{'biblionumber'}=$biblionumber;
         push( @itemlist, $item );
     }
     return ( \@itemlist );
@@ -196,11 +195,11 @@ sub GetShelfContents {
 
   $shelfnumber = &AddShelf( $shelfname, $owner, $category);
 
-Creates a new virtual bookshelf with name C<$shelfname>, owner C<$owner> and category
+Creates a new virtual virtualshelves with name C<$shelfname>, owner C<$owner> and category
 C<$category>.
 
 Returns a code to know what's happen.
-    * -1 : if this bookshelf already exist.
+    * -1 : if this virtualshelves already exist.
     * $shelfnumber : if success.
 
 =cut
@@ -209,7 +208,7 @@ sub AddShelf {
     my ( $shelfname, $owner, $category ) = @_;
     my $query = qq(
         SELECT *
-        FROM   bookshelf
+        FROM   virtualshelves
         WHERE  shelfname=? AND owner=?
     );
     my $sth = $dbh->prepare($query);
@@ -219,7 +218,7 @@ sub AddShelf {
     }
     else {
         my $query = qq(
-            INSERT INTO bookshelf
+            INSERT INTO virtualshelves
                 (shelfname,owner,category)
             VALUES (?,?,?)
         );
@@ -232,35 +231,35 @@ sub AddShelf {
 
 =item AddToShelf
 
-  &AddToShelf($itemnumber, $shelfnumber);
+  &AddToShelf($biblionumber, $shelfnumber);
 
-Adds item number C<$itemnumber> to virtual bookshelf number
+Adds item number C<$biblionumber> to virtual virtualshelves number
 C<$shelfnumber>, unless that item is already on that shelf.
 
 =cut
 
 #'
 sub AddToShelf {
-    my ( $itemnumber, $shelfnumber ) = @_;
-    return unless $itemnumber;
+    my ( $biblionumber, $shelfnumber ) = @_;
+    return unless $biblionumber;
     my $query = qq(
         SELECT *
-        FROM   shelfcontents
-        WHERE  shelfnumber=? AND itemnumber=?
+        FROM   virtualshelfcontents
+        WHERE  shelfnumber=? AND biblionumber=?
     );
     my $sth = $dbh->prepare($query);
 
-    $sth->execute( $shelfnumber, $itemnumber );
+    $sth->execute( $shelfnumber, $biblionumber );
     unless ( $sth->rows ) {
         # already on shelf
         my $query = qq(
-            INSERT INTO shelfcontents
-                (shelfnumber, itemnumber, flags)
+            INSERT INTO virtualshelfcontents
+                (shelfnumber, biblionumber, flags)
             VALUES
                 (?, ?, 0)
         );
         $sth = $dbh->prepare($query);
-        $sth->execute( $shelfnumber, $itemnumber );
+        $sth->execute( $shelfnumber, $biblionumber );
     }
 }
 
@@ -268,7 +267,7 @@ sub AddToShelf {
  
     &AddToShelfFromBiblio($biblionumber, $shelfnumber)
 
-    this function allow to add a book into the shelf number $shelfnumber
+    this function allow to add a virtual into the shelf number $shelfnumber
     from biblionumber.
 
 =cut
@@ -277,30 +276,21 @@ sub AddToShelfFromBiblio {
     my ( $biblionumber, $shelfnumber ) = @_;
     return unless $biblionumber;
     my $query = qq(
-        SELECT itemnumber
-        FROM   items
-        WHERE  biblionumber=?
+        SELECT *
+        FROM   virtualshelfcontents
+        WHERE  shelfnumber=? AND biblionumber=?
     );
     my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
-    my ($itemnumber) = $sth->fetchrow;
-    $query = qq(
-        SELECT *
-        FROM   shelfcontents
-        WHERE  shelfnumber=? AND itemnumber=?
-    );
-    $sth = $dbh->prepare($query);
-    $sth->execute( $shelfnumber, $itemnumber );
+    $sth->execute( $shelfnumber, $biblionumber );
     unless ( $sth->rows ) {
-        # "already on shelf";
         my $query =qq(
-            INSERT INTO shelfcontents
-                (shelfnumber, itemnumber, flags)
+            INSERT INTO virtualshelfcontents
+                (shelfnumber, biblionumber, flags)
             VALUES
                 (?, ?, 0)
         );
         $sth = $dbh->prepare($query);
-        $sth->execute( $shelfnumber, $itemnumber );
+        $sth->execute( $shelfnumber, $biblionumber );
     }
 }
 
@@ -308,14 +298,14 @@ sub AddToShelfFromBiblio {
 
 ModShelf($shelfnumber, $shelfname, $owner, $category )
 
-Modify the value into bookshelf table with values given on input arg.
+Modify the value into virtualshelves table with values given on input arg.
 
 =cut
 
 sub ModShelf {
     my ( $shelfnumber, $shelfname, $owner, $category ) = @_;
     my $query = qq(
-        UPDATE bookshelf
+        UPDATE virtualshelves
         SET    shelfname=?,owner=?,category=?
         WHERE  shelfnumber=?
     );
@@ -327,7 +317,7 @@ sub ModShelf {
 
   ($status) = &DelShelf($shelfnumber);
 
-Deletes virtual bookshelf number C<$shelfnumber>. The bookshelf must
+Deletes virtual virtualshelves number C<$shelfnumber>. The virtualshelves must
 be empty.
 
 Returns a two-element array, where C<$status> is 0 if the operation
@@ -354,7 +344,7 @@ sub ShelfPossibleAction {
     my ( $user, $shelfnumber, $action ) = @_;
     my $query = qq(
         SELECT owner,category
-        FROM   bookshelf
+        FROM   virtualshelves
         WHERE  shelfnumber=?
     );
     my $sth = $dbh->prepare($query);
@@ -367,23 +357,23 @@ sub ShelfPossibleAction {
 
 =item DelFromShelf
 
-  &DelFromShelf( $itemnumber, $shelfnumber);
+  &DelFromShelf( $biblionumber, $shelfnumber);
 
-Removes item number C<$itemnumber> from virtual bookshelf number
-C<$shelfnumber>. If the item wasn't on that bookshelf to begin with,
+Removes item number C<$biblionumber> from virtual virtualshelves number
+C<$shelfnumber>. If the item wasn't on that virtualshelves to begin with,
 nothing happens.
 
 =cut
 
 #'
 sub DelFromShelf {
-    my ( $itemnumber, $shelfnumber ) = @_;
+    my ( $biblionumber, $shelfnumber ) = @_;
     my $query = qq(
-        DELETE FROM shelfcontents
-        WHERE  shelfnumber=? AND itemnumber=?
+        DELETE FROM virtualshelfcontents
+        WHERE  shelfnumber=? AND biblionumber=?
     );
     my $sth = $dbh->prepare($query);
-    $sth->execute( $shelfnumber, $itemnumber );
+    $sth->execute( $shelfnumber, $biblionumber );
 }
 
 =head2 DelShelf
@@ -397,7 +387,7 @@ sub DelFromShelf {
 #'
 sub DelShelf {
     my ( $shelfnumber ) = @_;
-        my $sth = $dbh->prepare("DELETE FROM bookshelf WHERE shelfnumber=?");
+        my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
         $sth->execute($shelfnumber);
         return 0;
 }
@@ -419,53 +409,3 @@ Koha Developement team <info@koha.org>
 C4::Circulation::Circ2(3)
 
 =cut
-
-#
-# $Log$
-# Revision 1.21  2007/04/04 16:46:22  tipaul
-# HUGE COMMIT : code cleaning circulation.
-#
-# some stuff to do, i'll write a mail on koha-devel NOW !
-#
-# Revision 1.20  2007/03/09 14:31:47  tipaul
-# rel_3_0 moved to HEAD
-#
-# Revision 1.15.8.10  2007/01/25 13:18:15  tipaul
-# checking that a bookshelf with the same name AND OWNER does not exist before creating it
-#
-# Revision 1.15.8.9  2006/12/15 17:37:52  toins
-# removing a function used only once.
-#
-# Revision 1.15.8.8  2006/12/14 17:22:55  toins
-# bookshelves work perfectly with mod_perl and are cleaned.
-#
-# Revision 1.15.8.7  2006/12/13 19:46:41  hdl
-# Some bug fixing.
-#
-# Revision 1.15.8.6  2006/12/11 17:10:06  toins
-# fixing some bugs on bookshelves.
-#
-# Revision 1.15.8.5  2006/12/07 16:45:43  toins
-# removing warn compilation. (perl -wc)
-#
-# Revision 1.15.8.4  2006/11/23 09:05:01  tipaul
-# enable removal of a bookshelf even if there are items inside
-#
-# Revision 1.15.8.3  2006/10/30 09:50:20  tipaul
-# removing getiteminformations (using direct SQL, as we are in a .pm, so it's "legal")
-#
-# Revision 1.15.8.2  2006/08/31 16:03:52  toins
-# Add Pod to DelShelf
-#
-# Revision 1.15.8.1  2006/08/30 15:59:14  toins
-# Code cleaned according to coding guide lines.
-#
-# Revision 1.15  2004/12/16 11:30:58  tipaul
-# adding bookshelf features :
-# * create bookshelf on the fly
-# * modify a bookshelf name & status
-#
-# Revision 1.14  2004/12/15 17:28:23  tipaul
-# adding bookshelf features :
-# * create bookshelf on the fly
-# * modify a bookshelf (this being not finished, will commit the rest soon)
