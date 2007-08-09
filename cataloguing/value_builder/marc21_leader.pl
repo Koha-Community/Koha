@@ -40,7 +40,7 @@ return "";
 
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= $field_number
+my $function_name= $field_number;
 my $res="
 <script>
 function Focus$function_name(subfield_managed) {
