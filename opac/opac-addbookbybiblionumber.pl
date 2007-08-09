@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to provide virtualshelf management
+#script to provide bookshelf management
 # WARNING: This file uses 4-character tabs!
 #
 # $Header$
@@ -25,7 +25,7 @@
 use strict;
 use C4::Biblio;
 use CGI;
-use C4::VirtualShelves;
+use C4::BookShelves;
 use C4::Circulation;
 use C4::Auth;
 use C4::Output;
@@ -33,19 +33,19 @@ use C4::Output;
 my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $shelfnumber  = $query->param('shelfnumber');
-my $newvirtualshelf = $query->param('newvirtualshelf');
+my $newbookshelf = $query->param('newbookshelf');
 my $category     = $query->param('category');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "opac-addbybiblionumber.tmpl",
+        template_name   => "opac-addbookbybiblionumber.tmpl",
         query           => $query,
         type            => "opac",
         authnotrequired => 1,
     }
 );
 
-$shelfnumber = AddShelf( '', $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
+$shelfnumber = AddShelf( '', $newbookshelf, $loggedinuser, $category ) if $newbookshelf;
 
 # to know if we had to add more than one biblio.
 my $multiple = 0;
@@ -75,9 +75,9 @@ else {
             $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
     }
 
-    my $CGIvirtualshelves;
+    my $CGIbookshelves;
     if ( @shelvesloop > 0 ) {
-        $CGIvirtualshelves = CGI::scrolling_list (
+        $CGIbookshelves = CGI::scrolling_list (
             -name     => 'shelfnumber',
             -values   => \@shelvesloop,
             -labels   => \%shelvesloop,
@@ -110,7 +110,7 @@ else {
     }
 
     $template->param (
-        CGIvirtualshelves       => $CGIvirtualshelves,
+        CGIbookshelves       => $CGIbookshelves,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

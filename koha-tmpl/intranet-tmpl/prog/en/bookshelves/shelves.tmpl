@@ -1,25 +1,26 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Virtual Shelves</title>
+<title>Koha &rsaquo; Add to Virtual Shelf</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-virtualshelves.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-bookshelves.inc" -->
 
-<!-- TMPL_IF NAME="viewshelf" -->
+<!-- TMPL_IF Name="viewshelf" -->
+
 <div id="action">
-    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl">Back to virtual Shelves</a>
+    <a class="button" href="/cgi-bin/koha/bookshelves/shelves.pl">Back to virtual Shelves</a>
     <!-- TMPL_IF name="manageshelf" -->
-    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">
-        Edit this shelf</a>
+    <a class="button" href="/cgi-bin/koha/bookshelves/shelves.pl?op=modif&shelf=<!-- TMPL_VAR Name="shelfnumber" -->">
+        Modify this shelf</a>
     <!-- /TMPL_IF -->
 </div>
 
-<h3>Contents of <!-- TMPL_VAR NAME="shelfname" --></h3>
+<h3>Contents of <!-- TMPL_VAR Name="shelfname" --></h3>
 
-<form class="inline" action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" name="mainform">
+<form class="inline" action="/cgi-bin/koha/bookshelves/shelves.pl" method="post" name="mainform">
     <!-- TMPL_IF NAME="itemsloop" -->
     <table>
-        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
             <tr>
                 <th>
@@ -32,10 +33,10 @@
                 <th>Author</th>
                 <th>Call No.</th>
             </tr>
-        <!-- TMPL_LOOP NAME="itemsloop" -->
+        <!-- TMPL_LOOP Name="itemsloop" -->
             <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
                     <td>
-                        <input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
+                        <input type="checkbox" name="REM-<!-- TMPL_VAR Name="itemnumber" -->" />
                     </td>
                     <td>
                         <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
@@ -57,7 +58,7 @@
                             <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
                     </td>
-                    <td><!-- TMPL_VAR NAME="author" --></td>
+                    <td><!-- TMPL_VAR Name="author" --></td>
                     <td><!-- TMPL_VAR NAME="classification" --></td>
         </tr>
         <!-- /TMPL_LOOP -->
@@ -88,7 +89,7 @@
     <!-- TMPL_IF name="manageshelf" -->
     
 <br />
-<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+<form action="/cgi-bin/koha/bookshelves/shelves.pl" method="post">
     <table>
         <tr><th colspan="2">Add an item to this shelf by barcode</th></tr>
         <tr>
@@ -97,7 +98,7 @@
             </td>
             <td>
                 <input name="addbarcode" type="text" id="addbarcode" size="14" maxlength="14" />
-                <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+                <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
                 <input type="submit" value="Save" />
             </td>
@@ -106,16 +107,16 @@
 </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-    <!-- TMPL_IF NAME="shelves" -->
-        <!-- TMPL_IF NAME="status1" -->
-            <p class="error"><!-- TMPL_VAR NAME="string1" --></p>
+    <!-- TMPL_IF Name="shelves" -->
+        <!-- TMPL_IF Name="status1" -->
+            <p class="error"><!-- TMPL_VAR Name="string1" --></p>
         <!-- /TMPL_IF -->
-        <!-- TMPL_LOOP NAME="paramsloop" -->
-            <!-- TMPL_IF NAME="status" -->
-                <p class="error"><!-- TMPL_VAR NAME="string" --></p>
+        <!-- TMPL_LOOP Name="paramsloop" -->
+            <!-- TMPL_IF Name="status" -->
+                <p class="error"><!-- TMPL_VAR Name="string" --></p>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
-    <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl">
+    <form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl">
         <input type="hidden" name="shelves" value="1">
         <h3>Create a new virtual shelf</h3>
         <table>
@@ -124,34 +125,32 @@
         <tr><th scope="row"><label for="category">Category:</label> </th><td><select name="category" id="category">
                                     <option value="1">Private</option>
                                     <option value="2">Public</option>
-									<option value="3">Free</option>
                                     </select></td></tr></table>
         <ul>
             <li>A <b>private</b> virtual shelf is managed by you and can be seen only by you.</li>
             <li> A <b>public</b> virtual shelf can be seen by everybody, but managed only by you.</li>
-			<li> An <b>open</b> virtual shelf can be seen and managed by everybody.</li>
         </ul>
                                 <p><input type="submit" value="Add a new shelf"></p>
                     </form>
         
         <!-- TMPL_IF NAME="numberCanManage" -->
         <!-- TMPL_IF NAME="shelvesloop" -->
-        <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" name="mainform">
+        <form method="post" action="/cgi-bin/koha/bookshelves/shelves.pl" name="mainform">
                     <input type="hidden" name="shelves" value="1" />
                     <h3>Delete virtual shelves</h3>
                     <table>
                         <tr><th>&nbsp;</th><th>Shelf name</th><th>Contents</th></tr>
-                        <!-- TMPL_LOOP NAME="shelvesloop" -->
+                        <!-- TMPL_LOOP Name="shelvesloop" -->
                         <!-- TMPL_IF name="canmanage" -->
                         <tr>
                             <td>
-                                <input type="checkbox" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" />
+                                <input type="checkbox" name="DEL-<!-- TMPL_VAR Name="shelf" -->" />
                             </td>
                             <td>
-                                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a>
+                                <a href="/cgi-bin/koha/bookshelves/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a>
                             </td>
                             <td>
-                                <!-- TMPL_VAR NAME="shelfvirtualcount" --> item(s)
+                                <!-- TMPL_VAR Name="shelfbookcount" --> item(s)
                             </td>
                         </tr>
                         <!-- /TMPL_IF -->
@@ -161,14 +160,14 @@
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <br />
-        <p><form class="inline" action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get"><input type="submit" value="Back to virtual shelves" /></form></p>
+        <p><form class="inline" action="/cgi-bin/koha/bookshelves/shelves.pl" method="get"><input type="submit" value="Back to virtual shelves" /></form></p>
 
     <!-- TMPL_ELSE -->
     <!-- TMPL_IF name="edit" -->
         <form method="post">
             <input type="hidden" name="op" value="modifsave">
             <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->">
-<h3>Edit virtual shelf '<!-- TMPL_VAR name="shelfname"-->'</h3>
+<h3>Modify virtual shelf <!-- TMPL_VAR name="shelfname"--></h3>
             <table>
             <tr><td><label for="shelfname">Shelf name: </label></td><td><input type="text" id="shelfname" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></td></tr>
             <tr><td><label for="owner">Owner: </label></td><td><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></td></tr>
@@ -182,43 +181,27 @@
                         <option value="2" selected>Public</option>
                     <!-- TMPL_ELSE -->
                         <option value="2">Public</option>
-					<!-- TMPL_IF NAME="category3" -->
-						<option value="3" selected>Free</option>
-					<!-- TMPL_ELSE -->
-						<option value="3">Free</option>
                     <!-- /TMPL_IF -->
                 </select></td></tr>
             </table>
             <ul><li>A <strong>private</strong> virtual shelf is managed by you and can be seen <strong>only</strong> by you.</li>
                 <li> A <strong>public</strong> virtual shelf can be seen by <strong>everybody</strong>, but managed only by you.</li>
-				 <li> A <b>free</b> virtual shelf can be seen and managed by everybody.</li>
             </ul>
             <p><input type="submit" value="Save changes"></p>
 
         </form>
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
 <h3>Virtual shelves</h3>
 
 <table>
-<tr><th>Shelf name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
-
-<!-- TMPL_LOOP NAME="shelvesloop" -->
-<tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
-<td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
-<td>
-<!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="viewcategory3" -->Free<!-- /TMPL_IF -->
-</td>
-<td><!-- TMPL_VAR NAME="shelfvirtualcount" --> </td>
-<td><!-- TMPL_IF name="mine" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
-
-<!-- /TMPL_LOOP -->
-</table>
-        <p><form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Add or remove virtual shelves" /></form></p>
+<tr><th>Shelf name</th><th>Category</th><th>Content size</th><th>&nbsp;</th></tr>
+<!-- TMPL_LOOP Name="shelvesloop" -->
+<tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->><td><a href="/cgi-bin/koha/bookshelves/shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_IF NAME="category1" -->Private<!-- /TMPL_IF --><!-- TMPL_IF NAME="category2" -->Public<!-- /TMPL_IF --><!-- TMPL_IF NAME="category3" -->Free<!-- /TMPL_IF --></td><td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td><td><!-- TMPL_IF name="mine" --><a href="/cgi-bin/koha/bookshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Modify</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        <p><form action="/cgi-bin/koha/bookshelves/shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Add or remove virtual shelves" /></form></p>
     <!-- /TMPL_IF -->
-
+<!-- /TMPL_IF -->
 
 <br clear="both" />
 

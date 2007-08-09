@@ -447,11 +447,11 @@ CREATE TABLE `biblioitems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `virtualshelves`
+-- Table structure for table `bookshelf`
 --
 
-DROP TABLE IF EXISTS `virtualshelves`;
-CREATE TABLE `virtualshelves` (
+DROP TABLE IF EXISTS `bookshelf`;
+CREATE TABLE `bookshelf` (
   `shelfnumber` int(11) NOT NULL auto_increment,
   `shelfname` char(255) default NULL,
   `owner` char(80) default NULL,
@@ -1382,19 +1382,19 @@ CREATE TABLE sessions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `virtualshelfcontents`
+-- Table structure for table `shelfcontents`
 --
 
-DROP TABLE IF EXISTS `virtualshelfcontents`;
-CREATE TABLE `virtualshelfcontents` (
+DROP TABLE IF EXISTS `shelfcontents`;
+CREATE TABLE `shelfcontents` (
   `shelfnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `itemnumber` int(11) NOT NULL default '0',
   `flags` int(11) default NULL,
   `dateadded` timestamp NULL default NULL,
   KEY `shelfnumber` (`shelfnumber`),
-  KEY `biblionumber` (`biblionumber`),
-  CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `itemnumber` (`itemnumber`),
+  CONSTRAINT `shelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `bookshelf` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

@@ -22,7 +22,7 @@ require Exporter;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::VirtualShelves;
+use C4::BookShelves;
 use C4::Languages;       # getTranslatedLanguages
 use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember

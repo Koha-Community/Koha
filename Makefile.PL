@@ -86,7 +86,6 @@ WriteMakefile(
     PREREQ_PM => {
 'CGI' => 3.15,
 'CGI::Carp' => 1.29,
-'CGI::Session' => '4.10',
 'Class::Accessor' => 0.30,
 'DBD::mysql' => 3.0008,
 'DBI' => 1.53,

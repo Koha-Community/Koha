@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Add to My Virtual Shelf
+<!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Add to My Book List
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 
@@ -19,10 +19,10 @@
 </h1>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="CGIvirtualshelves"-->
-<form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="POST">
-    <p><b>Select an Existing Virtualshelf</b></p>
-    <label>Add to virtual shelf</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" -->
+<!-- TMPL_IF NAME="CGIbookshelves"-->
+<form name="f1" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl" method="post">
+    <p><b>Select an Existing Bookshelf</b></p>
+    <label>Add to virtual shelf</label> <!-- TMPL_VAR NAME="CGIbookshelves" -->
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="modifyshelfcontents" value="1" />
     <input type="submit" value="Add to virtual shelf" class="submit" />
@@ -30,13 +30,13 @@
 <p>...or...</p>
 <!-- /TMPL_IF -->
 
-<form name="f2" method="POST" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
-    <b>Add to a New Virtualshelf:</b>
+<form name="f2" method="post" action="/cgi-bin/koha/opac-addbookbybiblionumber.pl">
+    <b>Add to a New Bookshelf:</b>
         <p>
-            <label for="newvirtualshelf">
+            <label for="newbookshelf">
                 Shelf Name:
             </label>
-            <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
+            <input type="text" name="newbookshelf" id="newbookshelf" size="40" />
         </p>
             <label for="category">Category:</label>
             <select name="category" id="category">

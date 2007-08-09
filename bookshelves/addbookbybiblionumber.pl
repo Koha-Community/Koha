@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#script to provide virtual shelf management
+#script to provide bookshelf management
 #
 #
 # Copyright 2000-2002 Katipo Communications
@@ -24,11 +24,11 @@
 
 =head1 NAME
 
-    addbybiblionumber.pl
+    addbookbybiblionumber.pl
 
 =head1 DESCRIPTION
 
-    This script allow to add a virtual in a virtual shelf from a biblionumber.
+    This script allow to add a book in a virtual shelf from a biblionumber.
 
 =head1 CGI PARAMETERS
 
@@ -40,9 +40,9 @@
 
 =item shelfnumber
 
-    the shelfnumber where to add the virtual.
+    the shelfnumber where to add the book.
 
-=item newvirtualshelf
+=item newbookshelf
 
     if this parameter exists, then it must be equals to the name of the shelf
     to add.
@@ -59,68 +59,63 @@ use strict;
 use C4::Biblio;
 use CGI;
 use C4::Output;
-use C4::VirtualShelves;
+use C4::BookShelves;
 use C4::Circulation;
 use C4::Auth;
+
 
 #use it only to debug !
 use CGI::Carp qw/fatalsToBrowser/;
 use warnings;
 
-my $query           = new CGI;
-my $biblionumber    = $query->param('biblionumber');
-my $shelfnumber     = $query->param('shelfnumber');
-my $newvirtualshelf = $query->param('newvirtualshelf');
-my $category        = $query->param('category');
+my $query = new CGI;
+my $biblionumber = $query->param('biblionumber');
+my $shelfnumber = $query->param('shelfnumber');
+my $newbookshelf = $query->param('newbookshelf');
+my $category = $query->param('category');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "virtualshelves/addbybiblionumber.tmpl",
-        query           => $query,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { catalogue => 1 },
-    }
-);
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "bookshelves/addbookbybiblionumber.tmpl",
+                            query => $query,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {catalogue => 1},
+                        });
 
-$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category )
-  if $newvirtualshelf;
-if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
-    &AddToShelfFromBiblio( $biblionumber, $shelfnumber );
-    print
-"Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
+$shelfnumber = AddShelf($newbookshelf,$loggedinuser,$category) if $newbookshelf;
+
+if ($shelfnumber || ($shelfnumber == -1)) { # the shelf already exist.
+    &AddToShelfFromBiblio($biblionumber, $shelfnumber);
+    print "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
     exit;
-}
-else {    # this shelf doesn't already exist.
-    my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
+} else {    # this shelf doesn't already exist.
+    my  ( $bibliocount, @biblios )  = GetBiblio($biblionumber);
 
-    my ($shelflist) = GetShelves( $loggedinuser, 3 );
+    my ($shelflist) = GetShelves($loggedinuser,3);
     my @shelvesloop;
     my %shelvesloop;
-    foreach my $element ( sort keys %$shelflist ) {
-        push( @shelvesloop, $element );
+    foreach my $element (sort keys %$shelflist) {
+        push (@shelvesloop, $element);
         $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
     }
 
-    my $CGIvirtualshelves = CGI::scrolling_list(
-        -name     => 'shelfnumber',
-        -values   => \@shelvesloop,
-        -labels   => \%shelvesloop,
-        -size     => 1,
-        -tabindex => '',
-        -multiple => 0
-    );
+    my $CGIbookshelves=CGI::scrolling_list(
+                -name     => 'shelfnumber',
+                -values   => \@shelvesloop,
+                -labels   => \%shelvesloop,
+                -size     => 1,
+                -tabindex=>'',
+                -multiple => 0 );
 
     $template->param(
-        biblionumber      => $biblionumber,
-        title             => $biblios[0]->{'title'},
-        author            => $biblios[0]->{'author'},
-        CGIvirtualshelves => $CGIvirtualshelves,
-        intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav        => C4::Context->preference("IntranetNav"),
-    );
+                biblionumber => $biblionumber,
+                title => $biblios[0]->{'title'},
+                author => $biblios[0]->{'author'},
+                CGIbookshelves => $CGIbookshelves,
+                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+                IntranetNav => C4::Context->preference("IntranetNav"),
+                );
 
     output_html_with_http_headers $query, $cookie, $template->output;
 }
@@ -153,7 +148,7 @@ else {    # this shelf doesn't already exist.
 # theses scripts don't need to use C4::Search.
 #
 # Revision 1.4.2.3  2006/10/30 09:48:19  tipaul
-# samll bugfix to create a virtualshelf correctly
+# samll bugfix to create a bookshelf correctly
 #
 # Revision 1.4.2.2  2006/08/30 16:13:54  toins
 # correct an error in the "if condition".

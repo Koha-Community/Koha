@@ -29,13 +29,12 @@ use C4::Branch;  # GetBranches
 
 my $query = new CGI;
 my $op=$query->param("op");
-my $filename=$query->param("filename");
 my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
 
 if ($op eq "export") {
 	print $query->header(   -type => 'application/octet-stream', 
-							-attachment=>$filename);
+		-attachment=>'koha.mrc');
     
     my $StartingBiblionumber  = $query->param("StartingBiblionumber");
     my $EndingBiblionumber    = $query->param("EndingBiblionumber");
