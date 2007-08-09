@@ -11,22 +11,22 @@
 <h1>Log in to Koha</h1>
 <!-- TMPL_IF NAME="nopermission" -->
 <!-- This is what is displayed if user doesn"t have permission --><h3>Login Error</h3>
-<p>Sorry, Koha doesn"t think you have permission for this page.</p>
+<p>Sorry, that account doesn't have permission to access this page. Please <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">login as another user</a></p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
 <!-- This is what is displayed if login has timed out -->
-<h3>Login Error</h3><p>Sorry, your session has timed out.  Please login again.</p>
+<h3>Login Error</h3><p>Sorry, your session has timed out. Please <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">login again</a>.</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
 <!-- This is what is displayed if user"s IP has changed -->
-<h3>Login Error</h3><p>You are accessing Koha from a different ip address! Please login again.</p>
+<h3>Login Error</h3><p>You are accessing Koha from a different IP address! <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Please login again</a>.</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
 <!-- This is what is displayed if the username or password doesn"t work -->
-<h3>Login Error</h3><p>You entered an incorrect username or password.  Please try again.</p>
+<h3>Login Error</h3><p>You entered an incorrect username or password. <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Please try again</a>.</p>
 <!-- /TMPL_IF -->
 
 
