@@ -1,4 +1,4 @@
-ö#!/usr/bin/perl
+#!/usr/bin/perl
  
 # This file is part of Koha.
 #
