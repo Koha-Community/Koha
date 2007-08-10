@@ -240,7 +240,7 @@ sub checkauth {
     if (  $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
 		my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
-        if ( $session ) {
+        if ( $session->param('cardnumber') ) {
             C4::Context::set_userenv(				
                  $session->param('number'),       $session->param('id'),
                  $session->param('cardnumber'),   $session->param('firstname'),
