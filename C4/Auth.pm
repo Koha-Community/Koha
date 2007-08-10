@@ -120,7 +120,6 @@ C4::Auth - Authenticates Koha users
 
 sub get_template_and_user {
     my $in       = shift;
-	warn "GET Template";
     my $template =
       gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
