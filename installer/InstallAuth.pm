@@ -27,6 +27,7 @@ require Exporter;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
+use CGI::Session;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -221,14 +222,13 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-
 # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
     $type = 'intranet' unless $type;
 
-
+    my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tmpl";
 
@@ -237,23 +237,20 @@ sub checkauth {
     my %info;
     my ( $userid, $cookie, $sessionID, $flags, $envcookie );
     my $logout = $query->param('logout.x');
-    if ( $sessionID = $query->cookie('sessionID') ) {
+    if (  $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
-        if ( my %hash = $query->cookie('userenv') ) {
-            C4::Context::set_userenv(
-                $hash{number},       $hash{id},
-                $hash{cardnumber},   $hash{firstname},
-                $hash{surname},      $hash{branch},
-                $hash{branchname},   $hash{flags},
-                $hash{emailaddress}, $hash{branchprinter}
-            );
-            $cookie = $query->cookie(
-                -name    => 'sessionID',
-                -value   => $sessionID,
-                -expires => ''
-            );
+		my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+        if ( $session ) {
+            C4::Context::set_userenv(				
+                 $session->param('number'),       $session->param('id'),
+                 $session->param('cardnumber'),   $session->param('firstname'),
+                 $session->param('surname'),      $session->param('branch'),
+                 $session->param('branchname'),   $session->param('flags'),
+                 $session->param('emailaddress'), $session->param('branchprinter')
+             );
+			$cookie = $query->cookie(CGISESSID => $session->id);
             $loggedin=1;
-            $userid = $hash{cardnumber};
+            $userid = $session->param('cardnumber');
         }
         my ( $ip, $lasttime );
 
@@ -271,7 +268,8 @@ sub checkauth {
         }
     }
     unless ($userid) {
-        $sessionID = int( rand() * 100000 ) . '-' . time();
+		my $session = new CGI::Session("driver:File", undef, {Directory=>'/tmp'});
+		$sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
@@ -284,11 +282,7 @@ sub checkauth {
             printf L "%20s from %16s logged in  at %30s.\n", $userid,
               $ENV{'REMOTE_ADDR'}, $time;
             close L;
-            $cookie = $query->cookie(
-                -name    => 'sessionID',
-                -value   => $sessionID,
-                -expires => ''
-            );
+			$cookie = $query->cookie(CGISESSID => $sessionID);
             if ( $return == 2 ) {
                 #Only superlibrarian should have access to this page.
                 #Since if it is a user, it is supposed that there is a borrower table
@@ -303,11 +297,17 @@ sub checkauth {
                     "NO_LIBRARY_SET",
                     1,""
                 );
-                $envcookie = $query->cookie(
-                    -name    => 'userenv',
-                    -value   => $hash,
-                    -expires => ''
-                );
+				$session->param('number',0);
+				$session->param('id',C4::Context->config('user'));
+				$session->param('cardnumber',C4::Context->config('user'));
+				$session->param('firstname',C4::Context->config('user'));
+				$session->param('surname',C4::Context->config('user'),);
+				$session->param('branch','NO_LIBRARY_SET');
+				$session->param('branchname','NO_LIBRARY_SET');
+				$session->param('flags',1);
+				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+				$session->param('ip',$session->remote_addr());
+				$session->param('lasttime',time());                
                 $userid=C4::Context->config('user');
             }
         }
@@ -326,7 +326,7 @@ sub checkauth {
         # successful login
         unless ($cookie) {
             $cookie = $query->cookie(
-                -name    => 'sessionID',
+                -name    => 'CGISESSID',
                 -value   => '',
                 -expires => ''
             );
@@ -368,7 +368,7 @@ sub checkauth {
     );
     $template->param( \%info );
     $cookie = $query->cookie(
-        -name    => 'sessionID',
+        -name    => 'CGISESSID',
         -value   => $sessionID,
         -expires => ''
     );
