@@ -359,15 +359,14 @@ if ($step && $step==1){
     $dbh->disconnect;
   } else {
     #Check if there are enough tables.
-    # Version 2_2 was 74 tables, so we check if there is more than 75
-    # Maybe could be in step 2
+	# Paul has cleaned up tables so reduced the count
     #I put it there because it implied a data import if condition was not satisfied.
     my $dbh= DBI->connect("DBI:$info{dbms}:$info{dbname}:$info{hostname}".($info{port}?":$info{port}":""),$info{'user'}, $info{'password'});
     my $rq=$dbh->prepare("SHOW TABLES FROM ".$info{'dbname'});
     $rq->execute;
     my $data=$rq->fetchall_arrayref({});
     my $count=scalar(@$data);
-    if ($count < 75){
+    if ($count < 70){
       $template->param("count"=>$count,"proposeimport"=>1);
     } else {
       $template->param("count"=>$count,"default"=>1);

@@ -27,6 +27,7 @@ require Exporter;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
+use CGI::Session;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -221,14 +222,13 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-warn "here i am";
 # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
     my $type            = shift;
     $type = 'intranet' unless $type;
 
-
+    my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tmpl";
 
@@ -239,8 +239,8 @@ warn "here i am";
     my $logout = $query->param('logout.x');
     if (  $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
-		my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-        if ( my $session ) {
+		my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+        if ( $session ) {
             C4::Context::set_userenv(				
                  $session->param('number'),       $session->param('id'),
                  $session->param('cardnumber'),   $session->param('firstname'),
@@ -250,7 +250,7 @@ warn "here i am";
              );
 			$cookie = $query->cookie(CGISESSID => $session->id);
             $loggedin=1;
-            $userid = $hash{cardnumber};
+            $userid = $session->param('cardnumber');
         }
         my ( $ip, $lasttime );
 
@@ -268,7 +268,7 @@ warn "here i am";
         }
     }
     unless ($userid) {
-		my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});
+		my $session = new CGI::Session("driver:File", undef, {Directory=>'/tmp'});
 		$sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
@@ -368,7 +368,7 @@ warn "here i am";
     );
     $template->param( \%info );
     $cookie = $query->cookie(
-        -name    => 'sessionID',
+        -name    => 'CGISESSID',
         -value   => $sessionID,
         -expires => ''
     );
