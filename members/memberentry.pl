@@ -149,7 +149,7 @@ if ($category_type eq 'C' and $guarantorid ne '' ){
 	# CHECKS step by step
 # STEP 1
     if ($step eq 1) {
-		if (checkcardnumber($cardnumber)){ 
+		if ($op eq 'add' && checkcardnumber($cardnumber)){ 
 			push @errors, 'ERROR_cardnumber';
 			$nok = 1;
 		} 
