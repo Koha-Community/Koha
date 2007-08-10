@@ -638,7 +638,6 @@ sub checkauth {
         push @inputs, { name => $name, value => $value };
     }
     # get the branchloop, which we need for authetication
-	use C4::Branch;
     my $branches = GetBranches();
     my @branch_loop;
     for my $branch_hash (keys %$branches) {
@@ -648,6 +647,7 @@ sub checkauth {
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
     $template->param(
+		login				 => 1,
         INPUTS               => \@inputs,
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
