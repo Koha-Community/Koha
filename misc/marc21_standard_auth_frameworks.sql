@@ -1,5 +1,6 @@
 -- *******************************************************
 --   KOHA MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS   
+--                 POST-INSTALLATION SCRIPT               
 --                                                        
 --                  PRETEST VERSION 0.0.1                 
 --                       2007-08-10                       
@@ -15,7 +16,205 @@
 -- *******************************************************
 
 
-SET FOREIGN_KEY_CHECKS=0;
+
+-- ***********************************************************************
+--                                                                        
+-- STOP, DO NOT PROCEED FURTHER WITHOUT FIRST DUMPIMPING                  
+-- auth_tag_structure AND auth_subfield_structure TABLES IF NOT THE       
+-- ENTIRE KOHA DATABASE.                                                  
+--                                                                        
+-- However, if you have a Koha installation with no bibliographic         
+-- framework modifications or no records yet then this script should do   
+-- no harm and actually help protect you from future data loss when       
+-- editing bibliographic records including holdings information.          
+--                                                                        
+-- Code still needs to be written for preserving information from         
+-- installed bibliographic and authority frameworks and then updating     
+-- the frameworks and the bibliographic records losslessly.  A modest     
+-- task but everything takes time.                                        
+--                                                                        
+-- Despite the above warning, you are more likely to loose data from      
+-- authority records held in Koha if your authority frameworks            
+-- are less complete than the one provided in this file rather than from  
+-- possible risks from the simple design of the this installation         
+-- script.                                                                
+--                                                                        
+-- If you have an existing Koha installation, your default Koha MARC 21   
+-- bibliographic framework will not be updated from the standard Koha     
+-- update script.  This SQL script will update your authority             
+-- frameworks and should be applied after you have run the standard Koha  
+-- update script.                                                         
+--                                                                        
+-- See comments below for some provisions that may need adjusting to      
+-- support your Koha database.                                            
+--                                                                        
+-- A complete MySQL Koha SQL database may be dumped for backup with the   
+-- following command syntax as one line where the -h option is only       
+-- needed if applying this script for a database held on a remote         
+-- server.                                                                
+--                                                                        
+-- mysqldump --allow-keywords --single-transaction                        
+-- [-h YourMySQLServername] -u YourKohaMySQLUsername -p                   
+-- YourKohaDatabasename > KohaBackup.sql                                  
+--                                                                        
+-- Now that you have been warned, this SQL file may be run and            
+-- imported using the following command syntax as one line where the      
+-- -h option is only needed if applying this script for a database held   
+-- on a remote server.                                                    
+--                                                                        
+-- mysql [-h YourMySQLServername] -uYourKohaMySQLUsername                 
+-- -p YourKohaDatabasename < /path/to/marc21_standard_auth_frameworks.sql 
+--                                                                        
+-- ***********************************************************************
+
+
+
+-- ADJUST ME
+-- -- Uncomment the following commented lines to purge authority records.
+--
+-- DROP TABLE IF EXISTS `auth_subfield_table`;
+-- CREATE TABLE IF NOT EXISTS `auth_subfield_table` (
+--   `subfieldid` bigint(20) unsigned NOT NULL auto_increment,
+--   `authid` bigint(20) unsigned NOT NULL default '0',
+--   `tag` varchar(3) NOT NULL default '',
+--   `tagorder` tinyint(4) NOT NULL default '1',
+--   `tag_indicator` varchar(2) NOT NULL default '',
+--   `subfieldcode` char(1) NOT NULL default '',
+--   `subfieldorder` tinyint(4) NOT NULL default '1',
+--   `subfieldvalue` varchar(255) default NULL,
+--   PRIMARY KEY  (`subfieldid`),
+--   KEY `authid` (`authid`),
+--   KEY `tag` (`tag`),
+--   KEY `subfieldcode` (`subfieldcode`),
+--   KEY `subfieldvalue` (`subfieldvalue`)
+--   
+-- )
+-- 
+-- -- ADJUST ME
+-- -- Uncomment the line below and adjust if needed.
+-- -- ENGINE=MyISAM DEFAULT CHARSET=utf8
+-- 
+-- ;
+-- 
+-- 
+-- DROP TABLE IF EXISTS `auth_word`;
+-- CREATE TABLE IF NOT EXISTS `auth_word` (
+--   `authid` bigint(20) NOT NULL default '0',
+--   `tagsubfield` varchar(4) NOT NULL default '',
+--   `tagorder` tinyint(4) NOT NULL default '1',
+--   `subfieldorder` tinyint(4) NOT NULL default '1',
+--   `word` varchar(255) NOT NULL default '',
+--   `sndx_word` varchar(255) NOT NULL default '',
+--   KEY `authid` (`authid`),
+--   KEY `auth_search` (`tagsubfield`,`word`),
+--   KEY `word` (`word`),
+--   KEY `sndx_word` (`sndx_word`)
+--   
+-- )
+-- 
+-- -- ADJUST ME
+-- -- Uncomment the line below and adjust if needed.
+-- -- ENGINE=MyISAM DEFAULT CHARSET=utf8
+-- 
+-- ;
+-- 
+-- 
+-- DROP TABLE IF EXISTS `auth_header`;
+-- CREATE TABLE IF NOT EXISTS `auth_header` (
+--   `authid` bigint(20) unsigned NOT NULL auto_increment,
+--   `authtypecode` varchar(10) NOT NULL default '',
+--   `datecreated` date NOT NULL default '0000-00-00',
+--   `datemodified` date default NULL,
+--   `origincode` varchar(20) default NULL,
+--   `authtrees` text,
+--   PRIMARY KEY  (`authid`),
+--   KEY `origincode` (`origincode`)
+--   
+-- )
+-- 
+-- -- ADJUST ME
+-- -- Uncomment the line below and adjust if needed.
+-- -- ENGINE=MyISAM DEFAULT CHARSET=utf8
+-- 
+-- ;
+-- 
+-- 
+
+
+DROP TABLE IF EXISTS `auth_types`;
+CREATE TABLE IF NOT EXISTS `auth_types` (
+  `authtypecode` varchar(10) NOT NULL default '',
+  `authtypetext` varchar(255) NOT NULL default '',
+  `auth_tag_to_report` varchar(3) NOT NULL default '',
+  `summary` text NOT NULL,
+  PRIMARY KEY  (`authtypecode`)
+  
+)
+
+-- ADJUST ME
+-- Uncomment the line below and adjust if needed.
+-- ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+;
+
+
+INSERT INTO `auth_types` VALUES ('PERS0_NAME', 'Personal Name', '100', 'Personal Names');
+INSERT INTO `auth_types` VALUES ('CORP0_NAME', 'Corporate Name', '110', 'Corporate Names');
+INSERT INTO `auth_types` VALUES ('MEETI_NAME', 'Meeting Name', '111', 'Meeting Name');
+INSERT INTO `auth_types` VALUES ('UNIF_TITLE', 'Uniform Title', '130', 'Uniform Title');
+INSERT INTO `auth_types` VALUES ('CHRON_TERM', 'Chronological Term', '148', 'Chronological Term');
+INSERT INTO `auth_types` VALUES ('TOPIC_TERM', 'Topical Term', '150', 'Topical Term');
+INSERT INTO `auth_types` VALUES ('GEOGR_NAME', 'Geographic Name', '151', 'Geographic Name');
+INSERT INTO `auth_types` VALUES ('GENRE/FORM', 'Genre/Form Term', '155', 'Genre/Form Term');
+-- INSERT INTO `auth_types` VALUES ('TOPIC_SUBD', 'General Topical Term Subdivision', '180', 'General Topical Term Subdivision');
+-- INSERT INTO `auth_types` VALUES ('GEOGR_SUBD', 'Geographic Subdivision', '181', 'Geographic Subdivision');
+-- INSERT INTO `auth_types` VALUES ('CHRON_SUBD', 'Chronological Subdivision', '182', 'Chronological Subdivision');
+-- INSERT INTO `auth_types` VALUES ('FORM_SUBDI', 'Form Subdivision', '185', 'Form Subdivision');
+
+
+DROP TABLE IF EXISTS `auth_tag_structure`;
+CREATE TABLE IF NOT EXISTS `auth_tag_structure` (
+  `authtypecode` char(10) NOT NULL default '',
+  `tagfield` char(3) NOT NULL default '',
+  `liblibrarian` char(255) NOT NULL default '',
+  `libopac` char(255) NOT NULL default '',
+  `repeatable` tinyint(4) NOT NULL default '0',
+  `mandatory` tinyint(4) NOT NULL default '0',
+  `authorised_value` char(10) default NULL,
+  PRIMARY KEY  (`authtypecode`,`tagfield`)
+  
+)
+
+-- ADJUST ME
+-- Uncomment the line below and adjust if needed.
+-- ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+;
+
+
+DROP TABLE IF EXISTS `auth_subfield_structure`;
+CREATE TABLE IF NOT EXISTS `auth_subfield_structure` (
+  `authtypecode` char(10) NOT NULL default '',
+  `tagfield` char(3) NOT NULL default '',
+  `tagsubfield` char(1) NOT NULL default '',
+  `liblibrarian` char(255) NOT NULL default '',
+  `libopac` char(255) NOT NULL default '',
+  `repeatable` tinyint(4) NOT NULL default '0',
+  `mandatory` tinyint(4) NOT NULL default '0',
+  `tab` tinyint(1) default NULL,
+  `authorised_value` char(10) default NULL,
+  `value_builder` char(80) default NULL,
+  `seealso` char(255) default NULL,
+  PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
+  KEY `tab` (`authtypecode`,`tab`)
+  
+)
+
+-- ADJUST ME
+-- Uncomment the line below and adjust if needed.
+-- ENGINE=MyISAM DEFAULT CHARSET=utf8
+
+;
 
 
 -- *****************************************************************
