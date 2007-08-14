@@ -35,12 +35,12 @@
   </tfoot>
 </table>
 <!-- The manual invoice and credit buttons -->
-
-<form action="/cgi-bin/koha/members/maninvoice.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /><input type="submit" value="Create Manual Invoice" /></form>
-
-<form action="/cgi-bin/koha/members/mancredit.pl" method="get"> <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Create Manual Credit" /></form>
-
-<form action="/cgi-bin/koha/members/moremember.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Return to Patron Record" /></form>
-
+<div id="action">
+    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Return to Patron Record</a>
+    <div class="edit">
+        <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Invoice</a>
+        <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Credit</a>
+    </div>
+</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
