@@ -35,7 +35,6 @@ my $borrowernumber=$input->param('borrowernumber');
 # get borrower details
 my $data=GetMember($borrowernumber,'borrowernumber');
 my $add=$input->param('add');
-
 if ($add){
 #  print $input->header;
     my $itemnum=$input->param('itemnum');
@@ -63,6 +62,7 @@ if ($add){
 	}
 	else {
 		print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+		exit;
 	}
 } else {
 	my ($template, $loggedinuser, $cookie)

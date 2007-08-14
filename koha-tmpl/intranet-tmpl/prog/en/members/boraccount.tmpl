@@ -5,8 +5,19 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
 
-<!-- The table with the account items -->
+<!-- The manual invoice and credit buttons -->
+<div id="action">
+    <div class="edit">
+        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Return to Patron Record</a>
+    </div>
+    <div class="view">
+        <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Pay fines</a>
+        <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Invoice</a>
+        <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Credit</a>
+    </div>
+</div>
 
+<!-- The table with the account items -->
 <h1>Account for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
 
 <table>
@@ -34,13 +45,5 @@
   </tr>
   </tfoot>
 </table>
-<!-- The manual invoice and credit buttons -->
-<div id="action">
-    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Return to Patron Record</a>
-    <div class="edit">
-        <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Invoice</a>
-        <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Credit</a>
-    </div>
-</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

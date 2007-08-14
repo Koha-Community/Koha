@@ -270,7 +270,7 @@ EOT
 sub returnlost {
     my ( $borrowernumber, $itemnum ) = @_;
     my $dbh      = C4::Context->dbh;
-    my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
+    my $borrower = C4::Members::GetMember( $borrowernumber, 'borrowernumber' );
     my $sth      = $dbh->prepare(
         "UPDATE issues SET returndate=now() WHERE
   borrowernumber=? AND itemnumber=? AND returndate IS NULL"
@@ -367,6 +367,7 @@ sub manualinvoice {
         $sth->execute( $borrowernumber, $accountno, $amount, $desc, $type,
             $amountleft, $notifyid );
     }
+    return 0;
 }
 
 =head2 fixcredit
