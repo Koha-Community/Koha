@@ -799,7 +799,7 @@ sub GetItemsInfo {
     while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = '';
         my $isth    = $dbh->prepare(
-            "SELECT issues.*,borrowers.cardnumber
+            "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname
             FROM   issues, borrowers
             WHERE  itemnumber = ?
                 AND returndate IS NULL
@@ -809,6 +809,8 @@ sub GetItemsInfo {
         if ( my $idata = $isth->fetchrow_hashref ) {
             $data->{borrowernumber} = $idata->{borrowernumber};
             $data->{cardnumber}     = $idata->{cardnumber};
+            $data->{surname}     = $idata->{surname};
+            $data->{firstname}     = $idata->{firstname};
             $datedue                = format_date( $idata->{'date_due'} );
         }
         if ( $datedue eq '' ) {
