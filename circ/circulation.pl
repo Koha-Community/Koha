@@ -182,7 +182,7 @@ if ($borrowernumber) {
         #borrowercard expired or nearly expired, warn the librarian
         $template->param(
             flagged       => "1",
-            warndeparture => "1",
+            warndeparture => format_date("$warning_year-$warning_month-$warning_day"),
             renewaldate   => "$renew_year-$renew_month-$renew_day"
         );
     }
