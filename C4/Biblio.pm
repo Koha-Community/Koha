@@ -20,7 +20,7 @@ package C4::Biblio;
 use strict;
 
 require Exporter;
-use utf8;
+# use utf8;
 use C4::Context;
 use MARC::Record;
 use MARC::File::USMARC;
@@ -371,15 +371,24 @@ sub ModBiblio {
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
     my $oldRecord = GetMarcBiblio( $biblionumber );
-    #$oldRecord->encoding('UTF-8');
     
-    my @fields = $oldRecord->field( $itemtag );
-    foreach (@fields){
-        if ( !utf8::is_utf8( $_ ) ) {
-            utf8::decode( $_ );
-        }
+    # parse each item, and, for an unknown reason, re-encode each subfield 
+    # if you don't do that, the record will have encoding mixed
+    # and the biblio will be re-encoded.
+    # strange, I (Paul P.) searched more than 1 day to understand what happends
+    # but could only solve the problem this way...
+   my @fields = $oldRecord->field( $itemtag );
+    foreach my $fielditem ( @fields ){
+        my $field;
+        foreach ($fielditem->subfields()) {
+            if ($field) {
+                $field->add_subfields(Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
+            } else {
+                $field = MARC::Field->new("$itemtag",'','',Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
+            }
+          }
+        $record->append_fields($field);
     }
-    $record->append_fields( @fields ); # FIXME : encoding error...
     
     # adding biblionumber
     my ($tag_biblionumber, $subfield_biblionumber) = GetMarcFromKohaField('biblio.biblionumber',$frameworkcode);
@@ -464,22 +473,6 @@ sub ModItemTransfer {
     }
     return;
 }
-
-##New sub to dotransfer in marc tables as well. Not exported -TG 10/04/2006
-# sub domarctransfer {
-#     my ( $dbh, $itemnumber ) = @_;
-#     $itemnumber =~ s /\'//g;    ##itemnumber seems to come with quotes-TG
-#     my $sth =
-#       $dbh->prepare(
-#         "select biblionumber,holdingbranch from items where itemnumber=$itemnumber"
-#       );
-#     $sth->execute();
-#     while ( my ( $biblionumber, $holdingbranch ) = $sth->fetchrow ) {
-#         &ModItemInMarconefield( $biblionumber, $itemnumber,
-#             'items.holdingbranch', $holdingbranch );
-#     }
-#     return;
-# }
 
 =head2 ModBiblioframework
 
@@ -2233,11 +2226,17 @@ sub TransformHtmlToMarc {
             my $j=$i+1;
             
             if($tag < 10){ # no code for theses fields
-                my $inner_param = $params->[$j];
-                $newfield = MARC::Field->new(
-                    $tag,
-                    $cgi->param($params->[$j+1]),
-                );
+    # in MARC editor, 000 contains the leader.
+                if ($tag eq '000' ) {
+                    $record->leader($cgi->param($params->[$j+1])) if length($cgi->param($params->[$j+1]))==24;
+    # between 001 and 009 (included)
+                } else {
+                    $newfield = MARC::Field->new(
+                        $tag,
+                        $cgi->param($params->[$j+1]),
+                    );
+                }
+    # > 009, deal with subfields
             } else {
                 while($params->[$j] =~ /_code_/){ # browse all it's subfield
                     my $inner_param = $params->[$j];
