@@ -153,8 +153,8 @@ if ( $params->{'step3'} ) {
 my ( $year, $month, $day ) = &Today();
 my $tmpyear  = $year - 1;
 my $tmpmonth = $month - 3;
-$filterdate1 = $year . "-" . $tmpmonth . "-" . $day;
-$filterdate2 = $tmpyear . "-" . $month . "-" . $day;
+$filterdate1 = $tmpyear . "-" . $month . "-" . $day;
+$filterdate2 = $year . "-" . $tmpmonth . "-" . $day;
 
 $template->param(
     step1       => '1',
