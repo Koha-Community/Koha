@@ -2298,6 +2298,7 @@ sub TransformMarcToKoha {
           &TransformMarcToKohaOneField( "biblio", $field, $record, $result,
             $frameworkcode );
     }
+    my $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
     $sth2->execute;
     while ( ($field) = $sth2->fetchrow ) {
         if ( $field eq 'notes' ) { $field = 'bnotes'; }

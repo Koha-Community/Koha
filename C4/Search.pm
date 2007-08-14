@@ -860,9 +860,7 @@ sub searchResults {
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord;
         $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
-
         # add image url if there is one
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {
             $oldbiblio->{imageurl} =
