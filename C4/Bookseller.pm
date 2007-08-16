@@ -30,6 +30,7 @@ $VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map
 @EXPORT = qw(
     &GetBookSeller &GetBooksellersWithLateOrders
     &ModBookseller
+    &DelBookseller
     &AddBookseller
 );
 
@@ -77,7 +78,13 @@ sub GetBookSeller {
     my $sth =$dbh->prepare($query);
     $sth->execute("$searchstring%", $searchstring );
     my @results;
+    # count how many baskets this bookseller has.
+    # if it has none, the bookseller can be deleted
+    my $sth2 = $dbh->prepare("select count(*) from aqbasket where booksellerid=?");
     while ( my $data = $sth->fetchrow_hashref ) {
+        $sth2->execute($data->{id});
+        ($data->{basketcount}) = $sth2->fetchrow();
+        warn "COUNT : ".$data->{basketcount};
         push( @results, $data );
     }
     $sth->finish;
@@ -240,6 +247,20 @@ sub ModBookseller {
     $sth->finish;
 }
 
+=head2 DelBookseller
+
+&DelBookseller($booksellerid);
+
+delete the supplier identified by $booksellerid
+This sub can be called only if the supplier has no order.
+
+=cut
+sub DelBookseller {
+    my ($id) = @_;
+    my $dbh=C4::Context->dbh;
+    my $sth=$dbh->prepare("DELETE FROM aqbooksellers WHERE id=?");
+    $sth->execute($id);
+}
 END { }    # module clean-up code here (global destructor)
 
 1;

@@ -96,8 +96,13 @@ if ($op eq "display"){
                     invoiceprice=>$booksellers[0]->{'invoiceprice'},
                     listprice=>$booksellers[0]->{'listprice'},
                     GST => C4::Context->preference("gist"),
+                    basketcount =>$booksellers[0]->{'basketcount'},
                     );
-}else{
+} elsif ($op eq 'delete') {
+    &DelBookseller($id);
+    print $query->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
+    exit;
+} else {
     my @currencies = GetCurrencies();
     my $count = scalar @currencies;
     
