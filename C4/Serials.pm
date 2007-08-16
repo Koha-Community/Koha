@@ -623,11 +623,11 @@ sub GetSubscriptions {
     my $sth;
     if ($biblionumber) {
         my $query = qq(
-            SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,subscription.branchcode,biblio.biblionumber
-            FROM   subscription,biblio,biblioitems
-            WHERE   biblio.biblionumber = biblioitems.biblionumber
-                AND biblio.biblionumber = subscription.biblionumber
-                AND biblio.biblionumber=?
+            SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
+            FROM   subscription
+            LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+            LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+            WHERE biblio.biblionumber=?
         );
         if (C4::Context->preference('IndependantBranches') && 
             C4::Context->userenv && 
@@ -642,11 +642,11 @@ sub GetSubscriptions {
     else {
         if ( $ISSN and $title ) {
             my $query = qq|
-                SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,subscription.branchcode,biblio.biblionumber
-                FROM   subscription,biblio,biblioitems
-                WHERE  biblio.biblionumber = biblioitems.biblionumber
-                    AND biblio.biblionumber= subscription.biblionumber
-                    AND (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
+                SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
+                    FROM   subscription
+                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                    WHERE (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
             
             if (C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
@@ -660,11 +660,11 @@ sub GetSubscriptions {
         else {
             if ($ISSN) {
                 my $query = qq(
-                    SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,subscription.branchcode,biblio.biblionumber
-                    FROM   subscription,biblio,biblioitems
-                    WHERE  biblio.biblionumber = biblioitems.biblionumber
-                        AND biblio.biblionumber=subscription.biblionumber
-                        AND biblioitems.issn LIKE ?
+                    SELECT subscription.*,biblio.title,biblioitems.issn,,biblio.biblionumber
+                        FROM   subscription
+                        LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                        WHERE biblioitems.issn LIKE ?
                 );
                 if (C4::Context->preference('IndependantBranches') && 
                     C4::Context->userenv && 
@@ -678,10 +678,11 @@ sub GetSubscriptions {
             }
             else {
                 my $query = qq(
-                    SELECT subscription.subscriptionid,biblio.title,biblioitems.issn,subscription.notes,subscription.branchcode,biblio.biblionumber
-                    FROM   subscription,biblio,biblioitems
-                    WHERE  biblio.biblionumber = biblioitems.biblionumber
-                        AND biblio.biblionumber=subscription.biblionumber
+                    SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
+                        FROM   subscription
+                        LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                        WHERE 1
                         ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
                 
                 warn $query;       
