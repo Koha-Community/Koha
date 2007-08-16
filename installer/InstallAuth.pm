@@ -113,35 +113,37 @@ InstallAuth - Authenticates Koha users for Install process
 
 sub get_template_and_user {
     my $in       = shift;
-    my $query=$in->{'query'};
-    my $language=$query->cookie('KohaOpacLanguage');
-    my $path=C4::Context->config('intrahtdocs')."/prog/".($language?$language:"en");
-    my $template       = HTML::Template::Pro->new(
-        filename          => "$path/".$in->{template_name},
+    my $query    = $in->{'query'};
+    my $language = $query->cookie('KohaOpacLanguage');
+    my $path =
+      C4::Context->config('intrahtdocs') . "/prog/"
+      . ( $language ? $language : "en" );
+    my $template = HTML::Template::Pro->new(
+        filename          => "$path/" . $in->{template_name},
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
         path              => ["$path/includes"]
     );
-    
+
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
         $in->{'query'},
         $in->{'authnotrequired'},
         $in->{'flagsrequired'},
         $in->{'type'}
     );
-#     use Data::Dumper;warn "utilisateur $user cookie : ".Dumper($cookie);
+
+    #     use Data::Dumper;warn "utilisateur $user cookie : ".Dumper($cookie);
 
     my $borrowernumber;
     if ($user) {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
-        if (( $flags && $flags->{superlibrarian}==1)) {
+        if ( ( $flags && $flags->{superlibrarian} == 1 ) ) {
             $template->param( CAN_user_circulate        => 1 );
             $template->param( CAN_user_catalogue        => 1 );
             $template->param( CAN_user_parameters       => 1 );
@@ -153,7 +155,7 @@ sub get_template_and_user {
             $template->param( CAN_user_updatecharge     => 1 );
             $template->param( CAN_user_acquisition      => 1 );
             $template->param( CAN_user_management       => 1 );
-            $template->param( CAN_user_tools            => 1 );	
+            $template->param( CAN_user_tools            => 1 );
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
@@ -222,6 +224,7 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
+
 # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -237,20 +240,27 @@ sub checkauth {
     my %info;
     my ( $userid, $cookie, $sessionID, $flags, $envcookie );
     my $logout = $query->param('logout.x');
-    if (  $sessionID = $query->cookie("CGISESSID") ) {
+    if ( $sessionID = $query->cookie("CGISESSID") ) {
         C4::Context->_new_userenv($sessionID);
-		my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+        my $session =
+          new CGI::Session( "driver:File", $sessionID,
+            { Directory => '/tmp' } );
         if ( $session->param('cardnumber') ) {
-            C4::Context::set_userenv(				
-                 $session->param('number'),       $session->param('id'),
-                 $session->param('cardnumber'),   $session->param('firstname'),
-                 $session->param('surname'),      $session->param('branch'),
-                 $session->param('branchname'),   $session->param('flags'),
-                 $session->param('emailaddress'), $session->param('branchprinter')
-             );
-			$cookie = $query->cookie(CGISESSID => $session->id);
-            $loggedin=1;
-            $userid = $session->param('cardnumber');
+            C4::Context::set_userenv(
+                $session->param('number'),
+                $session->param('id'),
+                $session->param('cardnumber'),
+                $session->param('firstname'),
+                $session->param('surname'),
+                $session->param('branch'),
+                $session->param('branchname'),
+                $session->param('flags'),
+                $session->param('emailaddress'),
+                $session->param('branchprinter')
+            );
+            $cookie   = $query->cookie( CGISESSID => $session->id );
+            $loggedin = 1;
+            $userid   = $session->param('cardnumber');
         }
         my ( $ip, $lasttime );
 
@@ -268,47 +278,47 @@ sub checkauth {
         }
     }
     unless ($userid) {
-		my $session = new CGI::Session("driver:File", undef, {Directory=>'/tmp'});
-		$sessionID = $session->id;
+        my $session =
+          new CGI::Session( "driver:File", undef, { Directory => '/tmp' } );
+        $sessionID = $session->id;
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $userid, $password );
         if ($return) {
-            $loggedin=1;
+            $loggedin = 1;
             open L, ">>/tmp/sessionlog";
             my $time = localtime( time() );
             printf L "%20s from %16s logged in  at %30s.\n", $userid,
               $ENV{'REMOTE_ADDR'}, $time;
             close L;
-			$cookie = $query->cookie(CGISESSID => $sessionID);
+            $cookie = $query->cookie( CGISESSID => $sessionID );
             if ( $return == 2 ) {
-                #Only superlibrarian should have access to this page.
-                #Since if it is a user, it is supposed that there is a borrower table
-                #And thus that data structure is loaded.
+
+           #Only superlibrarian should have access to this page.
+           #Since if it is a user, it is supposed that there is a borrower table
+           #And thus that data structure is loaded.
                 my $hash = C4::Context::set_userenv(
-                    0,
-                    0,
-                    C4::Context->config('user'),
-                    C4::Context->config('user'),
-                    C4::Context->config('user'),
-                    "",
-                    "NO_LIBRARY_SET",
-                    1,""
+                    0,                           0,
+                    C4::Context->config('user'), C4::Context->config('user'),
+                    C4::Context->config('user'), "",
+                    "NO_LIBRARY_SET",            1,
+                    ""
                 );
-				$session->param('number',0);
-				$session->param('id',C4::Context->config('user'));
-				$session->param('cardnumber',C4::Context->config('user'));
-				$session->param('firstname',C4::Context->config('user'));
-				$session->param('surname',C4::Context->config('user'),);
-				$session->param('branch','NO_LIBRARY_SET');
-				$session->param('branchname','NO_LIBRARY_SET');
-				$session->param('flags',1);
-				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-				$session->param('ip',$session->remote_addr());
-				$session->param('lasttime',time());                
-                $userid=C4::Context->config('user');
+                $session->param( 'number',     0 );
+                $session->param( 'id',         C4::Context->config('user') );
+                $session->param( 'cardnumber', C4::Context->config('user') );
+                $session->param( 'firstname',  C4::Context->config('user') );
+                $session->param( 'surname',    C4::Context->config('user'), );
+                $session->param( 'branch',     'NO_LIBRARY_SET' );
+                $session->param( 'branchname', 'NO_LIBRARY_SET' );
+                $session->param( 'flags',      1 );
+                $session->param( 'emailaddress',
+                    C4::Context->preference('KohaAdminEmailAddress') );
+                $session->param( 'ip',       $session->remote_addr() );
+                $session->param( 'lasttime', time() );
+                $userid = C4::Context->config('user');
             }
         }
         else {
@@ -320,8 +330,7 @@ sub checkauth {
     }
 
     # finished authentification, now respond
-    if ( $loggedin )
-    {
+    if ($loggedin) {
 
         # successful login
         unless ($cookie) {
@@ -348,8 +357,10 @@ sub checkauth {
         push @inputs, { name => $name, value => $value };
     }
 
-    my $path=C4::Context->config('intrahtdocs')."/prog/".($query->param('language')?$query->param('language'):"en");
-    my $template       = HTML::Template::Pro->new(
+    my $path =
+      C4::Context->config('intrahtdocs') . "/prog/"
+      . ( $query->param('language') ? $query->param('language') : "en" );
+    my $template = HTML::Template::Pro->new(
         filename          => "$path/$template_name",
         die_on_bad_params => 1,
         global_vars       => 1,
@@ -357,15 +368,14 @@ sub checkauth {
         path              => ["$path/includes"]
     );
     $template->param(
-        INPUTS               => \@inputs,
+        INPUTS => \@inputs,
 
     );
+    $template->param( login => 1 );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     my $self_url = $query->url( -absolute => 1 );
-    $template->param(
-        url         => $self_url,
-    );
+    $template->param( url => $self_url, );
     $template->param( \%info );
     $cookie = $query->cookie(
         -name    => 'CGISESSID',
@@ -373,8 +383,8 @@ sub checkauth {
         -expires => ''
     );
     print $query->header(
-        -type   => 'utf-8',
-        -cookie => $cookie
+        -type    => 'text/html; charset=utf-8',
+        -cookie  => $cookie
       ),
       $template->output;
     exit;
@@ -384,14 +394,23 @@ sub checkpw {
 
     my ( $userid, $password ) = @_;
 
-    if (   $userid && $userid eq C4::Context->config('user')
+    if (   $userid
+        && $userid     eq C4::Context->config('user')
         && "$password" eq C4::Context->config('pass') )
     {
-# Koha superuser account
- 		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
+
+        # Koha superuser account
+        C4::Context->set_userenv(
+            0, 0,
+            C4::Context->config('user'),
+            C4::Context->config('user'),
+            C4::Context->config('user'),
+            "", 1
+        );
         return 2;
     }
-    if (   $userid && $userid eq 'demo'
+    if (   $userid
+        && $userid     eq 'demo'
         && "$password" eq 'demo'
         && C4::Context->config('demo') )
     {
@@ -402,7 +421,6 @@ sub checkpw {
     }
     return 0;
 }
-
 
 END { }    # module clean-up code here (global destructor)
 1;

@@ -6,26 +6,22 @@
 <!-- TMPL_IF NAME="loginprompt" -->Koha &rsaquo; Welcome to the Koha Web Installer<!-- /TMPL_IF --></title>
 
 <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
-<div>
-<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/en/images/koha.org-logo.gif" /></h1>
+<div id="login">
+<h1><a>Koha 3.0 Installer</a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
-<!-- This is what is displayed if user doesn't have permission --><h3>Login Error</h3>
-<p>Sorry, Koha doesn't think you have permission for this page.</p>
+<div id="login_error"><strong>Error</strong>: unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
-<!-- This is what is displayed if login has timed out -->
-<h3>Login Error</h3><p>Sorry, your session has timed out. Please login again.</p>
+<div id="login_error"><strong>Error</strong>: session timed out, please log in again</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
-<!-- This is what is displayed if user's IP has changed -->
-<h3>Login Error</h3><p>You are accessing Koha from a different IP address! Please login again.</p>
+<div id="login_error"><strong>Error</strong>: IP address has changed, please log in again </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
-<!-- This is what is displayed if the username or password doesn't work -->
-<h3>Login Error</h3><p>You entered an incorrect username or password. Please try again.</p>
+<div id="login_error"><strong>Error</strong>: Incorrect username or password</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="loginprompt" -->
@@ -38,12 +34,14 @@
 <p>Before we begin, please verify you have the correct credentials to continue. Please log in
 with the username and password given to you by your systems administrator and located in your
 <code>koha.xml</code> configuration file.</p>
-<table>
-	<caption>Please enter your username and password:</caption>
-    <tr><th scope="row"><label for="userid">Username:</label></th><td><input name="userid" id="userid" /></td></tr>
-    <tr><th scope="row"><label for="password">Password:</label></th><td><input type="password" name="password" id="password" /></td></tr>
-    </table>
-<p><input type="submit" value="Submit" /></p>
+<p>Please enter your username and password:</p>
+<p><label>Username:<br />
+<input type="text" name="userid" id="userid" class="input" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" /></label>
+</p>
+<p><label>Password:<br />
+<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" /></label>
+</p>
+<p class="submit"><input id="submit" type="submit" value="Login &raquo;" tabindex="4" /></p>
 </form>
 
 <!-- /TMPL_IF -->
