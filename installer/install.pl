@@ -51,7 +51,6 @@ my $dbh = DBI->connect(
 );
 
 if ( $step && $step == 1 ) {
-
     #First Step
     #Checking ALL perl Modules and services needed are installed.
     #Whenever there is an error, adding a report to the page
@@ -198,8 +197,9 @@ if ( $step && $step == 1 ) {
 
 }
 elsif ( $step && $step == 2 ) {
-
-    # Check Database connection and access
+#
+#STEP 2 Check Database conn~ection and access
+#
     $template->param(%info);
     my $checkmysql = $query->param("checkmysql");
     $template->param( 'mysqlconnection' => $checkmysql );
@@ -267,24 +267,25 @@ elsif ( $step && $step == 2 ) {
     }
 }
 elsif ( $step && $step == 3 ) {
+#
+#
+# STEP 3 : database setup
+#
+# 
     my $op = $query->param('op');
     if ( $op && $op eq 'finish' ) {
-        if ( C4::Context->preference('Version') ) {
-            warn "UPDATE Version";
-            my $finish =
-              $dbh->prepare(
-                "UPDATE systempreferences SET value=? WHERE variable='Version'"
-              );
-            $finish->execute( C4::Context->config("kohaversion") );
-        }
-        else {
-            warn "INSERT Version";
-            my $finish =
-              $dbh->prepare(
-"INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')"
-              );
-            $finish->execute( C4::Context->config("kohaversion") );
-        }
+    my $kohaversion=C4::Context::KOHAVERSION;
+    # remove the 3 last . to have a Perl number
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    if (C4::Context->preference('Version')) {
+        warn "UPDATE Version";
+      my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+      $finish->execute($kohaversion);
+    } else {
+        warn "INSERT Version";
+      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')");
+      $finish->execute($kohaversion);
+    }
 
   # Installation is finished.
   # We just deny anybody acess to install
@@ -293,10 +294,18 @@ elsif ( $step && $step == 3 ) {
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'finished' ) {
+    #
+    #
+    # we have finished, just redirect to mainpage.
+    #
+    #
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
         exit 1;
     }
     elsif ( $op && $op eq 'addframeworks' ) {
+    #
+    # 1ST install : insert the SQL files the user has selected
+    #
 
         #Framework importing and reports
         my $lang;
@@ -373,6 +382,12 @@ elsif ( $step && $step == 3 ) {
         $dbh->do('SET FOREIGN_KEY_CHECKS=1');
     }
     elsif ( $op && $op eq 'selectframeworks' ) {
+#
+#
+# 1ST install : show the user the sql datas he can insert in the database.
+#
+#
+# (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
 
 #Framework Selection
 #sql data for import are supposed to be located in misc/sql-datas/<language>/<level>
@@ -480,6 +495,11 @@ s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?==================
         $template->param( $op => 1 );
     }
     elsif ( $op && $op eq 'importdatastructure' ) {
+    #
+    #
+    # UPDATE (not 1st install) run updatedatabase
+    #
+    #
 
         #Import data structure and show errors if any
         #Uses DBI to read the file [MJR 2007-07-01]
@@ -514,12 +534,33 @@ s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?==================
         $rq->execute;
         my $data = $rq->fetchall_arrayref( {} );
         my $count = scalar(@$data);
+        #
+        # we don't have tables, propose DB import
+        #
         if ( $count < 70 ) {
             $template->param( "count" => $count, "proposeimport" => 1 );
         }
         else {
+            #
+            # we have tables, propose to select files to upload or updatedatabase
+            #
             $template->param( "count" => $count, "default" => 1 );
+            #
+            # 1st part of step 3 : check if there is a databaseversion systempreference
+            # if there is, then we just need to upgrade
+            # if there is none, then we need to install the database
+            #
+            my $dbversion = C4::Context->preference('Version');
+            $dbversion =~ /(.*)\.(..)(..)(...)/;
+            $dbversion = "$1.$2.$3.$4";
+            if (C4::Context->preference('Version')) {
+                $template->param("upgrading" => 1,
+                                "dbversion" => $dbversion,
+                                "kohaversion" => C4::Context->KOHAVERSION,
+                                );
+            }
         }
+
         $dbh->disconnect;
     }
 }
@@ -529,6 +570,7 @@ else {
     # using opendir + language Hash
 
     my $langavail = getTranslatedLanguages();
+
     my @languages;
     foreach (@$langavail) {
         push @languages,

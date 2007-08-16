@@ -106,6 +106,19 @@ use constant CONFIG_FNAME => "/etc/koha.xml";
 $context = undef;        # Initially, no context is set
 @context_stack = ();        # Initially, no saved contexts
 
+
+=item KOHAVERSION
+    returns the kohaversion stored in kohaversion.pl file
+=cut
+
+sub KOHAVERSION {
+    my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+    unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
+            $cgidir = C4::Context->intranetdir;
+    }
+    do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
+    return kohaversion();
+}
 =item read_config_file
 
 =over 4

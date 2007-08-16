@@ -80,6 +80,7 @@ function Hide(link) {
   <h1>Congratulations, Installation complete</h1>
   <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p> 
 <!--/TMPL_IF-->
+
 <!--TMPL_IF Name="selectframeworks"-->
   <h2 align="center">Selecting Default Settings</h2>
   <form name="frameworkselection" method="post" action="install.pl">
@@ -120,6 +121,8 @@ function Hide(link) {
   </form>
   </p>
 <!--/TMPL_IF-->
+
+
 <!--TMPL_IF Name="addframeworks"-->
   <h2 align="center">Results of installation:</h2>
   <p>Language :<!--TMPL_VAR Name="fwklanguage"--></p>
@@ -143,23 +146,25 @@ function Hide(link) {
   </p>
 <!--/TMPL_IF-->
 
-<!--TMPL_IF Name="importdatastructure"-->
-	<!--TMPL_IF Name="error"-->
-		<p>The following error occcurred while importing the database structure:</p>
-		<p class="error"><!-- TMPL_VAR NAME="error" --> </p>
-		<p>Please contact your system administrator</p>
-	<!-- TMPL_ELSE -->
-  <h2 align="center">Success</h2>
-  <ul>
-  <li>Database tables created</li>
-  </ul>
-  <form action="install.pl">
-  <input type="hidden" name="step" value="3" />
-  <p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
-  </form>
 
-	<!-- /TMPL_IF -->
+<!--TMPL_IF Name="importdatastructure"-->
+    <!--TMPL_IF Name="error"-->
+        <p>The following error occcurred while importing the database structure:</p>
+        <p class="error"><!-- TMPL_VAR NAME="error" --> </p>
+        <p>Please contact your system administrator</p>
+    <!-- TMPL_ELSE -->
+        <h2 align="center">Success</h2>
+        <ul>
+        <li>Database tables created</li>
+        </ul>
+        <form action="install.pl">
+        <input type="hidden" name="step" value="3" />
+        <p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
+        </form>
+    <!-- /TMPL_IF -->
 <!--/TMPL_IF-->
+
+
 <!--TMPL_IF Name="proposeimport"-->
   <p>Now we're ready to create the database tables and fill them with some default data.</p>
   <form action="install.pl">
@@ -167,17 +172,24 @@ function Hide(link) {
   <input type="hidden" name="op" value="importdatastructure"/>
   <p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
   </form>
-
-
 <!--/TMPL_IF-->
+
+
 <!--TMPL_IF Name="default"-->
-
-<p>Now we're ready to do some basic configuration. Please <a href="install.pl?step=3&amp;op=selectframeworks" class="button">install basic configuration settings</a> to continue the installation.</p>
-<p>
-Alternatively, if you are upgrading from a previous version of Koha, you can <a href="install.pl?step=3&amp;op=updatestructure" class="button">update your database</a>. Otherwise, you can skip this step.
-</p>
-
+    <!-- TMPL_IF name="upgrading" -->
+        <p>
+            We are upgrading from Koha <!-- TMPL_VAR name="dbversion" --> to <!-- TMPL_VAR name="kohaversion" -->, you must <a href="install.pl?step=3&amp;op=updatestructure" class="button">update your database</a>
+        </p>
+    <!-- TMPL_ELSE -->
+        <p>We are ready to do some basic configuration. Please 
+            <a href="install.pl?step=3&amp;op=selectframeworks" class="button">install basic configuration settings</a>
+            to continue the installation.
+        </p>
+    <!-- /TMPL_IF -->
 <!--/TMPL_IF-->
+
+
+
 <!--TMPL_IF Name="updatestructure"-->
   <div><h2 align="center">Updating Mysql database</h2>
   <!--TMPL_IF Name="updatereport"-->
@@ -186,9 +198,9 @@ Alternatively, if you are upgrading from a previous version of Koha, you can <a 
     <!--TMPL_VAR Name="updatereport"-->
     </p>
   <!--TMPL_ELSE-->
-    <p>Everything went OK.</p>
+    <p>Everything went OK, update done.</p>
   <!--/TMPL_IF-->
-<a href="install.pl?step=3&amp;op=selectframeworks" class="button">Continue to Framework Selection</a>
+<a href="install.pl?step=3&amp;op=finished" class="button">Continue to login to Koha</a>
   </div>
 <!--/TMPL_IF-->
 

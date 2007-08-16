@@ -412,19 +412,6 @@ CREATE TABLE `biblioitems` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `virtualshelves`
---
-
-DROP TABLE IF EXISTS `virtualshelves`;
-CREATE TABLE `virtualshelves` (
-  `shelfnumber` int(11) NOT NULL auto_increment,
-  `shelfname` char(255) default NULL,
-  `owner` char(80) default NULL,
-  `category` char(1) default NULL,
-  PRIMARY KEY  (`shelfnumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `borrowers`
 --
 
@@ -1209,22 +1196,6 @@ CREATE TABLE sessions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `virtualshelfcontents`
---
-
-DROP TABLE IF EXISTS `virtualshelfcontents`;
-CREATE TABLE `virtualshelfcontents` (
-  `shelfnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
-  `flags` int(11) default NULL,
-  `dateadded` timestamp NULL default NULL,
-  KEY `shelfnumber` (`shelfnumber`),
-  KEY `biblionumber` (`biblionumber`),
-  CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `special_holidays`
 --
 
@@ -1430,6 +1401,35 @@ CREATE TABLE `userflags` (
   `flagdesc` char(255) default NULL,
   `defaulton` int(11) default NULL,
   PRIMARY KEY  (`bit`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `virtualshelves`
+--
+
+DROP TABLE IF EXISTS `virtualshelves`;
+CREATE TABLE `virtualshelves` (
+  `shelfnumber` int(11) NOT NULL auto_increment,
+  `shelfname` char(255) default NULL,
+  `owner` char(80) default NULL,
+  `category` char(1) default NULL,
+  PRIMARY KEY  (`shelfnumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `virtualshelfcontents`
+--
+
+DROP TABLE IF EXISTS `virtualshelfcontents`;
+CREATE TABLE `virtualshelfcontents` (
+  `shelfnumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default '0',
+  `flags` int(11) default NULL,
+  `dateadded` timestamp NULL default NULL,
+  KEY `shelfnumber` (`shelfnumber`),
+  KEY `biblionumber` (`biblionumber`),
+  CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

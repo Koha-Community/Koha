@@ -37,7 +37,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $kohaVersion   = C4::Context->config("kohaversion");
+my $kohaVersion   = C4::Context::KOHAVERSION;
 my $osVersion     = `uname -a`;
 my $perlVersion   = $];
 my $mysqlVersion  = `mysql -V`;
