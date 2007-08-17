@@ -2,7 +2,7 @@
 --  KOHA 3.0 MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK   
 --                   POST-INSTALLATION SCRIPT                   
 --                                                              
---                     PRETEST VERSION 0.0.3                    
+--                     PRETEST VERSION 0.0.4                    
 --                          2007-08-17                          
 --                                                              
 --                            edited                            
@@ -13,8 +13,8 @@
 --     KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK    
 --                    POST-INSTALLATION SCRIPT                  
 --                                                              
---                     PRETEST VERSION 0.2.2                    
---                          2007-08-10                          
+--                     PRETEST VERSION 0.2.3                    
+--                          2007-08-17                          
 --                                                              
 --     original default requiring greater user customisation    
 --                  created by a few Koha Hands                 
@@ -714,6 +714,7 @@ INSERT INTO `marc_tag_structure` VALUES ('u75', 'ITEM DETAILS (RLIN)', 'ITEM DET
 INSERT INTO `marc_tag_structure` VALUES ('u7f', 'PRICE INFORMATION (RLIN)', 'PRICE INFORMATION (RLIN)', 1, 0, '', '');
 INSERT INTO `marc_tag_structure` VALUES ('u90', 'TAPE OUTPUT, TAPE (RLIN)', 'TAPE OUTPUT, TAPE (RLIN)', 0, 0, '', '');
 INSERT INTO `marc_tag_structure` VALUES ('ufi', 'FISCAL INFORMATION, FI (RLIN)', 'FISCAL INFORMATION, FI (RLIN)', 1, 0, '', '');
+
 
 
 INSERT INTO `marc_subfield_structure` VALUES ('000', '@', 'fixed length control field', 'fixed length control field', 0, 1, '', 0, '', '', 'marc21_leader.pl', 0, 0, '', '', '', NULL);
@@ -2050,7 +2051,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('651', 'v', 'Form subdivision', 'F
 INSERT INTO `marc_subfield_structure` VALUES ('651', 'x', 'General subdivision', 'General subdivision', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('651', 'y', 'Chronological subdivision', 'Chronological subdivision', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('651', 'z', 'Geographic subdivision', 'Geographic subdivision', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
-INSERT INTO `marc_subfield_structure` VALUES ('652', 'a', 'Geographic name of place element', 'Geographic name of place element', 0, 0, '', 6, '', 'GEOGR_NAME', '', NULL, -6, '', '', '', NULL);
+INSERT INTO `marc_subfield_structure` VALUES ('652', 'a', 'Geographic name of place element', 'Geographic name of place element', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('652', 'x', 'General subdivision', 'General subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('652', 'y', 'Chronological subdivision', 'Chronological subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('652', 'z', 'Geographic subdivision', 'Geographic subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
@@ -2086,7 +2087,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('656', '2', 'Source of term', 'Sou
 INSERT INTO `marc_subfield_structure` VALUES ('656', '3', 'Materials specified', 'Materials specified', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('656', '6', 'Linkage', 'Linkage', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('656', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
-INSERT INTO `marc_subfield_structure` VALUES ('656', 'a', 'Occupation', 'Occupation', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
+INSERT INTO `marc_subfield_structure` VALUES ('656', 'a', 'Occupation', 'Occupation', 0, 0, '', 6, '', 'TOPIC_TERM', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('656', 'k', 'Form', 'Form', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('656', 'v', 'Form subdivision', 'Form subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('656', 'x', 'General subdivision', 'General subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
@@ -2096,7 +2097,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('657', '2', 'Source of term', 'Sou
 INSERT INTO `marc_subfield_structure` VALUES ('657', '3', 'Materials specified', 'Materials specified', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('657', '6', 'Linkage', 'Linkage', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('657', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
-INSERT INTO `marc_subfield_structure` VALUES ('657', 'a', 'Function', 'Function', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
+INSERT INTO `marc_subfield_structure` VALUES ('657', 'a', 'Function', 'Function', 0, 0, '', 6, '', 'TOPIC_TERM', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('657', 'v', 'Form subdivision', 'Form subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('657', 'x', 'General subdivision', 'General subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('657', 'y', 'Chronological subdivision', 'Chronological subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
@@ -2113,7 +2114,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('662', '3', 'Materials specified',
 INSERT INTO `marc_subfield_structure` VALUES ('662', '4', 'Relator code', 'Relator code', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('662', '6', 'Linkage', 'Linkage', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('662', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
-INSERT INTO `marc_subfield_structure` VALUES ('662', 'a', 'Country or larger entity', 'Country or larger entity', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
+INSERT INTO `marc_subfield_structure` VALUES ('662', 'a', 'Country or larger entity', 'Country or larger entity', 1, 0, '', 6, '', 'GEOGR_NAME', '', NULL, 0, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('662', 'b', 'First-order political jurisdiction', 'First-order political jurisdiction', 0, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('662', 'c', 'Intermediate political jurisdiction', 'Intermediate political jurisdiction', 1, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('662', 'd', 'City', 'City', 0, 0, '', 6, '', '', '', NULL, 0, '', '', '', NULL);
@@ -2142,7 +2143,7 @@ INSERT INTO `marc_subfield_structure` VALUES ('691', '3', 'Materials specified',
 INSERT INTO `marc_subfield_structure` VALUES ('691', '6', 'Linkage', 'Linkage', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('691', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('691', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 6, '', '', '', 0, -5, '', '', '', NULL);
-INSERT INTO `marc_subfield_structure` VALUES ('691', 'a', 'Geographic name', 'Geographic name', 0, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
+INSERT INTO `marc_subfield_structure` VALUES ('691', 'a', 'Geographic name', 'Geographic name', 0, 0, '', 6, '', 'GEOGR_NAME', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('691', 'b', 'Geographic name following place entry element [OBSOLETE]', 'Geographic name following place entry element [OBSOLETE]', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('691', 'v', 'Form subdivision', 'Form subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('691', 'x', 'General subdivision', 'General subdivision', 1, 0, '', 6, '', '', '', NULL, -6, '', '', '', NULL);
@@ -4367,5 +4368,4 @@ INSERT INTO `marc_subfield_structure` VALUES ('ufi', 'f', 'FI', 'FI', 0, 0, '', 
 INSERT INTO `marc_subfield_structure` VALUES ('ufi', 'g', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('ufi', 'h', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL);
 INSERT INTO `marc_subfield_structure` VALUES ('ufi', 'n', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL);
-
 
