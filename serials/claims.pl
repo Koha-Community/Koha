@@ -20,7 +20,7 @@ my $order = $input->param('order');
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 
-foreach my $supplierid (keys %supplierlist){
+foreach my $supplierid (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
         my ($count, @dummy) = GetLateOrMissingIssues($supplierid,"",$order);
         my $counting = $count;
         $supplierlist{$supplierid} = $supplierlist{$supplierid}." ($counting)";
@@ -77,19 +77,19 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
-    order =>$order,
-	CGIsupplier => $CGIsupplier,
-    phone => $supplierinfo[0]->{phone},
-    booksellerfax => $supplierinfo[0]->{booksellerfax},
-    bookselleremail => $supplierinfo[0]->{bookselleremail},
+        order =>$order,
+        CGIsupplier => $CGIsupplier,
+        phone => $supplierinfo[0]->{phone},
+        booksellerfax => $supplierinfo[0]->{booksellerfax},
+        bookselleremail => $supplierinfo[0]->{bookselleremail},
         preview => $preview,
         missingissues => \@missingissues,
         supplierid => $supplierid,
         claimletter => $claimletter,
         singlesupplier => $singlesupplier,
         supplierloop => \@supplierinfo,
-	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-	);
+        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+        IntranetNav => C4::Context->preference("IntranetNav"),
+        );
 output_html_with_http_headers $input, $cookie, $template->output;

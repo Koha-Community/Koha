@@ -103,6 +103,7 @@ sub GetSuppliersWithLateIssues {
         LEFT JOIN       aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
         WHERE           subscription.subscriptionid = serial.subscriptionid
         AND             (planneddate < now() OR serial.STATUS = 3 OR serial.STATUS = 4)
+        ORDER BY name
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute;
