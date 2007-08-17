@@ -1,177 +1,170 @@
 <!-- TMPL_UNLESS NAME="preview" -->
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Subscription edit</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
-
-<script type="text/javascript">
-function Setorder(myorder){
-    if (document.claims.elements['order'].value == myorder){
-      document.claims.elements['order'].value=myorder+' desc';
-    } else {
-      document.claims.elements['order'].value=myorder;
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Subscription edit</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    
+    <!-- TMPL_INCLUDE NAME="menus.inc" -->
+    <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+    
+    <script type="text/javascript">
+    function Setorder(myorder){
+        if (document.claims.elements['order'].value == myorder){
+        document.claims.elements['order'].value=myorder+' desc';
+        } else {
+        document.claims.elements['order'].value=myorder;
+        }
+        document.claims.elements['op'].value="";
+        document.claims.submit();
     }
-    document.claims.elements['op'].value="";
-    document.claims.submit();
-}
-</script>
-<div id="mainbloc">
+    </script>
+    <div id="mainbloc">
 <!-- TMPL_ELSE -->
-<!-- TMPL_INCLUDE NAME="popup-top.inc" -->
-<div class="popup-block">
+    <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
+    <div class="popup-block">
 <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_UNLESS NAME="preview" -->
-	<h1>Claims</h1>
-
-	<p>
-	<form name="claims" action="claims.pl" method="post">
-    <!-- TMPL_VAR name="CGIsupplier" -->
-    <input type="submit" value="OK" />
-			<!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
-
-	</p>
-	<p>
-    <!--TMPL_IF Name="letter"-->
-    Select Letter :
-    <select name="letter_code">
-	<!-- TMPL_LOOP name="letters" -->
-      <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
-    <!--/TMPL_LOOP-->
-    </select>
-    <!--TMPL_ELSE-->
-    No Letter defined. Please Define One. The list of expected issues is displayed.
-    <!--/TMPL_IF-->
-	</p> 
-
-
-<input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
-<input type="hidden" name="op" value="" />
-
-		<!-- TMPL_IF NAME="missingissues" -->
-		<h3>Missing Issues</h3>
-		<table>
-			<tr>
-                <!--TMPL_IF Name=letter-->
-                <th class="cell-header">&nbsp;</th>
-                <!--/TMPL_IF-->
-				<th class="cell-header">Supplier</th>
-				<th class="cell-header">Title</th>
-				<th class="cell-header">Issue number</th>
-				<th class="cell-header">Status <a href="javascript:Setorder('status');">sort</a></th>
-				<th class="cell-header">Since <a href="javascript:Setorder('planneddate');">sort</a></th>
-				<th class="cell-header">Began Claim</th>
-			</tr>
-			<!-- TMPL_LOOP name="missingissues" -->
-				<tr>
-					<!--TMPL_IF Name=letter-->
-					<td class="cell">
-                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';" />
-					</td>
+    <h1>Claims</h1>
+    <p>
+    <form name="claims" action="claims.pl" method="post">
+        <!-- TMPL_VAR name="CGIsupplier" -->
+        <input type="submit" value="OK" />
+        <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
+    </p>
+    <p>
+        <!-- TMPL_IF NAME="letter" -->
+            Select Letter :
+            <select name="letter_code">
+                <!-- TMPL_LOOP name="letters" -->
+                    <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
+                <!--/TMPL_LOOP-->
+            </select>
+        <!--TMPL_ELSE-->
+            No Letter defined. Please Define One. The list of expected issues is displayed.
+        <!--/TMPL_IF-->
+    </p> 
+        <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
+        <input type="hidden" name="op" value="" />
+        <!-- TMPL_IF NAME="missingissues" -->
+            <h3>Missing Issues</h3>
+            <table>
+                <tr>
+                    <!--TMPL_IF NAME="letter"-->
+                    <th class="cell-header">Claim</th>
                     <!--/TMPL_IF-->
-					<td class="cell">
-					<!-- TMPL_VAR name="name" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="title" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="serialseq" -->
-					</td>
-					<td class="cell">
-                    <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
-                    <!-- TMPL_IF Name="status2" -->Arrived<!-- /TMPL_IF -->
-                    <!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
-                    <!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->
-                    <!-- TMPL_IF Name="status7" -->Claimed<!-- /TMPL_IF -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="planneddate" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="claimdate" -->
-					</td>
-				</tr>
-			<!-- /TMPL_LOOP -->
-		</table>
-		<!-- TMPL_ELSE -->
-		<p>Select a supplier</p>
-		<!-- /TMPL_IF -->
+                    <th class="cell-header">Supplier</th>
+                    <th class="cell-header">Title</th>
+                    <th class="cell-header">Issue number</th>
+                    <th class="cell-header">Status <a href="javascript:Setorder('status');">sort</a></th>
+                    <th class="cell-header">Since <a href="javascript:Setorder('planneddate');">sort</a></th>
+                <th class="cell-header">Began Claim</th>
+                </tr>
+                <!-- TMPL_LOOP name="missingissues" -->
+                    <tr>
+                        <!--TMPL_IF NAME="letter" -->
+                            <td class="cell">
+                                <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="javascript:document.claims.op.value='send_alert';" />
+                            </td>
+                        <!--/TMPL_IF-->
+                        <td class="cell">
+                        <!-- TMPL_VAR name="name" -->
+                        </td>
+                        <td class="cell">
+                        <!-- TMPL_VAR name="title" -->
+                        </td>
+                        <td class="cell">
+                        <!-- TMPL_VAR name="serialseq" -->
+                        </td>
+                        <td class="cell">
+                            <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
+                            <!-- TMPL_IF Name="status2" -->Arrived<!-- /TMPL_IF -->
+                            <!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
+                            <!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->
+                            <!-- TMPL_IF Name="status7" -->Claimed<!-- /TMPL_IF -->
+                        </td>
+                        <td class="cell">
+                        <!-- TMPL_VAR name="planneddate" -->
+                        </td>
+                        <td class="cell">
+                        <!-- TMPL_VAR name="claimdate" -->
+                        </td>
+                    </tr>
+                <!-- /TMPL_LOOP -->
+            </table>
+        <!-- TMPL_ELSE -->
+            <p>Select a supplier</p>
+        <!-- /TMPL_IF -->
 
-	<!-- TMPL_IF Name="singlesupplier"-->
-<input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
-
-		<!--
-		<a href="claims.pl?supplierid=<!-- TMPL_VAR
+        <!-- TMPL_IF Name="singlesupplier"-->
+            <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
+            <!--
+                <a href="claims.pl?supplierid=<!-- TMPL_VAR
 name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR
 name="supplierid" -->,''); return false" class="button">Supplier Group Claim Letter</a></p> -->
-	<!-- /TMPL_IF -->
-<p><br/>
-<!--TMPL_IF Name=letter-->
-  <input type="submit" name="submit" class="button" value="Send letter" />
-<!--/TMPL_IF-->
-
-</form>
+        <!-- /TMPL_IF -->
+        <p><br/>
+            <!--TMPL_IF Name=letter-->
+                <input type="submit" name="submit" class="button" value="Send letter" />
+            <!--/TMPL_IF-->
+        </form>
 <!-- TMPL_ELSE -->
-	<!-- TMPL_IF Name="supplierloop"-->
-		<!-- TMPL_LOOP Name="supplierloop"-->
-		<!-- TMPL_IF NAME="name" -->
-		<p><b><!-- TMPL_VAR NAME="name" --></b><br />
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="postal" -->
-		<!-- TMPL_VAR NAME="postal" --><br />
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="contphone" -->
-		Ph: <!-- TMPL_VAR NAME="contphone" --><br />
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="contfax" -->
-		Fax: <!-- TMPL_VAR NAME="contfax" --><br />
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="contemail" -->
-		Email: <!-- TMPL_VAR NAME="contemail" --><br />
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="accountnumber" -->
-		A/C: <!-- TMPL_VAR NAME="accountnumber" --></p>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="contact" -->
-		<p>Dear <!-- TMPL_VAR NAME="contact" --></p>
-		<!-- TMPL_ELSE -->
-		<p>To whom it may concern</p>
-		<!-- /TMPL_IF -->
-		<p>The following items have not been received from you and are now considered missing:</p>
-		<!-- /TMPL_LOOP -->
-	<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="missingissues" -->
-		<h3>Missing Issues</h3>
-		<table>
-			<tr>
-				<td class="cell"><b>Supplier<b></td>
-				<td class="cell"><b>Title</b></td>
-				<td class="cell"><b>Issue number</b></td>
-				<td class="cell"><b>Missing since</b></td>
-			</tr>
-			<!-- TMPL_LOOP name="missingissues" -->
-				<tr>
-					<td class="cell">
-					<!-- TMPL_VAR name="name" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="Title" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="serialseq" -->
-					</td>
-					<td class="cell">
-					<!-- TMPL_VAR name="planneddate" -->
-					</td>
-				</tr>
-			<!-- /TMPL_LOOP -->
-		</table>
-		<!-- /TMPL_IF -->
+<!-- TMPL_IF Name="supplierloop"-->
+        <!-- TMPL_LOOP Name="supplierloop"-->
+        <!-- TMPL_IF NAME="name" -->
+        <p><b><!-- TMPL_VAR NAME="name" --></b><br />
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="postal" -->
+        <!-- TMPL_VAR NAME="postal" --><br />
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="contphone" -->
+        Ph: <!-- TMPL_VAR NAME="contphone" --><br />
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="contfax" -->
+        Fax: <!-- TMPL_VAR NAME="contfax" --><br />
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="contemail" -->
+        Email: <!-- TMPL_VAR NAME="contemail" --><br />
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="accountnumber" -->
+        A/C: <!-- TMPL_VAR NAME="accountnumber" --></p>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="contact" -->
+        <p>Dear <!-- TMPL_VAR NAME="contact" --></p>
+        <!-- TMPL_ELSE -->
+        <p>To whom it may concern</p>
+        <!-- /TMPL_IF -->
+        <p>The following items have not been received from you and are now considered missing:</p>
+        <!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="missingissues" -->
+        <h3>Missing Issues</h3>
+        <table>
+            <tr>
+                <td class="cell"><b>Supplier<b></td>
+                <td class="cell"><b>Title</b></td>
+                <td class="cell"><b>Issue number</b></td>
+                <td class="cell"><b>Missing since</b></td>
+            </tr>
+            <!-- TMPL_LOOP name="missingissues" -->
+                <tr>
+                    <td class="cell">
+                    <!-- TMPL_VAR name="name" -->
+                    </td>
+                    <td class="cell">
+                    <!-- TMPL_VAR name="Title" -->
+                    </td>
+                    <td class="cell">
+                    <!-- TMPL_VAR name="serialseq" -->
+                    </td>
+                    <td class="cell">
+                    <!-- TMPL_VAR name="planneddate" -->
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        <!-- /TMPL_IF -->
 <br />
 <p class="noprint"><a href="javascript:window.print()" class="button">Print</a> &nbsp; <a href="javascript:window.close()" class="button">Close</a></p>
 <!-- /TMPL_UNLESS -->

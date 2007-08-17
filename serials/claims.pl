@@ -20,6 +20,16 @@ my $order = $input->param('order');
 my %supplierlist = GetSuppliersWithLateIssues;
 my @select_supplier;
 
+# open template first (security & userenv set here)
+my ($template, $loggedinuser, $cookie)
+= get_template_and_user({template_name => "serials/claims.tmpl",
+            query => $input,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => {serials => 1},
+            debug => 1,
+            });
+
 foreach my $supplierid (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
         my ($count, @dummy) = GetLateOrMissingIssues($supplierid,"",$order);
         my $counting = $count;
@@ -33,7 +43,7 @@ foreach (keys %$letters){
     push @letters ,{code=>$_,name=> $letters->{$_}};
 }
 
-my $letter=((scalar(@letters)>1)||($letters[0]->{name}||$letters[0]->{code}));
+my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
 my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order) if $supplierid;
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
@@ -53,7 +63,6 @@ if($supplierid){
    }
 }
 
-
 my $preview=0;
 if($op eq 'preview'){
     $preview = 1;
@@ -65,15 +74,6 @@ if ($op eq "send_alert"){
   my $cntupdate=UpdateClaimdateIssues(\@serialnums);
   ### $cntupdate SHOULD be equal to scalar(@$serialnums)
 }
-
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/claims.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {serials => 1},
-				debug => 1,
-				});
 
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(

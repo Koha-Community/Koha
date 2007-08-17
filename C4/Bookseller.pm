@@ -84,7 +84,6 @@ sub GetBookSeller {
     while ( my $data = $sth->fetchrow_hashref ) {
         $sth2->execute($data->{id});
         ($data->{basketcount}) = $sth2->fetchrow();
-        warn "COUNT : ".$data->{basketcount};
         push( @results, $data );
     }
     $sth->finish;
