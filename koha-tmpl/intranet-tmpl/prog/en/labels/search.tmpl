@@ -1,0 +1,128 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo;  Labels</title>
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<div id="main-compact">
+
+<h1>Catalog item search
+
+<!-- TMPL_IF name="batch_id" -->
+ for batch <!-- TMPL_VAR NAME="batch_id" -->
+<!-- /TMPL_IF  -->
+</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
+<div>
+  <select name="idx">
+    <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
+    <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
+    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
+    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
+    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISBN</option>
+    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISSN</option>
+    <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Call Number</option>
+    <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
+   <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
+    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title Phrase</option>
+    <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
+    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
+    <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
+</select>
+   <input type="text" size="30" name="marclist" title="Enter search terms" value=""/>  
+</div><div>
+<select name="idx">
+    <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
+    <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
+    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
+    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
+    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISBN</option>
+    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISSN</option>
+    <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Call Number</option>
+    <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
+   <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
+    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title Phrase</option>
+    <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
+    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
+    <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
+</select>
+   <input type="text" size="30" name="q" title="Enter search terms" value=""/>  
+</div>
+
+<!-- TMPL_IF NAME="sort_by_loop" -->
+<fieldset><legend>Sort by: </legend>
+    <p><select id="sort_by" name="sort_by">
+        <option value="">Field-weighted, Relevance Ranked</option>
+        <!-- TMPL_LOOP NAME="sort_by_loop" -->
+        <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
+        <!-- /TMPL_LOOP -->
+    </select>
+        </p>
+</fieldset>
+<!-- /TMPL_IF -->
+
+	<table>
+<!--
+	<tr><th scope="row">
+		<label for="datefrom">Added on or after date</label>
+	    </th>
+	    <td>
+		<input type="hidden" name="marclist" value="items.dateaccessioned" />
+		<input type="hidden" name="and_or" value="and" />
+		<input type="hidden" name="excluding" value="" />
+		<input type="hidden" name="operator" value=">=" />
+  <input type="text" size="10" id="datefrom" name="value" value="" />                                                      
+  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" valign="top" />
+
+<script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "datefrom",
+      ifFormat : "%Y-%m-%d",
+        button         :    "openCalendarFrom",
+        align          :    "Tl",
+        singleClick    :    false
+    });
+</script>
+
+
+</td>
+    </tr>
+	<tr><th scope="row">
+		<label for="dateto">Added on or before date</label>
+	    </th>
+	    <td>
+		<input type="hidden" name="marclist" value="items.dateaccessioned" />
+		<input type="hidden" name="and_or" value="and" />
+		<input type="hidden" name="excluding" value="" />
+		<input type="hidden" name="operator" value="<=" />
+  <input type="text" size="10" id="dateto" name="value" value="" />                                                      
+  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" valign="top" />
+
+<script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "dateto",
+      ifFormat : "%Y-%m-%d",
+        button         :    "openCalendarTo",
+        align          :    "Tl",
+    });
+</script>
+-->
+    <tr><th scope="row">Document Type</th>
+                <td colspan="2">
+                    <select name="Filter">
+                        <option value="">All Item Types</option>
+                        <!-- TMPL_LOOP name="itemtypeloop" -->
+                            <option value="<!-- TMPL_VAR name="value" -->" 
+                    <!-- TMPL_IF name="selected" --> selected="selected"
+                    <!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                </td>
+            </tr>
+
+	</table>
+<p>		<input type="submit" value="Start search" class="submit" /></p>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

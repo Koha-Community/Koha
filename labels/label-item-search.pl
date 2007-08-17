@@ -23,22 +23,32 @@ require Exporter;
 use CGI;
 use C4::Koha;
 use C4::Auth;
-
+use HTML::Template;
 use C4::Context;
+use C4::Search;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Acquisition;
+use C4::Search;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
+
+#use Smart::Comments;
+#use Data::Dumper;
 
 # Creates a scrolling list with the associated default value.
 # Using more than one scrolling list in a CGI assigns the same default value to all the
 # scrolling lists on the page !?!? That's why this function was written.
 
-my $query = new CGI;
-my $type  = $query->param('type');
-my $op    = $query->param('op');
-my $dbh   = C4::Context->dbh;
+my $query           = new CGI;
+my $type            = $query->param('type');
+my $op              = $query->param('op');
+my $batch_id        = $query->param('batch_id');
+my $dateaccessioned = $query->param('dateaccessioned');
+
+### $query;
+
+my $dbh = C4::Context->dbh;
 
 my $startfrom = $query->param('startfrom');
 $startfrom = 0 if ( !defined $startfrom );
@@ -59,33 +69,60 @@ if ( $op eq "do_search" ) {
     # builds tag and subfield arrays
     my @tags;
 
-    foreach my $marc (@marclist) {
-        if ($marc) {
-            my ( $tag, $subfield ) =
-              GetMarcFromKohaField( $marc );
-            if ($tag) {
-                push @tags, $dbh->quote("$tag$subfield");
-            }
-            else {
-                push @tags, $dbh->quote( substr( $marc, 0, 4 ) );
-            }
-        }
-        else {
-            push @tags, "";
-        }
-    }
-    my ( $results, $total ) =
-      catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
-        $startfrom * $resultsperpage,
-        $resultsperpage, $orderby );
+    my ( $results, $total ) ;
+      #catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
+      #  $startfrom * $resultsperpage,
+      #  $resultsperpage, $orderby );
 
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+use Data::Dumper;
+my $searchquery=$marclist[0];
+my ($error, $marcresults) = SimpleSearch($searchquery);
+
+my $hits = scalar @$marcresults;
+my @results;
+my $results;
+
+
+for(my $i=0;$i<$hits;$i++) {
+    my %resultsloop;
+    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
+    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
+    #build the hash for the template.
+    %resultsloop=%$biblio;
+    $resultsloop{highlight}       = ($i % 2)?(1):(0);
+#warn $resultsloop{biblionumber};
+
+    push @results, \%resultsloop;
+}
+    my @results2;
+    my $i;
+    for ( $i = 0 ; $i <= ( $hits - 1 ) ; $i++ ) {
+
+        my $itemnums = get_itemnumbers_of($results[$i]->{'biblionumber'});
+
+        my $iii = $itemnums->{$results[$i]->{'biblionumber'} } ;
+        my $item_results;
+		if ($iii ) {
+			$item_results =  &GetItemInfosOf( @$iii );
+        }
+        foreach my $item (keys %$item_results) {
+			for my $bibdata (keys %{$results[$i]}) {
+#warn Dumper($bibdata);        
+#warn Dumper($results[$i]->{$bibdata});
+				$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
+			}
+            push @results2, $item_results->{$item};
+        }
+
+    }
+   ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "barcodes/result.tmpl",
+            template_name   => "labels/result.tmpl",
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { tools => 1 },
+            flagsrequired   => { borrowers => 1 },
+            flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }
     );
@@ -140,15 +177,15 @@ if ( $op eq "do_search" ) {
     # then pushes the items onto a new array, as we really want the
     # items attached to the bibs not thew bibs themselves
 
-    my @results2;
+   # my @results2;
     my $i;
     for ( $i = 0 ; $i <= ( $total - 1 ) ; $i++ )
     {    #total-1 coz the array starts at 0
             #warn $i;
-
-        my $type         = 'intra';
+            #warn Dumper $results->[$i]{'bibid'};
+        my $type = 'intra';
         my @item_results =
-          &GetItemsInfo( $results->[$i]{'biblionumber'}, $type );
+          &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
 
         foreach my $item (@item_results) {
 
@@ -171,51 +208,55 @@ if ( $op eq "do_search" ) {
         from           => $from,
         to             => $to,
         numbers        => \@numbers,
+        batch_id       => $batch_id,
     );
 }
+
+#
+#
+#   search section
+#
+#
+
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
-            template_name   => "barcodes/search.tmpl",
+            template_name   => "labels/search.tmpl",
             query           => $query,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { tools => 1 },
+            flagsrequired   => { catalogue => 1 },
             debug           => 1,
         }
     );
-    my $sth =
-      $dbh->prepare(
-        "Select itemtype,description from itemtypes order by description");
-    $sth->execute;
-    my @itemtype;
-    my %itemtypes;
-    push @itemtype, "";
-    $itemtypes{''} = "";
-    while ( my ( $value, $lib ) = $sth->fetchrow_array ) {
-        push @itemtype, $value;
-        $itemtypes{$value} = $lib;
-    }
 
-    my $CGIitemtype = CGI::scrolling_list(
-        -name     => 'value',
-        -values   => \@itemtype,
-        -labels   => \%itemtypes,
-        -size     => 1,
-        -multiple => 0
+
+   #using old rel2.2 getitemtypes for testing!!!!, not devweek's GetItemTypes()
+
+    my $itemtypes = GetItemTypes;
+    my @itemtypeloop;
+    my ($thisitemtype );
+    foreach my $thisitemtype (keys %$itemtypes) {
+            my %row =(value => $thisitemtype,
+                           description => $itemtypes->{$thisitemtype}->{'description'},
+                            );  
+            push @itemtypeloop, \%row;
+    }  
+
+
+    $template->param(
+    itemtypeloop =>\@itemtypeloop,
+        batch_id     => $batch_id,
     );
-    $sth->finish;
 
-    $template->param( CGIitemtype => $CGIitemtype, );
+    # Print the page
+    $template->param(
+        intranetcolorstylesheet =>
+          C4::Context->preference("intranetcolorstylesheet"),
+        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+        IntranetNav        => C4::Context->preference("IntranetNav"),
+    );
 }
-
-# Print the page
-$template->param(
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
-);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:
