@@ -7,7 +7,9 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40101 SET NAMES utf8 */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
@@ -19,8 +21,8 @@
 
 DROP TABLE IF EXISTS `accountlines`;
 CREATE TABLE `accountlines` (
-  `borrowernumber` int(11) NOT NULL default '0',
-  `accountno` smallint(6) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
+  `accountno` smallint(6) NOT NULL default 0,
   `itemnumber` int(11) default NULL,
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
@@ -29,8 +31,8 @@ CREATE TABLE `accountlines` (
   `accounttype` varchar(5) default NULL,
   `amountoutstanding` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `notify_id` int(11) NOT NULL default '0',
-  `notify_level` int(2) NOT NULL default '0',
+  `notify_id` int(11) NOT NULL default 0,
+  `notify_level` int(2) NOT NULL default 0,
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
@@ -44,9 +46,9 @@ CREATE TABLE `accountlines` (
 
 DROP TABLE IF EXISTS `accountoffsets`;
 CREATE TABLE `accountoffsets` (
-  `borrowernumber` int(11) NOT NULL default '0',
-  `accountno` smallint(6) NOT NULL default '0',
-  `offsetaccount` smallint(6) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
+  `accountno` smallint(6) NOT NULL default 0,
+  `offsetaccount` smallint(6) NOT NULL default 0,
   `offsetamount` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -58,7 +60,7 @@ CREATE TABLE `accountoffsets` (
 DROP TABLE IF EXISTS `action_logs`;
 CREATE TABLE `action_logs` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `user` int(11) NOT NULL default '0',
+  `user` int(11) NOT NULL default 0,
   `module` text,
   `action` text,
   `object` int(11) default NULL,
@@ -73,7 +75,7 @@ CREATE TABLE `action_logs` (
 DROP TABLE IF EXISTS `alert`;
 CREATE TABLE `alert` (
   `alertid` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
   `type` varchar(10) NOT NULL default '',
   `externalid` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`alertid`),
@@ -104,7 +106,7 @@ CREATE TABLE `aqbasket` (
 
 DROP TABLE IF EXISTS `aqbookfund`;
 CREATE TABLE `aqbookfund` (
-  `bookfundid` varchar(5) NOT NULL default '''''',
+  `bookfundid` varchar(5) NOT NULL default '',
   `bookfundname` mediumtext,
   `bookfundgroup` varchar(5) default NULL,
   `branchcode` varchar(4) NOT NULL default '',
@@ -168,7 +170,7 @@ CREATE TABLE `aqbooksellers` (
 DROP TABLE IF EXISTS `aqbudget`;
 CREATE TABLE `aqbudget` (
   `bookfundid` varchar(5) NOT NULL default '',
-  `startdate` date NOT NULL default '0000-00-00',
+  `startdate` date NOT NULL default 0,
   `enddate` date default NULL,
   `budgetamount` decimal(13,2) default NULL,
   `aqbudgetid` tinyint(4) NOT NULL auto_increment,
@@ -183,7 +185,10 @@ CREATE TABLE `aqbudget` (
 DROP TABLE IF EXISTS `aqorderbreakdown`;
 CREATE TABLE `aqorderbreakdown` (
   `ordernumber` int(11) default NULL,
+  `linenumber` int(11) default NULL,
+  `branchcode` char(4) default NULL,
   `bookfundid` char(5) NOT NULL default '',
+  `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
   KEY `bookfundid` (`bookfundid`),
   CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -196,8 +201,8 @@ CREATE TABLE `aqorderbreakdown` (
 
 DROP TABLE IF EXISTS `aqorderdelivery`;
 CREATE TABLE `aqorderdelivery` (
-  `ordernumber` date NOT NULL default '0000-00-00',
-  `deliverynumber` smallint(6) NOT NULL default '0',
+  `ordernumber` date default NULL,
+  `deliverynumber` smallint(6) NOT NULL default 0,
   `deliverydate` varchar(18) default NULL,
   `qtydelivered` smallint(6) default NULL,
   `deliverycomments` mediumtext
@@ -253,7 +258,7 @@ DROP TABLE IF EXISTS `auth_header`;
 CREATE TABLE `auth_header` (
   `authid` bigint(20) unsigned NOT NULL auto_increment,
   `authtypecode` varchar(10) NOT NULL default '',
-  `datecreated` date NOT NULL default '0000-00-00',
+  `datecreated` date default NULL,
   `datemodified` date default NULL,
   `origincode` varchar(20) default NULL,
   `authtrees` mediumtext,
@@ -275,15 +280,15 @@ CREATE TABLE `auth_subfield_structure` (
   `tagsubfield` char(1) NOT NULL default '',
   `liblibrarian` varchar(255) NOT NULL default '',
   `libopac` varchar(255) NOT NULL default '',
-  `repeatable` tinyint(4) NOT NULL default '0',
-  `mandatory` tinyint(4) NOT NULL default '0',
+  `repeatable` tinyint(4) NOT NULL default 0,
+  `mandatory` tinyint(4) NOT NULL default 0,
   `tab` tinyint(1) default NULL,
   `authorised_value` varchar(10) default NULL,
   `value_builder` varchar(80) default NULL,
   `seealso` varchar(255) default NULL,
   `isurl` tinyint(1) default NULL,
-  `hidden` tinyint(3) NOT NULL default '0',
-  `linkid` tinyint(1) NOT NULL default '0',
+  `hidden` tinyint(3) NOT NULL default 0,
+  `linkid` tinyint(1) NOT NULL default 0,
   `kohafield` varchar(45) NOT NULL default '',
   `frameworkcode` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
@@ -300,8 +305,8 @@ CREATE TABLE `auth_tag_structure` (
   `tagfield` char(3) NOT NULL default '',
   `liblibrarian` char(255) NOT NULL default '',
   `libopac` char(255) NOT NULL default '',
-  `repeatable` tinyint(4) NOT NULL default '0',
-  `mandatory` tinyint(4) NOT NULL default '0',
+  `repeatable` tinyint(4) NOT NULL default 0,
+  `mandatory` tinyint(4) NOT NULL default 0,
   `authorised_value` char(10) default NULL,
   PRIMARY KEY  (`authtypecode`,`tagfield`),
   CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -340,7 +345,7 @@ CREATE TABLE `authorised_values` (
 
 DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` (
-  `biblionumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default 0,
   `frameworkcode` varchar(4) NOT NULL default '',
   `author` mediumtext,
   `title` mediumtext,
@@ -372,8 +377,8 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `biblioitemnumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL default 0,
   `volume` mediumtext,
   `number` mediumtext,
   `classification` varchar(25) default NULL,
@@ -528,7 +533,7 @@ CREATE TABLE `branchrelations` (
 
 DROP TABLE IF EXISTS `branchtransfers`;
 CREATE TABLE `branchtransfers` (
-  `itemnumber` int(11) NOT NULL default '0',
+  `itemnumber` int(11) NOT NULL default 0,
   `datesent` datetime default NULL,
   `frombranch` varchar(10) NOT NULL default '',
   `datearrived` datetime default NULL,
@@ -605,7 +610,8 @@ CREATE TABLE `currency` (
 
 DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` (
-  `biblionumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default 0,
+  `frameworkcode` varchar(4) NOT NULL,
   `author` mediumtext,
   `title` mediumtext,
   `unititle` mediumtext,
@@ -626,8 +632,8 @@ CREATE TABLE `deletedbiblio` (
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
 CREATE TABLE `deletedbiblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `biblioitemnumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL default 0,
   `volume` mediumtext,
   `number` mediumtext,
   `classification` varchar(25) default NULL,
@@ -651,6 +657,12 @@ CREATE TABLE `deletedbiblioitems` (
   `place` varchar(255) default NULL,
   `lcsort` varchar(25) default NULL,
   `ccode` varchar(4) default NULL,
+  `marcxml` longtext NOT NULL,
+  `collectiontitle` mediumtext,
+  `collectionissn` mediumtext,
+  `collectionvolume` mediumtext,
+  `editionstatement` text,
+  `editionresponsability` text,
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`)
@@ -662,7 +674,7 @@ CREATE TABLE `deletedbiblioitems` (
 
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` (
-  `borrowernumber` int(11) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
   `cardnumber` varchar(9) NOT NULL default '',
   `surname` mediumtext NOT NULL,
   `firstname` text,
@@ -722,10 +734,10 @@ CREATE TABLE `deletedborrowers` (
 
 DROP TABLE IF EXISTS `deleteditems`;
 CREATE TABLE `deleteditems` (
-  `itemnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `itemnumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL default 0,
   `multivolumepart` varchar(30) default NULL,
-  `biblioitemnumber` int(11) NOT NULL default '0',
+  `biblioitemnumber` int(11) NOT NULL default 0,
   `barcode` varchar(9) NOT NULL default '',
   `dateaccessioned` date default NULL,
   `booksellerid` varchar(10) default NULL,
@@ -754,7 +766,7 @@ CREATE TABLE `deleteditems` (
   `paidfor` mediumtext,
   `location` varchar(80) default NULL,
   `itemcallnumber` varchar(30) default NULL,
-  `onloan` date default '0000-00-00',
+  `onloan` date default NULL,
   `cutterextra` varchar(45) default NULL,
   `issue_date` date default NULL,
   `itype` varchar(10) default NULL,
@@ -792,7 +804,7 @@ CREATE TABLE `issues` (
   `return` varchar(4) default NULL,
   `renewals` tinyint(4) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `issuedate` date NOT NULL default '0000-00-00',
+  `issuedate` date default NULL,
   KEY `issuesborridx` (`borrowernumber`),
   KEY `issuesitemidx` (`itemnumber`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
@@ -832,10 +844,10 @@ CREATE TABLE `issuingrules` (
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
-  `itemnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `itemnumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL default 0,
   `multivolumepart` varchar(30) default NULL,
-  `biblioitemnumber` int(11) NOT NULL default '0',
+  `biblioitemnumber` int(11) NOT NULL default 0,
   `barcode` varchar(20) default NULL,
   `dateaccessioned` date default NULL,
   `booksellerid` varchar(10) default NULL,
@@ -861,7 +873,7 @@ CREATE TABLE `items` (
   `paidfor` mediumtext,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `location` varchar(80) default NULL,
-  `onloan` date default '0000-00-00',
+  `onloan` date default NULL,
   `cutterextra` varchar(45) default NULL,
   `issue_date` date default NULL,
   `itype` varchar(10) default NULL,
@@ -913,13 +925,13 @@ DROP TABLE IF EXISTS `labels_conf`;
 CREATE TABLE `labels_conf` (
   `id` int(4) NOT NULL auto_increment,
   `barcodetype` char(100) default '',
-  `title` tinyint(1) default '0',
-  `isbn` tinyint(1) default '0',
-  `itemtype` tinyint(1) default '0',
-  `barcode` tinyint(1) default '0',
-  `dewey` tinyint(1) default '0',
-  `class` tinyint(1) default '0',
-  `author` tinyint(1) default '0',
+  `title` tinyint(1) default 0,
+  `isbn` tinyint(1) default 0,
+  `itemtype` tinyint(1) default 0,
+  `barcode` tinyint(1) default 0,
+  `dewey` tinyint(1) default 0,
+  `class` tinyint(1) default 0,
+  `author` tinyint(1) default 0,
   `papertype` char(100) default '',
   `startrow` int(2) default NULL,
   PRIMARY KEY  (`id`)
@@ -969,8 +981,8 @@ CREATE TABLE `marc_subfield_structure` (
   `tagsubfield` char(1) NOT NULL default '',
   `liblibrarian` varchar(255) NOT NULL default '',
   `libopac` varchar(255) NOT NULL default '',
-  `repeatable` tinyint(4) NOT NULL default '0',
-  `mandatory` tinyint(4) NOT NULL default '0',
+  `repeatable` tinyint(4) NOT NULL default 0,
+  `mandatory` tinyint(4) NOT NULL default 0,
   `kohafield` varchar(40) default NULL,
   `tab` tinyint(1) default NULL,
   `authorised_value` varchar(10) default NULL,
@@ -997,8 +1009,8 @@ CREATE TABLE `marc_tag_structure` (
   `tagfield` char(3) NOT NULL default '',
   `liblibrarian` char(255) NOT NULL default '',
   `libopac` char(255) NOT NULL default '',
-  `repeatable` tinyint(4) NOT NULL default '0',
-  `mandatory` tinyint(4) NOT NULL default '0',
+  `repeatable` tinyint(4) NOT NULL default 0,
+  `mandatory` tinyint(4) NOT NULL default 0,
   `authorised_value` char(10) default NULL,
   `frameworkcode` char(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
@@ -1022,12 +1034,12 @@ CREATE TABLE `mediatypetable` (
 
 DROP TABLE IF EXISTS `notifys`;
 CREATE TABLE `notifys` (
-  `notify_id` int(11) NOT NULL default '0',
-  `borrowernumber` int(11) NOT NULL default '0',
-  `itemnumber` int(11) NOT NULL default '0',
-  `notify_date` date NOT NULL default '0000-00-00',
+  `notify_id` int(11) NOT NULL default 0,
+  `borrowernumber` int(11) NOT NULL default 0,
+  `itemnumber` int(11) NOT NULL default 0,
+  `notify_date` date default NULL,
   `notify_send_date` date default NULL,
-  `notify_level` int(1) NOT NULL default '0',
+  `notify_level` int(1) NOT NULL default 0,
   `method` varchar(20) NOT NULL default ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1055,15 +1067,15 @@ DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
   `branchcode` varchar(255) NOT NULL default '',
   `categorycode` varchar(2) NOT NULL default '',
-  `delay1` int(4) default '0',
+  `delay1` int(4) default 0,
   `letter1` varchar(20) default NULL,
-  `debarred1` char(1) default '0',
-  `delay2` int(4) default '0',
-  `debarred2` char(1) default '0',
+  `debarred1` char(1) default 0,
+  `delay2` int(4) default 0,
+  `debarred2` char(1) default 0,
   `letter2` varchar(20) default NULL,
-  `delay3` int(4) default '0',
+  `delay3` int(4) default 0,
   `letter3` varchar(20) default NULL,
-  `debarred3` int(1) default '0',
+  `debarred3` int(1) default 0,
   PRIMARY KEY  (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1073,7 +1085,7 @@ CREATE TABLE `overduerules` (
 
 DROP TABLE IF EXISTS `printers`;
 CREATE TABLE `printers` (
-  `printername` char(40) NOT NULL default '''''',
+  `printername` char(40) NOT NULL default '',
   `printqueue` char(20) default NULL,
   `printtype` char(20) default NULL,
   PRIMARY KEY  (`printername`)
@@ -1101,9 +1113,9 @@ CREATE TABLE `repeatable_holidays` (
 
 DROP TABLE IF EXISTS `reserveconstraints`;
 CREATE TABLE `reserveconstraints` (
-  `borrowernumber` int(11) NOT NULL default '0',
-  `reservedate` date NOT NULL default '0000-00-00',
-  `biblionumber` int(11) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
+  `reservedate` date default NULL,
+  `biblionumber` int(11) NOT NULL default 0,
   `biblioitemnumber` int(11) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1114,9 +1126,9 @@ CREATE TABLE `reserveconstraints` (
 
 DROP TABLE IF EXISTS `reserves`;
 CREATE TABLE `reserves` (
-  `borrowernumber` int(11) NOT NULL default '0',
-  `reservedate` date NOT NULL default '0000-00-00',
-  `biblionumber` int(11) NOT NULL default '0',
+  `borrowernumber` int(11) NOT NULL default 0,
+  `reservedate` date default NULL,
+  `biblionumber` int(11) NOT NULL default 0,
   `constrainttype` char(1) default NULL,
   `branchcode` varchar(4) default NULL,
   `notificationdate` date default NULL,
@@ -1174,8 +1186,8 @@ CREATE TABLE `serial` (
   `biblionumber` varchar(100) NOT NULL default '',
   `subscriptionid` varchar(100) NOT NULL default '',
   `serialseq` varchar(100) NOT NULL default '',
-  `status` tinyint(4) NOT NULL default '0',
-  `planneddate` date NOT NULL default '0000-00-00',
+  `status` tinyint(4) NOT NULL default 0,
+  `planneddate` date default NULL,
   `notes` text,
   `publisheddate` date default NULL,
   `itemnumber` text,
@@ -1203,9 +1215,9 @@ DROP TABLE IF EXISTS `special_holidays`;
 CREATE TABLE `special_holidays` (
   `id` int(11) NOT NULL auto_increment,
   `branchcode` varchar(4) NOT NULL default '',
-  `day` smallint(6) NOT NULL default '0',
-  `month` smallint(6) NOT NULL default '0',
-  `year` smallint(6) NOT NULL default '0',
+  `day` smallint(6) NOT NULL default 0,
+  `month` smallint(6) NOT NULL default 0,
+  `year` smallint(6) NOT NULL default 0,
   `isexception` smallint(1) NOT NULL default '1',
   `title` varchar(50) NOT NULL default '',
   `description` text NOT NULL,
@@ -1218,7 +1230,7 @@ CREATE TABLE `special_holidays` (
 
 DROP TABLE IF EXISTS `statistics`;
 CREATE TABLE `statistics` (
-  `datetime` datetime NOT NULL default '0000-00-00 00:00:00',
+  `datetime` datetime default NULL,
   `branch` varchar(4) default NULL,
   `proccode` varchar(4) default NULL,
   `value` double(16,4) default NULL,
@@ -1259,50 +1271,50 @@ CREATE TABLE `subcategorytable` (
 
 DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
-  `biblionumber` int(11) NOT NULL default '0',
+  `biblionumber` int(11) NOT NULL default 0,
   `subscriptionid` int(11) NOT NULL auto_increment,
   `librarian` varchar(100) default '',
-  `startdate` date default '0000-00-00',
-  `aqbooksellerid` int(11) default '0',
-  `cost` int(11) default '0',
-  `aqbudgetid` int(11) default '0',
-  `weeklength` tinyint(4) default '0',
-  `monthlength` tinyint(4) default '0',
-  `numberlength` tinyint(4) default '0',
-  `periodicity` tinyint(4) default '0',
+  `startdate` date default NULL,
+  `aqbooksellerid` int(11) default 0,
+  `cost` int(11) default 0,
+  `aqbudgetid` int(11) default 0,
+  `weeklength` tinyint(4) default 0,
+  `monthlength` tinyint(4) default 0,
+  `numberlength` tinyint(4) default 0,
+  `periodicity` tinyint(4) default 0,
   `dow` varchar(100) default '',
   `numberingmethod` varchar(100) default '',
   `notes` mediumtext,
   `status` varchar(100) NOT NULL default '',
-  `add1` int(11) default '0',
-  `every1` int(11) default '0',
-  `whenmorethan1` int(11) default '0',
+  `add1` int(11) default 0,
+  `every1` int(11) default 0,
+  `whenmorethan1` int(11) default 0,
   `setto1` int(11) default NULL,
   `lastvalue1` int(11) default NULL,
-  `add2` int(11) default '0',
-  `every2` int(11) default '0',
-  `whenmorethan2` int(11) default '0',
+  `add2` int(11) default 0,
+  `every2` int(11) default 0,
+  `whenmorethan2` int(11) default 0,
   `setto2` int(11) default NULL,
   `lastvalue2` int(11) default NULL,
-  `add3` int(11) default '0',
-  `every3` int(11) default '0',
-  `innerloop1` int(11) default '0',
-  `innerloop2` int(11) default '0',
-  `innerloop3` int(11) default '0',
-  `whenmorethan3` int(11) default '0',
+  `add3` int(11) default 0,
+  `every3` int(11) default 0,
+  `innerloop1` int(11) default 0,
+  `innerloop2` int(11) default 0,
+  `innerloop3` int(11) default 0,
+  `whenmorethan3` int(11) default 0,
   `setto3` int(11) default NULL,
   `lastvalue3` int(11) default NULL,
   `issuesatonce` tinyint(3) NOT NULL default '1',
-  `firstacquidate` date NOT NULL default '0000-00-00',
-  `manualhistory` tinyint(1) NOT NULL default '0',
+  `firstacquidate` date default NULL,
+  `manualhistory` tinyint(1) NOT NULL default 0,
   `irregularity` text,
   `letter` varchar(20) default NULL,
-  `numberpattern` tinyint(3) default '0',
+  `numberpattern` tinyint(3) default 0,
   `distributedto` text,
   `internalnotes` longtext,
   `callnumber` text,
   `branchcode` varchar(12) NOT NULL default '',
-  `hemisphere` tinyint(3) default '0',
+  `hemisphere` tinyint(3) default 0,
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1312,10 +1324,10 @@ CREATE TABLE `subscription` (
 
 DROP TABLE IF EXISTS `subscriptionhistory`;
 CREATE TABLE `subscriptionhistory` (
-  `biblionumber` int(11) NOT NULL default '0',
-  `subscriptionid` int(11) NOT NULL default '0',
-  `histstartdate` date NOT NULL default '0000-00-00',
-  `enddate` date default '0000-00-00',
+  `biblionumber` int(11) NOT NULL default 0,
+  `subscriptionid` int(11) NOT NULL default 0,
+  `histstartdate` date default NULL,
+  `enddate` date default NULL,
   `missinglist` longtext NOT NULL,
   `recievedlist` longtext NOT NULL,
   `opacnote` varchar(150) NOT NULL default '',
@@ -1344,7 +1356,7 @@ CREATE TABLE `subscriptionroutinglist` (
 DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` (
   `suggestionid` int(8) NOT NULL auto_increment,
-  `suggestedby` int(11) NOT NULL default '0',
+  `suggestedby` int(11) NOT NULL default 0,
   `managedby` int(11) default NULL,
   `STATUS` varchar(10) NOT NULL default '',
   `note` mediumtext,
@@ -1354,10 +1366,10 @@ CREATE TABLE `suggestions` (
   `publishercode` varchar(255) default NULL,
   `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `volumedesc` varchar(255) default NULL,
-  `publicationyear` smallint(6) default '0',
+  `publicationyear` smallint(6) default 0,
   `place` varchar(255) default NULL,
   `isbn` varchar(10) default NULL,
-  `mailoverseeing` smallint(1) default '0',
+  `mailoverseeing` smallint(1) default 0,
   `biblionumber` int(11) default NULL,
   `reason` text,
   PRIMARY KEY  (`suggestionid`),
@@ -1386,7 +1398,7 @@ CREATE TABLE `systempreferences` (
 DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `entry` varchar(255) NOT NULL default '',
-  `weight` bigint(20) NOT NULL default '0',
+  `weight` bigint(20) NOT NULL default 0,
   PRIMARY KEY  (`entry`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1396,7 +1408,7 @@ CREATE TABLE `tags` (
 
 DROP TABLE IF EXISTS `userflags`;
 CREATE TABLE `userflags` (
-  `bit` int(11) NOT NULL default '0',
+  `bit` int(11) NOT NULL default 0,
   `flag` char(30) default NULL,
   `flagdesc` char(255) default NULL,
   `defaulton` int(11) default NULL,
@@ -1422,8 +1434,8 @@ CREATE TABLE `virtualshelves` (
 
 DROP TABLE IF EXISTS `virtualshelfcontents`;
 CREATE TABLE `virtualshelfcontents` (
-  `shelfnumber` int(11) NOT NULL default '0',
-  `biblionumber` int(11) NOT NULL default '0',
+  `shelfnumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL default 0,
   `flags` int(11) default NULL,
   `dateadded` timestamp NULL default NULL,
   KEY `shelfnumber` (`shelfnumber`),
@@ -1462,12 +1474,13 @@ CREATE TABLE `z3950servers` (
 DROP TABLE IF EXISTS `zebraqueue`;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
-  `biblio_auth_number` int(11) NOT NULL default '0',
+  `biblio_auth_number` int(11) NOT NULL default 0,
   `operation` char(20) NOT NULL default '',
   `server` char(20) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
