@@ -942,6 +942,32 @@ CREATE TABLE `labels_conf` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `labels_templates`
+--
+
+DROP TABLE IF EXISTS `labels_templates`;
+CREATE TABLE `labels_templates` (
+  `tmpl_id` int(4) NOT NULL auto_increment,
+  `tmpl_code` char(100) default '',
+  `tmpl_desc` char(100) default '',
+  `page_width` float default '0',
+  `page_height` float default '0',
+  `label_width` float default '0',
+  `label_height` float default '0',
+  `topmargin` float default '0',
+  `leftmargin` float default '0',
+  `cols` int(2) default '0',
+  `rows` int(2) default '0',
+  `colgap` float default '0',
+  `rowgap` float default '0',
+  `active` int(1) default NULL,
+  `units` char(20) default 'PX',
+  `fontsize` int(4) default NULL,
+  PRIMARY KEY  (`tmpl_id`)
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
 -- Table structure for table `letter`
 --
 
