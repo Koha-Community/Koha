@@ -74,7 +74,7 @@ if ( $op eq "do_search" ) {
       #  $startfrom * $resultsperpage,
       #  $resultsperpage, $orderby );
 
-use Data::Dumper;
+#use Data::Dumper;
 my $searchquery=$marclist[0];
 my ($error, $marcresults) = SimpleSearch($searchquery);
 
