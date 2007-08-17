@@ -934,7 +934,11 @@ CREATE TABLE `labels_conf` (
   `author` tinyint(1) default 0,
   `papertype` char(100) default '',
   `startrow` int(2) default NULL,
-  PRIMARY KEY  (`id`)
+  `subclass` tinyint(1) default '0',
+  `itemcallnumber` tinyint(1) default '0',
+  `printingtype` char(10) default NULL,
+  `guidebox` tinyint(1) default NULL,
+  PRIMARY KEY  (`id`)  
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
