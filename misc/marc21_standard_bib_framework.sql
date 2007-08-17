@@ -2,8 +2,8 @@
 --  KOHA 3.0 MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK   
 --                   POST-INSTALLATION SCRIPT                   
 --                                                              
---                     PRETEST VERSION 0.0.2                    
---                          2007-08-10                          
+--                     PRETEST VERSION 0.0.3                    
+--                          2007-08-17                          
 --                                                              
 --                            edited                            
 --                            by thd                            
@@ -80,6 +80,9 @@
 -- -p YourKohaDatabasename < /path/to/marc21_standard_bib_framework.sql 
 --                                                                      
 -- *********************************************************************
+
+
+SET FOREIGN_KEY_CHECKS = 0;
 
 
 DROP TABLE IF EXISTS `biblio_framework`;
