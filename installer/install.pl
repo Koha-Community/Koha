@@ -390,7 +390,7 @@ elsif ( $step && $step == 3 ) {
 # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
 
 #Framework Selection
-#sql data for import are supposed to be located in misc/sql-datas/<language>/<level>
+#sql data for import are supposed to be located in installer/data/<language>/<level>
 # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
 # Where <level> is a category of requirement : required, recommended optional
 # level should contain :
@@ -401,7 +401,7 @@ elsif ( $step && $step == 3 ) {
 # Framework Selection is achieved through checking boxes.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
-        my $dir = C4::Context->config('intranetdir') . "/misc/sql-datas/";
+        my $dir = C4::Context->config('intranetdir') . "/installer/data/";
         opendir( MYDIR, $dir );
         my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
@@ -419,7 +419,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "languagelist" => \@languages );
         undef $/;
         $dir =
-          C4::Context->config('intranetdir') . "/misc/sql-datas/$langchoice";
+          C4::Context->config('intranetdir') . "/installer/data/$langchoice";
         opendir( MYDIR, $dir ) || warn "no open $dir";
         @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
@@ -438,7 +438,7 @@ elsif ( $step && $step == 3 ) {
         foreach my $requirelevel (@listdir) {
             $dir =
               C4::Context->config('intranetdir')
-              . "/misc/sql-datas/$langchoice/$requirelevel";
+              . "/installer/data/$langchoice/$requirelevel";
             opendir( MYDIR, $dir );
             my @listname =
               grep { !/^\.|CVS/ && -f "$dir/$_" && $_ =~ m/\.sql$/ }

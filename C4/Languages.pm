@@ -69,7 +69,7 @@ sub getFrameworkLanguages {
     my @languages;
     
     # find the available directory names
-    my $dir=C4::Context->config('intranetdir')."/misc/sql-datas/";
+    my $dir=C4::Context->config('intranetdir')."/installer/data/";
     opendir (MYDIR,$dir);
     my @listdir= grep { !/^\.|CVS/ && -d "$dir/$_"} readdir(MYDIR);    
     closedir MYDIR;
