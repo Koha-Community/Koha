@@ -3863,7 +3863,7 @@ sub ModBiblioMarc {
     $sth =
       $dbh->prepare(
         "update biblioitems set marc=?,marcxml=?  where biblionumber=?");
-    $sth->execute( $record->as_usmarc(), $record->as_xml_record(),
+    $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding),
         $biblionumber );
     $sth->finish;
     return $biblionumber;
