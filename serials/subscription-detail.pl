@@ -23,7 +23,8 @@ use C4::Date;
 use C4::Serials;
 use C4::Output;
 use C4::Context;
-use Date::Manip;
+use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
+#use Date::Manip;
 
 my $query = new CGI;
 my $op = $query->param('op');
@@ -48,7 +49,6 @@ if ($op eq 'del') {
 
 }
 my $subs = &GetSubscription($subscriptionid);
-# use Data::Dumper; warn $subscriptionid; warn Dumper($subs);
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
@@ -68,15 +68,15 @@ my ($user, $cookie, $sessionID, $flags)
 
 my $weekarrayjs='';
 my $count = 0;
-my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
-my $firstday = Date_DayOfYear($month,$day,$year);
-my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
+my ($year, $month, $day) = Today;
+my $firstday = Day_of_Year($year,$month,$day);
+my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
             $count = $i;
             if($wkno > 52){$year++; $wkno=1;}
             if($count>365){$count=$i-365;}
-            my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+            my ($y,$m,$d) =  Add_Delta_Days($year,1,1, $count - 1);#Date_NthDayOfYear($year,$count);
             my $output = "$y-$m-$d";
             $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
             $wkno++;
