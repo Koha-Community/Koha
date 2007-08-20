@@ -34,7 +34,6 @@
 
 use strict;
 use CGI;
-use Date::Manip;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
@@ -203,12 +202,12 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 #
 my ( $count, $issue ) = GetPendingIssues($borrowernumber);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
-my $today       = ParseDate('today');
+my $today       = POSIX::strftime("%Y%m%d", localtime);
 my @issuedata;
 my $totalprice = 0;
 my $toggle     = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my $datedue = ParseDate( $issue->[$i]{'date_due'} );
+    my $datedue = $issue->[$i]{'date_due'};
     $issue->[$i]{'date_due'} = format_date( $issue->[$i]{'date_due'} );
     my %row = %{ $issue->[$i] };
     $totalprice += $issue->[$i]{'replacementprice'};
