@@ -493,6 +493,8 @@ sub AddAuthority {
   my $leader='         a              ';##Fixme correct leader as this one just adds utf8 to MARC21
 
 # if authid empty => true add, find a new authid number
+  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
+  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
   if (!$authid) {
     my $sth=$dbh->prepare("select max(authid) from auth_header");
     $sth->execute;
@@ -505,7 +507,7 @@ sub AddAuthority {
 #     warn $record->as_formatted;
     $dbh->do("lock tables auth_header WRITE");
     $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
-    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record);
+    $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
   }else{
       $record->add_fields('001',$authid) unless ($record->field('001'));
@@ -513,7 +515,7 @@ sub AddAuthority {
       $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
       $dbh->do("lock tables auth_header WRITE");
       my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
-      $sth->execute($record->as_usmarc,$record->as_xml_record,$authid);
+      $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
       $sth->finish;
   }
   $dbh->do("unlock tables");
