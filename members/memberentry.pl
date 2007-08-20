@@ -24,7 +24,6 @@ use strict;
 # external modules
 use Date::Calc qw/Today/;
 use CGI;
-use Date::Manip;
 use Digest::MD5 qw(md5_base64);
 
 # internal modules
