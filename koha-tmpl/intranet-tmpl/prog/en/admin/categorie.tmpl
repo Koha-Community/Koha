@@ -91,14 +91,19 @@
 	<!-- TMPL_ELSE -->
 	<tr><th>Category code</th><td><input type="text" name="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
 	<!-- /TMPL_IF -->
-	<tr><th>Description</th><td>&nbsp; <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME=description -->" /></td></tr>
-	<tr><th>Enrollment period</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME=enrolmentperiod -->" /> months</td></tr>
-	<tr><th>Age required</th><td>&nbsp; <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME=dateofbirthrequired -->" size="3" maxlength="3" /> years</td></tr>
-	<tr><th>Upperage limit</th><td>&nbsp; <input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME=upperagelimit -->" /> years</td></tr>
-	<tr><th>Enrollment fee</th><td>$ <input type="text" name="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME=enrolmentfee -->" /></td></tr>
+	<tr><th>Description</th><td>&nbsp; <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->" /></td></tr>
+	<tr><th>Enrollment period</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> months</td></tr>
+	<tr><th>Age required</th><td>&nbsp; <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> years</td></tr>
+	<tr><th>Upperage limit</th><td>&nbsp; <input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> years</td></tr>
+	<tr><th>Enrollment fee</th><td>$ <input type="text" name="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /></td></tr>
 	<tr><th>Overdue notice required</th><td>&nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
-						<option<!-- TMPL_UNLESS name="overduenoticerequired" --> selected="selected"<!-- /TMPL_UNLESS --> value="0">No</option>
-						<option<!-- TMPL_IF NAME="overduenoticerequired" --> selected="selected"<!-- /TMPL_IF --> value="1">Yes</option>
+			<!-- TMPL_IF NAME="overduenoticerequired" -->
+						<option value="0">No</option>
+						<option value="1" selected="selected">Yes</option>
+			<!-- TMPL_ELSE -->
+						<option value="0" selected="selected">No</option>
+						<option value="1">Yes</option>
+			<!-- /TMPL_IF -->
 					</select></td></tr>
 	<tr><th>Reserve fee</th><td>$ <input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
 	<tr><th>Category type</th><td><SELECT name="category_type" >

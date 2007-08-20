@@ -704,13 +704,13 @@ function check_input(e){
         </tr>
         <tr>
             <td><label>Supplier:</label></td>
-            <td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled readonly>) <a href="#" onClick="FindAcqui(f)">Search for a Supplier</a></td>
+            <td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <a href="#" onClick="FindAcqui(f)">Search for a Supplier</a></td>
         </tr>
         <tr>
             <td><label>Biblio</label></td>
             <td>
                 <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8"> 
-                (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled readonly>)
+                (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />)
                 <a href="#" onClick="Plugin(f)">Search for Biblio</a> <!--TMPL_UNLESS Name="mod"--> |
                 <a href="#" onClick="Create_biblio(f)">Create Biblio</a><!--/TMPL_UNLESS-->
             </td>
@@ -724,8 +724,10 @@ function check_input(e){
             <td>
                 <select name="branchcode">
                     <option value="">Any branch</option>
-                    <!-- TMPL_LOOP name="branchloop" -->
-                        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+                    <!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                 </select> (select a branch)
             </td>
@@ -744,7 +746,11 @@ function check_input(e){
                 <select name="letter">
                     <option value="">un-activated</option>
                 <!-- TMPL_LOOP name="letterloop" -->
-                    <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+				<!-- TMPL_IF name="selected" -->
+                    <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="lettername" --></option>
+<!-- TMPL_ELSE -->
+                    <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="lettername" --></option>
+<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 </select> (select a letter &amp; patrons will be able to "follow" this subscription and recieve a mail on every new issue)
             </td>

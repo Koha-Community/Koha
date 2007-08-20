@@ -16,7 +16,10 @@
 			<select id="branch" name="branch">
 				<option value="">Default</option>
 			<!-- TMPL_LOOP NAME="branchloop" -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select>
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF --><!-- /TMPL_LOOP --></select>
 			<input type="submit" value="Select" />
 		</form>
 		<!--TMPL_IF Name="ERROR"-->
@@ -48,56 +51,110 @@
 			<!-- TMPL_LOOP NAME="table" -->
 				<tr>
 					<th><!-- TMPL_VAR NAME="line" --></th>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<input name="delay1-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay1" -->" />
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<!--TMPL_IF Name="noletter" --><input type="text" name="letter1-<!-- TMPL_VAR NAME="overduename" -->" value="<!--TMPL_VAR Name="letter1"-->"/>
 						<!--TMPL_ELSE -->
 							<select name="letter1-<!-- TMPL_VAR NAME="overduename" -->">
 								<option value="">Default</option>
 								<!-- TMPL_LOOP name="letterloop1" -->
-									<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+									<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- /TMPL_IF -->
 								<!-- /TMPL_LOOP -->
 							</select>
 						<!--/TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
-						<input type="checkbox" name="debarred1-<!-- TMPL_VAR NAME="overduename" -->" <!-- TMPL_IF NAME="debarred1" -->checked<!-- /TMPL_IF --> value="1" />
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="debarred1" --><input type="checkbox" name="debarred1-<!-- TMPL_VAR NAME="overduename" -->" checked="checked" value="1" />
+						<!-- TMPL_ELSE -->
+						<input type="checkbox" name="debarred1-<!-- TMPL_VAR NAME="overduename" -->" value="1" />
+						<!-- /TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<input name="delay2-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay2" -->" />
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<!--TMPL_IF Name="noletter" --><input type="text" name="letter2-<!-- TMPL_VAR NAME="overduename" -->" value="<!--TMPL_VAR Name="letter2"-->"/>
 						<!--TMPL_ELSE -->
 							<select name="letter2-<!-- TMPL_VAR NAME="overduename" -->">
 								<option value="">Default</option>
 								<!-- TMPL_LOOP name="letterloop2" -->
-									<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+									<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- /TMPL_IF -->
 								<!-- /TMPL_LOOP -->
 							</select>
 						<!--/TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
-						<input type="checkbox" name="debarred2-<!-- TMPL_VAR NAME="overduename" -->" <!-- TMPL_IF NAME="debarred2" -->checked<!-- /TMPL_IF --> value="1" />
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="debarred2" -->
+						<input type="checkbox" name="debarred2-<!-- TMPL_VAR NAME="overduename" -->" checked="checked" value="1" />
+<!-- TMPL_ELSE -->
+						<input type="checkbox" name="debarred2-<!-- TMPL_VAR NAME="overduename" -->" value="1" />
+<!-- /TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<input name="delay3-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay3" -->" />
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 						<!--TMPL_IF Name="noletter" --><input type="text" name="letter3-<!-- TMPL_VAR NAME="overduename" -->" value="<!--TMPL_VAR Name="letter3"-->"/>
 						<!--TMPL_ELSE -->
 							<select name="letter3-<!-- TMPL_VAR NAME="overduename" -->">
 								<option value="">Default</option>
 								<!-- TMPL_LOOP name="letterloop3" -->
-									<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="lettername" --></option>
+									<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="lettername" --></option>
+				<!-- /TMPL_IF -->
 								<!-- /TMPL_LOOP -->
 							</select>
 						<!--/TMPL_IF -->
 					</td>
-					<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
-						<input type="checkbox" name="debarred3-<!-- TMPL_VAR NAME="overduename" -->" <!-- TMPL_IF NAME="debarred3" -->checked<!-- /TMPL_IF --> value="1" />
+					<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF --><!-- TMPL_IF NAME="debarred3" -->
+						<input type="checkbox" name="debarred3-<!-- TMPL_VAR NAME="overduename" -->" checked="checked" value="1" />
+						<!-- TMPL_ELSE -->
+						<input type="checkbox" name="debarred3-<!-- TMPL_VAR NAME="overduename" -->" value="1" /><!-- /TMPL_IF -->
 					</td>
 				</tr>
 			<!-- /TMPL_LOOP -->

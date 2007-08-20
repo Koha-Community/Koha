@@ -70,11 +70,11 @@ return false;
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
         <p><label>Tag</label><!-- TMPL_VAR NAME="searchfield" --></p>
-        <p><label>Text for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="40" maxlength="100" /></p>
-        <p><label>Text for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="40" maxlength="100" /></p>
+        <p><label>Text for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape="HTML" -->" size="40" maxlength="100" /></p>
+        <p><label>Text for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></p>
         <p><label for="repeatable">Repeatable</label>
             <!-- TMPL_IF NAME="repeatable" -->
-                <input type="checkbox" name="repeatable" id="repeatable" value="1" checked/>
+                <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="repeatable" id="repeatable" value="1"/>
             <!-- /TMPL_IF -->
@@ -82,7 +82,7 @@ return false;
         </p>
         <p><label for="mandatory">Mandatory</label>
             <!-- TMPL_IF NAME="mandatory" -->
-                <input type="checkbox" name="mandatory" id="mandatory" value="1" checked/>
+                <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="mandatory" id="mandatory" value="1"/>
             <!-- /TMPL_IF -->
@@ -145,9 +145,12 @@ return false;
     <select name="authtypecode">
         <option value="">Default</option>
     <!-- TMPL_LOOP NAME="authtypeloop" -->
-        <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->>
-            <!-- TMPL_VAR NAME="authtypetext" -->
-        </option>
+		<!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
+		<!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="authtypetext" --></option>
+		<!-- /TMPL_IF -->
+            
     <!-- /TMPL_LOOP -->
     </select>
     <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
@@ -184,10 +187,10 @@ return false;
         <input type="hidden" name="op" value="add_form" />
         <input type="submit" class="submit" value="Add Tag" />
         <!-- TMPL_IF NAME="isprevpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Previous Page</a>
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Previous Page</a>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="nextpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page</a>
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page</a>
         <!-- /TMPL_IF -->
     </form>
 </div>

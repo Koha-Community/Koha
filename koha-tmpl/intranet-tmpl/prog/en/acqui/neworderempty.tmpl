@@ -173,7 +173,10 @@ if (quantity ==0) {
             <label>Branch</label>
             <select name="branch">
             <!-- TMPL_LOOP name="branchloop" -->
-                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </select>
         </p>
@@ -215,7 +218,7 @@ if (quantity ==0) {
             <p>
                 <label>Budgeted Cost</label>
                 <!-- TMPL_IF name="close" -->
-                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly  />
+                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly="readonly"  />
                 <!-- TMPL_ELSE -->
                     <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
                 <!--/TMPL_IF-->
@@ -223,16 +226,28 @@ if (quantity ==0) {
             <!-- TMPL_IF NAME="GST"-->
             <p>
                 <label>Budgeted GST</label>
-                <input type="text" size="20" name="GST" value="" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF--> />
+				<!-- TMPL_IF name="close" -->
+                <input type="text" size="20" name="GST" value="" readonly="readonly" />
+				<!-- TMPL_ELSE -->
+                <input type="text" size="20" name="GST" value="" />
+				<!--/TMPL_IF-->
             </p>
             <!-- /TMPL_IF -->
             <p>
                 <label><b>Total</b></label>
-                <input type="text" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF--> />
+                <!-- TMPL_IF name="close" -->
+				<input type="text" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" readonly="readonly" />
+				<!-- TMPL_ELSE -->
+                <input type="text" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" />
+				<!--/TMPL_IF-->
             </p>
             <p>
                 <label>Actual Cost</label>
-                <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" <!-- TMPL_IF name="close" -->readonly <!--/TMPL_IF--> />
+				<!-- TMPL_IF name="close" -->
+                <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" readonly="readonly" />
+				<!-- TMPL_ELSE -->
+                <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" />
+				<!--/TMPL_IF-->
             </p>
             <p>
                 <label>Invoice Number</label>

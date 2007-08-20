@@ -14,7 +14,10 @@
 <!--branchselection-->
 	<select name="branch" id="branch">
 	<!-- TMPL_LOOP Name="branchloop" -->
-		<option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" --></option>
+		<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="name" --></option>
+				<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	</select>
 
@@ -24,7 +27,10 @@
     <!--printerselection-->
     <select name="printer" id="printer">
         <!-- TMPL_LOOP Name="printerloop" -->
-            <option value="<!-- TMPL_VAR Name="value" -->"<!-- TMPL_IF Name="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR Name="name" -->
+            <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="name" --></option>
+				<!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
 <!-- /TMPL_IF -->

@@ -62,8 +62,10 @@
 				<br /><br />
 				<select name="branch" size="1">
 						<option value="">Branch</option>
-			<!-- TMPL_LOOP name="branchloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+			<!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 				</select>
 			<!--/TMPL_IF -->
@@ -105,13 +107,22 @@
 				<!--TMPL_IF Name="itemstatus"-->
 				    <!--TMPL_IF Name="choice"-->
 						<!-- TMPL_LOOP name="itemstatusloop" -->
-							<!-- TMPL_VAR name="itemlib" -->: <input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->checked<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR name="itemlib" -->: 
+							<!-- TMPL_IF name="selected" -->
+							<input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" checked="checked" />
+							<!-- TMPL_ELSE -->
+							<input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" />
+							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 				    <!--TMPL_ELSE-->
 					<select name="itemstatus" size="1">
 						<option value="">Item Status</option>
 						<!-- TMPL_LOOP name="itemstatusloop" -->
-							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- TMPL_IF name="selected" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" selected="selected"><!-- TMPL_VAR name="itemlib" --></option>
+							<!-- TMPL_ELSE -->
+							<option value="<!-- TMPL_VAR name="itemval" -->"><!-- TMPL_VAR name="itemlib" --></option>
+							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</select>
 				    <!--/TMPL_IF-->
@@ -129,7 +140,11 @@
 					<select name="location" size="1">
 						<option value="">Location</option>
 						<!-- TMPL_LOOP name="itemlocationloop" -->
-							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- TMPL_IF name="selected" -->
+							<option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemlocationname" --></option>
+							<!-- TMPL_ELSE -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</select>
 				<!-- TMPL_ELSE -->
@@ -162,7 +177,10 @@
 				<select name="branch" size="1">
 						<option value="">Branch</option>
 			<!-- TMPL_LOOP name="branchloop" -->
-				<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 				</select>
 			<!--/TMPL_IF-->
@@ -195,13 +213,22 @@
 				<!-- TMPL_IF Name="itemstatus"-->
 				    <!--TMPL_IF Name="choice"-->
 						<!-- TMPL_LOOP name="itemstatusloop" -->
-							<!-- TMPL_VAR name="itemlib" -->: <input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->checked<!-- /TMPL_IF -->>
+							<!-- TMPL_VAR name="itemlib" -->: 
+							<!-- TMPL_IF name="selected" -->
+							<input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" checked="checked" />
+							<!-- TMPL_ELSE -->
+							<input type="checkbox" name="itemstatus" value="<!-- TMPL_VAR name="itemval" -->" />
+							<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 				    <!--TMPL_ELSE-->
 					<select name="itemstatus" size="1">
 						<option value="">Item Status</option>
 						<!-- TMPL_LOOP name="itemstatusloop" -->
-							<option value="<!-- TMPL_VAR name="itemval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- TMPL_IF name="selected" -->
+							<option value="<!-- TMPL_VAR name="itemval" -->" selected="selected"><!-- TMPL_VAR name="itemlib" --></option>
+						<!-- TMPL_ELSE -->
+							<option value="<!-- TMPL_VAR name="itemval" -->"><!-- TMPL_VAR name="itemlib" --></option>
+<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</select>
 				    <!-- /TMPL_IF -->
@@ -218,7 +245,11 @@
 					<select name="location" size="1">
 						<option value="">Location</option>
 						<!-- TMPL_LOOP name="itemlocationloop" -->
-							<option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- TMPL_IF name="selected" -->
+							<option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemlocationname" --></option>
+						<!-- TMPL_ELSE -->
+							<option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="itemlocationname" --></option>
+					<!-- /TMPL_IF -->
 						<!-- /TMPL_LOOP -->
 					</select>
 				<!-- TMPL_ELSE -->

@@ -107,18 +107,33 @@
             </p>
             <!-- TMPL_IF NAME="GST" --><p>
                 <label>GST Registered</label>
-                    <input type="radio" name="gst" value="1" <!-- TMPL_IF name="gstreg" -->checked<!-- /TMPL_IF -->>Yes
-                    <input type="radio" name="gst" value="0" <!-- TMPL_UNLESS name="gstreg" -->checked<!-- /TMPL_UNLESS -->>No
-            </p><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0"><!-- /TMPL_IF -->
+				<!-- TMPL_IF name="gstreg" -->
+					<input type="radio" name="gst" value="1" checked="checked" />Yes
+                    <input type="radio" name="gst" value="0" />No
+				<!-- TMPL_ELSE -->
+                    <input type="radio" name="gst" value="1" />Yes
+                    <input type="radio" name="gst" value="0" checked="checked" />No
+				<!-- /TMPL_IF -->
+            </p><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0" /><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="GST" --><p>
                 <label>Ordering prices</label>
-                    <input type="radio" name="list_gst" value="1" <!-- TMPL_IF name="listincgst" -->checked<!-- /TMPL_IF -->>include GST
-                    <input type="radio" name="list_gst" value="0" <!-- TMPL_UNLESS name="listincgst" -->checked<!-- /TMPL_UNLESS -->>don't include GST
+				<!-- TMPL_IF name="listincgst" -->
+				<input type="radio" name="list_gst" value="1" checked="checked" />include GST
+                    <input type="radio" name="list_gst" value="0" />don't include GST
+				<!-- TMPL_ELSE -->
+                    <input type="radio" name="list_gst" value="1" />include GST
+                    <input type="radio" name="list_gst" value="0" checked="checked" />don't include GST
+				<!-- /TMPL_IF -->
             </p><!-- TMPL_ELSE --><input type="hidden" name="list_gst" value="0"><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="GST" --><p>
                 <label>Invoice prices</label>
-                    <input type="radio" name="invoice_gst" value="1" <!-- TMPL_IF name= "invoiceincgst" -->checked<!-- /TMPL_IF -->>include GST
-                    <input type="radio" name="invoice_gst" value="0" <!-- TMPL_UNLESS name="invoiceincgst" -->checked<!-- /TMPL_UNLESS -->>don't include GST
+				<!-- TMPL_IF name= "invoiceincgst" -->
+                    <input type="radio" name="invoice_gst" value="1" checked="checked" />include GST
+                    <input type="radio" name="invoice_gst" value="0" />don't include GST
+					<!-- TMPL_ELSE -->
+                    <input type="radio" name="invoice_gst" value="1">include GST
+                    <input type="radio" name="invoice_gst" value="0" checked="checked" />don't include GST
+
             </p><!-- TMPL_ELSE --><input type="hidden" name="invoice_gst" value="0"><!-- /TMPL_IF -->
             <p>
                 <label>Discount</label>

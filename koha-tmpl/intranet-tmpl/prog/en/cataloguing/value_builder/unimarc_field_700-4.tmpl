@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <html>
@@ -8,19 +8,43 @@
 </head>
 <body>
 <p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
-<form name="f_pop" onSubmit="javascript:report()">
+<form name="f_pop" onSubmit="report()">
 <table>
 	<tr>
 		<td>Code date publication </td><td><select name="f1" size="1">
-		<option value="075 - postface" <!-- TMPL_IF name="f1_075" -->SELECTED<!-- /TMPL_IF -->>postface</option>
-			<option value="651 - dir. de publication" <!-- TMPL_IF name="f1_651" -->SELECTED<!-- /TMPL_IF -->>dir. de publication</option>
-			<option value="440 - illustrateur" <!-- TMPL_IF name="f1_440" -->SELECTED<!-- /TMPL_IF -->>illustrateur</option>
-			<option value="080 - préface, notes" <!-- TMPL_IF name="f1_080" -->SELECTED<!-- /TMPL_IF -->>préface, notes</option>
-			<option value="730 - traducteur" <!-- TMPL_IF name="f1_730" -->SELECTED<!-- /TMPL_IF -->>traducteur</option>
+			<!-- TMPL_IF name="f1_075" -->
+			<option value="075 - postface" selected="selected">postface</option>
+			<!-- TMPL_ELSE -->
+			<option value="075 - postface">postface</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f1_651" -->
+			<option value="651 - dir. de publication" selected="selected">dir. de publication</option>
+			<!-- TMPL_ELSE -->
+			<option value="651 - dir. de publication">dir. de publication</option>
+			<!-- /TMPL_IF -->
+			
+			 <!-- TMPL_IF name="f1_440" -->
+			<option value="440 - illustrateur" selected="selected">illustrateur</option>
+			<!-- TMPL_ELSE -->
+			<option value="440 - illustrateur">illustrateur</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f1_080" -->
+			<option value="080 - préface, notes" selected="selected">préface, notes</option>
+			<!-- TMPL_ELSE -->
+			<option value="080 - préface, notes">préface, notes</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f1_730" -->
+			<option value="730 - traducteur" selected="selected">traducteur</option>
+			<!-- TMPL_ELSE -->
+			<option value="730 - traducteur">traducteur</option>
+			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
+	<tr><td colspan="2"><input type="submit" value="OK" /></td></tr>
 </table>
 </form>
 <script>

@@ -51,7 +51,11 @@
             <select id="branchprinter" name="branchprinter">
                 <option value="">None</option>
             <!-- TMPL_LOOP NAME="printerloop" -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchprinter" --></option>
+                <!-- TMPL_IF NAME="selected" -->
+				<option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchprinter" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchprinter" --></option>
+				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </select>
         <p><input type="submit" value="Submit" /></p>

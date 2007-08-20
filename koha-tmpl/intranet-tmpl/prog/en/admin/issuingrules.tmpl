@@ -28,7 +28,11 @@
 			<select id="branch" name="branch">
 				<option value="">Default</option>
 			<!-- TMPL_LOOP NAME="branchloop" -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select>
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP --></select>
 			<input type="submit" value="Select" />
 		</form>
 		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
@@ -44,7 +48,11 @@
 				<tr>
 					<th><!-- TMPL_VAR NAME="categorycode" --></th>
 					<!-- TMPL_LOOP NAME="cell" -->
-						<td<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+						<!-- TMPL_IF NAME="toggle" -->
+   <td class="highlight">
+<!-- TMPL_ELSE -->
+   <td>
+<!-- /TMPL_IF -->
 							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10" />
 						</td>
 					<!-- /TMPL_LOOP -->
