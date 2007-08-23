@@ -589,6 +589,53 @@ sub build_tabs ($$$$$) {
     $template->param( BIG_LOOP => \@BIG_LOOP );
 }
 
+sub BiblioAddAuthorities{
+  my ( $record, $frameworkcode ) = @_;
+  my $dbh=C4::Context->dbh;
+  my $query=$dbh->prepare(qq|
+SELECT authtypecode,tagfield
+FROM marc_subfield_structure 
+WHERE frameworkcode=? 
+AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
+# SELECT authtypecode,tagfield
+# FROM marc_subfield_structure 
+# WHERE frameworkcode=? 
+# AND (authtypecode IS NOT NULL OR authtypecode<>\"\")|);
+  $query->execute($frameworkcode);
+  my ($countcreated,$countlinked);
+  while (my $data=$query->fetchrow_hashref){
+    warn Data::Dumper::Dumper($data); 
+    if ($record->field($data->{tagfield})){
+      next if ($record->subfield($data->{tagfield},'3')||$record->subfield($data->{tagfield},'9'));
+      # No authorities id in the tag.
+      # Search if there is any authorities to link to.
+      my $query='at='.$data->{authtypecode}.' ';
+      map {$query.= " and he=".$_->[1] if ($_->[0]=~/[A-z]/)}  $record->field($data->{tagfield})->subfields();
+      warn $query;   
+      my ($error,$results)=SimpleSearch($query,"authorityserver");
+    # there is at least 1 result => return the 1st one
+      if (@$results>1) {
+        my $marcrecord = MARC::File::USMARC::decode($results->[0]);
+        $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
+  $countlinked++;
+      } else {
+  #There are no results, build authority record, add it to Authorities, get authid and add it to 9
+  ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode
+     
+        my $authtypedata=GetAuthType($data->{authtypecode});
+        my $marcrecordauth=MARC::Record->new();
+        my $field=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$record->subfield($data->{tagfield},'a'));
+        map { $field->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $record->field($data->{tagfield})->subfields();
+        $marcrecordauth->insert_fields_ordered($field);
+        my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
+        $countcreated++;
+        $record->field($data->{tagfield})->add_subfields('9'=>$authid);
+      }
+    }  
+  }
+  return ($countlinked,$countcreated);
+}
+
 # ========================
 #          MAIN
 #=========================
@@ -696,16 +743,15 @@ if ( $op eq "addbiblio" ) {
     if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {
         my $oldbibnum;
         my $oldbibitemnum;
+        if (C4::Context->preference("BiblioAddsAuthorities")){
+          my ($countlinked,$countcreated)=BiblioAddAuthorities($record,$frameworkcode);
+        } 
         if ( $is_a_modif ) {
             ModBiblioframework( $biblionumber, $frameworkcode ); 
             ModBiblio( $record, $biblionumber, $frameworkcode );
         }
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
-        }
-
-        if (C4::Context->preference("BiblioAddsAuthorities")){
-          my ($countlinked,$countcreated)=BiblioAddAuthorities($record,$frameworkcode);
         }
 
         if ($mode ne "popup"){
