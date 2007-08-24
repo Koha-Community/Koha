@@ -2,7 +2,7 @@
 --  KOHA 3.0 MARC 21 MEDIUM DEFAULT AUTHORITY FRAMEWORKS  
 --                 POST-INSTALLATION SCRIPT               
 --                                                        
---                  PRETEST VERSION 0.0.1                 
+--                  PRETEST VERSION 0.0.2                 
 --                       2007-08-23                       
 --                                                        
 --                         edited                         
@@ -84,7 +84,7 @@
 -- on a remote server.                                                    
 --                                                                        
 -- mysql [-h YourMySQLServername] -uYourKohaMySQLUsername                 
--- -p YourKohaDatabasename < /path/to/marc21_standard_auth_frameworks.sql 
+-- -p YourKohaDatabasename < /path/to/marc21_medium_auth_frameworks.sql   
 --                                                                        
 -- ***********************************************************************
 
