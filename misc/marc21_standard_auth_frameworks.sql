@@ -2,8 +2,8 @@
 -- KOHA 3.0 MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS 
 --                 POST-INSTALLATION SCRIPT               
 --                                                        
---                  PRETEST VERSION 0.0.4                 
---                       2007-08-21                       
+--                  PRETEST VERSION 0.0.5                 
+--                       2007-08-23                       
 --                                                        
 --                         edited                         
 --                   by thd for LibLime                   
@@ -12,8 +12,8 @@
 --                                                        
 --   KOHA MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS   
 --                                                        
---                  PRETEST VERSION 0.0.4                 
---                       2007-08-21                       
+--                  PRETEST VERSION 0.0.5                 
+--                       2007-08-23                       
 --                                                        
 --  original default requiring greater user customisation 
 --               created by a few Koha Hands              
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `auth_subfield_structure` (
   `tab` tinyint(1) default NULL,
   `authorised_value` char(10) default NULL,
   `value_builder` char(80) default NULL,
-  `seealso` char(255) default NULL,
+  `seealso` text default NULL,
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`)
   
@@ -1959,6 +1959,16 @@ INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '016', 'a', 'Record 
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '016', 'z', 'Canceled/invalid record control number', 'Canceled/invalid record control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '016', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '016', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '020', 'a', 'International Standard Book Number', 'International Standard Book Number', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '020', 'c', 'Terms of availability', 'Terms of availability', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '020', 'z', 'Canceled/invalid ISBN', 'Canceled/invalid ISBN', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '020', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '020', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '022', 'a', 'International Standard Serial Number', 'International Standard Serial Number', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '022', 'y', 'Incorrect ISSN', 'Incorrect ISSN', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '022', 'z', 'Canceled ISSN', 'Canceled ISSN', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '022', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '022', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', 'a', 'Standard number or code', 'Standard number or code', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', 'c', 'Terms of availability', 'Terms of availability', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', 'd', 'Additional codes following the standard number or code', 'Additional codes following the standard number or code', 0, 0, 0, NULL, NULL, NULL);
@@ -1966,6 +1976,24 @@ INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', 'z', 'Cancele
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', '2', 'Source of number or code', 'Source of number or code', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '024', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'a', 'Number of work', 'Number of work', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'b', 'Number of movement', 'Number of movement', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'c', 'Number of excerpt', 'Number of excerpt', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'd', 'Caption or heading', 'Caption or heading', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'e', 'Role', 'Role', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'g', 'Clef', 'Clef', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'm', 'Voice/instrument', 'Voice/instrument', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'n', 'Key signature', 'Key signature', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'o', 'Time signature', 'Time signature', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'p', 'Musical notation', 'Musical notation', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'q', 'General note', 'General note', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'r', 'Key or mode', 'Key or mode', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 's', 'Coded validity note', 'Coded validity note', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 't', 'Text incipit', 'Text incipit', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', '2', 'System code', 'System code', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
+INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '031', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '035', 'a', 'System control number', 'System control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '035', 'z', 'Canceled/invalid control number', 'Canceled/invalid control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('PERSO_NAME', '035', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
@@ -5512,7 +5540,6 @@ INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '003', 'CONTROL NUMBER ID
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '005', 'DATE AND TIME OF LATEST TRANSACTION', 'DATE AND TIME OF LATEST TRANSACTION', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '008', 'FIXED-LENGTH DATA ELEMENTS', 'FIXED-LENGTH DATA ELEMENTS', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '010', 'LIBRARY OF CONGRESS CONTROL NUMBER', 'LIBRARY OF CONGRESS CONTROL NUMBER', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '014', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '016', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '024', 'OTHER STANDARD IDENTIFIER', 'OTHER STANDARD IDENTIFIER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('CHRON_TERM', '034', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 1, 0, NULL);
@@ -5599,9 +5626,6 @@ INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '008', '@', 'fixed l
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '010', 'a', 'LC control number', 'LC control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '010', 'z', 'Canceled/invalid LC control number', 'Canceled/invalid LC control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '010', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '014', 'a', 'Control number of related bibliographic record', 'Control number of related bibliographic record', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '014', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '014', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '016', 'a', 'Record control number', 'Record control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '016', 'z', 'Canceled/invalid record control number', 'Canceled/invalid record control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('CHRON_TERM', '016', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL);
@@ -6380,7 +6404,6 @@ INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '003', 'CONTROL NUMBER ID
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '005', 'DATE AND TIME OF LATEST TRANSACTION', 'DATE AND TIME OF LATEST TRANSACTION', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '008', 'FIXED-LENGTH DATA ELEMENTS', 'FIXED-LENGTH DATA ELEMENTS', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '010', 'LIBRARY OF CONGRESS CONTROL NUMBER', 'LIBRARY OF CONGRESS CONTROL NUMBER', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '014', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '016', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '024', 'OTHER STANDARD IDENTIFIER', 'OTHER STANDARD IDENTIFIER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('TOPIC_TERM', '034', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 1, 0, NULL);
@@ -6467,9 +6490,6 @@ INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '008', '@', 'fixed l
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '010', 'a', 'LC control number', 'LC control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '010', 'z', 'Canceled/invalid LC control number', 'Canceled/invalid LC control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '010', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '014', 'a', 'Control number of related bibliographic record', 'Control number of related bibliographic record', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '014', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '014', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '016', 'a', 'Record control number', 'Record control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '016', 'z', 'Canceled/invalid record control number', 'Canceled/invalid record control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('TOPIC_TERM', '016', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL);
@@ -7252,7 +7272,6 @@ INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '003', 'CONTROL NUMBER ID
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '005', 'DATE AND TIME OF LATEST TRANSACTION', 'DATE AND TIME OF LATEST TRANSACTION', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '008', 'FIXED-LENGTH DATA ELEMENTS', 'FIXED-LENGTH DATA ELEMENTS', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '010', 'LIBRARY OF CONGRESS CONTROL NUMBER', 'LIBRARY OF CONGRESS CONTROL NUMBER', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '014', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '016', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '024', 'OTHER STANDARD IDENTIFIER', 'OTHER STANDARD IDENTIFIER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GEOGR_NAME', '034', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 'CODED CARTOGRAPHIC MATHEMATICAL DATA', 1, 0, NULL);
@@ -7339,9 +7358,6 @@ INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '008', '@', 'fixed l
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '010', 'a', 'LC control number', 'LC control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '010', 'z', 'Canceled/invalid LC control number', 'Canceled/invalid LC control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '010', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '014', 'a', 'Control number of related bibliographic record', 'Control number of related bibliographic record', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '014', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '014', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '016', 'a', 'Record control number', 'Record control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '016', 'z', 'Canceled/invalid record control number', 'Canceled/invalid record control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GEOGR_NAME', '016', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL);
@@ -8122,7 +8138,6 @@ INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '003', 'CONTROL NUMBER ID
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '005', 'DATE AND TIME OF LATEST TRANSACTION', 'DATE AND TIME OF LATEST TRANSACTION', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '008', 'FIXED-LENGTH DATA ELEMENTS', 'FIXED-LENGTH DATA ELEMENTS', 0, 1, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '010', 'LIBRARY OF CONGRESS CONTROL NUMBER', 'LIBRARY OF CONGRESS CONTROL NUMBER', 0, 0, NULL);
-INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '014', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 'LINK TO BIBLIOGRAPHIC RECORD FOR SERIAL OR MULTIPART ITEM', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '016', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 'NATIONAL BIBLIOGRAPHIC AGENCY CONTROL NUMBER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '024', 'OTHER STANDARD IDENTIFIER', 'OTHER STANDARD IDENTIFIER', 1, 0, NULL);
 INSERT INTO `auth_tag_structure` VALUES ('GENRE/FORM', '035', 'SYSTEM CONTROL NUMBER', 'SYSTEM CONTROL NUMBER', 1, 0, NULL);
@@ -8210,9 +8225,6 @@ INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '008', '@', 'fixed l
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '010', 'a', 'LC control number', 'LC control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '010', 'z', 'Canceled/invalid LC control number', 'Canceled/invalid LC control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '010', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '014', 'a', 'Control number of related bibliographic record', 'Control number of related bibliographic record', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '014', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL);
-INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '014', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '016', 'a', 'Record control number', 'Record control number', 0, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '016', 'z', 'Canceled/invalid record control number', 'Canceled/invalid record control number', 1, 0, 0, NULL, NULL, NULL);
 INSERT INTO `auth_subfield_structure` VALUES ('GENRE/FORM', '016', '2', 'Source', 'Source', 0, 0, 0, NULL, NULL, NULL);

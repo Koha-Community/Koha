@@ -2,8 +2,8 @@
 -- KOHA 3.0 MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS 
 --                     AUTHORITY TYPES                    
 --                                                        
---                  PRETEST VERSION 0.0.4                 
---                       2007-08-21                       
+--                  PRETEST VERSION 0.0.5                 
+--                       2007-08-23                       
 --                                                        
 --                         edited                         
 --                   by thd for LibLime                   
@@ -12,8 +12,8 @@
 --                                                        
 --   KOHA MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS   
 --                                                        
---                  PRETEST VERSION 0.0.4                 
---                       2007-08-21                       
+--                  PRETEST VERSION 0.0.5                 
+--                       2007-08-23                       
 --                                                        
 --  original default requiring greater user customisation 
 --               created by a few Koha Hands              
