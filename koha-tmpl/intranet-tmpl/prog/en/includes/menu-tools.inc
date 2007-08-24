@@ -9,7 +9,7 @@
     <a href="/cgi-bin/koha/tools/import.pl">Import</a>
     <a href="/cgi-bin/koha/tools/letter.pl">Letters</a>
     <a href="/cgi-bin/koha/tools/breeding.pl">Reservoir</a>
-    <a href="/cgi-bin/koha/tools/barcodes.pl">Barcodes</a>
+    <a href="/cgi-bin/koha/labels/labels-home.pl">Labels</a>
     <a href="/cgi-bin/koha/tools/overduerules.pl">overdue rules</a>
     <a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a>
 </div>
