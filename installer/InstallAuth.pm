@@ -119,7 +119,7 @@ sub get_template_and_user {
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $language ? $language : "en" );
     my $template = HTML::Template::Pro->new(
-        filename          => "$path/" . $in->{template_name},
+        filename          => "$path/modules/" . $in->{template_name},
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
@@ -361,7 +361,7 @@ sub checkauth {
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $query->param('language') ? $query->param('language') : "en" );
     my $template = HTML::Template::Pro->new(
-        filename          => "$path/$template_name",
+        filename          => "$path/modules/$template_name",
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
