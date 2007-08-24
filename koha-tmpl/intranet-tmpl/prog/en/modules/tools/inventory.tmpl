@@ -3,10 +3,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
     <h1>Inventory/Stocktaking</h1>
     <form method="post">
@@ -45,7 +45,7 @@
         <!-- /TMPL_IF -->
         <p><label>Not seen since:</label>
             <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
-            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="datelastseen_button" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datelastseen_button" />
             <script language="JavaScript" type="text/javascript">
             Calendar.setup(
             {
@@ -72,7 +72,7 @@
             <legend>Use a barcode file</legend>
             <p>barcode filename : <input type="file" name="uploadbarcodes" /></p>
             <p>Set datelastseen to : <input type="text" id="setdate" name="setdate" />
-             <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="setdate_button" />
+             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" />
             <script language="JavaScript" type="text/javascript">
             Calendar.setup(
             {

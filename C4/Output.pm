@@ -60,17 +60,17 @@ push @EXPORT, qw(
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
-my $path = C4::Context->config('intrahtdocs') . "/default/en/includes/";
+my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub gettemplate {
-    my ( $tmplbase, $opac, $query ) = @_;
+    my ( $tmplbase, $interface, $query ) = @_;
     if ( !$query ) {
         warn "no query in gettemplate";
     }
     my $htdocs;
-    if ( $opac ne "intranet" ) {
+    if ( $interface ne "intranet" ) {
         $htdocs = C4::Context->config('opachtdocs');
     }
     else {
@@ -79,10 +79,10 @@ sub gettemplate {
     my $path = C4::Context->preference('intranet_includes') || 'includes';
 
     #    warn "PATH : $path";
-    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $opac, $query );
+    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     my $template       = HTML::Template::Pro->new(
-        filename          => "$htdocs/$theme/$lang/$tmplbase",
+        filename          => "$htdocs/$theme/$lang/modules/$tmplbase",
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
@@ -90,9 +90,9 @@ sub gettemplate {
     );
 
     $template->param(
-        themelang => ( $opac ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
+        themelang => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
           . "/$theme/$lang",
-        interface => ( $opac ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
+        interface => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
         theme => $theme,
         opacstylesheet      => $opacstylesheet,
         opaccolorstylesheet => C4::Context->preference('opaccolorstylesheet'),

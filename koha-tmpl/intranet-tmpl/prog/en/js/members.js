@@ -1,44 +1,35 @@
-<script language="JavaScript" type="text/javascript">
-
+// this function checks id date is like DD/MM/YYYY
 function CheckDate(field) {
 var d = field.value;
 if (d!="") {
-       // this function checks id date is like JJ/MM/AAAA
-      var amin = 1900; // ann�e mini
-      var amax = 2100; // ann�e maxi
-      
+      var amin = 1900; 
+      var amax = 2100; 
       var date = d.split("/");
-      
       var ok=1;
       var msg;
-      
       if ( (date.length < 2) && (ok==1) ) {
         msg = _("Separator must be /"); 
     	alert(msg); ok=0; field.focus();
     	return;
       }
-      
       var dd   = date[0];
       var mm   = date[1];
       var yyyy = date[2]; 
-      
       // checking days
       if ( ((isNaN(dd))||(dd<1)||(dd>31)) && (ok==1) ) {
         msg = _("day not correct."); 
 	    alert(msg); ok=0; field.focus();
 	    return;
       }
-      
       // checking months
       if ( ((isNaN(mm))||(mm<1)||(mm>12)) && (ok==1) ) {
         msg = _("month not correct.");
 	    alert(msg); ok=0; field.focus();
 	    return;
       }
-      
       // checking years
       if ( ((isNaN(yyyy))||(yyyy<amin)||(yyyy>amax)) && (ok==1) ) {
-         msg = _("years not correct."); 
+        msg = _("years not correct."); 
 	    alert(msg); ok=0; field.focus();
 	    return;
       }
@@ -52,7 +43,7 @@ var msg2;
 if (  document.form.check_member.value==1){
 	if (document.form.categorycode.value != "I"){
 		
-		msg1 += ("Warning  !!!! Duplicate borrower!!!!");
+		msg1 += ("Warning  !!!! Duplicate patron!!!!");
 		alert(msg1);
 	check_form_borrowers(0);
 	document.form.submit();
@@ -147,7 +138,7 @@ if (nav < document.form.step.value) {
 			}
 		}
 	}
-//borrowers form 2 test if u chcked no to the quetsion of double 
+//patrons form to test if you chcked no to the quetsion of double 
  	if (document.form.step.value==2 && statut!=1 && document.form.check_member.value > 0 )
 	{
 		
@@ -155,7 +146,7 @@ if (nav < document.form.step.value) {
 			if (!(document.form_double.answernodouble.checked)){
 					
 				message ="";
-					message_champ+=("Please confirm suspicious duplicate borrower !!! ");
+					message_champ+=("Please confirm suspicious duplicate patron !!! ");
 					statut=1;
 					document.form.nodouble.value=0;
 			}
@@ -185,6 +176,3 @@ function Dopopguarantor(link) {
 
 	var newin=window.open(link,'popup','width=600,height=400,resizable=no,toolbar=false,scrollbars=yes,top');
 }
-
-
-</script>
