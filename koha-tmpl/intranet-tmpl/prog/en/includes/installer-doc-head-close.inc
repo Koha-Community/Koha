@@ -3,10 +3,10 @@
 <style type="text/css" media="screen">
 
 <!-- TMPL_IF NAME="login" -->
-    @import url(/intranet-tmpl/prog/en/includes/login.css);
+    @import url(/intranet-tmpl/prog/en/css/login.css);
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="wizard" -->
-    @import url(/intranet-tmpl/prog/en/includes/wizard.css);
+    @import url(/intranet-tmpl/prog/en/css/wizard.css);
 <!-- /TMPL_IF -->
 
 html { background: #eee; }

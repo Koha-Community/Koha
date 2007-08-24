@@ -20,7 +20,7 @@ function Help() {
 }
 </script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/staff.css">
 <style type="text/css">
 .catalogue {
 	background-color:#ad11ad;
