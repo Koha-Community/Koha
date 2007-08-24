@@ -382,9 +382,15 @@ sub checkauth {
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
         }
-        my $ip=$session->param('ip');
-        $userid = $session->param('id');
-        my $lasttime = $session->param('lasttime');
+        my $ip;
+		my $lasttime;
+		if ($session) {
+			$ip = $session->param('ip');
+			$lasttime = $session->param('lasttime');
+            $userid = $session->param('id');
+		}
+        
+		
         if ($logout) {
 
             # voluntary logout the user
@@ -443,7 +449,10 @@ sub checkauth {
     }
     unless ($userid) {
         my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});		
-        my $sessionID = $session->id;
+        my $sessionID;
+		if ($session) {
+			$sessionID = $session->id;
+			}
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
@@ -610,6 +619,7 @@ sub checkauth {
     # check that database and koha version are the same
     # there is no DB version, it's a fresh install,
     # go to web installer
+	warn "about to check version";
     unless (C4::Context->preference('Version')){
       if ($type ne 'opac'){
         warn "Install required, redirecting to Installer";
