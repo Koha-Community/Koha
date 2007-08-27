@@ -75,7 +75,7 @@ function Check(f) {
 			<!-- TMPL_ELSE -->
 				<tr><td><label for="authtypecode">Authority type<label></td><td><input id="authtypecode" type="text" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
 			<!-- /TMPL_IF -->
-		<tr><td><label for="authtypetext">Description</label></td><td><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" escape=HTML -->" /></td></tr>
+		<tr><td><label for="authtypetext">Description</label></td><td><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" ESCAPE="HTML" -->" /></td></tr>
 		<tr><td><label for="summary">Summary</label></td><td><textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea></td></tr>
 		<tr><td><label for="auth_tag_to_report">Report tag</label></td><td><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</td></tr></table>
 	<input type="hidden" name="op" value="add_validate" />
@@ -134,7 +134,7 @@ function Check(f) {
 </table>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="add_form" />
-	<input type="submit" value="Add authority type" title="Add authority type" alt="Add authority type" />
+	<input type="submit" value="Add authority type" />
 	<td width="33%"><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --></td>
 	<td width="33%"><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF --></td>
 </form>

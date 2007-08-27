@@ -9,7 +9,7 @@
 <div id="action">
     <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl">Back to virtual Shelves</a>
     <!-- TMPL_IF name="manageshelf" -->
-    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">
+    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">
         Edit this shelf</a>
     <!-- /TMPL_IF -->
 </div>
@@ -76,8 +76,7 @@
     <!-- TMPL_IF name="manageshelf" -->
         <!-- TMPL_IF NAME="itemsloop" -->
             <b>With selected items :</b>
-            <input type="submit"
-                   value="Remove"
+            <input type="submit" "Remove"
                    class="icon delete"
                    onclick="return confirmDelete('Are you sure you want to remove these items from the shelf?')"
                    style="display:inline;"
@@ -174,16 +173,16 @@
             <tr><td><label for="owner">Owner: </label></td><td><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->"><!-- TMPL_VAR NAME="loggedinusername" --></td></tr>
             <tr><td><label for="category">Category: </label></td><td><select id="category" name="category">
                     <!-- TMPL_IF name="category1" -->
-                        <option value="1" selected>Private</option>
+                        <option value="1" selected="selected">Private</option>
                     <!-- TMPL_ELSE -->
                         <option value="1">Private</option>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF name="category2" -->
-                        <option value="2" selected>Public</option>
+                        <option value="2" selected="selected">Public</option>
                     <!-- TMPL_ELSE -->
                         <option value="2">Public</option>
 					<!-- TMPL_IF NAME="category3" -->
-						<option value="3" selected>Free</option>
+						<option value="3" selected="selected">Free</option>
 					<!-- TMPL_ELSE -->
 						<option value="3">Free</option>
                     <!-- /TMPL_IF -->

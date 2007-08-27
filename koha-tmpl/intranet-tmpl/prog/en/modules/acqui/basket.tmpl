@@ -58,7 +58,7 @@
                     <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <!-- TMPL_IF name="closedate" -->
                         <td><p>
-                            <!-- TMPL_VAR NAME="title" --><br/>
+                            <!-- TMPL_VAR NAME="title" --><br />
                                 <!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -82,10 +82,10 @@
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_UNLESS name="closedate" -->
                         <td>
-                            <a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Modify</a>
+                            <a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Modify</a>
                         </td>
                         <td>
-                        <a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Delete</a>
+                        <a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;quantity=0&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Delete</a>
                         </td>
                         <!-- /TMPL_UNLESS -->
                     <!-- /TMPL_IF -->

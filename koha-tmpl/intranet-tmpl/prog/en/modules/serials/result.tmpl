@@ -3,7 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <div id="mainbloc">
-    <h1 class="catalogue">Search results</h1>
+    <h1>Search results</h1>
 <!-- TMPL_IF NAME="total"-->
 <div class="searchresults">
     <table>
@@ -16,7 +16,7 @@
     <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
             <td>
-                <a href="#" onclick="Javascript:GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR escape="URL" NAME="title" -->');" title="Get this one !">
+                <a href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR escape="URL" NAME="title" -->');" title="Get this one !">
                     <!-- TMPL_VAR NAME="title" -->
                 </a>
                 <br />

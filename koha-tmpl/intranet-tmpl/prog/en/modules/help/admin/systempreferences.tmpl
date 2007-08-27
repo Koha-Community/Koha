@@ -29,15 +29,15 @@
 	<p> The # means "beginning of a block", the | is the separator of each part, the {} being used for each subfield. A subfield can have up to 3 digits BEFORE and up to 3 digits AFTER each subfield</p>
 	<p>The UNIMARC (partial) definition for ISBD is </p><i>
 	<p>#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ;
-		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br/>
-		#230||{ ; 230a}|<br/>
-		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br/>
-		#210|&lt;br/&gt;&lt;label&gt;Editeur&lt;/label&gt;|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br/>
-		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br/>
-		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|<br/>
-		#225|&lt;br/&gt;&lt;label&gt;Description&lt;/label&gt;|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br/>
-		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;<br/>
-		#995|&lt;br&gt;Exemplaires :|{\n995b}{ - 995j}{/995k}|<br/>
+		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br />
+		#230||{ ; 230a}|<br />
+		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br />
+		#210|&lt;br/&gt;&lt;label&gt;Editeur&lt;/label&gt;|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br />
+		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br />
+		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|<br />
+		#225|&lt;br/&gt;&lt;label&gt;Description&lt;/label&gt;|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br />
+		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;<br />
+		#995|&lt;br&gt;Exemplaires :|{\n995b}{ - 995j}{/995k}|<br />
 	</i></p>
 </li>
 
@@ -45,7 +45,7 @@
 
 <li><b>ldapserver and ldapinfos --</b> Koha 2.0 can use Perl LDAP (Lightweight Directory Access Protocol, see http://search.cpan.org/~gbarr/perl-ldap-0.3202/lib/Net/LDAP.pod) to manage user access and privileges. To avoid a useless Perl package for libraries without ldap, all what is related to LDAP has been moved to KohaInstall/modules/C4/Auth_with_ldap.pm. Ask your system administrator to set up LDAP with Auth_with_ldap.pm (perldoc Auth_with_ldap.pm for help). Those 2 parameters are useless in 2.2 and have should not appear on a new install.</li>
 
-<li><b>LibraryName --</b> The library name or message that will be shown on the main OPAC page. You may use HTML tags to format the name. Example: Welcome to <i>Koha<br/>Free Software ILS</i></li>
+<li><b>LibraryName --</b> The library name or message that will be shown on the main OPAC page. You may use HTML tags to format the name. Example: Welcome to <i>Koha<br />Free Software ILS</i></li>
 
 <li><b>marc --</b> Turn on MARC support. Set to "no" if you do not intend to use MARC records.</li>
 

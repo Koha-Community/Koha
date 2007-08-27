@@ -90,7 +90,7 @@ function Hide(link) {
 
   <p><select name="fwklanguage" onchange="javascript:refresh(this.value)">
   <!--TMPL_LOOP Name="languagelist" -->
-  <!--TMPL_IF Name="checked"--><option value="<!--TMPL_VAR Name="dirname"-->" selected ><!--TMPL_VAR Name="languagedescription"--></option>
+  <!--TMPL_IF Name="checked"--><option value="<!--TMPL_VAR Name="dirname"-->" selected="selected"><!--TMPL_VAR Name="languagedescription"--></option>
   <!--TMPL_ELSE--><option value="<!--TMPL_VAR Name="dirname"-->"><!--TMPL_VAR Name="languagedescription"--></option>
   <!--/TMPL_IF-->
   <!--/TMPL_LOOP-->
@@ -103,8 +103,8 @@ function Hide(link) {
   <!--TMPL_LOOP Name="frameworks"-->
     <div style="border:1px;">
     <p>
-    <!--TMPL_IF Name="checked"--><input type="checkbox" Name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" checked />
-    <!--TMPl_ELSE--><input type="checkbox" Name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" />
+    <!--TMPL_IF Name="checked"--><input type="checkbox" name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" checked="checked" />
+    <!--TMPl_ELSE--><input type="checkbox" name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" />
     <!--/TMPL_IF-->
     <!--TMPL_VAR Name="fwkdescription"-->
     <em>(<!--TMPL_VAR Name="fwkname"-->)</em>
@@ -131,12 +131,12 @@ function Hide(link) {
   <p>
   <ul>
   <!--TMPL_LOOP Name="fwklist"-->
-    <li><!--TMPL_VAR Name="fwkname"--><!--TMPL_IF Name="error"--><br /><font color="red"><b></b><!--TMPL_VAR Name="error"--></font><!--/TMPL_IF--> </li>
+    <li><!--TMPL_VAR Name="fwkname"--><!--TMPL_IF Name="error"--><br /><span class="error"><!--TMPL_VAR Name="error"--></span><!--/TMPL_IF--> </li>
   <!--/TMPL_LOOP-->
   </ul>
   </p>
   <!--/TMPL_LOOP-->
-  <p>Installation complete.<br/>
+  <p>Installation complete.<br />
     <p>Click on Finish to complete and load the Koha Staff Interface.
     <form name="finish">
     <input type="hidden" name="step" value="3" />
@@ -159,7 +159,7 @@ function Hide(link) {
         </ul>
         <form action="install.pl">
         <input type="hidden" name="step" value="3" />
-        <p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
+  <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
         </form>
     <!-- /TMPL_IF -->
 <!--/TMPL_IF-->
@@ -169,8 +169,8 @@ function Hide(link) {
   <p>Now we're ready to create the database tables and fill them with some default data.</p>
   <form action="install.pl">
   <input type="hidden" name="step" value="3" />
-  <input type="hidden" name="op" value="importdatastructure"/>
-  <p> Click Next to continue <input value="Next &gt;&gt;" type="submit"></p>
+  <input type="hidden" name="op" value="importdatastructure" />
+  <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
   </form>
 <!--/TMPL_IF-->
 

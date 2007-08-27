@@ -16,48 +16,51 @@
 <h3>Template Settings</h3>
 <table>
 
-Template Code: <input type="text"  size="40" name="tmpl_code"><br>
-Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_desc" ></TEXTAREA><br>
+Template Code: <input type="text"  size="40" name="tmpl_code" /><br />
+Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_desc" ></textarea><br />
 
 <tr>
-        <td>Page Width:</td><td><input type="text"  size="4" name="page_width"></td>
-        <td>Page Height:</td><td><input type="text" size="4" name="page_height"></td>
+        <td>Page Width:</td><td><input type="text"  size="2" name="page_width" /></td>
+        <td>Page Height:</td><td><input type="text" size="2" name="page_height" /></td>
 </tr>
 <tr>
-        <td>Label Width:</td><td><input type="text"  size="4" name="label_width"></td>
-        <td>Label Height:</td><td><input type="text" size="4" name="label_height"></td>
+        <td>Label Width:</td><td><input type="text"  size="2" name="label_width" /></td>
+        <td>Label Height:</td><td><input type="text" size="2" name="label_height" /></td>
 </tr>
 <tr>
-        <td>Top Page Margin:</td><td><input type="text" size="4" name="topmargin"></td>
-        <td>Left Page Margin:</td><td><input type="text" size="4" name="leftmargin"></td>
+        <td>Top Page Margin:</td><td><input type="text" size="2" name="topmargin" /></td>
+        <td>Left Page Margin:</td><td><input type="text" size="2" name="leftmargin" /></td>
 </tr>
 <tr>
-        <td>Number of Columns:</td><td><input type="text" size="4" name="cols"></td>
-        <td>Number of Rows:</td><td><input type="text" size="4" name="rows"></td>
+        <td>Number of Columns:</td><td><input type="text" size="2" name="cols" /></td>
+        <td>Number of Rows:</td><td><input type="text" size="2" name="rows" /></td>
 </tr>
 <tr>
-        <td>Gap between Columns:</td><td><input type="text" size="4" name="colgap"></td>
-        <td>Gap between Rows:</td><td><input type="text" size="4" name="rowgap"></td>
+        <td>Gap between Columns:</td><td><input type="text" size="2" name="colgap" /></td>
+        <td>Gap between Rows:</td><td><input type="text" size="2" name="rowgap" /></td>
 </tr>
 </table>
 
 
-<br>
+<br />
 Units: <select name="units">
     <!-- TMPL_LOOP NAME="units" -->
         <option value="<!-- TMPL_VAR NAME="unit" -->"><!-- TMPL_VAR NAME="desc" --></option>
     <!-- /TMPL_LOOP -->
 </select>
 
-<br>
-<br>
-Font Size: <input type="textbox" name="fontsize"  SIZE="2"  
-		value="">
-<br>
-<br>
-        <input type="submit" value="Create Template">
-        <input type="reset" value="Reset">
-  <input type="hidden" name=op value="create">
+<br />
+<br />
+Font Size: <input type="textbox" name="fontsize"  size="1" value="" />
+<br />
+<br />
+Active: <input type="checkbox" name="active" />
+
+        <input type="hidden" name="op" value="create" />
+<br />
+<br />
+        <input type="submit" value="Save" />
+        <input type="reset" value="Reset" />
 </form>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

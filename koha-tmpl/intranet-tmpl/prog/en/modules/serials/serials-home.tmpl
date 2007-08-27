@@ -67,9 +67,9 @@ Serials updated :
                 Branch
             </th>
             <!-- TMPL_IF NAME="routing" -->
-              <th colspan=3>&nbsp;</th>
+              <th colspan="3">&nbsp;</th>
             <!-- TMPL_ELSE -->
-              <th colspan=2>&nbsp;</th>
+              <th colspan="2">&nbsp;</th>
             <!-- /TMPL_IF -->        
         </tr>
         <tr>
@@ -79,10 +79,10 @@ Serials updated :
             <!-- /TMPL_IF -->
             <input type="hidden" name="searched" value="1" />
             <td>
-                <input type="text" size=10 maxlength=11 name="ISSN_filter" value="<!-- TMPL_VAR name="ISSN_filter" -->" title="type ISSN here to filter subscription">
+                <input type="text" size="10" maxlength="11" name="ISSN_filter" value="<!-- TMPL_VAR name="ISSN_filter" -->" title="type ISSN here to filter subscription">
             </td>
             <td>
-                <input type="text" size=40 maxlength=40 name="title_filter" value="<!-- TMPL_VAR name="title_filter" -->" title="type a title -complete or partial- to filter subscription" />
+                <input type="text" size="40" maxlength="40" name="title_filter" value="<!-- TMPL_VAR name="title_filter" -->" title="type a title -complete or partial- to filter subscription" />
             </td>
             <td colspan="2">
                 &nbsp;
@@ -119,8 +119,7 @@ Serials updated :
                 <!-- TMPL_ELSE -->
                     <td>
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="notes" --><p><!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
-                <!-- TMPL_IF name="callnumber" --><p><!-- TMPL_VAR name="callnumber" --></p><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
                 </td>
                 <!-- TMPL_IF name="toggle" -->
                     <td class="hilighted">
@@ -135,7 +134,7 @@ Serials updated :
                     <!-- TMPL_ELSE -->
                         <td>
                     <!-- /TMPL_IF -->
-                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Routing List</a>
+                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&amp;op=new<!-- /TMPL_UNLESS -->">Routing List</a>
                     </td>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="toggle" -->

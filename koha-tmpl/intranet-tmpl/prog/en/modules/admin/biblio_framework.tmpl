@@ -70,7 +70,7 @@ function Check(f) {
             <p><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></p>
         <!-- /TMPL_IF -->
         <p><label for="description">Description</label>
-        <input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" escape=HTML -->" /></p>
+        <input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></p>
         <p>	<input type="button" value="Submit" class="submit" onclick="Check(this.form)" /></p>
     </form>
 <!-- /TMPL_IF -->

@@ -65,7 +65,7 @@
                     <tr>
                         <!--TMPL_IF NAME="letter" -->
                             <td class="cell">
-                                <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="javascript:document.claims.op.value='send_alert';" />
+                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';" />
                             </td>
                         <!--/TMPL_IF-->
                         <td class="cell">
@@ -104,8 +104,8 @@
 name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR
 name="supplierid" -->,''); return false" class="button">Supplier Group Claim Letter</a></p> -->
         <!-- /TMPL_IF -->
-        <p><br/>
-            <!--TMPL_IF Name=letter-->
+<p><br />
+<!--TMPL_IF Name="letter--">
                 <input type="submit" name="submit" class="button" value="Send letter" />
             <!--/TMPL_IF-->
         </form>

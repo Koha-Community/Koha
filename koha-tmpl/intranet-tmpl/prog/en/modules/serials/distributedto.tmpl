@@ -23,8 +23,8 @@
 					<!-- /TMPL_IF -->
 					<input type="hidden" name="SaveList" value="0">
 					<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
-					<input type="button" name="save" value="Save" class="button" onClick="FSaveList()">
-					<input type="button" name="clode" value="Close" class="button" onClick="javascript:window.close()">
+					<input type="button" name="save" value="Save" class="button" onclick="FSaveList()">
+					<input type="button" name="clode" value="Close" class="button" onclick="window.close()">
 			</td>
 			</tr>
 			<tr>
@@ -80,7 +80,7 @@
 			}
 		}
 		function FSaveList() {
-			document.Aform.SaveList.value=1;
+			document.Aform.SaveList.value="1";
 			document.Aform.submit();
 		}
 	</script>

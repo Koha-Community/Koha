@@ -70,90 +70,90 @@
         <!-- /TMPL_IF -->
 
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-        <input type="hidden" name="op" value="add_validate">
-        <input type="hidden" name="checked" value=0>
+        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="checked" value="0" />
                         
         <table>  
         <!-- TMPL_IF NAME="categorycode" -->
                 <tr>
                         <td>Category code</td>
                         <td>
-                                <input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->">
+                                <input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" />
                         </td>
                 </tr>
         <!-- TMPL_ELSE -->
                 <tr>
                         <td>Category code</td>
                         <td>
-                                <input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)">
+                                <input type="text" name="categorycode" size="3" maxlength="2" onblur="toUC(this)" />
                         </td>
                 </tr>
         <!-- /TMPL_IF -->
                 <tr>
                         <td>Description</td>
                         <td>
-                                <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->">
+                                <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->" />
                                 &nbsp;
                         </td>
                 </tr>
                 <tr>
                         <td>Enrolment period</td>
                         <td>
-                                <input type="text" name="enrolmentperiod" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->">
+                                <input type="text" name="enrolmentperiod" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Upperage limit</td>
                         <td>
-                                <input type="text" name="upperagelimit" value="<!-- TMPL_VAR NAME="upperagelimit" -->">
+                                <input type="text" name="upperagelimit" value="<!-- TMPL_VAR NAME="upperagelimit" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Age Required</td>
                         <td>
-                                <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->">
+                                <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Fine type</td>
                         <td>
-                                <input type="text" name="finetype" size="30" maxlength="30" value="<!-- TMPL_VAR NAME="finetype" -->">
+                                <input type="text" name="finetype" size="30" maxlength="30" value="<!-- TMPL_VAR NAME="finetype" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Bulk</td>
                         <td>
-                                <input type="text" name="bulk" value="<!-- TMPL_VAR NAME="bulk" -->">
+                                <input type="text" name="bulk" value="<!-- TMPL_VAR NAME="bulk" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Enrolment fee</td>
                         <td>
-                                <input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME="enrolmentfee" -->">
+                                <input type="text" name="enrolmentfee" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Overdue notice required</td>
                         <td>
-                                <input type="text" name="overduenoticerequired" value="<!-- TMPL_VAR NAME="overduenoticerequired" -->">
+                                <input type="text" name="overduenoticerequired" value="<!-- TMPL_VAR NAME="overduenoticerequired" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Issue limit</td>
                         <td>
-                                <input type="text" name="issuelimit" value="<!-- TMPL_VAR NAME="issuelimit" -->">
+                                <input type="text" name="issuelimit" value="<!-- TMPL_VAR NAME="issuelimit" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>Reserve fee</td>
                         <td>
-                                <input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->">
+                                <input type="text" name="reservefee" value="<!-- TMPL_VAR NAME="reservefee" -->" />
                         </td>
                 </tr>
                 <tr>
                         <td>&nbsp;</td>
                         <td>
-                                <input type="button" value="OK" onclick="Check(this.form)">
+                                <input type="button" value="OK" onclick="Check(this.form)" />
                         </td>
                 </tr>
         </table>
@@ -162,7 +162,7 @@
 <!-- TMPL_IF NAME="add_validate" -->
         Data recorded
         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="submit" value="OK">
+                <input type="submit" value="OK" />
         </form>
 <!-- /TMPL_IF -->
 
@@ -177,9 +177,9 @@
                                 <!-- TMPL_VAR NAME="categorycode" -->
                         </td>
                 </tr>
-                <form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-                        <input type="hidden" name="op" value="delete_confirmed">
-                        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->">
+                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                        <input type="hidden" name="op" value="delete_confirmed" />
+                        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" />
                 <tr>
                         <td>Description</td>
                         <td><!-- TMPL_VAR NAME="description" --></td>
@@ -225,9 +225,9 @@
                         <td colspan="2">This record is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</td>
                 </tr>
                <tr>
-                        <td colspan=2>
+                        <td colspan="2">
                                 </form><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                                <input type="submit" value="OK">
+                                <input type="submit" value="OK" />
                                 </form>
                         </td>
                 </tr>
@@ -236,17 +236,17 @@
                         <td colspan="2">CONFIRM DELETION</td>
                 </tr>
                 <tr>
-                        <td><input type="submit" value="YES"></form></td>
-                        <td><form action="<!-- TMPL_VAR NAME=script_name -->" method="post"><input type="submit" value="NO"></form></td>
+                        <td><input type="submit" value="YES" /></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" /></form></td>
                 </tr>
                 <!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=delete_confirmed -->
+<!-- TMPL_IF NAME="delete_confirmed" -->
         data deleted
-        <form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-        <input type="submit" value="OK">
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post" />
+        <input type="submit" value="OK" />
         </form>
 
 <!-- /TMPL_IF -->
@@ -258,8 +258,8 @@
         <!-- /TMPL_IF -->
 
         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME=searchfield -->">
-                <input type="reset" name="reset" value="clr">
+                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+                <input type="reset" name="reset" value="clr" />
         </form>
 
         <table>
@@ -297,8 +297,8 @@
 
         </table>
         <p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="hidden" name="op" value="add_form">
-                <input type="submit" value="Add Category"></a><br />
+                <input type="hidden" name="op" value="add_form" />
+                <input type="submit" value="Add Category" /></a><br />
         </form></p>
 <!-- /TMPL_IF -->
 

@@ -7,25 +7,25 @@
 <h1>Circulation: Library Holds</h1>
 
 <div id="mainbloc">
-        <h2 class="circulation">Holds for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2>Holds for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
                 <div>
                                 <h2>Hold find for(<!-- TMPL_VAR NAME="nextreservtitle" -->)must transfered</h2>
                         <p>This hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this hold.
                         </p>
                         <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
-                                <input type="submit" class="button circulation">
+                                <input type="submit" class="button" />
                         </form>
                 </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="waiting" -->
                 <div id="bloc25">
-                                <h2 class="circulation">This hold is waiting</h2>
+                                <h2>This hold is waiting</h2>
                         <p>This hold (<!-- TMPL_VAR NAME="nextreservtitle" -->) was placed by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
                         Please retain this hold.
                         </p>
                         <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
-                                <input type="submit">
+                                <input type="submit" />
                         </form>
                 </div>
         <!-- /TMPL_IF -->
@@ -34,14 +34,14 @@
             <!-- TMPL_IF NAME="reserveloop" -->
                 <table>
                 <tr>
-                        <th class="circulation" colspan="5">Holds at your library</th>
+                        <th colspan="5">Holds at your library</th>
                 </tr>
                 <tr>
-                        <th class="circulation">Available since</th>
-                        <th class="circulation">Title</th>
-                        <th class="circulation">Patron</th>
-                        <th class="circulation">Localisation</th>
-                        <th class="circulation">Action</th>
+                        <th>Available since</th>
+                        <th>Title</th>
+                        <th>Patron</th>
+                        <th>Localisation</th>
+                        <th>Action</th>
                 </tr>
                         <!-- TMPL_LOOP NAME="reserveloop" -->
                                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
@@ -62,14 +62,14 @@
                                         <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
                                         <td>
                                                 <form name="cancelReserve -->" action="waitingreserves.pl" method="post">
-                                                        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->">
-                                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-                                                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->">
-                                                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->">
+                                                        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->" />
+                                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                                                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
+                                                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->" />
                                                         <!-- TMPL_IF NAME="dotransfer" -->
-                                                        <input type="submit" value="Cancel reserve and return to : <!-- TMPL_VAR NAME="homebranch" -->"> 
+                                                        <input type="submit" value="Cancel reserve and return to : <!-- TMPL_VAR NAME="homebranch" -->" /> 
                                                         <!-- TMPL_ELSE -->
-                                                        <input type="submit" value="Cancel reserve" >
+                                                        <input type="submit" value="Cancel reserve" />
                                                 <!-- /TMPL_IF -->
                                                 </form>
                                         </td>

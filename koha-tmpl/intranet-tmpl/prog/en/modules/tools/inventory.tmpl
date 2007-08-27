@@ -3,7 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
@@ -16,7 +16,7 @@
         <label>Branch</label><select id="branchloop" name="branchcode">
         <!-- TMPL_LOOP NAME="branchloop" -->
             <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR NAME='value' -->" SELECTED><!-- TMPL_VAR NAME='branchname' --></option>
+                <option value="<!-- TMPL_VAR NAME='value' -->" selected="selected"><!-- TMPL_VAR NAME='branchname' --></option>
             <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
             <!-- /TMPL_IF -->
@@ -36,7 +36,7 @@
                 <option value="">Filter location</option>
         <!-- TMPL_LOOP NAME="authorised_values" -->
             <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR NAME='authorised_value' -->" selected><!-- TMPL_VAR NAME='lib' --></option>
+                <option value="<!-- TMPL_VAR NAME='authorised_value' -->" selected="selected"><!-- TMPL_VAR NAME='lib' --></option>
             <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->"><!-- TMPL_VAR NAME='lib' --></option>
             <!-- /TMPL_IF -->
@@ -63,7 +63,7 @@
         </p>
         <p>
             <input type="hidden" name="op" value="do_it" />
-            <input type="submit" value="OK" class="button reports"/>
+            <input type="submit" value="OK" class="button reports" />
         </p>
         </fieldset>
     </form>
@@ -123,7 +123,7 @@
                 <!-- TMPL_VAR NAME="barcode" -->
             </td>
             <td>
-                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href=# onclick="javascript:window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','Catalogue -- Biblio <!--TMPL_VAR Name="biblionumber"-->','width=800,height=600,toolbar=false');"><!-- TMPL_VAR NAME="title" --></a></p>
+                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href=# onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','Catalogue -- Biblio <!--TMPL_VAR Name="biblionumber"-->','width=800,height=600,toolbar=false');"><!-- TMPL_VAR NAME="title" --></a></p>
                 <p><!-- TMPL_VAR NAME="author" --></p>
             </td>
             <td>

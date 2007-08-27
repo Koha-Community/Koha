@@ -9,7 +9,7 @@
 <div id="action">
     <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Subscriptions</a>
     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Back to biblio</a>
-    <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=full">Complete view</a>
+    <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=full">Complete view</a>
     </form>
 </div>
 <!-- TMPL_LOOP name="subscription_LOOP" -->
@@ -80,7 +80,7 @@
         </p>
         <p>Last renewal of subscription was <b><!-- TMPl_VAR name="startdate" --></b></p>
         <!-- TMPL_IF name="enddate" --><p><b>This subscription is now ended. The last issue was recieved on <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF -->
-    <!--TMPL_UNLESS Name=fullinfo -->
+    <!--TMPL_UNLESS Name="fullinfo" -->
         <p><!-- TMPL_VAR name="notes" --></p>
         <!-- TMPL_IF name="opacnote" -->
             <h2>Issues summary</h2>

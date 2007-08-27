@@ -13,9 +13,9 @@
     <a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a>
     <!--TMPL_LOOP Name="subscriptions"-->
     <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a>
-        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
         <!--/TMPL_IF-->
-        <!--TMPL_IF name="subscriptionexpired"--><a href="#" onclick="javascript:popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--TMPL_IF name="subscriptionexpired"--><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
         <!--/TMPL_IF-->
       <!--/TMPL_LOOP-->
     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a>
@@ -54,47 +54,47 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="20" maxlength="100">
         </td>
         <td>
-            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size=10 maxlength=15>
+            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
         </td>
         <td>
             <!--TMPL_IF name="editdisable"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled="disabled">
             <!--TMPL_ELSE-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" OnChange="javascript:if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="javascript:if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
             <!--/TMPL_IF-->
   <!--TMPL_IF name="status1" -->
-                    <option value="1" selected>Waited</option>
+                    <option value="1" selected="selected">Waited</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status2" -->
-                    <option value="2" selected>Arrived</option>
+                    <option value="2" selected="selected">Arrived</option>
   <!--TMPL_ELSE -->
                     <option value="2">Arrived</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status3" -->
-                    <option value="3" selected>Late</option>
+                    <option value="3" selected="selected">Late</option>
   <!-- TMPL_ELSE -->
                     <option value="3">Late</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status4" -->
-                    <option value="4" selected>Missing</option>
+                    <option value="4" selected="selected">Missing</option>
   <!-- TMPL_ELSE -->
                     <option value="4">Missing</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status7" -->
-                    <option value="7" selected>Claimed</option>
+                    <option value="7" selected="selected">Claimed</option>
   <!-- TMPL_ELSE -->
                     <option value="7">Claimed</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status5" -->
-                    <option value="5" selected>Not Available</option>
+                    <option value="5" selected="selected">Not Available</option>
   <!-- TMPL_ELSE -->
                     <option value="5">Not Available</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status6" -->
-                    <option value="6" selected>Delete</option>
+                    <option value="6" selected="selected">Delete</option>
   <!-- TMPL_ELSE -->
                     <option value="6">Delete</option>
   <!-- /TMPL_IF -->
@@ -102,7 +102,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
         </td>
         <td>
-            <input type="text" name="notes" value="<!-- TMPL_VAR name="sernotes" -->" size=20 maxlength=255>
+            <input type="text" name="notes" value="<!-- TMPL_VAR name="sernotes" -->" size="20" maxlength="255">
         </td>
     </tr>
   <!--TMPL_UNLESS Name="subscriptionexpired"-->
@@ -156,46 +156,46 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
-            <b>Subs. <!-- TMPL_VAR name="subscriptionid" --></b> New Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" OnChange="javascript:if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}"/>
+            <b>Subs. <!-- TMPL_VAR name="subscriptionid" --></b> New Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="javascript:if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size=10 maxlength=15>
+            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size=10 maxlength=15>
+            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
         </td>
         <td>
             <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" >
   <!--TMPL_IF name="status1" -->
-                    <option value="1" selected>Waited</option>
+                    <option value="1" selected="selected">Waited</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status2" -->
-                    <option value="2" selected>Arrived</option>
+                    <option value="2" selected="selected">Arrived</option>
   <!--TMPL_ELSE -->
                     <option value="2">Arrived</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status3" -->
-                    <option value="3" selected>Late</option>
+                    <option value="3" selected="selected">Late</option>
   <!-- TMPL_ELSE -->
                     <option value="3">Late</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status4" -->
-                    <option value="4" selected>Missing</option>
+                    <option value="4" selected="selected">Missing</option>
   <!-- TMPL_ELSE -->
                     <option value="4">Missing</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status7" -->
-                    <option value="7" selected>Claimed</option>
+                    <option value="7" selected="selected">Claimed</option>
   <!-- TMPL_ELSE -->
                     <option value="7">Claimed</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status5" -->
-                    <option value="5" selected>Not Available</option>
+                    <option value="5" selected="selected">Not Available</option>
   <!-- TMPL_ELSE -->
                     <option value="5">Not Available</option>
   <!-- /TMPL_IF -->
   <!--TMPL_IF name="status6" -->
-                    <option value="6" selected>Delete</option>
+                    <option value="6" selected="selected">Delete</option>
   <!-- TMPL_ELSE -->
                     <option value="6">Delete</option>
   <!-- /TMPL_IF -->
@@ -203,7 +203,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
         </td>
         <td>
-            <input type="text" name="notes" value="" size=20 maxlength=255>
+            <input type="text" name="notes" value="" size="20" maxlength="255">
         </td>
     </tr>
   <!--TMPL_IF Name="serialsadditems"-->
@@ -247,7 +247,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 <!-- /TMPL_LOOP -->
 
 </table>
-    <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onClick="Check(this.form)" -->
+    <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" -->
 </div>
 </form>
 

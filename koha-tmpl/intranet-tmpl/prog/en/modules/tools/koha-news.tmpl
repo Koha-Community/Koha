@@ -3,7 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
@@ -14,7 +14,7 @@
 <!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
 
 <div id="koha-news_main" class="searchresults">
-    <h1> OPAC & KOHA News</h1>
+    <h1> OPAC &amp; KOHA News</h1>
     <!-- TMPL_IF name="add_form" -->
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
@@ -25,7 +25,7 @@
                 <option value="koha">Librarian interface</option>
                 <!-- TMPL_LOOP name="lang_list" -->
                     <!-- TMPL_IF name="selected" -->
-                        <option value="<!-- TMPL_VAR name="language" -->" selected>
+                        <option value="<!-- TMPL_VAR name="language" -->" selected="selected">
                     <!-- TMPL_ELSE -->
                         <option value="<!-- TMPL_VAR name="language" -->">
                     <!-- /TMPL_IF -->
@@ -40,7 +40,7 @@
             </p>
             <p>
                 <label for="expirationdate">Expiration date</label>
-                <input id="expirationdate" type="text" name="expirationdate" value="<!-- TMPL_VAR NAME="expirationdate" -->"/>
+                <input id="expirationdate" type="text" name="expirationdate" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
                 <script type="text/javascript">
                     Calendar.setup(
                     {
@@ -117,7 +117,7 @@
                                 <!-- TMPL_VAR NAME="new" -->
                             </td>
                             <td>
-                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&id=<!-- TMPL_VAR NAME="idnew" -->">
+                                <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=<!-- TMPL_VAR NAME="idnew" -->">
                                     Edit
                                 </a>
                             </td>

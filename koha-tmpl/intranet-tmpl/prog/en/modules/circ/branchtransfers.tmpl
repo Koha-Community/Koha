@@ -57,7 +57,7 @@
                             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                             <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
                             <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
-                            <input type="hidden" name="barcode" value=<!-- TMPL_VAR Name="barcode" --> />
+                            <input type="hidden" name="barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Cancel" />
                         </form>
@@ -68,7 +68,7 @@
                     <th>Ignore and return to transfers: </th>
                         <td>
                             <form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
-                                <input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR Name="tobranchcd" --> />
+                                <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
                                 <input type="hidden" name="barcode" />
                                 <!-- TMPL_LOOP Name="trsfitemloop" -->
                                     <input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
@@ -88,10 +88,10 @@
             <td>
                 <!-- TMPL_IF Name="reqmessage" -->
                     <!-- TMPL_IF Name="cancelled" -->
-                        Reserve Cancelled<br>
+                        Reserve Cancelled<br />
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="setwaiting" -->
-                        Item should now be waiting at library: <!-- TMPL_VAR Name="reqbrchname" --><br>
+                        Item should now be waiting at library: <!-- TMPL_VAR Name="reqbrchname" --><br />
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
                 <!-- TMPL_LOOP Name="errmsgloop" -->

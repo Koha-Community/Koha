@@ -5,7 +5,7 @@
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
 
 <div id="mainbloc">
-	<h1 class="circulation">Transfers made TO your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
+	<h1>Transfers made TO your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF name="branchesloop" -->
             <p>Your library is the destination for the following transfer(s)</p>
             <div id="resultlist">
@@ -13,14 +13,14 @@
                 <!-- TMPL_IF NAME="branchcode" -->
                 <table>
                 <tr>
-                        <th class="circulation" colspan="5">Coming from <!-- TMPL_VAR NAME="branchname" --> </th>
+                        <th colspan="5">Coming from <!-- TMPL_VAR NAME="branchname" --> </th>
                 </tr>
                 <tr>
-                    <th class="circulation">Date of transfer</th>
-                    <th class="circulation">Title</th>
-                    <th class="circulation">Reserved by </th>
-                    <th class="circulation">Localisation</th>
-                    <th class="circulation">Action</th>
+                    <th>Date of transfer</th>
+                    <th>Title</th>
+                    <th>Reserved by </th>
+                    <th>Localisation</th>
+                    <th>Action</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="reserv" -->
                     <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
@@ -61,7 +61,7 @@
                     </tr>
                 <!-- /TMPL_LOOP -->	
                 </table>
-                <br><br>
+                <br /><br />
                 <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </div>

@@ -67,8 +67,7 @@ Item Types Administration
           <label for="description">Description</label>
         </th>
 	<td>
-          <input type="text" id="description" name="description" size="48" maxlength="80"
-                value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
+          <input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
         </td>
       </tr>
       <tr>
@@ -85,7 +84,7 @@ Item Types Administration
               <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="KohaImageSrc" -->
-              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="">
+              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="" />
         <!-- TMPL_ELSE -->
               <br />
         <!-- /TMPL_IF -->
@@ -102,16 +101,10 @@ Item Types Administration
   <!-- /TMPL_IF -->
             remote image
             </label>
-            <input type="text"
-                   name="remoteImage"
-                   size="48"
-              maxlength="200"
-                  value="<!-- TMPL_VAR name="remote_image" -->"
-            onmousedown="document.getElementById('remote_image_check').checked = true;"
-            />
+            <input type="text" name="remoteImage" size="48" maxlength="200" value="<!-- TMPL_VAR name="remote_image" -->" onmousedown="document.getElementById('remote_image_check').checked = true;" />
             </label>
   <!-- TMPL_IF name="remote_image" -->
-            <img src="<!-- TMPL_VAR name="remote_image" -->" />
+            <img src="<!-- TMPL_VAR name="remote_image" -->" alt="" />
   <!-- /TMPL_IF -->
           </p>
           <hr />
@@ -141,10 +134,9 @@ Item Types Administration
           <input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="
   <!-- TMPL_IF name="renewalsallowed" -->
           <!-- TMPL_VAR NAME="renewalsallowed" -->
-  <!-- /TMPL_IF -->" value="1" /><!-- Display for NPL //<input type="hidden" name="rentalcharge" value="0" /> //Display for NPL -->
+  <!-- /TMPL_IF -->" value="1" />
         </td>
       </tr>
-<!-- Hide from NPL-->
       <tr>
         <th>
           <label for="rentalcharge">Rental charge</label>
@@ -152,7 +144,7 @@ Item Types Administration
         <td>
           <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" />
         </td>
-      </tr><!--  /Hide from NPL -->
+      </tr>
       <tr>
         <th>
           <label for="rentalcharge">Summary</label>
@@ -214,7 +206,7 @@ Item Types Administration
     <!-- TMPL_ELSE -->
   <tr class="highlight">
     <!-- /TMPL_IF -->
-    <td><img src="<!-- TMPL_VAR name="imageurl" -->" /></td>
+    <td><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /></td>
     <td>
       <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">
         <!-- TMPL_VAR name="itemtype" -->

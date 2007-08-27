@@ -3,7 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
 <script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/lib/calendar/calendar-en.js"></script>
@@ -21,7 +21,7 @@
     <form name="f1" onsubmit="return checkForm(this);" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post">
     <fieldset>
     <legend>What do you want to do ?</legend>
-        <p><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" checked />
+        <p><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" checked="checked" />
         Delete borrower who has not borrowed since:
         <input size="10" id="date1" name="filterdate1" value="<!-- TMPL_VAR NAME="filterdate1"-->" type="text" /></p>
             <script type="text/javascript">
@@ -34,7 +34,7 @@
             </script>
         
         <br />
-        <p><input id="checkissue" type="checkbox" name="checkbox" value="issue" checked />
+        <p><input id="checkissue" type="checkbox" name="checkbox" value="issue" checked="checked" />
         Anonymize issue history older than
         <input size="10" id="date2" name="filterdate2" value="<!-- TMPL_VAR NAME="filterdate2"-->" type="text" /></p>
             <script type="text/javascript">
@@ -72,7 +72,7 @@
             <!-- TMPL_IF NAME="totalToDelete" -->
                 What do you want to do for deleted members ?<br />
                 <label for="delete">Delete completly theses members</label>
-                <input id="delete" type="radio" name="radio" value="delete" checked/>
+                <input id="delete" type="radio" name="radio" value="delete" checked="checked" />
                 
                 <label for="trash">Move to trash theses members</label>
                 <input id="trash" type="radio" name="radio" value="trash" />
@@ -86,7 +86,7 @@
             <!-- /TMPL_IF -->
             <br /><br />
             <a href="JavaScript:back();" title="go back">Cancel</a>
-            <input type="submit" value=" OK " style="float:right;"/>
+            <input type="submit" value=" OK " style="float:right;" />
             
             <input type="hidden" name="step3" value="1" />
             <input type="hidden" name="filterdate1" value="<!-- TMPL_VAR NAME="filterdate1" -->" />

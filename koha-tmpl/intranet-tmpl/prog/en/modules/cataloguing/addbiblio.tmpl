@@ -10,7 +10,7 @@
 <!--TMPL_IF Name="done"-->
     <script language="javascript" type="text/javascript">
         opener.document.forms['f'].biblionumber.value=<!--TMPL_VAR Name="biblionumber"-->;
-        opener.document.forms['f'].title.value='<!--TMPL_VAR Name="title" ESCAPE=HTML-->';
+        opener.document.forms['f'].title.value='<!--TMPL_VAR Name="title" ESCAPE="HTML"-->';
         window.close();
     </script>
 <!--TMPL_ELSE-->
@@ -60,7 +60,7 @@
     <!-- show duplicate warning on tab 0 only -->
         <!-- TMPL_IF name="duplicatebiblionumber" -->
                     <div class="error">
-                        <p class="problem">Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
+                        <p class="problem">Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
                         <p>You must either :</p>
                         <ul>
                             <li>If it <em>is</em> a duplicate, <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->">Edit Items</a> of the existing record.</li>
@@ -111,7 +111,7 @@
             <!-- /TMPL_UNLESS -->
 
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-	            <a onClick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
+	            <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="repeatable" -->
                 <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')">+</span>
@@ -129,7 +129,7 @@
                 <!-- /TMPL_UNLESS --> 
                 
                 <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')"/>
+                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')" />
                         <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
                             style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
                             name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
@@ -137,11 +137,11 @@
                             size="1"
                             maxlength="1"
                             class="flat"
-                            tabindex=-1 />
+                            tabindex="-1" />
                 <!-- TMPL_ELSE -->
                     <input type="hidden"
                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                           value="<!-- TMPL_VAR NAME="subfield" -->"/>
+                           value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <!-- /TMPL_UNLESS -->
             
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->

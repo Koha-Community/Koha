@@ -53,55 +53,55 @@
 <!-- TMPL_IF NAME="step_1"-->
 		<form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 		<!-- 		field always hidden in different form (1,2,3) -->		
-			<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
-			<input type="hidden" name="FormFieldList" value="cardnumber|title|surname|firstname|dateofbirth|initials|othernames|select_city|sort1|sort2">
-			<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
-			<input type="hidden" name="type" value="borrowers">
-			<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
-			<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
-			<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->">
-			<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
+			<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
+			<input type="hidden" name="FormFieldList" value="cardnumber|title|surname|firstname|dateofbirth|initials|othernames|select_city|sort1|sort2" />
+			<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
+			<input type="hidden" name="type" value="borrowers" />
+			<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->" />
+			<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
+			<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
+			<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
 			<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 			<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-			<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+			<input type="hidden" name="nodouble" value="<!-- TMPL_VAR NAME="nodouble" -->" />
 	
 			<!-- 		input from form 2 -->
-			<input type="hidden" name="contacttitle" size="20" value="<!-- TMPL_VAR NAME="contacttitle" -->">
-			<input type="hidden" name="contactname" value="<!-- TMPL_VAR NAME="contactname" -->">
-			<input type="hidden" name="contactfirstname" value="<!-- TMPL_VAR NAME="contactfirstname" -->">		
-			<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" -->">
-			<input type="hidden" name="streetnumber" value="<!-- TMPL_VAR NAME="streetnumber" -->">
-			<input type="hidden" name="streettype" value="<!-- TMPL_VAR NAME="streettype" -->">
-			<input type="hidden" name="address"  value="<!-- TMPL_VAR NAME="address" -->">
-			<input type="hidden" name="address2"  value="<!-- TMPL_VAR NAME="address2" -->">
-			<input type="hidden" name="zipcode" value="<!-- TMPL_VAR NAME="zipcode" -->">
-			<input type="hidden" name="city" value="<!-- TMPL_VAR NAME="city" -->">
-			<input type="hidden" name="relationship" value="<!-- TMPL_VAR NAME="relationship" -->"> 
-			<input type="hidden" name="phone" value="<!-- TMPL_VAR NAME="phone" -->" >
-			<input type="hidden" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" >
-			<input type="hidden" name="mobile" size="10" value="<!-- TMPL_VAR NAME="mobile" -->" >	
-			<input type="hidden" name="email" value="<!-- TMPL_VAR NAME="email" -->" >
-			<input type="hidden" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" >
-			<input type="hidden" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" >	
-			<input type="hidden" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" >
-			<input type="hidden" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >	
+			<input type="hidden" name="contacttitle" size="20" value="<!-- TMPL_VAR NAME="contacttitle" -->" />
+			<input type="hidden" name="contactname" value="<!-- TMPL_VAR NAME="contactname" -->" />
+			<input type="hidden" name="contactfirstname" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
+			<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" -->" />
+			<input type="hidden" name="streetnumber" value="<!-- TMPL_VAR NAME="streetnumber" -->" />
+			<input type="hidden" name="streettype" value="<!-- TMPL_VAR NAME="streettype" -->" />
+			<input type="hidden" name="address" value="<!-- TMPL_VAR NAME="address" -->" />
+			<input type="hidden" name="address2" value="<!-- TMPL_VAR NAME="address2" -->" />
+			<input type="hidden" name="zipcode" value="<!-- TMPL_VAR NAME="zipcode" -->" />
+			<input type="hidden" name="city" value="<!-- TMPL_VAR NAME="city" -->" />
+			<input type="hidden" name="relationship" value="<!-- TMPL_VAR NAME="relationship" -->" /> 
+			<input type="hidden" name="phone" value="<!-- TMPL_VAR NAME="phone" -->" />
+			<input type="hidden" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" />
+			<input type="hidden" name="mobile" size="10" value="<!-- TMPL_VAR NAME="mobile" -->" />	
+			<input type="hidden" name="email" value="<!-- TMPL_VAR NAME="email" -->" />
+			<input type="hidden" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" />
+			<input type="hidden" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" />	
+			<input type="hidden" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />
+			<input type="hidden" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" />	
 
 			<!-- 		input from form3		 -->
-			<input type="hidden" name="dateenrolled" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
-			<input type="hidden" name="dateexpiry"  value="<!-- TMPL_VAR NAME="dateexpiry" -->">
+			<input type="hidden" name="dateenrolled" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
+			<input type="hidden" name="dateexpiry" value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
 			<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 			<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
-			<input type="hidden" name="userid"  value="<!-- TMPL_VAR NAME="userid" -->">
-			<input type="hidden" name="password"  value="<!-- TMPL_VAR NAME="password" -->">	
+			<input type="hidden" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
+			<input type="hidden" name="password" value="<!-- TMPL_VAR NAME="password" -->" />
 			<input type="hidden" name="debarred"  value="<!-- TMPL_VAR NAME="debarred" -->" />
 			<input type="hidden" name="lost"  value="<!-- TMPL_VAR NAME="lost" -->" />
 			<input type="hidden" name="gonenoaddress"  value="<!-- TMPL_VAR NAME="gonenoaddress" -->" />	
 
 	<!-- TMPL_IF NAME="opadd" -->
-		<input type="hidden" name="op" value="add">
+		<input type="hidden" name="op" value="add" />
 	<!-- TMPL_ELSE -->
-		<input type="hidden" name="op" value="modify">
+		<input type="hidden" name="op" value="modify" />
 	<!-- /TMPL_IF -->
 		<!-- TMPL_VAR NAME="member" -->
 			<p>
@@ -111,17 +111,17 @@
 				<label>
 				<!-- /TMPL_IF-->
 				Card number</label>
-				 <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
+				 <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
 			</p>	
 	<fieldset id="memberentry_identity">
 		<legend>Patron identity</legend>
 		<p>
 		<!-- TMPL_IF NAME="female" -->
-		<input type="radio" name="sex" value="F" checked>Female
-		<input type="radio" name="sex" value="M">Male
+		<input type="radio" name="sex" value="F" checked="checked" />Female
+		<input type="radio" name="sex" value="M" />Male
 		<!-- TMPL_ELSE -->
-		<input type="radio" name="sex" value="F">Female
-		<input type="radio" name="sex" value="M" checked>Male
+		<input type="radio" name="sex" value="F" />Female
+		<input type="radio" name="sex" value="M" checked="checked" />Male
 		<!-- /TMPL_IF -->
 		</p>
 		<p>
@@ -141,9 +141,9 @@
 		<!-- /TMPL_IF-->
 		Surname</label>
 		<! --TMPL_IF NAME="uppercasesurnames" -->                                
-		<input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+		<input style="text-transform:uppercase;" type="text" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
         <!-- TMPL_ELSE -->                       
-		<input style="text-transform:capitalize;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >   
+		<input style="text-transform:capitalize;" type="text" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />   
         <!-- /TMPL_IF --> 
 		</p>
 		<p>
@@ -153,7 +153,7 @@
 		<label>
 		<!-- /TMPL_IF-->
 		Firstname</label>
-		<input style="text-transform:capitalize;" type="text" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->">
+		<input style="text-transform:capitalize;" type="text" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateofbirth" -->
@@ -162,8 +162,8 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Date of birth</label>
-			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
-            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" />
+			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="dateofbirth_button" alt="" />
             <script language="JavaScript" type="text/javascript">
             Calendar.setup(
             {
@@ -181,7 +181,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Initials</label>
-			<input type="text" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->">	
+			<input type="text" name="initials" size="20" value="<!-- TMPL_VAR NAME="initials" -->" />	
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryothernames" -->
@@ -190,18 +190,18 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Other name</label>
-			<input style="text-transform:uppercase;" type="text" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
+			<input style="text-transform:uppercase;" type="text" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->" />
 		</p>
 	
 	<p>
-	<input name="guarantordelete" type="button" value="Delete Guarantor" onClick="javascript:document.form.guarantorid.value='';document.form.guarantorinfo.value='',document.form.guarantorsearch.value='Find guarantor';">
+	<input name="guarantordelete" type="button" value="Delete Guarantor" onclick="document.form.guarantorid.value='';document.form.guarantorinfo.value='',document.form.guarantorsearch.value='Find guarantor';" />
 	<!-- TMPL_IF NAME="guarantorid"-->	
 		
-		<input name="guarantorsearch" type="button" value="Modify Guarantor" onClick="javascript:Dopopguarantor('guarantor_search.pl');">
+		<input name="guarantorsearch" type="button" value="Modify Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
 	<!-- TMPL_ELSE -->
-		<input name="guarantorsearch" type="button" value="Find guarantor" onClick="javascript:Dopopguarantor('guarantor_search.pl');">
+		<input name="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
 	<!-- /TMPL_IF -->
-	<input name="guarantorinfo" type="text"  size="20"  value="<!-- TMPL_VAR NAME="guarantorinfo" -->" disabled readOnly >
+	<input name="guarantorinfo" type="text"  size="20" value="<!-- TMPL_VAR NAME="guarantorinfo" -->" disabled="disabled" readonly="readonly" />
 	</p>
 	</fieldset>
 	<fieldset id="memberentry_identity">
@@ -237,7 +237,7 @@
 			<!--TMPL_IF NAME="CGIsort1" -->	
 				<!-- TMPL_VAR NAME="CGIsort1" -->
 			<!--TMPL_ELSE-->
-				<input  type="text" name="sort1" size="20"  value="<!-- TMPL_VAR NAME="sort1" -->" >
+				<input  type="text" name="sort1" size="20" value="<!-- TMPL_VAR NAME="sort1" -->" />
 			<!-- /TMPL_IF -->		
 		</p>
 		<p>
@@ -250,12 +250,12 @@
 		<!--TMPL_IF NAME="CGIsort2" -->	
 			<!-- TMPL_VAR NAME="CGIsort2" -->
 		<!--TMPL_ELSE-->
-			<input  type="text" name="sort2" size="20"  value="<!-- TMPL_VAR NAME="sort2" -->" >
+			<input  type="text" name="sort2" size="20" value="<!-- TMPL_VAR NAME="sort2" -->" />
 		<!-- /TMPL_IF -->	
 		</p>
 	</fieldset>
 	<div>
-		<input type="button" name="next_step" value="Next Step" onclick="if(document.form.guarantorinfo.value){check_form_borrowers(1)} else{alert(_('You must define a guarantor'));};">
+		<input type="button" name="next_step" value="Next Step" onclick="if(document.form.guarantorinfo.value){check_form_borrowers(1)} else{alert(_('You must define a guarantor'));};" />
 	</div>
 </form>
 <!-- ************************ STEP_1 *********************** -->
@@ -264,48 +264,48 @@
 <!-- TMPL_IF NAME="step_2"-->
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 <!-- 		field always hidden in different form (1,2,3) -->
-		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
-		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|contacttitle|city|contactname|contactfirstname|phone|phonepro|mobile|email|emailpro|B_email|B_phone|relationship|fax">
-		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
-		<input type="hidden" name="type" value="borrowers">
-		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
-		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
-		<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->">
-		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
+		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
+		<input type="hidden" name="FormFieldList" value="cardnumber|streetnumber|streettype|address|address2|zipcode|contacttitle|city|contactname|contactfirstname|phone|phonepro|mobile|email|emailpro|B_email|B_phone|relationship|fax" />
+		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
+		<input type="hidden" name="type" value="borrowers" />
+		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->" />
+		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
+		<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
+		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-		<input type="hidden" name="nodouble"   value="<!-- TMPL_VAR NAME="nodouble" -->"/>
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+		<input type="hidden" name="nodouble"   value="<!-- TMPL_VAR NAME="nodouble" -->" />
 
 <!-- 		input from form 1 		-->
-		<input type="hidden" name="title" size="10" value="<!-- TMPL_VAR NAME="title" -->">
-		<input style="text-transform:capitalize;" type="hidden" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->">
-		<input style="text-transform:uppercase;" type="hidden" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" >
-		<input type="hidden" name="dateofbirth" size="20"  value="<!-- TMPL_VAR NAME="dateofbirth" -->">
-		<input type="hidden" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->">
-		<input type="hidden" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
-		<input type="hidden" name="sex" value="<!-- TMPL_VAR NAME="sex" -->" >
-		<input type="hidden" name="categorycode" size="10" value="<!-- TMPL_VAR NAME="categorycode" -->">
-		<input type="hidden" name="select_city" value="<!-- TMPL_VAR NAME="select_city" -->">	
-		<input type="hidden" name="sort1"  value="<!-- TMPL_VAR NAME="sort1" -->">
-		<input type="hidden" name="sort2"  value="<!-- TMPL_VAR NAME="sort2" -->">
-		<input name="guarantorinfo" type="hidden"  size="20"  value="<!-- TMPL_VAR NAME="guarantorinfo" -->" readOnly >
+		<input type="hidden" name="title" size="10" value="<!-- TMPL_VAR NAME="title" -->" />
+		<input style="text-transform:capitalize;" type="hidden" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
+		<input style="text-transform:uppercase;" type="hidden" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+		<input type="hidden" name="dateofbirth" size="20" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+		<input type="hidden" name="initials" size="20" value="<!-- TMPL_VAR NAME="initials" -->" />
+		<input type="hidden" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->" />
+		<input type="hidden" name="sex" value="<!-- TMPL_VAR NAME="sex" -->" />
+		<input type="hidden" name="categorycode" size="10" value="<!-- TMPL_VAR NAME="categorycode" -->" />
+		<input type="hidden" name="select_city" value="<!-- TMPL_VAR NAME="select_city" -->" />	
+		<input type="hidden" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+		<input type="hidden" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+		<input name="guarantorinfo" type="hidden"  size="20" value="<!-- TMPL_VAR NAME="guarantorinfo" -->" readonly="readonly" />
 
 <!-- 		input from form3		 -->
-		<input type="hidden" name="dateenrolled" size="20" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
-		<input type="hidden" name="dateexpiry" size="20" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
+		<input type="hidden" name="dateenrolled" size="20" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
+		<input type="hidden" name="dateexpiry" size="20" value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
 		<textarea  style="display:none;" name="opacnote" cols="70" rows="3"><!-- TMPL_VAR NAME="opacnote"--></textarea>
 		<textarea style="display:none;" name="borrowernotes" cols="70" rows="3"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
-		<input type="hidden" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->">
-		<input type="hidden" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->">	
+		<input type="hidden" name="userid" size="20" value="<!-- TMPL_VAR NAME="userid" -->" />
+		<input type="hidden" name="password" size="20" value="<!-- TMPL_VAR NAME="password" -->" />
 		<input type="hidden" name="debarred"  value="<!-- TMPL_VAR NAME="debarred" -->" />
 		<input type="hidden" name="lost"  value="<!-- TMPL_VAR NAME="lost" -->" />
 		<input type="hidden" name="gonenoaddress"  value="<!-- TMPL_VAR NAME="gonenoaddress" -->" />
 
 		<!-- TMPL_IF NAME="opadd" -->
-			<input type="hidden" name="op" value="add">
+			<input type="hidden" name="op" value="add" />
 		<!-- TMPL_ELSE -->
-			<input type="hidden" name="op" value="modify">
+			<input type="hidden" name="op" value="modify" />
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_VAR NAME="member" -->
@@ -316,7 +316,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Card number</label>
-			<input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
+			<input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
 		</p>
 		<fieldset>
 		<legend>Guarantor</legend>
@@ -341,7 +341,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Surname</label>	
-			<input type="text" style="text-transform:uppercase;" name="contactname" size="20" value="<!-- TMPL_VAR NAME="contactname" -->">
+			<input type="text" style="text-transform:uppercase;" name="contactname" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorycontactfirstname" -->
@@ -350,7 +350,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Firstname</label>	
-			<input type="text" style="text-transform:capitalize;" name="contactfirstname" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->">
+			<input type="text" style="text-transform:capitalize;" name="contactfirstname" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorybranchcode" -->
@@ -368,7 +368,7 @@
 				<label>
 			<!-- /TMPL_IF-->	
 			Street number</label> 
-			<input type="text" name="streetnumber" size="5" value="<!-- TMPL_VAR NAME="streetnumber" -->">
+			<input type="text" name="streetnumber" size="5" value="<!-- TMPL_VAR NAME="streetnumber" -->" />
 		</p>
 			<!-- TMPL_IF NAME="road_cgipopup" -->
 				<p>
@@ -388,7 +388,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Address</label> 
-			<input type="text" name="address" size="35" value="<!-- TMPL_VAR NAME="address" -->">
+			<input type="text" name="address" size="35" value="<!-- TMPL_VAR NAME="address" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryaddress2" -->	
@@ -397,7 +397,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Address 2</label>
-			<input type="text" name="address2" size="35" value="<!-- TMPL_VAR NAME="address2" -->">
+			<input type="text" name="address2" size="35" value="<!-- TMPL_VAR NAME="address2" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryzipcode" -->
@@ -406,7 +406,7 @@
 				<label>
 			<!-- /TMPL_IF-->	
 			Zipcode</label>
-			<input type="text" maxlength="5" name="zipcode" size="10" value="<!-- TMPL_VAR NAME="zipcode" -->">
+			<input type="text" maxlength="5" name="zipcode" size="10" value="<!-- TMPL_VAR NAME="zipcode" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorycity" -->
@@ -415,7 +415,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			City</label>
-			<input style="text-transform:uppercase;" type="text" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->">
+			<input style="text-transform:uppercase;" type="text" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryrelationship" -->
@@ -441,7 +441,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		Phone (home)</label>
-		<input type="text" name="phone" value="<!-- TMPL_VAR NAME="phone" -->" >
+		<input type="text" name="phone" value="<!-- TMPL_VAR NAME="phone" -->" />
 	</p>
 	<p>
 		<!-- TMPL_IF NAME="mandatoryphonepro" -->
@@ -450,7 +450,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		Phone (prof)</label>
-		<input type="text" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" >
+		<input type="text" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" />
 	</p>
 	<p>
 		<!-- TMPL_IF NAME="mandatorymobile" -->
@@ -459,7 +459,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		Phone (cell)</label>
-		<input type="text" name="mobile" value="<!-- TMPL_VAR NAME="mobile" -->" >
+		<input type="text" name="mobile" value="<!-- TMPL_VAR NAME="mobile" -->" />
 	</p>
 	<p>
 		<!-- TMPL_IF NAME="mandatoryemail" -->
@@ -468,7 +468,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		E-mail (home)</label>
-		<input type="text" name="email" value="<!-- TMPL_VAR NAME="email" -->" >	
+		<input type="text" name="email" value="<!-- TMPL_VAR NAME="email" -->" />	
 	</p>
 	<p>
 		<!-- TMPL_IF NAME="mandatoryemailpro" -->
@@ -477,7 +477,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		E-mail (prof)</label>
-		<input type="text" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" >		
+		<input type="text" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" />		
 	</p>
 	<p>
 		<!-- TMPL_IF NAME="mandatoryfax" -->
@@ -486,7 +486,7 @@
 			<label>
 		<!-- /TMPL_IF-->
 		fax</label>
-		<input type="text" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >	
+		<input type="text" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" />	
 	</p>
 	<h2>Borrower</h2>
 	<p>	
@@ -496,19 +496,19 @@
 			<label>
 		<!-- /TMPL_IF-->
 		E-mail (home)</label>
-		<input type="text" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" >	
+		<input type="text" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" />	
 		<!-- TMPL_IF NAME="mandatoryB_phone" -->
 			<label style="font-weight:bold">
 		<!--TMPL_ELSE-->
 			<label>
 		<!-- /TMPL_IF-->
 		Phone (cell)</label>	
-		<input type="text" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" >			
+		<input type="text" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />			
 	</p>
 	</fieldset>
 	<div>
-		<input type="button" name="step1" value="Previous step" onclick="check_form_borrowers(0);">
-		<input type="button" name="step3" onclick="check_form_borrowers(3)" value="Next step">
+		<input type="button" name="step1" value="Previous step" onclick="check_form_borrowers(0);" />
+		<input type="button" name="step3" onclick="check_form_borrowers(3)" value="Next step" />
 	</div>
 </form>
 
@@ -516,57 +516,57 @@
 <!-- TMPL_IF NAME="step_3"-->
 	<form name="form" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 <!-- 		field always hidden in different form (1,2,3) -->
-		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
-		<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password">
-		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
-		<input type="hidden" name="type" value="borrowers">
-		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
-		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
-		<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->">
-		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
+		<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
+		<input type="hidden" name="FormFieldList" value="cardnumber|dateenrolled|dateexpiry|opacnote|borrowernotes|userid|password" />
+		<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
+		<input type="hidden" name="type" value="borrowers" />
+		<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->" />
+		<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
+		<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
+		<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
 		<input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 		<input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-		<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->"/>
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+		<input type="hidden" name="nodouble" value="<!-- TMPL_VAR NAME="nodouble" -->" />
 
 <!-- 		input from form 1 		-->
-		<input type="hidden" name="title" size="10" value="<!-- TMPL_VAR NAME="title" -->">
-		<input style="text-transform:capitalize;" type="hidden" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->">
-		<input style="text-transform:uppercase;" type="hidden" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" >
-		<input type="hidden" name="dateofbirth" size="20"  value="<!-- TMPL_VAR NAME="dateofbirth" -->">
-		<input type="hidden" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->">
-		<input type="hidden" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
-		<input type="hidden" name="sex" value="<!-- TMPL_VAR NAME="sex" -->" >
-		<input type="hidden" name="categorycode" size="10" value="<!-- TMPL_VAR NAME="categorycode" -->">
-		<input type="hidden" name="select_city" value="<!-- TMPL_VAR NAME="select_city" -->">	
-		<input type="hidden" name="sort1"  value="<!-- TMPL_VAR NAME="sort1" -->">
-		<input type="hidden" name="sort2"  value="<!-- TMPL_VAR NAME="sort2" -->">
-		<input name="guarantorinfo" type="hidden"  size="20"  value="<!-- TMPL_VAR NAME="guarantorinfo" -->" readOnly >
+		<input type="hidden" name="title" size="10" value="<!-- TMPL_VAR NAME="title" -->" />
+		<input style="text-transform:capitalize;" type="hidden" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
+		<input style="text-transform:uppercase;" type="hidden" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+		<input type="hidden" name="dateofbirth" size="20" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+		<input type="hidden" name="initials" size="20" value="<!-- TMPL_VAR NAME="initials" -->" />
+		<input type="hidden" name="othernames" size="20" value="<!-- TMPL_VAR NAME="othernames" -->" />
+		<input type="hidden" name="sex" value="<!-- TMPL_VAR NAME="sex" -->" />
+		<input type="hidden" name="categorycode" size="10" value="<!-- TMPL_VAR NAME="categorycode" -->" />
+		<input type="hidden" name="select_city" value="<!-- TMPL_VAR NAME="select_city" -->" />	
+		<input type="hidden" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+		<input type="hidden" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+		<input name="guarantorinfo" type="hidden"  size="20" value="<!-- TMPL_VAR NAME="guarantorinfo" -->" readonly="readonly" />
 <!-- 		input from form 2 -->
-		<input type="hidden" name="contacttitle" size="20" value="<!-- TMPL_VAR NAME="contacttitle" -->">
-		<input type="hidden" name="contactname" size="35" value="<!-- TMPL_VAR NAME="contactname" -->">
-		<input type="hidden" name="contactfirstname" size="5" value="<!-- TMPL_VAR NAME="contactfirstname" -->">		
-		<input type="hidden" name="branchcode" size="20" value="<!-- TMPL_VAR NAME="branchcode" -->">
-		<input type="hidden" name="streetnumber"  value="<!-- TMPL_VAR NAME="streetnumber" -->">
-		<input type="hidden" name="streettype"  value="<!-- TMPL_VAR NAME="streettype" -->">
-		<input type="hidden" name="address"  value="<!-- TMPL_VAR NAME="address" -->">
-		<input type="hidden" name="address2"  value="<!-- TMPL_VAR NAME="address2" -->">
-		<input type="hidden" name="zipcode" size="20" value="<!-- TMPL_VAR NAME="zipcode" -->">
-		<input type="hidden" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->">
-		<input type="hidden" name="relationship" size="20" value="<!-- TMPL_VAR NAME="relationship" -->"> 
-		<input type="hidden" name="phone" size="10"  value="<!-- TMPL_VAR NAME="phone" -->" >
-		<input type="hidden" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" >
-		<input type="hidden" name="mobile" size="10" value="<!-- TMPL_VAR NAME="mobile" -->" >	
-		<input type="hidden" name="email" value="<!-- TMPL_VAR NAME="email" -->" >
-		<input type="hidden" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" >
-		<input type="hidden" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" >	
-		<input type="hidden" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" >
-		<input type="hidden" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >	
+		<input type="hidden" name="contacttitle" size="20" value="<!-- TMPL_VAR NAME="contacttitle" -->" />
+		<input type="hidden" name="contactname" size="35" value="<!-- TMPL_VAR NAME="contactname" -->" />
+		<input type="hidden" name="contactfirstname" size="5" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />		
+		<input type="hidden" name="branchcode" size="20" value="<!-- TMPL_VAR NAME="branchcode" -->" />
+		<input type="hidden" name="streetnumber" value="<!-- TMPL_VAR NAME="streetnumber" -->" />
+		<input type="hidden" name="streettype" value="<!-- TMPL_VAR NAME="streettype" -->" />
+		<input type="hidden" name="address" value="<!-- TMPL_VAR NAME="address" -->" />
+		<input type="hidden" name="address2" value="<!-- TMPL_VAR NAME="address2" -->" />
+		<input type="hidden" name="zipcode" size="20" value="<!-- TMPL_VAR NAME="zipcode" -->" />
+		<input type="hidden" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
+		<input type="hidden" name="relationship" size="20" value="<!-- TMPL_VAR NAME="relationship" -->" /> 
+		<input type="hidden" name="phone" size="10" value="<!-- TMPL_VAR NAME="phone" -->" />
+		<input type="hidden" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" />
+		<input type="hidden" name="mobile" size="10" value="<!-- TMPL_VAR NAME="mobile" -->" />	
+		<input type="hidden" name="email" value="<!-- TMPL_VAR NAME="email" -->" />
+		<input type="hidden" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" />
+		<input type="hidden" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" />	
+		<input type="hidden" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />
+		<input type="hidden" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" />	
 		
 		<!-- TMPL_IF NAME="opadd" -->
-			<input type="hidden" name="op" value="add">
+			<input type="hidden" name="op" value="add" />
 		<!-- TMPL_ELSE -->
-			<input type="hidden" name="op" value="modify">
+			<input type="hidden" name="op" value="modify" />
 		<!-- /TMPL_IF -->
 		<p>
 			<!-- TMPL_IF NAME="mandatorycardnumber" -->
@@ -575,7 +575,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			 Card number</label>
-			<input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
+			<input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
 		</p>
 	<fieldset id="memberentry_subscription">
 	<legend>Library set-up</legend>
@@ -586,7 +586,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Arrival date</label>
-			<input type="text" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
+			<input type="text" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
@@ -595,8 +595,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			Expiry date</label>
-			<input type="text" name="dateexpiry" maxlength="10"  size="10"
-							onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
+			<input type="text" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->
@@ -605,7 +604,7 @@
 				<label>
 			<!-- /TMPL_IF-->	
 			OPAC note</label>
-			<textarea  name="opacnote" cols="40" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
+			<textarea  name="opacnote" cols="40" rows="2"><!-- TMPL_VAR NAME="opacnote" --></textarea>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryborrowernotes" -->	
@@ -614,7 +613,7 @@
 				<label>
 			<!-- /TMPL_IF-->
 			Library note</label>
-			<textarea name="borrowernotes" cols="40" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
+			<textarea name="borrowernotes" cols="40" rows="2"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		</p>
 	</fieldset>
 	<fieldset id="memberentry_userid">
@@ -626,7 +625,7 @@
 			<label>
 			<!-- /TMPL_IF-->
 			OPAC Login</label>
-			<input type="text" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->">
+			<input type="text" name="userid" size="20" value="<!-- TMPL_VAR NAME="userid" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorypassword" -->
@@ -636,12 +635,12 @@
 			<!-- /TMPL_IF-->
 			Password</label>
 			<!--TMPL_IF NAME="opadd"-->
-				<input type="text" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->">
+				<input type="text" name="password" size="20" value="<!-- TMPL_VAR NAME="password" -->" />
 			<!--TMPL_ELSE-->
 				<!--TMPL_IF NAME="password"-->
-					<input type="text" name="password" size="20"  value="****">
+					<input type="text" name="password" size="20" value="****" />
 				<!--TMPL_ELSE-->
-					<input type="text" name="password" size="20"  value="">
+					<input type="text" name="password" size="20" value="" />
 				<!--/TMPL_IF-->
 			<!--/TMPL_IF-->
 		</p>
@@ -651,19 +650,19 @@
 			<!-- TMPL_LOOP NAME="flagloop" -->
 			<p>
 				<label class="borrowers_labels_title"><!-- TMPL_VAR NAME="html" --></label>
-				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Yes
-				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>No
+				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" --> />Yes
+				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" --> />No
 			</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_UNLESS -->	
 		<p>
 		</fieldset>
 		<div>
-			<input type="button" class="borrowers_button" name="step2" value="Previous step" onclick="check_form_borrowers(1);">	
+			<input type="button" class="borrowers_button" name="step2" value="Previous step" onclick="check_form_borrowers(1);" />	
 			<!-- TMPL_IF NAME="opadd" -->
-				<input type="button" name="step4" onclick="unique();" value="Add member">
+				<input type="button" name="step4" onclick="unique();" value="Add member" />
 			<!-- TMPL_ELSE -->
-				<input type="button" name="step4" onclick="check_form_borrowers();" value="Modify member">
+				<input type="button" name="step4" onclick="check_form_borrowers();" value="Modify member" />
 			<!--/TMPL_IF -->
 		</div>
 	</form>

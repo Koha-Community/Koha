@@ -30,7 +30,7 @@
                 &nbsp;
             </th>
             <th>
-                <input type="submit" class="button acquisition" value="Set Filter" />
+                <input type="submit" class="button" value="Set Filter" />
             </th>
         </tr>
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
@@ -41,7 +41,7 @@
                         <!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="isbn" -->ISBN :<i><!-- TMPL_VAR NAME="isbn" --></i> <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="publishercode" --><br/>published by:<!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="publishercode" --><br />published by:<!-- TMPL_VAR NAME="publishercode" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR NAME="publicationyear" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="place" --> at <i><!-- TMPL_VAR NAME="place" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="note" --><p><i>(<!-- TMPL_VAR NAME="note" -->)</i></p> <!-- /TMPL_IF -->
@@ -55,9 +55,9 @@
                 </td>
                 <td>
                     <!-- TMPL_IF name="biblionumber" -->
-                        <a href="neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button acquisition">Order</a>
+                        <a href="neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&amp;biblio=<!-- TMPL_VAR name="biblionumber" -->" class="button">Order</a>
                     <!-- TMPL_ELSE -->
-                        <a href="neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button acquisition">Order</a>
+                        <a href="neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->" class="button">Order</a>
                     <!-- /TMPL_IF -->
                 </td>
             </tr>

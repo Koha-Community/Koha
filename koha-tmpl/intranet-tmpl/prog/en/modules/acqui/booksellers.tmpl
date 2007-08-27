@@ -18,15 +18,15 @@
 		<tr>
 			<td>
 				<!-- TMPL_IF name="active" -->
-					<a href="basket.pl?supplierid=<!-- TMPL_VAR name=supplierid -->">Add order</a>
+					<a href="basket.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Add order</a>
 				<!-- TMPL_ELSE -->
 					Inactive
 				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<a href="parcels.pl?supplierid=<!-- TMPL_VAR name=supplierid -->">Receive order</a>
+				<a href="parcels.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Receive order</a>
 			</td>
-			<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name=supplierid -->"><!-- TMPL_VAR name="name" --></a></td>
+			<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->"><!-- TMPL_VAR name="name" --></a></td>
 			<td>
 				<table>
 				    <!-- TMPL_IF NAME="loop_basket"-->

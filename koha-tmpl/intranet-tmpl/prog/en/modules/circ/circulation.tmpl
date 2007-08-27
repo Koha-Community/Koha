@@ -65,7 +65,7 @@
         
             <!-- TMPL_IF NAME="dbarred" -->
                 <p>
-                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&destination=circ&status=0">Lift restriction</a>
+                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a>
                 </p>
             <!-- /TMPL_IF -->
         
@@ -115,7 +115,7 @@
 
     <p>
     <label for="findborrower">Enter patron card number or partial name: </label>
-    <input id="findborrower" name="findborrower" type="text" size="40"/>
+    <input id="findborrower" name="findborrower" type="text" size="40" />
     </p>
 
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
@@ -205,8 +205,8 @@
 <!-- TMPL_IF NAME="message" -->
 <p>
 No patron matched <!-- TMPL_VAR name="message" -->
-<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A"/>Add adult</a>
-<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C"/>Add child</a>  
+<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A" />Add adult</a>
+<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C" />Add child</a>  
 </p>
 <!-- /TMPL_IF -->
 
@@ -228,8 +228,8 @@ No patron matched <!-- TMPL_VAR name="message" -->
 
     <p>
     Patron not found?
-    <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A"/>Add adult</a>
-    <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C"/>Add child</a>
+    <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A" />Add adult</a>
+    <a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C" />Add child</a>
     or <a href="JavaScript:back();">try another search</a>
     </p>
 </fieldset>
@@ -586,7 +586,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
         
         <label for="stickyduedate">
 	<!-- TMPL_IF NAME="stickyduedate" -->
-            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> checked />
+            <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> checked="checked" />
             Remember due date for this patron
 <!-- TMPL_ELSE -->
             <input type="checkbox" id="stickyduedate" name="stickyduedate" <!-- TMPL_VAR NAME="selected" --> />
@@ -683,17 +683,17 @@ No patron matched <!-- TMPL_VAR name="message" -->
                         <!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
                         <!-- TMPL_IF name="waiting" -->
-                        <br/>
+                        <br />
                         <i>This hold is available</i>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" -->
-                        <br/>
+                        <br />
                         <i>This hold has been transfered from library : 
                         <!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="nottransfered" -->
-                        <br/>
+                        <br />
                         <i>This hold hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
                         <!-- /TMPL_IF -->
                     </td>
@@ -712,7 +712,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
     <p>
     <span class="click" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page')">Print Page</span>
-    / <span class="click" onclick="javascript:window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Print Slip</span>
+    / <span class="click" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Print Slip</span>
     </p>
     
     <input type="hidden" value="circ" name="destination" />
@@ -756,16 +756,11 @@ No patron matched <!-- TMPL_VAR name="message" -->
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
         <!-- TMPL_IF NAME="od" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked"/>
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
-        <input type="checkbox"
-                name="all_items[]"
-                value="<!-- TMPL_VAR NAME="itemnumber" -->"
-            checked="checked"
-                style="display: none;"
-        />
+        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
     </tr>
     <!-- /TMPL_LOOP --> <!-- todayissues -->
@@ -791,7 +786,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
     <!-- /TMPL_IF -->
         <td>
         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
-        <br/><!-- TMPL_VAR NAME="author" --> - <!-- TMPL_VAR name="itemnotes" -->
+        <br /><!-- TMPL_VAR NAME="author" --> - <!-- TMPL_VAR name="itemnotes" -->
         </td>
         <td>
         <!-- TMPL_VAR NAME="dd" -->

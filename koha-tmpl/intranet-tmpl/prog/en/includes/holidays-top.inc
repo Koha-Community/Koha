@@ -1,5 +1,5 @@
 </title>
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 
 <!-- Estos scripts permiten manejar calendario de fechas. -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/calendar.js"></script>

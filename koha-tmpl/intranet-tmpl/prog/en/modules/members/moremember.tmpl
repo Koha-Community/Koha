@@ -10,7 +10,7 @@
 <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
 
 <form action="" name="form">
-<input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->"/> 
+<input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 </form>
 <div id="action">
@@ -40,10 +40,10 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         
-        <a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME=borrowernumber -->">
+        <a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">
             Set password
         </a>
-        <a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME=borrowernumber -->">
+        <a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">
             Privileges
         </a> 
         <a href="javascript:confirm_deletion();">
@@ -60,7 +60,7 @@
         <a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
             Reading record
         </a>
-        <a href="javascript:confirm_reregistration();" onclick="javascript:document.form.value='y'" class="gest_borro_op">
+        <a href="javascript:confirm_reregistration();" onclick="document.form.value='y'" class="gest_borro_op">
         Renew
         </a>
     </div>
@@ -186,7 +186,7 @@
        
 	 <!-- TMPL_IF name="isguarantee" -->
             <!-- TMPL_IF NAME="guaranteeloop" -->
-                <p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME=name -->  </a></li><!-- /tmpl_loop --></ul></p>
+                <p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="guarantorborrowernumber" -->

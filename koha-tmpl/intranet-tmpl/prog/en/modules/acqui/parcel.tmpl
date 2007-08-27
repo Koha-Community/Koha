@@ -22,14 +22,14 @@
     <form action="" method="get" name="orderform">
     <table>
         <tr>
-            <th class="acquisition">BASKET</th>
-            <th class="acquisition">Summary</th>
-            <th class="acquisition">QTY ordered</th>
-            <th class="acquisition">Est Cost</th>
-            <th class="acquisition">ACTUAL</th>
-            <th class="acquisition">P&amp;P</th>
-            <th class="acquisition">QTY received</th>
-            <th class="acquisition">TOTAL</th>
+            <th>BASKET</th>
+            <th>Summary</th>
+            <th>QTY ordered</th>
+            <th>Est Cost</th>
+            <th>ACTUAL</th>
+            <th>P&amp;P</th>
+            <th>QTY received</th>
+            <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_received" -->
             <tr>
@@ -48,12 +48,12 @@
             </tr>
         <!-- /TMPL_LOOP -->
         <tr>
-            <th class="acquisition" colspan="3"></th>
-            <th class="acquisition">SUBTOTALS</th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalprice" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalfreight" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="totalquantity" --></th>
-            <th class="acquisition"><!-- TMPL_VAR NAME="tototal" --></th>
+            <th colspan="3"></th>
+            <th>SUBTOTALS</th>
+            <th><!-- TMPL_VAR NAME="totalprice" --></th>
+            <th><!-- TMPL_VAR NAME="totalfreight" --></th>
+            <th><!-- TMPL_VAR NAME="totalquantity" --></th>
+            <th><!-- TMPL_VAR NAME="tototal" --></th>
         </tr>
         <tr>
             <td colspan="5">
@@ -78,17 +78,17 @@
         <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
         <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
         <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
-        <p><b>Search ISBN or Title:</b> <input type="text" size="25" name="recieve" /></p>
+        <p><label for="recieve">Search ISBN or Title:</label> <input type="text" size="25" id="recieve" name="recieve" /></p>
     </form>
     <table> <caption>or select a pending orders</caption>
         <tr>
-            <th class="acquisition">BASKET</th>
-            <th class="acquisition">Summary</th>
-            <th class="acquisition">Est. Cost</th>
-            <th class="acquisition">P&amp;P</th>
-            <th class="acquisition">QTY Ordered</th>
-            <th class="acquisition">QTY</th>
-            <th class="acquisition">TOTAL</th>
+            <th>BASKET</th>
+            <th>Summary</th>
+            <th>Est. Cost</th>
+            <th>P&amp;P</th>
+            <th>QTY Ordered</th>
+            <th>QTY</th>
+            <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_orders" -->
             <tr>

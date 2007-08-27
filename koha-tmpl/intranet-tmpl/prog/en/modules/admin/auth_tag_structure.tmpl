@@ -74,17 +74,17 @@ return false;
         <p><label>Text for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></p>
         <p><label for="repeatable">Repeatable</label>
             <!-- TMPL_IF NAME="repeatable" -->
-                <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked />
+                <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
-                <input type="checkbox" name="repeatable" id="repeatable" value="1"/>
+                <input type="checkbox" name="repeatable" id="repeatable" value="1" />
             <!-- /TMPL_IF -->
             &nbsp;
         </p>
         <p><label for="mandatory">Mandatory</label>
             <!-- TMPL_IF NAME="mandatory" -->
-                <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked />
+                <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
-                <input type="checkbox" name="mandatory" id="mandatory" value="1"/>
+                <input type="checkbox" name="mandatory" id="mandatory" value="1" />
             <!-- /TMPL_IF -->
             &nbsp;
             </p>
@@ -106,7 +106,7 @@ return false;
     </tr>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="delete_confirmed" />
-        <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+        <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
         <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
     <tr><td colspan="2" align="center">CONFIRM DELETION</td></tr>
     <tr><td><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" class="submit" /></form></td></tr>
@@ -116,7 +116,7 @@ return false;
 
     Data deleted
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->">
+    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
     <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
     <input type="submit" value="OK" class="submit" />
     </form>

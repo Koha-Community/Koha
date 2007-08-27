@@ -25,7 +25,7 @@
 	<!-- /TMPL_IF -->
 	<p>
 	<label>City name</label>
-	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" escape=HTML -->">&nbsp;
+	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->">&nbsp;
 	</p>
 	<p>				
 	<label>City zipcode</label>
@@ -122,8 +122,8 @@
 
 	</table>
 	<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form">
-		<input type="submit" class="button" value="Add a city"  alt="Add city"><br>
+		<input type="hidden" name="op" value="add_form" />
+		<input type="submit" class="button" value="Add a city"  alt="Add city" /><br />
 	</form></p>
 <!-- /TMPL_IF -->
 

@@ -3,7 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
@@ -20,7 +20,7 @@
 <fieldset>
     <legend>Additional infos</legend>
         <p>
-         Display from <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->"/>
+         Display from <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -49,7 +49,7 @@
 										}
 									);
 								</script>
-					to <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->"/>
+					to <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
 					<script type="text/javascript">
 						function validate2(date) {
@@ -82,7 +82,7 @@
 		<p><b>Export into</b></p>
         <input id="screen" type="radio" checked name="output" value="screen" />
         <label for="screen" >To screen into the browser</label>
-		<br>
+		<br />
 		<input id="file" type="radio" name="output" value="file" />
 		 <label for="file">To file</label>
 		<input type="text" name="basename" value="Export"> into an application  
@@ -122,7 +122,7 @@
 	    </td>
 	    <td>
 	        <select name="module">
-			    <option value="" checked>All</option>
+			    <option value="" checked="checked">All</option>
 			    <option value ="CATALOGUING">Catalogue</option>
 				<option value ="MEMBERS">Members</option>
 				<option value ="ACQUISITION">Acquisitions</option>

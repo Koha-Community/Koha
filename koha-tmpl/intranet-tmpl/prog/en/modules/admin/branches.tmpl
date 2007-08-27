@@ -113,7 +113,7 @@
                             <br /><!-- TMPL_VAR name="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchaddress3" -->
                             <br /><!-- TMPL_VAR name="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name=branchphone -->
+                        <!-- TMPL_IF name="branchphone" -->
                             <br />Ph: <!-- TMPL_VAR name="branchphone" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchfax" -->
                             <br />Fax: <!-- TMPL_VAR name="branchfax" escape="HTML" --><!-- /TMPL_IF -->
@@ -137,16 +137,16 @@
                     <!-- TMPL_VAR NAME="branchprinter" -->
                 </td>
                 <td>
-                    <a href="<!-- TMPL_VAR name=action -->?op=edit&branchcode=<!-- TMPL_VAR name=value escape="HTML" -->">Edit</a>
+                    <a href="<!-- TMPL_VAR name="action" -->?op=edit&amp;branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->">Edit</a>
                 </td>
                 <td>
-                    <a href="<!-- TMPL_VAR name=action -->?branchcode=<!-- TMPL_VAR name=value escape="HTML" -->&branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&op=delete">Delete</a>
+                    <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&amp;op=delete">Delete</a>
                     </form>
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<form action="<!-- TMPL_VAR name=action -->" method="post">
+<form action="<!-- TMPL_VAR name="action" -->" method="post">
         <p><input type="hidden" name="op" value="add" />
         <input type="submit" value="Add New Branch" /></p>
     </form>
@@ -167,15 +167,15 @@
         <td><!-- TMPL_VAR name="categorycode" --></td>
         <td><!-- TMPL_VAR name="codedescription" --></td>
         <td>
-            <form action="<!-- TMPL_VAR name=action -->" method="post">
+            <form action="<!-- TMPL_VAR name="action" -->" method="post">
             <input type="hidden" name="op" value="editcategory" />
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
             <input type="submit" value="Edit" />
             </form>
         </td>
         <td>
-            <form action="<!-- TMPL_VAR name=action -->" method="post">
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+            <form action="<!-- TMPL_VAR name="action" -->" method="post">
+            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
             <input type="hidden" name="op" value="delete_category" /><input type="submit" value="Delete" />
             </form>
         </td>
@@ -195,15 +195,15 @@
 
 <!-- TMPL_IF name="editcategory" -->
     
-    <form action="<!-- TMPL_VAR name=action -->" name="Aform" method="post">
-    <input type="hidden" name=op value="addcategory_validate" />
+    <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
+    <input type="hidden" name="op" value="addcategory_validate" />
     <table>
         <caption><!-- TMPL_VAR name="head" --></caption>
         <tr>
             <td>Category code</td>
             <td>
                 <!-- TMPL_IF name="categorycode" -->
-                    <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+                    <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                     <!-- TMPL_VAR name="categorycode" -->
                 <!-- TMPL_ELSE -->
                     <input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
@@ -212,7 +212,7 @@
         </tr>
         <tr>
             <td>Name</td>
-            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name=categoryname escape="HTML" -->" />&nbsp;</td>
+            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" />&nbsp;</td>
         </tr>
         <tr>
             <td>Description</td>
@@ -224,9 +224,9 @@
 
 <!-- TMPL_IF name="delete_category" -->
     Confirm delete:
-    <form action="<!-- TMPL_VAR name=action -->" method="post">
+    <form action="<!-- TMPL_VAR name="action" -->" method="post">
         <input type="hidden" name="op" value="categorydelete_confirmed" />
-        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
         <input type="submit" value="YES" />
     </form>
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">

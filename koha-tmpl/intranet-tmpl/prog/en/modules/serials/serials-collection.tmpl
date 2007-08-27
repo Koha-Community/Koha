@@ -60,7 +60,7 @@ function popup(subscriptionid) {
 
 <!-- TMPL_UNLESS name="popup" -->
 
-	<h1>Serial Collection information for<br/> <em><!-- TMPL_VAR name="bibliotitle" --></em></h1>
+	<h1>Serial Collection information for<br /> <em><!-- TMPL_VAR name="bibliotitle" --></em></h1>
 <!-- /TMPL_UNLESS -->
 
 <!--TMPL_IF Name="subscriptions"-->
@@ -143,9 +143,9 @@ function popup(subscriptionid) {
         <td> <!-- TMPL_VAR name="notes" -->        <!--TMPL_IF name="subscriptionexpired"--><br /><span class="problem"> Subscription Expired</span>
         <!--/TMPL_IF-->
         </td>
-        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
+        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
         <!--TMPL_ELSE-->
-        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
+        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
         <!--TMPL_ELSE-->
         <td> &nbsp;</td>
         <!--/TMPL_IF-->
@@ -201,7 +201,7 @@ function popup(subscriptionid) {
                 </th>
             </tr>
       <!-- TMPL_LOOP Name="serials" -->
-            <tr name="branch <!--TMPL_VAR Name=branchcode"-->">
+            <tr name="branch <!--TMPL_VAR Name="branchcode"-->">
 <!--TMPL_UNLESS Name="onesubscription"-->
                  <td><a href="serials-collection.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->"><!--TMPL_VAR Name="subscriptionid"--></a></td>
 <!--/TMPL_UNLESS-->
@@ -230,10 +230,10 @@ function popup(subscriptionid) {
                 <td>
                   <div visibility="hidden" name="subs" val="<!--TMPL_VAR Name="subscriptionid"-->"></div>
                   <!--TMPL_IF Name="subscriptionexpired"-->
-                  <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled />
+                  <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled="disabled" />
                   <!--TMPL_ELSE-->
                     <!--TMPL_IF Name="status1"-->
-                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->"/>
+                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" />
                     <!--TMPL_ELSE -->
                     <!--TMPL_IF Name="status3"-->
                     <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" />

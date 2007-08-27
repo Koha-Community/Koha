@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; System Administration &rsaquo;
-<!-- TMPL_IF NAME=add_form --><!-- TMPL_IF NAME="searchfield" -->Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Printer Added<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Printer Deleted<!-- /TMPL_IF -->
@@ -10,7 +10,7 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 
-<!-- TMPL_IF NAME=add_form -->
+<!-- TMPL_IF NAME="add_form" -->
         <script language="JavaScript" type="text/javascript">
         //
         function isNotNull(f,noalert) {
@@ -79,7 +79,7 @@
 		<tr>
 			<td>Printer Name</td>
 			<td>
-				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME=searchfield -->" /><!-- TMPL_VAR NAME="searchfield" -->
+				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
@@ -153,7 +153,7 @@
 
 <!-- TMPL_IF NAME="else" -->
 <h2>Printer Admin</h2>
-	<!-- TMPL_IF NAME=searchfield -->
+	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -167,7 +167,7 @@
 			<th>Type</th>
 			<th>&nbsp;</th>
 		</tr>
-		<!-- TMPL_LOOP NAME=loop -->
+		<!-- TMPL_LOOP NAME="loop" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="printername" --></td>
 			<td><!-- TMPL_VAR NAME="printqueue" --></td>

@@ -57,7 +57,7 @@ if (alreadyreserved > "0"){
 			<p>Hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this item.
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
-				<input type="submit" class="button circulation">
+				<input type="submit" class="button">
 			</form>
 		</div>
 	<!-- /TMPL_IF -->
@@ -69,7 +69,7 @@ if (alreadyreserved > "0"){
 
 <h2>Add reserve</h2>
 <!-- TMPL_UNLESS NAME="cardnumber"-->
-    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onSubmit="request.pl" name="getborrower">
+    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onsubmit="request.pl" name="getborrower">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
                 <p>
                 <label>Patron</label>
@@ -92,7 +92,7 @@ if (alreadyreserved > "0"){
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="expiry" -->
-    <br>
+    <br />
     <p class="problem">
       <label>Expired account</label>
       This patron's account has expired
@@ -117,7 +117,7 @@ if (alreadyreserved > "0"){
     <div class="problem">No patron with this name, Please, try an other </div>
   <!-- /TMPL_IF -->
     <h3>Reserve properties</h3>
-        <form action="placerequest.pl" method="post" onSubmit="return check();" name="form">
+        <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
     
         <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->">
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
@@ -210,7 +210,7 @@ if (alreadyreserved > "0"){
                     else {return false;}">Cancel A reserve
                     <span> Item reserved for :
                             <!-- TMPL_VAR NAME="ReservedForSurname" -->  <!-- TMPL_VAR NAME="ReservedForFirstname" -->
-                    <br>
+                    <br />
                     expected at :	<!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
                     </span>
                     </a>
@@ -258,7 +258,7 @@ if (alreadyreserved > "0"){
           <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
-            <option value="W" selected>Waiting</option>
+            <option value="W" selected="selected">Waiting</option>
     	<!-- TMPL_ELSE -->
             <option value="<!-- TMPL_VAR NAME="priority" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
               <!-- TMPL_VAR NAME="priority" -->
@@ -275,9 +275,9 @@ if (alreadyreserved > "0"){
         <td>
     <!-- TMPL_IF Name="wait" -->
     	<!-- TMPL_IF NAME="atdestination" -->
-          Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+          Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->">
           <!-- TMPL_ELSE -->
-          Document will be transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+          Document will be transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->">
          <!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
           <select name="pickup">
@@ -295,10 +295,10 @@ if (alreadyreserved > "0"){
         </td>
         <td>
     <!-- TMPL_IF Name="wait" -->
-          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
+          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&amp;type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
                 <!-- TMPL_IF NAME="barcodenumber" -->
                     <!-- TMPL_VAR NAME="barcodenumber" -->
-                    <input type="hidden" name="itemnumber" value=<!-- TMPL_VAR NAME="itemnumber" -->>
+                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
                 <!-- TMPL_ELSE -->
                     No Barcode
                 <!-- /TMPL_IF -->
@@ -317,7 +317,7 @@ if (alreadyreserved > "0"){
   <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
       <tr>
         <td colspan="6">
-          <input type="submit" name="submit" value="Cancel reserve(s)" border="0">
+          <input type="submit" name="submit" value="Cancel reserve(s)" border="0" />
         </td>
       </tr>
     </table>

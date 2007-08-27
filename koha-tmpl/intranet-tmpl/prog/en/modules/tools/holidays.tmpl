@@ -11,26 +11,26 @@
 <!-- ********************** Panel for showing already loaded holidays *********************** -->
 <div class="panel" style="position:absolute;background-color:#CCCCCC" id="showHoliday">
  	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post" style="display:inline">
-		<p onclick="javascript: hidePanel('showHoliday');hidePanel('information')" style="cursor:pointer">
+		<p onclick=" hidePanel('showHoliday');hidePanel('information')" style="cursor:pointer">
 			Hide Details
 			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/signClose.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle">
 		</p>
 		<p>
 			<label>Day name</label>
 			<input type="text" size="20" id="showDayname" name="showDayname" readonly
-						   style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
-			<input type="hidden" name="showWeekday"/>
+						   style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<input type="hidden" name="showWeekday" />
 		</p>
 		<p>
 			<label>Library</label>
-			<input type="text" size="20" id="showBranchName" name="showBranchName" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			<input type="text" size="20" id="showBranchName" name="showBranchName" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</p>
 		<div style="display:inline">
-			Day <input type="text" size="2" id="showDay" name="showDay" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Day <input type="text" size="2" id="showDay" name="showDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 			Month <input type="text" size="2" id="showMonth" name="showMonth" readonly
-						        style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+						        style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 			Year <input type="text" size="4" id="showYear" name="showYear" readonly
-						       style="background-color:#FFFFFF;color:Black;font-size:10px;"/>		
+						       style="background-color:#FFFFFF;color:Black;font-size:10px;" />		
 		</div>
 	    <p>Add a description to holiday day.</p>
 		<p>
@@ -39,15 +39,15 @@
 		<div id="exceptionPosibility" style="position:static">
 			<input type="radio" name="showOperation" value="exception"> Generate an exception to this holiday
 			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0"   style="vertical-align:middle;cursor:pointer"
-					onclick="javascript: additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')">
-			<br>
+					onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')">
+			<br />
 		</div>
-		<input type="radio" name="showOperation" value="delete" checked> Delete this holiday.
+		<input type="radio" name="showOperation" value="delete" checked="checked"> Delete this holiday.
 		<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
-			onclick="javascript: additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')">
+			onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')">
 		<p>
 			<input type="submit" name="submit" id="submit" value="Save">
-			<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick="javascript: hidePanel('showHoliday');hidePanel('information')">
+			<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')">
 		</p>
 	</form>
 </div>
@@ -60,34 +60,34 @@
 		</h2>
 		<p>
 			<label>Day name</label>
-			<input type="text" size="20" id="newDayname" name="newDayname" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
-			<input type="hidden" name="newWeekday"/>
+			<input type="text" size="20" id="newDayname" name="newDayname" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<input type="hidden" name="newWeekday" />
 		</p>
 		<p>
 			<label>Library</label>
-			<input type="text" size="20" id="newBranchName" name="newBranchName" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			<input type="text" size="20" id="newBranchName" name="newBranchName" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</p>
 		<div style="display:inline">
-			Day <input type="text" size="2" id="newDay" name="newDay" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
-			Month <input type="text" size="2" id="newMonth" name="newMonth"  readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
-			Year <input type="text" size="4" id="newYear" name="newYear" readonly style="background-color:#FFFFFF;color:Black;font-size:10px;"/>
+			Day <input type="text" size="2" id="newDay" name="newDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			Month <input type="text" size="2" id="newMonth" name="newMonth"  readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			Year <input type="text" size="4" id="newYear" name="newYear" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</div>
 		<p>
 			<label>Add a description to holiday day</label>
 			<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
 		</p>
-			<input type="radio" name="newOperation" value="holiday" checked> Holiday only on this day.
+			<input type="radio" name="newOperation" value="holiday" checked="checked"> Holiday only on this day.
 			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
-			onclick="javascript: additionalInformation('This will take this date to make it holiday just for this time. Through this option, you can set a single holiday. For example, suppose you are in August 1st, and only for this year you want to make it holiday.')">
-			<br>
+			onclick=" additionalInformation('This will take this date to make it holiday just for this time. Through this option, you can set a single holiday. For example, suppose you are in August 1st, and only for this year you want to make it holiday.')">
+			<br />
 			<input type="radio" name="newOperation" value="weekday"> Holiday repeated every same day of the week
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick="javascript: additionalInformation('This will take this week day and make it holiday. No matter what date it is, this option will repeat this rule for every week. For example, if this date correspond to a saturday, every saturdays will be holidays.')">
-			<br>
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick=" additionalInformation('This will take this week day and make it holiday. No matter what date it is, this option will repeat this rule for every week. For example, if this date correspond to a saturday, every saturdays will be holidays.')">
+			<br />
 			<input type="radio" name="newOperation" value="repeatable">Holiday repeated yearly on the same date.
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick="javascript: additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, if this date correspond to a August 1st, every August 1st will be holiday, no matter what year you are.')">
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, if this date correspond to a August 1st, every August 1st will be holiday, no matter what year you are.')">
 			<p>
-				<input type="submit" name="submit" id="submit" value="Save"/>
-				<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick="javascript: hidePanel('newHoliday');hidePanel('information')">
+				<input type="submit" name="submit" id="submit" value="Save" />
+				<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')">
 			</p>
  	</form>
 </div>
@@ -103,7 +103,7 @@
 <!-- ******                     START OF INFORMATION PANEL                            ****** -->
 <!-- *************************************************************************************** -->
 
-<div class="information" style="position:absolute" id="information" onclick="javascript: hidePanel('information')" onblur="javascript: hidePanel('information')">
+<div class="information" style="position:absolute" id="information" onclick=" hidePanel('information')" onblur="javascript: hidePanel('information')">
 	<table>
 		<tr>
 			<td valign="top">

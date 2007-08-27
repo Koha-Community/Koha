@@ -12,9 +12,9 @@
 	<!-- /TMPL_IF -->
 
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-	<input type="hidden" name="op" value="add_validate">
-	<input type="hidden" name="checked" value="0">
-	<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->">
+	<input type="hidden" name="op" value="add_validate" />
+	<input type="hidden" name="checked" value="0" />
+	<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" />
 
 <!-- TMPL_IF NAME="roadtypeid" -->
 
@@ -28,13 +28,13 @@
 	<p>			
 	<label>Road type</label>
 		
-	<input  type="text" name="road_type" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="road_type" escape=HTML -->">
+	<input  type="text" name="road_type" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="road_type" ESCAPE="HTML" -->" />
 				
 	</p>
 	
 	<p>					  
 	<div >
-		<input class="button" type="button" onclick="Check(this.form)" value="OK">
+		<input class="button" type="button" onclick="Check(this.form)" value="OK" />
 	</div>	
 	</p>
 	</form>
@@ -49,8 +49,8 @@
 			</td>
 		</tr>
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed">
-			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->">        
+			<input type="hidden" name="op" value="delete_confirmed" />
+			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" />
 		<tr>
 			<td>Rod type</td>
 			<td><!-- TMPL_VAR NAME="road_type" --></td>
@@ -60,9 +60,9 @@
 			<td colspan="2" align="center">Confirm deletion</td>
 		</tr>
 		<tr>
-			<td><input type="submit" value="YES"></form></td>
+			<td><input type="submit" value="YES" /></form></td>
 			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="NO"></form></td>
+			<input type="submit" value="NO" /></form></td>
 		</tr>	
 	</table>
 <!-- /TMPL_IF -->
@@ -73,8 +73,8 @@
 		Search on  <!-- TMPL_VAR NAME="searchfield" -->
 	<!-- /TMPL_IF -->
 	<form action="<TMPL_VAR NAME="script_name">" method="post">
-		<input type="text" name="road_type" value="<!-- TMPL_VAR NAME="searchfield" -->">
-		<input type="submit" name="submit" value="OK" class="button">
+		<input type="text" name="road_type" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+		<input type="submit" name="submit" value="OK" class="button" />
 	</form>
 
 	<table>
@@ -97,8 +97,8 @@
 
 	</table>
 	<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form">
-		<input type="submit" class="button" value="Add road type"  alt="Add road type"><br>
+		<input type="hidden" name="op" value="add_form" />
+		<input type="submit" class="button" value="Add road type" /><br />
 	</form></p>
 <!-- /TMPL_IF -->
 

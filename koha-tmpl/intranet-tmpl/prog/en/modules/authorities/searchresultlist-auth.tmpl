@@ -5,55 +5,55 @@
     <h1 class="authority">Authority search results</h1>
     <div id="bloc25">
         <form name="f" method="post" action="auth_finder.pl">
-            <input type="hidden" name="op" value="do_search">
-            <input type="hidden" name="type" value="intranet">
-            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-            <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->">
+            <input type="hidden" name="op" value="do_search" />
+            <input type="hidden" name="type" value="intranet" />
+            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+            <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
             <div id="bloc25">
                 <h2 class="authority">Search on</h2>
                 <p>
                     <label class="label100">Authority type</label>
                     <!-- TMPL_VAR NAME="authtypecode" -->
-                    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+                    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
                 </p>
                 <p>
                     <label class="label100">Main entry ($a only)</label>
-                    <input type="hidden" name="marclist" value="mainmainentry">
-                    <input type="hidden" name="and_or" value="and">
-                    <input type="hidden" name="excluding" value="">
+                    <input type="hidden" name="marclist" value="mainmainentry" />
+                    <input type="hidden" name="and_or" value="and" />
+                    <input type="hidden" name="excluding" value="" />
                     <select name="operator">
                         <option value="contains">contains</option>
                         <option value="start">starts by</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainmainstring" -->">
+                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainmainstring" -->" />
                 </p>
                 <p>
                     <label class="label100">Main entry</label>
-                    <input type="hidden" name="marclist" value="mainentry">
-                    <input type="hidden" name="and_or" value="and">
-                    <input type="hidden" name="excluding" value="">
+                    <input type="hidden" name="marclist" value="mainentry" />
+                    <input type="hidden" name="and_or" value="and" />
+                    <input type="hidden" name="excluding" value="" />
                     <select name="operator">
                         <option value="contains">contains</option>
                         <option value="start">starts by</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainstring" -->">
+                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainstring" -->" />
                 </p>
                 <p>
                     <label class="label100">Anywhere</label>
-                    <input type="hidden" name="marclist" value="">
-                    <input type="hidden" name="and_or" value="and">
-                    <input type="hidden" name="excluding" value="">
-                    <select name="operator">
+                    <input type="hidden" name="marclist" value="" />
+                    <input type="hidden" name="and_or" value="and" />
+                    <input type="hidden" name="excluding" value="" />
+                    <select name="operator" >
                         <option value="contains">contains</option>
                         <option value="start">starts by</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="anystring" -->">
+                    <input type="text" name="value" value="<!-- TMPL_VAR name="anystring" -->" />
                 </p>
                 <p>
-                <input type="submit" value="Start search" class="button authority">
+                <input type="submit" value="Start search" class="button" />
                 </p>
             </div>
         </form>
@@ -62,7 +62,7 @@
         <div id="resultnumber">
             <p>
                 <!-- TMPL_IF name="displayprev" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
                     </a>
                 <!-- /TMPL_IF -->
@@ -70,20 +70,20 @@
                     <!-- TMPL_IF name="highlight" -->
                         <!-- TMPL_VAR NAME="number" -->
                     <!-- TMPL_ELSE -->
-                        <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                        <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                             <!-- TMPL_VAR NAME="number" --></a>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 <!-- TMPL_IF name="displaynext" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
             </p>
             <p>
                 <!-- TMPL_IF name="total" -->
-                    &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br><br>
+                    &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br /><br />
                 <!-- TMPL_ELSE -->
-                    &nbsp;No results found.<br>
+                    &nbsp;No results found.<br />
                 <!-- /TMPL_IF -->
             </p>
         </div>
@@ -98,7 +98,7 @@
                     <td>&nbsp;</td>
                     <td>&nbsp;</td>
                     <td>
-                        <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=<!-- TMPL_VAR NAME="index" -->')" class="button authority">
+                        <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=0&amp;index=<!-- TMPL_VAR NAME="index" -->')" class="button">
                             Clear
                         </a>
                     </td>
@@ -117,7 +117,7 @@
         <div id="resultnumber">
             <p>
                 <!-- TMPL_IF name="displayprev" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranetamp;&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
                     </a>
                 <!-- /TMPL_IF -->
@@ -125,12 +125,12 @@
                     <!-- TMPL_IF name="highlight" -->
                         <!-- TMPL_VAR NAME="number" -->
                     <!-- TMPL_ELSE -->
-                        <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                        <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                             <!-- TMPL_VAR NAME="number" --></a>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 <!-- TMPL_IF name="displaynext" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->&tagid=<!-- TMPL_VAR name="tagid" -->">
+                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
             </p>

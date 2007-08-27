@@ -9,9 +9,9 @@
   <legend>Authority search</legend>
 
   <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
-    <input type="hidden" name="op" value="do_search">
-    <input type="hidden" name="type" value="intranet">
-    <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
+    <input type="hidden" name="op" value="do_search" />
+    <input type="hidden" name="type" value="intranet" />
+    <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 
     <table>
       <tr>
@@ -33,7 +33,7 @@
       <tr>
         <th>
           <label for="value_mainmainentry">Main entry ($a only)</label>
-          <input type="hidden" name="marclist" value="mainmainentry">
+          <input type="hidden" name="marclist" value="mainmainentry" />
         </th>
         <td>
           <select name="operator">
@@ -43,15 +43,15 @@
 	  </select>
         </td>
         <td>
-          <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+          <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
         </td>
       </tr>
       <tr>
         <th>
           <label for="value_mainentry">Main entry</label>
-          <input type="hidden" name="marclist" value="mainentry">
-          <input type="hidden" name="and_or" value="and">
-          <input type="hidden" name="excluding" value="">
+          <input type="hidden" name="marclist" value="mainentry" />
+          <input type="hidden" name="and_or" value="and" />
+          <input type="hidden" name="excluding" value="" />
         </th>
         <td>
           <select name="operator">
@@ -61,16 +61,16 @@
 	  </select>
         </td>
         <td>
-          <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+          <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" /> 
         </td>
       </tr>
 
       <tr>
         <th>
           <label for="value_anywhere">Anywhere</label>
-          <input type="hidden" name="marclist" value="">
-          <input type="hidden" name="and_or" value="and">
-          <input type="hidden" name="excluding" value="">
+          <input type="hidden" name="marclist" value="" />
+          <input type="hidden" name="and_or" value="and" />
+          <input type="hidden" name="excluding" value="" />
         </th>
         <td>
           <select name="operator">
@@ -80,7 +80,7 @@
           </select>
         </td>
         <td>
-          <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->">
+          <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
         </td>
       </tr>
     </table>
@@ -120,7 +120,7 @@
     </table>
 
     <div id="action">
-      <input type="submit" value="Add" class="button authority">
+      <input type="submit" value="Add" class="button" />
     </div>
   </form>
 </fieldset>

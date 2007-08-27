@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <head>
 <title>KOHA:_Labs Thesis Selection plugin</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 
 <script language="JavaScript" type="text/javascript">
 <!-- Hide from old browsers
@@ -20,7 +20,7 @@ function Help() {
 // end hiding -->
 </script>
 
-<link rel="stylesheet" type="text/css" href="/intranet-tmpl/default/en/includes/common-style.css">
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/default/en/includes/common-style.css" />
 <style type="text/css">
 .catalogue {
 	background-color:#ad11ad;
@@ -38,11 +38,11 @@ a.catalogue:hover {
 
 <body>
 <div id="mainbloc">
-	<h1 class="catalogue">Laboratory Search</h1>
+	<h1>Laboratory Search</h1>
 	
 	<form name="f" method="post" action="/cgi-bin/koha/cataloguing/plugin_launcher.pl">
 		<div class="bloc25">
-			<h2 class="catalogue">Search on</h2>
+			<h2>Search on</h2>
 			<p>
 				<input type="hidden" name="plugin_name" value="labs_theses.pl">
 				<input type="hidden" name="index" value="<!--TMPL_VAR Name="index" -->">
@@ -51,14 +51,14 @@ a.catalogue:hover {
 				<input type="hidden" name="cat_auth" value="<!--TMPL_VAR Name="cat_auth" -->" >
 				<input type="text" name="search" value="<!-- TMPL_VAR Name="search" -->" size="35">
 				
-				<input type="submit" value="Start search" class="button catalogue">
+				<input type="submit" value="Start search" class="button">
 			</p>
 		</div>
 	</form>
 
 <!-- TMPL_IF Name="resultlist" -->
 	<div class="bloc25">
-	<h2 class="catalogue">Laboratory Search results</h2>
+	<h2>Laboratory Search results</h2>
 		<div id="resultnumber">
 			<p class="resultcount">
 			<!-- TMPL_IF NAME="total" -->
@@ -69,8 +69,8 @@ a.catalogue:hover {
 		<div id="resultlist">
 			<table>
 				<tr>
-					<th class="catalogue">Laboratory</th>
-					<th class="catalogue">Select</th>
+					<th>Laboratory</th>
+					<th>Select</th>
 				</tr>
 				<!-- TMPL_LOOP NAME="catresult" -->
 					<!-- TMPL_IF NAME="even" -->
@@ -82,8 +82,8 @@ a.catalogue:hover {
 						<!-- TMPL_VAR NAME="lib" -->
 						</td>
 						<td>
-							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,0)" class="button catalogue">Select</a>
-							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,1)" class="button catalogue">Sel&amp;close</a>
+							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,0)" class="button">Select</a>
+							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,1)" class="button">Sel&amp;close</a>
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
@@ -91,17 +91,17 @@ a.catalogue:hover {
 		</div>
 		<div id="resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> 
-					<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Previous</a>
+					<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE="URL"-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL"-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Previous</a>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP NAME="numbers" -->
 					<!-- TMPL_IF NAME="highlight" -->
 						<span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
 					<!-- TMPL_ELSE --> 
-						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
+						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE="URL"-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP --> 
 				<!-- TMPL_IF NAME="displaynext" -->
-					<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">Next&gt;&gt;</a>
+					<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;cat_auth=<!-- TMPL_VAR NAME="cat_auth" ESCAPE="URL"-->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">Next&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 			</p>
 			<p class="resultcount">

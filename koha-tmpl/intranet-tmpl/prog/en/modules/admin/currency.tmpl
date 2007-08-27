@@ -10,7 +10,7 @@
 <!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 
-<!-- TMPL_IF NAME=add_form -->
+<!-- TMPL_IF NAME="add_form" -->
         <script>
         //
         function isNotNull(f,noalert) {
@@ -65,11 +65,11 @@
         }
         </SCRIPT>
 
-        <form action="<!-- TMPL_VAR NAME=script_name -->" name="Aform" method="post">
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
 
 	<table>
-	<caption><!-- TMPL_IF NAME=searchfield -->
+	<caption><!-- TMPL_IF NAME="searchfield" -->
 		Modify currency
 	<!-- TMPL_ELSE -->
 		Add currency
@@ -98,7 +98,7 @@
 		</tr>
         </table>
 		
-		<input type="button" value="OK" onClick="Check(this.form)" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
+		<input type="button" value="OK" onclick="Check(this.form)" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
         </form>
 
 <!-- /TMPL_IF -->
@@ -131,7 +131,7 @@
 					<input type="submit" value="OK" />
 				</form>
 		<!-- TMPL_ELSE -->
-     	<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
+     	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 				<input type="submit" value="Delete this Currency" />
@@ -155,8 +155,8 @@
 	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->	
-        <form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME=searchfield -->" />
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
                 <input type="submit" name="Search" value="Search" />
         </form>	
 	<div class="table"><table>
@@ -174,8 +174,9 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-        <input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Currency" />
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="hidden" name="op" value="add_form" />
+		<input type="submit" value="Add Currency" />
         </form>
 
 	

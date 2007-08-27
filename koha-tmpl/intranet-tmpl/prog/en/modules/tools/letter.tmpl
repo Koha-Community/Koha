@@ -9,7 +9,7 @@
 		<input type="text" name="searchfield" value="">
 		<input type="submit" class="button" value="Filter"></form>
 		<!-- TMPL_IF NAME="search" -->
-		<br>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
+		<br />You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br />
 		<!-- /TMPL_IF -->
 		<table>
 		<tr>
@@ -35,9 +35,9 @@
 		</table>
 		<form action="/cgi-bin/koha/tools/letter.pl" method="post">
 			<input type="hidden" name="op" value="add_form">
-			<br>
+			<br />
 			<input type="submit" class="button" value="Add Letter" title="Add Letter" alt="Add Letter">
-			<br>
+			<br />
 		</form>
 		<br clear="all">
 	<!-- /TMPL_IF -->
@@ -146,32 +146,32 @@
 				<label class="label100">Koha module:</label>
 				<select name="module">
                                     <!--TMPL_IF Name="catalogue"-->
-                                    <option value="catalogue" selected>Catalogue</option>
+                                    <option value="catalogue" selected="selected">Catalogue</option>
                                     <!--TMPL_ELSE-->
                                     <option value="catalogue" >Catalogue</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="Serial"-->
-                                    <option value="serial" selected>Serial</option>
+                                    <option value="serial" selected="selected">Serial</option>
                                     <!--TMPL_ELSE-->
                                     <option value="serial">Serial</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="claimacquisition"-->
-                                    <option value="claimacquisition" selected>Claim Acquisition</option>
+                                    <option value="claimacquisition" selected="selected">Claim Acquisition</option>
                                     <!--TMPL_ELSE-->
                                     <option value="claimacquisition">Claim Acquisition</option>
                                     <!--/TMPL_IF -->
                                     <!--TMPL_IF Name="claimissues"-->
-                                    <option value="claimissues" selected>Claim Issues</option>
+                                    <option value="claimissues" selected="selected">Claim Issues</option>
                                     <!--TMPL_ELSE-->
                                     <option value="claimissues">Claim Issues</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="circulation"-->
-                                    <option value="circulation" selected>Circulation</option>
+                                    <option value="circulation" selected="selected">Circulation</option>
                                     <!--TMPL_ELSE-->
                                     <option value="circulation">Circulation</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="members"-->
-                                    <option value="members" selected>Members</option>
+                                    <option value="members" selected="selected">Members</option>
                                     <!--TMPL_ELSE-->
                                     <option value="members">Members</option>
                                     <!--/TMPL_IF-->
@@ -187,32 +187,32 @@
 				<label class="label100">Koha module:</label>
 				<select name="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
 						<!--TMPL_IF Name="catalogue"-->
-                        <option value="catalogue" selected>Catalogue</option>
+                        <option value="catalogue" selected="selected">Catalogue</option>
 						<!--TMPL_ELSE-->
                         <option value="catalogue" >Catalogue</option>
                         <!--/TMPL_IF-->
 						<!--TMPL_IF Name="serial"-->
-						<option value="serial" selected>Serial</option>
+						<option value="serial" selected="selected">Serial</option>
 						<!--TMPL_ELSE-->
 						<option value="serial">Serial</option>
 						<!--/TMPL_IF-->
 						<!--TMPL_IF Name="claimacquisition"-->
-						<option value="claimacquisition" selected>Claim Acquisition</option>
+						<option value="claimacquisition" selected="selected">Claim Acquisition</option>
 						<!--TMPL_ELSE-->
 						<option value="claimacquisition">Claim Acquisition</option>
 						<!--/TMPL_IF -->
 						<!--TMPL_IF Name="claimissues"-->
-						<option value="claimissues" selected>Claim Issues</option>
+						<option value="claimissues" selected="selected">Claim Issues</option>
 						<!--TMPL_ELSE-->
 						<option value="claimissues">Claim Issues</option>
 						<!--/TMPL_IF-->
 						<!--TMPL_IF Name="circulation"-->
-						<option value="circulation" selected>Circulation</option>
+						<option value="circulation" selected="selected">Circulation</option>
 						<!--TMPL_ELSE-->
 						<option value="circulation">Circulation</option>
 						<!--/TMPL_IF-->
 						<!--TMPL_IF Name="members"-->
-						<option value="members" selected>Members</option>
+						<option value="members" selected="selected">Members</option>
 						<!--TMPL_ELSE-->
 						<option value="members">Members</option>
 						<!--/TMPL_IF-->
@@ -233,7 +233,7 @@
 			<label class="label100">Content (mail content):</label>
 		</p>
 		<p>		
-		<select name="SQLfieldname" size=9>
+		<select name="SQLfieldname" size="9">
 			<!-- TMPL_LOOP name="SQLfieldname" -->
 				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
 			<!-- /TMPL_LOOP -->

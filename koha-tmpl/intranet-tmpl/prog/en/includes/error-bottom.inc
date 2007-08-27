@@ -1,5 +1,4 @@
-<br clear="all">
-<p> &nbsp; </p>
+<br clear="all" />
 
 <div class="center">
 <a href="/cgi-bin/koha/mainpage.pl">Home</a> ||
