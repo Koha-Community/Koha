@@ -1,9 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Reading Record for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- TMPL_IF NAME="showfulllink" -->
 <ul>
@@ -73,4 +78,9 @@
 </table>
 <form action="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Return to Patron Record" /></form>
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

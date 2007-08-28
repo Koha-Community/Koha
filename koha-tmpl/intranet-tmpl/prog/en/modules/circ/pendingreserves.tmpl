@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Holds</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -10,8 +11,13 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <h1>Pending holds as of <!-- TMPL_VAR NAME="todaysdate" --></h1>
 <div id="filters">
@@ -21,13 +27,8 @@
 <label for "from">
     Start date:
 </label>
-<input type="text"
-        size="10"
-        id="from"
-        name="from"
-        value="<!-- TMPL_VAR NAME="from" -->" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" 
-        border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
 <script language="JavaScript" type="text/javascript">
 function validate1(date) {
     var day = date.getDate();
@@ -58,10 +59,7 @@ Calendar.setup(
     End date:
 </label>
 <input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt=""
-        id="openCalendarTo"
-        style="cursor: pointer;"
-        valign="top" border="0" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" />
 <script type="text/javascript">
         function validate2(date) {
             var day = date.getDate();
@@ -169,4 +167,9 @@ Calendar.setup(
         <b>No items found.</b>
     <!-- /TMPL_IF -->
 </div>
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

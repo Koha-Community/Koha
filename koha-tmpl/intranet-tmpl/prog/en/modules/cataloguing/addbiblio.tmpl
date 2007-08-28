@@ -7,6 +7,12 @@
     <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 <!--/TMPL_UNLESS-->
 
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <!--TMPL_IF Name="done"-->
     <script language="javascript" type="text/javascript">
         opener.document.forms['f'].biblionumber.value=<!--TMPL_VAR Name="biblionumber"-->;
@@ -77,34 +83,15 @@
             <!-- TMPL_UNLESS name="hide_marc" -->
                 <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                 <!-- TMPL_IF NAME="fixedfield" -->
-	                <input tabindex="1"
-                               class="indicator flat"
-                               type="text"
-                               style="display:none;"
-                               name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                               size="2"
-                               maxlength="2"
-                               value="<!-- TMPL_VAR NAME="indicator" -->" />
+	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- TMPL_ELSE -->
-        	        <input tabindex="1"
-                               class="indicator flat"
-                               type="text"
-                               name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                               size="2"
-                               maxlength="2"
-                               value="<!-- TMPL_VAR NAME="indicator" -->" />
+        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- /TMPL_IF --> -
             <!-- TMPL_ELSE -->
                 <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1"
-                           type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                           value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- TMPL_ELSE -->
-                    <input tabindex="1"
-                           type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                           value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- /TMPL_IF -->
             <!-- /TMPL_UNLESS -->
 
@@ -122,24 +109,14 @@
             <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->">
             
                 <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
-                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                        <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
+                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
                 <!-- /TMPL_UNLESS --> 
                 
                 <!-- TMPL_UNLESS name="hide_marc" -->
                     <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')" alt="" />
-                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
-                            style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
-                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                            value="<!-- TMPL_VAR NAME="subfield" -->"
-                            size="1"
-                            maxlength="1"
-                            class="flat"
-                            tabindex="-1" />
+                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" tabindex="-1" />
                 <!-- TMPL_ELSE -->
-                    <input type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                           value="<!-- TMPL_VAR NAME="subfield" -->" />
+                    <input type="hidden" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <!-- /TMPL_UNLESS -->
             
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
@@ -245,17 +222,10 @@ function AreMandatoriesNotOk(){
     var tab = new Array();
     var label = new Array();
     var flag=0;
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
-        <!-- TMPL_LOOP NAME='innerloop' -->
-            <!-- TMPL_LOOP NAME='subfield_loop'-->
-                <!-- TMPL_IF NAME='mandatory'-->
-                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
                    	tab.push("<!-- TMPL_VAR NAME='number' -->");
                    	label.push("<!-- TMPL_VAR NAME='marc_lib' -->");
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
+                <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     var StrAlert = "Can't save this record because the following field aren't filled :\n\n";
     for(var i=0,len=mandatories.length; i<len ; i++){
         if( ! document.getElementById(mandatories[i]).value){
@@ -278,17 +248,8 @@ function AreMandatoriesNotOk(){
 function AreZ3950MandoriesOk(){
     var mandatories = new Array();
     var mandatories_label = new Array();
-    
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
-        <!-- TMPL_LOOP NAME='innerloop' -->
-            <!-- TMPL_LOOP NAME='subfield_loop'-->
-                <!-- TMPL_IF NAME='z3950_mandatory'-->
-                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
-                    mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='z3950_mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+        mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     
     var error = 0;
     var strQuery="";

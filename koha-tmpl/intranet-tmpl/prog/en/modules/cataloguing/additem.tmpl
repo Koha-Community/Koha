@@ -4,22 +4,22 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 
 <h1>Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 
 <div id="action">
-    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
-        Edit Bibliographic Record
-    </a>
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
-        Normal view
-    </a>
-    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
-        View MARC in Catalog
-    </a>
-    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
-        View ISBD in Catalog
-    </a>
+<ul>
+	<li>    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Edit Bibliographic Record</a></li>
+	<li>    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal view</a></li>
+	<li>    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">View MARC in Catalog</a></li>
+	<li>    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">View ISBD in Catalog</a></li>
+</ul>
 </div>
 
 <div id="cataloguing_additem_itemlist">
@@ -76,7 +76,7 @@
     <input type="button" value="Save Changes" onclick="Check(this.form)" accesskey="w" />
     <!-- /TMPL_IF -->
     </form>
-
+</div>
 <script language="JavaScript" type="text/javascript">
 function active(numlayer)
 {

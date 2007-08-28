@@ -1,17 +1,21 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Virtual Shelves</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-virtualshelves.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- TMPL_IF NAME="viewshelf" -->
 <div id="action">
-    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl">Back to virtual Shelves</a>
+<ul>    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Back to virtual Shelves</a></li>
     <!-- TMPL_IF name="manageshelf" -->
-    <a class="button" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">
-        Edit this shelf</a>
-    <!-- /TMPL_IF -->
+    <li><a  href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">Edit this shelf</a></li>
+    <!-- /TMPL_IF --></ul>
 </div>
 
 <h3>Contents of <!-- TMPL_VAR NAME="shelfname" --></h3>
@@ -219,7 +223,12 @@
     <!-- /TMPL_IF -->
 
 
-<br clear="both" />
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 <script type="text/javascript">
 	function confirmDelete(s){
@@ -259,5 +268,3 @@
 	}
 	
 </script>
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

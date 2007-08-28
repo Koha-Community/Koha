@@ -1,36 +1,27 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo;  Labels</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
 
-<div id="main">
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
 
+<h3>Layout Name</h3>
+<input type="textbox" name="layoutname"  size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" />
 
+<h3>Choose Order Of Fields to Print</h3>
 
-<h3>
-        Layout Name
-
-</h3>
-<input type="textbox" name="layoutname"  SIZE="20"
-        value="<!-- TMPL_VAR NAME="layoutname" -->">
-
-
-<p>
-<p>
-<p>
-
-
-
-<h3>
-        Choose Order Of Fields to Print
-</h3>
 <table summary="fields to print">
 <tr>
         <td>
         <select name="tx_title">
-        <option value="0" SELECTED></option>
+        <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -46,7 +37,7 @@
         </td>
 <td>
         <select name="tx_subtitle">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -63,7 +54,7 @@
  
         <td>
         <select name="tx_author">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -81,7 +72,7 @@
 <tr>
         <td>
         <select name="tx_isbn">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -98,7 +89,7 @@
 
         <td>
         <select name="tx_issn">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -113,10 +104,9 @@
         <label>ISSN</label>
         </td>
 
-
         <td>
         <select name="tx_itemtype">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -136,7 +126,7 @@
 <tr>
         <td>
         <select name="tx_dewey">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -153,7 +143,7 @@
 
         <td>
         <select name="tx_barcode">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -168,10 +158,9 @@
         <label>Barcode</label>
         </td>
 
-
         <td>
         <select name="tx_classif">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -189,7 +178,7 @@
 <tr>
         <td>
         <select name="tx_subclass">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -203,11 +192,9 @@
        </select>
         <label>Sub-Class</label>
         </td>
-
-
         <td>
         <select name="tx_itemcallnumber">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -221,61 +208,41 @@
       </select>
         <label>Call Number</label>
         </td>
-
-
   </tr>
-
-
-
-
-
-
-
-
 </table>
-<p>
-
-
 
 <h3>Choose Barcode Type</h3>
 <select name="barcodetype">
     <!-- TMPL_LOOP NAME="barcode_types" -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"
-            <!-- TMPL_IF NAME="active" --> selected  <!-- /TMPL_IF -->
-        ><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_IF NAME="active" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
+		<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
 </select>
-
-
 
 <h3>Choose Layout Type</h3>
 <select name="printingtype">
     <!-- TMPL_LOOP NAME="printingtypes" -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"
-            <!-- TMPL_IF NAME="active" --> selected  <!-- /TMPL_IF -->
-        ><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_IF NAME="active" -->
+        <option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
 </select>
 
+<h3>Start printing from Label number:<input type="textbox" name="startlabel"  size="2" value="1" /></h3>
 
 
-
-<h3>
-        Start printing from Label number:<input type="textbox" name="startlabel"  SIZE="2" value="1">
-
-
-</h3>
-
-<p>
-<p>
-<h3>Draw Guide Boxes<input type="checkbox" name="guidebox" value=1></h3>
-<p>
-<p>
-<p>
-        <input type="submit" value="Submit">
-		<input type="hidden" name=op value="add_layout"> 
-</p>
+<h3>Draw Guide Boxes<input type="checkbox" name="guidebox" value="1" /></h3>
+        <input type="submit" value="Submit" />
+		<input type="hidden" name="op" value="add_layout" />
 </form>
-</div>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
