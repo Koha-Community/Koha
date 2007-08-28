@@ -1,10 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials &rsaquo; Select Supplier</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div class="yui-g">
+
 <h1>Supplier Search Results</h1>
 <h2>You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h2>
 
-<div class="searchresults">
 <!-- TMPL_IF NAME="loop_suppliers" -->
 <table>
 	<tr>
@@ -14,14 +19,13 @@
 	<!-- TMPL_LOOP name="loop_suppliers" -->
 		<tr>
 			<td><!-- TMPL_VAR name="name" --></td>
-			<td><a href="#" onclick="GetIt(<!-- TMPL_VAR NAME="aqbooksellerid" -->,'<!--  TMPL_VAR escape="URL" NAME="name" -->')">Get It !</td>
+			<td><a href="#" onclick="GetIt(<!-- TMPL_VAR NAME="aqbooksellerid" -->,'<!--  TMPL_VAR escape="URL" NAME="name" -->')">Get It !</a></td>
 		</tr>
 	<!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-    <br />
-    <a href="javascript:back();">Perform a new search</a>
-</div>
+
+    <p><a href="javascript:back();">Perform a new search</a></p>
 
 <script type="text/javascript" language="Javascript">
 
@@ -33,3 +37,8 @@ function GetIt(aqbooksellerid,name)
 }
 </script>
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

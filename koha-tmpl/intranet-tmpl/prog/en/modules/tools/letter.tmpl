@@ -1,8 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Letters Administration</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
 <!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 	<!-- TMPL_IF NAME="else" -->
 		<form action="/cgi-bin/koha/tools/letter.pl" method="post">
@@ -132,8 +139,7 @@
 		}
 		
 		</script>
-	<div id="bloc25">
-		<!-- TMPL_IF name="modify" -->
+	<!-- TMPL_IF name="modify" -->
 			<h2 class="parameters">Modify letter</h2>
 		<!-- TMPL_ELSE -->
 			<h2 class="parameters">Add letter</h2>
@@ -243,7 +249,6 @@
 		</p>
 		<p><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
 		</form>
-	</div>
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="add_validate" -->
@@ -294,5 +299,10 @@
 	<input type="submit" value="OK">
 	</form>
 	<!-- /TMPL_IF -->
+
 </div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

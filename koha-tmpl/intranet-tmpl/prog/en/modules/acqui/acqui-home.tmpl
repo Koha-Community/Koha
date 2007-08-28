@@ -1,15 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Start, recieve, or modify any order</legend>
     <!-- TMPL_IF name="nobudget" -->
-        <span class="problem">You must define a budget in parameters</span>
+        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in parameters</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
             <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" />
             <input type="submit" value="Search" />
@@ -119,4 +126,9 @@
     document.findsupplier.supplier.focus();
 </script>
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

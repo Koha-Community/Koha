@@ -1,9 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; System Administration &rsaquo; Issuing Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 	<h1>Defining <!-- TMPL_IF NAME="branch" -->fining rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default fining rules<!-- /TMPL_IF --></h1>
 		
@@ -24,7 +30,7 @@
 			<li>library * and patron category *, same itemtype </li>
 			<li>library * and patron category *, itemtype *</li>
 		</ul>
-	
+	</div>
 		<form method="post" action="/cgi-bin/koha/admin/finesrules.pl">
 		<label for="branch">Select a library :</label>
 			<select id="branch" name="branch">
@@ -66,4 +72,9 @@
 			<input type="submit" value="Save Changes" />
 		</form>
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

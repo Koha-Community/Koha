@@ -1,12 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<div id="mainbloc">
-    <h1>Search results</h1>
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div class="yui-g">
+
+<h1>Search results</h1>
 <!-- TMPL_IF NAME="total"-->
-<div class="searchresults">
-    <table>
+<table>
     <tr>
        <th>Title</th>
        <th>Author</th>
@@ -34,7 +37,6 @@
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
-</div>
 <!-- TMPL_ELSE -->
 No result found for <b><!-- TMPL_VAR NAME="query" --></b>
 <!-- /TMPL_IF-->
@@ -53,3 +55,9 @@ function GetIt(bibno,title)
     window.close();
 }
 </script>
+
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

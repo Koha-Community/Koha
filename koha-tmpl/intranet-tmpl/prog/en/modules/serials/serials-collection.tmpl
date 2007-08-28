@@ -1,10 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!--TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <script language="JavaScript" type="text/javascript">
 showlayer('<!-- TMPL_VAR NAME="yearmax"-->');
@@ -64,7 +68,6 @@ function popup(subscriptionid) {
 <!-- /TMPL_UNLESS -->
 
 <!--TMPL_IF Name="subscriptions"-->
-<font size ="-2">
 <table>
 <!--TMPL_IF Name="onesubscription"-->
 <caption> Subscription Summary</caption>
@@ -158,7 +161,6 @@ function popup(subscriptionid) {
 </tr>
 <!--/TMPL_IF-->
 </table>
-</font>
 <!--/TMPL_IF -->
     <div class="tabsubs">
     <!-- TMPL_LOOP NAME="years" -->
@@ -250,11 +252,17 @@ function popup(subscriptionid) {
             </tr>
       <!-- /TMPL_LOOP -->
         </table>
-      <p><input type="submit" value="Edit serials"></p>
+      <p><input type="submit" value="Edit serials" /></p>
     </div>
     <!--/TMPL_LOOP -->
-  <input type="hidden" name="subscriptionid" value="<!--TMPL_VAR Name="subscriptionidlist"-->">
+  <input type="hidden" name="subscriptionid" value="<!--TMPL_VAR Name="subscriptionidlist"-->" />
 
 </form>
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

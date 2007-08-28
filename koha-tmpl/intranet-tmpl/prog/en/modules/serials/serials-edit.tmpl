@@ -1,13 +1,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 
-<!--------------------------MAIN BODY OF PAGE-------------------------->
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <h1>Serial Edition <!-- TMPL_VAR name="bibliotitle" --></h1>
-<form method="post" name="f" action="serials-edit.pl" >
+<form method="post" name="f" action="serials-edit.pl">
 <!--onsubmit="return barcode_check()">-->
 <div id="action">
     <a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a>
@@ -24,7 +28,7 @@
 Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 <!--/TMPL_IF -->
 
- <input type="hidden" name="op" value="serialchangestatus">
+ <input type="hidden" name="op" value="serialchangestatus" />
 	<table cellspacing="0" cellpadding="0" border="0" class="collapse">
 	<tr>
 		<th>
@@ -51,19 +55,19 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
-            Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="20" maxlength="100">
+            Issue <input type="text" name="serialseq" value="<!-- TMPL_VAR name="serialseq" -->" size="20" maxlength="100" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
+            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
+            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
             <!--TMPL_IF name="editdisable"-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled="disabled">
             <!--TMPL_ELSE-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="javascript:if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
             <!--/TMPL_IF-->
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Waited</option>
@@ -102,7 +106,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
         </td>
         <td>
-            <input type="text" name="notes" value="<!-- TMPL_VAR name="sernotes" -->" size="20" maxlength="255">
+            <input type="text" name="notes" value="<!-- TMPL_VAR name="sernotes" -->" size="20" maxlength="255" />
         </td>
     </tr>
   <!--TMPL_UNLESS Name="subscriptionexpired"-->
@@ -156,16 +160,16 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
-            <b>Subs. <!-- TMPL_VAR name="subscriptionid" --></b> New Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="javascript:if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
+            <b>Subs. <!-- TMPL_VAR name="subscriptionid" --></b> New Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
         </td>
         <td>
-            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15">
+            <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15">
+            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" >
+            <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->">
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Waited</option>
   <!-- /TMPL_IF -->
@@ -203,7 +207,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
         </td>
         <td>
-            <input type="text" name="notes" value="" size="20" maxlength="255">
+            <input type="text" name="notes" value="" size="20" maxlength="255" />
         </td>
     </tr>
   <!--TMPL_IF Name="serialsadditems"-->
@@ -326,4 +330,9 @@ function HideItems(index,labelindex) {
 <!--/TMPL_IF>
 </script>
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

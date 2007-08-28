@@ -1,6 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials Expiration</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -9,20 +17,14 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
-
 <h1>Check expiration</h1>
 
 <fieldset>
     <legend>Select record which will expire</legend>
     
-    <form name="f"
-          action="/cgi-bin/koha/serials/checkexpiration.pl"
-          method="post"
-          onsubmit="return CheckForm(this);">
+    <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
          
-        <label for="title">Filter on title&nbsp;</label>
+        <label for="title">Filter on title</label>
         <input id="title" type="texte" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" />
         <br />
         <label for="issn">Filter on ISSN</label>
@@ -54,8 +56,7 @@
     <!-- /TMPL_IF -->
         will expirate bebore <b><!-- TMPL_VAR NAME="date" --></b>
 </p>
-<div class="searchresults">
-    <table>
+<table>
         <tr>
             <th>
                 issn
@@ -117,7 +118,6 @@
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
-</div>
 <!-- /TMPL_IF -->
 
 <script type="text/javascript" language="JavaScript">
@@ -142,4 +142,9 @@
 </script>
 
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

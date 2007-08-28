@@ -1,7 +1,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Reports</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -10,6 +13,11 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
@@ -22,7 +30,7 @@
 		<!-- /TMPL_IF NAME="loopfilter"-->
 		
 		<table>
-			<tr >
+			<tr>
 				<th>Num/Items</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -99,11 +107,15 @@
 		<!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" -->
 	
-	<p>
 	<input type="submit" value="OK" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 	<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

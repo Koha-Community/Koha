@@ -1,10 +1,4 @@
-<div id="kohalogo">
-    <img src="/intranet-tmpl/prog/img/koha-logo-white.png" height="60px" />
-    <h3><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h3>
-</div>
-<div id="onlinehelp">
-    <a href="#" onclick="window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes');">[?]</a>
-</div>
+
 <div id="mainmenu">
 
     <!-- TMPL_IF NAME="CAN_user_circulate" -->

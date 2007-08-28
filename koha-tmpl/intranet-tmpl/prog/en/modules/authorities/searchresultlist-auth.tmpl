@@ -1,23 +1,28 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloguing Authority Selection</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<div id="mainbloc">
-    <h1 class="authority">Authority search results</h1>
-    <div id="bloc25">
-        <form name="f" method="post" action="auth_finder.pl">
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+    <h1>Authority search results</h1>
+    <form name="f" method="post" action="auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
             <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
-            <div id="bloc25">
-                <h2 class="authority">Search on</h2>
+            <h2>Search on</h2>
                 <p>
-                    <label class="label100">Authority type</label>
+                    <label>Authority type</label>
                     <!-- TMPL_VAR NAME="authtypecode" -->
                     <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
                 </p>
                 <p>
-                    <label class="label100">Main entry ($a only)</label>
+                    <label>Main entry ($a only)</label>
                     <input type="hidden" name="marclist" value="mainmainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -29,7 +34,7 @@
                     <input type="text" name="value" value="<!-- TMPL_VAR name="mainmainstring" -->" />
                 </p>
                 <p>
-                    <label class="label100">Main entry</label>
+                    <label>Main entry</label>
                     <input type="hidden" name="marclist" value="mainentry" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -41,7 +46,7 @@
                     <input type="text" name="value" value="<!-- TMPL_VAR name="mainstring" -->" />
                 </p>
                 <p>
-                    <label class="label100">Anywhere</label>
+                    <label>Anywhere</label>
                     <input type="hidden" name="marclist" value="" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -55,11 +60,8 @@
                 <p>
                 <input type="submit" value="Start search" class="button" />
                 </p>
-            </div>
         </form>
-    </div>
-    <div id="bloc25">
-        <div id="resultnumber">
+    <div id="resultnumber">
             <p>
                 <!-- TMPL_IF name="displayprev" -->
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
@@ -90,9 +92,9 @@
         <div id="resultlist">
             <table>
                 <tr>
-                    <th class="authority">Summary</th>
-                    <th class="authority">Used</th>
-                    <th class="authority">Get It!</th>
+                    <th>Summary</th>
+                    <th>Used</th>
+                    <th>Get It!</th>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
@@ -134,9 +136,7 @@
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
             </p>
-        </div>	
-    </div>
-</div>
+        </div>
 
 <script language="JavaScript" type="text/javascript">
 
@@ -145,4 +145,9 @@ function jumpfull(page)
     window.open(page,'','fullscreen,scrollbars');
 }
 </script>
-<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

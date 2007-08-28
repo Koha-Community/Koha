@@ -1,11 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <Title>Koha -- Authority details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
 
-<div id="authorities_authorities_add_or_modify">
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <!-- TMPL_IF name="authid" -->
   <h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
 <!-- TMPL_ELSE -->
@@ -53,7 +57,7 @@
             <!-- /TMPL_IF -->
         </p>
     <!-- /TMPL_IF -->
-    <div>
+
     <!-- TMPL_LOOP NAME="subfield_loop" -->
         <p class="subfield">
         <!-- TMPL_IF NAME="visibility" -->
@@ -88,11 +92,11 @@
                     <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
                     <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
                 </p>
-        </div>
+</div>
     <!-- /TMPL_LOOP -->
-    </div>
+
 <!-- /TMPL_LOOP -->
-</div>	
+
 		<div name="hidden" id="hidden" class="tab">
 		<!-- TMPL_LOOP NAME="hidden_loop" -->
 				<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
@@ -280,5 +284,9 @@ function unHideSubfield(index,labelindex) {
 }
 
 </script>
+</div>
+</div>
+</div>
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -317,12 +317,12 @@ sub create_input {
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         $subfield_data{marc_value} =
 		"<input type=\"text\"
-                        id=".$subfield_data{id}."
-                        name=".$subfield_data{id}."
+                        id=\"".$subfield_data{id}."\"
+                        name=\"".$subfield_data{id}."\"
 			value=\"$value\"
 			class=\"input_marceditor\"
                         tabindex=\"1\"                     
-			DISABLE READONLY \/>
+			disabled=\"disabled\" readonly=\"readonly\" \/>
 			<span class=\"buttonDot\"
 				onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}')\">...</span>
 		";
@@ -345,14 +345,13 @@ sub create_input {
         $subfield_data{marc_value} =
 		"<input tabindex=\"1\"
                         type=\"text\"
-                        id=".$subfield_data{id}."
-			name=".$subfield_data{id}."
+                        id=\"".$subfield_data{id}."\"
+			name=\"".$subfield_data{id}."\"
 			value=\"$value\"
                         class=\"input_marceditor\"
-			onfocus=\"javascript:Focus$function_name($index_tag)\"
-			onblur=\"javascript:Blur$function_name($index_tag); \" \/>
-		<span class=\"buttonDot\"
-			onclick=\"Clic$function_name('$subfield_data{id}')\">...</a>
+			onfocus=\"Focus$function_name($index_tag)\"
+			onblur=\"Blur$function_name($index_tag); \" \/>
+		<span class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}')\">...</a>
 		$javascript";
         # it's an hidden field
     }
@@ -360,16 +359,16 @@ sub create_input {
         $subfield_data{marc_value} =
             "<input tabindex=\"1\"
                     type=\"hidden\"
-                    id=".$subfield_data{id}."
-                    name=".$subfield_data{id}."
+                    id=\"".$subfield_data{id}."\"
+                    name=\"".$subfield_data{id}."\"
                     value=\"$value\" \/>
             ";
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {
         $subfield_data{marc_value} =
             "<input type=\"text\"
-                    id=".$subfield_data{id}."
-                    name=".$subfield_data{id}."
+                    id=\"".$subfield_data{id}."\"
+                    name=\"".$subfield_data{id}."\"
                     class=\"input_marceditor\"
                     tabindex=\"1\"
                     value=\"$value\"
@@ -391,8 +390,8 @@ sub create_input {
             $subfield_data{marc_value} =
                 "<textarea cols=\"70\"
                            rows=\"4\"
-                           id=".$subfield_data{id}."
-                           name=".$subfield_data{id}."
+                           id=\"".$subfield_data{id}."\"
+                           name=\"".$subfield_data{id}."\"
                            class=\"input_marceditor\"
                            tabindex=\"1\"
                            >$value</textarea>
@@ -401,8 +400,8 @@ sub create_input {
         else {
             $subfield_data{marc_value} =
                 "<input type=\"text\"
-                        id=".$subfield_data{id}."
-                        name=".$subfield_data{id}."
+                        id=\"".$subfield_data{id}."\"
+                        name=\"".$subfield_data{id}."\"
                         value=\"$value\"
                         tabindex=\"1\"
                         class=\"input_marceditor\"
@@ -681,7 +680,7 @@ my $framework = CGI::scrolling_list(
     -name     => 'Frameworks',
     -id       => 'Frameworks',
     -default  => $curfwk,
-    -OnChange => 'Changefwk(this);',
+    -onchange => 'Changefwk(this);',
     -values   => \@select_fwk,
     -labels   => \%select_fwk,
     -size     => 1,

@@ -2,8 +2,7 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Subscription edit</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-    
-    <!-- TMPL_INCLUDE NAME="menus.inc" -->
+    <!-- TMPL_INCLUDE NAME="header.inc" -->
     <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
     
     <script type="text/javascript">
@@ -17,7 +16,6 @@
         document.claims.submit();
     }
     </script>
-    <div id="mainbloc">
 <!-- TMPL_ELSE -->
     <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
     <div class="popup-block">
@@ -104,8 +102,8 @@
 name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR
 name="supplierid" -->,''); return false" class="button">Supplier Group Claim Letter</a></p> -->
         <!-- /TMPL_IF -->
-<p><br />
-<!--TMPL_IF Name="letter--">
+
+<!--TMPL_IF Name="letter" -->
                 <input type="submit" name="submit" class="button" value="Send letter" />
             <!--/TMPL_IF-->
         </form>
@@ -165,11 +163,10 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
             <!-- /TMPL_LOOP -->
         </table>
         <!-- /TMPL_IF -->
-<br />
+
 <p class="noprint"><a href="javascript:window.print()" class="button">Print</a> &nbsp; <a href="javascript:window.close()" class="button">Close</a></p>
 <!-- /TMPL_UNLESS -->
 
-</div>
 <script type="text/javascript">
 <!--
 
@@ -179,7 +176,13 @@ function popup(supplierid,serialid){
 //-->
 </script>
 <!-- TMPL_UNLESS NAME="preview" -->
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
 <!-- /TMPL_UNLESS -->

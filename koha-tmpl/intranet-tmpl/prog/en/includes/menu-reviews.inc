@@ -1,5 +1,5 @@
 <div id="submenu">
-        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Reviews Home</a>
+<ul>
+	<li>        <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Reviews Home</a></li>
+</ul>
 </div>
-
-<div id="main">

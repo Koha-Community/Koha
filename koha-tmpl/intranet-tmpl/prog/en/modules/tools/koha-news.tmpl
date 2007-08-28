@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; News Management</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
 
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -10,8 +12,12 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 
 <div id="koha-news_main" class="searchresults">
     <h1> OPAC &amp; KOHA News</h1>
@@ -65,6 +71,7 @@
                 <input class="button" type="button" value="Cancel" onclick="window.location.href='/cgi-bin/koha/tools/opac-news.pl'" />
             </p>
         </form>
+		</div>
     <!-- TMPL_ELSE -->
         <div id="koha-news_filter">
             <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" />
@@ -127,14 +134,20 @@
                 <input type="hidden" name="op" value="del" />
                 <input type="submit" class="button" value="Delete selected" />
             </form>
+			</div>
         <!-- TMPL_ELSE -->
             <p>No news loaded</p>
         <!-- /TMPL_IF -->
         <div id="action">
           <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">Add news</a>
         </div>
-    </div>
+		</div>
     <!-- /TMPL_IF -->
+
+
+</div>
+</div>
 </div>
 
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

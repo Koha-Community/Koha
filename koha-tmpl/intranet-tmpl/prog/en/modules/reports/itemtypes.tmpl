@@ -1,7 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Reports</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -9,6 +11,12 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
@@ -38,5 +46,9 @@
 		<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
+</div>
+</div>
+</div>
 
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

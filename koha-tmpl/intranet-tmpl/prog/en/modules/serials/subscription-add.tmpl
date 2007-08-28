@@ -1,9 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -19,8 +24,8 @@
 <!--
 
 // the english words used in display purposes
-var text = new Array(_('Number'),_('Volume'),_('Issue'),_('Month'),_('Week'),_('Starting with:'),_('Rollover at:'),_('Choose Hemisphere:'),_('Northern'),_('Southern'),
-_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'),_('Season'),_('Year'));
+var text = new Array('Number','Volume','Issue','Month','Week','Starting with:','Rollover at:','Choose Hemisphere:','Northern','Southern',
+'Autumn','Winter','Spring','Summer','Fall','Season','Year');
 var is_season = 0;
 var is_hemisphere = 1;
 
@@ -44,7 +49,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value=1;
-        document.f.numberingmethod.value=_('Vol {X}, No {Y}, Issue {Z}');
+        document.f.numberingmethod.value= 'Vol {X}, No {Y}, Issue {Z}';
         moreoptions(text[1],text[0],text[2]);
         display_table(0); // toggle info box on (1) or off (0)
         break;
@@ -64,7 +69,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_('Vol {X}, No {Y}');
+        document.f.numberingmethod.value= 'Vol {X}, No {Y}';
         moreoptions(text[1],text[0]);
         display_table(0);
         break;
@@ -84,7 +89,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_('Vol {X}, Issue {Y}');
+        document.f.numberingmethod.value= 'Vol {X}, Issue {Y}';
         moreoptions(text[1],text[2]);
         display_table(0);
         break;
@@ -104,7 +109,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_('No {X}, Issue {Y}');
+        document.f.numberingmethod.value= 'No {X}, Issue {Y}';
         moreoptions(text[0],text[2]);
         display_table(0);
         break;
@@ -127,7 +132,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue2.value='1';
         document.f.lastvalue3.value='';
         document.f.periodicity.value='8';
-        document.f.numberingmethod.value=_('{Y} {X}');
+        document.f.numberingmethod.value='{Y} {X}';
         moreoptions_seasons(text[15],sYear);
         display_table(0);
         is_season = 1;
@@ -156,7 +161,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue2.value='1';
         document.f.lastvalue3.value='';
         document.f.periodicity.value=1;
-        document.f.numberingmethod.value=_('{X}/{Y}');
+        document.f.numberingmethod.value='{X}/{Y}';
         display_table(0);
         break;
     default:
@@ -242,8 +247,8 @@ function moreoptions_daily_check(x) {
     var errortext='';
     if(periodicity == 1){
         document.getElementById("irregularity").innerHTML = '';
-        var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
-        errortext =_("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
+        var daynames = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+        errortext = "Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>";
         for(var j=0;j<daynames.length;j++){
             errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
         }
@@ -282,14 +287,14 @@ var textbox = '';
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><td>"+text[6]+"<\/td>";
-            textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
+            textbox +="<td><a href='javascript:irregularity_check()'>"+'Irregularity?'+"<\/a><\/td>\n";
             textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
             if(z){
                 textbox +="<td><input type='text' name='whenmorethantemp3' size='4' onkeyup='moreoptionsupdate(\"whenmorethan3\",1)'><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)'><br /><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
+          textbox +="<tr> <td>"+'issues expected'+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)'><br /><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -352,7 +357,7 @@ var textbox = '';
         }
         textbox +="<\/select><\/td><\/tr>\n";
         textbox +="<tr><td>"+text[6]+"<\/td>";
-        textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
+        textbox +="<td><a href='javascript:irregularity_check()'>"+'Irregularity?'+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
     }
@@ -372,7 +377,7 @@ function irregularity_check(){
     var error='';
     var toobig;
     var expected; 
-    var errortext = _("<b>Warning irregularity detected<\/b><br \/>");
+    var errortext = "<b>Warning irregularity detected<\/b><br \/>";
     switch(periodicity){
     case "12":
         if(rollover < 730) expected =730;
@@ -463,17 +468,17 @@ function irregularity_check(){
     }
     if(expected){
         if(expected == 365 || expected==730){
-            var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
-            errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
+            var daynames = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
+            errortext += "Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>";
             for(var j=0;j<daynames.length;j++){
-                errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
+                errortext +="<input type=\"checkbox\" name=\"irregular\" id=\"irregular"+(j+1)+"\" value=\""+(j+1)+"\" />"+daynames[j]+" &nbsp; ";
             }
             error=errortext;
         } else {
-            errortext +=expected+_(" issues expected ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
+            errortext +=expected+" issues expected "+rollover+" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>";
             var count=0;
             for(var i=rollover;i<expected;i++){
-                errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
+                errortext +="<select name=\"irregular\" id=\"irregular"+count+"\" onchange=\"display_example(expected)\">\n";
                 errortext +=irregular_options(periodicity);
                 errortext +="<\/select>\n";
                 count++;
@@ -482,7 +487,7 @@ function irregularity_check(){
         }
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
+        errortext +=expectedover+" issues expected "+rollover+" were entered.<br \/> You seem to have indicated more issues per year than expected.";
         error=errortext;
     }
     if(error.length ==0){
@@ -498,8 +503,8 @@ function irregular_options(periodicity){
 <!-- TMPL_IF NAME="weekarrayjs" -->
     var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
 <!-- /TMPL_IF -->
-    var months = new Array(_('January'),_('February'),_('March'),_('April'),_('May'),_('June'),_('July'),_('August'),_('September'),_('October'),_('November'),_('December'));
-    var seasons = new Array(_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'));
+    var months = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
+    var seasons = new Array('Autumn','Winter','Spring','Summer','Fall');
     var errortext='';
     if(periodicity == 1) {
         expected = 366;
@@ -583,7 +588,7 @@ function display_example(expected){
     var whenmorethan3 = parseInt(document.f.whenmorethan3.value);
     var setto2 = parseInt(document.f.setto2.value);
     var setto3 = parseInt(document.f.setto3.value);
-    var displaytext = _('Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n');
+    var displaytext = "Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n";
     if(startfrom3>0){
         var count=startfrom3-1;
         var count2=startfrom2;
@@ -683,19 +688,17 @@ function check_input(e){
 <!-- TMPL_IF name="mod" -->
     <h1>Modify a subscription</h1>
     <form method="post" name="f">
-        <input type="hidden" name="op" value="modsubscription">
-        <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+        <input type="hidden" name="op" value="modsubscription" />
+        <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
 <!-- TMPL_ELSE -->
     <h1>Add a subscription (Serial Holdings Record)</h1>
-    <form method="post" name="f">
-        <input type="hidden" name="op" value="addsubscription">
+    <form method="post" action="/cgi-bin/koha/serials/subscription-add.pl" name="f">
+        <input type="hidden" name="op" value="addsubscription" />
 <!-- /TMPL_IF -->
-<input type="hidden" name="user" value="<!-- TMPL_VAR name="loggedinusername" -->">
-<input type="hidden" name="irreg_check" value="0">
-<input type="hidden" name="issuesexpected1" value="0">
+<input type="hidden" name="user" value="<!-- TMPL_VAR name="loggedinusername" -->" />
+<input type="hidden" name="irreg_check" value="0" />
+<input type="hidden" name="issuesexpected1" value="0" />
 
-
-<div id="subscription_form">
     <h2>Subscription information for subscription #<!--TMPL_VAR name="subscriptionid"--></h2>
     <table>
         <tr>
@@ -704,12 +707,12 @@ function check_input(e){
         </tr>
         <tr>
             <td><label>Supplier:</label></td>
-            <td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8"> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a Supplier</a></td>
+            <td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a Supplier</a></td>
         </tr>
         <tr>
             <td><label>Biblio</label></td>
             <td>
-                <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8"> 
+                <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8" /> 
                 (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />)
                 <a href="#" onclick="Plugin(f)">Search for Biblio</a> <!--TMPL_UNLESS Name="mod"--> |
                 <a href="#" onclick="Create_biblio(f)">Create Biblio</a><!--/TMPL_UNLESS-->
@@ -717,7 +720,7 @@ function check_input(e){
         </tr>
         <tr>
             <td><label>Call Number</label></td>
-            <td><input type="text" name="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20"></td>
+            <td><input type="text" name="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" /></td>
         </tr>
         <tr>
             <td>Branch</td>
@@ -765,15 +768,14 @@ function check_input(e){
             </td>
         </tr>
     </table>
-<div>
 <div id="subscription_form_planning">
     <h2>Planning</h2>
     <table>
         <tr>
             <td>First Issue ETA:</td>
             <td>
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;"  />
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;" />
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="" />
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="acqui_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -941,8 +943,8 @@ function check_input(e){
         <tr>
             <td>Begins On: (*)</td>
             <td>
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;"  />
-                <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" style="border-width: 0px;">
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt=""  />
+                <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -968,7 +970,7 @@ function check_input(e){
                 <select name="subtype">
                     <!-- TMPL_LOOP NAME="subtype" -->
                         <!-- TMPL_IF NAME="selected" -->
-                        <option value="<!-- TMPL_VAR NAME="name" -->"  selected="SELECTED">
+                        <option value="<!-- TMPL_VAR NAME="name" -->" selected="selected">
                         <!-- TMPL_ELSE -->
                         <option value="<!-- TMPL_VAR NAME="name" -->">
                         <!-- /TMPL_IF -->
@@ -976,12 +978,12 @@ function check_input(e){
                         </option>
                     <!-- /TMPL_LOOP -->
                 </select>
-                <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)"> (*) (enter amount in numerals)
+                <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (*) (enter amount in numerals)
             </td>
         </tr>
     <tr>
         <td>Numbering calculation</td>
-        <td>Numbering formula: <input type="text" name="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->"></td>
+        <td>Numbering formula: <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" /></td>
     </tr>
     <tr>
     <td colspan="3">
@@ -996,40 +998,40 @@ function check_input(e){
                 <tr>
                     <td>Add</td>
                     <td>
-                        <input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->">
+                        <input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->" />
                     </td>
                     <td>
-                        <input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->">
+                        <input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->" />
                     </td>
                     <td>
-                        <input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->">
+                        <input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->" />
                     </td>
                 </tr>
                 <tr>
                     <td>once every</td>
-                    <td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->"></td>
-                    <td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->"></td>
-                    <td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->"></td>
+                    <td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->" /></td>
+                    <td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->" /></td>
+                    <td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->" /></td>
                 </tr>
                 <tr>
                     <td>When more than</td>
-                    <td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->"></td>
-                    <td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->"></td>
-                    <td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->"></td>
+                    <td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->" /></td>
+                    <td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->" /></td>
+                    <td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->" /></td>
                 </tr>
                 <!-- TMPL_IF name="mod" -->
                 <tr>
                     <td>The loop is for instance</td>
-                    <td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->"></td>
-                    <td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->"></td>
-                    <td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->"></td>
+                    <td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->" /></td>
+                    <td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->" /></td>
+                    <td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->" /></td>
                 </tr>
                 <!-- /TMPL_IF -->
                 <tr>
                     <td>Set back to</td>
-                    <td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->"></td>
-                    <td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->"></td>
-                    <td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->"></td>
+                    <td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->" /></td>
+                    <td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->" /></td>
+                    <td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->" /></td>
                 </tr>
                 <tr>
                     <td>
@@ -1039,9 +1041,9 @@ function check_input(e){
                             Begins with
                         <!-- /TMPL_IF -->
                     </td>
-                    <td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->"></td>
-                    <td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->"></td>
-                    <td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->"></td>
+                    <td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->" /></td>
+                    <td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->" /></td>
+                    <td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->" /></td>
                 </tr>
             </table>
         </div>
@@ -1054,11 +1056,11 @@ function check_input(e){
     <table>
         <tr>
           <td>Starting date:</td>
-          <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"> (the date of the 1st subscription)</td>
+          <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /> (the date of the 1st subscription)</td>
         </tr>
         <tr>
           <td>Ending date:</td>
-          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->">(if empty : subscription still active)</td>
+          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty : subscription still active)</td>
         </tr>
         <tr>
             <td>Recieved issues</td>
@@ -1080,15 +1082,11 @@ function check_input(e){
 </div>
 <!--/TMPL_IF-->
 <!-- TMPL_IF name="mod" -->
-    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w">
+    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" />
 <!-- TMPL_ELSE -->
-    <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w">
+    <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" />
 <!-- /TMPL_IF -->
 </form>
-</div>
-
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 <script language="JavaScript" type="text/javascript">
 function Create_biblio(f)
@@ -1118,13 +1116,13 @@ function Check(f) {
             document.f.submit();
         } else {
             if(f.numbering_pattern.value == ''){
-                alert(_("need to choose a numbering pattern"));
+                alert("need to choose a numbering pattern");
             } else {
-                alert(_("need to check for irregularity by clicking 'Irregularity?'"));
+                alert("need to check for irregularity by clicking 'Irregularity?'");
             }
         }
     } else {
-        alert(_('field marked with * are mandatory'));
+        alert('field marked with * are mandatory');
     }
     return false;
 }
@@ -1143,3 +1141,10 @@ window.onload = irregularity_check();
 window.onload = irregular_order();
 </script>
 <!-- /TMPL_IF -->
+
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
