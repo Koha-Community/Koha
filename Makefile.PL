@@ -142,6 +142,9 @@ WriteMakefile(
 	# File tree mapping
 	PM => map_tree(),
 
+	# disable tests
+	'test' => {TESTS => 't/dummy.t'},
+
 #   CONFIGURE => sub {
 #     # Ask for options with prompt($question,$default) calls here?
 #     return { macro => { 'export TEST' => '755' } }
