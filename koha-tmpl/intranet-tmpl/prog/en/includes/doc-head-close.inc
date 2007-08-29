@@ -1,7 +1,46 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/reset-fonts-grids.css" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff.css" />
+
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
+
+<!-- TMPL_IF NAME="css_libs" -->
+<!-- TMPL_LOOP NAME="css_libs" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="lib" -->" />
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="css_module" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="css_module" -->" />
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="css_page" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="css_page" -->" />
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="css_widgets" -->
+<!-- TMPL_LOOP NAME="css_widgets" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="widget" -->" />
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="js_libs" -->
+<!-- TMPL_LOOP NAME="js_libs" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="lib" -->"></script>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="js_module" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="js_module" -->"></script>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="js_page" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="js_page" -->"></script>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="js_widgets" -->
+<!-- TMPL_LOOP NAME="js_widgets" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="widget" -->"></script>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="popup" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/intranet2popup.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="login" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/login.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="wizard" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/wizard.css" />
