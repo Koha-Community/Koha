@@ -5,39 +5,45 @@
 
 <!-- TMPL_IF NAME="css_libs" -->
 <!-- TMPL_LOOP NAME="css_libs" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="lib" -->" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="lib" -->" />
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="css_module" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="css_module" -->" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/modules/<!-- TMPL_VAR NAME="css_module" -->" />
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="css_page" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="css_page" -->" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/pages/<!-- TMPL_VAR NAME="css_page" -->" />
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="css_widgets" -->
 <!-- TMPL_LOOP NAME="css_widgets" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/<!-- TMPL_VAR NAME="widget" -->" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="widget" -->" />
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="js_libs" -->
 <!-- TMPL_LOOP NAME="js_libs" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="lib" -->"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="lib" -->"></script>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="js_module" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="js_module" -->"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/modules/<!-- TMPL_VAR NAME="js_module" -->"></script>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="js_page" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="js_page" -->"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/pages/<!-- TMPL_VAR NAME="js_page" -->"></script>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="js_widgets" -->
 <!-- TMPL_LOOP NAME="js_widgets" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/<!-- TMPL_VAR NAME="widget" -->"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="widget" -->"></script>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="js_includes" -->
+<!-- TMPL_LOOP NAME="js_includes" -->
+<!-- TMPL_INCLUDE NAME="js_include" -->
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
