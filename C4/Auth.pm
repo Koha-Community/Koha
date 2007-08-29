@@ -132,6 +132,19 @@ sub get_template_and_user {
     my $borrowernumber;
     my $insecure = C4::Context->preference('insecure');
     if ($user or $insecure) {
+
+		# load the template variables for stylesheets and JavaScript
+		$template->param( css_libs => $in->{'css_libs'} );
+		$template->param( css_module => $in->{'css_module'} );
+		$template->param( css_page => $in->{'css_page'} );
+		$template->param( css_widgets => $in->{'css_widgets'} );
+
+        $template->param( js_libs => $in->{'js_libs'} );
+        $template->param( js_module => $in->{'js_module'} );
+        $template->param( js_page => $in->{'js_page'} );
+        $template->param( js_widgets => $in->{'js_widgets'} );
+
+		# user info
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
