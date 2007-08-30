@@ -659,6 +659,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { editcatalogue => 1 },
+		css_page => 'addbiblio.css',
+		js_page => 'addbiblio.js',
     }
 );
 
