@@ -20,7 +20,7 @@ if ($referurl) {
 }
 
 $refer =~ /.*koha\/(.*)\.pl.*/;
-my $from = "help/$1.tmpl";
+my $from = "modules/help/$1.tmpl";
 
 my $template = gethelptemplate( $from, "intranet" );
 
@@ -34,7 +34,7 @@ sub gethelptemplate {
     $htdocs = C4::Context->config('intrahtdocs');
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet" );
     unless ( -e "$htdocs/$theme/$lang/$tmplbase" ) {
-        $tmplbase = "help/nohelp.tmpl";
+        $tmplbase = "modules/help/nohelp.tmpl";
         ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet" );
     }
     my $template = HTML::Template->new(

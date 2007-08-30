@@ -143,7 +143,6 @@ sub get_template_and_user {
         $template->param( js_module => $in->{'js_module'} );
         $template->param( js_page => $in->{'js_page'} );
         $template->param( js_widgets => $in->{'js_widgets'} );
-		$template->param( js_includes => $in->{'js_includes'} );
 
 		# user info
         $template->param( loggedinusername => $user );
