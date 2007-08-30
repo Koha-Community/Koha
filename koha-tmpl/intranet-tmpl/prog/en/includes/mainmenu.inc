@@ -70,20 +70,5 @@
         <!-- TMPL_VAR NAME="IntranetNav" -->
     <!-- /TMPL_IF -->
 	
-    <div id="login">
-        <!-- TMPL_IF NAME="loggedinusername" -->
-        <ul>
-        <li>Logged in as: <strong> <!-- TMPL_VAR NAME="loggedinusername" --> </strong>
-            at <strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong></li>
-            <!-- TMPL_IF NAME="AutoLocation" -->
-                <li>autolocate activated</li>
-        <!-- TMPL_ELSE -->
-            <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Change Settings</a></li>
-        <!-- /TMPL_IF -->
-            <li><a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a></li>
-        </ul>
-        <!-- /TMPL_IF -->
-	</div>
-
 </div>
 </div>

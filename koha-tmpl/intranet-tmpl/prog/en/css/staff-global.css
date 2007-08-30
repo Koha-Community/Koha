@@ -1,5 +1,13 @@
 @import url( /intranet-tmpl/prog/en/lib/yui/reset-fonts-grids.css) all;
 
+a, a:link, a:visited, a:active {
+	color : #316494;
+}
+
+a:hover {
+	color : #669ACC;
+}
+
 body {
 	text-align : left;
 }
@@ -59,10 +67,18 @@ h6 {
 .yui-u {
 }
 
-#onlinehelp {
+#doc3 {
+	padding-top : 1em;
+}
+
+#login	 {
 	position : absolute;
 	top : 3px;
-	right : 10px;
+	right : 40px;
+}
+
+#login a {
+
 }
 
 ul {
@@ -75,34 +91,51 @@ li {
 }
 
 #header {
+	border-bottom : 1px solid #E8E8E8;
+}
+
+#header:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+
+#title {
 	background-image : url("../../img/koha-logo-black.png");
-	background-position : left;
+	background-position : 5px 2px;
 	background-repeat : no-repeat;
+	float : left;
 	height : 54px;
-	padding-left : 45px;
+	padding-left : 50px;
 }
 
-#header h1 {
-	height : 54px;
-	vertical-align : middle;
+#title h1 {
+	display : inline;
+	line-height : 54px;
 }
 
-#header h1 a {
+#title h1 a {
 	text-decoration : none;
+}
+
+#toplevelnav {
+	float : left;
+	line-height : 54px;
+	margin-left : 1em;
 }
 
 #submenu {
 	margin : .5em 0;
 }
 
-#submenu li {
+#toplevelnav li, #submenu li {
 	display : inline;
 	border-right : 1px solid #E8E8E8;
 	padding : 0 .5em;
 	white-space : nowrap;
 }
 
-#submenu li:last-child {
+#toplevelnav li:last-child, #submenu li:last-child {
 	border : 0;
 }
 
