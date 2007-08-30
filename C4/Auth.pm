@@ -703,7 +703,8 @@ sub checkauth {
 #    $cookie = $query->cookie(CGISESSID => $session->id
 #   );
     print $query->header(
-        -type   => 'utf-8',
+ 		-type   => 'text/html',
+        -charset => 'utf-8',
         -cookie => $cookie
       ),
       $template->output;
