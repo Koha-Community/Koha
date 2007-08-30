@@ -661,6 +661,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { editcatalogue => 1 },
 		css_page => 'addbiblio.css',
 		js_page => 'addbiblio.js',
+		js_libs =>  [   
+                          { lib => 'lib/jquery/jquery.js' },
+						  { lib => 'lib/jquery/plugins/jquery.blockUI.js' },
+                        ],
     }
 );
 

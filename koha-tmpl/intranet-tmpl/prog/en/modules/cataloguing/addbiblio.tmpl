@@ -1,6 +1,424 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+$.blockUI(); 
+$(document).ready(function(){
+	$.unblockUI();
+});
+function _(s) { return s } // dummy function for gettext
+
+function confirmnotdup(){
+	document.getElementById("confirm_not_duplicate").value = 1;
+	var checkform =	document.getElementById("f");
+	Check(checkform);
+}
+
+function active(numlayer){
+    for (i=0; i <= 10 ; i++ ) {
+	var tab;
+	try{
+		tab = document.getElementById(i+'XX');
+		tab.getAttribute('id'); // do not remove this line. It throws an execption.
+	}
+	catch(e){
+		continue;
+	}
+        if (numlayer==i) {
+            tab.setAttribute("class","content_visible");
+            var tabactive=document.getElementById('link'+i);
+            tabactive.removeAttribute("class");
+            tabactive.setAttribute("class","tab_active");
+        } else {
+            tab.setAttribute("class","content_hidden");
+            try {
+                var tabactive=document.getElementById('link'+i);
+                tabactive.removeAttribute("class");
+                tabactive.setAttribute("class","tab_inactive");
+            }
+            catch(e){};
+        }
+    }
+}
+
+/**
+ * 
+ * 
+ */
+function Check(){
+    var StrAlert = AreMandatoriesNotOk();
+    if( ! StrAlert ){
+        document.f.submit;
+        return true;
+    } else {
+        alert(StrAlert);
+        return false;
+    }
+}
+
+function Dopop(link,i) {
+    defaultvalue = document.getElementById(i).value;
+    window.open(link+"&result="+defaultvalue,"value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+/**
+ * this function open a popup to search on z3950 server.
+ */
+function PopupZ3950() {
+    var strQuery = AreZ3950MandoriesOk();
+    if(strQuery){
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+    } else {
+        var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");    
+        alert(strAlert);
+    }
+}
+
+/**
+ * check if mandatory subfields are writed
+ */
+function AreMandatoriesNotOk(){
+    var mandatories = new Array();
+    var tab = new Array();
+    var label = new Array();
+    var flag=0;
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+                   	tab.push("<!-- TMPL_VAR NAME='number' -->");
+                   	label.push("<!-- TMPL_VAR NAME='marc_lib' -->");
+                <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+    var StrAlert = "Can't save this record because the following field aren't filled :\n\n";
+    for(var i=0,len=mandatories.length; i<len ; i++){
+        if( ! document.getElementById(mandatories[i]).value){
+            flag = 1;
+            document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
+            document.getElementById(mandatories[i]).focus();
+            StrAlert += "\t* "+label[i]+" in tab "+tab[i]+"\n";
+        }
+    }
+    if(flag){
+	    return StrAlert;
+	} else {
+		return flag;
+	}
+}
+
+/** 
+ * check if z3950 mandatories are set or not
+ */
+function AreZ3950MandoriesOk(){
+    var mandatories = new Array();
+    var mandatories_label = new Array();
+	<!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='z3950_mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+        mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+    
+    var error = 0;
+    var strQuery="";
+    for(var i=0,len=mandatories.length; i<len ; i++){
+        var field_value = document.getElementById(mandatories[i]).value;
+        if( ! field_value ){
+            error++;
+        } else {
+            strQuery += "&"+mandatories_label[i]+"="+field_value;
+        }
+    }
+    if(error < 4){
+        return strQuery;
+    } else {
+        return false;
+    }
+}
+
+function Changefwk(FwkList) {
+	var fwk = FwkList.options[FwkList.selectedIndex].value;
+ 	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&breedingid=<!-- TMPL_VAR name="breedingid" -->&frameworkcode="+fwk;
+
+}
+
+function openAuth(tagid,authtype,X) {
+// 	defaultid=document.getElementById(subfieldid);
+//     alert("X"+X);
+    Y=X.parentNode.getAttribute("id");
+//     alert("tagid"+Y);
+	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+
+function ExpandField(index) {
+    var original = document.getElementById(index); //original <div>
+    var divs = original.getElementsByTagName('div');
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+            if (divs[i].style.display == 'block') {
+                divs[i].style.display = 'none';
+            } else {
+                divs[i].style.display = 'block';
+            }
+        }
+    }
+}
+
+/**
+ * To clone a field or a subfield by clickink on '+' button
+ */ 
+function CloneField(index) {
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var new_key = CreateKey();
+    var new_id  = original.getAttribute('id')+new_key;
+    
+    clone.setAttribute('id',new_id); // setting a new id for the parent div
+    
+    var divs = clone.getElementsByTagName('div');
+    
+    <!-- TMPL_UNLESS NAME='hide_marc'--> // No indicator if hide_marc
+        // setting a new name for the new indicator
+        var indicator = clone.getElementsByTagName('input')[0];
+        indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
+    <!-- /TMPL_UNLESS -->
+        
+    // settings all subfields
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+            
+            // set the attribute for the new 'div' subfields
+            divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
+            
+            var inputs   = divs[i].getElementsByTagName('input');
+            var id_input = "";
+            
+            inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+            inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
+            var id_input;
+            try {
+            	id_input = inputs[1].getAttribute('id')+new_key;
+                inputs[1].setAttribute('id',id_input);
+                inputs[1].setAttribute('name',inputs[1].getAttribute('name')+new_key);
+            } catch(e) {
+            	try{ // it s a select if it is not an input
+                    var selects = divs[i].getElementsByTagName('select');
+                    id_input = selects[0].getAttribute('id')+new_key;
+                    selects[0].setAttribute('id',id_input);
+                    selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
+                }catch(e2){ // it is a textarea if it s not a select or an input
+                	var textaeras = divs[i].getElementsByTagName('textarea');
+                	id_input = textaeras[0].getAttribute('id')+new_key;
+                	textaeras[0].setAttribute('id',id_input);
+                    textaeras[0].setAttribute('name',textaeras[0].getAttribute('name')+new_key);
+                }
+            }
+            
+            <!-- TMPL_UNLESS NAME='advancedMARCEditor'-->
+            // when cloning a subfield, re set its label too.
+            var labels = divs[i].getElementsByTagName('label');
+            labels[0].setAttribute('for',id_input);
+            <!-- /TMPL_UNLESS -->
+            
+            <!-- TMPL_UNLESS NAME='hide_marc'-->
+                // updating javascript parameters on button up
+                var imgs = divs[i].getElementsByTagName('img');
+                imgs[0].setAttribute('onclick',"upSubfield(\'"+divs[i].getAttribute('id')+"\');");
+            <!-- /TMPL_UNLESS -->
+            
+            // setting its '+' button
+            var CloneButtonPlus=0;
+            try {
+                CloneButtonPlus = divs[i].getElementsByTagName('span')[0];
+                if(CloneButtonPlus.getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
+                } else {
+                    CloneButtonPlus = 0;
+                }
+            }
+            catch(e){
+                // do nothig if ButtonPlus & CloneButtonPlus don t exist.
+            }
+            
+            // button ...
+            var spans=0;
+            try {
+                spans = divs[i].getElementsByTagName('span');
+            } catch(e) {
+                // no spans
+            }
+            if(spans){
+                var buttonDot;
+                if(!CloneButtonPlus){ // it s impossible to have  + ... (buttonDot AND buttonPlus)
+                    buttonDot = spans[0];
+                    if(buttonDot){
+                        // 2 possibilities :
+                        try{
+                            var buttonDotOnClick = buttonDot.getAttribute('onclick');
+                            if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
+                                var re = /\('.*'\)/i;
+                                buttonDotOnClick = buttonDotOnClick.replace(re,"('"+inputs[1].getAttribute('id')+"')");
+                                if(buttonDotOnClick){
+                                    buttonDot.setAttribute('onclick',buttonDotOnClick);
+                                }
+                            } else {
+                                if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
+                                    
+                                    var re1 = /&index=.*',/;
+                                    var re2 = /,.*\)/;
+
+                                    buttonDotOnClick = buttonDotOnClick.replace(re1,"&index="+inputs[1].getAttribute('id')+"',");
+                                    buttonDotOnClick = buttonDotOnClick.replace(re2,",'"+inputs[1].getAttribute('id')+"')");
+                                    
+                                    if(buttonDotOnClick){
+                                            buttonDot.setAttribute('onclick',buttonDotOnClick);
+                                    }
+                                }
+                            }
+                            try {
+                            	// do not copy the script section.
+                            	var script = spans[0].getElementsByTagName('script')[0];
+                            	spans[0].removeChild(script);
+                            } catch(e) {
+                            	// do nothing if there is no script
+                            }
+                    	}catch(e){}
+                	}
+                }
+            }
+            <!-- TMPL_UNLESS NAME='hide_marc'-->
+                var buttonUp = divs[i].getElementsByTagName('img')[0];
+                buttonUp.setAttribute('onclick',"upSubfield('" + divs[i].getAttribute('id') + "')");
+            <!-- /TMPL_UNLESS -->
+            
+        } else { // it's a indicator div
+            if(divs[i].getAttribute('name') == 'div_indicator'){
+                var inputs = divs[i].getElementsByTagName('input');
+                inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+                
+                var CloneButtonPlus;
+                try {
+                    CloneButtonPlus = divs[i].getElementsByTagName('span')[1]; // 0 is the title
+                    CloneButtonPlus.setAttribute('onclick',"CloneField('" + divs[i].parentNode.getAttribute('id') + "')");
+                }
+                catch(e){
+                    // do nothig CloneButtonPlus doesn't exist.
+                }
+            }
+        }
+    }
+    
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
+}
+
+function CloneSubfield(index){
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var new_key = CreateKey();
+    var new_id  = original.getAttribute('id')+new_key;
+    
+    // set the attribute for the new 'div' subfields
+    var inputs     = clone.getElementsByTagName('input');
+    var selects    = clone.getElementsByTagName('select');
+    var textareas  = clone.getElementsByTagName('textarea');
+        
+    // input
+    var id_input = "";
+    for(var i=0,len=inputs.length; i<len ; i++ ){
+        id_input = inputs[i].getAttribute('id')+new_key;
+        inputs[i].setAttribute('id',id_input);
+        inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+    }
+    
+    // select 
+    for(var i=0,len=selects.length; i<len ; i++ ){
+        id_input = selects[i].getAttribute('id')+new_key;
+        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
+        selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+    }
+    
+    // textarea
+    for(var i=0,len=textareas.length; i<len ; i++ ){
+        id_input = textareas[i].getAttribute('id')+new_key;
+        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
+        textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+    }
+    
+    <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
+    // when cloning a subfield, reset its label too.
+    var label = clone.getElementsByTagName('label')[0];
+    label.setAttribute('for',id_input);
+    <!-- /TMPL_UNLESS -->
+    
+    // setting a new if for the parent div
+    clone.setAttribute('id',new_id);
+    
+    var CloneButtonPlus;
+    try {
+    	var spans = clone.getElementsByTagName('span');
+    	if(spans.length){
+        	for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
+        		if(spans[i].getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus = spans[i];
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                    var buttonUp = clone.getElementsByTagName('img')[0];
+                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
+                }
+            }
+        }
+    }
+    catch(e){
+        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    }
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
+}
+
+/**
+ * This function create a random number
+ */
+function CreateKey(){
+    return parseInt(Math.random() * 100000);
+}
+
+/**
+ * This function allows to move a subfield up by clickink on the 'up' button .
+ */
+function upSubfield(index) {
+    try{
+        var line = document.getElementById(index); // get the line where the user has clicked.
+    } catch(e) {
+        return; // this line doesn't exist...
+    }
+    var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
+    
+    // getting all subfields for this tag
+    var subfields = tag.getElementsByTagName('div');
+    var subfieldsLength = subfields.length;
+    
+    if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
+    
+    // among all subfields 
+    for(var i=0;i<subfieldsLength;i++){ 
+        if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
+            if(i==1){ // if the clicked subfield is on the top
+                tag.appendChild(subfields[1]);
+                return;
+            } else {
+                var lineAbove = subfields[i-1];
+                tag.insertBefore(line,lineAbove);
+                return;
+            }
+        }
+    }
+}
+
+function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
+    subfield = document.getElementById(index);
+    subfield.style.display = 'block';
+    label = document.getElementById(labelindex);
+    label.style.display='none';	
+}
+//]]>
+</script>
+</head>
+<body>
+
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <!--TMPL_UNLESS Name="popup"-->
