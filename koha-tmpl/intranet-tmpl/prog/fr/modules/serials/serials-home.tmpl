@@ -1,0 +1,171 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Périodiques <!-- TMPL_VAR name="biblionumber" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-serials.inc" -->
+
+
+<!--TMPL_IF Name="information"-->
+<div id="information">
+Abonnement(s) mis à jour :
+<table>
+  <tr>
+    <th>
+      Numérotation périodique
+    </th>
+    <th>
+      Etat
+    </th>
+    <th>
+      Publié le
+    </th>
+    <th>
+      Date prévue
+    </th>
+    <th>
+      Notes
+    </th>
+  </tr>  
+<!--TMPL_LOOP Name="information"-->
+  <tr>
+    <td>
+      <!--TMPL_VAR Name="serialseq"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="status"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="publisheddate"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="planneddate"-->
+    </td>
+    <td>
+      <!--TMPL_VAR Name="notes"-->
+    </td>
+  </tr>  
+<!--/TMPL_LOOP -->
+</table>
+</div>
+<!--/TMPL_IF-->
+<h1>Abonnements périodiques</h1>
+<div id="serials_home">
+	<h2>Recherche des abonnements existants</h2>
+<!-- TMPL_IF NAME="routing" -->
+        <h3>Recherche d'une liste de circulation de périodique</h3>
+<!-- /TMPL_IF -->
+
+    <table>
+        <tr>
+            <th>ISSN</th>
+            <th>Titre</th>
+            <th>
+                Note
+            </th>
+            <th>
+                Site
+            </th>
+            <!-- TMPL_IF NAME="routing" -->
+              <th colspan=3>&nbsp;</th>
+            <!-- TMPL_ELSE -->
+              <th colspan=2>&nbsp;</th>
+            <!-- /TMPL_IF -->        
+        </tr>
+        <tr>
+            <form action="/cgi-bin/koha/serials/serials-home.pl" method="get">
+            <!-- TMPL_IF NAME="routing" -->
+                <input type="hidden" name="routing" value="<!-- TMPL_VAR NAME="routing" -->" />
+            <!-- /TMPL_IF -->
+            <input type="hidden" name="searched" value="1" />
+            <td>
+                <input type="text" size=10 maxlength=11 name="ISSN_filter" value="<!-- TMPL_VAR name="ISSN_filter" -->" title="Saisir un ISSN pour sélectionner les abonnements">
+            </td>
+            <td>
+                <input type="text" size=40 maxlength=40 name="title_filter" value="<!-- TMPL_VAR name="title_filter" -->" title="Saisir un titre (complet ou partiel) pour sélectionner les abonnements">
+            </td>
+            <td colspan="2">
+                &nbsp;
+            </td>
+            <td colspan="2">
+                <input type="submit" value="Sélectionner" class="button serial" title="Sélection sur l'ISSN/titre">
+            </td>
+        </tr>
+        <!-- TMPL_IF NAME="done_searched"-->
+        <!-- TMPL_LOOP name="subscriptions" -->
+            <tr>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="issn" -->
+                    <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="Historique des n° parus"><!-- TMPL_VAR name="issn" --></a>
+                <!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="title" -->
+                    <!-- TMPL_VAR name="title" -->
+                <!-- TMPL_ELSE -->
+                    |
+                <!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="notes" --><p><!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="callnumber" --><p><!-- TMPL_VAR name="callnumber" --></p><!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="branchcode" --><!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
+                </td>
+                <!-- TMPL_IF NAME="routing" -->
+                    <!-- TMPL_IF name="toggle" -->
+                        <td class="hilighted">
+                    <!-- TMPL_ELSE -->
+                        <td>
+                    <!-- /TMPL_IF -->
+                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&op=new<!-- /TMPL_UNLESS -->">Liste de Circulation</a>
+                    </td>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="Détail de l'abonnement">Détail</a>
+                </td>
+                <!-- TMPL_IF name="toggle" -->
+                    <td class="hilighted">
+                <!-- TMPL_ELSE -->
+                    <td>
+                <!-- /TMPL_IF -->
+                  <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Bulletinage</a>
+                </td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_IF -->
+    </table>
+    
+    <!-- TMPL_IF NAME="routing" -->
+    <!-- TMPL_ELSE -->
+    	<h2>Ajouter un abonnement</h2>
+    	<div id="action">
+            <a href="/cgi-bin/koha/serials/subscription-add.pl" class="button serial">
+                Ajouter un abonnement
+            </a>
+        </div>
+    <!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

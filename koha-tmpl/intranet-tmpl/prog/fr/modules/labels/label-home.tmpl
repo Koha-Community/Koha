@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Etiquettes</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
+
+<div id="main">
+<!-- TMPL_INCLUDE NAME="label-status.inc" -->
+
+<!-- TMPL_IF NAME="layout_loop" -->
+<h2>Sélectionnez un format</h2>
+<form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
+<table>
+<tr>
+        <th>Format</th>
+        <th>Type de code à barres</th>
+        <th>Type d'impression</th>
+        <th>Choisir les champs à imprimer</th>
+        <th>Modifier</th>
+        <th>Supprimer</th>
+        <th>Actif</th>
+</tr>
+<!-- TMPL_LOOP NAME="layout_loop" -->
+<tr>
+          <td><!-- TMPL_VAR NAME="layoutname" -->  </td>
+       <td>    <!-- TMPL_VAR NAME="barcodetype" -->    </td>
+       <td>   <!-- TMPL_VAR NAME="printingtype" -->    </td>
+
+       <td>
+                <!-- TMPL_VAR NAME="fieldlist" -->
+        </td>
+
+       <td>
+                <a href="/cgi-bin/koha/labels/label-edit-layout.pl?layout_id=<!-- TMPL_VAR NAME="id" -->">Modifier</a>
+        </td>
+        <td>
+                <a href="/cgi-bin/koha/label-home.pl?op=delete_layout&layout_id=<!-- TMPL_VAR NAME="id"-->">Supprimer</a>
+        </td>
+<td>
+<input type="radio" name="layout_id" value="<!-- TMPL_VAR NAME="id" -->"  
+                ><!-- TMPL_IF NAME="active" -->
+ checked
+                <!-- /TMPL_IF -->
+ >
+        </td>
+</tr>
+
+<!-- /TMPL_LOOP -->
+<tr><td colspan="7" align="right">
+     <input type="submit" value="Définir le format actif">
+        <input type="hidden" name=op value="set_active_layout">
+</table>
+</form>
+<!-- /TMPL_IF -->
+<p><a href="/cgi-bin/koha/labels/label-create-layout.pl">Créer un nouveau modèle d'étiquette</a></p>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

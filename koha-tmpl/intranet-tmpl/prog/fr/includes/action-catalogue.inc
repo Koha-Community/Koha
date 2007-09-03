@@ -9,7 +9,7 @@
             </div>
             
             <div class="others">
-                <a href="#" onclick="JavaScript:window.open('/cgi-bin/koha/bookshelves/addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_bookshelf','width=500,height=400,toolbar=false,scrollbars=yes'); return false;"> Ajouter à l'étagère</a> <a href="/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Imprimer</a>
+                <a href="#" onclick="JavaScript:window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes'); return false;"> Ajouter à l'étagère</a> <a href="/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Imprimer</a>
                 <!-- TMPL_IF name="subscriptionsnumber" -->
                 <a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&title_filter=<!-- TMPL_VAR NAME="subscriptiontitle" -->">
                     Abonnement(s)
@@ -23,7 +23,7 @@
                 <!-- /TMPL_IF -->
                 
                 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&title=<!-- TMPL_VAR NAME="title"-->&author=<!-- TMPL_VAR NAME="author"-->" >
-                    Historique de prêt
+                    Historique de circulation
                 </a>
   
                 <!-- TMPL_IF NAME="CAN_user_parameters"-->

@@ -1,0 +1,182 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Etiquettes<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="label-topmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-nav.inc" -->
+
+<div id="main">
+
+<form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
+
+<h3>Nom du format</h3>
+<input type="textbox" name="layoutname"  SIZE="20" value="<!-- TMPL_VAR NAME="layoutname" -->">
+
+<br />
+<br />
+
+<h3>Choisissez le type de code à barres (encodage)</h3>
+<select name="barcodetype">
+    <!-- TMPL_LOOP NAME="barcode_types" -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"
+            <!-- TMPL_IF NAME="active" --> selected  ><!-- /TMPL_IF -->
+        ><!-- TMPL_VAR NAME="desc" --></option>
+    <!-- /TMPL_LOOP -->
+</select>
+<br />
+
+<h3>Choisissez le type de présentation</h3>
+<select name="printingtype">
+    <!-- TMPL_LOOP NAME="printingtypes" -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"
+            <!-- TMPL_IF NAME="active" --> selected  <!-- /TMPL_IF -->>
+        <!-- TMPL_VAR NAME="desc" --></option>
+    <!-- /TMPL_LOOP -->
+</select>
+
+<br />
+<br />
+
+<h3>
+    Choisir l'ordre des champs de texte à imprimer
+</h3>
+<table summary="fields to print">
+<tr>
+        <td>
+ <select name="tx_title">
+            <!-- TMPL_LOOP Name="tx_title" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+            </select>
+        <label>Titre</label>
+        </td>
+            <td>
+        <select name="tx_subtitle">
+                 <!-- TMPL_LOOP Name="tx_subtitle" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+      </select>
+        <label>Sous-titre</label>
+        </td> 
+
+        <td>
+        <select name="tx_author">
+             <!-- TMPL_LOOP Name="tx_author" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+            </select>
+       <label>Auteur</label>
+        </td>
+</tr> 
+ <tr>
+        <td>
+        <select name="tx_isbn">
+              <!-- TMPL_LOOP Name="tx_isbn" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+            </select>
+      <label>ISBN</label>
+        </td>
+
+        <td>
+        <select name="tx_issn">
+               <!-- TMPL_LOOP Name="tx_issn" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+            </select>
+     <label>ISSN</label>
+        <td>
+        <select name="tx_itemtype">
+                 <!-- TMPL_LOOP Name="tx_itemtype" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+            </select>
+   <label>Type de document</label>
+        </td>
+  </tr>
+<tr>
+        <td>
+        <select name="tx_dewey">
+                <!-- TMPL_LOOP Name="tx_dewey" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+       </select>
+        <label>Dewey</label>
+        </td>
+        <td>
+        <select name="tx_barcode">
+                 <!-- TMPL_LOOP Name="tx_barcode" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+      </select>
+        <label>Code à barres (texte)</label>
+        </td>
+        <td>
+        <select name="tx_classif">
+                  <!-- TMPL_LOOP Name="tx_classif" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+     </select>
+        <label>Classification</label>
+        </td>
+</tr> 
+ <tr>
+        <td>
+        <select name="tx_subclass">
+                  <!-- TMPL_LOOP Name="tx_subclass" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+     </select>
+        <label>sous-classe</label>
+        </td>
+            <td>
+        <select name="tx_itemcallnumber">
+                 <!-- TMPL_LOOP Name="tx_itemcallnumber" -->
+                <option value="<!-- TMPL_VAR Name="num" -->"<!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+                    <!-- TMPL_VAR Name="num" -->
+                </option>
+            <!-- /TMPL_LOOP -->
+      </select>
+        <label>Cote</label>
+        </td>
+  </tr>
+</table>
+
+<br />
+<h3>
+        Commencer l'impression à l'étiquette numéro : <input type="textbox" name="startlabel"  SIZE="1"  value=" <!-- TMPL_VAR NAME="startlabel" --> ">
+</h3>
+
+<br />
+<h3>Tracer des cases modèles<input type="checkbox" name="guidebox" value=1 
+                ><!-- TMPL_IF NAME="guidebox"-->
+                     checked
+                <!-- /TMPL_IF -->  ></h3>
+
+<p>
+        <input type="submit" value="Valider">
+        <input type="hidden" name=op value="save_layout">
+        <input type="hidden" name=layout_id value="<!-- TMPL_VAR NAME="layout_id" -->">
+</p>
+</form>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

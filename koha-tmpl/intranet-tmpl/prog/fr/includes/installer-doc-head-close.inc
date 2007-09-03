@@ -2,6 +2,13 @@
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <style type="text/css" media="screen">
 
+<!-- TMPL_IF NAME="login" -->
+    @import url(/intranet-tmpl/prog/en/css/login.css);
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="wizard" -->
+    @import url(/intranet-tmpl/prog/en/css/wizard.css);
+<!-- /TMPL_IF -->
+
 html { background: #eee; }
 
 body {

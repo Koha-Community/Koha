@@ -1,5 +1,5 @@
 <div id="kohalogo">
-    <img src="/intranet-tmpl/prog/images/koha-logo.png" height="60px"/>
+    <img src="/intranet-tmpl/prog/img/koha-logo-white.png" height="60px"/>
     <h3><a href="/cgi-bin/koha/mainpage.pl">Client Koha bibliothécaire</a></h3>
 </div>
 <div id="onlinehelp">
@@ -12,7 +12,7 @@
     <ul>
        <li>
        <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-        <label for="navfindborrower">Préter à</label>
+        <label for="navfindborrower">Préter à :</label>
             <input id="navfindborrower" name="findborrower" type="text" size="10" />
             <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
             <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
@@ -48,7 +48,7 @@
                         <input type="submit" value=" OK " class="submit" />
                         </form>
                      </li>
-                    <li><a href="/cgi-bin/koha/bookshelves/shelves.pl">Étagères virtuelles</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Étagères virtuelles</a></li>
                 </ul>
                 <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->

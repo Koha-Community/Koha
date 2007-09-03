@@ -1,10 +1,10 @@
 </title>
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/calendar/calendar-system.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
 
 <!-- Estos scripts permiten manejar calendario de fechas. -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/calendar/calendar-setup.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- **************************************************** -->
 
 <script language="JavaScript" type="text/javascript">

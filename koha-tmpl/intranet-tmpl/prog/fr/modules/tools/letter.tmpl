@@ -1,0 +1,298 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration système</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+
+	<!-- TMPL_IF NAME="else" -->
+		<form action="/cgi-bin/koha/tools/letter.pl" method="post">
+		<input type="text" name="searchfield" value="">
+		<input type="submit" class="button" value="Sélectionner"></form>
+		<!-- TMPL_IF NAME="search" -->
+		<br>Vous recherchiez <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br>
+		<!-- /TMPL_IF -->
+		<table>
+		<tr>
+			<th>Module</th>
+			<th>Code</th>
+			<th>Nom</th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
+		</tr>
+		<!-- TMPL_LOOP NAME="letter" -->
+			<tr bgcolor=<!-- TMPL_VAR NAME="toggle" --> >
+				<td><!-- TMPL_VAR NAME="module" --></td>
+				<td><!-- TMPL_VAR NAME="code" --></td>
+				<td><!-- TMPL_VAR NAME="name" --></td>
+				<td>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=<!-- TMPL_VAR name="module" -->&amp;code=<!-- TMPL_VAR NAME="code" -->">Modifier</a>
+				</td>
+				<td>
+					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">Supprimer</a>
+				</td>
+			</tr>
+		<!-- /TMPL_LOOP -->
+		</table>
+		<form action="/cgi-bin/koha/tools/letter.pl" method="post">
+			<input type="hidden" name="op" value="add_form">
+			<br>
+			<input type="submit" class="button" value="Ajouter une lettre" title="Ajouter une lettre" alt="Ajouter une lettre">
+			<br>
+		</form>
+		<br clear="all">
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_form" -->
+	<script language="javascript" type="text/javascript">
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length ==0) {
+	return false;
+			}
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull==0 && v.value=='') {
+			return false;
+		}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+/*			if (!(isNotNull(window.document.Aform.code))) {
+				_alertString += "\n- " + _("Code missing");
+			}*/
+/*			if (!(isNotNull(window.document.Aform.name))) {
+				_alertString += "\n- " + _("Name missing");
+			}*/
+			if (_alertString.length==0) {
+				document.Aform.submit();
+			} else {
+				alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+				alertString2 += "\n------------------------------------------------------------------------------------\n";
+				alertString2 += _alertString;
+				alert(alertString2);
+			}
+		}
+		// GPL code coming from PhpMyAdmin
+		function insertValueQuery() {
+			var myQuery = document.Aform.content;
+			var myListBox = document.Aform.SQLfieldname;
+		
+			if(myListBox.options.length > 0) {
+				var chaineAj = "";
+				var NbSelect = 0;
+				for(var i=0; i<myListBox.options.length; i++) {
+					if (myListBox.options[i].selected){
+						NbSelect++;
+						if (NbSelect > 1)
+							chaineAj += ", ";
+						chaineAj += myListBox.options[i].value;
+					}
+				}
+		
+				//IE support
+				if (document.selection) {
+					myQuery.focus();
+					sel = document.selection.createRange();
+					sel.text = chaineAj;
+					document.Aform.insert.focus();
+				}
+				//MOZILLA/NETSCAPE support
+				else if (document.Aform.content.selectionStart || document.Aform.content.selectionStart == "0") {
+					var startPos = document.Aform.content.selectionStart;
+					var endPos = document.Aform.content.selectionEnd;
+					var chaineSql = document.Aform.content.value;
+					myQuery.value = chaineSql.substring(0, startPos) +'<<'+ chaineAj+'>>' + chaineSql.substring(endPos, chaineSql.length);
+				} else {
+					myQuery.value += chaineAj;
+				}
+			}
+		}
+		
+		</script>
+	<div id="bloc25">
+		<!-- TMPL_IF name="modify" -->
+			<h2 class="parameters">Modifier une lettre</h2>
+		<!-- TMPL_ELSE -->
+			<h2 class="parameters">Ajouter une lettre</h2>
+		<!-- /TMPL_IF -->
+		<form action="/cgi-bin/koha/tools/letter.pl" name="Aform" method="post">
+		<input type="hidden" name="op" value="add_validate">
+		<input type="hidden" name="checked" value="0">
+		<!-- TMPL_IF NAME="modify" -->
+			<p>
+				<label class="label100">Module Koha : </label>
+				<select name="module">
+                                    <!--TMPL_IF Name="catalogue"-->
+                                    <option value="catalogue" selected>Catalogue</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="catalogue" >Catalogue</option>
+                                    <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="Serial"-->
+                                    <option value="serial" selected>Périodique</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="serial">Périodique</option>
+                                    <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="claimacquisition"-->
+                                    <option value="claimacquisition" selected>Réclamation d'une commande</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="claimacquisition">Réclamation d'une commande</option>
+                                    <!--/TMPL_IF -->
+                                    <!--TMPL_IF Name="claimissues"-->
+                                    <option value="claimissues" selected>Réclamation numéros manquants</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="claimissues">Réclamation numéros manquants</option>
+                                    <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="circulation"-->
+                                    <option value="circulation" selected>Circulation</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="circulation">Circulation</option>
+                                    <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="members"-->
+                                    <option value="members" selected>Adhérents</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="members">Adhérents</option>
+                                    <!--/TMPL_IF-->
+				</select>
+			</p>
+			<p>
+				<label class="label100">Code : </label><input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="code" -->
+			</p>
+		<!-- /TMPL_IF -->
+		
+		<!-- TMPL_IF NAME="adding" -->
+			<p>
+				<label class="label100">Module Koha : </label>
+				<select name="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
+						<!--TMPL_IF Name="catalogue"-->
+                        <option value="catalogue" selected>Catalogue</option>
+						<!--TMPL_ELSE-->
+                        <option value="catalogue" >Catalogue</option>
+                        <!--/TMPL_IF-->
+						<!--TMPL_IF Name="serial"-->
+						<option value="serial" selected>Périodique</option>
+						<!--TMPL_ELSE-->
+						<option value="serial">Périodique</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="claimacquisition"-->
+						<option value="claimacquisition" selected>Réclamation d'une commande</option>
+						<!--TMPL_ELSE-->
+						<option value="claimacquisition">Réclamation d'une commande</option>
+						<!--/TMPL_IF -->
+						<!--TMPL_IF Name="claimissues"-->
+						<option value="claimissues" selected>Réclamation numéros manquants</option>
+						<!--TMPL_ELSE-->
+						<option value="claimissues">Réclamation numéros manquants</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="circulation"-->
+						<option value="circulation" selected>Circulation</option>
+						<!--TMPL_ELSE-->
+						<option value="circulation">Circulation</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="members"-->
+						<option value="members" selected>Adhérents</option>
+						<!--TMPL_ELSE-->
+						<option value="members">Adhérents</option>
+						<!--/TMPL_IF-->
+				</select>
+			</p>
+			<p>
+				<label class="label100">Code : </label><input type="text" name="code" size="20" maxlength="20">
+			</p>
+		<!-- /TMPL_IF -->
+		
+		<p>
+			<label class="label100">Nom : </label><input type="text" name="name" size="60" value="<!-- TMPL_VAR NAME="name" -->">
+		</p>
+		<p>
+			<label class="label100">Titre (sujet de l'email) : </label><input type="text" name="title" size="60" value="<!-- TMPL_VAR NAME="title" -->">
+		</p>
+		<p>
+			<label class="label100">Contenu (contenu de l'email) : </label>
+		</p>
+		<p>		
+		<select name="SQLfieldname" size=9>
+			<!-- TMPL_LOOP name="SQLfieldname" -->
+				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
+			<!-- /TMPL_LOOP -->
+		</select>
+        <input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insérer">
+        <textarea name="content" cols="100" rows="15"><!-- TMPL_VAR NAME="content" --></textarea>
+		</p>
+		<p><input type="button" value="OK" onclick="Check(this.form)" class="button"></p>
+		</form>
+	</div>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="add_validate" -->
+	Donnée enregistrée
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirm" -->
+	<table border="0" cellspacing="0" cellpadding="5">
+		<tr valign="top" bgcolor="#99cc33">
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b>module / Code</b>
+			</td>
+			<td background="<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif">
+				<b><!-- TMPL_VAR name="module"--> / <!-- TMPL_VAR NAME="code" --></b>
+			</td>
+		</tr>
+	
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed">
+		<input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->">
+		<input type="hidden" name="module" value="<!-- TMPL_VAR NAME="module" -->">
+		<tr>
+			<td>Nom</td>
+			<td><!-- TMPL_VAR NAME="Name" --></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">CONFIRMEZ SUPPRESSION</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="submit" value="OUI">
+				</form>
+			</td>
+			<td>
+				<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+					<input type="submit" value="NON">
+				</form>
+			</td>
+		</tr>
+	</table>
+	<!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="delete_confirmed" -->
+	Donnée supprimée
+	<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+	<input type="submit" value="OK">
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

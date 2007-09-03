@@ -1,0 +1,39 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo;  Renouveller l'abonnement #<!-- TMPL_VAR name="subscriptionid" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!--TMPL_IF Name="renew"-->
+ <div id="mainbloc">
+  Abonnement renouvelé
+  
+  <script type="text/javascript">
+  <!--
+  opener.document.location.reload();
+  self.close();
+  //-->
+  </script>
+</div>
+<!--TMPL_ELSE-->
+<div id="mainbloc">
+
+<h1 class="serial">renouvellement d'abonnement pour <!-- TMPL_VAR name="bibliotitle" --></h1>
+
+<form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
+	<div id="bloc25">
+		<input type="hidden" name="op" value="renew">
+		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->">
+		<p><label class="label100">date de début</label><input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->"></p>
+		<p>Durée d'abonnement : </p>
+		<p><label class="label100">Nombre de n°</label><input type="text" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->"></p>
+		<p><label class="label100">Nombre de semaines</label><input type="text" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->"></p>
+		<p><label class="label100">Nombre de mois</label><input type="text" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->"></p>
+		<p>Note pour le bibliothécaire qui va gérer votre demande de renouvellement</p>
+		<ul><textarea name="note" rows="10" cols="60"></textarea></ul>
+		<input type="submit" value="Demander un renouvellement" class="button serial">
+	</div>
+</form>
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
+
