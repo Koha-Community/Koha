@@ -180,6 +180,11 @@ if ( $step && $step == 1 ) {
             push @missing, { name => "PDF::Report", usagebarcode => 1 };
         }
     }
+    unless ( eval { require Net::LDAP } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "Algorithm::CheckDigits", usagebarcode => 1 };
+        }
+    }
     unless ( eval { require GD::Barcode::UPCE } ) {
         if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
             push @missing, { name => "GD::Barcode::UPCE", usagepine => 1 };
@@ -190,7 +195,6 @@ if ( $step && $step == 1 ) {
             push @missing, { name => "Net::LDAP", usageLDAP => 1 };
         }
     }
-
     $template->param( missings => \@missing ) if ( scalar(@missing) > 0 );
     $template->param( 'checkmodule' => 1 )
       unless ( scalar(@missing) && $problem );
