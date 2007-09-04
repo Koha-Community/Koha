@@ -704,8 +704,8 @@ $mandatory_z3950 = GetMandatoryFieldZ3950($frameworkcode);
 my $record   = -1;
 my $encoding = "";
 my (
-	$biblionumtagfield,
-	$biblionumtagsubfield,
+	$biblionumbertagfield,
+	$biblionumbertagsubfield,
 	$biblioitemnumtagfield,
 	$biblioitemnumtagsubfield,
 	$bibitem,
@@ -725,7 +725,7 @@ if ($biblionumber) {
     $is_a_modif = 1;
 
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
-    ( $biblionumtagfield, $biblionumtagsubfield ) =
+    ( $biblionumbertagfield, $biblionumbertagsubfield ) =
 	&GetMarcFromKohaField( "biblio.biblionumber", $frameworkcode );
     ( $biblioitemnumtagfield, $biblioitemnumtagsubfield ) =
 	&GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
@@ -785,10 +785,6 @@ if ( $op eq "addbiblio" ) {
         build_tabs ($template, $record, $dbh,$encoding,$input);
         $template->param(
             biblionumber             => $biblionumber,
-            biblionumtagfield        => $biblionumtagfield,
-            biblionumtagsubfield     => $biblionumtagsubfield,
-            biblioitemnumtagfield    => $biblioitemnumtagfield,
-            biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
             biblioitemnumber         => $biblioitemnumber,
             duplicatebiblionumber    => $duplicatebiblionumber,
             duplicatebibid           => $duplicatebiblionumber,
@@ -827,8 +823,8 @@ elsif ( $op eq "delete" ) {
     build_tabs( $template, $record, $dbh, $encoding,$input );
     $template->param(
         biblionumber             => $biblionumber,
-        biblionumtagfield        => $biblionumtagfield,
-        biblionumtagsubfield     => $biblionumtagsubfield,
+        biblionumbertagfield        => $biblionumbertagfield,
+        biblionumbertagsubfield     => $biblionumbertagsubfield,
         biblioitemnumtagfield    => $biblioitemnumtagfield,
         biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
         biblioitemnumber         => $biblioitemnumber,

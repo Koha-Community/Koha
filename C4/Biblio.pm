@@ -2217,14 +2217,32 @@ sub TransformHtmlToMarc {
     
     while ($params->[$i]){ # browse all CGI params
         my $param = $params->[$i];
-        
-        if($param =~ /^tag_(\d*)_indicator_/){ # new field start when having 'input name="..._indicator_..."
+        my $newfield=0;
+        # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
+        if ($param eq 'biblionumber') {
+            my ( $biblionumbertagfield, $biblionumbertagsubfield ) =
+                &GetMarcFromKohaField( "biblio.biblionumber", '' );
+            if ($biblionumbertagfield < 10) {
+                $newfield = MARC::Field->new(
+                    $biblionumbertagfield,
+                    $cgi->param($param),
+                );
+            } else {
+                $newfield = MARC::Field->new(
+                    $biblionumbertagfield,
+                    '',
+                    '',
+                    "$biblionumbertagsubfield" => $cgi->param($param),
+                );
+            }
+            push @fields,$newfield if($newfield);
+        } 
+        elsif ($param =~ /^tag_(\d*)_indicator_/){ # new field start when having 'input name="..._indicator_..."
             my $tag  = $1;
             
             my $ind1 = substr($cgi->param($param),0,1);
             my $ind2 = substr($cgi->param($param),1,1);
             
-            my $newfield=0;
             my $j=$i+1;
             
             if($tag < 10){ # no code for theses fields
