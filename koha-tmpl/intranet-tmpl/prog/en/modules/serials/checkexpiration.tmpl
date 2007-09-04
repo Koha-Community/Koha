@@ -1,6 +1,32 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials Expiration</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
+<script type="text/javascript" language="JavaScript">
+// <![CDATA[
+    document.f.date.focus();
+    
+    /**
+     *  Function CheckForm
+     *  This function checks the form before submit
+     */
+     function CheckForm(form){
+        if(form.date.value){
+            return true;
+        }
+        else {
+            alert("You must enter a date !");
+            document.f.date.focus();
+            return false;
+        }
+     }
+     // ]]>
+</script>
+<!-- End of additions -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -12,12 +38,6 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
 
 <h1>Check expiration</h1>
 
@@ -26,14 +46,14 @@
     
     <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
          
-        <label for="title">Filter on title</label>
-        <input id="title" type="texte" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" />
-        <br />
-        <label for="issn">Filter on ISSN</label>
-        <input id="issn" type="texte" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" />
-        <br />
-        <label for="date">with expiration date before</label>
-        <input id="date" type="texte" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" />
+        <p><label for="title">Filter on title</label>
+        <input id="title" type="text" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" /></p>
+
+        <p><label for="issn">Filter on ISSN</label>
+        <input id="issn" type="text" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" /></p>
+
+        <p><label for="date">with expiration date before</label>
+        <input id="date" type="text" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" />
             <script type="text/javascript">
                 Calendar.setup(
                  {
@@ -41,7 +61,7 @@
                      ifFormat : "%Y-%m-%d",
                  }
                 );
-            </script>
+            </script></p>
         <input type="submit" value="Search" />
     </form>
 </fieldset>
@@ -54,24 +74,16 @@
         <!-- TMPL_IF NAME="issn"-->and <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="issn"-->
-        issn like <b><!-- TMPL_VAR NAME="issn" --></b>
+        ISSN like <b><!-- TMPL_VAR NAME="issn" --></b>
     <!-- /TMPL_IF -->
-        will expirate bebore <b><!-- TMPL_VAR NAME="date" --></b>
+        will expire before <b><!-- TMPL_VAR NAME="date" --></b>
 </p>
 <table>
         <tr>
-            <th>
-                issn
-            </th>
-            <th>
-                title
-            </th>
-            <th>
-                Note
-            </th>
-            <th>
-                Expiration date
-            </th>
+            <th>ISSN</th>
+            <th>Title</th>
+            <th>Note</th>
+            <th>Expiration date</th>
         </tr>
     <!-- TMPL_LOOP NAME="subscriptions_loop"-->
         <!-- TMPL_IF NAME="toogle"-->
@@ -121,28 +133,6 @@
     <!-- /TMPL_LOOP -->
     </table>
 <!-- /TMPL_IF -->
-
-<script type="text/javascript" language="JavaScript">
-// <![CDATA[
-    document.f.datenumber.focus();
-    
-    /**
-     *  Function CheckForm
-     *  This function checks the form before submit
-     */
-     function CheckForm(form){
-        if(form.datenumber.value){
-            return true;
-        }
-        else {
-            alert("you must write a date !");
-            document.f.datenumber.focus();
-            return false;
-        }
-     }
-     // ]]>
-</script>
-
 
 </div>
 </div>

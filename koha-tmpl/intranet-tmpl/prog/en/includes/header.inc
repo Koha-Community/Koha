@@ -1,4 +1,4 @@
-<div id="header"><div id="title">
+<div id="header"><div id="sitetitle">
     <h1><a href="/cgi-bin/koha/mainpage.pl">Koha Staff Client</a></h1>
 </div>
 	

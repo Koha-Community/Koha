@@ -12,19 +12,19 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<h1 class="serial">Alert subscribers for <!-- TMPL_VAR name="bibliotitle" --></h1>
+<h1>Alert subscribers for <!-- TMPL_VAR name="bibliotitle" --></h1>
 		<a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button">subscription</a>
 		<!-- TMPL_IF name="alertloop" -->
 			<table>
 			<tr>
-				<th class="serial">Borrower name</th>
-				<th class="serial">&nbsp;</th>
+				<th>Borrower name</th>
+				<th>&nbsp;</th>
 			</tr>
 
 			<!-- TMPL_LOOP NAME="alertloop" -->
 				<tr>
 					<td><!-- TMPL_VAR name="name" --></td>
-					<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber">" class="button serial">View</a></td>
+					<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber">" class="button">View</a></td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 			</table>

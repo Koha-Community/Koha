@@ -1,13 +1,9 @@
-<!-- TMPL_UNLESS NAME="preview" -->
+
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Subscription edit</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-    <!-- TMPL_INCLUDE NAME="header.inc" -->
-    <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
-    
     <script type="text/javascript">
+<!-- TMPL_UNLESS NAME="preview" -->
     function Setorder(myorder){
         if (document.claims.elements['order'].value == myorder){
         document.claims.elements['order'].value=myorder+' desc';
@@ -17,16 +13,32 @@
         document.claims.elements['op'].value="";
         document.claims.submit();
     }
+<!-- /TMPL_UNLESS -->
+		function popup(supplierid,serialid){
+			window.open('claims.pl?supplierid='+ supplierid +'&amp;serialid='+ serialid +'&amp;op=preview' ,'popup', 'width=600,height=400,toolbar=no,scrollbars=yes');
+		}
+		//-->
     </script>
-<!-- TMPL_ELSE -->
-    <!-- TMPL_INCLUDE NAME="popup-top.inc" -->
-    <div class="popup-block">
+</head>
+<body>
+    <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_UNLESS NAME="preview" -->
+    <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
 <!-- /TMPL_UNLESS -->
 
+
+
 <!-- TMPL_UNLESS NAME="preview" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
     <h1>Claims</h1>
-    <p>
     <form name="claims" action="claims.pl" method="post">
+    <p>
         <!-- TMPL_VAR name="CGIsupplier" -->
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
@@ -52,42 +64,42 @@
             <table>
                 <tr>
                     <!--TMPL_IF NAME="letter"-->
-                    <th class="cell-header">Claim</th>
+                    <th>Claim</th>
                     <!--/TMPL_IF-->
-                    <th class="cell-header">Supplier</th>
-                    <th class="cell-header">Title</th>
-                    <th class="cell-header">Issue number</th>
-                    <th class="cell-header">Status <a href="javascript:Setorder('status');">sort</a></th>
-                    <th class="cell-header">Since <a href="javascript:Setorder('planneddate');">sort</a></th>
-                <th class="cell-header">Began Claim</th>
+                    <th>Supplier</th>
+                    <th>Title</th>
+                    <th>Issue number</th>
+                    <th>Status <a href="javascript:Setorder('status');">sort</a></th>
+                    <th>Since <a href="javascript:Setorder('planneddate');">sort</a></th>
+                <th>Began Claim</th>
                 </tr>
                 <!-- TMPL_LOOP name="missingissues" -->
                     <tr>
                         <!--TMPL_IF NAME="letter" -->
-                            <td class="cell">
+                            <td>
                     <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';" />
                             </td>
                         <!--/TMPL_IF-->
-                        <td class="cell">
+                        <td>
                         <!-- TMPL_VAR name="name" -->
                         </td>
-                        <td class="cell">
+                        <td>
                         <!-- TMPL_VAR name="title" -->
                         </td>
-                        <td class="cell">
+                        <td>
                         <!-- TMPL_VAR name="serialseq" -->
                         </td>
-                        <td class="cell">
+                        <td>
                             <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
                             <!-- TMPL_IF Name="status2" -->Arrived<!-- /TMPL_IF -->
                             <!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
                             <!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->
                             <!-- TMPL_IF Name="status7" -->Claimed<!-- /TMPL_IF -->
                         </td>
-                        <td class="cell">
+                        <td>
                         <!-- TMPL_VAR name="planneddate" -->
                         </td>
-                        <td class="cell">
+                        <td>
                         <!-- TMPL_VAR name="claimdate" -->
                         </td>
                     </tr>
@@ -110,6 +122,10 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
             <!--/TMPL_IF-->
         </form>
 <!-- TMPL_ELSE -->
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div class="yui-g">
 <!-- TMPL_IF Name="supplierloop"-->
         <!-- TMPL_LOOP Name="supplierloop"-->
         <!-- TMPL_IF NAME="name" -->
@@ -142,23 +158,23 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
         <h3>Missing Issues</h3>
         <table>
             <tr>
-                <td class="cell"><b>Supplier<b></td>
-                <td class="cell"><b>Title</b></td>
-                <td class="cell"><b>Issue number</b></td>
-                <td class="cell"><b>Missing since</b></td>
+                <td><b>Supplier<b></td>
+                <td><b>Title</b></td>
+                <td><b>Issue number</b></td>
+                <td><b>Missing since</b></td>
             </tr>
             <!-- TMPL_LOOP name="missingissues" -->
                 <tr>
-                    <td class="cell">
+                    <td>
                     <!-- TMPL_VAR name="name" -->
                     </td>
-                    <td class="cell">
+                    <td>
                     <!-- TMPL_VAR name="Title" -->
                     </td>
-                    <td class="cell">
+                    <td>
                     <!-- TMPL_VAR name="serialseq" -->
                     </td>
-                    <td class="cell">
+                    <td>
                     <!-- TMPL_VAR name="planneddate" -->
                     </td>
                 </tr>
@@ -169,24 +185,14 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
 <p class="noprint"><a href="javascript:window.print()" class="button">Print</a> &nbsp; <a href="javascript:window.close()" class="button">Close</a></p>
 <!-- /TMPL_UNLESS -->
 
-<script type="text/javascript">
-<!--
 
-function popup(supplierid,serialid){
-	window.open('claims.pl?supplierid='+ supplierid +'&amp;serialid='+ serialid +'&amp;op=preview' ,'popup', 'width=600,height=400,toolbar=no,scrollbars=yes');
-}
-//-->
-</script>
+</div>
+</div>
+</div>
+
 <!-- TMPL_UNLESS NAME="preview" -->
-</div>
-</div>
-</div>
-
 <!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-
-<!-- TMPL_ELSE -->
-<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
 <!-- /TMPL_UNLESS -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 

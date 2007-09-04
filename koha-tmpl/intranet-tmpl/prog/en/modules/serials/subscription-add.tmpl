@@ -1,17 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions -->
@@ -22,12 +11,13 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 
-<script type="text/javascript" language="javascript">
+<script type="text/javascript">
 <!--
+function _(s) { return s } // dummy function for gettext
 
 // the english words used in display purposes
-var text = new Array('Number','Volume','Issue','Month','Week','Starting with:','Rollover at:','Choose Hemisphere:','Northern','Southern',
-'Autumn','Winter','Spring','Summer','Fall','Season','Year');
+var text = new Array(_('Number'),_('Volume'),_('Issue'),_('Month'),_('Week'),_('Starting with:'),_('Rollover at:'),_('Choose Hemisphere:'),_('Northern'),_('Southern'),
+_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'),_('Season'),_('Year'));
 var is_season = 0;
 var is_hemisphere = 1;
 
@@ -51,7 +41,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value=1;
-        document.f.numberingmethod.value= 'Vol {X}, No {Y}, Issue {Z}';
+        document.f.numberingmethod.value=_('Vol {X}, No {Y}, Issue {Z}');
         moreoptions(text[1],text[0],text[2]);
         display_table(0); // toggle info box on (1) or off (0)
         break;
@@ -71,7 +61,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value= 'Vol {X}, No {Y}';
+        document.f.numberingmethod.value=_('Vol {X}, No {Y}');
         moreoptions(text[1],text[0]);
         display_table(0);
         break;
@@ -91,7 +81,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value= 'Vol {X}, Issue {Y}';
+        document.f.numberingmethod.value=_('Vol {X}, Issue {Y}');
         moreoptions(text[1],text[2]);
         display_table(0);
         break;
@@ -111,7 +101,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value= 'No {X}, Issue {Y}';
+        document.f.numberingmethod.value=_('No {X}, Issue {Y}');
         moreoptions(text[0],text[2]);
         display_table(0);
         break;
@@ -134,7 +124,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue2.value='1';
         document.f.lastvalue3.value='';
         document.f.periodicity.value='8';
-        document.f.numberingmethod.value='{Y} {X}';
+        document.f.numberingmethod.value=_('{Y} {X}');
         moreoptions_seasons(text[15],sYear);
         display_table(0);
         is_season = 1;
@@ -163,7 +153,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvalue2.value='1';
         document.f.lastvalue3.value='';
         document.f.periodicity.value=1;
-        document.f.numberingmethod.value='{X}/{Y}';
+        document.f.numberingmethod.value=_('{X}/{Y}');
         display_table(0);
         break;
     default:
@@ -249,8 +239,8 @@ function moreoptions_daily_check(x) {
     var errortext='';
     if(periodicity == 1){
         document.getElementById("irregularity").innerHTML = '';
-        var daynames = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
-        errortext = "Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>";
+        var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
+        errortext =_("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
         for(var j=0;j<daynames.length;j++){
             errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
         }
@@ -289,14 +279,14 @@ var textbox = '';
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><td>"+text[6]+"<\/td>";
-            textbox +="<td><a href='javascript:irregularity_check()'>"+'Irregularity?'+"<\/a><\/td>\n";
+            textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
             textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
             if(z){
                 textbox +="<td><input type='text' name='whenmorethantemp3' size='4' onkeyup='moreoptionsupdate(\"whenmorethan3\",1)'><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+'issues expected'+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)'><br /><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
+          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)'><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -359,7 +349,7 @@ var textbox = '';
         }
         textbox +="<\/select><\/td><\/tr>\n";
         textbox +="<tr><td>"+text[6]+"<\/td>";
-        textbox +="<td><a href='javascript:irregularity_check()'>"+'Irregularity?'+"<\/a><\/td>\n";
+        textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
     }
@@ -379,7 +369,7 @@ function irregularity_check(){
     var error='';
     var toobig;
     var expected; 
-    var errortext = "<b>Warning irregularity detected<\/b><br \/>";
+    var errortext = _("<b>Warning irregularity detected<\/b><br \/>");
     switch(periodicity){
     case "12":
         if(rollover < 730) expected =730;
@@ -470,17 +460,17 @@ function irregularity_check(){
     }
     if(expected){
         if(expected == 365 || expected==730){
-            var daynames = new Array('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday');
-            errortext += "Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>";
+            var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
+            errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
             for(var j=0;j<daynames.length;j++){
-                errortext +="<input type=\"checkbox\" name=\"irregular\" id=\"irregular"+(j+1)+"\" value=\""+(j+1)+"\" />"+daynames[j]+" &nbsp; ";
+                errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
             }
             error=errortext;
         } else {
-            errortext +=expected+" issues expected "+rollover+" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>";
+            errortext +=expected+_(" issues expected ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
             var count=0;
             for(var i=rollover;i<expected;i++){
-                errortext +="<select name=\"irregular\" id=\"irregular"+count+"\" onchange=\"display_example(expected)\">\n";
+                errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
                 errortext +=irregular_options(periodicity);
                 errortext +="<\/select>\n";
                 count++;
@@ -489,7 +479,7 @@ function irregularity_check(){
         }
     }
     if(toobig){
-        errortext +=expectedover+" issues expected "+rollover+" were entered.<br \/> You seem to have indicated more issues per year than expected.";
+        errortext +=expectedover+_(" issues expected ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
         error=errortext;
     }
     if(error.length ==0){
@@ -505,8 +495,8 @@ function irregular_options(periodicity){
 <!-- TMPL_IF NAME="weekarrayjs" -->
     var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
 <!-- /TMPL_IF -->
-    var months = new Array('January','February','March','April','May','June','July','August','September','October','November','December');
-    var seasons = new Array('Autumn','Winter','Spring','Summer','Fall');
+    var months = new Array(_('January'),_('February'),_('March'),_('April'),_('May'),_('June'),_('July'),_('August'),_('September'),_('October'),_('November'),_('December'));
+    var seasons = new Array(_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'));
     var errortext='';
     if(periodicity == 1) {
         expected = 366;
@@ -590,7 +580,7 @@ function display_example(expected){
     var whenmorethan3 = parseInt(document.f.whenmorethan3.value);
     var setto2 = parseInt(document.f.setto2.value);
     var setto3 = parseInt(document.f.setto3.value);
-    var displaytext = "Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n";
+    var displaytext = _('Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n');
     if(startfrom3>0){
         var count=startfrom3-1;
         var count2=startfrom2;
@@ -684,8 +674,68 @@ function check_input(e){
     }
 }
 
+function Create_biblio(f)
+{
+   window.open('/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup','FindABibIndex','width=1024,height=768,toolbar=no,scrollbars=yes');
+}
+
+function Plugin(f)
+{
+	 window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
+}
+
+function FindAcqui(f)
+{
+	 window.open('acqui-search.pl','FindASupplier','width=800,height=400,toolbar=no,scrollbars=yes');
+}
+
+function Find_ISSN(f)
+{
+	 window.open('issn-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
+}
+
+
+function Check(f) {
+    if (f.startdate.value.length != 0 && f.sublength.value > 0) {
+        if (f.irreg_check.value == 1) {
+            document.f.submit();
+        } else {
+            if(f.numbering_pattern.value == ''){
+                alert(_("need to choose a numbering pattern"));
+            } else {
+                alert(_("need to check for irregularity by clicking 'Irregularity?'"));
+            }
+        }
+    } else {
+        alert(_('field marked with * are mandatory'));
+    }
+    return false;
+}
+<!-- TMPL_IF name="mod" -->
+window.onload = modify_num_pattern();
+    <!-- TMPL_IF name="hemisphere" -->
+    window.onload = hemispheres(<!-- TMPL_VAR NAME="hemisphere" -->);
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="irregularity" -->
+window.onload = irregularity_check();
+window.onload = irregular_order();
+<!-- /TMPL_IF -->
 -->
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+
 
 <!-- TMPL_IF name="mod" -->
     <h1>Modify a subscription</h1>
@@ -1089,60 +1139,6 @@ function check_input(e){
     <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" />
 <!-- /TMPL_IF -->
 </form>
-
-<script language="JavaScript" type="text/javascript">
-function Create_biblio(f)
-{
-   window.open('/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup','FindABibIndex','width=1024,height=768,toolbar=no,scrollbars=yes');
-}
-
-function Plugin(f)
-{
-	 window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
-}
-
-function FindAcqui(f)
-{
-	 window.open('acqui-search.pl','FindASupplier','width=800,height=400,toolbar=no,scrollbars=yes');
-}
-
-function Find_ISSN(f)
-{
-	 window.open('issn-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
-}
-
-
-function Check(f) {
-    if (f.startdate.value.length != 0 && f.sublength.value > 0) {
-        if (f.irreg_check.value == 1) {
-            document.f.submit();
-        } else {
-            if(f.numbering_pattern.value == ''){
-                alert("need to choose a numbering pattern");
-            } else {
-                alert("need to check for irregularity by clicking 'Irregularity?'");
-            }
-        }
-    } else {
-        alert('field marked with * are mandatory');
-    }
-    return false;
-}
-</script>
-<!-- TMPL_IF name="mod" -->
-<script type="text/javascript">
-window.onload = modify_num_pattern();
-    <!-- TMPL_IF name="hemisphere" -->
-    window.onload = hemispheres(<!-- TMPL_VAR NAME="hemisphere" -->);
-    <!-- /TMPL_IF -->
-</script>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="irregularity" -->
-<script type="text/javascript">
-window.onload = irregularity_check();
-window.onload = irregular_order();
-</script>
-<!-- /TMPL_IF -->
 
 </div>
 </div>

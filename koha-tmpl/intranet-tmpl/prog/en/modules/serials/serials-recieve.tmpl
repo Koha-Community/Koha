@@ -1,6 +1,44 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script language="JavaScript" type="text/javascript">
+
+function popup() {
+	window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR
+name="subscriptionid">","subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+
+function barcode_check(){
+    <!-- TMPL_IF NAME="count" -->
+	var count = '<!-- TMPL_VAR NAME="count" -->';
+	for(var i=1;i<=count;i++){
+
+		var barcodenum = "barcode"+i;
+		var statusnum = "status"+i;
+		var elembarcode = "document.getElementById('"+barcodenum+"')";
+		var elemstatus = "document.getElementById('"+statusnum+"')";
+// alert(elembarcode+"\n"+eval(elembarcode+".value));
+// alert(elemstatus+"\n"+eval(elemstatus+".value"));
+		if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
+			var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
+			if (answer){
+				document.f.submit();
+			} else {
+				return false;
+			}
+		}
+		if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
+			var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
+			if (answer){
+				document.f.submit();
+			} else {
+				return false;
+			}
+		}
+	}
+    <!-- /TMPL_IF -->
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -291,53 +329,16 @@
 		<p><label>Starting date:</label><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->"> (the date of the 1st subscription)</p>
 		<p><label>Ending date:</label><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->">(if empty : subscription still active)</p>
 		<p>Recieved issues</p>
-		<p>&nbsp;<textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></p>
+		<p><textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></p>
 		<p>Missing issues</p>
-		<p>&nbsp;<textarea name="missinglist" cols="60" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></p>
+		<p><textarea name="missinglist" cols="60" rows="2"><!-- TMPL_VAR name="missinglist" --></textarea></p>
 		<p>Opac's note</p>
-		<p>&nbsp;<textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></p>
+		<p><textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></p>
 		<input type="submit" value="Save changes" class="button">
 	</form>
 
 </div>
-<script language="JavaScript" type="text/javascript">
 
-function popup() {
-	window.open("subscription-renew.pl?subscriptionid=<!-- TMPL_VAR
-name="subscriptionid">","subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
-}
-
-function barcode_check(){
-    <!-- TMPL_IF NAME="count" -->
-	var count = '<!-- TMPL_VAR NAME="count" -->';
-	for(var i=1;i<=count;i++){
-
-		var barcodenum = "barcode"+i;
-		var statusnum = "status"+i;
-		var elembarcode = "document.getElementById('"+barcodenum+"')";
-		var elemstatus = "document.getElementById('"+statusnum+"')";
-// alert(elembarcode+"\n"+eval(elembarcode+".value));
-// alert(elemstatus+"\n"+eval(elemstatus+".value"));
-		if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
-			var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
-			if (answer){
-				document.f.submit();
-			} else {
-				return false;
-			}
-		}
-		if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
-			var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
-			if (answer){
-				document.f.submit();
-			} else {
-				return false;
-			}
-		}
-	}
-    <!-- /TMPL_IF -->
-}
-</script>
 
 </div>
 </div>

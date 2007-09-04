@@ -1,6 +1,80 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script language="JavaScript" type="text/javascript">
+
+function popup(subscriptionid) {
+	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+
+function barcode_check(){
+    <!-- TMPL_IF NAME="count" -->
+    var count = <!-- TMPL_VAR NAME="count" -->;
+    for(var i=1;i<=count;i++){
+
+        var barcodenum = "barcode"+i;
+        var statusnum = "status"+i;
+        var elembarcode = "document.getElementById('"+barcodenum+"')";
+        var elemstatus = "document.getElementById('"+statusnum+"')";
+// alert(elembarcode+"\n"+eval(elembarcode+".value));
+// alert(elemstatus+"\n"+eval(elemstatus+".value"));
+        if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
+            var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
+            if (answer){
+                document.f.submit();
+            } else {
+                return false;
+            }
+        }
+        if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
+            var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
+            if (answer){
+                document.f.submit();
+            } else {
+                return false;
+            }
+        }
+    }
+    <!--/TMPL_IF-->
+}
+
+function Check(f) {
+    var total_errors=0;
+//	alert(f.field_value.length);
+    for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+            document.getElementById("error"+i).style.backgroundColor="#FF0000";
+            total_errors++;
+        } else {
+//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+        }
+    }
+    var alertString2;
+    if (total_errors==0) {
+        document.f.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+        alert(alertString2);
+    }
+}
+<!--TMPL_IF Name="serialsadditems"-->
+function unHideItems(index,labelindex) {
+	subfield = document.getElementById(index);
+	subfield.style.display = 'block';
+	label = document.getElementById(labelindex);
+	label.style.display='none';	
+}
+function HideItems(index,labelindex) {
+	subfield = document.getElementById(index);
+	subfield.style.display = 'none';
+	label = document.getElementById(labelindex);
+	label.style.display='block';	
+}
+<!--/TMPL_IF>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -16,15 +90,15 @@
 <form method="post" name="f" action="serials-edit.pl">
 <!--onsubmit="return barcode_check()">-->
 <div id="action">
-    <a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a>
+    <ul><li><a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
     <!--TMPL_LOOP Name="subscriptions"-->
-    <a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a>
-        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+	<li><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a></li>
+        <!--TMPL_IF name="abouttoexpire"--><li><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a></li>
         <!--/TMPL_IF-->
-        <!--TMPL_IF name="subscriptionexpired"--><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--TMPL_IF name="subscriptionexpired"--><li><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a></li>
         <!--/TMPL_IF-->
       <!--/TMPL_LOOP-->
-    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a>
+    <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
 </div>
 <!--TMPL_IF Name="barcode_not_unique" -->
 Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
@@ -33,21 +107,11 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
  <input type="hidden" name="op" value="serialchangestatus" />
 	<table cellspacing="0" cellpadding="0" border="0" class="collapse">
 	<tr>
-		<th>
-			Numbered
-		</th>
-		<th>
-			Published on
-		</th>
-		<th>
-			planned for
-		</th>
-		<th>
-			Status
-		</th>
-		<th>
-			Notes
-		</th>
+		<th>Numbered</th>
+		<th>Published on</th>
+		<th>planned for</th>
+		<th>Status</th>
+		<th>Notes</th>
 	</tr>
 <!-- TMPL_LOOP name="serialslist" -->
     <tr>
@@ -254,83 +318,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
 </table>
     <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" -->
-</div>
 </form>
-
-<script language="JavaScript" type="text/javascript">
-
-function popup(subscriptionid) {
-	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
-}
-
-function barcode_check(){
-    <!-- TMPL_IF NAME="count" -->
-    var count = <!-- TMPL_VAR NAME="count" -->;
-    for(var i=1;i<=count;i++){
-
-        var barcodenum = "barcode"+i;
-        var statusnum = "status"+i;
-        var elembarcode = "document.getElementById('"+barcodenum+"')";
-        var elemstatus = "document.getElementById('"+statusnum+"')";
-// alert(elembarcode+"\n"+eval(elembarcode+".value));
-// alert(elemstatus+"\n"+eval(elemstatus+".value"));
-        if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
-            var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
-            if (answer){
-                document.f.submit();
-            } else {
-                return false;
-            }
-        }
-        if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
-            var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
-            if (answer){
-                document.f.submit();
-            } else {
-                return false;
-            }
-        }
-    }
-    <!--/TMPL_IF-->
-}
-
-function Check(f) {
-    var total_errors=0;
-//	alert(f.field_value.length);
-    for (i=0 ; i<f.field_value.length ; i++) {
-//	alert (f.field_value[i].value);
-        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-            document.getElementById("error"+i).style.backgroundColor="#FF0000";
-            total_errors++;
-        } else {
-//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-        }
-    }
-    var alertString2;
-    if (total_errors==0) {
-        document.f.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
-        alert(alertString2);
-    }
-}
-<!--TMPL_IF Name="serialsadditems"-->
-function unHideItems(index,labelindex) {
-	subfield = document.getElementById(index);
-	subfield.style.display = 'block';
-	label = document.getElementById(labelindex);
-	label.style.display='none';	
-}
-function HideItems(index,labelindex) {
-	subfield = document.getElementById(index);
-	subfield.style.display = 'none';
-	label = document.getElementById(labelindex);
-	label.style.display='block';	
-}
-<!--/TMPL_IF>
-</script>
 
 </div>
 </div>

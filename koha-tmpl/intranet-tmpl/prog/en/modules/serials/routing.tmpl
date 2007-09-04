@@ -1,6 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script language="javascript" type="text/javascript">
+<!--
+
+function reorder_item(sid,rid,rank){
+    var mylocation = 'reorder_members.pl?subscriptionid='+sid+'&routingid='+rid+'&rank='+rank;
+    window.location.href=mylocation; 
+}
+
+function search_member(subscriptionid){
+    var myurl = 'member-search.pl?subscriptionid='+subscriptionid; window.open(myurl,'FindAMember','width=500,height=400,toolbar=no,scrollbars=yes');
+}
+
+//-->
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -12,15 +26,6 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<script language="javascript" type="text/javascript">
-<!--
-
-function reorder_item(sid,rid,rank){
-    var mylocation = 'reorder_members.pl?subscriptionid='+sid+'&routingid='+rid+'&rank='+rank;
-    window.location.href=mylocation; 
-}
-//-->
-</script>
 
 <!-- TMPL_IF NAME="op" -->
 <h1>Create Routing List</h1>
@@ -47,22 +52,21 @@ function reorder_item(sid,rid,rank){
 <table border="0" cellspacing="0" cellpadding="0">
 <tr valign="top"><td style="padding-top:5px;"><b>List Member:</b></td>
     <td><table cellspacing="0" cellpadding="0" border="0" class="collapse">
-        <tr><td class="cell-header">Name</td>
-            <td class="cell-header">Location</td>
-            <td class="cell-header">Rank</td>
-            <td class="cell-header">Delete</td></tr>
+        <tr><th>Name</th>
+            <th>Location</th>
+            <th>Rank</th>
+            <th>Delete</th></tr>
 <!-- TMPL_LOOP NAME="memberloop" -->
-        <tr><td class="cell"><!-- TMPL_VAR NAME="name" --></td>
-            <td class="cell"><!-- TMPL_VAR NAME="location" --></td>
-            <td class="cell"><!-- TMPL_VAR NAME="routingbox" --></td>
-            <td class="cell"><a href="/cgi-bin/koha/serials/routing.pl?routingid=<!-- TMPL_VAR NAME="routingid" -->&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete">Delete</a></td></tr>
+        <tr><td><!-- TMPL_VAR NAME="name" --></td>
+            <td><!-- TMPL_VAR NAME="location" --></td>
+            <td><!-- TMPL_VAR NAME="routingbox" --></td>
+            <td><a href="/cgi-bin/koha/serials/routing.pl?routingid=<!-- TMPL_VAR NAME="routingid" -->&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
-        <tr><td colspan="4"><br /><a onclick="search_member(<!-- TMPL_VAR
+        </table><p><a onclick="search_member(<!-- TMPL_VAR
 NAME="subscriptionid" -->); return false"
 href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR
 NAME="subscriptionid" -->" class="button">Add List Member</a> &nbsp; <a
-href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button">Delete All</a></td></tr>
-        </table></td></tr>
+href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button">Delete All</a></p></td></tr>
 
 <!-- TMPL_ELSE -->
 <table border="0" cellspacing="0" cellpadding="0">
@@ -70,22 +74,12 @@ href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscr
     <td><p><a onclick="search_member(<!-- TMPL_VAR NAME="subscriptionid"
 -->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button">Add List Member</a></p></td></tr>
 <!-- /TMPL_IF -->
-<tr><td valign="top" colspan="2"></td></tr>
-<tr><td valign="top"><b>Notes:</b></td>
-    <td><textarea name="notes" rows="3" cols="50"><!-- TMPL_VAR NAME="routingnotes" --></textarea></td></tr>
-<tr><td></td>
-    <td><input type="submit" name="submit" class="button" value="Save" /></td></tr>
+<tr><td valign="top"><label for="notes">Notes:</label></td>
+    <td><textarea name="notes" id="notes" rows="3" cols="50"><!-- TMPL_VAR NAME="routingnotes" --></textarea></td></tr>
 </table>
+<p><input type="submit" name="submit" class="button" value="Save" /></p>
 </form>
-</div>
-<script type="text/javascript">
-<!--
 
-function search_member(subscriptionid){
-    var myurl = 'member-search.pl?subscriptionid='+subscriptionid; window.open(myurl,'FindAMember','width=500,height=400,toolbar=no,scrollbars=yes');
-}
-//-->
-</script>
 </div>
 </div>
 </div>

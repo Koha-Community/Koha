@@ -1,9 +1,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials &rsaquo; Select Supplier</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = name;
+  window.close();
+}
+</script>
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <div id="doc" class="yui-t7">
    <div id="bd">
@@ -29,15 +37,6 @@
 
     <p><a href="javascript:back();">Perform a new search</a></p>
 
-<script type="text/javascript" language="Javascript">
-
-function GetIt(aqbooksellerid,name)
-{
-  opener.document.f.aqbooksellerid.value = aqbooksellerid;
-  opener.document.f.aqbooksellername.value = name;
-  window.close();
-}
-</script>
 
 </div>
 </div>

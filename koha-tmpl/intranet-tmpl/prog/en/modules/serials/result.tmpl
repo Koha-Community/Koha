@@ -1,9 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script language="Javascript">
+
+function GetIt(bibno,title)
+{
+    title = title.replace(/\?/,"\?");
+    title = title.replace(/"/,"\"");
+    title = title.replace(/'/,"\'");
+    opener.document.f.biblionumber.value = bibno;
+    opener.document.f.title.value = title;
+    window.close();
+}
+</script>
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <div id="doc" class="yui-t7">
    <div id="bd">
@@ -43,20 +54,6 @@
 No result found for <b><!-- TMPL_VAR NAME="query" --></b>
 <!-- /TMPL_IF-->
 </div>
-
-
-<script language="Javascript">
-
-function GetIt(bibno,title)
-{
-    title = title.replace(/\?/,"\?");
-    title = title.replace(/"/,"\"");
-    title = title.replace(/'/,"\'");
-    opener.document.f.biblionumber.value = bibno;
-    opener.document.f.title.value = title;
-    window.close();
-}
-</script>
 
 </div>
 </div>
