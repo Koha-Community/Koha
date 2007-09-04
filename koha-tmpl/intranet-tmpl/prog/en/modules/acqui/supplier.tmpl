@@ -1,6 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Supplier <!-- TMPL_VAR name="bookselname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+function confirm_deletion() {
+    if (confirm("Confirm deletion of this supplier ?")) {
+        window.location="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&op=delete";
+    }
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -266,13 +273,7 @@
         </fieldset>
 
 <!--/TMPL_IF-->
-<script>
-function confirm_deletion() {
-    if (confirm("Confirm deletion of this supplier ?")) {
-        window.location="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&op=delete";
-    }
-}
-</script>
+
 </div>
 </div>
 </div>

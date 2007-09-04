@@ -1,17 +1,17 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title>Z39.50 Search Results</title>
-    <!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME="TemplateEncoding" -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
-<link rel="shortcut icon" href="/intranet-tmpl/prog/en/includes/favicon.ico" type="image/x-icon" />
-<style type="text/css"> 
-    <!-- TMPL_IF NAME="intranetstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/css/<!-- TMPL_VAR NAME="intranetstylesheet" -->);<!-- TMPL_ELSE -->@import url(<!-- TMPL_VAR NAME='themelang' -->/css/intranet.css);<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="intranetcolorstylesheet" -->@import url(<!-- TMPL_VAR NAME='themelang' -->/css/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->);<!-- /TMPL_IF -->
-</style>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Z39.50 Search Results</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+    function Import(GetThisOne,biblionumber) {
+        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
+        window.close();
+        return false;
+    }
+</script>
 </head>
-
 <body>
+
+
 <div id="main-compact">
 
     <h2>Search for</h2>
@@ -76,13 +76,7 @@
 
 </div>
 <!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> servers to search</h3><!-- /TMPL_IF -->
-<script language="JavaScript" type="text/javascript">
-    function Import(GetThisOne,biblionumber) {
-        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
-        window.close();
-        return false;
-    }
-</script>
+
 </div>
 </body>
 </html>

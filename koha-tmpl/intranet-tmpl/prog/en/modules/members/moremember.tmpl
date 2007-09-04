@@ -1,6 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Patron Details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+function confirm_deletion() {
+    var is_confirmed = window.confirm('Click OK to confirm deletion');
+    var borrowernumbervalue=document.form.borrowernumber.value; 
+   
+    if (is_confirmed) {
+            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
+    }
+}
+
+function confirm_reregistration() {
+    var is_confirmed = window.confirm('Click OK to confirm renewal');
+    var borrowernumbervalue1=document.form.borrowernumber.value;
+    if (is_confirmed) {
+    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber='+borrowernumbervalue1+'';
+    }
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -334,24 +352,7 @@
 		<!-- /TMPL_LOOP -->
 	</table>
 	<!-- /TMPL_IF -->
-<script type="text/javascript">
-function confirm_deletion() {
-    var is_confirmed = window.confirm('Click OK to confirm deletion');
-    var borrowernumbervalue=document.form.borrowernumber.value; 
-   
-    if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
-    }
-}
 
-function confirm_reregistration() {
-    var is_confirmed = window.confirm('Click OK to confirm renewal');
-    var borrowernumbervalue1=document.form.borrowernumber.value;
-    if (is_confirmed) {
-    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber='+borrowernumbervalue1+'';
-    }
-}
-</script>
 <!-- /TMPL_IF --> <!-- unknowuser -->
 </div>
 </div>

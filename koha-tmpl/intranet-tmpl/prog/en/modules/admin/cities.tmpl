@@ -1,6 +1,52 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; System administration &rsaquo; Cities</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNotNull(f,noalert) {
+			if (f.value.length == 0) {
+		return false;
+			}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function toUC(f) {
+			var x=f.value.toUpperCase();
+			f.value=x;
+			return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isNum(v,maybenull) {
+		var n = new Number(v.value);
+		if (isNaN(n)) {
+			return false;
+			}
+		if (maybenull == 0 && v.value =='') {
+			return false;
+		}
+		return true;
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function isDate(f) {
+			var t = Date.parse(f.value);
+			if (isNaN(t)) {
+				return false;
+			}
+		}
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		function Check(f) {
+			var ok=1;
+			var _alertString="";
+			var alertString2;
+			if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
+				_alertString += "\n- " + _("City name & zipcode missing");
+				alert(_alertString);	
+			}
+			else{
+			document.Aform.submit();
+			}
+		}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -141,49 +187,4 @@
 
 <!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-<script language="javascript" type="text/javascript">
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNotNull(f,noalert) {
-			if (f.value.length == 0) {
-		return false;
-			}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function toUC(f) {
-			var x=f.value.toUpperCase();
-			f.value=x;
-			return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNum(v,maybenull) {
-		var n = new Number(v.value);
-		if (isNaN(n)) {
-			return false;
-			}
-		if (maybenull == 0 && v.value =='') {
-			return false;
-		}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isDate(f) {
-			var t = Date.parse(f.value);
-			if (isNaN(t)) {
-				return false;
-			}
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function Check(f) {
-			var ok=1;
-			var _alertString="";
-			var alertString2;
-			if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
-				_alertString += "\n- " + _("City name & zipcode missing");
-				alert(_alertString);	
-			}
-			else{
-			document.Aform.submit();
-			}
-		}
-</script>
+

@@ -1,135 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <Title>Koha -- Authority details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
-<!-- TMPL_IF name="authid" -->
-  <h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
-<!-- TMPL_ELSE -->
-  <h1>Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
-<!-- /TMPL_IF -->  
-  <form method="post" name="f">
-    <input type="hidden" name="op" value="add" />
-    <input type="hidden" name="addfield_field" value="" />
-    <input type="hidden" name="repeat_field" value="" />
-    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-    <input type="hidden" name="authid" value="<!-- TMPL_VAR NAME="authid" -->" />
-
-    <div id="action">
-<!-- TMPL_IF name="authid" -->
-      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
-<!-- TMPL_ELSE -->
-      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
-<!-- /TMPL_IF -->
-    </div>
-
-<!-- TMPL_IF name="duplicateauthid" -->
-	<div class="problem">
-		<p>Duplicate suspected with <a href="javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->&amp;popup=1", "Duplicate Authority");" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
-		<p>You must either :</p>
-		<ul>
-			<p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>
-			<p>Go to <a href="authorities.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->" >original authority</a></p>
-		</ul>
-	</div>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_LOOP NAME="0XX" -->
-    <!-- TMPL_IF name="tag" -->
-        <p class="tag">
-            <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-            <!-- TMPL_UNLESS name="hide_marc" -->
-                <a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
-                <input tabindex="1" onblur="this.style.backgroundColor='#ffffff';" onfocus="this.style.backgroundColor='#ffffff;'" type="text" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat" /> -
-            <!-- TMPL_ELSE -->
-                <input tabindex="1" type="hidden" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->" />
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_VAR NAME="tag_lib" --><!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" -->
-                <a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" value="" size="2" onchange="AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" />
-            <!-- /TMPL_IF -->
-        </p>
-    <!-- /TMPL_IF -->
-
-    <!-- TMPL_LOOP NAME="subfield_loop" -->
-        <p class="subfield">
-        <!-- TMPL_IF NAME="visibility" -->
-            <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
-                <!-- TMPL_VAR NAME="subfield" -->
-            </a>
-        <!-- /TMPL_IF -->
-        <div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
-            <p>
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield"> 
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
-                    <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" disabled="disabled" readonly="readonly" tabindex="-1" />
-                <!-- TMPL_ELSE -->
-                    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
-                <!-- /TMPL_UNLESS -->
-                <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
-                    <!-- TMPL_VAR NAME="marc_lib" -->
-                    <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
-                    </label>
-                <!-- /TMPL_UNLESS -->
-                    <!-- TMPL_VAR NAME="marc_value" -->
-                    <!-- TMPL_IF NAME="repeatable" -->
-                        <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
-                    <!-- /TMPL_IF -->
-                    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-                    <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1" />
-                    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-                    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-                </p>
-</div>
-    <!-- /TMPL_LOOP -->
-
-<!-- /TMPL_LOOP -->
-
-		<div name="hidden" id="hidden" class="tab">
-		<!-- TMPL_LOOP NAME="hidden_loop" -->
-				<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-				<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
-				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-		<!-- /TMPL_LOOP -->
-		</div>
-		<!-- TMPL_IF name="oldauthnumtagfield" -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->" />
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->" />
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->" />
-			<input type="hidden" name="mandatory" value="0" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->" />
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->" />
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-		<!-- /TMPL_IF -->
-    <div id="action">
-<!-- TMPL_IF name="authid" -->
-      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
-<!-- TMPL_ELSE -->
-      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
-<!-- /TMPL_IF -->
-    </div>
-	</form>
-</fieldset>
-
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function active(numlayer)
 {
 	for (i=0; i < 10 ; i++ ) {
@@ -286,6 +158,135 @@ function unHideSubfield(index,labelindex) {
 }
 
 </script>
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="menu-authorities.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<!-- TMPL_IF name="authid" -->
+  <h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<!-- TMPL_ELSE -->
+  <h1>Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<!-- /TMPL_IF -->  
+  <form method="post" name="f">
+    <input type="hidden" name="op" value="add" />
+    <input type="hidden" name="addfield_field" value="" />
+    <input type="hidden" name="repeat_field" value="" />
+    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+    <input type="hidden" name="authid" value="<!-- TMPL_VAR NAME="authid" -->" />
+
+    <div id="action">
+<!-- TMPL_IF name="authid" -->
+      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
+<!-- TMPL_ELSE -->
+      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
+<!-- /TMPL_IF -->
+    </div>
+
+<!-- TMPL_IF name="duplicateauthid" -->
+	<div class="problem">
+		<p>Duplicate suspected with <a href="javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->&amp;popup=1", "Duplicate Authority");" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
+		<p>You must either :</p>
+		<ul>
+			<p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>
+			<p>Go to <a href="authorities.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->" >original authority</a></p>
+		</ul>
+	</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="0XX" -->
+    <!-- TMPL_IF name="tag" -->
+        <p class="tag">
+            <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+            <!-- TMPL_UNLESS name="hide_marc" -->
+                <a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
+                <input tabindex="1" onblur="this.style.backgroundColor='#ffffff';" onfocus="this.style.backgroundColor='#ffffff;'" type="text" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat" /> -
+            <!-- TMPL_ELSE -->
+                <input tabindex="1" type="hidden" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->" />
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_VAR NAME="tag_lib" --><!-- /TMPL_UNLESS -->
+            <!-- TMPL_IF name="repeatable" -->
+                <a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" value="" size="2" onchange="AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" />
+            <!-- /TMPL_IF -->
+        </p>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_LOOP NAME="subfield_loop" -->
+        <p class="subfield">
+        <!-- TMPL_IF NAME="visibility" -->
+            <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
+                <!-- TMPL_VAR NAME="subfield" -->
+            </a>
+        <!-- /TMPL_IF -->
+        <div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
+            <p>
+            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+                <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield"> 
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_UNLESS name="hide_marc" -->
+                    <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
+                    <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" disabled="disabled" readonly="readonly" tabindex="-1" />
+                <!-- TMPL_ELSE -->
+                    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <!-- /TMPL_UNLESS -->
+                <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+                    <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
+                    <!-- TMPL_VAR NAME="marc_lib" -->
+                    <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
+                    </label>
+                <!-- /TMPL_UNLESS -->
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <!-- TMPL_IF NAME="repeatable" -->
+                        <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
+                    <!-- /TMPL_IF -->
+                    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+                    <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1" />
+                    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+                    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+                    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
+                </p>
+</div>
+    <!-- /TMPL_LOOP -->
+
+<!-- /TMPL_LOOP -->
+
+		<div name="hidden" id="hidden" class="tab">
+		<!-- TMPL_LOOP NAME="hidden_loop" -->
+				<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+				<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
+		<!-- /TMPL_LOOP -->
+		</div>
+		<!-- TMPL_IF name="oldauthnumtagfield" -->
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->" />
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->" />
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->" />
+			<input type="hidden" name="mandatory" value="0" />
+			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
+			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->" />
+			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->" />
+			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+		<!-- /TMPL_IF -->
+    <div id="action">
+<!-- TMPL_IF name="authid" -->
+      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
+<!-- TMPL_ELSE -->
+      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
+<!-- /TMPL_IF -->
+    </div>
+	</form>
+</fieldset>
+
 </div>
 </div>
 </div>

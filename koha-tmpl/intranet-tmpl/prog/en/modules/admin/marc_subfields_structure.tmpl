@@ -3,6 +3,48 @@
 <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+
+function active(numlayer){
+    var contentdiv   = document.getElementById("content");
+    var subfields    = contentdiv.getElementsByTagName("div");
+    var numSubfield  = subfields.length;
+    var tabs = document.getElementById("tabs").getElementsByTagName('a');
+
+    // all others must be hidden
+    for (i=0; i < numSubfield ; i++ ) {
+        if (subfields[i].getAttribute('id') == "content_"+numlayer) {
+        
+            // display this subfield
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_visible");
+            
+            // change css class
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_active");
+            
+        } else {
+            tabs[i].removeAttribute('class');
+            tabs[i].setAttribute('class',"tab_inactive");
+            subfields[i].removeAttribute("class");
+            subfields[i].setAttribute("class","content_hidden");
+        }
+    }
+}
+
+
+function displayMoreConstraint(numlayer){
+    var thisdiv = document.getElementById(numlayer);
+    if(thisdiv.getAttribute("class") == "content_hidden"){
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_visible");
+    } else {
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_hidden");
+    }
+}
+
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -172,48 +214,7 @@
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<script language="JavaScript" type="text/javascript">
 
-function active(numlayer){
-    var contentdiv   = document.getElementById("content");
-    var subfields    = contentdiv.getElementsByTagName("div");
-    var numSubfield  = subfields.length;
-    var tabs = document.getElementById("tabs").getElementsByTagName('a');
-
-    // all others must be hidden
-    for (i=0; i < numSubfield ; i++ ) {
-        if (subfields[i].getAttribute('id') == "content_"+numlayer) {
-        
-            // display this subfield
-            subfields[i].removeAttribute("class");
-            subfields[i].setAttribute("class","content_visible");
-            
-            // change css class
-            tabs[i].removeAttribute('class');
-            tabs[i].setAttribute('class',"tab_active");
-            
-        } else {
-            tabs[i].removeAttribute('class');
-            tabs[i].setAttribute('class',"tab_inactive");
-            subfields[i].removeAttribute("class");
-            subfields[i].setAttribute("class","content_hidden");
-        }
-    }
-}
-
-
-function displayMoreConstraint(numlayer){
-    var thisdiv = document.getElementById(numlayer);
-    if(thisdiv.getAttribute("class") == "content_hidden"){
-        thisdiv.removeAttribute('class');
-        thisdiv.setAttribute("class","content_visible");
-    } else {
-        thisdiv.removeAttribute('class');
-        thisdiv.setAttribute("class","content_hidden");
-    }
-}
-
-</script>
 
 </div>
 </div>

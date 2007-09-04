@@ -5,20 +5,7 @@
 <!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC tag Structure<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
-<h1>MARC tag structure admin for <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function isNotNull(f,noalert) {
         if (f.value.length ==0) {
@@ -68,6 +55,20 @@
         }
     }
     </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<h1>MARC tag structure admin for <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
+
 
 <!-- TMPL_IF NAME="add_form" -->
 <!-- ------------------------------------------------------------------------ -->

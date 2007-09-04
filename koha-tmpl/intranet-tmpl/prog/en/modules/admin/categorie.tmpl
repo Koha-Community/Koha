@@ -5,21 +5,7 @@
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
-<!-- TMPL_IF NAME="add_form" -->
-	<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 	//
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -81,6 +67,21 @@
 		ff.submit();
 	}
 	</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<!-- TMPL_IF NAME="add_form" -->
+	
 
 
 	

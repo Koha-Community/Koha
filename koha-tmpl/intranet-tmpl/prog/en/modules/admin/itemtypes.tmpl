@@ -21,7 +21,62 @@ Data Deleted
 Item Types Administration
 <!-- /TMPL_IF -->
 </title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><script type="text/javascript">
+
+function isNotNull(f,noalert) {
+	if (f.value.length ==0) {
+		return false;
+	}
+	return true;
+}
+
+function toUC(f) {
+	var x=f.value.toUpperCase();
+	f.value=x;
+	return true;
+}
+
+function isNum(v,maybenull) {
+var n = new Number(v.value);
+if (isNaN(n)) {
+	return false;
+	}
+if (maybenull==0 && v.value=='') {
+	return false;
+}
+return true;
+}
+
+function isDate(f) {
+	var t = Date.parse(f.value);
+	if (isNaN(t)) {
+		return false;
+	}
+}
+
+function Check(f) {
+	var ok=1;
+	var _alertString="";
+	var alertString2;
+	if (f.itemtype.value.length==0) {
+		_alertString += "\n- " + _("Itemtype missing");
+	}
+	if (!(isNotNull(window.document.Aform.description,1))) {
+		_alertString += "\n- " + _("Description missing");
+	}
+	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
+		_alertString += "\n- " + _("Rental charge is not a number");
+	}
+	if (_alertString.length==0) {
+		document.Aform.submit();
+	} else {
+		alertString2  = _("Form not submitted because of the following problem(s)");
+		alertString2 += "\n------------------------------------------------------------------------------------\n";
+		alertString2 += _alertString;
+		alert(alertString2);
+	}
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -92,7 +147,7 @@ Item Types Administration
               <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="KohaImageSrc" -->
-              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="" />
+              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="<!-- TMPL_VAR name="KohaImageSrc" -->" title="<!-- TMPL_VAR name="KohaImageSrc" -->" />
         <!-- TMPL_ELSE -->
               <br />
         <!-- /TMPL_IF -->
@@ -248,62 +303,7 @@ Item Types Administration
 <!-- /TMPL_IF -->
 
 
-<script language="javascript" type="text/javascript">
 
-function isNotNull(f,noalert) {
-	if (f.value.length ==0) {
-		return false;
-	}
-	return true;
-}
-
-function toUC(f) {
-	var x=f.value.toUpperCase();
-	f.value=x;
-	return true;
-}
-
-function isNum(v,maybenull) {
-var n = new Number(v.value);
-if (isNaN(n)) {
-	return false;
-	}
-if (maybenull==0 && v.value=='') {
-	return false;
-}
-return true;
-}
-
-function isDate(f) {
-	var t = Date.parse(f.value);
-	if (isNaN(t)) {
-		return false;
-	}
-}
-
-function Check(f) {
-	var ok=1;
-	var _alertString="";
-	var alertString2;
-	if (f.itemtype.value.length==0) {
-		_alertString += "\n- " + _("Itemtype missing");
-	}
-	if (!(isNotNull(window.document.Aform.description,1))) {
-		_alertString += "\n- " + _("Description missing");
-	}
-	if ((!isNum(f.rentalcharge,0)) && f.rentalcharge.value.length > 0) {
-		_alertString += "\n- " + _("Rental charge is not a number");
-	}
-	if (_alertString.length==0) {
-		document.Aform.submit();
-	} else {
-		alertString2  = _("Form not submitted because of the following problem(s)");
-		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += _alertString;
-		alert(alertString2);
-	}
-}
-</script>
 </div>
 </div>
 </div>

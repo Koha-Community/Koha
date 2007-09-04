@@ -1,4 +1,45 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Koha -- Barcodes and Labels: Search Results<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+<!--
+
+
+function add_item(itemnum,batch_id){
+
+ var getstr='';
+ if (itemnum == 'checked') {
+    itms= new Array;        
+    if(document.resultform.itemnumber.length > 0) {
+        for (var i=0; i < document.resultform.itemnumber.length; i++) {
+            if (document.resultform.itemnumber[i].checked) {
+                itms.push("itemnumber=" +  document.resultform.itemnumber[i].value);
+            }
+        }
+        getstr = itms.join("&");
+    }
+  } else {
+		getstr = "itemnumber="+itemnum;
+} 
+ 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&"+getstr;
+	window.opener.location.href = myurl;
+}
+/* # TODO  there's a checkall fcn in opac/includes.... that should be modified to accept form object. */
+function check_all()
+{
+count = document.resultform.elements.length;
+    for (i=0; i < count; i++)  
+    {   
+            document.resultform.elements[i].checked = 1;
+    }
+}
+
+function add_item3(itemnumber){
+
+ var myurl = "label-manager.pl?op=add&itemnumber="+itemnumber+"";
+     window.opener.location.href = myurl;
+}
+
+//-->
+</script>
 </head>
 <body>
 <div id="main-compact">
@@ -96,44 +137,4 @@
 	</div> 
 </div>
 
-<script type="text/javascript">
-<!--
-
-
-function add_item(itemnum,batch_id){
-
- var getstr='';
- if (itemnum == 'checked') {
-    itms= new Array;        
-    if(document.resultform.itemnumber.length > 0) {
-        for (var i=0; i < document.resultform.itemnumber.length; i++) {
-            if (document.resultform.itemnumber[i].checked) {
-                itms.push("itemnumber=" +  document.resultform.itemnumber[i].value);
-            }
-        }
-        getstr = itms.join("&");
-    }
-  } else {
-		getstr = "itemnumber="+itemnum;
-} 
- 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&"+getstr;
-	window.opener.location.href = myurl;
-}
-/* # TODO  there's a checkall fcn in opac/includes.... that should be modified to accept form object. */
-function check_all()
-{
-count = document.resultform.elements.length;
-    for (i=0; i < count; i++)  
-    {   
-            document.resultform.elements[i].checked = 1;
-    }
-}
-
-function add_item3(itemnumber){
-
- var myurl = "label-manager.pl?op=add&itemnumber="+itemnumber+"";
-     window.opener.location.href = myurl;
-}
-
-//-->
-</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

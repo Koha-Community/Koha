@@ -1,16 +1,72 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; System Administration &rsaquo; Budgets</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
+<!-- TMPL_IF name="add_form" -->
+<script type="text/javascript">
+	//
+	function isNotNull(f,noalert) {
+		if (f.value.length ==0) {
+   return false;
+		}
+		return true;
+	}
+	//
+	function toUC(f) {
+		var x=f.value.toUpperCase();
+		f.value=x;
+		return true;
+	}
+	//
+	function isNum(v,maybenull) {
+	var n = new Number(v.value);
+	if (isNaN(n)) {
+		return false;
+		}
+	if (maybenull==0 && v.value=='') {
+		return false;
+	}
+	return true;
+	}
+	//
+	function isDate(f) {
+		var t = Date.parse(f.value);
+		if (isNaN(t)) {
+			return false;
+		}
+	}
+	//
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+		if (f.bookfundid.value.length==0) {
+			_alertString += "- bookfundid missing\n";
+		}
+		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
+			_alertString += "- Budget missing\n";
+		}
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = "Form not submitted because of the following problem(s)\n";
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+</script>
+<!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+
 
 <!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
 
@@ -91,7 +147,7 @@
       </select>
       <input type="text" size="10" id="filter_startdate" name="filter_startdate" value="<!-- TMPL_VAR Name="filter_startdate" -->" />
       <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="filter_startdate_button" />
-      <script language="JavaScript" type="text/javascript">
+      <script type="text/javascript">
         Calendar.setup(
           {
             inputField : "filter_startdate",
@@ -123,7 +179,7 @@
       </select>
       <input type="text" size="8" maxlength="10" id="filter_enddate" name="filter_enddate" value="<!-- TMPL_VAR Name="filter_enddate" -->" />
       <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="filter_enddate_button" />
-      <script language="JavaScript" type="text/javascript">
+      <script type="text/javascript">
         Calendar.setup(
           {
             inputField : "filter_enddate",
@@ -184,59 +240,7 @@
 <!-- /TMPL_IF --> <!-- else -->
 
 <!-- TMPL_IF name="add_form" -->
-<script language="JavaScript" type="text/javascript">
-	//
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-	//
-	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
-		return true;
-	}
-	//
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=='') {
-		return false;
-	}
-	return true;
-	}
-	//
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
-	}
-	//
-	function Check(f) {
-		var ok=1;
-		var _alertString="";
-		var alertString2;
-		if (f.bookfundid.value.length==0) {
-			_alertString += "- bookfundid missing\n";
-		}
-		if (!(isNotNull(window.document.Aform.budgetamount,1))) {
-			_alertString += "- Budget missing\n";
-		}
-		if (_alertString.length==0) {
-			document.Aform.submit();
-		} else {
-			alertString2 = "Form not submitted because of the following problem(s)\n";
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
-			alertString2 += _alertString;
-			alert(alertString2);
-		}
-	}
-</script>
+
 
 <form action="/cgi-bin/koha/admin/aqbudget.pl" name="Aform" method="post">
   <fieldset>
@@ -260,7 +264,7 @@
         <td>
           <input type="text" size="8" maxlength="10" id="startdate" name="startdate" value="<!-- TMPL_VAR Name="startdate" -->" />
           <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="startdate_button" />
-          <script language="JavaScript" type="text/javascript">
+          <script type="text/javascript">
             Calendar.setup(
               {
                 inputField : "startdate",
@@ -278,7 +282,7 @@
         <td>
           <input type="text" size="8" maxlength="10" id="enddate" name="enddate" value="<!-- TMPL_VAR Name="enddate" -->" />
           <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="enddate_button" alt="" />
-          <script language="JavaScript" type="text/javascript">
+          <script type="text/javascript">
             Calendar.setup(
               {
                 inputField : "enddate",

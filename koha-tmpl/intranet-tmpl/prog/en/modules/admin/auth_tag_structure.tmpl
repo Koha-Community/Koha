@@ -1,21 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; System Administration</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
-<h1>Authority MARC framework for <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --><!-- TMPL_ELSE -->default framework<!-- /TMPL_IF --></h1>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function isNotNull(f,noalert) {
         if (f.value.length ==0) {
@@ -65,6 +51,21 @@ return false;
         }
     }
     </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<h1>Authority MARC framework for <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --><!-- TMPL_ELSE -->default framework<!-- /TMPL_IF --></h1>
+
 
 <!-- TMPL_IF NAME="add_form" -->
 
@@ -147,7 +148,6 @@ return false;
 
 
 <!-- TMPL_IF NAME="else" -->
-<div id="bloc25">
 <h2>Select an authority framework</h2>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
     <select name="authtypecode">
@@ -164,9 +164,7 @@ return false;
     <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
     <input type="submit" value="OK" class="submit" />
 </form>
-</div>
-<div id="bloc100">
-    <table>
+<table>
     <tr>
         <th>Tag</th>
         <th>Lib</th>
@@ -201,7 +199,6 @@ return false;
             <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page</a>
         <!-- /TMPL_IF -->
     </form>
-</div>
 <!-- /TMPL_IF -->
 
 </div>

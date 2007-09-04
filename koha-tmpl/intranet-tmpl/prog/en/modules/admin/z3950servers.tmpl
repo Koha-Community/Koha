@@ -5,20 +5,9 @@
 <!-- TMPL_IF NAME="add_validate" -->z39.50 Server Added<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->z39.50 Server Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
 
 <!-- TMPL_IF NAME="add_form" -->
-        <script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -86,6 +75,21 @@
                 }
         }
         </script>
+        <!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<!-- TMPL_IF NAME="add_form" -->
+        
 
        
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">

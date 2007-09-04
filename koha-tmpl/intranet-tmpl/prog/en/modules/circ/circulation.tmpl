@@ -4,8 +4,62 @@
 &rsaquo; Checking out to <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->
 (<!-- TMPL_VAR NAME="cardnumber" -->)
 <!-- /TMPL_IF --></title>
-
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+
+    /**
+    *  MoreBorrowerDetails();
+    *  This function displays or not borrower information.
+    */
+    function MoreBorrowerDetails() {
+        var div = document.getElementById('BorrowerDetails');
+        if(div.getAttribute('class') == "content_visible"){
+            div.removeAttribute('class');
+            div.setAttribute('class',"content_hidden");
+        }
+        else {
+            div.setAttribute('class',"content_visible");
+            div.setAttribute('style',"height:180px;");
+        }
+    }
+    /**
+    *  active(numlayer)
+    *  This function activate the numlayer div.
+    */
+    function active(numlayer){
+        for (i=0; i <= 1 ; i++ ) {
+            var tab;
+            try{
+                tab = document.getElementById(i+'XX');
+                tab.getAttribute('id'); // that throw an exception.
+            }
+            catch(e){
+                continue; // go to the next step.
+            }
+            if (numlayer==i) {
+                tab.setAttribute("class","content_visible");
+                var tabactive=document.getElementById('link'+i);
+                tabactive.removeAttribute("class");
+                tabactive.setAttribute("class","tab_active");
+            } else {
+                tab.setAttribute("class","content_hidden");
+                try {
+                    var tabactive=document.getElementById('link'+i);
+                    tabactive.removeAttribute("class");
+                    tabactive.setAttribute("class","tab_inactive");
+                }
+                catch(e){};
+            }
+        }
+    }
+
+    <!-- TMPL_IF NAME="borrowernumber" -->
+        document.mainform.barcode.focus(); // set the focus to the barcode entry.
+    <!-- TMPL_ELSE -->
+        document.mainform.findborrower.focus(); // set the focus to te form to search a borrower
+    <!-- /TMPL_IF -->
+
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -830,61 +884,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 <!--/TMPL_IF -->
 
-<script type="text/JavaScript" language="JavaScript">
 
-    /**
-    *  MoreBorrowerDetails();
-    *  This function displays or not borrower information.
-    */
-    function MoreBorrowerDetails() {
-        var div = document.getElementById('BorrowerDetails');
-        if(div.getAttribute('class') == "content_visible"){
-            div.removeAttribute('class');
-            div.setAttribute('class',"content_hidden");
-        }
-        else {
-            div.setAttribute('class',"content_visible");
-            div.setAttribute('style',"height:180px;");
-        }
-    }
-    /**
-    *  active(numlayer)
-    *  This function activate the numlayer div.
-    */
-    function active(numlayer){
-        for (i=0; i <= 1 ; i++ ) {
-            var tab;
-            try{
-                tab = document.getElementById(i+'XX');
-                tab.getAttribute('id'); // that throw an exception.
-            }
-            catch(e){
-                continue; // go to the next step.
-            }
-            if (numlayer==i) {
-                tab.setAttribute("class","content_visible");
-                var tabactive=document.getElementById('link'+i);
-                tabactive.removeAttribute("class");
-                tabactive.setAttribute("class","tab_active");
-            } else {
-                tab.setAttribute("class","content_hidden");
-                try {
-                    var tabactive=document.getElementById('link'+i);
-                    tabactive.removeAttribute("class");
-                    tabactive.setAttribute("class","tab_inactive");
-                }
-                catch(e){};
-            }
-        }
-    }
-
-    <!-- TMPL_IF NAME="borrowernumber" -->
-        document.mainform.barcode.focus(); // set the focus to the barcode entry.
-    <!-- TMPL_ELSE -->
-        document.mainform.findborrower.focus(); // set the focus to te form to search a borrower
-    <!-- /TMPL_IF -->
-
-</script>
 
 </div>
 </div>

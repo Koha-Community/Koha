@@ -1,6 +1,57 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloging &rsaquo; Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+function _(s) { return s } // dummy function for gettext
+function active(numlayer)
+{
+    for (i=10; i < 11 ; i++ ) {
+        ong = i+"XX";
+            link = "link"+i;
+        if (numlayer==i) {
+            document.getElementById(ong).style.visibility="visible";
+            document.getElementById(link).style.backgroundColor="#11AA11";
+            document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
+        } else {
+            document.getElementById(ong).style.visibility="hidden";
+            document.getElementById(link).style.backgroundColor="#FFFFFF";
+            document.getElementById(link).style.backgroundImage="";
+        }
+    }
+}
+function Check(f) {
+    var total_errors=0;
+//	alert(f.field_value.length);
+    for (i=0 ; i<f.field_value.length ; i++) {
+//	alert (f.field_value[i].value);
+        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
+            document.getElementById("error"+i).style.backgroundColor="#FF0000";
+            total_errors++;
+        } else {
+//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
+        }
+    }
+    var alertString2;
+    if (total_errors==0) {
+        document.f.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+        alert(alertString2);
+    }
+}
+function Dopop(link,i) {
+    defaultvalue=document.forms[0].field_value[i].value;
+    newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+function confirm_deletion(biblionumber,itemnumber) {
+    var is_confirmed = confirm(_('Are you sure you want to delete this item?'));
+    if (is_confirmed) {
+    window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
+    }
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -79,56 +130,7 @@
     <!-- /TMPL_IF -->
     </form>
 </div>
-<script language="JavaScript" type="text/javascript">
-function active(numlayer)
-{
-    for (i=10; i < 11 ; i++ ) {
-        ong = i+"XX";
-            link = "link"+i;
-        if (numlayer==i) {
-            document.getElementById(ong).style.visibility="visible";
-            document.getElementById(link).style.backgroundColor="#11AA11";
-            document.getElementById(link).style.backgroundImage="url(<!-- TMPL_VAR NAME="themelang" -->/images/background-mem.gif)";
-        } else {
-            document.getElementById(ong).style.visibility="hidden";
-            document.getElementById(link).style.backgroundColor="#FFFFFF";
-            document.getElementById(link).style.backgroundImage="";
-        }
-    }
-}
-function Check(f) {
-    var total_errors=0;
-//	alert(f.field_value.length);
-    for (i=0 ; i<f.field_value.length ; i++) {
-//	alert (f.field_value[i].value);
-        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-            document.getElementById("error"+i).style.backgroundColor="#FF0000";
-            total_errors++;
-        } else {
-//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-        }
-    }
-    var alertString2;
-    if (total_errors==0) {
-        document.f.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
-        alert(alertString2);
-    }
-}
-function Dopop(link,i) {
-    defaultvalue=document.forms[0].field_value[i].value;
-    newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-function confirm_deletion(biblionumber,itemnumber) {
-    var is_confirmed = confirm(_('Are you sure you want to delete this item?'));
-    if (is_confirmed) {
-    window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
-    }
-}
-</script>
+
 </div>
 </div>
 </div>

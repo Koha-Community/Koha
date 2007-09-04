@@ -1,10 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Clean Borrowers</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
 <!-- End of additions --><!-- Additions to enable Calendar system -->
@@ -12,6 +8,43 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name='themelang' -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
+<script type="text/javascript" language="JavaScript">
+// <![CDATA[
+        /**
+         *  checkForm(form)
+         *  This function check the form is correctly filled.
+         */
+          function checkForm(form) {
+              if((form.checkbox[0].checked)){
+                  if(!(form.date1.value)){
+                    alert("please enter a date !");
+                    document.form.date1.focus();
+                    return false;
+                  }
+              }
+              if((form.checkbox[1].checked)){
+                  if(!(form.date2.value)){
+                      alert("please enter a date !");
+                      document.form.date2.focus();
+                      return false;
+                  }
+              }
+              return true;
+          }
+          
+        /**
+         *  checkForm2(form)
+         *  This function check the form2 is correctly filled.
+         */
+          function checkForm2(form) {
+              return true;
+          }
+     // ]]>
+</script>
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
 
@@ -125,40 +158,6 @@
     <a href="/cgi-bin/koha/tools/tools-home.pl">Go back to tools home.</a>
 <!-- Step 3 END -->
 <!-- /TMPL_IF -->
-
-<script type="text/javascript" language="JavaScript">
-// <![CDATA[
-        /**
-         *  checkForm(form)
-         *  This function check the form is correctly filled.
-         */
-          function checkForm(form) {
-              if((form.checkbox[0].checked)){
-                  if(!(form.date1.value)){
-                    alert("please enter a date !");
-                    document.form.date1.focus();
-                    return false;
-                  }
-              }
-              if((form.checkbox[1].checked)){
-                  if(!(form.date2.value)){
-                      alert("please enter a date !");
-                      document.form.date2.focus();
-                      return false;
-                  }
-              }
-              return true;
-          }
-          
-        /**
-         *  checkForm2(form)
-         *  This function check the form2 is correctly filled.
-         */
-          function checkForm2(form) {
-              return true;
-          }
-     // ]]>
-</script>
 
 </div>
 </div>
