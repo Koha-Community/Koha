@@ -53,12 +53,6 @@
         }
     }
 
-    <!-- TMPL_IF NAME="borrowernumber" -->
-        document.mainform.barcode.focus(); // set the focus to the barcode entry.
-    <!-- TMPL_ELSE -->
-        document.mainform.findborrower.focus(); // set the focus to te form to search a borrower
-    <!-- /TMPL_IF -->
-
 </script>
 </head>
 <body>
@@ -178,7 +172,7 @@
 
     <p>
     <label for="findborrower">Enter patron card number or partial name: </label>
-    <input id="findborrower" name="findborrower" type="text" size="40" />
+    <input id="findborrower" name="findborrower" type="text" size="40" class="focus" />
     </p>
 
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
@@ -307,7 +301,7 @@ No patron matched <!-- TMPL_VAR name="message" -->
     <legend>Checkout an item</legend>
 
     <p>
-    <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" size="14" />
+    <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" class="focus" size="14" />
     
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->

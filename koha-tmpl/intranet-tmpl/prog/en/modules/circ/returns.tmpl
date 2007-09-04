@@ -1,9 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Returns <!-- TMPL_VAR Name="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/JavaScript" language="JavaScript">
-	document.mainform.barcode.focus();
-</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -190,7 +187,7 @@
             <fieldset>
             <legend>Enter item barcode</legend>
             <p>
-                <input name="barcode" id="barcode" size="14" maxlength="14" />
+                <input name="barcode" id="barcode" size="14" maxlength="14" class="focus" />
                 <input type="submit" value="Submit" />
             </p>
             <!-- TMPL_LOOP Name="inputloop" -->

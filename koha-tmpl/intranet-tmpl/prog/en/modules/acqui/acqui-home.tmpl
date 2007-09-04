@@ -1,9 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/JavaScript">
-    document.findsupplier.supplier.focus();
-</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -23,13 +20,13 @@
     <!-- TMPL_IF name="nobudget" -->
         <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in parameters</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" />
+            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
     <!-- TMPL_ELSE -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" />
+            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>

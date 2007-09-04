@@ -1,9 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloguing</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/JavaScript">
-    document.search.q.focus();
-</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -25,7 +22,7 @@
 	<form name="search" action="addbooks.pl">
 		<p>
         <label for="q">Search the catalog: </label>
-        <input id="q" type="text"  size="25"   name="q" />
+        <input id="q" type="text"  size="25" name="q" class="focus" />
         <input type="submit" value="search" />
         </p>
 	</form>

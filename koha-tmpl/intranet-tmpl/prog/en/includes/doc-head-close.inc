@@ -21,7 +21,8 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="widget" -->" />
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
-
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/staff-global.js"></script>
 <!-- TMPL_IF NAME="js_libs" -->
 <!-- TMPL_LOOP NAME="js_libs" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="lib" -->"></script>

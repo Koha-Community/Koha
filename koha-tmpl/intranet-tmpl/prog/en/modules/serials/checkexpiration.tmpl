@@ -8,7 +8,6 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <script type="text/javascript" language="JavaScript">
 // <![CDATA[
-    document.f.date.focus();
     
     /**
      *  Function CheckForm
@@ -53,7 +52,7 @@
         <input id="issn" type="text" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" /></p>
 
         <p><label for="date">with expiration date before</label>
-        <input id="date" type="text" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" />
+        <input id="date" type="text" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" class="focus" />
             <script type="text/javascript">
                 Calendar.setup(
                  {
