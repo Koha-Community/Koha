@@ -532,6 +532,7 @@ sub build_tabs ($$$$$) {
                             tag           => $tag,
                             index         => $index_tag,
                             tag_lib       => $tagslib->{$tag}->{lib},
+                            repeatable       => $tagslib->{$tag}->{repeatable},
                             subfield_loop => \@subfields_data,
                             fixedfield    => ($tag < 10)?(1):(0),
                         );
