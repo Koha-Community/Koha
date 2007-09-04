@@ -4,11 +4,16 @@
 </head>
 <body>
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <div id="catalogue_detail_biblio">
-	<div id="bloc25">
 	<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
 		<h2>
 			<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra">
@@ -38,10 +43,8 @@
                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Requests</a>
          <br />      
 	<!-- /TMPL_LOOP -->
-	</div>
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
-<div id="bloc25">
-	<h2>BARCODE <!-- TMPL_VAR NAME="barcode" --></h2>
+<h2>BARCODE <!-- TMPL_VAR NAME="barcode" --></h2>
  	<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR
 NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modify</a> |
         <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Delete</a>
@@ -68,12 +71,15 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 	Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br />
 	<b>Group Number:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br />
 	<b>Biblio number:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br />
-	</h2>
-</div>
 <!-- /TMPL_LOOP -->
 
-<p>
-</form>
-</center>
 
+</div>
+
+
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

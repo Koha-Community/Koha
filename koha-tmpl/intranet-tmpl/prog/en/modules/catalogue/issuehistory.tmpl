@@ -4,73 +4,55 @@
 </head>
 <body>
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 
-    <h1>Issue history for <!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) </h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<h1>Issue history for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
 
 <!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
     
 <div class="searchresults">
     <!-- TMPL_IF NAME="issues" -->
-        <br />
-        <b>Has been issued <!-- TMPL_VAR NAME="total" --> times</b>
+        <p><b>Has been issued <!-- TMPL_VAR NAME="total" --> times</b></p>
         <table>
-            <th>
-                Date
-            </th>
-            <th>
-                Surname
-            </th>
-            <th>
-                Firstname
-            </th>
-            <th>
-                Issuing branch
-            </th>
-            <th>
-                Renew
-            </th>
-            <th>
-                Date due
-            </th>
-            <th>
-                Return date
-            </th>
+            <tr><th>Date</th>
+            <th>Surname</th>
+            <th>Firstname</th>
+            <th>Issuing branch</th>
+            <th>Renew</th>
+            <th>Date due</th>
+            <th>Return date</th></tr>
         <!-- TMPL_LOOP NAME="issues" -->
             <tr>
-                <td>
-                    <!-- TMPL_IF NAME="timestamp" -->
+                <td><!-- TMPL_IF NAME="timestamp" -->
                         <!-- TMPL_VAR NAME="timestamp" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="surname" -->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="surname" -->
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
                             <!-- TMPL_VAR NAME="surname" -->
                         </a>
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="firstname" -->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="firstname" -->
                         <!-- TMPL_VAR NAME="firstname" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="issuingbranch" -->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="issuingbranch" -->
                         <!-- TMPL_VAR NAME="issuingbranch" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="renewals"-->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="renewals"-->
                         YES<br />
                         <small>
                             <!-- TMPL_IF NAME="lastreneweddate" -->
@@ -79,29 +61,30 @@
                         </small>
                     <!-- TMPL_ELSE -->
                         NO
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="date_due" -->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="date_due" -->
                         <!-- TMPL_VAR NAME="date_due" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_IF NAME="returndate" -->
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="returndate" -->
                         <!-- TMPL_VAR NAME="returndate" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF -->
-                </td>
+                    <!-- /TMPL_IF --></td>
            </tr>
         <!-- /TMPL_LOOP -->
+		</table>
     <!-- TMPL_ELSE -->
-        <br />
-        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->) <span class="problem">has never been issued.</span></b>
+        <p>
+        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->) <span class="problem">has never been issued.</span></p>
         
     <!-- /TMPL_IF -->
 </div>
 
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
