@@ -28,11 +28,12 @@ INSTALLATION
 Koha 3.0 comes with a new installer, based on MakeMaker, the tool that
 is usually used to install CPAN modules.  This means that if you know
 how to customise CPAN-installed modules, the same things should work
-for you with Koha.
+for you with Koha.  If not, don't worry.  If you want to customise the
+installation more than described below, run "man ExtUtils::MakeMaker"
 
 You need to have a server running MySQL 5, Zebra and some webserver
 (preferably Apache) before installing Koha.  Create a database in
-MySQL called koha and 
+MySQL called koha, owned by a kohaadmin user, with a password set.
 
 Default installation instructions:
 
