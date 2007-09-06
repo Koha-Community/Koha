@@ -29,11 +29,20 @@ Makefile.PL - Koha packager and installer
 
 =head1 SYNOPSIS
 
+=head2 BASIC INSTALLATION
+
 	perl Makefile.PL
 	make
 	sudo make install
+
+=head2 PACKAGING RELEASE TARBALLS
+
 	make manifest tardist
 	make manifest zipdist
+
+=head2 CLEANING UP
+
+	make clean
 
 =head1 DESCRIPTION
 
@@ -41,7 +50,7 @@ This is a packager and installer that uses
 ExtUtils::MakeMaker, which is fairly common
 on perl systems.
 As well as building tar or zip files
-and installing,
+and installing with the above commands,
 it allows us to check pre-requisites
 and generate configuration files.
 
@@ -65,14 +74,15 @@ Hash of file mappings
 
 =head2 CONFIGURE
 
-Maybe use prompt() here in future to get configuration values at installation time.
+Maybe use prompt() here in future to get configuration values 
+interactively at installation time.
 
 =head2 PL_FILES
 
 This is a hash of PL scripts to run after installation and
 the files to ask them to generate.
 Maybe use the values from CONFIGURE
-to generate initial configuration files.
+to generate initial configuration files in future.
 
 =cut
 
@@ -178,7 +188,7 @@ WriteMakefile(
 =head2 map_tree
 
 This function lists all files and where to install each one.
-It returns a hash reference suitable for PM.
+It returns a hash reference suitable for the PM variable above.
 
 =cut
 

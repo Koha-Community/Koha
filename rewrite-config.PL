@@ -31,18 +31,28 @@ rewrite-config.PL - helper for the Koha packager and installer
 
 =head1 DESCRIPTION
 
-This helper script replaces placeholders in the
+This helper script replaces keywords in the
 configuration files with value either supplied through
 the environment (with export, or by putting them on
-the start of the make command linke) or with reasonable
+the start of the make command line) or with reasonable
 guesses worked out by the script.
 
-=head2 KEYS
+=head2 KEYWORDS
 
-The following configuration keys are available:
+The following configuration keywords are available:
 
 BASE_DIR, MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
 WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
+
+=head1 EXAMPLES
+
+To override the guessed hostname and email address, run:
+
+	WEBSERVER_HOST=mysecrethostname.com.invalid \
+	WEBMASTER_EMAIL=webmaster@publichost.com make install
+
+Note that if WEBSERVER_HOST does not resolve to an IP address, you will
+also need to override WEBSERVER_IP.
 
 =cut
 
