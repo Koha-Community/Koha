@@ -59,6 +59,8 @@ also need to override WEBSERVER_IP.
 $myhost = hostname();
 $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
+# This is set here to rescue systems with broken DNS
+$myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
 
 # These are our configuration guesses
 # Keys were extracted by
@@ -72,10 +74,9 @@ $mydomain =~ s/^.*?\.//;
   "__WEBMASTER_EMAIL__" => 'webmaster@'.$mydomain,
   "__WEBSERVER_DOMAIN__" => $mydomain,
   "__WEBSERVER_HOST__" => $myhost,
-  # This is set like this to rescue systems with broken DNS
-  "__WEBSERVER_IP__" => $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?",
-  "__WEBSERVER_PORT__" => 80,
-  "__WEBSERVER_PORT_LIBRARIAN__" => 8080,
+  "__WEBSERVER_IP__" => $myip,
+  "__WEBSERVER_PORT__" => "80",
+  "__WEBSERVER_PORT_LIBRARIAN__" => "8080",
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
 );
