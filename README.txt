@@ -1,9 +1,10 @@
-Koha - award-winning GPL Integrated Library System.
+Koha - award-winning GPL Integrated Library System
 
-Koha is a full-featured . Developed initially in New Zealand by Katipo
-Communications Ltd and first deployed in January of 2000 for Horowhenua
-Library Trust, it is currently maintained by a team of software providers
-and library technology staff from around the globe.
+Koha aims to be a full-featured Integrated Library System. Developed
+initially in New Zealand by Katipo Communications Ltd and first deployed
+in January of 2000 for Horowhenua Library Trust, it is currently
+maintained by a team of software providers and library technology staff
+from around the globe.
 
 
 STRUCTURE
