@@ -47,7 +47,7 @@ and generate configuration files.
 
 =head1 VARIABLES
 
-=head2 NAME, VERSION, ABSTRACT, AUTHOR
+=head2 NAME, VERSION_FROM, ABSTRACT, AUTHOR
 
 Basic metadata about this software.
 
@@ -79,7 +79,8 @@ to generate initial configuration files.
 WriteMakefile(
 
     NAME => 'koha',
-    VERSION => strftime('2.9.%Y%m%d%H',gmtime),
+    #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
+    VERSION_FROM => 'C4/Context.pm',
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
@@ -150,7 +151,14 @@ WriteMakefile(
 #     return { macro => { 'export TEST' => '755' } }
 #     },
 
-#   PL_FILES => { # generator => target
+   PL_FILES => { # generator => target(s)
+      'rewrite-config.PL' => [
+         '$(INST_LIBDIR)/koha/etc/koha-conf.xml',
+         '$(INST_LIBDIR)/koha/etc/koha-httpd.conf',
+         '$(INST_LIBDIR)/koha/etc/zebra-biblios.cfg',
+         '$(INST_LIBDIR)/koha/etc/zebra-authorities.cfg'
+         ]
+   }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
 #     'misc/koha.conf.PL' => '$(INST_LIBDIR)/../etc/koha.conf',
 #     'misc/apache-koha.conf.PL' => '$(INST_LIBDIR)/../etc/apache-koha.conf',
@@ -217,6 +225,16 @@ excluding non-files, CVS files and whitespace in filenames.
 			$result{$src} = '$(INST_LIBDIR)/koha/templates/'.$src;
 		}
 	}
+=pod
+
+etc files are copied to koha/etc
+
+=cut
+	# Misc etc to koha/etc
+	foreach my $src (glob("etc/*")) {
+		$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
+	}
+
 
 	return \%result;
 }
@@ -227,6 +245,10 @@ __END__
 =head1 SEE ALSO
 
 ExtUtils::MakeMaker(3)
+
+=head1 AUTHOR
+
+MJ Ray mjr at phonecoop.coop
 
 =cut
 

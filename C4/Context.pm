@@ -28,8 +28,7 @@ use vars qw($VERSION $AUTOLOAD),
     qw($context),
     qw(@context_stack);
 
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-        shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
+$VERSION = '3.00.00.002';
 
 =head1 NAME
 
