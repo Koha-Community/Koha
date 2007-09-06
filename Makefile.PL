@@ -197,11 +197,10 @@ C4/*.pm is copied to perl's lib namespace.
 =pod
 
 CGIs are copied to koha/cgi-bin
-and other scripts to koha/examples.
+and other scripts to koha/scripts.
 
 =cut
-	# Misc scripts to koha/examples
-	foreach my $src (glob("*.pl"),glob("*/*.pl"),glob("installer/*.pm"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
+	foreach my $src ("mainpage.pl","help.pl",glob("*/*.pl"),glob("installer/*.pm"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_LIBDIR)/koha/scripts/'.$src;
 		} else {

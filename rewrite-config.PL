@@ -41,8 +41,8 @@ guesses worked out by the script.
 
 The following configuration keys are available:
 
-BASE_DIR, MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBSERVER_DOMAIN,
-WEBSERVER_HOST, WEBSERVER_IP, ZEBRA_PASS, ZEBRA_USER
+BASE_DIR, MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
+WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
 
 =cut
 
@@ -59,10 +59,13 @@ $mydomain =~ s/^.*?\.//;
   "__MYSQL_HOST__" => $myhost,
   "__MYSQL_PASS__" => "katikoan",
   "__MYSQL_USER__" => "kohaadmin",
+  "__WEBMASTER_EMAIL__" => 'webmaster@'.$mydomain,
   "__WEBSERVER_DOMAIN__" => $mydomain,
   "__WEBSERVER_HOST__" => $myhost,
   # This is set like this to rescue systems with broken DNS
   "__WEBSERVER_IP__" => $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?",
+  "__WEBSERVER_PORT__" => 80,
+  "__WEBSERVER_PORT_LIBRARIAN__" => 8080,
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
 );
