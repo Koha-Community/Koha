@@ -1,10 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Returns <!-- TMPL_VAR Name="title" --></title>
+<title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Check In</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -12,7 +15,8 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<h1>Circulation &rsaquo; Returns</h1>
+
+<h1>Check In</h1>
 
 <!-- case of a mistake in transfert loop -->
 <!-- TMPL_IF Name="WrongTransfer" -->
@@ -185,9 +189,8 @@
 <!-- TMPL_ELSE -->
     <form method="post" action="/cgi-bin/koha/circ/returns.pl"  name="mainform" id="mainform">
             <fieldset>
-            <legend>Enter item barcode</legend>
             <p>
-                <input name="barcode" id="barcode" size="14" maxlength="14" class="focus" />
+                <label for="barcode">Enter item barcode: </label><input name="barcode" id="barcode" size="14" maxlength="14" class="focus" />
                 <input type="submit" value="Submit" />
             </p>
             <!-- TMPL_LOOP Name="inputloop" -->
@@ -238,7 +241,7 @@
     </table>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF Name="riloop" -->
-    <h2>Returned items</h2>
+    <h2>Checked-In items</h2>
     <table>
         <tr>
             <th>Title</th>
@@ -282,5 +285,5 @@
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

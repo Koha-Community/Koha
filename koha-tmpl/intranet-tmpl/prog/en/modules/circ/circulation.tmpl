@@ -54,10 +54,14 @@
     }
 
 </script>
+
 </head>
 <body>
+
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo;<!-- TMPL_IF NAME="borrowernumber" --> <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- TMPL_ELSE --> <strong>Checkouts</strong><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -68,7 +72,7 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
     <h1>Checkouts</h1>
 <!-- TMPL_ELSE -->
-    <h1>Circulation &rsaquo; Checkouts</h1>
+<!--     <h1>Circulation &rsaquo; Checkouts</h1> -->
 <!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
@@ -166,7 +170,7 @@
 
 <!-- TMPL_UNLESS NAME="CGIselectborrower"-->
 <!-- No card entered yet -->
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
+<!-- <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform" id="mainform">
 <fieldset id="circ_circulation_borrower_search">
     <legend>Search for a patron</legend>
 
@@ -179,7 +183,7 @@
     <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
     <input type="submit" value="Submit" />
 </fieldset>
-</form>
+</form> -->
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 
@@ -884,5 +888,5 @@ No patron matched <!-- TMPL_VAR name="message" -->
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
