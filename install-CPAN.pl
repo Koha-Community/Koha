@@ -29,6 +29,7 @@
 use CPAN;
 CPAN::Config->load;
 $cpan = $CPAN::Config->{cpan_home};
+mkdir $cpan.'/sources/authors/id';
 mkdir $cpan.'/sources/authors/id/K';
 mkdir $cpan.'/sources/authors/id/K/KO';
 mkdir $cpan.'/sources/authors/id/K/KO/KOHA';
