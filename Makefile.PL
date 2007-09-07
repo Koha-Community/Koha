@@ -163,10 +163,10 @@ WriteMakefile(
 
    PL_FILES => { # generator => target(s)
       'rewrite-config.PL' => [
-         '$(INST_LIBDIR)/koha/etc/koha-conf.xml',
-         '$(INST_LIBDIR)/koha/etc/koha-httpd.conf',
-         '$(INST_LIBDIR)/koha/etc/zebra-biblios.cfg',
-         '$(INST_LIBDIR)/koha/etc/zebra-authorities.cfg'
+         '$(PREFIX)/share/koha/etc/koha-conf.xml',
+         '$(PREFIX)/share/koha/etc/koha-httpd.conf',
+         '$(PREFIX)/share/koha/etc/zebra-biblios.cfg',
+         '$(PREFIX)/share/koha/etc/zebra-authorities.cfg'
          ]
    }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
@@ -206,15 +206,15 @@ C4/*.pm is copied to perl's lib namespace.
 
 =pod
 
-CGIs are copied to koha/cgi-bin
-and other scripts to koha/scripts.
+CGIs are copied to $(PREFIX)/lib/cgi-bin/koha/
+and other scripts to koha/
 
 =cut
 	foreach my $src ("mainpage.pl","help.pl",glob("*/*.pl"),glob("installer/*.pm"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
 		if ($src =~ /(misc|updater|rss)\//) {
-			$result{$src} = '$(INST_LIBDIR)/koha/scripts/'.$src;
+			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
 		} else {
-			$result{$src} = '$(INST_LIBDIR)/koha/cgi-bin/'.$src;
+			$result{$src} = '$(PREFIX)/lib/cgi-bin/koha/'.$src;
 		}
 	}
 
@@ -236,12 +236,12 @@ excluding non-files, CVS files and whitespace in filenames.
 	}
 =pod
 
-etc files are copied to koha/etc
+etc files are copied to /usr/share/koha/etc/
 
 =cut
 	# Misc etc to koha/etc
 	foreach my $src (glob("etc/*")) {
-		$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
+		$result{$src} = '$(PREFIX)/share/koha/'.$src;
 	}
 
 

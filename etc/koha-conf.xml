@@ -11,11 +11,11 @@
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver"> 
     <directory>__BASE_DIR__/zebradb/biblios</directory>
-    <config>__BASE_DIR__/etc/zebra-biblios.cfg</config>
-    <cql2rpn>__BASE_DIR__/etc/pqf.properties</cql2rpn>
+    <config>__PREFIX__/share/koha/etc/zebra-biblios.cfg</config>
+    <cql2rpn>__PREFIX__/share/koha/etc/pqf.properties</cql2rpn>
 </server>
 <serverinfo id="biblioserver">
-        <ccl2rpn>__BASE_DIR__/ccl.properties</ccl2rpn>
+        <ccl2rpn>__PREFIX__/share/koha/etc/ccl.properties</ccl2rpn>
         <user>__ZEBRA_USER__</user>    
         <password>__ZEBRA_PASS__</password>
 </serverinfo>
@@ -23,10 +23,10 @@
 <!-- AUTHORITY RECORDS -->
 <server id="authorityserver"  listenref="authorityserver" >
     <directory>__BASE_DIR__/zebradb/authorities</directory>
-    <config>__BASE_DIR__/etc/zebra-authorities.cfg</config>
+    <config>__PREFIX__/share/koha/etc/zebra-authorities.cfg</config>
 </server>
 <serverinfo id="authorityserver">
-    <ccl2rpn>__BASE_DIR__/etc/ccl.properties</ccl2rpn>
+    <ccl2rpn>__PREFIX__/share/koha/etc/ccl.properties</ccl2rpn>
     <user>__ZEBRA_USER__</user>
     <password>__ZEBRA_PASS__</password>
 </serverinfo>
@@ -41,10 +41,10 @@
  <biblioservershadow>1</biblioservershadow>
  <authorityserver>authorities</authorityserver>
  <authorityservershadow>1</authorityservershadow>
- <intranetdir>__BASE_DIR__/intranet/cgi-bin</intranetdir>
- <opacdir>__BASE_DIR__/opac/cgi-bin</opacdir>
- <opachtdocs>__BASE_DIR__/opac/htdocs/opac-tmpl</opachtdocs>
- <intrahtdocs>__BASE_DIR__/intranet/htdocs/intranet-tmpl</intrahtdocs>
- <includes>__BASE_DIR__/intranet/htdocs/intranet-tmpl/default/en/includes/</includes>
+ <intranetdir>__CGI_DIR__</intranetdir>
+ <opacdir>__CGI_DIR__/opac</opacdir>
+ <opachtdocs>__BASE_DIR__/templates/koha-tmpl/opac-tmpl</opachtdocs>
+ <intrahtdocs>__BASE_DIR__/templates/koha-tmpl/intranet-tmpl</intrahtdocs>
+ <includes>__BASE_DIR__/templates/koha-tmpl/intranet-tmpl/default/en/includes/</includes>
 </config>
 </yazgfs>

@@ -41,7 +41,9 @@ guesses worked out by the script.
 
 The following configuration keywords are available:
 
-BASE_DIR, MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
+PREFIX,
+BASE_DIR, CGI_DIR, LOG_DIR,
+MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
 WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
 
 =head1 EXAMPLES
@@ -61,16 +63,20 @@ $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
 # This is set here to rescue systems with broken DNS
 $myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
+$prefix = $ENV{'PREFIX'} || "/usr";
 
 # These are our configuration guesses
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
-  "__BASE_DIR__" => sprintf("/usr/lib/perl5/site-perl/%vd/koha",$^V),
+  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl5/site_perl/%vd",$^V))."/koha",
+  "__CGI_DIR__" => $prefix."/lib/cgi-bin/koha",
+  "__LOG_DIR__" => "/var/log",
   "__MYSQL_DB__" => "koha",
   "__MYSQL_HOST__" => $myhost,
   "__MYSQL_PASS__" => "katikoan",
   "__MYSQL_USER__" => "kohaadmin",
+  "__PREFIX__" => $prefix,
   "__WEBMASTER_EMAIL__" => 'webmaster@'.$mydomain,
   "__WEBSERVER_DOMAIN__" => $mydomain,
   "__WEBSERVER_HOST__" => $myhost,
