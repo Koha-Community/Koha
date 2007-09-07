@@ -12,6 +12,10 @@ body {
 	text-align : left;
 }
 
+form {
+	display : inline;
+}
+
 h1 {
 	font-size : 182%;
 	font-weight : bold;
@@ -40,6 +44,14 @@ h5 {
 h6 {
 	font-size : 93%;
 	font-weight : bold;
+}
+
+strong {
+	font-weight : bold;
+}
+
+em {
+	font-style : italic;
 }
 
 #hd {
@@ -74,7 +86,7 @@ h6 {
 #login	 {
 	position : absolute;
 	top : 3px;
-	right : 40px;
+	right : .5em;
 }
 
 #login a {
@@ -91,6 +103,7 @@ li {
 }
 
 #header {
+	background-color : #F3F3F3;
 	border-bottom : 1px solid #E8E8E8;
 }
 
@@ -101,12 +114,13 @@ li {
 }
 
 #sitetitle {
-	background-image : url("../../img/koha-logo-black.png");
+/*	background-image : url("../../img/koha-logo-black.png");
 	background-position : 5px 2px;
 	background-repeat : no-repeat;
 	float : left;
 	height : 54px;
-	padding-left : 50px;
+	padding-left : 50px;*/
+	border-bottom : 1px solid #E8E8E8;
 }
 
 #sitetitle h1 {
@@ -120,12 +134,33 @@ li {
 
 #toplevelnav {
 	float : left;
-	line-height : 54px;
-	margin-left : 1em;
+	line-height : 2em;
+}
+
+#toplevelnav li.more a {
+	background-image: url("../../img/more-arrow.gif");
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right : 13px;
 }
 
 #submenu {
-	margin : .5em 0;
+	margin : 0 0 .5em 0;
+	padding : 0;
+}
+
+#submenu ul {
+	margin : 0;
+	padding : 0;	
+}
+
+#submenu ul li {
+	padding-left : 0;
+}
+
+#toplevelnav ul {
+	margin : 0;
+	padding : 0;
 }
 
 #toplevelnav li, #submenu li {
@@ -189,4 +224,96 @@ legend {
 	padding : 0;
 }
 
+#breadcrumbs {
+	background-color : #F3F3F3;
+	border-bottom : 1px solid #E8E8E8;
+	font-size : 90%;
+	padding :.2em .5em .4em .5em;
+}
 
+#commonsearch {
+	display : inline;
+}
+
+
+div#header_search {
+	background-image : url("../../img/koha-logo-medium.gif");
+	background-position : .5em .5em;
+	background-repeat : no-repeat;
+	padding-left : 14.2em;
+	margin: 1em .5em 1em 0;
+}
+
+div#header_search ul.link-tabs {
+	font-family : Arial, Geneva, sans-serif;
+	margin-bottom : -4px;
+}
+
+div#header_search ul.link-tabs li.on a, div#header_search ul.link-tabs li a, div#header_search ul.link-tabs li.off a {
+	padding : 0.1em .5em .2em .5em;
+}
+
+div#circ_search,div#catalog_search {
+	border-top : 1px solid #EEEEEE;
+	border-left : 1px solid #EEEEEE;
+	border-right : 1px solid #666666;
+	border-bottom : 1px solid #CCCCCC;
+	padding : .5em 2em .5em 1em;
+}
+
+div#circ_search {
+	display : block;
+}
+
+div#catalog_search {
+	display : none;
+}
+
+/* Panel-Switch Tabs */
+ul.link-tabs {
+	list-style-type: none;
+	margin: 2px 0 9px 5px;
+	padding: 0;
+}
+
+ul.link-tabs li {
+	display: inline;
+	padding: 0px;
+}
+
+ul.link-tabs li a {
+	border-bottom: 1px solid #333333;
+	border-left : 1px solid #DDDDDD;
+	border-right : 1px solid #666666;
+	padding: .2em 1.2em .2em 1.2em;
+	text-decoration: none;
+}
+
+ul.link-tabs li.off a {
+	background-color: #EEEEEB;
+	border-top: 1px solid #DDDDDD;
+	margin-right : 1px;
+}
+
+ul.link-tabs li.off a:hover {
+	background-color: #FFFFEC;
+	border-bottom: 1px solid #333333;
+	border-left : 1px solid #BEBF84;
+	border-right : 2px solid #333333;
+	margin-right : 0;
+	padding: .2em 1.2em .2em 1.2em;
+}
+
+ul.link-tabs li.on a {
+	background-color: #FFFFCC;
+	border-top: 1px solid #FFFFCC;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FFCC66;
+	font-weight : bold;
+}
+
+div#header_search .tip {
+	font-size: 93%;
+	color : Gray;
+}
