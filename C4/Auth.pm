@@ -562,6 +562,7 @@ sub checkauth {
                 $session->param('emailaddress',$emailaddress);
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
+				$session->param('branchprinter',$branchprinter);
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian

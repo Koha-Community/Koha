@@ -34,6 +34,8 @@ use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 use C4::Reserves;
+use C4::Context;
+use CGI::Session;
 
 use Date::Calc qw(
   Today
@@ -49,6 +51,31 @@ use Date::Calc qw(
 #
 my $query = new CGI;
 
+# new op dev the branch and the printer are now defined by the userenv
+# but first we have to check if someone has tried to change them
+
+my $branch = $query->param('branch');
+if ($branch){
+    # update our session so the userenv is updated
+	my $dbh=C4::Context->dbh;
+	my $sessionID = $query->cookie("CGISESSID") ;
+	my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+	$session->param('branch',$branch);
+	my $branchname = GetBranchName($branch);
+	$session->param('branchname',$branchname);
+}
+
+my $printer = $query->param('printer');
+if ($printer){
+    # update our session so the userenv is updated
+	my $dbh=C4::Context->dbh;
+	my $sessionID = $query->cookie("CGISESSID") ;
+	my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+	$session->param('branchprinter',$printer);
+
+}
+
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {
         template_name   => 'circ/circulation.tmpl',
@@ -61,16 +88,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $branches = GetBranches();
 
 my $printers = GetPrinters();
-my $printer = GetPrinter($query, $printers);
+
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
 #$findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrowernumber');
 
-# new op dev the branch and the printer are now defined by the userenv
-my $branch  = C4::Context->userenv->{'branch'};
+$branch  = C4::Context->userenv->{'branch'};	
 $printer = C4::Context->userenv->{'branchprinter'};
+
 
 # If Autolocated is not activated, we show the Circulation Parameters to chage settings of librarian
     if (C4::Context->preference("AutoLocation") ne 1)

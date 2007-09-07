@@ -803,7 +803,7 @@ set_userenv is called in Auth.pm
 
 #'
 sub set_userenv{
-    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress)= @_;
+    my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
     my $var=$context->{"activeuser"};
     my $cell = {
         "number"     => $usernum,
@@ -816,6 +816,7 @@ sub set_userenv{
         "branchname" => $branchname,
         "flags"      => $userflags,
         "emailaddress"    => $emailaddress,
+		"branchprinter"    => $branchprinter
     };
     $context->{userenv}->{$var} = $cell;
     return $cell;

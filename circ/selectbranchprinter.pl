@@ -19,6 +19,8 @@
 
 use strict;
 use CGI qw/:standard/;
+
+use C4::Context;
 use C4::Circulation;
 use C4::Output;
 use C4::Auth;
@@ -39,14 +41,25 @@ my $printers = GetPrinters();
 my $branch   = $query->param('branch');
 my $printer  = $query->param('printer');
 
-my %cookie = $query->cookie('userenv');
-($branch)  || ( $branch  = $cookie{'branch'} );
-($printer) || ( $printer = $cookie{'printer'} );
+# set header with cookie....
 
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "circ/selectbranchprinter.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { circulate => 1 },
+    }
+);
+
+
+($branch)  || ( $branch  = C4::Context->userenv->{'branch'} );
+($printer) || ( $printer = C4::Context->userenv->{'branchprinter'} );
 ( $branches->{$branch} )  || ( $branch  = ( keys %$branches )[0] );
 ( $printers->{$printer} ) || ( $printer = ( keys %$printers )[0] );
 
-# is you force a selection....
+# if you force a selection....
 my $oldbranch  = $branch;
 my $oldprinter = $printer;
 
@@ -92,17 +105,7 @@ if ( $branchcount == 1 ) {
 
 ################################################################################
 # Start writing page....
-# set header with cookie....
 
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "circ/selectbranchprinter.tmpl",
-        query           => $query,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { circulate => 1 },
-    }
-);
 $template->param(
     oneprinter              => $oneprinter,
     onebranch               => $onebranch,
