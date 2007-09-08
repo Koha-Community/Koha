@@ -83,6 +83,10 @@ for (my $i=0; $i<$count; $i++){
 	my %line;
 	$line{bookfundname} = $results[$i]->{'bookfundname'};
 	$line{budgetamount} = $results[$i]->{'budgetamount'};
+	$line{aqbudgetid} = $results[$i]->{'aqbudgetid'};
+	$line{bookfundid} = $results[$i]->{'bookfundid'};
+	$line{sdate} = $results[$i]->{'startdate'};
+	$line{edate} = $results[$i]->{'enddate'};
 	$line{spent} = sprintf  ("%.2f", $spent);
 	$line{comtd} = sprintf  ("%.2f",$comtd);
 	$line{avail}  = sprintf  ("%.2f",$avail);
