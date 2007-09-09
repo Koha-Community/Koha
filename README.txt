@@ -40,9 +40,9 @@ Default installation instructions:
 1. perl Makefile.PL
 2. make
 3. sudo make install
-4. ln -s /usr/lib/perl5/site-perl/*/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
+4. ln -s /usr/share/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
 5. a2ensite koha && /etc/init.d/apache reload
-6. zebrasrv -c /usr/lib/perl5/site-perl/*/koha/etc/koha-conf.xml
+6. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
 7. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
@@ -53,6 +53,22 @@ For instructions on how to override the default settings, run
 perldoc rewrite-config.PL
 
 
+IF YOU HAVE PROBLEMS
+====================
+
+IF THIS IS A PRE-RELEASE TREE: please contact developers by email via
+http://lists.nongnu.org/mailman/listinfo/koha-devel
+or
+http://dir.gmane.org/gmane.education.libraries.koha.devel
+
+IF THIS IS A RELEASED VERSION: please see the support pages at
+http://www.koha.org/
+
+Released versions usually have three-digit numbers, like 3.00.01,
+while other version number styles are usually snapshots or previews.
+
+
 DEVELOPER NOTES
+===============
 
 For instructions on how to package releases, run perldoc Makefile.PL
