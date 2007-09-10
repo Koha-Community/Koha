@@ -1,4 +1,4 @@
-<div class="yui-b"><ul id="navigation">
+<ul id="navigation">
 	<li>    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="holds to retrieve off the shelf">Holds to pull</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Holds awaiting pickup</a></li>
@@ -9,4 +9,3 @@
 	<li>    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Fines</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Daily reconciliation</a></li>
 </ul>
-</div>
