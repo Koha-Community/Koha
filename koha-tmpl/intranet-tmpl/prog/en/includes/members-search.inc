@@ -3,9 +3,9 @@
 	<div class="tip" id="residenttip">Enter patron card number or partial name:</div>
 	<div id="patron_search">
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="member" size="25" name="member" type="text" />
+    <input id="searchmember" size="25" name="member" type="text" />
     order by:
-    <select name="orderby" id="orderby">
+    <select name="orderby" id="searchorderby">
     <option value="surname,firstname">Surname</option>
     <option value="cardnumber">Cardnumber</option>
     </select>

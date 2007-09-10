@@ -61,7 +61,7 @@ if ($input->param('newflags')) {
     while (my ($bit, $flag, $flagdesc) = $sth->fetchrow) {
 	my $checked='';
 	if ($accessflags->{$flag}) {
-	    $checked='checked';
+	    $checked= 1;
 	}
 	my %row = ( bit => $bit,
 		 flag => $flag,

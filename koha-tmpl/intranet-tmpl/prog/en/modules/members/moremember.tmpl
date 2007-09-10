@@ -24,20 +24,17 @@ function confirm_reregistration() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></div>
-
-
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron doesn't exist.<a href="javascript:back();">Go Back</a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo; <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
 
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
@@ -200,7 +197,7 @@ function confirm_reregistration() {
        
 	 <!-- TMPL_IF name="isguarantee" -->
             <!-- TMPL_IF NAME="guaranteeloop" -->
-                <p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
+                <p><label>Guarantees:</label></p><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul>
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="guarantorborrowernumber" -->
@@ -261,7 +258,7 @@ function confirm_reregistration() {
             <td>
                 <!-- TMPL_VAR NAME="itemtype_description" -->
                 <!-- TMPL_IF NAME="itemtype_image" -->
-                <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
+                <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
                 <!-- /TMPL_IF -->
             </td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
@@ -360,7 +357,9 @@ function confirm_reregistration() {
 <!-- /TMPL_IF --> <!-- unknowuser -->
 </div>
 </div>
-</div>
 
+<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

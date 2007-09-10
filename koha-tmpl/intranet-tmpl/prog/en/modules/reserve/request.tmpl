@@ -1,7 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script language="JavaScript">
+<script type="text/css">
+// <![CDATA[ 
 function check() {
 	var msg = "";
 	var count_reserv = 0;
@@ -47,6 +48,7 @@ if (alreadyreserved > "0"){
 		return(false);
 	}
 }
+// ]]>
 </script>
 </head>
 <body>
@@ -215,7 +217,7 @@ if (alreadyreserved > "0"){
                     <!-- TMPL_IF NAME="nocancel" -->
                             Can't be cancelled, when item on transfert
                             <!-- TMPL_ELSE -->
-                            <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?'))    
+                            <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?'))    
                                     {return true;}
                     else {return false;}">Cancel A reserve
                     <span> Item reserved for :

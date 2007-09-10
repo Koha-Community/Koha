@@ -3,14 +3,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="members-search.inc" -->
-
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Guarantor Search</div>
 
 <div id="doc" class="yui-t7">
    <div id="bd">
-	<div class="yui-g">
+	
 
 <h1>Search for guarantor</h1>
 	<form action="/cgi-bin/koha/members/guarantor_search.pl" method="post">
@@ -21,7 +17,6 @@
 		</select>
 		<input type="submit" class="button" value="Search" />
 	</form>
-</div>
 
 <!--TMPL_IF NAME="results" -->
 	<p>Searched for <!-- TMPL_VAR NAME="member" -->, <!-- TMPL_VAR Name ="numresults" --> borrower(s) found:</p>
@@ -34,11 +29,7 @@
 			<th>Address</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="resultsloop" -->
-			<!-- TMPL_IF NAME="background" -->
-				<tr bgcolor="#ffffcc">
-			<!-- TMPL_ELSE -->
-				<tr bgcolor="white">
-			<!-- /TMPL_IF -->
+			<tr>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
 				<td><p><a href="javascript:window.opener.document.form.guarantorid.value=<!-- TMPL_VAR NAME="borrowernumber" -->;window.opener.document.form.guarantorsearch.value='Modify Guarantor';window.opener.document.form.guarantorinfo.value='<!-- TMPL_VAR NAME="guarantorinfo" -->';self.close();"><!-- TMPL_VAR NAME="surname" --></a></p>
 				<td><b><!-- TMPL_VAR NAME="firstname" --></b></td> 
@@ -47,14 +38,7 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-</div>
-</div>
 <!--/TMPL_IF-->
 
-
 </div>
-</div>
-</div>
-
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

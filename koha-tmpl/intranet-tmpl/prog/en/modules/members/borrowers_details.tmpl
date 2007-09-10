@@ -3,55 +3,50 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<div id="doc3" class="yui-t2">
-   
+<div id="doc" class="yui-t7">
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
 
-	<h1>PATRON DETAILS</h1>
+	<h1>Patron Details</h1>
 	
 	<form name="form" method="post" action="/cgi-bin/members/borrowers_details.pl">
-	<div >
 	<!-- TMPL_IF NAME="Institution"-->	
 		
 		<p>
 		
-			<label>Patron category</label>		
-			<input  type="text" name="description" size="20" value="<!-- TMPL_VAR NAME="description" -->" />
+			<label for="description">Patron category</label>		
+			<input  type="text" id="description" name="description" size="20" value="<!-- TMPL_VAR NAME="description" -->" />
 		</p>
 		<p>
 			
-			<label>Organisation name</label>
-			<input  style="text-transform:uppercase;" type="text" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+			<label for="surname">Organisation name</label>
+			<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
 		</p>
 		
 	<!-- TMPL_ELSE -->	
 
 		<p>
-			<label>Patron category</label>
-			<input  type="text" name="description" size="20" value="<!-- TMPL_VAR NAME="description" -->" />
+			<label for="description">Patron category</label>
+			<input  type="text" name="description" id="description" size="20" value="<!-- TMPL_VAR NAME="description" -->" />
 			</p>
 		<p>
-			<label>Title</label>
-			<input  type="text" name="title" size="20" value="<!-- TMPL_VAR NAME="title" -->" />
+			<label for="title">Title</label>
+			<input  type="text" name="title" id="title" size="20" value="<!-- TMPL_VAR NAME="title" -->" />
 			
 		</p>
 		<p>
-			<label>Surname</label>
-			<input  style="text-transform:uppercase;" type="text" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
+			<label for="surname">Surname</label>
+			<input  style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20" value="<!-- TMPL_VAR NAME="surname" -->" />
 		</p>
 			
 		<p>	
 			
-			<label>Firstname</label>
-			<input  style="text-transform:capitalize;" type="text" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
+			<label for="firstname">Firstname</label>
+			<input  style="text-transform:capitalize;" type="text" id="firstname" name="firstname" size="20" value="<!-- TMPL_VAR NAME="firstname" -->" />
 		</p>
 		<p>
-			<label>Date of birth </label>
-			<input  type="text" name="dateofbirth" size="20" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+			<label for="dateofbirth">Date of birth </label>
+			<input  type="text" name="dateofbirth" id="dateofbirth" size="20" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
 		</p>		
 		
 		
@@ -59,17 +54,10 @@
 		
 	<!-- /TMPL_IF -->
 	<p>
-		<div align="center">
 		<a href="#" onclick="window.close()">Close Window</a>
-		</div>
 	</p>
 	
 	</form>
 
-
 </div>
-</div>
-</div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

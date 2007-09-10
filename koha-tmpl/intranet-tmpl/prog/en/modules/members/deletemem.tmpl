@@ -4,28 +4,31 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Cannot Delete Patron</div>
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 	<h3>Cannot Delete Patron</h3>
-		<!-- TMPL_IF name="ItemsOnIssues" -->
-			Patron has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.
+		<ul><!-- TMPL_IF name="ItemsOnIssues" -->
+			<li>Patron has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.</li>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="charges -->
-			Patron has <!-- TMPL_VAR name="charges" --> in fines.
+			<li>Patron has <!-- TMPL_VAR name="charges" --> in fines.</li>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF name="guarantees" -->
-			Patron's record has guaranteed accounts attached.
-		<!-- /TMPL_IF -->
+			<li>Patron's record has guaranteed accounts attached.</li>
+		<!-- /TMPL_IF --></ul>
 
 </div>
 </div>
-</div>
 
+<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
