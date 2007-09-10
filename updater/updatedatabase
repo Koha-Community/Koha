@@ -1640,8 +1640,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
         next if $table->{Name} eq 'auth_word';
         next if $table->{Name} eq 'auth_subfield_table';
         if ($table->{Engine} ne 'InnoDB') {
-            $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
             print "moving $table->{Name} to InnoDB\n";
+            $dbh->do("ALTER TABLE $table->{Name} TYPE = innodb");
         }
         unless ($table->{Collation} =~ /^utf8/) {
             print "moving $table->{Name} to utf8\n";
