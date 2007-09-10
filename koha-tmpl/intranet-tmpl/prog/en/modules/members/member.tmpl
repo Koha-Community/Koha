@@ -4,16 +4,15 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="searching" -->Search Results<!-- TMPL_ELSE -->Search<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
-<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">patrons</a><!-- TMPL_IF NAME="searching" --> &rsaquo; <a>Search Results</a><!-- /TMPL_IF -->
 
 <form name="f" action="/cgi-bin/koha/members/member.pl" method="post">
     <label for="member">Search by name or barcode:</label>
@@ -102,5 +101,5 @@ document.f.member.focus();
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

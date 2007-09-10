@@ -1,6 +1,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/clickmenu.css" />
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
 
 <!-- TMPL_IF NAME="css_libs" -->
@@ -22,6 +23,7 @@
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.clickmenu.pack.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/staff-global.js"></script>
 <!-- TMPL_IF NAME="js_libs" -->
 <!-- TMPL_LOOP NAME="js_libs" -->
@@ -41,7 +43,10 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="widget" -->"></script>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
-
+<script type="text/javascript">$(document).ready(function() 
+{ 
+    $('#toplevelmenu').clickMenu(); 
+}); </script>
 <!-- TMPL_IF NAME="popup" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/intranet2popup.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="login" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/login.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="wizard" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/wizard.css" />

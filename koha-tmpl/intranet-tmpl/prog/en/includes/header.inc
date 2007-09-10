@@ -1,11 +1,17 @@
 <div id="header">
 	
 <div id="toplevelnav">
-<ul>
+<ul id="toplevelmenu">
 	<li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li>
 	<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>
 	<li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li>
-	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a></li>
+	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul>
+	<li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
+	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
+	<li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
+	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
+	<li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li>
+	<li><a href="/cgi-bin/koha/about.pl">About Koha</a></li></ul></li>
 </ul>
 </div>
 	

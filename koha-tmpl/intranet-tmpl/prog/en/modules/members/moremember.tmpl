@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Patron Details</title>
+<title>Koha &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 function confirm_deletion() {
@@ -22,7 +22,11 @@ function confirm_reregistration() {
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+<!-- TMPL_INCLUDE NAME="members-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></div>
+
+
 
 <div id="doc3" class="yui-t2">
    
@@ -358,5 +362,5 @@ function confirm_reregistration() {
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

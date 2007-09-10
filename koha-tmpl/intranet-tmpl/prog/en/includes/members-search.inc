@@ -1,6 +1,17 @@
-<!-- Begin Circulation Resident Search Box -->
+<!-- Begin Members Resident Search Box -->
 <div id="header_search">
 	<div class="tip" id="residenttip">Enter patron card number or partial name:</div>
+	<div id="patron_search">
+	<form action="/cgi-bin/koha/members/member.pl" method="post">
+    <input id="member" size="25" name="member" type="text" />
+    order by:
+    <select name="orderby" id="orderby">
+    <option value="surname,firstname">Surname</option>
+    <option value="cardnumber">Cardnumber</option>
+    </select>
+    <input value="Search" type="submit" />
+</form>
+	</div>
 	<div id="circ_search">
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
@@ -17,8 +28,9 @@
 		</form>
 	</div>
 			<ul class="link-tabs">
+			<li class="off"><a id="showPatronSearch" href="/cgi-bin/koha/members/members-home.pl">Search Patrons</a></li>
 			<li class="on"><a id="showCircSearch" href="/cgi-bin/koha/circ/circulation.pl">Check Out</a></li>
 			<li class="off"><a id="showCatSearch" href="/cgi-bin/koha/catalogue/advsearch.pl">Search the Catalog</a></li>
 			</ul>	
 </div>
-<!-- End Circulation Resident Search Box -->
+<!-- End Members Resident Search Box -->
