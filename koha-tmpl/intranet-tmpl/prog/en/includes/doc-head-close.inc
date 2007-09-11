@@ -2,8 +2,12 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/clickmenu.css" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs.css" />
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
-
+        <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
+        <!--[if lte IE 7]>
+        <link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs-ie.css" type="text/css" media="projection, screen">
+        <![endif]-->
 <!-- TMPL_IF NAME="css_libs" -->
 <!-- TMPL_LOOP NAME="css_libs" -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="lib" -->" />
@@ -24,6 +28,7 @@
 <!-- /TMPL_IF -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.clickmenu.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tabs.pack.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/staff-global.js"></script>
 <!-- TMPL_IF NAME="js_libs" -->
 <!-- TMPL_LOOP NAME="js_libs" -->
@@ -43,10 +48,6 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="widget" -->"></script>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
-<script type="text/javascript">$(document).ready(function() 
-{ 
-    $('#toplevelmenu').clickMenu(); 
-}); </script>
 <!-- TMPL_IF NAME="popup" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/intranet2popup.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="login" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/login.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="wizard" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/wizard.css" />
