@@ -34,7 +34,7 @@
 }
 .tabs-nav a, .tabs-nav a span {
     display: block;
-    padding: 4px 10px;
+	padding: .2em .5em .25em .5em;
 }
 .tabs-nav a {
     position: relative;
@@ -52,11 +52,15 @@
 	text-decoration : none;
 	top : -1px;
 }
+
+.tabs-nav .tabs-selected a:hover {
+	color : #0000CC;
+}
+
 .tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
     outline: 0; /* prevent dotted border in Firefox */
 }
-.tabs-nav a, .tabs-nav .tabs-disabled a:hover, .tabs-nav .tabs-disabled a:focus, .tabs-nav .tabs-disabled a:active {
-}
+
 .tabs-nav a span {
     width: 64px; /* IE 6 treats width as min-width */
     min-width: 64px;
