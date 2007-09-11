@@ -37,7 +37,9 @@ sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= "328".(int(rand(100000))+1);
 my $res="
-<script>
+<script type=\"text/javascript\">
+//<![CDATA[
+
 function Focus$function_name(subfield_managed) {
 return 1;
 }
@@ -51,6 +53,7 @@ function Clic$function_name(i) {
 	newin=window.open(\"plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 328\",'width=700,height=700,toolbar=false,scrollbars=yes');
 
 }
+//]]>
 </script>
 ";
 

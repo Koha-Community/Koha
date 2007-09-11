@@ -315,20 +315,20 @@ foreach my $tag (sort keys %{$tagslib}) {
                                                                   -default=>"$value",
                                                                   -labels => \%authorised_lib,
                                                                   -size=>1,
-                                                                    -tabindex=>'',
+                                                                  -tabindex=>'',
                                                                   -multiple=>0,
                                                                   );
     } elsif ($tagslib->{$tag}->{$subfield}->{thesaurus_category}) {
-      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
+      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\"  size=\"47\" maxlength=\"255\" /> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=$i',$i)\">...</a>";
           #"
     } elsif ($tagslib->{$tag}->{$subfield}->{'value_builder'}) {
       my $plugin="value_builder/".$tagslib->{$tag}->{$subfield}->{'value_builder'};
       require $plugin;
       my $extended_param = plugin_parameters($dbh,$record,$tagslib,$i,0);
       my ($function_name,$javascript) = plugin_javascript($dbh,$record,$tagslib,$i,0);
-      $subfield_data{marc_value}="<input type=\"text\" value=\"$value\" name=\"field_value\"  size=47 maxlength=255 OnFocus=\"javascript:Focus$function_name($i)\" OnBlur=\"javascript:Blur$function_name($i)\"> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
+      $subfield_data{marc_value}="<input type=\"text\" value=\"$value\" name=\"field_value\"  size=\"47\" maxlength=\"255\" onfocus=\"javascript:Focus$function_name($i)\" onblur=\"javascript:Blur$function_name($i)\" /> <a href=\"javascript:Clic$function_name($i)\">...</a> $javascript";
     } else {
-      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+      $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" />";
     }
 #        $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
         push(@loop_data, \%subfield_data);

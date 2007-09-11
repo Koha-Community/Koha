@@ -42,7 +42,9 @@ sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
 my $res="
-<script>
+<script type=\"text/javascript\">
+//<![CDATA[
+
 function Focus$function_name(subfield_managed) {
     if(!document.getElementById(\"$field_number\").value){
         document.getElementById(\"$field_number\").value = '     nam a22     7a 4500';
@@ -59,6 +61,7 @@ function Clic$function_name(i) {
 	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_leader.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
+//]]>
 </script>
 ";
 

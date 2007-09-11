@@ -67,10 +67,10 @@ function confirm_deletion(biblionumber,itemnumber) {
 
 <h1>Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 
-<div id="cataloguing_additem_itemlist">
-    <form method="post" action="additem.pl" name="f">
+    <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+<div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->
         <h2>Existing items</h2>
         <table>
@@ -120,9 +120,9 @@ function confirm_deletion(biblionumber,itemnumber) {
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
     <input type="button" value="Save Changes" onclick="Check(this.form)" accesskey="w" />
     <!-- /TMPL_IF -->
-    </form>
-</div>
 
+</div>
+    </form>
 </div>
 </div>
 <div class="yui-b">

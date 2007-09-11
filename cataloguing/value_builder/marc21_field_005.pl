@@ -81,7 +81,9 @@ if (length($sec)==1) {
 
 my $date = "$year$mon$mday$hour$min$sec".".0";
 my $res  = "
-<script>
+<script type=\"text/javascript\">
+//<![CDATA[
+
 function Blur$function_name(index) {
 //need this?
 }
@@ -99,6 +101,7 @@ return 0;
 
 function Clic$function_name(subfield_managed) {
 }
+//]]>
 </script>
 ";
 return ($function_name,$res);

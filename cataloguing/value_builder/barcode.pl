@@ -84,7 +84,9 @@ while (my ($count)= $sth->fetchrow_array) {
 }
 $nextnum++;
 my $res  = "
-<script>
+<script type=\"text/javascript\">
+//<![CDATA[
+
 function Blur$function_name(index) {
 //need this?
 }
@@ -102,6 +104,7 @@ return 0;
 
 function Clic$function_name(subfield_managed) {
 }
+//]]>
 </script>
 ";
 return ($function_name,$res);

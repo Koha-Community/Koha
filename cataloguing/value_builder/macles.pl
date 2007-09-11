@@ -45,7 +45,9 @@ sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= "macles".(int(rand(100000))+1);
 my $res="
-<script>
+<script type=\"text/javascript\">
+//<![CDATA[
+
 function Focus$function_name(subfield_managed) {
 return 1;
 }
@@ -58,6 +60,7 @@ function Clic$function_name(i) {
 	newin=window.open(\"plugin_launcher.pl?plugin_name=macles.pl&index=\"+i,\"MACLES\",',toolbar=false,scrollbars=yes');
 
 }
+//]]>
 </script>
 ";
 
