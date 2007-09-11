@@ -53,7 +53,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my %requiretables = (
         action_logs     => "(
                         `timestamp` TIMESTAMP NOT NULL ,
-                        `user` INT( 11 ) NOT NULL ,
+                        `user` INT( 11 ) NOT NULL default '0' ,
                         `module` TEXT default '',
                         `action` TEXT default '' ,
                         `object` INT(11) NULL ,
@@ -579,6 +579,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                 extra    => '',
             },
         ],
+		aqbookfund => [
+			{
+				field  => 'bookfundid',
+				type   => 'varchar(5)',
+				null   => 'NOT NULL',
+				key    => 'PRI',
+				default => '',
+				extra  => '',
+			},
+		],
+  
         aqbooksellers =>  [
             {
                 field    => 'id',
@@ -604,8 +615,29 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                 default    => '',
                 extra    => '',
             },
+			{
+				field   => 'invoicedisc',
+				type    => 'float(6,4)',
+				null    => 'NULL',
+				key     => '',
+				default => 'NULL',
+				extra   => '',
+			},
+				
         ],
         
+		aqbudget     =>  [
+			{
+				bookfundid varchar(5) NOT NULL default '',
+				field    => 'bookfundid',
+				type     => 'varchar(5)',
+				null     => 'NOT NULL',
+				key      => '',
+				default  => '',
+				exra     => '',
+			 },
+		],
+		
         accountlines =>  [
             {
                 field    => 'notify_id',
@@ -623,6 +655,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
                 default    => '0',
                 extra    => '',
             },
+			{
+				field   => 'accountno',
+				type    => 'smallint(6)',
+				null    => 'NOT NULL',
+				key     => '',
+				default => '0',
+				extra   => '',
+			},
+			{
+				field   => 'description',
+				type    => 'mediumtext',
+				null    => 'NULL',
+			},
+			{
+				field   => 'dispute',
+				type    => 'mediumtext',
+				null    => 'NULL',
+		    },
         
         ],
         
