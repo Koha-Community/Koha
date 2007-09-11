@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Catalogue MARC Detail</title>
+<title>Koha &rsaquo; Catalogue &rsaquo; MARC Details for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="JavaScript" type="text/javascript">
 function active(numlayer){
@@ -58,13 +58,15 @@ function Addbiblio(op) {
 <body>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a>  &rsaquo; MARC Details for <i><!-- TMPL_VAR NAME="title" --></i></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_UNLESS name="popup" -->
     <h1>MARC biblio : <!-- TMPL_VAR NAME="biblionumber" --></h1>
@@ -438,7 +440,8 @@ function Addbiblio(op) {
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

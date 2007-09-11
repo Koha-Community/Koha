@@ -2,14 +2,13 @@
 <title>Koha &rsaquo; Add to Virtual Shelf</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <style type="text/css">
-   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin:auto; text-align:left; }
+   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin: auto; text-align:left; }
    </style>
 </head>
 <body>
 
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
-	<div class="yui-g">
 
 
 <h1>Add 
@@ -19,8 +18,8 @@
     <!-- /TMPL_IF --> to a virtual shelf
 </h1>
 
-<form name="f1" method="POST" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     
     <b>Select an existing shelf</b>
     <p>
@@ -30,7 +29,7 @@
     <input type="submit" value="Add to virtual shelf" class="submit" />
 </form>
 <p>...or...</p>
-<form name="f2" method="POST" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+<form name="f2" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
     <b>Add to a new shelf:</b>
         <p>
             <label for="newvirtualshelf">
@@ -50,7 +49,6 @@
     <input type="submit" value="Add to virtual shelf" class="submit" /> 
 </form>
 
-</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -2,11 +2,13 @@
 <title>Koha &rsaquo; Z39.50 Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="javascript" type="text/javascript">
+//<![CDATA[
     function Import(GetThisOne) {
         opener.document.location= "../cataloguing/addbiblio.pl?z3950=1&oldbiblionumber=<!-- TMPL_VAR NAME="oldbiblionumber" -->&breedingid="+GetThisOne;
         self.close();
         return false;
     }
+//]]>
 </script>
 </head>
 <body>

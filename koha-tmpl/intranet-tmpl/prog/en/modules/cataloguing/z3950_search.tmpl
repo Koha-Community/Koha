@@ -2,17 +2,16 @@
 <title>Koha &rsaquo; Z39.50 Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
+//<![CDATA[
     function Import(GetThisOne,biblionumber) {
         opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
         window.close();
         return false;
     }
+//]]>
 </script>
 </head>
 <body>
-
-
-<div id="main-compact">
 
     <h2>Search for</h2>
     <!-- TMPL_IF NAME="title"--><p>Title: <!-- TMPL_VAR NAME="title"--></p><!-- /TMPL_IF -->
@@ -74,10 +73,8 @@
 </table>
 <!-- /TMPL_IF -->
 
-</div>
 <!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> servers to search</h3><!-- /TMPL_IF -->
 
-</div>
 </body>
 </html>
 

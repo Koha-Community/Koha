@@ -1,25 +1,27 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Catalogue Issue History</title>
+<title>Koha &rsaquo; Catalogue &rsaquo; Checkout History for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a>  &rsaquo; Checkout History for <i><!-- TMPL_VAR NAME="title" --></i></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
-<h1>Issue history for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
+<h1>Checkout history for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
 
 <!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
     
 <div class="searchresults">
     <!-- TMPL_IF NAME="issues" -->
-        <p><b>Has been issued <!-- TMPL_VAR NAME="total" --> times</b></p>
+        <p><b>Has been checked out <!-- TMPL_VAR NAME="total" --> times</b></p>
         <table>
             <tr><th>Date</th>
             <th>Surname</th>
@@ -77,14 +79,15 @@
 		</table>
     <!-- TMPL_ELSE -->
         <p>
-        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->) <span class="problem">has never been issued.</span></p>
+        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->) <span class="problem">has never been checked out.</span></p>
         
     <!-- /TMPL_IF -->
 </div>
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

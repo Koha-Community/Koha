@@ -4,13 +4,13 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
     <!-- TMPL_IF NAME="koha_spsuggest" -->
         <div style="font-size: 12px;">Did you mean: 
@@ -384,10 +384,10 @@
     
     <!-- /TMPL_IF -->
 
-
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

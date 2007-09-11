@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Cataloging &rsaquo; Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
+//<![CDATA[
 function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
@@ -51,29 +52,20 @@ function confirm_deletion(biblionumber,itemnumber) {
     window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
     }
 }
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 
 <h1>Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
-
-<div id="action">
-<ul>
-	<li>    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Edit Bibliographic Record</a></li>
-	<li>    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal view</a></li>
-	<li>    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">View MARC in Catalog</a></li>
-	<li>    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">View ISBD in Catalog</a></li>
-</ul>
-</div>
 
 <div id="cataloguing_additem_itemlist">
     <form method="post" action="additem.pl" name="f">
@@ -133,7 +125,8 @@ function confirm_deletion(biblionumber,itemnumber) {
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="additem-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
