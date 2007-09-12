@@ -3352,7 +3352,7 @@ sub _koha_modify_biblioitem {
     $biblioitem->{'biblionumber'} =
       $dbh->quote( $biblioitem->{'biblionumber'} );
 
-    $query = "Update biblioitems set
+    $query = "UPDATE biblioitems SET
         itemtype        = $biblioitem->{'itemtype'},
         url             = $biblioitem->{'url'},
         isbn            = $biblioitem->{'isbn'},
@@ -3420,8 +3420,11 @@ sub _koha_add_biblioitem {
             volumeddesc      = ?, illus           = ?,
             pages            = ?, notes           = ?,
             size             = ?, lccn            = ?,
-            marc             = ?, lcsort          =?,
-            place            = ?, ccode           = ?
+            marc             = ?, lcsort          = ?,
+            place            = ?, ccode           = ?,
+            collectiontitle  = ?, collectionissn  = ?,
+            collectionvolume = ?, editionstatement= ?,
+            editionresponsability= ?
           "
     );
     my ($lcsort) =
@@ -3439,7 +3442,10 @@ sub _koha_add_biblioitem {
         $biblioitem->{'pages'},          $biblioitem->{'bnotes'},
         $biblioitem->{'size'},           $biblioitem->{'lccn'},
         $biblioitem->{'marc'},           $biblioitem->{'place'},
-        $lcsort,                         $biblioitem->{'ccode'}
+        $lcsort,                         $biblioitem->{'ccode'},
+        $biblioitem->{'collectiontitle'},$biblioitem->{'collectionissn'},
+        $biblioitem->{'collectionvolume'},$biblioitem->{'editionstatement'},
+        $biblioitem->{'editionresponsability'}
     );
     $sth->finish;
     return ($bibitemnum);
