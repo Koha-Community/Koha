@@ -569,95 +569,41 @@ Modify borrower's data
 sub ModMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
-    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'} );
-    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} );
-
-    #  	warn "num user".$data{'borrowernumber'};
+    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} ) if ($data{'dateofbirth'} );
+    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'} ) if ($data{'dateexpiry'} );
+    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} ) if ($data{'dateenrolled'} );
+#     warn Data::Dumper::Dumper(%data);
+    #   warn "num user".$data{'borrowernumber'};
+    my $qborrower=$dbh->prepare("SHOW columns from borrowers");
+    $qborrower->execute;
+    my %hashborrowerfields;  
+    while (my ($field)=$qborrower->fetchrow){
+      $hashborrowerfields{$field}=1;
+    }  
     my $query;
     my $sth;
     $data{'userid'} = '' if ( $data{'password'} eq '' );
-
+    my @parameters;  
+    foreach (keys %data)
+    {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_} and $data{$_})} ;
+    
     # test to know if u must update or not the borrower password
     if ( $data{'password'} eq '****' ) {
 
-        $query = "UPDATE borrowers SET 
-		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
-		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
-		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
-		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
-		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
-		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
-		ethnotes = ?,sex = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
-		WHERE borrowernumber=$data{'borrowernumber'}";
+        $query = "UPDATE borrowers SET ".join (",",@parameters)
+    ." WHERE borrowernumber=$data{'borrowernumber'}";
+#         warn "$query";
         $sth = $dbh->prepare($query);
-        $sth->execute(
-            $data{'cardnumber'},       $data{'surname'},
-            $data{'firstname'},        $data{'title'},
-            $data{'othernames'},       $data{'initials'},
-            $data{'streetnumber'},     $data{'streettype'},
-            $data{'address'},          $data{'address2'},
-            $data{'city'},             $data{'zipcode'},
-            $data{'email'},            $data{'phone'},
-            $data{'mobile'},           $data{'fax'},
-            $data{'emailpro'},         $data{'phonepro'},
-            $data{'B_streetnumber'},   $data{'B_streettype'},
-            $data{'B_address'},        $data{'B_city'},
-            $data{'B_zipcode'},        $data{'B_email'},
-            $data{'B_phone'},          $data{'dateofbirth'},
-            $data{'branchcode'},       $data{'categorycode'},
-            $data{'dateenrolled'},     $data{'dateexpiry'},
-            $data{'gonenoaddress'},    $data{'lost'},
-            $data{'debarred'},         $data{'contactname'},
-            $data{'contactfirstname'}, $data{'contacttitle'},
-            $data{'guarantorid'},      $data{'borrowernotes'},
-            $data{'relationship'},     $data{'ethnicity'},
-            $data{'ethnotes'},         $data{'sex'},
-            $data{'userid'},           $data{'opacnote'},
-            $data{'contactnote'},      $data{'sort1'},
-            $data{'sort2'}
-        );
+        $sth->execute;
     }
     else {
 
         ( $data{'password'} = md5_base64( $data{'password'} ) )
           if ( $data{'password'} ne '' );
-        $query = "UPDATE borrowers SET 
-		cardnumber  = ?,surname = ?,firstname = ?,title = ?,othernames = ?,initials = ?,
-		streetnumber = ?,streettype = ?,address = ?,address2 = ?,city = ?,zipcode = ?,
-		email = ?,phone = ?,mobile = ?,fax = ?,emailpro = ?,phonepro = ?,B_streetnumber = ?,
-		B_streettype = ?,B_address = ?,B_city = ?,B_zipcode = ?,B_email = ?,B_phone = ?,dateofbirth = ?,branchcode = ?,
-		categorycode = ?,dateenrolled = ?,dateexpiry = ?,gonenoaddress = ?,lost = ?,debarred = ?,contactname = ?,
-		contactfirstname = ?,contacttitle = ?,guarantorid = ?,borrowernotes = ?,relationship =  ?,ethnicity = ?,
-		ethnotes = ?,sex = ?,password = ?,userid = ?,opacnote = ?,contactnote = ?,sort1 = ?,sort2 = ? 
-		WHERE borrowernumber=$data{'borrowernumber'}";
+        $query = "UPDATE borrowers SET ".join (",",@parameters)." WHERE borrowernumber=$data{'borrowernumber'}";
+#         warn "$query";
         $sth = $dbh->prepare($query);
-        $sth->execute(
-            $data{'cardnumber'},       $data{'surname'},
-            $data{'firstname'},        $data{'title'},
-            $data{'othernames'},       $data{'initials'},
-            $data{'streetnumber'},     $data{'streettype'},
-            $data{'address'},          $data{'address2'},
-            $data{'city'},             $data{'zipcode'},
-            $data{'email'},            $data{'phone'},
-            $data{'mobile'},           $data{'fax'},
-            $data{'emailpro'},         $data{'phonepro'},
-            $data{'B_streetnumber'},   $data{'B_streettype'},
-            $data{'B_address'},        $data{'B_city'},
-            $data{'B_zipcode'},        $data{'B_email'},
-            $data{'B_phone'},          $data{'dateofbirth'},
-            $data{'branchcode'},       $data{'categorycode'},
-            $data{'dateenrolled'},     $data{'dateexpiry'},
-            $data{'gonenoaddress'},    $data{'lost'},
-            $data{'debarred'},         $data{'contactname'},
-            $data{'contactfirstname'}, $data{'contacttitle'},
-            $data{'guarantorid'},      $data{'borrowernotes'},
-            $data{'relationship'},     $data{'ethnicity'},
-            $data{'ethnotes'},         $data{'sex'},
-            $data{'password'},         $data{'userid'},
-            $data{'opacnote'},         $data{'contactnote'},
-            $data{'sort1'},            $data{'sort2'}
-        );
+        $sth->execute;
     }
     $sth->finish;
 
@@ -673,6 +619,7 @@ sub ModMember {
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","MODIFY",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
 }
+
 
 =head2
 
