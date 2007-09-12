@@ -228,21 +228,21 @@ sub GetBookFundBreakdown {
                quantityreceived,subscription
         FROM   aqorders
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
-        WHERE  bookfundid=?
+        LEFT JOIN aqbookfund ON (aqorderbreakdown.bookfundid=aqbookfund.bookfundid and aqorderbreakdown.branchcode=aqbookfund.branchcode)
+        LEFT JOIN aqbudget ON (aqbudget.bookfundid=aqbookfund.bookfundid and aqbudget.branchcode=aqbudget.branchcode)
+        WHERE  aqorderbreakdown.bookfundid=?
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
-            AND ((datereceived >= ? and datereceived < ?) OR (budgetdate >= ? and budgetdate < ?))
+            AND ((budgetdate >= ? and budgetdate < ?) OR (startdate>=? and enddate<=?))
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $id, $start, $end, $start, $end );
 
-    my $spent = 0;
+    my ($spent) = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         if ( $data->{'subscription'} == 1 ) {
             $spent += $data->{'quantity'} * $data->{'unitprice'};
         }
         else {
-
-            my $leftover = $data->{'quantity'} - ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
             $spent += ( $data->{'unitprice'} ) * ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
 
         }
@@ -274,7 +274,7 @@ sub GetBookFundBreakdown {
 
     while ( my $data = $sth->fetchrow_hashref ) {
         my $left = $data->{'tleft'};
-        if ( !$left || $left eq '' ) {
+        if ( (!$left && (!$data->{'datereceived'}||$data->{'datereceived'} eq '0000-00-00') ) || $left eq '' ) {
             $left = $data->{'quantity'};
         }
         if ( $left && $left > 0 ) {
