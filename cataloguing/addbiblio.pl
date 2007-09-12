@@ -466,6 +466,7 @@ sub build_tabs ($$$$$) {
 		else {
 		   push @fields, $record->leader(); # if tag == 000
 		}
+		# loop through each field
                 foreach my $field (@fields) {
                     
                     my @subfields_data;
@@ -528,6 +529,10 @@ sub build_tabs ($$$$$) {
                         );
                     }
                     if ( $#subfields_data >= 0 ) {
+                        # build the tag entry.
+                        # note that the random() field is mandatory. Otherwise, on repeated fields, you'll 
+                        # have twice the same "name" value, and cgi->param() will return only one, making
+                        # all subfields to be merged in a single field.
                         my %tag_data = (
                             tag           => $tag,
                             index         => $index_tag,
@@ -535,6 +540,7 @@ sub build_tabs ($$$$$) {
                             repeatable       => $tagslib->{$tag}->{repeatable},
                             subfield_loop => \@subfields_data,
                             fixedfield    => ($tag < 10)?(1):(0),
+                            random        => CreateKey,
                         );
                         if ($tag >= 010){ # no indicator for theses tag
                            $tag_data{indicator} = $field->indicator(1).$field->indicator(2);
@@ -604,14 +610,12 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   $query->execute($frameworkcode);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
-    warn Data::Dumper::Dumper($data); 
     if ($record->field($data->{tagfield})){
       next if ($record->subfield($data->{tagfield},'3')||$record->subfield($data->{tagfield},'9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
       map {$query.= " and he=".$_->[1] if ($_->[0]=~/[A-z]/)}  $record->field($data->{tagfield})->subfields();
-      warn $query;   
       my ($error,$results)=SimpleSearch($query,"authorityserver");
     # there is at least 1 result => return the 1st one
       if (@$results>1) {

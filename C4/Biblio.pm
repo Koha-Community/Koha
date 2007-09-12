@@ -2225,7 +2225,6 @@ sub TransformHtmlToMarc {
     my $record  = MARC::Record->new();
     my $i=0;
     my @fields;
-    
     while ($params->[$i]){ # browse all CGI params
         my $param = $params->[$i];
         my $newfield=0;
@@ -2253,7 +2252,7 @@ sub TransformHtmlToMarc {
             
             my $ind1 = substr($cgi->param($param),0,1);
             my $ind2 = substr($cgi->param($param),1,1);
-            
+            $newfield=0;
             my $j=$i+1;
             
             if($tag < 10){ # no code for theses fields
