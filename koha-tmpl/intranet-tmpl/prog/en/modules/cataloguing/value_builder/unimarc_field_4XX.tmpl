@@ -19,7 +19,7 @@
                 
                 // browse all its subfields
 
-                var subfields = whichfield.parentNode.getElementsByTagName('input');
+                var subfields = whichfield.parentNode.parentNode.getElementsByTagName('input');
 
                 var re = /^tag_\d*_code_/;
                 for(var i=0, len = subfields.length ; i< len ; i++) {
