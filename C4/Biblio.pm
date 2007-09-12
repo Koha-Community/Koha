@@ -1820,6 +1820,8 @@ The authors are stored in differents places depending on MARC flavour
 sub GetMarcAuthors {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
+    # tagslib useful for UNIMARC author reponsabilities
+    my $tagslib = &GetMarcStructure( 1, '' ); # FIXME : we don't have the framework available, we take the default framework. May be bugguy on some setups, will be usually correct.
     if ( $marcflavour eq "MARC21" ) {
         $mintag = "100";
         $maxtag = "111"; 
@@ -1842,7 +1844,6 @@ sub GetMarcAuthors {
                 $marcflavour ne 'MARC21'
                 and (
                     ($authors_subfield->[0] eq '3') or
-                    ($authors_subfield->[0] eq '4') or
                     ($authors_subfield->[0] eq '5')
                 )
             )
@@ -1854,7 +1855,17 @@ sub GetMarcAuthors {
             }
             $count_auth++;
             my $subfieldcode = $authors_subfield->[0];
-            my $value        = $authors_subfield->[1];
+            my $value;
+            # deal with UNIMARC author responsability
+            if (
+                $marcflavour ne 'MARC21'
+                and ($authors_subfield->[0] eq '4')
+            )
+            {
+                $value = "(".GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ).")";
+            } else {
+                $value        = $authors_subfield->[1];
+            }
             $hash{tag}       = $field->tag;
             $hash{value}    .= $value . " " if ($subfieldcode != 9) ;
             $hash{link}     .= $value if ($subfieldcode eq 9);
@@ -3332,6 +3343,11 @@ sub _koha_modify_biblioitem {
     $biblioitem->{'bnotes'}       = $dbh->quote( $biblioitem->{'bnotes'} );
     $biblioitem->{'size'}         = $dbh->quote( $biblioitem->{'size'} );
     $biblioitem->{'place'}        = $dbh->quote( $biblioitem->{'place'} );
+    $biblioitem->{'collectiontitle'}        = $dbh->quote( $biblioitem->{'collectiontitle'} );
+    $biblioitem->{'collectionissn'}         = $dbh->quote( $biblioitem->{'collectionissn'} );
+    $biblioitem->{'collectionvolume'}       = $dbh->quote( $biblioitem->{'collectionvolume'} );
+    $biblioitem->{'editionstatement'}       = $dbh->quote( $biblioitem->{'editionstatement'} );
+    $biblioitem->{'editionresponsability'}  = $dbh->quote( $biblioitem->{'editionresponsability'} );
     $biblioitem->{'ccode'}        = $dbh->quote( $biblioitem->{'ccode'} );
     $biblioitem->{'biblionumber'} =
       $dbh->quote( $biblioitem->{'biblionumber'} );
@@ -3352,6 +3368,11 @@ sub _koha_modify_biblioitem {
         notes           = $biblioitem->{'bnotes'},
         size            = $biblioitem->{'size'},
         place           = $biblioitem->{'place'},
+        collectiontitle = $biblioitem->{'collectiontitle'},
+        collectionissn  = $biblioitem->{'collectionissn'},
+        collectionvolume= $biblioitem->{'collectionvolume'},
+        editionstatement= $biblioitem->{'editionstatement'},
+        editionresponsability= $biblioitem->{'editionresponsability'},
         ccode           = $biblioitem->{'ccode'}
         where biblionumber = $biblioitem->{'biblionumber'}";
 
