@@ -131,7 +131,8 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
         </td>
         <td>
             <!--TMPL_IF name="editdisable"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" disabled="disabled">
+              <input type="hidden" name="status" id="status<!-- TMPL_VAR NAME="num" -->" value="1">
+              <select name="status" size="1"  disabled="disabled">
             <!--TMPL_ELSE-->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
             <!--/TMPL_IF-->
