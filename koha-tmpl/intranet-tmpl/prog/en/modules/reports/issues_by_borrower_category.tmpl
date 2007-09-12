@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Checkouts by patron category</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -10,13 +10,16 @@
 <!-- End of additions -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Checkouts by patron category</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
@@ -42,7 +45,7 @@
 						<!-- TMPL_VAR NAME="totalitemtype" -->
 					</td>
 				</tr>
-			<!-- /TMPL_LOOP NAME="loopitemtype" -->
+			<!-- /TMPL_LOOP -->
 			<tr>
 				<th>TOTAL</th>
 				<!-- TMPL_LOOP NAME="loopborrowertotal" -->
@@ -56,17 +59,19 @@
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Checkouts by patron category</h1>
-	<form method="post">
-		<p>Select a borrower category (or don't if you want to see global status) <input type="text" name="value" /></p>
-		<p>Select a branch : <!-- TMPL_VAR NAME="CGIbranch" --></p>
+	<form method="post" action="/cgi-bin/koha/reports/manager.pl">
+		<p><label for="borrowercategory">Select a borrower category</label> (or don't if you want to see global status) <input type="text" name="value" id="borrowercategory" /></p>
+		<p><label for="branch">Select a branch:</label> <!-- TMPL_VAR NAME="CGIbranch" --></p>
 		<input type="submit" value="OK" />
 		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 		<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
-</div>
-</div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

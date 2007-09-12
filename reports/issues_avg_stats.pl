@@ -127,7 +127,7 @@ if ($do_it) {
 		$select{$value}=$desc;
 	}
 	my $CGIBorCat=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'borcat',
 				-values   => \@select,
 				-labels   => \%select,
 				-size     => 1,
@@ -144,7 +144,7 @@ if ($do_it) {
 		$select{$value}=$desc;
 	}
 	my $CGIItemTypes=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'itemtypes',
 				-values   => \@select,
 				-labels    => \%select,
 				-size     => 1,
@@ -169,14 +169,14 @@ if ($do_it) {
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
 	my $CGIBranch=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'branch',
 				-values   => \@select_branch,
 				-labels   => \%select_branches,
 				-size     => 1,
 				-multiple => 0 );
 	
 	my $CGISort1=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'sort1',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );
@@ -193,7 +193,7 @@ if ($do_it) {
 		push @select, $value;
 	}
 	my $CGISort2=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'sort2',
 				-values   => \@select,
 				-size     => 1,
 				-multiple => 0 );

@@ -75,7 +75,7 @@ sub set_parameters {
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
-				-id => 'value',
+				-id => 'branch',
 				-values   => \@select_branch,
 				-labels   => \%select_branches,
 				-size     => 1,

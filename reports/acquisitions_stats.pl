@@ -136,7 +136,7 @@ else {
     }
     my $CGIBookSellers = CGI::scrolling_list(
         -name   => 'Filter',
-        -id     => 'Filter',
+        -id     => 'supplier',
         -values => \@select,
 
         #                               -labels   => \%select,
@@ -159,7 +159,7 @@ else {
     }
     my $CGIItemTypes = CGI::scrolling_list(
         -name     => 'Filter',
-        -id       => 'Filter',
+        -id       => 'itemtypes',
         -values   => \@select,
         -labels   => \%select,
         -size     => 1,
@@ -182,7 +182,7 @@ else {
     }
     my $CGIBudget = CGI::scrolling_list(
         -name     => 'Filter',
-        -id       => 'Filter',
+        -id       => 'budget',
         -values   => \@select,
         -labels   => \%select,
         -size     => 1,
@@ -203,7 +203,7 @@ else {
     }
     my $CGISort1 = CGI::scrolling_list(
         -name     => 'Filter',
-        -id       => 'Filter',
+        -id       => 'sort1',
         -values   => \@select,
         -size     => 1,
         -multiple => 0
@@ -226,7 +226,7 @@ else {
     }
     my $CGISort2 = CGI::scrolling_list(
         -name     => 'Filter',
-        -id       => 'Filter',
+        -id       => 'sort2',
         -values   => \@select,
         -size     => 1,
         -multiple => 0

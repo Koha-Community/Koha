@@ -1,28 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Item Types</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Item Types</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
-	<h1>Koha : Reports on itemtypes <!--TMPL_IF NAME="branch" --> for branch = <!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></h1>
+	<h1>Reports on item types <!--TMPL_IF NAME="branch" --> for branch = <!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></h1>
 	<table>
 		<tr>
 			<th>Item type</th>
@@ -40,7 +34,7 @@
 	</table>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>View catalogue group by itemtypes</h1>
+	<h1>View catalogue group by item types</h1>
 	<form method="post">
 		Select a branch (or don't if you want the report for all branches) <!-- TMPL_VAR NAME="CGIbranch" -->
 		<input type="submit" value="OK" />
@@ -48,9 +42,11 @@
 		<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
-</div>
-</div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

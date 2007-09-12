@@ -1,22 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Acquisitions Statistics</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Acquisitions Statistics</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
@@ -65,11 +65,11 @@
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Acquisitions statistics</h1>
-	<form method="post">
+	<form method="post" action="/cgi-bin/koha/reports/acquisitions_stats.pl">
 	<table>
 		<thead>
 			<tr>
-			<th><div>Title</th>
+			<th>Title</th>
 			<th>Row</th>
 			<th>Column</th>
 			<th>Filter</th>
@@ -80,8 +80,8 @@
 				<td>Placed On</td>
 				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
 				<td><input type="radio" name="Column" value="aqbasket.closedate" /> </td>
-				<td > From <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+				<td> From <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
@@ -110,7 +110,7 @@
 									);
 								</script>
 					To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -156,8 +156,8 @@
 				<td>Received On</td>
 				<td><input type="radio" name="Line" value="aqorderdelivery.deliverydate" /></td>
 				<td><input type="radio" name="Column" value="aqorderdelivery.deliverydate" /></td>
-				<td > From <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
+				<td> From <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
+							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
@@ -186,7 +186,7 @@
 									);
 								</script>
 					To <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarToRO" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -232,13 +232,13 @@
 				<td>Supplier</td>
 				<td><input type="radio" name="Line" value="aqbooksellers.name" /></td>
 				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
-				<td ><!-- TMPL_VAR NAME="CGIBookSeller" --></td>
+				<td><!-- TMPL_VAR NAME="CGIBookSeller" --></td>
 			</tr>
 			<tr>
 				<td>Budget</td>
 				<td><input type="radio" name="Line" value="aqorderbreakdown.bookfundid" /></td>
 				<td><input type="radio" name="Column" value="aqorderbreakdown.bookfundid" /></td>
-				<td ><!-- TMPL_VAR NAME="CGIBudget" --></td>
+				<td><!-- TMPL_VAR NAME="CGIBudget" --></td>
 			</tr>
 			<!-- TMPL_IF Name="hassort1" -->
 				<tr class="hilighted"> 
@@ -256,7 +256,6 @@
 					<td><!-- TMPL_VAR NAME="CGISort2" --> </td>
 				</tr>
 			<!-- /TMPL_IF -->
-			<tr></tr>
 		</tbody>
 	</table>
 	
@@ -267,22 +266,22 @@
 	
 	
 		<h3> Output </h3>
-		<input type="radio" checked name="output" value="screen" /> To screen into the browser
+		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
 		
-		<input type="radio" name="output" value="file" /> To file <input type="text" name="basename" value="Export" /> into an application  
+		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
 		<!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	</p>
 	
-	<p>
-	<input type="submit" value="OK" />
+	
+<p>	<input type="submit" value="OK" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
+	<input type="hidden" name="do_it" value="1" /></p>
 	</form>
 <!-- /TMPL_IF -->
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

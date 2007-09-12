@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Checkout statistics</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -10,17 +10,20 @@
 <!-- End of additions -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Checkout statistics</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
     <!-- TMPL_LOOP NAME="mainloop" -->
-        <h1>Checkouts statistics </h1>
+        <h1>Checkout statistics </h1>
         <!-- TMPL_IF NAME="loopfilter" -->
             <p>Filtered on</p>
             <ul>
@@ -31,7 +34,7 @@
         <!-- /TMPL_IF -->
         
         <table> 
-            <tr >
+            <tr>
                 <th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
                 <!-- TMPL_LOOP NAME="loopcol" -->
                     <th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -54,7 +57,7 @@
                             </td>
                         </tr>
                         <!-- /TMPL_LOOP -->
-                        <tr >
+                        <tr>
                             <th>TOTAL</th>
                             <!-- TMPL_LOOP NAME="loopfooter" -->
                                 <th>
@@ -66,12 +69,12 @@
         </table>
     <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-    <h1>Checkouts statistics </h1>
-    <form method="post">
+    <h1>Checkout statistics </h1>
+    <form method="post" action="/cgi-bin/koha/reports/issues_stats.pl">
     <table>
         <thead>
             <tr>
-                <th><div>Title</th>
+                <th>Title</th>
                 <th>Row</th>
                 <th>Column</th>
                 <th>Filter</th>
@@ -82,8 +85,8 @@
                 <td>Period</td>
                 <td><input type="radio" name="Line" value="datetime" /></td>
                 <td><input type="radio" name="Column" value="datetime" /></td>
-                <td > From <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
-                    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+                <td> <label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+                    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
                     <script language="JavaScript" type="text/javascript">
                     function validate1(date) {
                         var day = date.getDate();
@@ -110,8 +113,8 @@
                         }
                     );
                     </script>
-                    To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
-                        <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+                    <label for="to">To</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+                        <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
                         <script type="text/javascript">
                             function validate2(date) {
                                 var day = date.getDate();
@@ -142,11 +145,11 @@
                     </td>
                 </tr>
                 <tr class="hilighted"> 
-                <td>Type :<select name="PeriodTypeSel">
+                <td><label for="PeriodTypeSel">Type:</label><select name="PeriodTypeSel" id="PeriodTypeSel">
                     <option value ="issue">Issue</option>
                     <option value ="return">Return</option>
                     </select></td>
-                <td colspan="2">group by <select name="DisplayBy">
+                <td colspan="2"><label for="DisplayBy">group by</label> <select name="DisplayBy" id="DisplayBy">
                     <option value="">None</option>
                     <option value ="1">Day of week</option>
                     <option value ="2">Month</option>
@@ -154,7 +157,7 @@
                     </select>
                 </td>
                 <td>
-                    Select Day : <select name="PeriodDaySel">
+                    <label for="PeriodDaySel">Select Day: </label><select name="PeriodDaySel" id="PeriodDaySel">
                     <option value =""></option>
                     <option value ="Monday">Monday</option>
                     <option value ="Tuesday">Tuesday</option>
@@ -164,7 +167,7 @@
                     <option value ="Saturday">Saturday</option>
                     <option value ="Sunday">Sunday</option>
                     </select>
-                    Select Month : <select name="PeriodMonthSel">
+                    <label for="PeriodMonthSel">Select Month:</label> <select name="PeriodMonthSel" id="PeriodMonthSel">
                     <option value =""></option>
                     <option value ="January">January</option>
                     <option value ="February">February</option>
@@ -181,7 +184,7 @@
                     </select>
                 </td>
         </tr>
-        <tr >
+        <tr>
             <td>Patron Category</td>
             <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
             <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
@@ -191,7 +194,7 @@
             <td>Document Type</td>
             <td><input type="radio" name="Line" value="itemtype" /></td>
             <td><input type="radio" name="Column" value="itemtype" /></td>
-            <td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
+            <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
         </tr>
         <tr>
             <td>Branch</td>
@@ -227,27 +230,29 @@
                 <td><!-- TMPL_VAR NAME="CGISort2" --> </td>
             </tr>
         <!-- /TMPL_IF -->
-        <tr></tr>
         </tbody>
     </table>
         <h3> Cell value </h3>
             <p><input type="radio" name="Cellvalue" value="1" checked="checked" /> Count checkouts </p>
             <p><input type="radio" name="Cellvalue" value="3" /> Circulation rate </p>
         <h3> Output </h3>
-        <input type="radio" checked name="output" value="screen" /> To screen into the browser
-        <input type="radio" name="output" value="file"> To file <input type="text" name="basename" value="Export" /> into an application  
+        <input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
+		
+		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
         <!-- TMPL_VAR NAME="CGIextChoice" -->
         <!-- TMPL_VAR NAME="CGIsepChoice" -->
-    </p>
+    
     <p>
     <input type="submit" value="OK" />
     <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-    <input type="hidden" name="do_it" value="1" />
+    <input type="hidden" name="do_it" value="1" /></p>
     </form>
 <!-- /TMPL_IF -->
-</div>
-</div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

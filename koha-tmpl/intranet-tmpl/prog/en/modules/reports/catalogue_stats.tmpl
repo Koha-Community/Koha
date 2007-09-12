@@ -1,22 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Catalogue statistics</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Catalogue statistics</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
@@ -29,7 +25,7 @@
 		<!-- /TMPL_IF-->
 		
 		<table>
-			<tr >
+			<tr>
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -52,7 +48,7 @@
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP-->
-				<tr >
+				<tr>
 					<th>TOTAL</th>
 					<!-- TMPL_LOOP NAME="loopfooter" -->
 						<th>
@@ -65,11 +61,11 @@
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Catalogue statistics</h1>
-	<form method="post">
+	<form method="post" action="/cgi-bin/koha/reports/catalogue_stats.pl">
 	<table>
 		<thead>
 			<tr>
-			<th><div>Title</th>
+			<th>Title</th>
 			<th>Row</th>
 			<th>Column</th>
 			<th>Filter</th>
@@ -81,11 +77,11 @@
 					<td>Dewey Classification</td>
 					<td><input type="radio" name="Line" value="dewey" /></td>
 					<td><input type="radio" name="Column" value="dewey" /></td>
-					<td > From <input type="text" name="Filter" /> To <input type="text" name="Filter" /></td>
+					<td> <label for="deweyFrom">From</label> <input type="text" id="deweyFrom" name="Filter" /> <label for="deweyTo">To</label> <input type="text" id="deweyTo" name="Filter" /></td>
 				</tr>
 				<tr class="hilighted">
 					<td>&nbsp;</td>
-					<td colspan="2"><select name="deweydigits">
+					<td colspan="2"><select name="deweydigits" id="deweydigits">
 						<option value=""> </option>
 						<option value ="1">1</option>
 						<option value ="2">2</option>
@@ -93,23 +89,23 @@
 						<option value ="4">4</option>
 						<option value ="5">5</option>
 						</select>
-						digits 
+						<label for="deweydigits">digits</label> 
 					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" /></tr>
+				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="haslccn" -->
 				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>LoC Classification</td>
 					<td><input type="radio" name="Line" value="lccn" /></td>
 					<td><input type="radio" name="Column" value="lccn" /></td>
-					<td > From <input type="text" name="Filter" > To <input type="text" name="Filter" /></td>
+					<td> <label for="locFrom">From</label> <input type="text" name="Filter" id="locFrom" /> <label for="locTo">To</label> <input type="text" name="Filter" id="locTo" /></td>
 				</tr>
 				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>&nbsp;</td>
-					<td colspan="2"><select name="lccndigits">
+					<td colspan="2"><select name="lccndigits" id="lccndigits">
 						<option value=""> </option>
 						<option value ="1">1</option>
 						<option value ="2">2</option>
@@ -117,23 +113,23 @@
 						<option value ="4">4</option>
 						<option value ="5">5</option>
 						</select>
-						characters
+						<label for="lccndigits">characters</label>
 					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" /></tr>
+				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
 			<!-- /TMPL_IF  -->
 			<!-- TMPL_IF Name="hascote" -->
 				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>Callnumber</td>
 					<td><input type="radio" name="Line" value="items.itemcallnumber" /></td>
 					<td><input type="radio" name="Column" value="items.itemcallnumber" /></td>
-					<td>From <input type="text" name="Filter" > To <input type="text" name="Filter" /></td>
+					<td><label for="callnoFrom">From</label> <input type="text" name="Filter" id="callnoFrom" /> <label for="callnoTo">To</label> <input type="text" name="Filter" id="callnoTo" /></td>
 				</tr>
 				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 					<td>&nbsp;</td>
-					<td colspan="2"><select name="cotedigits">
+					<td colspan="2"><select name="cotedigits" id="cotedigits">
 						<option value=""> </option>
 						<option value ="1">1</option>
 						<option value ="2">2</option>
@@ -141,18 +137,18 @@
 						<option value ="4">4</option>
 						<option value ="5">5</option>
 						</select>
-						characters 
+						<label for="cotedigits">characters</label> 
 					</td>
 					<td>&nbsp;</td>
 				</tr>
 				<!-- TMPL_ELSE -->
-				<tr><input type="hidden" name="Filter" > <input type="hidden" name="Filter" /></tr>
+				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
 			<!-- /TMPL_IF -->
 			<!--TMPL_IF Name="hglghtDT"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Document Type</td>
 				<td><input type="radio" name="Line" value="itemtype" /></td>
 				<td><input type="radio" name="Column" value="itemtype" /></td>
-				<td ><!-- TMPL_VAR NAME="CGIItemType" --></td>
+				<td><!-- TMPL_VAR NAME="CGIItemType" --></td>
 			</tr>
 			<!--TMPL_IF Name="hglghtPub"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Publisher</td>
@@ -164,7 +160,7 @@
 				<td>Publication Year</td>
 				<td><input type="radio" name="Line" value="publicationyear" /></td>
 				<td><input type="radio" name="Column" value="publicationyear" /></td>
-				<td>From <input type="text" name="Filter" /> To <input type="text" name="Filter" /></td>
+				<td><label for="pubyearFrom">From</label> <input type="text" name="Filter" id="pubyearFrom" /> <label for="pubyearTo">To</label> <input type="text" name="Filter" id="pubyearTo" /></td>
 			</tr>
 			<!--TMPL_IF Name="hglghtHB"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Home Branch</td>
@@ -183,22 +179,21 @@
 	
 	
 		<h3> Output </h3>
-		<input type="radio" checked name="output" value="screen" /> To screen into the browser
+		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
 		
-		<input type="radio" name="output" value="file" /> To file <input type="text" name="basename" value="Export" /> into an application  
+		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
 		<!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	</p>
-	
-	<p>
-	<input type="submit" value="OK" />
+
+	<p><input type="submit" value="OK" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
+	<input type="hidden" name="do_it" value="1" /></p>
 	</form>
 <!-- /TMPL_IF -->
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

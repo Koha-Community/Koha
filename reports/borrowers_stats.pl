@@ -120,7 +120,7 @@ if ($do_it) {
  		$select_catcode{$catcode} = $description;
  	}
  	my $CGICatCode=CGI::scrolling_list( -name     => 'Filter',
- 				-id => 'Filter',
+ 				-id => 'catcode',
  				-values   => \@select_catcode,
  				-labels   => \%select_catcode,
  				-size     => 1,
@@ -143,7 +143,7 @@ foreach my $thisbranch (keys %$branches) {
     push @branchloop, \%row;
 }
     my $CGIBranch=CGI::scrolling_list( -name     => 'Filter',
-                             -id => 'Filter',
+                             -id => 'branch',
                              -values   => \@select_branch,
 #                             -labels   => \%select_branches,
                              -size     => 1,
@@ -161,7 +161,7 @@ foreach my $thisbranch (keys %$branches) {
  	}
 # 
  	my $CGIZipCode=CGI::scrolling_list( -name     => 'Filter',
- 				-id => 'Filter',
+ 				-id => 'zipcode',
  				-values   => \@select_zipcode,
  				-size     => 1,
  				-multiple => 0 );
@@ -183,7 +183,7 @@ foreach my $thisbranch (keys %$branches) {
  	}
 # 
  	my $CGIsort1=CGI::scrolling_list( -name     => 'Filter',
- 				-id => 'Filter',
+ 				-id => 'sort1',
  				-values   => \@select_sort1,
 				-labels	=>\%select_sort1,
  				-size     => 1,
@@ -201,7 +201,7 @@ foreach my $thisbranch (keys %$branches) {
 		}
 	}
 	my $CGIsort2=CGI::scrolling_list( -name     => 'Filter',
-				-id => 'Filter',
+				-id => 'sort2',
 				-values   => \@select_sort2,
 				-size     => 1,
 				-multiple => 0 );
