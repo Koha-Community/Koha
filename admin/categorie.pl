@@ -104,7 +104,7 @@ if ($op eq 'add_form') {
 				issuelimit              => $data->{'issuelimit'},
 				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
 				category_type           => $data->{'category_type'},
-				"type_".$data->{'category_type'} => " SELECTED ",
+				"type_".$data->{'category_type'} => 1,
 				);
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################

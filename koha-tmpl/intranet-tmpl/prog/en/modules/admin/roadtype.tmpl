@@ -1,7 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration: Road Types
+<title>Koha &rsaquo; Administration &rsaquo; Road Types</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
+//<![CDATA[
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         function isNotNull(f,noalert) {
                 if (f.value.length == 0) {
@@ -46,17 +47,19 @@
                 document.Aform.submit();
                 }
         }
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Road Types</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
 	<!-- TMPL_IF NAME="id_city" -->
@@ -98,7 +101,7 @@
 	<table>
 		<tr>
 			<th>Road type id </th>
-			<th>
+			<td>
 				<!-- TMPL_VAR NAME="roadtypeid" -->
 			</td>
 		</tr>
@@ -106,9 +109,8 @@
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" />
 		<tr>
-			<td>Rod type</td>
+			<td>Road type</td>
 			<td><!-- TMPL_VAR NAME="road_type" --></td>
-		</tr>
 		</tr>
 		<tr>
 			<td colspan="2" align="center">Confirm deletion</td>
@@ -133,9 +135,9 @@
 
 	<table>
 		<tr>
-			<th>Road type</bh>
-			<th> </th>
-			<th> </th>
+			<th>Road type</th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
 		<!-- TMPL_IF NAME="toggle" -->
@@ -150,17 +152,18 @@
 		<!-- /TMPL_LOOP -->
 
 	</table>
-	<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="add_form" />
-		<input type="submit" class="button" value="Add road type" /><br />
-	</form></p>
+		<p><input type="submit" class="button" value="Add road type" /></p>
+	</form>
 <!-- /TMPL_IF -->
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 

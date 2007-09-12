@@ -1,24 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo; Issuing Rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; Fines</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Fines</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 	<h1>Defining <!-- TMPL_IF NAME="branch" -->fining rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default fining rules<!-- /TMPL_IF --></h1>
 		
 	<div class="help">
 		<h3>HINT for fines</h3>
 		<p>Each box needs to be filled in with fine,time to start charging,charging cycle</p>
-		<p>eg 1,7,7</span> = 1 [USD,EUR,etc] fine after 7 days, every 7 days</p>
+		<p>eg 1,7,7 = 1 [USD,EUR,etc] fine after 7 days, every 7 days</p>
 		<p>Fines are calculated by the fines2.pl script, located in misc directory.  Ask your administrator to put this script in crontab, after midnight, to have fines calculated every night</p>
 	</div>
 	<div class="help">
@@ -57,7 +57,7 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="row" -->
 				<tr>
-					<th><!-- TMPL_VAR NAME="categorycode" --></th>
+					<th scope="row"><!-- TMPL_VAR NAME="categorycode" --></th>
 					<!-- TMPL_LOOP NAME="cell" -->
 						<!-- TMPL_IF NAME="toggle" -->
    <td class="highlight">
@@ -76,7 +76,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

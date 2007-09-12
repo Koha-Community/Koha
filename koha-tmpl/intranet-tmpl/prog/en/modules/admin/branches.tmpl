@@ -1,20 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo; <!-- TMPL_IF name="add" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_category" -->Confirm deletion of category<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Branch Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Branch Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add branch<!-- TMPL_ELSE -->Modify branch <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Branches<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add Branch Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm Deletion of Branch Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="heading-branches-add-branch-p" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add branch<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Modify branch <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Branches<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF name="add" -->
     <!-- TMPL_IF name="heading-branches-add-branch-p" -->
@@ -65,7 +64,7 @@
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchprinter" --></option>
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </select>
+            </select></p>
         <p><input type="submit" value="Submit" /></p>
     </form>
 <!-- /TMPL_IF -->
@@ -84,7 +83,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-    <h1><!-- TMPL_VAR name="head" --></h1>
+    <h1>Branches</h1>
     <!-- TMPL_IF NAME="message" --><div class="problem">
         <!-- TMPL_VAR name="message" --><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE1" --><div class="problem">Branch saved</div><!-- /TMPL_IF -->
@@ -104,8 +103,7 @@
             <th>Category</th>
             <th>Branch IP</th>
             <th>Branch Printer</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP name="branches" -->
             <tr>
@@ -149,7 +147,6 @@
                 </td>
                 <td>
                     <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&amp;op=delete">Delete</a>
-                    </form>
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
@@ -206,7 +203,7 @@
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="addcategory_validate" />
     <table>
-        <caption><!-- TMPL_VAR name="head" --></caption>
+        <caption><!-- TMPL_IF NAME="categorycode" -->Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Branch Category<!-- /TMPL_IF --></caption>
         <tr>
             <td>Category code</td>
             <td>
@@ -220,17 +217,18 @@
         </tr>
         <tr>
             <td>Name</td>
-            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" />&nbsp;</td>
+            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" /></td>
         </tr>
         <tr>
             <td>Description</td>
-            <td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />&nbsp;</td>
+            <td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" /></td>
         </tr>
     </table><input type="submit" value="Update" />
     </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_category" -->
+ <!-- TMPL_UNLESS name="MESSAGE8" -->
     Confirm delete:
     <form action="<!-- TMPL_VAR name="action" -->" method="post">
         <input type="hidden" name="op" value="categorydelete_confirmed" />
@@ -240,11 +238,13 @@
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
         <input type="submit" value="NO" />
     </form>
+<!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

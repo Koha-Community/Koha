@@ -1,5 +1,10 @@
-<ul id="navigation">
+<ul>
+	<li><a href="/cgi-bin/koha/circ/returns.pl">Check In</a></li>
+	<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
+</ul>
+<h5>Circulation Reports</h5>
+<ul class="left-nav">
 	<li>    <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="holds to retrieve off the shelf">Holds to pull</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Holds awaiting pickup</a></li>
 	<li>    <a href="/cgi-bin/koha/circ/transferstodo.pl" title="transfers to do from your library">Transfers to do</a></li>

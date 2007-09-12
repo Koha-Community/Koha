@@ -1,11 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
+//<![CDATA[
 	//
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -66,19 +67,23 @@
         // if all is good
 		ff.submit();
 	}
-	</script>
+	//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Data recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
 	
@@ -115,13 +120,13 @@
 			<!-- /TMPL_IF -->
 					</select></td></tr>
 	<tr><th>Reserve fee</th><td>$ <input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></td></tr>
-	<tr><th>Category type</th><td><SELECT name="category_type" >
-					<option value="" <!-- TMPL_VAR NAME="type_n" -->>Select a Category type</option>
-     					<option value="A" <!-- TMPL_VAR NAME="type_A" -->>Adult</option>
-					<option value="C" <!-- TMPL_VAR NAME="type_C" -->>Children</option>
-					<option value="I" <!-- TMPL_VAR NAME="type_I" -->>Organisation</option>
-					<option value="P" <!-- TMPL_VAR NAME="type_P" -->>Professional</option>
-					</SELECT></td>
+	<tr><th>Category type</th><td><select name="category_type" >
+						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Select a Category type</option><!-- TMPL_ELSE --><option value="">Select a Category type</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adult</option><!-- TMPL_ELSE --><option value="A">Adult</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_C" --><option value="C" selected="selected">Children</option><!-- TMPL_ELSE --><option value="C">Children</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Organisation</option><!-- TMPL_ELSE --><option value="I">Organisation</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professional</option><!-- TMPL_ELSE --><option value="P">Professional</option><!-- /TMPL_IF -->
+					</select></td>
 	</tr>
 </table>
 
@@ -222,7 +227,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,12 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo;
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->Printer Added<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->Printer Deleted<!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" --> Printers &rsaquo; Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE --> Printers &rsaquo; Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> Printers &rsaquo; Printer Added<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> Printers &rsaquo; Confirm Deletion of Printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> Printers &rsaquo; Printer Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Printers<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_IF NAME="add_form" --><script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -58,19 +59,24 @@
                         alert(alertString2);
                 }
         }
-        </script>
+        //]]>
+</script>
 	<!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer Added<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Confirm Deletion of Printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Printers<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
         
@@ -87,14 +93,14 @@
 	<table>
 	<!-- TMPL_IF NAME="searchfield" -->
 		<tr>
-			<td>Printer Name</td>
+			<th scope="row">Printer Name</th>
 			<td>
 				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Printer Name</td>
+			<th scope="row">Printer Name</th>
 			<td>
 				<input type="text" name="printername" size="50" maxlength="50" />
 			</td>
@@ -102,11 +108,11 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>Queue</td>
+			<th scope="row">Queue</th>
 			<td><input type="text" name="printqueue" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printqueue" -->" /> </td>
 		</tr>
         	<tr>
-			<td>Type</td>
+			<th scope="row">Type</th>
 			<td><input type="text" name="printtype" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printtype" -->" /> </td>
 		</tr>
         </table><p><input type="button" value="OK" onclick="Check(this.form);" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';" /></p>
@@ -201,7 +207,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

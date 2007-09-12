@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo;
+<title>Koha &rsaquo; Administration &rsaquo;
 <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
@@ -8,6 +8,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_IF NAME="add_form" -->
 <script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -59,19 +60,25 @@
                         alert(alertString2);
                 }
         }
-        </script>
+        //]]>
+</script>
 		<!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
         
@@ -162,14 +169,11 @@
 
 <!-- TMPL_IF NAME="else" -->
 
-<h2>Currencies Management</h2>
+<h2>Currencies</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->	
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-                <input type="submit" name="Search" value="Search" />
-        </form>	
+
 	<table>
 		<tr>
 			<th>Currency</th>
@@ -205,7 +209,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
