@@ -83,13 +83,13 @@ function AreMandatoriesNotOk(){
                    	tab.push("<!-- TMPL_VAR NAME='number' -->");
                    	label.push("<!-- TMPL_VAR NAME='marc_lib' -->");
                 <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
-    var StrAlert = "Can't save this record because the following field aren't filled :\n\n";
+    var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
     for(var i=0,len=mandatories.length; i<len ; i++){
         if( ! document.getElementById(mandatories[i]).value){
             flag = 1;
             document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
             document.getElementById(mandatories[i]).focus();
-            StrAlert += "\t* "+label[i]+" in tab "+tab[i]+"\n";
+            StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
         }
     }
     if(flag){
@@ -294,6 +294,16 @@ function CloneField(index) {
                 catch(e){
                     // do nothig CloneButtonPlus doesn't exist.
                 }
+                // setting its 'Expand' property
+                var ExpandFieldA=0;
+                try {
+                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
+                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
+                }
+                catch(e){
+                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
+                }
+
             }
         }
     }
@@ -485,28 +495,28 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     
     <!-- TMPL_LOOP NAME="innerloop" -->
         <!-- TMPL_IF NAME="tag" -->
-	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->">
+	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
         <div class="tag_title" name="div_indicator">
             <!-- TMPL_UNLESS name="hide_marc" -->
                 <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                 <!-- TMPL_IF NAME="fixedfield" -->
-	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- TMPL_ELSE -->
-        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- /TMPL_IF --> -
             <!-- TMPL_ELSE -->
                 <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- TMPL_ELSE -->
-                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- /TMPL_IF -->
             <!-- /TMPL_UNLESS -->
 
             <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-	            <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
+	            <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="repeatable" -->
-                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')">+</span>
+                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
             <!-- /TMPL_IF -->
             
         </div>
