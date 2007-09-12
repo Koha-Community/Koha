@@ -45,13 +45,13 @@ my $starttime = gettimeofday;
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
-my $sth = $dbh->prepare("select bibid from marc_biblio");
+my $sth = $dbh->prepare("select biblionumber from biblio where biblionumber >54500");
 $sth->execute;
-# my ($bibidmax) =  $sth->fetchrow;
-# warn "$bibidmax <<==";
-while (my ($bibid)= $sth->fetchrow) {
+# my ($biblionumbermax) =  $sth->fetchrow;
+# warn "$biblionumbermax <<==";
+while (my ($biblionumber)= $sth->fetchrow) {
     #now, parse the record, extract the item fields, and store them in somewhere else.
-    my $record = GetMarcBiblio($bibid);
+    my $record = GetMarcBiblio($biblionumber);
     my @fields = $record->field($tagfield);
     my @items;
     my $nbitems=0;
@@ -66,16 +66,15 @@ while (my ($bibid)= $sth->fetchrow) {
         $record->delete_field($field);
         $nbitems++;
     }
-#     print "$bibid\n";
+#     print "$biblionumber\n";
     # now, create biblio and items with NEWnewXX call.
-    my $frameworkcode = GetFrameworkCode($bibid);
-    localNEWmodbiblio($dbh,$record,$bibid,$frameworkcode) unless $test_parameter;
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    localNEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode) unless $test_parameter;
 #     warn 'B=>'.$record->as_formatted;
 #     print "biblio done\n";
     for (my $i=0;$i<=$#items;$i++) {
         my $tmp = TransformMarcToKoha($dbh,$items[$i],$frameworkcode) unless $test_parameter; # finds the itemnumber
-#         warn "    I=> ".$items[$i]->as_formatted;
-        localNEWmoditem($dbh,$items[$i],$bibid,$tmp->{itemnumber},0) unless $test_parameter;
+        localNEWmoditem($dbh,$items[$i],$biblionumber,$tmp->{itemnumber},0) unless $test_parameter;
 #         print "1 item done\n";
     }
 }
@@ -86,17 +85,19 @@ print "$i MARC record done in $timeneeded seconds\n";
 # modified NEWmodbiblio to jump the MARC part of the biblio modif
 # highly faster
 sub localNEWmodbiblio {
-    my ($dbh,$record,$bibid,$frameworkcode) =@_;
+    my ($dbh,$record,$biblionumber,$frameworkcode) =@_;
     $frameworkcode="" unless $frameworkcode;
     my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
+    C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio );
+    C4::Biblio::_koha_modify_biblioitem( $dbh, $oldbiblio );
 
     return 1;
 }
 
 sub localNEWmoditem {
-    my ( $dbh, $record, $bibid, $itemnumber, $delete ) = @_;
-#     warn "NEWmoditem $bibid / $itemnumber / $delete ".$record->as_formatted;
-    my $frameworkcode=GetFrameworkCode($bibid);
+    my ( $dbh, $record, $biblionumber, $itemnumber, $delete ) = @_;
+#     warn "NEWmoditem $biblionumber / $itemnumber / $delete ".$record->as_formatted;
+    my $frameworkcode=GetFrameworkCode($biblionumber);
     my $olditem = TransformMarcToKoha( $dbh, $record,$frameworkcode );
     C4::Biblio::_koha_modify_item( $dbh, $olditem );
 }
