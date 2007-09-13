@@ -14,8 +14,8 @@ use MARC::File::USMARC;
 $|=1;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare("select m.biblionumber,b.biblioitemnumber from marc_biblio m left join biblioitems b on b.biblionumber=m.biblionumber");
-	$sth->execute();
+my $sth=$dbh->prepare("select m.biblionumber,b.biblioitemnumber from biblio m left join biblioitems b on b.biblionumber=m.biblionumber");
+$sth->execute();
 
 my $i=1;
 while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
@@ -32,18 +32,36 @@ sub MARCmodbiblionumber{
     my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField("biblio.biblioitemnumber","");
         
     my $update=0;
-        my @tags = $record->field($tagfield);
+    my $tag = $record->field($tagfield);
+#     warn "ICI : ".$record->as_formatted if $record->subfield('090','a') eq '11546';
     
-    if (!@tags){
-        my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
-            $record->append_fields($newrec);
-        $update=1;
+# check that we have biblionumber at the right place, otherwise, update or create the field.
+    if ($tagfield <10) {
+        unless ($tag && $tag->data() == $biblionumber) {
+            if ($tag) {
+                $tag->update($biblionumber);
+            } else {
+                my $newrec = MARC::Field->new( $tagfield, $biblionumber);
+                $record->insert_fields_ordered($newrec);
+            }
+            $update=1;
+        }
+    } else {
+        unless ($tag && $tag->subfield($biblionumtagsubfield) == $biblionumber) {
+            if($tag) {
+                $tag->update($tagfield => $biblionumber);
+            } else {
+                my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
+                $record->insert_fields_ordered($newrec);
+            }
+            $update=1;
+        }
     }
     
     
     if ($update){	
-        &ModBiblioMarc($record,'',$biblionumber);
-        print "\n modified : $biblionumber \n";	
+        &ModBiblioMarc($record,$biblionumber,'');
+        print "\n modified : $biblionumber \n".$record->as_formatted;	
     }
     
 }
