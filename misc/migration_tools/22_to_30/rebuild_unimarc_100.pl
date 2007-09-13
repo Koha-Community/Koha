@@ -35,7 +35,7 @@ sub MARCmodrecord {
         $update=1;
         my $string;
         if ($record->subfield(100,"a")) {
-            $string = $record->subfield(100,"a");
+            $string = substr($record->subfield(100,"a")."                                   ",0,35);
             my $f100 = $record->field(100);
             $record->delete_field($f100);
         } else {
