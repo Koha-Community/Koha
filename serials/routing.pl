@@ -114,9 +114,9 @@ for(my $i=0;$i<$routing;$i++){
     for(my $j=1; $j <= $routing; $j++) {
 	$rankingbox .= "<option ";
 	if($routinglist[$i]->{'ranking'} == $j){
-	    $rankingbox .= " selected='SELECTED'";
+	    $rankingbox .= " selected=\"selected\"";
 	}
-	$rankingbox .= " value='$j'>$j</option>";
+	$rankingbox .= " value=\"$j\">$j</option>";
     }
     $rankingbox .= "</select>";
     $data->{'routingbox'} = $rankingbox;

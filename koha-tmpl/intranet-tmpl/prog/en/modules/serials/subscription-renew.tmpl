@@ -7,12 +7,12 @@
 <!--TMPL_IF Name="renew"-->
   Subscription renewed.
   
-  <script type="text/javascript">
-  <!--
+<script type="text/javascript">
+//<![CDATA[
   opener.document.location.reload();
   self.close();
-  //-->
-  </script>
+  //]]>
+</script>
 <!--TMPL_ELSE-->
 
 <h1>Subscription renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
@@ -26,7 +26,7 @@
 		<p><label for="weeklength">Number of weeks</label><input type="text" id="weeklength" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->" /></p>
 		<p><label for="monthlength">Number of months</label><input type="text" id="monthlength" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->" /></p>
 		<p><label for="note">Note for the librarian that will manage your renewal request</label></p>
-		<ul><textarea name="note" id="note" rows="10" cols="60"></textarea></ul>
+		<p><textarea name="note" id="note" rows="10" cols="60"></textarea></p>
 		<input type="submit" value="Request a renewal" class="button serial" />
 </form>
 

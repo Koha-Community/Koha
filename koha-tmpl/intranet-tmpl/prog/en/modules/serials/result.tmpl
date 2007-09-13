@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="Javascript">
-
+//<![CDATA[
 function GetIt(bibno,title)
 {
     title = title.replace(/\?/,"\?");
@@ -12,13 +12,14 @@ function GetIt(bibno,title)
     opener.document.f.title.value = title;
     window.close();
 }
+//]]>
 </script>
 </head>
 <body>
 
 <div id="doc" class="yui-t7">
    <div id="bd">
-	<div class="yui-g">
+	
 
 <h1>Search results</h1>
 <!-- TMPL_IF NAME="total"-->
@@ -53,10 +54,7 @@ function GetIt(bibno,title)
 <!-- TMPL_ELSE -->
 No result found for <b><!-- TMPL_VAR NAME="query" --></b>
 <!-- /TMPL_IF-->
-</div>
 
-</div>
-</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

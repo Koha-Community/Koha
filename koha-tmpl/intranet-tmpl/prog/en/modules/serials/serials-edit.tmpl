@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="JavaScript" type="text/javascript">
-
+//<![CDATA[
 function popup(subscriptionid) {
 	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
 }
@@ -74,24 +74,26 @@ function HideItems(index,labelindex) {
 	label.style.display='block';	
 }
 <!--/TMPL_IF>
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <h1>Serial Edition <!-- TMPL_VAR name="bibliotitle" --></h1>
 <form method="post" name="f" action="serials-edit.pl">
 <!--onsubmit="return barcode_check()">-->
 <div id="action">
-    <ul><li><a href="serials-collection.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
+    <ul>
     <!--TMPL_LOOP Name="subscriptions"-->
+	<li><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
 	<li><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a></li>
         <!--TMPL_IF name="abouttoexpire"--><li><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a></li>
         <!--/TMPL_IF-->
@@ -105,7 +107,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 <!--/TMPL_IF -->
 
  <input type="hidden" name="op" value="serialchangestatus" />
-	<table cellspacing="0" cellpadding="0" border="0" class="collapse">
+	<table>
 	<tr>
 		<th>Numbered</th>
 		<th>Published on</th>
@@ -236,7 +238,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->">
+            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="num" -->">
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Waited</option>
   <!-- /TMPL_IF -->
@@ -323,7 +325,9 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

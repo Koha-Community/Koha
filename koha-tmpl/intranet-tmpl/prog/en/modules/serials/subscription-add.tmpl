@@ -1,15 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions -->
-
-<!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
 <script type="text/javascript">
 <!--
@@ -727,20 +719,20 @@ window.onload = irregular_order();
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 
 
 <!-- TMPL_IF name="mod" -->
     <h1>Modify a subscription</h1>
-    <form method="post" name="f">
+    <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
         <input type="hidden" name="op" value="modsubscription" />
         <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
 <!-- TMPL_ELSE -->
@@ -1143,7 +1135,9 @@ window.onload = irregular_order();
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

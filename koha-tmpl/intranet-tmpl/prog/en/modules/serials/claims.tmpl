@@ -23,7 +23,7 @@
 <body>
     <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_UNLESS NAME="preview" -->
-    <!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+    <!--TMPL_INCLUDE NAME="serials-search.inc" -->
 <!-- /TMPL_UNLESS -->
 
 
@@ -34,7 +34,7 @@
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
     <h1>Claims</h1>
     <form name="claims" action="claims.pl" method="post">
@@ -125,7 +125,7 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
 
 <div id="doc" class="yui-t7">
    <div id="bd">
-	<div class="yui-g">
+	
 <!-- TMPL_IF Name="supplierloop"-->
         <!-- TMPL_LOOP Name="supplierloop"-->
         <!-- TMPL_IF NAME="name" -->
@@ -185,14 +185,13 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
 <p class="noprint"><a href="javascript:window.print()" class="button">Print</a> &nbsp; <a href="javascript:window.close()" class="button">Close</a></p>
 <!-- /TMPL_UNLESS -->
 
-
-</div>
 </div>
 </div>
 
 <!-- TMPL_UNLESS NAME="preview" -->
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
 <!-- /TMPL_UNLESS -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-
-

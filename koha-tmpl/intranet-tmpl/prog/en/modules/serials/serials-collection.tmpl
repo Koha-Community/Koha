@@ -1,7 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
 showlayer('<!-- TMPL_VAR NAME="yearmax"-->');
 
 function showlayer(numlayer)
@@ -51,22 +52,29 @@ function addsubscriptionid()
 function popup(subscriptionid) {
     newin=window.open('subscription-renew.pl?mode=popup&subscriptionid='+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
+
+$(document).ready(function() {
+	$('#subscription_years').tabs();
+});
+ 
+
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 
 <!-- TMPL_UNLESS name="popup" -->
 
-	<h1>Serial Collection information for<br /> <em><!-- TMPL_VAR name="bibliotitle" --></em></h1>
+	<h1>Serial Collection information for  <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
 <!-- /TMPL_UNLESS -->
 
 <!--TMPL_IF Name="subscriptions"-->
@@ -164,25 +172,20 @@ function popup(subscriptionid) {
 <!--/TMPL_IF-->
 </table>
 <!--/TMPL_IF -->
-    <div class="tabsubs">
-    <!-- TMPL_LOOP NAME="years" -->
+
+
+<!-- TMPL_IF NAME="years" --><form name="edition" action="serials-edit.pl">
+<div id="subscription-years">
+<ul>
+	<!-- TMPL_LOOP NAME="years" -->
         <!-- TMPL_IF NAME="year" -->
-        <!-- TMPL_IF NAME="first" -->
-            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_active" href="javascript:showlayer('<!-- TMPL_VAR NAME="year" -->')"><!-- TMPL_VAR NAME="year" --></a>
-        <!-- TMPL_ELSE -->
-            <a  id="link<!-- TMPL_VAR NAME="year" -->" class="tab_inactive" href="javascript:showlayer('<!-- TMPL_VAR NAME="year" -->')"><!-- TMPL_VAR NAME="year" --></a>
-        <!-- /TMPL_IF -->
+            <li><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->#subscription-year-<!-- TMPL_VAR NAME="year" -->"><!-- TMPL_VAR NAME="year" --></a></li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-    </div>
+</ul>
 
-<form name="edition" action="serials-edit.pl">
  <!-- TMPL_LOOP NAME="years" -->
- <!--TMPL_IF Name="first" -->
-    <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="content_visible" >
- <!--TMPL_ELSE -->
-    <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="content_hidden">
- <!--/TMPL_IF -->
+<div id="subscription-year-<!-- TMPL_VAR NAME="year" -->">
         <table width="400px">
             <tr>
 <!--TMPL_UNLESS Name="onesubscription"-->
@@ -205,7 +208,7 @@ function popup(subscriptionid) {
                 </th>
             </tr>
       <!-- TMPL_LOOP Name="serials" -->
-            <tr name="branch <!--TMPL_VAR Name="branchcode"-->">
+            <tr>
 <!--TMPL_UNLESS Name="onesubscription"-->
                  <td><a href="serials-collection.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->"><!--TMPL_VAR Name="subscriptionid"--></a></td>
 <!--/TMPL_UNLESS-->
@@ -232,18 +235,18 @@ function popup(subscriptionid) {
                     <!-- TMPL_VAR Name="branchcode" -->
                 </td>
                 <td>
-                  <div visibility="hidden" name="subs" val="<!--TMPL_VAR Name="subscriptionid"-->"></div>
+                  <input type="hidden" name="subs" value="<!--TMPL_VAR Name="subscriptionid"-->" />
                   <!--TMPL_IF Name="subscriptionexpired"-->
                   <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled="disabled" />
                   <!--TMPL_ELSE-->
                     <!--TMPL_IF Name="status1"-->
-                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" />
+                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
                     <!--TMPL_ELSE -->
                     <!--TMPL_IF Name="status3"-->
-                    <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" />
+                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
                     <!--TMPL_ELSE -->
                       <!--TMPL_IF Name="status4"-->
-                      <input type="checkbox" name="serialid" checked value="<!--TMPL_VAR Name="serialid"-->" />
+                      <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
                       <!--TMPL_ELSE -->
                       <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" />
                       <!--/TMPL_IF-->           
@@ -259,12 +262,15 @@ function popup(subscriptionid) {
     <!--/TMPL_LOOP -->
   <input type="hidden" name="subscriptionid" value="<!--TMPL_VAR Name="subscriptionidlist"-->" />
 
+</div>
 </form>
+<!-- /TMPL_IF -->
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-

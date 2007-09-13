@@ -18,13 +18,13 @@ function search_member(subscriptionid){
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 
 <!-- TMPL_IF NAME="op" -->
@@ -41,7 +41,7 @@ function search_member(subscriptionid){
 
 <select name="date_selected">
 <!-- TMPL_LOOP NAME="dates" -->
-<option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" <!-- TMPL_IF NAME="selected" --> selected="SELECTED" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option>
+<option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" <!-- TMPL_IF NAME="selected" --> selected="selected" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option>
 <!-- /TMPL_LOOP -->
 </select>
 
@@ -82,7 +82,9 @@ href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscr
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

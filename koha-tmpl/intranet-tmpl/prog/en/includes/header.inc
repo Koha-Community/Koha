@@ -8,6 +8,8 @@
 	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul>
 	<li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
 	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
+	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+	<li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
 	<li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
 	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
 	<li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li>

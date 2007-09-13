@@ -1,21 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials &rsaquo; Search for Supplier</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script language="Javascript">
-
+<script type="text/javascript">
+//<![CDATA[
 function GetIt(aqbooksellerid,name)
 {
   opener.document.f.aqbooksellerid.value = aqbooksellerid;
   opener.document.f.aqbooksellername.value = name;
   window.close();
 }
+//]]>
 </script>
 </head>
 <body>
 
 <div id="doc" class="yui-t7">
    <div id="bd">
-	<div class="yui-g">
+	
 
 
 <h1>Search supplier for serial subscription</h1>
@@ -25,8 +26,6 @@ function GetIt(aqbooksellerid,name)
         <input type="submit" class="button serial" value="OK" />
     </form>
 
-</div>
-</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -4,20 +4,19 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <h1>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h1>
 <div id="action">
     <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Subscriptions</a>
     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Back to biblio</a>
     <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=full">Complete view</a>
-    </form>
 </div>
 <!-- TMPL_LOOP name="subscription_LOOP" -->
     <div id="serials_serial_issue_<!-- TMPL_VAR name="subscriptionid" -->">
@@ -113,7 +112,9 @@
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
