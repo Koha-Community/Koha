@@ -66,10 +66,10 @@ elsif ( $type eq 'create' || $type eq 'save' ) {
     #    if (! -e "$htdocs/$theme/$lang/$from") {
     # doesnt exist
     eval {
-        open( OUTFILE, ">$htdocs/$theme/$lang/$from" ) || die "Can't open file";
+        open( OUTFILE, ">$htdocs/$theme/$lang/modules/$from" ) || die "Can't open file";
     };
     if ($@) {
-        $error = "Cant open file $htdocs/$theme/$lang/$from";
+        $error = "Cant open file $htdocs/$theme/$lang/modules/$from";
     }
     else {
 
@@ -99,10 +99,10 @@ elsif ( $type eq 'modify' ) {
     my $htdocs = C4::Context->config('intrahtdocs');
     my ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet" );
     eval {
-        open( INFILE, "$htdocs/$theme/$lang/$from" ) || die "Can't open file";
+        open( INFILE, "$htdocs/$theme/$lang/modules/$from" ) || die "Can't open file";
     };
     if ($@) {
-        $error = "Cant open file $htdocs/$theme/$lang/$from";
+        $error = "Cant open file $htdocs/$theme/$lang/modules/$from";
     }
     my $help;
     while ( my $inp = <INFILE> ) {
