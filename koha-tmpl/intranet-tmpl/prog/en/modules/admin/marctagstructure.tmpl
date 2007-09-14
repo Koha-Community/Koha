@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->MARC tag Structure<!-- /TMPL_IF --></title>
+<!-- TMPL_IF name="add_form" -->MARC Tag Structure &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->MARC Tag Structure &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->MARC Tag Structure &rsaquo;  Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->MARC Tag Structure<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -60,10 +60,11 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->Data Deleted<!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; Data Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC tag Structure<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
@@ -76,7 +77,7 @@
 
 
 <!-- TMPL_IF NAME="add_form" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
@@ -96,24 +97,27 @@
 
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-<!-- ------------------------------------------------------------------------ -->
-<table>
-<caption>Confirm Deletion of Tag <em><!-- TMPL_VAR NAME="searchfield" --></em>?</caption>
+
+<h3>Confirm Deletion of Tag <em><!-- TMPL_VAR NAME="searchfield" --></em>?</h3>
     <p>Tag: <!-- TMPL_VAR NAME="searchfield" --></p>
     <p>Description: <!-- TMPL_VAR NAME="liblibrarian" --></p>
-    </table>
-    <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />	<input type="submit" value="Yes, Delete this Tag" /></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do Not Delete" /></form>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="delete_confirmed" />
+	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+	<input type="submit" value="Yes, Delete this Tag" /></form>
+	
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do Not Delete" /></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <div class="details"><h3>Tag Deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Return to MARC Tag Structure" />
     </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="framework_create" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="framework_create_confirm" />
         <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
@@ -128,7 +132,7 @@
     </form>
 <!-- /TMPL_IF -->
 
-<!-- ------------------------------------------------------------------------ -->
+
 <!-- TMPL_IF NAME="else" -->
 
 <form name="f" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -169,7 +173,8 @@
         <th>Subfields</th>
         <th>Edit</th>
         <th>Delete</th>
-                <tr>
+	</tr>
+
     <!-- TMPL_IF NAME="select_display" -->
         <!-- TMPL_LOOP NAME="loop" -->
             <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
@@ -182,7 +187,7 @@
             <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
         </tr>
-            <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
             <td>
                 &nbsp;
             </td>
@@ -212,12 +217,11 @@
     </table>
     <!-- TMPL_IF NAME="isprevpage" -->
             <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Previous</a>
-        <!-- /TMPL_IF --><form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <input type="hidden" name="op" value="add_form" />
+        <!-- /TMPL_IF -->
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="add_form" />
-	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->" />
-    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->" />
+    	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
         <input type="submit" value="Add Tag" />
     </form>
         <!-- TMPL_IF NAME="nextpage" -->

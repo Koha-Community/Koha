@@ -258,9 +258,9 @@ if ($op eq 'add_form') {
 			$row_data{repeatable} = $results[$i]->{'mts_repeatable'};
 			$row_data{mandatory} = $results[$i]->{'mts_mandatory'};
 			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?op=add_form&tagfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
-			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
-			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{subfield_link} ="marc_subfields_structure.pl?op=add_form&amp;tagfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$row_data{toggle} = $toggle;
 			$j=$i;
 			my @internal_loop = ();
@@ -308,9 +308,9 @@ if ($op eq 'add_form') {
 			$row_data{repeatable} = $results->[$i]{'repeatable'};
 			$row_data{mandatory} = $results->[$i]{'mandatory'};
 			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
-			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&frameworkcode=".$frameworkcode;
+			$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$row_data{toggle} = $toggle;
 			push(@loop_data, \%row_data);
 		}

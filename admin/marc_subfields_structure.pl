@@ -204,7 +204,7 @@ if ( $op eq 'add_form' ) {
             $data->{'tagsubfield'}
           . "<input type=\"hidden\" name=\"tagsubfield\" value=\""
           . $data->{'tagsubfield'}
-          . "\" id=\"tagsubfield\">";
+          . "\" id=\"tagsubfield\" />";
         $row_data{subfieldcode} = $data->{'tagsubfield'};
         $row_data{liblibrarian} = CGI::escapeHTML( $data->{'liblibrarian'} );
         $row_data{libopac}      = CGI::escapeHTML( $data->{'libopac'} );
@@ -309,7 +309,7 @@ if ( $op eq 'add_form' ) {
         $row_data{tagsubfield} =
             "<input type=\"text\" name=\"tagsubfield\" value=\""
           . $data->{'tagsubfield'}
-          . "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\">";
+          . "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
         $row_data{liblibrarian} = "";
         $row_data{libopac}      = "";
         $row_data{seealso}      = "";
@@ -383,7 +383,7 @@ if ( $op eq 'add_form' ) {
     $template->param(
         action   => "Edit subfields",
         tagfield =>
-"<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\">$tagfield",
+"<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />$tagfield",
         loop           => \@loop_data,
         more_subfields => $more_subfields,
         more_tag       => $tagfield
@@ -540,7 +540,7 @@ else {    # DEFAULT
         $row_data{delete}           =
 "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield="
           . $results->[$i]{'tagsubfield'}
-          . "&frameworkcode=$frameworkcode";
+          . "&amp;frameworkcode=$frameworkcode";
         $row_data{toggle} = $toggle;
 
         if ( $row_data{tab} eq -1 ) {

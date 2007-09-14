@@ -189,7 +189,7 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\">";
+		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
@@ -290,7 +290,7 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\">";
+		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
@@ -471,7 +471,7 @@ if ($op eq 'add_form') {
 		$row_data{value_builder}	= $results->[$i]{'value_builder'};
 		$row_data{hidden}	= $results->[$i]{'hidden'} if($results->[$i]{'hidden'} gt "000") ;
 		$row_data{isurl}	= $results->[$i]{'isurl'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&authtypecode=$authtypecode";
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&amp;authtypecode=$authtypecode";
 		$row_data{toggle} = $toggle;
 		if ($row_data{tab} eq -1) {
 			$row_data{subfield_ignored} = 1;

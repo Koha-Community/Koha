@@ -4,6 +4,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Authority MARC subfield structure</div>
 
@@ -15,7 +16,7 @@
 
 <!-- TMPL_IF NAME="add_form" -->
 
-	<h><!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<h1><!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF -->
 	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h1>
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
@@ -32,13 +33,12 @@
 	   <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
 	   <p><label for="hidden<!-- TMPL_VAR NAME="row" -->">Hidden</label> Opac:<!-- TMPL_VAR name="ohidden" -->  Intranet:<!-- TMPL_VAR name="ihidden" --> Editor:<!-- TMPL_VAR name="ehidden" --> (see online help)</p>
 	   <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL </label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked)</p>
-        <p><label>Help input:</label>
+        <p>Help input: </p>	
         <ul>
             <li>Authorized Value <!-- TMPL_VAR NAME="authorised_value" --></li>
             <li>Thesaurus <!-- TMPL_VAR NAME="frameworkcode" --></li>
             <li>Plugin <!-- TMPL_VAR NAME="value_builder" --></li>
-        </ul>
-        </p>	 
+        </ul> 
     </div>
 	<!-- /TMPL_LOOP -->
 	<input type="submit" class="submit" value="Save Changes" />
@@ -53,26 +53,32 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
-<div class="data"><table>
-<caption>Confirm Deletion of Subfield <span class="ex"><!-- TMPL_VAR NAME="tagsubfield" -->?</span></caption>
-	<tr>
-		<th>Subfield</th>
-		<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
-	</tr>
-	<p>Description<!-- TMPL_VAR NAME="liblibrarian" --></p>
-</table></div>
-			<form class="inline" action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+<h3>Confirm Deletion of Subfield <span class="ex"><!-- TMPL_VAR NAME="tagsubfield" -->?</span></h3>
+	<p>Subfield: <!-- TMPL_VAR NAME="tagsubfield" --></p>
+	<p>Description: <!-- TMPL_VAR NAME="liblibrarian" --></p>
+
+		<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
 				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" /><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" /><input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /><input type="submit" class="cancel" value="Yes, Delete this Subfield" />
-			</form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />	<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />	<input type="submit" class="submit" value="No, Do Not Delete" />
-			</form>
+				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+				<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+				<input type="submit" class="cancel" value="Yes, Delete this Subfield" />
+		</form>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+			<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+			<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+			<input type="submit" class="submit" value="No, Do Not Delete" />
+		</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-	Data deleted
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
-	<input type="submit" class="submit" value="OK" />
+	<h3>Data deleted</h3>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+		<input type="submit" class="submit" value="OK" />
 	</form>
 <!-- /TMPL_IF -->
 
@@ -88,6 +94,7 @@
 	<th>Text</th>
 	<th>Constraints</th>
 	<th>Delete</th>
+</tr>
 <!-- TMPL_LOOP NAME="loop" -->
 <!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 	<td><!-- TMPL_VAR NAME="tagsubfield" --></td>

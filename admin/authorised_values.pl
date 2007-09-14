@@ -100,9 +100,9 @@ if ($op eq 'add_form') {
 							id => $data->{'id'}
 							);
 	if ($data->{'category'}) {
-		$template->param(category => "<input type=\"hidden\" name=\"category\" value='$data->{'category'}'>$data->{'category'}");
+		$template->param(category => "<input type=\"hidden\" name=\"category\" value=\"'$data->{'category'}'\" />$data->{'category'}");
 	} else {
-		$template->param(category => "<input type=text name=\"category\" size=8 maxlength=8>");
+		$template->param(category => "<input type=\"text\" name=\"category\" id=\"category\" size=\"8\" maxlength=\"8\" />");
 	}
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -164,21 +164,21 @@ if ($op eq 'add_form') {
 		$searchfield=$category_list[0];
 	}
 	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle="white";
+	my $toggle=1;
 	my @loop_data = ();
 	# builds value list
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-			$toggle="#ffffcc";
+	  	if ($toggle eq 1){
+			$toggle=1;
 	  	} else {
-			$toggle="white";
+			$toggle=0;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{category} = $results->[$i]{'category'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{lib} = $results->[$i]{'lib'};
-		$row_data{edit} = "$script_name?op=add_form&id=".$results->[$i]{'id'};
-		$row_data{delete} = "$script_name?op=delete_confirm&searchfield=$searchfield&id=".$results->[$i]{'id'};
+		$row_data{edit} = "$script_name?op=add_form&amp;id=".$results->[$i]{'id'};
+		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=$searchfield&amp;id=".$results->[$i]{'id'};
 		push(@loop_data, \%row_data);
 	}
 

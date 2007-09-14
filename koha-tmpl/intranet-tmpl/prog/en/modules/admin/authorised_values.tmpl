@@ -1,15 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Authorized Values <!-- TMPL_IF name="add_form" --> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->Authorised values admin<!-- /TMPL_IF --></title>
+<!-- TMPL_IF name="else" -->Authorized values admin<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->	
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->Authorised values admin<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Authorized values admin<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -23,7 +28,7 @@
 	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF -->
 	</h1>
-	<form class="inline" action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
         <table>
         <tr>
@@ -31,7 +36,7 @@
             <td><!-- TMPL_VAR name="category" --></td>
         </tr>
         <tr>
-            <th><label for="authorised_value">Authorised value</label></th>
+            <th><label for="authorised_value">Authorized value</label></th>
             <td><input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" /></td>
         </tr>
         <tr>
@@ -55,7 +60,7 @@
 		<td>Description</td>
 		<td><!-- TMPL_VAR name="searchfield" --></td>
 	</tr>
-	<tr><td>Value</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	<tr><td>Value</td><td><!-- TMPL_VAR name="Tvalue" --></td><td>&nbsp;</td></tr>
 	</table>
 	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
@@ -63,18 +68,17 @@
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Confirm Deletion" /></form> <form class="inline" action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
 <!-- /TMPL_IF -->
 
-<!-- -->
 <!-- TMPL_IF name="else" -->
 
-<h1>Authorised values admin</h1>
-<p>This table is used in MARC definition. You can define as many categories as you want, and as many authorised values as you want in each category.</p>
-<p>When you define the MARC subfield structure, you can link a subfield to a authorised-value category. When the user ask for adding of modifying a biblio,
-the subfield is not entered through a free field, but though a list of authorised values</p>
+<h1>Authorized values admin</h1>
+<p>This table is used in MARC definition. You can define as many categories as you want, and as many authorized values as you want in each category.</p>
+<p>When you define the MARC subfield structure, you can link a subfield to a authorized-value category. When the user ask for adding of modifying a biblio,
+the subfield is not entered through a free field, but though a list of authorized values</p>
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
 <table>
 <tr>
 	<th>Category</th>
-	<th>Authorised value</th>
+	<th>Authorized value</th>
 	<th>Description</th>
 	<th>Edit</th>
 	<th>Delete</th>
@@ -97,7 +101,7 @@ the subfield is not entered through a free field, but though a list of authorise
 <!-- /TMPL_IF --> 
 
 <div id="action">
-    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=<!-- TMPL_VAR NAME="category" -->">Add Authorised value for <!-- TMPL_VAR name="category" --></a>
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->">Add Authorized value for <!-- TMPL_VAR name="category" --></a>
     <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Add New Category</a>
 </div>
 

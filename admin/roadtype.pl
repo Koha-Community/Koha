@@ -121,7 +121,7 @@ if ($op eq 'add_form') {
 	}
 
         $template->param(	
-				city_name       =>	( $data->{'road_type'}),
+				road_type       =>	( $data->{'road_type'}),
 				);
 
 

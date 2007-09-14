@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Biblio Framework<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --> Biblio Framework &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> Biblio Framework &rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Biblio Framework<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -59,8 +59,9 @@ function Check(f) {
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Biblio Framework<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio Framework</a> &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">Biblio Framework</a> &rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Biblio Framework<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -87,13 +88,11 @@ function Check(f) {
 <!-- TMPL_IF NAME="delete_confirm" -->
 <h3>Delete ramework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
     <!-- TMPL_IF NAME="total" -->
-        <div class="error">This framework is used <!-- TMPL_VAR NAME="total" --> times
+        <div class="error">This framework is used <!-- TMPL_VAR NAME="total" --> times</div>
     <!-- /TMPL_IF -->
-    <p>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Yes, Delete this Framework!" />
         </form>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete!" /></form>
-    </p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->

@@ -5,6 +5,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add Branch Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm Deletion of Branch Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
     <!-- TMPL_IF name="heading-branches-add-branch-p" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add branch<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Modify branch <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Branches<!-- /TMPL_IF --></div>

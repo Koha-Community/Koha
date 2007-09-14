@@ -1,7 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo;<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> MARC Subfield Structure &rsaquo; Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> MARC Subfield Structure &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> MARC Subfield Structure &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> MARC Subfield Structure &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->MARC Subfield Structure<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -50,9 +49,10 @@ function displayMoreConstraint(numlayer){
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->MARC Subfield Structure<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -106,22 +106,22 @@ function displayMoreConstraint(numlayer){
             <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
             
             <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
-            <span id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+            <div id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
                 <h3>Advanced constraint</h3>
                 <p>
                     <label for="defaultvalue">default value</label>
                     <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" />
                 </p>
-                <p><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</label></p>
+                <p><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</p>
                 <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</p>
                 <p><label>Link</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple:200b)</p>
-                <p><label>Others Options: <p>(choose one)</p></label>
+                <p><label>Others Options:</label> (choose one)</p>
                     <p><label>Authorized Value</label><!-- TMPL_VAR NAME="authorised_value" --></p>
                     <p><label>Thesaurus</label><!-- TMPL_VAR NAME="authtypes" --></p>
                     <p><label>Plugin</label><!-- TMPL_VAR NAME="value_builder" --></p>
                 </p>
                 <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></p>
-            </span>
+            </div>
         </div>
         <!-- /TMPL_LOOP -->
     </div>
@@ -130,25 +130,32 @@ function displayMoreConstraint(numlayer){
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
-<table>
-<caption>Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->?</span></caption>
-    <tr>
-        <th>Subfield</th>
-        <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
-    </tr>
+<h3>Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->?</h3>
+    <p>Subfield: <!-- TMPL_VAR NAME="tagsubfield" --></p>
     <p>Description<!-- TMPL_VAR NAME="liblibrarian" --></p>
-</table>
-            <form class="inline" action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+
+            <form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-                <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" /><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Yes, Delete this Subfield" />
-            </form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />	<input type="submit" value="No, Do Not Delete" />
+                <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+				<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+				<input type="submit" value="Yes, Delete this Subfield" />
+            </form>
+			
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+			<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+			<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+			<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+			<input type="submit" value="No, Do Not Delete" />
             </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-    Data deleted
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
+    <h3>Data deleted</h3>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
     <input type="submit" value="OK" />
     </form>
 <!-- /TMPL_IF -->
@@ -165,6 +172,7 @@ function displayMoreConstraint(numlayer){
     <th>Text</th>
     <th>Constraints</th>
     <th>Delete</th>
+</tr>
 <!-- TMPL_LOOP NAME="loop" -->
 <!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
     <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
@@ -196,24 +204,23 @@ function displayMoreConstraint(numlayer){
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
     <input type="hidden" name="op" value="add_form" />
     <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="edit_tagfield" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="edit_frameworkcode" -->" />
     <input type="submit" value="Edit Subfields" />
 </form>
-<form class="inline" action="marctagstructure.pl" method="get">
+<form action="marctagstructure.pl" method="get">
     <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Return to Marc Structure" />
 </form>
 <!-- TMPL_IF NAME="previous" -->
     <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0" />
-    </a><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="next" -->
     <!-- TMPL_VAR NAME="next" -->
         <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1rightarrow.png" title="next" alt="next" border="0" />
-    </a>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
