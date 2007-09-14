@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials</title>
+<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_IF name="mod" --> Modify a subscription<!-- TMPL_ELSE -->Add a subscription<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
@@ -182,6 +182,7 @@ function display_table(n) {
 }
 
 function modify_num_pattern() {
+	if(!document.getElementById("numberpattern")){ return false; }
     document.getElementById("numberpattern").value = '<!-- TMPL_VAR NAME="numberpattern" -->';
     num_pattern();
     
@@ -721,6 +722,7 @@ window.onload = irregular_order();
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-add.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --> Modify a subscription<!-- TMPL_ELSE -->Add a subscription<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    

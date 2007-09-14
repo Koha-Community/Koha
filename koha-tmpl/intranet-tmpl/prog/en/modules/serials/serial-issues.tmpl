@@ -1,10 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials</title>
+<title>Koha &rsaquo; Serials &rsaquo; Subscription information for <!-- TMPL_VAR name="bibliotitle" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Subscription information for <i><!-- TMPL_VAR name="bibliotitle" --></i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -12,7 +14,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h1>
+<h1>Subscription information for <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
 <div id="action">
     <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Subscriptions</a>
     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Back to biblio</a>

@@ -6,6 +6,8 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Serials </div>
+
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -127,7 +129,7 @@ Serials updated :
                 <!-- TMPL_ELSE -->
                     <td>
                 <!-- /TMPL_IF -->
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button serial" title="subscription detail">Detail</a>
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button" title="subscription detail">Detail</a>
                 </td>
                 <!-- TMPL_IF name="toggle" -->
                     <td class="hilighted">
@@ -144,7 +146,7 @@ Serials updated :
     <!-- TMPL_IF NAME="routing" -->
     <!-- TMPL_ELSE -->
     	<div id="action">
-            <a href="/cgi-bin/koha/serials/subscription-add.pl" class="button serial">
+            <a href="/cgi-bin/koha/serials/subscription-add.pl" class="button">
                 Add subscription
             </a>
         </div>

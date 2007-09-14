@@ -24,6 +24,8 @@ function active(numlayer)
 <!-- TMPL_UNLESS name="popup" -->
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Serials </div>
+
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -31,11 +33,11 @@ function active(numlayer)
 	<div class="yui-b">
 	<h1>Subscription information for biblio #<!-- TMPL_VAR NAME="biblionumber" --> with title : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial">Back to biblio</a>
+	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Back to biblio</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
-			<a  class="button serial" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+			<a  class="button" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	<a class=" button serial" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=small">Compact view</a>

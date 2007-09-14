@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials</title>
+<title>Koha &rsaquo; Serials &rsaquo; Serial Edition <!-- TMPL_VAR name="bibliotitle" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
@@ -81,13 +81,15 @@ function HideItems(index,labelindex) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;  Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i></div>
+
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Serial Edition <!-- TMPL_VAR name="bibliotitle" --></h1>
+<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
 <form method="post" name="f" action="serials-edit.pl">
 <!--onsubmit="return barcode_check()">-->
 <div id="action">
