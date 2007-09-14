@@ -3,13 +3,15 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <form name="input" action="/cgi-bin/koha/labels/label-create-template.pl" method="get">
 
@@ -60,7 +62,8 @@ Active: <input type="checkbox" name="active" />
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

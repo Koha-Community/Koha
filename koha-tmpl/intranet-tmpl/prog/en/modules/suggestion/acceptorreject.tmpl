@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Suggestion Management</title>
+<title>Koha &rsaquo; Suggestions Management</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript">
  // <![CDATA[
@@ -42,14 +42,15 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Suggestions Management</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
     <h1>Suggestions Management</h1>
     
@@ -63,7 +64,7 @@
     <!-- TMPL_IF NAME="suggestions_loop" -->
     <b>Waiting suggestion,</b> accept or reject these suggestions with a reason.
     <form name="f" method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
-    <input type="hidden" name="op" value="aorr_confirm">
+    <input type="hidden" name="op" value="aorr_confirm" />
     <table>
         <tr>
             <th>Status</th>
@@ -113,7 +114,7 @@
             </tr>
         <!-- /TMPL_LOOP -->
         </table>
-        <input type="submit" value="Change Status">
+        <input type="submit" value="Change Status" />
 </form>
 <!-- TMPL_ELSE -->
     <b>No waiting suggestion to accept or reject.</b>
@@ -196,6 +197,4 @@
 </div>
 </div>
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

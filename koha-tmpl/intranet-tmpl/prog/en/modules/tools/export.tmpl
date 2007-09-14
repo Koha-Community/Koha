@@ -1,19 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; MARC biblio export</title>
+<title>Koha &rsaquo; MARC Export</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; MARC Export</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
-<h1>Select biblios to export</h1>
 <p>
     <b>Note : The items are exported by this tool unless specified.</b>
 </p>
@@ -21,20 +21,20 @@
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
     <fieldset>
     <legend>
-        Records
+        Select Records to Export
     </legend>
         <p>
             <label for="start">from biblio number</label>
             <input id="start" type="text" name="StartingBiblionumber" size="5" />
-        <p>
         </p>
+        <p>
             <label for="end">to biblio number :</label>
             <input id="end" type="text" name="EndingBiblionumber" size="5" />
         </p>
         
         <p>
-            <label for="itemtypes" >Document type</label>
-            <select name="itemtype">
+            <label for="itemtype" >Document type</label>
+            <select name="itemtype" id="itemtype">
                 <option value="">-- All --</option>
                 <!-- TMPL_LOOP NAME="itemtypeloop" -->
 				<!-- TMPL_IF name="selected" -->
@@ -94,7 +94,7 @@
             format.
         </p>
         <p>
-        <label for="filename">Filename:</label><input id="filename" tyle=text" name="filename" value="koha.mrc" />
+        <label for="filename">Filename:</label><input id="filename" type="text" name="filename" value="koha.mrc" />
         </p>
     </fieldset>
     <input type="hidden" name="op" value="export" />
@@ -103,7 +103,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -3,24 +3,27 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <form name="input" action="/cgi-bin/koha/labels/label-save-template.pl" method="get">
 
 <h3>Edit Label Template</h3>
 
 <h3>Template Settings</h3>
-<table>
 
-Template ID: <!-- TMPL_VAR NAME="tmpl_id" --> <br />
+<p>Template ID: <!-- TMPL_VAR NAME="tmpl_id" --> <br />
 Template Code: <input type="text"  size="40" name="tmpl_code" value="<!-- TMPL_VAR NAME="tmpl_code" -->" /><br />
-Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_desc"><!-- TMPL_VAR NAME="tmpl_desc" --></textarea><br />
+Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_desc"><!-- TMPL_VAR NAME="tmpl_desc" --></textarea><br /></p>
+
+<table>
 
 <tr>
         <td>Page Width:</td><td><input type="text"  size="4" name="page_width"  value="<!-- TMPL_VAR NAME="page_width" -->" /></td>
@@ -41,8 +44,6 @@ Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_d
 <tr>
         <td>Gap between Columns:</td><td><input type="text" size="4" name="colgap"  value="<!-- TMPL_VAR NAME="colgap" -->" /></td>
         <td>Gap between Rows:</td><td><input type="text" size="4" name="rowgap"  value="<!-- TMPL_VAR NAME="rowgap" -->" /></td>
-
-
 
 </tr>
 </table>
@@ -67,14 +68,15 @@ Active:
 <!-- /TMPL_IF -->
         <input type="hidden" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" />
 <p>
-<p>
         <input type="submit" value="Save" />
         <input type="reset" value="Reset" />
 </p>
 </form>
-</div>
-</div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
