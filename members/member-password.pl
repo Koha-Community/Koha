@@ -70,6 +70,7 @@ if ( $newpassword ) {
 	$template->param(	othernames => $bor->{'othernames'},
 			surname     => $bor->{'surname'},
 			firstname   => $bor->{'firstname'},
+			borrowernumber => $bor->{'borrowernumber'},
 			userid      => $bor->{'userid'},
 			defaultnewpassword => $defaultnewpassword );
 

@@ -1,11 +1,51 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo;<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --> Patron Management</title>
+<title>Koha &rsaquo; Patrons &rsaquo; <!-- TMPL_IF NAME="opadd" -->
+		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+  <!--TMPL_IF Name="opadd"-->
+<script language="JavaScript" type="text/javascript">
+function active(numlayer){
+    for (i=1; i <= 3 ; i++ ) {
+        var tab = document.getElementById('step'+i);
+        if (numlayer==i) {
+            tab.setAttribute("class","content_visible");
+            var tabactive=document.getElementById('link'+i);
+            tabactive.removeAttribute("class");
+            tabactive.setAttribute("class","tab_active");
+        } else {
+            tab.setAttribute("class","content_hidden");
+            try {
+                var tabactive=document.getElementById('link'+i);
+                tabactive.removeAttribute("class");
+                tabactive.setAttribute("class","tab_inactive");
+            }
+            catch(e){};
+        }
+    }
+}
+</script>
+  <!--/TMPL_IF-->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="opadd" -->
+		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
 		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
@@ -19,7 +59,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
 		<p>
-		<form name="form_double">
+		<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 			<div id="problem">
 				Duplicate suspected
 				<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >Detail</a>
@@ -27,9 +67,9 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a> 
 				&nbsp;&nbsp;&nbsp; No, it is not
 				<!-- TMPL_IF NAME="checked"-->
-					<input type="checkbox" checked name="answernodouble" >
+					<input type="checkbox" checked="checked" name="answernodouble" >
 				<!-- TMPL_ELSE -->
-					<input type="checkbox" name="answernodouble" >
+					<input type="checkbox" name="answernodouble" />
 				<!-- /TMPL_IF -->
 			</div>
 		</form>
@@ -57,63 +97,42 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
             <a href="javascript:active(2)" class="tab_inactive" id="link2">Contacts</a>
             <a href="javascript:active(3)" class="tab_inactive" id="link3">Library Management</a>
     </div>
-<script language="JavaScript" type="text/javascript">
-function active(numlayer){
-    for (i=1; i <= 3 ; i++ ) {
-        var tab = document.getElementById('step'+i);
-        if (numlayer==i) {
-            tab.setAttribute("class","content_visible");
-            var tabactive=document.getElementById('link'+i);
-            tabactive.removeAttribute("class");
-            tabactive.setAttribute("class","tab_active");
-        } else {
-            tab.setAttribute("class","content_hidden");
-            try {
-                var tabactive=document.getElementById('link'+i);
-                tabactive.removeAttribute("class");
-                tabactive.setAttribute("class","tab_inactive");
-            }
-            catch(e){};
-        }
-    }
-}
-</script>
-
   <!--/TMPL_IF-->
+  
 <form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 <!--    field always hidden in different form (1,2,3) -->
-<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->">
-<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->">
-<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->">
-<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->">
-<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->">
-<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->">
+<input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
+<input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
+<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->" />
+<input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
+<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
+<input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
 <input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 <input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
-<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 <input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
-<!-- TMPL_IF NAME="opadd" --><input type="hidden" name="op" value="insert"><!-- TMPL_ELSE --><input type="hidden" name="op" value="save"><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opadd" --><input type="hidden" name="op" value="insert" /><!-- TMPL_ELSE --><input type="hidden" name="op" value="save" /><!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="step_1"-->
-  <div name="step_1" id="step1" class="content_visible">
+  <div id="step1" class="content_visible">
   <!--TMPL_IF Name="I"-->
-  <input type="hidden" name="FormFieldList" value="surname|contactname|contactfirstname"> <!--TMPL_ELSE--> <input type="hidden" name="FormFieldList" value="title|surname|firstname|dateofbirth|initials|othernames">  <!--/TMPL_IF-->
+  <input type="hidden" name="FormFieldList" value="surname|contactname|contactfirstname" /> <!--TMPL_ELSE--> <input type="hidden" name="FormFieldList" value="title|surname|firstname|dateofbirth|initials|othernames" />  <!--/TMPL_IF-->
 	<fieldset id="memberentry_identity">
 		<legend><!--TMPL_IF Name="I"-->Organisation <!--TMPL_ELSE-->Patron <!--/TMPL_IF-->identity</legend>
 		<p>
 		<!-- TMPL_IF NAME="female" -->
-		<input type="radio" name="sex" value="F" checked>Female
-		<input type="radio" name="sex" value="M">Male
+		<input type="radio" name="sex" id="sex-female" value="F" checked="checked" /><label for="sex-female">Female</label>
+		<input type="radio" name="sex" id="sex-male" value="M" /><label for="sex-male">Male</label>
 		<!-- TMPL_ELSE -->
-		<input type="radio" name="sex" value="F">Female
-		<input type="radio" name="sex" value="M" checked>Male
+		<input type="radio" name="sex" id="sex-female" value="F" /><label for="sex-female">Female</label>
+		<input type="radio" name="sex" id="sex-male" value="M" checked="checked" /><label for="sex-male">Male</label>
 		<!-- /TMPL_IF -->
 		</p>
 		<p>
 		<!-- TMPL_IF NAME="mandatorytitle" -->
-			<label style="font-weight:bold">
+			<label for="btitle" class="required">
 		<!-- TMPL_ELSE -->
-			<label>
+			<label for="btitle">
 		<!-- /TMPL_IF-->
 		Title</label>
 		<!-- TMPL_VAR NAME="borrotitlepopup" -->
@@ -121,35 +140,35 @@ function active(numlayer){
 
 		<p>
 		<!-- TMPL_IF NAME="mandatorysurname" -->
-		<label style="font-weight:bold">
+		<label for="surname" class="required">
 		<!-- TMPL_ELSE -->
-		<label>
+		<label for="surname">
 		<!-- /TMPL_IF-->
 		Surname</label>
 		<!-- TMPL_IF NAME="uppercasesurnames" -->
-		<input style="text-transform:uppercase;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+		<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" />
 		<!-- TMPL_ELSE -->
-		<input style="text-transform:capitalize;" type="text" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" >
+		<input type="text" id="surname" name="surname" size="20"  value="<!-- TMPL_VAR NAME="surname" -->" />
 		<!-- /TMPL_IF -->
 		</p>
 		<p>
 		<!-- TMPL_IF NAME="mandatoryfirstname" -->
-		<label style="font-weight:bold">
+		<label for="firstname" class="required">
 		<!-- TMPL_ELSE -->
-		<label>
+		<label for="firstname">
 		<!-- /TMPL_IF-->
 		Firstname</label>
-		<input style="text-transform:capitalize;" type="text" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->">
+		<input type="text" id="firstname" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateofbirth" -->
-			<label style="font-weight:bold">
+			<label for="dateofbirth" class="required">
 			<!-- TMPL_ELSE -->	
-			<label>
+			<label for="dateofbirth">
 			<!-- /TMPL_IF-->
 			Date of birth</label>
-			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->">
-            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" />
+			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
           {
@@ -162,21 +181,21 @@ function active(numlayer){
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryinitials" -->
-				<label style="font-weight:bold">
+				<label for="initials" class="required">
 			<!-- TMPL_ELSE -->
-				<label>
+				<label for="initials">
 			<!-- /TMPL_IF-->
 			Initials</label>
-			<input type="text" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->">	
+			<input type="text" id="initials" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->" />	
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryothernames" -->
-			<label style="font-weight:bold">
+			<label for="othernames" class="required">
 			<!-- TMPL_ELSE -->
-			<label>
+			<label for="othernames">
 			<!-- /TMPL_IF-->
 			Other name</label>
-			<input style="text-transform:uppercase;" type="text" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" >
+			<input type="text" id="othernames" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" />
 		</p>
        
 <!--TMPL_IF Name="C"-->  <p>
@@ -195,19 +214,19 @@ function active(numlayer){
     <legend>Main address</legend>
     <p>
       <!-- TMPL_IF NAME="mandatorystreetnumber" -->
-      <label style="font-weight:bold">
+      <label for="streetnumber" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="streetnumber">
       <!-- /TMPL_IF-->
       Street number</label>
-      <input type="text" name="streetnumber" size="5" value="<!-- TMPL_VAR NAME="streetnumber" -->">
+      <input type="text" id="streetnumber" name="streetnumber" size="5" value="<!-- TMPL_VAR NAME="streetnumber" -->" />
     </p>
     <!-- TMPL_IF NAME="road_cgipopup" -->
       <p>
       <!-- TMPL_IF NAME="mandatorystreettype" -->
-      <label style="font-weight:bold">
+      <label for="streettype" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="streettype">
       <!-- /TMPL_IF-->
       Street type</label>
       <!-- TMPL_VAR NAME="roadpopup" -->
@@ -215,37 +234,37 @@ function active(numlayer){
     <!--/TMPL_IF--> 
     <p>
       <!-- TMPL_IF NAME="mandatoryaddress" -->
-      <label style="font-weight:bold">
+      <label for="address" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="address">
       <!--/TMPL_IF-->
       Address</label>
-      <input type="text" name="address" size="35" value="<!-- TMPL_VAR NAME="address" -->">
+      <input type="text" id="address" name="address" size="35" value="<!-- TMPL_VAR NAME="address" -->" />
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatoryaddress2" -->
-      <label style="font-weight:bold">
+      <label for="address2" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="address2">
       <!-- /TMPL_IF-->
       Address 2</label>
-      <input type="text" name="address2" size="35" value="<!-- TMPL_VAR NAME="address2" -->">
+      <input type="text" id="address2" name="address2" size="35" value="<!-- TMPL_VAR NAME="address2" -->" />
     </p>
     <p> 
       <!-- TMPL_IF NAME="mandatoryzipcode" -->
-        <label style="font-weight:bold">
+        <label for="zipcode" class="required">
       <!--TMPL_ELSE-->
-        <label>
+        <label for="zipcode">
       <!-- /TMPL_IF-->
       Zipcode</label>
-      <input type="text" maxlength="5" name="zipcode" size="5" value="<!-- TMPL_VAR NAME="zipcode" -->">
+      <input type="text" name="zipcode" id="zipcode" size="10" value="<!-- TMPL_VAR NAME="zipcode" -->" />
     </p>
     <!-- TMPL_IF NAME="city_cgipopup" --> 
     <p>
       <!-- TMPL_IF NAME="mandatoryselect_city" -->
-        <label style="font-weight:bold">
+        <label for="select_city" class="required">
       <!-- TMPL_ELSE -->
-        <label>
+        <label for="select_city">
       <!-- /TMPL_IF-->
       Select a city</label>
       <!-- TMPL_VAR NAME="citypopup" -->
@@ -253,12 +272,12 @@ function active(numlayer){
     <!-- /TMPL_IF-->
     <p>
       <!-- TMPL_IF NAME="mandatorycity" -->
-        <label style="font-weight:bold">
+        <label for="city" class="required">
       <!--TMPL_ELSE-->
-        <label>
+        <label for="city">
       <!-- /TMPL_IF-->
       City</label>
-      <input style="text-transform:uppercase;" type="text" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->">
+      <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
     </p>
     </fieldset>
   <fieldset id="memberentry_contact">
@@ -267,74 +286,74 @@ function active(numlayer){
       <h2>Borrower</h2>
       <p> 
         <!-- TMPL_IF NAME="mandatoryB_email" -->
-          <label style="font-weight:bold">
+          <label for="B_email" class="required">
         <!--TMPL_ELSE-->
-          <label>
+          <label for="B_email">
         <!-- /TMPL_IF-->
         E-mail (home)</label>
-        <input type="text" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" /> 
+        <input type="text" id="B_email" name="B_email" value="<!-- TMPL_VAR NAME="B_email" -->" /> 
         <!-- TMPL_IF NAME="mandatoryB_phone" -->
-          <label style="font-weight:bold">
+          <label for="B_phone" class="required">
         <!--TMPL_ELSE-->
-          <label>
+          <label for="B_phone">
         <!-- /TMPL_IF-->
         Phone (cell)</label>  
-        <input type="text" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />     
+        <input type="text" id="B_phone" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />     
       </p>
 <!--/TMPL_IF-->
       <p>
       <!-- TMPL_IF NAME="mandatoryphone" --> 
-      <label style="font-weight:bold">
+      <label for="phone" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="phone">
       <!-- /TMPL_IF-->
       Phone (home)</label>
-      <input type="text"  name="phone" value="<!-- TMPL_VAR NAME="phone" -->" >
+      <input type="text" id="phone" name="phone" value="<!-- TMPL_VAR NAME="phone" -->" />
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatoryphonepro" -->
-      <label style="font-weight:bold">
+      <label for="phonepro" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="phonepro">
       <!-- /TMPL_IF-->
       Phone (prof)</label>
-      <input type="text" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" >
+      <input type="text" id="phonepro" name="phonepro" value="<!-- TMPL_VAR NAME="phonepro" -->" />
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatorymobile" -->
-      <label style="font-weight:bold">
+      <label for="mobile" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="mobile">
       <!-- /TMPL_IF-->
       Phone (cell)</label>
-      <input type="text" name="mobile" value="<!-- TMPL_VAR NAME="mobile" -->" >
+      <input type="text" id="mobile" name="mobile" value="<!-- TMPL_VAR NAME="mobile" -->" />
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatoryemail" -->
-      <label style="font-weight:bold">
+      <label for="email" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="email">
       <!-- /TMPL_IF-->
       E-mail (home)</label>
-      <input type="text" name="email" value="<!-- TMPL_VAR NAME="email" -->" >  
+      <input type="text" id="email" name="email" value="<!-- TMPL_VAR NAME="email" -->" />  
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatoryemailpro" --> 
-      <label style="font-weight:bold">
+      <label for="emailpro" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="emailpro">
       <!-- /TMPL_IF-->
       E-mail (prof)</label>
-      <input type="text" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" >
+      <input type="text" id="emailpro" name="emailpro" value="<!-- TMPL_VAR NAME="emailpro" -->" />
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatoryfax" -->
-      <label style="font-weight:bold">
+      <label for="fax" class="required">
       <!--TMPL_ELSE-->
-      <label>
+      <label for="fax">
       <!-- /TMPL_IF-->
       Fax</label>
-      <input type="text" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" >
+      <input type="text" id="fax" name="fax" value="<!-- TMPL_VAR NAME="fax" -->" />
     </p>
   </fieldset>
 </div>
@@ -343,9 +362,9 @@ function active(numlayer){
 <!--/TMPL_IF -->
 <!--TMPL_IF Name="step_2"-->
 <!--TMPL_IF Name="step_1"-->
-<div name="step_2" id="step2" class="content_hidden">
+<div id="step2" class="content_hidden">
 <!--TMPL_ELSE-->
-<div name="step_2" id="step2" class="content_visible">
+<div id="step2" class="content_visible">
 <!--/TMPL_IF-->       
  	<fieldset id="memberentry_address">
 		<legend>Address</legend>
@@ -353,30 +372,30 @@ function active(numlayer){
 		<legend>Alternate address</legend>
 			<p>
 				<!-- TMPL_IF NAME="mandatoryB_address" -->
-					<label style="font-weight:bold">
+					<label for="B_address" class="required">
 				<!--TMPL_ELSE-->
-					<label>
+					<label for="B_address">
 				<!-- /TMPL_IF-->
 				Address</label>
-				<input type="text" name="B_address" size="40" value="<!-- TMPL_VAR NAME="B_address" -->">
+				<input type="text" id="B_address" name="B_address" size="40" value="<!-- TMPL_VAR NAME="B_address" -->" />
 			</p>
 			<p>
 				<!-- TMPL_IF NAME="mandatoryB_zipcode" -->
-					<label style="font-weight:bold">
+					<label for="B_zipcode" class="required">
 				<!--TMPL_ELSE-->
-					<label>
+					<label for="B_zipcode">
 				<!-- /TMPL_IF-->
 				Zipcode</label>
-				<input type="text" name="B_zipcode" maxlength="5" size="5" value="<!-- TMPL_VAR NAME="B_zipcode" -->">
+				<input type="text" id="B_zipcode" name="B_zipcode" maxlength="5" size="5" value="<!-- TMPL_VAR NAME="B_zipcode" -->" />
 			</p>
 			<p>
 				<!-- TMPL_IF NAME="mandatoryB_city" -->
-					<label style="font-weight:bold" >
+					<label for="B_city" class="required" >
 				<!--TMPL_ELSE-->
-					<label>
+					<label for="B_city">
 				<!-- /TMPL_IF-->
 				City</label>
-				<input type="text" style="text-transform:uppercase;" name="B_city" size="20" value="<!-- TMPL_VAR NAME="B_city" -->">
+				<input type="text" id="B_city" name="B_city" size="20" value="<!-- TMPL_VAR NAME="B_city" -->" />
 			</p>
 		</fieldset>
 	</fieldset>
@@ -386,9 +405,9 @@ function active(numlayer){
 		<legend>Organisations</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryphone" --> 
-			<label style="font-weight:bold">
+			<label for="organisations" class="required">
 			<!--TMPL_ELSE-->
-			<label>
+			<label for="organisations">
 			<!-- /TMPL_IF-->
 			Organisation(s)</label>
 			<!-- TMPL_VAR NAME="CGIorganisations" -->
@@ -409,24 +428,24 @@ function active(numlayer){
   <fieldset id="memberentry_identity">
     <legend>Library Management</legend>
     <!-- TMPL_IF NAME="mandatorycardnumber" -->
-      <label style="font-weight:bold">
+      <label for="cardnumber" class="required">
     <!--TMPL_ELSE -->
-      <label>
+      <label for="cardnumber">
     <!-- /TMPL_IF--> 
     Card number</label>
-    <input type="text" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->">
+    <input type="text" id="cardnumber" name="cardnumber" size="10" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
     <p>
       <!-- TMPL_IF NAME="mandatorybranchcode" -->
-        <label style="font-weight:bold">
+        <label for="branchcode" class="required">
       <!--TMPL_ELSE-->
-        <label>
+        <label for="branchcode">
       <!-- /TMPL_IF-->
       Branch</label>
       <!-- TMPL_VAR NAME="CGIbranch" -->
     </p>
     <p>
     <!-- TMPL_IF NAME="catcodepopup" -->
-          <label>Category</label>
+          <label for="categorycode">Category</label>
           <!-- TMPL_VAR NAME="catcodepopup" -->
       <!-- TMPL_ELSE -->
           <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF-->.</span>
@@ -435,28 +454,28 @@ function active(numlayer){
     </p>
     <p>
       <!-- TMPL_IF NAME="mandatorysort1" -->
-        <label style="font-weight:bold">
+        <label for="sort1" class="required">
       <!-- TMPL_ELSE -->
-        <label>
+        <label for="sort1">
       <!-- /TMPL_IF-->
       Sort 1</label>
       <!--TMPL_IF NAME="CGIsort1" --> 
         <!-- TMPL_VAR NAME="CGIsort1" -->
       <!--TMPL_ELSE-->
-        <input  type="text" name="sort1" size="20"  value="<!-- TMPL_VAR NAME="sort1" -->" >
+        <input  type="text" id="sort1" name="sort1" size="20"  value="<!-- TMPL_VAR NAME="sort1" -->" />
       <!-- /TMPL_IF -->   
     </p>
     <p>
     <!-- TMPL_IF NAME="mandatorysort2" -->
-    <label style="font-weight:bold">
+    <label for="sort2" class="required">
     <!-- TMPL_ELSE -->
-    <label>
+    <label for="sort2">
     <!-- /TMPL_IF-->
     Sort 2</label>
     <!--TMPL_IF NAME="CGIsort2" --> 
       <!-- TMPL_VAR NAME="CGIsort2" -->
     <!--TMPL_ELSE-->
-      <input  type="text" name="sort2" size="20"  value="<!-- TMPL_VAR NAME="sort2" -->" >
+      <input  type="text" id="sort2" name="sort2" size="20"  value="<!-- TMPL_VAR NAME="sort2" -->" />
     <!-- /TMPL_IF --> 
     </p>
   </fieldset>
@@ -464,13 +483,13 @@ function active(numlayer){
 	<legend>Library set-up</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateenrolled" -->
-			<label style="font-weight:bold">
+			<label for="dateenrolled" class="required">
 			<!--TMPL_ELSE-->
-			<label>
+			<label for="dateenrolled">
 			<!-- /TMPL_IF-->
 			Arrival date</label>
-			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->">
-            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateenrolled_button" />
+			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10"	  size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateenrolled_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
           {
@@ -483,14 +502,14 @@ function active(numlayer){
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
-			<label style="font-weight:bold">
+			<label for="dateexpiry" class="required">
 			<!--TMPL_ELSE-->
-			<label>
+			<label for="dateexpiry">
 			<!-- /TMPL_IF-->
 			Expiry date</label>
 			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10"
-							onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->">
-            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateexpiry_button" />
+							onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
           {
@@ -503,48 +522,48 @@ function active(numlayer){
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->
-				<label style="font-weight:bold">
+				<label for="opacnote" class="required">
 			<!--TMPL_ELSE-->
-				<label>
+				<label for="opacnote">
 			<!-- /TMPL_IF-->	
 			OPAC note</label>
-			<textarea  name="opacnote" cols="40" rows="2"   ><!-- TMPL_VAR NAME="opacnote" --></textarea>
+			<textarea id="opacnote" name="opacnote" cols="40" rows="2"><!-- TMPL_VAR NAME="opacnote" --></textarea>
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryborrowernotes" -->	
-				<label style="font-weight:bold">
+				<label for="borrowernotes" class="required">
 			<!--TMPL_ELSE-->
-				<label>
+				<label for="borrowernotes">
 			<!-- /TMPL_IF-->
 			Library note</label>
-			<textarea name="borrowernotes" cols="40" rows="2"   ><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
+			<textarea id="borrowernotes" name="borrowernotes" cols="40" rows="2"><!-- TMPL_VAR NAME="borrowernotes" --></textarea>
 		</p>
 	</fieldset>
 	<fieldset id="memberentry_userid">
 		<legend>OPAC login</legend>
 		<p>
 			<!-- TMPL_IF NAME="mandatoryuserid" -->
-			<label style="font-weight:bold">
+			<label for="userid" class="required">
 			<!--TMPL_ELSE-->
-			<label>
+			<label for="userid">
 			<!-- /TMPL_IF-->
 			OPAC Login</label>
-			<input type="text" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->">
+			<input type="text" id="userid" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->" />
 		</p>
 		<p>
 			<!-- TMPL_IF NAME="mandatorypassword" -->
-			<label style="font-weight:bold">
+			<label for="password" class="required">
 			<!--TMPL_ELSE-->
-			<label>
+			<label for="password">
 			<!-- /TMPL_IF-->
 			Password</label>
 			<!--TMPL_IF NAME="opadd"-->
-				<input type="text" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->">
+				<input type="text" id="password" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->" />
 			<!--TMPL_ELSE-->
 				<!--TMPL_IF NAME="password"-->
-					<input type="text" name="password" size="20"  value="****">
+					<input type="text" id="password" name="password" size="20"  value="****" />
 				<!--TMPL_ELSE-->
-					<input type="text" name="password" size="20"  value="">
+					<input type="text" id="password" name="password" size="20"  value="" />
 				<!--/TMPL_IF-->
 			<!--/TMPL_IF-->
 		</p>
@@ -553,9 +572,9 @@ function active(numlayer){
 			<h2>Warning</h2>
 			<!-- TMPL_LOOP NAME="flagloop" -->
 			<p>
-				<label class="borrowers_labels_title"><!-- TMPL_VAR NAME="html" --></label>
-				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" -->>Yes
-				<input type="radio" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" -->>No
+				<strong><!-- TMPL_VAR NAME="html" --></strong>
+				<input type="radio" id="yes<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" <!-- TMPL_VAR NAME="yes" --> /><label for="yes<!-- TMPL_VAR NAME="name" -->">Yes</label>
+				<input type="radio" id="no<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" <!-- TMPL_VAR NAME="no" --> /><label for="no<!-- TMPL_VAR NAME="name" -->">No</label>
 			</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_UNLESS -->	
@@ -563,13 +582,20 @@ function active(numlayer){
 		</fieldset>
 </div>
 <!-- /TMPL_IF -->
-    <div name="action">
+    <div id="action">
       <!-- TMPL_IF NAME="opadd" -->
-        <input type="button" name="step4" onclick="check_form_borrowers();unique();" value="Add member">
+        <input type="button" name="step4" onclick="check_form_borrowers();unique();" value="Add member" />
       <!-- TMPL_ELSE -->
-        <input type="button" name="step4" onclick="check_form_borrowers();" value="Modify member">
+        <input type="button" name="step4" onclick="check_form_borrowers();" value="Modify member" />
       <!--/TMPL_IF -->
     </div>
 </form>
   
-<!--	TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
