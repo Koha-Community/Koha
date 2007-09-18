@@ -219,7 +219,8 @@ if ($delete){
   print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 }
 if ($nok){
-  $template->param( "op$op" => 1);
+  $op="add" if ($op eq "insert");
+  $op="modify" if ($op eq "save");
   %data=%newdata; 
   $template->param( updtype => ($op eq "insert"?'I':'M'),step_1=>1,step_2=>1,step_3=>1,allsteps=>1);
 } 
