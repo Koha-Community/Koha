@@ -177,7 +177,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
       push @errors, "ERROR_login_exist";
       $nok=1;
     } else {
-      warn Data::Dumper::Dumper(%newdata);  
+#       warn Data::Dumper::Dumper(%newdata);  
       $borrowernumber = &AddMember(%newdata);
         if ($data{'organisations'}){            
           # need to add the members organisations
@@ -240,11 +240,11 @@ if ($delete){
     }
   }
   if ($op eq 'add'){
-    $template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1);
+    $template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1,allsteps=>1);
   } 
-  if ($op eq "Modify")  {
+  if ($op eq "modify")  {
     $template->param( updtype => 'M');
-    $template->param( step_1=>1,step_2=>1,step_3=>1) unless $step;
+    $template->param( step_1=>1,step_2=>1,step_3=>1,allsteps=>1) unless $step;
   }
 # my $cardnumber=$data{'cardnumber'};
   $data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';

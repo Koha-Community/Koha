@@ -40,18 +40,18 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 		<div id="problem">
 			<p>The following fields are wrong. Please fix it/them</p>
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
-				<p>login/password already exist</p>
+				<div name="ERROR_login_exist">login/password already exist</div>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
-				<p>Cardnumber already in use</p>
+				<div name="ERROR_cardnumber">Cardnumber already in use</div>
 			<!-- /TMPL_IF -->
-                        <!-- TMPL_IF NAME="ERROR_age_limitations" -->
-                                Patron is too young or too old for this category
-                        <!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="ERROR_age_limitations" -->
+              <div name="ERROR_age_limitations">Patron is too young or too old for this category</div>
+      <!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_IF -->
 	
-  <!--TMPL_IF Name="opadd"-->
+  <!--TMPL_IF Name="allsteps"-->
     <div id="tabs">
             <a href="javascript:active(1)" class="tab_active" id="link1">Personal Information</a>
             <a href="javascript:active(2)" class="tab_inactive" id="link2">Contacts</a>
