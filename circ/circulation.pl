@@ -57,12 +57,12 @@ my $query = new CGI;
 my $branch = $query->param('branch');
 if ($branch){
     # update our session so the userenv is updated
-	my $dbh=C4::Context->dbh;
-	my $sessionID = $query->cookie("CGISESSID") ;
-	my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-	$session->param('branch',$branch);
-	my $branchname = GetBranchName($branch);
-	$session->param('branchname',$branchname);
+    my $dbh=C4::Context->dbh;
+    my $sessionID = $query->cookie("CGISESSID") ;
+    my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+    $session->param('branch',$branch);
+    my $branchname = GetBranchName($branch);
+    $session->param('branchname',$branchname);
 }
 
 my $printer = $query->param('printer');

@@ -12,7 +12,7 @@
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
     <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
-	<input name="branch" value="CPL" type="hidden" />
+	<input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
     <input name="printer" value="" type="hidden" />
 	<input value="Submit" type="submit" />
 	</form>
