@@ -1,9 +1,175 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_INCLUDE NAME="holidays-top.inc" -->
+<title>Koha &rsaquo; Tools &rsaquo; Holidays</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script language="JavaScript" type="text/javascript">
+	// Captura el evento onmousemove para cualquier navegador
+	if (document.layers) { // Netscape
+		document.captureEvents(Event.MOUSEMOVE);
+	    document.onmousemove = captureMousePosition;
+	} else if (document.all) { // Internet Explorer
+	    document.onmousemove = captureMousePosition;
+	} else if (document.getElementById) { // Netcsape 6
+	    document.onmousemove = captureMousePosition;
+	}
+
+	var mouseXMax = 0;
+	var mouseYMax = 0;
+	var mouseX = 0;
+	var mouseY = 0;
+
+	function captureMousePosition(e) {
+	    if (document.layers) {
+		    mouseX = e.pageX;
+			mouseY = e.pageY;
+	        mouseXMax = window.innerWidth + window.pageXOffset;
+		    mouseYMax = window.innerHeight + window.pageYOffset;
+	    } else if (document.all) {
+		    mouseX = window.event.x + document.body.scrollLeft;
+	        mouseY = window.event.y + document.body.scrollTop;
+	        mouseXMax = document.body.clientWidth + document.body.scrollLeft;
+	        mouseYMax = document.body.clientHeight + document.body.scrollTop;
+	    } else if (document.getElementById) {
+	        mouseX = e.pageX;
+		    mouseY = e.pageY;
+	        mouseXMax = window.innerWidth + window.pageXOffset;
+	        mouseYMax = window.innerHeight + window.pageYOffset;
+	    }
+	}
+
+	function holidayOperation(formObject, opType) {
+		var op = document.getElementsByName('operation');
+		op[0].value = opType;
+		formObject.submit();
+	}
+
+	// This function shows the "Show Holiday" panel //
+	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description) {
+		
+		var panel = document.getElementById('showHoliday');
+		panel.style.display = 'inline';
+		document.getElementById('newHoliday').style.display = 'none';
+		panel.style.top = mouseYMax/2;
+		panel.style.left = (mouseXMax/2) - 250;
+		document.getElementById('showDayname').value = dayName;
+		document.getElementById('showBranchName').value = document.getElementById('branch').value;
+		document.getElementById('showDay').value = day;
+		document.getElementById('showMonth').value = month;
+		document.getElementById('showYear').value = year;
+		document.getElementById('showDescription').value = description;
+		document.getElementsByName('showWeekday')[0].value = weekDay;
+		document.getElementById('showTitle').value = title;
+		
+		if (exceptionPosibility == 1) {
+			document.getElementById('exceptionPosibility').style.display = 'inline';
+		} else {
+			document.getElementById('exceptionPosibility').style.display = 'none';
+		}
+	}
+
+	// This function shows the "Add Holiday" panel //
+	function newHoliday (dayName, day, month, year, weekDay) {
+		var panel = document.getElementById('newHoliday');
+		panel.style.display = 'inline';
+		document.getElementById('showHoliday').style.display = 'none';
+		panel.style.top = mouseYMax/2;
+		panel.style.left = (mouseXMax/2)  - 250;
+		document.getElementById('newDayname').value = dayName;
+		document.getElementById('newBranchName').value = document.getElementById('branch').value;
+		document.getElementById('newDay').value = day;
+		document.getElementById('newMonth').value = month;
+		document.getElementById('newYear').value = year;
+		document.getElementsByName('newWeekday')[0].value = weekDay;
+	}
+
+	function hidePanel(aPanelName) {
+		document.getElementById(aPanelName).style.display = 'none';
+	}
+
+	function changeBranch () {
+		var branch = document.getElementById('branch').options[document.getElementById('branch').selectedIndex].value;
+		location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch;
+	}
+
+	function additionalInformation (anExplanation) {
+		var panel = document.getElementById('information');
+		var paragraph = document.getElementById('explanation');
+		panel.style.display = 'inline'
+		panel.style.top = mouseY;
+		panel.style.left = mouseX;
+		var info = document.createTextNode(anExplanation);
+		if (paragraph.hasChildNodes()) {
+			paragraph.removeChild(paragraph.lastChild);
+		}
+		paragraph.appendChild(info);
+	}
+
+	function Help() {
+		newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+	}
+</script>
+
+<style type="text/css">
+.normalday { 
+	background-color :  #EDEDED;
+	color :  Black; 
+	border : 1px solid #000000;
+}
+
+.exception {
+	background-color :  #EDEDED;
+	color :  Black; 		
+	border : 1px solid #000000;
+}
+
+.holiday { 
+	background-color :  red;
+	color :  Black; 
+	border : 1px solid #000000;
+}
+
+.repeatableday { 
+	background-color :  yellow;
+	color :  Black; 
+	border : 1px solid #000000;
+}
+
+.information {
+	z-index : 1;
+	background-color :  #DCD2F1;
+	width : 300px;
+	display : none;
+	border : 1px solid #000000;
+	color :  #000000;
+	font-size :  8pt;
+	font-weight :  bold;
+    background-color :  #FFD700;
+	cursor :  pointer;
+	padding : 2px;
+}
+
+.panel {
+	z-index : 1;
+	width : 500px;
+	display : none;
+	border : 1px solid #000000;
+	padding : 0px;
+}
+
+</style>
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; Holidays</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 
 <!-- ******************************** FLAT PANELS ******************************************* -->
 <!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
@@ -11,84 +177,77 @@
 
 <!-- ********************** Panel for showing already loaded holidays *********************** -->
 <div class="panel" style="position:absolute;background-color:#CCCCCC" id="showHoliday">
- 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post" style="display:inline">
+ 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
 		<p onclick=" hidePanel('showHoliday');hidePanel('information')" style="cursor:pointer">
 			Hide Details
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/signClose.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle">
+			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/signClose.gif" border="0" alt="" style="vertical-align:middle" />
 		</p>
 		<p>
-			<label>Day name</label>
-			<input type="text" size="20" id="showDayname" name="showDayname" readonly
-						   style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="showDayname">Day name</label>
+			<input type="text" size="20" id="showDayname" name="showDayname" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 			<input type="hidden" name="showWeekday" />
 		</p>
 		<p>
-			<label>Library</label>
+			<label for="showBranchName">Library</label>
 			<input type="text" size="20" id="showBranchName" name="showBranchName" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</p>
 		<div style="display:inline">
-			Day <input type="text" size="2" id="showDay" name="showDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
-			Month <input type="text" size="2" id="showMonth" name="showMonth" readonly
-						        style="background-color:#FFFFFF;color:Black;font-size:10px;" />
-			Year <input type="text" size="4" id="showYear" name="showYear" readonly
-						       style="background-color:#FFFFFF;color:Black;font-size:10px;" />		
+			<label for="showDay">Day</label> <input type="text" size="2" id="showDay" name="showDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="showMonth">Month</label> <input type="text" size="2" id="showMonth" name="showMonth" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="showYear">Year</label> <input type="text" size="4" id="showYear" name="showYear" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />		
 		</div>
-	    <p>Add a description to holiday day.</p>
+	    <p><label for="showDescription">Add a description to holiday day:</label></p>
 		<p>
 			<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
 		</p>
 		<div id="exceptionPosibility" style="position:static">
-			<input type="radio" name="showOperation" value="exception"> Generate an exception to this holiday
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0"   style="vertical-align:middle;cursor:pointer"
-					onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')">
-			<br />
+			<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday</label>
+			<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
 		</div>
-		<input type="radio" name="showOperation" value="delete" checked="checked"> Delete this holiday.
-		<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
-			onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')">
+		<input type="radio" name="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel">Delete this holiday</label>.
+		<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
 		<p>
-			<input type="submit" name="submit" id="submit" value="Save">
-			<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')">
+			<input type="submit" name="submit" value="Save" />
+			<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')" />
 		</p>
 	</form>
 </div>
 
 <!-- ***************************** Panel to deal with new holidays **********************  -->
 <div class="panel" style="position:absolute;background-color:#CCCCCC" id="newHoliday">
- 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post" style="display:inline">
+ 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
 		<h2>
 			Add new holiday
 		</h2>
 		<p>
-			<label>Day name</label>
+			<label for="newDayname">Day name</label>
 			<input type="text" size="20" id="newDayname" name="newDayname" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 			<input type="hidden" name="newWeekday" />
 		</p>
 		<p>
-			<label>Library</label>
+			<label for="newBranchName">Library</label>
 			<input type="text" size="20" id="newBranchName" name="newBranchName" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</p>
 		<div style="display:inline">
-			Day <input type="text" size="2" id="newDay" name="newDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
-			Month <input type="text" size="2" id="newMonth" name="newMonth"  readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
-			Year <input type="text" size="4" id="newYear" name="newYear" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="newDay">Day</label> <input type="text" size="2" id="newDay" name="newDay" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="newMonth">Month</label> <input type="text" size="2" id="newMonth" name="newMonth"  readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
+			<label for="newYear">Year</label> <input type="text" size="4" id="newYear" name="newYear" readonly="readonly" style="background-color:#FFFFFF;color:Black;font-size:10px;" />
 		</div>
 		<p>
-			<label>Add a description to holiday day</label>
+			<label for="newDescription">Add a description to holiday day</label>
 			<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
 		</p>
-			<input type="radio" name="newOperation" value="holiday" checked="checked"> Holiday only on this day.
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer"
-			onclick=" additionalInformation('This will take this date to make it holiday just for this time. Through this option, you can set a single holiday. For example, suppose you are in August 1st, and only for this year you want to make it holiday.')">
+			<input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" /> <label for="newOperationOnce">Holiday only on this day</label>.
+			<a href="#" onclick=" additionalInformation('This will take this date to make it holiday just for this time. Through this option, you can set a single holiday. For example, suppose you are in August 1st, and only for this year you want to make it holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
 			<br />
-			<input type="radio" name="newOperation" value="weekday"> Holiday repeated every same day of the week
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick=" additionalInformation('This will take this week day and make it holiday. No matter what date it is, this option will repeat this rule for every week. For example, if this date correspond to a saturday, every saturdays will be holidays.')">
+			<input type="radio" name="newOperation" id="newOperationDay" value="weekday" /> <label for="newOperationDay">Holiday repeated every same day of the week</label>
+			<a href="#" onclick=" additionalInformation('This will take this week day and make it holiday. No matter what date it is, this option will repeat this rule for every week. For example, if this date correspond to a saturday, every saturdays will be holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
 			<br />
-			<input type="radio" name="newOperation" value="repeatable">Holiday repeated yearly on the same date.
-			<img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle;cursor:pointer" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, if this date correspond to a August 1st, every August 1st will be holiday, no matter what year you are.')">
+			<input type="radio" name="newOperation" id="newOperationYear" value="repeatable" /><label for="newOperationYear">Holiday repeated yearly on the same date</label>.
+			<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, if this date correspond to a August 1st, every August 1st will be holiday, no matter what year you are.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
 			<p>
-				<input type="submit" name="submit" id="submit" value="Save" />
-				<input type="button" name="cancel2" id="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')">
+				<input type="submit" name="submit" value="Save" />
+				<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
 			</p>
  	</form>
 </div>
@@ -104,13 +263,13 @@
 <!-- ******                     START OF INFORMATION PANEL                            ****** -->
 <!-- *************************************************************************************** -->
 
-<div class="information" style="position:absolute" id="information" onclick=" hidePanel('information')" onblur="javascript: hidePanel('information')">
+<div class="information" style="position:absolute" id="information" onclick=" hidePanel('information')">
 	<table>
 		<tr>
-			<td valign="top">
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/info.gif" hspace="0" vspace="0" border="0" style="vertical-align:middle">
+			<td>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/info.gif" border="0" style="vertical-align:middle" alt="" />
 			</td>
-			<td valign="top">
+			<td>
 				<p id="explanation" style="display:inline;align:justify"></p>
 			</td>
 		</tr>
@@ -212,4 +371,10 @@
 	);
 </script>
 </div>
-<!-- TMPL_INCLUDE NAME="holidays-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

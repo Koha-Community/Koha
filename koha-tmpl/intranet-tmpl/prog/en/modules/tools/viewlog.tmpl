@@ -1,19 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Logs</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; Logs</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -28,9 +22,9 @@
 <fieldset>
     <legend>Additional infos</legend>
         <p>
-         Display from <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
-								<script language="JavaScript" type="text/javascript">
+        <label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
+							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
+								<script type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
 										var month = date.getMonth() + 1;
@@ -57,8 +51,8 @@
 										}
 									);
 								</script>
-					to <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+					<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
+						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
 					<script type="text/javascript">
 						function validate2(date) {
 							var day = date.getDate();
@@ -86,17 +80,17 @@
 					);
 		    </script>
 		</p>
-		<p>
+
 		<p><b>Export into</b></p>
-        <input id="screen" type="radio" checked name="output" value="screen" />
-        <label for="screen" >To screen into the browser</label>
-		<br />
+        <p><input id="screen" type="radio" checked="checked" name="output" value="screen" />
+        <label for="screen" >To screen into the browser</label></p>
+		<p>
 		<input id="file" type="radio" name="output" value="file" />
 		 <label for="file">To file</label>
-		<input type="text" name="basename" value="Export"> into an application  
+		<input type="text" name="basename" value="Export" /> into an application  
 		<!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->">
+	    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 	    <input type="submit" value=" GO " />
 	    </p>
 </fieldset>
@@ -122,14 +116,14 @@
 	<tr>
 	    <td>
             <input type="submit" value="filter" />
-            <input type="hidden" name="do_it" value="1">
+            <input type="hidden" name="do_it" value="1" />
 	    </td>
 	    <td>
 	        <input type="text" name="user" value="<!-- TMPL_VAR NAME="user"-->" />
 	    </td>
 	    <td>
 	        <select name="module">
-			    <option value="" checked="checked">All</option>
+			    <option value="" selected="selected">All</option>
 			    <option value ="CATALOGUING">Catalogue</option>
 				<option value ="MEMBERS">Members</option>
 				<option value ="ACQUISITION">Acquisitions</option>
@@ -201,6 +195,7 @@
 					</tr>
 		<!-- /TMPL_LOOP -->
     </table>
+	</form>
 </div>
 </div>
 <div class="yui-b">

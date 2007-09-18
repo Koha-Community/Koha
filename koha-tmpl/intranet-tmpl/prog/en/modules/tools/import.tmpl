@@ -5,6 +5,9 @@
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; MARC Import</div>
+
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -53,9 +56,9 @@
 	</tr>
 	<tr>
 		<th scope="row" rowspan="2">If ISBN is already in the reservoir: </th>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked="checked" />Ignore this one, keep the existing one</td></tr>
+		<td><input type="radio" id="overwrite_bibliono" name="overwrite_biblio" value="0" checked="checked" /><label for="overwrite_bibliono">Ignore this one, keep the existing one</label></td></tr>
 <tr><td>
-			<input type="radio" name="overwrite_biblio" value="1" />Overwrite the existing one with this</td>
+			<input type="radio" id="overwrite_biblioyes" name="overwrite_biblio" value="1" /><label for="overwrite_biblioyes">Overwrite the existing one with this</label></td>
 	</tr>
 </table><input type="submit" value="Import" />
 </form>
