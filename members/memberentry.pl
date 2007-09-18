@@ -134,8 +134,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
 
   # CHECKS step by step
 # STEP 1
-#   if ($step eq 3) {
-    if ($op eq 'add' && checkcardnumber($cardnumber)){ 
+    if ($op eq 'insert' && checkcardnumber($cardnumber)){ 
       push @errors, 'ERROR_cardnumber';
       $nok = 1;
     } 
@@ -157,10 +156,8 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $nok = 1;
       }
     }
-#   }
 
 # STEP 2
-#   if ($step eq 2) {
     if ( ($newdata{'userid'} eq '')){
       my $onefirstnameletter=substr($data{'firstname'},0,1);
       my $fivesurnameletter=substr($data{'surname'},0,5);
@@ -168,7 +165,6 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     }
 #   }
 # STEP 3
-#   if ($step eq 3) {
   if ($op eq 'insert'){
     # this value show if the login and password are been used
     my $loginexist=checkuserpassword($borrowernumber,$data{'userid'},$data{'password'});
@@ -177,7 +173,6 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
       push @errors, "ERROR_login_exist";
       $nok=1;
     } else {
-#       warn Data::Dumper::Dumper(%newdata);  
       $borrowernumber = &AddMember(%newdata);
         if ($data{'organisations'}){            
           # need to add the members organisations
@@ -223,6 +218,11 @@ if ($op eq 'save'){
 if ($delete){
   print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 }
+if ($nok){
+  $template->param( "op$op" => 1);
+  %data=%newdata; 
+  $template->param( updtype => ($op eq "insert"?'I':'M'),step_1=>1,step_2=>1,step_3=>1,allsteps=>1);
+} 
 #  else {  # this else goes down the whole script
   # retrieve previous values : either in DB or in CGI, in case of errors in values
 #   my $data;
