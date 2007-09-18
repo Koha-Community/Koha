@@ -1239,7 +1239,7 @@ sub AddReturn {
                     $sth->execute( $iteminformation->{'itemnumber'} );
                     $sth->finish;
     #         now we check if there is a reservation with the validate of transfer if we have one, we can         set it with the status 'W'
-            ModReserveStatus( $iteminformation->{'itemnumber'},'W' );
+            C4::Reserves::ModReserveStatus( $iteminformation->{'itemnumber'},'W' );
             }
         else {
             $messages->{'WrongTransfer'} = $tobranch;
