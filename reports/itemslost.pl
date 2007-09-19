@@ -34,11 +34,11 @@ use C4::Branch; # GetBranches
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/itemslost.tmpl",
+        template_name   => "reports/itemslost.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { tools => 1 },
+        flagsrequired   => { reportss => 1 },
         debug           => 1,
     }
 );
