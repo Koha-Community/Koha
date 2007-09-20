@@ -146,6 +146,7 @@ var statut=0;
 	if (statut==1){
 			//alert if at least 1 error
 				alert(message+"\n"+message_champ);
+				return false;
 	}
 	else 
 	{

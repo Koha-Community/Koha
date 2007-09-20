@@ -584,9 +584,9 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <!-- /TMPL_IF -->
     <div id="action">
       <!-- TMPL_IF NAME="opadd" -->
-        <input type="button" name="step4" onclick="check_form_borrowers();unique();" value="Add member" />
+        <input type="button" name="step4" onclick="return check_form_borrowers();unique();" value="Add member" />
       <!-- TMPL_ELSE -->
-        <input type="button" name="step4" onclick="check_form_borrowers();" value="Modify member" />
+        <input type="button" name="step4" onclick="return check_form_borrowers();" value="Modify member" />
       <!--/TMPL_IF -->
     </div>
 </form>
