@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+#           2006 SAN-OP
+#           2007 BibLibre, Paul POULAIN
 #
 # This file is part of Koha.
 #
@@ -20,8 +22,6 @@
 =head1 returns.pl
 
 script to execute returns of books
-
-written 11/3/2002 by Finlay
 
 =cut
 
@@ -103,7 +103,6 @@ if ($query->param('WT-itemNumber')){
 updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
 }
 
-
 if ( $query->param('resbarcode') ) {
     my $item           = $query->param('itemnumber');
     my $borrowernumber = $query->param('borrowernumber');
@@ -115,13 +114,12 @@ if ( $query->param('resbarcode') ) {
     
 #     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
 # if not we send a value in reserve waiting for not implementting waiting status
-	if ($diffBranchReturned) {
-	$diffBranchSend = $diffBranchReturned;
-	}
-	else {
-	$diffBranchSend = undef;
-	}
-		 
+    if ($diffBranchReturned) {
+        $diffBranchSend = $diffBranchReturned;
+    }
+    else {
+        $diffBranchSend = undef;
+    }
     ModReserveAffect( $item, $borrowernumber,$diffBranchSend);
 #   check if we have other reservs for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
@@ -294,6 +292,7 @@ if ( $messages->{'ResFound'} and not $messages->{'WrongTransfer'}) {
             gonenoaddress  => $borr->{'gonenoaddress'},
             currentbranch  => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
             itemnumber       => $reserve->{'itemnumber'},
+            barcode     => $barcode,
         );
 
     }
@@ -319,6 +318,7 @@ if ( $messages->{'ResFound'} and not $messages->{'WrongTransfer'}) {
             destbranch	   => $reserve->{'branchcode'},
             transfertodo => ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ? 0 : 1 ),
             reserved => 1,
+            resbarcode       => $barcode,
             today            => $todaysdate,
             itemnumber       => $reserve->{'itemnumber'},
             borsurname       => $borr->{'surname'},

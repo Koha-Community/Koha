@@ -361,6 +361,8 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
         if($reserve{'holdingbranch'} eq $reserve{'wbrcode'}){
             $reserve{'atdestination'} = 1;
         }
+        # set found to 1 if reserve is waiting for patron pickup
+        $reserve{'found'} = 1 if $res->{'found'} eq 'W';
     }
     
 #     get borrowers reserve info

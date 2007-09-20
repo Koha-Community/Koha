@@ -97,3 +97,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('virtualshelves','1','Set virtual shelves management ON or OFF','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950AuthorAuthFields','701,702,700','contains the MARC biblio tags of person authorities to fill biblio.author with w',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950NormalizeAuthor','0','If set, Personal Name Authorities will replace authors in biblio.author','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesNeedReturns','0','If set, a reserve done on an item available in this branch need a check-in, otherwise, a reserve on a specific item, that is on the branch & available is considered as available','','YesNo');

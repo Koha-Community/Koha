@@ -76,7 +76,10 @@
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
                 <input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <!-- /TMPL_LOOP -->
-                <input type="hidden" name="barcode" value="0" />
+                <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
+                <input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" />
+                <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
                 </form>
     <!-- /TMPL_IF -->
 

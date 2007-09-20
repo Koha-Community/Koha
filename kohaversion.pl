@@ -8,7 +8,7 @@
 #        and is automatically called by Auth.pm when needed.
 
 sub kohaversion {
-    return "3.00.00.002";
+    return "3.00.00.003";
 }
 
 1;

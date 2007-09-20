@@ -4,6 +4,8 @@
 package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
+#           2006 SAN Ouest Provence
+#           2007 BibLibre Paul POULAIN
 #
 # This file is part of Koha.
 #
@@ -47,7 +49,33 @@ C4::Reserves - Koha functions for dealing with reservation.
 =head1 DESCRIPTION
 
   this modules provides somes functions to deal with reservations.
-
+  
+  Reserves are stored in reserves table.
+  The following columns contains important values :
+  - priority >0      : then the reserve is at 1st stage, and not yet affected to any item.
+             =0      : then the reserve is being dealed
+  - found : NULL       : means the patron requested the 1st available, and we haven't choosen the item
+            W(aiting)  : the reserve has an itemnumber affected, and is on the way
+            F(inished) : the reserve has been completed, and is done
+  - itemnumber : empty : the reserve is still unaffected to an item
+                 filled: the reserve is attached to an item
+  The complete workflow is :
+  ==== 1st use case ====
+  patron request a document, 1st available :                      P >0, F=NULL, I=NULL
+  a library having it run "transfertodo", and clic on the list    
+         if there is no transfer to do, the reserve waiting
+         patron can pick it up                                    P =0, F=W,    I=filled 
+         if there is a transfer to do, write in branchtransfer    P =0, F=NULL, I=filled
+           The pickup library recieve the book, it check in       P =0, F=W,    I=filled
+  The patron borrow the book                                      P =0, F=F,    I=filled
+  
+  ==== 2nd use case ====
+  patron requests a document, a given item,
+    If pickup is holding branch                                   P =0, F=W,   I=filled
+    If transfer needed, write in branchtransfer                   P =0, F=NULL, I=filled
+        The pickup library recieve the book, it checks it in      P =0, F=W,    I=filled
+  The patron borrow the book                                      P =0, F=F,    I=filled
+  
 =head1 FUNCTIONS
 
 =over 2
@@ -856,7 +884,7 @@ The itemnumber parameter is used to find the biblionumber.
 with the biblionumber & the borrowernumber, we can affect the itemnumber
 to the correct reserve.
 
-if $transferToDo is set, then the status is set to "Waiting" as well.
+if $transferToDo is not set, then the status is set to "Waiting" as well.
 otherwise, a transfer is on the way, and the end of the transfer will 
 take care of the waiting status
 =cut
@@ -900,9 +928,6 @@ sub ModReserveAffect {
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
     $sth->finish;
-
-    # now fix up the remaining priorities....
-#     _FixPriority( $data->{'priority'}, $biblio ); # can't work, 1st parameter should be $biblionumbern NOT priority. FIXME : remove this line if no problem seen once it is commented.
     return;
 }
 

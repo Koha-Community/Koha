@@ -97,11 +97,10 @@ my $strsth =
         biblio.title,
         biblio.author
  FROM  reserves
- LEFT JOIN items ON items.biblionumber=reserves.biblionumber,
-  borrowers,biblio
+ LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
+ LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
+ LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE isnull(cancellationdate)
-  && reserves.borrowernumber=borrowers.borrowernumber 
-  && reserves.biblionumber=biblio.biblionumber
   && reserves.found is NULL
   && items.holdingbranch=?
  ";

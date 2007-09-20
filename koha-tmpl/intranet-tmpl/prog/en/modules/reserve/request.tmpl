@@ -287,7 +287,11 @@ if (alreadyreserved > "0"){
         <td>
     <!-- TMPL_IF Name="wait" -->
     	<!-- TMPL_IF NAME="atdestination" -->
-          Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+                <!-- TMPL_IF name="found" -->
+                Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
+            <!-- TMPL_ELSE -->
+                Waiting to be pulled
+            <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
           Document will be transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
          <!-- /TMPL_IF -->

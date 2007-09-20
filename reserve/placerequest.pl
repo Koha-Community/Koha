@@ -33,7 +33,11 @@ my $input = new CGI;
 #print $input->header;
 
 my @bibitems=$input->param('biblioitem');
-my @reqbib=$input->param('reqbib');
+# FIXME I think reqbib does not exist anymore, it's used in line 82, to AddReserve of contraint type 'o'
+#       I bet it's a 2.x feature, reserving a given biblioitem, that is useless in Koha 3.0
+#       we can remove this line, the AddReserve of constrainttype 'o',
+#       and probably remove the reserveconstraint table as well, I never could fill anything in this table.
+my @reqbib=$input->param('reqbib'); 
 my $biblionumber=$input->param('biblionumber');
 my $borrower=$input->param('member');
 my $notes=$input->param('notes');
@@ -51,7 +55,7 @@ if ($checkitem ne ''){
 		my $item = $checkitem;
 		$item = GetItem($item);
 		if ( $item->{'holdingbranch'} eq $branch ){
-		$found = 'W';
+		$found = 'W' unless C4::Context->preference('ReservesNeedReturns');
 		}
 
 
@@ -77,6 +81,7 @@ if ($type eq 'str8' && $borrowernumber ne ''){
             # place a request on 1st available
             AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem,$found);
 	} elsif ($reqbib[0] ne ''){
+            # FIXME : elsif probably never reached, (see top of the script)
             # place a request on a given item
             AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'o',\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
 	} else {
