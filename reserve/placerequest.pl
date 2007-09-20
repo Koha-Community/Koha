@@ -51,7 +51,7 @@ if ($checkitem ne ''){
 		my $item = $checkitem;
 		$item = GetItem($item);
 		if ( $item->{'holdingbranch'} eq $branch ){
-		$found = 'W';	
+		$found = 'W';
 		}
 
 
@@ -74,13 +74,13 @@ if ($type eq 'str8' && $borrowernumber ne ''){
 	}
 	my $const;
 	if ($input->param('request') eq 'any'){
-	$const='a';
-  AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@realbi,$rank[0],$notes,$title,$checkitem,$found);
+            # place a request on 1st available
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem,$found);
 	} elsif ($reqbib[0] ne ''){
-	$const='o';
-  AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,$const,\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
+            # place a request on a given item
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'o',\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
 	} else {
-  AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
 	}
 	
 print $input->redirect("request.pl?biblionumber=$biblionumber");
