@@ -97,7 +97,7 @@ var statut=0;
  		}
  	} 
 	
-	if (document.form.BorrowerMandatoryField.value==''||document.form.FormFieldList.value=='' )
+	if (document.form.BorrowerMandatoryField.value=='')
 	{}
 	else
 	{
