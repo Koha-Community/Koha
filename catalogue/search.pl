@@ -259,13 +259,6 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
     my $secondary_servers_loop;# = displaySecondaryServers();
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
     
-    # load the limit types (icon-based limits in advanced search page)
-    my $outer_limit_types_loop = displayLimitTypes();
-    $template->param(outer_limit_types_loop =>  $outer_limit_types_loop,);
-    
-    # load the search indexes (what a user can choose to search by)
-    my $indexes = displayIndexes();
-    
     # determine what to display next to the search boxes (ie, boolean option
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
@@ -274,11 +267,9 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
     my @search_boxes_array;
     my $search_boxes_count = 1; # should be a syspref
     for (my $i=0;$i<=$search_boxes_count;$i++) {
-        my $this_index =[@$indexes]; # clone the data, not just the reference
-        #@$this_index[$i]->{selected} = "selected";
         if ($i==0) {
             push @search_boxes_array,
-                {indexes => $this_index,
+                {
                 search_boxes_label => 1,
                 scan_index => 1,
                 };
@@ -286,13 +277,10 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
         }
         elsif ($i==$search_boxes_count) {
             push @search_boxes_array,
-                {indexes => $indexes,
+                {
                 add_field => "1",};
         }
-        else {
-            push @search_boxes_array,
-                {indexes => $indexes,};
-        }
+
     }
     $template->param(uc(C4::Context->preference("marcflavour")) => 1,
                       search_boxes_loop => \@search_boxes_array);
@@ -300,10 +288,6 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
     # load the language limits (for search)
     my $languages_limit_loop = getAllLanguages();
     $template->param(search_languages_loop => $languages_limit_loop,);
-    
-    # load the subtype limits
-    my $outer_subtype_limits_loop = displaySubtypesLimit();
-    $template->param(outer_subtype_limits_loop => $outer_subtype_limits_loop,);
     
     my $expanded_options;
     if (not defined $cgi->param('expanded_options')){
@@ -316,8 +300,6 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
 
     # load the sort_by options for the template
     my $sort_by = $cgi->param('sort_by');
-    my $sort_by_loop = displaySortby($sort_by);
-    $template->param(sort_by_loop => $sort_by_loop);
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -335,10 +317,6 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 my @sort_by;
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
-# load the sort_by options for the template
-# my $sort_by = $params->{'sort_by'};
-# my $sort_by_loop = displaySortby($sort_by);
-# $template->param(sort_by_loop => $sort_by_loop);
 #
 # Use the servers defined, or just search our local catalog(default)
 my @servers;
