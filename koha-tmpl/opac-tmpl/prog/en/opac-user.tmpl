@@ -172,8 +172,22 @@
                 </td>
                 <td><!-- TMPL_VAR NAME="reservedate" --></td>
                 <td><!-- TMPL_VAR Name="branch" --></td>
-                <td><!-- TMPL_IF NAME="atdestination" -->
-                                Waiting at <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="holdingbranch" -->In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --><!-- /TMPL_IF --></td>
+                <td>
+                    <!-- TMPL_IF Name="wait" -->
+                        <!-- TMPL_IF NAME="atdestination" -->
+                            <!-- TMPL_IF name="found" -->
+                            Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b>
+                            <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
+                        <!-- TMPL_ELSE -->
+                            Waiting to be pulled
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_ELSE -->
+                        Document being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+                        <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                        Not ready
+                    <!-- /TMPL_IF -->
+                </td>
             </tr>
             <!-- /TMPL_LOOP -->
         </table>

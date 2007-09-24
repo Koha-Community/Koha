@@ -178,11 +178,25 @@ foreach my $res (@reserves) {
         $res->{'holdingbranch'} =
           $branches->{ $item->{'holdingbranch'} }->{'branchname'};
         $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
-        if ( $res->{'holdingbranch'} eq $res->{'branch'} ) {
-            $res->{'atdestination'} = 1;
-        }
+        # get document reserve status
         my $biblioData = GetBiblioData($res->{'biblionumber'});
         $res->{'waiting_title'} = $biblioData->{'title'};
+        if ( ( $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) ) {
+            my $item = $res->{'itemnumber'};
+            $item = GetBiblioFromItemNumber($item,undef);
+            $res->{'wait'}= 1; 
+            $res->{'holdingbranch'}=$item->{'holdingbranch'};
+            $res->{'biblionumber'}=$item->{'biblionumber'};
+            $res->{'barcodenumber'}	= $item->{'barcode'};
+            $res->{'wbrcode'} = $res->{'branchcode'};
+            $res->{'itemnumber'}	= $res->{'itemnumber'};
+            $res->{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
+            if($res->{'holdingbranch'} eq $res->{'wbrcode'}){
+                $res->{'atdestination'} = 1;
+            }
+            # set found to 1 if reserve is waiting for patron pickup
+            $res->{'found'} = 1 if $res->{'found'} eq 'W';
+        }
         push @waiting, $res;
         $wcount++;
     }
