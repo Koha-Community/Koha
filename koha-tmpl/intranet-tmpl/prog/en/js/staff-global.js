@@ -4,10 +4,10 @@
  	$(".focus").focus();
 	$('#toplevelmenu').clickMenu(); 
 	$('#header_search').tabs({
-    onShow: function() {
-        alert($('#header_search').children("div:visible").children("input:eq(0)").focus());
-    }
-});
+		onShow: function() {
+	        $('#header_search').find('div:visible').find('input').eq(0).focus();
+	    }	
+	});
  });
  
 

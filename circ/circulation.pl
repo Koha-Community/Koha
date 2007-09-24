@@ -595,6 +595,7 @@ if ($borrowerslist) {
     }
     $CGIselectborrower = CGI::scrolling_list(
         -name     => 'borrowernumber',
+		-id          => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
         -size     => 7,
