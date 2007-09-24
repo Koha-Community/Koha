@@ -532,6 +532,7 @@ sub buildQuery {
         }
     );
 
+
 # STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
 # we can't handle field weighting, stemming until a formal query parser is written
 # I'll work on this soon -- JF
@@ -562,6 +563,10 @@ sub buildQuery {
                # if there was, we can apply the current operator
         for ( my $i = 0 ; $i <= @operands ; $i++ ) {
             my $operand = $operands[$i];
+            # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
+            foreach (keys %{C4::Context->stopwords}) {
+                $operand=~ s/\b$_\b//i;
+            }
             my $index   = $indexes[$i];
             my $stemmed_operand;
             my $stemming      = C4::Context->parameters("Stemming")     || 0;
@@ -1268,6 +1273,7 @@ sub NZanalyse {
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND value LIKE ?");
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$string) {
+                next if C4::Context->stopwords->{uc($_)}; # skip if stopword
                 #warn "search on all indexes on $_";
                 my $biblionumbers;
                 next unless $_;
