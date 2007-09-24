@@ -1,22 +1,29 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Recieve <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_IF name="date" -->
+            Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Parcel <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="date" --><!-- TMPL_ELSE -->Orders not yet Received for <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  <!-- TMPL_IF name="date" -->
+            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"-->Parcel <i><!-- TMPL_VAR NAME="invoice" --></i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="date" --></i>
+        <!-- TMPL_ELSE -->
+            Orders not yet Received for <!-- TMPL_VAR NAME="name" -->
+        <!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 	
     <h1>
         <!-- TMPL_IF name="date" -->
             Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"-->Parcel <i><!-- TMPL_VAR NAME="invoice" --></i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="date" --></i>
         <!-- TMPL_ELSE -->
-            orders not yet recieved for <!-- TMPL_VAR NAME="name" -->
+            Orders not yet Received for <!-- TMPL_VAR NAME="name" -->
         <!-- /TMPL_IF -->
     </h1>
 <div id="acqui_recieve_summary">
@@ -25,8 +32,8 @@
     <p>On: <!-- TMPL_VAR NAME="datereceived" --></p>
 </div>
 <div id="acqui_recieve_recievelist">
-    <h2>Recieve list</h2>
-    <form action="" method="get" name="orderform">
+    <h2>Receive list</h2>
+    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table>
         <tr>
             <th>BASKET</th>
@@ -49,13 +56,13 @@
                 <td><!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="unitprice" --></td>
-                <td></td>
+                <td>&nbsp;</td>
                 <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
                 <td><!-- TMPL_VAR NAME="total" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
         <tr>
-            <th colspan="3"></th>
+            <th colspan="3">&nbsp;</th>
             <th>SUBTOTALS</th>
             <th><!-- TMPL_VAR NAME="totalprice" --></th>
             <th><!-- TMPL_VAR NAME="totalfreight" --></th>
@@ -117,7 +124,8 @@
 </div>
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 

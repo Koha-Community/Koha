@@ -4,19 +4,20 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
-        <legend>Start, recieve, or modify any order</legend>
+        <legend>Start, receive, or modify any order</legend>
     <!-- TMPL_IF name="nobudget" -->
         <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in parameters</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
@@ -26,7 +27,7 @@
         </form>
     <!-- TMPL_ELSE -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
+            <p><label for="supplier">Supplier: </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
@@ -94,22 +95,22 @@
         <!-- TMPL_LOOP name="loop_budget" -->
             <tr>
                 <td><!-- TMPL_VAR name="bookfundname" --></td>
-                <td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&aqbudgetid=<!--TMPL_VAR NAME="aqbudgetid"-->"><!-- TMPL_VAR name="budgetamount" --></a></td>
-                <td><a href="/cgi-bin/koha/acqui/spent.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&start=<!--TMPL_VAR NAME="sdate"-->&end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="spent" --></a></td>
-                <td><a href="/cgi-bin/koha/acqui/bookfund.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&start=<!--TMPL_VAR NAME="sdate"-->&end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="comtd" --></a></td>
+                <td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!--TMPL_VAR NAME="aqbudgetid"-->"><!-- TMPL_VAR name="budgetamount" --></a></td>
+                <td><a href="/cgi-bin/koha/acqui/spent.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="spent" --></a></td>
+                <td><a href="/cgi-bin/koha/acqui/bookfund.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="comtd" --></a></td>
                 <td><!-- TMPL_VAR name="avail" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
         </tbody>
-        <tfooter>
+        <tfoot>
         <tr>
-            <th>Total</td>
+            <th>Total</th>
             <th><!-- TMPL_VAR name="total" --></th>
             <th><!-- TMPL_VAR name="totspent" --></th>
             <th><!-- TMPL_VAR name="totcomtd" --></th>
             <th><!-- TMPL_VAR name="totavail" --></th>
         </tr>
-        </tfooter>
+        </tfoot>
     </table>
     </div>
     <!-- /TMPL_IF -->
@@ -126,7 +127,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

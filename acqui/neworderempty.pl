@@ -159,6 +159,7 @@ foreach my $thisitemtype (sort keys %$itemtypes) {
 
 my $CGIitemtype = CGI::scrolling_list(
     -name     => 'format',
+	-id          => 'format',
     -values   => \@itemtypesloop,
     -default  => $data->{'itemtype'},
     -labels   => \%itemtypesloop,
@@ -202,6 +203,7 @@ for ( my $i = 0 ; $i < $count2 ; $i++ ) {
 }
 my $CGIbookfund = CGI::scrolling_list(
     -name     => 'bookfund',
+	-id         => 'bookfund',
     -values   => \@select_bookfund,
     -default  => $data->{'bookfundid'},
     -labels   => \%select_bookfunds,

@@ -1,16 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Add order from suggestion: <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Add order from a suggestion</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="suggestions-add-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Add order from a suggestion</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 	
 <h1>Suggestions</h1>
 <div id="acqui_suggestion_select">
@@ -22,24 +24,7 @@
             <th>Accepted by</th>
             <th>&nbsp;</th>
         </tr>
-        <tr>
-            <th>
-                 Filter on :
-                <p>
-                title: <input type="text" name="title" value="<!-- TMPL_VAR NAME="title"-->" />
-                author: <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
-                publisher: <input type="text" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->" /></p>
-            </th>
-            <th>
-                &nbsp;
-            </th>
-            <th>
-                &nbsp;
-            </th>
-            <th>
-                <input type="submit" class="button" value="Set Filter" />
-            </th>
-        </tr>
+        
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
             <tr>
                 <td>
@@ -74,7 +59,8 @@
 </div>
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

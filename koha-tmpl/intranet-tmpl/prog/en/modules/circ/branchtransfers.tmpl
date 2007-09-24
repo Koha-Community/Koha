@@ -15,8 +15,6 @@
 	<div class="yui-b">
 
 
-<h1>Circulation &rsaquo; Transfers</h1>
-
 <!-- TMPL_IF Name="found" -->
     <h3>Reserve Found</h3>
     <table>
@@ -92,36 +90,33 @@
     </table>
 
 <!-- TMPL_ELSE -->
-    <table>
-        <caption>Messages</caption>
-        <tr>
-            <td>
+
+        <h4>Messages</h4>
+		<ul>
                 <!-- TMPL_IF Name="reqmessage" -->
                     <!-- TMPL_IF Name="cancelled" -->
-                        Reserve Cancelled<br />
+                        <li>Reserve Cancelled</li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="setwaiting" -->
-                        Item should now be waiting at library: <!-- TMPL_VAR Name="reqbrchname" --><br />
+                        <li>Item should now be waiting at library: <!-- TMPL_VAR Name="reqbrchname" --></li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
                 <!-- TMPL_LOOP Name="errmsgloop" -->
                     <!-- TMPL_IF Name="errbadcode" -->
-                        No Item with barcode: <!-- TMPL_VAR Name="msg" -->
+                        <li>No Item with barcode: <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errispermanent" -->
-                            Please return item to home library: <!-- TMPL_VAR Name="msg" -->
+                            <li>Please return item to home library: <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errdesteqholding" -->
-                        Item is already at destination library.
+                        <li>Item is already at destination library.</li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errwasreturned" -->
-                        Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>
-<!-- TMPL_VAR Name="name" --> and has been returned.
+                        <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>
+<!-- TMPL_VAR Name="name" --> and has been returned.</li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </td>
-        </tr>
-    </table>
+			</ul>
     <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
         <table>
             <caption>Transfer</caption>

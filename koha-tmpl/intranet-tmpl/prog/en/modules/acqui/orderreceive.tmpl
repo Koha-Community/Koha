@@ -1,16 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Receipt summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Receipt order for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Parcel <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
 <h1>Receipt order for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Parcel <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</h1>
 
@@ -20,32 +22,20 @@
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
     <fieldset>
     <legend>Catalogue Details</legend>
-    <p><label>Title</label><!-- TMPL_VAR NAME="title" --></p>
-    <p>
-        <label>Author</label>
-        <!-- TMPL_VAR NAME="author" -->
-    </p>
-    <p>
-        <label>Copyright Date</label>
-        <!-- TMPL_VAR NAME="copyrightdate" -->
-    </p>
+    <p>Title<!-- TMPL_VAR NAME="title" --></p>
+    <p> Author
+        <!-- TMPL_VAR NAME="author" --></p>
+    <p> Copyright Date
+        <!-- TMPL_VAR NAME="copyrightdate" --></p>
     
-    <p>
-        <label>ISBN</label>
-        <!-- TMPL_VAR NAME="isbn" -->
-    </p>
-    <p>
-        <label>Series</label>
-        <!-- TMPL_VAR NAME="seriestitle" -->
-    </p>
-    <p>
-        <label>Item Barcode</label>
-        <input type="text" size="20" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
-    </p>
-    <p>
-        <label>Volume Info (for serials)</label>
-        <input type="text" size="20" name="volinf" />
-    </p>
+    <p> ISBN
+        <!-- TMPL_VAR NAME="isbn" --></p>
+    <p> Series
+        <!-- TMPL_VAR NAME="seriestitle" --></p>
+    <p> <label>Item Barcode</label>
+        <input type="text" size="20" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></p>
+    <p> <label>Volume Info (for serials)</label>
+        <input type="text" size="20" name="volinf" /></p>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
@@ -102,7 +92,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

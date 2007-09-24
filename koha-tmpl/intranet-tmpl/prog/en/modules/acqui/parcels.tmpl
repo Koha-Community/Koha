@@ -1,15 +1,18 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Recieve <!-- TMPL_VAR name="bookselname" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 	
 <h1>Receive parcel from supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 
@@ -17,21 +20,17 @@
 <div id="resultnumber">
 <!-- Row of numbers corresponding to search result pages -->
 <!-- TMPL_IF NAME="displayprev" -->
-    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/prev.gif" border="0" /></a>
-<!-- TMPL_ELSE -->
-    <img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0" />
+    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra">&lt;&lt; Previous</a>
 <!-- /TMPL_IF -->
 <!-- TMPL_LOOP NAME="numbers" -->
     <!-- TMPL_IF NAME="highlight" -->
-    <img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
+    <span class="current"><!-- TMPL_VAR NAME="number" --></span>
     <!-- TMPL_ELSE -->
-    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0" /></a>
+    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><!-- TMPL_VAR NAME="number" --></a>
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 <!-- TMPL_IF NAME="displaynext" -->
-    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/next.gif" border="0" /></a>
-<!-- TMPL_ELSE -->
-    <img src="<!-- TMPL_VAR NAME="themelang" -->/images/numbers/placeholder.gif" border="0" />
+    <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra">Next &gt;&gt;</a>
 <!-- /TMPL_IF -->
 </div>
 
@@ -49,37 +48,24 @@
             <th>Items expected</th>
         </tr>
         <tr>
-            <th>
-                &nbsp;
-                <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->">
-            </th>
-            <th>
-                <input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->">
-            </th>
-            <th>
-                From :<input type="text" size="9" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->"> 
-                <p>To :<input type="text" size="9" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->">
-            </th>
-            <th>
-                &nbsp;
-            </th>
-            <th>
-                Sort by :<select name="orderby" size="1">
+            <th> <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></th>
+            <th><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" /></th>
+            <th><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->" /> 
+                <p><label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->" /></th>
+            <th>&nbsp;</th>
+            <th><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
                 <option value="aqorders.booksellerinvoicenumber"> Code</option>
                 <option value="datereceived"> Date Received</option>
                 <option value="datereceived desc"> Date Received reverse</option>
                 <option value="aqorders.booksellerinvoicenumber desc"> Code reverse</option>
                 </select><br />
-                Results per page :<select name="resultsperpage" value ="<!--TMPL_VAR Name="resultsperpage"-->" size="1">
+                <label for="resultsperpage">Results per page :</label><select name="resultsperpage" value ="<!--TMPL_VAR Name="resultsperpage"-->" id="resultsperpage">
                 <option value="20">20</option>
                 <option value="30">30</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-                </select>
-            </th>
-            <th>
-                <input type="submit" class="button" value="Filter">
-            </th>
+                </select></th>
+            <th><input type="submit" class="button" value="Filter" /></th>
         </tr>
 <!-- Actual Search Results -->
 <!-- TMPL_LOOP NAME="searchresults" -->
@@ -118,26 +104,27 @@
         <form method="get" action="parcel.pl">
         <p>
             <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-            <label>Parcel Code</label>
-            <input type="text" size="20" name="invoice" />
+            <label for="invoice">Parcel Code</label>
+            <input type="text" size="20" id="invoice" name="invoice" />
         </p>
         <p>
-            <label>GST</label>
-            <input type="text" size="20" name="gst" />
+            <label for="gst">GST</label>
+            <input type="text" size="20" id="gst" name="gst" />
         </p>
         <p>
-            <label>Freight</label>
-            <input type="text" size="20" name="freight" />
+            <label for="freight">Freight</label>
+            <input type="text" size="20" id="freight" name="freight" />
         </p>
         <p>
-            <input type="submit" class="button" value="save" />
+            <input type="submit" class="button" value="Save" />
         </p>
         </form>
     </fieldset>
     </div>
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

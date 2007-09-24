@@ -1,41 +1,45 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket (<!-- TMPL_VAR NAME="basketno" -->) for <!-- TMPL_VAR NAME="name" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_UNLESS name="closedate" -->
 <script type="text/javascript">
-            function confirm_close() {
+//<![CDATA[            function confirm_close() {
                 var is_confirmed = confirm('Are you sure you want to close this basket?');
                 if (is_confirmed) {
                     window.location = "/cgi-bin/koha/acqui/booksellers.pl?op=close&basketno=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->";
                 }
             }
+//]]>
         </script>
 		<!-- /TMPL_UNLESS -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-b">
 
     <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_VAR NAME="basketno" --> for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
-    <div id="acqui_basket_summary">
+
+    <!-- TMPL_IF NAME="basketno" --><div id="acqui_basket_summary">
         <h2>Basket Details</h2>
-        <p><label>Basket number </label> <!-- TMPL_VAR NAME="basketno" -->&nbsp;</p>
-        <p><label>Managed by </label> <!-- TMPL_VAR NAME="authorisedbyname" -->&nbsp;</p>
-        <p><label>Open on </label> <!-- TMPL_VAR NAME="creationdate" -->&nbsp;</p>
-        <p><label>For </label> Supplier Id <!-- TMPL_VAR NAME="booksellerid" -->&nbsp;</p>
-        <p><label>Invoice number </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&nbsp;</p>
-        <!-- TMPL_IF name="closedate" --><p><label>Closed On: </label> <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
+        <p>Basket number  <!-- TMPL_VAR NAME="basketno" --></p>
+        <p>Managed by  <!-- TMPL_VAR NAME="authorisedbyname" --></p>
+        <p>Open on  <!-- TMPL_VAR NAME="creationdate" --></p>
+        <p>For  Supplier Id <!-- TMPL_VAR NAME="booksellerid" --></p>
+        <p>Invoice number <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
+        <!-- TMPL_IF name="closedate" --><p>Closed On:  <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
         <!-- TMPL_UNLESS name="closedate" -->
         <p><a href="javascript:confirm_close()" class="button">Close this basket</a></p>
         <!-- /TMPL_UNLESS -->
-    </div>
+    </div><!-- /TMPL_IF -->
     
     <div id="acqui_basket_content">
     <h2>Order Details</h2>
@@ -49,7 +53,7 @@
                 <th>Est.</th>
                 <th>Qty.</th>
                 <th>Total</th>
-                <th class="DoNotPrint">
+                <th>
                     <a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">Fund</a>
                 </th>
                 <!-- TMPL_IF name="active" -->
@@ -85,7 +89,7 @@
                     <td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="line_total" --></td>
-                    <td class="DoNotPrint"><!-- TMPL_VAR NAME="bookfundname" --></td>
+                    <td><!-- TMPL_VAR NAME="bookfundname" --></td>
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_UNLESS name="closedate" -->
                         <td>
@@ -142,7 +146,7 @@
         <form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
             <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
             <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
-            <ul><li><label for="q">From an existing record: </label><input id="q" type="text"  size="25"   name="q" />
+            <ul><li><label for="q">From an existing record: </label><input id="q" type="text"  size="25" name="q" />
             <input type="submit" value="Search" /></li>
             <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a Suggestion</a></li>
             <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">New Record</a></li>
@@ -153,7 +157,8 @@
 
 </div>
 </div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
