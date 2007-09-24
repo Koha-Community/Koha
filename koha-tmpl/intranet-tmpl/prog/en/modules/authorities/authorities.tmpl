@@ -231,7 +231,7 @@ function unHideSubfield(index,labelindex) {
                 <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield"> 
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
+                    <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
                     <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" disabled="disabled" readonly="readonly" tabindex="-1" />
                 <!-- TMPL_ELSE -->
                     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
