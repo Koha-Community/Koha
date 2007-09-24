@@ -1,27 +1,26 @@
-<strong>Statistics wizards</strong>
+<h5>Statistics wizards</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
 		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
-
 		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
 	</ul>
 
 
-	<strong>Top Lists</strong>
+	<h5>Top Lists</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons checking out the most</a></li>
-
 		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Items checked out the most</a></li>
 	</ul>
-	Inactive
+	
+	<h5>Inactive</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Patrons who haven't checked out</a></li>
 		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items not checked out</a></li>
 	</ul>
 
 
-	<strong>Other</strong>
+	<h5>Other</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Items lost</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
