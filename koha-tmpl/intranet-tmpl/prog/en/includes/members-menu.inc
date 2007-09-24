@@ -1,11 +1,9 @@
 <h5>Add Patron</h5>
 <ul>
-<ul>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A">Adult</a></li>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C">Child</a></li>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P">Professional</a></li>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Organisation</a></li>
-</ul>
 </ul>
 <!-- TMPL_IF NAME="borrowernumber" -->
 <h5>Patron Details</h5>

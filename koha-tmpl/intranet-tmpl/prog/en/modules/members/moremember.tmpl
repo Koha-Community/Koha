@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Patrons &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
+<title>Koha &rsaquo; Patrons &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -26,7 +26,7 @@ function confirm_reregistration() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --> </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -34,49 +34,18 @@ function confirm_reregistration() {
 	<div id="yui-main">
 	<div class="yui-b">
 
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
+
 <!-- TMPL_IF NAME="unknowuser" -->
-    This patron doesn't exist.<a href="javascript:back();">Go Back</a>
+    This patron does not exist.
 <!-- TMPL_ELSE -->
 
+<!-- TMPL_IF NAME="reregistration" --><div class="message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 </form>
 
-<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
-
-<div id="action">
-    
-	<div class="edit">
-        <ul><!-- TMPL_IF name="adultborrower" -->
-        <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Add child</a> </li>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="category_type" -->
-            <!--TMPL_IF NAME="guarantor"-->
-                <li><a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">
-            <!--TMPL_ELSE-->
-            <li><a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">
-            <!--/TMPL_IF-->Edit</a></li>
-        <!-- TMPL_ELSE --> <!-- try with categorycode if no category_type -->
-            <!-- TMPL_IF NAME="categorycode" -->
-            <li><a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode"-->">Edit</a></li>
-            <!-- TMPL_ELSE --> <!-- if no categorycode, set category_type to A by default -->
-                <li><a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=A">Edit</a></li>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
-        
-        <li><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set password</a></li>
-       <li> <a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Privileges</a></li> 
-        <li><a href="javascript:confirm_deletion();">Delete</a> </li></ul>
-    </div>
-	
-    <div class="view">
-<ul>
-	<li>        <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Pay fines</a> </li>
-	<li>        <a href="#" onclick="confirm_reregistration(); document.form.value='y';">Renew</a></li>
-</ul>
-    </div>
-</div>
 <!-- TMPL_IF NAME="flagged" -->
     <ul>
         <!-- TMPL_IF NAME="debarred" -->
@@ -134,9 +103,49 @@ function confirm_reregistration() {
     </p>
     <p><label>City: </label><!-- TMPL_VAR NAME="city" --></p>
     <p><label>Zip code: </label><!-- TMPL_VAR NAME="zipcode" --></p>
+	
+	   <!-- TMPL_IF NAME="I" -->
+  <p><label>Organisation phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
+  <p><label>Organisation email: </label><!-- TMPL_VAR NAME="emailpro" --></p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS NAME="I"-->
+    <p><label>Home phone: </label><!-- TMPL_VAR NAME="phone" --></p>
+    <p><label>Cell phone: </label><!-- TMPL_VAR NAME="mobile" --></p>
+    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
+    <!-- /TMPL_UNLESS -->
+    <!-- TMPL_IF NAME="P"-->
+    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phone" --></p>
+    <p><label>Professionnal email: </label><!-- TMPL_VAR NAME="mobile" --></p>
+    <!-- /TMPL_IF -->   
+    <p><label>Fax: </label><!-- TMPL_VAR NAME="fax" --></p>
+    <!-- TMPL_UNLESS NAME="I"-->
+    <p><label>E-mail address:</label><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
+    <!-- /TMPL_UNLESS -->
   
             <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
 </fieldset>
+
+<fieldset>
+    <legend>Alternate Address</legend>
+    <!-- TMPL_UNLESS NAME="I"-->
+      <!-- TMPL_UNLESS NAME="C"-->
+  <p><label>Alternate address: </label><!-- TMPL_VAR NAME="B_address" --></p>
+      <p><label>Alternate city: </label><!-- TMPL_VAR NAME="B_city" --></p>
+      <p><label>Alternate zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
+  <!-- /TMPL_UNLESS -->
+    <!-- /TMPL_UNLESS -->
+ 
+     <!-- TMPL_IF NAME="C" -->
+    <p><label>Name: </label><!-- TMPL_VAR NAME="contactname" --></p>
+    <p><label>Firstname: </label><!-- TMPL_VAR NAME="firstname" --></p>    
+    <p><label>Phone: </label><!-- TMPL_VAR NAME="phone" --></p>
+    <p><label>Email: </label><!-- TMPL_VAR NAME="email" --></p>
+    <p><label>Relationship: </label><!-- TMPL_VAR NAME="relationship" --></p>
+   <!-- /TMPL_IF -->
+       
+    <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
+</fieldset>
+
 <fieldset>
     <legend>Library use</legend>
     <p><label>Patron number:</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
@@ -165,54 +174,20 @@ function confirm_reregistration() {
     <p><label>Message to Patron:</label><!-- TMPL_VAR NAME="opacnote" --></p>
             <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
 </fieldset>
-<fieldset>
-    <legend>Contacts</legend>
-    <!-- TMPL_UNLESS NAME="I"-->
-      <!-- TMPL_UNLESS NAME="C"-->
-  <p><label>Alternate address: </label><!-- TMPL_VAR NAME="B_address" --></p>
-      <p><label>Alternate city: </label><!-- TMPL_VAR NAME="B_city" --></p>
-      <p><label>Alternate zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
-  <!-- /TMPL_UNLESS -->
-    <!-- /TMPL_UNLESS -->
-    <!-- TMPL_IF NAME="I" -->
-  <p><label>Organisation phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
-  <p><label>Organisation email: </label><!-- TMPL_VAR NAME="emailpro" --></p>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_UNLESS NAME="I"-->
-    <p><label>Home phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Cell phone: </label><!-- TMPL_VAR NAME="mobile" --></p>
-    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
-    <!-- /TMPL_UNLESS -->
-    <!-- TMPL_IF NAME="P"-->
-    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Professionnal email: </label><!-- TMPL_VAR NAME="mobile" --></p>
-    <!-- /TMPL_IF -->   
-    <p><label>Fax: </label><!-- TMPL_VAR NAME="fax" --></p>
-    <!-- TMPL_UNLESS NAME="I"-->
-    <p><label>E-mail address:</label><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
-    <!-- /TMPL_UNLESS -->
-     <!-- TMPL_IF NAME="C" -->
-    <p><label>Name: </label><!-- TMPL_VAR NAME="contactname" --></p>
-    <p><label>Firstname: </label><!-- TMPL_VAR NAME="firstname" --></p>    
-    <p><label>Phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Email: </label><!-- TMPL_VAR NAME="email" --></p>
-    <p><label>Relationship: </label><!-- TMPL_VAR NAME="relationship" --></p>
-   <!-- /TMPL_IF -->
-       
-    <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
-</fieldset>
 
-<fieldset>
-    <legend>Fines and Charges</legend>
-    <!-- TMPL_IF name="totaldue" -->
+
+<div id="patrons-fines-and-charges">
+    <h2>Fines and Charges</h2>
+    <!-- TMPL_IF EXPR="totaldue eq 0.00" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
     <!-- TMPL_ELSE -->
         <p>No outstanding charges</p>
     <!-- /TMPL_IF -->
-</fieldset>
-    <div>
+</div>
+
+<div id="patrons-items-on-loan">
     <h2>Items on loan</h2>
-    <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
+    <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
         <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table>
@@ -281,11 +256,12 @@ function confirm_reregistration() {
         <input type="submit" name="renew_checked" value="Renew checked items" />
         <input type="submit" name="renew_all" value="Renew all" />
         </div>
-    </form>
-    </div>
-<!-- TMPL_IF NAME="reservloop" -->
-<div id="circ_circulation_issue">
+    </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
+	</div>
+	
+<div id="patrons-items-reserved">
 	<h2>Patron current reserves</h2>
+<!-- TMPL_IF NAME="reservloop" -->
 	<table>
 		<tr>
 			<th>Reserve date</th>
@@ -333,7 +309,10 @@ function confirm_reregistration() {
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
+	<!-- TMPL_ELSE -->
+	<p>Patron has nothing on reserve.</p>
 	<!-- /TMPL_IF -->
+	</div>
 
 <!-- /TMPL_IF --> <!-- unknowuser -->
 </div>

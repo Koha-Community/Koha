@@ -1,11 +1,11 @@
 <div id="header">
 	
 <div id="toplevelnav">
-<ul class="clickMenu" id="toplevelmenu">
-	<li class="main"><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li>
-	<li class="main"><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>
-	<li class="main"><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li>
-	<li class="more main"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul class="innerBox">
+<ul id="toplevelmenu">
+	<li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li>
+	<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>
+	<li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li>
+	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul>
 	<li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
 	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
 	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
