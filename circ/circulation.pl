@@ -203,21 +203,23 @@ if ($borrowernumber) {
       Add_Delta_YM( $enrol_year, $enrol_month, $enrol_day,
         0 , $borrower->{'enrolmentperiod'}) if ($enrol_year*$enrol_month*$enrol_day>0);
     # if the expiry date is before today
-    if ( Date_to_Days( $today_year, $today_month, $today_day ) >
-        Date_to_Days( $warning_year, $warning_month, $warning_day ) )
+    if ( $warning_year*$warning_month*$warning_day==0 
+      || Date_to_Days( $today_year, $today_month, $today_day ) 
+         > Date_to_Days( $warning_year, $warning_month, $warning_day ) )
     {
 
         #borrowercard expired or nearly expired, warn the librarian
         $template->param(
             flagged       => "1",
-            warndeparture => format_date("$warning_year-$warning_month-$warning_day"),
+            warndeparture => "1",
             renewaldate   => "$renew_year-$renew_month-$renew_day"
         );
     }
     # check for NotifyBorrowerDeparture
-        if (C4::Context->preference('NotifyBorrowerDeparture') &&
+        if ($warning_year*$warning_month*$warning_day==0 
+      || (C4::Context->preference('NotifyBorrowerDeparture') &&
             Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
-            Date_to_Days( $today_year, $today_month, $today_day ) ) 
+            Date_to_Days( $today_year, $today_month, $today_day )) ) 
         {
             $template->param("warndeparture" => 1);
         }
