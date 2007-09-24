@@ -196,11 +196,12 @@ if ($borrowernumber) {
     my ( $today_year,   $today_month,   $today_day )   = Today();
     my ( $warning_year, $warning_month, $warning_day ) = split /-/,
       $borrower->{'dateexpiry'};
-
+    my ( $enrol_year, $enrol_month, $enrol_day ) = split /-/,
+      $borrower->{'dateenrolled'};
     # Renew day is calculated by adding the enrolment period to today
     my ( $renew_year, $renew_month, $renew_day ) =
-      Add_Delta_YM( $today_year, $today_month, $today_day,
-        $borrower->{'enrolmentperiod'}, 0 );
+      Add_Delta_YM( $enrol_year, $enrol_month, $enrol_day,
+        0 , $borrower->{'enrolmentperiod'}) if ($enrol_year*$enrol_month*$enrol_day>0);
     # if the expiry date is before today
     if ( Date_to_Days( $today_year, $today_month, $today_day ) >
         Date_to_Days( $warning_year, $warning_month, $warning_day ) )
