@@ -160,8 +160,8 @@ sub SearchMember {
           "SELECT * FROM borrowers
                   LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
                   ($category_type?" AND category_type = ".$dbh->quote($category_type):"").
-                  " WHERE surname LIKE ? ORDER BY $orderby";
-        @bind = ("$searchstring%");
+                  " WHERE surname LIKE ? OR cardnumber like ? ORDER BY $orderby";
+        @bind = ("$searchstring%","$searchstring");
     }
     else    # advanced search looking in surname, firstname and othernames
     {
