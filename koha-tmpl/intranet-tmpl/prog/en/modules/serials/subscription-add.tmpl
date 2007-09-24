@@ -13,6 +13,27 @@ _('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'),_('Season'),_('Year'))
 var is_season = 0;
 var is_hemisphere = 1;
 
+function YMDaToYWDa(S) {
+    with (new Date(Date.UTC(S[0], S[1] - 1, S[2]))) {
+        var DoW = getUTCDay();
+        setUTCDate(getUTCDate() - (DoW + 6) % 7 + 3);
+        var ms = valueOf();
+        setUTCMonth(0, 4);
+        var WN = Math.round((ms - valueOf()) / 604800000) + 1;
+        return [getUTCFullYear(), WN, DoW == 0 ? 7 : DoW];
+    }
+}
+function dayofyear(d) { // d is a Date object
+var yn = d.getFullYear();
+var mn = d.getMonth();
+var dn = d.getDate();
+var d1 = new Date(yn,0,1,12,0,0); // noon on Jan. 1
+var d2 = new Date(yn,mn,dn,12,0,0); // noon on input date
+var ddiff = Math.round((d2-d1)/864e5);
+return ddiff+1;
+}
+
+
 // common pre defined number patterns
 function num_pattern() {
 var patternchoice = document.getElementById("numberpattern").value;
@@ -30,9 +51,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value=1;
-        document.f.lastvalue1.value=1;
+/*        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value=1;
+        document.f.lastvalue3.value=1;*/
         document.f.numberingmethod.value=_('Vol {X}, No {Y}, Issue {Z}');
         moreoptions(text[1],text[0],text[2]);
         display_table(0); // toggle info box on (1) or off (0)
@@ -50,9 +71,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
+/*        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';
+        document.f.lastvalue3.value='';*/
         document.f.numberingmethod.value=_('Vol {X}, No {Y}');
         moreoptions(text[1],text[0]);
         display_table(0);
@@ -70,14 +91,13 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';
         document.f.numberingmethod.value=_('Vol {X}, Issue {Y}');
         moreoptions(text[1],text[2]);
         display_table(0);
         break;
     case "5":
+        var d = new Date(document.f.firstacquidate.value);
+        var smonth = d.getMonth();
         document.f.add1.value=1;
         document.f.add2.value=1;
         document.f.add3.value='';
@@ -90,15 +110,13 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
-        document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';
         document.f.numberingmethod.value=_('No {X}, Issue {Y}');
         moreoptions(text[0],text[2]);
         display_table(0);
         break;
     case "6":
-        var d = new Date();
+        moreoptions_seasons(text[15],sYear);
+        var d = new Date(document.f.firstacquidate.value);
         var sYear = d.getFullYear();
         document.f.add1.value=1;
         document.f.add2.value='1';
@@ -112,12 +130,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value='1';
         document.f.setto3.value='';
-        document.f.lastvalue1.value=sYear;
-        document.f.lastvalue2.value='1';
-        document.f.lastvalue3.value='';
+        document.f.lastvaluetemp1.value=sYear;
         document.f.periodicity.value='8';
         document.f.numberingmethod.value=_('{Y} {X}');
-        moreoptions_seasons(text[15],sYear);
         display_table(0);
         is_season = 1;
         break;
@@ -127,7 +142,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.irreg_check.value=1; 
         break;
     case "8":
-        var d = new Date();
+        var d = new Date(document.f.startdate.value);
         var sYear = d.getFullYear();
         document.f.add1.value=1;
         document.f.add2.value=1;
@@ -141,10 +156,54 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.lastvalue1.value=sYear;
-        document.f.lastvalue2.value='1';
+//         document.f.setto3.value='';
+        if (document.f.lastvalue1.value==0){document.f.lastvalue1.value=sYear};
+        if (document.f.lastvalue2.value==0 ||document.f.lastvalue2.value=='' ){    
+          switch (document.f.periodicity.value){
+            case 1:              
+              var doy = dayofyear(d);
+              //var Weeknumber=YWDA[1];
+              document.f.lastvalue2.value=doy; 
+              break;      
+            case 12:     
+              var doy = dayofyear(d);
+              //var Weeknumber=YWDA[1];
+              document.f.lastvalue2.value=doy*2; 
+              break;      
+            case 13:     
+              var doy = dayofyear(d);
+              //var Weeknumber=YWDA[1];
+              document.f.lastvalue2.value=doy/3; 
+              break;      
+            case 2:
+            case 3:
+            case 4:
+              var YWDa = YMDaToYWDa(d);
+              //var Weeknumber=YWDA[1];
+              document.f.lastvalue2.value=YWDA[1]/(document.f.periodicity.value-1); 
+              break;      
+            case 5:
+              var smonth = d.getMonth();
+              document.f.lastvalue2.value=smonth;
+              break;      
+            case 6:
+              var smonth = d.getMonth();
+              document.f.lastvalue2.value=smonth/2;
+              break;      
+            case 7:
+            case 8:      
+              var smonth = d.getMonth();
+              document.f.lastvalue2.value=smonth/3;
+              break;      
+            case 9:                        
+              var smonth = d.getMonth();
+              document.f.lastvalue2.value=smonth/6;
+              break;      
+            default:
+          } 
+        }    
+        //         document.f.lastvalue2.value=document.f.lastvaluetemp2.value;
         document.f.lastvalue3.value='';
-        document.f.periodicity.value=1;
         document.f.numberingmethod.value=_('{X}/{Y}');
         moreoptions(text[16],text[0]);
         display_table(0);
@@ -162,9 +221,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value='';
         document.f.setto3.value='';
-        document.f.lastvalue1.value=1;
+/*        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value='';
-        document.f.lastvalue3.value='';
+        document.f.lastvalue3.value='';*/
         document.f.numberingmethod.value='{X}';
         moreoptions_daily_check(text[0]);
         document.f.irreg_check.value=1;
@@ -263,11 +322,11 @@ var textbox = '';
             }
         }
         textbox +="<\/tr>\n";
-        textbox +="<tr><td>"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")'><\/td>\n";
+        textbox +="<tr><td>"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=" + document.f.lastvalue1.value +" /><\/td>\n";
         if(y){
-            textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")'><\/td>\n";
+            textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")' value=" + document.f.lastvalue2.value + " /><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='lastvaluetemp3' size='4' onkeyup='moreoptionsupdate(\"lastvalue3\")'><\/td>\n";
+                textbox +="<td><input type='text' name='lastvaluetemp3' size='4' onkeyup='moreoptionsupdate(\"lastvalue3\")' value=" + document.f.lastvalue3.value + " /><\/td>\n";
             }
         }
         textbox +="<\/tr>\n";
@@ -280,7 +339,7 @@ var textbox = '';
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)'><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
+          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=" + document.f.issuesexpected1.value + " ><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -652,6 +711,15 @@ function moreoptionsupdate(fieldnames,rollover){
     // alert(fieldnametemp);
     eval("document.f."+fieldname+".value = document.f."+fieldnametemp+".value");
 //     alert (fieldname+" : "+eval("document.f."+fieldname+".value") +' '+fieldnametemp+' : ' +eval("document.f."+fieldnametemp+".value"));
+    var patternchoice = document.getElementById("numberpattern").value;
+    switch(patternchoice){
+    case "2":
+    case "4":
+    case "5":
+    case "8":
+       if (document.f.lastvaluetemp2.value>0){document.f.innerloop1.value = document.f.lastvaluetemp2.value;}
+      break;   
+    }  
     if(rollover){
         eval("document.f.every"+(fieldnametempnumber-1)+".value = document.f."+fieldnametemp+".value");
     }
@@ -821,8 +889,8 @@ window.onload = irregular_order();
         <tr>
             <td>First Issue ETA:</td>
             <td>
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="" />
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="acqui_date" />
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;"  alt=""/>
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size=13 maxlength=10 id="acqui_date" style="border-width: 0px;" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -1066,14 +1134,12 @@ window.onload = irregular_order();
                     <td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->" /></td>
                     <td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->" /></td>
                 </tr>
-                <!-- TMPL_IF name="mod" -->
                 <tr>
-                    <td>The loop is for instance</td>
+                    <td>inner counter</td>
                     <td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->" /></td>
                     <td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->" /></td>
                     <td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->" /></td>
                 </tr>
-                <!-- /TMPL_IF -->
                 <tr>
                     <td>Set back to</td>
                     <td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->" /></td>

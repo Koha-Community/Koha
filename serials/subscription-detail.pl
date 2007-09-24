@@ -84,6 +84,7 @@ for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
 chop($weekarrayjs);
 
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
+
 $subs->{startdate}=format_date($subs->{startdate});
 $subs->{firstacquidate}=format_date($subs->{firstacquidate});
 $subs->{histstartdate}=format_date($subs->{histstartdate});
@@ -99,7 +100,7 @@ $template->param(
     hemisphere => $hemisphere,
     );
 $template->param(
-            "periodicity".$subs->{periodicity} => 1,
+            "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
             "arrival".$subs->{dow} => 1,
             "numberpattern".$subs->{numberpattern} => 1,
             intranetstylesheet => C4::Context->preference("intranetstylesheet"),
