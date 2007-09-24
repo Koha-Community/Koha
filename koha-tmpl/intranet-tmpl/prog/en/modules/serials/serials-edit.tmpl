@@ -95,11 +95,12 @@ function HideItems(index,labelindex) {
 <div id="action">
     <ul>
     <!--TMPL_LOOP Name="subscriptions"-->
+    
 	<li><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="serial Collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
 	<li><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a></li>
-        <!--TMPL_IF name="abouttoexpire"--><li><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a></li>
+        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
         <!--/TMPL_IF-->
-        <!--TMPL_IF name="subscriptionexpired"--><li><a href="#" onclick="popup('subscription-renew.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->&amp;mode=popup')">Renew <!--TMPL_VAR Name="subscriptionid"--></a></li>
+        <!--TMPL_IF name="subscriptionexpired"--><a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
         <!--/TMPL_IF-->
       <!--/TMPL_LOOP-->
     <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
