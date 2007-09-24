@@ -54,55 +54,12 @@ if ( $step && $step == 1 ) {
     #First Step
     #Checking ALL perl Modules and services needed are installed.
     #Whenever there is an error, adding a report to the page
-    # I suppose here that Apache user can access /usr/bin/
-    # If mysql or zebra are in some fancy directory not in PATH
-    # Performing a disk search.
     $template->param( language => 1 );
     my $problem;
 
     unless ( $] >= 5.006001 ) {    # Bug 179
         $template->param( "problems" => 1, "perlversion" => 1 );
         $problem = 1;
-    }
-    unless ( -x "/usr/bin/perl" ) {
-        my $realperl = `which perl`;
-        $realperl = `find / -name perl` unless ($realperl);
-        chomp $realperl;
-        $template->param( "problems" => 1, 'perllocation' => 1 )
-          unless ($realperl);
-        $problem = 1 unless ($realperl);
-    }
-    unless ( -x "/usr/local/bin/mysql" ) {
-        my $mysql = `which mysql`;
-        $mysql = `find / -name mysql` unless ($mysql);
-        chomp $mysql;
-        $template->param( "problems" => 1, 'mysql' => 1 ) unless ($mysql);
-        $problem = 1 unless ($mysql);
-    }
-    unless ( -x "/usr/local/bin/zebraidx" || -x "/usr/local/bin/zebraidx-2.0" )
-    {
-        my $zebra = `which zebraidx`;
-        $zebra = `which zebraidx-2.0`       unless ($zebra);
-        $zebra = `find / -name "zebraidx*"` unless ($zebra);
-        chomp $zebra;
-        $template->param( "problems" => 1, 'zebra' => 1 ) unless ($zebra);
-        $problem = 1 unless ($zebra);
-    }
-    unless ( -x "/usr/local/bin/zebrasrv" || -x "/usr/local/bin/zebrasrv-2.0" )
-    {
-        my $zebra = `which zebrasrv`;
-        $zebra = `which zebrasrv-2.0`       unless ($zebra);
-        $zebra = `find / -name "zebrasrv*"` unless ($zebra);
-        chomp $zebra;
-        $template->param( "problems" => 1, 'zebra' => 1 ) unless ($zebra);
-        $problem = 1 unless ($zebra);
-    }
-    unless ( -x "/usr/local/bin/yaz-client" ) {
-        my $yaz = `which yaz-client`;
-        $yaz = `find / -name "yaz-client*"` unless ($yaz);
-        chomp $yaz;
-        $template->param( "problems" => 1, 'yaz' => 1 ) unless ($yaz);
-        $problem = 1 unless ($yaz);
     }
 
     # We could here use a special find
