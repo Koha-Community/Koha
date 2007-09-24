@@ -313,7 +313,6 @@ if ($borrowernumber) {
         $getreserv{nottransfered} = 0;
 
         $getreserv{reservedate}    = format_date( $num_res->{'reservedate'} );
-        $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
         $getreserv{title}          = $getiteminfo->{'title'};
         $getreserv{itemtype}       = $itemtypeinfo->{'description'};
         $getreserv{author}         = $getiteminfo->{'author'};
@@ -326,6 +325,7 @@ if ($borrowernumber) {
             $getreserv{waiting} = 1;
 #     genarate information displaying only waiting reserves
         $getWaitingReserveInfo{title}        = $getiteminfo->{'title'};
+        $getWaitingReserveInfo{biblionumber}   = $getiteminfo->{'biblionumber'};
         $getWaitingReserveInfo{itemtype}    = $itemtypeinfo->{'description'};
         $getWaitingReserveInfo{author}        = $getiteminfo->{'author'};
         $getWaitingReserveInfo{reservedate}    = format_date( $num_res->{'reservedate'} );
@@ -722,7 +722,8 @@ $template->param(
       $borrower->{'dateexpiry'},    #format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
     streetaddress     => $borrower->{'address'},
-    emailaddress      => $borrower->{'emailaddress'},
+    email      => $borrower->{'email'},
+	emailpro           => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},

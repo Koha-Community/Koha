@@ -15,14 +15,13 @@ border-bottom : 1px solid black;
 float : left;
 font-size : 90%;
 clear : left;
-margin: 1.5em 0 0 0;  
+margin: .9em 0 0 0;  
 padding: 0;
 width: 100%; 
 }
 
 legend {  
-margin-left: 1em;  
-color: #000000;  
+margin-left: 1em;
 font-weight: bold;
 font-size : 110%;
 }
@@ -63,6 +62,13 @@ ol.radio label.radio {
 	width : 12em;
 	margin-right : 1em;
 }
+
+fieldset.action {
+	float : none;
+	border : none;
+	margin : 0;
+	padding : 1em 0 .3em 0;
+}	
 </style>
 </head>
 <body>
@@ -631,13 +637,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 		<!-- /TMPL_UNLESS -->	
 </div>
 <!-- /TMPL_IF -->
-    <div id="action">
+    <fieldset class="action">
       <!-- TMPL_IF NAME="opadd" -->
         <input type="button" name="step4" onclick="return check_form_borrowers(); unique();" value="Add member" />
       <!-- TMPL_ELSE -->
         <input type="button" name="step4" onclick="return check_form_borrowers();" value="Modify member" />
       <!--/TMPL_IF -->
-    </div>
+    </fieldset>
 </form>
   
 </div>

@@ -7,51 +7,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-    /**
-    *  MoreBorrowerDetails();
-    *  This function displays or not borrower information.
-    */
-    function MoreBorrowerDetails() {
-        var div = document.getElementById('BorrowerDetails');
-        if(div.getAttribute('class') == "content_visible"){
-            div.removeAttribute('class');
-            div.setAttribute('class',"content_hidden");
-        }
-        else {
-            div.setAttribute('class',"content_visible");
-            div.setAttribute('style',"height:180px;");
-        }
-    }
-    /**
-    *  active(numlayer)
-    *  This function activate the numlayer div.
-    */
-    function active(numlayer){
-        for (i=0; i <= 1 ; i++ ) {
-            var tab;
-            try{
-                tab = document.getElementById(i+'XX');
-                tab.getAttribute('id'); // that throw an exception.
-            }
-            catch(e){
-                continue; // go to the next step.
-            }
-            if (numlayer==i) {
-                tab.setAttribute("class","content_visible");
-                var tabactive=document.getElementById('link'+i);
-                tabactive.removeAttribute("class");
-                tabactive.setAttribute("class","tab_active");
-            } else {
-                tab.setAttribute("class","content_hidden");
-                try {
-                    var tabactive=document.getElementById('link'+i);
-                    tabactive.removeAttribute("class");
-                    tabactive.setAttribute("class","tab_inactive");
-                }
-                catch(e){};
-            }
-        }
-    }
 	 $(document).ready(function() {
  		$('#patronlists').tabs();
 	 });
@@ -84,72 +39,47 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 
 <div id="BorrowerDetails">
-        <fieldset>
-            <legend><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
-            </legend>
-<!--             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">details</a>
-                / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;modify=edit&amp;destination=circ&categorycode=<!-- TMPL_VAR name="categorycode" -->">edit</a> -->
-        <p>
-        <!--TMPL_IF Name="warndeparture"--><p class="problem"> Patron card expires on <!-- TMPL_VAR name="warndeparture" -->.</p><!--/TMPL_IF-->
-        <!-- TMPL_IF NAME="streetaddress"-->
-            <!-- TMPL_VAR NAME="streetaddress" -->,
-        <!-- TMPL_ELSE -->
-            <span class="problem">No address stored for patron.</span>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="city" -->
-            <!-- TMPL_VAR NAME="city" -->
-        <!-- TMPL_ELSE -->
-            No city stored.
-        <!-- /TMPL_IF -->
-    <!--TMPL_IF NAME="phone" -->
-        <!-- TMPL_VAR NAME="phone" -->
-    <!-- TMPL_ELSE -->
-        <span class="problem">No phone stored.</span>    
-    <!-- /TMPL_IF -->
-    </p>
-    <!-- TMPL_IF NAME="emailaddress" -->
-    <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a>
-    <!-- /TMPL_IF -->
-    <p>Category: <!-- TMPL_VAR name="categorycode" --></p>
-    </fieldset>
+
+       
+
     <!-- TMPL_IF NAME="overduecount" -->
         <span class="problem"><b><big>This borrower has <!-- TMPL_VAR name="overduecount" --> overdue(s) items</big></b></span>
     <!--/TMPL_IF-->
     <!-- TMPL_IF NAME="flagged" -->
-        <fieldset>
-            <legend class="problem">Warning</legend>
-            <!-- TMPL_IF NAME="gna" -->
-                <p>Address: Patron's address in doubt</p>
+        <div class="warning">
+		<h3>Warning</h3>
+		<ul>
+			<!--TMPL_IF Name="warndeparture"--><li> Patron card expires on <!-- TMPL_VAR name="warndeparture" -->.</li><!--/TMPL_IF-->
+            <!-- TMPL_IF NAME="gna" --><li>Address: Patron's address in doubt</li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="lost" --><li>Lost: Patron's card is lost</li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="dbarred" --><li>
+                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a></li><!-- /TMPL_IF -->
+        	<!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" -->Overdues: See highlighted items <a href="JavaScript:active(1)">below</a><!-- /TMPL_IF --></li>
             <!-- /TMPL_IF -->
-        
-            <!-- TMPL_IF NAME="lost" -->
-                <p>Lost: Patron's card is lost</p>
-            <!-- /TMPL_IF -->
-        
-            <!-- TMPL_IF NAME="dbarred" -->
-                <p>
-                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a>
-                </p>
-            <!-- /TMPL_IF -->
-        
-            <!-- TMPL_IF name="odues" -->
-            <p>
-                <!-- TMPL_IF name="nonreturns" -->
-            Overdues: See highlighted items <a href="JavaScript:active(1)">below</a>
-                <!-- /TMPL_IF -->
-            </p>
-            <!-- /TMPL_IF --> <!-- odues -->
-        
-            <!-- TMPL_IF NAME="charges" -->
-            <p>
-            Fines: Patron has 
+        <!-- TMPL_IF NAME="charges" --><li>Fines: Patron has 
             <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines</a>.
-            Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a>
-            </p>
+            Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="WaitingReserveLoop" -->	
+<li>
+    <strong>Holds waiting:</strong>
+        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
+            <ul> 
+                <li> <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"-->,<!-- /TMPL_IF --> reserved on <!-- TMPL_VAR NAME="reservedate"--> 
+            <!-- TMPL_IF NAME="waitingat" -->
+                waiting at : <!-- TMPL_VAR NAME="waitingat" -->	
             <!-- /TMPL_IF -->
+                </li>
+            </ul>
+    <!-- /TMPL_LOOP -->
+</li>
+
+<!-- /TMPL_IF -->
+
+
             <!-- this part must be removed if we keep the new waiting infos display-->
             <!-- TMPL_IF NAME="waiting" -->
-            <p>
+            <li>
             Reserves waiting:
                 <!-- TMPL_LOOP name="itemswaiting" -->
                 <li>
@@ -157,14 +87,15 @@
                 (<!-- TMPL_VAR name="barcode" --> -- <!-- TMPL_VAR name="branchname" -->)
                 </li>
                 <!-- /TMPL_LOOP --> <!-- itemswaiting -->
-            </p>
+            </li>
             <!-- /TMPL_IF --> <!-- waiting -->
             <!-- end of this part must be removed if we keep the new waiting infos display-->
         
             <!-- TMPL_IF name="notes" -->
-            <p>Notes: <!-- TMPL_VAR name="notesmsg" --></p>
+            <li>Notes: <!-- TMPL_VAR name="notesmsg" --></li>
             <!-- /TMPL_IF --> <!-- notes -->
-        </fieldset>
+			</ul>
+        </div>
     <!-- /TMPL_IF --> <!-- flagged -->
 
 </div> <!-- id=BorrowerDetails -->
@@ -304,7 +235,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="borrowernumber" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
-    <legend>Checkout an item</legend>
+    <legend>Check Out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></legend>
 
     <p>
     <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" class="focus" size="14" />
@@ -676,27 +607,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 </fieldset>
 </form>
 
-<!-- TMPL_IF NAME="WaitingReserveLoop" -->	
-<fieldset id="circ_circulation_issue">
-    <legend class="problem">Holds waiting</legend>
-        This patron has holds waiting:
-        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
-        <p>
-            <ul> 
-                <li> <!-- TMPL_VAR NAME="title"--> (<!-- TMPL_VAR NAME="itemtype"-->), author : <!-- TMPL_VAR NAME="author"-->, reserved the : <!-- TMPL_VAR NAME="reservedate"--> 
-            <!-- TMPL_IF NAME="waitingat" -->
-                waiting at : <!-- TMPL_VAR NAME="waitingat" -->	
-            <!-- /TMPL_IF -->
-                </li>
-            </ul>
-        </p>
-    <!-- /TMPL_LOOP -->
-</fieldset>
-
-<!-- /TMPL_IF -->
-
 <div id="patronlists">
-    <h2><!-- TMPL_VAR NAME="firstname"--> <!-- TMPL_VAR NAME="surname"--> (<!-- TMPL_VAR NAME="cardnumber"-->) has</h2>
 
 <ul>   
 <li>    <!--TMPL_IF NAME="issuecount"-->
@@ -716,8 +627,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <div id="checkouts">
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
     <p>
-    <span class="click" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page')">Print Page</span>
-    / <span class="click" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip')">Print Slip</span>
+    <a href="#" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page'); return false;">Print Page</a>
+    / <a href="#" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip'); return false;">Print Slip</a>
     </p>
     
     <input type="hidden" value="circ" name="destination" />
@@ -884,7 +795,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
