@@ -65,7 +65,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="printers-admin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Modify printer '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Add printer<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer Added<!-- /TMPL_IF -->
@@ -169,15 +169,12 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
-<h2>Printer Admin</h2>
+<h2>Printer Administration</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-                <input type="submit" name="submit" value="Search" />
-        </form>
-<table>
+
+<!-- TMPL_IF NAME="loop" --><table>
 		<tr>
 			<th>Name</th>
 			<th>Queue</th>
@@ -193,7 +190,7 @@
 "op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="printername" -->" /><input type="submit" value="Delete" /></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
-	</table>
+	</table><!-- TMPL_ELSE --><div class="notice">No printers defined.</div><!-- /TMPL_IF -->
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
        <p> <input type="hidden" name="op" value="add_form" /><input type="submit" value="Add Printer" /></p></form>
 	<!-- TMPL_IF NAME="offsetgtzero" -->
