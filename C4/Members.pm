@@ -582,14 +582,14 @@ sub ModMember {
     }  
     my $query;
     my $sth;
-    $data{'userid'} = '' if ( $data{'password'} eq '' );
+    $data{'userid'} = '' if ( $data{'password'} eq '' );  
     my @parameters;  
-    foreach (keys %data)
-    {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_} and $data{$_})} ;
     
     # test to know if u must update or not the borrower password
     if ( $data{'password'} eq '****' ) {
-
+        delete $data{'password'};
+        foreach (keys %data)
+        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_} and $data{$_})} ;
         $query = "UPDATE borrowers SET ".join (",",@parameters)
     ." WHERE borrowernumber=$data{'borrowernumber'}";
 #         warn "$query";
@@ -598,6 +598,8 @@ sub ModMember {
     }
     else {
 
+        foreach (keys %data)
+        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_} and $data{$_})} ;
         ( $data{'password'} = md5_base64( $data{'password'} ) )
           if ( $data{'password'} ne '' );
         $query = "UPDATE borrowers SET ".join (",",@parameters)." WHERE borrowernumber=$data{'borrowernumber'}";
