@@ -316,15 +316,15 @@ sub create_input {
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         $subfield_data{marc_value} =
-		"<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-			value=\"$value\"
-			class=\"input_marceditor\"
-                        tabindex=\"1\"                     
-			disabled=\"disabled\" readonly=\"readonly\" \/>
-			<span class=\"buttonDot\"
-				onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}')\">...</span>
+            "<input type=\"text\"
+                    id=\"".$subfield_data{id}."\"
+                    name=\"".$subfield_data{id}."\"
+                    value=\"$value\"
+                    class=\"input_marceditor\"
+                    tabindex=\"1\"
+                    \/>
+                    <span class=\"buttonDot\"
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}')\">...</span>
 		";
     # it's a plugin field
     }

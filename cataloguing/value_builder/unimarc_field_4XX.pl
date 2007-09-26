@@ -83,7 +83,7 @@ sub plugin {
     my $searchdesc;
 
     if ( $op eq "fillinput" ) {
-        my $bibnum = $query->param('bibnum');
+        my $biblionumber = $query->param('biblionumber');
         my $index  = $query->param('index');
         my $marcrecord;
 
@@ -101,9 +101,9 @@ sub plugin {
         );
 
         #get marc record
-        $marcrecord = GetMarcBiblio($bibnum);
+        $marcrecord = GetMarcBiblio($biblionumber);
 
-        my $subfield_value_9 = $bibnum;
+        my $subfield_value_9 = $biblionumber;
         my $subfield_value_0;
         $subfield_value_0 = $marcrecord->field('001')->data
           if $marcrecord->field('001');
@@ -293,21 +293,21 @@ sub plugin {
         $template->param(
             fillinput        => 1,
             index            => $query->param('index') . "",
-            biblionumber     => $bibnum ? $bibnum : "",
-            subfield_value_9 => $subfield_value_9,
-            subfield_value_0 => $subfield_value_0,
-            subfield_value_a => $subfield_value_a,
-            subfield_value_c => $subfield_value_c,
-            subfield_value_d => $subfield_value_d,
-            subfield_value_e => $subfield_value_e,
-            subfield_value_h => $subfield_value_h,
-            subfield_value_i => $subfield_value_i,
-            subfield_value_p => $subfield_value_p,
-            subfield_value_t => $subfield_value_t,
-            subfield_value_u => $subfield_value_u,
-            subfield_value_v => $subfield_value_v,
-            subfield_value_x => $subfield_value_x,
-            subfield_value_y => $subfield_value_y,
+            biblionumber     => $biblionumber ? $biblionumber : "",
+            subfield_value_9 => "$subfield_value_9",
+            subfield_value_0 => "$subfield_value_0",
+            subfield_value_a => "$subfield_value_a",
+            subfield_value_c => "$subfield_value_c",
+            subfield_value_d => "$subfield_value_d",
+            subfield_value_e => "$subfield_value_e",
+            subfield_value_h => "$subfield_value_h",
+            subfield_value_i => "$subfield_value_i",
+            subfield_value_p => "$subfield_value_p",
+            subfield_value_t => "$subfield_value_t",
+            subfield_value_u => "$subfield_value_u",
+            subfield_value_v => "$subfield_value_v",
+            subfield_value_x => "$subfield_value_x",
+            subfield_value_y => "$subfield_value_y",
         );
 ###############################################################
     }
