@@ -150,7 +150,7 @@ function popup(subscriptionid) {
                 <!--TMPL_IF name="periodicity32" -->
                         Irregular
                 <!-- /TMPL_IF -->
-                <!--TMPL_IF name="periodicity" -->
+                <!--TMPL_IF name="periodicity0" -->
                         Unknown
                 <!-- /TMPL_IF -->
                 <!--TMPL_IF name="periodicity12" -->
@@ -258,8 +258,8 @@ function popup(subscriptionid) {
                 <div id="irreg"></div>
             </p>
             <!-- /TMPL_IF -->
-            <p><label>Begins on:</label>
-                <!--TMPL_VAR name="startdate" -->
+            <p><label>First arrival:</label>
+                <!--TMPL_VAR name="firstacquidate" -->
             </p>
         <!-- TMPL_IF name="numberlength" --><p><label>Number of issues:</label> <!-- TMPL_VAR name="numberlength" --></p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="weeklength" --><p><label>Number of weeks:</label> <!-- TMPL_VAR name="weeklength" --></p><!-- /TMPL_IF -->
@@ -307,6 +307,14 @@ function popup(subscriptionid) {
                     <td><!-- TMPL_VAR name="setto1" --></td>
                     <td><!-- TMPL_VAR name="setto2" --></td>
                     <td><!-- TMPL_VAR name="setto3" --></td>
+                </tr>
+                <tr>
+                    <td>
+                            Inner Counter
+                    </td>
+                    <td><!-- TMPL_VAR name="innerloop1" --></td>
+                    <td><!-- TMPL_VAR name="innerloop2" --></td>
+                    <td><!-- TMPL_VAR name="innerloop3" --></td>
                 </tr>
                 <tr>
                     <td>
