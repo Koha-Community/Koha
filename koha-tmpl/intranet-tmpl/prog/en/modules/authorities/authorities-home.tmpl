@@ -20,12 +20,7 @@
     <input type="hidden" name="type" value="intranet" />
     <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
 
-    <table>
-      <tr>
-        <th>
-          <label for="authtypecode">Search on</label>
-        </th>
-        <td colspan="2">
+    <p><label for="authtypecode">Search on</label>
           <select id="authtypecode" name="authtypecode">
 <!-- TMPL_LOOP NAME="authtypesloop" -->
   <!-- TMPL_IF name="selected" -->
@@ -35,70 +30,47 @@
   <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
           </select>
-        </td>
-      </tr>
-      <tr>
-        <th>
           <label for="value_mainmainentry">Main entry ($a only)</label>
           <input type="hidden" name="marclist" value="mainmainentry" />
-        </th>
-        <td>
           <select name="operator">
 	    <option value="contains">contains</option>
 	    <option value="start">start by</option>
             <option value="is">is exactly</option>
-	  </select>
-        </td>
-        <td>
-          <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="value_mainentry">Main entry</label>
-          <input type="hidden" name="marclist" value="mainentry" />
-          <input type="hidden" name="and_or" value="and" />
-          <input type="hidden" name="excluding" value="" />
-        </th>
-        <td>
-          <select name="operator">
-	    <option value="contains">contains</option>
-	    <option value="start">start by</option>
+        </select>
+        <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+    </p>
+    <p>
+        <label for="value_mainentry">Main entry</label>
+        <input type="hidden" name="marclist" value="mainentry" />
+        <input type="hidden" name="and_or" value="and" />
+        <input type="hidden" name="excluding" value="" />
+        <select name="operator">
+            <option value="contains">contains</option>
+            <option value="start">start by</option>
             <option value="is">is exactly</option>
-	  </select>
-        </td>
-        <td>
-          <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" /> 
-        </td>
-      </tr>
-
-      <tr>
-        <th>
-          <label for="value_anywhere">Anywhere</label>
+        </select>
+        <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
+      </p>
+    <p><label for="value_anywhere">Anywhere</label>
           <input type="hidden" name="marclist" value="" />
           <input type="hidden" name="and_or" value="and" />
           <input type="hidden" name="excluding" value="" />
-        </th>
-        <td>
           <select name="operator">
             <option value="contains">contains</option>
             <option value="start">start by</option>
             <option value="is">is exactly</option>
           </select>
-        </td>
-        <td>
           <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-        </td>
-      </tr>
-    </table>
-    
+    </p>
+suivi.paulpoulain.com):koha-tmpl/intranet-tmpl/prog/en/modules/authorities/authorities-home.tmpl
     <div id="action">
-          Order by :<select name="orderby">
+          <p><label>Order by :</label><select name="orderby">
          <option value="">None</option>
 	    <option value="HeadingAsc">Heading Ascendant</option>
 	    <option value="HeadingDsc">Heading Descendant</option>
 	  </select>
       <input type="submit" value="Start search">
+      </p>
     </div>
   </form>
 </fieldset>
@@ -107,25 +79,17 @@
   <legend>Add authority</legend>
 
   <form name="f2" method="post" action="authorities.pl">
-    <table>
-      <tr>
-        <th>
-          <label for="add_authtypecode">Authority type</label>
-        </th>
-        <td>
-          <select id="add_authtypecode" name="authtypecode">
+    <p><label for="add_authtypecode">Authority type</label>
+        <select id="add_authtypecode" name="authtypecode">
 <!-- TMPL_LOOP name="authtypesloop" -->
   <!-- TMPL_IF name="selected" -->
-            <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="authtypetext" --></option>
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="authtypetext" --></option>
   <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="authtypetext" --></option>
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="authtypetext" --></option>
   <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-          </select>
-        </td>
-      </tr>
-    </table>
-
+        </select>
+    </p>
     <div id="action">
       <input type="submit" value="Add" class="button" />
     </div>
