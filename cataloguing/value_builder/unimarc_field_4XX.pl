@@ -290,6 +290,21 @@ sub plugin {
         if   ( $marcrecord->field('010') ) {
             $subfield_value_y = $marcrecord->field('010')->subfield("a");
         }
+        # escape the 's
+        $subfield_value_9 =~ s/'/\\'/g;
+        $subfield_value_0 =~ s/'/\\'/g;
+        $subfield_value_a =~ s/'/\\'/g;
+        $subfield_value_c =~ s/'/\\'/g;
+        $subfield_value_d =~ s/'/\\'/g;
+        $subfield_value_e =~ s/'/\\'/g;
+        $subfield_value_h =~ s/'/\\'/g;
+        $subfield_value_i =~ s/'/\\'/g;
+        $subfield_value_p =~ s/'/\\'/g;
+        $subfield_value_t =~ s/'/\\'/g;
+        $subfield_value_u =~ s/'/\\'/g;
+        $subfield_value_v =~ s/'/\\'/g;
+        $subfield_value_x =~ s/'/\\'/g;
+        $subfield_value_y =~ s/'/\\'/g;
         $template->param(
             fillinput        => 1,
             index            => $query->param('index') . "",
