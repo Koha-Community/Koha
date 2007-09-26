@@ -116,14 +116,15 @@ while (my ($biblionumber) = $sth->fetchrow) {
                     # ... and split in words
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
+                        # remove any accented char
                         # if the entry is already here, improve weight
-                        if ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        if ($result{$key}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
                             my $weight=$1+1;
-                            $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                            $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
+                            $result{$key}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         # otherwise, create it, with weight=1
                         } else {
-                            $result{$key}->{$_}.="$biblionumber,$title-1;";
+                            $result{$key}->{"$_"}.="$biblionumber,$title-1;";
                         }
                     }
                 }
@@ -135,13 +136,13 @@ while (my ($biblionumber) = $sth->fetchrow) {
                 foreach (split / /,$line) {
                         next unless $_;
 #                     warn $record->as_formatted."$_ =>".$title;
-                        if ($result{__RAW__}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        if ($result{__RAW__}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
                             my $weight=$1+1;
 #                             $weight++;
-                            $result{__RAW__}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                            $result{__RAW__}->{$_} .= "$biblionumber,$title-$weight;";
+                            $result{__RAW__}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{__RAW__}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
-                            $result{__RAW__}->{$_}.="$biblionumber,$title-1;";
+                            $result{__RAW__}->{"$_"}.="$biblionumber,$title-1;";
                         }
                 }
             }
@@ -219,13 +220,13 @@ while (my ($authid) = $sth->fetchrow) {
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, improve weight
-                        if ($result{$key}->{$_} =~ /$authid,$title\-(\d);/) {
+                        if ($result{$key}->{"$_"} =~ /$authid,$title\-(\d);/) {
                             my $weight=$1+1;
-                            $result{$key}->{$_} =~ s/$authid,$title\-(\d);//;
-                            $result{$key}->{$_} .= "$authid,$title-$weight;";
+                            $result{$key}->{"$_"} =~ s/$authid,$title\-(\d);//;
+                            $result{$key}->{"$_"} .= "$authid,$title-$weight;";
                         # otherwise, create it, with weight=1
                         } else {
-                            $result{$key}->{$_}.="$authid,$title-1;";
+                            $result{$key}->{"$_"}.="$authid,$title-1;";
                         }
                     }
                 }
@@ -237,13 +238,13 @@ while (my ($authid) = $sth->fetchrow) {
                 foreach (split / /,$line) {
                         next unless $_;
 #                     warn $record->as_formatted."$_ =>".$title;
-                        if ($result{__RAW__}->{$_} =~ /$authid,$title\-(\d);/) {
+                        if ($result{__RAW__}->{"$_"} =~ /$authid,$title\-(\d);/) {
                             my $weight=$1+1;
 #                             $weight++;
-                            $result{__RAW__}->{$_} =~ s/$authid,$title\-(\d);//;
-                            $result{__RAW__}->{$_} .= "$authid,$title-$weight;";
+                            $result{__RAW__}->{"$_"} =~ s/$authid,$title\-(\d);//;
+                            $result{__RAW__}->{"$_"} .= "$authid,$title-$weight;";
                         } else {
-                            $result{__RAW__}->{$_}.="$authid,$title-1;";
+                            $result{__RAW__}->{"$_"}.="$authid,$title-1;";
                         }
                 }
             }

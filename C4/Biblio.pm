@@ -3089,25 +3089,25 @@ sub _AddBiblioNoZebra {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, improve weight
 #                         warn "managing $_";
-                        if ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        if ($result{$key}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
                             my $weight=$1+1;
-                            $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                            $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
+                            $result{$key}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
                             # get the value if it exist in the nozebra table, otherwise, create it
                             $sth2->execute($server,$key,$_);
                             my $existing_biblionumbers = $sth2->fetchrow;
                             # it exists
                             if ($existing_biblionumbers) {
-                                $result{$key}->{$_} =$existing_biblionumbers;
+                                $result{$key}->{"$_"} =$existing_biblionumbers;
                                 my $weight=$1+1;
-                                $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                                $result{$key}->{$_} .= "$biblionumber,$title-$weight;";
+                                $result{$key}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                                $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                             # create a new ligne for this entry
                             } else {
 #                             warn "INSERT : $server / $key / $_";
                                 $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).', indexname='.$dbh->quote($key).',value='.$dbh->quote($_));
-                                $result{$key}->{$_}.="$biblionumber,$title-1;";
+                                $result{$key}->{"$_"}.="$biblionumber,$title-1;";
                             }
                         }
                     }
@@ -3121,24 +3121,24 @@ sub _AddBiblioNoZebra {
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
                     # if the entry is already here, improve weight
-                    if ($result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                    if ($result{'__RAW__'}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
                         my $weight=$1+1;
-                        $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                        $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
+                        $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                        $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                     } else {
                         # get the value if it exist in the nozebra table, otherwise, create it
                         $sth2->execute($server,'__RAW__',$_);
                         my $existing_biblionumbers = $sth2->fetchrow;
                         # it exists
                         if ($existing_biblionumbers) {
-                            $result{'__RAW__'}->{$_} =$existing_biblionumbers;
+                            $result{'__RAW__'}->{"$_"} =$existing_biblionumbers;
                             my $weight=$1+1;
-                            $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
-                            $result{'__RAW__'}->{$_} .= "$biblionumber,$title-$weight;";
+                            $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                         # create a new ligne for this entry
                         } else {
                             $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).',  indexname="__RAW__",value='.$dbh->quote($_));
-                            $result{'__RAW__'}->{$_}.="$biblionumber,$title-1;";
+                            $result{'__RAW__'}->{"$_"}.="$biblionumber,$title-1;";
                         }
                     }
                 }
