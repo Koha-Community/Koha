@@ -98,11 +98,10 @@
         <tr>
             <th>BASKET</th>
             <th>Summary</th>
-            <th>Est. Cost</th>
-            <th>P&amp;P</th>
-            <th>QTY Ordered</th>
-            <th>QTY</th>
-            <th>TOTAL</th>
+            <th>Order qty</th>
+            <th>Order cost</th>
+            <th>Recieved qty</th>
+            <th>Recieved cost</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_orders" -->
             <tr>
@@ -113,13 +112,19 @@
                 <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
-                <td><!-- TMPL_VAR NAME="unitprice" --></td>
-                <td></td>
                 <td><!-- TMPL_VAR NAME="quantity" --></td>
-                <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
+                <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
+                <td><!-- TMPL_IF EXPR="unitprice ne '0.00'" --><!-- TMPL_VAR NAME="unitprice" --><!-- /TMPL_IF --></td>
             </tr>
         <!-- /TMPL_LOOP -->
+            <tr>
+                <th colspan="2">TOTAL</th>
+                <th><!-- TMPL_VAR NAME="totalPquantity" --></th>
+                <th><!-- TMPL_VAR NAME="totalPecost" --></th>
+                <th><!-- TMPL_VAR NAME="quantityreceived" --></th>
+                <th><!-- TMPL_VAR NAME="totalPunitprice" --></th>
+            </tr>
      </table>
 </div>
 </div>

@@ -119,6 +119,9 @@ for (my $i=0;$i<$countlines;$i++){
 my $pendingorders = GetPendingOrders($supplierid);
 my $countpendings = scalar @$pendingorders;
 
+# pending orders totals
+my ($totalPunitprice,$totalPquantity,$totalPecost);
+
 my @loop_orders = ();
 for (my $i=0;$i<$countpendings;$i++){
     my %line;
@@ -130,6 +133,9 @@ for (my $i=0;$i<$countpendings;$i++){
             $toggle=0;
     }
     %line = %{$pendingorders->[$i]};
+    $totalPunitprice += $line{unitprice};
+    $totalPquantity +=$line{quantity};
+    $totalPecost += $line{ecost};
     $line{ecost} = sprintf("%.2f",$line{ecost});
     $line{unitprice} = sprintf("%.2f",$line{unitprice});
     $line{invoice} = $invoice;
@@ -143,25 +149,25 @@ $totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
-						datereceived => $datereceived,
-						formatteddatereceived => format_date($datereceived),
-                        name => $booksellers[0]->{'name'},
-                        supplierid => $supplierid,
-                        gst => $gst,
-                        freight => $freight,
-                        invoice => $invoice,
-                        countreceived => $countlines,
-                        loop_received => \@loop_received,
-                        countpending => $countpendings,
-                        loop_orders => \@loop_orders,
-                        totalprice => $totalprice,
-                        totalfreight => $totalfreight,
-                        totalquantity => $totalquantity,
-                        tototal => $tototal,
-                        gst => $gst,
-                        grandtot => $tototal+$gst,
-                        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav => C4::Context->preference("IntranetNav"),
-                        );
+                datereceived => $datereceived,
+                formatteddatereceived => format_date($datereceived),
+                name => $booksellers[0]->{'name'},
+                supplierid => $supplierid,
+                gst => $gst,
+                freight => $freight,
+                invoice => $invoice,
+                countreceived => $countlines,
+                loop_received => \@loop_received,
+                countpending => $countpendings,
+                loop_orders => \@loop_orders,
+                totalprice => $totalprice,
+                totalfreight => $totalfreight,
+                totalquantity => $totalquantity,
+                tototal => $tototal,
+                gst => $gst,
+                grandtot => $tototal+$gst,
+                totalPunitprice => sprintf("%.2f",$totalPunitprice),
+                totalPquantity => $totalPquantity,
+                totalPecost => sprintf("%.2f",$totalPecost),
+                );
 output_html_with_http_headers $input, $cookie, $template->output;
