@@ -77,9 +77,10 @@ if (alreadyreserved > "0"){
 <h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></h1>
 
 <!-- TMPL_UNLESS NAME="cardnumber"-->
-    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" name="getborrower">
-	<fieldset class="brief">
-	<legend>Select Patron</legend>
+    <!-- TMPL_IF NAME="messageborrower" -->                                    
+      <div class="problem">No patron with this name, Please, try another </div>    
+    <!-- /TMPL_IF -->
+    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onsubmit="request.pl" name="getborrower">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
 		        <label for="patron">Patron: </label>
 				<div class="hint">(type card number or part of a name)</div>
