@@ -67,6 +67,7 @@ my %tabsysprefs;
     $tabsysprefs{timeout}="Admin";
     $tabsysprefs{Intranet_includes}="Admin";
     $tabsysprefs{AutoLocation}="Admin";
+    $tabsysprefs{DebugLevel}="Admin";
 
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
