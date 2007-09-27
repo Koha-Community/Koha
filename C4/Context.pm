@@ -18,6 +18,39 @@ package C4::Context;
 
 # $Id$
 use strict;
+
+use CGI::Carp qw(fatalsToBrowser set_message);
+BEGIN {
+    sub handle_errors {
+        my $msg = shift;
+        my $debug_level =  C4::Context->preference("DebugLevel");
+
+        if ($debug_level eq "2"){
+            # debug 2 , print extra info too.
+            my %versions = get_versions();
+
+# a little example table with various version info";
+            print "
+                <h1>debug level $debug_level </h1>
+                <p>Got an error: $msg</p>
+                <table>
+                <tr><th>Apache<td>  $versions{apacheVersion}</tr>
+                <tr><th>Koha<td>    $versions{kohaVersion}</tr>
+                <tr><th>MySQL<td>   $versions{mysqlVersion}</tr>
+                <tr><th>OS<td>      $versions{osVersion}</tr>
+                <tr><th>Perl<td>    $versions{perlVersion}</tr>
+                </table>";
+
+        } elsif ($debug_level eq "1"){
+            print "<h1>debug level $debug_level </h1>";
+            print "<p>Got an error: $msg</p>";
+        } else {
+            print "production mode - trapped fatal";
+        }       
+    }       
+    set_message(\&handle_errors);
+}
+
 use DBI;
 use ZOOM;
 use XML::Simple;
@@ -859,6 +892,31 @@ sub _unset_userenv
     undef $context->{"activeuser"} if ($context->{"activeuser"} eq $sessionID);
 }
 
+
+=item get_versions
+
+  C4::Context->get_versions
+
+Gets various version info, for core Koha packages, Currently called from carp handle_errors() sub, to send to browser if 'DebugLevel' syspref is set to '2'.
+
+=cut
+
+#'
+
+# A little example sub to show more debugging info for CGI::Carp
+sub get_versions {
+    my %versions;
+    $versions{kohaVersion}  = C4::Context->config("kohaversion");
+    $versions{osVersion} = `uname -a`;
+    $versions{perlVersion} = $];
+    $versions{mysqlVersion} = `mysql -V`;
+    $versions{apacheVersion} =  `httpd -v`;
+    $versions{apacheVersion} =  `httpd2 -v` unless  $versions{apacheVersion} ;
+    $versions{apacheVersion} =  `apache2 -v` unless  $versions{apacheVersion}
+;
+    $versions{apacheVersion} =  `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
+    return %versions;
+}
 
 
 1;
