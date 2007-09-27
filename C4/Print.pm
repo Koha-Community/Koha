@@ -24,6 +24,8 @@ require Exporter;
 
 use C4::Context;
 use C4::Circulation;
+use C4::Members;
+use C4::Date;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -186,31 +188,11 @@ EOF
 sub printslip {
     my ( $borrowernumber ) = @_;
     my ( $borrower, $flags ) = GetMemberDetails( $borrowernumber);
-    my ($borrowerissues) = GetBorrowerIssues( $borrower );
-    my ($borroweriss2) = GetBorrowerIssues( $borrower );
-    my $i = 0;
-    my @issues;
-
-    foreach ( sort { $a <=> $b } keys %$borrowerissues ) {
-        $issues[$i] = $borrowerissues->{$_};
-        my $dd = $issues[$i]->{'date_due'};
-
-        #convert to nz style dates
-        #this should be set with some kinda config variable
-        my @tempdate = split( /-/, $dd );
-        $issues[$i]->{'date_due'} = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-        $i++;
-    }
-    foreach ( sort { $a <=> $b } keys %$borroweriss2 ) {
-        $issues[$i] = $borroweriss2->{$_};
-        my $dd = $issues[$i]->{'date_due'};
-
-        #convert to nz style dates
-        #this should be set with some kinda config variable
-        my @tempdate = split( /-/, $dd );
-        $issues[$i]->{'date_due'} = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-        $i++;
-    }
+	my ($countissues,$issueslist) = GetPendingIssues($borrowernumber); 
+	foreach my $it (@$issueslist){
+		$it->{'date_due'}=format_date($it->{'date_due'});
+    }		
+    my @issues = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @$issueslist;
     remoteprint(\@issues, $borrower );
 }
 
