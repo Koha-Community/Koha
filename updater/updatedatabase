@@ -265,6 +265,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion) ) {
             },
             {
                 uniquefieldrequired => 'variable',
+                variable            => 'DebugLevel',
+                value               => '0',
+                forceupdate         => { 'explanation' => 1,
+                                        'type' => 1},
+                explanation            => 'Set the level of error info sent to the browser. 0=none, 1=some, 2=most',
+                type                => 'Choice',
+                options             => '0|1|2'
+            },
+            {
+                uniquefieldrequired => 'variable',
                 variable            => 'BorrowersTitles',
                 value               => 'Mr|Mrs|Miss|Ms',
                 forceupdate         => { 'explanation' => 1,
