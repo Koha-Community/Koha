@@ -6,70 +6,6 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
-
-<style type="text/css">
-
-fieldset {  
-border-width : 1px;
-border-bottom : 1px solid black;
-float : left;
-font-size : 90%;
-clear : left;
-margin: .9em 0 0 0;  
-padding: 0;
-width: 100%; 
-}
-
-legend {  
-margin-left: 1em;
-font-weight: bold;
-font-size : 110%;
-}
-
-label {  
-float: left;  
-font-weight : bold;
-width: 12em;  
-margin-right: 1em;  
-text-align: right;
-}
-
-fieldset ol {  
-padding: 1em 1em 0 1em;  
-list-style-type: none;
-}
-
-fieldset li {  
-float : left;
-clear : left;
-padding-bottom: 1em;
-list-style-type: none;
-width: 100%; 
-}
-
-fieldset.submit {  
-border-style: none;
-}
-
-ol.radio label {
-	width : auto;
-	float : none;
-	margin-right : 0;
-}
-
-ol.radio label.radio {
-	float : left;
-	width : 12em;
-	margin-right : 1em;
-}
-
-fieldset.action {
-	float : none;
-	border : none;
-	margin : 0;
-	padding : 1em 0 .3em 0;
-}	
-</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -89,13 +25,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add<!--TMPL_IF Name="I"--> organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Modify<!--TMPL_IF Name="I"--> organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="check_member" -->
@@ -154,7 +90,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
   <div id="step1" class="content_visible">
   <!--TMPL_IF Name="I"-->
   <input type="hidden" name="FormFieldList" value="surname|contactname|contactfirstname" /> <!--TMPL_ELSE--> <input type="hidden" name="FormFieldList" value="title|surname|firstname|dateofbirth|initials|othernames" />  <!--/TMPL_IF-->
-	<fieldset id="memberentry_identity">
+	<fieldset class="rows" id="memberentry_identity">
 		<legend><!--TMPL_IF Name="I"-->Organisation <!--TMPL_ELSE-->Patron <!--/TMPL_IF-->identity</legend>
 		<ol>
 		<li>
@@ -246,7 +182,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
   </p>       
 <!--/TMPL_IF-->       
 	</fieldset>
-<fieldset>
+<fieldset class="rows">
     <legend>Main address</legend><ol>
     <li>
       <!-- TMPL_IF NAME="mandatorystreetnumber" -->
@@ -317,7 +253,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
     </li>
 	</ol>
     </fieldset>
-  <fieldset id="memberentry_contact">
+  <fieldset class="rows" id="memberentry_contact">
     <legend>Contact</legend><ol>       
 <!--TMPL_IF Name="C"-->
       <h2>Borrower</h2>
@@ -405,7 +341,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <div id="step2" class="content_visible">
 <!--/TMPL_IF-->       
 
-		<fieldset id="memberentry_address">
+		<fieldset class="rows" id="memberentry_address">
 		<legend>Alternate address</legend><ol>
 			<li>
 				<!-- TMPL_IF NAME="mandatoryB_address" -->
@@ -438,7 +374,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 		</fieldset>
   <!-- TMPL_IF NAME="I" -->
 	<!-- TMPL_IF NAME="memberofinstution" -->
-	<fieldset id="memberentry_organisation">
+	<fieldset class="rows" id="memberentry_organisation">
 		<legend>Organisations</legend><ol>
 		<li>
 			<!-- TMPL_IF NAME="mandatoryphone" --> 
@@ -463,7 +399,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <div id="step3" class="content_visible">
 <!--/TMPL_IF-->       
 
-  <fieldset id="memberentry_library_management">
+  <fieldset class="rows" id="memberentry_library_management">
     <legend>Library Management</legend><ol>
    <li> <!-- TMPL_IF NAME="mandatorycardnumber" -->
       <label for="cardnumber" class="required">
@@ -518,7 +454,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
     </li>
 	</ol>
   </fieldset>
-	<fieldset id="memberentry_subscription">
+	<fieldset class="rows" id="memberentry_subscription">
 	<legend>Library set-up</legend><ol>
 		<li>
 			<!-- TMPL_IF NAME="mandatorydateenrolled" -->
@@ -578,7 +514,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 		</li>
 		</ol>
 	</fieldset>
-	<fieldset id="memberentry_userid">
+	<fieldset class="rows" id="memberentry_userid">
 		<legend>OPAC login</legend><ol>
 		<li>
 			<!-- TMPL_IF NAME="mandatoryuserid" -->
@@ -609,7 +545,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 		</fieldset>
 		<!--this zones are not necessary in modif mode -->
 		<!-- TMPL_UNLESS NAME="opadd" -->
-		<fieldset>
+		<fieldset class="rows">
 			<legend>Patron Account Flags</legend>
 			<ol class="radio">
 			<!-- TMPL_LOOP NAME="flagloop" -->
@@ -638,9 +574,9 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <!-- /TMPL_IF -->
     <fieldset class="action">
       <!-- TMPL_IF NAME="opadd" -->
-        <input type="button" name="step4" onclick="return check_form_borrowers(); unique();" value="Add member" />
+        <input type="button" name="step4" onclick="return check_form_borrowers(); unique();" value="Add Patron" />
       <!-- TMPL_ELSE -->
-        <input type="button" name="step4" onclick="return check_form_borrowers();" value="Modify member" />
+        <input type="button" name="step4" onclick="return check_form_borrowers();" value="Save Changes" />
       <!--/TMPL_IF -->
     </fieldset>
 </form>

@@ -1,9 +1,27 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; <!-- TMPL_IF NAME="viewshelf" -->Virtual Shelves &rsaquo; Contents of <!-- TMPL_VAR NAME="shelfname" --><!-- TMPL_ELSE -->Virtual Shelves<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
-//<![CDATA[	function confirmDelete(s){
+//<![CDATA[	
+
+$(document).ready(function(){
+	$("th.checkall").html("<a href=\"/cgi-bin/koha/shelves.pl\" id=\"CheckAll\"><img src=\"<!-- TMPL_VAR NAME="themelang" -->/../img/checkall.gif\" height=\"18\" width=\"18\" alt=\"Check All\" title=\"Check All\" border=\"0\" /></a>");
+ 	$("#CheckAll").click(function(){
+		$(".checkboxed").checkCheckboxes();
+		$("#CheckAll img").attr("src","<!-- TMPL_VAR NAME="themelang" -->/../img/checknone.gif").attr("title","Check None").attr("alt","Check None");
+		$("#CheckAll").attr("id","CheckNone");
+		return false;
+	});
+ 	$("#CheckNone").click(function(){
+		$(".checkboxed").unCheckCheckboxes();
+		$("#CheckNone img").attr("src","<!-- TMPL_VAR NAME="themelang" -->/../img/checkall.gif").attr("title","Check All").attr("alt","Check All");
+		$("#CheckNone").attr("id","CheckAll");
+		return false;
+	});
+});
+
+function confirmDelete(s){
 		if (window.confirm(s))
 			return true;
 		return false;
@@ -55,29 +73,28 @@
 
 <!-- TMPL_IF NAME="viewshelf" -->
 <div id="action">
-<ul>    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Back to virtual Shelves</a></li>
-    <!-- TMPL_IF name="manageshelf" -->
+<!-- TMPL_IF name="manageshelf" --><ul>
     <li><a  href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelfnumber" -->">Edit this shelf</a></li>
-    <!-- /TMPL_IF --></ul>
+    </ul><!-- /TMPL_IF -->
 </div>
 
-<h3>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></h3>
+<fieldset>
+<legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
 
-<form class="inline" action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" name="mainform">
+<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
     <!-- TMPL_IF NAME="itemsloop" -->
     <table>
             <tr>
-                <th>
-                    <a href="javascript:CheckAll();">
-                        <small>(Un)Check All</small>
-                    </a>
+                <th class="checkall">
+                   &nbsp;
                 </th>
                 <th>&nbsp;</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Call No.</th>
+				<th>&nbsp;</th>
             </tr>
         <!-- TMPL_LOOP NAME="itemsloop" -->
             <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
@@ -106,6 +123,7 @@
                     </td>
                     <td><!-- TMPL_VAR NAME="author" --></td>
                     <td><!-- TMPL_VAR NAME="classification" --></td>
+					<td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></td>
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
@@ -124,24 +142,24 @@
             <input type="submit" value="Remove" onclick="return confirmDelete('Are you sure you want to remove these items from the shelf?')" style="display:inline;" />
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
+		</fieldset>
 </form>
     <!-- TMPL_IF name="manageshelf" -->
     
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
-    <table>
-        <tr><th colspan="2">Add an item to this shelf by barcode</th></tr>
-        <tr>
-            <td>
+<fieldset>
+    <legend>Add an item to this shelf by barcode</legend>
+        <ol>
+            <li>
                 <label for="addbarcode">Barcode:</label>
-            </td>
-            <td>
+            
                 <input name="addbarcode" type="text" id="addbarcode" size="14" maxlength="14" />
                 <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="submit" value="Save" />
-            </td>
-        </tr>
-    </table>
+                <input type="submit" value="Add" />
+            </li>
+		</ol>
+	</fieldset>
 </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
@@ -233,7 +251,7 @@
 				 <li> A <b>free</b> virtual shelf can be seen and managed by everybody.</li>
             </ul>
             <p><input type="submit" value="Save changes"></p>
-
+			
         </form>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

@@ -210,12 +210,12 @@ span.problem {
 
 fieldset {
 	border : 2px solid #EEEEEE;
-	margin : 1em;
+	margin : 1em 1em 1em 0;
 	padding : 1em;
 }
 
 legend {
-	font-size : 138.5%;
+	font-size : 123.1%;
 	font-weight : bold;
 	margin : 0 0 0 -1em;
 	padding : 0;
@@ -264,47 +264,9 @@ div#circ_search,div#catalog_search,div#patron_search,div#subscription_search,div
 	padding : 0 0 .2em 0;
 }
 
-/* Panel-Switch Tabs */
-ul.link-tabs {
-	list-style-type: none;
-	margin: 1px 0 9px 5px;
-	padding: 0;
-}
-
-ul.link-tabs li {
-	display: inline;
-	padding: 0px;
-}
-
-ul.link-tabs li a {
-	border-bottom: 1px solid #333333;
-	border-left : 1px solid #DDDDDD;
-	border-right : 1px solid #666666;
-	padding: .2em 1.2em .2em 1.2em;
-	text-decoration: none;
-}
-
-ul.link-tabs li.off a {
-	background-color: #FFFFFF;
-	border : 0;
-	margin-right : 1px;
-	text-decoration: underline;
-}
-
-ul.link-tabs li.off a:hover {
-	background-color: #FFFFEC;
-	border : 0;
-	margin-right : 0;
-	padding: .2em 1.2em .2em 1.2em;
-}
-
-ul.link-tabs li.on a {
-	background-color: #FFFFCC;
-	border-top: 1px solid #FFFFCC;
-	border-right: 1px solid #FF9900;
-	border-bottom: 1px solid #FF9900;
-	border-left: 1px solid #FFCC66;
-	font-weight : bold;
+div#reserves,div#checkouts {
+	border : 1px solid #E8E8E8;
+	padding : 1em;
 }
 
 div#header_search .tip {
@@ -481,27 +443,41 @@ div.message {
 }
 
 div.patroninfo {
-	margin-bottom : .5em;
 	margin-top : -.5em;
 }
 
 div.patroninfo h5 {
-	background-color : #F5F0CC;
-	border-top :  1px solid #CCCC99;
-	border-left :  1px solid #CCCC99;
+	background-color : #FCFAF3;
+	/*border-top :  1px solid #CCCC99;
+	border-left :  1px solid #CCCC99;*/
 	border-right :  1px solid #CCCC99;
 	margin-bottom : 0;
+	padding-left : .5em;
+	padding-top : .3em;
 	padding-bottom : .5em;
 }
 
 div.patroninfo ul {
-	border : 1px solid #CCCC99;
+	/*border : 1px solid #CCCC99;*/
+	border-right : 1px solid #CCCC99;
+	border-bottom : 0;
 	border-top : 0;
-	background-color : #F5F0CC;
+	background-color : #FCFAF3;
+	padding-bottom : .5em;
 }
 
-div.patroninfo ul li {
+div.patroninfo ul li, div.patronviews ul li {
 	list-style-type : none;
+}
+
+div.patronviews {
+	background-color : #FDFCF7;
+	/*border-left : 1px solid #CCCC99;
+	border-bottom : 1px solid #CCCC99;*/
+	border-right :  1px solid #CCCC99;
+	border-top : 1px solid #CCCC99;
+	margin-bottom : .5em;
+	padding : .5em 0 .5em 0;
 }
 
 a.member-edit {
@@ -512,3 +488,191 @@ a.member-edit {
 	text-align : right;
 	text-decoration : none;
 }
+
+fieldset.brief {
+	border : 1px solid #E8E8E8;
+}
+
+fieldset.brief label {
+	display : block;
+	font-weight : bold;
+	padding : .3em 0;
+}
+
+fieldset.brief div.hint {
+	color : #999999;
+	font-size : 80%;
+	margin-bottom : .4em;
+}
+
+fieldset.rows {  
+border-width : 1px;
+border-bottom : 1px solid black;
+float : left;
+font-size : 90%;
+clear : left;
+margin: .9em 0 0 0;  
+padding: 0;
+width: 100%; 
+}
+
+fieldset.rows legend {  
+	margin-left: 1em;
+	font-weight: bold;
+	font-size : 110%;
+}
+
+fieldset.rows label, fieldset.rows span.label {  
+	float: left;  
+	font-weight : bold;
+	width: 12em;  
+	margin-right: 1em;  
+	text-align: right;
+}
+
+fieldset.rows.left label, fieldset.rows.left span.label {
+	width : 8em;
+	text-align : left;	
+}
+
+fieldset.rows ol {  
+padding: 1em 1em 0 1em;  
+list-style-type: none;
+}
+
+fieldset.rows li {  
+float : left;
+clear : left;
+padding-bottom: 1em;
+list-style-type: none;
+width: 100%; 
+}
+
+fieldset.rows.left li {
+	padding-bottom : .4em;
+}
+
+fieldset.rows ol.radio label {
+	width : auto;
+	float : none;
+	margin-right : 0;
+}
+
+fieldset.rows ol.radio label.radio {
+	float : left;
+	width : 12em;
+	margin-right : 1em;
+}
+
+fieldset.rows table {
+	clear : both;
+	margin-left : 1em;
+}
+
+fieldset.rows td label {
+	float : none;
+	font-weight : normal;
+	width : auto;
+}
+
+fieldset.action {
+	clear : both;
+	float : none;
+	border : none;
+	margin : 0;
+	padding : 1em 0 .3em 0;
+	width : auto;
+}
+
+fieldset.rows fieldset.action {
+	padding : 0 0 1em 1em;
+}
+
+.tabs-nav li {
+	list-style : none;
+}
+
+.tabs-nav a, .tabs-nav a span {
+   background : none;
+	padding: .2em .5em .25em .5em;
+}
+
+.tabs-nav a {
+    z-index : auto;
+}
+
+.tabs-nav .tabs-selected a {
+	background-color : #FFFFCC;
+	border-top: 1px solid #FFFFCC;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FFCC66;
+	font-weight : bold;
+	text-align : center;
+	text-decoration : none;
+	top : -1px;
+}
+
+.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
+    background-position : inherit;
+    outline: 0; /* prevent dotted border in Firefox */
+}
+.tabs-nav a, .tabs-nav .tabs-disabled a:hover, .tabs-nav .tabs-disabled a:focus, .tabs-nav .tabs-disabled a:active {
+    background-position: inherit;
+}
+
+.tabs-nav .tabs-selected a:hover {
+	color : #0000CC;
+}
+
+.tabs-nav li.tabs-selected {
+	background-color : #FFFFCC;
+}
+
+.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
+	 background : none;
+    outline: 0; /* prevent dotted border in Firefox */
+}
+
+.tabs-container {
+    border-top: 0;
+    padding : inherit;
+    background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+}
+.tabs-loading em {
+    padding: inherit;
+    background: none;
+}
+
+#patronlists .tabs-nav a {
+    top: 0;
+ }
+
+#patronlists .tabs-nav li {
+	margin-right : .5em;
+}
+
+#patronlists .tabs-nav li a {
+	background-color : #F3F3F3;
+	border-top : 1px solid #E8E8E8;
+	border-left : 1px solid #E8E8E8;
+	border-right : 1px solid #E8E8E8;
+	border-bottom : 0;
+	text-align : center;
+	text-decoration : none;
+}
+
+#patronlists .tabs-nav li.tabs-selected  {
+	background-color : #FFF;
+}
+
+#patronlists .tabs-nav li.tabs-selected a {
+	background-color : #FFF;
+	border-top : 1px solid #E8E8E8;
+	border-left : 1px solid #E8E8E8;
+	border-right : 1px solid #E8E8E8;
+	border-bottom : 1px solid #FFF;
+	margin-bottom : -5px;
+	text-align : center;
+}
+

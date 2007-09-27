@@ -116,6 +116,7 @@ if ($cardnumber) {
     }
 
     $template->param(
+		borrowernumber => $borrowerinfo->{'borrowernumber'},
         borrowersurname   => $borrowerinfo->{'surname'},
         borrowerfirstname => $borrowerinfo->{'firstname'},
         borrowerreservs   => $count_reserv,
@@ -399,6 +400,7 @@ foreach my $branchcode ( keys %{$branches} ) {
 }
 my $CGIbranch = CGI::scrolling_list(
     -name     => 'pickup',
+	-id          => 'pickup',
     -values   => \@values,
     -default  => $default,
     -labels   => \%label_of,

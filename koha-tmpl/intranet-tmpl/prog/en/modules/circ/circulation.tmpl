@@ -49,7 +49,7 @@
         <div class="warning">
 		<h3>Warning</h3>
 		<ul>
-			<!--TMPL_IF Name="warndeparture"--><li> Patron card expires on <!-- TMPL_VAR name="warndeparture" -->.</li><!--/TMPL_IF-->
+			<!--TMPL_IF Name="warndeparture"--><li> Patron card has expired or will expire soon.</li><!--/TMPL_IF-->
             <!-- TMPL_IF NAME="gna" --><li>Address: Patron's address in doubt</li><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="lost" --><li>Lost: Patron's card is lost</li><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="dbarred" --><li>
@@ -238,7 +238,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <legend>Check Out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></legend>
 
     <p>
-    <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" class="focus" size="14" />
+    <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" class="focus" size="14" /></p>
     
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
@@ -278,7 +278,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <li><span class="problem">Patron's card is expired</span></li>
         <!-- /TMPL_IF -->
         </ul>
-</p>
+
     <!-- TMPL_IF NAME="memberofinstution" -->
     <p><!-- TMPL_VAR NAME="CGIorganisations" --></p>
     <!-- /TMPL_IF -->
@@ -600,9 +600,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
     <!-- /TMPL_IF -->
 
-    <div id="action">
+    <fieldset class="action">
     <input type="submit" value="Issue" />
-    </div>
+    </fieldset>
 
 </fieldset>
 </form>
@@ -611,33 +611,32 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 <ul>   
 <li>    <!--TMPL_IF NAME="issuecount"-->
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts"><!-- TMPL_VAR NAME="issuecount"--> issue(s)</a>
+            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts"><!-- TMPL_VAR NAME="issuecount"--> Checkout(s)</a>
     <!-- TMPL_ELSE -->
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 issues</a>
+            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
     <!-- /TMPL_IF --></li>
 <li><!-- TMPL_IF NAME="countreserv"-->
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves"><!--TMPL_VAR NAME="countreserv"--> reserve(s)</a>
+            <a href="/cgi-bin/koha/circ/circulation.pl#reserves"><!--TMPL_VAR NAME="countreserv"--> Holds(s)</a>
     <!-- TMPL_ELSE -->
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves">0 reserves</a>
+            <a href="/cgi-bin/koha/circ/circulation.pl#reserves">0 Holds</a>
     <!-- /TMPL_IF --></li>
  
 </ul>
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->
 <div id="checkouts">
+<!--TMPL_IF NAME="issuecount"-->
     <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
-    <p>
+<!--     <p>
     <a href="#" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page'); return false;">Print Page</a>
     / <a href="#" onclick="window.open('/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip'); return false;">Print Slip</a>
-    </p>
+    </p> -->
     
     <input type="hidden" value="circ" name="destination" />
     <input type="hidden" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />	
-    
-<!-- TMPL_IF NAME="todayissues" -->
-    <table>
+        <table>
     <tr>
         <th>Title</th>
         <th>Due date</th>
@@ -646,10 +645,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th>Barcode</th>
         <th>Renew?</th>
     </tr>
-    
-    <tr>
-        <th colspan="6"><a name="today" id="today">Today checkouts</a></th>
-    </tr>
+<!-- TMPL_IF NAME="todayissues" -->
+
     <!-- TMPL_LOOP NAME="todayissues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
     <tr>
@@ -658,8 +655,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /TMPL_IF -->
         <td>
         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
-        <br /><!-- TMPL_VAR NAME="author" -->
-        - <!-- TMPL_VAR name="itemnotes" -->
+       <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF -->
         </td>
         <td><!-- TMPL_VAR NAME="dd" --></td>
         <td>
@@ -682,15 +679,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /TMPL_LOOP --> <!-- todayissues -->
     <!-- /TMPL_IF --> <!-- todayissues -->
 <!-- TMPL_IF NAME="previssues" -->
-    <table>
-    <tr>
-        <th>Title</th>
-        <th>Due date</th>
-        <th>Itemtype</th>
-        <th>Call no</th>
-        <th>Barcode</th>
-        <th>Renew?</th>
-    </tr>
     <tr>
         <th colspan="6"><a name="previous" id="previous">Previous checkouts</a></th>
     </tr>
@@ -727,19 +715,24 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /TMPL_LOOP --> <!-- previssues -->
 <!-- /TMPL_IF --> <!-- previssues -->
     </table>
-
+	<!--TMPL_IF NAME="issuecount"-->
     <div id="action">
     <input type="submit" name="renew_checked" value="Renew Checked Items" />
     <input type="submit" name="renew_all" value="Renew All" />
     </div>
+	<!-- /TMPL_IF -->
 </form>
+<!-- TMPL_ELSE -->
+<p>Patron has nothing checked out.</p>
+<!-- /TMPL_IF -->
 </div>
 
-<!-- TMPL_IF NAME="reservloop" -->
+
 <div id="reserves">
+<!-- TMPL_IF NAME="reservloop" -->
     <table>
         <tr>
-            <th>Reserve date</th>
+            <th>Hold date</th>
             <th>Barcode</th>
             <th>Title</th>
             <th>Author</th>
@@ -782,8 +775,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
-</div>
-<!-- /TMPL_IF --> <!-- reservesloop -->
+	<!-- TMPL_ELSE -->
+	<p>Patron has no pending holds.</p>
+<!-- /TMPL_IF -->
+</div> <!-- reservesloop -->
 
 <!-- /TMPL_IF --> <!-- borrowernumber -->
 </div>

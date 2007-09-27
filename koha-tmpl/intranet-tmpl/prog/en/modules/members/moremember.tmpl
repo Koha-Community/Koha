@@ -158,16 +158,16 @@ function confirm_reregistration() {
     
     <li><strong>Registration branch: </strong><!-- TMPL_VAR NAME="branchname" --></li>
 
-    <li><strong>Sort field 1: </strong><!-- TMPL_VAR NAME="sort1" --></li>
-    <li><strong>Sort field 2:</strong><!-- TMPL_VAR NAME="sort2" --></li>
+    <!-- TMPL_IF NAME="sort1" --><li><strong>Sort field 1: </strong><!-- TMPL_VAR NAME="sort1" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="sort2" --><li><strong>Sort field 2:</strong><!-- TMPL_VAR NAME="sort2" --></li><!-- /TMPL_IF -->
     <li><strong>OPAC login: </strong><!-- TMPL_VAR name="userid" --></li>
     <!-- TMPL_IF NAME="password" -->
   <li><strong>OPAC password: </strong>*******</li>
    <!--TMPL_ELSE -->
   <li><strong>OPAC password: </strong><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
    <!--/TMPL_IF --> 
-  <li><strong>Circulation notes: </strong><!-- TMPL_VAR name="borrowernotes" --></li>
-    <li><strong>Message to Patron:</strong><!-- TMPL_VAR NAME="opacnote" --></li>
+  <!-- TMPL_IF NAME="borrowernotes" --><li><strong>Circulation notes: </strong><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacnote" --><li><strong>Message to Patron:</strong><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
 	</ul>
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
  </div>
