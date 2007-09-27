@@ -15,7 +15,7 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 	<li><a href="Someone please write this">Add Note</a></li>
-	<li><a href="/cgi-bin/koha/members/member-password.pl?member=1">Change Password</a></li>
+	<li><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li>
 	<li><a href="">Print</a><ul><li><a href="">Page</a></li><li><a href="">Slip</a></li></ul></li><li><a href="javascript:confirm_reregistration();">Renew Account</a></li><li><a href="/cgi-bin/koha/members/member-flags.pl?member=1">Set Permissions</a></li><li><a href="javascript:confirm_deletion();">Delete</a></li>
 </ul>
 <br clear="all" /></div>
