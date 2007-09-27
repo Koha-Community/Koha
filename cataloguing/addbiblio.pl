@@ -290,6 +290,7 @@ sub create_input {
         index          => $index_tag,
         id             => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
         value          => $value,
+        random         => CreateKey(),
     );
     if($subfield eq '@'){
         $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_tag."_".$index_subfield;
