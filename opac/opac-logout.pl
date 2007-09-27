@@ -23,34 +23,7 @@ my $query     = new CGI;
 my $sessionID = $query->cookie('sessionID');
 my $dbh       = C4::Context->dbh;
 
-# Check that this is the ip that created the session before deleting it
-my $sth = $dbh->prepare("select userid,ip from sessions where sessionID=?");
-$sth->execute($sessionID);
-my ( $userid, $ip );
-if ( $sth->rows ) {
-    ( $userid, $ip ) = $sth->fetchrow;
-    if ( $ip ne $ENV{'REMOTE_ADDR'} ) {
-
-        # attempt to logout from a different ip than cookie was created at
-        exit;
-    }
-}
-
-$sth = $dbh->prepare("delete from sessions where sessionID=?");
-$sth->execute($sessionID);
-open L, ">>/tmp/sessionlog";
-my $time = localtime( time() );
-printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip,
-  $time;
-close L;
-
-my $cookie = $query->cookie(
-    -name    => 'sessionID',
-    -value   => '',
-    -expires => '+1y'
-);
-
-# Should redirect to opac home page after logging out
+C4::Context->_unset_userenv($sessionID);
 
 print $query->redirect("/cgi-bin/koha/opac-main.pl");
 
