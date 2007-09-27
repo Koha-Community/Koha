@@ -1,3 +1,5 @@
+function _(s) { return s } // dummy function for gettext
+
 // this function checks id date is like DD/MM/YYYY
 function CheckDate(field) {
 var d = field.value;

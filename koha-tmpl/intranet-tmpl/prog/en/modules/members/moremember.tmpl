@@ -33,9 +33,9 @@ function confirm_reregistration() {
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 
+<div class="yui-g" style="border : 1px solid #CCCCCC;">
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron does not exist.
 <!-- TMPL_ELSE -->
@@ -64,119 +64,116 @@ function confirm_reregistration() {
 <!-- /TMPL_IF -->
 
 
-
-<fieldset>
-<legend>Patron information</legend>
+ <div class="yui-u first" style="border-right : 1px solid #CCCCCC;">
+<div id="patron-information" style="padding : .5em;">
+<h3>
     <!-- TMPL_UNLESS NAME="I" -->
-    <p><label>Title:</label><!-- TMPL_VAR NAME="title" --></p> 
-    <p><label>First name:</label><!-- TMPL_VAR NAME="firstname" --></p>
-    <!-- /TMPL_UNLESS -->
-    <p><!-- TMPL_IF NAME="I" --><label>Organisation name: </label><!-- TMPL_ELSE --><label>Last name: </label><!-- /TMPL_IF --><!-- TMPL_VAR NAME="surname" --></p>
-    <!-- TMPL_UNLESS NAME="I" --><p><label>Other names: </label><!-- TMPL_VAR NAME="othernames" --></p>
-    <p><label>Initials: </label><!-- TMPL_VAR NAME="initials" --></p>
-    <p><label>Date of birth:</label><!-- TMPL_VAR NAME="dateofbirth" --></p>
-    <p><label>Sex:</label><!-- TMPL_VAR NAME="sex" --></p><!-- /TMPL_UNLESS -->
-    <!-- TMPL_IF NAME="printethnicityline" -->
-    <p><label>Ethnicity:</label><!-- TMPL_VAR NAME="ethnicity" --></p>
-    <p><label>Ethnicity notes: </label><!-- TMPL_VAR NAME="ethnotes" --></p>
-    <!-- /TMPL_IF -->
-   <!-- TMPL_IF name="isguarantee" -->
-            <!-- TMPL_IF NAME="guaranteeloop" -->
-                <p><label>Guarantees:</label><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
-            <!-- /TMPL_IF -->
-        <!-- TMPL_ELSE -->
-            <!-- TMPL_IF name="guarantorborrowernumber" -->
-                <p><label>Guarantor:</label><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></p>
-            <!-- /TMPL_IF -->
-     <!-- /TMPL_IF  -->
-    <p>
-        <label>Address: </label>
-        <!-- TMPL_VAR NAME="streetnumber" -->
+   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->"<!-- TMPL_VAR NAME="othernames" -->"<!-- /TMPL_IF -->  <p><!-- TMPL_VAR NAME="streetnumber" -->
         <!--TMPL_IF NAME="roaddetails"-->
          <!-- TMPL_VAR NAME="roaddetails" -->,
         <!-- /TMPL_IF -->
-        <!-- TMPL_VAR NAME="address" -->
-    </p>
-    <p>
-        <label>Address2: </label>
-        <!-- TMPL_VAR NAME="address2"-->
-    </p>
-    <p><label>City: </label><!-- TMPL_VAR NAME="city" --></p>
-    <p><label>Zip code: </label><!-- TMPL_VAR NAME="zipcode" --></p>
-	
-	   <!-- TMPL_IF NAME="I" -->
-  <p><label>Organisation phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
-  <p><label>Organisation email: </label><!-- TMPL_VAR NAME="emailpro" --></p>
+        <!-- TMPL_VAR NAME="address" --><br />
+        <!-- TMPL_IF NAME="address2" --><!-- TMPL_VAR NAME="address2"--><br /><!-- /TMPL_IF -->
+    	<!-- TMPL_IF NAME="city" --><!-- TMPL_VAR NAME="city" --><!-- /TMPL_IF -->
+    	<!-- TMPL_IF NAME="zipcode" --><!-- TMPL_VAR NAME="zipcode" --><!-- /TMPL_IF --></p>
+		    
+	<p><!-- TMPL_UNLESS NAME="I"-->
+			<!-- TMPL_IF NAME="phone" --><strong>Home: </strong><!-- TMPL_VAR NAME="phone" --><br /><!-- /TMPL_IF -->
+		    <!-- TMPL_IF NAME="mobile" --><strong>Mobile:  </strong><!-- TMPL_VAR NAME="mobile" --><br /><!-- /TMPL_IF -->
+		    <!-- TMPL_IF NAME="phonepro" --><strong>Work: </strong><!-- TMPL_VAR NAME="phonepro" --><br /><!-- /TMPL_IF -->
+		<!-- /TMPL_UNLESS -->
+		   <!-- TMPL_IF NAME="I" -->
+  <!-- TMPL_IF NAME="phonepro" --><strong>Organisation phone: </strong><!-- TMPL_VAR NAME="phonepro" --><br /><!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="emailpro" --><strong>Organisation email: </strong><!-- TMPL_VAR NAME="emailpro" --><br /><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-    <!-- TMPL_UNLESS NAME="I"-->
-    <p><label>Home phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Cell phone: </label><!-- TMPL_VAR NAME="mobile" --></p>
-    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phonepro" --></p>
-    <!-- /TMPL_UNLESS -->
-    <!-- TMPL_IF NAME="P"-->
-    <p><label>Professional phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Professionnal email: </label><!-- TMPL_VAR NAME="mobile" --></p>
-    <!-- /TMPL_IF -->   
-    <p><label>Fax: </label><!-- TMPL_VAR NAME="fax" --></p>
-    <!-- TMPL_UNLESS NAME="I"-->
-    <p><label>E-mail address:</label><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
-    <!-- /TMPL_UNLESS -->
-  
-            <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
-</fieldset>
 
-<fieldset>
-    <legend>Alternate Address</legend>
+    <!-- TMPL_IF NAME="P"-->
+   <!-- TMPL_IF NAME="phone" --> <strong>Professional phone: </strong><!-- TMPL_VAR NAME="phone" --><br /><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="mobile" --><strong>Professionnal mobile: </strong><!-- TMPL_VAR NAME="mobile" --><br /><!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->   	
+	<!-- TMPL_IF NAME="fax" --><strong>Fax: </strong><!-- TMPL_VAR NAME="fax" --><br><!-- /TMPL_IF -->
+</p>    <!-- TMPL_UNLESS NAME="I"-->
+    <p><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
+    <!-- /TMPL_UNLESS -->
+    <p><strong>Initials: </strong><!-- TMPL_VAR NAME="initials" --></p>
+    <p><strong>Date of birth:</strong><!-- TMPL_VAR NAME="dateofbirth" --></p>
+    <p><strong>Sex:</strong><!-- TMPL_VAR NAME="sex" --></p><!-- /TMPL_UNLESS -->
+    <!-- TMPL_IF NAME="printethnicityline" -->
+    <p><strong>Ethnicity:</strong><!-- TMPL_VAR NAME="ethnicity" --></p>
+    <p><strong>Ethnicity notes: </strong><!-- TMPL_VAR NAME="ethnotes" --></p>
+    <!-- /TMPL_IF -->
+   <!-- TMPL_IF name="isguarantee" -->
+            <!-- TMPL_IF NAME="guaranteeloop" -->
+                <p><strong>Guarantees:</strong><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
+            <!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_IF name="guarantorborrowernumber" -->
+                <p><strong>Guarantor:</strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></p>
+            <!-- /TMPL_IF -->
+     <!-- /TMPL_IF  -->
+  
+    
+  
+            <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
+</div>
+
+<div id="patron-alternate-address" style="padding : .5em;">
+    <h3>Alternate Address</h3>
     <!-- TMPL_UNLESS NAME="I"-->
       <!-- TMPL_UNLESS NAME="C"-->
-  <p><label>Alternate address: </label><!-- TMPL_VAR NAME="B_address" --></p>
-      <p><label>Alternate city: </label><!-- TMPL_VAR NAME="B_city" --></p>
-      <p><label>Alternate zipcode: </label><!-- TMPL_VAR NAME="B_zipcode" --></p>
+  <p><strong>Alternate address: </strong><!-- TMPL_VAR NAME="B_address" --></p>
+      <p><strong>Alternate city: </strong><!-- TMPL_VAR NAME="B_city" --></p>
+      <p><strong>Alternate zipcode: </strong><!-- TMPL_VAR NAME="B_zipcode" --></p>
   <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
  
      <!-- TMPL_IF NAME="C" -->
-    <p><label>Name: </label><!-- TMPL_VAR NAME="contactname" --></p>
-    <p><label>Firstname: </label><!-- TMPL_VAR NAME="firstname" --></p>    
-    <p><label>Phone: </label><!-- TMPL_VAR NAME="phone" --></p>
-    <p><label>Email: </label><!-- TMPL_VAR NAME="email" --></p>
-    <p><label>Relationship: </label><!-- TMPL_VAR NAME="relationship" --></p>
+    <p><strong>Name: </strong><!-- TMPL_VAR NAME="contactname" --></p>
+    <p><strong>Firstname: </strong><!-- TMPL_VAR NAME="firstname" --></p>    
+    <p><strong>Phone: </strong><!-- TMPL_VAR NAME="phone" --></p>
+    <p><strong>Email: </strong><!-- TMPL_VAR NAME="email" --></p>
+    <p><strong>Relationship: </strong><!-- TMPL_VAR NAME="relationship" --></p>
    <!-- /TMPL_IF -->
        
-    <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
-</fieldset>
+    <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
+</div>
 
-<fieldset>
-    <legend>Library use</legend>
-    <p><label>Patron number:</label><!-- TMPL_VAR NAME="borrowernumber" --></p>
-    <p><label>Category:</label><!-- TMPL_VAR NAME="description" --></p>
-    <p><label>Registration date:</label><!-- TMPL_VAR NAME="dateenrolled" --></p>
+
+</div>
+ <div class="yui-u"> 
+ <div id="patron-library-details" style="padding : .5em;"
+ <h3>Library use</h3>
+ <ul>
+    <li><strong>Patron number: </strong><!-- TMPL_VAR NAME="borrowernumber" --></li>
+    <li><strong>Category: </strong><!-- TMPL_VAR NAME="description" --> (<!-- TMPL_VAR NAME="categorycode" -->)I?(<!-- TMPL_VAR NAME="I" -->)A?(<!-- TMPL_VAR NAME="A" -->)C?(<!-- TMPL_VAR NAME="C" -->)(<!-- TMPL_VAR NAME="category_type" -->)</li>
+    <li><strong>Registration date: </strong><!-- TMPL_VAR NAME="dateenrolled" --></li>
     
-    <p><label>Expiration date: </label>
+    <li><strong>Expiration date: </strong>
     <!-- TMPL_IF NAME="reregistration" -->
-            <label class="reregistrinfo"><!-- TMPL_VAR NAME="dateexpiry" --></label>
+            <strong class="reregistrinfo"><!-- TMPL_VAR NAME="dateexpiry" --></strong>
     <!--TMPL_ELSE-->
             <!-- TMPL_VAR NAME="dateexpiry" -->
     <!-- /TMPL_IF -->
-    </p>
+    </li>
     
-    <p><label>Registration branch:</label><!-- TMPL_VAR NAME="branchname" --></p>
+    <li><strong>Registration branch: </strong><!-- TMPL_VAR NAME="branchname" --></li>
 
-    <p><label>Sort field 1: </label><!-- TMPL_VAR NAME="sort1" --></p>
-    <p><label>Sort field 2:</label><!-- TMPL_VAR NAME="sort2" --></p>
-    <p><label>OPAC login: </label><!-- TMPL_VAR name="userid" --></p>
+    <li><strong>Sort field 1: </strong><!-- TMPL_VAR NAME="sort1" --></li>
+    <li><strong>Sort field 2:</strong><!-- TMPL_VAR NAME="sort2" --></li>
+    <li><strong>OPAC login: </strong><!-- TMPL_VAR name="userid" --></li>
     <!-- TMPL_IF NAME="password" -->
-  <p><label>OPAC password: </label>*******</p>
+  <li><strong>OPAC password: </strong>*******</li>
    <!--TMPL_ELSE -->
-  <p><label>OPAC password: </label><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></p> 
+  <li><strong>OPAC password: </strong><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
    <!--/TMPL_IF --> 
-  <p><label>Circulation notes:</label><!-- TMPL_VAR name="borrowernotes" --></p>
-    <p><label>Message to Patron:</label><!-- TMPL_VAR NAME="opacnote" --></p>
-            <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
-</fieldset>
-
-
-<div id="patrons-fines-and-charges">
+  <li><strong>Circulation notes: </strong><!-- TMPL_VAR name="borrowernotes" --></li>
+    <li><strong>Message to Patron:</strong><!-- TMPL_VAR NAME="opacnote" --></li>
+	</ul>
+            <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
+ </div>
+</div>
+</div>
+<div id="patrons-fines-and-charges" class="yui-g">
     <h2>Fines and Charges</h2>
     <!-- TMPL_IF EXPR="totaldue eq 0.00" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
@@ -185,7 +182,7 @@ function confirm_reregistration() {
     <!-- /TMPL_IF -->
 </div>
 
-<div id="patrons-items-on-loan">
+<div id="patrons-items-on-loan" class="yui-g">
     <h2>Items on loan</h2>
     <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
         <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -259,7 +256,7 @@ function confirm_reregistration() {
     </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
 	</div>
 	
-<div id="patrons-items-reserved">
+<div id="patrons-items-reserved" class="yui-g">
 	<h2>Patron current reserves</h2>
 <!-- TMPL_IF NAME="reservloop" -->
 	<table>
@@ -315,9 +312,9 @@ function confirm_reregistration() {
 	</div>
 
 <!-- /TMPL_IF --> <!-- unknowuser -->
-</div>
-</div>
 
+</div>
+</div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 </div>
