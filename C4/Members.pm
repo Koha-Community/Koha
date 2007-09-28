@@ -597,11 +597,10 @@ sub ModMember {
         $sth->execute;
     }
     else {
- ( $data{'password'} = md5_base64( $data{'password'} ) )
-          if ( $data{'password'} ne '' );
+        ( $data{'password'} = md5_base64( $data{'password'} ) )
         foreach (keys %data)
         {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_} and $data{$_})} ;
-       
+          if ( $data{'password'} ne '' );
         $query = "UPDATE borrowers SET ".join (",",@parameters)." WHERE borrowernumber=$data{'borrowernumber'}";
 #         warn "$query";
         $sth = $dbh->prepare($query);
