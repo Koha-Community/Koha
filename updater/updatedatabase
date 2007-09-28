@@ -2211,8 +2211,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.004";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-             $dbh->do("INSERT INTO `systempreferences` VALUES ('DebugLevel','2','set the level of error info sent to the browser. 0=none, 1=some, 2=most','0|1|2','Choice')");
-    }
+	$dbh->do("INSERT INTO `systempreferences` VALUES ('DebugLevel','2','set the level of error info sent to the browser. 0=none, 1=some, 2=most','0|1|2','Choice')");    
     print "Upgrade to $DBversion done (adding DebugLevel systempref, in 'Admin' tab)\n";
     SetVersion ($DBversion);
 }
