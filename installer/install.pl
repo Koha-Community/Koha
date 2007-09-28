@@ -109,6 +109,10 @@ if ( $step && $step == 1 ) {
     unless ( eval { require XML::RSS } ) {
         push @missing, { name => "XML::RSS" };
     }
+    unless ( eval { require CGI::Carp } ) {
+        push @missing, { name => "CGI::Carp" };
+    }
+
 
 # The following modules are not mandatory, depends on how the library want to use Koha
     unless ( eval { require PDF::API2 } ) {
