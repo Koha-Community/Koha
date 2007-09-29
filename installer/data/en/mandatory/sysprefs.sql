@@ -40,7 +40,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('item-level_itypes','1','Item-level Itemtype / issuing rules','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemcallnumber','676a','The MARC field/subfield that is used to calculate the itemcallnumber (in UNIMARC',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('KohaAdminEmailAddress','root@localhost','the email address where borrowers modifs are sent','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('kohaspsuggest','1','Keep track of queries and suggestions in a database','','');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('kohaspsuggest','','Track search queries, turn on by specifying host:dbname:user:pass','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LabelMARCView','standard','Define how a MARC record will display','standard|economical','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog','0','Active this if you want to log all the letter sent',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Library name as shown on main opac page','','');

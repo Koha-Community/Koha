@@ -553,14 +553,13 @@ my $phrases = $search_desc;
 my $ipaddress;
 
 if ( C4::Context->preference("kohaspsuggest") ) {
+	my ($suggest_host, $suggest_dbname, $suggest_user, $suggest_pwd) = split(':', C4::Context->preference("kohaspsuggest"));
     eval {
         my $koha_spsuggest_dbh;
 
         # FIXME: this needs to be moved to Context.pm
         eval {
-            $koha_spsuggest_dbh =
-              DBI->connect( "DBI:mysql:suggest:66.213.78.76",
-                "auth", "Free2cirC" );
+			$koha_spsuggest_dbh=DBI->connect("DBI:mysql:$suggest_dbname:$suggest_host","$suggest_user","$suggest_pwd");
         };
         if ($@) {
             warn "can't connect to spsuggest db";
