@@ -49,6 +49,29 @@ if (alreadyreserved > "0"){
 	}
 }
 
+ $(document).ready(function() {
+ 	$("#requestany").click(function() {
+		if(this.checked){
+		$("input[@name=checkitem]").each(function() {
+			$(this).attr("checked","");
+		});
+		}
+	});
+ 	$("input[@name=checkitem]").click(function() {
+		onechecked = 0;
+		$("input[@name=checkitem]").each(function() {
+			if(this.checked){
+				onechecked = 1;
+			}
+		});
+		if(onechecked == 1){
+			$("#requestany").attr("checked","");
+		} else {
+			$("#requestany").attr("checked","checked");
+		}
+	});
+ });
+
 // ]]>
 </script>
 </head>
@@ -112,8 +135,7 @@ if (alreadyreserved > "0"){
 
     <!-- TMPL_IF NAME="diffbranch" -->			
     <p class="problem">
-      <strong>Branch Mismatch</strong>
-      The patron isn't in his own library
+      <strong>Warning:</strong> Pickup Library is different than Patron's Home Library
     </p>
     <!-- /TMPL_IF -->
 
@@ -163,8 +185,8 @@ if (alreadyreserved > "0"){
         <table>
         <tr>
             <th>Barcode</th>
-            <th>Home branch</th>
-            <th>Holding branch</th>
+            <th>Home Library</th>
+            <th>Holding Library</th>
             <th>Call number</th>
             <th>Information</th>
             <th>Cancel a Reserve</th>
@@ -185,7 +207,7 @@ if (alreadyreserved > "0"){
             </td>
             <td>
         <!-- TMPL_IF Name="date_due" -->
-            On loan, Return expected on <!-- TMPL_VAR NAME="date_due" -->
+            <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF NAME="available" -->
@@ -204,27 +226,21 @@ if (alreadyreserved > "0"){
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="notforloan" -->
-            This document is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+            This item is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="transfertwhen" -->
-            Document in transfer from the library : <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to : <!-- TMPL_VAR NAME="transfertto" -->, the : <!-- TMPL_VAR NAME="transfertwhen" -->
+            Item in transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, on <!-- TMPL_VAR NAME="transfertwhen" -->
         <!-- /TMPL_IF -->
             </td>
             <td>
             <!-- TMPL_IF NAME="reservedate"-->
                     <!-- TMPL_IF NAME="nocancel" -->
-                            Can't be cancelled, when item on transfer
+                            Can't be cancelled when item is on transfer
                             <!-- TMPL_ELSE -->
-                            <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?'))    
-                                    {return true;}
-                    else {return false;}">Cancel A reserve  </a>
-                    <span> Item reserved for :
-                            <!-- TMPL_VAR NAME="ReservedForSurname" -->  <!-- TMPL_VAR NAME="ReservedForFirstname" -->
-                    <br />
-                    expected at :	<!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
-                    </span>
+                    Item on hold for <!-- TMPL_VAR NAME="ReservedForFirstname" -->
+                            <!-- TMPL_VAR NAME="ReservedForSurname" -->, expected at <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->. <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?')) {return true;} else {return false;}">Cancel hold</a>
                   
                     <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
@@ -236,7 +252,7 @@ if (alreadyreserved > "0"){
         </table>
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
     
-        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;"> If no item is available, hold next returning item</label>
+        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;">Hold next available copy </label>
                <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
         </p>
         
@@ -262,7 +278,7 @@ if (alreadyreserved > "0"){
         <th>Patron</th>
         <th>Notes</th>
         <th>Date</th>
-        <th>Pick up location</th>
+        <th>Pick up Library</th>
         <th>Details</th>
       </tr>
   <!-- TMPL_LOOP Name="reserveloop" -->
@@ -290,12 +306,12 @@ if (alreadyreserved > "0"){
     <!-- TMPL_IF Name="wait" -->
     	<!-- TMPL_IF NAME="atdestination" -->
                 <!-- TMPL_IF name="found" -->
-                Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
+                Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
             <!-- TMPL_ELSE -->
                 Waiting to be pulled
             <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
-            Document being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
+            Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
          <!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
           <select name="pickup">
