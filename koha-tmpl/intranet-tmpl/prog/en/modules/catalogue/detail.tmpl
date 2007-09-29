@@ -47,10 +47,8 @@ function confirm_deletion(count) {
 <!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
     
     <div id="catalogue_detail_biblio">
-        <h2>Biblio detail</h2>
+        <h2><!-- TMPL_VAR NAME="title" --></h2>
         <p>
-            <label><b>Title</b></label>
-            <!-- TMPL_VAR NAME="title" -->
             [
             <!-- TMPL_IF name="description" -->
                 <!-- TMPL_VAR name="description" -->
@@ -234,6 +232,7 @@ function confirm_deletion(count) {
 </div>
 </div>
 <div class="yui-b">
+<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 </div>
 </div>
