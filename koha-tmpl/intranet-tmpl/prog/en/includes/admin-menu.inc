@@ -5,7 +5,7 @@
 
 <h5>Basic parameters</h5>
 <ul>
-	<li><a href="/cgi-bin/koha/admin/branches.pl">Libraries and branches</a></li>
+	<li><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a></li>
 	<li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Accounts and budgets</a></li>
 	<li><a href="/cgi-bin/koha/admin/currency.pl">Currencies</a></li>
 	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>

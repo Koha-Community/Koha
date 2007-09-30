@@ -1,14 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Branch Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Branch Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add branch<!-- TMPL_ELSE -->Modify branch <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Branches<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, agency categories<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add Branch Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm Deletion of Branch Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Add branch<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Modify branch <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Branches</a> &rsaquo; Confirm deletion of branch '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Branches<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  
+
+<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; 
+<!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="else" -->Libraries, branches, agency categories<!-- /TMPL_IF -->
+
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -30,7 +41,7 @@
             <input type="hidden" name="add" value="0" />
         <!-- /TMPL_IF -->
         <p>
-            <label><b>Branch code</b></label>
+            <label><b>Library code</b></label>
             <!-- TMPL_IF name="branchcode" -->
                 <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
                 <!-- TMPL_VAR name="branchcode" -->
@@ -54,8 +65,8 @@
         <p><label>Phone</label><input type="text" name="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></p>
         <p><label>Fax</label><input type="text" name="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></p>
         <p><label>E-mail</label><input type="text" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></p>
-        <p><label>Branch IP</label><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /></p>
-        <p><label>Branch Printer</label>
+        <p><label>Library IP</label><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /></p>
+        <p><label>Library Printer</label>
             <select id="branchprinter" name="branchprinter">
                 <option value="">None</option>
             <!-- TMPL_LOOP NAME="printerloop" -->
@@ -76,7 +87,7 @@
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
             <input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
-        <input type="submit" value="Delete Branch" />
+        <input type="submit" value="Delete Library" />
     </form> 
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
         <input type="submit" value="Do Not Delete" />
@@ -84,17 +95,17 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-    <h1>Branches</h1>
+    <h1>Libraries</h1>
     <!-- TMPL_IF NAME="message" --><div class="problem">
         <!-- TMPL_VAR name="message" --><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE1" --><div class="problem">Branch saved</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE2" --><div class="problem">Branch saved</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE3" --><div class="problem">Branch deleted</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE4" --><div class="problem">Branch category added</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE5" --><div class="problem">Branch category modified</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE6" --><div class="problem">Branch category deleted</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE7" --><div class="problem">Impossible to delete : branch is used</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE8" --><div class="problem">Category cannot be deleted because there are branches using that category.</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE1" --><div class="problem">Library saved</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE2" --><div class="problem">Library saved</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE3" --><div class="problem">Library deleted</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE4" --><div class="problem">Library category added</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE5" --><div class="problem">Library category modified</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE6" --><div class="problem">Library category deleted</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE7" --><div class="problem">Library cannot be deleted because there are patrons using that library</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE8" --><div class="problem">Category cannot be deleted because there are libraries using that category</div><!-- /TMPL_IF -->
 
     <table>
         <tr>
@@ -102,8 +113,8 @@
             <th>Code</th>
             <th>Address</th>
             <th>Category</th>
-            <th>Branch IP</th>
-            <th>Branch Printer</th>
+            <th>Library IP</th>
+            <th>Library Printer</th>
             <th colspan="2">&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP name="branches" -->
@@ -154,12 +165,12 @@
     </table>
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
         <p><input type="hidden" name="op" value="add" />
-        <input type="submit" value="Add New Branch" /></p>
+        <input type="submit" value="Add New Library" /></p>
     </form>
     
     <!-- TMPL_IF NAME="branchcategories" -->
     <table>
-    <caption>Branches Categories</caption>
+    <caption>Agency Categories</caption>
     <tr>
         <th>Name</th>
         <th>Code</th>
@@ -204,7 +215,7 @@
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="addcategory_validate" />
     <table>
-        <caption><!-- TMPL_IF NAME="categorycode" -->Edit Branch Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Branch Category<!-- /TMPL_IF --></caption>
+        <caption><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --></caption>
         <tr>
             <td>Category code</td>
             <td>
