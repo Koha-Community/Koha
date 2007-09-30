@@ -383,7 +383,7 @@ sub branchinfotable {
 
         # Handle categories
         my $no_categories_p = 1;
-        my @categories      = '';
+        my @categories;
         foreach my $cat ( @{ $branch->{'categories'} } ) {
             my ($catinfo) = @{ GetBranchCategory($cat) };
             push @categories, { 'categoryname' => $catinfo->{'categoryname'} };
