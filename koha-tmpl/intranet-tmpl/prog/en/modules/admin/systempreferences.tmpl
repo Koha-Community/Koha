@@ -107,9 +107,9 @@
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type-yesno" -->
                     <!-- TMPL_IF NAME="value-yes" -->
-                    <input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->Yes
+                    <input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->ON
                 <!-- TMPL_IF NAME="value-no" -->	
-                    <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->No<!-- /TMPL_IF -->
+                    <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->OFF<!-- /TMPL_IF -->
                 </td></tr>
         </table>
         <p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <input type="button"  value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
@@ -141,7 +141,9 @@
             <th>Variable Name:</th>
             <td><!-- TMPL_VAR NAME="searchfield" --></td>
         </tr>
-        <tr><th>Value: </th><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr></table>
+        <tr><th>Value: </th><td>
+		<!-- TMPL_VAR NAME="Tvalue" -->
+		</td></tr></table>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit"  value="Yes, Delete"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
     
@@ -182,7 +184,11 @@
     <!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
         <td><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></td>
-        <td><!-- TMPL_VAR NAME="value" --></td>
+
+        <td><!-- TMPL_IF NAME="yesno" -->
+		<!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
+
         <td width="20%"><!-- TMPL_VAR NAME="explanation" --></td>
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>

@@ -447,6 +447,8 @@ if ($op eq 'add_form') {
         my %row_data;  # get a fresh hash for the row data
         $row_data{variable} = $results->[$i]{'variable'};
         $row_data{value} = $results->[$i]{'value'};
+		$row_data{yes} = 1 if ($results->[$i]{'value'} == 1);
+		$row_data{yesno} = 1 if ($results->[$i]{'type'} eq 'YesNo');
         $row_data{explanation} = $results->[$i]{'explanation'};
         $row_data{toggle} = $toggle;
         $row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
