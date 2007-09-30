@@ -140,66 +140,66 @@ my @line_loop;
 my $toggle= 1;
 # my $i=0;
 while (my $data=$sth->fetchrow_hashref){
-	if ( $toggle eq 1 ) {
-		$toggle = 0;
-	} else {
-		$toggle = 1;
-	}
-	my %row = ( overduename => $data->{'categorycode'},
-				toggle => $toggle,
-				line => $data->{'description'}
-				);
-	if (%temphash){
-		for (my $i=1;$i<=3;$i++){
-			$row{"delay$i"}=$temphash{$data->{'categorycode'}}->{"delay$i"};
-			$row{"debarred$i"}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
-			if ($countletters){
-				my @letterloop;
-				foreach my $thisletter (keys %$letters) {
-					my $selected = 1 if $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"};
-					my %letterrow =(value => $thisletter,
-								selected => $selected,
-								lettername => $letters->{$thisletter},
-							);
-					push @letterloop, \%letterrow;
-				}
-				$row{"letterloop$i"}=\@letterloop;
-			} else {
-				$row{"noletter"}=1;
-				$row{"letter$i"}=$temphash{$data->{'categorycode'}}->{"letter$i"};
-			}
-		}
-	} else {
-	#getting values from table
-		my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? and categorycode=?");
-		$sth2->execute($branch,$data->{'categorycode'});
-		my $dat=$sth2->fetchrow_hashref;
-		for (my $i=1;$i<=3;$i++){
-			if ($countletters){
-				my @letterloop;
-				foreach my $thisletter (keys %$letters) {
-					my $selected = 1 if $thisletter eq $dat->{"letter$i"};
-					my %letterrow =(value => $thisletter,
-								selected => $selected,
-								lettername => $letters->{$thisletter},
-							);
-					push @letterloop, \%letterrow;
-				}
-				$row{"letterloop$i"}=\@letterloop;
-			} else {
-				$row{"noletter"}=1;
-				if ($dat->{"letter$i"}){$row{"letter$i"}=$dat->{"letter$i"};}
-			}
-			if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
-			if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
-		}
-		$sth2->finish;
-	}
-	push @line_loop,\%row;
+    if ( $toggle eq 1 ) {
+        $toggle = 0;
+    } else {
+        $toggle = 1;
+    }
+    my %row = ( overduename => $data->{'categorycode'},
+                toggle => $toggle,
+                line => $data->{'description'}
+                );
+    if (%temphash){
+        for (my $i=1;$i<=3;$i++){
+            $row{"delay$i"}=$temphash{$data->{'categorycode'}}->{"delay$i"};
+            $row{"debarred$i"}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
+            if ($countletters){
+                my @letterloop;
+                foreach my $thisletter (keys %$letters) {
+                    my $selected = 1 if $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"};
+                    my %letterrow =(value => $thisletter,
+                                    selected => $selected,
+                                    lettername => $letters->{$thisletter},
+                                    );
+                    push @letterloop, \%letterrow;
+                }
+                $row{"letterloop$i"}=\@letterloop;
+            } else {
+                $row{"noletter"}=1;
+                $row{"letter$i"}=$temphash{$data->{'categorycode'}}->{"letter$i"};
+            }
+        }
+    } else {
+    #getting values from table
+        my $sth2=$dbh->prepare("SELECT * from overduerules WHERE branchcode=? and categorycode=?");
+        $sth2->execute($branch,$data->{'categorycode'});
+        my $dat=$sth2->fetchrow_hashref;
+        for (my $i=1;$i<=3;$i++){
+            if ($countletters){
+                my @letterloop;
+                foreach my $thisletter (keys %$letters) {
+                    my $selected = 1 if $thisletter eq $dat->{"letter$i"};
+                    my %letterrow =(value => $thisletter,
+                                    selected => $selected,
+                                    lettername => $letters->{$thisletter},
+                                    );
+                    push @letterloop, \%letterrow;
+                }
+                $row{"letterloop$i"}=\@letterloop;
+            } else {
+                $row{"noletter"}=1;
+                if ($dat->{"letter$i"}){$row{"letter$i"}=$dat->{"letter$i"};}
+            }
+            if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
+            if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
+        }
+        $sth2->finish;
+    }
+    push @line_loop,\%row;
 }
 $sth->finish;
 
 $template->param(table=> \@line_loop,
-						branchloop => \@branchloop,
-						branch => $branch);
+                branchloop => \@branchloop,
+                branch => $branch);
 output_html_with_http_headers $input, $cookie, $template->output;
