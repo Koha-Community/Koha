@@ -187,9 +187,8 @@ if ( C4::Context->preference("IndependantBranches") ) {
     }
     $samebranch = 1 if ( $userenv->{flags} == 1 );
 }
-
-$data->{'branchname'} =
-  ( ( GetBranchDetail( $data->{'branchcode'} ) )->{'branchname'} );
+my $branchdetail = GetBranchDetail( $data->{'branchcode'});
+$data->{'branchname'} = $branchdetail->{branchname};
 
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
