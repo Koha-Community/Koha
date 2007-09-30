@@ -29,9 +29,9 @@
 
 <!-- TMPL_IF name="add" -->
     <!-- TMPL_IF name="heading-branches-add-branch-p" -->
-        <h1>Add branch</h1>
+        <h1>Add library</h1>
     <!-- TMPL_ELSE -->
-        <h1>Modify branch</h1>
+        <h1>Modify library</h1>
     <!-- /TMPL_IF -->
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
@@ -53,10 +53,12 @@
             <label><b>Name</b></label>
             <input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
         </p>
+		Agency Categories:
         <!-- TMPL_LOOP name="categoryloop" -->
             <p>
-                <label><!-- TMPL_VAR name="categoryname" --></label>
-                <input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /><!-- TMPL_VAR name="codedescription" -->
+                <input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> />
+				<label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
+				: <!-- TMPL_VAR name="codedescription" -->
             </p>
         <!-- /TMPL_LOOP -->
         <p><label>Address</label><input type="text" name="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></p>
@@ -142,9 +144,9 @@
                 <td>
                     <!-- TMPL_IF name="no-categories-p" -->
                         (no categories set)
-                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_ELSE -->O
                         <!-- TMPL_LOOP name="category_list" -->
-                            <!-- TMPL_VAR name="categoryname" --><br />
+                            N<!-- TMPL_VAR name="categoryname" --><br />
                         <!-- /TMPL_LOOP -->
                     <!-- /TMPL_IF -->
                 </td>
@@ -201,7 +203,7 @@
     </table>
     <!-- TMPL_ELSE -->
         <p>
-            <b>No Category defined.</b>
+            <b>No Agency Categories defined.</b>
         </p>
     <!-- /TMPL_IF --> <!-- NAME="branchcategories" -->
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><p>

@@ -4,7 +4,7 @@
 	<li>        <a href="/cgi-bin/koha/admin/branches.pl">Libraries</a></li>
 	<li>        <a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds</a></li>
 	<li>        <a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>
-	<li>        <a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/categorie.pl">Patron types and categories</a></li>
 	<li>        <a href="/cgi-bin/koha/admin/issuingrules.pl">Issuing rules</a></li>
 </ul>
     </p>
