@@ -48,9 +48,9 @@
                 </ul>
             </div>
             <!--/TMPL_IF -->
+            <!-- TMPL_IF name="table" -->
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
-                    
                 <table>
                     <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default branch <!--/TMPL_IF-->
                     <!--TMPL_IF Name="datasaved"-->
@@ -185,6 +185,10 @@
                 </table>
                 <input type="submit" value="Save Changes" />
             </form>
+            <!-- TMPL_ELSE -->
+                <div class="warning">You don't have defined a patron category, or the patron categories don't need overdue notices.</div>
+                <div class="warning">If this is not what you were expecting, go to <a href="../admin/categorie.pl">patron categories</p></div>
+            <!-- /TMPL_IF -->
     </div>
     </div>
     <div class="yui-b">
