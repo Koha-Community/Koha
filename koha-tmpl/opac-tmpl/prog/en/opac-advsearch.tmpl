@@ -59,7 +59,7 @@
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
             <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
-            <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
+            <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
                 <option value="cpn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
@@ -73,23 +73,23 @@
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="nt" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Notes/Comments</option>
             <!-- /TMPL_IF -->
-            <option value="pb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher</option>
-            <option value="pl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher Location</option>
+            <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher</option>
+            <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher Location</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
                 <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
                 <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
                 <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
             <!-- /TMPL_IF -->
-            <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
+            <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
             <!-- /TMPL_IF -->
-            <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
+            <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
             <!-- /TMPL_IF -->
-                <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
+                <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value=""/>
         <!-- TMPL_IF NAME="expanded_options" -->

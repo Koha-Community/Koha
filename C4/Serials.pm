@@ -366,12 +366,12 @@ sub GetSubscription {
        LEFT JOIN biblio ON biblio.biblionumber=subscription.biblionumber
        WHERE subscription.subscriptionid = ?
     );
-    if (C4::Context->preference('IndependantBranches') && 
-        C4::Context->userenv && 
-        C4::Context->userenv->{'flags'} != 1){
-#       warn "flags: ".C4::Context->userenv->{'flags'};
-      $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
-    }
+#     if (C4::Context->preference('IndependantBranches') && 
+#         C4::Context->userenv && 
+#         C4::Context->userenv->{'flags'} != 1){
+# #       warn "flags: ".C4::Context->userenv->{'flags'};
+#       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
+#     }
 #       warn "query : $query";
     my $sth = $dbh->prepare($query);
 #       warn "subsid :$subscriptionid";
@@ -2307,8 +2307,9 @@ sub abouttoexpire {
           "select max(planneddate) from serial where subscriptionid=?");
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow ;
-#       warn "date expiration : ".$expirationdate." date courante ".$res;
+#        warn "date expiration : ".$expirationdate." date courante ".$res;
       my @res=split /-/,$res;
+      @res=Date::Calc::Today if ($res[0]*$res[1]==0);
       my @endofsubscriptiondate=split/-/,$expirationdate;
       my $per = $subscription->{'periodicity'};
       my $x;
