@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Tools &rsaquo; Overdue Rules</title>
+<title>Koha &rsaquo; Tools &rsaquo; Notice Triggers</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; Overdue Rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; Notice Triggers</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -14,14 +14,14 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-	<h1>Defining <!-- TMPL_IF NAME="branch" -->overdue actions for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default overdue actions<!-- /TMPL_IF --></h1>
+	<h1>Defining <!-- TMPL_IF NAME="branch" -->overdue notice triggers for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default overdue notice trigers<!-- /TMPL_IF --></h1>
 	<div class="help">
-		<p>Delay is the number of days after an issue is due before an action is triggered. </p>
-		<p>If you want Koha to trigger an action (send a letter or debar member), delay is needed.</p>
-		<p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
+		<p>Define up to three notices below. Specify the 'Delay' (days after item is overdue), a Notice to send, and whether to change the
+		status of the patron to 'Debarred'</p>
+		<p>Note: you must specify the delay or the entry will be ignored. Delay is measured in days</p>
 	</div>
 		<form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
-		<label for="branch">Select a branch :</label>
+		<label for="branch">Select a library :</label>
 			<select id="branch" name="branch">
 				<option value="">Default</option>
 			<!-- TMPL_LOOP NAME="branchloop" -->
@@ -36,10 +36,10 @@
 		<h3>Data error</h3>
 			<p>The following fields have a forbidden value. Correct them and press OK again :</p><ul>
 			<!-- TMPL_IF NAME="ERRORDELAY" -->
-				<li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="bor"--> borrower category has some unexpected characters. There should be only numerical characters. </li>
+				<li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="bor"--> patron category has some unexpected characters. There should be only numerical characters. </li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERRORORDER" -->
-				<li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="bor"--> borrower category </li>
+				<li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="bor"--> patron category </li>
 		<!-- /TMPL_IF -->
 			</ul></div>
 		<!--/TMPL_IF -->
@@ -47,7 +47,7 @@
 			<input type="hidden" name="op" value="save" />
 			
 			<table>
-			<caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default branch <!--/TMPL_IF-->		<!--TMPL_IF Name="datasaved"-->
+			<caption>Notice triggers for overdues: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF-->		<!--TMPL_IF Name="datasaved"-->
 		<br /><h3 align="center">INPUT SAVED</h3>
 		<!--/TMPL_IF -->
 			</caption>
@@ -55,7 +55,7 @@
 				<th>&nbsp;</th><th colspan="3" scope="col">First</th><th colspan="3" scope="col">Second</th><th colspan="3" scope="col">Third</th>
 			</tr>
 			<tr>
-				<th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th>
+				<th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Notice</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Notice</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Notice</th><th scope="col">Debar</th>
 			</tr>
 			<!-- TMPL_LOOP NAME="table" -->
 				<tr>

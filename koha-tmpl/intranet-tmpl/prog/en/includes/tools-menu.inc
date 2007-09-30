@@ -7,8 +7,8 @@
 	<li><a href="/cgi-bin/koha/tools/export.pl">Export</a></li>
 	<li><a href="/cgi-bin/koha/tools/import.pl">Import</a></li>
 	<li><a href="/cgi-bin/koha/tools/letter.pl">Notices</a></li>
+	<li><a href="/cgi-bin/koha/tools/overduerules.pl">Notice/status triggers</a></li>
 	<li><a href="/cgi-bin/koha/tools/breeding.pl">Reservoir</a></li>
 	<li><a href="/cgi-bin/koha/labels/label-home.pl">Labels</a></li>
-	<li><a href="/cgi-bin/koha/tools/overduerules.pl">Overdue Rules</a></li>
 	<li><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></li>
 </ul>
