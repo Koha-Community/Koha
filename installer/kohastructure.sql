@@ -395,7 +395,7 @@ CREATE TABLE `biblioitems` (
   `collectionissn` text NOT NULL,
   `collectionvolume` mediumtext NOT NULL,
   `editionstatement` text NOT NULL,
-  `editionreponsability` text NOT NULL,
+  `editionresponsibility` text NOT NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `illus` varchar(255) default NULL,
   `pages` varchar(255) default NULL,

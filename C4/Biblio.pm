@@ -1856,7 +1856,7 @@ sub GetMarcAuthors {
             $count_auth++;
             my $subfieldcode = $authors_subfield->[0];
             my $value;
-            # deal with UNIMARC author responsability
+            # deal with UNIMARC author responsibility
             if (
                 $marcflavour ne 'MARC21'
                 and ($authors_subfield->[0] eq '4')
@@ -3346,7 +3346,7 @@ sub _koha_modify_biblioitem {
     $biblioitem->{'collectionissn'}         = $dbh->quote( $biblioitem->{'collectionissn'} );
     $biblioitem->{'collectionvolume'}       = $dbh->quote( $biblioitem->{'collectionvolume'} );
     $biblioitem->{'editionstatement'}       = $dbh->quote( $biblioitem->{'editionstatement'} );
-    $biblioitem->{'editionresponsability'}  = $dbh->quote( $biblioitem->{'editionresponsability'} );
+    $biblioitem->{'editionresponsibility'}  = $dbh->quote( $biblioitem->{'editionresponsibility'} );
     $biblioitem->{'ccode'}        = $dbh->quote( $biblioitem->{'ccode'} );
     $biblioitem->{'biblionumber'} =
       $dbh->quote( $biblioitem->{'biblionumber'} );
@@ -3371,7 +3371,7 @@ sub _koha_modify_biblioitem {
         collectionissn  = $biblioitem->{'collectionissn'},
         collectionvolume= $biblioitem->{'collectionvolume'},
         editionstatement= $biblioitem->{'editionstatement'},
-        editionresponsability= $biblioitem->{'editionresponsability'},
+        editionresponsibility= $biblioitem->{'editionresponsibility'},
         ccode           = $biblioitem->{'ccode'}
         where biblionumber = $biblioitem->{'biblionumber'}";
 
@@ -3423,7 +3423,7 @@ sub _koha_add_biblioitem {
             place            = ?, ccode           = ?,
             collectiontitle  = ?, collectionissn  = ?,
             collectionvolume = ?, editionstatement= ?,
-            editionresponsability= ?
+            editionresponsibility= ?
           "
     );
     my ($lcsort) =
@@ -3444,7 +3444,7 @@ sub _koha_add_biblioitem {
         $lcsort,                         $biblioitem->{'ccode'},
         $biblioitem->{'collectiontitle'},$biblioitem->{'collectionissn'},
         $biblioitem->{'collectionvolume'},$biblioitem->{'editionstatement'},
-        $biblioitem->{'editionresponsability'}
+        $biblioitem->{'editionresponsibility'}
     );
     $sth->finish;
     return ($bibitemnum);
