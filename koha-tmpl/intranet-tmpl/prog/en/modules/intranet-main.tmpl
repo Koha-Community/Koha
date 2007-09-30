@@ -4,34 +4,35 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-	
-    <h1>Welcome to Koha</h1>
-    
+<div id="doc3">
+<div id="bd">
+	<div class="yui-gb">
+	<div class="yui-u first">
+	First Column
         <!-- TMPL_IF name="koha_news_count" -->
-            <p><!-- TMPL_VAR name="koha_news_count" --> recent news item(s)</p>
-            <table>
+		<div>
+            News
+			<!-- TMPL_VAR name="koha_news_count" --> recent news item(s)
             <!-- TMPL_LOOP name="koha_news" -->
-                <tr>
-                <th>
-                    on <!-- TMPL_VAR name="newdate" -->, <!-- TMPL_VAR name="title" -->
-                </th>
-				</tr>
-                <tr><td>
-                    <p><!-- TMPL_VAR name="new" --></p>
-                </td></tr>
+                     <!-- TMPL_VAR name="title" -->
+					 on <!-- TMPL_VAR name="newdate" -->
+                    <!-- TMPL_VAR name="new" -->
             <!-- /TMPL_LOOP -->
-            </table>
+		</div>
         <!-- /TMPL_IF -->
-
+		<div>
+		<!-- TMPL_VAR NAME="IntranetmainUserblock" -->
+		</div>
+	</div>
+	<div class="yui-u">
+	Third Column
+	</div>
+	<div class="yui-u">
+	Second Column
+	</div>
+</div>
+<div id="ft">
+footer
 </div>
 </div>
-</div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

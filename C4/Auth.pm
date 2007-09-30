@@ -253,6 +253,7 @@ sub get_template_and_user {
             virtualshelves          => C4::Context->preference("virtualshelves"),
             LibraryName             => C4::Context->preference("LibraryName"),
             KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
+			IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
         );
     }
     else {
