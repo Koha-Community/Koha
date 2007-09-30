@@ -40,7 +40,7 @@ my ( $template, $loggedinuser, $cookie );
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
-foreach my $thisauthtype ( sort { $authtypes->{$a} <=> $authtypes->{$b} }
+foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'} }
     keys %$authtypes )
 {
     my $selected = 1 if $thisauthtype eq $authtypecode;
