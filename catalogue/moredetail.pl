@@ -23,7 +23,7 @@ use strict;
 require Exporter;
 use C4::Koha;
 use CGI;
-use C4::Biblio;             # to use &GetBiblioItemData &itemissues
+use C4::Biblio;             # to use &GetBiblioItemData &GetItemsByBiblioitemnumber
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
 use C4::Auth;
@@ -54,19 +54,19 @@ my $bi=$query->param('bi');
 my $data=GetBiblioItemData($bi);
 my $dewey = $data->{'dewey'};
 # FIXME Dewey is a string, not a number, & we should use a function
-$dewey =~ s/0+$//;
-if ($dewey eq "000.") { $dewey = "";};
-if ($dewey < 10){$dewey='00'.$dewey;}
-if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
-if ($dewey <= 0){
-      $dewey='';
-}
-$dewey=~ s/\.$//;
-$data->{'dewey'}=$dewey;
+# $dewey =~ s/0+$//;
+# if ($dewey eq "000.") { $dewey = "";};
+# if ($dewey < 10){$dewey='00'.$dewey;}
+# if ($dewey < 100 && $dewey > 10){$dewey='0'.$dewey;}
+# if ($dewey <= 0){
+#      $dewey='';
+# }
+# $dewey=~ s/\.$//;
+# $data->{'dewey'}=$dewey;
 
 my @results;
 
-my $items= GetItemIssues($bi);
+my $items= GetItemsByBiblioitemnumber($bi);
 my $count=@$items;
 $data->{'count'}=$count;
 
@@ -83,18 +83,16 @@ foreach my $item (@$items){
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
 
-    if ($item->{'date_due'} eq 'Available'){
+    if ($item->{'date_due'} eq ''){
         $item->{'issue'}= 0;
     } else {
         $item->{'date_due'} = format_date($item->{'date_due'});
         $item->{'issue'}= 1;
-        $item->{'borrowernumber'} = $item->{'borrower'};
-        $item->{'cardnumber'} = $item->{'card'};
     }
 }
 
 $template->param(BIBITEM_DATA => \@results);
-$template->param(ITEM_DATA => \@$items);
+$template->param(ITEM_DATA => $items);
 $template->param(loggedinuser => $loggedinuser);
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -68,6 +68,7 @@ push @EXPORT, qw(
   &GetUsedMarcStructure
 
   &GetItemsInfo
+  &GetItemsByBiblioitemnumber
   &GetItemnumberFromBarcode
   &get_itemnumbers_of
   &GetXmlBiblio
@@ -1391,6 +1392,68 @@ sub GetItemInfosOf {
     ';
     return get_infos_of( $query, 'itemnumber' );
 }
+
+=head2 GetItemsByBiblioitemnumber
+
+=over 4
+
+GetItemsByBiblioitemnumber($biblioitemnumber);
+
+Returns an arrayref of hashrefs suitable for use in a TMPL_LOOP
+Called by moredetail.pl
+
+=back
+
+=cut
+
+sub GetItemsByBiblioitemnumber {
+	my ( $bibitem ) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT * FROM items WHERE items.biblioitemnumber = ?")	|| die $dbh->errstr;
+	# Get all items attached to a biblioitem
+    my $i = 0;
+    my @results; 
+    $sth->execute($bibitem) || die $sth->errstr;
+    while ( my $data = $sth->fetchrow_hashref ) {  
+		# Foreach item, get circulation information
+		my $sth2 = $dbh->prepare( "SELECT * FROM issues,borrowers
+                                   WHERE itemnumber = ?
+                                   AND returndate is NULL
+                                   AND issues.borrowernumber = borrowers.borrowernumber"
+        );
+        $sth2->execute( $data->{'itemnumber'} );
+        if ( my $data2 = $sth2->fetchrow_hashref ) {
+			# if item is out, set the due date and who it is out too
+			$data->{'date_due'}   = $data2->{'date_due'};
+			$data->{'cardnumber'} = $data2->{'cardnumber'};
+			$data->{'borrowernumber'}   = $data2->{'borrowernumber'};
+		}
+        else {
+			# set date_due to blank, so in the template we check itemlost, and wthdrawn 
+			$data->{'date_due'} = '';                                                                                                         
+		}    # else         
+        $sth2->finish;
+        # Find the last 3 people who borrowed this item.                  
+        my $query2 = "SELECT * FROM issues, borrowers WHERE itemnumber = ?
+                      AND issues.borrowernumber = borrowers.borrowernumber
+                      AND returndate is not NULL
+                      ORDER BY returndate desc,timestamp desc LIMIT 3";
+        $sth2 = $dbh->prepare($query2) || die $dbh->errstr;
+        $sth2->execute( $data->{'itemnumber'} ) || die $sth2->errstr;
+        my $i2 = 0;
+        while ( my $data2 = $sth2->fetchrow_hashref ) {
+			$data->{"timestamp$i2"} = $data2->{'timestamp'};
+			$data->{"card$i2"}      = $data2->{'cardnumber'};
+			$data->{"borrower$i2"}  = $data2->{'borrowernumber'};
+			$i2++;
+		}
+        $sth2->finish;
+        push(@results,$data);
+    } 
+    $sth->finish;
+    return (\@results); 
+}
+
 
 =head2 GetBiblioItemInfosOf
 
