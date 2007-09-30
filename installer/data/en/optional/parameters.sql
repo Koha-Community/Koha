@@ -1,5 +1,3 @@
-INSERT INTO `branches` (branchcode, branchname) VALUES ('MAIN','Main Library');
-
 INSERT INTO `currency` (currency, rate) VALUES ('USD', 1.0);
 
 INSERT INTO `z3950servers` (`host`, `port`, `db`, `userid`, `password`, `name`, `id`, `checked`, `rank`, `syntax`) VALUES
