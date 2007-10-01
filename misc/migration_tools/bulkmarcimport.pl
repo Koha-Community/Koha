@@ -32,7 +32,7 @@ binmode(STDOUT, ":utf8");
 use Getopt::Long;
 
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit);
+my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit,$fk_off);
 
 $|=1;
 
@@ -45,6 +45,7 @@ GetOptions(
     't' => \$test_parameter,
     'c:s' => \$char_encoding,
     'v:s' => \$verbose,
+    'fk' => \$fk_off,
 );
 
 # FIXME:  Management of error conditions needed for record parsing problems
@@ -158,6 +159,7 @@ parameters :
 \th : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
 \tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
+\tfk : Turn off foreign key checks during import.                
 \tn : the number of records to import. If missing, all the file is imported
 \tcommit : the number of records to wait before performing a 'commit' operation
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
@@ -186,6 +188,9 @@ if ($delete) {
     $dbh->do("truncate biblioitems");
     $dbh->do("truncate items");
 }
+if ($fk_off) {
+	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
+}
 if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
@@ -208,7 +213,7 @@ $commitnum = $commit;
 }
 
 #1st of all, find item MARC tag.
-my ($tagfield,$tagsubfield) = &GetMarcFromKohaField($dbh,"items.itemnumber",'');
+my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
 while ( my $record = $batch->next() ) {
 # warn "=>".$record->as_formatted;
@@ -295,6 +300,9 @@ while ( my $record = $batch->next() ) {
             AddItem($items[$i],$bibid,$oldbibitemnum);
         }
     }
+}
+if ($fk_off) {
+	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
 # final commit of the changes
 z3950_extended_services('commit',set_service_options('commit'));
