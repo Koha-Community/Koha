@@ -1,0 +1,48 @@
+# Generic character map.
+#
+# $Id: string.chr,v 1.4 1999/09/07 07:19:21 adam Exp $
+
+# Define the basic value-set. *Beware* of changing this without re-indexing
+# your databases.
+lowercase {0-9}{a-y}üzזהרצו
+uppercase {0-9}{A-Y}ÜZִֶ״ײֵ
+
+# Breaking characters
+
+space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~
+
+# Characters to be considered equivalent for searching purposes.
+
+# equivalent זה(ae)
+# equivalent רצ(oe)
+# equivalent ו(aa)
+# equivalent uü
+
+# Supplemental mappings
+
+#map (&auml;)       ה
+#map (&aelig;)      ז
+#map (&oslash;)     ר
+#map (&aring;)      ו
+#map (&ouml;)       צ
+#map (&Auml;)       ִ
+#map (&Aelig;)      ֶ
+#map (&Oslash;)     ״
+#map (&Aring;)      ֵ
+#map (&Ouml;)       ײ
+
+#map יֹ		e
+#map ב		a
+#map ף		o
+#map ם		i
+
+#map (Aa)	(AA)
+
+#map (aa)        a
+map (^The\s)    @
+map (^the\s)    @
+map (^a\s)      @
+map (^A\s)      @
+map (^An\s)     @
+map (^an\s)     @
+

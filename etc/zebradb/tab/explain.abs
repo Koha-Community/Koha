@@ -1,0 +1,224 @@
+# This Explain schema is used for our internal management and processing of
+# explain data. On request, records are mapped to the proper Explain ASN.1
+# before transmission.
+#
+# $Id: explain.abs,v 1.2 2004/01/19 12:10:20 adam Exp $
+
+name explain
+reference Explain-schema
+attset explain.att
+#attset explain
+tagset explain.tag
+
+esetname B @
+esetname F @
+
+section rpnCapabilities
+elm (4,550)				rpnOperators			-
+elm (4,550)/(4,551)			rpnOperator			-
+elm (4,552)				resultSetAsOperandSupported	-
+elm (4,553)				restrictionOperandSupported	-
+elm (4,554)				proximitySupport		-
+elm (4,554)/(4,555)			anySupport			-
+elm (4,554)/(4,556)			unitsSupported			-
+elm (4,554)/(4,556)/(4,557)		unitSupported			-
+elm (4,554)/(4,556)/(4,557)/(4,558)	known				-
+elm (4,554)/(4,556)/(4,557)/(4,559)	private				-
+elm (4,554)/(4,556)/(4,557)/(4,559)/(4,558) privateUnit			-
+elm (4,554)/(4,556)/(4,557)/(4,559)/(4,560) description			-
+
+section accessInfo
+elm (4,501)				queryTypesSupported		-
+elm (4,501)/(4,518)			queryTypeDetails		-
+elm (4,501)/(4,518)/(4,519):rpnCapabilities	rpnCapabilities		-
+elm (4,501)/(4,518)/(4,520)		iso8777Capabilities		-
+elm (4,501)/(4,518)/(4,521)		privateCapabilities		-
+elm (4,503)				diagnosticSets			-
+elm (4,503)/(4,1000)			diagnosticSet			-
+elm (4,505)				attributeSetIds			-
+elm (4,505)/(4,1000)			attributeSetId			-
+elm (4,507)				schemas				-
+elm (4,507)/(4,1000)			schema				-
+elm (4,509)				recordSyntaxes			-
+elm (4,509)/(4,1000)			recordSyntax			-
+elm (4,511)				resourceChallenges		-
+elm (4,511)/(4,1000)			resourceChallenge		-
+elm (4,513)				restrictedAccess		-
+elm (4,514)				costInfo			-
+elm (4,515)				variantSets			-
+elm (4,515)/(4,1000)			variantSets			-
+elm (4,516)				elementSetNames			-
+elm (4,516)/(4,1001)			elementSetName			-
+elm (4,517)				unitSystems			-
+elm (4,517)/(4,1001)			unitSystem			-
+
+section commonInfo
+elm (4,601)				dateAdded			!
+elm (4,602)				dateChanged			!
+elm (4,603)				expiry		DateExpired
+elm (4,604)				languageCode	HumanStringLanguage
+
+section contactInfo
+elm (4,102)				name				-
+elm (4,113)				description			-
+elm (4,127)				address				-
+elm (4,128)				email				-
+elm (4,129)				phone				-
+
+section stringOrNumeric
+elm (4,1001)				string				-
+elm (4,1002)				numeric				-
+
+section attributeSetDetailsValue
+elm (4,709)				attributeValue			-
+elm (4,709)/(4,710):stringOrNumeric	value	-
+elm (4,709)/(4,113)			description			-
+elm (4,709)/(4,712)			subAttributes			-
+elm (4,709)/(4,712)/(4,713):stringOrNumeric subAttribute		-
+elm (4,709)/(4,714)			superAttributes			-
+elm (4,709)/(4,714)/(4,715):stringOrNumeric superAttributes		-
+elm (4,709)/(4,711)			partialSupport			-
+
+section attributeSetDetails
+elm (4,1000)				attributeSet			-
+elm (4,702)				attributesByType		-
+elm (4,702)/(4,703)			attributeTypeDetails		-
+elm (4,702)/(4,703)/(4,704)		attributeType			-
+elm (4,702)/(4,703)/(4,705)		defaultIfOmitted		-
+elm (4,702)/(4,703)/(4,705)/(4,706):stringOrNumeric	defaultValue	-
+elm (4,702)/(4,703)/(4,705)/(4,113)	defaultDescription		-
+elm (4,702)/(4,703)/(4,708):attributeSetDetailsValue attributeValues	-
+
+section attributeCombinations
+elm (4,1000)				attributeSet			-
+elm (4,717)				legalCombinations		-
+elm (4,717)/(4,718)			legalCombination		-
+elm (4,717)/(4,718)/(4,719)		attributeOccurrence		-
+elm (4,717)/(4,718)/(4,719)/(4,1000)	attributeSetId			-
+elm (4,717)/(4,718)/(4,719)/(4,704)	attributeType			-
+elm (4,717)/(4,718)/(4,719)/(4,720)	mustBeSupplied			-
+elm (4,717)/(4,718)/(4,719)/(4,721)	anyOrNone			-
+elm (4,717)/(4,718)/(4,719)/(4,722)	specific			-
+elm (4,717)/(4,718)/(4,719)/(4,722)/(4,710):stringOrNumeric value	-
+
+section attributeType
+elm (4,751)				attributeType			-
+elm (4,751)/(4,102)			attributeName			-
+elm (4,751)/(4,113)			attributeDescription		-
+elm (4,751)/(4,704)			type				-
+elm (4,751)/(4,708)			attributeValues			-
+elm (4,751)/(4,708)/(4,709)		attributeValue			-
+elm (4,751)/(4,708)/(4,709)/(4,102)	name				-
+elm (4,751)/(4,708)/(4,709)/(4,113)	description			-
+elm (4,751)/(4,708)/(4,709)/(4,710):stringOrNumeric attributeValue	-
+elm (4,751)/(4,708)/(4,709)/(4,752):stringOrNumeric equivalentAttribute	-
+
+section main
+#
+# CategoryList
+#
+elm (4,1)				categoryList	ExplainCategory
+elm (4,1)/(4,600):commonInfo		categoryListCommonInfo		-
+elm (4,1)/(4,300)			categories			-
+elm (4,1)/(4,300)/(4,301)		category			-
+elm (4,1)/(4,300)/(4,301)/(4,102)	categoryName			-
+elm (4,1)/(4,300)/(4,301)/(4,302)	originalName			-
+elm (4,1)/(4,300)/(4,301)/(4,113)	description			-
+elm (4,1)/(4,300)/(4,301)/(4,303)	asn1Module			-
+
+#
+# TargetInfo
+# 
+elm (4,2)				targetInfo		ExplainCategory
+elm (4,2)/(4,600):commonInfo		targetCommonInfo		-
+elm (4,2)/(4,102)			targetName		TargetName
+elm (4,2)/(4,103)			recentNews			-
+elm (4,2)/(4,104)			icon				-
+elm (4,2)/(4,105)			namedResultSets			-
+elm (4,2)/(4,106)			multipleDbSearch		-
+elm (4,2)/(4,107)			maxResultSets			-
+elm (4,2)/(4,108)			maxResultSize			-
+elm (4,2)/(4,109)			maxTerms			-
+elm (4,2)/(4,110)			timeoutInterval			-
+elm (4,2)/(4,111)			welcomeMessage			-
+elm (4,2)/(4,112):contactInfo		contactInfo			-
+elm (4,2)/(4,113)			description			-
+elm (4,2)/(4,114)			nicknames			-
+elm (4,2)/(4,114)/(4,102)		nickname			-
+elm (4,2)/(4,115)			usageRestrictions		-
+elm (4,2)/(4,116)			paymentAddr			-
+elm (4,2)/(4,117)			hours				-
+elm (4,2)/(4,118)			dbCombinations			-
+elm (4,2)/(4,118)/(4,605)		databaseList			-
+elm (4,2)/(4,118)/(4,605)/(4,102)	databaseName			-
+elm (4,2)/(4,119)			addresses			-
+elm (4,2)/(4,119)/(4,120)		internetAddress			-
+elm (4,2)/(4,119)/(4,120)/(4,121) 	host				-
+elm (4,2)/(4,119)/(4,120)/(4,122)	port				-
+elm (4,2)/(4,119)/(4,123)		otherAddress			-
+elm (4,2)/(4,119)/(4,123)/(4,124)	addressType			-
+elm (4,2)/(4,119)/(4,123)/(4,121)	address				-
+elm (4,2)/(4,125)			languages			-
+elm (4,2)/(4,125)/(4,126)		language			-
+elm (4,2)/(4,500):accessInfo		commonAccessInfo		-
+#
+# DatabaseInfo
+#
+elm (4,3)				databaseInfo	ExplainCategory
+elm (4,3)/(4,600):commonInfo		databaseCommonInfo		-
+elm (4,3)/(4,102)			databaseName	DatabaseName
+elm (4,3)/(4,226)			explainDatabase			-
+elm (4,3)/(4,114)			nicknames			-
+elm (4,3)/(4,114)/(4,102)		nickname			-
+elm (4,3)/(4,104)			icon				-
+elm (4,3)/(4,201)			userFee				-
+elm (4,3)/(4,202)			available	Availability
+elm (4,3)/(4,203)			titleString			-
+elm (4,3)/(4,227)			keywords			-
+elm (4,3)/(4,227)/(4,1000)		keyword				-
+elm (4,3)/(4,113)			description			-
+elm (4,3)/(4,205)			associatedDbs			-
+elm (4,3)/(4,205)/(4,605)		databaseList			-
+elm (4,3)/(4,205)/(4,605)/(4,102)	databaseName			-
+elm (4,3)/(4,206)			subDbs				-
+elm (4,3)/(4,206)/(4,605)		databaseList			-
+elm (4,3)/(4,206)/(4,605)/(4,102)	databaseName			-
+elm (4,3)/(4,207)			disclaimers			-
+elm (4,3)/(4,103)			recentNews			-
+elm (4,3)/(4,209)			recordCount			-
+elm (4,3)/(4,209)/(4,210)		recordCountActual		-
+elm (4,3)/(4,209)/(4,211)		recordCountApprox		-
+elm (4,3)/(4,212)			defaultOrder			-
+elm (4,3)/(4,213)			avRecordSize			-
+elm (4,3)/(4,214)			maxRecordSize			-
+elm (4,3)/(4,215)			hours				-
+elm (4,3)/(4,216)			bestTime			-
+elm (4,3)/(4,217)			lastUpdate			-
+elm (4,3)/(4,218)			updateInterval			-
+elm (4,3)/(4,219)			coverage			-
+elm (4,3)/(4,220)			proprietary			-
+elm (4,3)/(4,221)			copyrightText			-
+elm (4,3)/(4,222)			copyrightNotice			-
+elm (4,3)/(4,223):contactInfo		producerContactInfo		-
+elm (4,3)/(4,224):contactInfo		supplierContactInfo		-
+elm (4,3)/(4,225):contactInfo		submissionContactInfo		-
+elm (4,3)/(4,500):accessInfo		databaseAccessInfo		-
+#
+# AttributeSetInfo
+#
+elm (4,7)				attributeSetInfo	ExplainCategory
+elm (4,7)/(4,600):commonInfo		attributeSetInfoCommonInfo	-
+elm (4,7)/(4,1000)			attributeSet		AttributeSetOID
+elm (4,7)/(4,113)			description			-
+elm (4,7)/(4,102)			name				-
+elm (4,7)/(4,750):attributeType		attributes			-
+#
+# AttributeDetails
+#
+elm (4,10)				attributeDetails	ExplainCategory
+elm (4,10)/(4,600):commonInfo		attributeDetailsCommonInfo	-
+elm (4,10)/(4,102)			databaseName		DatabaseName
+elm (4,10)/(4,700)			attributesBySet			-
+elm (4,10)/(4,700)/(4,701):attributeSetDetails attributeSetDetails	-
+elm (4,10)/(4,716):attributeCombinations attributeCombinations		-
+

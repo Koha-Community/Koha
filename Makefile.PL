@@ -163,8 +163,9 @@ WriteMakefile(
       'rewrite-config.PL' => [
          '$(PREFIX)/share/koha/etc/koha-conf.xml',
          '$(PREFIX)/share/koha/etc/koha-httpd.conf',
-         '$(PREFIX)/share/koha/etc/zebra-biblios.cfg',
-         '$(PREFIX)/share/koha/etc/zebra-authorities.cfg'
+         '$(PREFIX)/share/koha/etc/zebradb/tab/kohalis',
+         '$(PREFIX)/share/koha/etc/zebradb/zebra-biblios.cfg',
+         '$(PREFIX)/share/koha/etc/zebradb/zebra-authorities.cfg'
          ]
    }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
