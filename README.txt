@@ -44,8 +44,6 @@ Default installation instructions:
 4. ln -s /usr/share/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
 5. a2ensite koha && /etc/init.d/apache reload
 6. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
-(Once Koha is working, you should set this zebra as a service run on
-startup.)
 7. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
