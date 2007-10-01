@@ -278,7 +278,7 @@ function confirm_reregistration() {
 						<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="waitingposition" -->
-						Waiting position for this document :
+					 Queue for this item :
 						<b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
 						<!-- /TMPL_IF -->
 					</td>
@@ -286,15 +286,15 @@ function confirm_reregistration() {
 						<!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
 						<!-- TMPL_IF name="waiting" -->
-						<i>This document is available</i>
+						<i>This item is available</i>
 						<!-- /TMPL_IF -->
 						<!-- TMPL_IF name="transfered" -->
-						<i>This document has been transfered from library : 
+						<i>This item has been transfered from library : 
 						<!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
 						<!-- /TMPL_IF -->
 
 						<!-- TMPL_IF name="nottransfered" -->
-						<i>This document hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
+						<i>This item hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
 						<!-- /TMPL_IF -->
 				
 					</td>
