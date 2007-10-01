@@ -952,7 +952,7 @@ sub GetPendingIssues {
     WHERE
       borrowernumber=? 
       AND returndate IS NULL
-    ORDER BY issues.date_due"
+    ORDER BY issues.issuedate"
     );
     $sth->execute($borrowernumber);
     my $data = $sth->fetchall_arrayref({});

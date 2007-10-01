@@ -403,13 +403,9 @@ if ($borrower) {
     # split in 2 arrays for today & previous
     my $dbh = C4::Context->dbh;
     foreach my $it ( @$issueslist ) {
-        my $issuedate = $it->{'timestamp'};
+        my $issuedate = $it->{'issuedate'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
-
-        # to let perl sort this correctly
-        $it->{'timestamp'} =~ s/(-|\:| )//g;
-
         if ( $todaysdate == $issuedate ) {
             (
                 $it->{'charge'},
