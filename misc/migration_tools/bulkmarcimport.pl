@@ -305,8 +305,8 @@ if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
 # final commit of the changes
-z3950_extended_services('commit',set_service_options('commit'));
-print "COMMIT OPERATION SUCCESSFUL\n";
+#z3950_extended_services('commit',set_service_options('commit'));
+#print "COMMIT OPERATION SUCCESSFUL\n";
 
 my $timeneeded = gettimeofday - $starttime;
 print "$i MARC records done in $timeneeded seconds\n";
