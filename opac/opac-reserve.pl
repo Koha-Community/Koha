@@ -28,6 +28,7 @@ use C4::Date;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
+use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 
@@ -100,8 +101,7 @@ $template->param( CGIbranch => $CGIbranchloop );
 
 #### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
 # get the itemtype data....
-my @items = GetItemInfosOf($biblionumber);
-
+my @items = GetItemsInfo($biblionumber);
 #######################################################
 # old version, add so that old templates still work
 my %types_old;
@@ -143,11 +143,11 @@ $template->param( itemcount => $itemcount );
 my %types;
 my %itemtypes;
 my @duedates;
+#die @items;
 foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
     $itm->{ $itm->{'publictype'} } = 1;
-
     my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
         'a', ( $itm->{'biblioitemnumber'} ) );
     $fee = sprintf "%.02f", $fee;

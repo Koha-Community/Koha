@@ -30,6 +30,7 @@ use C4::Context;
 use C4::Biblio;
 use C4::Search;
 use C4::Circulation;
+use C4::Accounts;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
 
