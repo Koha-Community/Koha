@@ -37,19 +37,31 @@ MySQL called koha, owned by a kohaadmin user, with a password set.
 
 Default installation instructions:
 
+0. export MYSQL_PASS=thePasswordYouChose
 1. perl Makefile.PL
 2. make
 3. sudo make install
 4. ln -s /usr/share/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
 5. a2ensite koha && /etc/init.d/apache reload
 6. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
+(Once Koha is working, you should set this zebra as a service run on
+startup.)
 7. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
 replace steps 1-3 with "perl install-CPAN.pl" but this is non-standard and
 may not be safe.  Nevertheless, it's pretty cool when it works.
 
-For instructions on how to override the default settings, run
+The defaults will install Koha to places that follow relevant standards,
+such as the File Hierarchy Standard.  If you want to install Koha to a
+different directory like /opt/koha, then replace step 1 with:
+1a. export PREFIX=/opt/koha
+1b. export CGI_DIR=/opt/koha/cgi
+1c. export LOG_DIR=/opt/koha/log
+1d. perl Makefile.PL PREFIX=/opt/koha
+
+You can change most of the defaults in a similar way, such as MYSQL_HOST.
+For full instructions on how to override the default settings, run
 perldoc rewrite-config.PL
 
 
