@@ -664,16 +664,18 @@ sub SearchOrder {
     if ($id) {
         @searchterms = ($id);
     }
-    map { push( @searchterms, "$_%", "% $_%" ) } @data;
+    map { push( @searchterms, "$_%", "%$_%" ) } @data;
     push( @searchterms, $search, $search, $biblionumber );
     my $query;
-    if ($id) {
+  ### FIXME  THIS CAN raise a problem if more THAN ONE biblioitem is linked to one biblio  
+    if ($id) {  
         $query =
-          "SELECT *,biblio.title FROM aqorders,biblioitems,biblio,aqbasket
-            WHERE aqorders.biblioitemnumber = biblioitems.biblioitemnumber AND
-            aqorders.basketno = aqbasket.basketno
-            AND aqbasket.booksellerid = ?
-            AND biblio.biblionumber=aqorders.biblionumber
+          "SELECT *,biblio.title 
+           FROM aqorders 
+           LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber 
+           LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber 
+           LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+            WHERE aqbasket.booksellerid = ?
             AND ((datecancellationprinted is NULL)
             OR (datecancellationprinted = '0000-00-00'))
             AND (("
@@ -687,11 +689,11 @@ sub SearchOrder {
     else {
         $query =
           " SELECT *,biblio.title
-            FROM   aqorders,biblioitems,biblio,aqbasket
-            WHERE  aqorders.biblioitemnumber = biblioitems.biblioitemnumber
-            AND    aqorders.basketno = aqbasket.basketno
-            AND    biblio.biblionumber=aqorders.biblionumber
-            AND    ((datecancellationprinted is NULL)
+            FROM   aqorders
+            LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
+            LEFT JOIN aqbasket on aqorders.basketno=aqbasket.basketno
+            LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber      
+            WHERE  ((datecancellationprinted is NULL)
             OR     (datecancellationprinted = '0000-00-00'))
             AND    (aqorders.quantityreceived < aqorders.quantity OR aqorders.quantityreceived is NULL)
             AND (("
@@ -893,9 +895,8 @@ sub GetParcels {
                 count(DISTINCT biblionumber) AS biblio,
                 sum(quantity) AS itemsexpected,
                 sum(quantityreceived) AS itemsreceived
-        FROM   aqorders, aqbasket
-        WHERE  aqbasket.basketno = aqorders.basketno
-             AND aqbasket.booksellerid = $bookseller and datereceived IS NOT NULL
+        FROM   aqorders LEFT JOIN aqbasket ON aqbasket.basketno = aqorders.basketno
+        WHERE aqbasket.booksellerid = $bookseller and datereceived IS NOT NULL
     ";
 
     $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" " if ($code);
@@ -1070,19 +1071,15 @@ sub GetHistory {
                 aqorders.ordernumber,
                 aqorders.booksellerinvoicenumber as invoicenumber,
                 aqbooksellers.id as id
-            FROM aqorders,aqbasket,aqbooksellers,biblio";
+            FROM aqorders 
+            LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno 
+            LEFT JOIN aqbooksellers ON aqorders.basketno=aqbasket.basketno
+            LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
-        $query .= ",borrowers "
+        $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
           if ( C4::Context->preference("IndependantBranches") );
 
-        $query .="
-            WHERE aqorders.basketno=aqbasket.basketno
-            AND   aqbasket.booksellerid=aqbooksellers.id
-            AND   biblio.biblionumber=aqorders.biblionumber ";
-
-        $query .= " AND aqbasket.authorisedby=borrowers.borrowernumber"
-          if ( C4::Context->preference("IndependantBranches") );
-
+        $query .= " WHERE 1 ";
         $query .= " AND biblio.title LIKE " . $dbh->quote( "%" . $title . "%" )
           if $title;
 
