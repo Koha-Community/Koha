@@ -1162,7 +1162,7 @@ sub ModSerialStatus {
     # change status & update subscriptionhistory
     my $val;
     if ( $status eq 6 ) {
-        DelIssue( $serialseq, $subscriptionid );
+        DelIssue( {'serialid'=>$serialid, 'subscriptionid'=>$subscriptionid,'serialseq'=>$serialseq} );
     }
     else {
         my $query =
@@ -1826,20 +1826,21 @@ this function delete an issue which has $serialseq and $subscriptionid given on 
 =cut
 
 sub DelIssue {
-    my ( $serialseq, $subscriptionid ) = @_;
+    my ( $dataissue) = @_;
     my $dbh   = C4::Context->dbh;
+    ### TODO Add itemdeletion. Should be in a pref ?
     my $query = qq|
         DELETE FROM serial
-        WHERE       serialseq= ?
+        WHERE       serialid= ?
         AND         subscriptionid= ?
     |;
     my $mainsth = $dbh->prepare($query);
-    $mainsth->execute( $serialseq, $subscriptionid );
+    $mainsth->execute( $dataissue->{'serialid'}, $dataissue->{'subscriptionid'});
 
     #Delete element from subscription history
     $query = "SELECT * FROM   subscription WHERE  subscriptionid = ?";
     my $sth   = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
+    $sth->execute($dataissue->{'subscriptionid'});
     my $val = $sth->fetchrow_hashref;
     unless ( $val->{manualhistory} ) {
         my $query = qq|
@@ -1847,18 +1848,18 @@ sub DelIssue {
           WHERE       subscriptionid= ?
       |;
         my $sth = $dbh->prepare($query);
-        $sth->execute($subscriptionid);
+        $sth->execute($dataissue->{'subscriptionid'});
         my $data = $sth->fetchrow_hashref;
-        $data->{'missinglist'}  =~ s/$serialseq//;
-        $data->{'recievedlist'} =~ s/$serialseq//;
+        my $serialseq= $dataissue->{'serialseq'};
+        $data->{'missinglist'}  =~ s/\b$serialseq\b//;
+        $data->{'recievedlist'} =~ s/\b$serialseq\b//;
         my $strsth = "UPDATE subscriptionhistory SET "
           . join( ",",
             map { join( "=", $_, $dbh->quote( $data->{$_} ) ) } keys %$data )
           . " WHERE subscriptionid=?";
         $sth = $dbh->prepare($strsth);
-        $sth->execute($subscriptionid);
+        $sth->execute($dataissue->{'subscriptionid'});
     }
-    ### TODO Add itemdeletion. Should be in a pref ?
     
     return $mainsth->rows;
 }
