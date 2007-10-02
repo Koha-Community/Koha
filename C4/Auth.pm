@@ -574,7 +574,7 @@ sub checkauth {
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
 #            warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
-                ".$session->param('surname').",      ".$session->param('branch');
+#                 ".$session->param('surname').",      ".$session->param('branch');
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
