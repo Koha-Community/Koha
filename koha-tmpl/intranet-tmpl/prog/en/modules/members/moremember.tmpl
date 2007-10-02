@@ -230,7 +230,7 @@ function confirm_reregistration() {
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
             <td>
             <!-- TMPL_IF name="norenew" -->
-                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Reserved</a>
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
             <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="red" -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
@@ -240,7 +240,7 @@ function confirm_reregistration() {
             <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
             <!-- /TMPL_IF -->
             </td>
-            <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Return</a></td>
+            <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
         </tr>
         <!-- /tmpl_loop -->
         <tr>
@@ -257,11 +257,11 @@ function confirm_reregistration() {
 	</div>
 	
 <div id="patrons-items-reserved" class="yui-g">
-	<h2>Patron current reserves</h2>
+	<h2>Patron current holds</h2>
 <!-- TMPL_IF NAME="reservloop" -->
 	<table>
 		<tr>
-			<th>Reserve date</th>
+			<th>Hold date</th>
 			<th>Barcode</th>
 			<th>Title</th>
 			<th>Author</th>
@@ -301,13 +301,13 @@ function confirm_reregistration() {
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 					<td>
-					    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">view reserves </a>
+					    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">view holds </a>
 					</td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
 	<!-- TMPL_ELSE -->
-	<p>Patron has nothing on reserve.</p>
+	<p>Patron has nothing on hold.</p>
 	<!-- /TMPL_IF -->
 	</div>
 

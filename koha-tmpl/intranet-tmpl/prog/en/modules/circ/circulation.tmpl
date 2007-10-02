@@ -644,6 +644,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th>Call no</th>
         <th>Barcode</th>
         <th>Renew?</th>
+		<th>Check In?</th>
     </tr>
 <!-- TMPL_IF NAME="todayissues" -->
 
@@ -675,12 +676,13 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- /TMPL_IF -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
+		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
     </tr>
     <!-- /TMPL_LOOP --> <!-- todayissues -->
     <!-- /TMPL_IF --> <!-- todayissues -->
 <!-- TMPL_IF NAME="previssues" -->
     <tr>
-        <th colspan="6"><a name="previous" id="previous">Previous checkouts</a></th>
+        <th colspan="7"><a name="previous" id="previous">Previous checkouts</a></th>
     </tr>
     <!-- TMPL_LOOP NAME="previssues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
@@ -711,6 +713,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- /TMPL_IF -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
+		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
     </tr>
     <!-- /TMPL_LOOP --> <!-- previssues -->
 <!-- /TMPL_IF --> <!-- previssues -->

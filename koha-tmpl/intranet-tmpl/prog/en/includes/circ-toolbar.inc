@@ -1,5 +1,5 @@
 <div id="toolbar"><ul class="toolbar">
-	<li><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="borrowernumber" -->">Check Out</a></li>
+	<li><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Check Out</a></li>
 	<!-- TMPL_IF name="adultborrower" --><li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Add child</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="category_type" -->
             <!--TMPL_IF NAME="guarantor"-->
@@ -16,6 +16,6 @@
         <!-- /TMPL_IF -->
 	<li><a href="Someone please write this">Add Note</a></li>
 	<li><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li>
-	<li><a href="">Print</a><ul><li><a href="">Page</a></li><li><a href="">Slip</a></li></ul></li><li><a href="javascript:confirm_reregistration();">Renew Account</a></li><li><a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><li><a href="javascript:confirm_deletion();">Delete</a></li>
+	<li><a href="">Print</a><ul><li><a href="">Page</a></li><li><a href="">Slip</a></li></ul></li><li><a href="javascript:confirm_reregistration();">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a href="javascript:confirm_deletion();">Delete</a></li>
 </ul>
 <br clear="all" /></div>

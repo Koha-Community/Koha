@@ -2,17 +2,17 @@
 	
 <div id="toplevelnav">
 <ul id="toplevelmenu">
-	<li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li>
-	<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>
-	<li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li>
+	<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li><!-- /TMPL_IF -->
+	 <!-- TMPL_IF NAME="CAN_user_borrowers" --><li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li><!-- /TMPL_IF -->
 	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul>
-	<li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
 	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
 	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-	<li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
-	<li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li>
-	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li>
-	<li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li>
+	<li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_reports" --><li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_tools" --><li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_parameters" --><li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li><!-- /TMPL_IF -->
 	<li><a href="/cgi-bin/koha/about.pl">About Koha</a></li></ul></li>
 </ul>
 </div>
