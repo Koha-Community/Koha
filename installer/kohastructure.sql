@@ -106,10 +106,10 @@ CREATE TABLE `aqbasket` (
 
 DROP TABLE IF EXISTS `aqbookfund`;
 CREATE TABLE `aqbookfund` (
-  `bookfundid` varchar(5) NOT NULL default '',
+  `bookfundid` char(10) NOT NULL default '',
   `bookfundname` mediumtext,
   `bookfundgroup` varchar(5) default NULL,
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   PRIMARY KEY  (`bookfundid`,`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -169,12 +169,12 @@ CREATE TABLE `aqbooksellers` (
 
 DROP TABLE IF EXISTS `aqbudget`;
 CREATE TABLE `aqbudget` (
-  `bookfundid` varchar(5) NOT NULL default '',
+  `bookfundid` char(10) NOT NULL default '',
   `startdate` date NOT NULL default 0,
   `enddate` date default NULL,
   `budgetamount` decimal(13,2) default NULL,
   `aqbudgetid` tinyint(4) NOT NULL auto_increment,
-  `branchcode` varchar(4) default NULL,
+  `branchcode` char(10) default NULL,
   PRIMARY KEY  (`aqbudgetid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -186,8 +186,8 @@ DROP TABLE IF EXISTS `aqorderbreakdown`;
 CREATE TABLE `aqorderbreakdown` (
   `ordernumber` int(11) default NULL,
   `linenumber` int(11) default NULL,
-  `branchcode` char(4) default NULL,
-  `bookfundid` char(5) NOT NULL default '',
+  `branchcode` char(10) default NULL,
+  `bookfundid` char(10) NOT NULL default '',
   `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
   KEY `bookfundid` (`bookfundid`),
@@ -449,7 +449,7 @@ CREATE TABLE `borrowers` (
   `B_email` text,
   `B_phone` mediumtext,
   `dateofbirth` date default NULL,
-  `branchcode` varchar(10) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `categorycode` varchar(10) NOT NULL default '',
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
@@ -498,7 +498,7 @@ CREATE TABLE `branchcategories` (
 
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` (
-  `branchcode` varchar(10) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `branchname` mediumtext NOT NULL,
   `branchaddress1` mediumtext,
   `branchaddress2` mediumtext,
@@ -518,7 +518,7 @@ CREATE TABLE `branches` (
 
 DROP TABLE IF EXISTS `branchrelations`;
 CREATE TABLE `branchrelations` (
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `categorycode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
@@ -701,7 +701,7 @@ CREATE TABLE `deletedborrowers` (
   `B_email` text,
   `B_phone` mediumtext,
   `dateofbirth` date default NULL,
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `categorycode` varchar(2) default NULL,
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
@@ -797,7 +797,7 @@ CREATE TABLE `issues` (
   `borrowernumber` int(11) default NULL,
   `itemnumber` int(11) default NULL,
   `date_due` date default NULL,
-  `branchcode` varchar(10) default NULL,
+  `branchcode` char(10) default NULL,
   `issuingbranch` varchar(18) default NULL,
   `returndate` date default NULL,
   `lastreneweddate` date default NULL,
@@ -830,7 +830,7 @@ CREATE TABLE `issuingrules` (
   `chargename` varchar(100) default NULL,
   `maxissueqty` int(4) default NULL,
   `issuelength` int(4) default NULL,
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`),
@@ -1099,7 +1099,7 @@ CREATE TABLE `opac_news` (
 
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
-  `branchcode` varchar(255) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `categorycode` varchar(2) NOT NULL default '',
   `delay1` int(4) default 0,
   `letter1` varchar(20) default NULL,
@@ -1132,7 +1132,7 @@ CREATE TABLE `printers` (
 DROP TABLE IF EXISTS `repeatable_holidays`;
 CREATE TABLE `repeatable_holidays` (
   `id` int(11) NOT NULL auto_increment,
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `weekday` smallint(6) default NULL,
   `day` smallint(6) default NULL,
   `month` smallint(6) default NULL,
@@ -1164,7 +1164,7 @@ CREATE TABLE `reserves` (
   `reservedate` date default NULL,
   `biblionumber` int(11) NOT NULL default 0,
   `constrainttype` char(1) default NULL,
-  `branchcode` varchar(4) default NULL,
+  `branchcode` char(10) default NULL,
   `notificationdate` date default NULL,
   `reminderdate` date default NULL,
   `cancellationdate` date default NULL,
@@ -1248,7 +1248,7 @@ CREATE TABLE sessions (
 DROP TABLE IF EXISTS `special_holidays`;
 CREATE TABLE `special_holidays` (
   `id` int(11) NOT NULL auto_increment,
-  `branchcode` varchar(4) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `day` smallint(6) NOT NULL default 0,
   `month` smallint(6) NOT NULL default 0,
   `year` smallint(6) NOT NULL default 0,
@@ -1347,7 +1347,7 @@ CREATE TABLE `subscription` (
   `distributedto` text,
   `internalnotes` longtext,
   `callnumber` text,
-  `branchcode` varchar(12) NOT NULL default '',
+  `branchcode` char(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
