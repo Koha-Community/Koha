@@ -60,17 +60,18 @@ sub get_authorised_value_desc ($$$$$$) {
     my ( $tagslib, $tag, $subfield, $value, $framework, $dbh ) = @_;
 
     #---- branch
-    #if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
 
-        #       return GetBranchDetail($value)->{branchname};
-    #}
+#                return GetBranchDetail($value)->{branchname};
+               return $value;
+    }
 
     #---- itemtypes
-    #if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
 
-        #          my $itemtypedef = getitemtypeinfo($itemtype);
-        #      return $itemtypedef->{description};
-    #}
+                  my $itemtypedef = getitemtypeinfo($itemtype);
+              return $itemtypedef->{description};
+    }
 
     #---- "true" authorized value
     my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
