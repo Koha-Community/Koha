@@ -245,7 +245,7 @@ storeData:1
 lockDir: $authorityserverdir/lock
 perm.anonymous:r
 perm.kohaadmin:rw
-passw.kohalis
+passw.passwd
 shadow
 register: $authorityserverdir/register:4G
 shadow: $authorityserverdir/shadow:4G
@@ -447,7 +447,7 @@ storeData:1
 lockDir: $biblioserverdir/lock
 perm.anonymous:r
 perm.kohaadmin:rw
-passw.kohalis
+passw.passwd
 shadow
 register: $biblioserverdir/register:4G
 shadow: $biblioserverdir/shadow:4G

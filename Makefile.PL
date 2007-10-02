@@ -163,7 +163,7 @@ WriteMakefile(
       'rewrite-config.PL' => [
          '$(PREFIX)/share/koha/etc/koha-conf.xml',
          '$(PREFIX)/share/koha/etc/koha-httpd.conf',
-         '$(PREFIX)/share/koha/etc/zebradb/tab/kohalis',
+         '$(PREFIX)/share/koha/etc/zebradb/tab/passwd',
          '$(PREFIX)/share/koha/etc/zebradb/zebra-biblios.cfg',
          '$(PREFIX)/share/koha/etc/zebradb/zebra-authorities.cfg'
          ]
