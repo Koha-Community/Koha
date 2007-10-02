@@ -547,6 +547,19 @@ CREATE TABLE `branchtransfers` (
   CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+--
+-- Table structure for table `browser`
+--
+DROP TABLE IF EXISTS `browser`;
+CREATE TABLE `browser` (
+  `level` int(11) NOT NULL,
+  `classification` varchar(20) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `number` bigint(20) NOT NULL,
+  `endnode` tinyint(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Table structure for table `categories`
 --
@@ -1076,6 +1089,18 @@ CREATE TABLE `notifys` (
   `notify_level` int(1) NOT NULL default 0,
   `method` varchar(20) NOT NULL default ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `nozebra`
+--
+CREATE TABLE `nozebra` (
+                `server` varchar(20)     NOT NULL,
+                `indexname` varchar(40)  NOT NULL,
+                `value` varchar(250)     NOT NULL,
+                `biblionumbers` longtext NOT NULL,
+                KEY `indexname` (`server`,`indexname`),
+                KEY `value` (`server`,`value`))
+                ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `opac_news`

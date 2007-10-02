@@ -121,10 +121,6 @@ if ($browser_tag) {
     if (C4::Context->preference('opaclanguages') eq 'fr' && $browser_tag eq '676' & $browser_subfield eq 'a') {
         $classification = dewey_french();
     }
-    $classification = dewey_french();
-    # calculate end node...
-    #use Data::Dumper;
-    #warn "==>".Dumper(%browser_result);
     foreach (keys %browser_result) {
         my $father = substr($_,0,-1);
         $browser_result{$father}->{notendnode}=1;
