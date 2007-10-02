@@ -30,7 +30,7 @@ function Dopop(link) {
 			<!-- TMPL_LOOP NAME="loopfilter" -->
 					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF -->
 		
 		<table>
 			<tr >
@@ -52,7 +52,7 @@ function Dopop(link) {
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="reference" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="reference" -->"><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
 							</td>
@@ -61,7 +61,7 @@ function Dopop(link) {
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
-				<!-- /TMPL_LOOP NAME="looprow" -->
+				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
