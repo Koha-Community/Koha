@@ -35,7 +35,9 @@
 <ul>
 	<li><a href="/cgi-bin/koha/circ/returns.pl">Check In</a></li>
 	<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
-	<li>    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
+	<!-- TMPL_UNLESS NAME="AutoLocation" -->
+            <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
+	<!-- /TMPL_UNLESS -->
 </ul>
 
 
