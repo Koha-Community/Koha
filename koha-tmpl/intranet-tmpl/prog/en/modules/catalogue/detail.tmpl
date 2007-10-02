@@ -1,6 +1,21 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- Core + Skin CSS -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css">
+<!-- OPTIONAL: Menu Stylesheet (required for creating buttons of type "menu" and "split") -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css">
+
+<!-- Dependencies -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/element/element-beta-min.js"></script>
+
+<!-- OPTIONAL: Menu and Container Core (required for creating buttons of type "menu" and "split") -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/container/container_core-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/menu/menu-min.js"></script>
+
+<!-- Source file -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/button/button-beta-min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function Dopop(link) {
@@ -26,10 +41,61 @@ function confirm_deletion(count) {
 		
     }
 }
+      // "contentready" event handler for the "toolbar" <div>
+	 YAHOO.example.init = function () {
+      YAHOO.util.Event.onContentReady("toolbar", function () {
+			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
+            var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
+			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
+			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
+			var oPlacehold = new YAHOO.widget.Button("placehold");
+			var oEditButton = new YAHOO.widget.Button("editbutton", { type: "menu", menu: "editbuttonselect" });
+			 });
+    } ();
+	
 //]]>
 </script>
+<style type="text/css">
+#toolbar {
+}
+
+#addbiblio a {
+	padding-left : 2.1em;
+	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
+	background-position : 0 -155px;
+	background-repeat : no-repeat;
+}
+
+#deletebiblio a {
+	padding-left : 2.1em;
+	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
+	background-position : 0 -188px;
+	background-repeat : no-repeat;
+}
+
+#printbiblio a {
+	padding-left : 2.1em;
+	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
+	background-position : 0 -243px;
+	background-repeat : no-repeat;
+}
+
+#addtoshelf a {
+	padding-left : 2.2em;
+	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
+	background-position : 0 -124px;
+	background-repeat : no-repeat;
+}
+
+#placehold a {
+	padding-left : 2.2em;
+	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
+	background-position : 0 -215px;
+	background-repeat : no-repeat;
+}
+</style>
 </head>
-<body>
+<body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
@@ -42,12 +108,11 @@ function confirm_deletion(count) {
 	<div id="yui-main">
 	<div class="yui-b">
 
-    <h1></h1>
-    
-<!-- TMPL_INCLUDE NAME="action-catalogue.inc" -->
-    
-    <div id="catalogue_detail_biblio">
-        <h2><!-- TMPL_VAR NAME="title" --></h2>
+<!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
+    <div class="yui-gb">
+    <h2><!-- TMPL_VAR NAME="title" --></h2>	
+	<div id="catalogue_detail_biblio" class="yui-u first">
+
         <p>
             [
             <!-- TMPL_IF name="description" -->
@@ -61,90 +126,108 @@ function confirm_deletion(count) {
             <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
             / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
         </p>
-
+		
+		
+		
+		<ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
-            <p><label><b>Authors:</b></label>
+            <li><strong>Authors:</strong><ul>
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-                <p><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
+                <li><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
                     <!-- TMPL_VAR NAME="value" -->
-                </a>&nbsp;</p>
+                </a>&nbsp;</li>
                 <!-- /TMPL_LOOP -->
-            </p>
+				</ul>
+            </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="illus" -->
-            <p><label><b>Illus:</b></label><!-- TMPL_VAR name="illus" -->&nbsp;</p>
+            <li><strong>Illustrator:</strong> <!-- TMPL_VAR name="illus" -->&nbsp;</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="publishercode" -->
-            <p><label><b>Published by :</b></label>
+            <li><strong>Publisher:</strong>
                 <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode" -->">
                     <!-- TMPL_VAR NAME="publishercode" -->
                 </a>&nbsp;
-            </p>
+            </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="publicationyear" -->
-            <p><label><b>in:</b></label><!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</p>
+            <li>in:<!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</li>
         <!-- /TMPL_IF -->
-        <p>
-            <label><b>Description:</b></label>
+        <li><strong>Description:</strong>
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
-                <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->&nbsp;
-        </p>
+                <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
+        </li>
+		</ul>
+		</div>
+		
+		<div class="yui-u">
+<!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a><!-- /TMPL_IF -->
+</div>
+		
+		<div class="yui-u">
+		<ul>
         <!-- TMPL_IF name="isbn" -->
-            <p><label><b>ISBN: </b></label><!-- TMPL_VAR NAME="isbn" -->&nbsp;</p>
+            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" -->&nbsp;</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="issn" -->
-            <p><label><b>ISSN:</b></label><!-- TMPL_VAR NAME="issn" -->&nbsp;</p>
+            <li><strong>ISSN:</strong><!-- TMPL_VAR NAME="issn" -->&nbsp;</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="collectiontitle" -->
-            <p><label><b>Collection: </b></label>
-                <!-- TMPL_VAR NAME="collectiontitle" --> <!-- TMPL_IF name="collectionvolume" -->, <!-- TMPL_VAR NAME="collectionvolume" --><!-- /TMPL_IF --><!-- TMPL_IF name="collectionissn" -->(ISSN : <!-- TMPL_VAR NAME="collectionissn" -->)<!-- /TMPL_IF -->
-            </p>
+            <li><strong>Collection: </strong>
+                <!-- TMPL_VAR NAME="collectiontitle" --> <!-- TMPL_IF name="collectionvolume" -->, <!-- TMPL_VAR NAME="collectionvolume" --><!-- /TMPL_IF --><!-- TMPL_IF name="collectionissn" -->(<strong>ISSN:</strong> <!-- TMPL_VAR NAME="collectionissn" -->)<!-- /TMPL_IF -->
+            </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="MARCSUBJCTS" -->
-            <p><label><b>Subjects: </b></label></p>
-            <p>
+            <li><strong>Subjects:</strong> 
+            <ul>
                 <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-                    <p><a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
-                    &nbsp;</p>
+                    <li><a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
+                    &nbsp;</li>
                 <!-- /TMPL_LOOP -->
-            </p>
+				</ul>
+            </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="copyrightdate" -->
-            <p><label><b>Year : </b></label><!-- TMPL_VAR NAME="copyrightdate" --></p>
+            <li><strong>Copyright:</strong> <!-- TMPL_VAR NAME="copyrightdate" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="MARCNOTES" -->
-            <p><label><b>Notes: </b></label></p>
-            <p>
+            <li><strong>Notes:</strong>
+            <ul>
                 <!-- TMPL_LOOP NAME="MARCNOTES" -->
-                    <p>- <!-- TMPL_VAR NAME="marcnote" --></p>
+                    <li>- <!-- TMPL_VAR NAME="marcnote" --></li>
                 <!-- /TMPL_LOOP -->
-            </p>
+            </ul>
+			</li>
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="notes" -->
-                <p><label><b>Notes: </b></label><!-- TMPL_VAR NAME="notes" --></p>
+                <li><strong>Notes:</strong> <!-- TMPL_VAR NAME="notes" --></li>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="unititle" -->
-            <p><label><b>Alt title: </b></label><!-- TMPL_VAR NAME="unititle" --></p>
+            <li><strong>Alternate title:</strong> <!-- TMPL_VAR NAME="unititle" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="classification" -->
-            <p><label><b>classification:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
+            <li><strong>Classification:</strong> <!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="dewey" -->
-            <p><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --></p>
+            <li><strong>Dewey:</strong> <!-- TMPL_VAR name="dewey" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="URLS" -->
-            <p><label><b>URL: </b></label>
+            <li><strong>URL:</strong> 
                 <!-- TMPL_LOOP name="URLS" -->
                     <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
                 <!-- /TMPL_LOOP -->
-            </p>
+            </li>
         <!-- /TMPL_IF -->
-    </div>
+		</ul>
+</div>
 
+</div>
+
+<div class="yui-g">
 <!-- TMPL_IF name="count" -->
     <div id="catalogue_detail_items">
-        <h2><!-- TMPL_VAR NAME="count" --> items</h2>
+        <caption><!-- TMPL_VAR NAME="count" --> item(s)</caption>
         <table>
             <tr>
                 <th>Item type</th>
@@ -187,7 +270,10 @@ function confirm_deletion(count) {
 <!-- TMPL_ELSE -->
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
+</div>
+
 <!-- TMPL_IF name="subscriptionsnumber" -->
+<div class="yui-g">
 <div id="catalogue_detail_subscriptions">
     <h2>This is a serial subscription</h2>
     <p> (We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
@@ -226,6 +312,7 @@ function confirm_deletion(count) {
             </table>
             <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
+</div>
 </div>
 <!-- /TMPL_IF -->
 
