@@ -166,12 +166,12 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
 #   }
 # STEP 3
   if ($op eq 'insert'){
-    # this value show if the login and password are been used
-    my $loginexist=checkuserpassword($borrowernumber,$data{'userid'},$data{'password'});
-    # test to know if u must save or create the borrowers
-    if ($loginexist) {
-      push @errors, "ERROR_login_exist";
-      $nok=1;
+	  my $loginexist;
+	  # Check if the userid is unique
+	  if ( !Check_Userid($data{'userid'},$borrowernumber)) {
+		  push @errors, "ERROR_login_exist";
+		  $loginexist = 1;
+		  $nok=1;
     } else {
       $borrowernumber = &AddMember(%newdata);
         if ($data{'organisations'}){            
@@ -210,13 +210,22 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
 # }
 
 if ($op eq 'save'){
-  # test to know if another user have the same password and same login    
-  &ModMember(%newdata);    
-  print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+	# test to know if another user have the same password and same login    
+	my $loginexist;                                                                                                                                      
+	# Check if the userid is unique                                                                                                                      
+	if ( !Check_Userid($data{'userid'},$borrowernumber)) {
+		push @errors, "ERROR_login_exist";
+		$loginexist = 1;
+		$nok=1;
+	}
+	if (!$loginexist){
+		&ModMember(%newdata);    
+		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+	}
 }
 
 if ($delete){
-  print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 }
 if ($nok){
   $op="add" if ($op eq "insert");

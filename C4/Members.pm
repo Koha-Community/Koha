@@ -113,6 +113,7 @@ push @EXPORT, qw(
 push @EXPORT, qw(
   &checkuniquemember 
   &checkuserpassword
+	&Check_Userid
   &fixEthnicity
   &ethnicitycategories 
   &fixup_cardnumber
@@ -750,6 +751,24 @@ sub AddMember {
     return $data{'borrowernumber'};
 }
 
+sub Check_Userid {
+	my ($uid,$member) = @_;
+	my $dbh = C4::Context->dbh;
+    # Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
+    # Then we need to tell the user and have them create a new one.
+    my $sth =
+      $dbh->prepare(
+        "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
+    $sth->execute( $uid, $member );
+    if ( ( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref ) ) {
+        return 0;
+    }
+	else {
+		return 1;
+	}
+}
+
+
 sub changepassword {
     my ( $uid, $member, $digest ) = @_;
     my $dbh = C4::Context->dbh;
@@ -758,9 +777,9 @@ sub changepassword {
 #Then we need to tell the user and have them create a new one.
     my $sth =
       $dbh->prepare(
-        "select * from borrowers where userid=? and borrowernumber != ?");
+        "SELECT * FROM borrowers WHERE userid=? AND borrowernumber != ?");
     $sth->execute( $uid, $member );
-    if ( ( $uid ne '' ) && ( $sth->fetchrow ) ) {
+    if ( ( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref ) ) {
         return 0;
     }
     else {
