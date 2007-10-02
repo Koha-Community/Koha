@@ -100,7 +100,9 @@ foreach my $thisbranch (keys %$branches) {
             );
     push @branchloop, \%row;
 }
-$template->param(branchloop => \@branchloop);
+$template->param(branchloop => \@branchloop,
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+);
 
 if ($op eq 'mod'||$op eq 'dup') {
     my $subscriptionid = $query->param('subscriptionid');
