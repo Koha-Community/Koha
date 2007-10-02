@@ -1,14 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration</title>
+<title>Koha &rsaquo; System Administration &rsaquo; <!-- TMPL_IF NAME="else" -->Stop Words<!-- /TMPL_IF --><!-- TMPL_IF NAME="add_form" --> Stop Words &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify Stop Word<!-- TMPL_ELSE -->Add Stop Word<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> Stop Words &rsaquo; Data recorded<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> Stop Words &rsaquo; Delete Stop Word '<!-- TMPL_VAR NAME="searchfield" -->' ?<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" --> Stop Words &rsaquo; Data deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<h1>Koha &rsaquo; Stopword</h1>
-
-<div id="mainbloc">
-    <!-- TMPL_IF NAME="add_form" -->
+<!-- TMPL_IF NAME="add_form" -->
         <script language="javascript" type="text/javascript">
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             function isNotNull(f,noalert) {
@@ -59,7 +52,22 @@
                 }
             }
         </script>
+	<!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="stopwords-admin-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Stop Words<!-- /TMPL_IF --><!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify Stop Word<!-- TMPL_ELSE -->Add Stop Word<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Data recorded<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Delete Stop Word '<!-- TMPL_VAR NAME="searchfield" -->' ?<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Data deleted<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+        
         <!-- TMPL_IF NAME="searchfield" -->
             <h1>Modify word</h1>
         <!-- TMPL_ELSE -->
@@ -113,12 +121,9 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
-    <h1>Stop words admin</h1>
-    <b>NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</b>
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-        <input type="submit" name="ok" value="OK" />
-    </form>
+    <h1>Stop Words</h1>
+    <p class="message">NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</p>
+
 
     <!-- TMPL_IF NAME="searchfield" -->
                     You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
@@ -147,6 +152,11 @@
             <input type="submit" value="Add Stop word" alt="Add Stop word" />
     </form>
 <!-- /TMPL_IF -->
-</div>
 
-<!-- TMPL_INCLUDE NAME="parameters-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
