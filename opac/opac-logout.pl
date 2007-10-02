@@ -18,7 +18,7 @@
 use CGI;
 use C4::Context;
 use C4::Output;
-
+use CGI::Session;
 my $query     = new CGI;
 my $sessionID = $query->cookie('sessionID');
 my $dbh       = C4::Context->dbh;

@@ -32,6 +32,7 @@ use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches
 
+# use utf8;
 # use Net::LDAP;
 # use Net::LDAP qw(:all);
 
@@ -58,10 +59,10 @@ C4::Auth - Authenticates Koha users
         {
             template_name   => "opac-main.tmpl",
             query           => $query,
-	    type            => "opac",
-	    authnotrequired => 1,
-	    flagsrequired   => {borrow => 1},
-	}
+      type            => "opac",
+      authnotrequired => 1,
+      flagsrequired   => {borrow => 1},
+  }
     );
 
   print $query->header(
@@ -96,10 +97,10 @@ C4::Auth - Authenticates Koha users
         {
            template_name   => "opac-main.tmpl",
            query           => $query,
-	   type            => "opac",
-	   authnotrequired => 1,
-	   flagsrequired   => {borrow => 1},
-	}
+     type            => "opac",
+     authnotrequired => 1,
+     flagsrequired   => {borrow => 1},
+  }
     );
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
@@ -170,7 +171,7 @@ sub get_template_and_user {
             $template->param( CAN_user_updatecharge     => 1 );
             $template->param( CAN_user_acquisition      => 1 );
             $template->param( CAN_user_management       => 1 );
-            $template->param( CAN_user_tools            => 1 );	
+            $template->param( CAN_user_tools            => 1 ); 
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
@@ -220,11 +221,11 @@ sub get_template_and_user {
         if ( $flags && $flags->{tools} == 1 ) {
             $template->param( CAN_user_tools => 1 );
         }
-	
+  
         if ( $flags && $flags->{editauthorities} == 1 ) {
             $template->param( CAN_user_editauthorities => 1 );
         }
-		
+    
         if ( $flags && $flags->{serials} == 1 ) {
             $template->param( CAN_user_serials => 1 );
         }
@@ -244,6 +245,8 @@ sub get_template_and_user {
             LibraryName        => C4::Context->preference("LibraryName"),
             LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginBranchname    => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
+            LoginFirstname     => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
+            LoginSurname       => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu", 
             AutoLocation       => C4::Context->preference("AutoLocation"),
             hide_marc          => C4::Context->preference("hide_marc"),
             patronimages       => C4::Context->preference("patronimages"),
@@ -262,7 +265,7 @@ sub get_template_and_user {
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
-	$template->param(
+  $template->param(
             KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
             suggestion             => "" . C4::Context->preference("suggestion"),
             virtualshelves         => "" . C4::Context->preference("virtualshelves"),
@@ -282,6 +285,8 @@ sub get_template_and_user {
             LibraryNameTitle       => "" . $LibraryNameTitle,
             LoginBranchcode        => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
             LoginBranchname        => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"", 
+            LoginFirstname        => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
+            LoginSurname        => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu", 
             OpacPasswordChange     => C4::Context->preference("OpacPasswordChange"),
             opacreadinghistory     => C4::Context->preference("opacreadinghistory"),
             opacuserjs             => C4::Context->preference("opacuserjs"),
@@ -359,7 +364,7 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-	# warn "Checking Auth";
+  # warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -385,7 +390,8 @@ sub checkauth {
         $loggedin = 1;
     }
     elsif ( $sessionID = $query->cookie("CGISESSID")) {
-        my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+#         my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+        my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
         C4::Context->_new_userenv($sessionID);
         if ($session){
             C4::Context::set_userenv(
@@ -395,20 +401,23 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
+            warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
+                ".$session->param('surname').",      ".$session->param('branch');
         }
         my $ip;
-		my $lasttime;
-		if ($session) {
-			$ip = $session->param('ip');
-			$lasttime = $session->param('lasttime');
-            $userid = $session->param('id');
-		}
+        my $lasttime;
+        if ($session) {
+          $ip = $session->param('ip');
+          $lasttime = $session->param('lasttime');
+                $userid = $session->param('id');
+        }
         
-		
+    
         if ($logout) {
 
             # voluntary logout the user
-            $session->delete;
+#             $session->delete;
+            $session->flush;      
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
@@ -437,7 +446,7 @@ sub checkauth {
                 $info{'oldip'}        = $ip;
                 $info{'newip'}        = $ENV{'REMOTE_ADDR'};
                 $info{'different_ip'} = 1;
-				$session->delete();
+        $session->delete();
                 C4::Context->_unset_userenv($sessionID);
                 $sessionID = undef;
                 $userid    = undef;
@@ -462,11 +471,12 @@ sub checkauth {
         }
     }
     unless ($userid) {
-        my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});		
+#         my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});    
+        my $session = new CGI::Session("driver:File", undef, {Directory=>'/tmp'});    
         my $sessionID;
-		if ($session) {
-			$sessionID = $session->id;
-			}
+    if ($session) {
+      $sessionID = $session->id;
+      }
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
@@ -505,7 +515,7 @@ sub checkauth {
                   = $sth->fetchrow
                   if ( $sth->rows );
 
-# 				warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+#         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                 unless ( $sth->rows ) {
                     my $sth =
                       $dbh->prepare(
@@ -520,7 +530,7 @@ sub checkauth {
                       = $sth->fetchrow
                       if ( $sth->rows );
 
-# 					warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+#           warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
                         (
@@ -542,7 +552,7 @@ sub checkauth {
                 my $branches = GetBranches();
                 my @branchesloop;
                 foreach my $br ( keys %$branches ) {
-                    # 		now we work with the treatment of ip
+                    #     now we work with the treatment of ip
                     my $domain = $branches->{$br}->{'branchip'};
                     if ( $domain && $ip =~ /^$domain/ ) {
                         $branchcode = $branches->{$br}->{'branchcode'};
@@ -563,7 +573,8 @@ sub checkauth {
                 $session->param('emailaddress',$emailaddress);
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
-				$session->param('branchprinter',$branchprinter);
+#            warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
+                ".$session->param('surname').",      ".$session->param('branch');
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
@@ -571,7 +582,7 @@ sub checkauth {
                         $session->param('id',C4::Context->config('user'));
                         $session->param('cardnumber',C4::Context->config('user'));
                         $session->param('firstname',C4::Context->config('user'));
-                        $session->param('surname',C4::Context->config('user'),);
+                        $session->param('surname',C4::Context->config('user'));
                         $session->param('branch','NO_LIBRARY_SET');
                         $session->param('branchname','NO_LIBRARY_SET');
                         $session->param('flags',1);
@@ -607,7 +618,7 @@ sub checkauth {
             $cookie = $query->cookie( CGISESSID => ''
             );
         }
-		return ( $userid, $cookie, $sessionID, $flags );
+    return ( $userid, $cookie, $sessionID, $flags );
 
     }
 
@@ -634,7 +645,7 @@ sub checkauth {
     # check that database and koha version are the same
     # there is no DB version, it's a fresh install,
     # go to web installer
-	warn "about to check version";
+  warn "about to check version";
     unless (C4::Context->preference('Version')){
       if ($type ne 'opac'){
         warn "Install required, redirecting to Installer";
@@ -670,7 +681,7 @@ sub checkauth {
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
     $template->param(
-		login				 => 1,
+    login        => 1,
         INPUTS               => \@inputs,
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
@@ -754,7 +765,7 @@ sub checkpw {
     {
 
 # Koha superuser account
-# 		C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
+#     C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
         return 2;
     }
     if (   $userid && $userid eq 'demo'
