@@ -55,8 +55,20 @@ unless (%index) {
         'dewey' => '676a',
         'host-item' => '995a,995c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
-    } else {
-        # build a MARC21 default index file
+    } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
+		$dbh->do("UPDATE systempreferences SET values=\"'title' => '245a,245b',
+		'author' => '100a',
+		'isbn' => '020a',
+		'issn' => '022a',
+		'biblionumber => '999c',
+		'itemtype' => '942c',
+		'publisher' => '260b',
+		'date' => '260c',
+		'note' => '500a',
+		'subject' => '600a, 650a',
+		'dewey' => '082',
+		'host-item' => '952a, 952c'");
+        %index = GetNoZebraIndexes();
     }
 }
 $|=1;
