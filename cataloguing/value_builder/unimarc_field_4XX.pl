@@ -356,16 +356,15 @@ sub plugin {
         }
         my @arrayresults;
         my @field_data = ($search);
-        for (
-            my $i = $startfrom ;
-            $i <= (
-                  ( $startfrom + $resultsperpage ) < scalar(@$results)
-                ? ( $startfrom + $resultsperpage )
-                : scalar(@$results)
-            ) ;
-            $i++
-          )
-        {
+         for (
+             my $i = $startfrom * $resultsperpage ;
+             $i < (( $startfrom * $resultsperpage + $resultsperpage  < scalar(@$results))
+                 ? $startfrom * $resultsperpage + $resultsperpage
+                 : scalar(@$results)
+             ) ;
+             $i++
+           )
+         {
             my $record = MARC::Record::new_from_usmarc( $results->[$i] );
             my $rechash = TransformMarcToKoha( $dbh, $record );
             my $pos;
@@ -385,7 +384,7 @@ sub plugin {
             $CN =~ s/ \|$//;
             $rechash->{CN} = $CN;
             push @arrayresults, $rechash;
-        }
+         }
 
    #         for(my $i = 0 ; $i <= $#marclist ; $i++)
    #         {
@@ -425,6 +424,18 @@ sub plugin {
         }
         my $defaultview =
           'BiblioDefaultView' . C4::Context->preference('BiblioDefaultView');
+#         my $link="/cgi-bin/koha/cataloguing/value_builder/unimarc4XX.pl?op=do_search&q=$search_desc&resultsperpage=$resultsperpage&startfrom=$startfrom&search=$search";
+#           foreach my $sort (@sort_by){      
+#             $link.="&sort_by=".$sort."&";
+#           }        
+#           $template->param(
+#             pagination_bar => pagination_bar(
+#                     $link,
+#                     getnbpages($hits, $results_per_page),
+#                     $page,
+#                     'page'
+#             ),
+#           );     
         $template->param(
             result         => \@arrayresults,
             index          => $query->param('index') . "",
