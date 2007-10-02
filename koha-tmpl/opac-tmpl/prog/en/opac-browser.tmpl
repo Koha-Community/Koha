@@ -5,6 +5,7 @@
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
     <h1>Browse our catalogue</h1>
+        <!-- TMPL_IF name="HIERARCHY_LOOP" -->
         <ul>
         <li>
             <!-- TMPL_VAR name="description" --> <a href="opac-browser.pl">Top level</a>
@@ -33,4 +34,7 @@
             </ul>
         <!-- /TMPL_LOOP -->
         </ul>
+        <!-- TMPL_ELSE -->
+            <div class="warning">The browser table is empty. this feature is not fully set-up. see <a href="http://wiki.koha.org/doku.php?id=opacbrowser">wiki</a> for more informations on what it does or how to set it</div>
+        <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
