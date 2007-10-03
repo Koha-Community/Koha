@@ -1073,7 +1073,7 @@ sub GetHistory {
                 aqbooksellers.id as id
             FROM aqorders 
             LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno 
-            LEFT JOIN aqbooksellers ON aqorders.basketno=aqbasket.basketno
+            LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
             LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
         $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
