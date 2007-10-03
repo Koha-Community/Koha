@@ -309,17 +309,10 @@
 <script>
 function report() {
 		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
-			'     '+
-			document.f_pop.f5.value+
-			document.f_pop.f6.value+
-			document.f_pop.f7.value+
-			document.f_pop.f8.value+
-			document.f_pop.f9.value+ 
-			'22     '+
-			document.f_pop.f17.value+
-			document.f_pop.f18.value+
-			document.f_pop.f19.value+
-			' 4500';
+			'    '+document.f_pop.f5.value +
+			document.f_pop.f6.value+ document.f_pop.f7.value+
+			document.f_pop.f8.value+ document.f_pop.f9.value+ '       '+
+			document.f_pop.f17.value+ document.f_pop.f18.value+ document.f_pop.f19.value+'     ';
 		self.close();
 		return false;
 	}
