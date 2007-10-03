@@ -429,7 +429,10 @@
 </form>
 <script>
 function report() {
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value = 
 			'<!-- TMPL_VAR NAME="dateentered" -->'+
 			document.f_pop.f0.value+
 			document.f_pop.f014.value+

@@ -309,7 +309,10 @@
 </form>
 <script>
 function report() {
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value = 
 			'    '+document.f_pop.f5.value +
 			document.f_pop.f6.value+ document.f_pop.f7.value+
 			document.f_pop.f8.value+ document.f_pop.f9.value+ '       '+
