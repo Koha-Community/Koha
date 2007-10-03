@@ -611,7 +611,7 @@ sub itemissues {
 
         # Find the last 3 people who borrowed this item.
         $sth2 = $dbh->prepare(
-            "SELECT * FROM issues, borrowers
+            "SELECT * FROM issues
                 LEFT JOIN borrowers ON  issues.borrowernumber = borrowers.borrowernumber
                 WHERE itemnumber = ?
                 AND returndate IS NOT NULL

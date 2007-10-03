@@ -153,11 +153,11 @@ sub checkoverdues {
     my @overdueitems;
     my $count = 0;
     my $sth   = $dbh->prepare(
-        "SELECT * FROM issues,biblio,biblioitems,items
-            WHERE items.biblioitemnumber = biblioitems.biblioitemnumber
-                AND items.biblionumber     = biblio.biblionumber
-                AND issues.itemnumber      = items.itemnumber
-                AND issues.borrowernumber  = ?
+        "SELECT * FROM issues
+         LEFT JOIN items ON issues.itemnumber      = items.itemnumber
+         LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+         LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+            WHERE issues.borrowernumber  = ?
                 AND issues.returndate is NULL
                 AND issues.date_due < ?"
     );
@@ -460,8 +460,7 @@ sub UpdateFine {
         # I think this else-clause deals with the case where we're adding
         # a new fine.
         my $sth4 = $dbh->prepare(
-            "select title from biblio,items where items.itemnumber=?
-    and biblio.biblionumber=items.biblionumber"
+            "select title from biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber where items.itemnumber=?"
         );
         $sth4->execute($itemnum);
         my $title = $sth4->fetchrow_hashref;
@@ -518,9 +517,9 @@ sub BorType {
     my ($borrowernumber) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
-        "Select * from borrowers,categories where
-  borrowernumber=? and
-borrowers.categorycode=categories.categorycode"
+        "SELECT * from borrowers 
+      LEFT JOIN categories ON borrowers.categorycode=categories.categorycode 
+      WHERE borrowernumber=?"
     );
     $sth->execute($borrowernumber);
     my $data = $sth->fetchrow_hashref;
@@ -1050,9 +1049,9 @@ C<$date_due> contains the date of item return
 sub CheckExistantNotifyid {
      my($borrowernumber,$date_due) = @_;
      my $dbh = C4::Context->dbh;
-         my $query =  qq|SELECT notify_id FROM issues,accountlines
+         my $query =  qq|SELECT notify_id FROM accountlines 
+             LEFT JOIN issues ON issues.itemnumber= accountlines.itemnumber
              WHERE accountlines.borrowernumber =?
-             AND issues.itemnumber= accountlines.itemnumber
               AND date_due = ?|;
     my $sth=$dbh->prepare($query);
          $sth->execute($borrowernumber,$date_due);
@@ -1155,18 +1154,17 @@ sub GetOverduesForBranch {
                 accountlines.notify_level,
                 items.location,
                 accountlines.amountoutstanding
-            FROM  issues,borrowers,biblio,biblioitems,itemtypes,items,branches,accountlines
+            FROM  accountlines
+            LEFT JOIN issues ON issues.itemnumber = accountlines.itemnumber AND issues.borrowernumber = accountlines.borrowernumber
+            LEFT JOIN borrowers ON borrowers.borrowernumber = accountlines.borrowernumber
+            LEFT JOIN items ON items.itemnumber = issues.itemnumber
+            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
+            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
+            LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+            LEFT JOIN branches ON branches.branchcode = issues.branchcode
             WHERE ( issues.returndate  is null)
               AND ( accountlines.amountoutstanding  != '0.000000')
               AND ( accountlines.accounttype  = 'FU')
-              AND ( issues.borrowernumber = accountlines.borrowernumber )
-              AND ( issues.itemnumber = accountlines.itemnumber )
-              AND ( borrowers.borrowernumber = issues.borrowernumber )
-              AND ( biblio.biblionumber = biblioitems.biblionumber )
-              AND ( biblioitems.biblionumber = items.biblionumber )
-              AND ( itemtypes.itemtype = biblioitems.itemtype )
-              AND ( items.itemnumber = issues.itemnumber )
-              AND ( branches.branchcode = issues.branchcode )
               AND (issues.branchcode = ?)
               AND (issues.date_due <= NOW())
             ORDER BY  borrowers.surname
@@ -1207,18 +1205,17 @@ sub GetOverduesForBranch {
                     accountlines.notify_level,
                     items.location,
                     accountlines.amountoutstanding
-           FROM  issues,borrowers,biblio,biblioitems,itemtypes,items,branches,accountlines
+            FROM  accountlines
+            LEFT JOIN issues ON issues.itemnumber = accountlines.itemnumber AND issues.borrowernumber = accountlines.borrowernumber
+            LEFT JOIN borrowers ON borrowers.borrowernumber = accountlines.borrowernumber
+            LEFT JOIN items ON items.itemnumber = issues.itemnumber
+            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
+            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
+            LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+            LEFT JOIN branches ON branches.branchcode = issues.branchcode
            WHERE ( issues.returndate  is null )
              AND ( accountlines.amountoutstanding  != '0.000000')
              AND ( accountlines.accounttype  = 'FU')
-             AND ( issues.borrowernumber = accountlines.borrowernumber )
-             AND ( issues.itemnumber = accountlines.itemnumber )
-             AND ( borrowers.borrowernumber = issues.borrowernumber )
-             AND ( biblio.biblionumber = biblioitems.biblionumber )
-             AND ( biblioitems.biblionumber = items.biblionumber )
-             AND ( itemtypes.itemtype = biblioitems.itemtype )
-             AND ( items.itemnumber = issues.itemnumber )
-             AND ( branches.branchcode = issues.branchcode )
              AND (issues.branchcode = ? AND items.location = ?)
              AND (issues.date_due <= NOW())
            ORDER BY  borrowers.surname

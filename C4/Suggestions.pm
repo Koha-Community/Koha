@@ -275,9 +275,8 @@ sub CountSuggestion {
         else {
             my $query = qq |
                 SELECT count(*)
-                FROM suggestions,borrowers
+                FROM suggestions LEFT JOIN borrowers ON borrowers.borrowernumber=suggestions.suggestedby
                 WHERE status=?
-                AND borrowers.borrowernumber=suggestions.suggestedby
                 AND (borrowers.branchcode='' OR borrowers.branchcode =?)
             |;
             $sth = $dbh->prepare($query);

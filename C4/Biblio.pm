@@ -784,11 +784,11 @@ sub GetItemsInfo {
     my ( $biblionumber, $type ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "SELECT *,items.notforloan as itemnotforloan
-                 FROM items, biblio, biblioitems
+                 FROM items 
+                 LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
+                 LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
                  LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype
                 WHERE items.biblionumber = ?
-                    AND biblioitems.biblioitemnumber = items.biblioitemnumber
-                    AND biblio.biblionumber = items.biblionumber
                 ORDER BY items.dateaccessioned desc
                  ";
     my $sth = $dbh->prepare($query);
@@ -801,10 +801,9 @@ sub GetItemsInfo {
         my $datedue = '';
         my $isth    = $dbh->prepare(
             "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname
-            FROM   issues, borrowers
+            FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
             WHERE  itemnumber = ?
-                AND returndate IS NULL
-                AND issues.borrowernumber=borrowers.borrowernumber"
+                AND returndate IS NULL"
         );
         $isth->execute( $data->{'itemnumber'} );
         if ( my $idata = $isth->fetchrow_hashref ) {
@@ -1263,10 +1262,10 @@ sub GetBiblioFromItemNumber {
     my ( $itemnumber ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-        "SELECT * FROM biblio,items,biblioitems
-         WHERE items.itemnumber = ?
-           AND biblio.biblionumber = items.biblionumber
-           AND biblioitems.biblioitemnumber = items.biblioitemnumber"
+        "SELECT * FROM items 
+        LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
+        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+         WHERE items.itemnumber = ?"
     );
 
     $sth->execute($itemnumber);
@@ -1652,10 +1651,12 @@ sub GetMarcBiblio {
      $marcxml =~ s/\x1f//g;
      $marcxml =~ s/\x1d//g;
      $marcxml =~ s/\x0f//g;
-     $marcxml =~ s/\x0c//g;
+     $marcxml =~ s/\x0c//g;  
 #   warn $marcxml;
     my $record = MARC::Record->new();
-     $record = MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour')) if $marcxml;
+     
+      $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour'))} if ($marcxml);
+     if ($@) {warn $@;}
 #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
     return $record;
 }

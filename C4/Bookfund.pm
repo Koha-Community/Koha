@@ -139,9 +139,9 @@ sub GetBookFunds {
     if ( $branch ne '' ) {
         $strsth = "
         SELECT *
-        FROM   aqbookfund,aqbudget
-        WHERE  aqbookfund.bookfundid=aqbudget.bookfundid
-            AND startdate<now()
+        FROM   aqbookfund
+        LEFT JOIN aqbudget ON aqbookfund.bookfundid=aqbudget.bookfundid
+        WHERE  startdate<now()
             AND enddate>now()
             AND (aqbookfund.branchcode='' OR aqbookfund.branchcode= ? )
       GROUP BY aqbookfund.bookfundid ORDER BY bookfundname";
@@ -149,10 +149,9 @@ sub GetBookFunds {
     else {
         $strsth = "
             SELECT *
-            FROM   aqbookfund,
-                   aqbudget
-            WHERE aqbookfund.bookfundid=aqbudget.bookfundid
-                AND startdate<now()
+            FROM   aqbookfund
+            LEFT JOIN aqbudget ON aqbookfund.bookfundid=aqbudget.bookfundid
+            WHERE startdate<now()
                 AND enddate>now()
             GROUP BY aqbookfund.bookfundid ORDER BY bookfundname
         ";

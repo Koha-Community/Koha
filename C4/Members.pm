@@ -1016,11 +1016,13 @@ sub GetAllIssues {
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my $query =
-"Select *,items.timestamp AS itemstimestamp from issues,biblio,items,biblioitems
-  where borrowernumber=? and
-  items.biblioitemnumber=biblioitems.biblioitemnumber and
-  items.itemnumber=issues.itemnumber and
-  items.biblionumber=biblio.biblionumber order by $order";
+  "Select *,items.timestamp AS itemstimestamp from 
+  issues 
+  LEFT JOIN items on items.itemnumber=issues.itemnumber
+  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+  LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
+  where borrowernumber=? 
+  order by $order";
     if ( $limit != 0 ) {
         $query .= " limit $limit";
     }
@@ -1040,11 +1042,11 @@ sub GetAllIssues {
     # large chunk of older issues data put into table oldissues
     # to speed up db calls for issuing items
     if ( C4::Context->preference("ReadingHistory") ) {
-        my $query2 = "SELECT * FROM oldissues,biblio,items,biblioitems
+        my $query2 = "SELECT * FROM oldissues
+                      LEFT JOIN items ON items.itemnumber=oldissues.itemnumber
+                      LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+                      LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
                       WHERE borrowernumber=? 
-                      AND items.biblioitemnumber=biblioitems.biblioitemnumber
-                      AND items.itemnumber=oldissues.itemnumber
-                      AND items.biblionumber=biblio.biblionumber
                       ORDER BY $order";
         if ( $limit != 0 ) {
             $limit = $limit - $count;

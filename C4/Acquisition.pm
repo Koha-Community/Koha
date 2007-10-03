@@ -819,9 +819,10 @@ sub GetParcel {
                 aqorders.listprice,
                 aqorders.rrp,
                 aqorders.ecost
-        FROM aqorders,aqbasket
+        FROM aqorders 
+        LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
-        WHERE aqbasket.basketno=aqorders.basketno
+        WHERE 
             AND aqbasket.booksellerid=?
             AND aqorders.booksellerinvoicenumber LIKE  \"$code\"
             AND aqorders.datereceived= \'$datereceived\'";

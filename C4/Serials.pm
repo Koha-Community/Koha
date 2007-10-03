@@ -140,12 +140,12 @@ sub GetLateIssues {
     if ($supplierid) {
         my $query = qq|
             SELECT     name,title,planneddate,serialseq,serial.subscriptionid
-            FROM       subscription, serial, biblio
+            FROM       subscription
+            LEFT JOIN  serial ON subscription.subscriptionid = serial.subscriptionid
+            LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-            WHERE      subscription.subscriptionid = serial.subscriptionid
-            AND        ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
+            WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
             AND        subscription.aqbooksellerid=$supplierid
-            AND        biblio.biblionumber = subscription.biblionumber
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
@@ -153,11 +153,11 @@ sub GetLateIssues {
     else {
         my $query = qq|
             SELECT     name,title,planneddate,serialseq,serial.subscriptionid
-            FROM       subscription, serial, biblio
+            FROM       subscription
+            LEFT JOIN  serial ON subscription.subscriptionid = serial.subscriptionid
+            LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-            WHERE      subscription.subscriptionid = serial.subscriptionid
-            AND        ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
-            AND        biblio.biblionumber = subscription.biblionumber
+            WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
@@ -1431,9 +1431,9 @@ sub ReNewSubscription {
     my $subscription = GetSubscription($subscriptionid);
      my $query        = qq|
          SELECT *
-         FROM   biblio,biblioitems
-         WHERE  biblio.biblionumber=biblioitems.biblionumber
-        AND    biblio.biblionumber=?
+         FROM   biblio 
+         LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber
+         WHERE    biblio.biblionumber=?
      |;
      my $sth = $dbh->prepare($query);
      $sth->execute( $subscription->{biblionumber} );
@@ -1828,7 +1828,8 @@ this function delete an issue which has $serialseq and $subscriptionid given on 
 sub DelIssue {
     my ( $dataissue) = @_;
     my $dbh   = C4::Context->dbh;
-    ### TODO Add itemdeletion. Should be in a pref ?
+    ### TODO Add itemdeletion. Would need to get itemnumbers. Should be in a pref ?
+    
     my $query = qq|
         DELETE FROM serial
         WHERE       serialid= ?
@@ -2050,9 +2051,9 @@ sub getsupplierbyserialid {
     my $dbh        = C4::Context->dbh;
     my $sth        = $dbh->prepare(
         "SELECT serialid, serial.subscriptionid, aqbooksellerid
-                                   FROM serial, subscription
-                                   WHERE serial.subscriptionid = subscription.subscriptionid
-                                   AND serialid = ?
+         FROM serial 
+         LEFT JOIN subscription ON serial.subscriptionid = subscription.subscriptionid
+         WHERE serialid = ?
                                    "
     );
     $sth->execute($serialid);
@@ -2077,9 +2078,9 @@ sub check_routing {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
-"SELECT count(routingid) routingids FROM subscriptionroutinglist, subscription
-                              WHERE subscription.subscriptionid = subscriptionroutinglist.subscriptionid
-                              AND subscription.subscriptionid = ? ORDER BY ranking ASC
+"SELECT count(routingid) routingids FROM subscription LEFT JOIN subscriptionroutinglist 
+                              ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
+                              WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
                               "
     );
     $sth->execute($subscriptionid);
@@ -2240,9 +2241,10 @@ sub getroutinglist {
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
         "SELECT routingid, borrowernumber,
-                              ranking, biblionumber FROM subscriptionroutinglist, subscription
-                              WHERE subscription.subscriptionid = subscriptionroutinglist.subscriptionid
-                              AND subscription.subscriptionid = ? ORDER BY ranking ASC
+                              ranking, biblionumber 
+         FROM subscription 
+         LEFT JOIN subscriptionroutinglist ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
+         WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
                               "
     );
     $sth->execute($subscriptionid);
@@ -2724,8 +2726,8 @@ sub itemdata {
     my ($barcode) = @_;
     my $dbh       = C4::Context->dbh;
     my $sth       = $dbh->prepare(
-        "Select * from items,biblioitems where barcode=?
-  and items.biblioitemnumber=biblioitems.biblioitemnumber"
+        "Select * from items LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber 
+        WHERE barcode=?"
     );
     $sth->execute($barcode);
     my $data = $sth->fetchrow_hashref;

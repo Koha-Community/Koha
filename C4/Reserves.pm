@@ -430,9 +430,9 @@ sub GetReserveFee {
     my $dbh   = C4::Context->dbh;
     my $const = lc substr( $constraint, 0, 1 );
     my $query = qq/
-      SELECT * FROM borrowers,categories
+      SELECT * FROM borrowers
+    LEFT JOIN categories ON borrowers.categorycode = categories.categorycode
     WHERE borrowernumber = ?
-      AND borrowers.categorycode = categories.categorycode
     /;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
@@ -447,9 +447,8 @@ sub GetReserveFee {
         # first find biblioitem records
         my @biblioitems;
         my $sth1 = $dbh->prepare(
-            "SELECT * FROM biblio,biblioitems
-                   WHERE (biblio.biblionumber = ?)
-                     AND (biblio.biblionumber = biblioitems.biblionumber)"
+            "SELECT * FROM biblio LEFT JOIN biblioitems on biblio.biblionumber = biblioitems.biblionumber
+                   WHERE (biblio.biblionumber = ?)"
         );
         $sth1->execute($biblionumber);
         while ( my $data1 = $sth1->fetchrow_hashref ) {
@@ -612,10 +611,10 @@ sub CheckReserves {
         # Look up the item by itemnumber
         my $query = "
             SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
-            FROM   items, biblioitems, itemtypes
-            WHERE  items.biblioitemnumber = biblioitems.biblioitemnumber
-               AND biblioitems.itemtype = itemtypes.itemtype
-               AND itemnumber=$qitem
+            FROM   items
+            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+            LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
+            WHERE  itemnumber=$qitem
         ";
         $sth = $dbh->prepare($query);
     }
@@ -624,7 +623,9 @@ sub CheckReserves {
         # Look up the item by barcode
         my $query = "
             SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
-            FROM   items, biblioitems, itemtypes
+            FROM   items
+            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+            LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
             WHERE  items.biblioitemnumber = biblioitems.biblioitemnumber
               AND biblioitems.itemtype = itemtypes.itemtype
               AND barcode=$qbc

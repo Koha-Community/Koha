@@ -118,11 +118,10 @@ sub displaylog {
     if ($modulename eq "catalogue"){
         $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
         $strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
-        $strsth .= " FROM borrowers,action_logs ";
-        $strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
+        $strsth .= " FROM action_logs LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user";
+        $strsth .= " LEFT JOIN biblio ON action_logs.object=biblio.biblionumber " ;#if ($modulename eq "acqui.simple");
     
-        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-        $strsth .=" AND action_logs.module = 'cataloguing' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+        $strsth .=" WHERE action_logs.module = 'cataloguing' ";# if ($modulename eq "acqui.simple");
         if (@filters) {
             foreach my $filter (@filters) {
                 if ($filter->{name} =~ /user/) {
@@ -138,13 +137,11 @@ sub displaylog {
             }
         }
     } elsif ($modulename eq "acqui") {
-        $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
-        $strsth .= "biblio.biblionumber, biblio.title, biblio.author" ;#if ($modulename eq "acqui.simple");
-        $strsth .= "FROM borrowers,action_logs ";
-        $strsth .= ",biblio " ;#if ($modulename eq "acqui.simple");
-    
-        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-        $strsth .= "AND action_logs.module = 'cataloguing' AND action_logs.object=biblio.biblionumber ";# if ($modulename eq "acqui.simple");
+        $strsth=qq|select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,
+        biblio.biblionumber, biblio.title, biblio.author
+        FROM action_logs LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user 
+        LEFT JOIN  biblio ON action_logs.object=biblio.biblionumber
+        WHERE action_logs.module = 'cataloguing' |;# if ($modulename eq "acqui.simple");
         if (@filters){
             foreach my $filter (@filters){
                 if ($filter->{name} =~ /user/){
@@ -160,12 +157,11 @@ sub displaylog {
             }
         }
     } elsif ($modulename eq "members"){
-        $strsth="select action_logs.timestamp, action_logs.action, action_logs.info, borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,";
-        $strsth .= "bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid,";
-        $strsth .= "FROM borrowers,action_logs,borrowers as bor2 ";
-    
-        $strsth .=" WHERE borrowers.borrowernumber=action_logs.user";
-        $strsth .= "AND action_logs.module = 'members' AND action_logs.object=bor2.borrowernumber ";# if ($modulename eq "acqui.simple");
+        $strsth=qq|SELECT action_logs.timestamp, action_logs.action, action_logs.info, 
+        borrowers.cardnumber, borrowers.surname, borrowers.firstname, borrowers.userid,
+        bor2.cardnumber, bor2.surname, bor2.firstname, bor2.userid
+        FROM action_logs LEFT JOIN borrowers ON borrowers.borrowernumber=action_logs.user LEFT JOIN borrowers as bor2 ON action_logs.object=bor2.borrowernumber
+        WHERE action_logs.module = 'members' |;# if ($modulename eq "acqui.simple");
         if (@filters){
             foreach my $filter (@filters){
                 if ($filter->{name} =~ /user/){
