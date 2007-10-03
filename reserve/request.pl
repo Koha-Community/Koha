@@ -103,12 +103,17 @@ if ($cardnumber) {
         $maxreserves = 1;
     }
 
-    # we check the date expiricy of the borrower
-    my $warning = (Date_to_Days(split /-/,$date) > Date_to_Days( split /-/,$borrowerinfo->{'dateexpiry'}));
-     
-    if ( $warning > 0 ) {
+    # we check the date expiricy of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
+    warn "BOR : ".$borrowerinfo->{'dateexpiry'};
+    if ($borrowerinfo->{'dateexpiry'}) {
+        my $warning = (Date_to_Days(split /-/,$date) > Date_to_Days( split /-/,$borrowerinfo->{'dateexpiry'}));
+        if ( $warning > 0 ) {
+            $expiry = 1;
+        }
+    } else {
         $expiry = 1;
     }
+     
 
     # check if the borrower make the reserv in a different branch
     if ( $borrowerinfo->{'branchcode'} ne C4::Context->userenv->{'branch'} ) {
@@ -116,19 +121,19 @@ if ($cardnumber) {
     }
 
     $template->param(
-		borrowernumber => $borrowerinfo->{'borrowernumber'},
-        borrowersurname   => $borrowerinfo->{'surname'},
-        borrowerfirstname => $borrowerinfo->{'firstname'},
-		borrowerstreetaddress => $borrowerinfo->{'address'},
-		borrowercity => $borrowerinfo->{'city'},
-		borrowerphone => $borrowerinfo->{'phone'},
-		borroweremail => $borrowerinfo->{'email'},
-		borroweremailpro => $borrowerinfo->{'emailpro'},
-		borrowercategory => $borrowerinfo->{'category'},
-        borrowerreservs   => $count_reserv,
-        maxreserves       => $maxreserves,
-        expiry            => $expiry,
-        diffbranch        => $diffbranch
+                borrowernumber => $borrowerinfo->{'borrowernumber'},
+                borrowersurname   => $borrowerinfo->{'surname'},
+                borrowerfirstname => $borrowerinfo->{'firstname'},
+                borrowerstreetaddress => $borrowerinfo->{'address'},
+                borrowercity => $borrowerinfo->{'city'},
+                borrowerphone => $borrowerinfo->{'phone'},
+                borroweremail => $borrowerinfo->{'email'},
+                borroweremailpro => $borrowerinfo->{'emailpro'},
+                borrowercategory => $borrowerinfo->{'category'},
+                borrowerreservs   => $count_reserv,
+                maxreserves       => $maxreserves,
+                expiry            => $expiry,
+                diffbranch        => $diffbranch
     );
 }
 
