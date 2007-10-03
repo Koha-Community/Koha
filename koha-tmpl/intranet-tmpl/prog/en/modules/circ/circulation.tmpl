@@ -39,9 +39,34 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 
 <div id="BorrowerDetails">
-
-       
-
+        <fieldset>
+            <legend><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
+            </legend>
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">details</a>
+                / <a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;op=modify&amp;destination=circ&categorycode=<!-- TMPL_VAR name="categorycode" -->">edit</a>
+        <p>
+        <!--TMPL_IF Name="warndeparture"--><p class="problem"> Patron card expires on <!-- TMPL_VAR name="warndeparture" -->.</p><!--/TMPL_IF-->
+        <!-- TMPL_IF NAME="streetaddress"-->
+            <!-- TMPL_VAR NAME="streetaddress" -->,
+        <!-- TMPL_ELSE -->
+            <span class="problem">No address stored for patron.</span>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="city" -->
+            <!-- TMPL_VAR NAME="city" -->
+        <!-- TMPL_ELSE -->
+            No city stored.
+        <!-- /TMPL_IF -->
+    <!--TMPL_IF NAME="phone" -->
+        <!-- TMPL_VAR NAME="phone" -->
+    <!-- TMPL_ELSE -->
+        <span class="problem">No phone stored.</span>    
+    <!-- /TMPL_IF -->
+    </p>
+    <!-- TMPL_IF NAME="emailaddress" -->
+    <a href="mailto:<!-- TMPL_VAR NAME="emailaddress" -->"><!-- TMPL_VAR NAME="emailaddress" --></a>
+    <!-- /TMPL_IF -->
+    <p>Category: <!-- TMPL_VAR name="categorycode" --></p>
+    </fieldset>
     <!-- TMPL_IF NAME="overduecount" -->
         <span class="problem"><b><big>This borrower has <!-- TMPL_VAR name="overduecount" --> overdue(s) items</big></b></span>
     <!--/TMPL_IF-->
