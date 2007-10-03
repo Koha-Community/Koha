@@ -122,7 +122,7 @@ push @EXPORT, qw(
 
 =item SearchMember
 
-  ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type);
+  ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type,$filter,$showallbranches);
 
 Looks up patrons (borrowers) by name.
 
@@ -137,6 +137,10 @@ C<$searchstring> is a space-separated list of search terms. Each term
 must match the beginning a borrower's surname, first name, or other
 name.
 
+C<$filter> is assumed to be a list of elements to filter results on
+
+C<$showallbranches> is used in IndependantBranches Context to display all branches results.
+
 C<&SearchMember> returns a two-element list. C<$borrowers> is a
 reference-to-array; each element is a reference-to-hash, whose keys
 are the fields of the C<borrowers> table in the Koha database.
@@ -148,7 +152,7 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl
 sub SearchMember {
-    my ($searchstring, $orderby, $type,$category_type ) = @_;
+    my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "";
     my $count;
@@ -158,10 +162,18 @@ sub SearchMember {
     if ( $type eq "simple" )    # simple search for one letter only
     {
         $query =
-          "SELECT * FROM borrowers
-                  LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
-                  ($category_type?" AND category_type = ".$dbh->quote($category_type):"").
-                  " WHERE surname LIKE ? OR cardnumber like ? ORDER BY $orderby";
+          "SELECT * 
+           FROM borrowers
+           LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
+                  ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
+        $query .=
+         " WHERE (surname LIKE ? OR cardnumber like ?) ";
+        if (C4::Context->preference("IndependantBranches") && !$showallbranches){
+          if (C4::Context->userenv && C4::Context->userenv->{flags}!=1 && C4::Context->userenv->{'branch'}){
+            $query.=" AND borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'}) unless (C4::Context->userenv->{'branch'} eq "insecure");
+          }      
+        }     
+        $query.=" ORDER BY $orderby";
         @bind = ("$searchstring%","$searchstring");
     }
     else    # advanced search looking in surname, firstname and othernames
@@ -170,9 +182,15 @@ sub SearchMember {
         $count = @data;
         $query = "SELECT * FROM borrowers
                     LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-		WHERE ((surname LIKE ? OR surname LIKE ?
-		OR firstname  LIKE ? OR firstname LIKE ?
-		OR othernames LIKE ? OR othernames LIKE ?)
+		              WHERE ";
+        if (C4::Context->preference("IndependantBranches") && !$showallbranches){
+          if (C4::Context->userenv && C4::Context->userenv->{flags}!=1 && C4::Context->userenv->{'branch'}){
+            $query.=" borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'})." AND " unless (C4::Context->userenv->{'branch'} eq "insecure");
+          }      
+        }     
+        $query.="((surname LIKE ? OR surname LIKE ?
+		              OR firstname  LIKE ? OR firstname LIKE ?
+		              OR othernames LIKE ? OR othernames LIKE ?)
 		".
                   ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
         @bind = (
@@ -198,7 +216,7 @@ sub SearchMember {
 
     my $sth = $dbh->prepare($query);
 
-    #	warn "Q $orderby : $query";
+#     warn "Q $orderby : $query";
     $sth->execute(@bind);
     my @results;
     my $data = $sth->fetchall_arrayref({});
