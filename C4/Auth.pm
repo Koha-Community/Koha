@@ -401,8 +401,8 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
-            warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
-                ".$session->param('surname').",      ".$session->param('branch');
+#             warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
+#                 ".$session->param('surname').",      ".$session->param('branch');
         }
         my $ip;
         my $lasttime;
