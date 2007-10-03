@@ -104,8 +104,7 @@ if ($cardnumber) {
     }
 
     # we check the date expiricy of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
-    warn "BOR : ".$borrowerinfo->{'dateexpiry'};
-    if ($borrowerinfo->{'dateexpiry'}) {
+    if ($borrowerinfo->{'dateexpiry'} ne '0000-00-00') {
         my $warning = (Date_to_Days(split /-/,$date) > Date_to_Days( split /-/,$borrowerinfo->{'dateexpiry'}));
         if ( $warning > 0 ) {
             $expiry = 1;
@@ -221,7 +220,7 @@ foreach my $itemnumber (@itemnumbers) {
     push( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} }, $itemnumber );
 }
 
-@branchcodes = uniq @branchcodes;
+# @branchcodes = uniq @branchcodes;
 
 my @biblioitemnumbers = keys %itemnumbers_of_biblioitem;
 

@@ -59,59 +59,95 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="select_item_types" -->
-<!-- The first time round you select which bibitems you want -->
-<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
-<input type="hidden" name="item_types_selected" value="1">
-<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-<h2>Reservation Details</h2>
-<div class="form">
-<table>
-   <tr><th>Reserving: </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span><!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></td></tr>
-    <tr><th>For:</th><td><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></td></tr>
-
-    <tr><th>Pick up from:</th><td><select name="branch" id="branch">
-        <option>-- Please choose your branch --</option>
-        <!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
-</select></td></tr>
-</table>
-
-<!-- TMPL_IF NAME="onlyone" -->
-<!-- If there is only one type -->
-
-<p><input type="submit" class="submit" value="Next &gt;&gt;">
-<input type="hidden" name="all" value="1"></p>
-</form>
-
-<!-- TMPL_ELSE -->
-<!-- If there is more than one type -->
-
-    <h4>Choose Either...</h4>
-        <p>
-            <input id="checknextavailable" type="checkbox" name="all" value="next-available">
-            <label for="checknextavailable">Next Available Copy (any format)</label>
+    <!-- The first time round you select which bibitems you want -->
+    <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+        <input type="hidden" name="item_types_selected" value="1">
+        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+        <h2>Reservation Details</h2>
+        <div class="form">
+            <h3>Reserving: <span class="title"><!-- TMPL_VAR NAME="title" -->, <!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></h3>
+            <p>For <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></p>
+            
+        <!-- TMPL_LOOP name="bibitemloop" -->    
+            <p><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></p>
+            <!-- TMPL_IF NAME="publicationyear" --><p><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+            <table>
+            <tr>
+                <th>Barcode</th>
+                <th>Home Library</th>
+                <th>Holding Library</th>
+                <th>Call number</th>
+                <th>Information</th>
+                <th>Cancel a Reserve</th>
+            </tr>
+            <!-- TMPL_LOOP Name="itemloop" -->
+                <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+                    <td>
+                            <!-- TMPL_VAR NAME="barcode" --> 
+                    </td>
+                    <td>
+                    <!-- TMPL_VAR NAME="homebranch" -->
+                    </td>
+                    <td>
+                    <!-- TMPL_VAR NAME="holdingbranch" -->
+                    </td>
+                    <td>
+                    <!-- TMPL_VAR NAME="itemcallnumber" -->
+                    </td>
+                    <td>
+                <!-- TMPL_IF Name="date_due" -->
+                    <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
+                <!-- /TMPL_IF -->
+            
+                <!-- TMPL_IF NAME="available" -->
+                    <label>Hold this item 
+                        <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                </label>     
+                
+                <!-- /TMPL_IF -->
+                    
+                <!-- TMPL_IF name="reservedate" -->
+                    Item on hold since <!-- TMPL_VAR NAME="reservedate" -->
+                <!-- /TMPL_IF -->
+            
+                <!-- TMPL_IF Name="message" -->
+                    Cant' be selected (lost or long overdue)
+                <!-- /TMPL_IF -->
+            
+                <!-- TMPL_IF Name="notforloan" -->
+                    This item is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+                <!-- /TMPL_IF -->
+            
+                <!-- TMPL_IF Name="transfertwhen" -->
+                    Item in transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+                    to <!-- TMPL_VAR NAME="transfertto" -->, on <!-- TMPL_VAR NAME="transfertwhen" -->
+                <!-- /TMPL_IF -->
+                    </td>
+                    <td>
+                    <!-- TMPL_IF NAME="reservedate"-->
+                                Item on hold
+                    <!-- TMPL_ELSE -->
+                            No holds
+                    <!-- /TMPL_IF -->
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP --> <!-- itemloop -->
+        </table>
+        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;">Hold next available copy </label>
+            <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
         </p>
-    <h4>
-     ...Or Choose Acceptable Formats
-    </h4>
-
-<!-- TMPL_LOOP NAME="TYPE_ROWS" -->
-<ul><!-- TMPL_LOOP NAME="ROW" -->
-<li><input type="checkbox" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" class="checkbox"><!-- TMPL_VAR NAME="description" --></li>
-<!-- /TMPL_LOOP -->
-</ul><!-- /TMPL_LOOP -->
-<!-- <table>
-    <tr>
-    <th>Number of Copies</th><th>Requests already received for this title</th> <th>Items curently on issue, due back</th></tr>
-    <td><!-- TMPL_VAR NAME="itemcount" --></td>
-    <td><!-- TMPL_VAR NAME="reservecount" --></td>
-     <td><!-- TMPL_LOOP NAME="ITEMS" --><!-- TMPL_VAR NAME="date_due" -->, <!-- /TMPL_LOOP --></td>
-</table> -->
-</div>
-<p><input type="submit" class="submit" value="Confirm Reservation &gt;&gt;"></p>
-</form>
-<!-- /TMPL_IF -->
-
-<!-- end of the first form -->
+        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+        <!-- /TMPL_LOOP --> <!-- bibitemloop -->
+        <p>Pick up from:<select name="branch" id="branch">
+                    <option>-- Please choose your branch --</option>
+                    <!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
+            </select>
+        </p>
+        <input type="submit" value="Place Hold" />
+        <input type="hidden" name="all" value="1"/></p>
+        <input type="hidden" name="place_reserve" value="1"/>
+        </form>
+    <!-- end of the first form -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="item_types_selected" -->

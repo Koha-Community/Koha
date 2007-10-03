@@ -49,19 +49,15 @@ my $borrowernumber=GetMember($borrower,'cardnumber');
 my $checkitem=$input->param('checkitem');
 my $found;
 
-#new op : if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found .
+#if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found .
 if ($checkitem ne ''){
-		$rank[0] = '0';
-		my $item = $checkitem;
-		$item = GetItem($item);
-		if ( $item->{'holdingbranch'} eq $branch ){
-		$found = 'W' unless C4::Context->preference('ReservesNeedReturns');
-		}
-
-
+    $rank[0] = '0';
+    my $item = $checkitem;
+    $item = GetItem($item);
+    if ( $item->{'holdingbranch'} eq $branch ){
+        $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
+    }
 }
-
-# END of new op .
 
 if ($type eq 'str8' && $borrowernumber ne ''){
 	my $count=@bibitems;

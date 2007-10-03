@@ -28,7 +28,6 @@ use C4::Date;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
-use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 
@@ -143,7 +142,6 @@ $template->param( itemcount => $itemcount );
 my %types;
 my %itemtypes;
 my @duedates;
-#die @items;
 foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
@@ -195,71 +193,40 @@ $template->param( TYPE_ROWS => \@typerows );
 $width = 2 * $width - 1;
 $template->param( totalwidth => 2 * $width - 1, );
 
-if ( $query->param('item_types_selected') ) {
-
-    # this is what happens after the itemtypes have been selected. Stage 2
-    my @itemtypes = $query->param('itemtype');
-    my $fee       = 0;
-    my $proceed   = 0;
-    if (@itemtypes) {
-        my %newtypes;
-        foreach my $itmtype (@itemtypes) {
-            $newtypes{$itmtype} = $itemtypes{$itmtype};
+if ( $query->param('place_reserve') ) {
+    my @bibitems=$query->param('biblioitem');
+    my $notes=$query->param('notes');
+    my $checkitem=$query->param('checkitem');
+    my $found;
+    
+    #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
+    if ($checkitem ne ''){
+        $rank = '0';
+        my $item = $checkitem;
+        $item = GetItem($item);
+        if ( $item->{'holdingbranch'} eq $branch ){
+            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
         }
-        my @types = values %newtypes;
-        $template->param( TYPES => \@types );
-        foreach my $type (@itemtypes) {
-            my @reqbibs;
-            foreach my $item (@items) {
-                if ( $item->{'itemtype'} eq $type ) {
-                    push @reqbibs, $item->{'biblioitemnumber'};
-                }
-            }
-            $fee +=
-              GetReserveFee( undef, $borrowernumber, $biblionumber, 'o',
-                \@reqbibs );
+    }
+        
+        my $count=@bibitems;
+    @bibitems=sort @bibitems;
+    my $i2=1;
+    my @realbi;
+    $realbi[0]=$bibitems[0];
+    for (my $i=1;$i<$count;$i++) {
+        my $i3=$i2-1;
+        if ($realbi[$i3] ne $bibitems[$i]) {
+            $realbi[$i2]=$bibitems[$i];
+            $i2++;
         }
-        $proceed = 1;
     }
-    elsif ( $query->param('all') ) {
-        $template->param( all => 1 );
-        # No idea why fee would be set to 1 ... it's supposed to be a monetary value, not a flag
-		# -- JF
-		#$fee = 1;
- 		$proceed = 1;
-    }
-    if ( $proceed && $branch ) {
-        $fee = sprintf "%.02f", $fee;
-		if ($fee > 1) {
-        $template->param( fee => $fee, istherefee => $fee > 0 ? 1 : 0 );
-		}
-        $template->param( item_types_selected => 1 );
-        $template->param( no_branch_selected => 1 ) unless ( $branch != '' );
-    }
-    else {
-        $template->param( message            => 1 );
-        $template->param( no_items_selected  => 1 ) unless ($proceed);
-        $template->param( no_branch_selected => 1 ) unless ($branch);
-    }
-}
-elsif ( $query->param('place_reserve') ) {
-
     # here we actually do the reserveration. Stage 3.
-    my $title     = $bibdata->{'title'};
-    my @itemtypes = $query->param('itemtype');
-    foreach my $type (@itemtypes) {
-        my @reqbibs;
-        foreach my $item (@items) {
-            if ( $item->{'itemtype'} eq $type ) {
-                push @reqbibs, $item->{'biblioitemnumber'};
-            }
-        }
-        AddReserve( $branch, $borrowernumber, $biblionumber, 'o',
-            \@reqbibs, $rank, '', $title );
-    }
-    if ( $query->param('all') ) {
-        AddReserve( $branch, $borrowernumber, $biblionumber, 'a',
-            undef, $rank, '', $title );
+    if ($query->param('request') eq 'any'){
+        # place a request on 1st available
+        AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,$bibdata->{'title'},$checkitem,$found);
+    } else {
+        AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,$bibdata->{'title'},$checkitem, $found);
     }
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
 }
@@ -316,6 +283,139 @@ else {
     }
 }
 
+
+my @branchcodes;
+my %itemnumbers_of_biblioitem;
+my @itemnumbers  = @{ get_itemnumbers_of($biblionumber)->{$biblionumber} };
+my $iteminfos_of = GetItemInfosOf(@itemnumbers);
+
+foreach my $itemnumber (@itemnumbers) {
+    push( @branchcodes,
+        $iteminfos_of->{$itemnumber}->{homebranch},
+        $iteminfos_of->{$itemnumber}->{holdingbranch} );
+
+    my $biblioitemnumber = $iteminfos_of->{$itemnumber}->{biblioitemnumber};
+    push( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} }, $itemnumber );
+}
+
+# @branchcodes = uniq @branchcodes;
+
+my @biblioitemnumbers = keys %itemnumbers_of_biblioitem;
+
+my $branchinfos_of      = get_branchinfos_of(@branchcodes);
+my $notforloan_label_of = get_notforloan_label_of();
+my $biblioiteminfos_of  = GetBiblioItemInfosOf(@biblioitemnumbers);
+
+my @itemtypes;
+foreach my $biblioitemnumber (@biblioitemnumbers) {
+    push @itemtypes, $biblioiteminfos_of->{$biblioitemnumber}{itemtype};
+}
+
+my $itemtypeinfos_of = get_itemtypeinfos_of(@itemtypes);
+
+my @bibitemloop;
+
+foreach my $biblioitemnumber (@biblioitemnumbers) {
+    my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
+
+    $biblioitem->{description} =
+      $itemtypeinfos_of->{ $biblioitem->{itemtype} }{description};
+
+    foreach
+      my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
+    {
+        my $item = $iteminfos_of->{$itemnumber};
+
+        $item->{homebranchname} =
+          $branchinfos_of->{ $item->{homebranch} }{branchname};
+
+        # if the holdingbranch is different than the homebranch, we show the
+        # holdingbranch of the document too
+        if ( $item->{homebranch} ne $item->{holdingbranch} ) {
+            $item->{holdingbranchname} =
+              $branchinfos_of->{ $item->{holdingbranch} }{branchname};
+        }
+        
+# 	add information
+	$item->{itemcallnumber} = $item->{itemcallnumber};
+	
+        # if the item is currently on loan, we display its return date and
+        # change the background color
+        my $issues= GetItemIssue($itemnumber);
+        if ( $issues->{'date_due'} ) {
+            $item->{date_due} = format_date($issues->{'date_due'});
+            $item->{backgroundcolor} = 'onloan';
+        }
+
+        # checking reserve
+        my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($itemnumber);
+        my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+
+        if ( defined $reservedate ) {
+            $item->{backgroundcolor} = 'reserved';
+            $item->{reservedate}     = format_date($reservedate);
+            $item->{ReservedForBorrowernumber}     = $reservedfor;
+            $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
+            $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
+            $item->{ExpectedAtLibrary}     = $expectedAt;
+            
+        }
+
+        # Management of the notforloan document
+        if ( $item->{notforloan} ) {
+            $item->{backgroundcolor} = 'other';
+            $item->{notforloanvalue} =
+              $notforloan_label_of->{ $item->{notforloan} };
+        }
+
+        # Management of lost or long overdue items
+        if ( $item->{itemlost} ) {
+
+            # FIXME localized strings should never be in Perl code
+            $item->{message} =
+                $item->{itemlost} == 1 ? "(lost)"
+              : $item->{itemlost} == 2 ? "(long overdue)"
+              : "";
+            $item->{backgroundcolor} = 'other';
+        }
+
+        # Check of the transfered documents
+        my ( $transfertwhen, $transfertfrom, $transfertto ) =
+          GetTransfers($itemnumber);
+
+        if ( $transfertwhen ne '' ) {
+            $item->{transfertwhen} = format_date($transfertwhen);
+            $item->{transfertfrom} =
+              $branchinfos_of->{$transfertfrom}{branchname};
+            $item->{transfertto} = $branchinfos_of->{$transfertto}{branchname};
+		$item->{nocancel} = 1;
+        }
+
+        # If there is no loan, return and transfer, we show a checkbox.
+        $item->{notforloan} = $item->{notforloan} || 0;
+
+        # An item is available only if:
+        if (
+            not defined $reservedate    # not reserved yet
+            and $issues->{'date_due'} eq ''         # not currently on loan
+            and not $item->{itemlost}   # not lost
+            and not $item->{notforloan} # not forbidden to loan
+            and $transfertwhen eq ''    # not currently on transfert
+          )
+        {
+            $item->{available} = 1;
+        }
+
+        push @{ $biblioitem->{itemloop} }, $item;
+    }
+
+    push @bibitemloop, $biblioitem;
+}
+
+# display infos
+$template->param(
+    bibitemloop       => \@bibitemloop,
+);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:
