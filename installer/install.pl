@@ -238,38 +238,44 @@ elsif ( $step && $step == 3 ) {
 #
 # 
     my $op = $query->param('op');
-    if ( $op && $op eq 'finish' ) {
-    my $kohaversion=C4::Context::KOHAVERSION;
-    # remove the 3 last . to have a Perl number
-    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-    if (C4::Context->preference('Version')) {
-        warn "UPDATE Version";
-      my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
-      $finish->execute($kohaversion);
-    } else {
-        warn "INSERT Version";
-      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')");
-      $finish->execute($kohaversion);
-    }
-
-  # Installation is finished.
-  # We just deny anybody acess to install
-  # And we redirect people to mainpage.
-  # The installer wil have to relogin since we donot pass cookie to redirection.
-        $template->param( "$op" => 1 );
-    }
-    elsif ( $op && $op eq 'finished' ) {
-    #
-    #
-    # we have finished, just redirect to mainpage.
-    #
-    #
+    if ( $op && $op eq 'finished' ) {
+        #
+        # we have finished, just redirect to mainpage.
+        #
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
         exit 1;
     }
+    elsif ( $op && $op eq 'finish' ) {
+        my $kohaversion=C4::Context::KOHAVERSION;
+        # remove the 3 last . to have a Perl number
+        $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+        if (C4::Context->preference('Version')) {
+            warn "UPDATE Version";
+            my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+            $finish->execute($kohaversion);
+        } else {
+            warn "INSERT Version";
+            my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')");
+            $finish->execute($kohaversion);
+        }
+
+        # Installation is finished.
+        # We just deny anybody acess to install
+        # And we redirect people to mainpage.
+        # The installer wil have to relogin since we donot pass cookie to redirection.
+        $template->param( "$op" => 1 );
+    }
+    elsif ( $op && $op eq 'Nozebra' ) {
+        if ($query->param('Nozebra')) {
+            $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
+        } else {
+            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
+        }
+        $template->param( "$op" => 1 );
+    }
     elsif ( $op && $op eq 'addframeworks' ) {
     #
-    # 1ST install : insert the SQL files the user has selected
+    # 1ST install, 3rd sub-step : insert the SQL files the user has selected
     #
 
         #Framework importing and reports
@@ -285,7 +291,7 @@ elsif ( $step && $step == 3 ) {
         $dbh->do('SET FOREIGN_KEY_CHECKS=0');
         my $request =
           $dbh->prepare(
-"SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
+            "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
           );
         $request->execute;
         my ($systempreference) = $request->fetchrow;
@@ -331,11 +337,11 @@ elsif ( $step && $step == 3 ) {
         }
         my $updateflag =
           $dbh->do(
-"UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'"
+            "UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'"
           );
         unless ( $updateflag == 1 ) {
             my $string =
-"INSERT INTO systempreferences (value, variable, explanation, type) VALUES (\"$systempreference\",'FrameworksLoaded','Frameworks loaded through webinstaller','choice')";
+                "INSERT INTO systempreferences (value, variable, explanation, type) VALUES (\"$systempreference\",'FrameworksLoaded','Frameworks loaded through webinstaller','choice')";
             my $rq = $dbh->prepare($string);
             $rq->execute;
         }
@@ -347,23 +353,23 @@ elsif ( $step && $step == 3 ) {
         $dbh->do('SET FOREIGN_KEY_CHECKS=1');
     }
     elsif ( $op && $op eq 'selectframeworks' ) {
-#
-#
-# 1ST install : show the user the sql datas he can insert in the database.
-#
-#
-# (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
-
-#Framework Selection
-#sql data for import are supposed to be located in installer/data/<language>/<level>
-# Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
-# Where <level> is a category of requirement : required, recommended optional
-# level should contain :
-#   SQL File for import With a readable name.
-#   txt File taht explains what this SQL File is meant for.
-# Could be VERY useful to have A Big file for a kind of library.
-# But could also be useful to have some Authorised values data set prepared here.
-# Framework Selection is achieved through checking boxes.
+        #
+        #
+        # 1ST install, 2nd sub-step : show the user the sql datas he can insert in the database.
+        #
+        #
+        # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
+        
+        #Framework Selection
+        #sql data for import are supposed to be located in installer/data/<language>/<level>
+        # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
+        # Where <level> is a category of requirement : required, recommended optional
+        # level should contain :
+        #   SQL File for import With a readable name.
+        #   txt File taht explains what this SQL File is meant for.
+        # Could be VERY useful to have A Big file for a kind of library.
+        # But could also be useful to have some Authorised values data set prepared here.
+        # Framework Selection is achieved through checking boxes.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $dir = C4::Context->config('intranetdir') . "/installer/data/";
@@ -391,7 +397,7 @@ elsif ( $step && $step == 3 ) {
         my @levellist;
         my $request =
           $dbh->prepare(
-"SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
+            "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
           );
         $request->execute;
         my ($frameworksloaded) = $request->fetchrow;
@@ -444,30 +450,12 @@ elsif ( $step && $step == 3 ) {
         $template->param( "levelloop" => \@levellist );
         $template->param( "$op"       => 1 );
     }
-    elsif ( $op && $op eq 'updatestructure' ) {
-
-        #Do updatedatabase And report
-        my $execstring =
-          C4::Context->config("intranetdir") . "/updater/updatedatabase";
-        undef $/;
-        my $string = qx|$execstring 2>&1|;
-        if ($string) {
-            $string =~ s/\n|\r/<br \/>/g;
-            $string =~
-s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?====================)/<font color=red>$1<\/font>/g;
-            $template->param( "updatereport" => $string );
-        }
-        $template->param( $op => 1 );
-    }
     elsif ( $op && $op eq 'importdatastructure' ) {
-    #
-    #
-    # UPDATE (not 1st install) run updatedatabase
-    #
-    #
-
-        #Import data structure and show errors if any
-        #Uses DBI to read the file [MJR 2007-07-01]
+        #
+        #
+        # 1st install, 1st "sub-step" : import kohastructure
+        #
+        #
         my $dbh = DBI->connect(
             "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
               . ( $info{port} ? ":$info{port}" : "" ),
@@ -485,11 +473,30 @@ s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?==================
         );
         $dbh->disconnect;
     }
+    elsif ( $op && $op eq 'updatestructure' ) {
+        #
+        # Not 1st install, the only sub-step : update database
+        #
+        #Do updatedatabase And report
+        my $execstring =
+          C4::Context->config("intranetdir") . "/updater/updatedatabase";
+        undef $/;
+        my $string = qx|$execstring 2>&1|;
+        if ($string) {
+            $string =~ s/\n|\r/<br \/>/g;
+            $string =~
+                s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?====================)/<font color=red>$1<\/font>/g;
+            $template->param( "updatereport" => $string );
+        }
+        $template->param( $op => 1 );
+    }
     else {
-
-#Check if there are enough tables.
-# Paul has cleaned up tables so reduced the count
-#I put it there because it implied a data import if condition was not satisfied.
+        #
+        # check wether it's a 1st install or an update
+        #
+        #Check if there are enough tables.
+        # Paul has cleaned up tables so reduced the count
+        #I put it there because it implied a data import if condition was not satisfied.
         my $dbh = DBI->connect(
             "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
               . ( $info{port} ? ":$info{port}" : "" ),

@@ -22,8 +22,9 @@ body {
 
 h1 {
         color: #006;
-        font-size: 18px;
-        font-weight: lighter;
+        font-size: 2em;
+        font-weight: normal;
+        vertical-align:middle;
 }
 
 h2 { font-size: 16px; }
