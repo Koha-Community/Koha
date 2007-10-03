@@ -69,7 +69,7 @@ sub get_authorised_value_desc ($$$$$$) {
     #---- itemtypes
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
 
-                  my $itemtypedef = getitemtypeinfo($itemtype);
+                  my $itemtypedef = getitemtypeinfo($value);
               return $itemtypedef->{description};
     }
 
