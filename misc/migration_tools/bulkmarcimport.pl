@@ -157,18 +157,16 @@ if ($version || ($input_marc_file eq '')) {
 small script to import an iso2709 file into Koha.
 parameters :
 \th : this version/help screen
-\tfile /path/to/file/to/dump : the file to dump
+\tfile /path/to/file/to/dump : the file to import
 \tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
-\tfk : Turn off foreign key checks during import.                
+\tfk : Turn off foreign key checks during import.
 \tn : the number of records to import. If missing, all the file is imported
 \tcommit : the number of records to wait before performing a 'commit' operation
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
 \tc : the characteristic MARC flavour. At the moment, only MARC21 and UNIMARC 
 \tsupported. MARC21 by default.
 \td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
-\t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
-\tmarc_biblio,
-\t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
+\t\tbiblio, \tbiblioitems,\titems
 IMPORTANT : don't use this script before you've entered and checked your MARC parameters tables twice (or more!).
 Otherwise, the import won't work correctly and you will get invalid data.
 
@@ -177,7 +175,7 @@ SAMPLE :
 \t\$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 -file /home/jmf/koha.mrc -n 3000
 EOF
 ;#'
-die;
+exit;
 }
 
 my $dbh = C4::Context->dbh;
@@ -292,7 +290,6 @@ while ( my $record = $batch->next() ) {
     print "$i : $nbitems items found\n" if $verbose;
     # now, create biblio and items with Addbiblio call.
     unless ($test_parameter) {
-    warn "NEWREC : ".$newRecord->as_formatted;
         my ($bibid,$oldbibitemnum) = AddBiblio($newRecord,'');
         warn "ADDED biblio NB $bibid in DB\n" if $verbose;
         for (my $i=0;$i<=$#items;$i++) {
