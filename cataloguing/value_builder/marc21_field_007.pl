@@ -74,7 +74,7 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "value_builder/marc21_field_007.tmpl",
+    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_007.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
