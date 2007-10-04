@@ -262,7 +262,7 @@ if ($nok){
     $template->param(female => 1);
   } elsif ($data{'sex'} eq 'M'){
      $template->param(mail => 1);
-  } else ($data{'sex'} eq 'N'){
+  } else {
      $template->param(none => 1);
   }
   my ($categories,$labels)=ethnicitycategories();
