@@ -139,6 +139,7 @@ else {
         total        => 0,
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

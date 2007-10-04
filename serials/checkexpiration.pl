@@ -49,6 +49,7 @@ use C4::Auth;
 use C4::Serials; # GetExpirationDate
 use C4::Output;
 use C4::Context;
+use C4::Date;
 use Date::Calc qw/Today Date_to_Days/;
 
 my $query = new CGI;
@@ -66,7 +67,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 
 my $title = $query->param('title');
 my $issn  = $query->param('issn');
-my $date  = $query->param('date');
+my $date  = format_date_in_iso($query->param('date'));
 my $today = join "-",&Today;
 
 if ($date) {
@@ -81,8 +82,9 @@ if ($date) {
         $subscription->{expirationdate} = $expirationdate;
         next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in good format.
         if ( Date_to_Days(split "-",$expirationdate) < Date_to_Days(split "-",$date) &&
-             Date_to_Days(split "-",$expirationdate) > Date_to_Days(split "-",$today) ) {
-            push @subscriptions_loop,$subscription;             
+        Date_to_Days(split "-",$expirationdate) > Date_to_Days(split "-",$today) ) {
+            $subscription->{expirationdate}=format_date($subscription->{expirationdate});
+            push @subscriptions_loop,$subscription;
         }
     }
     
@@ -90,10 +92,12 @@ if ($date) {
         title           => $title,
         issn            => $issn,
         numsubscription => scalar @subscriptions_loop,
-        date => $date,
+        date => format_date($date),
         subscriptions_loop => \@subscriptions_loop,
         "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     );
 }
-
+$template->param (
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+);
 output_html_with_http_headers $query, $cookie, $template->output;

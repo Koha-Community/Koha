@@ -285,6 +285,7 @@ sub get_opac_new {
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
     $data->{$data->{'lang'}} = 1;
+    $data->{expirationdate} = format_date($data->{expirationdate});
     $sth->finish;
     return $data;
 }
@@ -292,7 +293,7 @@ sub get_opac_new {
 sub get_opac_news {
     my ($limit, $lang) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_news";
+    my $query = "SELECT *, timestamp AS newdate FROM opac_news";
     if ($lang) {
         $query.= " WHERE lang = '" .$lang ."' ";
     }
@@ -307,6 +308,7 @@ sub get_opac_news {
     while (my $row = $sth->fetchrow_hashref) {
         if ((($limit) && ($count < $limit)) || (!$limit)) {
             $row->{'newdate'} = format_date($row->{'newdate'});
+            $row->{'expirationdate'} = format_date($row->{'expirationdate'});
             push @opac_news, $row;
         }
         $count++;

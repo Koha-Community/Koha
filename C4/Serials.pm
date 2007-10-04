@@ -1038,18 +1038,12 @@ sub GetExpirationDate {
     my $enddate          = $subscription->{startdate};
 
 # we don't do the same test if the subscription is based on X numbers or on X weeks/months
-#     warn "SUBSCRIPTIONID :$subscriptionid";
-#      use Data::Dumper; warn Dumper($subscription);
-
-#          warn "dateCHECKRESERV :".$subscription->{startdate};
     if ($subscription->{periodicity}){
       if ( $subscription->{numberlength} ) {
           #calculate the date of the last issue.
           my $length = $subscription->{numberlength};
-  #         warn "ENDDATE ".$enddate;
           for ( my $i = 1 ; $i <= $length ; $i++ ) {
               $enddate = GetNextDate( $enddate, $subscription );
-  #             warn "AFTER ENDDATE ".$enddate;
           }
       }
       elsif ( $subscription->{monthlength} ){
@@ -1058,20 +1052,9 @@ sub GetExpirationDate {
           $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
       } elsif ( $subscription->{weeklength} ){
           my @date=split (/-/,$subscription->{startdate});
-  #         warn "dateCHECKRESERV :".$subscription->{startdate};
-  #### An other way to do it
-  #         if ( $subscription->{weeklength} ){
-  #           my ($weeknb,$year)=Week_of_Year(@startdate);
-  #           $weeknb += $subscription->{weeklength};
-  #           my $weeknbcalc= $weeknb % 52;
-  #           $year += int($weeknb/52);
-  # #           warn "year : $year weeknb :$weeknb weeknbcalc $weeknbcalc";
-  #           @endofsubscriptiondate=Monday_of_Week($weeknbcalc,$year);
-  #         }
           my @enddate = Add_Delta_Days($date[0],$date[1],$date[2],$subscription->{weeklength}*7);
           $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
       }
-  #     warn "date de fin :$enddate";
       return $enddate;
     } else {
       return 0;  

@@ -37,6 +37,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Date;
 
 
 use C4::Members;               # GetBorrowersWhoHavexxxBorrowed.
@@ -66,20 +67,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ( $params->{'step2'} ) {
-    $filterdate1 = $params->{'filterdate1'};
-    $filterdate2 = $params->{'filterdate2'};
+    $filterdate1 = format_date_in_iso($params->{'filterdate1'});
+    $filterdate2 = format_date_in_iso($params->{'filterdate2'});
     my $checkbox = $params->{'checkbox'};
 
     my $totalDel;
     if ($checkbox eq "borrower") {
-        $filterdate1 = $params->{'filterdate1'};
         my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
         $totalDel = scalar @$membersToDelete;
     }
 
     my $totalAno;
     if ($checkbox eq "issue") {
-        $filterdate2 = $params->{'filterdate2'};
         my $membersToAnonymize =
           GetBorrowersWithIssuesHistoryOlderThan($filterdate2);
         $totalAno = scalar @$membersToAnonymize;
@@ -89,8 +88,8 @@ if ( $params->{'step2'} ) {
         step2            => 1,
         totalToDelete    => $totalDel,
         totalToAnonymize => $totalAno,
-        filterdate1      => $filterdate1,
-        filterdate2      => $filterdate2
+        filterdate1      => format_date($filterdate1),
+        filterdate2      => format_date($filterdate2),
     );
 
     #writing the template
@@ -99,8 +98,8 @@ if ( $params->{'step2'} ) {
 }
 
 if ( $params->{'step3'} ) {
-    $filterdate1 = $params->{'filterdate1'};
-    $filterdate2 = $params->{'filterdate2'};
+    $filterdate1 = format_date_in_iso($params->{'filterdate1'});
+    $filterdate2 = format_date_in_iso($params->{'filterdate2'});
     my $do_delete = $params->{'do_delete'};
     my $do_anonym = $params->{'do_anonym'};
 
@@ -153,13 +152,14 @@ if ( $params->{'step3'} ) {
 my ( $year, $month, $day ) = &Today();
 my $tmpyear  = $year - 1;
 my $tmpmonth = $month - 3;
-$filterdate1 = $tmpyear . "-" . $month . "-" . $day;
-$filterdate2 = $year . "-" . $tmpmonth . "-" . $day;
+$filterdate1 = format_date($tmpyear . "-" . $month . "-" . $day);
+$filterdate2 = format_date($year . "-" . $tmpmonth . "-" . $day);
 
 $template->param(
     step1       => '1',
     filterdate1 => $filterdate1,
-    filterdate2 => $filterdate2
+    filterdate2 => $filterdate2,
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 );
 
 #writing the template

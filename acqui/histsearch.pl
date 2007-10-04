@@ -54,13 +54,14 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
+use C4::Date;
 
 my $input          = new CGI;
 my $title          = $input->param('title');
 my $author         = $input->param('author');
 my $name           = $input->param('name');
 my $from_placed_on = $input->param('fromplacedon');
-my $to_placed_on   = $input->param('toplacedon');
+my $to_placed_on   = format_date_in_iso($input->param('toplacedon'));
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -92,6 +93,7 @@ $template->param(
       C4::Context->preference("intranetcolorstylesheet"),
     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
     IntranetNav        => C4::Context->preference("IntranetNav"),
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

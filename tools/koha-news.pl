@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output;
 use C4::NewsChannels;
 use C4::Languages;
+use C4::Date;
 use Date::Calc qw/Date_to_Days Today/;
 
 my $cgi = new CGI;
@@ -36,7 +37,7 @@ my $cgi = new CGI;
 my $id             = $cgi->param('id');
 my $title          = $cgi->param('title');
 my $new            = $cgi->param('new');
-my $expirationdate = $cgi->param('expirationdate');
+my $expirationdate = format_date_in_iso($cgi->param('expirationdate'));
 my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
 
@@ -69,16 +70,19 @@ $template->param( lang_list => \@lang_list );
 my $op = $cgi->param('op');
 
 if ( $op eq 'add_form' ) {
-    $template->param( add_form => 1 );
+    $template->param( add_form => 1,
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    );
     if ($id) {
         $template->param( 
             op => 'edit',
-            id => $new_detail->{'idnew'}
+            id => $new_detail->{'idnew'},
         );
-        $template->param($new_detail);
+        $template->param($new_detail,);
     }
     else {
-        $template->param( op => 'add' );
+        $template->param( op => 'add',
+        );
     }
 }
 elsif ( $op eq 'add' ) {
@@ -102,7 +106,7 @@ else {
     foreach my $new ( @$opac_news ) {
         next unless $new->{'expirationdate'};
         next if $new->{'expirationdate'} eq '0000-00-00';
-        if (Date_to_Days( split "-" ,$new->{'expirationdate'} ) < Date_to_Days(&Today) ){
+        if (Date_to_Days( split "-" ,format_date_in_iso($new->{'expirationdate'}) ) < Date_to_Days(&Today) ){
             $new->{'hasexpirated'} = 1;
         }
     }

@@ -237,7 +237,8 @@ foreach my $thisbranch (keys %$branches) {
 					CGIsepChoice => $CGIsepChoice,
 					CGIBranch => $CGIBranch
 #					CGIBranch => \@branchloop
-					);
+                        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+                    );
 
 }
 output_html_with_http_headers $input, $cookie, $template->output;

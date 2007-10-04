@@ -249,14 +249,11 @@ else {
         batch_id     => $batch_id,
     );
 
-    # Print the page
-    $template->param(
-        intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav        => C4::Context->preference("IntranetNav"),
-    );
 }
+# Print the page
+$template->param(
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 # Local Variables:

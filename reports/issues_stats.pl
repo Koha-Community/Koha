@@ -27,6 +27,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Output;
 use C4::Circulation;
+use C4::Date;
 use Date::Manip;
 
 =head1 NAME
@@ -45,6 +46,8 @@ my $fullreportname = "reports/issues_stats.tmpl";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->param("Filter");
+$filters[0]=format_date_in_iso($filters[0]);
+$filters[1]=format_date_in_iso($filters[1]);
 my $podsp = $input->param("DisplayBy");
 my $type = $input->param("PeriodTypeSel");
 my $daysel = $input->param("PeriodDaySel");
@@ -64,9 +67,7 @@ my ($template, $borrowernumber, $cookie)
                             debug => 1,
                             });
 $template->param(do_it => $do_it,
-                intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-                intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-                IntranetNav => C4::Context->preference("IntranetNav"),
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
                 );
 if ($do_it) {
 # Displaying results
@@ -80,8 +81,8 @@ if ($do_it) {
 # Printing to a csv file
         print $input->header(-type => 'application/vnd.sun.xml.calc',
                             -encoding    => 'utf-8',
-                -attachment=>"$basename.csv",
-                -filename=>"$basename.csv" );
+                            -attachment=>"$basename.csv",
+                            -filename=>"$basename.csv" );
         my $cols = @$results[0]->{loopcol};
         my $lines = @$results[0]->{looprow};
         my $sep;
@@ -270,8 +271,13 @@ sub calculate {
                 if ( @$filters[$i] ) {
                         if (($i==1) and (@$filters[$i-1])) {
                                 $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
+                            }
+                        # format the dates filters, otherwise just fill as is
+                        if ($i>=2) {
+                            $cell{filter} .= @$filters[$i];
+                        } else {
+                            $cell{filter} .= format_date(@$filters[$i]);
                         }
-                        $cell{filter} .= @$filters[$i];
                         $cell{crit} .="Period From" if ($i==0);
                         $cell{crit} .="Period To" if ($i==1);
                         $cell{crit} .="Borrower Cat=" if ($i==2);
@@ -357,7 +363,7 @@ sub calculate {
         }
         $strsth .=" group by $linefield";
         $strsth .=" order by $lineorder";
-        warn "". $strsth;
+#         warn "". $strsth;
         
         my $sth = $dbh->prepare( $strsth );
         if (( @linefilter ) and ($linefilter[1])){
@@ -510,7 +516,7 @@ sub calculate {
 # 	warn "filling table";
         my $emptycol; 
         while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-                warn "filling table $row / $col / $value ";
+#                 warn "filling table $row / $col / $value ";
                 $emptycol = 1 if ($col eq undef);
                 $col = "zzEMPTY" if ($col eq undef);
                 $row = "zzEMPTY" if ($row eq undef);
@@ -530,9 +536,9 @@ sub calculate {
                         push @loopcell, {value => $value  } ;
                 }
                 push @looprow,{ 'rowtitle' => ($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle},
-                                                        'loopcell' => \@loopcell,
-                                                        'hilighted' => ($hilighted >0),
-                                                        'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
+                                'loopcell' => \@loopcell,
+                                'hilighted' => ($hilighted >0),
+                                'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
                                                 };
                 $hilighted = -$hilighted;
         }

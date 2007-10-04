@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
+use C4::Date;
 
 =head1 NAME
 
@@ -46,6 +47,10 @@ my $fullreportname = "reports/acquisitions_stats.tmpl";
 my $line           = $input->param("Line");
 my $column         = $input->param("Column");
 my @filters        = $input->param("Filter");
+$filters[0]=format_date_in_iso($filters[0]);
+$filters[1]=format_date_in_iso($filters[1]);
+$filters[2]=format_date_in_iso($filters[2]);
+$filters[3]=format_date_in_iso($filters[3]);
 my $podsp          = $input->param("PlacedOnDisplay");
 my $rodsp          = $input->param("ReceivedOnDisplay");
 my $aodsp          = $input->param("AcquiredOnDisplay");    ##added by mason.
@@ -65,9 +70,7 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 		);
 if ($do_it) {
 
@@ -294,7 +297,12 @@ sub calculate {
             if ( ( ( $i == 1 ) or ( $i == 3 ) ) and ( @$filters[ $i - 1 ] ) ) {
                 $cell{err} = 1 if ( @$filters[$i] < @$filters[ $i - 1 ] );
             }
-            $cell{filter} .= @$filters[$i];
+            # format the dates filters, otherwise just fill as is
+            if ($i>=4) {
+                $cell{filter} .= @$filters[$i];
+            } else {
+                $cell{filter} .= format_date(@$filters[$i]);
+            }
             $cell{crit}   .= "Placed On From" if ( $i == 0 );
             $cell{crit}   .= "Placed On To" if ( $i == 1 );
             $cell{crit}   .= "Received On From" if ( $i == 2 );

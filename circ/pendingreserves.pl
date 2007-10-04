@@ -29,7 +29,7 @@ use C4::Date;
 my $input = new CGI;
 my $order = $input->param('order');
 my $startdate=$input->param('from');
-my $enddate=$input->param('to');
+my $enddate=format_date_in_iso($input->param('to'));
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
@@ -146,15 +146,12 @@ while ( my $data = $sth->fetchrow_hashref ) {
 $sth->finish;
 
 $template->param(
-    todaysdate              => format_date($todaysdate),
-	from		            => $startdate,
-	to			            => $enddate,
-    reserveloop             => \@reservedata,
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
+    todaysdate      => format_date($todaysdate),
+    fro             => $startdate,
+    to              => $enddate,
+    reserveloop     => \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -27,7 +27,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Members;
-use Date::Manip;
+use C4::Date;
 
 =head1 NAME
 
@@ -51,107 +51,103 @@ my $mime = $input->param("MIME");
 my $del = $input->param("sep");
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
-	= get_template_and_user({template_name => $fullreportname,
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {reports => 1},
-				debug => 1,
-				});
+    = get_template_and_user({template_name => $fullreportname,
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {reports => 1},
+                debug => 1,
+                });
 $template->param(do_it => $do_it,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-		);
+        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        );
 if ($do_it) {
 # Displaying results
-	my $results = calculate($limit, $column, \@filters);
-	if ($output eq "screen"){
+    my $results = calculate($limit, $column, \@filters);
+    if ($output eq "screen"){
 # Printing results to screen
-		$template->param(mainloop => $results);
-		output_html_with_http_headers $input, $cookie, $template->output;
-		exit(1);
-	} else {
+        $template->param(mainloop => $results);
+        output_html_with_http_headers $input, $cookie, $template->output;
+        exit(1);
+    } else {
 # Printing to a csv file
-		print $input->header(-type => 'application/vnd.sun.xml.calc',
-                                     -encoding    => 'utf-8',
-			-attachment=>"$basename.csv",
-			-filename=>"$basename.csv" );
-		my $cols = @$results[0]->{loopcol};
-		my $lines = @$results[0]->{looprow};
-		my $sep;
-		$sep =C4::Context->preference("delimiter");
+        print $input->header(-type => 'application/vnd.sun.xml.calc',
+                            -encoding    => 'utf-8',
+                            -attachment=>"$basename.csv",
+                            -filename=>"$basename.csv" );
+        my $cols = @$results[0]->{loopcol};
+        my $lines = @$results[0]->{looprow};
+        my $sep;
+        $sep =C4::Context->preference("delimiter");
 # header top-right
-		print "num /". @$results[0]->{column} .$sep;
+        print "num /". @$results[0]->{column} .$sep;
 # Other header
-		foreach my $col ( @$cols ) {
-			print $col->{coltitle}.$sep;
-		}
-		print "Total\n";
+        foreach my $col ( @$cols ) {
+            print $col->{coltitle}.$sep;
+        }
+        print "Total\n";
 # Table
-		foreach my $line ( @$lines ) {
-			my $x = $line->{loopcell};
-			print $line->{rowtitle}.$sep;
-			foreach my $cell (@$x) {
-				print $cell->{value}.$sep;
-			}
-			print $line->{totalrow};
- 			print "\n";
-	 	}
+        foreach my $line ( @$lines ) {
+            my $x = $line->{loopcell};
+            print $line->{rowtitle}.$sep;
+            foreach my $cell (@$x) {
+                print $cell->{value}.$sep;
+            }
+            print $line->{totalrow};
+            print "\n";
+        }
 # footer
-		print "TOTAL";
-		$cols = @$results[0]->{loopfooter};
-		foreach my $col ( @$cols ) {
-			print $sep.$col->{totalcol};
-		}
-		print $sep.@$results[0]->{total};
-		exit(1);
-	}
+        print "TOTAL";
+        $cols = @$results[0]->{loopfooter};
+        foreach my $col ( @$cols ) {
+            print $sep.$col->{totalcol};
+        }
+        print $sep.@$results[0]->{total};
+        exit(1);
+    }
 # Displaying choices
 } else {
-	my $dbh = C4::Context->dbh;
-	my @values;
-	my %labels;
-	my %select;
-	my $req;
-	
-	my @mime = ( C4::Context->preference("MIME") );
+    my $dbh = C4::Context->dbh;
+    my @values;
+    my %labels;
+    my %select;
+    my $req;
+    
+    my @mime = ( C4::Context->preference("MIME") );
 #	foreach my $mime (@mime){
 #		warn "".$mime;
 #	}
-	
-	my $CGIextChoice=CGI::scrolling_list(
-				-name     => 'MIME',
-				-id       => 'MIME',
-				-values   => \@mime,
-				-size     => 1,
-				-multiple => 0 );
-	
-	my @dels = ( C4::Context->preference("delimiter") );
-	my $CGIsepChoice=CGI::scrolling_list(
-				-name     => 'sep',
-				-id       => 'sep',
-				-values   => \@dels,
-				-size     => 1,
-				-multiple => 0 );
-	
-	my ($codes,$labels) = GetborCatFromCatType(undef,undef);
-	my @borcatloop;
-	foreach my $thisborcat (sort keys %$labels) {
- # 			my $selected = 1 if $thisbranch eq $branch;
- 			my %row =(value => $thisborcat,
- # 									selected => $selected,
-									description => $labels->{$thisborcat},
-							);
-			push @borcatloop, \%row;
-	}
-	
-	
-	$template->param(
-					CGIextChoice => $CGIextChoice,
-					CGIsepChoice => $CGIsepChoice,
-					borcatloop =>\@borcatloop,
-					);
+    
+    my $CGIextChoice=CGI::scrolling_list(
+                -name     => 'MIME',
+                -id       => 'MIME',
+                -values   => \@mime,
+                -size     => 1,
+                -multiple => 0 );
+    
+    my @dels = ( C4::Context->preference("delimiter") );
+    my $CGIsepChoice=CGI::scrolling_list(
+                -name     => 'sep',
+                -id       => 'sep',
+                -values   => \@dels,
+                -size     => 1,
+                -multiple => 0 );
+    
+    my ($codes,$labels) = GetborCatFromCatType(undef,undef);
+    my @borcatloop;
+    foreach my $thisborcat (sort keys %$labels) {
+# 			my $selected = 1 if $thisbranch eq $branch;
+            my %row =(value => $thisborcat,
+# 									selected => $selected,
+                                    description => $labels->{$thisborcat},
+                            );
+            push @borcatloop, \%row;
+    }
+    $template->param(
+                    CGIextChoice => $CGIextChoice,
+                    CGIsepChoice => $CGIsepChoice,
+                    borcatloop =>\@borcatloop,
+                    );
 output_html_with_http_headers $input, $cookie, $template->output;
 }
 
@@ -159,179 +155,179 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 sub calculate {
-	my ($line, $column, $filters) = @_;
-	my @mainloop;
-	my @loopfooter;
-	my @loopcol;
-	my @loopline;
-	my @looprow;
-	my %globalline;
-	my $grantotal =0;
+    my ($line, $column, $filters) = @_;
+    my @mainloop;
+    my @loopfooter;
+    my @loopcol;
+    my @loopline;
+    my @looprow;
+    my %globalline;
+    my $grantotal =0;
 # extract parameters
-	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
 # Filters
 # Checking filters
 #
-	my @loopfilter;
-	for (my $i=0;$i<=2;$i++) {
-		my %cell;
-		if ( @$filters[$i] ) {
-			if (($i==1) and (@$filters[$i-1])) {
-				$cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
-			}
-			$cell{filter} .= @$filters[$i];
-			$cell{crit} .="Bor Cat" if ($i==0);
-			$cell{crit} .="Without issues since" if ($i==1);
-			push @loopfilter, \%cell;
-		}
-	}
-	my $colfield;
-	my $colorder;
-	if ($column){
-		$column = "borrowers.".$column if $column=~/categorycode/;
-		my @colfilter ;
-		$colfilter[0] = @$filters[0] if ($column =~ /category/ )  ;
-	# 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
-	#warn "filtre col ".$colfilter[0]." ".$colfilter[1];
-												
-	# loop cols.
-		$colfield .= $column;
-		$colorder .= $column;
-		
-		my $strsth2;
-		$strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `issues` ON issues.borrowernumber=borrowers.borrowernumber";
-		if ($colfilter[0]) {
-			$colfilter[0] =~ s/\*/%/g;
-			$strsth2 .= " and $column LIKE '$colfilter[0]' " ;
-		}
-		$strsth2 .=" group by $colfield";
-		$strsth2 .=" order by $colorder";
-		warn "". $strsth2;
-		
-		my $sth2 = $dbh->prepare( $strsth2 );
-		$sth2->execute;
+    my @loopfilter;
+    for (my $i=0;$i<=2;$i++) {
+        my %cell;
+        if ( @$filters[$i] ) {
+            if (($i==1) and (@$filters[$i-1])) {
+                $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
+            }
+            $cell{filter} .= @$filters[$i];
+            $cell{crit} .="Bor Cat" if ($i==0);
+            $cell{crit} .="Without issues since" if ($i==1);
+            push @loopfilter, \%cell;
+        }
+    }
+    my $colfield;
+    my $colorder;
+    if ($column){
+        $column = "borrowers.".$column if $column=~/categorycode/;
+        my @colfilter ;
+        $colfilter[0] = @$filters[0] if ($column =~ /category/ )  ;
+    # 	$colfilter[0] = @$filters[11] if ($column =~ /sort2/ ) ;
+    #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
+                                                
+    # loop cols.
+        $colfield .= $column;
+        $colorder .= $column;
+        
+        my $strsth2;
+        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `issues` ON issues.borrowernumber=borrowers.borrowernumber";
+        if ($colfilter[0]) {
+            $colfilter[0] =~ s/\*/%/g;
+            $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
+        }
+        $strsth2 .=" group by $colfield";
+        $strsth2 .=" order by $colorder";
+        warn "". $strsth2;
+        
+        my $sth2 = $dbh->prepare( $strsth2 );
+        $sth2->execute;
 
-		
-	
-		while (my ($celvalue) = $sth2->fetchrow) {
-			my %cell;
-	#		my %ft;
-	#		warn "coltitle :".$celvalue;
-			$cell{coltitle} = $celvalue;
-	#		$ft{totalcol} = 0;
-			push @loopcol, \%cell;
-		}
-	#	warn "fin des titres colonnes";
-	}
-	
-	my $i=0;
+        
+    
+        while (my ($celvalue) = $sth2->fetchrow) {
+            my %cell;
+    #		my %ft;
+    #		warn "coltitle :".$celvalue;
+            $cell{coltitle} = $celvalue;
+    #		$ft{totalcol} = 0;
+            push @loopcol, \%cell;
+        }
+    #	warn "fin des titres colonnes";
+    }
+    
+    my $i=0;
 #	my @totalcol;
-	my $hilighted=-1;
-	
-	#Initialization of cell values.....
-	my @table;
-	
+    my $hilighted=-1;
+    
+    #Initialization of cell values.....
+    my @table;
+    
 #	warn "init table";
-	for (my $i=1;$i<=$line;$i++) {
-		foreach my $col ( @loopcol ) {
+    for (my $i=1;$i<=$line;$i++) {
+        foreach my $col ( @loopcol ) {
 #			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-			$table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
-		}
-	}
+            $table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
+        }
+    }
 
 
 # preparing calculation
-	my $strcalc ;
-	
+    my $strcalc ;
+    
 # Processing calculation
-	$strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
-	$strcalc .= " , $colfield " if ($colfield);
-	$strcalc .= " FROM borrowers ";
-	$strcalc .= "WHERE 1 ";
-	@$filters[0]=~ s/\*/%/g if (@$filters[0]);
-	$strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-	if (@$filters[1]){
-		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ";
-		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ");
-		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
-		
+    $strcalc .= "SELECT CONCAT( borrowers.surname , \"\\t\",borrowers.firstname, \"\\t\", borrowers.cardnumber)";
+    $strcalc .= " , $colfield " if ($colfield);
+    $strcalc .= " FROM borrowers ";
+    $strcalc .= "WHERE 1 ";
+    @$filters[0]=~ s/\*/%/g if (@$filters[0]);
+    $strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
+    if (@$filters[1]){
+        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ";
+        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> ".format_date_in_iso(@$filters[1]));
+        $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+        
 # 		$queryfilter->execute(@$filters[1]);
 # 		while (my ($borrowernumber)=$queryfilter->fetchrow){
 # 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
 # 		}
-	} else {
-		my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues ";
-		my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
-		$queryfilter->execute;
-		$strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
+    } else {
+        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues ";
+        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
+        $queryfilter->execute;
+        $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
 # 		while (my ($borrowernumber)=$queryfilter->fetchrow){
 # 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
 # 		}
-	}
-	$strcalc .= " group by borrowers.borrowernumber";
-	$strcalc .= ", $colfield" if ($column);
-	$strcalc .= " order by $colfield " if ($colfield);
-	my $max;
-	if (@loopcol) {
-		$max = $line*@loopcol;
-	} else { $max=$line;}
-	$strcalc .= " LIMIT 0,$max" if ($line);
-	warn "SQL :". $strcalc;
-	
-	my $dbcalc = $dbh->prepare($strcalc);
-	$dbcalc->execute;
+    }
+    $strcalc .= " group by borrowers.borrowernumber";
+    $strcalc .= ", $colfield" if ($column);
+    $strcalc .= " order by $colfield " if ($colfield);
+    my $max;
+    if (@loopcol) {
+        $max = $line*@loopcol;
+    } else { $max=$line;}
+    $strcalc .= " LIMIT 0,$max" if ($line);
+    warn "SQL :". $strcalc;
+    
+    my $dbcalc = $dbh->prepare($strcalc);
+    $dbcalc->execute;
 # 	warn "filling table";
-	my $previous_col;
-	my $i=1;
-	while (my  @data = $dbcalc->fetchrow) {
-		my ($row, $col )=@data;
-		$col = "zzEMPTY" if ($col eq undef);
-		$i=1 if (($previous_col) and not($col eq $previous_col));
-		$table[$i]->{$col}=$row;
+    my $previous_col;
+    my $i=1;
+    while (my  @data = $dbcalc->fetchrow) {
+        my ($row, $col )=@data;
+        $col = "zzEMPTY" if ($col eq undef);
+        $i=1 if (($previous_col) and not($col eq $previous_col));
+        $table[$i]->{$col}=$row;
 #		warn " ".$i." ".$col. " ".$row;
-		$i++;
-		$previous_col=$col;
-	}
-	
-	push @loopcol,{coltitle => "Global"} if not($column);
-	
-	my $max =(($line)?$line:@table -1);
- 	for ($i=1; $i<=$max;$i++) {
- 		my @loopcell;
- 		#@loopcol ensures the order for columns is common with column titles
- 		# and the number matches the number of columns
- 		my $colcount=0;
- 		foreach my $col ( @loopcol ) {
- 			my $value;
- 			if (@loopcol){
- 				$value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
- 			} else {
- 				$value =$table[$i]->{"zzEMPTY"};
- 			}
-			push @loopcell, {value => $value} ;
-		}
-		push @looprow,{ 'rowtitle' => $i ,
-						'loopcell' => \@loopcell,
-						'hilighted' => ($hilighted >0),
-					};
-		$hilighted = -$hilighted;
-	}
-	
-			
+        $i++;
+        $previous_col=$col;
+    }
+    
+    push @loopcol,{coltitle => "Global"} if not($column);
+    
+    my $max =(($line)?$line:@table -1);
+    for ($i=1; $i<=$max;$i++) {
+        my @loopcell;
+        #@loopcol ensures the order for columns is common with column titles
+        # and the number matches the number of columns
+        my $colcount=0;
+        foreach my $col ( @loopcol ) {
+            my $value;
+            if (@loopcol){
+                $value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}};
+            } else {
+                $value =$table[$i]->{"zzEMPTY"};
+            }
+            push @loopcell, {value => $value} ;
+        }
+        push @looprow,{ 'rowtitle' => $i ,
+                        'loopcell' => \@loopcell,
+                        'hilighted' => ($hilighted >0),
+                    };
+        $hilighted = -$hilighted;
+    }
+    
+            
 
-	# the header of the table
-	$globalline{loopfilter}=\@loopfilter;
-	# the core of the table
-	$globalline{looprow} = \@looprow;
-	$globalline{loopcol} = \@loopcol;
+    # the header of the table
+    $globalline{loopfilter}=\@loopfilter;
+    # the core of the table
+    $globalline{looprow} = \@looprow;
+    $globalline{loopcol} = \@loopcol;
 # 	# the foot (totals by borrower type)
-	$globalline{loopfooter} = \@loopfooter;
-	$globalline{total}= $grantotal;
-	$globalline{line} = $line;
-	$globalline{column} = $column;
-	push @mainloop,\%globalline;
-	return \@mainloop;
+    $globalline{loopfooter} = \@loopfooter;
+    $globalline{total}= $grantotal;
+    $globalline{line} = $line;
+    $globalline{column} = $column;
+    push @mainloop,\%globalline;
+    return \@mainloop;
 }
 
 1;
