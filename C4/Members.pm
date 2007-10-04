@@ -608,7 +608,7 @@ sub ModMember {
     if ( $data{'password'} eq '****' ) {
         delete $data{'password'};
         foreach (keys %data)
-        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_}) } ;
+        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "flags" and $_ ne "borrowernumber" and $hashborrowerfields{$_}) } ;
         $query = "UPDATE borrowers SET ".join (",",@parameters)
     ." WHERE borrowernumber=$data{'borrowernumber'}";
 #         warn "$query";
@@ -619,7 +619,7 @@ sub ModMember {
         $data{'password'} = md5_base64( $data{'password'} )   if ( $data{'password'} ne '' );
         delete $data{'password'} if ($data{password} eq "");
         foreach (keys %data)
-        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $hashborrowerfields{$_})} ;
+        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "flags" and $_ ne "borrowernumber" and $hashborrowerfields{$_})} ;
         
         $query = "UPDATE borrowers SET ".join (",",@parameters)." WHERE borrowernumber=$data{'borrowernumber'}";
 #         warn "$query";
@@ -754,7 +754,6 @@ sub AddMember {
       . ",debarred="
       . $dbh->quote( $data{'debarred'} )
       . ",ethnicity="
-      . $dbh->quote( $data{'ethnicity'} )
       . ",ethnotes="
       . $dbh->quote( $data{'ethnotes'} );
 
