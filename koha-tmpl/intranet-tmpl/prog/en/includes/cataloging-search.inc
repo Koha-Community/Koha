@@ -1,7 +1,7 @@
 <!-- Begin Circulation Resident Search Box -->
 <div id="header_search">
 <div id="addbooks_search">
-	<p class="tip">Search the catalog:</p>
+	<p class="tip">Search the catalog and the reservoir:</p>
 	<form name="search" action="addbooks.pl">
         <input type="text" name="q"  size="40" class="focus" />
         <input type="submit" value="Search" />
@@ -18,7 +18,7 @@
 	</form>
 	</div>	
 			<ul>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#addbooks_search">Search the Catalog</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#addbooks_search">Cataloguing Search</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
 			</ul>	
 </div>
