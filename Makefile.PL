@@ -239,8 +239,10 @@ etc files are copied to /usr/share/koha/etc/
 
 =cut
 	# Misc etc to koha/etc
-	foreach my $src (glob("etc/*")) {
-		$result{$src} = '$(PREFIX)/share/koha/'.$src;
+	foreach my $src (glob("etc/zebradb/*/*/*"),glob("etc/zebradb/*/*"),glob("etc/zebradb/*"),glob("etc/*")) {
+		if (-f $src) {
+			$result{$src} = '$(PREFIX)/share/koha/'.$src;
+		}
 	}
 
 
