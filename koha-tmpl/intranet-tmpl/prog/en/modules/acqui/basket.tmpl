@@ -69,7 +69,7 @@
                     <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <!-- TMPL_IF name="closedate" -->
                         <td><p>
-                            <!-- TMPL_VAR NAME="title" --><br />
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber="<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><br />
                                 <!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -78,7 +78,7 @@
                     <!-- TMPL_ELSE -->
                         <td>
                             <p>
-                            <!-- TMPL_VAR NAME="title" --></p>
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
                                 <p><!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->

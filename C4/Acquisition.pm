@@ -823,7 +823,7 @@ sub GetParcel {
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         WHERE 
-            AND aqbasket.booksellerid=?
+            aqbasket.booksellerid=?
             AND aqorders.booksellerinvoicenumber LIKE  \"$code\"
             AND aqorders.datereceived= \'$datereceived\'";
 
@@ -831,13 +831,14 @@ sub GetParcel {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
             $strsth .=
-                " and (borrowers.branchcode = '"
+                " AND (borrowers.branchcode = '"
               . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
+              . "' OR borrowers.branchcode ='')";
         }
     }
-    $strsth .= " order by aqbasket.basketno";
+    $strsth .= " ORDER BY aqbasket.basketno";
     ### parcelinformation : $strsth
+    warn "STH : $strsth";
     my $sth = $dbh->prepare($strsth);
     $sth->execute($supplierid);
     while ( my $data = $sth->fetchrow_hashref ) {
