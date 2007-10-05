@@ -61,7 +61,7 @@ use vars qw($VERSION $AUTOLOAD),
     qw($context),
     qw(@context_stack);
 
-$VERSION = '3.00.00.002';
+$VERSION = '3.00.00.005';
 
 =head1 NAME
 
