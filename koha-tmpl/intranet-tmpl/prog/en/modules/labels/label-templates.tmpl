@@ -41,11 +41,11 @@
 				<a href="/cgi-bin/koha/labels/label-templates.pl?op=delete&tmpl_id=<!-- TMPL_VAR NAME="tmpl_id" -->">Delete</a>
         </td>
 		  <td>
-<input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->"  
-                <!-- TMPL_IF NAME="active" -->
- checked
-                <!-- /TMPL_IF -->
- >
+<!-- TMPL_IF NAME="active" -->
+    <input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" checked />
+<!-- TMPL_ELSE -->
+    <input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" />
+<!-- /TMPL_IF -->
 
         </td>
 </tr>
