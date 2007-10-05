@@ -292,6 +292,7 @@ sub create_input {
         value          => $value,
         random         => CreateKey(),
     );
+    # deal with a <010 tag
     if($subfield eq '@'){
         $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_tag."_".$index_subfield;
     } else {
@@ -301,12 +302,14 @@ sub create_input {
     if(exists $mandatory_z3950->{$tag.$subfield}){
         $subfield_data{z3950_mandatory} = $mandatory_z3950->{$tag.$subfield};
     }
-    
+    # decide if the subfield must be expanded (visible) by default or not
+    # if it is mandatory, then expand. If it is hidden explicitly by the hidden flag, hidden anyway
     $subfield_data{visibility} = "display:none;"
         if (    ($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne ''
             or ($value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory})
         );
-    
+    # always expand all subfields of a mandatory field
+    $subfield_data{visibility} = "" if $tagslib->{$tag}->{mandatory};
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
         $subfield_data{marc_value} =
