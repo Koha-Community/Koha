@@ -4,7 +4,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
 
@@ -14,12 +14,14 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+<!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
+
 <h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Start, receive, or modify any order</legend>
     <!-- TMPL_IF name="nobudget" -->
-        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in parameters</span>
+        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in Administration</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
             <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Search" />

@@ -2,6 +2,7 @@
 <Title>Koha -- Authority details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
+function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
 	for (i=0; i < 10 ; i++ ) {
@@ -157,18 +158,6 @@ function unHideSubfield(index,labelindex) {
 	label.style.display='none';	
 }
 
-</script>
-
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-
-<script language="JavaScript" type="text/javascript">
-function Help() {
-    newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
-}
-
 function addauthority() {
     X = document.forms[0].authtype.value;
     window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
@@ -179,12 +168,17 @@ function searchauthority() {
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<div id="doc3" class="yui-t2">
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority (<!-- TMPL_VAR name="authtypetext" -->)<!-- /TMPL_IF -->  </div>
+
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-g">
 
 <!-- TMPL_IF name="authid" -->
   <h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
@@ -305,7 +299,5 @@ function searchauthority() {
 
 </div>
 </div>
-</div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

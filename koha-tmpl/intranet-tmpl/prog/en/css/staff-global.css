@@ -245,6 +245,7 @@ div#header_search {
 	float: left;
 	padding-left : 14.2em;
 	margin: .3em 0 .5em 0;
+	min-height : 52px;
 }
 
 div#header_search input {
@@ -263,6 +264,12 @@ div#header_search ul.link-tabs li.off a {
 }
 
 div#circ_search,div#catalog_search,div#patron_search,div#subscription_search,div#addbooks_search,div#notices_search,div#printer_search,div#checkin_search,div#suggestions_search,div#roadtype_search,div#stopword_search {
+	border : 0;
+	border-bottom : 1px solid #FF9900;
+	padding : 0 0 .2em 0;
+}
+
+div#header_search div.residentsearch {
 	border : 0;
 	border-bottom : 1px solid #FF9900;
 	padding : 0 0 .2em 0;
@@ -520,6 +527,8 @@ padding: 0;
 width: 100%; 
 }
 
+
+
 fieldset.rows legend {  
 	margin-left: 1em;
 	font-weight: bold;
@@ -529,7 +538,7 @@ fieldset.rows legend {
 fieldset.rows label, fieldset.rows span.label {  
 	float: left;  
 	font-weight : bold;
-	width: 12em;  
+	width: 9em;  
 	margin-right: 1em;  
 	text-align: right;
 }
@@ -554,6 +563,17 @@ width: 100%;
 
 fieldset.rows.left li {
 	padding-bottom : .4em;
+}
+
+fieldset.rows li.radio {
+	padding-left: 9em;
+	width : auto;
+}
+
+fieldset.rows li.radio label {
+	float : none;
+	width : auto;
+	margin : 0 0 0 1em;
 }
 
 fieldset.rows ol.radio label {
