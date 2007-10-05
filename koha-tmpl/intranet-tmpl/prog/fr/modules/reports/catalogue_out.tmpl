@@ -1,15 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Stats</title>
+<title>Koha &rsaquo; Statistiques Rapport rDocuments jamais empruntéséservations &rsaquo; Toutes les réservations</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/reports/reports-home.pl">Statistiques</a> &rsaquo; Documents ne sortant pas</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
@@ -19,10 +22,10 @@
 			<!-- TMPL_LOOP NAME="loopfilter" -->
 					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --><!-- TMPL_VAR NAME="crit"-->=<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
 			<!-- /TMPL_LOOP -->
-		<!-- /TMPL_IF NAME="loopfilter"-->
+		<!-- /TMPL_IF-->
 		
 		<table>
-			<tr >
+			<tr>
 				<th>Num/Exempl</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -38,12 +41,12 @@
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
-				<!-- /TMPL_LOOP NAME="looprow" -->
+				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Documents jamais prêtés</h1>
-	<form method="post">
+	<form method="post" action="/cgi-bin/koha/reports/catalogue_out.pl">
 	
 	<table>
 		<thead>
@@ -57,7 +60,7 @@
 			<tr>
 				<td>
 					<select name="Limit">
-						<option value ="" checked>Aucun</option>
+						<option value ="" selected="selected">Aucun</option>
 						<option value ="5"> 5</option>
 						<option value ="10">10</option>
 						<option value ="15">15</option>
@@ -70,36 +73,42 @@
 				</td>
 				<td>
 					<select name="Criteria">
-						<option value ="" checked>Aucun</option>
+						<option value ="" selected="selected">Aucun</option>
 						<option value ="homebranch">Site</option>
 						<option value ="itemtype">Type de document</option>
 					</select>
 				</td>
+				<td colspan="2">&nbsp;</td>
 			</tr>
 			<tr class="hilighted">
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>Site</td>
-				<td><input type="text" name="Filter" value="" /></td>
+				<td colspan="2">&nbsp;</td>
+				<td><label for="branchFilter">Site</label></td>
+				<td><input type="text" id="branchFilter" name="Filter" value="" /></td>
 			</tr>
 			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>Type document</td>
-				<td><input type="text" name="Filter" value="" /></td>
+				<td colspan="2">&nbsp;</td>
+				<td><label for="docFilter">Type document</label></td>
+				<td><input type="text" id="docFilter" name="Filter" value="" /></td>
 			</tr>
 		</tbody>
 	</table>
 	
 	
 		<h3> Affichage </h3>
-		<input type="radio" checked name="output" value="screen" /> Afficher dans le navigateur <input type="radio" name="output" value="file"> <input type="text" name="basename" value="Export" /> Ouvrir dans un logiciel <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
+		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /><label for="outputscreen"> A afficher dans le navigateur</label>
+		
+		<input type="radio" name="output" id="outputfile" value="file" /> <label for="outputfile">Enregistrer</label> <input type="text" name="basename" value="Export" /> dans un logiciel  <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
 	
-	<p>
-	<input type="submit" value="OK" />
+	<p><input type="submit" value="OK" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
+	<input type="hidden" name="do_it" value="1" /></p>
 	</form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

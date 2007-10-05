@@ -1,14 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Stats</title>
+<title>Koha &rsaquo; Statistiques Outils &rPrêts pas catégorie de lecteursaquo; Documents perdus</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/reports/reports-home.pl">Statistiques</a> &rsaquo; Prêts par catégorie de lecteur</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 <!-- TMPL_LOOP NAME="mainloop" -->
@@ -34,7 +39,7 @@
 						<!-- TMPL_VAR NAME="totalitemtype" -->
 					</td>
 				</tr>
-			<!-- /TMPL_LOOP NAME="loopitemtype" -->
+			<!-- /TMPL_LOOP -->
 			<tr>
 				<th>TOTAL</th>
 				<!-- TMPL_LOOP NAME="loopborrowertotal" -->
@@ -48,13 +53,19 @@
 <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Prêts par catégorie d'adhérent</h1>
-	<form method="post">
-		<p> Sélectionner une catégorie d'adhérent (ou rien si vous souhaitez visualiser l'état global) <input type="text" name="value" /></p>
-		<p>Sélectionnez un site : <!-- TMPL_VAR NAME="CGIbranch" --></p>
+	<form method="post" action="/cgi-bin/koha/reports/manager.pl">
+		<p><label for="borrowercategory">Sélectionnez une catégorie d'adhérent</label> (ou rien si vous souhaitez visualiser l'état global) <input type="text" name="value" id="borrowercategory" /></p>
+		<p><label for="branch">Sélectionnez un site :</label> <!-- TMPL_VAR NAME="CGIbranch" --></p>
 		<input type="submit" value="OK" />
 		<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 		<input type="hidden" name="do_it" value="1" />
 	</form>
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

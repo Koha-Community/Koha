@@ -1,23 +1,33 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo;<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Créer, réceptionner, modifier une commande</legend>
     <!-- TMPL_IF name="nobudget" -->
-        <span class="problem">Vous devez définir un budget (module paramètres)</span>
+        <span class="problem">Vous devez définir <a href="/cgi-bin/koha/admin/aqbookfund.pl">un budget</a> dans les paramètres</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Fournisseur </label><input type="text" size="25" name="supplier" id="supplier" />
+            <p><label for="supplier">Fournisseur </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Rechercher">
             </p>
         </form>
     <!-- TMPL_ELSE -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Fournisseur </label><input type="text" size="25" name="supplier" id="supplier" />
+            <p><label for="supplier">Fournisseur :  </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" value="Rechercher">
             </p>
         </form>
@@ -60,7 +70,7 @@
     <input type="submit" value="Valider le taux de change">
     </form>
 <!-- TMPL_ELSE -->
-    <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button acquisition">
+    <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button">
     Ajouter une devise
     </a>
 <!-- /TMPL_IF -->
@@ -85,22 +95,22 @@
         <!-- TMPL_LOOP name="loop_budget" -->
             <tr>
                 <td><!-- TMPL_VAR name="bookfundname" --></td>
-                <td><!-- TMPL_VAR name="budgetamount" --></td>
-                <td><!-- TMPL_VAR name="spent" --></td>
-                <td><!-- TMPL_VAR name="comtd" --></td>
+                <td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!--TMPL_VAR NAME="aqbudgetid"-->"><!-- TMPL_VAR name="budgetamount" --></a></td>
+                <td><a href="/cgi-bin/koha/acqui/spent.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="spent" --></a></td>
+                <td><a href="/cgi-bin/koha/acqui/bookfund.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="comtd" --></a></td>
                 <td><!-- TMPL_VAR name="avail" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
         </tbody>
-        <tfooter>
+        <tfoot>
         <tr>
-            <th>Total</td>
+            <th>Total</th>
             <th><!-- TMPL_VAR name="total" --></th>
             <th><!-- TMPL_VAR name="totspent" --></th>
             <th><!-- TMPL_VAR name="totcomtd" --></th>
             <th><!-- TMPL_VAR name="totavail" --></th>
         </tr>
-        </tfooter>
+        </tfoot>
     </table>
     </div>
     <!-- /TMPL_IF -->
@@ -114,8 +124,10 @@
     <p>Pour fermer un panier de commande cliquez sur "voir les paniers de commande "ou cherchez au dessus, et cliquez alors sur "valider le panier".</p>
 </div>
 
-<script type="text/JavaScript">
-    document.findsupplier.supplier.focus();
-</script>
-
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

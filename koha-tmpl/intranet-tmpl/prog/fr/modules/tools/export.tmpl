@@ -1,11 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Exportation de notice MARC</title>
+<title>Koha &rsaquo; Outils &rsaquo; Export MARCLogs</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-tools.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/tools/tools-home.pl">Outils</a> &rsaquo; Export MARC</div>
 
-<h1>Sélectionnez les notices à exporter : </h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <p>
     <b>Remarque : les exemplaires sont exportés par cet outil, sauf si vous les excluez.</b>
 </p>
@@ -13,20 +21,20 @@
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
     <fieldset>
     <legend>
-        Notices
+        Sélectionnez les notices à exporter :
     </legend>
         <p>
             <label for="start">à partir de la notice numéro</label>
             <input id="start" type="text" name="StartingBiblionumber" size="5" />
-        <p>
         </p>
+        <p>
             <label for="end">à la notice N° : </label>
             <input id="end" type="text" name="EndingBiblionumber" size="5" />
         </p>
         
         <p>
-            <label for="itemtypes" >Type document</label>
-            <select name="itemtype">
+            <label for="itemtype" >Type document</label>
+            <select name="itemtype" id="itemtype">
                 <option value="">-- Tout --</option>
                 <!-- TMPL_LOOP NAME="itemtypeloop" -->
 				<!-- TMPL_IF name="selected" -->
@@ -85,11 +93,17 @@
             format.
         </p>
         <p>
-        <label for="filename">Nom du fichier :</label><input id="filename" tyle=text" name="filename" value="koha.mrc" />
+        <label for="filename">Nom du fichier :</label><input id="filename" type="text" name="filename" value="koha.mrc" />
         </p>
     </fieldset>
     <input type="hidden" name="op" value="export" />
-    <input type="submit" value="Export" class="button" />
+    <input type="submit" value="Exportation" class="button">
 </form>
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

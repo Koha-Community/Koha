@@ -1,134 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>koha &rsaquo; Administration système &rsaquo; communes</title>
+<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="add_form" -->Communes &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modifier une commune<!-- TMPL_ELSE --> Ajouter une commune<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Communes &rsaquo; Confirmer suppression de la commune<!-- TMPL_ELSE --> Communes<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<!-- TMPL_IF NAME="add_form" -->
-	<!-- TMPL_IF NAME="cityid" -->
-		<h1>Modifier une commune</h1>
-	<!-- TMPL_ELSE -->
-		<h1>Ajouter une commune</h1>
-	<!-- /TMPL_IF -->
-
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-	<input type="hidden" name="op" value="add_validate">
-	<input type="hidden" name="checked" value="0">
-	<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->">
-
-	<!-- TMPL_IF NAME="cityid" -->
-		<p class="p_borrowers">
-	
-		<label>Identifiant commune</label>
-		<label><b><!-- TMPL_VAR NAME="cityid" --></b></label>
-		</p>
-	<!-- /TMPL_IF -->
-	<p>
-	<label>Nom de commune</label>
-	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" escape=HTML -->">&nbsp;
-	</p>
-	<p>				
-	<label>Code postal de la commune</label>
-	<input type="text" name="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->">
-	</p>
-	
-	<p>
-	<div >
-		<input class="button" type="button" onclick="Check(this.form)" value="OK">
-	</div>	
-	</p>
-	</form>
-
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->
-	<table>
-		<tr>
-			<td>
-				<b>Identifiant commune</b>
-			</td>
-			<td>
-				<!-- TMPL_VAR NAME="cityid" -->
-			</td>
-		</tr>
-		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed">
-			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->">        
-		<tr>
-			<td>Nom de  Commune</td>
-			<td><!-- TMPL_VAR NAME="city_name" --></td>
-		</tr>
-		<tr>
-			<td>Code postal de la commune</td>
-			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
-		</tr>
-		</tr>
-		<!-- TMPL_IF NAME="totalgtzero" -->
-		<tr>
-			<td colspan="2" align="center" class="problem">Cette notice est utilisée <!-- TMPL_VAR NAME="total" --> fois. Suppression impossible</td>
-		</tr>
-	<tr>
-			<td colspan="2">
-				</form><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-				<input type="submit" value="OK">
-				</form>
-			</td>
-		</tr>
-		<!-- TMPL_ELSE -->
-		<tr>
-			<td colspan="2" align="center">Confirmer la suppression</td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="OUI"></form></td>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="NON"></form></td>
-		</tr>
-		<!-- /TMPL_IF -->
-</table>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="else" -->
-	<h2>Gestion des communes</h2>
-	<!-- TMPL_IF NAME="searchfield" -->
-		Recherche : <!-- TMPL_VAR NAME="searchfield" -->
-	<!-- /TMPL_IF -->
-	<form action="<TMPL_VAR NAME="script_name">" method="post">
-		<input type="text" name="city_name" value="<!-- TMPL_VAR NAME="searchfield" -->">
-		<input type="submit" name="submit" value="OK" class="button">
-	</form>
-
-	<table>
-		<tr>
-			<th>Identifiant commune</th>
-			<th>Nom de commune</th>
-			<th>Code postal de la commune</th>
-			<th> </th>
-			<th> </th>
-			
-		</tr>
-		<!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" -->
-		<tr class="hilighted">
-		<!-- TMPL_ELSE -->
-		<tr>
-		<!-- /TMPL_IF -->
-			<td><!-- TMPL_VAR NAME="cityid" --></td>
-			<td><!-- TMPL_VAR NAME="city_name" --></td>
-			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
-			
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Modifier</a></td>
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Supprimer</a></td>
-		</tr>
-		<!-- /TMPL_LOOP -->
-
-	</table>
-	<p><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form">
-		<input type="submit" class="button" value="Ajouter une commune" alt="Ajouter une commune"><br>
-	</form></p>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		function isNotNull(f,noalert) {
 			if (f.value.length == 0) {
@@ -173,4 +47,140 @@
 			document.Aform.submit();
 			}
 		}
+//]]>
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cities-admin-menu.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/cities.pl">Villes</a> &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modifier une commune<!-- TMPL_ELSE --> Ajouter une commune<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/cities.pl">Villes</a> &rsaquo; Confirmer la suppression de la ville<!-- TMPL_ELSE --> Communes<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+	<!-- TMPL_IF NAME="cityid" -->
+		<h1>Modifier une commune</h1>
+	<!-- TMPL_ELSE -->
+		<h1>Ajouter une commune</h1>
+	<!-- /TMPL_IF -->
+
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+	<input type="hidden" name="checked" value="0" />
+	<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" />
+
+	<!-- TMPL_IF NAME="cityid" -->
+		<p class="p_borrowers">
+	
+		<label>Identifiant commune</label>
+		<label><b><!-- TMPL_VAR NAME="cityid" --></b></label>
+		</p>
+	<!-- /TMPL_IF -->
+	<p>
+	<label>Nom de commune</label>
+	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
+	</p>
+	<p>				
+	<label>Code postal de la commune</label>
+	<input type="text" name="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->" />
+	</p>
+	
+	<p>
+		<input class="button" type="button" onclick="Check(this.form)" value="OK" />
+	</p>
+	</form>
+
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->
+<h3>Confirmer la suppression de la commune</h3>
+	<table>
+		<tr>
+			<td>
+				<b>Identifiant commune</b>
+			</td>
+			<td>
+				<!-- TMPL_VAR NAME="cityid" -->
+			</td>
+		</tr>
+		        
+		<tr>
+			<td>Nom de commune</td>
+			<td><!-- TMPL_VAR NAME="city_name" --></td>
+		</tr>
+		<tr>
+			<td>Code postal de la commune</td>
+			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
+		</tr>
+		<!-- TMPL_IF NAME="totalgtzero" -->
+		<tr>
+			<td colspan="2" align="center" class="problem">Cette notice est utilisée <!-- TMPL_VAR NAME="total" --> fois. Suppression impossible</td>
+		</tr>
+	<tr>
+			<td colspan="2">
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="submit" value="OK" />
+				</form>
+			</td>
+		</tr>
+		<!-- TMPL_ELSE -->
+		<tr>
+			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed" />
+			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" /><input type="submit" value="OUI"></form></td>
+			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="NON"></form></td>
+		</tr>
+		<!-- /TMPL_IF -->
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="else" -->
+	<h2>Gestion des communes</h2>
+	<!-- TMPL_IF NAME="searchfield" -->
+		Recherche : <!-- TMPL_VAR NAME="searchfield" -->
+	<!-- /TMPL_IF -->
+
+	<table>
+		<tr>
+			<th>Identifiant commune</th>
+			<th>Nom de commune</th>
+			<th>Code postal de la commune</th>
+			<th> </th>
+			<th> </th>
+			
+		</tr>
+		<!-- TMPL_LOOP NAME="loop" -->
+		<!-- TMPL_IF NAME="toggle" -->
+		<tr class="hilighted">
+		<!-- TMPL_ELSE -->
+		<tr>
+		<!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="cityid" --></td>
+			<td><!-- TMPL_VAR NAME="city_name" --></td>
+			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
+			
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Modifier</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Supprimer</a></td>
+		</tr>
+		<!-- /TMPL_LOOP -->
+
+	</table>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="add_form" />
+		<p><input type="submit" class="button" value="Ajouter une commune" alt="Ajouter une commune"></p>
+	</form>
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

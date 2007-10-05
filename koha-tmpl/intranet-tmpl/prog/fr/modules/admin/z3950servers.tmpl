@@ -1,16 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système <!-- TMPL_IF NAME="else" -->Serveurs Z39.50<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME=searchfield -->Modifier le serveur Z39.50 <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter un serveur Z39.50<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="else" -->Serveurs Z39.50<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier le serveur Z39.50 <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter un serveur Z39.50<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Serveur Z39.50 ajouté<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Serveur Z39.50 supprimé<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
 <!-- TMPL_IF NAME="add_form" -->
-        <script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -77,27 +75,48 @@
                         alert(alertString2);
                 }
         }
-        </script>
+        //]]>
+</script>
+        <!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="z3950-admin-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Serveurs Z39.50<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier le serveur Z39.50 <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter un serveur Z39.50<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Serveur Z39.50 ajouté<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Serveur Z39.50 supprimé<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+        
 
        
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
-<!-- TMPL_IF NAME=searchfield -->
+<!-- TMPL_IF NAME="searchfield" -->
                 <h1>Modification d'un serveur Z39.50</h1>
         <!-- TMPL_ELSE -->
                 <h1>Ajouter un serveur Z39.50</h1>
         <!-- /TMPL_IF -->                
         <table>
-        <!-- TMPL_IF NAME=searchfield -->
+        <!-- TMPL_IF NAME="searchfield" -->
                 <tr>
-                        <th>Serveur Z39.50</th>
+                        <th scope="row">Serveur Z39.50</th>
                         <td>
                                 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
                         </td>
                 </tr>
         <!-- TMPL_ELSE -->
                 <tr>
-                        <th>Serveur Z39.50</th>
+                        <th scope="row">Serveur Z39.50</th>
                         <td>
                                 <input type="text" name="searchfield" size="65" maxlength="100" onblur="toUC(this)" />
                         </td>
@@ -105,47 +124,47 @@
         <!-- /TMPL_IF -->
 
 		<tr>
-			<th>Nom du serveur hôte</th>
+			<th scope="row">Nom du serveur hôte</th>
 			<td>
 				<input type="text" name="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
 			</td>
 		</tr>
 		<tr>
-			<th>Port</th>
+			<th scope="row">Port</th>
 			<td>
 				<input type="text" name="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
 			</td>
 		</tr>
 		<tr>
-			<th>Base de données</th>
+			<th scope="row">Base de données</th>
 			<td>
 				<input type="text" name="db" value="<!-- TMPL_VAR NAME="db" -->" />
 			</td>
 		</tr>
 		<tr>
-			<th>Identifiant utilisateur</th>
+			<th scope="row">Identifiant utilisateur</th>
 			<td>
 				<input type="text" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
 			</td>
 		</tr>
 		<tr>
-			<th>Mot de passe</th>
+			<th scope="row">Mot de passe</th>
 			<td>
 				<input type="text" name="password" value="<!-- TMPL_VAR NAME="password" -->" />
 			</td>
 		</tr>
 		<tr>
-			<th>Vérifié(recherché par défaut)</th>
+			<th scope="row">Vérifié(recherché par défaut)</th>
 			<td>
-				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  
+				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </td></tr>
 		<tr>
-			<th>Rang (ordre d'affichage)</th>
+			<th scope="row">Rang (ordre d'affichage)</th>
 			<td>
 				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
 			</td>
 		</tr>
 				<tr>
-			<th>Syntaxe (Z39-50 peut envoyer<br>
+			<th scope="row">Syntaxe (Z39-50 peut envoyer<br />
 			 notices dans divers formats. En choisir un)</th>
 			<td>
 				<select name="syntax">
@@ -218,12 +237,9 @@
 </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME=else -->
+<!-- TMPL_IF NAME="else" -->
 <h3>Gestion des serveurs Z39.50</h3>
-         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-                <input type="submit" name="search" value="Rechercher">
-        </form>
+
         <!-- TMPL_IF NAME="searchfield" -->
                 Vous recherchiez <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->		
@@ -239,7 +255,7 @@
 						<th>Syntaxe</th>
                         <th colspan="2">&nbsp;</th>
                 </tr>
-                <!-- TMPL_LOOP NAME=loop -->
+                <!-- TMPL_LOOP NAME="loop" -->
                <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="name" --></td>
                         <td><!-- TMPL_VAR NAME="host" --> : <!-- TMPL_VAR NAME="port" --></td>
@@ -271,4 +287,10 @@
 
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

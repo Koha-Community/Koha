@@ -1,29 +1,58 @@
-<!-- TMPL_INCLUDE NAME="serials-top.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Périodiques &rsaquo; Information d'abonnement pour notice N°<!-- TMPL_VAR NAME="biblionumber" --> titre : <!-- TMPL_VAR name="bibliotitle" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+active(<!-- TMPL_VAR name="yearmin" -->);
+function active(numlayer)
+{
+	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
+		ong = i;
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+//]]>
+</script>
+</head>
+<body>
 
 <!-- TMPL_UNLESS name="popup" -->
-	<h1 class="serial">Information d'abonnement pour notice N°<!-- TMPL_VAR NAME="biblionumber" --> titre : <!-- TMPL_VAR name="bibliotitle" --></h1>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; Périodiques </div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	<h1>Information d'abonnement pour notice N°<!-- TMPL_VAR NAME="biblionumber" --> titre : <!-- TMPL_VAR name="bibliotitle" --></h1>
 	<p>
-	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button serial">Retour à la notice</a>
+	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Retour à la notice</a>
 <!-- /TMPL_UNLESS -->
 	<!-- TMPL_LOOP NAME="years" -->
 		<!-- TMPL_IF NAME="year" -->
-			<a  class="button serial" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+			<a  class="button" href="javascript:active(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
 		<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
-	<a class=" button serial" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Vue partielle</a>
+	<a class=" button serial" href="serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=small">Vue partielle</a>
 	</p>
 	<!-- TMPL_LOOP NAME="years" -->
 	<div name="<!-- TMPL_VAR NAME="year" -->" id="<!-- TMPL_VAR NAME="year" -->" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
 		<table>
 			<tr>
-				<th class="serial">Information
+				<th>Information
 				</th>
-				<th class="serial">Date
+				<th>Date
 				</th>
-				<th class="serial">Numéro
+				<th>Numéro
 				</th>
-				<th class="serial">Etat
+				<th>Etat
 				</th>
 			</tr>
 			<!-- TMPL_LOOP Name="serials" -->
@@ -48,21 +77,12 @@
 		</table>
 	</div>
 	<!--/TMPL_LOOP -->
-<script language="JavaScript" type="text/javascript">
-active(<!-- TMPL_VAR name="yearmin" -->);
-function active(numlayer)
-{
-	for (i=<!--TMPL_VAR Name="yearmin"-->; i<=<!--TMPL_VAR Name="yearmax"-->; i++ ) {
-		ong = i;
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
-		} else {
-			document.getElementById(ong).style.visibility="hidden";
-		}
-	}
-}
 
-</script>
-</body>
-</html>
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

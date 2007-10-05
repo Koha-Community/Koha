@@ -1,11 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système :  <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="frameworkcode" -->Modifier le texte de la grille<!-- TMPL_ELSE -->Ajouter une grille<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->Supprimer la grille pour <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Grille de catalogage<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="add_form" --> Grille de catalogage &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modifier le texte de la grille<!-- TMPL_ELSE -->Ajouter une grille<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> Grille de catalogage &rsaquo; Supprimer la grille pour <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Grille de catalogage<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function isNotNull(f,noalert) {
     if (f.value.length ==0) {
@@ -57,7 +54,20 @@ function Check(f) {
         alert(alertString2);
     }
 }
+//]]>
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">Grille de catalogage</a> &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modifier le texte de la grille<!-- TMPL_ELSE -->Ajouter une grille<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">Grille de catalogage</a> &rsaquo; Supprimer la grille pour <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->Grille de catalogage<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
     <h1><!-- TMPL_IF NAME="frameworkcode" -->Modifier le texte de la grille<!-- TMPL_ELSE -->Ajouter une grille<!-- /TMPL_IF --></h1>
@@ -70,7 +80,7 @@ function Check(f) {
             <p><label for="frameworkcode">Code de grille de catalogage</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></p>
         <!-- /TMPL_IF -->
         <p><label for="description">Description</label>
-        <input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" escape=HTML -->" /></p>
+        <input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></p>
         <p>	<input type="button" value="Valider" class="submit" onclick="Check(this.form)"></p>
     </form>
 <!-- /TMPL_IF -->
@@ -78,13 +88,11 @@ function Check(f) {
 <!-- TMPL_IF NAME="delete_confirm" -->
 <h3>Supprimer la grille pour <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
     <!-- TMPL_IF NAME="total" -->
-        <div class="error">Cette grille est utilisée <!-- TMPL_VAR NAME="total" --> fois
+        <div class="error">Cette grille est utilisée <!-- TMPL_VAR NAME="total" --> fois</div>
     <!-- /TMPL_IF -->
-    <p>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Oui, supprimer cette grille!">
         </form>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Non, ne pas supprimer !"></form>
-    </p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
@@ -124,4 +132,10 @@ function Check(f) {
 </form>
 
 <!-- /TMPL_IF -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

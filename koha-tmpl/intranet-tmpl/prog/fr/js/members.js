@@ -1,3 +1,5 @@
+function _(s) { return s } // dummy function for gettext
+
 // this function checks id date is like DD/MM/YYYY
 function CheckDate(field) {
 var d = field.value;
@@ -84,9 +86,7 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 // function to test all fields in forms and nav in different forms(1 ,2 or 3)
  function check_form_borrowers(nav){
 var statut=0;
-if (nav < document.form.step.value) {
-	document.form.step.value=nav;
-	if ((document.form.step.value==0) && document.form.check_member.value == 1 )
+	if (document.form.check_member.value == 1 )
 	{
  	
 		if (document.form_double.answernodouble)	{
@@ -98,25 +98,18 @@ if (nav < document.form.step.value) {
 			}
  		}
  	} 
-	document.form.submit();
 	
-} else {
-	if (document.form.BorrowerMandatoryField.value==''||document.form.FormFieldList.value=='' )
+	if (document.form.BorrowerMandatoryField.value=='')
 	{}
 	else
 	{
 	    var champ_verif = document.form.BorrowerMandatoryField.value.split ('|');
- 	    var champ_form= document.form.FormFieldList.value.split('|');
 	    var message ="The following fields are mandatory :\n";
 	    var message_champ="";
-		for (var j=0; j<champ_form.length; j++){ 
-			if (document.getElementsByName(""+champ_form[j]+"")[0]){
 			for (var i=0; i<champ_verif.length; i++) {
 					if (document.getElementsByName(""+champ_verif[i]+"")[0]) {
-					var val_champ=eval("document.form."+champ_verif[i]+".value");
-					var ref_champ=eval("document.form."+champ_verif[i]);
-					var val_form=eval("document.form."+champ_form[j]+".value");
-					if (champ_verif[i] == champ_form[j]){
+					  var val_champ=eval("document.form."+champ_verif[i]+".value");
+					  var ref_champ=eval("document.form."+champ_verif[i]);
 						//check if it's a select
 						if (ref_champ.type=='select-one'){
 							if (ref_champ.options[0].selected ){
@@ -130,16 +123,13 @@ if (nav < document.form.step.value) {
 								// action if the field is not empty
 								message_champ+=champ_verif[i]+"\n";
 								statut=1;
-								}	
 							}	
-						}
-					}
-				}
-			}
-		}
+				    }
+			   }
+		  }
 	}
 //patrons form to test if you chcked no to the quetsion of double 
- 	if (document.form.step.value==2 && statut!=1 && document.form.check_member.value > 0 )
+ 	if (statut!=1 && document.form.check_member.value > 0 )
 	{
 		
   		
@@ -155,16 +145,15 @@ if (nav < document.form.step.value) {
 			}
  	}
 		
-			if (statut==1){
+	if (statut==1){
 			//alert if at least 1 error
 				alert(message+"\n"+message_champ);
-			}
-			else 
-			{
-			document.form.step=nav;
+				return false;
+	}
+	else 
+	{
 			document.form.submit();
-			}
-		}
+	}
 }
 
 function Dopop(link) {

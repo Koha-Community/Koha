@@ -1,5 +1,12 @@
 <div id="submenu">
-    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Choix du site</a> <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="holds to retrieve off the shelf">Réservations à traiter</a> <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Réservations en attente</a> <a href="/cgi-bin/koha/circ/transferstodo.pl" title="transfers to do from your library">Transferts à faire</a> <a href="/cgi-bin/koha/circ/transferstoreceive.pl" title="transfers to receive at your library">Transferts à recevoir</a> <a href="/cgi-bin/koha/circ/overdue.pl">Retards</a> <a href="/cgi-bin/koha/circ/branchoverdues.pl">Amendes</a7> <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Etat de caisse (aujourd'hui)</a> 
+<ul>
+	<li>    <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Définir un site</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="Réservations à mettre de coté">Réservations à traiter</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="Réservations mis de coté pour : %s">Réservations mises de coté</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/transferstodo.pl" title="Transferts à faire depuis votre site">Transferts à effectuer</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/transferstoreceive.pl" title="Transferts en cours vers votre site">Transfert à recevoir</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Retards</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Amendes</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Etat de caisse quotidien</a></li>
+</ul>
 </div>
-
-<div id="main">

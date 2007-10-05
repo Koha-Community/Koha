@@ -1,15 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration système &rsaquo; règles de prêt</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Règles de prêt</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 	<h1>Définition <!-- TMPL_IF NAME="branch" -->règles de prêt pour <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->règles de prêt par défaut<!-- /TMPL_IF --></h1>
 	<div class="help">
 		<h3>CONSEIL pour les prêts</h3>
 		<p>Remplir chaque case  avec la durée du prêt, le nombre maximum de prêts</p>
-		<p>p.ex. 21,5</span> autorise 5 prêts pour 21 jours</p>
+		<p>autorise 5 prêts pour 21 jours</p>
 	</div>
 
 	<div class="help">
@@ -63,4 +72,10 @@
 			<input type="submit" value="Valider les modifications">
 		</form>
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,11 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système</title>
+<title>Koha &rsaquo; Administrationsystème</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsquo; Administration système</div>
 
-<h1>Koha &rsaquo; Administration système</h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><h1>Administration du système</h1>
 
 <table>
 <caption>Préférences système</caption>
@@ -15,7 +22,7 @@
 </tr>
 </table>
 <table>
-<caption>Pour de meilleurs résultats, configurer ces paramètres dans leur ordre d'apparition</caption>
+<caption>Configurer ces paramètres dans leur ordre d'apparition</caption>
 <tr>
 <th colspan="2">Paramètres de base</th>
 </tr>
@@ -28,11 +35,11 @@
 	<td>Postes et budgets pour les acquisitions</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/currency.pl">Devises</a></td>
-	<td>Définit des taux de change.</td>
+	<td><a href="/cgi-bin/koha/admin/currency.pl">Devises et taux de change</a></td>
+	<td>Définit des monnaies et taux de change utilisés dans les acquisitions.</td>
 </tr>
 <tr>
-	<td><a href="/cgi-bin/koha/admin/itemtypes.pl">Types de document</a></td>
+	<td><a href="/cgi-bin/koha/admin/itemtypes.pl">Types de documents et règles de prêt.</a></td>
 	<td>Définir les types de documents utilisés pour les règles de prêt.</td>
 </tr>
 
@@ -69,7 +76,7 @@
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/biblio_framework.pl">Grille de catalogage MARC</a></td>
-	<td>Créer et gérer les grilles de catalogage (champ et sous champs)</td>
+	<td>Créer et gérer les grilles de catalogage (champ et sous champs) qui définissent les caractéristiques de vos notices MARC (champs et sous champs), ainsi que l'organisation de la grille.</td>
 </tr>
 <tr>
 	<td><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Liens Koha => MARC</a></td>
@@ -87,6 +94,10 @@
 <th colspan="2">Paramètres divers</th>
 </tr>
 <tr>
+	<td><a href="/cgi-bin/koha/admin/stopwords.pl">Mots vides</a></td>
+	<td>Mots ignorés dans la recherche</td>
+</tr>
+<tr>
 	<td><a href="/cgi-bin/koha/admin/printers.pl">Imprimantes</a></td>
 	<td>Imprimantes (chemin UNIX)</td>
 </tr>
@@ -96,4 +107,7 @@
 </tr>
 </table>
 
+</div>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

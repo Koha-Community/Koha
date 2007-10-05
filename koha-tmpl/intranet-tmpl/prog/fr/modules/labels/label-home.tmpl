@@ -1,9 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Etiquettes</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="main">
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; Etiquettes</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 
 <!-- TMPL_IF NAME="layout_loop" -->
@@ -35,23 +44,27 @@
         <td>
                 <a href="/cgi-bin/koha/label-home.pl?op=delete_layout&layout_id=<!-- TMPL_VAR NAME="id"-->">Supprimer</a>
         </td>
-<td>
-<input type="radio" name="layout_id" value="<!-- TMPL_VAR NAME="id" -->"  
-                ><!-- TMPL_IF NAME="active" -->
- checked
-                <!-- /TMPL_IF -->
- >
+<td> <!-- TMPL_IF NAME="active" -->
+<input type="radio" name="layout_id" value="<!-- TMPL_VAR NAME="id" -->" checked="checked" />
+<!-- TMPL_ELSE -->
+<input type="radio" name="layout_id" value="<!-- TMPL_VAR NAME="id" -->" />
+<!-- /TMPL_IF -->
         </td>
 </tr>
 
 <!-- /TMPL_LOOP -->
-<tr><td colspan="7" align="right">
+<tr><td colspan="7">
      <input type="submit" value="Définir le format actif">
-        <input type="hidden" name=op value="set_active_layout">
+        <input type="hidden" name=op value="set_active_layout" />
 </table>
 </form>
 <!-- /TMPL_IF -->
 <p><a href="/cgi-bin/koha/labels/label-create-layout.pl">Créer un nouveau modèle d'étiquette</a></p>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-

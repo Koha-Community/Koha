@@ -1,47 +1,56 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Maintenance du catalogue</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<!-- TMPL_IF NAME=allsub-p -->
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<!-- TMPL_IF NAME="allsub-p" -->
 <table>
 <caption>Réponses</caption>
 <!-- TMPL_LOOP NAME="loop" -->
-<tr><td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" escape=url -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME=sub2 escape=url -->');window1.focus()"><!-- TMPL_VAR NAME="subject" escape=html --></a></td></tr>
+<tr><td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=<!-- TMPL_VAR NAME="sub" ESCAPE="URL" -->" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=<!-- TMPL_VAR NAME="sub2" ESCAPE="URL" -->');window1.focus()"><!-- TMPL_VAR NAME="subject" ESCAPE="HTML" --></a></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=modsub-p -->
+<!-- TMPL_IF NAME="modsub-p" -->
 <form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
 Cela changera la vedette-sujet dans toutes les notices où ce sujet est utilisé. <strong>tout</strong> Les notices dans lesquelles ce sujet est utilisé.
 <table>
 <caption>Mise à Jour générale vedette sujet</caption>
-<tr><th scope="row"><label for="sub">Sujet : </label></th><td><input type="text" value="<!-- TMPL_VAR NAME="sub" escape=html -->" name="sub" id="sub" size="40" /><input type="hidden" name="type" value="upsub" />
-<input type="hidden" name="oldsub" value="<!-- TMPL_VAR NAME="sub" escape=html -->" /></td></tr>
+<tr><th scope="row"><label for="sub">Sujet : </label></th><td><input type="text" value="<!-- TMPL_VAR NAME="sub" ESCAPE="HTML" -->" name="sub" id="sub" size="40" /><input type="hidden" name="type" value="upsub" />
+<input type="hidden" name="oldsub" value="<!-- TMPL_VAR NAME="sub" ESCAPE="HTML" -->" /></td></tr>
 </table>
 <input type="submit" value="Modifier">
 </form>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=upsub-p -->
-Modification réussie <!-- TMPL_VAR NAME="oldsub" escape=html --> est maintenant <!-- TMPL_VAR NAME="sub" escape=html -->
+<!-- TMPL_IF NAME="upsub-p" -->
+Modification réussie <!-- TMPL_VAR NAME="oldsub" ESCAPE="HTML" --> est maintenant <!-- TMPL_VAR NAME="sub" ESCAPE="HTML" -->
 <!-- <![ IGNORE [
-<p><a href="/cgi-bin/koha/maint/catmaintain.pl" onclick="window0.focus()">Back to catalogue maintenance</a><br>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl" onclick="window0.focus()">Back to catalogue maintenance</a><br />
 <a href=nowhere onclick="self.close()">Close this window</a>
 ]]> -->
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=undel-p -->
+<!-- TMPL_IF NAME="undel-p" -->
 <table>
 <thead>
 <tr><th>Titre</th><th>Auteur</th><th>Récupérer</th></tr>
 <!-- TMPL_LOOP NAME="loop" -->
 <tr>
-<td><!-- TMPL_VAR NAME="title" escape=html --></td>
-<td><!-- TMPL_VAR NAME="author" escape=html --></td>
+<td><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></td>
+<td><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></td>
 <td><a href="/cgi-bin/koha/maint/catmaintain.pl?<!-- TMPL_VAR NAME="undelete" escape="url" -->">Récupérer</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
@@ -49,31 +58,31 @@ Modification réussie <!-- TMPL_VAR NAME="oldsub" escape=html --> est maintenant
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=finun-p -->
+<!-- TMPL_IF NAME="finun-p" -->
 <h3>Annulation de suppression réussie</h3>
 <p><a href="/cgi-bin/koha/maint/catmaintain.pl">Retour à la mise à jour du catalogue</a></p>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=fixitemtype-p -->
+<!-- TMPL_IF NAME="fixitemtype-p" -->
 <form method="post" action="/cgi-bin/koha/maint/catmaintain.pl">
 <table>
-<tr><th scope="row"><label for="itemtype">Type de document : </label></th><td><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="bi" escape=html>" />
+<tr><th scope="row"><label for="itemtype">Type de document : </label></th><td><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="bi" ESCAPE="HTML">" />
 <input type="hidden" name="type" value="updatetype" />
-<input type="text" name="itemtype" id="itemtype" value="<!-- TMPL_VAR NAME="item" escape=html>" /></td></tr>
+<input type="text" name="itemtype" id="itemtype" value="<!-- TMPL_VAR NAME="item" ESCAPE="HTML">" /></td></tr>
 </table>
 <input type="submit" value="Changer">
 </form>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=updatetype-p -->
+<!-- TMPL_IF NAME="updatetype-p" -->
 <h3>Mise à jour réussie</h3>
 <p><a href="/cgi-bin/koha/maint/catmaintain.pl">Retour à la mise à jour du catalogue</a></p>
 <!-- /TMPL_IF -->
 
 
-<!-- TMPL_IF NAME=mainmenu-p -->
+<!-- TMPL_IF NAME="mainmenu-p" -->
 
 <h1>Mise à jour du catalogue</h1>
 <form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
@@ -103,5 +112,9 @@ Modification réussie <!-- TMPL_VAR NAME="oldsub" escape=html --> est maintenant
 
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+</div>
 
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

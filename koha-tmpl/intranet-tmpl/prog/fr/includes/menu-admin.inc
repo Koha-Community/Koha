@@ -1,10 +1,18 @@
 <div id="submenu">
     <p>
-        <a href="/cgi-bin/koha/admin/branches.pl">Sites</a><a href="/cgi-bin/koha/admin/aqbookfund.pl">Budgets</a><a href="/cgi-bin/koha/admin/itemtypes.pl">Types documents</a> <a href="/cgi-bin/koha/admin/categorie.pl">Catégories d'adhérent</a><a href="/cgi-bin/koha/admin/issuingrules.pl">Règles de prêt</a>
+<ul>
+	<li>        <a href="/cgi-bin/koha/admin/branches.pl">Sites</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/aqbookfund.pl">Poste budgétaire</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/itemtypes.pl">Types de document</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/categorie.pl">Catégories adhérent</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/issuingrules.pl">Règles de prêt</a></li>
+</ul>
     </p>
     <p>
-        <a href="/cgi-bin/koha/admin/biblio_framework.pl">Grilles catalogage</a> <a href="/cgi-bin/koha/admin/authtypes.pl">Grilles Autorités</a> <a href="/cgi-bin/koha/admin/authorised_values.pl">Valeurs autorisées</a>
+<ul>
+	<li>        <a href="/cgi-bin/koha/admin/biblio_framework.pl">Grille de catalogage</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/authtypes.pl">Grilles d'autorité</a></li>
+	<li>        <a href="/cgi-bin/koha/admin/authorised_values.pl">Valeurs autorisées</a></li>
+</ul>
     </p>
 </div>
-
-<div id="main">

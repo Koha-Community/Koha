@@ -1,6 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Recherche dictionnaire</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 	<h1>Recherche dictionnaire</h1>
 <form name="f" method="post" action="/cgi-bin/koha/catalogue/dictionary.pl">
@@ -12,17 +21,17 @@
 				<input type="hidden" name="type" value="<!-- TMPL_VAR Name="type" -->" />
 				<input type="hidden" name="index" value="<!-- TMPL_VAR Name="anindex" ESCAPE="URL" -->" /></form>
 
-<!-- TMPL_IF Name=search -->
+<!-- TMPL_IF Name="search" -->
 	<!-- TMPL_IF NAME="authresult" -->
 		
 			<!-- TMPL_IF NAME="displayprev" --> 
-					<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Précédent</a>
+					<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL"-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL"-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Précédent</a>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP NAME="numbers" -->
 					<!-- TMPL_IF NAME="highlight" -->
 						<!-- TMPL_VAR NAME="number" -->
 					<!-- TMPL_ELSE --> 
-						<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
+						<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP --> 
 				<!-- TMPL_IF NAME="displaynext" -->
@@ -98,13 +107,13 @@
 			</table>
 		
 			<!-- TMPL_IF NAME="displayprev" --> 
-					<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Précédent</a>
+					<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL"-->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL"-->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->">&lt;&lt;Précédent</a>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_LOOP NAME="numbers" -->
 					<!-- TMPL_IF NAME="highlight" -->
 						<!-- TMPL_VAR NAME="number" -->
 					<!-- TMPL_ELSE --> 
-						<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE=URL -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
+						<a href="dictionary.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;marclist=<!-- TMPL_VAR NAME="marclist" ESCAPE="URL" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE="URL" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;index=<!-- TMPL_VAR Name="anindex" -->"><!-- TMPL_VAR NAME="number" --></a>
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_LOOP --> 
 				<!-- TMPL_IF NAME="displaynext" -->
@@ -134,5 +143,9 @@
 	
 <!-- /TMPL_IF -->
 
-</body>
-</html>
+</div>
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

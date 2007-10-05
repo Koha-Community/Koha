@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Aide en ligne &rsaquo; Préférences système &rsaquo; Gestion des préférences système</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
 
 <h1>Gestion des préférences système</h1>
 <p>Cette page vous permet de choisir les préférences système qui contrôlent la plupart des aspects de Koha.Ces paramètres devraient être fixés avant tous les autres.</p>
@@ -28,15 +30,15 @@
 	<p>Signifie que le "bloc"995 a <br>Items : AVANT, les champs 995b, 995j, 995k, répétés pour chaque exemplaire, puis rien après le bloc.</p>
 	<p> Le # signifie "début d'un bloc", le | est le séparateur de chaque partie, les {} utilisées pour chaque sous-champ.Un champ peut avoir jusqu'à 3 indicateurs AVANT et jusqu'à 3 indicateurs APRES chaque sous-champ</p>
 	<p>La définition UNIMARC (partielle) pour l'ISBD est </p><i>
-	<p>#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ; #200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br/>
-		#230||{ ; 230a}|<br/>
-		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br/>
-		#210|<br/><label>Editeur</label>|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br/>
-		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br/>
-		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d} { + 215e}|<br/>
-		#225|<br/><label>Description</label>|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br/>
-		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt; br/&gt;<br/>
-		#995|&lt;br&gt;Exemplaires :|{\\n995b}{ - 995j}{/995k}|<br/>
+	<p>#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ; #200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br />
+		#230||{ ; 230a}|<br />
+		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br />
+		#210|<br/><label>Editeur</label>|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br />
+		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br />
+		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d} { + 215e}|<br />
+		#225|<br/><label>Description</label>|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br />
+		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt; br/&gt;<br />
+		#995|&lt;br&gt;Exemplaires :|{\\n995b}{ - 995j}{/995k}|<br />
 	</i></p>
 </li>
 
@@ -44,7 +46,7 @@
 
 <li><b>ldapserver and ldapinfos --</b> Koha 2.0 sait utiliser Perl LDAP (Lightweight Directory Access Protocol,voir http://search.cpan.org/~gbarr/ perl-ldap- 0.3202/lib/Net/LDAP.pod)pour gérer les accès des utilisateurs et leurs habilitations.Pour obtenir un paquetage Perl utilisable en bibliothèque sans ldap, tout ce qui est relié au LDAP a été déplacé dans KohaInstall/modules/ C4/Auth_with_ldap.pm.Demandez à votre administrateur système de régler le LDAP avec Auth_with_ldap.pm (perldoc Auth_with_ldap. pm for help).Ces 2 paramétrages seront inutiles dans la 2.2 et ne devraient plus apparaître pour une nouvelle installation.</li>
 
-<li><b>Nom de la Bibliothèque --</b> Le nom de la bibliothèque ou le message qui s'affichera sur la page d'accueil de l'OPAC.Exemple : Bienvenue à <i>Koha<br/>SIGB sous licence libre</i></li>
+<li><b>Nom de la Bibliothèque --</b> Le nom de la bibliothèque ou le message qui s'affichera sur la page d'accueil de l'OPAC.Exemple : Bienvenue à <i>Koha<br />SIGB sous licence libre</i></li>
 
 <li><b>marc --</b> Active le format MARC.Choisissez le "no" si vous n'avez pas l'intention d'utiliser les notices MARC.</li>
 

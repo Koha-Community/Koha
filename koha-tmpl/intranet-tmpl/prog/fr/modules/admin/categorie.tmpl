@@ -1,17 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système <!-- TMPL_IF NAME=add_form --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Catégorie supprimée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Catégories adhérent<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<!-- TMPL_IF NAME=add_form -->
-	<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
 	//
 	function isNotNull(f,noalert) {
 		if (f.value.length ==0) {
@@ -72,7 +67,27 @@
         // if all is good
 		ff.submit();
 	}
-	</script>
+	//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Catégorie supprimée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Catégories adhérent<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+	
 
 
 	
@@ -106,13 +121,13 @@
 			<!-- /TMPL_IF -->
 					</select></td></tr>
 	<tr><th>Droits de réservation</th><td><input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /> €</td></tr>
-	<tr><th>Type de catégorie</th><td><SELECT name="category_type" >
-					<option value="" <!-- TMPL_VAR NAME="type_n" -->>Sélectionner un type de catégorie</option>
-     					<option value="A" <!-- TMPL_VAR NAME="type_A" -->>Adulte</option>
-					<option value="C" <!-- TMPL_VAR NAME="type_C" -->>Enfant</option>
-					<option value="I" <!-- TMPL_VAR NAME="type_I" -->>Collectivités</option>
-					<option value="P" <!-- TMPL_VAR NAME="type_P" -->>Professionnel</option>
-					</SELECT></td>
+	<tr><th>Type de catégorie</th><td><select name="category_type" >
+						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Sélectionnez un type de catégorie</option><!-- TMPL_ELSE --><option value="">Sélectionnez un type de catégorie</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adulte</option><!-- TMPL_ELSE --><option value="A">Adulte</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_C" --><option value="C" selected="selected">Enfant</option><!-- TMPL_ELSE --><option value="C">Enfant</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Collectivités</option><!-- TMPL_ELSE --><option value="I">Collectivités</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professionnel</option><!-- TMPL_ELSE --><option value="P">Professionnel</option><!-- /TMPL_IF -->
+					</select></td>
 	</tr>
 </table>
 
@@ -187,7 +202,7 @@
 		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="categorycode" --></td>
                         <td>
-                            <a href="<!-- TMPL_VAR NAME=script_name -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME=categorycode -->"><!-- TMPL_VAR NAME="description" --></a>
+                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></a>
                         </td>
                         <td>
                             <!-- TMPL_IF NAME="type_A" -->Adulte<!-- /TMPL_IF -->
@@ -202,7 +217,7 @@
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
                         <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" value="Modifier"></form></td>
-                        <td><form action="<!-- TMPL_VAR NAME=script_name -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" value="Supprimer"></form></td>
+                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" value="Supprimer"></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -211,4 +226,10 @@
 	</form>
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

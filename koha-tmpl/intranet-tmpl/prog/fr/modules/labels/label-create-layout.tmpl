@@ -1,36 +1,31 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Etiquettes</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Etiquettes Adhérent Créer un modèle&rsaquo; créer un crédit manuel</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-labels.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="main">
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Circulation</a> &rsaquo; Créer modèle</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
 
+<p><label for="layoutname">Nom du format</label>
+<input type="textbox" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></p>
 
+<p><label for="tx_title">Choisir l'order des champs à imprimer</label></p>
 
-<h3>
-        Nom du format
-
-</h3>
-<input type="textbox" name="layoutname"  SIZE="20"
-        value="<!-- TMPL_VAR NAME="layoutname" -->">
-
-
-<p>
-<p>
-<p>
-
-
-
-<h3>
-        Choisir l'order des champs à imprimer
-</h3>
 <table summary="fields to print">
 <tr>
         <td>
-        <select name="tx_title">
-        <option value="0" SELECTED></option>
+        <select name="tx_title" id="tx_title">
+        <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -46,7 +41,7 @@
         </td>
 <td>
         <select name="tx_subtitle">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -63,7 +58,7 @@
  
         <td>
         <select name="tx_author">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -81,7 +76,7 @@
 <tr>
         <td>
         <select name="tx_isbn">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -98,7 +93,7 @@
 
         <td>
         <select name="tx_issn">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -113,10 +108,9 @@
         <label>ISSN</label>
         </td>
 
-
         <td>
         <select name="tx_itemtype">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -136,7 +130,7 @@
 <tr>
         <td>
         <select name="tx_dewey">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -153,7 +147,7 @@
 
         <td>
         <select name="tx_barcode">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -168,10 +162,9 @@
         <label>Code à barres</label>
         </td>
 
-
         <td>
         <select name="tx_classif">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -189,7 +182,7 @@
 <tr>
         <td>
         <select name="tx_subclass">
-         <option value="0" SELECTED></option>
+         <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -203,11 +196,9 @@
        </select>
         <label>Sous-classification</label>
         </td>
-
-
         <td>
         <select name="tx_itemcallnumber">
-          <option value="0" SELECTED></option>
+          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -221,61 +212,42 @@
       </select>
         <label>Cote</label>
         </td>
-
-
   </tr>
-
-
-
-
-
-
-
-
 </table>
-<p>
 
-
-
-<h3>Choisissez le type de code à barres</h3>
-<select name="barcodetype">
+<p><label for="barcodetype">Choisissez le type de code à barres</label>
+<select name="barcodetype" id="barcodetype">
     <!-- TMPL_LOOP NAME="barcode_types" -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"
-            <!-- TMPL_IF NAME="active" --> selected  ><!-- /TMPL_IF -->
-        ><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_IF NAME="active" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
+		<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select>
+</select></p>
 
-
-
-<h3>Choisissez le type de présentation</h3>
-<select name="printingtype">
+<p><label for="printingtype">Choisissez le type de présentation</label>
+<select name="printingtype" id="printingtype">
     <!-- TMPL_LOOP NAME="printingtypes" -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"
-            <!-- TMPL_IF NAME="active" --> selected  ><!-- /TMPL_IF -->
-        ><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_IF NAME="active" -->
+        <option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
+	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select>
-
-
-
-
-<h3>
-        Commencer l'impression à l'étiquette numéro : <input type="textbox" name="startlabel"  SIZE="2" value="1">
-
-
-</h3>
-
+</select></p>
 <p>
-<p>
-<h3>Tracer des cases modèles<input type="checkbox" name="guidebox" value=1></h3>
-<p>
-<p>
-<p>
-        <input type="submit" value="Valider">
-		<input type="hidden" name=op value="add_layout"> 
-</p>
+<label for="startlabel">Commencer l'impression à l'étiquette numéro : <input type="textbox" name="startlabel" id="startlabel" size="2" value="1" /></label></p>
+
+
+<p><label for="guidebox">Tracer des cases modèles<input type="checkbox" id="guidebox" name="guidebox" value="1" /></label></p>
+<p>		<input type="hidden" name="op" value="add_layout" />
+        <input type="submit" value="Valider"></p>
 </form>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-

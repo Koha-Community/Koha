@@ -1,8 +1,16 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; <!-- TMPL_IF NAME="searchdesc" -->Résultat de la recherche <!-- TMPL_VAR NAME="searchdesc" --><!-- TMPL_ELSE -->Vous n'avez indiqué aucun critère de recherche<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
     <!-- TMPL_IF NAME="koha_spsuggest" -->
         <div style="font-size: 12px;">Voulez-vous dire :  
@@ -140,16 +148,16 @@
                     <form name="bulkedit" action="search.pl">
                         <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" -->" />
                         <input type="hidden" name="operation" value="bulkedit" />
-                        Terme de recherche : <input type="text" name="inputvalue" value=""/><br/>
+                        Terme de recherche : <input type="text" name="inputvalue" value="" /><br />
                         Sous-champ       <select name="tagsubfield">
                         <!--TMPL_LOOP Name="tagsubfields"-->
                             <option value="<!--TMPL_VAR Name="tagsubfield"-->"> <!--TMPL_VAR Name="tagsubfield"-->
                             <!-- --<TMPL_VAR Name="tagdesc">--<TMPL_VAR Name="subfielddesc">-->
                             </option>
                         <!--/TMPL_LOOP -->
-                        </select><br/>
-                        Changer pour : <input type="text" name="targetvalue" value=""/><br/>
-                        Test seulement <input type="checkbox" name="test" value="1"/><br/>
+                        </select><br />
+                        Changer pour : <input type="text" name="targetvalue" value="" /><br />
+                        Test seulement <input type="checkbox" name="test" value="1" /><br />
                         <input type="Submit" name="Edit" value="Modifier">
                     </form>
                     </dd>
@@ -175,45 +183,45 @@
                     <!-- RE-SORT START -->
                     <p>
                     Trier les réponses
-                    <select id="sort_by" name="sort_by" onChange="document.myform.submit();">
+                    <select id="sort_by" name="sort_by" onchange="document.myform.submit();">
                         <option value="">Par critère et ordre</option>
         <!--TMPL_IF Name="9523a"-->
-          <option value="1=9523 &gt;i" selected>Popularité (plus à moins)</option>
+          <option value="1=9523 &gt;i" selected="selected">Popularité (plus à moins)</option>
         <!--TMPL_ELSE -->
           <option value="1=9523 &gt;i">Popularité (plus à moins)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="9523d"-->
-          <option value="1=9523 &lt;i" selected>Popularité (moins à plus)</option>
+          <option value="1=9523 &lt;i" selected="selected">Popularité (moins à plus)</option>
         <!--TMPL_ELSE -->
           <option value="1=9523 &lt;i">Popularité (moins à plus)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="1003d"-->
-          <option value="1=1003 &lt;i" selected>Auteur (A-Z)</option>
+          <option value="1=1003 &lt;i" selected="selected">Auteur (A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=1003 &lt;i">Auteur (A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="1003a"-->
-         <option value="1=1003 &gt;i" selected>Auteur (Z-A)</option>
+         <option value="1=1003 &gt;i" selected="selected">Auteur (Z-A)</option>
         <!--TMPL_ELSE -->
          <option value="1=1003 &gt;i">Auteur (Z-A)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="20d"-->
-          <option value="1=20 &lt;i" selected>Cote (Non fiction 0-9 à Fiction A-Z)</option>
+          <option value="1=20 &lt;i" selected="selected">Cote (Non fiction 0-9 à Fiction A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=20 &lt;i">Cote (Non fiction 0-9 à Fiction A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="20a"-->
-          <option value="1=20 &gt;i" selected>Cote (Fiction Z-A à Non fiction 9-0)</option>
+          <option value="1=20 &gt;i" selected="selected">Cote (Fiction Z-A à Non fiction 9-0)</option>
         <!--TMPL_ELSE -->
           <option value="1=20 &gt;i">Cote (Fiction Z-A à Non fiction 9-0)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>Dates</option>
+          <option value="1=31 &gt;i" selected="selected">Dates</option>
         <!--TMPL_ELSE -->
           <option value="1=31 &gt;i">Dates</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+          <option value="1=31 &gt;i" selected="selected">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
         <!--TMPL_ELSE -->
           <option value="1=31 &gt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
         <!--/TMPL_IF-->
@@ -223,22 +231,22 @@
           <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="32a"-->
-          <option value="1=32 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
+          <option value="1=32 &gt;i" selected="selected">&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
         <!--TMPL_ELSE -->
           <option value="1=32 &gt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="32d"-->
-          <option value="1=32 &lt;i" selected>&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
+          <option value="1=32 &lt;i" selected="selected">&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
         <!--TMPL_ELSE -->
           <option value="1=32 &lt;i">&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="4d"-->
-          <option value="1=4 &lt;i" selected>Titre (A-Z)</option>
+          <option value="1=4 &lt;i" selected="selected">Titre (A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=4 &lt;i">Titre (A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="4a"-->
-          <option value="1=4 &gt;i" selected>Titre (Z-A)</option>
+          <option value="1=4 &gt;i" selected="selected">Titre (Z-A)</option>
         <!--TMPL_ELSE -->
           <option value="1=4 &gt;i">Titre (Z-A)</option>
         <!--/TMPL_IF-->
@@ -269,7 +277,7 @@
                                     </a>
                             <!-- TMPL_ELSE -->
                                 <!-- TMPL_IF name="imageurl" -->
-                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->"/>
+                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
                                 <!-- TMPL_ELSE -->
                                     <!-- TMPL_VAR name="description" -->
                                 <!-- /TMPL_IF -->
@@ -305,9 +313,9 @@
                                         <!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                                        Description : 
                                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="volume" --> vol <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="timestamp" --> <i>(modifié le <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                                     </p>
@@ -375,5 +383,8 @@
 
 </div>
 </div>
-
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

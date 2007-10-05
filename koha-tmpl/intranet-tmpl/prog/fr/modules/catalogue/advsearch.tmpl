@@ -1,11 +1,29 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; recherche avancée</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+	/**
+	 *  Function add_field();
+	 *  This function allows to display a new field to search.
+	 */
+	function add_field() {
+	    var ButtonPlus = document.getElementById('ButtonPlus');
+	    var line       = ButtonPlus.parentNode;
+	    var dad        = line.parentNode;
+	    dad.appendChild(line.cloneNode(true));
+	    line.removeChild(ButtonPlus);
+	}
+</script>
+</head>
+<body>
 
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	
 <form action="search.pl" method="get">
-<div id="main-sidebar"><div id="advanced-search">
+<div id="advanced-search">
 <!-- TMPL_IF NAME="expanded_options" -->
 <h1>Recherche avancée</h1>
 <!-- TMPL_ELSE -->
@@ -18,11 +36,9 @@
 
 <fieldset>
         <legend>Sélectionnez des bases de données locales</legend>
-            <p>
                 <!-- TMPL_LOOP NAME="local_servers_loop" -->
-                <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->"/><label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
+                <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->" /><label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
                 <!-- /TMPL_LOOP -->
-            </p>
 </fieldset>
 <!-- /DATABASES -->
 <!-- /TMPL_IF -->
@@ -31,11 +47,9 @@
 <!-- REMOTE DATABASES -->
 <fieldset>
     <legend>Retirer des bases de données : </legend>
-        <p>
                 <!-- TMPL_LOOP NAME="outer_servers_loop" -->
-                <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->"/><label for="<!-- TMPL_VAR NAME="id" -->"><img alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->"/><!-- TMPL_VAR NAME="label" --></label>
+                <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->" /><label for="<!-- TMPL_VAR NAME="id" -->"><img alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /><!-- TMPL_VAR NAME="label" --></label>
                 <!-- /TMPL_LOOP -->
-    </p>
     </fieldset>
 <!-- /REMOTE DATABASES -->
 <!-- /TMPL_IF -->
@@ -48,15 +62,14 @@
 
         <!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="scan_index" -->
-                <p><label for='scan'>Parcourir les index : </label><input type='checkbox' name='scan' id='scan' value='1'/></p>
+                <p><label for="scan">Parcourir les index : </label><input type="checkbox" name="scan" id="scan" value="1" /></p>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-            <p>
         <!-- TMPL_IF NAME="expanded_options" -->
-            <select name='op'>
-                <option value='and' selected='selected'>et</option>
-                <option value='or'>ou</option>
-                <option value='not'>sauf</option>
+            <select name="op">
+                <option value="and" selected="selected">et</option>
+                <option value="or">ou</option>
+                <option value="not">sauf</option>
             </select>
         <!-- /TMPL_IF --> 
         <select name="idx">
@@ -86,7 +99,7 @@
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Code à barres</option>
 
         </select>
-        <input id="search_box" type="text" size="30" name="q" title="Entrer les termes de recherche" value="">
+        <input id="search_box" type="text" size="30" name="q" title="Entrer les termes de recherche" value="" class="focus">
         <!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="add_field" -->
                 <a href="JavaScript:add_field();" id="ButtonPlus" title="Ajouter un autre champ">[+]</a>
@@ -102,7 +115,7 @@
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
         <td><p>
-        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/>&nbsp;
+        <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->" />&nbsp;
         <!--TMPL_VAR Name="description" --></p></td>
         <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
@@ -117,19 +130,19 @@
     <legend>Limite le type à </legend>
     <table class="itemtypes">
             <tr>
-                <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t"/><label for="mc-bks" title="Livres, Pamphlets, rapports techniques, Manuscrits, Publications légales, Mémoires et thèses"><img border="0" src="/intranet-tmpl/prog/img/AF.gif" alt="Livres">Livres</label></td>
-                <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Films, Videos, Diapos, Transparents,\nPhotos, cartes, Graphiques, Dessins"><img border="0" src="/intranet-tmpl/prog/img/AV Aids.gif" alt="Matériels visuels">Matériels visuels</label></td>
-                <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i"/><label for="mc-sr" title="discours, livres sur CD et cassette"><img border="0" src="/intranet-tmpl/prog/img/AF.gif" alt="Livres-cassettes">Livres-cassettes</label></td>
+                <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t" /><label for="mc-bks" title="Livres, Pamphlets, rapports techniques, Manuscrits, Publications légales, Mémoires et thèses"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Livres">Livres</label></td>
+                <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v" /><label for="mc-vis" title="Films, Videos, Diapos, Transparents,\nPhotos, cartes, Graphiques, Dessins"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Matériels visuels">Matériels visuels</label></td>
+                <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i" /><label for="mc-sr" title="discours, livres sur CD et cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Livres-cassettes">Livres-cassettes</label></td>
             </tr>
             <tr>
-                <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c"/><label for="mc-cf" title="Fichiers informatiques, Données, Logiciel"><img border="0" src="/intranet-tmpl/prog/img/CD-ROM software.gif" alt="Fichiers informatiques">Fichiers informatiques</label></td>
-                <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH"/><label for="mc-lh" title="Documents d'histoire locale"><img border="0" src="/intranet-tmpl/prog/img/Local history.gif" alt="Documents d'histoire locale">Documents d'histoire locale</label></td>
-                <td><input type="checkbox" id="mc-map" name="limit" value="mc:a"/><label for="mc-map" title="Cartes, Globes"><img border="0" src="/intranet-tmpl/prog/img/PF.gif " alt="Cartes">Cartes</label></td>
+                <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c" /><label for="mc-cf" title="Fichiers informatiques, Données, Logiciel"><img border="0" src="/intranet-tmpl/prog/en/images/CD-ROM software.gif" alt="Fichiers informatiques">Fichiers informatiques</label></td>
+                <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH" /><label for="mc-lh" title="Documents d'histoire locale"><img border="0" src="/intranet-tmpl/prog/en/images/Local history.gif" alt="Documents d'histoire locale">Documents d'histoire locale</label></td>
+                <td><input type="checkbox" id="mc-map" name="limit" value="mc:a" /><label for="mc-map" title="Cartes, Globes"><img border="0" src="/intranet-tmpl/prog/en/images/PF.gif " alt="Cartes">Cartes</label></td>
             </tr>
             <tr>
-                <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j"/><label for="mc-mus" title="Musique"><img border="0" src="/intranet-tmpl/prog/img/CDM.gif" alt="Musique">Musique</label></td>
-                <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o"/><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/img/KIT.gif" alt="Kits" />Kits</label></td>
-                <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF"/><label for="mc-ref" title="Ouvrages de référence"><img border="0" src="/intranet-tmpl/prog/img/REF.gif" alt="Ouvrages de référence">Ouvrages de référence</label></td>
+                <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j" /><label for="mc-mus" title="Musique"><img border="0" src="/intranet-tmpl/prog/en/images/CDM.gif" alt="Musique">Musique</label></td>
+                <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o" /><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/en/images/KIT.gif" alt="Kits" />Kits</label></td>
+                <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF" /><label for="mc-ref" title="Ouvrages de référence"><img border="0" src="/intranet-tmpl/prog/en/images/REF.gif" alt="Ouvrages de référence">Ouvrages de référence</label></td>
                 
             </tr>
             
@@ -207,7 +220,7 @@
 </fieldset>
 <!--/TMPL_IF -->
 <!--TMPL_IF Name="UNIMARC" -->
-</div></div>
+</div>
 <div id="sidebar">
 <!-- SUBTYPE LIMITS -->
 		<fieldset>
@@ -434,42 +447,42 @@
     <p><select id="sort_by" name="sort_by">
         <option value="">Par critère et ordre</option>
         <!--TMPL_IF Name="9523a"-->
-          <option value="1=9523 &gt;i" selected>Popularité (plus à moins)</option>
+          <option value="1=9523 &gt;i" selected="selected">Popularité (plus à moins)</option>
         <!--TMPL_ELSE -->
           <option value="1=9523 &gt;i">Popularité (plus à moins)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="9523d"-->
-          <option value="1=9523 &lt;i" selected>Popularité (moins à plus)</option>
+          <option value="1=9523 &lt;i" selected="selected">Popularité (moins à plus)</option>
         <!--TMPL_ELSE -->
           <option value="1=9523 &lt;i">Popularité (moins à plus)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="1003d"-->
-          <option value="1=1003 &lt;i" selected>Auteur (A-Z)</option>
+          <option value="1=1003 &lt;i" selected="selected">Auteur (A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=1003 &lt;i">Auteur (A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="1003a"-->
-         <option value="1=1003 &gt;i" selected>Auteur (Z-A)</option>
+         <option value="1=1003 &gt;i" selected="selected">Auteur (Z-A)</option>
         <!--TMPL_ELSE -->
          <option value="1=1003 &gt;i">Auteur (Z-A)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="20d"-->
-          <option value="1=20 &lt;i" selected>Cote (Non fiction 0-9 à Fiction A-Z)</option>
+          <option value="1=20 &lt;i" selected="selected">Cote (Non fiction 0-9 à Fiction A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=20 &lt;i">Cote (Non fiction 0-9 à Fiction A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="20a"-->
-          <option value="1=20 &gt;i" selected>Cote (Fiction Z-A à Non fiction 9-0)</option>
+          <option value="1=20 &gt;i" selected="selected">Cote (Fiction Z-A à Non fiction 9-0)</option>
         <!--TMPL_ELSE -->
           <option value="1=20 &gt;i">Cote (Fiction Z-A à Non fiction 9-0)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>Dates</option>
+          <option value="1=31 &gt;i" selected="selected">Dates</option>
         <!--TMPL_ELSE -->
           <option value="1=31 &gt;i">Dates</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+          <option value="1=31 &gt;i" selected="selected">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
         <!--TMPL_ELSE -->
           <option value="1=31 &gt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
         <!--/TMPL_IF-->
@@ -479,22 +492,22 @@
           <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="32a"-->
-          <option value="1=32 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
+          <option value="1=32 &gt;i" selected="selected">&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
         <!--TMPL_ELSE -->
           <option value="1=32 &gt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition: du plus récent au plus ancien</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="32d"-->
-          <option value="1=32 &lt;i" selected>&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
+          <option value="1=32 &lt;i" selected="selected">&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
         <!--TMPL_ELSE -->
           <option value="1=32 &lt;i">&nbsp;&nbsp;&nbsp;DAte d'acquisition : du plus ancien au plus récent</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="4d"-->
-          <option value="1=4 &lt;i" selected>Titre (A-Z)</option>
+          <option value="1=4 &lt;i" selected="selected">Titre (A-Z)</option>
         <!--TMPL_ELSE -->
           <option value="1=4 &lt;i">Titre (A-Z)</option>
         <!--/TMPL_IF-->
         <!--TMPL_IF Name="4a"-->
-          <option value="1=4 &gt;i" selected>Titre (Z-A)</option>
+          <option value="1=4 &gt;i" selected="selected">Titre (Z-A)</option>
         <!--TMPL_ELSE -->
           <option value="1=4 &gt;i">Titre (Z-A)</option>
         <!--/TMPL_IF-->
@@ -516,22 +529,9 @@
 </div>
 </form>
 
-<script type="text/JavaScript" language="JavaScript">
 
-document.getElementById('search_box').focus(); // auto focus on the search input.
 
-/**
- *  Function add_field();
- *  This function allows to display a new field to search.
- */
-function add_field() {
-    var ButtonPlus = document.getElementById('ButtonPlus');
-    var line       = ButtonPlus.parentNode;
-    var dad        = line.parentNode;
-    dad.appendChild(line.cloneNode(true));
-    line.removeChild(ButtonPlus);
-}
-
-</script>
+</div>
+</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

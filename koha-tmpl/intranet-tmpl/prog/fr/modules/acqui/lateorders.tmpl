@@ -1,9 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Commandes en retard</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Commandes en retard</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
 <h1 ><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> :  <!--/TMPL_IF -->Commandes en retard</h1>
 <div id="acqui_lateorders">
     <table>
@@ -16,28 +26,29 @@
             <th>&nbsp;</th>
         </tr>
         <tr>
-            <td align="center" class="doNotPrint">
+            <td>
                 <form action="lateorders.pl" method="post">
-                <input align="right" size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> jours
+                <input size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> jours
             </td>
-            <td class="doNotPrint">
+            <td>
                     <!-- TMPL_VAR name="CGIsupplier" -->
             </td>
             <td colspan="2">
                     &nbsp;
             </td>
-            <td class="doNotPrint">
+            <td>
                 <input type="submit" value="Sélectionner">
                 </form>
             </td>
-            <td class="doNotPrint">
-                <form name="claim" method="post">
+            <td>
+                <form action="lateorders.pl" name="claim" method="post">
                     <input type="hidden" name="op" value="send_alert" />
-                    <select name="letter_code" >
+                    <!-- TMPL_IF NAME="letters" --><select name="letter_code" id="letter_code">
                         <!--TMPL_LOOP Name="letters"-->
                             <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
                         <!--/TMPL_LOOP -->
                     </select>
+					<!-- /TMPL_IF -->
                     <input type="submit" value="Réclamation commande">
             </td>
         </tr>
@@ -50,10 +61,10 @@
                 <td>
                     <!-- TMPL_VAR name="orderdate" --> (<!-- TMPL_VAR name="latesince" --> jours)
                 </td>
-                <td class="doNotPrint">
+                <td>
                         <!-- TMPL_VAR name="supplier" -->
                 </td>
-                <td >
+                <td>
                     <b><!-- TMPL_VAR name="title" --></b>
                     <!-- TMPL_IF name="author" --><br/><i>Auteur : </i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
                     <!-- TMPL_IF name="publisher" -->
@@ -63,18 +74,18 @@
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 </td>
-                <td align="right">
+                <td>
                     <!-- TMPL_VAR name="unitpricesupplier" -->x<!-- TMPL_VAR name="quantity" --> = <!-- TMPL_VAR name="subtotal" -->
                     <p title="budget"><!-- TMPL_VAR name="budget" --></p>
                 </td>
-                <td class="doNotPrint">
+                <td>
                     <p><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->" title="panier">
                         <!-- TMPL_VAR name="basketno" -->
                     </a>
                     </p>
                     <p title="Site"><!-- TMPL_VAR name="branch" --></p>
                 </td>
-                <td class="doNotPrint">
+                <td>
                     <input type="checkbox" name="claim_for" value="<!--TMPL_VAR Name="ordernumber" -->" />
                 </td>
             </tr>
@@ -89,7 +100,7 @@
             <th>
                 <!-- TMPL_VAR name="total" -->
             </th>
-            <th class="doNotPrint"> &nbsp;</th>
+            <th> &nbsp;</th>
             <td>
                 <input type="submit" value="Réclamation commande">
                 </form>
@@ -97,5 +108,10 @@
         </tr>
     </table>
 </div>
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-

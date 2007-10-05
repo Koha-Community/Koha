@@ -1,20 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Recherche commande</title>
 <!-- TMPL_INCLUDE NAME="doc-head-calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Recherche commande</div>
 
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/lib/calendar/calendar-system.css">
-<!-- End of additions -->
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
 
-<!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
 
 	<h1>Recherche sur les commandes</h1>
 	<div id="acqui_histsearch">
@@ -36,7 +38,7 @@
 					<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
 					<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
 					<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
-					<th>De <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" alt="Calendrier">
+					<th><label for="from">De</label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Voir calendrier">
 						<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" />
 						<script language="JavaScript" type="text/javascript">
 							function validate1(date) {
@@ -57,14 +59,14 @@
 							Calendar.setup(
 								{
 									inputField : "from",
-									ifFormat : "%Y-%m-%d",
+									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 									button : "openCalendarFrom",
 									disableFunc : validate1,
 									dateStatusFunc : validate1
 								}
 							);
 						</script>
-						à <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Calendrier">
+						<label for="to">à</label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Voir calendrier">
 						<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
 						<script type="text/javascript">
 							function validate2(date) {
@@ -86,7 +88,7 @@
 							Calendar.setup(
 								{
 									inputField : "to",
-									ifFormat : "%Y-%m-%d",
+									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 									button : "openCalendarTo",
 									disableFunc : validate2,
 									dateStatusFunc : validate2
@@ -100,9 +102,8 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="suggestions_loop" -->
 				<tr>
-					<td>
-					    <!-- TMPL_IF NAME="invoicenumber" -->
-					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=<!-- TMPL_VAR NAME="invoicenumber"-->&supplierid=<!-- TMPL_VAR NAME="id"-->&datereceived=<!-- TMPL_VAR NAME="datereceived" -->">Colis</a>
+					<td>		    <!-- TMPL_IF NAME="invoicenumber" -->
+					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=<!-- TMPL_VAR NAME="invoicenumber"-->&amp;supplierid=<!-- TMPL_VAR NAME="id"-->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->">Colis</a>
 					    <!-- TMPL_ELSE -->
 					        &nbsp;
 					    <!-- /TMPL_IF -->
@@ -121,4 +122,10 @@
 		</form>
 	</div>
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

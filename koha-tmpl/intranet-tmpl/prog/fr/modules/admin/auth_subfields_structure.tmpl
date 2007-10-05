@@ -1,13 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système</title>
+<title>Koha &rsaquo; Administration système &Grilles d'autorités, sous-champsrsaquo; règles de prêt</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Structure MARC des autorités</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
 
-	<h><!-- TMPL_IF NAME="use-heading-flags-p" -->
+	<h1><!-- TMPL_IF NAME="use-heading-flags-p" -->
 	<!-- TMPL_IF NAME="heading-edit-subfields-p" -->Modifier les restrictions des sous-champs MARC<!-- /TMPL_IF -->
 	<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h1>
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
@@ -24,13 +33,12 @@
 	   <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Géré dans l'onglet</label><!-- TMPL_VAR NAME="tab" --> (ignore signifie que le sous-champ n'est PAS géré par Koha)</p>
 	   <p><label for="hidden<!-- TMPL_VAR NAME="row" -->">Caché</label> Opac : <!-- TMPL_VAR name="ohidden" --> Intranet : <!-- TMPL_VAR name="ihidden" --> Editeur : <!-- TMPL_VAR name="ehidden" --> (voir aide en ligne)</p>
 	   <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Est une URL </label> <!-- TMPL_VAR NAME="isurl" --> (coché, indique que le sous-champ est une URL valide et peut être cliqué)</p>
-        <p><label>Aide à la saisie : </label>
+        <p>Aide à la saisie :  </p>	
         <ul>
             <li>Valeur autorisée : <!-- TMPL_VAR NAME="authorised_value" --></li>
             <li>Thésaurus <!-- TMPL_VAR NAME="frameworkcode" --></li>
             <li>Plugin : <!-- TMPL_VAR NAME="value_builder" --></li>
-        </ul>
-        </p>	 
+        </ul> 
     </div>
 	<!-- /TMPL_LOOP -->
 	<input type="submit" class="submit" value="Valider les modifications">
@@ -45,26 +53,32 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
-<div class="data"><table>
-<caption>Confirmer la suppression du sous-champ <span class="ex"><!-- TMPL_VAR NAME="tagsubfield" --> ?</span></caption>
-	<tr>
-		<th>Sous-champ</th>
-		<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
-	</tr>
-	<p>Description <!-- TMPL_VAR NAME="liblibrarian" --></p>
-</table></div>
-			<form class="inline" action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+<h3>Confirmer la suppression du sous-champ <span class="ex"><!-- TMPL_VAR NAME="tagsubfield" --> ?</span></h3>
+	<p>Sous-champ : <!-- TMPL_VAR NAME="tagsubfield" --></p>
+	<p>Description : <!-- TMPL_VAR NAME="liblibrarian" --></p>
+
+		<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
 				<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" /><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" /><input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /><input type="submit" class="cancel" value="Oui, supprimer ce sous-champ">
-			</form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />	<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />	<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />	<input type="submit" class="submit" value="Non, ne pas supprimer">
-			</form>
+				<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+				<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+				<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+				<input type="submit" class="cancel" value="Oui, supprimer ce sous-champ">
+		</form>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+			<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+			<input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+			<input type="submit" class="submit" value="Non, ne pas supprimer">
+		</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-	Donnée supprimée
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->">
-	<input type="submit" class="submit" value="OK" />
+	<h3>Donnée supprimée</h3>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+		<input type="submit" class="submit" value="OK" />
 	</form>
 <!-- /TMPL_IF -->
 
@@ -80,6 +94,7 @@
 	<th>Texte</th>
 	<th>Restricteurs</th>
 	<th>Supprimer</th>
+</tr>
 <!-- TMPL_LOOP NAME="loop" -->
 <!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 	<td><!-- TMPL_VAR NAME="tagsubfield" --></td>
@@ -118,7 +133,7 @@
 <!-- /TMPL_LOOP -->
 </table>
 <div id="action">
-    <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&tagfield=<!-- TMPL_VAR name="edit_tagfield" -->&authtypecode=<!-- TMPL_VAR name="edit_authtypecode" -->">Modifier les sous-champs</a> <a href="auth_tag_structure.pl?searchfield=<!-- TMPl_VAR name="tagfield" -->&authtypecode=<!-- TMPL_VAR name="authtypecode"-->">Retourner à la structure de l'autorité</a>
+    <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;tagfield=<!-- TMPL_VAR name="edit_tagfield" -->&amp;authtypecode=<!-- TMPL_VAR name="edit_authtypecode" -->">Modifier les sous-champs</a> <a href="auth_tag_structure.pl?searchfield=<!-- TMPl_VAR name="tagfield" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode"-->">Retourner à la structure de l'autorité</a>
 </div>
     <!-- TMPL_IF NAME="previous" -->
       <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="précédent" alt="précédent" border="0">
@@ -134,4 +149,10 @@
 
 
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -7,6 +7,12 @@
     <!-- TMPL_IF NAME="loginprompt" -->Connectez-vous à Koha<!-- /TMPL_IF -->
 </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+
 <div id="login">
 <h1><a href="http://koha.org">Koha</a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
@@ -31,7 +37,7 @@
     <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->
 <p><label>Nom d'utilisateur : <br />
-<input type="text" name="userid" id="userid" class="input" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" /></label>
+<input type="text" name="userid" id="userid" class="input focus" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" /></label>
 </p>
 <p><label>Mot de passe : <br />
 <input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" /></label>
@@ -50,12 +56,8 @@
 <!--<ul> -->
 <!--	<li><a href="/cgi-bin/koha/lostpassword.pl" title="Password Lost and Found">Lost your password?</a></li> -->
 <!-- </ul> -->
-<!-- /TMPL_IF -->
 
-<script type="text/javascript">
-// <![CDATA[
-    document.getElementById('userid').focus(); // auto focus on login input when document is loaded.
-// ]]>
-</script>
+</div>
+</div>
 
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

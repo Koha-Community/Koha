@@ -1,11 +1,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Imprimer un reçu pour <!-- TMPL_VAR NAME="cardnumber" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+
+<div id="doc3">
+   
+   <div id="bd">
 
 <h3>Bibliothèque</h3>
-<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br><!-- /TMPL_IF -->
-Prêté à <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br>
-<!-- TMPL_VAR NAME="todaysdate" --><br>
+<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br /><!-- /TMPL_IF -->
+Prêté à <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br />
+<!-- TMPL_VAR NAME="todaysdate" --><br />
 <table>
 	<caption>Prêts</caption>
 	<tr>
@@ -41,4 +47,6 @@ Prêté à <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR
 
 <!-- endmenu -->
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

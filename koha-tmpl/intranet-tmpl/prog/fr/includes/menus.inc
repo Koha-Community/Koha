@@ -1,10 +1,4 @@
-<div id="kohalogo">
-    <img src="/intranet-tmpl/prog/img/koha-logo-white.png" height="60px"/>
-    <h3><a href="/cgi-bin/koha/mainpage.pl">Client Koha bibliothécaire</a></h3>
-</div>
-<div id="onlinehelp">
-    <a href="#" onclick="javascript:window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes');">[?]</a>
-</div>
+
 <div id="mainmenu">
 
     <!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -79,7 +73,7 @@
         <li>
             <b> Information de connexion</b>
         </li>
-        <li>Connecté en tant que : <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b> à <b><!-- TMPL_VAR NAME="LoginBranchname" --></b></li>
+        <li>Connecté en tant que : <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b> à <b><!-- TMPL_VAR NAME="LoginBranchcode" --></b></li>
             <!-- TMPL_IF NAME="AutoLocation" -->
                 <li>autolocalisation activée</li>
         <!-- TMPL_ELSE -->

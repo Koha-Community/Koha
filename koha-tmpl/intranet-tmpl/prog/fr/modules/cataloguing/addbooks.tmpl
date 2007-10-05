@@ -1,32 +1,34 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogage : </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+	$(document).ready(function() {
+	$('#header_search').tabs();
+ });
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cataloging-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; Catalogage</div>
 
-	<h1>Koha &rsaquo; Maintenance du catalogue</h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 	<!-- TMPL_IF name="noitemsfound" -->
 		Pas d'exemplaire(s) trouvé(s)
 	<!-- /TMPL_IF -->
 	
-<h3>Recherche des notices existantes</h3>
-<div id="addbooks_search">
-	<form name="search" action="addbooks.pl">
-		<p>
-        <label for="q">Recherche dans le catalogue :  </label>
-        <input id="q" type="text"  size="25"   name="q" />
-        <input type="submit" value="Rechercher">
-        </p>
-	</form>
-</div>
 <div id="addbooks_add_without_search">
 	<!-- TMPL_IF NAME="NOTMARC" -->
 		<form action="addbiblio.pl">
 			<input type="submit" value="Ajouter une notice sans recherche">
 		</form>
 	<!-- TMPL_ELSE -->
-		<br />
 		<form name="f" action="addbiblio.pl" method="post">
 		<h3>Créer une notice bibliographique à partir de zéro</h3>
 		<p>
@@ -49,7 +51,6 @@
 <!-- display the search results -->
 
 <!-- TMPL_IF NAME="total"-->
-<br />
 <!-- TMPL_VAR NAME="total"--> réponses trouvées dans le catalogue. <!-- TMPL_VAR name='pagination_bar'-->
 <div class="searchresults">
     <table>
@@ -159,8 +160,7 @@
 </div>
 <!-- /TMPL_IF -->
 
-<script type="text/JavaScript">
-    document.search.q.focus();
-</script>
-
+</div>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

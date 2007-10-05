@@ -1,13 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Constructeur du label</title>
 </head>
 <body>
-<form name="f_pop">
+<form name="f_pop" onSubmit="javascript:report()">
+<input type="hidden" name="plugin_name" value="marc21_leader.pl">
 <table>
 	<tr>
 		<td>1-4 Taille enregistrement</td>
@@ -307,16 +304,26 @@
 		<td>(auto-rempli)</td>
 	<tr>
 
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
+	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
 </table>
 </form>
 <script>
 function report() {
-		opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = 
-			'    '+document.f_pop.f5.value +
-			document.f_pop.f6.value+ document.f_pop.f7.value+
-			document.f_pop.f8.value+ document.f_pop.f9.value+ '       '+
-			document.f_pop.f17.value+ document.f_pop.f18.value+ document.f_pop.f19.value+'     ';
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value = 
+			'     '+
+			document.f_pop.f5.value+
+			document.f_pop.f6.value+
+			document.f_pop.f7.value+
+			document.f_pop.f8.value+
+			document.f_pop.f9.value+ 
+			'22     '+
+			document.f_pop.f17.value+
+			document.f_pop.f18.value+
+			document.f_pop.f19.value+
+			' 4500';
 		self.close();
 		return false;
 	}

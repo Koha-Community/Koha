@@ -1,14 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Périodiques</title>
+<title>Koha &rsaquo;  Périodiques &rsaquo; Abonnement pour <!-- TMPL_VAR name="bibliotitle" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!--TMPL_INCLUDE NAME="menu-serials.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/serials/serials-home.pl">Périodiques</a> &rsaquo; Informations d'abonnement pour <i><!-- TMPL_VAR name="bibliotitle" --></i></div>
 
-<h1>Etat de collection pour <!-- TMPL_VAR name="bibliotitle" --></h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Etat de collection pour <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
 <div id="action">
-    <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Abonnements</a> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Retour à la notice</a> <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=full">Vue complète</a>
-    </form>
+    <a href="/cgi-bin/koha/serials/serials-home.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Abonnements</a> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Retour à la notice</a> <a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=full">Vue complète</a>
 </div>
 <!-- TMPL_LOOP name="subscription_LOOP" -->
     <div id="serials_serial_issue_<!-- TMPL_VAR name="subscriptionid" -->">
@@ -49,25 +57,25 @@
         <!-- /TMPL_IF -->
         </b>
         <!--TMPL_IF name="arrival1" -->
-            le <b>lundi</b>
+            le <b>Lundi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival2" -->
-            le <b>mardi</b>
+            le <b>Mardi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival3" -->
-            le <b>mercredi</b>
+            le <b>Mercredi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival4" -->
-            le <b>jeudi</b>
+            le <b>Jeudi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival5" -->
-            le <b>vendredi</b>
+            le <b>Vendredi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival6" -->
-            le <b>samedi</b>
+            le <b>Samedi</b>
         <!-- /TMPL_IF -->
         <!--TMPL_IF name="arrival7" -->
-            le <b>dimanche</b>
+            le <b>Dimanche</b>
         <!-- /TMPL_IF -->
         pour <b>
             <!-- TMPL_IF name="numberlength" --><!-- TMPL_VAR name="numberlength" --> numéros<!-- /TMPL_IF -->
@@ -77,7 +85,7 @@
         </p>
         <p>Dernier renouvellement de l'abonnement le <b><!-- TMPl_VAR name="startdate" --></b></p>
         <!-- TMPL_IF name="enddate" --><p><b>L'abonnement est terminé. Le dernier numéro a été reçu le <!-- TMPL_VAR name="enddate" --></b></p><!-- /TMPL_IF -->
-    <!--TMPL_UNLESS Name=fullinfo -->
+    <!--TMPL_UNLESS Name="fullinfo" -->
         <p><!-- TMPL_VAR name="notes" --></p>
         <!-- TMPL_IF name="opacnote" -->
             <h2>Abrégé des n° parus</h2>
@@ -100,5 +108,12 @@
     </div>
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_LOOP -->
+
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

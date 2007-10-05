@@ -1,17 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système
+<title>Koha &rsaquo; Administration &rsaquo;système
 <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Devise supprimée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Devises<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<!-- TMPL_IF NAME=add_form -->
-        <script>
+<!-- TMPL_IF NAME="add_form" -->
+<script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -63,13 +60,34 @@
                         alert(alertString2);
                 }
         }
-        </SCRIPT>
+        //]]>
+</script>
+		<!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-        <form action="<!-- TMPL_VAR NAME=script_name -->" name="Aform" method="post">
-        <input type="hidden" name="op" value="add_validate" />
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Devise supprimée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Devises<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+        
+
+<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+<input type="hidden" name="op" value="add_validate" />
 
 	<table>
-	<caption><!-- TMPL_IF NAME=searchfield -->
+	<caption><!-- TMPL_IF NAME="searchfield" -->
 		Modifier la devise
 	<!-- TMPL_ELSE -->
 		Ajouter une devise
@@ -98,7 +116,7 @@
 		</tr>
         </table>
 		
-		<input type="button" value="OK" onClick="Check(this.form)" /> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;">
+		<input type="button" value="OK" onclick="Check(this.form)" /> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;">
         </form>
 
 <!-- /TMPL_IF -->
@@ -110,7 +128,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-<div class="table details">	<table><caption>Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" --> </caption>
+<table><caption>Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" --> </caption>
 
 		<tr>
 			<th>Devise</th>
@@ -131,7 +149,7 @@
 					<input type="submit" value="OK" />
 				</form>
 		<!-- TMPL_ELSE -->
-     	<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
+     	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 				<input type="submit" value="Supprimer cette devise">
@@ -151,15 +169,12 @@
 
 <!-- TMPL_IF NAME="else" -->
 
-<h2>Gestion des devises</h2>
+<h2>Devises</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		Vous recherchiez <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->	
-        <form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME=searchfield -->" />
-                <input type="submit" name="Search" value="Rechercher">
-        </form>	
-	<div class="table"><table>
+
+	<table>
 		<tr>
 			<th>Devise</th>
 			<th>Taux</th>
@@ -174,8 +189,9 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-<form action="<!-- TMPL_VAR NAME=script_name -->" method="post">
-        <input type="hidden" name="op" value="add_form" /><input type="submit" value="Ajouter une devise">
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+        <input type="hidden" name="op" value="add_form" />
+		<input type="submit" value="Ajouter une devise">
         </form>
 
 	
@@ -191,4 +207,10 @@
 <!-- /TMPL_IF -->
 
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

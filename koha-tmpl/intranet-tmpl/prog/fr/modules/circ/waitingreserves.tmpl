@@ -1,30 +1,40 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Réservations mises de coté</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 
 <h1>Circulation : Réservations du site</h1>
 
-<div id="mainbloc">
-        <h2 class="circulation">Transferts en cours <b>vers</b> votre site le : <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2>Transferts en cours <b>vers</b> votre site le : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
                 <div>
                                 <h2>Réservation trouvée pour le document <!-- TMPL_VAR NAME="nextreservtitle" -->, doit être transféré</h2>
                         <p>Ce document est réservé par <b> :  <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>au site de <b> <!-- TMPL_VAR NAME="branchname" --> </b>; Prière de mettre ce document en transfert.
                         </p>
                         <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
-                                <input type="submit" class="button circulation">
+                                <input type="submit" class="button" />
                         </form>
                 </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="waiting" -->
                 <div id="bloc25">
-                                <h2 class="circulation">Ce document est en attente</h2>
+                                <h2>Ce document est mis de coté</h2>
                         <p>Ce document (<!-- TMPL_VAR NAME="nextreservtitle" -->) est réservé par <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>; Prière de garder ce document pour la réservation suivante.
                         </p>
                         <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
-                                <input type="submit">
+                                <input type="submit" />
                         </form>
                 </div>
         <!-- /TMPL_IF -->
@@ -33,14 +43,14 @@
             <!-- TMPL_IF NAME="reserveloop" -->
                 <table>
                 <tr>
-                        <th class="circulation" colspan="5">Réservations sur votre site</th>
+                        <th colspan="5">Réservations sur votre site</th>
                 </tr>
                 <tr>
-                        <th class="circulation">Disponible depuis le</th>
-                        <th class="circulation">Titre</th>
-                        <th class="circulation">Adhérent</th>
-                        <th class="circulation">Localisation</th>
-                        <th class="circulation">Action</th>
+                        <th>Disponible depuis le</th>
+                        <th>Titre</th>
+                        <th>Adhérent</th>
+                        <th>Localisation</th>
+                        <th>Action</th>
                 </tr>
                         <!-- TMPL_LOOP NAME="reserveloop" -->
                                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
@@ -60,10 +70,10 @@
                                         <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
                                         <td>
                                                 <form name="cancelReserve -->" action="waitingreserves.pl" method="post">
-                                                        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->">
-                                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-                                                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->">
-                                                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->">
+                                                        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->" />
+                                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                                                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
+                                                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->" />
                                                         <!-- TMPL_IF NAME="dotransfer" -->
                                                         <input type="submit" value='Annuler une réservation et retourner à : <!-- TMPL_VAR NAME="homebranch" -->'> 
                                                         <!-- TMPL_ELSE -->
@@ -79,5 +89,11 @@
                 <!-- /TMPL_IF -->
         </div>
         <!-- /TMPL_UNLESS -->
+
 </div>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

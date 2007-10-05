@@ -1,16 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système &rsaquo; règles de prêt</title>
+<title>Koha &rsaquo; Administration système &Asaquo; amendes</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Amendes</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 	<h1>Définition <!-- TMPL_IF NAME="branch" -->règles de retard pour <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->règles de retard par défaut<!-- /TMPL_IF --></h1>
 		
 	<div class="help">
 		<h3>CONSEIL pour les amendes</h3>
 		<p>Chaque case doit être remplie avec l'amende, l'échéance et la durée des frais</p>
-		<p>p.ex. 1,7,7</span> = 1 [Eur, USD] d'amende, au bout de 7 jours, par tranche de 7 jours</p>
+		<p>= 1 [Eur, USD] d'amende, au bout de 7 jours, par tranche de 7 jours</p>
 		<p>Demandez à votre administrateur d'ajouter ce script dans le planificateur de tâches (crontab), après minuit, pour que les amendes soient calculées chaque nuit</p>
 	</div>
 	<div class="help">
@@ -24,7 +33,7 @@
 			<li>Même site et même catégorie d'adhérent et type de document* </li>
 			<li>Même site et même catégorie d'adhérent et type de document*</li>
 		</ul>
-	
+	</div>
 		<form method="post" action="/cgi-bin/koha/admin/finesrules.pl">
 		<label for="branch">Sélection d'un site : </label>
 			<select id="branch" name="branch">
@@ -49,7 +58,7 @@
 			</tr>
 			<!-- TMPL_LOOP NAME="row" -->
 				<tr>
-					<th><!-- TMPL_VAR NAME="categorycode" --></th>
+					<th scope="row"><!-- TMPL_VAR NAME="categorycode" --></th>
 					<!-- TMPL_LOOP NAME="cell" -->
 						<!-- TMPL_IF NAME="toggle" -->
    <td class="highlight">
@@ -66,4 +75,10 @@
 			<input type="submit" value="Valider les modifications">
 		</form>
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,11 +1,21 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Transferts vers votre site</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="mainbloc">
-	<h1 class="circulation">Transferts en cours VERS votre site le : <!-- TMPL_VAR NAME="show_date" --></h1>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Transferts vers votre site</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+
+	<h1>Transferts en cours VERS votre site le : <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF name="branchesloop" -->
             <p>Vous êtes destinataire des transferts suivants</p>
             <div id="resultlist">
@@ -13,14 +23,14 @@
                 <!-- TMPL_IF NAME="branchcode" -->
                 <table>
                 <tr>
-                        <th class="circulation" colspan="5">venant de <!-- TMPL_VAR NAME="branchname" --> </th>
+                        <th colspan="5">venant de <!-- TMPL_VAR NAME="branchname" --> </th>
                 </tr>
                 <tr>
-                    <th class="circulation">Date de transfert</th>
-                    <th class="circulation">Titre</th>
-                    <th class="circulation">Réservé par </th>
-                    <th class="circulation">Localisation</th>
-                    <th class="circulation">Action</th>
+                    <th>Date de transfert</th>
+                    <th>Titre</th>
+                    <th>Réservé par </th>
+                    <th>Localisation</th>
+                    <th>Action</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="reserv" -->
                     <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
@@ -60,12 +70,17 @@
                     </tr>
                 <!-- /TMPL_LOOP -->	
                 </table>
-                <br><br>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </div>
         <!-- TMPL_ELSE -->
             <p>Pas de transfert à recevoir</p>
         <!-- /TMPL_IF -->
+
 </div>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

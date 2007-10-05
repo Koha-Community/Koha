@@ -1,11 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Panier d'achat pour : <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Rechercher dans le catalogueListe des Réponses</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Recherche dans le catalogue</div>
 
-<h1>Panier d'achat pour :  <!-- TMPL_VAR name="bookselname" --></h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
+<h1>Recherche des notices existantes</h1>
 
 
 <!-- TMPL_IF NAME="total" -->
@@ -21,7 +30,7 @@
 <!-- TMPL_IF NAME="query_error" -->
 <br /><br />
 <b>Erreur : </b>
-<span  class="problem">
+<span class="problem">
     <!-- TMPL_VAR NAME="query_error" -->
 </span>
 <!-- /TMPL_IF -->
@@ -46,7 +55,7 @@
                 </p>
             </td>
             <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="commander celui-ci !">
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="commander celui-ci !">
                 Commande
             </a>
             </td>
@@ -56,4 +65,10 @@
 </div>
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

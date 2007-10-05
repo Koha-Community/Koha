@@ -1,11 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Transferts</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Transferts</div>
 
-<h1>Circulation &rsaquo; Transferts</h1>
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 
 <!-- TMPL_IF Name="found" -->
     <h3>Réservation trouvée</h3>
@@ -15,12 +23,12 @@
                 Réservation trouvée pour <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>).
             <!-- /TMPL_IF -->
             <!-- TMPL_IF Name="waiting" -->
-                L'exemplaire est marqué en attente à <!-- TMPL_VAR Name="branchname" --> pour <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>).
+                L'exemplaire est marqué mis de coté à <!-- TMPL_VAR Name="branchname" --> pour <!-- TMPL_VAR Name="name" --> (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>).
             <!-- /TMPL_IF -->
         </caption>
         <tr>
             <th>
-                <!-- TMPL_IF Name="reserved" -->Mettre la réservation en attente et transférer le livre à <b><!-- TMPL_VAR Name="branchname" --> </b> :  <!-- /TMPL_IF -->
+                <!-- TMPL_IF Name="reserved" -->Mettre la réservation à "mis de coté" et transférer le livre à <b><!-- TMPL_VAR Name="branchname" --> </b> :  <!-- /TMPL_IF -->
                 <!-- TMPL_IF Name="waiting" -->Annuler la réservation, puis tenter le transfert :  <!-- /TMPL_IF -->
             </th>
             <td>
@@ -39,7 +47,7 @@
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="reserved" -->
                         <input type="hidden" name="request" value="SetWaiting" />
-                        <input type="submit" value="En attente">
+                        <input type="submit" value="mis de coté">
                     <!-- /TMPL_IF -->
                 </form>
             </td>
@@ -57,7 +65,7 @@
                             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                             <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
                             <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
-                            <input type="hidden" name="barcode" value=<!-- TMPL_VAR Name="barcode" --> />
+                            <input type="hidden" name="barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
                             <input type="hidden" name="request" value="KillReserved" />
                             <input type="submit" value="Annuler">
                         </form>
@@ -68,7 +76,7 @@
                     <th>Ignorer et retourner à transferts :  </th>
                         <td>
                             <form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
-                                <input type="hidden" name="tobranchcd" value=<!-- TMPL_VAR Name="tobranchcd" --> />
+                                <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobranchcd" -->" />
                                 <input type="hidden" name="barcode" />
                                 <!-- TMPL_LOOP Name="trsfitemloop" -->
                                     <input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
@@ -82,35 +90,32 @@
     </table>
 
 <!-- TMPL_ELSE -->
-    <table>
-        <caption>Messages</caption>
-        <tr>
-            <td>
+
+        <h4>Messages</h4>
+		<ul>
                 <!-- TMPL_IF Name="reqmessage" -->
                     <!-- TMPL_IF Name="cancelled" -->
-                        Echec de la réservation<br>
+                        <li>Echec de la réservation</li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="setwaiting" -->
-                        Le document devrait maintenant être en attente au site : <!-- TMPL_VAR Name="reqbrchname" --><br>
+                        <li>Le document devrait maintenant être mis de coté à <!-- TMPL_VAR Name="reqbrchname" --></li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
                 <!-- TMPL_LOOP Name="errmsgloop" -->
                     <!-- TMPL_IF Name="errbadcode" -->
-                        Pas d'exemplaire avec code à barres : <!-- TMPL_VAR Name="msg" -->
+                        <li>Pas d'exemplaire avec code à barres : <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errispermanent" -->
-                            Merci de retourner l'exemplaire au site d'origine : <!-- TMPL_VAR Name="msg" -->
+                            <li>Merci de retourner l'exemplaire au site d'origine : <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errdesteqholding" -->
-                        Le document est déjà au site de destination.
+                        <li>Le document est déjà au site de destination.</li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errwasreturned" -->
-                        L'exemplaire était emprunté par <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a> <!-- TMPL_VAR Name="name" --> et a été retourné.
+                        <li>L'exemplaire était emprunté par <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a> <!-- TMPL_VAR Name="name" --> et a été retourné.</li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </td>
-        </tr>
-    </table>
+			</ul>
     <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
         <table>
             <caption>Transfert</caption>
@@ -128,7 +133,7 @@
             </tr>
             <tr>
                 <th scope="row">Entrez le code à barres</th>
-                <td><input name="barcode" size="15" /></td>
+                <td><input name="barcode" size="15" class="focus" /></td>
             </tr>
         </table>
         <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
@@ -164,4 +169,10 @@
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<!-- TMPL_INCLUDE Name="intranet-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,32 +1,45 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; <!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier d'achat (<!-- TMPL_VAR NAME="basketno" -->) pour <!-- TMPL_VAR NAME="name" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier d'achat <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> pour <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
-
-    <h1><!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier de commande <!-- TMPL_VAR NAME="basketno" --> pour <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
-    <div id="acqui_basket_summary">
-        <h2>Contenu du panier</h2>
-        <p><label>Numéro de panier </label> <!-- TMPL_VAR NAME="basketno" -->&nbsp;</p>
-        <p><label>Géré par </label> <!-- TMPL_VAR NAME="authorisedbyname" -->&nbsp;</p>
-        <p><label>Ouvert le </label> <!-- TMPL_VAR NAME="creationdate" -->&nbsp;</p>
-        <p><label>Pour :  </label> Identifiant fournisseur <!-- TMPL_VAR NAME="booksellerid" -->&nbsp;</p>
-        <p><label>Numéro facture </label><!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&nbsp;</p>
-        <!-- TMPL_IF name="closedate" --><p><label>Fermé le :  </label> <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
-        </table>
-        <!-- TMPL_UNLESS name="closedate" -->
-        <p><a href="javascript:confirm_close()" class="button">Fermer ce panier</a></p>
-        <script>
-            function confirm_close() {
-                var is_confirmed = confirm(_('Êtes vous sûr de vouloir fermer ce panier ?'));
+<!-- TMPL_UNLESS name="closedate" -->
+<script type="text/javascript">
+//<![CDATA[            function confirm_close() {
+                var is_confirmed = confirm('Are you sure you want to close this basket?');
                 if (is_confirmed) {
                     window.location = "/cgi-bin/koha/acqui/booksellers.pl?op=close&basketno=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->";
                 }
             }
+//]]>
         </script>
+		<!-- /TMPL_UNLESS -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo;<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier d'achat <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> pour <!-- TMPL_VAR NAME="name" --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+    <h1><!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier de commande <!-- TMPL_VAR NAME="basketno" --> pour <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+
+    <!-- TMPL_IF NAME="basketno" --><div id="acqui_basket_summary">
+        <h2>Contenu du panier</h2>
+        <p>Numéro de panier <!-- TMPL_VAR NAME="basketno" --></p>
+        <p>Géré par <!-- TMPL_VAR NAME="authorisedbyname" --></p>
+        <p>Ouvert le <!-- TMPL_VAR NAME="creationdate" --></p>
+        <p>Pour le fournisseur <!-- TMPL_VAR NAME="booksellerid" --></p>
+        <p>Facture numéro <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
+        <!-- TMPL_IF name="closedate" --><p>Fermé le : <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
+        <!-- TMPL_UNLESS name="closedate" -->
+        <p><a href="javascript:confirm_close()" class="button">Fermer ce panier</a></p>
         <!-- /TMPL_UNLESS -->
-    </div>
+    </div><!-- /TMPL_IF -->
     
     <div id="acqui_basket_content">
     <h2>Détails de la commande</h2>
@@ -40,10 +53,8 @@
                 <th>Est.</th>
                 <th>QTé</th>
                 <th>Total</th>
-                <th class="DoNotPrint">
-                    <a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">
-                        Poste budgétaire
-                    </a>
+                <th>
+                    <a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=aqorderbreakdown.bookfundid,biblioitems.publishercode">Poste budgétaire</a>
                 </th>
                 <!-- TMPL_IF name="active" -->
                     <!-- TMPL_UNLESS name="closedate" -->
@@ -58,7 +69,7 @@
                     <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <!-- TMPL_IF name="closedate" -->
                         <td><p>
-                            <!-- TMPL_VAR NAME="title" --><br/>
+                            <!-- TMPL_VAR NAME="title" --><br />
                                 <!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -78,14 +89,14 @@
                     <td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="line_total" --></td>
-                    <td class="DoNotPrint"><!-- TMPL_VAR NAME="bookfundname" --></td>
+                    <td><!-- TMPL_VAR NAME="bookfundname" --></td>
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_UNLESS name="closedate" -->
                         <td>
-                            <a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Modifier</a>
+                            <a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Modifier</a>
                         </td>
                         <td>
-                        <a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&quantity=0&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Supprimer</a>
+                        <a href="addorder.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;quantity=0&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Supprimer</a>
                         </td>
                         <!-- /TMPL_UNLESS -->
                     <!-- /TMPL_IF -->
@@ -98,7 +109,7 @@
                 </td>
                 <th>Sous-total</th>
                 <th><!-- TMPL_VAR NAME="sub_total_est" --></th>
-                <th><!-- TMPL_VAR NAME="sub_total" --></td>
+                <th><!-- TMPL_VAR NAME="sub_total" --></th>
                 <th><!-- TMPL_VAR name="qty_total" --></th>
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_IF name="closedate" -->
@@ -124,18 +135,18 @@
         </table>
     <!-- TMPL_ELSE -->
         <table>
-            <tr><td>Panier vide</p>
+            <tr><td>Panier vide</td></tr>
         </table>
     <!-- /TMPL_IF -->
+    </div>
     
     <!-- TMPL_UNLESS name="closedate" -->
-    </div>
     <div id="acqui_basket_add">
         <h2>Ajouter à une commande</h2>
         <form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
             <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
             <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
-            <ul><li><label for="q">A partir d'une notice existante :  </label><input id="q" type="text"  size="25"   name="q" />
+            <ul><li><label for="q">A partir d'une notice existante :  </label><input id="q" type="text"  size="25" name="q" />
             <input type="submit" value="Rechercher"></li>
             <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">A partir d'une suggestion</a></li>
             <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Nouvelle notice</a></li>
@@ -144,4 +155,10 @@
     </div>
     <!-- /TMPL_UNLESS -->
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

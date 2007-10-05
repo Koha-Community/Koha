@@ -1,10 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Réservations &rsaquo; Réserver <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
-
-<script language="JavaScript">
+<script type="text/javascript">
+// <![CDATA[ 
 function check() {
 	var msg = "";
 	var count_reserv = 0;
@@ -50,108 +48,149 @@ if (alreadyreserved > "0"){
 		return(false);
 	}
 }
+
+ $(document).ready(function() {
+ 	$("#requestany").click(function() {
+		if(this.checked){
+		$("input[@name=checkitem]").each(function() {
+			$(this).attr("checked","");
+		});
+		}
+	});
+ 	$("input[@name=checkitem]").click(function() {
+		onechecked = 0;
+		$("input[@name=checkitem]").each(function() {
+			if(this.checked){
+				onechecked = 1;
+			}
+		});
+		if(onechecked == 1){
+			$("#requestany").attr("checked","");
+		} else {
+			$("#requestany").attr("checked","checked");
+		}
+	});
+ });
+
+// ]]>
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> &rsaquo; Réserver <!-- TMPL_VAR NAME="title" --></div>
+
+<!-- TMPL_IF NAME="cardnumber" -->
+<div id="doc3" class="yui-t2">
+ <!-- TMPL_ELSE -->
+ <div id="doc" class="yui-t7">
+ <!-- /TMPL_IF -->  
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <!-- TMPL_IF NAME="messagetransfert" -->
 		<div>
 				<h2>Réservation trouvée pour (<!-- TMPL_VAR NAME="nextreservtitle" -->), merci de transférer</h2>
 			<p>Ce document est réservé par : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>au site de <b> <!-- TMPL_VAR NAME="branchname" --> </b>; Prière de mettre ce document en transfert.
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
-				<input type="submit" class="button circulation">
+				<input type="submit" class="button" />
 			</form>
 		</div>
 	<!-- /TMPL_IF -->
-<h1>Réservations</h1>
+<h1>Réserver <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></h1>
 
-  <h2>Informations notice</h2>
-    <p><label>Civilité :  </label><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
-    <p><label>Auteur :  </label><!-- TMPL_VAR NAME="author" --></p>
-
-<h2>Ajouter réservation</h2>
 <!-- TMPL_UNLESS NAME="cardnumber"-->
-    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onSubmit="request.pl" name="getborrower">
+    <!-- TMPL_IF NAME="messageborrower" -->                                    
+      <div class="problem">Attention, il n'y a aucun adhérent de ce nom, prière d'en essayer un autre </div>    
+    <!-- /TMPL_IF -->
+    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onsubmit="request.pl" name="getborrower">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
-                <p>
-                <label>Adhérent</label>
-                <input type="text" size="20" name="findborrower"> (Entrer le n° de carte d'adhérent ou une partie du nom)
-                </p>
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->">
+			<fieldset class="brief">
+		        <label for="patron">Adhérent :  </label>
+				<div class="hint">(Entrer le n° de carte d'adhérent ou une partie du nom)</div>
+                <input type="text" size="20" id="patron" name="findborrower" /> 
+                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
                 <input type="submit" value="Rechercher">
+			</fieldset>
         <!-- TMPL_ELSE -->
             <!-- TMPL_VAR NAME="CGIselectborrower" -->
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->">
+                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
                 <input type="submit" value="Sélectionner">
         <!-- /TMPL_UNLESS -->
     </form>
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF NAME="maxreserves" -->
     <p class="problem">
-      <label><u>Trop de réservations</u></label>
+      <strong>Trop de réservations</strong>
       Actuellement, cet adhérent a trop réservation(s).
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="expiry" -->
-    <br>
+    <br />
     <p class="problem">
-      <label>Carte expirée</label>
+      <strong>Carte expirée</strong>
       La carte d'adhérent a expiré
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="diffbranch" -->			
     <p class="problem">
-      <label>Localisation</label>
-      L'adhérent n'est pas dans son site d'inscription
+      <strong>Attention : </strong> Le site de récupération est différent du site de rattachement de l'adhérent
     </p>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="alreadyreserved" -->			
     <p class="problem">
-      <label>L'opération peut être effectuée</label>
+      <strong>Attention : </strong>
       Un adhérent a déjà une réservation sur ce document
     </p>
     <!-- /TMPL_IF -->
 
   <!-- TMPL_IF NAME="messageborrower" -->
-    <div class="problem">No patron with this name, Please, try an other </div>
+    <p class="problem"><strong>Adhérent pas trouvé :</strong> Attention, il n'y a aucun adhérent de ce nom, prière d'en essayer un autre </p>
   <!-- /TMPL_IF -->
-    <h3>Propriétés réservation</h3>
-        <form action="placerequest.pl" method="post" onSubmit="return check();" name="form">
+  <fieldset class="rows left">
+    <legend>Détail de la réservation</legend>
+        <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
     
-        <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->">
-        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-        <input type="hidden" name="type" value="str8">
-        <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->">
-        <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->">
-        <p><label>Adhérent</label>
+        <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->" />
+        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+        <input type="hidden" name="type" value="str8" />
+        <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
+        <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->" />
+       <ol> <li><span class="label">Adhérent : </span>
             <!-- TMPL_IF NAME="cardnumber"-->
-                <!-- TMPL_VAR NAME="borrowersurname" --> <!-- TMPL_VAR NAME="borrowerfirstname" --> (Numéro de carte : <!--  TMPL_VAR NAME="cardnumber" -->)
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> (<!--  TMPL_VAR NAME="cardnumber" -->)</a>
             <!-- TMPL_ELSE -->
                 Pas encore défini
             <!-- /TMPL_IF -->
-        </p>
-        <p>
-        <label for="priority">Priorité</label>
-            <b> <!-- TMPL_VAR Name="fixedRank" --> </b>
-        </p>
-        <p>
-            <label>Notes</label>
-            <textarea name="notes" cols="20" rows="2"></textarea>
-        </p>
-        <p>
-            <label>Récupérer à</label>
+        </li>
+        <li>
+        <span class="label">Priorité :</span>
+            <strong><!-- TMPL_VAR Name="fixedRank" --></strong>
+        </li>
+        <li>
+            <label for="holdnotes">Notes : </label>
+            <textarea id="holdnotes" name="notes" cols="30" rows="1"></textarea>
+        </li>
+        <li>
+            <label for="pickup">Récupérer à :</label>
             <!-- TMPL_VAR NAME="CGIbranch" -->
-        </p>
+        </li>
         <!-- TMPL_LOOP name="bibitemloop" -->    
-        <p><label>Type de document : </label> <!-- TMPL_VAR NAME="description" --></p>
-        <p><label>Année de publication :</label> <!-- TMPL_VAR NAME="publicationyear" --></p>
+        <li><span class="label">Type de document : </span> <!-- TMPL_VAR NAME="description" --></li>
+        <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Année de publication :</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
+</ol>
     
         <table>
         <tr>
             <th>Code à barres</th>
-            <th>Site d'origine</th>
-            <th>Site de localisation</th>
+            <th>Bibliothèque d'origine</th>
+            <th>ite de localisation</th>
             <th>Cote</th>
             <th>Information</th>
             <th>Annuler une réservation</th>
@@ -172,18 +211,18 @@ if (alreadyreserved > "0"){
             </td>
             <td>
         <!-- TMPL_IF Name="date_due" -->
-            En prêt, retour attendu le <!-- TMPL_VAR NAME="date_due" -->
+            <span class="checkedout">dû <!-- TMPL_VAR NAME="date_due" --></span>
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF NAME="available" -->
-            <label>
-                <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-                Réserver cet exemplaire
-            </label>
+            <label>éserver cet exemplaire 
+                <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+           </label>     
+           
         <!-- /TMPL_IF -->
             
         <!-- TMPL_IF name="reservedate" -->
-            Documents réservés au <!-- TMPL_VAR NAME="reservedate" -->
+            Exemplaire mis de côté pour <!-- TMPL_VAR NAME="reservedate" -->
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="message" -->
@@ -195,7 +234,7 @@ if (alreadyreserved > "0"){
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="transfertwhen" -->
-            Document en transfert de la bibliothèque de : <!-- TMPL_VAR NAME="transfertfrom" -->, à : <!-- TMPL_VAR NAME="transfertto" -->, le : <!-- TMPL_VAR NAME="transfertwhen" -->
+            Document en transfert de la bibliothèque de <!-- TMPL_VAR NAME="transfertfrom" -->, à : <!-- TMPL_VAR NAME="transfertto" -->, le : <!-- TMPL_VAR NAME="transfertwhen" -->
         <!-- /TMPL_IF -->
             </td>
             <td>
@@ -203,17 +242,11 @@ if (alreadyreserved > "0"){
                     <!-- TMPL_IF NAME="nocancel" -->
                             Ne peut  pas être annulé, lorsqu'il y a un exemplaire en transfert
                             <!-- TMPL_ELSE -->
-                            <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?'))    
-                                    {return true;}
-                    else {return false;}">Annuler une réservation
-                    <span> Documents réservés pour : <!-- TMPL_VAR NAME="ReservedForSurname" --> <!-- TMPL_VAR NAME="ReservedForFirstname" -->
-                    <br>
-                    Attendu à : <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
-                    </span>
-                    </a>
+                    document réservé pour <!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" -->, attendu à <!-- TMPL_VAR NAME="ExpectedAtLibrary" --> <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?')) {return true;} else {return false;}">Annuler la réservation</a>
+                  
                     <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
-                    Pas de réservation
+                    Pas de réservationtrouvée
             <!-- /TMPL_IF -->
             </td>
         </tr>
@@ -221,60 +254,73 @@ if (alreadyreserved > "0"){
         </table>
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
     
-        <p> <label>&nbsp;</label>
-            S'il n'y a pas d'exemplaire disponible, réserver l'exemplaire qui reviendra le premier
-            <input type="checkbox" name="request" value="Tous">
+        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;">Réserver le prochain disponible </label>
+               <input type="checkbox" id="requestany" name="request" checked="checked" value="Tous">
         </p>
         
-        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->">
-        <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->">
+        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+        <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
     
-    <div id="actions">
+    <fieldset class="action">
     <!-- TMPL_IF NAME="cardnumber"-->
-        <input type="submit" value="Réservation">
+        <input type="submit" value="Réserver">
     <!-- /TMPL_IF -->
-    </div>
+    </fieldset>
+	</fieldset>
     </form>
+
 <!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="cardnumber" -->
 <!-- TMPL_IF name="reserveloop" -->
-<h2>Réservations en attente</h2>
 <form name="T<!-- TMPL_VAR NAME="time" -->" action="modrequest.pl" method="post">
+<fieldset class="rows left">
+<legend>Réservation(s) existante(s)</legend>
     <table>
       <tr>
         <th>Priorité</th>
         <th>Adhérent</th>
         <th>Notes</th>
         <th>Date</th>
-        <th>Lieu de récupération</th>
-        <th>Informations</th>
+        <th>Récupérer à</th>
+        <th>Détails</th>
       </tr>
   <!-- TMPL_LOOP Name="reserveloop" -->
       <tr>
         <td>
-          <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
-          <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+          <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+          <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
-            <option value="W" selected>En attente</option>
+            <option value="W" selected="selected">mis de coté</option>
     	<!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="priority" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->>
+		<!-- TMPL_IF Name="selected" -->
+            <option value="<!-- TMPL_VAR NAME="priority" -->" selected="selected">
               <!-- TMPL_VAR NAME="priority" -->
             </option>
+    	<!-- TMPL_ELSE -->
+			<option value="<!-- TMPL_VAR NAME="priority" -->">
+              <!-- TMPL_VAR NAME="priority" -->
+            </option>
+        <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
             <option value="del">sup</option>
           </select>
         </td>
         <td>
-          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" ><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a>
+          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" ><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
         </td>
         <td><!-- TMPL_VAR NAME="notes" --></td>
         <td><!-- TMPL_VAR NAME="date" --></td>
         <td>
     <!-- TMPL_IF Name="wait" -->
     	<!-- TMPL_IF NAME="atdestination" -->
-          Document en attente à <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+                <!-- TMPL_IF name="found" -->
+                Document mis de coté à <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+            <!-- TMPL_ELSE -->
+                A mettre de coté
+            <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
-          Document qui sera transféré  à <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+            Document en transfert vers <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
          <!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
           <select name="pickup">
@@ -292,10 +338,10 @@ if (alreadyreserved > "0"){
         </td>
         <td>
     <!-- TMPL_IF Name="wait" -->
-          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
+          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&amp;type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
                 <!-- TMPL_IF NAME="barcodenumber" -->
                     <!-- TMPL_VAR NAME="barcodenumber" -->
-                    <input type="hidden" name="itemnumber" value=<!-- TMPL_VAR NAME="itemnumber" -->>
+                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <!-- TMPL_ELSE -->
                     Pas de code à barres
                 <!-- /TMPL_IF -->
@@ -312,13 +358,20 @@ if (alreadyreserved > "0"){
         </td>
       </tr>
   <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
-      <tr>
-        <td colspan="6">
-          <input type="submit" name="submit" value="Annuler réservation(s)" border="0">
-        </td>
-      </tr>
-    </table>
+     </table>
+<fieldset class="action"><input type="submit" name="submit" value="Annuler réservation(s)"></fieldset>
+</fieldset>
 </form>
 <!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+
+<!-- TMPL_IF NAME="cardnumber"-->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="hold-menu.inc" -->
+</div>
+<!-- /TMPL_IF -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

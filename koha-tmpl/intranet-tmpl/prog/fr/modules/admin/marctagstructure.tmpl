@@ -1,16 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système
-<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du champ '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->Donnée supprimée<!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;système
+<!-- TMPL_IF name="add_form" -->Structure des champs MARC &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Structure des champs MARC &rsaquo; Confirmer la suppression du champ '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->Structure des champs MARC &rsaquo; Donnée supprimée<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Structure des champs MARC<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<h1>Gestion de la structure des champs MARC pour <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->Grille MARC par défaut<!-- /TMPL_IF --></h1>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     function isNotNull(f,noalert) {
         if (f.value.length ==0) {
@@ -59,17 +55,36 @@
             alert(alertString2);
         }
     }
-    </script>
+    //]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">Structure MARC</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">Structure MARC</a> &rsaquo; Confirmez la suppression du champ '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">Structure MARC</a> &rsaquo; Information supprimée<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Structure des champs MARC<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Gestion de la structure des champs MARC pour <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->Grille MARC par défaut<!-- /TMPL_IF --></h1>
+
 
 <!-- TMPL_IF NAME="add_form" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-        <input type="hidden" name="op" value="add_validate">
-	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+        <input type="hidden" name="op" value="add_validate" />
+	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
         <h2><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modifier le champ<!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Ajouter un champ<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h2>
-	 <p><label>Champ</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3"/></p>    
-    <p><label for="liblibrarian">Texte pour bib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape=HTML -->" size="40" maxlength="100"></p>
-    <p><label for="libopac">Texte pour OPAC</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape=HTML -->" size="40" maxlength="100"></p>
+	 <p><label>Champ</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3" /></p>    
+    <p><label for="liblibrarian">Texte pour bib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" ESCAPE="HTML" -->" size="40" maxlength="100" /></p>
+    <p><label for="libopac">Texte pour OPAC</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" ESCAPE="HTML" -->" size="40" maxlength="100" /></p>
     <p><label for="repeatable">Répétable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
     <p><label for="mandatory">Obligatoire</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
     <p><label for="authorised_value">Valeur autorisée</label><!-- TMPL_VAR NAME="authorised_value" --> (si vous sélectionnez une valeur ici, les indicateurs seront limités à la liste des valeurs autorisées)</p>
@@ -82,27 +97,30 @@
 
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-<!-- ------------------------------------------------------------------------ -->
-<table>
-<caption>Confirmer la suppression du champ <em><!-- TMPL_VAR NAME="searchfield" --></em> ?</caption>
+
+<h3>Confirmer la suppression du champ <em><!-- TMPL_VAR NAME="searchfield" --></em> ?</h3>
     <p>Champ : <!-- TMPL_VAR NAME="searchfield" --></p>
     <p>Description : <!-- TMPL_VAR NAME="liblibrarian" --></p>
-    </table>
-    <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">	<input type="submit" value="Oui, supprimer ce champ"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Non, ne pas supprimer"></form>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<input type="hidden" name="op" value="delete_confirmed" />
+	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+	<input type="submit" value="Oui, supprimer ce champ"></form>
+	
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Non, ne pas supprimer"></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <div class="details"><h3>Champ supprimé</h3>
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Retour structure MARC">
     </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="framework_create" -->
-<!-- ------------------------------------------------------------------------ -->
+
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="framework_create_confirm">
-        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+        <input type="hidden" name="op" value="framework_create_confirm" />
+        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
         Créer une grille d'autorité pour <!-- TMPL_VAR NAME="frameworkcode" --> (<!-- TMPL_VAR NAME="frameworktext" -->) en utilisant
         <select name="existingframeworkcode">
             <option value="">Par défaut</option>
@@ -110,11 +128,11 @@
             <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
         <!-- /TMPL_LOOP -->
         </select>
-        <input type="submit" value="OK">
+        <input type="submit" value="OK" />
     </form>
 <!-- /TMPL_IF -->
 
-<!-- ------------------------------------------------------------------------ -->
+
 <!-- TMPL_IF NAME="else" -->
 
 <form name="f" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -132,7 +150,7 @@
     </p>
     <p>
         <label for="searchfield">Rechercher le champ</label>
-        <input type="text" name="searchfield" id="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->">
+        <input type="text" name="searchfield" id="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit" value="Rechercher">
     </p>
     <p>
@@ -155,7 +173,8 @@
         <th>Sous-champs</th>
         <th>Modifier</th>
         <th>Supprimer</th>
-                <tr>
+	</tr>
+
     <!-- TMPL_IF NAME="select_display" -->
         <!-- TMPL_LOOP NAME="loop" -->
             <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
@@ -168,7 +187,7 @@
             <td><a href="<!-- TMPL_VAR NAME="edit" -->">Modifier</a></td>
             <td><a href="<!-- TMPL_VAR NAME="delete" -->">Supprimer</a></td>
         </tr>
-            <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
             <td>
                 &nbsp;
             </td>
@@ -197,12 +216,11 @@
     </table>
     <!-- TMPL_IF NAME="isprevpage" -->
             <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Précédent</a>
-        <!-- /TMPL_IF --><form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <input type="hidden" name="op" value="add_form">
+        <!-- /TMPL_IF -->
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="add_form">
-	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->">
-    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->">
+        <input type="hidden" name="op" value="add_form" />
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield"-->" />
+    	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
         <input type="submit" value="Ajouter un champ">
     </form>
         <!-- TMPL_IF NAME="nextpage" -->
@@ -212,4 +230,10 @@
 <!-- /TMPL_IF -->
 
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

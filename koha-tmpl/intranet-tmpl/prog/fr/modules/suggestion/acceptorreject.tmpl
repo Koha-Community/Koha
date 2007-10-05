@@ -1,8 +1,56 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo;  Gestion des suggestion</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
+<script type="text/JavaScript">
+ // <![CDATA[
+    /**
+     *  check(form);
+     *  This function check the form before submit it.
+     */
+     /*
+     function check(form){
+        return true;
+     }
+     */
+	/**
+	 *  displayOther.
+	 *  This function display the select or an textaera to write a reason.
+	 */
+	function displayOther(id) {
+		var spanselect = document.getElementById("span-select-reason"+id);
+		var spanother = document.getElementById("span-other-reason"+id);
+        var select = spanselect.firstChild.nextSibling;	
+        
+		if(select.value != "other"){
+			return;
+		}
+		if(spanother.getAttribute('class')=='content_visible'){
+			spanother.removeAttribute('class');
+			spanselect.removeAttribute('class');
+			spanother.setAttribute('class','content_hidden');
+			spanselect.setAttribute('class','content_visible');
+		}
+		else{
+			spanother.removeAttribute('class');
+			spanselect.removeAttribute('class');
+			spanselect.setAttribute('class','content_hidden');
+			spanother.setAttribute('class','content_visible');			
+		}
+	}
+// ]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; Gestion des suggestions</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
     <h1>Gestion suggestions</h1>
     
@@ -11,11 +59,10 @@
     </div>
 
 <!-- TMPL_IF name="op_else" -->
-    <br />
     <!-- TMPL_IF NAME="suggestions_loop" -->
     <b>Suggestions en attente,</b> accepter ou rejeter ces suggestions en le justifiant.
     <form name="f" method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
-    <input type="hidden" name="op" value="aorr_confirm">
+    <input type="hidden" name="op" value="aorr_confirm" />
     <table>
         <tr>
             <th>Etat</th>
@@ -52,10 +99,10 @@
 		    </span>
                 </td>
                 <td>
-		<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, par <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br>
-                    <!-- TMPL_IF name="copyrightdate" -->© <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
+		<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, par <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
+                    <!-- TMPL_IF name="copyrightdate" -->&copy; <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="volumedesc" -->; Volume : <i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="isbn" -->; ISBN : <i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Edité par <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> en <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> en <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="isbn" -->; ISBN : <i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Edité par <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> en <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> en <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br /><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
                 </td>
                 <td>
                     <!-- TMPL_VAR name="surnamesuggestedby" -->
@@ -98,7 +145,7 @@
                     <!-- TMPL_IF NAME="author" -->
                         , par <!-- TMPL_VAR NAME="author" -->
                     <!-- /TMPL_IF -->
-                    <br>
+                    <br />
                     <!-- TMPL_IF name="copyrightdate" -->
                         © <!-- TMPL_VAR name="copyrightdate" -->
                     <!-- /TMPL_IF -->
@@ -117,7 +164,7 @@
                     <!-- TMPL_IF name="place" -->
                         en <i><!-- TMPL_VAR name="place" --></i>
                     <!-- /TMPL_IF -->
-                    <br>
+                    <br />
                     <!-- TMPL_IF name="note" -->
                         <!-- TMPL VAR NAME="note" -->
                     <!-- /TMPL_IF -->
@@ -144,43 +191,8 @@
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<script type="text/JavaScript" language="JavaScript">
- // <![CDATA[
-    /**
-     *  check(form);
-     *  This function check the form before submit it.
-     */
-     /*
-     function check(form){
-        return true;
-     }
-     */
-	/**
-	 *  displayOther.
-	 *  This function display the select or an textaera to write a reason.
-	 */
-	function displayOther(id) {
-		var spanselect = document.getElementById("span-select-reason"+id);
-		var spanother = document.getElementById("span-other-reason"+id);
-        var select = spanselect.firstChild.nextSibling;	
-        
-		if(select.value != "other"){
-			return;
-		}
-		if(spanother.getAttribute('class')=='content_visible'){
-			spanother.removeAttribute('class');
-			spanselect.removeAttribute('class');
-			spanother.setAttribute('class','content_hidden');
-			spanselect.setAttribute('class','content_visible');
-		}
-		else{
-			spanother.removeAttribute('class');
-			spanselect.removeAttribute('class');
-			spanselect.setAttribute('class','content_hidden');
-			spanother.setAttribute('class','content_visible');			
-		}
-	}
-// ]]>
-</script>
 
+</div>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

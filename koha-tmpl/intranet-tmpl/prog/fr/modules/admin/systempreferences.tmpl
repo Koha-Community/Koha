@@ -1,13 +1,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système
+<title>Koha &rsaquo; Administration &rsaquo;système
 <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modifier une préférence système <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter une préférence système<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Donnée ajoutée<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du paramètre '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Paramètres supprimés<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Préférences<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
             if (f.value.length ==0) {
@@ -59,7 +56,23 @@
                 alert(alertString2);
             }
         }
-        </script>
+        //]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modifier une préférence système <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Ajouter une préférence système<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Donnée ajoutée<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du paramètre '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Paramètres supprimés<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Préférences<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+
 
 <!-- TMPL_IF NAME="add_form" -->
     
@@ -94,9 +107,9 @@
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type-yesno" -->
                     <!-- TMPL_IF NAME="value-yes" -->
-                    <input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->Oui
+                    <input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->Actif
                 <!-- TMPL_IF NAME="value-no" -->	
-                    <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->Non<!-- /TMPL_IF -->
+                    <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->Inactif<!-- /TMPL_IF -->
                 </td></tr>
         </table>
         <p><input type="submit" value='<!-- TMPL_IF NAME="modify" -->Valider modifications<!-- TMPL_ELSE -->Ajouter préférence<!-- /TMPL_IF -->'> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;"></p>
@@ -128,7 +141,9 @@
             <th>Nom de la variable : </th>
             <td><!-- TMPL_VAR NAME="searchfield" --></td>
         </tr>
-        <tr><th>Valeur :  </th><td><!-- TMPL_VAR NAME="Tvalue" --></td></tr></table>
+        <tr><th>Valeur :  </th><td>
+		<!-- TMPL_VAR NAME="Tvalue" -->
+		</td></tr></table>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit" value="Oui, supprimer"></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Non, ne pas supprimer"></form>
     
@@ -158,15 +173,18 @@
     </tr>
     <!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
-        <td><!-- TMPL_VAR NAME="variable" --></td>
-        <td><!-- TMPL_VAR NAME="value" --></td>
+        <td><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></td>
+
+        <td><!-- TMPL_IF NAME="yesno" -->
+		<!-- TMPL_IF NAME="yes" -->Actif<!-- TMPL_ELSE -->Inactif<!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
+
         <td width="20%"><!-- TMPL_VAR NAME="explanation" --></td>
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Modifier</a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Supprimer</a></td>
     </tr>
     <!-- /TMPL_LOOP -->
     </table>
-    </form>
     
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="add_form" />
@@ -175,4 +193,10 @@
     
     <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

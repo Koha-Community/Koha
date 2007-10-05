@@ -1,11 +1,26 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Valeurs autoriséesbudgets <!-- TMPL_IF name="add_form" --> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modifier la valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Ajout valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Gestion des valeurs autorisées<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Valeur autorisées</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modifier la valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->Ajout valeur autorisée<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Valeur autorisées</a> &rsaquo; Confirmer la suppression<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Gestion des valeurs autorisées<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF name="add_form" -->
 	<h1>
@@ -13,7 +28,7 @@
 	   <!-- TMPL_IF name="action_add_value" -->Ajout valeur autorisée<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" -->Ajouter une catégorie<!-- /TMPL_IF -->
 	</h1>
-	<form class="inline" action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
         <table>
         <tr>
@@ -45,7 +60,7 @@
 		<td>Description</td>
 		<td><!-- TMPL_VAR name="searchfield" --></td>
 	</tr>
-	<tr><td>Valeur</td><td><!-- TMPL_VAR name="Tvalue" --></td></tr>
+	<tr><td>Valeur</td><td><!-- TMPL_VAR name="Tvalue" --></td><td>&nbsp;</td></tr>
 	</table>
 	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
@@ -53,12 +68,11 @@
 		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Confirmer la suppression"></form> <form class="inline" action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Ne pas supprimer"></form>
 <!-- /TMPL_IF -->
 
-<!-- -->
 <!-- TMPL_IF name="else" -->
 
 <h1>Gestion des valeurs autorisées</h1>
 <p>Cette table est utilisée dans la définition de MARC. Vous pouvez définir autant de catégories que vous le souhaitez, et autant de valeurs autorisées que vous souhaitez dans chaque catégorie.</p>
-<p>Lorsque vous déterminez la structure des sous-champs MARC, vous pouvez lier un sous-champ à une catégorie de valeurs autorisées.</p>
+<p>Lorsque vous déterminez la structure des sous-champs MARC, vous pouvez lier un sous-champ à une catégorie de valeurs autorisées. Lorsque le bibliothécaire créée une notice, le sous champ n'est plus une zone de saisie libre, mais une liste déroulante.</p>
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Voir catégorie :  </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Valider"></form>
 <table>
 <tr>
@@ -86,7 +100,7 @@
 <!-- /TMPL_IF --> 
 
 <div id="action">
-    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&category=<!-- TMPL_VAR NAME="category" -->">Ajouter une nouvelle valeur dans <!-- TMPL_VAR name="category" --></a> <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Ajouter une nouvelle catégorie</a>
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->">Ajouter une nouvelle valeur dans <!-- TMPL_VAR name="category" --></a> <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Ajouter une nouvelle catégorie</a>
 </div>
 
 <!-- TMPL_IF NAME="nextpage" -->
@@ -97,4 +111,10 @@
 
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

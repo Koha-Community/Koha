@@ -1,9 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Liste des lectures pour <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-members.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/members/members-home.pl">Adhérents</a> &rsaquo; Historique de lecture de <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="showfulllink" -->
 <ul>
@@ -73,4 +82,11 @@
 </table>
 <form action="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Retour à la fiche d'adhérent"></form>
 
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Etiquettes</title>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
 
 <div id="main-compact">
 
@@ -102,7 +104,7 @@
 <script type="text/javascript">
     Calendar.setup({
         inputField     :    "dateto",
-      ifFormat : "%Y-%m-%d",
+      ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
         button         :    "openCalendarTo",
         align          :    "Tl",
     });
@@ -113,9 +115,11 @@
                     <select name="Filter">
                         <option value="">Tous types de document</option>
                         <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <option value="<!-- TMPL_VAR name="value" -->" 
-                    ><!-- TMPL_IF name="selected" --> selected="selected"
-                    <!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+                            <!-- TMPL_IF name="selected" -->
+                                <option value="<!-- TMPL_VAR name="value" -->"  selected="selected" >
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR name="value" -->">
+                            <!-- /TMPL_IF --><!-- TMPL_VAR name="description" --></option>
                         <!-- /TMPL_LOOP -->
                     </select>
                 </td>

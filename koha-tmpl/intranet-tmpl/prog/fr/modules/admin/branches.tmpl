@@ -1,18 +1,37 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système <!-- TMPL_IF name="add" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du site '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" --><!-- TMPL_VAR name="head" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_category" -->Confirmer la suppression de la catégorie <!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Modifier catégorie de site <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirmer la suppression de la catégorie <!-- TMPL_VAR name="categorycode" --> ?<!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Ajouter un site<!-- TMPL_ELSE -->Modifier site <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirmer la suppression du site '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Sites de la bibliothèque<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  
+
+<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Sites</a> &rsaquo;  <!-- TMPL_IF NAME="categorycode" -->Modifier catégorie de site <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Sites</a> &rsaquo; Confirmer la suppression de la catégorie <!-- TMPL_VAR name="categorycode" --> ?<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Sites</a> &rsaquo;  
+<!-- TMPL_IF name="heading-branches-add-branch-p" -->Ajouter un site<!-- TMPL_ELSE -->Modifier site <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Sites</a> &rsaquo;  Confirmer la suppression du site '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="else" -->Sites de la bibliothèque<!-- /TMPL_IF -->
+
+</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF name="add" -->
     <!-- TMPL_IF name="heading-branches-add-branch-p" -->
-        <h1>Ajout site</h1>
+        <h1>Ajouter un site</h1>
     <!-- TMPL_ELSE -->
-        <h1>Modifier site</h1>
+        <h1>Modifier un site</h1>
     <!-- /TMPL_IF -->
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
@@ -22,7 +41,7 @@
             <input type="hidden" name="add" value="0" />
         <!-- /TMPL_IF -->
         <p>
-            <label><b>Code site</b></label>
+            <label><b>Code du site</b></label>
             <!-- TMPL_IF name="branchcode" -->
                 <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
                 <!-- TMPL_VAR name="branchcode" -->
@@ -34,10 +53,12 @@
             <label><b>Nom</b></label>
             <input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
         </p>
+		Catégories de site :
         <!-- TMPL_LOOP name="categoryloop" -->
             <p>
-                <label><!-- TMPL_VAR name="categoryname" --></label>
-                <input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /><!-- TMPL_VAR name="codedescription" -->
+                <input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> />
+				<label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
+				: <!-- TMPL_VAR name="codedescription" -->
             </p>
         <!-- /TMPL_LOOP -->
         <p><label>Adresse</label><input type="text" name="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></p>
@@ -46,8 +67,8 @@
         <p><label>Téléphone</label><input type="text" name="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></p>
         <p><label>Fax</label><input type="text" name="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></p>
         <p><label>Email</label><input type="text" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></p>
-        <p><label>Adresses IP du site </label><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /></p>
-        <p><label>Imprimante du site</label>
+        <p><label>Adresses IP du site</label><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /></p>
+        <p><label>Imprimante site</label>
             <select id="branchprinter" name="branchprinter">
                 <option value="">Aucun</option>
             <!-- TMPL_LOOP NAME="printerloop" -->
@@ -57,7 +78,7 @@
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchprinter" --></option>
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </select>
+            </select></p>
         <p><input type="submit" value="Valider"></p>
     </form>
 <!-- /TMPL_IF -->
@@ -76,16 +97,16 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-    <h1><!-- TMPL_VAR name="head" --></h1>
+    <h1>Sites</h1>
     <!-- TMPL_IF NAME="message" --><div class="problem">
         <!-- TMPL_VAR name="message" --><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE1" --><div class="problem">Site sauvegardé</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE2" --><div class="problem">Site sauvegardé</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE1" --><div class="problem">Site enregistré</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE2" --><div class="problem">Site enregistré</div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE3" --><div class="problem">Site supprimé</div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE4" --><div class="problem">Catégorie de site ajoutée</div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE5" --><div class="problem">Catégorie de site modifiée</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE6" --><div class="problem">Catégorie  de site supprimée</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="MESSAGE7" --><div class="problem">Suppression impossible : ce site est utilisé</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE6" --><div class="problem">Catégorie de site supprimée</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="MESSAGE7" --><div class="problem">Le site La catégorie ne peut tre supprimée parce qadhérents u'il y a des sites qui l'utilisent.</div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE8" --><div class="problem">La catégorie ne peut être supprimée parce qu'il y a des sites qui l'utilisent.</div><!-- /TMPL_IF -->
 
     <table>
@@ -94,10 +115,9 @@
             <th>Code</th>
             <th>Adresse</th>
             <th>Catégorie</th>
-            <th>Adresses IP du site </th>
-            <th>Imprimante du site</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th>Adresses IP du site</th>
+            <th>Imprimante site</th>
+            <th colspan="2">&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP name="branches" -->
             <tr>
@@ -113,7 +133,7 @@
                             <br /><!-- TMPL_VAR name="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchaddress3" -->
                             <br /><!-- TMPL_VAR name="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name=branchphone -->
+                        <!-- TMPL_IF name="branchphone" -->
                             <br />Tel.: <!-- TMPL_VAR name="branchphone" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchfax" -->
                             <br />Fax : <!-- TMPL_VAR name="branchfax" escape="HTML" --><!-- /TMPL_IF -->
@@ -137,16 +157,15 @@
                     <!-- TMPL_VAR NAME="branchprinter" -->
                 </td>
                 <td>
-                    <a href="<!-- TMPL_VAR name=action -->?op=edit&branchcode=<!-- TMPL_VAR name=value escape="HTML" -->">Modifier</a>
+                    <a href="<!-- TMPL_VAR name="action" -->?op=edit&amp;branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->">Modifier</a>
                 </td>
                 <td>
-                    <a href="<!-- TMPL_VAR name=action -->?branchcode=<!-- TMPL_VAR name=value escape="HTML" -->&branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&op=delete">Supprimer</a>
-                    </form>
+                    <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&amp;op=delete">Supprimer</a>
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<form action="<!-- TMPL_VAR name=action -->" method="post">
+<form action="<!-- TMPL_VAR name="action" -->" method="post">
         <p><input type="hidden" name="op" value="add" />
         <input type="submit" value="Ajouter un nouveau site"></p>
     </form>
@@ -167,15 +186,15 @@
         <td><!-- TMPL_VAR name="categorycode" --></td>
         <td><!-- TMPL_VAR name="codedescription" --></td>
         <td>
-            <form action="<!-- TMPL_VAR name=action -->" method="post">
+            <form action="<!-- TMPL_VAR name="action" -->" method="post">
             <input type="hidden" name="op" value="editcategory" />
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
             <input type="submit" value="Modifier">
             </form>
         </td>
         <td>
-            <form action="<!-- TMPL_VAR name=action -->" method="post">
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+            <form action="<!-- TMPL_VAR name="action" -->" method="post">
+            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
             <input type="hidden" name="op" value="delete_category" /><input type="submit" value="Supprimer">
             </form>
         </td>
@@ -195,15 +214,15 @@
 
 <!-- TMPL_IF name="editcategory" -->
     
-    <form action="<!-- TMPL_VAR name=action -->" name="Aform" method="post">
-    <input type="hidden" name=op value="addcategory_validate" />
+    <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
+    <input type="hidden" name="op" value="addcategory_validate" />
     <table>
-        <caption><!-- TMPL_VAR name="head" --></caption>
+        <caption><!-- TMPL_IF NAME="categorycode" -->Modifier catégorie de site <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --></caption>
         <tr>
             <td>Code catégorie</td>
             <td>
                 <!-- TMPL_IF name="categorycode" -->
-                    <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+                    <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                     <!-- TMPL_VAR name="categorycode" -->
                 <!-- TMPL_ELSE -->
                     <input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
@@ -212,26 +231,34 @@
         </tr>
         <tr>
             <td>Nom</td>
-            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name=categoryname escape="HTML" -->" />&nbsp;</td>
+            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" /></td>
         </tr>
         <tr>
             <td>Description</td>
-            <td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />&nbsp;</td>
+            <td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" /></td>
         </tr>
     </table><input type="submit" value="Valider">
     </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_category" -->
+ <!-- TMPL_UNLESS name="MESSAGE8" -->
     Confirmer la suppression : 
-    <form action="<!-- TMPL_VAR name=action -->" method="post">
+    <form action="<!-- TMPL_VAR name="action" -->" method="post">
         <input type="hidden" name="op" value="categorydelete_confirmed" />
-        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name=categorycode escape="HTML" -->" />
+        <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
         <input type="submit" value="OUI">
     </form>
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
         <input type="submit" value="NON">
     </form>
+<!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

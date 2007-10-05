@@ -1,180 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; catalogage &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Modifier la notice MARC numéro <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Ajout notice MARC<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!--TMPL_UNLESS Name="popup"-->
-    <!-- TMPL_INCLUDE NAME="menus.inc" -->
-    <!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
-<!--/TMPL_UNLESS-->
-
-<!--TMPL_IF Name="done"-->
-    <script language="javascript" type="text/javascript">
-        opener.document.forms['f'].biblionumber.value=<!--TMPL_VAR Name="biblionumber"-->;
-        opener.document.forms['f'].title.value='<!--TMPL_VAR Name="title" ESCAPE=HTML-->';
-        window.close();
-    </script>
-<!--TMPL_ELSE-->
-    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
-<!-- /TMPL_IF -->
-
-<h1><!-- TMPL_IF NAME="biblionumtagfield" -->Modifier la notice MARC numéro <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Ajout notice MARC<!-- /TMPL_IF --></h1>
-
-<div id="action">
-    <!-- TMPL_IF name="biblionumber" -->
-        <input type="submit" value="Ajouter notice bibliographique">
-    <!-- TMPL_ELSE -->
-        <input type="submit" value="Ajouter notice bibliographique">
-    <!-- /TMPL_IF -->
-    <input type="button" value="Recherche Z39.50" onclick="PopupZ3950(); return false;">
-</div>
-<br />
- Avec la grille : <!--TMPL_VAR Name="framework" -->
-
-        <input type="hidden" name="op" value="addbiblio" />
-
-<!--TMPL_IF Name="popup"-->
-        <input type="hidden" name="mode" value="popup" />
-<!--/TMPL_IF-->
-        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-        <input type="hidden" name="breedingid" value="<!-- TMPL_VAR NAME="breedingid" -->" />
-
-	<div id="tabs">
-        <!-- TMPL_LOOP name="BIG_LOOP" -->
-            <!-- TMPL_IF name="number" -->
-                <a href="JavaScript:active(<!-- TMPL_VAR name="number"-->)" class="tab_inactive" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
-            <!-- TMPL_ELSE -->
-                <a href="JavaScript:active(<!-- TMPL_VAR name="number"-->)" class="tab_active" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
-            <!-- /TMPL_IF -->
-        <!--  /TMPL_LOOP -->
-	</div>
-
-<!-- TMPL_LOOP name="BIG_LOOP" -->
-<!-- hide every tab except the 1st -->
-<!-- TMPL_IF name="number" -->
-    <div id="<!-- TMPL_VAR name="number" -->XX" class="content_hidden">
-<!-- TMPL_ELSE -->
-    <div id="0XX" class="content_visible">
-<!-- /TMPL_IF -->
-<!-- TMPL_UNLESS name="number" -->
-    <!-- show duplicate warning on tab 0 only -->
-        <!-- TMPL_IF name="duplicatebiblionumber" -->
-                    <div class="error">
-                        <p class="problem">Est-ce un doublon de <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
-                        <p>Vous devez soit : </p>
-                        <ul>
-                            <li>Si c'est un doublon, <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->">Modifier les exemplaires</a>de la notice existante.</li>
-                            <li>Sinon, cliquez sur <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Confirmer que ce n'est pas un doublon</a></li>
-                        </ul>
-                    </div>
-        <!-- /TMPL_IF -->
-    <!-- /TMPL_UNLESS -->
-    
-    <!-- TMPL_LOOP NAME="innerloop" -->
-        <!-- TMPL_IF NAME="tag" -->
-	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->">
-        <div class="tag_title" name="div_indicator">
-            <!-- TMPL_UNLESS name="hide_marc" -->
-                <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
-                <!-- TMPL_IF NAME="fixedfield" -->
-	                <input tabindex="1"
-                               class="indicator"
-                               type="text"
-                               style="display:none;"
-                               name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                               size="2"
-                               maxlength="2"
-                               value="<!-- TMPL_VAR NAME="indicator" -->"
-                               class="flat" />
-                <!-- TMPL_ELSE -->
-        	        <input tabindex="1"
-                               class="indicator"
-                               type="text"
-                               name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                               size="2"
-                               maxlength="2"
-                               value="<!-- TMPL_VAR NAME="indicator" -->"
-                               class="flat" />
-                <!-- /TMPL_IF --> -
-            <!-- TMPL_ELSE -->
-                <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1"
-                           type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                           value="<!-- TMPL_VAR NAME="indicator" -->" />
-                <!-- TMPL_ELSE -->
-                    <input tabindex="1"
-                           type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                           value="<!-- TMPL_VAR NAME="indicator" -->" />
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_UNLESS -->
-
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-	            <a onClick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" -->
-                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'-->')">+</span>
-            <!-- /TMPL_IF -->
-            
-        </div>
-	
-        <!-- TMPL_LOOP NAME="subfield_loop" -->
-            <!--  One line on the marc editor -->
-            <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->">
-            
-                <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
-                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                        <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
-                <!-- /TMPL_UNLESS --> 
-                
-                <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')"/>
-                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
-                            style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
-                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                            value="<!-- TMPL_VAR NAME="subfield" -->"
-                            size="1"
-                            maxlength="1"
-                            class="flat"
-                            tabindex=-1 />
-                <!-- TMPL_ELSE -->
-                    <input type="hidden"
-                           name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                           value="<!-- TMPL_VAR NAME="subfield" -->"/>
-                <!-- /TMPL_UNLESS -->
-            
-                <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
-                        <!-- TMPL_VAR NAME="marc_lib" -->
-                    <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
-                    </label>
-                <!-- /TMPL_UNLESS -->
-                
-                <!-- TMPL_VAR NAME="marc_value" -->
-                
-                <!-- TMPL_IF NAME="repeatable" -->
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
-                <!-- /TMPL_IF -->
-                
-            </div>
-            <!-- End of the line -->
-            
-        <!-- /TMPL_LOOP -->
-        </div>
-        <!-- /TMPL_IF --><!-- tag -->
-    <!-- /TMPL_LOOP -->
-    </div>
-<!-- /TMPL_LOOP -->
-
-</form>
-
-<script language="javascript" type="text/javascript">
-
+<script type="text/javascript">
+//<![CDATA[
 function _(s) { return s } // dummy function for gettext
 
 function confirmnotdup(){
 	document.getElementById("confirm_not_duplicate").value = 1;
+	alert(_("Vous avez confirmé que ce n'était pas un doublon. Cliquer sur "Ajouter notice" à nouveau pour enregistrer la saisie"));
 	var checkform =	document.getElementById("f");
 	Check(checkform);
 }
@@ -247,24 +80,17 @@ function AreMandatoriesNotOk(){
     var tab = new Array();
     var label = new Array();
     var flag=0;
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
-        <!-- TMPL_LOOP NAME='innerloop' -->
-            <!-- TMPL_LOOP NAME='subfield_loop'-->
-                <!-- TMPL_IF NAME='mandatory'-->
-                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
                    	tab.push("<!-- TMPL_VAR NAME='number' -->");
                    	label.push("<!-- TMPL_VAR NAME='marc_lib' -->");
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
-    var StrAlert = "Can't save this record because the following field aren't filled :\n\n";
+                <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+    var StrAlert = _("Impossible d'enregistrer la notice, les champs suivants sont vides : \\n\\n");
     for(var i=0,len=mandatories.length; i<len ; i++){
         if( ! document.getElementById(mandatories[i]).value){
             flag = 1;
             document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
             document.getElementById(mandatories[i]).focus();
-            StrAlert += "\t* "+label[i]+" in tab "+tab[i]+"\n";
+            StrAlert += "\t* "+label[i]+_(" dans l'onglet")+tab[i]+"\n";
         }
     }
     if(flag){
@@ -280,17 +106,8 @@ function AreMandatoriesNotOk(){
 function AreZ3950MandoriesOk(){
     var mandatories = new Array();
     var mandatories_label = new Array();
-    
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
-        <!-- TMPL_LOOP NAME='innerloop' -->
-            <!-- TMPL_LOOP NAME='subfield_loop'-->
-                <!-- TMPL_IF NAME='z3950_mandatory'-->
-                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
-                    mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='z3950_mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+        mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     
     var error = 0;
     var strQuery="";
@@ -311,7 +128,7 @@ function AreZ3950MandoriesOk(){
 
 function Changefwk(FwkList) {
 	var fwk = FwkList.options[FwkList.selectedIndex].value;
- 	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR Name="oldbiblionumber"-->&breedingid=<!-- TMPL_VAR name="breedingid" -->&frameworkcode="+fwk;
+ 	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&breedingid=<!-- TMPL_VAR name="breedingid" -->&frameworkcode="+fwk;
 
 }
 
@@ -478,6 +295,16 @@ function CloneField(index) {
                 catch(e){
                     // do nothig CloneButtonPlus doesn't exist.
                 }
+                // setting its 'Expand' property
+                var ExpandFieldA=0;
+                try {
+                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
+                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
+                }
+                catch(e){
+                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
+                }
+
             }
         }
     }
@@ -594,7 +421,147 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     label = document.getElementById(labelindex);
     label.style.display='none';	
 }
-
+//]]>
 </script>
+</head>
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<div id="doc3">
+   <div id="bd">
+
+<!--TMPL_IF Name="done"-->
+    <script type="text/javascript">
+        opener.document.forms['f'].biblionumber.value=<!--TMPL_VAR Name="biblionumber"-->;
+        opener.document.forms['f'].title.value='<!--TMPL_VAR Name="title" ESCAPE="HTML"-->';
+        window.close();
+    </script>
+<!--TMPL_ELSE-->
+    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
+<!-- /TMPL_IF -->
+
+<h1><!-- TMPL_IF NAME="biblionumtagfield" -->Modifier la notice MARC numéro <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Ajout notice MARC<!-- /TMPL_IF --></h1>
+
+<div id="action">
+    <!-- TMPL_IF name="biblionumber" -->
+        <input type="submit" value="Ajouter notice bibliographique">
+    <!-- TMPL_ELSE -->
+        <input type="submit" value="Ajouter notice bibliographique">
+    <!-- /TMPL_IF -->
+    <input type="button" value="Recherche Z39.50" onclick="PopupZ3950(); return false;">
+</div>
+<br />
+ Avec la grille : <!--TMPL_VAR Name="framework" -->
+
+        <input type="hidden" name="op" value="addbiblio" />
+
+<!--TMPL_IF Name="popup"-->
+        <input type="hidden" name="mode" value="popup" />
+<!--/TMPL_IF-->
+        <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+        <input type="hidden" name="breedingid" value="<!-- TMPL_VAR NAME="breedingid" -->" />
+
+	<div id="tabs">
+        <!-- TMPL_LOOP name="BIG_LOOP" -->
+            <!-- TMPL_IF name="number" -->
+                <a href="javascript:active(<!-- TMPL_VAR name="number"-->)" class="tab_inactive" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
+            <!-- TMPL_ELSE -->
+                <a href="javascript:active(<!-- TMPL_VAR name="number"-->)" class="tab_active" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
+            <!-- /TMPL_IF -->
+        <!--  /TMPL_LOOP -->
+	</div>
+
+<!-- TMPL_LOOP name="BIG_LOOP" -->
+<!-- hide every tab except the 1st -->
+<!-- TMPL_IF name="number" -->
+    <div id="<!-- TMPL_VAR name="number" -->XX" class="content_hidden">
+<!-- TMPL_ELSE -->
+    <div id="0XX" class="content_visible">
+<!-- /TMPL_IF -->
+<!-- TMPL_UNLESS name="number" -->
+    <!-- show duplicate warning on tab 0 only -->
+        <!-- TMPL_IF name="duplicatebiblionumber" -->
+                    <div class="error">
+                        <p class="problem">Est-ce un doublon de <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
+                        <p>Vous devez soit : </p>
+                        <ul>
+                            <li>Si c'est un doublon, <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->">Modifier les exemplaires</a>de la notice existante.</li>
+                            <li>Sinon, cliquez sur <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Confirmer que ce n'est pas un doublon</a></li>
+                        </ul>
+                    </div>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+    
+    <!-- TMPL_LOOP NAME="innerloop" -->
+        <!-- TMPL_IF NAME="tag" -->
+	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
+        <div class="tag_title" name="div_indicator">
+            <!-- TMPL_UNLESS name="hide_marc" -->
+                <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                <!-- TMPL_IF NAME="fixedfield" -->
+	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                <!-- TMPL_ELSE -->
+        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                <!-- /TMPL_IF --> -
+            <!-- TMPL_ELSE -->
+                <!-- TMPL_IF NAME="fixedfield" -->
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                <!-- TMPL_ELSE -->
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_UNLESS -->
+
+            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+	            <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_IF name="repeatable" -->
+                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
+            <!-- /TMPL_IF -->
+            
+        </div>
+	
+        <!-- TMPL_LOOP NAME="subfield_loop" -->
+            <!--  One line on the marc editor -->
+            <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+            
+                <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
+                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
+                <!-- /TMPL_UNLESS --> 
+                
+                <!-- TMPL_UNLESS name="hide_marc" -->
+                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/images/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')" alt="" />
+                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" tabindex="-1" />
+                <!-- TMPL_ELSE -->
+                    <input type="hidden" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <!-- /TMPL_UNLESS -->
+            
+                <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+                    <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR NAME="marc_lib" -->
+                    <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
+                    </label>
+                <!-- /TMPL_UNLESS -->
+                
+                <!-- TMPL_VAR NAME="marc_value" -->
+                
+                <!-- TMPL_IF NAME="repeatable" -->
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
+                <!-- /TMPL_IF -->
+                
+            </div>
+            <!-- End of the line -->
+            
+        <!-- /TMPL_LOOP -->
+        </div>
+        <!-- /TMPL_IF --><!-- tag -->
+    <!-- /TMPL_LOOP -->
+    </div>
+<!-- /TMPL_LOOP -->
+
+</form>
+
+</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,6 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>KOHA : INTRANET : Catalogue</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -20,7 +20,7 @@ function Help() {
 }
 </script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/staff.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/staff.css" />
 <style type="text/css">
 .catalogue {
 	background-color:#ad11ad;
@@ -41,7 +41,7 @@ a.catalogue:hover {
 <div id="menubar">
 	<span class="koha">KOHA</span>
 	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
-	<a class="acquisition" href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> <a class="catalogue" href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> <a class="circulation"  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Adhérents</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Bilans</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a> <a class="about" href="/cgi-bin/koha/about.pl">A propos</a> <a class="catalogue" href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Aide</a>
+	<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> <a  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> <a class="members" href="/cgi-bin/koha/members/members-home.pl">Adhérents</a> <a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Autorités</a> <a class="reports" href="/cgi-bin/koha/reports-home.pl">Bilans</a> <a class="parameters" href="/cgi-bin/koha/admin-home.pl">Paramètres</a> <a class="about" href="/cgi-bin/koha/about.pl">A propos</a> <a href="/cgi-bin/koha/help.pl" onclick="Help(); return false;">Aide</a>
 </div>
 <div id="submenu">
 	<span class="koha">options >></span>

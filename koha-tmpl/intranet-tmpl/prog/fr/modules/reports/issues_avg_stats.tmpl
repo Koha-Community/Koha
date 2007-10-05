@@ -1,19 +1,23 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Stats</title>
+<title>Koha &rsaquo; Statistiques PériodiquDurée moyenne des prêtses &rsaquo; Selection fournisseur</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!--TMPL_INCLUDE NAME="menus.inc" --><!-- TMPL_INCLUDE NAME="menu-reports.inc"-->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css">
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/reports/reports-home.pl">Statistiques</a> &rsaquo; Durée moyenne de prêt</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Statistiques sur la durée moyenne des prêts </h1>
+		<h1>Durée moyenne de prêt</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Sélectionné sur</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -22,7 +26,7 @@
 		<!-- /TMPL_IF-->
 		
 		<table>
-			<tr >
+			<tr>
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th><!-- TMPL_VAR NAME="coltitle" --></th>
@@ -42,8 +46,8 @@
 							<!-- TMPL_VAR NAME="totalrow" -->
 						</td>
 					</tr>
-				<!-- /TMPL_LOOP NAME="looprow" -->
-				<tr >
+				<!-- /TMPL_LOOP -->
+				<tr>
 					<th>TOTAL</th>
 					<!-- TMPL_LOOP NAME="loopfooter" -->
 						<th>
@@ -55,12 +59,12 @@
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Koha : Statistiques sur la durée moyenne des prêts </h1>
-	<form method="post">
+	<h1>Statistique de la durée moyenne de prêt </h1>
+	<form method="post" action="/cgi-bin/koha/reports/issues_avg_stats.pl">
 	<table>
 		<thead>
 			<tr>
-			<th><div>Titre</th>
+			<th>Titre</th>
 			<th>Ligne</th>
 			<th>Colonne</th>
 			<th>Sélectionner</th>
@@ -71,8 +75,8 @@
 				<td>Date du prêt</td>
 				<td><input type="radio" name="Line" value="timestamp" /></td>
 				<td><input type="radio" name="Column" value="timestamp" /></td>
-				<td > De <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFrom" style="cursor: pointer;" valign="top">
+				<td > <label for="from">De</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Voir calendrier" border="0" id="openCalendarFrom" style="cursor: pointer;">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
@@ -93,15 +97,15 @@
 									Calendar.setup(
 										{
 											inputField : "from",
-											ifFormat : "%Y-%m-%d",
+											ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 											button : "openCalendarFrom",
 											disableFunc : validate1,
 											dateStatusFunc : validate1
 										}
 									);
 								</script>
-					au <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+					<label for="to">à</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Voir calendrier" id="openCalendarTo" style="cursor: pointer;" border="0">
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -122,7 +126,7 @@
 								Calendar.setup(
 									{
 										inputField : "to",
-										ifFormat : "%Y-%m-%d",
+										ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 										button : "openCalendarTo",
 										disableFunc : validate2,
 										dateStatusFunc : validate2
@@ -147,8 +151,8 @@
 				<td>Retours</td>
 				<td><input type="radio" name="Line" value="returndate" /></td>
 				<td><input type="radio" name="Column" value="returndate" /></td>
-				<td > De <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" hspace="0" vspace="0" id="openCalendarFromRO" style="cursor: pointer;" valign="top">
+				<td > <label for="fromRO">De</label> <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
+							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Voir calendrier" border="0" id="openCalendarFromRO" style="cursor: pointer;">
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
 										var day = date.getDate();
@@ -169,15 +173,15 @@
 									Calendar.setup(
 										{
 											inputField : "fromRO",
-											ifFormat : "%Y-%m-%d",
+											ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 											button : "openCalendarFromRO",
 											disableFunc : validate1,
 											dateStatusFunc : validate1
 										}
 									);
 								</script>
-					au <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" valign="top" border="0" hspace="0" vspace="0">
+					<label for="toRO">à</label> <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
+						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Voir calendrier" id="openCalendarToRO" style="cursor: pointer;" border="0">
 							<script type="text/javascript">
 								function validate2(date) {
 									var day = date.getDate();
@@ -198,7 +202,7 @@
 								Calendar.setup(
 									{
 										inputField : "toRO",
-										ifFormat : "%Y-%m-%d",
+										ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 										button : "openCalendarToRO",
 										disableFunc : validate2,
 										dateStatusFunc : validate2
@@ -217,7 +221,7 @@
 					</select>
 					
 				</td>
-				<td><input type="hidden" name="Filter" value=""><input type="hidden" name="Filter" value="" /></td>
+				<td><input type="hidden" name="Filter" value="" /><input type="hidden" name="Filter" value="" /></td>
 			</tr>
 			<tr class="hilighted">
 				<td>Catégorie d'adhérent</td>
@@ -244,7 +248,7 @@
 				<td><input type="radio" name="Column" value="issuingbranch"></td>
 				<td ><! TMPL_VAR NAME="CGIBranch" ></td>
 			</tr> -->
-			<input type="hidden" name="Filter" value="" />
+			<tr><td colspan="4"><input type="hidden" name="Filter" value="" /></td></tr>
 <!--End Modified -->
 			<!-- TMPL_IF Name="hassort1" -->
 				<tr class="hilighted"> 
@@ -262,20 +266,27 @@
 					<td><!-- TMPL_VAR NAME="CGISort2" --> </td>
 				</tr>
 			<!-- /TMPL_IF -->
-			<tr></tr>
 		</tbody>
 	</table>
 	
 	
 		<h3> Affichage </h3>
-		<input type="radio" checked name="output" value="screen" /> Afficher dans le navigateur <input type="radio" name="output" value="file" /> <input type="text" name="basename" value="Export" /> Ouvrir dans un logiciel <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
-	</p>
+		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">A afficher dans le navigateur</label>
+		
+		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">Enregistrer</label> <input type="text" name="basename" value="Export" /> dans un logiciel  <!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
+	
 	
 	<p>
 	<input type="submit" value="OK" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" />
+	<input type="hidden" name="do_it" value="1" /></p>
 	</form>
 <!-- /TMPL_IF -->
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

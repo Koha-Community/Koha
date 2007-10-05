@@ -1,14 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation
-<!-- TMPL_IF Name="borrowernumber" -->
-: En prêt à, <!-- TMPL_VAR name="surname" -->, <!-- TMPL_VAR name="firstname" -->(<!-- TMPL_VAR NAME="cardnumber" -->)
-<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Circulation &rsaquo; Transferts à faire</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Transferts à faire</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
 
 
-<div id="mainbloc">
     <h1>Transferts à effectuer <!-- TMPL_VAR NAME="show_date" --></h1>
     <!-- TMPL_IF name="branchesloop" -->
     <div id="resultlist">
@@ -16,7 +22,7 @@
             <!-- TMPL_IF NAME="branchcode" -->
             <table>
             <tr>
-                <th colspan="5">Réservations en attente pour : <!-- TMPL_VAR NAME="branchname" --> </th>
+                <th colspan="5">Réservations mises de coté pour : <!-- TMPL_VAR NAME="branchname" --> </th>
             </tr>
             <tr>
                 <th>Date de réservation</th>
@@ -57,12 +63,17 @@
                 </tr>
             <!-- /TMPL_LOOP -->
             </table>
-            <br><br>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     </div>
     <!-- TMPL_ELSE -->
         <p>Pas de transfert à effectuer</p>
     <!-- /TMPL_IF -->
+
 </div>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,16 +1,26 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Détails du catalogue MARC</title>
+<title>Koha &rsaquo; Catalogue &rsaquo; Détails des exemplaires de  <!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
 
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-catalogue.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> &rsaquo; Exemplaires pour <i><!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --></i></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
 
 <div id="catalogue_detail_biblio">
-	<div id="bloc25">
 	<!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
-		<h2 class="catalogue">
+		<h2>
 			<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra">
-				<!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)
+				<!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF -->
 			</a>
 		</h2>
 		<p>
@@ -31,44 +41,46 @@
 		<p><b>Format : </b> <!-- TMPL_VAR NAME="size" --></p>
 		<p><b>Remarques : </b> <!-- TMPL_VAR NAME="bnotes" --></p>
 		<p><b>N° d'exemplaires : </b> <!-- TMPL_VAR NAME="count" --></p>
-		<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modifier</a> |
-               <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Supprimer</a> |
+		<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modifier</a> |
+               <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Supprimer</a> |
                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Réservations</a>
          <br />      
 	<!-- /TMPL_LOOP -->
-	</div>
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
-<div id="bloc25">
-	<h2 class="catalogue">CODE A BARRES <!-- TMPL_VAR NAME="barcode" --></h2>
- 	<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=<!-- TMPL_VAR
-NAME="biblionumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modifier</a> |
-        <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Supprimer</a>
+<h2>CODE A BARRES <!-- TMPL_VAR NAME="barcode" --></h2>
+ 	<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR
+NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modifier</a> |
+        <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Supprimer</a>
 	<br />
-	<b>Site d'origine : </b> <!-- TMPL_VAR NAME="homebranch" --><br>
-	<b>Site actuel : </b> <!-- TMPL_VAR NAME="holdingbranch" --><br>
-	<b>Vu pour la dernière fois le :  </b> <!-- TMPL_VAR NAME="datelastseen" --><br>
-	<b>Emprunté pour la dernière fois le : </b> <!-- TMPL_VAR NAME="datelastborrowed" --><br>
-	<b>Etat de l'exemplaire : </b> <!-- TMPL_IF NAME="issue" -->Prêté à : <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Disponible <!-- /TMPL_IF --><br>
-	<!-- TMPL_IF NAME="issue" --><b>Date de retour : </b> <!-- TMPL_VAR NAME="date_due" --><br><!-- /TMPL_IF -->
-	<b>Dernier emprunteur 1 : </b> <!-- TMPL_VAR NAME="card0" --><br>
-	<b>Dernier emprunteur 2 : </b> <!-- TMPL_VAR NAME="card1" --><br>
-	<b>Prix de remplacement : </b> <!-- TMPL_VAR NAME="replacementprice" --><br>
-	<b>Exemplaire perdu : </b> <!-- TMPL_IF NAME="itemlost" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br>
-	<b>Réglé : </b> <!-- TMPL_VAR NAME="paidfor" --><br>
-	<b>Remarques : </b> <!-- TMPL_VAR NAME="itemnotes" --><br>
-	<b>Renouvellements : </b> <!-- TMPL_VAR NAME="renewals" --><br>
-	<b><a href="/cgi-bin/koha/acqui/orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">Date d'acquisition : </a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br>
-	<b>Annulé : </b> <!-- TMPL_IF NAME="wthdrawn" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br>
+	<b>Site d'origine : </b> <!-- TMPL_VAR NAME="homebranch" --><br />
+	<b>Site actuel : </b> <!-- TMPL_VAR NAME="holdingbranch" --><br />
+	<b>Vu pour la dernière fois le :  </b> <!-- TMPL_VAR NAME="datelastseen" --><br />
+	<b>Emprunté pour la dernière fois le : </b> <!-- TMPL_VAR NAME="datelastborrowed" --><br />
+	<b>Etat de l'exemplaire : </b> <!-- TMPL_IF NAME="issue" -->Prêté à : <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Disponible <!-- /TMPL_IF --><br />
+	<!-- TMPL_IF NAME="issue" --><b>Date de retour : </b> <!-- TMPL_VAR NAME="date_due" --><br /><!-- /TMPL_IF -->
+	<b>Dernier emprunteur 1 : </b> <!-- TMPL_VAR NAME="card0" --><br />
+	<b>Dernier emprunteur 2 : </b> <!-- TMPL_VAR NAME="card1" --><br />
+	<b>Prix de remplacement : </b> <!-- TMPL_VAR NAME="replacementprice" --><br />
+	<b>Exemplaire perdu : </b> <!-- TMPL_IF NAME="itemlost" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br />
+	<b>Réglé : </b> <!-- TMPL_VAR NAME="paidfor" --><br />
+	<b>Remarques : </b> <!-- TMPL_VAR NAME="itemnotes" --><br />
+	<b>Renouvellements : </b> <!-- TMPL_VAR NAME="renewals" --><br />
+	<b><a href="/cgi-bin/koha/acqui/orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">Date d'acquisition : </a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br />
+	<b>Annulé : </b> <!-- TMPL_IF NAME="wthdrawn" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --><br />
 	<b><a
-	href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total des prêts : </a></b> <!-- TMPL_VAR NAME="issues" --><br>
-	<b>Numéro de groupe :</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br>
-	<b>Numéro de notice : </b> <!-- TMPL_VAR NAME="biblionumber" --> <br>
-	</h2>
-</div>
+	href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total des prêts : </a></b> <!-- TMPL_VAR NAME="issues" --><br />
+	<b>Numéro de groupe :</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br />
+	<b>Numéro de notice : </b> <!-- TMPL_VAR NAME="biblionumber" --> <br />
 <!-- /TMPL_LOOP -->
 
-<p>
-</form>
-</center>
 
+</div>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,12 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Panier d'achat pour : <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Panier de commande <!-- TMPL_VAR NAME="basketno" --> &rsaquo;vérification MARC :  <!-- TMPL_IF name="ordnum" -->Modifier les détails de la commande (ligne #<!-- TMPL_VAR NAME="ordnum" -->)<!-- TMPL_ELSE -->Nouvelle commande<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-acqui.inc" -->
-
-<script language="javascript" type="text/javascript">
-<!--
+<script type="text/javascript">
+//<![CDATA[
 function update(f){
 //collect values
 quantity=f.quantity.value
@@ -45,13 +41,11 @@ f.GST.value=GST;
 return true;
 }
 
-
-
 function messenger(X,Y,etc){
     win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
     win.focus();
     win.document.close();
-    win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br>");
+    win.document.write("<body link='#333333' bgcolor='#ffffff' text='#000000'><font size='2'><p><br />");
     win.document.write(etc);
     win.document.write("<center><form><input type=button onclick='self.close()' value='Close'></form></center>");
     win.document.write("</font></body></html>");
@@ -70,7 +64,22 @@ if (quantity ==0) {
 }
     document.frusin.submit();
 }
+//]]>
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Panier <!-- TMPL_VAR NAME="basketno" --></a> &rsaquo; <!-- TMPL_IF name="ordnum" -->Modifier les détails de la commande (ligne #<!-- TMPL_VAR NAME="ordnum" -->)<!-- TMPL_ELSE -->Nouvelle commande<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
+
 <h1>
     <!-- TMPL_IF name="ordnum" -->
         Modifier les détails de la commande (ligne #<!-- TMPL_VAR NAME="ordnum" -->)
@@ -80,28 +89,22 @@ if (quantity ==0) {
         <!-- TMPL_IF name="suggestionid" -->(créé à partir de la suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
 </h1>
 
-<fieldset>
-    <legend>Contenu du panier</legend>
-    <p>
-        <!-- TMPL_IF name="basketno" -->
-            <label>Numéro de panier</label><!-- TMPL_VAR NAME="basketno" -->
-        <!-- TMPL_ELSE -->
-            Nouveau panier
-        <!-- /TMPL_IF -->
-        &nbsp;
-    </p>
-    <p><label>Géré par</label><!-- TMPL_VAR NAME="authorisedbyname" -->&nbsp;</p>
-    <p><label>Ouvert le </label><!-- TMPL_VAR NAME="creationdate" -->&nbsp;</p>
-    <p><label>Pour : </label>Identifiant fournisseur <!-- TMPL_VAR NAME="booksellerid" -->&nbsp;</p>
-    <p><label>Numéro de facture</label><!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&nbsp;</p>
-    <!-- TMPL_IF name="closedate" --><p><label>Fermé le : </label> <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
-</fieldset>
+<!-- TMPL_IF name="basketno" -->
+<div id="basket-details">Contenu du panier
+    <p>Numéro de panier : <!-- TMPL_VAR NAME="basketno" --></p>
+    <p>Géré par <!-- TMPL_VAR NAME="authorisedbyname" --></p>
+    <p>Ouvert le <!-- TMPL_VAR NAME="creationdate" --></p>
+    <p>Pour le fournisseur <!-- TMPL_VAR NAME="booksellerid" --></p>
+    <p>Facture numéro : <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
+    <!-- TMPL_IF name="closedate" --><p>Fermé le : <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin">
     <fieldset>
         <legend>Détails du catalogue</legend>
         <!-- TMPL_UNLESS name="existing" -->
-            <input type="hidden" name="existing" value="no" />
+		<input type="hidden" name="existing" value="no" />
         <!-- /TMPL_UNLESS -->
         <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordnum" -->" />
         <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
@@ -118,60 +121,66 @@ if (quantity ==0) {
             <input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
         <!-- /TMPL_LOOP -->
         <p>
-            <label><b>Titre *</b></label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>Titre</strong>
                 <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
+            <label for="title" class="required">Titre</label>
+                <input type="text" id="title" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label>Auteur</label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>Auteur</strong>
                 <input type="hidden" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
+            <label for="author">Auteur</label>
+                <input type="text" id="author" size="20" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label> Editeur</label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>Editeur</strong>
                 <input type="hidden" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
+            <label for="publishercode"> Editeur</label>
+                <input type="text" id="publishercode" size="20" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label>Date de copyright</label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>Date de copyright</strong>
                 <input type="hidden" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /><!-- TMPL_VAR NAME="copyrightdate" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
+            <label for="copyrightdate">Date de copyright</label>
+                <input type="text" id="copyrightdate" size="20" name="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label>Format</label>
+            <label for="format">Format</label>
             <!-- TMPL_VAR NAME="CGIitemtype" -->
         </p>
         <p>
-            <label>ISBN</label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>ISBN</strong>
                 <input type="hidden" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
+            <label for="ISBN">ISBN</label>
+                <input type="text" id="ISBN" size="20" name="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label>Collections</label>
             <!-- TMPL_IF name="biblio" -->
+			<strong>Collections</strong>
                 <input type="hidden" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
             <!-- TMPL_ELSE -->
-                <input type="text" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
+            <label for="series">Collections</label>
+                <input type="text" id="series" size="20" name="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
             <!-- /TMPL_IF -->
         </p>
         <p>
-            <label>Site</label>
-            <select name="branch">
+            <label for="branch">Site</label>
+            <select name="branch" id="branch">
             <!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- TMPL_ELSE -->
@@ -184,94 +193,102 @@ if (quantity ==0) {
     <fieldset>
         <legend>Détails de comptabilité</legend>
             <p>
-                <label>Quantité</label>
                 <!-- TMPL_IF name="close" -->
+			<strong>Quantité</strong>
                     <input type="hidden" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
+                <label for="quantity">Quantité</label>
+                    <input type="text" id="quantity" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
                 <!--/TMPL_IF-->
             </p>
             <p>
-                <label>Ligne de crédit</label>
                 <!-- TMPL_IF name="close" -->
+			<strong>Ligne de crédit</strong>
                     <input type="hidden" size="20" name="bookfund" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundname" -->
                 <!-- TMPL_ELSE -->
+                <label for="bookfund">Ligne de crédit</label>
                     <!-- TMPL_VAR NAME="CGIbookfund" -->
                 <!--/TMPL_IF-->
             </p>
             <p>
-                <label>Prix fournisseur</label>
                 <!-- TMPL_IF name="close" -->
+			<strong>Prix fournisseur</strong>
                     <input type="hidden" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
+                <label for="list_price">Prix fournisseur</label>
+                    <input type="text" id="list_price" size="20" name="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
                 <!--/TMPL_IF-->
             </p>
             <p>
-                <label>Coût de remplacement </label>
                 <!-- TMPL_IF name="close" -->
+			<strong>Coût de remplacement</strong>
                     <input type="hidden" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /><!-- TMPL_VAR NAME="rrp" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
+                <label for="rrp">Coût de remplacement </label>
+                    <input type="text" id="rrp" size="20" name="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
                 <!--/TMPL_IF-->
             </p>
             <p>
-                <label>Coût budgété</label>
                 <!-- TMPL_IF name="close" -->
-                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly="readonly"  />
+			<strong>Coût budgété</strong>
+                    <input type="text" id="" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly="readonly"  />
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
+                <label for="ecost">Coût budgété</label>
+                    <input type="text" id="ecost" size="20" name="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
                 <!--/TMPL_IF-->
             </p>
             <!-- TMPL_IF NAME="GST"-->
             <p>
-                <label>TVA budgetée</label>
 				<!-- TMPL_IF name="close" -->
-                <input type="text" size="20" name="GST" value="" readonly="readonly" />
+			<strong>TVA budgetée</strong>
+                <input type="text" id="" size="20" name="GST" value="" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <input type="text" size="20" name="GST" value="" />
+                <label for="GST">TVA budgetée</label>
+                <input type="text" id="GST" size="20" name="GST" value="" />
 				<!--/TMPL_IF-->
             </p>
             <!-- /TMPL_IF -->
             <p>
-                <label><b>Total</b></label>
                 <!-- TMPL_IF name="close" -->
-				<input type="text" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" readonly="readonly" />
+			<strong>Total</strong>
+				<input type="text" id="" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <input type="text" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" />
+                <label for="total"><strong>Total</strong></label>
+                <input type="text" id="total" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" />
 				<!--/TMPL_IF-->
             </p>
             <p>
-                <label>Coût réel</label>
 				<!-- TMPL_IF name="close" -->
-                <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" readonly="readonly" />
+			<strong>Coût réel</strong>
+                <input type="text" id="" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" />
+                <label for="cost">Coût réel</label>
+                <input type="text" id="cost" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" />
 				<!--/TMPL_IF-->
             </p>
             <p>
-                <label>Numéro de facture</label>
-                <input type="text" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /> (habituellement vide)
+                <label for="invoice">Numéro de facture</label>
+                <input type="text" id="invoice" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /> (habituellement vide)
             </p>
             <p>
-                <label>Notes</label>
-                <input type="text" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" />
+                <label for="notes">Notes</label>
+                <input type="text" id="notes" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" />
             </p>
             <p>Les deux champs suivants sont disponibles pour votre usage propre. Ils peuvent servir à des usages statistiques.</p>
             <p>
-                <label>Champ de tri 1</label>
                 <!-- TMPL_IF Name="CGIsort1" -->
                     <!-- TMPL_VAR Name="CGIsort1" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
+                <label for="sort1">Champ de tri 1</label>
+                    <input type="text" id="sort1" size="20" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
                 <!--/TMPL_IF -->
             </p>
             <p>
-                <label>Champ de tri 2</label>
                 <!-- TMPL_IF Name="CGIsort2" -->
                     <!-- TMPL_VAR Name="CGIsort2" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" size="20" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
+                <label for="sort2">Champ de tri 2</label>
+                    <input type="text" id="sort2" size="20" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
                 <!--/TMPL_IF -->
             </p>
     </fieldset>
@@ -279,4 +296,10 @@ if (quantity ==0) {
         <input type="button" value="OK" onclick="check(this.form)" />
     </p>
 </form>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

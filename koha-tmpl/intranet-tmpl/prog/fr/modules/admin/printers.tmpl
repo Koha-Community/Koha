@@ -1,17 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration système
-<!-- TMPL_IF NAME=add_form --><!-- TMPL_IF NAME="searchfield" -->Modifier l'imprimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une imprimante<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->Imprimante ajoutée<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de l'imprimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->Imprimante supprimée<!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;système
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" --> Imprimantes &rsaquo; Modifier l'imprimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE --> Imprimante &rsaquo; Ajout d'imprimante<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> Imprimantes &rsaquo; Imprimante ajoutée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> Imprimantes &rsaquo; Confirmer la suppression de l'imprimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> Imprimantes &rsaquo; Imprimante supprimée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Imprimantes<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-admin.inc" -->
-
-<!-- TMPL_IF NAME=add_form -->
-        <script language="JavaScript" type="text/javascript">
+<!-- TMPL_IF NAME="add_form" --><script type="text/javascript">
+//<![CDATA[
         //
         function isNotNull(f,noalert) {
                 if (f.value.length ==0) {
@@ -63,7 +59,28 @@
                         alert(alertString2);
                 }
         }
-        </script>
+        //]]>
+</script>
+	<!-- /TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="printers-admin-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" --> <a href="/cgi-bin/koha/admin/printers.pl">Imprimante</a> &rsaquo; Modifier l'impreimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/printers.pl">Imprimantes</a> &rsaquo; Ajout imprimante<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/printers.pl">Imprimante</a> &rsaquo; Imprimante ajoutée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/printers.pl">Imprimantes</a> &rsaquo; Confirmer la suppression de l'imprimante '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/printers.pl">Imprimante</a> &rsaquo; Imprimante supprimée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="else" -->Imprimantes<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="add_form" -->
+        
 
 
         
@@ -77,14 +94,14 @@
 	<table>
 	<!-- TMPL_IF NAME="searchfield" -->
 		<tr>
-			<td>Nom de l'imprimante</td>
+			<th scope="row">Nom de l'imprimante</th>
 			<td>
-				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME=searchfield -->" /><!-- TMPL_VAR NAME="searchfield" -->
+				<input type="hidden" name="printername" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
 			</td>
 		</tr>
 	<!-- TMPL_ELSE -->
 		<tr>
-			<td>Nom de l'imprimante</td>
+			<th scope="row">Nom de l'imprimante</th>
 			<td>
 				<input type="text" name="printername" size="50" maxlength="50" />
 			</td>
@@ -92,11 +109,11 @@
 	<!-- /TMPL_IF -->
 
         	<tr>
-			<td>File d'attente</td>
+			<th scope="row">File d'attente</th>
 			<td><input type="text" name="printqueue" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printqueue" -->" /> </td>
 		</tr>
         	<tr>
-			<td>Type</td>
+			<th scope="row">Type</th>
 			<td><input type="text" name="printtype" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printtype" -->" /> </td>
 		</tr>
         </table><p><input type="button" value="OK" onclick="Check(this.form);" /> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';"></p>
@@ -152,22 +169,19 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
-<h2>Gestion Imprimantes</h2>
-	<!-- TMPL_IF NAME=searchfield -->
+<h2>Configuration imprimante</h2>
+	<!-- TMPL_IF NAME="searchfield" -->
 		Vous recherchiez <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                <input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-                <input type="submit" name="submit" value="Rechercher">
-        </form>
-<table>
+
+<!-- TMPL_IF NAME="loop" --><table>
 		<tr>
 			<th>Nom</th>
 			<th>File d'attente</th>
 			<th>Type</th>
 			<th>&nbsp;</th>
 		</tr>
-		<!-- TMPL_LOOP NAME=loop -->
+		<!-- TMPL_LOOP NAME="loop" -->
 		<tr>
 			<td><!-- TMPL_VAR NAME="printername" --></td>
 			<td><!-- TMPL_VAR NAME="printqueue" --></td>
@@ -176,7 +190,7 @@
 "op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="printername" -->" /><input type="submit" value="Supprimer"></form></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
-	</table>
+	</table><!-- TMPL_ELSE --><div class="notice">Pas d'imprimante définie.</div><!-- /TMPL_IF -->
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
        <p> <input type="hidden" name="op" value="add_form" /><input type="submit" value="Ajouter une imprimante"></p></form>
 	<!-- TMPL_IF NAME="offsetgtzero" -->
@@ -189,4 +203,10 @@
 <!-- /TMPL_IF -->
 
 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

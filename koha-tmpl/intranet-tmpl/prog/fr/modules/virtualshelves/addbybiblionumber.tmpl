@@ -1,6 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Ajouter dans l'étagère virtuelle</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin: auto; text-align:left; }
+   </style>
+</head>
+<body>
+
+<div id="custom-doc" class="yui-t7">
+   <div id="bd">
+
 
 <h1>Ajouter <i><!-- TMPL_VAR NAME="title" --></i>
     <!-- TMPL_IF NAME="author" -->
@@ -8,8 +17,8 @@
     <!-- /TMPL_IF --> dans une étagère virtuelle
 </h1>
 
-<form name="f1" method="POST" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
+<form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     
     <b>Sélectionner une étagère existante</b>
     <p>
@@ -19,13 +28,13 @@
     <input type="submit" value="Ajouter à l'étagère virtuelle" class="submit">
 </form>
 <p>...ou...</p>
-<form name="f2" method="POST" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+<form name="f2" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
     <b>Ajouter à une nouvelle étagère virtuelle :</b>
         <p>
             <label for="newvirtualshelf">
                 Nom de l'étagère :
             </label>
-			<input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
+			<input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
         </p>
         <p>
@@ -39,5 +48,6 @@
     <input type="submit" value="Ajouter à l'étagère virtuelle" class="submit"> 
 </form>
 
-</body>
-</html>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

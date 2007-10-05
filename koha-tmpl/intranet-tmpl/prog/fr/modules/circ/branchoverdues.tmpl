@@ -1,12 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_INCLUDE NAME="menus.inc" -->
-<!-- TMPL_INCLUDE NAME="menu-circ.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo; Prêts en retard à <!-- TMPL_VAR NAME="LoginBranchname" --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 
 <h1>Circulation : Retards par site à <!-- TMPL_VAR NAME="LoginBranchname" --></h1>
 
-<div id="mainbloc">
 <!-- selector of location -->
 <!-- TMPL_IF NAME="location" -->
 <legend>Localisation sélectionnée</legend>
@@ -27,7 +37,7 @@
             <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
         <!-- /TMPL_LOOP -->
     </select>
-    <input type="submit" name="location" class="button" value="OK">
+    <input type="submit" name="location" class="button" value="OK" />
 </form>
 </p>
 <!-- /TMPL_IF -->
@@ -79,22 +89,22 @@
                     <td align="center">
                     <!-- TMPL_IF NAME="overdue1" -->
                         <!-- TMPL_IF NAME="borroweremail" -->
-                            <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=mail&location=<!-- TMPL_VAR NAME="location" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">email</a>
+                            <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=mail&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">email</a>
                         <!-- TMPL_ELSE -->
                             email
                         <!-- /TMPL_IF -->
-                            &nbsp;|&nbsp; <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&location=<!-- TMPL_VAR NAME="location" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->
-                            ">téléphone</a> &nbsp;|&nbsp; <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&location=<!-- TMPL_VAR NAME="location" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
-                            &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">lettre</a>
+                            &nbsp;|&nbsp; <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=phone&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->
+                            ">téléphone</a> &nbsp;|&nbsp; <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=letter&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                            &amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">lettre</a>
                     <!-- /TMPL_IF -->
                     
                     <!-- TMPL_IF NAME="overdue2" -->
-                        <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=letter&location=<!-- TMPL_VAR NAME="location" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&notifyId=<!-- TMPL_VAR NAME="notify_id" -->">lettre</a>
+                        <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=letter&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">lettre</a>
                     <!-- /TMPL_IF -->
                     
                     <!-- TMPL_IF NAME="overdue3" -->
-                    <a href="branchoverdues.pl?action=add&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=lost&location=<!-- TMPL_VAR NAME="location" -->&overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
-                    &notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Considéré comme perdu</a>
+                    <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=lost&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
+                    &amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Considéré comme perdu</a>
                     <!-- /TMPL_IF -->
                     
                     </td>
@@ -156,12 +166,18 @@
                         </td>
                     
                         <td>
-                        <a href="branchoverdues.pl?action=remove&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&method=phone&location=<!-- TMPL_VAR NAME="location" -->&notify_date=<!-- TMPL_VAR NAME="notify_date" -->">Annuler  la notification</a>
+                        <a href="branchoverdues.pl?action=remove&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=phone&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;notify_date=<!-- TMPL_VAR NAME="notify_date" -->">Annuler  la notification</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
             </table>
         </fieldset>
     <!-- /TMPL_IF -->
+
 </div>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
