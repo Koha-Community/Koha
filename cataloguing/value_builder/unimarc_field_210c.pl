@@ -172,7 +172,7 @@ my ($input) = @_;
         # builds tag and subfield arrays
         my @tags;
     
-        my ($results,$total) = authoritysearch($dbh, \@tags,\@and_or,
+        my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
                                             \@excluding, \@operator, \@value,
                                             $startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
     
@@ -215,14 +215,13 @@ my ($input) = @_;
             $to = (($startfrom+1)*$resultsperpage);
         }
         $template->param(result => $results) if $results;
-        $template->param(index => $query->param('index'));
+        $template->param('index' => $query->param('index'));
         $template->param(startfrom=> $startfrom,
                                 displaynext=> $displaynext,
                                 displayprev=> $displayprev,
                                 resultsperpage => $resultsperpage,
                                 startfromnext => $startfrom+1,
                                 startfromprev => $startfrom-1,
-                                index => $index,
                                 total=>$total,
                                 from=>$from,
                                 to=>$to,
