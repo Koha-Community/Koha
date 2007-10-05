@@ -245,7 +245,7 @@ foreach my $tag (sort keys %{$tagslib}) {
     $subfield_data{tag}=$tag;
     $subfield_data{subfield}=$subfield;
 #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-    $subfield_data{marc_lib}="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".substr($tagslib->{$tag}->{$subfield}->{lib},0,12)."</span>";
+    $subfield_data{marc_lib}="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
     $subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
     $subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
     $subfield_data{hidden}= "display:none" if $tagslib->{$tag}->{$subfield}->{hidden};
