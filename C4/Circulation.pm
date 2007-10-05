@@ -681,15 +681,15 @@ sub CanBookBeIssued {
     if ( $borrower->{flags}->{'DBARRED'} ) {
         $issuingimpossible{DEBARRED} = 1;
     }
-    if ( Date_to_Days(Today) > 
-        Date_to_Days( split "-", $borrower->{'dateexpiry'} ) )
-    {
-
-        #
-        #if (&Date_Cmp(&ParseDate($borrower->{expiry}),&ParseDate("today"))<0) {
+    if ( $borrower->{'dateexpiry'} eq '0000-00-00') {
         $issuingimpossible{EXPIRED} = 1;
+    } else {
+        if ( Date_to_Days(Today) > 
+            Date_to_Days( split "-", $borrower->{'dateexpiry'} ) )
+        {
+            $issuingimpossible{EXPIRED} = 1;
+        }
     }
-
     #
     # BORROWER STATUS
     #
