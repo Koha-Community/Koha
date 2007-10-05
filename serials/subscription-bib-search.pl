@@ -67,8 +67,9 @@ $startfrom=0 unless $startfrom;
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
 
-if ($op eq "do_search") {
-    my $query = $input->param('q');
+my $query = $input->param('q');
+# don't run the search if no search term !
+if ($op eq "do_search" && $query) {
 
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 19 if(!defined $resultsperpage);
@@ -161,7 +162,18 @@ if ($op eq "do_search") {
                             to=>$to,
                             numbers=>\@numbers,
                             );
-} # end of if ($op eq "do_search")
+} # end of if ($op eq "do_search" & $query)
+ elsif ($op eq "do_search") {
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {catalogue => 1, serials=>1},
+                debug => 1,
+                });
+    $template->param("no_query" => 1);
+}
  else {
     ($template, $loggedinuser, $cookie)
         = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
@@ -172,19 +184,7 @@ if ($op eq "do_search") {
                 debug => 1,
                 });
 
-    my  %itemtypes = GetItemTypes();
-    my @values = values %itemtypes;
-    my $CGIitemtype=CGI::scrolling_list(
-            -name     => 'value',
-            -values   => \@values,
-            -labels   => \%itemtypes,
-            -size     => 1,
-            -multiple => 0
-    );
-
-    $template->param(
-            CGIitemtype => $CGIitemtype,
-    );
+    $template->param("no_query" => 0);
 }
 
 # Print the page
