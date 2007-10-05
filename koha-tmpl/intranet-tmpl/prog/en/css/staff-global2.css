@@ -47,7 +47,9 @@ h4 {
 h5 {
 	font-size : 123.1%;	
 	font-weight : bold;
-}
+    background: url( /intranet-tmpl/prog/img/css_header.png );
+    background-repeat:repeat-x;
+    color:white;}
 
 h6 {
 	font-size : 93%;
@@ -452,9 +454,15 @@ ul.innerBox {
     border: none;
 }
 
+div.yui-b {
+    border: 1px solid #dddddd;
+    padding:10px 0 10px 5px;
+    background:#e4eaee;
+}
+
 div.yui-b h5 {
 	font-size : 100%;
-	margin : .5em 0;
+    margin : .5em 0;
 }
 
 /*Action button*/
@@ -522,4 +530,46 @@ div.yui-b h5 {
 
 #action .others a:hover {
     cursor:pointer;
+}
+
+
+
+
+div#toolbar {
+background:url(/intranet-tmpl/prog/img/bg-tab.png) repeat-x;
+background-color : #82badd;
+padding-bottom:0px;
+}
+
+ul.toolbar {
+}
+
+ul.toolbar li {
+	display : inline;
+	float : left;
+	list-style : none;
+}
+
+ul.toolbar li a {
+    background: url( /intranet-tmpl/prog/img/css_header.png );
+    background-repeat:repeat-x;
+    color:white;
+    border : 1px solid #F3F3F3;
+	display : block;
+	margin : 3px;
+	padding : 3px;
+	text-decoration : none;
+}
+
+ul.toolbar li a:hover {
+    background:none;
+    background-color : #FFFFCC;
+    color:#82badd;
+}
+
+ul.toolbar li:last-child a:hover {
+}
+
+ul.toolbar ul {
+	display : none;
 }
