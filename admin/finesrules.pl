@@ -61,7 +61,7 @@ if ($op eq 'save') {
       my $cat = $3; # item type
       my $data=$input->param($key);
       my ($fine,$firstremind,$chargeperiod)=split(',',$data);
-      warn "$br $bor $cat $fine $firstremind $chargeperiod";
+#       warn "$br $bor $cat $fine $firstremind $chargeperiod";
 # 			if ($fine >0) {
 #       $br="*" unless ($br);
       $bor="*" unless ($bor);
