@@ -540,7 +540,7 @@ sub build_tabs ($$$$$) {
                             tag_lib       => $tagslib->{$tag}->{lib},
                             repeatable       => $tagslib->{$tag}->{repeatable},
                             subfield_loop => \@subfields_data,
-                            fixedfield    => ($tag < 10)?(1):(0),
+                            fixedfield    => $tag < 10?1:0,
                             random        => CreateKey,
                         );
                         if ($tag >= 010){ # no indicator for theses tag
@@ -579,7 +579,7 @@ sub build_tabs ($$$$$) {
                         indicator        => $indicator,
                         subfield_loop    => \@subfields_data,
                         tagfirstsubfield => $subfields_data[0],
-                        fixedfield       => ($tag < 10)?(1):(0)
+                        fixedfield       => $tag < 10?1:0,
                     );
                     
                     push @loop_data, \%tag_data ;
