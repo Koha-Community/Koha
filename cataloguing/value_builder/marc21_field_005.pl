@@ -89,14 +89,8 @@ function Blur$function_name(index) {
 }
 
 function Focus$function_name(subfield_managed) {
-        // TODO FIXME :: HTML code has changed
-
-	for (i=0 ; i<document.f.field_value.length ; i++) {
-                if (document.f.tag[i].value == '005') {
-                        document.f.field_value[i].value = '$date';
-                }
-        }
-return 0;
+    document.getElementById(\"$field_number\").value='$date';
+    return 0;
 }
 
 function Clic$function_name(subfield_managed) {

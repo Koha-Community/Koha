@@ -52,16 +52,8 @@ sub plugin_javascript {
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-    // TODO FIXME :: HTML code has changed
-
-    for (i=0 ; i<document.f.field_value.length ; i++) {
-        if (document.f.tag[i].value == '008') {
-            if (!document.f.field_value[i].value) {
-                document.f.field_value[i].value = '$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
-            }
-        }
-    }
-return 1;
+    document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
+    return 1;
 }
 
 function Blur$function_name(subfield_managed) {
