@@ -37,7 +37,7 @@ if ($version || (!$confirm)) {
      export PERL5LIB=/path/to/koha;export KOHA_CONF=/etc/koha.xml;./build_browser_and_cloud.pl -b -f 676a -t 606 -c
 EOF
 ;
-die;
+exit;
 }
 
 ##################################
@@ -121,6 +121,7 @@ if ($browser_tag) {
     if (C4::Context->preference('opaclanguages') eq 'fr' && $browser_tag eq '676' & $browser_subfield eq 'a') {
         $classification = dewey_french();
     }
+
     foreach (keys %browser_result) {
         my $father = substr($_,0,-1);
         $browser_result{$father}->{notendnode}=1;
@@ -128,7 +129,7 @@ if ($browser_tag) {
     $dbh->do("truncate browser");
     my $sth = $dbh->prepare("insert into browser (level,classification,description,number,endnode) values (?,?,?,?,?)");
     foreach (keys %browser_result) {
-        $sth->execute(length($_),$_,$classification->{$_}?$classification->{$_}:"classification $_",$browser_result{$_}->{value},$browser_result{$_}->{notendnode}?0:1);
+        $sth->execute(length($_),$_,$classification->{$_}?$classification->{$_}:"classification $_",$browser_result{$_}->{value},$browser_result{$_}->{notendnode}?0:1) if $browser_result{$_}->{value};
     }
 }
 
