@@ -261,7 +261,7 @@ if ($nok){
   if ($data{'sex'} eq 'F'){
     $template->param(female => 1);
   } elsif ($data{'sex'} eq 'M'){
-     $template->param(mail => 1);
+     $template->param(male => 1);
   } else {
      $template->param(none => 1);
   }
