@@ -18,6 +18,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 use strict; use warnings;
+use CGI;
 use C4::Context;
 use C4::Biblio;
 use C4::Output;
@@ -32,7 +33,7 @@ my $itemnumber=$cgi->param('itemnumber');
 my $biblioitemnumber=$cgi->param('biblioitemnumber');
 my $itemlost=$cgi->param('itemlost');
 my $wthdrawn=$cgi->param('wthdrawn');
-my $binding=$cgi->param('binding');
+my $damaged=$cgi->param('damaged');
 
 my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
@@ -44,7 +45,7 @@ my $item_data_hashref = $item_data_sth->fetchrow_hashref();
 # superimpose the new on the old
 $item_data_hashref->{'itemlost'} = $itemlost if $itemlost;
 $item_data_hashref->{'wthdrawn'} = $wthdrawn if $wthdrawn;
-$item_data_hashref->{'binding'} = $binding if $binding;
+$item_data_hashref->{'damaged'} = $damaged if $damaged;
 
 # check reservations
 my ($status, $reserve) = CheckReserves($itemnumber, $item_data_hashref->{'barcode'});
@@ -85,7 +86,7 @@ $sth->finish;
 
 # FIXME: eventually we'll use Biblio.pm, but it's currently too buggy
 #ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
-$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,binding=? WHERE itemnumber=?");
-$sth->execute($wthdrawn,$itemlost,$binding,$itemnumber);
+$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=? WHERE itemnumber=?");
+$sth->execute($wthdrawn,$itemlost,$damaged,$itemnumber);
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");

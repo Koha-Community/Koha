@@ -50,7 +50,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
 my $bi=$query->param('bi');
-
+$bi = $biblionumber unless $bi;
 my $data=GetBiblioItemData($bi);
 my $dewey = $data->{'dewey'};
 # FIXME Dewey is a string, not a number, & we should use a function

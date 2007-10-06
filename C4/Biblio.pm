@@ -1177,18 +1177,18 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 
 #'
 sub GetBiblioItemData {
-    my ($bibitem) = @_;
+    my ($biblioitemnumber) = @_;
     my $dbh       = C4::Context->dbh;
     my $sth       =
       $dbh->prepare(
-"Select *,biblioitems.notes as bnotes from biblioitems, biblio,itemtypes where biblio.biblionumber = biblioitems.biblionumber and biblioitemnumber = ? and biblioitems.itemtype = itemtypes.itemtype"
+	"SELECT *,biblioitems.notes AS bnotes
+		FROM biblioitems,biblio,itemtypes 
+	WHERE biblio.biblionumber = biblioitems.biblionumber 
+		AND biblioitemnumber = ? "
       );
     my $data;
-
-    $sth->execute($bibitem);
-
+    $sth->execute($biblioitemnumber);
     $data = $sth->fetchrow_hashref;
-
     $sth->finish;
     return ($data);
 }    # sub &GetBiblioItemData

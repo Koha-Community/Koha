@@ -43,7 +43,7 @@
 		<p><b>No. of Items:</b> <!-- TMPL_VAR NAME="count" --></p>
 		<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modify</a> |
                <a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!--TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!--TMPL_VAR NAME="itemnumber"-->">Delete</a> |
-               <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Requests</a>
+               <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
          <br />      
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_LOOP NAME="ITEM_DATA" -->
@@ -61,17 +61,61 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 	<b>Last Borrower 1:</b> <!-- TMPL_VAR NAME="card0" --><br />
 	<b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br />
 	<b>Replacement Price:</b> <!-- TMPL_VAR NAME="replacementprice" --><br />
-	<b>Item lost:</b> <!-- TMPL_IF NAME="itemlost" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br />
+
+	<b>Item Status Summary</b><!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemlost"-->Item Lost<!-- /TMPL_IF --> <!-- TMPL_IF NAME="binding" -->Item Damaged<!-- /TMPL_IF --> <!-- TMPL_IF NAME="wthdrawn" -->Item Withdrawn<!-- /TMPL_IF --><br/>
+
+<tr><th>Damaged Status:</th>
+<td>
+<form class="inline" action="updateitem.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+<select name="binding" >
+<!-- TMPL_LOOP NAME="itembindingloop" -->
+<option value="<!-- TMPL_VAR NAME="authorised_value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+<input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
+<input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
+<input type="submit" name="submit" class="submit" value="Set Status" /></form>
+</td></tr>
+
+<tr><th>Lost Status:</th>
+<td>
+<form class="inline" action="updateitem.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+<select name="itemlost" >
+<!-- TMPL_LOOP NAME="itemlostloop" -->
+<option value="<!-- TMPL_VAR NAME="authorised_value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+<input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
+<input type="hidden" name="binding" value="<!-- TMPL_VAR NAME="binding" -->" />
+<input type="submit" name="submit" class="submit" value="Set Status" /></form>
+</td></tr>
+
+
 	<b>Paid for:</b> <!-- TMPL_VAR NAME="paidfor" --><br />
 	<b>Notes:</b> <!-- TMPL_VAR NAME="itemnotes" --><br />
 	<b>Renewals:</b> <!-- TMPL_VAR NAME="renewals" --><br />
 	<b><a href="/cgi-bin/koha/acqui/orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&catview=yes">
 	Accession
 	Date:</a></b> <!-- TMPL_VAR NAME="dateaccessioned" --><br />
-	<b>Cancelled:</b> <!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --><br />
-	<b><a
-	href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">Total
-	Issues:</a></b> <!-- TMPL_VAR NAME="issues" --><br />
+
+<tr><th>Withdrawn:</th><td><!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --> <form class="inline" action="updateitem.pl" method="post">
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+<input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+<input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
+<input type="hidden" name="binding" value="<!-- TMPL_VAR NAME="binding" -->" />
+
+<!-- TMPL_IF NAME="wthdrawn" --><input type="hidden" name="wthdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="wthdrawn" value="1" /><!-- /TMPL_IF -->
+<input type="submit" name="submit" class="submit" value="<!-- TMPL_IF NAME="wthdrawn" -->Restore<!-- TMPL_ELSE -->Make Withdrawn<!-- /TMPL_IF -->" /></form></td></tr>
+
+
+<tr><th>Total Issues:</th><td><!-- TMPL_VAR NAME="issues" --> (<a href="/cgi-bin/koha/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View Circulation History</a>)</td></tr>
 	<b>Group Number:</b> <!-- TMPL_VAR NAME="biblioitemnumber" --> <br />
 	<b>Biblio number:</b> <!-- TMPL_VAR NAME="biblionumber" --> <br />
 <!-- /TMPL_LOOP -->
