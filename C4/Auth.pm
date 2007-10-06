@@ -438,8 +438,9 @@ sub checkauth {
         if ($logout) {
 
             # voluntary logout the user
-#             $session->delete;
+
             $session->flush;      
+			$session->delete();
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
