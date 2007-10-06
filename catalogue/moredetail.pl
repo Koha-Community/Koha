@@ -53,6 +53,7 @@ my $bi=$query->param('bi');
 $bi = $biblionumber unless $bi;
 my $data=GetBiblioItemData($bi);
 my $dewey = $data->{'dewey'};
+
 # FIXME Dewey is a string, not a number, & we should use a function
 # $dewey =~ s/0+$//;
 # if ($dewey eq "000.") { $dewey = "";};
@@ -76,6 +77,8 @@ my $order = GetOrder($ordernum);
 $results[0]=$data;
 
 foreach my $item (@$items){
+	$item->{itemlostloop}= GetAuthorisedValues('ITEMLOST');
+	$item->{itemdamagedloop}= GetAuthorisedValues('DAMAGED');
     $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});

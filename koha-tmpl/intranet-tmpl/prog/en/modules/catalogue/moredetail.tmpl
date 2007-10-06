@@ -62,7 +62,7 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 	<b>Last Borrower 2:</b> <!-- TMPL_VAR NAME="card1" --><br />
 	<b>Replacement Price:</b> <!-- TMPL_VAR NAME="replacementprice" --><br />
 
-	<b>Item Status Summary</b><!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemlost"-->Item Lost<!-- /TMPL_IF --> <!-- TMPL_IF NAME="binding" -->Item Damaged<!-- /TMPL_IF --> <!-- TMPL_IF NAME="wthdrawn" -->Item Withdrawn<!-- /TMPL_IF --><br/>
+	<b>Item Status Summary</b><!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemlost"-->Item Lost<!-- /TMPL_IF --> <!-- TMPL_IF NAME="damaged" -->Item Damaged<!-- /TMPL_IF --> <!-- TMPL_IF NAME="wthdrawn" -->Item Withdrawn<!-- /TMPL_IF --><br/>
 
 <tr><th>Damaged Status:</th>
 <td>
@@ -70,8 +70,8 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
 <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
 <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-<select name="binding" >
-<!-- TMPL_LOOP NAME="itembindingloop" -->
+<select name="damaged" >
+<!-- TMPL_LOOP NAME="itemdamagedloop" -->
 <option value="<!-- TMPL_VAR NAME="authorised_value" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
 <!-- /TMPL_LOOP -->
 </select>
@@ -92,7 +92,7 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 <!-- /TMPL_LOOP -->
 </select>
 <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
-<input type="hidden" name="binding" value="<!-- TMPL_VAR NAME="binding" -->" />
+<input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
 <input type="submit" name="submit" class="submit" value="Set Status" /></form>
 </td></tr>
 
@@ -109,7 +109,7 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
 <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
 <input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
-<input type="hidden" name="binding" value="<!-- TMPL_VAR NAME="binding" -->" />
+<input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
 
 <!-- TMPL_IF NAME="wthdrawn" --><input type="hidden" name="wthdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="wthdrawn" value="1" /><!-- /TMPL_IF -->
 <input type="submit" name="submit" class="submit" value="<!-- TMPL_IF NAME="wthdrawn" -->Restore<!-- TMPL_ELSE -->Make Withdrawn<!-- /TMPL_IF -->" /></form></td></tr>
