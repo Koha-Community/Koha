@@ -47,43 +47,62 @@ the 3 scripts are inserted after the <input> in the html code
 
 =cut
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= "barcode".(int(rand(100000))+1);
+	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+	my $function_name= "barcode".(int(rand(100000))+1);
 
-# find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+	# find today's date
+	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
                                                                localtime(time);
-$year +=1900;
-$mon +=1;
-if (length($mon)==1) {
-	$mon = "0".$mon;
-}
-if (length($mday)==1) {
-	$mday = "0".$mday;
-}
-if (length($hour)==1) {
-        $hour = "0".$hour;
-}
-if (length($min)==1) {
+	$year +=1900;
+	$mon +=1;
+	if (length($mon)==1) {
+		$mon = "0".$mon;
+	}
+	if (length($mday)==1) {
+		$mday = "0".$mday;
+	}
+	if (length($hour)==1) {
+   	     $hour = "0".$hour;
+	}
+	if (length($min)==1) {
         $min = "0".$min;
-}
-if (length($sec)==1) {
+	}
+	if (length($sec)==1) {
         $hour = "0".$sec;
-}
+	}
 
-my $dbh = C4::Context->dbh;
-my $date = "$year";
+	my $dbh = C4::Context->dbh;
+	my $date = "$year";
 
-my $query = "select max(abs(barcode)) from items";
-my $sth=$dbh->prepare($query);
-$sth->execute();
-my $nextnum;
-while (my ($count)= $sth->fetchrow_array) {
-	$nextnum = $count;
-	warn "COUNT".$count;
-}
-$nextnum++;
-my $res  = "
+	my ($tag,$subfield) =  GetMarcFromKohaField("items.barcode");
+
+	my $nextnum;
+	my $query;
+	my $autoBarcodeType = C4::Context->preference("autoBarcode");
+	unless ($autoBarcodeType eq 'OFF' or !$autoBarcodeType) {
+
+	if ($autoBarcodeType eq 'annual') {
+		$query = "select max(cast( substring_index(barcode, '-',-1) as signed)) from items where barcode like ?";
+		my $sth=$dbh->prepare($query);
+		$sth->execute("$year%");
+		while (my ($count)= $sth->fetchrow_array) {
+    		$nextnum = $count if $count;
+		}
+		$nextnum++;
+		$nextnum = sprintf("%0*d", "4",$nextnum);
+		$nextnum = "$year-$nextnum";
+	}
+	elsif ($autoBarcodeType eq 'incremental') {
+		# not the best, two catalogers could add the same barcode easily this way :/
+		$query = "select max(abs(barcode)) from items";
+        my $sth=$dbh->prepare($query);
+		$sth->execute();
+		while (my ($count)= $sth->fetchrow_array) {
+			$nextnum = $count;
+		}
+		$nextnum++;
+	}
+		my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[
 
@@ -93,7 +112,7 @@ function Blur$function_name(index) {
 
 function Focus$function_name(subfield_managed) {
 		for (i=0 ; i<document.f.field_value.length ; i++) {
-			if (document.f.tag[i].value == '952' && document.f.subfield[i].value == 'p') {
+			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
 				if (document.f.field_value[i].value == '') {
 					document.f.field_value[i].value = '$nextnum';
 				}
@@ -107,7 +126,13 @@ function Clic$function_name(subfield_managed) {
 //]]>
 </script>
 ";
-return ($function_name,$res);
+
+	# don't return a value unless we have the appropriate syspref set
+	return ($function_name,$res);
+	}
+	else {
+		return ($function_name,"<script type=\"text/javascript\">function Focus$function_name() { return 0;}</script>");
+	}
 }
 
 =head1
