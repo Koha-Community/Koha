@@ -99,8 +99,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950NormalizeAuthor','0','If ON, Personal Name Authorities will replace authors in biblio.author','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesNeedReturns','0','If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type)  VALUES ('DebugLevel','2','Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','0|1|2','Choice');
-
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebra','1','If ON, Zebra indexing is turned off, simpler setup, but slower searches','','YesNo');
-
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebraIndexes','0','Enter a specific hash for NoZebra indexes. Enter : \'indexname\' => \'100a,245a,500*\',\'index2\' => \'...\'','','Free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use mysql or a temporary file for storing session data','mysql|tmp','Choice');  
+
+
 

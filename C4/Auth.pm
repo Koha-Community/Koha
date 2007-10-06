@@ -260,8 +260,7 @@ sub get_template_and_user {
         );
     }
     else {
-        warn "template type should be OPAC, here it is=[" . $in->{'type'} . "]"
-          unless ( $in->{'type'} eq 'opac' );
+		warn "template type should be OPAC, here it is=[" . $in->{'type'} . "]" unless ( $in->{'type'} eq 'opac' );
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
@@ -378,7 +377,6 @@ sub checkauth {
 
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
-    warn "about to check version";
     unless (C4::Context->preference('Version')) {
       if ($type ne 'opac') {
         warn "Install required, redirecting to Installer";
@@ -407,8 +405,15 @@ sub checkauth {
         $loggedin = 1;
     }
     elsif ( $sessionID = $query->cookie("CGISESSID")) {
-#         my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-        my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+		my $storage_method = C4::Context->preference('SessionStorage');
+		my $session;
+		if ($storage_method eq 'mysql'){
+		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+		}
+		else {
+			# catch all defaults to tmp should work on all systems
+			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
+		}
         C4::Context->_new_userenv($sessionID);
         if ($session){
             C4::Context::set_userenv(
