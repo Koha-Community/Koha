@@ -1,8 +1,8 @@
 -- *************************************************************
 --  KOHA 3.0 MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK
 --
---                     PRETEST VERSION 0.0.6
---                          2007-09-29
+--                     PRETEST VERSION 0.1.0
+--                          2007-10-06
 --
 --                            edited
 --                            by thd
@@ -62,10 +62,10 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 ('999', 'SYSTEM CONTROL NUMBERS (KOHA)', 'SYSTEM CONTROL NUMBERS (KOHA)', 1, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-('999', 'a', 'Item type [OBSOLETE]', 'Item type [OBSOLETE]', 0, 0, NULL, -1, NULL, NULL, '', NULL, -5, '', '', '',NULL),
-('999', 'b', 'Koha Dewey Subclass [OBSOLETE]', 'Koha Dewey Subclass [OBSOLETE]', 0, 0, NULL, 0, NULL, NULL, '', NULL, -5, '', '', '',NULL),
-('999', 'c', 'Koha biblionumber', 'Koha biblionumber', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, '', '', '',NULL),
-('999', 'd', 'Koha biblioitemnumber', 'Koha biblioitemnumber', 0, 0, 'biblioitems.biblioitemnumber', -1, NULL, NULL, '', NULL, -5, '', '', '',NULL);
+('999', 'a', 'Item type [OBSOLETE]', 'Item type [OBSOLETE]', 0, 0, NULL, -1, NULL, NULL, '', NULL, -5, '', '', '', NULL),
+('999', 'b', 'Koha Dewey Subclass [OBSOLETE]', 'Koha Dewey Subclass [OBSOLETE]', 0, 0, NULL, 0, NULL, NULL, '', NULL, -5, '', '', '', NULL),
+('999', 'c', 'Koha biblionumber', 'Koha biblionumber', 0, 0, 'biblio.biblionumber', -1, NULL, NULL, '', NULL, -5, '', '', '', NULL),
+('999', 'd', 'Koha biblioitemnumber', 'Koha biblioitemnumber', 0, 0, 'biblioitems.biblioitemnumber', -1, NULL, NULL, '', NULL, -5, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -89,11 +89,11 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 ('942', 'ADDED ENTRY ELEMENTS (KOHA)', 'ADDED ENTRY ELEMENTS (KOHA)', 0, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '',NULL),
-('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '',NULL),
-('942', 'j', 'Location (call number prefix code)', 'Location (call number prefix code)', 0, 0, 'biblioitems.classification', 9, '', '', '', NULL, 0, '', '', '',NULL),
-('942', 'k', 'Classification base (DDC to decimal or LCC letter class padded after single letter classes with trailing 0', 'Classification base', 0, 0, 'biblioitems.dewey', 9, '', '', '', NULL, 0, '', '', '',NULL),
-('942', 'l', 'Classification subclass (DDC after decimal or LCC number after letters', 'Classification subclass', 0, 0, 'biblioitems.subclass', 9, '', '', '', NULL, 0, '', '', '',NULL);
+('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
+('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
+('942', 'j', 'Location (call number prefix code)', 'Location (call number prefix code)', 0, 0, 'biblioitems.classification', 9, '', '', '', NULL, 0, '', '', '', NULL),
+('942', 'k', 'Classification base (DDC to decimal or LCC letter class padded after single letter classes with trailing 0', 'Classification base', 0, 0, 'biblioitems.dewey', 9, '', '', '', NULL, 0, '', '', '', NULL),
+('942', 'l', 'Classification subclass (DDC after decimal or LCC number after letters', 'Classification subclass', 0, 0, 'biblioitems.subclass', 9, '', '', '', NULL, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -115,6 +115,49 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 
+-- rel_2-2 items Field/Subfields
+
+-- INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES
+-- ('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', '');
+
+-- INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
+-- ('952', '0', 'Item status (withdrawn)', 'Item status (withdrawn)', 0, 0, 'items.withdrawn', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', '1', 'Item status (lost)', 'Item status (lost)', 0, 0, 'items.itemlost', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', '3', 'Materials specified', 'Materials specified', 0, 0, '', 10, '', '', '', NULL, -1, '', '', '', NULL),
+-- ('952', '4', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', '6', 'Linkage', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '', NULL),
+-- ('952', '8', 'Sequence number', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', '9', 'Cost, normal purchase price', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'a', 'Canceled barcode', 'Canceled barcode', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '', NULL),
+-- ('952', 'b', 'Location (homebranch)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'c', 'Shelving location', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'd', 'Sublocation or collection (holdingbranch)', 'Sublocation or collection (holdingbranch)', 0, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '''952b''', '', NULL),
+-- ('952', 'e', 'Source of acquisition', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'f', 'Coded location qualifier', 'Coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'g', 'Non-coded location qualifier', 'Non-coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'h', 'Classification part', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'i', 'Item part', 'Item part', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'j', 'Shelving control number', 'Shelving control number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'k', 'Call number (combined)', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '', NULL),
+-- ('952', 'l', 'Shelving form of title', 'Shelving form of title', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'm', 'Call number suffix', 'Call number suffix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'n', 'Country code', 'Country code', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'o', 'Call number prefix', 'Call number prefix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'p', 'Barcode', 'Barcode', 0, 1, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
+-- ('952', 'q', 'Piece physical condition', 'Piece physical condition', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'r', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 's', 'Copyright article-fee code', 'Copyright article-fee code', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 't', 'Copy number', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('952', 'u', 'Koha itemnumber (autogenerated)', 'Koha itemnumber', 0, 0, 'items.itemnumber', -1, '', '', '', 0, -5, '', '', '', NULL),
+-- ('952', 'v', 'Date acquired', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, 'usmarc_field_952v.pl', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'x', 'Nonpublic note', 'Nonpublic note', 1, 0, '', 10, '', '', '', NULL, 6, '', '', '', NULL),
+-- ('952', 'y', 'Use restrictions (not for loan)', 'Use restrictions (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', 1, 0, '', '', '', NULL);
+
+
+
 -- Recommended items Field/Subfields
 
 
@@ -122,40 +165,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 -- ('95k', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', '');
 
 -- INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
--- ('95k', '0', 'Item status (withdrawn) (similar to 876-8 $j)', 'Item status (withdrawn)', 0, 0, 'items.withdrawn', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', '1', 'Item status (lost) (similar to 876-8 $j)', 'Item status (lost)', 0, 0, 'items.itemlost', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', '2', 'Source of classification or shelving scheme (similar to 852 $2)', 'Source of classification or shelving scheme', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', '3', 'Materials specified (similar to 852, 876-8 $3)', 'Materials specified', 0, 0, '', 10, '', '', '', NULL, -1, '', '', '',NULL),
--- ('95k', '4', 'Use restrictions (similar to 506 $a, 876-8 $h)', 'Use restrictions', 0, 0, 'items.restricted', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', '6', 'Linkage (similar to 852, 876-8 $6)', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '',NULL),
--- ('95k', '8', 'Sequence number (similar to 852, 876-8 $8)', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', '9', 'Koha itemnumber (autogenerated similar to 852, 876-8 $3 $8 $t combined)', 'Koha itemnumber', 0, 0, 'items.itemnumber', -1, '', '', '', 0, -5, '', '', '',NULL),
--- ('95k', 'a', 'Location (homebranch) (similar to 852 $a)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'b', 'Sublocation or collection (holdingbranch) (similar to 852 $b)', 'Sublocation or collection (holdingbranch)', 1, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'c', 'Shelving location (similar to 852 $c, 876-8 $l)', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'd', 'Date acquired (similar to 541, 876-8 $d)', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, 'usmarc_field_952v.pl', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'e', 'Source of acquisition (similar to 541 $a, 876-8 $e)', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'f', 'Coded location qualifier (similar to 852 $f)', 'Coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'g', 'Non-coded location qualifier (similar to 852 $g)', 'Non-coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'h', 'Classification part (similar to 852 $h)', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'i', 'Item part (similar to 852 $i)', 'Item part', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'j', 'Shelving control number (similar to 852 $j)', 'Shelving control number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'k', 'Call number prefix (similar to 852 $k)', 'Call number prefix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'l', 'Shelving form of title (similar to 852 $l)', 'Shelving form of title', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'm', 'Call number suffix (similar to 852 $m)', 'Call number suffix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'n', 'Country code (similar to 852 $n)', 'Country code', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'o', 'Call number (similar to 852 $k $h $i $m combined)', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '',NULL),
--- ('95k', 'p', 'Piece designation (barcode) (similar to 852, 876-8 $p)', 'Piece designation (barcode)', 0, 1, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '',NULL),
--- ('95k', 'q', 'Piece physical condition (similar to 562 $a, 852 $q)', 'Piece physical condition', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'r', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', 'Invalid or canceled piece designation (canceled barcode)', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '',NULL),
--- ('95k', 's', 'Copyright article-fee code (similar to 018 $a, 852 $s)', 'Copyright article-fee code', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 't', 'Copy number (similar to 852, 876-8 $t)', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
--- ('95k', 'u', 'Cost, normal purchase price (similar to 541 $h, 876-8 $c)', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'v', 'Cost, replacement price (similar to 365 $b, 876-8 $c)', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'w', 'Price effective from (similar to 365 $f)', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'x', 'Nonpublic note (similar to 852, 876-8 $x)', 'Nonpublic note', 1, 0, '', 10, '', '', '', NULL, 6, '', '', '',NULL),
--- ('95k', 'y', 'Use restrictions (not for loan) (similar to 506 $a, 876-8 $h)', 'Use restrictions (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '',NULL),
--- ('95k', 'z', 'Public note (similar to 852, 876-8 $z)', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', 1, 0, '', '', '',NULL);
+-- ('95k', '0', 'Item status (withdrawn) (similar to 876-8 $j)', 'Item status (withdrawn)', 0, 0, 'items.withdrawn', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', '1', 'Item status (lost) (similar to 876-8 $j)', 'Item status (lost)', 0, 0, 'items.itemlost', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', '2', 'Source of classification or shelving scheme (similar to 852 $2)', 'Source of classification or shelving scheme', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', '3', 'Materials specified (bound volume) (similar to 852, 876-8 $3)', 'Materials specified (bound volume)', 0, 0, '', 10, '', '', '', NULL, -1, '', '', '', NULL),
+-- ('95k', '4', 'Use restrictions (similar to 506 $a, 876-8 $h)', 'Use restrictions', 0, 0, 'items.restricted', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', '5', 'Koha item type', 'Koha item type', 1, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -5, '', '', '', NULL),
+-- ('95k', '6', 'Linkage (similar to 852, 876-8 $6)', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '', NULL),
+-- ('95k', '7', 'Cost, normal purchase price (similar to 541 $h, 876-8 $c)', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', '8', 'Sequence number (similar to 852, 876-8 $8)', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', '9', 'Koha itemnumber (autogenerated similar to 852, 876-8 $3 $8 $t combined)', 'Koha itemnumber', 0, 0, 'items.itemnumber', -1, '', '', '', 0, -5, '', '', '', NULL),
+-- ('95k', 'a', 'Location (homebranch) (similar to 852 $a)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'b', 'Sublocation or collection (holdingbranch) (similar to 852 $b)', 'Sublocation or collection (holdingbranch)', 1, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'c', 'Shelving location (similar to 852 $c, 876-8 $l)', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'd', 'Date acquired (similar to 541, 876-8 $d)', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, 'usmarc_field_952v.pl', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'e', 'Source of acquisition (similar to 541 $a, 876-8 $e)', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'f', 'Coded location qualifier (similar to 852 $f)', 'Coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'g', 'Non-coded location qualifier (similar to 852 $g)', 'Non-coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'h', 'Classification part (similar to 852 $h)', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'i', 'Item part (similar to 852 $i)', 'Item part', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'j', 'Shelving control number (similar to 852 $j)', 'Shelving control number', 0, 0, 'items.stack', 10, 'STACK', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'k', 'Call number prefix (similar to 852 $k)', 'Call number prefix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'l', 'Shelving form of title (similar to 852 $l)', 'Shelving form of title', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'm', 'Call number suffix (similar to 852 $m)', 'Call number suffix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'n', 'Country code (similar to 852 $n)', 'Country code', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'o', 'Call number (similar to 852 $k $h $i $m combined)', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '', NULL),
+-- ('95k', 'p', 'Piece designation (barcode) (similar to 852, 876-8 $p)', 'Piece designation (barcode)', 0, 1, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
+-- ('95k', 'q', 'Piece physical condition (similar to 562 $a, 852 $q)', 'Piece physical condition', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'r', 'Invalid or canceled piece designation (canceled barcode) (similar to 876-8 $r)', 'Invalid or canceled piece designation (canceled barcode)', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '', NULL),
+-- ('95k', 's', 'Copyright article-fee code (similar to 018 $a, 852 $s)', 'Copyright article-fee code', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 't', 'Copy number (similar to 852, 876-8 $t)', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('95k', 'u', 'Uniform Resource Identifier (similar to 852 $u)', 'Uniform Resource Identifier', 1, 0, '', 10, '', '', '', 1, 0, '', '', '', NULL),
+-- ('95k', 'v', 'Cost, replacement price (similar to 365 $b, 876-8 $c)', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'w', 'Price effective from (similar to 365 $f)', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'x', 'Nonpublic note (similar to 852, 876-8 $x)', 'Nonpublic note', 1, 0, '', 10, '', '', '', NULL, 6, '', '', '', NULL),
+-- ('95k', 'y', 'Use restrictions (not for loan) (similar to 506 $a, 876-8 $h)', 'Use restrictions (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '', NULL),
+-- ('95k', 'z', 'Public note (similar to 852, 876-8 $z)', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', 1, 0, '', '', '', NULL);
 
 
 
@@ -166,40 +211,44 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 ('952', 'LOCATION AND ITEM INFORMATION (KOHA)', 'LOCATION AND ITEM INFORMATION (KOHA)', 1, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-('952', '0', 'Item status (withdrawn)', 'Item status (withdrawn)', 0, 0, 'items.withdrawn', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', '1', 'Item status (lost)', 'Item status (lost)', 0, 0, 'items.itemlost', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', '3', 'Materials specified', 'Materials specified', 0, 0, '', 10, '', '', '', NULL, -1, '', '', '',NULL),
-('952', '4', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', '6', 'Linkage', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '',NULL),
-('952', '8', 'Sequence number', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', '9', 'Cost, normal purchase price', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 'a', 'Canceled barcode', 'Canceled barcode', 1, 0, '', 10, '', '', '', NULL, -1, '', '', '',NULL),
-('952', 'b', 'Location (homebranch)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '',NULL),
-('952', 'c', 'Shelving location', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 'd', 'Sublocation or collection (holdingbranch)', 'Sublocation or collection (holdingbranch)', 0, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '''952b''', '',NULL),
-('952', 'e', 'Source of acquisition', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 'f', 'Coded location qualifier', 'Coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'g', 'Non-coded location qualifier', 'Non-coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'h', 'Classification part', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'i', 'Item part', 'Item part', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'j', 'Shelving control number', 'Shelving control number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'k', 'Call number (combined)', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '',NULL),
-('952', 'l', 'Shelving form of title', 'Shelving form of title', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'm', 'Call number suffix', 'Call number suffix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'n', 'Country code', 'Country code', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'o', 'Call number prefix', 'Call number prefix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'p', 'Barcode', 'Barcode', 0, 1, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '',NULL),
-('952', 'q', 'Piece physical condition', 'Piece physical condition', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'r', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 's', 'Copyright article-fee code', 'Copyright article-fee code', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 't', 'Copy number', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '',NULL),
-('952', 'u', 'Koha itemnumber (autogenerated)', 'Koha itemnumber', 0, 0, 'items.itemnumber', -1, '', '', '', 0, -5, '', '', '',NULL),
-('952', 'v', 'Date acquired', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, 'usmarc_field_952v.pl', '', '', 0, 0, '', '', '',NULL),
-('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 'x', 'Nonpublic note', 'Nonpublic note', 1, 0, '', 10, '', '', '', NULL, 6, '', '', '',NULL),
-('952', 'y', 'Use restrictions (not for loan)', 'Use restrictions (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '',NULL),
-('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', 1, 0, '', '', '',NULL);
+('952', '0', 'Item status (withdrawn)', 'Item status (withdrawn)', 0, 0, 'items.withdrawn', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', '1', 'Item status (lost)', 'Item status (lost)', 0, 0, 'items.itemlost', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', '3', 'Materials specified', 'Materials specified', 0, 0, '', 10, '', '', '', NULL, -1, '', '', '', NULL),
+('952', '4', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', '5', 'Koha item type', 'Koha item type', 1, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -5, '', '', '', NULL),
+('952', '6', 'Linkage', 'Linkage', 0, 0, '', 10, '', '', '', NULL, -6, '', '', '', NULL),
+('952', '7', 'Cost, normal purchase price', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', '8', 'Sequence number', 'Sequence number', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', '9', 'Koha itemnumber', 'Koha itemnumber', 0, 0, 'items.itemnumber', -1, '', '', '', 0, -5, '', '', '', NULL),
+('952', 'a', 'Location (homebranch)', 'Location (homebranch)', 0, 0, 'items.homebranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
+('952', 'b', 'Sublocation or collection (holdingbranch)', 'Sublocation or collection (holdingbranch)', 1, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
+('952', 'c', 'Shelving location', 'Shelving location', 1, 0, 'items.location', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', 'd', 'Date acquired', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, 'dateaccessioned.pl', '', '', 0, 0, '', '', '', NULL),
+('952', 'e', 'Source of acquisition', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', 'f', 'Coded location qualifier', 'Coded location qualifier', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'g', 'Koha issues (borrowed)', 'Koha issues (borrowed)', 0, 0, 'items.issues', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 'h', 'Classification part', 'Classification part', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'i', 'Item part', 'Item part', 1, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'j', 'Shelving control number', 'Shelving control number', 0, 0, 'items.stack', 10, 'STACK', '', '', NULL, -1, '', '', '', NULL),
+('952', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'l', 'Koha renewals', 'Koha renewals', 0, 0, 'items.renewals', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 'm', 'Call number suffix', 'Call number suffix', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'n', 'Koha reserves (requests)', 'Koha reserves (requests)', 0, 0, 'items.reserves', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 'o', 'Call number', 'Call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '', NULL),
+('952', 'p', 'Piece designation (barcode)', 'Piece designation (barcode)', 0, 0, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
+('952', 'q', 'Koha onloan', 'Koha onloan', 1, 0, 'items.onloan', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 'r', 'Koha datelastseen', 'Koha datelastseen', 1, 0, 'items.datelastseen', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 's', 'Koha datelastborrowed', 'Koha datelastborrowed', 1, 0, 'items.datelastborrowed', 10, '', '', '', NULL, -5, '', '', '', NULL),
+('952', 't', 'Copy number', 'Copy number', 0, 0, '', 10, '', '', '', NULL, 0, '', '', '', NULL),
+('952', 'u', 'Uniform Resource Identifier', 'Uniform Resource Identifier', 1, 0, '', 10, '', '', '', 1, 0, '', '', '', NULL),
+('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 1, 0, 'items.paidfor', 10, '', '', '', NULL, 7, '', '', '', NULL),
+('952', 'y', 'Use restrictions (not for loan)', 'Use restrictions (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '', NULL),
+('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', 1, 0, '', '', '', NULL);
+
+
 
 
 -- *******************************************************
