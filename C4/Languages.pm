@@ -25,8 +25,6 @@ require Exporter;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
-
 =head1 NAME
 
 C4::Languages - Perl Module containing language list functions for Koha 
