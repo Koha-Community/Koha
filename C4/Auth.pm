@@ -493,12 +493,20 @@ sub checkauth {
         }
     }
     unless ($userid) {
-#         my $session = new CGI::Session("driver:MySQL", undef, {Handle=>$dbh});    
-        my $session = new CGI::Session("driver:File", undef, {Directory=>'/tmp'});    
+		my $storage_method = C4::Context->preference('SessionStorage');
+		my $session;
+		if ($storage_method eq 'mysql'){
+		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+		}
+		else {
+			# catch all defaults to tmp should work on all systems
+			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
+		}
+
         my $sessionID;
-    if ($session) {
-      $sessionID = $session->id;
-      }
+		if ($session) {
+			$sessionID = $session->id;
+		}
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
