@@ -278,36 +278,6 @@ sub GetAuthItemlost {
     return ( $count, @results );
 }
 
-=head2 GetAuthItembinding
-
-grab itemlost authorized values
-
-=cut
-
-sub GetAuthItembinding {
-    my $itembinding = shift;
-    my $count       = 0;
-    my @results;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "SELECT * FROM authorised_values ORDER BY authorised_value");
-    $sth->execute;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{category} eq "BINDING" ) {
-            $count++;
-            if ( $itembinding eq $data->{'authorised_value'} ) {
-                $data->{'selected'} = 1;
-            }
-            $results[$count] = $data;
-
-            #warn "data: $data";
-        }
-    }
-    $sth->finish;
-    return ( $count, @results );
-}
-
 =head2 getauthtypes
 
   $authtypes = &getauthtypes();

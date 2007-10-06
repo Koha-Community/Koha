@@ -941,7 +941,6 @@ sub searchResults {
         my $onloan_count      = 0;
         my $wthdrawn_count    = 0;
         my $itemlost_count    = 0;
-        my $itembinding_count = 0;
         my $norequests        = 1;
 
         foreach my $field (@fields) {
@@ -958,9 +957,6 @@ sub searchResults {
             }
             elsif ( $item->{itemlost} ) {
                 $itemlost_count++;
-            }
-            elsif ( $item->{binding} ) {
-                $itembinding_count++;
             }
             elsif ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
             {
@@ -999,7 +995,6 @@ sub searchResults {
         $oldbiblio->{onloancount}   = $onloan_count;
         $oldbiblio->{wthdrawncount} = $wthdrawn_count;
         $oldbiblio->{itemlostcount} = $itemlost_count;
-        $oldbiblio->{bindingcount}  = $itembinding_count;
         $oldbiblio->{orderedcount}  = $ordered_count;
         $oldbiblio->{isbn}          =~ s/-//g; # deleting - in isbn to enable amazon content 
         
