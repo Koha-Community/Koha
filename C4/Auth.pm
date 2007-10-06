@@ -375,6 +375,23 @@ sub checkauth {
     my $timeout = C4::Context->preference('timeout');
     $timeout = 600 unless $timeout;
 
+
+    # If Version syspref is unavailable, it means Koha is beeing installed,
+    # and so we must redirect to OPAC maintenance page or to the WebInstaller
+    warn "about to check version";
+    unless (C4::Context->preference('Version')) {
+      if ($type ne 'opac') {
+        warn "Install required, redirecting to Installer";
+        print $query->redirect("/cgi-bin/koha/installer/install.pl");
+      } 
+      else {
+        warn "OPAC Install required, redirecting to maintenance";
+        print $query->redirect("/cgi-bin/koha/maintenance.pl");
+      }
+      exit;
+    }
+
+
     # state variables
     my $loggedin = 0;
     my %info;
@@ -645,17 +662,6 @@ sub checkauth {
     # check that database and koha version are the same
     # there is no DB version, it's a fresh install,
     # go to web installer
-  warn "about to check version";
-    unless (C4::Context->preference('Version')){
-      if ($type ne 'opac'){
-        warn "Install required, redirecting to Installer";
-        print $query->redirect("/cgi-bin/koha/installer/install.pl");
-      } else {
-        warn "OPAC Install required, redirecting to maintenance";
-        print $query->redirect("/cgi-bin/koha/maintenance.pl");
-      }       
-      exit;
-    }
     # there is a DB version, compare it to the code version
     my $kohaversion=C4::Context::KOHAVERSION;
     # remove the 3 last . to have a Perl number
