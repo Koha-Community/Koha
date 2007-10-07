@@ -49,6 +49,11 @@ $template->param( biblionumber => $biblionumber );
 # change back when ive fixed request.pl
 my @items = &GetItemsInfo( $biblionumber, 'opac' );
 my $dat = &GetBiblioData($biblionumber);
+
+if (!$dat) {
+    print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
+}
+
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       =
