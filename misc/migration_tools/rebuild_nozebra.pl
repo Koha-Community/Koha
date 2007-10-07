@@ -67,6 +67,7 @@ unless (%index) {
 		'note' => '500a',
 		'subject' => '600a, 650a',
 		'dewey' => '082',
+		'bc' => '952p',
 		'host-item' => '952a, 952c'");
         %index = GetNoZebraIndexes();
     }
