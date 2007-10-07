@@ -1,9 +1,9 @@
 -- availability statuses
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('ITEMLOST','0','');
-INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('ITEMLOST','2','Long Overdue (Lost)');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('ITEMLOST','1','Lost');
-INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('ITEMLOST','3','Lost and Paid For');
-INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('ITEMLOST','4','Missing in Inventory');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','0','');
+INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST','2','Long Overdue (Lost)');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Lost');
+INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Lost and Paid For');
+INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Missing in Inventory');
 
 -- damaged status of an item
 INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('DAMAGED','0','');
@@ -21,11 +21,15 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','1','Special Collection');
 
+-- withdrawn status of an item, linked to items.withdrawn
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','0','');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Restricted Access');
+
 -- loanability status of an item, linked to items.notforloan
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOTFORLOAN','-1','Ordered');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOTFORLOAN','0','');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOTFORLOAN','1','Not For Loan');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOTFORLOAN','2','Staff Collection');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','Ordered');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','0','');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','1','Not For Loan');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','2','Staff Collection');
 
 -- restricted status of an item, linked to items.restricted
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','0','');
