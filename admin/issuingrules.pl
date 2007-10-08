@@ -37,79 +37,67 @@ my $op = $input->param('op');
 # $flagsrequired->{circulation}=1;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/issuingrules.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 0,
- 			     flagsrequired => {parameters => 1},
-			      debug => 1,
-                             });
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {parameters => 1},
+                            debug => 1,
+                            });
 # save the values entered
 if ($op eq 'save') {
-	my @names=$input->param();
-	my $sth_search = $dbh->prepare("select count(*) as total from issuingrules where branchcode=? and categorycode=? and itemtype=?");
+    my @names=$input->param();
+    my $sth_search = $dbh->prepare("SELECT count(*) AS total FROM issuingrules WHERE branchcode=? and categorycode=? and itemtype=?");
 
-	my $sth_Iinsert = $dbh->prepare("insert into issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength,rentaldiscount) values (?,?,?,?,?,?)");
-	my $sth_Iupdate=$dbh->prepare("Update issuingrules set maxissueqty=?, issuelength=?, rentaldiscount=? where branchcode=? and categorycode=? and itemtype=?");
-	my $sth_Idelete=$dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=? and fine=0");
-	foreach my $key (@names){
-		# ISSUES
-		if ($key =~ /I-(.*)-(.*)\.(.*)/) {
-			my $br = $1; # branch
-			my $bor = $2; # borrower category
-			my $cat = $3; # item type
-			my $data=$input->param($key);
-			my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
-# 			if ($maxissueqty >0) {
-				$sth_search->execute($br,$bor,$cat);
-				my $res = $sth_search->fetchrow_hashref();
-				if ($res->{total}) {
-					$sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
-				} else {
-					$sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
-				}
-# 			} else {
-# 				$sth_Idelete->execute($br,$bor,$cat);
-# 			}
-		}
-	}
-
+    my $sth_Iinsert = $dbh->prepare("INSERT INTO issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength,rentaldiscount) VALUES (?,?,?,?,?,?)");
+    my $sth_Iupdate=$dbh->prepare("UPDATE issuingrules SET maxissueqty=?, issuelength=?, rentaldiscount=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
+    my $sth_Idelete=$dbh->prepare("DELETE FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=? AND fine=0");
+    foreach my $key (@names){
+        # ISSUES
+        if ($key =~ /I-(.*)-(.*)\.(.*)/) {
+            my $br = $1; # branch
+            my $bor = $2; # borrower category
+            my $cat = $3; # item type
+            my $data=$input->param($key);
+            my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
+            $sth_search->execute($br,$bor,$cat);
+            my $res = $sth_search->fetchrow_hashref();
+            if ($res->{'total'} >0) {
+                $sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
+            } else {
+                $sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
+            }
+        }
+    }
 }
 my $branches = GetBranches;
 my @branchloop;
 foreach my $thisbranch (keys %$branches) {
-	my $selected = 1 if $thisbranch eq $branch;
-	my %row =(value => $thisbranch,
-				selected => $selected,
-				branchname => $branches->{$thisbranch}->{'branchname'},
-			);
-	push @branchloop, \%row;
+    my $selected = 1 if $thisbranch eq $branch;
+    my %row =(value => $thisbranch,
+                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
 }
 
-my $sth=$dbh->prepare("Select description,categorycode from categories order by description");
+my $sth=$dbh->prepare("SELECT description,categorycode FROM categories ORDER BY description");
 $sth->execute;
 my @trow3;
 my @title_loop;
-# my $i=0;
 while (my $data=$sth->fetchrow_hashref){
-	my %row = (in_title => $data->{'description'});
-	push @title_loop,\%row;
- 	push @trow3,$data->{'categorycode'};
-# 	$i++;
+    my %row = (in_title => $data->{'description'});
+    push @title_loop,\%row;
+    push @trow3,$data->{'categorycode'};
 }
-
-my %row = (in_title => "*");
-push @title_loop, \%row;
-push @trow3,'*';
 
 $sth->finish;
 $sth=$dbh->prepare("Select description,itemtype from itemtypes order by description");
 $sth->execute;
-# $i=0;
 my $toggle= 1;
 my @row_loop;
 my @itemtypes;
 while (my $row=$sth->fetchrow_hashref){
-	push @itemtypes,\$row;
+    push @itemtypes,\$row;
 }
 my $line;
 $line->{itemtype} = "*";
@@ -117,44 +105,39 @@ $line->{description} = "*";
 push @itemtypes,\$line;
 
 foreach my $data (@itemtypes) {
-	my @trow2;
-	my @cell_loop;
-	if ( $toggle eq 1 ) {
-		$toggle = 0;
-	} else {
-		$toggle = 1;
-	}
-	for (my $i=0;$i<=$#trow3;$i++){
-		my $sth2=$dbh->prepare("select * from issuingrules where branchcode=? and categorycode=? and itemtype=?");
-		$sth2->execute($branch,$trow3[$i],$$data->{'itemtype'});
-		my $dat=$sth2->fetchrow_hashref;
-		$sth2->finish;
-		my $fine=$dat->{'fine'}+0;
-		my $maxissueqty = $dat->{'maxissueqty'}+0;
-		my $issuelength = $dat->{'issuelength'}+0;
-	        my $rentaldiscount = $dat->{'rentaldiscount'}+0;
-		my $finesvalue;
-		$finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine+$dat->{'firstremind'}+$dat->{'chargeperiod'}>0;
-		my $issuingvalue;
-                $issuingvalue = "$issuelength,$maxissueqty,$rentaldiscount" if $issuelength+$maxissueqty>0;
-		my %row = (	issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
-				issuingvalue => $issuingvalue,
-				toggle => $toggle,
-				);
-		push @cell_loop,\%row;
-	}
-	my %row = (categorycode => $$data->{description},
-  					cell =>\@cell_loop);
-	push @row_loop, \%row;
+    my @trow2;
+    my @cell_loop;
+    if ( $toggle eq 1 ) {
+            $toggle = 0;
+    } else {
+            $toggle = 1;
+    }
+    for (my $i=0;$i<=$#trow3;$i++){
+        my $sth2=$dbh->prepare("SELECT * FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
+        $sth2->execute($branch,$trow3[$i],$$data->{'itemtype'});
+        my $dat=$sth2->fetchrow_hashref;
+        $sth2->finish;
+        my $fine=$dat->{'fine'}+0;
+        my $maxissueqty = $dat->{'maxissueqty'}+0;
+        my $issuelength = $dat->{'issuelength'}+0;
+        my $issuingvalue;
+        $issuingvalue = "$issuelength,$maxissueqty" if $issuelength+$maxissueqty>0;
+        my %row = (issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
+                    issuingvalue => $issuingvalue,
+                    toggle => $toggle,
+                    );
+        push @cell_loop,\%row;
+    }
+    my %row = (categorycode => $$data->{description},
+                cell =>\@cell_loop
+            );
+    push @row_loop, \%row;
 }
 
 $sth->finish;
 $template->param(title => \@title_loop,
-						row => \@row_loop,
-						branchloop => \@branchloop,
-						branch => $branch,
-						intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-						);
+                row => \@row_loop,
+                branchloop => \@branchloop,
+                branch => $branch,
+                );
 output_html_with_http_headers $input, $cookie, $template->output;
