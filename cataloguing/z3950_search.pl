@@ -204,7 +204,7 @@ else {
                         $notmarcrecord, $alreadyindb, $alreadyinfarm,
                         $imported,      $breedingid
                       )
-                      = ImportBreeding( $marcdata, 1, $serverhost[$k], $encoding[$k], $random );
+                      = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random );
 
                     my %row_data;
                     if ( $i % 2 ) {
