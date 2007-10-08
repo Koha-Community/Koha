@@ -855,7 +855,6 @@ AddIssue does the following things :
 
 sub AddIssue {
     my ( $borrower, $barcode, $date, $cancelreserve ) = @_;
-    
     my $dbh = C4::Context->dbh;
 my $barcodecheck=CheckValidBarcode($barcode);
 if ($borrower and $barcode and $barcodecheck ne '0'){
@@ -925,20 +924,6 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                 my $branches   = GetBranches();
                 my $branchname =
                   $branches->{ $res->{'branchcode'} }->{'branchname'};
-                if ($cancelreserve) {
-                    CancelReserve( 0, $res->{'itemnumber'},
-                        $res->{'borrowernumber'} );
-                }
-                else {
-
-       # set waiting reserve to first in reserve queue as book isn't waiting now
-                    ModReserve(
-                        1,
-                        $res->{'biblionumber'},
-                        $res->{'borrowernumber'},
-                        $res->{'branchcode'}
-                    );
-                }
             }
             elsif ( $restype eq "Reserved" ) {
 
@@ -953,6 +938,19 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                     CancelReserve( 0, $res->{'itemnumber'},
                         $res->{'borrowernumber'} );
                 }
+            }
+            if ($cancelreserve) {
+                CancelReserve( $res->{'biblionumber'}, 0,
+                    $res->{'borrowernumber'} );
+            }
+            else {
+    # set waiting reserve to first in reserve queue as book isn't waiting now
+                ModReserve(
+                    1,
+                    $res->{'biblionumber'},
+                    $res->{'borrowernumber'},
+                    $res->{'branchcode'}
+                );
             }
         }
 

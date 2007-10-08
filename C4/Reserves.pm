@@ -705,7 +705,7 @@ priorities of the other people who are waiting on the book.
 sub CancelReserve {
     my ( $biblio, $item, $borr ) = @_;
     my $dbh = C4::Context->dbh;
-        if ( ( $item and $borr ) and ( not $biblio ) ) {
+        if ( $item and $borr ) {
         # removing a waiting reserve record....
         # update the database...
         my $query = "
@@ -720,7 +720,7 @@ sub CancelReserve {
         $sth->execute( $item, $borr );
         $sth->finish;
     }
-    if ( ( $biblio and $borr ) and ( not $item ) ) {
+    else {
         # removing a reserve record....
         # get the prioritiy on this record....
         my $priority;
