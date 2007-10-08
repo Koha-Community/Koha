@@ -57,20 +57,21 @@ sub MARCfindbreeding {
       $dbh->prepare("select file,marc,encoding from marc_breeding where id=?");
     $sth->execute($id);
     my ( $file, $marc, $encoding ) = $sth->fetchrow;
+    # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-        if ( $record->field('010') ) {
-            foreach my $field ( $record->field('010') ) {
-                foreach my $subfield ( $field->subfield('a') ) {
-                    my $newisbn = $field->subfield('a');
+        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField('biblioitems.isbn','');
+        if ( $record->field($isbnfield) ) {
+            foreach my $field ( $record->field($isbnfield) ) {
+                foreach my $subfield ( $field->subfield($isbnsubfield) ) {
+                    my $newisbn = $field->subfield($isbnsubfield);
                     $newisbn =~ s/-//g;
-                    $field->update( 'a' => $newisbn );
+                    $field->update( $isbnsubfield => $newisbn );
                 }
-                # record->insert_fields_ordered($record->field('010'));
             }
         }
-
-        if ($record->subfield(100,'a')) {
+        # fix the unimarc 100 coded field (with unicode information)
+        if (C4::Context->preference('marcflavour') eq 'UNIMARC' && $record->subfield(100,'a')) {
             my $f100a=$record->subfield(100,'a');
             my $f100 = $record->field(100);
             my $f100temp = $f100->as_string;
@@ -87,6 +88,7 @@ sub MARCfindbreeding {
             return -1;
         }
         else {
+            # normalize author : probably UNIMARC specific...
             if (    C4::Context->preference("z3950NormalizeAuthor")
                 and C4::Context->preference("z3950AuthorAuthFields") )
             {
