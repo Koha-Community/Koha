@@ -90,6 +90,10 @@ foreach my $branch ( keys %$branches ) {
         my %line;
         $line{branch} = $branches->{$branch}->{'branchname'};
         $line{value}  = $branch;
+        warn "===>".$line{value}." eq ".C4::Context->userenv->{'branch'};
+        if ($line{value} eq C4::Context->userenv->{'branch'}) {
+            $line{selected} = 1;
+        }
         push @CGIbranchlooparray, \%line;
     }
 }

@@ -139,8 +139,13 @@
         <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
         <!-- /TMPL_LOOP --> <!-- bibitemloop -->
         <p>Pick up from:<select name="branch" id="branch">
-                    <option>-- Please choose your branch --</option>
-                    <!-- TMPL_LOOP NAME="CGIbranch" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option><!-- /TMPL_LOOP -->
+                    <!-- TMPL_LOOP NAME="CGIbranch" -->
+                        <!-- TMPL_IF name="selected" -->
+                            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branch" --></option>
+                        <!-- TMPL_ELSE -->
+                            <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option>
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
             </select>
         </p>
         <input type="submit" value="Place Hold" />
