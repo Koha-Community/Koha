@@ -774,6 +774,14 @@ my $DBversion = "3.00.00.000";
         
         biblioitems =>  [
             {
+                field    => 'itemtype',
+                type    => 'varchar(10)',
+                null    => 'NOT NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
                 field    => 'lcsort',
                 type    => 'varchar(25)',
                 null    => 'NULL',
@@ -841,6 +849,13 @@ my $DBversion = "3.00.00.000";
                 
         ],
         deletedbiblioitems => [
+            {
+                field   => 'itemtype',
+                type    => 'varchar(10)',
+                null    => 'NOT NULL',
+                default => '',
+                extra   => '',
+            },
             {
                 field   => 'dewey',
                 type    => 'varchar(30)',
@@ -1162,6 +1177,18 @@ my $DBversion = "3.00.00.000";
                 field => 'dateadded',
                 type => 'timestamp',
                 null    => 'NULL',
+            },
+        ],
+        statistics => [
+            {
+                field => 'branch',
+                type => 'varchar(10)',
+                null    => 'NOT NULL',
+            },
+            {
+                field => 'itemtype',
+                type => 'varchar(10)',
+                null    => 'NOT NULL',
             },
         ],
         systempreferences =>  [

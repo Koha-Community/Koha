@@ -382,7 +382,7 @@ CREATE TABLE `biblioitems` (
   `volume` mediumtext,
   `number` mediumtext,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` varchar(30) default '',
@@ -650,7 +650,7 @@ CREATE TABLE `deletedbiblioitems` (
   `volume` mediumtext,
   `number` mediumtext,
   `classification` varchar(25) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `isbn` varchar(14) default NULL,
   `issn` varchar(9) default NULL,
   `dewey` double(8,6) default NULL,
@@ -828,8 +828,8 @@ CREATE TABLE `issues` (
 
 DROP TABLE IF EXISTS `issuingrules`;
 CREATE TABLE `issuingrules` (
-  `categorycode` varchar(2) NOT NULL default '',
-  `itemtype` varchar(4) NOT NULL default '',
+  `categorycode` varchar(10) NOT NULL default '',
+  `itemtype` varchar(10) NOT NULL default '',
   `restrictedtype` tinyint(1) default NULL,
   `rentaldiscount` decimal(28,6) default NULL,
   `reservecharge` decimal(28,6) default NULL,
@@ -844,8 +844,7 @@ CREATE TABLE `issuingrules` (
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`),
-  CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `issuingrules_ibfk_2` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `issuingrules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1284,14 +1283,14 @@ CREATE TABLE `special_holidays` (
 DROP TABLE IF EXISTS `statistics`;
 CREATE TABLE `statistics` (
   `datetime` datetime default NULL,
-  `branch` varchar(4) default NULL,
+  `branch` varchar(10) default NULL,
   `proccode` varchar(4) default NULL,
   `value` double(16,4) default NULL,
   `type` varchar(16) default NULL,
   `other` mediumtext,
   `usercode` varchar(10) default NULL,
   `itemnumber` int(11) default NULL,
-  `itemtype` varchar(4) default NULL,
+  `itemtype` varchar(10) default NULL,
   `borrowernumber` int(11) default NULL,
   `associatedborrower` int(11) default NULL,
   KEY `timeidx` (`datetime`)
