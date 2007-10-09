@@ -3268,7 +3268,7 @@ sub _koha_add_biblio {
     $sth->finish;
     $sth = $dbh->prepare(
         "INSERT INTO biblio
-    SET biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?, frameworkcode = ? "
+    SET datecreated=NOW(), biblionumber  = ?, title = ?, author = ?, copyrightdate = ?, serial = ?, seriestitle = ?, notes = ?, abstract = ?, unititle = ?, frameworkcode = ? "
     );
     $sth->execute(
         $biblionumber,         $biblio->{'title'},
