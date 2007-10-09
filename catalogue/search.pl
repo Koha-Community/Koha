@@ -162,7 +162,7 @@ my ($template,$borrowernumber,$cookie);
 # decide which template to use
 my $template_name;
 my @params = $cgi->param("limit");
-if ((@params>1) || ($cgi->param("q")) ) {
+if ((@params>=1) || ($cgi->param("q")) ) {
     $template_name = 'catalogue/results.tmpl';
 }
 else {
@@ -215,7 +215,7 @@ query parser.
 my $branches = GetBranches();
 my @branch_loop;
 push @branch_loop, {value => "", branchname => "All Branches", };
-for my $branch_hash (keys %$branches) {
+for my $branch_hash (sort keys %$branches) {
     push @branch_loop, {value => "branch: $branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
 $template->param(branchloop => \@branch_loop,);
@@ -397,7 +397,7 @@ if ($@ || $error) {
 my $op=$cgi->param("operation");
 if ($op eq "bulkedit"){
         my ($countchanged,$listunchanged)=
-          EditBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
+          ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
                       $params->{"tagsubfield"},
                       $params->{"inputvalue"},
                       $params->{"targetvalue"},

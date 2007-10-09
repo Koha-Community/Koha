@@ -248,7 +248,7 @@ sub getRecords {
         $expanded_facet, $branches,         $query_type,
         $scan
     ) = @_;
-    warn "Query : $koha_query";
+#     warn "Query : $koha_query";
     my @servers = @$servers_ref;
     my @sort_by = @$sort_by_ref;
 
@@ -790,9 +790,9 @@ sub buildQuery {
     $human_search_desc =~ s/^ //g;
     my $koha_query = $query;
 
-    #warn "QUERY:".$koha_query;
-    #warn "SEARCHDESC:".$human_search_desc;
-    #warn "FEDERATED QUERY:".$federated_query;
+#     warn "QUERY:".$koha_query;
+#     warn "SEARCHDESC:".$human_search_desc;
+#     warn "FEDERATED QUERY:".$federated_query;
     return ( undef, $human_search_desc, $koha_query, $federated_query );
 }
 
@@ -971,16 +971,14 @@ sub searchResults {
 
                 # Last resort
                 elsif ( $item->{'holdingbranch'} ) {
-                    $items->{ $item->{'homebranch'} }->{count}++;
+                    $items->{ $item->{'holdingbranch'} }->{count}++;
                 }
                 $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
                 $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
                 $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
             }
         }    # notforloan, item level and biblioitem level
-        for my $key ( keys %$items ) {
-
-            #warn "key: $key";
+        for my $key ( sort keys %$items ) {
             my $this_item = {
                 branchname     => $branches{$items->{$key}->{branchcode}},
                 branchcode     => $items->{$key}->{branchcode},
@@ -1058,9 +1056,9 @@ sub searchResults {
 }
 
 
-=head2 EditBiblios
+=head2 ModBiblios
 
-($countchanged,$listunchanged) = EditBiblios($listbiblios, $tagsubfield,$initvalue,$targetvalue,$test);
+($countchanged,$listunchanged) = ModBiblios($listbiblios, $tagsubfield,$initvalue,$targetvalue,$test);
 
 this function changes all the values $initvalue in subfield $tag$subfield in any record in $listbiblios
 test parameter if set donot perform change to records in database.
@@ -1089,7 +1087,7 @@ $template->param(countchanged => $countchanged, loopunchanged=>$listunchanged);
 
 =cut
 
-sub EditBiblios{
+sub ModBiblios{
   my ($listbiblios,$tagsubfield,$initvalue,$targetvalue,$test)=@_;
   my $countmatched;
   my @unmatched;
