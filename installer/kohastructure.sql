@@ -289,7 +289,7 @@ CREATE TABLE `auth_subfield_structure` (
   `isurl` tinyint(1) default NULL,
   `hidden` tinyint(3) NOT NULL default 0,
   `linkid` tinyint(1) NOT NULL default 0,
-  `kohafield` varchar(45) NOT NULL default '',
+  `kohafield` varchar(45) NULL default '',
   `frameworkcode` varchar(8) NOT NULL default '',
   PRIMARY KEY  (`authtypecode`,`tagfield`,`tagsubfield`),
   KEY `tab` (`authtypecode`,`tab`)

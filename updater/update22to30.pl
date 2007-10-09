@@ -207,7 +207,7 @@ my $DBversion = "3.00.00.000";
         aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
         aqbudget => { 'branchcode' => 'varchar(4) NULL'},
         auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
-        auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL default 0', 'kohafield' => 'VARCHAR(45) NOT NULL', 'linkid' =>  'TINYINT(1) NOT NULL default 0', 'isurl' => 'TINYINT(1)', 'frameworkcode'=>'VARCHAR(8) NOT  NULL'},
+        auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL default 0', 'kohafield' => 'VARCHAR(45) NULL', 'linkid' =>  'TINYINT(1) NOT NULL default 0', 'isurl' => 'TINYINT(1)', 'frameworkcode'=>'VARCHAR(8) NOT  NULL'},
         marc_breeding => { 'isbn' => 'varchar(13) NOT NULL'},
         serial =>{ 'publisheddate' => 'date', 'claimdate' => 'date', 'itemnumber'=>'text NULL','routingnotes'=>'text NULL',},
         statistics => { 'associatedborrower' => 'integer'},
