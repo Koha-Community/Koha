@@ -418,7 +418,7 @@ sub GetTagsLabels {
   my ($total) = $sth->fetchrow;
   $authtypecode="" unless ($total >0);
   $sth= $dbh->prepare(
-"SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
+"SELECT auth_tag_structure.tagfield,auth_tag_structure.liblibrarian,auth_tag_structure.libopac,auth_tag_structure.mandatory,auth_tag_structure.repeatable 
  FROM auth_tag_structure 
  WHERE authtypecode=? 
  ORDER BY tagfield"
@@ -434,7 +434,7 @@ sub GetTagsLabels {
         $res->{$tag}->{repeatable} = $repeatable;
   }
   $sth=      $dbh->prepare(
-"SELECT tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,authtypecode,value_builder,kohafield,seealso,hidden,isurl 
+"SELECT tagfield,tagsubfield,liblibrarian,libopac,tab, mandatory, repeatable,authorised_value,frameworkcode as authtypecode,value_builder,kohafield,seealso,hidden,isurl 
 FROM auth_subfield_structure 
 WHERE authtypecode=? 
 ORDER BY tagfield,tagsubfield"

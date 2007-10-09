@@ -103,24 +103,8 @@ if ($authid) {
     }
 } else {
     # authid is empty => the user want to empty the entry.
-    my @subfields_data;
-    my %subfield_data;
-    foreach my $subfield ( '0' .. '9' ) { #subfield code should also be number !
-        $subfield_data{marc_value}    = '';
-        $subfield_data{marc_subfield} = $subfield;
-        push( @subfields_data, \%subfield_data );
-    }
-    foreach my $subfield ( 'a' .. 'z' ) {
-        $subfield_data{marc_value}    = '';
-        $subfield_data{marc_subfield} = $subfield;
-        push( @subfields_data, \%subfield_data );
-    }
-    
-    my %tag_data;
-    # $tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
-    $tag_data{subfield} = \@subfields_data;
-    push( @loop_data, \%tag_data );
-    warn Data::Dumper::Dumper(\@loop_data);
+    $template->param( "clear" => 1 );
+#     warn Data::Dumper::Dumper(\@loop_data);
 }
 
 $template->param( "0XX" => \@loop_data );

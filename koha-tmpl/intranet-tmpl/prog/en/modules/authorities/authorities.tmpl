@@ -1,161 +1,368 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <Title>Koha -- Authority details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
 <script type="text/javascript">
-function _(s) { return s } // dummy function for gettext
+//<![CDATA[
+
 function active(numlayer)
 {
-	for (i=0; i < 10 ; i++ ) {
-		ong = i+"XX";
-		link = "link"+i;
-		if (numlayer==i) {
-			document.getElementById(ong).style.visibility="visible";
-		} else {
-			document.getElementById(ong).style.visibility="hidden";
-		}
-	}
+    for (i=0; i < 10 ; i++ ) {
+        ong = i+"XX";
+        link = "link"+i;
+        if (numlayer==i) {
+                document.getElementById(ong).style.visibility="visible";
+        } else {
+                document.getElementById(ong).style.visibility="hidden";
+        }
+    }
 }
-function Check(f) {
-	// Scan for nonempty fields
-	var field_is_nonempty_p = new Array();
-	for (i=0 ; i<f.field_value.length ; i++) {
-	    field_is_nonempty_p[f.tag[i].value] = 0;
-	}
-	for (i=0 ; i<f.field_value.length ; i++) {
-	    if (f.field_value[i].value.length != 0) {
-		field_is_nonempty_p[f.tag[i].value] += 1;
-	    }
-	}
-
-	// Scan for missing mandatory subfields
-	var total_missing_mandatory_subfields = 0;
-	for (i=0 ; i<f.field_value.length-2 ; i++) {
-		if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-		    // We should not flag an error unless the tag is also
-		    // mandatory, or if something else in the tag is entered
-
-		    if (f.tag_mandatory[i].value == 1 || field_is_nonempty_p[f.tag[i].value]) {
-			document.getElementById("error"+i).style.backgroundColor="#FF0000";
-			total_missing_mandatory_subfields++;
-		    }
-		} else {
-			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-		}
-	}
-
-	// Scan for missing mandatory tags
-	var total_missing_mandatory_tags = 0;
-	var seen_mandatory_tag_p = new Array();
-	for (i=0 ; i<f.field_value.length ; i++) {
-	    var j = f.tag[i].value;
-	    if (!field_is_nonempty_p[j] && f.tag_mandatory[i].value == 1) {
-		if (seen_mandatory_tag_p[j] != 1) {
-		    seen_mandatory_tag_p[j] = 1;
-		    total_missing_mandatory_tags++;
-		}
-		document.getElementById("error"+i).style.backgroundColor="#ffff00";
-	    }
-	}
-
-	var total_errors = total_missing_mandatory_tags + total_missing_mandatory_subfields;
-	var alertString2;
-	if (total_errors!=0) {
-		alertString2  = _("Form not submitted because of the following problem(s)");
-		alertString2 += "\n------------------------------------------------------------------------------------\n";
-		alertString2 += "\n- "+ total_missing_mandatory_tags +_(" mandatory tags empty");
-		alertString2 += "\n- "+ total_missing_mandatory_subfields +_(" mandatory fields empty (see bold subfields)");
-		alert(alertString2);
-	} else {
-		document.forms['f'].submit();
-	}
-}
-function Dopop(link,i) {
-	defaultvalue=document.forms['f'].field_value[i].value;
-	newin=window.open(link+"&result="+defaultvalue,"value builder",'width=550,height=550,toolbar=false,scrollbars=yes');
+/**
+ * check if mandatory subfields are writed
+ */
+function AreMandatoriesNotOk(){
+    var mandatories = new Array();
+    var tab = new Array();
+    var label = new Array();
+    var flag=0;
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
+        <!-- TMPL_LOOP NAME='innerloop' -->
+            <!-- TMPL_LOOP NAME='subfield_loop'-->
+                <!-- TMPL_IF NAME='mandatory'-->
+                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+                        tab.push("<!-- TMPL_VAR NAME='number' -->");
+                        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
+    var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
+    for(var i=0,len=mandatories.length; i<len ; i++){
+        //alert (  mandatories[i]);
+        if( ! document.getElementById(mandatories[i]).value){
+            flag = 1;
+            document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
+            document.getElementById(mandatories[i]).focus();
+            StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
+        }
+    }
+    if(flag){
+      return StrAlert;
+  } else {
+    return flag;
+  }
 }
 
-function PopupZ3950() {
-    var strQuery="";
-	for (i=0 ; i<document.forms['f'].field_value.length ; i++) {
-		if (document.forms['f'].kohafield[i].value == "biblioitems.isbn" && document.forms['f'].field_value[i].value.length>0) {
-		    strQuery += "&isbn="+document.forms['f'].field_value[i].value;
-		}
-		if (document.forms['f'].kohafield[i].value == "biblio.title" && document.forms['f'].field_value[i].value.length>0) {
-		    strQuery += "&title="+document.forms['f'].field_value[i].value;
-		}
-		if (document.forms['f'].kohafield[i].value == "biblio.author" &&document.forms['f'].field_value[i].value.length>0) {
-		    strQuery += "&author="+document.forms['f'].field_value[i].value;
-		}
-		if (document.forms['f'].kohafield[i].value == "biblioitems.issn" && document.forms['f'].field_value[i].value.length>0) {
-		    strQuery += "&issn="+document.forms['f'].field_value[i].value;
-		}
-	}
-	newin=window.open("../z3950/search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=500,height=400,toolbar=false,scrollbars=yes');
+/**
+ * 
+ * 
+ */
+function Check(){
+    var StrAlert = AreMandatoriesNotOk();
+    if( ! StrAlert ){
+        document.f.submit;
+        return true;
+    } else {
+        alert(StrAlert);
+        return false;
+    }
 }
+
+
+
 
 function AddField(field,cntrepeatfield) {
-	document.forms['f'].op.value = "addfield";
-	document.forms['f'].addfield_field.value=field;
-	document.forms['f'].repeat_field.value=cntrepeatfield;
-	document.f.submit();
+    document.forms['f'].op.value = "addfield";
+    document.forms['f'].addfield_field.value=field;
+    document.forms['f'].repeat_field.value=cntrepeatfield;
+    document.f.submit();
 }
 
-function cloneSubfield(index) {
+function Dopop(link,i) {
+    defaultvalue = document.getElementById(i).value;
+    window.open(link+"&result="+defaultvalue,"value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+function ExpandField(index) {
+    var original = document.getElementById(index); //original <div>
+    var divs = original.getElementsByTagName('div');
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+            if (divs[i].style.display == 'block') {
+                divs[i].style.display = 'none';
+            } else {
+                divs[i].style.display = 'block';
+            }
+        }
+    }
+}
+
+/**
+ * To clone a field or a subfield by clickink on '+' button
+ */ 
+function CloneField(index) {
     var original = document.getElementById(index); //original <div>
     var clone = original.cloneNode(true);
-
-    // set the attribute for the new 'div' subfields
-    clone.setAttribute('id',index + index);//set another id.
-    var NumTabIndex;
-    NumTabIndex = parseInt(original.getAttribute('tabindex'));
-    if(isNaN(NumTabIndex)) NumTabIndex = 0;
-    clone.setAttribute('tabindex',NumTabIndex+1);
+    var new_key = CreateKey();
+    var new_id  = original.getAttribute('id')+new_key;
     
-    var CloneButtonPlus;
-    try{
-        CloneButtonPlus = clone.getElementsByTagName('a')[0];
-        CloneButtonPlus.setAttribute('onclick',"cloneSubfield('" + index + index + "')");
-    }
-    catch(e){
-        // do nothing if ButtonPlus & CloneButtonPlus don't exist.
-    }
+    clone.setAttribute('id',new_id); // setting a new id for the parent div
+    
+    var divs = clone.getElementsByTagName('div');
+    
+    <!-- TMPL_UNLESS NAME='hide_marc'--> // No indicator if hide_marc
+        // setting a new name for the new indicator
+        var indicator = clone.getElementsByTagName('input')[0];
+        indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
+    <!-- /TMPL_UNLESS -->
+        
+    // settings all subfields
+    for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
+        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+            
+            // set the attribute for the new 'div' subfields
+            divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
+            
+            var inputs   = divs[i].getElementsByTagName('input');
+            var id_input = "";
+            
+            inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+            inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
+            var id_input;
+            try {
+              id_input = inputs[1].getAttribute('id')+new_key;
+                inputs[1].setAttribute('id',id_input);
+                inputs[1].setAttribute('name',inputs[1].getAttribute('name')+new_key);
+            } catch(e) {
+              try{ // it s a select if it is not an input
+                    var selects = divs[i].getElementsByTagName('select');
+                    id_input = selects[0].getAttribute('id')+new_key;
+                    selects[0].setAttribute('id',id_input);
+                    selects[0].setAttribute('name',selects[0].getAttribute('name')+new_key);
+                }catch(e2){ // it is a textarea if it s not a select or an input
+                  var textaeras = divs[i].getElementsByTagName('textarea');
+                  id_input = textaeras[0].getAttribute('id')+new_key;
+                  textaeras[0].setAttribute('id',id_input);
+                    textaeras[0].setAttribute('name',textaeras[0].getAttribute('name')+new_key);
+                }
+            }
+            
+            <!-- TMPL_UNLESS NAME='advancedMARCEditor'-->
+            // when cloning a subfield, re set its label too.
+            var labels = divs[i].getElementsByTagName('label');
+            labels[0].setAttribute('for',id_input);
+            <!-- /TMPL_UNLESS -->
+            
+            <!-- TMPL_UNLESS NAME='hide_marc'-->
+                // updating javascript parameters on button up
+                var imgs = divs[i].getElementsByTagName('img');
+                imgs[0].setAttribute('onclick',"upSubfield(\'"+divs[i].getAttribute('id')+"\');");
+            <!-- /TMPL_UNLESS -->
+            
+            // setting its '+' button
+            var CloneButtonPlus=0;
+            try {
+                CloneButtonPlus = divs[i].getElementsByTagName('span')[0];
+                if(CloneButtonPlus.getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
+                } else {
+                    CloneButtonPlus = 0;
+                }
+            }
+            catch(e){
+                // do nothig if ButtonPlus & CloneButtonPlus don t exist.
+            }
+            
+            // button ...
+            var spans=0;
+            try {
+                spans = divs[i].getElementsByTagName('span');
+            } catch(e) {
+                // no spans
+            }
+            if(spans){
+                var buttonDot;
+                if(!CloneButtonPlus){ // it s impossible to have  + ... (buttonDot AND buttonPlus)
+                    buttonDot = spans[0];
+                    if(buttonDot){
+                        // 2 possibilities :
+                        try{
+                            var buttonDotOnClick = buttonDot.getAttribute('onclick');
+                            if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
+                                var re = /\('.*'\)/i;
+                                buttonDotOnClick = buttonDotOnClick.replace(re,"('"+inputs[1].getAttribute('id')+"')");
+                                if(buttonDotOnClick){
+                                    buttonDot.setAttribute('onclick',buttonDotOnClick);
+                                }
+                            } else {
+                                if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
+                                    
+                                    var re1 = /&index=.*',/;
+                                    var re2 = /,.*\)/;
 
+                                    buttonDotOnClick = buttonDotOnClick.replace(re1,"&index="+inputs[1].getAttribute('id')+"',");
+                                    buttonDotOnClick = buttonDotOnClick.replace(re2,",'"+inputs[1].getAttribute('id')+"')");
+                                    
+                                    if(buttonDotOnClick){
+                                            buttonDot.setAttribute('onclick',buttonDotOnClick);
+                                    }
+                                }
+                            }
+                            try {
+                              // do not copy the script section.
+                              var script = spans[0].getElementsByTagName('script')[0];
+                              spans[0].removeChild(script);
+                            } catch(e) {
+                              // do nothing if there is no script
+                            }
+                      }catch(e){}
+                  }
+                }
+            }
+            <!-- TMPL_UNLESS NAME='hide_marc'-->
+                var buttonUp = divs[i].getElementsByTagName('img')[0];
+                buttonUp.setAttribute('onclick',"upSubfield('" + divs[i].getAttribute('id') + "')");
+            <!-- /TMPL_UNLESS -->
+            
+        } else { // it's a indicator div
+            if(divs[i].getAttribute('name') == 'div_indicator'){
+                var inputs = divs[i].getElementsByTagName('input');
+                inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+                
+                var CloneButtonPlus;
+                try {
+                    CloneButtonPlus = divs[i].getElementsByTagName('span')[1]; // 0 is the title
+                    CloneButtonPlus.setAttribute('onclick',"CloneField('" + divs[i].parentNode.getAttribute('id') + "')");
+                }
+                catch(e){
+                    // do nothig CloneButtonPlus doesn't exist.
+                }
+                
+                // setting its 'Expand' property
+                var ExpandFieldA=0;
+                try {
+                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
+                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
+                }
+                catch(e){
+                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
+                }
+                
+            }
+        }
+    }
+    
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
 
-function upSubfield(index) {
-	try{
-		var line = document.getElementById(index); // get the line where the user has clicked.
-	} catch(e) {
-		return;
-	}
-	var tag = line.parentNode; // get the dad of this line. (should be "<div tag=XXX>")
-	
-	// getting all subfields for this tag
-	var subfields = tag.getElementsByTagName('div');
-	var subfieldsLength = subfields.length;
-	if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
-	// among all subfields 
-	for(var i=0;i<subfieldsLength;i++){ 
-		if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
-			if(i==0){ // if the clicked subfield is on the top
-				tag.appendChild(subfields[0]);
-				return;
-			}else{
-				var lineAbove = subfields[i-1];
-				tag.insertBefore(line,lineAbove);
-				return;
-			}
-		}
-	}
+function CloneSubfield(index){
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var new_key = CreateKey();
+    var new_id  = original.getAttribute('id')+new_key;
+    
+    // set the attribute for the new 'div' subfields
+    var inputs     = clone.getElementsByTagName('input');
+    var selects    = clone.getElementsByTagName('select');
+    var textareas  = clone.getElementsByTagName('textarea');
+        
+    // input
+    var id_input = "";
+    for(var i=0,len=inputs.length; i<len ; i++ ){
+        id_input = inputs[i].getAttribute('id')+new_key;
+        inputs[i].setAttribute('id',id_input);
+        inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+    }
+    
+    // select 
+    for(var i=0,len=selects.length; i<len ; i++ ){
+        id_input = selects[i].getAttribute('id')+new_key;
+        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
+        selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+    }
+    
+    // textarea
+    for(var i=0,len=textareas.length; i<len ; i++ ){
+        id_input = textareas[i].getAttribute('id')+new_key;
+        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
+        textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+    }
+    
+    <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
+    // when cloning a subfield, reset its label too.
+    var label = clone.getElementsByTagName('label')[0];
+    label.setAttribute('for',id_input);
+    <!-- /TMPL_UNLESS -->
+    
+    // setting a new if for the parent div
+    clone.setAttribute('id',new_id);
+    
+    var CloneButtonPlus;
+    try {
+      var spans = clone.getElementsByTagName('span');
+      if(spans.length){
+          for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
+            if(spans[i].getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus = spans[i];
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                    var buttonUp = clone.getElementsByTagName('img')[0];
+                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
+                }
+            }
+        }
+    }
+    catch(e){
+        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    }
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
 }
 
-function unHideSubfield(index,labelindex) {
-	subfield = document.getElementById(index);
-	subfield.style.display = 'block';
-	label = document.getElementById(labelindex);
-	label.style.display='none';	
+/**
+ * This function create a random number
+ */
+function CreateKey(){
+    return parseInt(Math.random() * 100000);
+}
+
+/**
+ * This function allows to move a subfield up by clickink on the 'up' button .
+ */
+function upSubfield(index) {
+    try{
+        var line = document.getElementById(index); // get the line where the user has clicked.
+    } catch(e) {
+        return; // this line doesn't exist...
+    }
+    var tag = line.parentNode; // get the dad of this line. (should be "<div id='tag_...'>")
+    
+    // getting all subfields for this tag
+    var subfields = tag.getElementsByTagName('div');
+    var subfieldsLength = subfields.length;
+    
+    if(subfieldsLength<=1) return; // nothing to do if there is just one subfield.
+    
+    // among all subfields 
+    for(var i=0;i<subfieldsLength;i++){ 
+        if(subfields[i].getAttribute('id') == index){ //looking for the subfield which is clicked :
+            if(i==1){ // if the clicked subfield is on the top
+                tag.appendChild(subfields[1]);
+                return;
+            } else {
+                var lineAbove = subfields[i-1];
+                tag.insertBefore(line,lineAbove);
+                return;
+            }
+        }
+    }
+}
+
+function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
+    subfield = document.getElementById(index);
+    subfield.style.display = 'block';
+    label = document.getElementById(labelindex);
+    label.style.display='none'; 
 }
 
 function addauthority() {
@@ -167,6 +374,7 @@ function searchauthority() {
     Y = document.forms[0].value.value;
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
+//]]>
 </script>
 </head>
 <body>
@@ -175,17 +383,17 @@ function searchauthority() {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority (<!-- TMPL_VAR name="authtypetext" -->)<!-- /TMPL_IF -->  </div>
 
 <div id="doc" class="yui-t7">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-g">
+
+<div id="bd">
+        <div id="yui-main">
+        <div class="yui-g">
 
 <!-- TMPL_IF name="authid" -->
-  <h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
 <!-- TMPL_ELSE -->
-  <h1>Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<h1>Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
 <!-- /TMPL_IF -->  
-  <form method="post" name="f">
+<form method="post" name="f">
     <input type="hidden" name="op" value="add" />
     <input type="hidden" name="addfield_field" value="" />
     <input type="hidden" name="repeat_field" value="" />
@@ -194,109 +402,174 @@ function searchauthority() {
 
     <div id="action">
 <!-- TMPL_IF name="authid" -->
-      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
+    <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
 <!-- TMPL_ELSE -->
-      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
+    <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
 <!-- /TMPL_IF -->
     </div>
 
 <!-- TMPL_IF name="duplicateauthid" -->
-	<div class="problem">
-		<p>Duplicate suspected with <a href="javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->&amp;popup=1", "Duplicate Authority");" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
-		<p>You must either :</p>
-		<ul>
-			<p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>
-			<p>Go to <a href="authorities.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->" >original authority</a></p>
-		</ul>
-	</div>
+        <div class="problem">
+                <p>Duplicate suspected with <a href="javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->&amp;popup=1", "Duplicate Authority");" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
+                <p>You must either :</p>
+                <ul>
+                        <p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>
+                        <p>Go to <a href="authorities.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->" >original authority</a></p>
+                </ul>
+        </div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_LOOP NAME="0XX" -->
-    <!-- TMPL_IF name="tag" -->
-        <p class="tag">
-            <input type="hidden" name="ind_tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-            <!-- TMPL_UNLESS name="hide_marc" -->
-                <a title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></a>
-                <input tabindex="1" onblur="this.style.backgroundColor='#ffffff';" onfocus="this.style.backgroundColor='#ffffff;'" type="text" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" class="flat" /> -
+<!--TMPL_UNLESS Name="singletab"-->
+<div id="tabs">
+        <!-- TMPL_LOOP name="BIG_LOOP" -->
+            <!-- TMPL_IF name="number" -->
+                <a href="JavaScript:active(<!-- TMPL_VAR name="number"-->)" class="tab_inactive" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
             <!-- TMPL_ELSE -->
-                <input tabindex="1" type="hidden" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> name="indicator" value="<!-- TMPL_VAR NAME="indicator" -->" />
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" --><!-- TMPL_VAR NAME="tag_lib" --><!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" -->
-                <a href="#<!-- TMPL_VAR NAME="tag" -->" onclick="this.nextSibling.type='text';this.nextSibling.focus()">+</a><input type="hidden" value="" size="2" onchange="AddField('<!-- TMPL_VAR NAME="tag" -->',this.value)" />
+                <a href="JavaScript:active(<!-- TMPL_VAR name="number"-->)" class="tab_active" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
             <!-- /TMPL_IF -->
-        </p>
-    <!-- /TMPL_IF -->
+        <!--  /TMPL_LOOP -->
+</div>
+<!--/TMPL_UNLESS-->
 
-    <!-- TMPL_LOOP NAME="subfield_loop" -->
-        <p class="subfield">
-        <!-- TMPL_IF NAME="visibility" -->
-            <a tabindex="1" style="color: grey; font-size: 80%; cursor: se-resize;" id="label<!-- TMPL_VAR name="index" -->" onclick="unHideSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->','label<!-- TMPL_VAR name="index" -->')">
-                <!-- TMPL_VAR NAME="subfield" -->
-            </a>
-        <!-- /TMPL_IF -->
-        <div style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='index' -->">
-            <p>
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                <label <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield"> 
-            <!-- /TMPL_UNLESS -->
+<!-- TMPL_LOOP name="BIG_LOOP" -->
+<!-- hide every tab except the 1st -->
+<!--TMPL_UNLESS Name="singletab"-->
+    <!-- TMPL_IF name="number" -->
+        <div id="<!-- TMPL_VAR name="number" -->XX" class="content_hidden">
+    <!-- TMPL_ELSE -->
+        <div id="0XX" class="content_visible">
+    <!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
+    
+    <!-- TMPL_LOOP NAME="innerloop" -->
+        <!-- TMPL_IF NAME="tag" -->
+<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
+        <div class="tag_title" name="div_indicator">
             <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')" />
-                    <input title="<!-- TMPL_VAR NAME="marc_lib_plain" -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" disabled="disabled" readonly="readonly" tabindex="-1" />
+                <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                <!-- TMPL_IF NAME="fixedfield" -->
+                <input tabindex="1"
+                            class="indicator"
+                            type="text"
+                            style="display:none;"
+                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
+                            size="2"
+                            maxlength="2"
+                            value="<!-- TMPL_VAR NAME="indicator" -->"
+                            class="flat" />
                 <!-- TMPL_ELSE -->
-                    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input tabindex="1"
+                            class="indicator"
+                            type="text"
+                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
+                            size="2"
+                            maxlength="2"
+                            value="<!-- TMPL_VAR NAME="indicator" -->"
+                            class="flat" />
+                <!-- /TMPL_IF --> -
+            <!-- TMPL_ELSE -->
+                <!-- TMPL_IF NAME="fixedfield" -->
+                    <input tabindex="1"
+                        type="hidden"
+                        name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
+                        value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
+                <!-- TMPL_ELSE -->
+                    <input tabindex="1"
+                        type="hidden"
+                        name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
+                        value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_UNLESS -->
+
+            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+            <a onClick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_IF name="repeatable" -->
+                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
+            <!-- /TMPL_IF -->
+            
+        </div>
+
+        <!-- TMPL_LOOP NAME="subfield_loop" -->
+            <!--  One line on the marc editor -->
+            <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->">
+            
+                <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
+                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                        <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
+                <!-- /TMPL_UNLESS --> 
+                
+                <!-- TMPL_UNLESS name="hide_marc" -->
+                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')"/>
+                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
+                            style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
+                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                            value="<!-- TMPL_VAR NAME="subfield" -->"
+                            size="1"
+                            maxlength="1"
+                            class="flat"
+                            tabindex=-1 />
+                <!-- TMPL_ELSE -->
+                    <input type="hidden"
+                        name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                        value="<!-- TMPL_VAR NAME="subfield" -->"/>
                 <!-- /TMPL_UNLESS -->
+            
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
-                    <!-- TMPL_VAR NAME="marc_lib" -->
-                    <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR NAME="marc_lib" -->
+                    <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
                     </label>
                 <!-- /TMPL_UNLESS -->
-                    <!-- TMPL_VAR NAME="marc_value" -->
-                    <!-- TMPL_IF NAME="repeatable" -->
-                        <a style="cursor: crosshair; color: grey; font-size: 80%;" onclick="cloneSubfield('subfield<!-- TMPL_VAR NAME="tag" --><!-- TMPL_VAR name="index" -->')">+</a>
-                    <!-- /TMPL_IF -->
-                    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-                    <input type="hidden" name="subfieldYYY" value="<!-- TMPL_VAR NAME="subfield" -->" size="2" maxlength="1" />
-                    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-                    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-                </p>
-</div>
+                
+                <!-- TMPL_VAR NAME="marc_value" -->
+                
+                <!-- TMPL_IF NAME="repeatable" -->
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
+                <!-- /TMPL_IF -->
+                
+            </div>
+            <!-- End of the line -->
+            
+        <!-- /TMPL_LOOP -->
+        </div>
+        <!-- /TMPL_IF --><!-- tag -->
     <!-- /TMPL_LOOP -->
-
-<!-- /TMPL_LOOP -->
-
-		<div name="hidden" id="hidden" class="tab">
-		<!-- TMPL_LOOP NAME="hidden_loop" -->
-				<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-				<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
-				<input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-				<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-		<!-- /TMPL_LOOP -->
-		</div>
-		<!-- TMPL_IF name="oldauthnumtagfield" -->
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->" />
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->" />
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->" />
-			<input type="hidden" name="mandatory" value="0" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-			<input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
-			<input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->" />
-			<input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->" />
-			<input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-		<!-- /TMPL_IF -->
-    <div id="action">
-<!-- TMPL_IF name="authid" -->
-      <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
-<!-- TMPL_ELSE -->
-      <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" />
-<!-- /TMPL_IF -->
     </div>
-	</form>
-</fieldset>
+<!-- /TMPL_LOOP -->
+<!--TMPL_UNLESS Name="singletab"-->
+</div>	
+<!--/TMPL_UNLESS-->
 
+<div name="hidden" id="hidden" class="tab">
+<!-- TMPL_LOOP NAME="hidden_loop" -->
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
+    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
+    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
+<!-- /TMPL_LOOP -->
+</div>
+<!-- TMPL_IF name="oldauthnumtagfield" -->
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->">
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->">
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->">
+    <input type="hidden" name="mandatory" value="0">
+    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
+    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->">
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->">
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+<!-- /TMPL_IF -->
+<div id="action">
+    <!-- TMPL_IF name="authid" -->
+        <input type="button" value="Save" onClick="Check(this.form)" accesskey="w">
+    <!-- TMPL_ELSE -->
+        <input type="button" value="Add authority" onClick="Check(this.form)" accesskey="w">
+    <!-- /TMPL_IF -->
+</div>
+</form>
+</fieldset>
 </div>
 </div>
 

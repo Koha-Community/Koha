@@ -108,18 +108,65 @@ function searchauthority() {
 </div>
 
 <div id="authorities_detail_details">
-<!-- TMPL_LOOP NAME="0XX" -->
+
+<!--TMPL_UNLESS Name="singletab"-->
+    <div id="tabs">
+        <!-- TMPL_IF NAME="0XX" -->
+            <a href="javascript:active(0)" class="tab_active" id="link0">0</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="1XX" -->
+            <a href="javascript:active(1)" class="tab_inactive" id="link1">1</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="2XX" -->
+            <a href="javascript:active(2)" class="tab_inactive" id="link2">2</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="3XX" -->
+            <a href="javascript:active(3)" class="tab_inactive" id="link3">3</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="4XX" -->
+            <a href="javascript:active(4)" class="tab_inactive" id="link4">4</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="5XX" -->
+            <a href="javascript:active(5)" class="tab_inactive" id="link5">5</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="6XX" -->
+            <a href="javascript:active(6)" class="tab_inactive" id="link6">6</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="7XX" -->
+            <a href="javascript:active(7)" class="tab_inactive" id="link7">7</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="8XX" -->
+            <a href="javascript:active(8)" class="tab_inactive" id="link8">8</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="9XX" -->
+            <a href="javascript:active(9)" class="tab_inactive" id="link9">9</a>
+        <!-- /TMPL_IF -->
+    </div>
+<!--/TMPL_UNLESS-->
+
+<!-- TMPL_LOOP name="BIG_LOOP" -->
+<!-- hide every tab except the 1st -->
+<!--TMPL_UNLESS Name="singletab"-->
+  <!-- TMPL_IF name="number" -->
+    <div id="<!-- TMPL_VAR name="number" -->XX" class="content_hidden">
+  <!-- TMPL_ELSE -->
+    <div id="0XX" class="content_visible">
+  <!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
+    
+    <!-- TMPL_LOOP NAME="innerloop" -->
                 <!-- TMPL_IF name="tag" -->
-                    <p class="tag">
+                    <div class="tag">
+                    <div class="tag_title">
                         <!-- TMPL_VAR NAME="tag" -->
-                    </p>
+                    </div>
                 <!-- TMPL_ELSE -->
-                    <br />
+                    <div class="tag">
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label>&nbsp;
-                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
+                    <label class="labelsubfield">&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
                     <!-- TMPL_IF name="link" -->
@@ -131,9 +178,13 @@ function searchauthority() {
                         <a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR name="authority" -->" class="button">Auth</a>
                     <!-- /TMPL_IF -->
                 </p>
-             <!-- /TMPL_LOOP -->
-
-<!-- /TMPL_LOOP --> <!-- tag -->
+            <!-- /TMPL_LOOP -->
+            </div>
+  
+    <!-- /TMPL_LOOP -->
+    </div>
+<!-- /TMPL_LOOP -->
+    
 </div>
 	
 
