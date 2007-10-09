@@ -392,7 +392,7 @@ elsif ( $step && $step == 3 ) {
         $dir =
           C4::Context->config('intranetdir') . "/installer/data/$langchoice";
         opendir( MYDIR, $dir ) || warn "no open $dir";
-        @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
+        @listdir = sort grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my @levellist;
         my $request =
