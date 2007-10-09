@@ -840,7 +840,7 @@ my $DBversion = "3.00.00.000";
                 extra   => '',
             },
             {
-                field   => 'editionresponsability',
+                field   => 'editionresponsibility',
                 type    => 'text',
                 null    => 'null',
                 default => '',

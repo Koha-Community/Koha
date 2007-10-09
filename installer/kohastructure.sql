@@ -675,7 +675,7 @@ CREATE TABLE `deletedbiblioitems` (
   `collectionissn` mediumtext,
   `collectionvolume` mediumtext,
   `editionstatement` text,
-  `editionresponsability` text,
+  `editionresponsibility` text,
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`)
