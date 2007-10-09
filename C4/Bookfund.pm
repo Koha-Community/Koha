@@ -228,7 +228,7 @@ sub GetBookFundBreakdown {
         FROM   aqorders
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         LEFT JOIN aqbookfund ON (aqorderbreakdown.bookfundid=aqbookfund.bookfundid and aqorderbreakdown.branchcode=aqbookfund.branchcode)
-        LEFT JOIN aqbudget ON (aqbudget.bookfundid=aqbookfund.bookfundid and aqbudget.branchcode=aqbudget.branchcode)
+        LEFT JOIN aqbudget ON (aqbudget.bookfundid=aqbookfund.bookfundid and aqbudget.branchcode=aqbookfund.branchcode)
         WHERE  aqorderbreakdown.bookfundid=?
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
             AND ((budgetdate >= ? and budgetdate < ?) OR (startdate>=? and enddate<=?))
