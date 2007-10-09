@@ -211,8 +211,8 @@ if ($borrowernumber) {
         #borrowercard expired or nearly expired, warn the librarian
         $template->param(
             flagged       => "1",
-            warndeparture => "1",
-            renewaldate   => "$renew_year-$renew_month-$renew_day"
+            warndeparture => format_date($borrower->{dateexpiry}),
+            renewaldate   => format_date("$renew_year-$renew_month-$renew_day")
         );
     }
     # check for NotifyBorrowerDeparture
@@ -221,7 +221,7 @@ if ($borrowernumber) {
             Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
             Date_to_Days( $today_year, $today_month, $today_day )) ) 
         {
-            $template->param("warndeparture" => 1);
+            $template->param("warndeparture" => format_date($borrower->{dateexpiry}));
         }
     $template->param(
         overduecount => $od,

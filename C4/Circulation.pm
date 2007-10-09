@@ -762,8 +762,7 @@ sub CanBookBeIssued {
             $issuingimpossible{NO_MORE_RENEWALS} = 1;
         }
         else {
-
-            #        $needsconfirmation{RENEW_ISSUE} = 1;
+            $needsconfirmation{RENEW_ISSUE} = 1;
         }
     }
     elsif ($issue->{borrowernumber}) {
@@ -807,17 +806,14 @@ sub CanBookBeIssued {
 "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
         }
     }
-    if ( C4::Context->preference("LibraryName") eq "Horowhenua Library Trust" )
-    {
+    if ( C4::Context->preference("LibraryName") eq "Horowhenua Library Trust" ) {
         if ( $borrower->{'categorycode'} eq 'W' ) {
             my %issuingimpossible;
             return ( \%issuingimpossible, \%needsconfirmation );
-        }
-        else {
+        } else {
             return ( \%issuingimpossible, \%needsconfirmation );
         }
-    }
-    else {
+    } else {
         return ( \%issuingimpossible, \%needsconfirmation );
     }
 }
@@ -985,13 +981,11 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
         my $datedue  = time + ($loanlength) * 86400;
         my @datearr  = localtime($datedue);
         my $dateduef =
-            ( 1900 + $datearr[5] ) . "-"
-          . ( $datearr[4] + 1 ) . "-"
-          . $datearr[3];
+            sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]);
         if ($date) {
             $dateduef = $date;
         }
-	$dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
+       $dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
        # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
         if ( C4::Context->preference('ReturnBeforeExpiry')
             && $dateduef gt $borrower->{dateexpiry} )
