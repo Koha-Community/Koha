@@ -30,25 +30,9 @@
     </div>
     <div id="bloc25">
         <div id="resultnumber">
-            <p>
-                <!-- TMPL_IF name="displayprev" -->
-                    <a href="cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->">
-                        <img src="/intranet-tmpl/default/images/numbers/prev.gif" border="0">
-                    </a>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_LOOP NAME="numbers" -->
-                    <!-- TMPL_IF name="highlight" -->
-                        <img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
-                    <!-- TMPL_ELSE -->
-                        <a href="cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->">
-                            <img  src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0"></a>
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_LOOP -->
-                <!-- TMPL_IF name="displaynext" -->
-                    <a href="cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet&index=<!-- TMPL_VAR name="index" -->">
-                        <img src="/intranet-tmpl/default/images/numbers/next.gif" border="0"></a>
-                <!-- /TMPL_IF -->
-            </p>
+            <div class="paginationBar">
+              <!--TMPL_VAR Name="pagination_bar"-->      
+            </div>
             <p>
                 <!-- TMPL_IF name="total" -->
                     &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br><br>
@@ -77,25 +61,9 @@
     
         </div>
         <div id="resultnumber">
-            <p>
-                <!-- TMPL_IF name="displayprev" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet">
-                        <img src="/intranet-tmpl/default/images/numbers/prev.gif" border="0">
-                    </a>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_LOOP NAME="numbers" -->
-                    <!-- TMPL_IF name="highlight" -->
-                        <img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->-highlight.gif">
-                    <!-- TMPL_ELSE -->
-                        <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet">
-                            <img src="/intranet-tmpl/default/images/numbers/<!-- TMPL_VAR NAME="number" -->.gif" border="0"></a>
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_LOOP -->
-                <!-- TMPL_IF name="displaynext" -->
-                    <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;&amp;authtypecode=EDITORS&and_or=and&operator=contains&value=<!-- TMPL_VAR NAME="resultstring" -->&op=do_search&type=intranet">
-                        <img src="/intranet-tmpl/default/images/numbers/next.gif" border="0"></a>
-                <!-- /TMPL_IF -->
-            </p>
+            <div class="paginationBar">
+              <!--TMPL_VAR Name="pagination_bar"-->      
+            </div>
         </div>
     </div>
 </div>

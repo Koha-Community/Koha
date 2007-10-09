@@ -28,6 +28,7 @@ use CGI;
 use C4::Search;
 use MARC::Record;
 use C4::Koha;
+
 ###TODO To rewrite in order to use SearchAuthorities
 
 =head1
@@ -214,6 +215,8 @@ my ($input) = @_;
         } else {
             $to = (($startfrom+1)*$resultsperpage);
         }
+        my $link="plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=and&operator=contains&".join("&",map {"value=".$_} @value)."&op=do_search&type=intranet&index=$index";
+        warn "$link ,".getnbpages($total, $resultsperpage);
         $template->param(result => $results) if $results;
         $template->param('index' => $query->param('index'));
         $template->param(startfrom=> $startfrom,
@@ -228,6 +231,12 @@ my ($input) = @_;
                                 numbers=>\@numbers,
                                 authtypecode =>$authtypecode,
                                 resultstring =>$value[0],
+                                pagination_bar => pagination_bar(
+                                    $link,
+                                    getnbpages($total, $resultsperpage),
+                                    $startfrom,
+                                    'startfrom'
+                                ),
                                 );
     } else {
         ($template, $loggedinuser, $cookie)
