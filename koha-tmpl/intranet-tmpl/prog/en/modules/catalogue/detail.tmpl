@@ -48,22 +48,11 @@ function confirm_deletion(count) {
  	$("#edititems").parent().remove();
 	$("#duplicatebiblio").parent().remove();
 	$("#editmenucontainer").empty();
+	yuiToolbar();
  });
 
 // YUI Toolbar Functions
 
-	 YAHOO.example.init = function () {
-	     YAHOO.util.Event.onContentReady("toolbar", function () {
-			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
-			var oEditbiblio = new YAHOO.widget.Button("editbiblio");
-			var oEdititems = new YAHOO.widget.Button("edititems");
-			var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
-            var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
-			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
-			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
-			var oPlacehold = new YAHOO.widget.Button("placehold");
-			 });
-			 
        var editmenu = [
             { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=" },
             { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
@@ -77,8 +66,19 @@ function confirm_deletion(count) {
 				menu: editmenu,
 				container: "editmenucontainer"
 		 });   
-		 
+
+function yuiToolbar(){
+	 YAHOO.toolbar.init = function () {
+			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
+			var oEditbiblio = new YAHOO.widget.Button("editbiblio");
+			var oEdititems = new YAHOO.widget.Button("edititems");
+			var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
+            var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
+			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
+			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
+			var oPlacehold = new YAHOO.widget.Button("placehold");		 
     } ();
+}
 	
 //]]>
 </script>
