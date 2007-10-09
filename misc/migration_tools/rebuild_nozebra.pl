@@ -83,16 +83,17 @@ $sth->execute();
 my $i=0;
 my %result;
 while (my ($biblionumber) = $sth->fetchrow) {
-    $i++;
-    print "\r$i";
-    my  $record;
-   eval{
-	$record = GetMarcBiblio($biblionumber);
-   };
-   if($@){
-	print "  There was some pb getting biblionumber : ".$biblionumber."\n";
-	next;
-   }
+        $i++;
+        print "\r$i";
+        my  $record;
+    eval{
+            $record = GetMarcBiblio($biblionumber);
+    };
+    if($@){
+            print "  There was some pb getting biblionumber : ".$biblionumber."\n";
+            next;
+    }
+    next unless $record;
     # get title of the record (to store the 10 first letters with the index)
     my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
     my $title = lc($record->subfield($titletag,$titlesubfield));
