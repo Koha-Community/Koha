@@ -21,12 +21,14 @@ my $keep_export;
 my $reset;
 my $biblios;
 my $authorities;
+my $noxml;
 GetOptions(
 	'd:s'      => \$directory,
 	'reset'      => \$reset,
 	's'        => \$skip_export,
 	'k'        => \$keep_export,
 	'b'        => \$biblios,
+	'noxml'        => \$noxml,
 	'a'        => \$authorities,
 	);
 
@@ -286,10 +288,13 @@ rank:rank-1
         open(OUT,">:utf8","$directory/authorities/authorities.iso2709") or die $!;
         my $dbh=C4::Context->dbh;
         my $sth;
-        $sth=$dbh->prepare("select authid from auth_header $limit");
+        $sth=$dbh->prepare("select authid,marc from auth_header $limit");
         $sth->execute();
         my $i=0;
-        while (my ($authid) = $sth->fetchrow) {
+        while (my ($authid,$record) = $sth->fetchrow) {
+            # FIXME : we retrieve the iso2709 record. if the GetAuthority (that uses the XML) fails
+            # due to some MARC::File::XML failure, then try the iso2709, 
+            # (add authid & authtype if needed)
             my $record;
             eval {
                 $record = GetAuthority($authid);
@@ -298,16 +303,16 @@ rank:rank-1
                 print "  There was some pb getting authority : ".$authid."\n";
             next;
             }
-
+		
             print ".";
             print "\r$i" unless ($i++ %100);
-            # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
-            # otherwise, if it's wron, zebra will fail miserabily (and never index what is after the failing record)
+#            # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
+#            # otherwise, if it's wron, zebra will fail miserabily (and never index what is after the failing record)
             my $leader=$record->leader;
             substr($leader,0,5)='     ';
             substr($leader,10,7)='22     ';
             $record->leader(substr($leader,0,24));
-            print OUT $record->as_usmarc();
+            print OUT $record->as_usmarc;
         }
         close(OUT);
     }
@@ -489,6 +494,76 @@ rank:rank-1
         open(OUT,">:utf8 ","$directory/biblios/export") or die $!;
         my $dbh=C4::Context->dbh;
         my $sth;
+	if ($noxml){
+	  $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
+	  $sth->execute();
+          my $i=0;
+          while (my ($biblionumber,$marc) = $sth->fetchrow) {
+            my $record;
+	    $record=MARC::Record->new_from_usmarc($marc);
+            my $record_correct=1;
+            next unless $record->field($biblionumbertagfield);
+	    if ($biblionumbertagfield eq '001') {
+                unless ($record->field($biblionumbertagfield)->data()) {
+                    $record_correct=0;
+                    my $field;
+                    # if the field where biblionumber is already exist, just update it, otherwise create it
+			    if ($record->field($biblionumbertagfield)) {
+				$field =  $record->field($biblionumbertagfield);
+				$field->update($biblionumber);
+			    } else {
+				my $newfield;
+				$newfield = MARC::Field->new( $biblionumbertagfield, $biblionumber);
+				$record->append_fields($newfield);
+			    }
+			}
+		    } else {
+			unless ($record->subfield($biblionumbertagfield,$biblionumbertagsubfield)) {
+			    $record_correct=0;
+			    my $field;
+			    # if the field where biblionumber is already exist, just update it, otherwise create it
+			    if ($record->field($biblionumbertagfield)) {
+				$field =  $record->field($biblionumbertagfield);
+				$field->add_subfields($biblionumbertagsubfield => $biblionumber);
+			    } else {
+				my $newfield;
+				$newfield = MARC::Field->new( $biblionumbertagfield,'','', $biblionumbertagsubfield => $biblionumber);
+				$record->append_fields($newfield);
+			    }
+			}
+    #             warn "FIXED BIBLIONUMBER".$record->as_formatted;
+		    }
+		    unless ($record->subfield($biblioitemnumbertagfield,$biblioitemnumbertagsubfield)) {
+				$record_correct=0;
+		    #             warn "INCORRECT BIBLIOITEMNUMBER :".$record->as_formatted;
+			my $field;
+				# if the field where biblionumber is already exist, just update it, otherwise create it
+				if ($record->field($biblioitemnumbertagfield)) {
+				    $field =  $record->field($biblioitemnumbertagfield);
+				    if ($biblioitemnumbertagfield <10) {
+					$field->update($biblionumber);
+				    } else {
+					$field->add_subfields($biblioitemnumbertagsubfield => $biblionumber);
+				    }
+				} else {
+				    my $newfield;
+				    if ($biblioitemnumbertagfield <10) {
+					$newfield = MARC::Field->new( $biblioitemnumbertagfield, $biblionumber);
+				    } else {
+					$newfield = MARC::Field->new( $biblioitemnumbertagfield,'','', $biblioitemnumbertagsubfield => $biblionumber);
+				    }
+				    $record->insert_grouped_field($newfield);
+			}
+	    #             warn "FIXED BIBLIOITEMNUMBER".$record->as_formatted;
+		    }
+		    my $leader=$record->leader;
+		    substr($leader,0,5)='     ';
+		    substr($leader,10,7)='22     ';
+		    $record->leader(substr($leader,0,24));
+        	    print OUT $record->as_usmarc();
+		}
+		close (OUT);
+	} else {
         $sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber $limit");
         $sth->execute();
         my $i=0;
@@ -507,7 +582,7 @@ rank:rank-1
             # check that biblionumber & biblioitemnumber are stored in the MARC record, otherwise, add them & update the biblioitems.marcxml data.
             my $record_correct=1;
             next unless $record->field($biblionumbertagfield);
-            if ($biblionumbertagfield eq '001') {
+	    if ($biblionumbertagfield eq '001') {
                 unless ($record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
                     my $field;
@@ -576,6 +651,7 @@ rank:rank-1
             print OUT $record->as_usmarc();
         }
         close(OUT);
+	}
     }
     
     #
