@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF name="add_form" -->MARC Tag Structure &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->MARC Tag Structure &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->MARC Tag Structure &rsaquo;  Data Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->MARC Tag Structure<!-- /TMPL_IF --></title>
+<!-- TMPL_IF name="add_form" -->MARC Frameworks &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" -->MARC Frameworks &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" -->MARC Frameworks &rsaquo;  Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->MARC Frameworks<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -62,10 +62,10 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Tag Structure</a> &rsaquo; Data Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->MARC tag Structure<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Data Deleted<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <!-- TMPL_VAR NAME="frameworkcode" --> Framework<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -73,7 +73,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>MARC tag structure admin for <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
+<h1>MARC Framework for <!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->default MARC framework<!-- /TMPL_IF --></h1>
 
 
 <!-- TMPL_IF NAME="add_form" -->
@@ -90,7 +90,7 @@
     <p><label for="authorised_value">Authorized value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
         <p>
             <input type="submit" value="Save Changes" onclick="Check(this.form)" />
-            <input type="submit" value="Cancel and Return to MARC Tag Structure" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->'; return false;" />
+            <input type="submit" value="Cancel and Return to MARC Frameworks" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->'; return false;" />
         </p>
     </form>
 <!-- /TMPL_IF -->
@@ -113,7 +113,7 @@
 
     <div class="details"><h3>Tag Deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-    <input type="submit" value="Return to MARC Tag Structure" />
+    <input type="submit" value="Return to MARC Frameworks" />
     </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="framework_create" -->

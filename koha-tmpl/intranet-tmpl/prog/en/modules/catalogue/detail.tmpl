@@ -18,16 +18,17 @@
 <script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/button/button-beta-min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+function _(s) { return s } // dummy function for gettext
 function Dopop(link) {
     newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 function confirm_deletion(count) {
         var is_confirmed;
 	if (count>0){
-		    is_confirmed= alert(_('you have [ '+ count +' ] item(s) linked \n you must delete all items before delete this biblio'));
+		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
 		    }
         else{
-		    is_confirmed= confirm(_('Are you sure you want to delete this biblio? '));
+		    is_confirmed= confirm(_('Are you sure you want to delete this record? '));
 	}
 
     
@@ -41,60 +42,49 @@ function confirm_deletion(count) {
 		
     }
 }
-      // "contentready" event handler for the "toolbar" <div>
+
+// prepare DOM for YUI Toolbar
+
+ $(document).ready(function() {
+ 	$("#edititems").parent().remove();
+	$("#duplicatebiblio").parent().remove();
+	$("#editmenucontainer").empty();
+ });
+
+// YUI Toolbar Functions
+
 	 YAHOO.example.init = function () {
-      YAHOO.util.Event.onContentReady("toolbar", function () {
+	     YAHOO.util.Event.onContentReady("toolbar", function () {
 			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
+			var oEditbiblio = new YAHOO.widget.Button("editbiblio");
+			var oEdititems = new YAHOO.widget.Button("edititems");
+			var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
             var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
 			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
 			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
 			var oPlacehold = new YAHOO.widget.Button("placehold");
-			var oEditButton = new YAHOO.widget.Button("editbutton", { type: "menu", menu: "editbuttonselect" });
 			 });
+			 
+       var editmenu = [
+            { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=" },
+            { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
+            { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=duplicate" }
+        ];
+        
+        var oEditMenu = new YAHOO.widget.Button({
+				type: "menu",
+				label: "Edit",
+				name: "editmenubutton",
+				menu: editmenu,
+				container: "editmenucontainer"
+		 });   
+		 
     } ();
 	
 //]]>
 </script>
-<style type="text/css">
-#toolbar {
-}
-
-#addbiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -155px;
-	background-repeat : no-repeat;
-}
-
-#deletebiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -188px;
-	background-repeat : no-repeat;
-}
-
-#printbiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -243px;
-	background-repeat : no-repeat;
-}
-
-#addtoshelf a {
-	padding-left : 2.2em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -124px;
-	background-repeat : no-repeat;
-}
-
-#placehold a {
-	padding-left : 2.2em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -215px;
-	background-repeat : no-repeat;
-}
-</style>
 </head>
+
 <body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -160,10 +150,11 @@ function confirm_deletion(count) {
 		</ul>
 		</div>
 		
-<!-- TMPL_IF NAME="AmazonContent" -->
-		<!-- TMPL_IF NAME="AmazonISBN" --><div class="yui-u"><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
-</div><!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+<div class="yui-u"><!-- TMPL_IF NAME="AmazonContent" -->
+		<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
+<!-- TMPL_ELSE -->
+	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0">
+<!-- /TMPL_IF --></div>
 		
 		<div class="yui-u">
 		<ul>

@@ -51,29 +51,29 @@ function displayMoreConstraint(numlayer){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl">MARC Subfield Structure</a> &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->MARC Subfield Structure<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 <!-- TMPL_IF NAME="add_form" -->
     <h1>
         <!-- TMPL_IF NAME="use-heading-flags-p" -->
-            <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Constraints<!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_VAR NAME="action" -->
         <!-- /TMPL_IF -->
     </h1>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="add_validate" />
+	<input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Save Changes" />
     
-    <h2>Tag <!-- TMPL_VAR NAME="tagfield" --></h2>
     <div id="tabs">
      <p>Edit subfield
         <!-- TMPL_LOOP NAME="loop" -->
@@ -93,34 +93,39 @@ function displayMoreConstraint(numlayer){
         <!-- TMPL_LOOP NAME="loop" --> 
         <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
         
-        <h3>Basic constaints</h3>
-                <!-- TMPL_IF name="subfieldcode" -->
-                    <p>Subfield code: <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
-                <!-- TMPL_ELSE -->
-                    <p>Subfield code: <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></p>
-            <!-- /TMPL_IF -->
-            <p><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian</label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></p>
-            <p><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC</label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></p>
-            <p><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
-            <p><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
-            <p><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab</label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</p>
-            
+               <fieldset class="rows"><legend>Basic constraints</legend>
+                	<ol>
+                		<!-- TMPL_IF name="subfieldcode" -->
+                		<li><span class="label">Subfield code:</span> <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
+                		<!-- TMPL_ELSE -->
+                		<li><span class="label">Subfield code:</span> <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
+                		<!-- /TMPL_IF -->
+                		<li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
+                		<li><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC: </label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></li>
+                		<li><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" --></li>
+                		<li><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" --></li>
+                		<li><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab: </label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</li>
+                	</ol>
+            </fieldset>
             <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
             <div id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
-                <h3>Advanced constraint</h3>
-                <p>
-                    <label for="defaultvalue">default value</label>
-                    <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" />
-                </p>
-                <p><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</p>
-                <p><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</p>
-                <p><label>Link</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple:200b)</p>
-                <p><label>Others Options:</label> (choose one)</p>
-                    <p><label>Authorized Value</label><!-- TMPL_VAR NAME="authorised_value" --></p>
-                    <p><label>Thesaurus</label><!-- TMPL_VAR NAME="authtypes" --></p>
-                    <p><label>Plugin</label><!-- TMPL_VAR NAME="value_builder" --></p>
-                </p>
-                <p><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></p>
+             <fieldset class="rows" id="advanced-constraints">
+				<legend>Advanced constraints</legend>
+                <ol><li><label for="defaultvalue">Default value</label>
+                    <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" /></li>
+                <li><label for="hidden">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</li>
+                <li><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is an URL and can be clicked</li>
+                <li><label>Link</label><input type="text" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="5" /> (exemple:200b)</li>
+                <li><span class="label">Others Options:</span> (choose one)
+                    	<ol>
+                    		<li><label for="">Authorized Value</label><!-- TMPL_VAR NAME="authorised_value" --></li>
+                    		<li><label for="">Thesaurus</label><!-- TMPL_VAR NAME="authtypes" --></li>
+                    		<li><label for="">Plugin</label><!-- TMPL_VAR NAME="value_builder" --></li>
+                    	</ol>
+                </li>
+                <li><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></li>
+				</ol>
+				</fieldset>
             </div>
         </div>
         <!-- /TMPL_LOOP -->
@@ -227,9 +232,6 @@ function displayMoreConstraint(numlayer){
 
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

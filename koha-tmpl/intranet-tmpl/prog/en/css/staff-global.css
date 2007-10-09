@@ -415,35 +415,20 @@ dd {
 
 div#toolbar {
 	background-color : #F3F3F3;
+	margin-bottom : .7em;
 }
 
 ul.toolbar {
+	padding-left : 0;
+}
+
+.yui-menu-button  {
+	
 }
 
 ul.toolbar li {
 	display : inline;
-	float : left;
 	list-style : none;
-}
-
-ul.toolbar li a {
-	background-color : #F3F3F3;
-	border : 1px solid #F3F3F3;
-	display : block;
-	margin : 3px;
-	padding : 3px;
-	text-decoration : none;
-}
-
-ul.toolbar li a:hover {
-	background-color : #FFFFCC;
-}
-
-ul.toolbar li:last-child a:hover {
-}
-
-ul.toolbar ul {
-	display : none;
 }
 
 div.message {
@@ -708,3 +693,48 @@ fieldset.rows fieldset.action {
 .subfield_not_filled {
 	background-color : #FFFF99;
 }
+.content_hidden {
+    visibility:hidden; /* you propably don't need to change this one */
+    display:none;
+}
+
+/* the property for the displayed tab */
+.content_visible {
+    visibility:visible; /* you propably don't need to change this one */
+    display:block;
+}
+#addbiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-new.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#deletebiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-delete.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#printbiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-print.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#addtoshelf a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-add-to-shelf.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#placehold a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-hold.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+

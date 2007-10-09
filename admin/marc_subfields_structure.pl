@@ -382,8 +382,7 @@ if ( $op eq 'add_form' ) {
     $template->param( 'heading-edit-subfields-p' => 1 );
     $template->param(
         action   => "Edit subfields",
-        tagfield =>
-"<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />$tagfield",
+        tagfield => $tagfield,
         loop           => \@loop_data,
         more_subfields => $more_subfields,
         more_tag       => $tagfield
