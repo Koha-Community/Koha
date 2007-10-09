@@ -562,11 +562,11 @@ sub GetIssuingRules {
    my ($itemnumber,$categorycode)=@_;
    my $dbh   = C4::Context->dbh();    
    my $query=qq|SELECT * 
-        FROM items,biblioitems,itemtypes,issuingrules
+        FROM items
+        LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
+        LEFT JOIN itemtypes ON  biblioitems.itemtype=itemtypes.itemtype
+        LEFT JOIN issuingrules ON issuingrules.itemtype=itemtypes.itemtype
         WHERE items.itemnumber=?
-        AND items.biblioitemnumber=biblioitems.biblioitemnumber
-        AND biblioitems.itemtype=itemtypes.itemtype
-        AND issuingrules.itemtype=itemtypes.itemtype
         AND issuingrules.categorycode=?
         AND  (items.itemlost <> 1
         OR items.itemlost is NULL)|;
