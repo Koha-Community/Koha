@@ -122,28 +122,25 @@ if ($do_it) {
 #	foreach my $mime (@mime){
 #		warn "".$mime;
 #	}
-    
-    my $CGIextChoice=CGI::scrolling_list(
-                -name     => 'MIME',
-                -id       => 'MIME',
-                -values   => \@mime,
-                -size     => 1,
-                -multiple => 0 );
-    
-    my @dels = ( C4::Context->preference("delimiter") );
-    my $CGIsepChoice=CGI::scrolling_list(
-                -name     => 'sep',
-                -id       => 'sep',
-                -values   => \@dels,
-                -size     => 1,
-                -multiple => 0 );
-    #branch
-    my $branches = GetBranches;
-    my @branchloop;
-    foreach my $thisbranch (keys %$branches) {
-# 			my $selected = 1 if $thisbranch eq $branch;
+        my $CGIextChoice=CGI::scrolling_list(
+                                -name     => 'MIME',
+                                -id       => 'MIME',
+                                -values   => \@mime,
+                                -size     => 1,
+                                -multiple => 0 );
+        
+        my @dels = ( C4::Context->preference("delimiter") );
+        my $CGIsepChoice=CGI::scrolling_list(
+                                -name     => 'sep',
+                                -id       => 'sep',
+                                -values   => \@dels,
+                                -size     => 1,
+                                -multiple => 0 );
+        #branch
+        my $branches = GetBranches;
+	my @branchloop;
+	foreach my $thisbranch (sort keys %$branches) {
             my %row =(value => $thisbranch,
-# 									selected => $selected,
                                     branchname => $branches->{$thisbranch}->{'branchname'},
                             );
             push @branchloop, \%row;

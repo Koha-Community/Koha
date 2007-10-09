@@ -96,7 +96,7 @@ $template->param(do_it => 1,
 # load the branches
 my $branches = GetBranches();
 my @branch_loop;
-for my $branch_hash ( keys %$branches ) {
+for my $branch_hash (sort keys %$branches ) {
     my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
     push @branch_loop,
       {

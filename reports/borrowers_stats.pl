@@ -133,7 +133,7 @@ my @select_branch;
 #my %select_branches;
 push @select_branch,"";
 #$select_branches{""}="";
-foreach my $thisbranch (keys %$branches) {
+foreach my $thisbranch (sort keys %$branches) {
 	push @select_branch,$thisbranch;
    # my $selected = 1 if $thisbranch eq $branch;
     my %row =(value => $thisbranch,

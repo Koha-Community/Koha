@@ -57,7 +57,7 @@ if ( C4::Context->preference("SearchMyLibraryFirst") ) {
         my $branches = GetBranches();
         my @branchloop;
 
-        foreach my $thisbranch ( keys %$branches ) {
+        foreach my $thisbranch (sort keys %$branches ) {
             my $selected = 1
               if ( C4::Context->userenv
                 && ( $thisbranch eq C4::Context->userenv->{branch} ) );
