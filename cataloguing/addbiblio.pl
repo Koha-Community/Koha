@@ -329,8 +329,8 @@ sub create_input {
                     class=\"input_marceditor\"
                     tabindex=\"1\"
                     \/>
-                    <span class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}')\">...</span>
+                    <a href=\"#\" class=\"buttonDot\"
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
 		";
     # it's a plugin field
     }
@@ -357,7 +357,7 @@ sub create_input {
                         class=\"input_marceditor\"
 			onfocus=\"Focus$function_name($index_tag)\"
 			onblur=\"Blur$function_name($index_tag); \" \/>
-		<span class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}')\">...</a>
+		<a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
 		$javascript";
         # it's an hidden field
     }
