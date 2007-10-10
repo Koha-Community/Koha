@@ -101,11 +101,12 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 
 my %newdata;
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
-  my @names=($borrower_data?keys %$borrower_data:$input->param());
-  foreach my $key (@names){
-    $newdata{$key}=$input->param($key)||'';
-    $newdata{$key}=~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
-  }
+    
+    my @names= $borrower_data && $op ne 'save' ? keys %$borrower_data : $input->param();
+    foreach my $key (@names) {
+        $newdata{$key} = $input->param($key) || '';
+        $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
+    }
 
 
   # WARN : some tests must be done whatever the step, because the librarian can click on any tab.
