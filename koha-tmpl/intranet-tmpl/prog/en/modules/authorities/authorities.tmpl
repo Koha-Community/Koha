@@ -508,7 +508,7 @@ function searchauthority() {
                             size="1"
                             maxlength="1"
                             class="flat"
-                            tabindex=-1 />
+                            tabindex="-1" />
                 <!-- TMPL_ELSE -->
                     <input type="hidden"
                         name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
@@ -543,29 +543,29 @@ function searchauthority() {
 
 <div name="hidden" id="hidden" class="tab">
 <!-- TMPL_LOOP NAME="hidden_loop" -->
-    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->">
-    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->">
-    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->">
-    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
-    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
 <!-- /TMPL_LOOP -->
 </div>
 <!-- TMPL_IF name="oldauthnumtagfield" -->
-    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->">
-    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->">
-    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->">
-    <input type="hidden" name="mandatory" value="0">
-    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->">
-    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->">
-    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->">
-    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->">
-    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->">
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthnumtagfield" -->" />
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthnumtagsubfield" -->" />
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authid" -->" />
+    <input type="hidden" name="mandatory" value="0" />
+    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+    <input type="hidden" name="tag_mandatory" value="<!-- TMPL_VAR NAME="tag_mandatory" -->" />
+    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="oldauthtypetagfield" -->" />
+    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->" />
+    <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
 <!-- /TMPL_IF -->
 <div id="action">
     <!-- TMPL_IF name="authid" -->
-        <input type="button" value="Save" onClick="Check(this.form)" accesskey="w">
+        <input type="button" value="Save" onClick="Check(this.form)" accesskey="w" />
     <!-- TMPL_ELSE -->
-        <input type="button" value="Add authority" onClick="Check(this.form)" accesskey="w">
+        <input type="button" value="Add authority" onClick="Check(this.form)" accesskey="w" />
     <!-- /TMPL_IF -->
 </div>
 </form>
