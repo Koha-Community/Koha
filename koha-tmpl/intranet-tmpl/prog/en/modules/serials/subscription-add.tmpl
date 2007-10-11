@@ -313,15 +313,15 @@ document.getElementById("more_options").innerHTML = '';
 var textbox = '';
     // alert("X: "+x+"Y: "+y+"Z: "+z);
     if(x){
-        textbox +="<table>\n<tr><td>&nbsp;<\/td><td>"+x+"<\/td>";
+        textbox +="<table>\n<tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
         if(y){
-            textbox +="<td>"+y+"<\/td>";
+            textbox +="<th>"+y+"<\/th>";
             if(z){
-                textbox +="<td>"+z+"<\/td>";
+                textbox +="<th>"+z+"<\/th>";
             }
         }
         textbox +="<\/tr>\n";
-        textbox +="<tr><td>"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=" + document.f.lastvalue1.value +" /><\/td>\n";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=" + document.f.lastvalue1.value +" /><\/td>\n";
         if(y){
             textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")' value=" + document.f.lastvalue2.value + " /><\/td>\n";
             if(z){
@@ -330,7 +330,7 @@ var textbox = '';
         }
         textbox +="<\/tr>\n";
         if(y){
-            textbox +="<tr><td>"+text[6]+"<\/td>";
+            textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
             textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
             textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
             if(z){
@@ -379,7 +379,7 @@ var textbox = '';
     // alert("X: "+x+"Year: "+y);
     if(x){
         var hemi_select = parseInt('<!-- TMPL_VAR NAME="hemisphere" -->');
-        textbox +="<table>\n<tr><td>"+ text[7]  +"<\/td><td colspan='2'><select name='hemisphere' onchange='hemispheres(this.options[this.selectedIndex].value)'>";
+        textbox +="<li><label for=\"hemisphere\">"+ text[7]  +"<\/label><select name='hemisphere' id=\"hemisphere\" onchange='hemispheres(this.options[this.selectedIndex].value)'>";
         for(var i = 1; i <= 2; i++){
             textbox +="<option value='"+i+"'";
             if(i == hemi_select){
@@ -387,11 +387,11 @@ var textbox = '';
             }
             textbox +=">"+text[i+7]+"<\/option>";
         }
-        textbox +="<\/select><\/td><\/tr>\n";
-        textbox +="<tr><td>&nbsp;<\/td><td>"+x+"<\/td>";
-        textbox +="<td>"+text[16]+"<\/td>";
+        textbox +="<\/li>\n";
+        textbox +="<table><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
+        textbox +="<th>"+text[16]+"<\/th>";
         textbox +="<\/tr>\n";
-        textbox +="<tr><td>"+text[5]+"<\/td><td><select name='lastvaluetemp2' id='season1' onchange='moreoptionsupdate(\"lastvalue2\")'>";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name='lastvaluetemp2' id='season1' onchange='moreoptionsupdate(\"lastvalue2\")'>";
         for(var j = 1; j <= 4; j++){
             textbox +="<option value='"+j+"'>"+text[j+10]+"<\/option>";
         }
@@ -400,7 +400,7 @@ var textbox = '';
             textbox +="<option value='"+k+"'>"+k+"<\/option>";
         }
         textbox +="<\/select><\/td><\/tr>\n";
-        textbox +="<tr><td>"+text[6]+"<\/td>";
+        textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
         textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
@@ -735,9 +735,10 @@ function check_input(e){
     }
 }
 
-function Create_biblio(f)
-{
-   window.open('/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup','FindABibIndex','width=1024,height=768,toolbar=no,scrollbars=yes');
+function addbiblioPopup(biblionumber) {
+	var destination = "/cgi-bin/koha/cataloguing/addbiblio.pl?mode=popup";
+	if(biblionumber){ destination += "&biblionumber="+biblionumber; }
+ window.open(destination,'AddBiblioPopup','width=1024,height=768,toolbar=no,scrollbars=yes');
 }
 
 function Plugin(f)
@@ -762,13 +763,13 @@ function Check(f) {
             document.f.submit();
         } else {
             if(f.numbering_pattern.value == ''){
-                alert(_("need to choose a numbering pattern"));
+                alert(_("Please choose a numbering pattern"));
             } else {
-                alert(_("need to check for irregularity by clicking 'Irregularity?'"));
+                alert(_("Please check for irregularity by clicking 'Irregularity?'"));
             }
         }
     } else {
-        alert(_('field marked with * are mandatory'));
+        alert(_('Fields marked with * are mandatory'));
     }
     return false;
 }
@@ -791,13 +792,10 @@ window.onload = irregular_order();
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-add.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --> Modify a subscription<!-- TMPL_ELSE -->Add a subscription<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc3" class="yui-t7">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-
-
+   <div class="yui-g">
 
 <!-- TMPL_IF name="mod" -->
     <h1>Modify a subscription</h1>
@@ -813,33 +811,34 @@ window.onload = irregular_order();
 <input type="hidden" name="irreg_check" value="0" />
 <input type="hidden" name="issuesexpected1" value="0" />
 
-    <h2>Subscription information for subscription #<!--TMPL_VAR name="subscriptionid"--></h2>
-    <table>
-        <tr>
-            <td>Librarian:</td>
-            <td><!-- TMPL_VAR name="loggedinusername" --></td>
-        </tr>
-        <tr>
-            <td><label>Supplier:</label></td>
-            <td><input type="text" name="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a Supplier</a></td>
-        </tr>
-        <tr>
-            <td><label>Biblio</label></td>
-            <td>
-                <input type="text" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8" /> 
+	<div class="yui-u first">
+    <fieldset id="subscription_add_information" class="rows">
+	<legend>Subscription information for subscription #<!--TMPL_VAR name="subscriptionid"--></legend>
+	<ol>
+        <li>
+            <span class="label">Librarian: </span>            <!-- TMPL_VAR name="loggedinusername" -->
+        </li>
+        <li>
+            <label for="aqbooksellerid">Supplier:</label>
+            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a Supplier</a></div>
+        </li>
+        <li>
+            <label for="biblionumber">Biblio</label>
+            
+                <input type="text" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8" /> 
                 (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />)
-                <a href="#" onclick="Plugin(f)">Search for Biblio</a> <!--TMPL_UNLESS Name="mod"--> |
-                <a href="#" onclick="Create_biblio(f)">Create Biblio</a><!--/TMPL_UNLESS-->
-            </td>
-        </tr>
-        <tr>
-            <td><label>Call Number</label></td>
-            <td><input type="text" name="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" /></td>
-        </tr>
-        <tr>
-            <td>Branch</td>
-            <td>
-                <select name="branchcode">
+               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="biblionumber" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
+                <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a><!--/TMPL_IF--></div>
+            
+        </li>
+        <li>
+            <label for="callnumber">Call Number</label>
+            <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
+        </li>
+        <li>
+            <label for="branchcode">Branch</label>
+            
+                <select name="branchcode" id="branchcode">
                     <option value="">Any branch</option>
                     <!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- TMPL_ELSE -->
@@ -847,20 +846,20 @@ window.onload = irregular_order();
 				<!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                 </select> (select a branch)
-            </td>
-        </tr>
-        <tr>
-            <td><label>Notes</label></td>
-            <td><textarea name="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea></td>
-        </tr>
-        <tr>
-            <td><label>Management Notes</label></td>
-            <td><textarea name="internalnotes" cols="30" rows="2"><!-- TMPL_VAR name="internalnotes" --></textarea></td>
-        </tr>
-        <tr>
-            <td>Patron alert with </td>
-            <td>
-                <select name="letter">
+            
+        </li>
+        <li>
+            <label for="notes">Notes</label>
+            <textarea name="notes" id="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea>
+        </li>
+        <li>
+            <label for="internalnotes">Management Notes</label>
+            <textarea name="internalnotes" id="internalnotes" cols="30" rows="2"><!-- TMPL_VAR name="internalnotes" --></textarea>
+        </li>
+        <li>
+            <label for="letter">Patron alert with </label>
+            
+                <select name="letter" id="letter">
                     <option value="">un-activated</option>
                 <!-- TMPL_LOOP name="letterloop" -->
 				<!-- TMPL_IF name="selected" -->
@@ -869,27 +868,32 @@ window.onload = irregular_order();
                     <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="lettername" --></option>
 <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-                </select> (select a letter &amp; patrons will be able to "follow" this subscription and recieve a mail on every new issue)
-            </td>
-        </tr>
-        <tr>
-            <td><b>Warning:</b></td>
-            <td>
+                </select> <div class="inputnote">(select a letter &amp; patrons will be able to "follow" this subscription and recieve a mail on every new issue)</div>
+            
+        </li>
+	</ol>
+
+            <div class="warning"><b>Warning:</b>
+            
                 <ul>
                     <li>Remember you <b>must</b> have created a biblio <b>before</b> creating a subscription</li>
                     <li>You also must have selected a supplier if you want to ask for late issues</li>
-                </ul>
-            </td>
-        </tr>
-    </table>
+                </ul></div>
+            
+
+	</fieldset>
+	</div>
+	
+<div class="yui-u">
 <div id="subscription_form_planning">
-    <h2>Planning</h2>
-    <table>
-        <tr>
-            <td>First Issue ETA:</td>
-            <td>
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;"  alt=""/>
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size=13 maxlength=10 id="acqui_date" style="border-width: 0px;" />
+	<fieldset class="rows">
+	<legend>Planning</legend>
+    <ol>
+        <li>
+           <label for="firstacquidate"> First Issue ETA:</label>
+            
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -907,15 +911,12 @@ window.onload = irregular_order();
                         align          :   "Tl"
                     });
                 </script>
-            </td>
-            <td rowspan="5">
-                <div id="displayexample"></div>
-            </td>
-        </tr>
-        <tr>
-            <td>Frequency: (*)</td>
-            <td>
-                <select name="periodicity" size="1" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
+           
+        </li>
+        <li>
+            <label for="periodicity">Frequency: (*)</label>
+            
+                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
                 <option value="" selected="selected">-- please choose --</option>
                 <!-- TMPL_IF name="periodicity16" -->
                 <option value="16" selected="selected">Without Periodicity</option>
@@ -1000,13 +1001,11 @@ window.onload = irregular_order();
                 <!-- TMPL_ELSE -->
                     <option value="11">1/2 years</option>
                 <!-- /TMPL_IF -->
-                </select>
-                Manual History :<input type="checkbox" name="manualhist" value="1" />
-            </td>
-        </tr>
-        <tr>
-            <td>Numbering Pattern:</td>
-            <td>
+                </select></li>
+				<li><label for="manuallist"> Manual History:</label> <input type="checkbox" name="manualhist" id="manuallist" value="1" /></li>
+        <li>
+           <label for="numberpattern"> Numbering Pattern:</label>
+            
                 <select name="numbering_pattern" size="1" id="numberpattern" onchange="num_pattern()">
                     <option value="" selected="selected">-- please choose --</option>
                     <!-- TMPL_IF name="numberpattern1" -->
@@ -1050,14 +1049,14 @@ window.onload = irregular_order();
                         <option value="7">None of the above</option>
                     <!-- /TMPL_IF -->
                 </select>
-                <div id="more_options"></div>
-                <div id="irregularity"></div>
-            </td>
-        </tr>
-        <tr>
-            <td>Begins On: (*)</td>
-            <td>
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt=""  />
+        </li>
+                <li id="more_options"></li>
+                <li id="irregularity"></li>
+   	           <li id="displayexample"></li>
+        <li>
+           <label for="startdate"> Begins On: (*)</label>
+            
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
@@ -1076,12 +1075,12 @@ window.onload = irregular_order();
                         align        : "Tl"
                     });
                 </script>
-            </td>
-        </tr>
-        <tr>
-            <td>Subscription length</td>
-            <td>
-                <select name="subtype">
+            
+        </li>
+        <li>
+            <label for="subtype">Subscription length</label>
+            
+                <select name="subtype" id="subtype">
                     <!-- TMPL_LOOP NAME="subtype" -->
                         <!-- TMPL_IF NAME="selected" -->
                         <option value="<!-- TMPL_VAR NAME="name" -->" selected="selected">
@@ -1093,15 +1092,12 @@ window.onload = irregular_order();
                     <!-- /TMPL_LOOP -->
                 </select>
                 <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (*) (enter amount in numerals)
-            </td>
-        </tr>
-    <tr>
-        <td>Numbering calculation</td>
-        <td>Numbering formula: <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" /></td>
-    </tr>
-    <tr>
-    <td colspan="3">
-        <div id="basetable" style="display: none;">
+            
+        </li>
+    <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" />
+    </li>
+    <li>
+           <div id="basetable" style="display: none;">
             <table class="small">
                 <tr>
                     <th>&nbsp;</th>
@@ -1159,8 +1155,9 @@ window.onload = irregular_order();
                 </tr>
             </table>
         </div>
-        </td></tr>
-    </table>
+        </li>
+    </ol>
+	</fieldset>
 </div>
 <!--TMPL_IF Name="history"-->
 <div id="subscription_form_history">
@@ -1175,7 +1172,7 @@ window.onload = irregular_order();
           <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty : subscription still active)</td>
         </tr>
         <tr>
-            <td>Recieved issues</td>
+            <td>Received issues</td>
             <td><textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></td>
         </tr>
         <tr>
@@ -1198,13 +1195,11 @@ window.onload = irregular_order();
 <!-- TMPL_ELSE -->
     <input type="button" value="Add subscription" onclick="Check(this.form)" accesskey="w" />
 <!-- /TMPL_IF -->
+</div>
+
 </form>
 
 </div>
 </div>
 
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
-</div>
-</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
