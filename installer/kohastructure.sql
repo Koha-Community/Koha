@@ -355,6 +355,7 @@ CREATE TABLE `biblio` (
   `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `datecreated` DATE NOT NULL,
   `abstract` mediumtext,
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
