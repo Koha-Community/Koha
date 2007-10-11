@@ -180,6 +180,11 @@ exit;
 
 my $dbh = C4::Context->dbh;
 
+# save the CataloguingLog property : we don't want to log a bulkmarcimport. It will slow the import & 
+# will create problems in the action_logs table, that can't handle more than 1 entry per second per user.
+my $CataloguingLog = C4::Context->preference('CataloguingLog');
+$dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
+
 if ($delete) {
     print "deleting biblios\n";
     $dbh->do("truncate biblio");
@@ -304,6 +309,9 @@ if ($fk_off) {
 # final commit of the changes
 #z3950_extended_services('commit',set_service_options('commit'));
 #print "COMMIT OPERATION SUCCESSFUL\n";
+
+# restore CataloguingLog
+$dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
 
 my $timeneeded = gettimeofday - $starttime;
 print "$i MARC records done in $timeneeded seconds\n";
