@@ -203,7 +203,7 @@ sub SearchAuthorities {
             $n++;
         }
         if ($n>1){
-            $query= "\@or ".$query;
+            while ($n>1){$query= "\@or ".$query;$n--;}
         }
         
         my $dosearch;
@@ -236,7 +236,11 @@ sub SearchAuthorities {
             }#if value
         }
         ##Add how many queries generated
-        $query= $and.$query.$q2;
+        if ($query=~/\S+/){    
+          $query= $and.$query.$q2 
+        } else {
+          $query=$q2;    
+        }         
         ## Adding order
         $query=' @or  @attr 7=1 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingAsc");
         $query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingDsc");
