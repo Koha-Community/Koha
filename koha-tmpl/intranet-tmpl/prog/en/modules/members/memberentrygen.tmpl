@@ -172,7 +172,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		<!-- /TMPL_IF -->
        	</li>
 		</ol>
-<!--TMPL_IF Name="C"-->  <p>
+<!--TMPL_IF EXPR="I || C || P"-->  <p>
   <input name="guarantordelete" type="button" value="Delete Guarantor" onclick="document.form.guarantorid.value='';document.form.guarantorinfo.value='',document.form.guarantorsearch.value='Find guarantor';" />
   <!-- TMPL_IF NAME="guarantorid"-->  
     
@@ -180,7 +180,8 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
   <!-- TMPL_ELSE -->
     <input name="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
   <!-- /TMPL_IF -->
-  <input name="guarantorinfo" type="text"  size="20" value="<!-- TMPL_VAR NAME="guarantorinfo" -->" disabled="disabled" readonly="readonly" />
+  <input name="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" readonly="readonly" />
+  <input name="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->"  readonly="readonly" />
   </p>       
 <!--/TMPL_IF-->       
 	</fieldset>

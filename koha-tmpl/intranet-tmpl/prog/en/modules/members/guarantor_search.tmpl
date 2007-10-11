@@ -31,7 +31,7 @@
 		<!-- TMPL_LOOP NAME="resultsloop" -->
 			<tr>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
-				<td><p><a href="javascript:window.opener.document.form.guarantorid.value=<!-- TMPL_VAR NAME="borrowernumber" -->;window.opener.document.form.guarantorsearch.value='Modify Guarantor';window.opener.document.form.guarantorinfo.value='<!-- TMPL_VAR NAME="guarantorinfo" -->';self.close();"><!-- TMPL_VAR NAME="surname" --></a></p>
+				<td><p><a href="javascript:window.opener.document.form.guarantorid.value=<!-- TMPL_VAR NAME="borrowernumber" -->;window.opener.document.form.guarantorsearch.value='Modify Guarantor';window.opener.document.form.contactname.value='<!-- TMPL_VAR NAME="surname" ESCAPE=JS -->';window.opener.document.form.contactfirstname.value='<!-- TMPL_VAR NAME="firstname" ESCAPE=JS -->';window.opener.document.form.address.value='<!-- TMPL_VAR NAME="address" ESCAPE=JS -->';window.opener.document.form.city.value='<!-- TMPL_VAR NAME="city" ESCAPE=JS -->';window.opener.document.form.zipcode.value='<!-- TMPL_VAR NAME="zipcode" ESCAPE=JS -->';self.close();"><!-- TMPL_VAR NAME="surname" --></a></p>
 				<td><b><!-- TMPL_VAR NAME="firstname" --></b></td> 
 				<td><!-- TMPL_VAR NAME="dateofbirth" --></td>
 				<td><p><!-- TMPL_VAR NAME="address" --> <!-- TMPL_VAR NAME="city" --></p></td>
