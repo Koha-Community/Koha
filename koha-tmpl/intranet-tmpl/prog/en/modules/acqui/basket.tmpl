@@ -3,7 +3,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_UNLESS name="closedate" -->
 <script type="text/javascript">
-//<![CDATA[            function confirm_close() {
+//<![CDATA[
+            function confirm_close() {
                 var is_confirmed = confirm('Are you sure you want to close this basket?');
                 if (is_confirmed) {
                     window.location = "/cgi-bin/koha/acqui/booksellers.pl?op=close&basketno=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->";

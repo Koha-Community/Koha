@@ -690,10 +690,10 @@ sub CanBookBeIssued {
     if ( $borrower->{'dateexpiry'} eq '0000-00-00') {
         $issuingimpossible{EXPIRED} = 1;
     } else {
-        if ( Date_to_Days(Today) > 
-            Date_to_Days( split "-", $borrower->{'dateexpiry'} ) )
-        {
-            $issuingimpossible{EXPIRED} = 1;
+        my @expirydate=  split /-/,$borrower->{'dateexpiry'};
+        if($expirydate[0]==0 || $expirydate[1]==0|| $expirydate[2]==0 ||
+            Date_to_Days(Today) > Date_to_Days( @expirydate )) {
+            $issuingimpossible{EXPIRED} = 1;                                   
         }
     }
     #
