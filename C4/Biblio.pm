@@ -594,26 +594,36 @@ sub DelBiblio {
     my ( $biblionumber ) = @_;
     my $dbh = C4::Context->dbh;
     my $error;    # for error handling
+	
+	# First make sure this biblio has no items attached
+	my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber=?");
+	$sth->execute($biblionumber);
+	if (my $itemnumber = $sth->fetchrow){
+		# Fix this to use a status the template can understand
+		$error .= "This Biblio has items attached, please delete them first before deleting this biblio ";
+	}
 
+	# shouldnt this be done when deleting an item?
+	# Ill shift this to delitem next
     # First make sure there are no items with issues are still attached
-    my $sth =
-      $dbh->prepare(
-        "SELECT itemnumber FROM items WHERE biblionumber=?");
-    $sth->execute($biblionumber);
-    while ( my $itemnumber = $sth->fetchrow ) {
-        my $issues = GetItemIssues($itemnumber);
-        foreach my $issue (@$issues) {
-            if (   ( $issue->{date_due} )
-                && ( $issue->{date_due} ne "Available" ) )
-            {
+#    my $sth =
+#      $dbh->prepare(
+#        "SELECT itemnumber FROM items WHERE biblionumber=?");
+#    $sth->execute($biblionumber);
+#    while ( my $itemnumber = $sth->fetchrow ) {
+#        my $issues = GetItemIssues($itemnumber);
+#        foreach my $issue (@$issues) {
+#            if (   ( $issue->{date_due} )
+#                && ( $issue->{date_due} ne "Available" ) )
+#            {
 
-#FIXME: we need a status system in Biblio like in Circ to return standard codes and messages
+# FIXME: we need a status system in Biblio like in Circ to return standard codes and messages
 # instead of hard-coded strings
-                $error .=
-"Item is checked out to a patron -- you must return it before deleting the Biblio";
-            }
-        }
-    }
+#                $error .=
+# "Item is checked out to a patron -- you must return it before deleting the Biblio";
+#            }
+#        }
+#    }
     return $error if $error;
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
