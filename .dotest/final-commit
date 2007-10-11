@@ -1,13 +1,3 @@
-IMPROVEMENT (for #1416 : Available items marked waiting as soon as hold is placed)
+removing .dotest, not sure how it got in here
 
-In fact, #1416 is not a bug, it's a feature : SAN-OP librarians place the reserve "book in hand", and confirm on phone that it's available
-NPL save the reserve, but pick them from the shelves once a day only. So the item must be "to pull"
-
-This commit improves the behaviour :
-- document Reserves.pm a little, it was needed !
-- add a systempreference ReservesNeedReturns, that let the library choose it's behaviour
-- define the systempref in english & french systempreferences files
-- add the systempref through the web installer (bumping to 3.00.00.003)
-
-Signed-off-by: Chris Cormack <crc@liblime.com>
 Signed-off-by: Joshua Ferraro <jmf@liblime.com>
