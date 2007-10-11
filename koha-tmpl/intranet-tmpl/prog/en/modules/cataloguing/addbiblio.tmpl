@@ -9,9 +9,9 @@
 	 });
 
 function confirmnotdup(){
-	document.getElementById("confirm_not_duplicate").value = 1;
-	alert(_("Not a duplicate confirmed. Please click on Add biblio to save the record"));
-	var checkform =	document.getElementById("f");
+	$("#confirm_not_duplicate").attr("value","1");
+	// alert(_("Not a duplicate confirmed. Please click on Add biblio to save the record"));
+	var checkform =	$("#f");
 	Check(checkform);
 }
 
@@ -22,7 +22,7 @@ function confirmnotdup(){
 function Check(){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
-        document.f.submit;
+        document.f.submit();
         return true;
     } else {
         alert(StrAlert);
@@ -122,11 +122,7 @@ function ExpandField(index) {
     var divs = original.getElementsByTagName('div');
     for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
         if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
-            if (divs[i].style.display == 'block') {
-                divs[i].style.display = 'none';
-            } else {
-                divs[i].style.display = 'block';
-            }
+            $(divs[i]).toggle();
         }
     }
 }
@@ -421,6 +417,20 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         <div id="yui-main">
         <div class="yui-g">
 
+<h1><!-- TMPL_IF NAME="biblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
+
+<!-- TMPL_UNLESS name="number" -->
+    <!-- show duplicate warning on tab 0 only -->
+        <!-- TMPL_IF name="duplicatebiblionumber" -->
+                    <div class="error">
+					<h4>Duplicate Record?</h4>
+                        <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
+                 <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" /><input type="submit" value="Yes: Edit existing items" /></form>
+           		<form action="/cgi-bin/koha/cataloguing/addbibliopl" method="get"><input type="submit" onclick="confirmnotdup(); return false;" value="No: Save as New Record" /></form>
+                    </div>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+
 <!--TMPL_IF Name="done"-->
     <script type="text/javascript">
         opener.document.forms['f'].biblionumber.value=<!--TMPL_VAR Name="biblionumber"-->;
@@ -429,10 +439,9 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     </script>
 <!--TMPL_ELSE-->
     <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
+	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 <!-- /TMPL_IF -->
-
-<h1><!-- TMPL_IF NAME="biblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
-
+	
 <div id="action">
     <!-- TMPL_IF name="biblionumber" -->
         <input type="submit" value="Save Bibliographic Record" />
@@ -467,19 +476,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 <!-- TMPL_ELSE -->
     <div id="tab<!-- TMPL_VAR name="number" -->XX">
 <!-- /TMPL_IF -->
-<!-- TMPL_UNLESS name="number" -->
-    <!-- show duplicate warning on tab 0 only -->
-        <!-- TMPL_IF name="duplicatebiblionumber" -->
-                    <div class="error">
-                        <p class="problem">Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
-                        <p>You must either :</p>
-                        <ul>
-                            <li>If it <em>is</em> a duplicate, <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->">Edit Items</a> of the existing record.</li>
-                            <li>If not, click to <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" /> <a href="#" onclick="confirmnotdup(); return false;">Confirm it's not a duplicate</a></li>
-                        </ul>
-                    </div>
-        <!-- /TMPL_IF -->
-    <!-- /TMPL_UNLESS -->
+
     
     <!-- TMPL_LOOP NAME="innerloop" -->
         <!-- TMPL_IF NAME="tag" -->
