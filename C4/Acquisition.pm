@@ -1096,6 +1096,7 @@ sub GetHistory {
 
         $query .= " AND creationdate<" . $dbh->quote($to_placed_on)
           if $to_placed_on;
+        $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00')";
 
         if ( C4::Context->preference("IndependantBranches") ) {
             my $userenv = C4::Context->userenv;
