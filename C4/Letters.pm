@@ -19,9 +19,9 @@ package C4::Letters;
 
 use strict;
 use Mail::Sendmail;
-use C4::Date;
-use Date::Manip;
-use C4::Suggestions;
+# use C4::Date;
+# use Date::Manip;
+# use C4::Suggestions;
 use C4::Members;
 use C4::Log;
 require Exporter;
