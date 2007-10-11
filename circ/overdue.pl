@@ -24,12 +24,22 @@ use C4::Context;
 use C4::Output;
 use CGI;
 use C4::Auth;
+use C4::Branch;
 use C4::Date;
 
 my $input = new CGI;
 my $type  = $input->param('type');
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
+my $order=$input->param('order');
+my $bornamefilter=$input->param('borname');
+my $borcatfilter=$input->param('borcat');
+my $itemtypefilter=$input->param('itemtype');
+my $borflagsfilter=$input->param('borflags') || " ";
+my $branchfilter=$input->param('branch');
+my $showall=$input->param('showall');
+my $theme = $input->param('theme'); # only used if allowthemeoverride is set
+
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -41,6 +51,68 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+my $dbh = C4::Context->dbh;
+
+my $req;
+$req = $dbh->prepare( "select categorycode, description from categories order by description");
+$req->execute;
+my @borcatloop;
+while (my ($catcode, $description) =$req->fetchrow) {
+  my $selected = 1 if $catcode eq $borcatfilter;
+  my %row =(value => $catcode,
+        selected => $selected,
+        catname => $description,
+      );
+  push @borcatloop, \%row;
+}
+
+$req = $dbh->prepare( "select itemtype, description from itemtypes order by description");
+$req->execute;
+my @itemtypeloop;
+while (my ($itemtype, $description) =$req->fetchrow) {
+  my $selected = 1 if $itemtype eq $itemtypefilter;
+  my %row =(value => $itemtype,
+        selected => $selected,
+        itemtypename => $description,
+      );
+  push @itemtypeloop, \%row;
+}
+my $onlymine=C4::Context->preference('IndependantBranches') && 
+             C4::Context->userenv && 
+             C4::Context->userenv->{flags}!=1 && 
+             C4::Context->userenv->{branch};
+my $branches = GetBranches($onlymine);
+my @branchloop;
+my @selectflags;
+push @selectflags, " ";#
+push @selectflags,"gonenoaddress";#
+push @selectflags,"debarred";#
+push @selectflags,"lost";#
+my $CGIflags=CGI::scrolling_list( -name     => 'borflags',
+            -id =>'borflags',
+            -values   => \@selectflags,
+            -size     => 1,
+            -multiple => 0 );
+
+foreach my $thisbranch ( sort keys %$branches ) {
+     my %row = (
+        value      => $thisbranch,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+        selected   => (C4::Context->userenv && $branches->{$thisbranch}->{'branchcode'} eq C4::Context->userenv->{'branch'})
+    );
+    push @branchloop, \%row;
+}
+$branchfilter=C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
+
+$template->param( branchloop => \@branchloop );
+$template->param(borcatloop=> \@borcatloop,
+          itemtypeloop => \@itemtypeloop,
+          branchloop=> \@branchloop,
+          CGIflags     => $CGIflags,
+          borname => $bornamefilter,
+          order => $order,
+          showall => $showall);
+
 my $duedate;
 my $borrowernumber;
 my $itemnum;
@@ -59,61 +131,68 @@ my $todaysdate =
   . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
   . sprintf( "%0.2d", $datearr[3] );
 
-my $dbh = C4::Context->dbh;
 
-my $sth =
-  $dbh->prepare(
-    "select date_due,borrowernumber,itemnumber
-     from issues
-     where isnull(returndate) && date_due<? order by date_due,borrowernumber"
-  );
-$sth->execute($todaysdate);
+$bornamefilter =~s/\*/\%/g;
+$bornamefilter =~s/\?/\_/g;
+
+my $strsth="select date_due,concat(surname,' ', firstname) as borrower, 
+  borrowers.phone, borrowers.email,issues.itemnumber, items.barcode, biblio.title, biblio.author,borrowers.borrowernumber 
+  from issues
+LEFT JOIN borrowers ON (issues.borrowernumber=borrowers.borrowernumber )
+LEFT JOIN items ON (issues.itemnumber=items.itemnumber)
+LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
+LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber )
+where isnull(returndate) ";
+$strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
+$strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
+$strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
+$strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
+$strsth.=" && borrowers.flags = '".$borflagsfilter."' " if ($borflagsfilter ne " ") ;
+$strsth.=" && issues.branchcode = '".$branchfilter."' " if($branchfilter) ;
+if ($order eq "borrower"){
+  $strsth.=" order by borrower,date_due " ;
+} elsif ($order eq "title"){
+  $strsth.=" order by title,date_due,borrower ";
+} elsif ($order eq "barcode"){
+  $strsth.=" order by items.barcode,date_due,borrower ";
+}elsif ($order eq "borrower desc"){
+  $strsth.=" order by borrower desc,date_due " ;
+} elsif ($order eq "title desc"){
+  $strsth.=" order by title desc,date_due,borrower ";
+} elsif ($order eq "barcode desc"){
+  $strsth.=" order by items.barcode desc,date_due,borrower ";
+} elsif ($order eq "date_due desc"){
+  $strsth.=" order by date_due desc,borrower ";
+} else {
+  $strsth.=" order by date_due,borrower ";
+}
+my $sth=$dbh->prepare($strsth);
+#warn "overdue.pl : query string ".$strsth;
+$sth->execute();
 
 my @overduedata;
-while ( my $data = $sth->fetchrow_hashref ) {
-    $duedate        = format_date($data->{'date_due'});
-    $borrowernumber = $data->{'borrowernumber'};
-    $itemnum        = $data->{'itemnumber'};
+while (my $data=$sth->fetchrow_hashref) {
+  $duedate=$data->{'date_due'};
+  $duedate = format_date($duedate);
+  $itemnum=$data->{'itemnumber'};
 
-    my $sth1 =
-      $dbh->prepare(
-"select concat(firstname,' ',surname),phone,email from borrowers where borrowernumber=?"
-      );
-    $sth1->execute($borrowernumber);
-    $data1 = $sth1->fetchrow_hashref;
-    $name  = $data1->{'concat(firstname,\' \',surname)'};
-    $phone = $data1->{'phone'};
-    $email = $data1->{'email'};
-    $sth1->finish;
+  $name=$data->{'borrower'};
+  $phone=$data->{'phone'};
+  $email=$data->{'email'};
 
-    my $sth2 =
-      $dbh->prepare("select biblionumber from items where itemnumber=?");
-    $sth2->execute($itemnum);
-    $data2        = $sth2->fetchrow_hashref;
-    $biblionumber = $data2->{'biblionumber'};
-    $sth2->finish;
+  $title=$data->{'title'};
+  $author=$data->{'author'};
+  push (@overduedata, { duedate      => $duedate,
+      bornum       => $data->{borrowernumber},
+      barcode      => $data->{barcode},
+      itemnum      => $itemnum,
+      name         => $name,
+      phone        => $phone,
+      email        => $email,
+      biblionumber => $biblionumber,
+      title        => $title,
+      author       => $author });
 
-    my $sth3 =
-      $dbh->prepare("select title,author from biblio where biblionumber=?");
-    $sth3->execute($biblionumber);
-    $data3  = $sth3->fetchrow_hashref;
-    $title  = $data3->{'title'};
-    $author = $data3->{'author'};
-    $sth3->finish;
-    push(
-        @overduedata,
-        {
-            duedate        => $duedate,
-            borrowernumber => $borrowernumber,
-            itemnum        => $itemnum,
-            name           => $name,
-            phone          => $phone,
-            email          => $email,
-            biblionumber   => $biblionumber,
-            title          => $title,
-            author         => $author
-        }
-    );
 }
 
 $template->param(
