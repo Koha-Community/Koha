@@ -5,33 +5,9 @@
 <script type="text/javascript">
 //<![CDATA[
 
-function active(numlayer){
-    var contentdiv   = document.getElementById("content");
-    var subfields    = contentdiv.getElementsByTagName("div");
-    var numSubfield  = subfields.length;
-    var tabs = document.getElementById("tabs").getElementsByTagName('a');
-
-    // all others must be hidden
-    for (i=0; i < numSubfield ; i++ ) {
-        if (subfields[i].getAttribute('id') == "content_"+numlayer) {
-        
-            // display this subfield
-            subfields[i].removeAttribute("class");
-            subfields[i].setAttribute("class","content_visible");
-            
-            // change css class
-            tabs[i].removeAttribute('class');
-            tabs[i].setAttribute('class',"tab_active");
-            
-        } else {
-            tabs[i].removeAttribute('class');
-            tabs[i].setAttribute('class',"tab_inactive");
-            subfields[i].removeAttribute("class");
-            subfields[i].setAttribute("class","content_hidden");
-        }
-    }
-}
-
+	 $(document).ready(function() {
+ 		$('#subfieldtabs').tabs();
+	 });
 
 function displayMoreConstraint(numlayer){
     var thisdiv = document.getElementById(numlayer);
@@ -74,24 +50,17 @@ function displayMoreConstraint(numlayer){
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="submit" value="Save Changes" />
     
-    <div id="tabs">
-     <p>Edit subfield
+    <div id="subfieldtabs" class="toptabs numbered">
+   <ul>
         <!-- TMPL_LOOP NAME="loop" -->
-               <a 
-                    href="javascript:active('sub<!-- TMPL_VAR NAME='subfieldcode' -->');"
-                    class="tab_inactive"
-                    id="sub<!-- TMPL_VAR NAME="subfieldcode" -->"
-                    title="<!-- TMPL_VAR NAME="liblibrarian" -->"
-                >
+               <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->
-               </a>
+               </a></li>
         <!-- /TMPL_LOOP -->
-    </p>
-    </div>
+    </ul>
     
-    <div id="content" style="display:block">
-        <!-- TMPL_LOOP NAME="loop" --> 
-        <div id="content_sub<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+    <!-- TMPL_LOOP NAME="loop" --> 
+        <div id="sub<!-- TMPL_VAR NAME="subfieldcode" -->field">
         
                <fieldset class="rows"><legend>Basic constraints</legend>
                 	<ol>
@@ -107,8 +76,9 @@ function displayMoreConstraint(numlayer){
                 		<li><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab: </label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield is NOT managed by Koha)</li>
                 	</ol>
             </fieldset>
+			
             <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
-            <div id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden">
+            <div id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden" style="clear: both">
              <fieldset class="rows" id="advanced-constraints">
 				<legend>Advanced constraints</legend>
                 <ol><li><label for="defaultvalue">Default value</label>
@@ -126,10 +96,10 @@ function displayMoreConstraint(numlayer){
                 <li><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link</label><!-- TMPL_VAR NAME="kohafield" --></li>
 				</ol>
 				</fieldset>
-            </div>
-        </div>
+            </div><br class="clear" /><!-- /more  -->
+        </div><!-- /content_sub -->
         <!-- /TMPL_LOOP -->
-    </div>
+		</div><!-- /content -->
     </form>
 <!-- /TMPL_IF -->
 
