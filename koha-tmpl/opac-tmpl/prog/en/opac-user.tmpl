@@ -108,7 +108,7 @@
         <th colspan="2">Title</th>
         <th>Call No.</th>
         <th>Due</th>
-        <th>Renew</th>
+        <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_UNLESS -->
         <th>Fines</th>
         </tr>
         <!-- TMPL_LOOP NAME="ISSUES" -->
@@ -136,6 +136,7 @@
                 <!-- TMPL_ELSE -->
                     <td><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- /TMPL_IF -->
+                <!-- TMPL_UNLESS name="patron_flagged" -->
                 <td>
                     <!-- TMPL_IF NAME="status" -->
                         <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a>
@@ -143,6 +144,7 @@
                         Not renewable
                     <!-- /TMPL_IF -->
                 </td>
+                <!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
             </tr>
         <!-- /TMPL_LOOP -->
