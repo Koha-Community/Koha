@@ -366,7 +366,7 @@ if the borrower borrows to much things
 =cut
 
 # check if a book can be issued.
-# returns an array with errors if any
+
 
 sub TooMany ($$) {
     my $borrower        = shift;
@@ -404,118 +404,103 @@ sub TooMany ($$) {
             );
     my $alreadyissued;
 
-    # check the 3 parameters
+    # check the 3 parameters (branch / itemtype / category code
     $sth->execute( $cat_borrower, $type, $branch_borrower );
     my $result = $sth->fetchrow_hashref;
+#     warn "$cat_borrower, $type, $branch_borrower = ".Data::Dumper::Dumper($result);
 
-# Currently, using defined($result) ie on an entire hash reports whether memory
-# for that aggregate has ever been allocated. As $result is used all over the place
-# it would rarely return as undefined.
-    if ( defined( $result->{maxissueqty} ) ) {
+    if ( $result->{maxissueqty} ne '' ) {
+#         warn "checking on everything set";
         $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "a $alreadyissued / ".( $result->{maxissueqty} + 0 ) );
+            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/itemtype failed)" );
         }
-        else {
-            return;
+        # now checking for total
+        $sth->execute( $cat_borrower, '', $branch_borrower );
+        my $result = $sth->fetchrow_hashref;
+        if ( $result->{maxissueqty} ne '*' ) {
+            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            my $alreadyissued = $sth2->fetchrow;
+            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
+                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/total failed)"  );
+            }
         }
     }
 
-    # check for branch=*
-    $sth->execute( $cat_borrower, $type, "" );
-    $result = $sth->fetchrow_hashref;
-    if ( defined( $result->{maxissueqty} ) ) {
+    # check the 2 parameters (branch / itemtype / default categorycode
+    $sth->execute( '*', $type, $branch_borrower );
+    my $result = $sth->fetchrow_hashref;
+#     warn "*, $type, $branch_borrower = ".Data::Dumper::Dumper($result);
+
+    if ( $result->{maxissueqty} ne '' ) {
+#         warn "checking on 2 parameters (default categorycode)";
         $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "b $alreadyissued / ".( $result->{maxissueqty} + 0 ) );
+            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / itemtype failed)"  );
         }
-        else {
-            return;
+        # now checking for total
+        $sth->execute( '*', '*', $branch_borrower );
+        my $result = $sth->fetchrow_hashref;
+        if ( $result->{maxissueqty} ne '' ) {
+            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            my $alreadyissued = $sth2->fetchrow;
+            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
+                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / total failed)" );
+            }
         }
     }
-
-    # check for itemtype=*
-#     $sth->execute( $cat_borrower, "*", $branch_borrower );
-#     $result = $sth->fetchrow_hashref;
-#     if ( defined( $result->{maxissueqty} ) ) {
-#         $sth3->execute( $borrower->{'borrowernumber'} );
-#         my ($alreadyissued) = $sth3->fetchrow;
-#         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-#        warn "HERE : $alreadyissued / ($result->{maxissueqty} for $borrower->{'borrowernumber'}";
-#             return ( "c $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
-#         }
-#         else {
-#             return;
-#         }
-#     }
-
-    # check for borrowertype=*
-    $sth->execute( "*", $type, $branch_borrower );
-    $result = $sth->fetchrow_hashref;
-    if ( defined( $result->{maxissueqty} ) ) {
+    
+    # check the 1 parameters (default branch / itemtype / categorycode
+    $sth->execute( $cat_borrower, $type, '*' );
+    my $result = $sth->fetchrow_hashref;
+#     warn "$cat_borrower, $type, * = ".Data::Dumper::Dumper($result);
+    
+    if ( $result->{maxissueqty} ne '' ) {
+#         warn "checking on 1 parameter (default branch + categorycode)";
         $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "d $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
+            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch/category/itemtype failed)"  );
         }
-        else {
-            return;
-        }
-    }
-
-    $sth->execute( "*", "*", $branch_borrower );
-    $result = $sth->fetchrow_hashref;
-    if ( defined( $result->{maxissueqty} ) ) {
-        $sth3->execute( $borrower->{'borrowernumber'} );
-        my $alreadyissued = $sth3->fetchrow;
-        if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "e $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
-        }
-        else {
-            return;
+        # now checking for total
+        $sth->execute( $cat_borrower, '*', '*' );
+        my $result = $sth->fetchrow_hashref;
+        if ( $result->{maxissueqty} ne '' ) {
+            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            my $alreadyissued = $sth2->fetchrow;
+            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
+                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / category / total failed)"  );
+            }
         }
     }
 
-    $sth->execute( "*", $type, "" );
-    $result = $sth->fetchrow_hashref;
-    if ( defined( $result->{maxissueqty} ) && $result->{maxissueqty} >= 0 ) {
+    # check the 0 parameters (default branch / itemtype / default categorycode
+    $sth->execute( '*', $type, '*' );
+    my $result = $sth->fetchrow_hashref;
+#     warn "*, $type, * = ".Data::Dumper::Dumper($result);
+
+    if ( $result->{maxissueqty} ne '' ) {
+#         warn "checking on default branch and default categorycode";
         $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "f $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
+            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / itemtype failed)"  );
         }
-        else {
-            return;
+        # now checking for total
+        $sth->execute( '*', '*', '*' );
+        my $result = $sth->fetchrow_hashref;
+        if ( $result->{maxissueqty} ne '' ) {
+            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            my $alreadyissued = $sth2->fetchrow;
+            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
+                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / total failed)"  );
+            }
         }
     }
 
-#     $sth->execute( $cat_borrower, "*", "" );
-#     $result = $sth->fetchrow_hashref;
-#     if ( defined( $result->{maxissueqty} ) ) {
-#         $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
-#         my $alreadyissued = $sth2->fetchrow;
-#         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-#             return ( "g $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
-#         }
-#         else {
-#             return;
-#         }
-#     }
-
-#     $sth->execute( "*", "*", "" );
-#     $result = $sth->fetchrow_hashref;
-#     if ( defined( $result->{maxissueqty} ) ) {
-#         $sth3->execute( $borrower->{'borrowernumber'} );
-#         my $alreadyissued = $sth3->fetchrow;
-#         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-#             return ( "h $alreadyissued / " . ( $result->{maxissueqty} + 0 ) );
-#         }
-#         else {
-#             return;
-#         }
-#     }
+    #OK, the patron can issue !!!
     return;
 }
 

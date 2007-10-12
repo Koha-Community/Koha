@@ -30,7 +30,7 @@ my $dbh = C4::Context->dbh;
 
 my $type=$input->param('type');
 my $branch = $input->param('branch');
-$branch="" unless $branch;
+$branch="*" unless $branch;
 my $op = $input->param('op');
 
 # my $flagsrequired;
