@@ -564,8 +564,13 @@ sub buildQuery {
         for ( my $i = 0 ; $i <= @operands ; $i++ ) {
             my $operand = $operands[$i];
             # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
+            # we use IsAlpha unicode definition, to deal correctly with diacritics.
+            # otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
+            # and don't find anything...
             foreach (keys %{C4::Context->stopwords}) {
-                $operand=~ s/\b$_\b//i;
+                $operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
+                $operand=~ s/^$_\P{IsAlpha}/ /i;
+                $operand=~ s/\P{IsAlpha}$_$/ /i;
             }
             my $index   = $indexes[$i];
             my $stemmed_operand;
