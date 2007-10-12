@@ -17,17 +17,9 @@ function AreMandatoriesNotOk(){
     var tab = new Array();
     var label = new Array();
     var flag=0;
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --> 
-        <!-- TMPL_LOOP NAME='innerloop' -->
-            <!-- TMPL_LOOP NAME='subfield_loop'-->
-                <!-- TMPL_IF NAME='mandatory'-->
-                    mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
                         tab.push("<!-- TMPL_VAR NAME='number' -->");
-                        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
+                        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
     for(var i=0,len=mandatories.length; i<len ; i++){
         //alert (  mandatories[i]);
@@ -52,7 +44,7 @@ function AreMandatoriesNotOk(){
 function Check(){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
-        document.f.submit;
+        document.f.submit();
         return true;
     } else {
         alert(StrAlert);
