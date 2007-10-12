@@ -148,13 +148,6 @@
     <!-- TMPL_IF name="dewey" -->
     <p><label><b>Dewey:</b></label><!-- TMPL_VAR name="dewey" --></p>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="URLS" -->
-    <p><label><b>URL: </b></label>
-        <!-- TMPL_LOOP name="URLS" -->
-        <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;|&nbsp;
-        <!-- /TMPL_LOOP -->
-    </p>
-    <!-- /TMPL_IF -->
     <p><label><b>Item type : </b></label>
         <!-- TMPL_IF name="description" -->
         <!-- TMPL_VAR name="description" -->
@@ -162,6 +155,19 @@
         <!-- TMPL_VAR NAME="itemtype" -->
         <!-- /TMPL_IF -->
     </p>
+    <!-- TMPL_IF name="MARCURLS" -->
+	<!-- TMPL_IF NAME="count" -->
+	<p><label><b>Online Resources:</b></label>
+    <ul>    <!-- TMPL_LOOP name="MARCURLS" -->
+		<li><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
+			<br /><!-- /TMPL_IF --> 
+		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
+		<a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="linktext" --></a>
+			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
+            <!-- /TMPL_LOOP --></ul>
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_IF name="count" -->

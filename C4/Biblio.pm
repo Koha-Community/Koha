@@ -65,6 +65,7 @@ push @EXPORT, qw(
   &GetMarcBiblio
   &GetMarcAuthors
   &GetMarcSeries
+  GetMarcUrls
   &GetUsedMarcStructure
 
   &GetItemsInfo
@@ -1922,11 +1923,50 @@ sub GetMarcAuthors {
     return \@marcauthors;
 }
 
+=head2 GetMarcUrls
+
+=over 4
+
+$marcurls = GetMarcUrls($record,$marcflavour);
+Returns arrayref of URLs from MARC data, suitable to pass to tmpl loop.
+Assumes web resources (not uncommon in MARC21 to omit resource type ind) 
+
+=back
+
+=cut
+
+sub GetMarcUrls {
+    my ($record, $marcflavour) = @_;
+    my @marcurls;
+    my $marcurl;
+    for my $field ($record->field('856')) {
+        my $url = $field->subfield('u');
+        my @notes;
+        for my $note ( $field->subfield('z')) {
+            push @notes , {note => $note};
+        }        
+        $marcurl = {  MARCURL => $url,
+                      notes => \@notes,
+					};
+		if($marcflavour eq 'MARC21') {
+        	my $s3 = $field->subfield('3');
+			my $link = $field->subfield('y');
+            $marcurl->{'linktext'} = $link || $s3 || $url ;;
+            $marcurl->{'part'} = $s3 if($link);
+            $marcurl->{'toc'} = 1 if($s3 =~ /^[Tt]able/) ;
+		} else {
+			$marcurl->{'linktext'} = $url;
+		}
+        push @marcurls, $marcurl;    
+	}
+    return \@marcurls;
+}  #end GetMarcUrls
+
 =head2 GetMarcSeries
 
 =over 4
 
-$marcseriessarray = GetMarcSeries($record,$marcflavour);
+$marcseriesarray = GetMarcSeries($record,$marcflavour);
 Get all series from the MARC record and returns them in an array.
 The series are stored in differents places depending on MARC flavour
 

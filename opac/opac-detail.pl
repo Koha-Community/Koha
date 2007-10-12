@@ -99,12 +99,14 @@ $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 	my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
+	my $marcurlsarray	= GetMarcUrls($record,$marcflavour);
 
     $template->param(
         MARCNOTES   => $marcnotesarray,
         MARCSUBJCTS => $marcsubjctsarray,
         MARCAUTHORS => $marcauthorsarray,
-		MARCSERIES  => $marcseriesarray
+		MARCSERIES  => $marcseriesarray,
+		MARCURLS	=> $marcurlsarray,
     );
 
 my @results = ( $dat, );
