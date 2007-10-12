@@ -90,6 +90,10 @@ while (my $data=$sth->fetchrow_hashref){
     push @trow3,$data->{'categorycode'};
 }
 
+my %row = (in_title => "*");
+push @title_loop, \%row;
+push @trow3,'*';
+
 $sth->finish;
 $sth=$dbh->prepare("Select description,itemtype from itemtypes order by description");
 $sth->execute;
@@ -117,11 +121,11 @@ foreach my $data (@itemtypes) {
         $sth2->execute($branch,$trow3[$i],$$data->{'itemtype'});
         my $dat=$sth2->fetchrow_hashref;
         $sth2->finish;
-        my $fine=$dat->{'fine'}+0;
-        my $maxissueqty = $dat->{'maxissueqty'}+0;
-        my $issuelength = $dat->{'issuelength'}+0;
+        my $fine=$dat->{'fine'};
+        my $maxissueqty = $dat->{'maxissueqty'};
+        my $issuelength = $dat->{'issuelength'};
         my $issuingvalue;
-        $issuingvalue = "$issuelength,$maxissueqty" if $issuelength+$maxissueqty>0;
+        $issuingvalue = "$issuelength,$maxissueqty" if $maxissueqty ne '';
         my %row = (issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
                     issuingvalue => $issuingvalue,
                     toggle => $toggle,
@@ -129,6 +133,7 @@ foreach my $data (@itemtypes) {
         push @cell_loop,\%row;
     }
     my %row = (categorycode => $$data->{description},
+                total => ($$data->{itemtype} eq '*'?1:0),
                 cell =>\@cell_loop
             );
     push @row_loop, \%row;

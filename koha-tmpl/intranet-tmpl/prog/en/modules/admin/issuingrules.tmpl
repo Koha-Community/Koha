@@ -9,68 +9,65 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Issuing Rules</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
 
-	<h1>Defining <!-- TMPL_IF NAME="branch" -->issuing rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default issuing rules<!-- /TMPL_IF --></h1>
-	<div class="help">
-		<h3>HINT for issues</h3>
-		<p>Each box needs to be filled in with issuelength,maxissues</p>
-		<p>eq 21,5 enables 5 issues for 21 days</p>
-	</div>
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 
-	<div class="help">
-		<h3>Default values</h3>
-		<p> If a cell is not filled, the 1st of the following value is searched :</p>
-		<ul>
-			<li>same library and same patron category, itemtype *</li>
-			<li>same library and same itemtype, patron category *</li>
-			<li>same itemtype and patron category, library *</li>
-			<li>everywhere</li>
-			<li>If nothing is set, default is 21,5 (hardcoded)</li>
-		</ul>
-	</div>
-		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
-		<label for="branch">Select a library :</label>
-			<select id="branch" name="branch">
-				<option value="">Default</option>
-			<!-- TMPL_LOOP NAME="branchloop" -->
-				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- TMPL_ELSE -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP --></select>
-			<input type="submit" value="Select" />
-		</form>
-		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
-			<input type="hidden" name="op" value="save" />
-			<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-			
-			<table>
-			<caption>Defining circulation rules for <!-- TMPL_VAR NAME="branch" --></caption>
-			<tr>
-				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th scope="col"><!-- TMPL_VAR NAME="in_title" --></th><!-- /TMPL_LOOP -->
-			</tr>
-			<!-- TMPL_LOOP NAME="row" -->
-				<tr>
-					<th><!-- TMPL_VAR NAME="categorycode" --></th>
-					<!-- TMPL_LOOP NAME="cell" -->
-						<!-- TMPL_IF NAME="toggle" -->
-   <td class="highlight">
-<!-- TMPL_ELSE -->
-   <td>
-<!-- /TMPL_IF -->
-							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10" />
-						</td>
-					<!-- /TMPL_LOOP -->
-				</tr>
-			<!-- /TMPL_LOOP -->
-			</table>
-			
-			<input type="submit" value="Save Changes" />
-		</form>
+    <h1>Defining <!-- TMPL_IF NAME="branch" -->issuing rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default issuing rules<!-- /TMPL_IF --></h1>
+    <div class="help">
+        <h3>HINT for issues</h3>
+        <p>Each box needs to be filled in with issuelength,maxissues</p>
+        <p>eq 21,5 enables 5 issues for 21 days</p>
+    </div>
+
+    <div class="help">
+        <h3>Default values</h3>
+        <ul>
+            <li>If a cell is not filled, the value in the default column (top right) is used</li>
+            <li>If a total is filled (last line), the patron must fit both itemtype and total rule</li>
+            <li>If a rule is filled for a given branch, it is used, otherwise, it's the rule of the "default" branch</li>
+    </div>
+        <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
+        <label for="branch">Select a library :</label>
+            <select id="branch" name="branch">
+                <option value="">Default</option>
+                <!-- TMPL_LOOP NAME="branchloop" -->
+                    <!-- TMPL_IF NAME="selected" -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                    <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select>
+            <input type="submit" value="Select" />
+        </form>
+        <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
+            <input type="hidden" name="op" value="save" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+            
+            <table>
+                <caption>Defining circulation rules for <!-- TMPL_VAR NAME="branch" --></caption>
+                <tr>
+                    <th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th scope="col"><!-- TMPL_IF EXPR="in_title eq '*'" -->Default<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="in_title" --><!-- /TMPL_IF --></th><!-- /TMPL_LOOP -->
+                </tr>
+                <!-- TMPL_LOOP NAME="row" -->
+                    <tr>
+                        <th><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
+                        <!-- TMPL_LOOP NAME="cell" -->
+                            <!-- TMPL_IF NAME="toggle" -->
+                                <td class="highlight">
+                            <!-- TMPL_ELSE -->
+                                <td>
+                            <!-- /TMPL_IF -->
+                                <input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10" />
+                            </td>
+                        <!-- /TMPL_LOOP -->
+                    </tr>
+                <!-- /TMPL_LOOP -->
+            </table>
+            <input type="submit" value="Save Changes" />
+        </form>
 
 </div>
 </div>

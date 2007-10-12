@@ -1469,14 +1469,6 @@ my $DBversion = "3.00.00.000";
                 onDelete => 'CASCADE',
             },
         ],
-        issuingrules => [
-            {    key => 'categorycode',
-                foreigntable => 'categories',
-                foreignkey => 'categorycode',
-                onUpdate => 'CASCADE',
-                onDelete => 'CASCADE',
-            },
-        ],
         issues => [    # constraint is SET NULL : when a borrower or an item is deleted, we keep the issuing record
         # for stat purposes
             {    key => 'borrowernumber',
