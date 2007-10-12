@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF name="add_form" -->MARC Frameworks &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="add_form" -->MARC Frameworks &rsaquo; <!-- TMPL_VAR name="action" --> <!-- TMPL_VAR NAME="searchfield" --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->MARC Frameworks &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirmed" -->MARC Frameworks &rsaquo;  Data Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC Frameworks<!-- /TMPL_IF --></title>
@@ -62,10 +62,10 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">MARC Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a> &rsaquo; <!-- TMPL_VAR name="action" --> <!-- TMPL_VAR NAME="searchfield" --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Data Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <!-- TMPL_VAR NAME="frameworkcode" --> Framework<!-- /TMPL_IF --></div>
+<!-- TMPL_IF name="else" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; MARC Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -79,19 +79,20 @@
 <!-- TMPL_IF NAME="add_form" -->
 
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-        <input type="hidden" name="op" value="add_validate" />
+	
+      <fieldset class="rows"><legend><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modify tag <!-- TMPL_VAR NAME="searchfield" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Add tag<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></legend>  <input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-        <h2><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-modify-tag-p" -->Modify tag<!-- /TMPL_IF --><!-- TMPL_IF NAME="heading-add-tag-p" -->Add tag<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h2>
-	 <p><label>Tag</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3" /></p>    
-    <p><label for="liblibrarian">Label for lib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" ESCAPE="HTML" -->" size="40" maxlength="100" /></p>
-    <p><label for="libopac">Label for opac</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" ESCAPE="HTML" -->" size="40" maxlength="100" /></p>
-    <p><label for="repeatable">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</p>
-    <p><label for="mandatory">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</p>
-    <p><label for="authorised_value">Authorized value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
-        <p>
+
+	<ol> <li><label for="tagfield">Tag</label><input id="tagfield" type="text" name="tagfield" value="<!-- TMPL_VAR NAME="searchfield" -->" maxlength="3" size="3" /></li>    
+    <li><label for="liblibrarian">Label for lib</label><input type="text" id="liblibrarian" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" ESCAPE="HTML" -->" size="40" maxlength="100" /></li>
+    <li><label for="libopac">Label for opac</label><input type="text" id="libopac" name="libopac" value="<!-- TMPL_VAR NAME="libopac" ESCAPE="HTML" -->" size="40" maxlength="100" /></li>
+    <li><label for="repeatable">Repeatable</label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
+    <li><label for="mandatory">Mandatory</label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</li>
+    <li><label for="authorised_value">Authorized value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</li>
+        <li>
             <input type="submit" value="Save Changes" onclick="Check(this.form)" />
             <input type="submit" value="Cancel and Return to MARC Frameworks" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->'; return false;" />
-        </p>
+        </li></ol></fieldset>
     </form>
 <!-- /TMPL_IF -->
 

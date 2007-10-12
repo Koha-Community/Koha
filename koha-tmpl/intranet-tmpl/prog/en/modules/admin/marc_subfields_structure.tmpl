@@ -53,9 +53,9 @@ function displayMoreConstraint(numlayer){
     <div id="subfieldtabs" class="toptabs numbered">
    <ul>
         <!-- TMPL_LOOP NAME="loop" -->
-               <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
+               <li><!-- TMPL_IF NAME="subfieldcode" --><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->
-               </a></li>
+               </a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a><!-- /TMPL_IF --></li>
         <!-- /TMPL_LOOP -->
     </ul>
     
