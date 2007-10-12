@@ -45,7 +45,7 @@ our %posix_map = (
 );
 
 our %dmy_subs = (			# strings to eval  (after using regular expression returned by regexp below)
-							# make arrayrs for POSIX::strftime()
+							# make arrays for POSIX::strftime()
 	  iso  => '[(0,0,0,$3, $2 - 1, $1 - 1900)]',		
 	metric => '[(0,0,0,$1, $2 - 1, $3 - 1900)]',
 	  us   => '[(0,0,0,$2, $1 - 1, $3 - 1900)]',
@@ -99,7 +99,7 @@ sub init ($;$$) {
 sub output ($;$) {
 	my $self = shift;
 	my $newformat = (@_) ? _recognize_format(shift) : $self->{'dateformat'} ;
-	return POSIX::strftime($posix_map{$newformat}, @self::dmy_array);
+	return (eval {POSIX::strftime($posix_map{$newformat}, @self::dmy_array)} || undef);
 }
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
 	my $class = shift;
@@ -126,9 +126,10 @@ sub format {	# get or set dateformat: iso, metric, us, etc.
 sub visual {
 	my $self = shift;
 	if (@_) {
-		return $format_map{ shift };
+		return $format_map{ _recognize_format(shift) };
 	}
-	return $format_map{$self->{'dateformat'} || $prefformat} ;
+	$self eq __PACKAGE__ and return $format_map{$prefformat};
+	return $format_map{ eval { $self->{'dateformat'} } || $prefformat} ;
 }
 
 1;
@@ -204,17 +205,32 @@ Or even:
 
 		print C4::Dates->new("21-09-1989", "metric")->output("iso");
 
-=head2 ->DHMTLCalendar([date_format])
+=head2 "syspref" -- System Preference(s)
+
+Perhaps you want to force data obtained in a known format to display according to the user's system
+preference, without necessarily knowing what that preference is.  For this purpose, you can use the
+psuedo-format argument "syspref".  
+
+For example, to print an ISO date (from the database) in the <systempreference> format:
+
+		my $date = C4::Dates->new($date_from_database,"iso");
+		my $datestring_for_display = $date->display("syspref");
+		print $datestring_for_display;
+
+Or even:
+
+		print C4::Dates->new($date_from_database,"iso")->display("syspref");
+
+If you just want to know what the <systempreferece> is, you can use:
+
+C4::Dates->
+
+=head2 ->DHMTLcalendar([date_format])
 
 Returns the format string for DHTML Calendar Display based on date_format.  
 If date_format is not supplied, the return is based on system preference.
 
-		C4::Dates->new()->DHTMLCalendar();	#  e.g., returns "%m/%d/%Y" for 'us' system preference
-
-Format dates from database in ISO format into the <systempreference> format for display to user:
-
-		my $date = C4::Dates->new($date_from_database,"iso");
-		my $datestring_for_display = $date->display("syspref");
+		C4::Dates->DHTMLcalendar();	#  e.g., returns "%m/%d/%Y" for 'us' system preference
 
 =head3 Error Handling
 

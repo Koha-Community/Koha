@@ -19,36 +19,39 @@ package C4::Context;
 # $Id$
 use strict;
 
-use CGI::Carp qw(fatalsToBrowser set_message);
 BEGIN {
-    sub handle_errors {
-        my $msg = shift;
-        my $debug_level =  C4::Context->preference("DebugLevel");
+	if ($ENV{'USER_AGENT'})	{
+		require CGI::Carp;
+		import CGI::Carp qw(fatalsToBrowser);
+			sub handle_errors {
+				my $msg = shift;
+				my $debug_level =  C4::Context->preference("DebugLevel");
 
-        if ($debug_level eq "2"){
-            # debug 2 , print extra info too.
-            my %versions = get_versions();
+				if ($debug_level eq "2"){
+					# debug 2 , print extra info too.
+					my %versions = get_versions();
 
-# a little example table with various version info";
-            print "
-                <h1>debug level $debug_level </h1>
-                <p>Got an error: $msg</p>
-                <table>
-                <tr><th>Apache<td>  $versions{apacheVersion}</tr>
-                <tr><th>Koha<td>    $versions{kohaVersion}</tr>
-                <tr><th>MySQL<td>   $versions{mysqlVersion}</tr>
-                <tr><th>OS<td>      $versions{osVersion}</tr>
-                <tr><th>Perl<td>    $versions{perlVersion}</tr>
-                </table>";
+		# a little example table with various version info";
+					print "
+						<h1>debug level $debug_level </h1>
+						<p>Got an error: $msg</p>
+						<table>
+						<tr><th>Apache<td>  $versions{apacheVersion}</tr>
+						<tr><th>Koha<td>    $versions{kohaVersion}</tr>
+						<tr><th>MySQL<td>   $versions{mysqlVersion}</tr>
+						<tr><th>OS<td>      $versions{osVersion}</tr>
+						<tr><th>Perl<td>    $versions{perlVersion}</tr>
+						</table>";
 
-        } elsif ($debug_level eq "1"){
-            print "<h1>debug level $debug_level </h1>";
-            print "<p>Got an error: $msg</p>";
-        } else {
-            print "production mode - trapped fatal";
-        }       
-    }       
-    set_message(\&handle_errors);
+				} elsif ($debug_level eq "1"){
+					print "<h1>debug level $debug_level </h1>";
+					print "<p>Got an error: $msg</p>";
+				} else {
+					print "production mode - trapped fatal";
+				}       
+			}       
+		CGI::Carp->set_message(\&handle_errors);
+    }  	# else there is no browser to send fatals to!
 }
 
 use DBI;
@@ -57,9 +60,7 @@ use XML::Simple;
 
 use C4::Boolean;
 
-use vars qw($VERSION $AUTOLOAD),
-    qw($context),
-    qw(@context_stack);
+use vars qw($VERSION $AUTOLOAD $context @context_stack);
 
 $VERSION = '3.00.00.005';
 
@@ -911,9 +912,8 @@ sub get_versions {
     $versions{perlVersion} = $];
     $versions{mysqlVersion} = `mysql -V`;
     $versions{apacheVersion} =  `httpd -v`;
-    $versions{apacheVersion} =  `httpd2 -v` unless  $versions{apacheVersion} ;
-    $versions{apacheVersion} =  `apache2 -v` unless  $versions{apacheVersion}
-;
+    $versions{apacheVersion} =  `httpd2 -v`            unless  $versions{apacheVersion} ;
+    $versions{apacheVersion} =  `apache2 -v`           unless  $versions{apacheVersion} ;
     $versions{apacheVersion} =  `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
     return %versions;
 }

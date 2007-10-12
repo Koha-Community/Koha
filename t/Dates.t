@@ -1,11 +1,9 @@
 #!/bin/perl
 
-use Test::More tests => 83;
+use Test::More tests => 82;
 BEGIN {
 		use_ok('C4::Dates');
 }
-use_ok( CGI::Carp );
-CGI::Carp->fatalsToBrowser(0);
 
 my %thash = (
 	  iso  => ['2001-01-01','1989-09-21'],
