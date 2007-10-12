@@ -603,27 +603,6 @@ sub DelBiblio {
 		$error .= "This Biblio has items attached, please delete them first before deleting this biblio ";
 	}
 
-	# shouldnt this be done when deleting an item?
-	# Ill shift this to delitem next
-    # First make sure there are no items with issues are still attached
-#    my $sth =
-#      $dbh->prepare(
-#        "SELECT itemnumber FROM items WHERE biblionumber=?");
-#    $sth->execute($biblionumber);
-#    while ( my $itemnumber = $sth->fetchrow ) {
-#        my $issues = GetItemIssues($itemnumber);
-#        foreach my $issue (@$issues) {
-#            if (   ( $issue->{date_due} )
-#                && ( $issue->{date_due} ne "Available" ) )
-#            {
-
-# FIXME: we need a status system in Biblio like in Circ to return standard codes and messages
-# instead of hard-coded strings
-#                $error .=
-# "Item is checked out to a patron -- you must return it before deleting the Biblio";
-#            }
-#        }
-#    }
     return $error if $error;
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
@@ -646,16 +625,6 @@ sub DelBiblio {
         # delete this biblioitem
         $error = &_koha_delete_biblioitems( $dbh, $biblioitemnumber );
         return $error if $error;
-
-        # delete items
-        my $items_sth =
-          $dbh->prepare(
-            "SELECT itemnumber FROM items WHERE biblioitemnumber=?");
-        $items_sth->execute($biblioitemnumber);
-        while ( my $itemnumber = $items_sth->fetchrow ) {
-            $error = &_koha_delete_item( $dbh, $itemnumber );
-            return $error if $error;
-        }
     }
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$biblionumber,"") 
         if C4::Context->preference("CataloguingLog");
@@ -676,6 +645,10 @@ Exported function (core API) for deleting an item record in Koha.
 sub DelItem {
     my ( $biblionumber, $itemnumber ) = @_;
     my $dbh = C4::Context->dbh;
+	
+	# check the item has no current issues
+	
+	
     &_koha_delete_item( $dbh, $itemnumber );
     # get the MARC record
     my $record = GetMarcBiblio($biblionumber);
