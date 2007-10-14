@@ -69,14 +69,16 @@ function confirm_deletion(count) {
 
 function yuiToolbar(){
 	 YAHOO.toolbar.init = function () {
-			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
-			var oEditbiblio = new YAHOO.widget.Button("editbiblio");
-			var oEdititems = new YAHOO.widget.Button("edititems");
-			var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
-            var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
-			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
-			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
-			var oPlacehold = new YAHOO.widget.Button("placehold");		 
+                    var oAddbiblio = new YAHOO.widget.Button("addbiblio");
+                    var oEditbiblio = new YAHOO.widget.Button("editbiblio");
+                    var oEdititems = new YAHOO.widget.Button("edititems");
+                    var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
+                    var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
+                    var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
+                    var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
+                    <!-- TMPL_UNLESS name="bi_notforloan" -->
+                        var oPlacehold = new YAHOO.widget.Button("placehold");		 
+                    <!-- /TMPL_UNLESS -->
     } ();
 }
 	
@@ -236,16 +238,21 @@ function yuiToolbar(){
                     <td><!-- TMPL_IF name="datedue" -->
                             On issue to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
                         <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="notforloan" -->
-                                <!-- TMPL_VAR name="notforloan" -->
+                            <!-- TMPL_IF name="bi_notforloan" -->
+                                Not For loan (itemtype)
                             <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF name="itemlost"-->
-                                    Item lost
+                                <!-- TMPL_IF name="notforloan" -->
+                                    <!-- TMPL_VAR name="notforloan" -->
                                 <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+                                    <!-- TMPL_IF name="itemlost"-->
+                                        Item lost
+                                    <!-- TMPL_ELSE -->
+                                    <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF --></td>
+                        <!-- /TMPL_IF -->
+                        </td>
                     <td><!-- TMPL_VAR NAME="datedue" --></td>
                     <td><!-- TMPL_VAR NAME="datelastseen" --></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>

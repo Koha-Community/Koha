@@ -21,6 +21,7 @@ use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField
 use C4::Koha;      # getFacets
 use Lingua::Stem;
+use C4::Date;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -832,13 +833,14 @@ sub searchResults {
     #find itemtype & itemtype image
     my %itemtypes;
     $bsth =
-      $dbh->prepare("SELECT itemtype,description,imageurl,summary FROM itemtypes");
+      $dbh->prepare("SELECT itemtype,description,imageurl,summary,notforloan FROM itemtypes");
     $bsth->execute();
     while ( my $bdata = $bsth->fetchrow_hashref ) {
         $itemtypes{ $bdata->{'itemtype'} }->{description} =
           $bdata->{'description'};
         $itemtypes{ $bdata->{'itemtype'} }->{imageurl} = $bdata->{'imageurl'};
         $itemtypes{ $bdata->{'itemtype'} }->{summary} = $bdata->{'summary'};
+        $itemtypes{ $bdata->{'itemtype'} }->{notforloan} = $bdata->{'notforloan'};
     }
 
     #search item field code
@@ -948,41 +950,58 @@ sub searchResults {
         my $itemlost_count    = 0;
         my $norequests        = 1;
 
+        #
+        # check the loan status of the item : 
+        # it is not stored in the MARC record, for pref (zebra reindexing)
+        # reason. Thus, we have to get the status from a specific SQL query
+        #
+        my $sth_issue = $dbh->prepare("
+            SELECT date_due,returndate 
+            FROM issues 
+            WHERE itemnumber=? AND returndate IS NULL");
+
         foreach my $field (@fields) {
             my $item;
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
+            $sth_issue->execute($item->{itemnumber});
+            $item->{due_date} = format_date($sth_issue->fetchrow);
+            $item->{onloan} = 1 if $item->{due_date};
+            # at least one item can be reserved : suppose no
+            $norequests = 1;
             if ( $item->{wthdrawn} ) {
                 $wthdrawn_count++;
-            }
-            elsif ( $item->{notforloan} == -1 ) {
-                $ordered_count++;
-                $norequests = 0;
             }
             elsif ( $item->{itemlost} ) {
                 $itemlost_count++;
             }
-            elsif ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
+            unless ( $item->{notforloan}) {
+                # OK, this one can be issued, so at least one can be reserved
+                $norequests = 0;
+            }
+            if ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
             {
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{onloancount} = 1;
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{due_date} = $item->{due_date};
                 $onloan_count++;
-                $norequests = 0;
             }
-            else {
-                $norequests = 0;
-                if ( $item->{'homebranch'} ) {
-                    $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{count}++;
-                }
+            if ( $item->{'homebranch'} ) {
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{count}++;
+            }
 
-                # Last resort
-                elsif ( $item->{'holdingbranch'} ) {
-                    $items->{ $item->{'holdingbranch'} }->{count}++;
-                }
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
+            # Last resort
+            elsif ( $item->{'holdingbranch'} ) {
+                $items->{ $item->{'holdingbranch'} }->{count}++;
             }
+            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
+            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
+            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
         }    # notforloan, item level and biblioitem level
+
+        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
+        $norequests = 1 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
+
         for my $key ( sort keys %$items ) {
             my $this_item = {
                 branchname     => $branches{$items->{$key}->{branchcode}},
@@ -990,6 +1009,8 @@ sub searchResults {
                 count          => $items->{$key}->{count}==1 ?"":$items->{$key}->{count},
                 itemcallnumber => $items->{$key}->{itemcallnumber},
                 location => $items->{$key}->{location},
+                onloancount         => $items->{$key}->{onloancount},
+                due_date         => $items->{$key}->{due_date},
             };
             push @items_loop, $this_item;
         }
@@ -1000,61 +1021,6 @@ sub searchResults {
         $oldbiblio->{itemlostcount} = $itemlost_count;
         $oldbiblio->{orderedcount}  = $ordered_count;
         $oldbiblio->{isbn}          =~ s/-//g; # deleting - in isbn to enable amazon content 
-        
-# FIXME
-#  Ugh ... this is ugly, I'll re-write it better above then delete it
-#     my $norequests = 1;
-#     my $noitems    = 1;
-#     if (@items) {
-#         $noitems = 0;
-#         foreach my $itm (@items) {
-#             $norequests = 0 unless $itm->{'itemnotforloan'};
-#         }
-#     }
-#     $oldbiblio->{'noitems'} = $noitems;
-#     $oldbiblio->{'norequests'} = $norequests;
-#     $oldbiblio->{'even'} = $even = not $even;
-#     $oldbiblio->{'itemcount'} = $counts{'total'};
-#     my $totalitemcounts = 0;
-#     foreach my $key (keys %counts){
-#         if ($key ne 'total'){
-#             $totalitemcounts+= $counts{$key};
-#             $oldbiblio->{'locationhash'}->{$key}=$counts{$key};
-#         }
-#     }
-#     my ($locationtext, $locationtextonly, $notavailabletext) = ('','','');
-#     foreach (sort keys %{$oldbiblio->{'locationhash'}}) {
-#         if ($_ eq 'notavailable') {
-#             $notavailabletext="Not available";
-#             my $c=$oldbiblio->{'locationhash'}->{$_};
-#             $oldbiblio->{'not-available-p'}=$c;
-#         } else {
-#             $locationtext.="$_";
-#             my $c=$oldbiblio->{'locationhash'}->{$_};
-#             if ($_ eq 'Item Lost') {
-#                 $oldbiblio->{'lost-p'} = $c;
-#             } elsif ($_ eq 'Withdrawn') {
-#                 $oldbiblio->{'withdrawn-p'} = $c;
-#             } elsif ($_ eq 'On Loan') {
-#                 $oldbiblio->{'on-loan-p'} = $c;
-#             } else {
-#                 $locationtextonly.= $_;
-#                 $locationtextonly.= " ($c)<br/> " if $totalitemcounts > 1;
-#             }
-#             if ($totalitemcounts>1) {
-#                 $locationtext.=" ($c)<br/> ";
-#             }
-#         }
-#     }
-#     if ($notavailabletext) {
-#         $locationtext.= $notavailabletext;
-#     } else {
-#         $locationtext=~s/, $//;
-#     }
-#     $oldbiblio->{'location'} = $locationtext;
-#     $oldbiblio->{'location-only'} = $locationtextonly;
-#     $oldbiblio->{'use-location-flags-p'} = 1;
-
         push( @newresults, $oldbiblio );
     }
     return @newresults;

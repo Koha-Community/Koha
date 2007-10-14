@@ -7,11 +7,13 @@
 <div id="action">
 
 <!-- TMPL_UNLESS NAME="norequests" -->
-	<!-- TMPL_IF NAME="RequestOnOpac" -->
-		<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-		Place Reserve
-		</a>
-	<!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS name="bi_notforloan" -->
+        <!-- TMPL_IF NAME="RequestOnOpac" -->
+            <a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            Place Reserve
+            </a>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
         <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             MARC View
@@ -186,18 +188,26 @@
             <td><!-- TMPL_VAR NAME="description" --></td>
             <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
             <td>
-                <!-- TMPL_IF name="datedue" -->
-                On issue
+                <!-- TMPL_IF name="bi_notforloan" -->
+                    Not for loan
                 <!-- TMPL_ELSE -->
-                <!-- TMPL_IF name="notforloan" -->
-                <!-- TMPL_VAR name="notforloan" -->
-                <!-- TMPL_ELSE -->
-                <!-- TMPL_IF name="itemlost"-->
-                Item lost
-                <!-- TMPL_ELSE -->
-                <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="datedue" -->
+                    On issue
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF name="notforloan" -->
+                            <!-- TMPL_VAR name="notforloan" -->
+                        <!-- TMPL_ELSE -->
+                            <!-- TMPL_IF name="itemlost"-->
+                                Item lost
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_IF NAME="wthdrawn" -->
+                                    Item Cancelled
+                                <!-- TMPL_ELSE -->
+                                    Available
+                                <!-- /TMPL_IF -->
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
             </td>
             <td><!-- TMPL_VAR NAME="datedue" --></td>
