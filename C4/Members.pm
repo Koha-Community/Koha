@@ -1224,11 +1224,16 @@ sub checkuniquemember {
 }
 
 sub checkcardnumber {
-	my ($cardnumber) = @_;
+	my ($cardnumber,$borrowernumber) = @_;
 	my $dbh = C4::Context->dbh;
 	my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($cardnumber);
+	$query .= " AND borrowernumber <> ?" if ($borrowernumber);
+  my $sth = $dbh->prepare($query);
+  if ($borrowernumber) {
+   $sth->execute($cardnumber,$borrowernumber);
+  } else { 
+	 $sth->execute($cardnumber);
+  } 
 	if (my $data= $sth->fetchrow_hashref()){
 		return 1;
 	}

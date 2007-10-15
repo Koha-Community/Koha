@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Patrons &rsaquo; <!-- TMPL_IF NAME="opadd" -->
-		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+<title>Koha &rsaquo; Patrons &rsaquo; 
+<!-- TMPL_IF NAME="opadd" -->	Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
 patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
 patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -11,9 +11,12 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="opadd" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; 
+<!-- TMPL_IF NAME="opadd" -->
 		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE --> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> &rsaquo; Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+<!-- TMPL_ELSE --> 
+<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> &rsaquo; Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
 patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
@@ -34,6 +37,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- /TMPL_IF -->
+  
 	<!-- TMPL_IF NAME="check_member" -->
 		<p>
 		<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
@@ -65,18 +69,17 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
       <!-- TMPL_IF NAME="ERROR_age_limitations" -->
               <div id="ERROR_age_limitations">Patron is too young or too old for this category</div>
       <!-- /TMPL_IF -->
+   <!-- TMPL_IF NAME="ERROR_branch" -->
+              <div id="ERROR_branch">branch selected not allowed.</div>
+      <!-- /TMPL_IF -->   
 		</div>
 	<!-- /TMPL_IF -->
 	
-  <!--TMPL_IF Name="allsteps"-->
-
-  <!--/TMPL_IF-->
   
 <form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
 <input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
-<input type="hidden" name="step" value="<!-- TMPL_VAR NAME="step" -->" />
 <input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
 <input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
 <input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
@@ -84,12 +87,10 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 <input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 <input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
+<!--TMPL_IF Name="step"--><input type="hidden" name="step"  value="<!-- TMPL_VAR NAME="step" -->" /><!--/TMPL_IF-->
 <!-- TMPL_IF NAME="opadd" --><input type="hidden" name="op" value="insert" /><!-- TMPL_ELSE --><input type="hidden" name="op" value="save" /><!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="step_1"-->
-  <div id="step1" class="content_visible">
-  <!--TMPL_IF Name="I"-->
-  <input type="hidden" name="FormFieldList" value="surname|contactname|contactfirstname" /> <!--TMPL_ELSE--> <input type="hidden" name="FormFieldList" value="title|surname|firstname|dateofbirth|initials|othernames" />  <!--/TMPL_IF-->
 	<fieldset class="rows" id="memberentry_identity">
 		<legend><!--TMPL_IF Name="I"-->Organisation <!--TMPL_ELSE-->Patron <!--/TMPL_IF-->identity</legend>
 		<ol>
@@ -162,7 +163,10 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			Other name: </label>
 			<input type="text" id="othernames" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" />
 		</li>
-		<li class="radio">
+    <!--TMPL_IF Name="I"-->
+        <input type="hidden" name="sex" value="N" />
+    <!--TMPL_ELSE-->
+		<li class="radio">  
 		<!-- TMPL_IF NAME="female" -->
 				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" checked="checked" />
 				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
@@ -172,7 +176,8 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		<!-- /TMPL_IF -->
        	</li>
 		</ol>
-<!--TMPL_IF EXPR="I || C || P"-->  <p>
+    <!--/TMPL_IF-->
+<!--TMPL_IF EXPR="showguarantor"-->  <p>
   <input name="guarantordelete" type="button" value="Delete Guarantor" onclick="document.form.guarantorid.value='';document.form.guarantorinfo.value='',document.form.guarantorsearch.value='Find guarantor';" />
   <!-- TMPL_IF NAME="guarantorid"-->  
     
@@ -333,16 +338,11 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
     </li>
 	</ol>
   </fieldset>
-</div>
+
 
 <!-- ************************ STEP_1 *********************** -->
 <!--/TMPL_IF -->
 <!--TMPL_IF Name="step_2"-->
-<!--TMPL_IF Name="step_1"-->
-<div id="step2" class="content_hidden">
-<!--TMPL_ELSE-->
-<div id="step2" class="content_visible">
-<!--/TMPL_IF-->       
 
 		<fieldset class="rows" id="memberentry_address">
 		<legend>Alternate address</legend><ol>
@@ -392,15 +392,9 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 	</fieldset>
 	<!-- /TMPL_IF -->
   <!-- /TMPL_IF -->
-</div>
               
 <!-- /TMPL_IF -->
 <!--TMPL_IF Name="step_3"-->
-<!--TMPL_IF Name="step_1"-->
-<div id="step3" class="content_hidden">
-<!--TMPL_ELSE-->
-<div id="step3" class="content_visible">
-<!--/TMPL_IF-->       
 
   <fieldset class="rows" id="memberentry_library_management">
     <legend>Library Management</legend><ol>
@@ -573,13 +567,12 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			</ol>
 			</fieldset>
 		<!-- /TMPL_UNLESS -->	
-</div>
 <!-- /TMPL_IF -->
     <fieldset class="action">
       <!-- TMPL_IF NAME="opadd" -->
-        <input type="button" name="step4" onclick="return check_form_borrowers(); unique();" value="Add Patron" />
+        <input type="button" name="add" onclick="return check_form_borrowers(); unique();" value="Add Patron" />
       <!-- TMPL_ELSE -->
-        <input type="button" name="step4" onclick="return check_form_borrowers();" value="Save Changes" />
+        <input type="button" name="save" onclick="return check_form_borrowers();" value="Save Changes" />
       <!--/TMPL_IF -->
     </fieldset>
 </form>
