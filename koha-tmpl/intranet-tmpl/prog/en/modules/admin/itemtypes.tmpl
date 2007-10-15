@@ -1,23 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;<!-- TMPL_IF name="add_form" -->
+<title>Koha &rsaquo; Administration &rsaquo; Item Types <!-- TMPL_IF name="add_form" -->&rsaquo; 
   <!-- TMPL_IF name="itemtype" -->
 Modify item type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
 Add item type
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->
+<!-- TMPL_IF name="delete_confirm" -->&rsaquo; 
   <!-- TMPL_IF name="total" -->
 Cannot Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
 Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" -->
+<!-- TMPL_IF name="delete_confirmed" -->&rsaquo; 
 Data Deleted
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" -->
-Item Types Administration
 <!-- /TMPL_IF -->
 </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><script type="text/javascript">
@@ -85,20 +82,20 @@ function Check(f) {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" -->
   <!-- TMPL_IF name="itemtype" -->
-Modify item type '<!-- TMPL_VAR name="itemtype" -->'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Modify item type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
-Add item type
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Add item type
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->
   <!-- TMPL_IF name="total" -->
-Cannot Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Cannot Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
-Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirmed" -->
-Data Deleted
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo;Data Deleted
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->
 Item Types Administration
@@ -120,41 +117,30 @@ Item Types Administration
   <input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="checked" value="0" />
 		
-    <table>
+    <fieldset class="rows">
+	<ol>
   <!-- TMPL_IF name="itemtype" -->
-      <tr>
-        <th>
-          <label>Item type</label>
-        </th>
-        <td>
-          <input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" />
+      <li>
+          <span class="label">Item type</span> <input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" />
           <!-- TMPL_VAR name="itemtype" -->
-        </td>
-      </tr>
+     </li>
   <!-- TMPL_ELSE -->
-      <tr>
-        <th>
-          <label for="itemtype">Item type</label>
-        </th>
-        <td>
-          <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" />
-        </td>
-      </tr>
+      <li>
+          <label for="itemtype">Item type</label> <input type="text" id="itemtype" name="itemtype" size="10" maxlength="10" onblur="toUC(this)" />
+      </li>
   <!-- /TMPL_IF -->
-      <tr>
-        <th>
-          <label for="description">Description</label>
-        </th>
-	<td>
-          <input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
-        </td>
-      </tr>
-      <tr>
-        <th>Image</th>
-        <td>
-          <p>
+      <li>
+          <label for="description">Description</label><input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />      </li>
+      <li><fieldset>
+	  <legend>Image: </legend>
+        
+          <ol>
   <!-- TMPL_LOOP NAME="IMAGESLOOP" -->
-            <label>
+  			<li style="float: none; display: inline; clear : none; width: auto;">
+            <label> <!-- TMPL_IF NAME="KohaImageSrc" -->
+              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="<!-- TMPL_VAR name="KohaImageSrc" -->" title="<!-- TMPL_VAR name="KohaImageSrc" -->" />
+        <!-- TMPL_ELSE -->
+        <!-- /TMPL_IF -->
     <!-- TMPL_IF name="checked" -->
               <input type="radio" name="image" value="<!-- TMPL_VAR name="KohaImage" -->" checked="checked" />
     <!-- TMPL_ELSE -->
@@ -162,80 +148,58 @@ Item Types Administration
               <input type="radio" name="image" value="<!-- TMPL_VAR name="KohaImage" -->" />
               <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="KohaImageSrc" -->
-              <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="<!-- TMPL_VAR name="KohaImageSrc" -->" title="<!-- TMPL_VAR name="KohaImageSrc" -->" />
-        <!-- TMPL_ELSE -->
-              <br />
-        <!-- /TMPL_IF -->
             </label>
+			</li>
   <!-- /TMPL_LOOP -->
-          </p>
-
-          <p>
-            <label>
+	<li>
+            <label for="remote_image_check"> Remote image:</label>
   <!-- TMPL_IF name="remote_image" -->
             <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
   <!-- TMPL_ELSE -->
             <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
   <!-- /TMPL_IF -->
-            remote image
-            </label>
+           
             <input type="text" name="remoteImage" size="48" maxlength="200" value="<!-- TMPL_VAR name="remote_image" -->" onmousedown="document.getElementById('remote_image_check').checked = true;" />
 
   <!-- TMPL_IF name="remote_image" -->
             <img src="<!-- TMPL_VAR name="remote_image" -->" alt="" />
   <!-- /TMPL_IF -->
-          </p>
-          <hr />
-          <p>
-            <label><input type="radio" name="image" value="removeImage" /> remove image</label>
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="notforloan">Not for loan</label>
-        </th>
-        <td>
-            <!-- TMPL_IF name="notforloan" -->
+          </li>
+          <li>
+            <label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" />
+          </li>
+        
+          </ol>
+		  </fieldset>
+      </li>
+      <li>
+          <label for="notforloan">Not for loan</label>   <!-- TMPL_IF name="notforloan" -->
                 <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" id="notforloan" name="notforloan" value="1" />
             <!-- /TMPL_IF -->
           (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="renewalsallowed">Renewals</label>
-        </th>
-        <td>
-	          <input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="renewalsallowed" -->" />
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="rentalcharge">Rental charge</label>
-        </th>
-        <td>
-          <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" />
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="rentalcharge">Summary</label>
-        </th>
-        <td><p>Enter a summary that will overwrite the default one in search results lists</p>
-          <p><textarea id="summary" name="summary" cols="40" rows="10"><!-- TMPL_VAR NAME="summary" --></textarea></p>
-          <p>Example, for a website itemtype : </p>
+        
+      </li>
+      <li>
+          <label for="renewalsallowed">Renewals: </label>
+		  <input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="renewalsallowed" -->" />
+        </li>
+      <li>
+          <label for="rentalcharge">Rental charge: </label>
+		  <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" />
+         </li>
+      <li>
+          <label for="summary">Summary: </label>
+         <textarea id="summary" name="summary" cols="55" rows="5"><!-- TMPL_VAR NAME="summary" --></textarea>
+          <p>Enter a summary that will overwrite the default one in search results lists. Example, for a website itemtype : </p>
           <p><b>&lt;a href="[856u]"&gt;open site&lt;/a&gt;</b> will show the link just below the title</p>
-        </td>
-      </tr>
-    </table>
+      </li>
+	  </ol>
+    </fieldset>
 
     <p id="action">
       <input type="button" value="Save Changes" onclick="Check(this.form)" />
-      <input type="button" value="Cancel" onclick="history.back();" />
     </p>
 </form>
 <!-- /TMPL_IF -->
@@ -267,7 +231,7 @@ Item Types Administration
 <h2>Item Types Administration</h2>
 <table>
   <tr>
-    <th>image</th>
+    <th>Image</th>
     <th>Code</th>
     <th>Description</th>
     <th>Not for Loan</th>

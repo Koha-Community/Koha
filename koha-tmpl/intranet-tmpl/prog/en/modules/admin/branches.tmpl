@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, agency categories<!-- /TMPL_IF --></title>
+    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, &amp; Agency categories<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -9,15 +9,15 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  
 
-<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; 
+<!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; 
 <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, agency categories</a> &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="else" -->Libraries, branches, agency categories<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Libraries, Branches, &amp; Agency Categories<!-- /TMPL_IF -->
 
 </div>
 
@@ -28,47 +28,46 @@
 	<div class="yui-b">
 
 <!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" -->
-        <h1>Add library</h1>
-    <!-- TMPL_ELSE -->
-        <h1>Modify library</h1>
-    <!-- /TMPL_IF -->
+  <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
+	<fieldset class="rows">
         <input type="hidden" name="op" value="add_validate" />
         <!-- TMPL_IF name="heading-branches-add-branch-p" -->
             <input type="hidden" name="add" value="1" />
         <!-- TMPL_ELSE -->
             <input type="hidden" name="add" value="0" />
         <!-- /TMPL_IF -->
-        <p>
-            <label><b>Library code</b></label>
+        <ol><li>
             <!-- TMPL_IF name="branchcode" -->
+			<span class="label">Library code</span>
                 <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
                 <!-- TMPL_VAR name="branchcode" -->
             <!-- TMPL_ELSE -->
-                <input type="text" name="branchcode" size="10" maxlength="10" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+            <label for="branchcode">Library code</label>
+                <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
             <!-- /TMPL_IF -->
-        </p>
-        <p>
-            <label><b>Name</b></label>
-            <input type="text" name="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
-        </p>
-		Agency Categories:
-        <!-- TMPL_LOOP name="categoryloop" -->
-            <p>
-                <input type="checkbox" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> />
-				<label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
-				: <!-- TMPL_VAR name="codedescription" -->
-            </p>
-        <!-- /TMPL_LOOP -->
-        <p><label>Address</label><input type="text" name="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></p>
-        <p><label>&nbsp;</label><input type="text" name="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></p>
-        <p><label>&nbsp;</label><input type="text" name="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></p>
-        <p><label>Phone</label><input type="text" name="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></p>
-        <p><label>Fax</label><input type="text" name="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></p>
-        <p><label>E-mail</label><input type="text" name="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></p>
-        <p><label>IP</label><input type="text" name="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" />can be entered as a single IP, or a subnet such as 192.168.1.*</p>
-        <p><label>Library Printer</label>
+        </li>
+        <li>
+            <label for="branchname">Name</label>
+            <input type="text" name="branchname" id="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
+        </li>
+		<li><fieldset><legend>Agency Categories:</legend>
+        <ol>
+		<!-- TMPL_LOOP name="categoryloop" -->
+            <li><label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
+                <input type="checkbox" id="<!-- TMPL_VAR name="categorycode" -->" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /> <span class="hint"><!-- TMPL_VAR name="codedescription" --></span>
+            </li>
+        <!-- /TMPL_LOOP --></fieldset>
+		</ol>
+		</li>
+        <li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
+        <li><label for="branchaddress2">Address Line 2</label><input type="text" name="branchaddress2" id="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></li>
+        <li><label for="branchaddress3">Address Line 3</label><input type="text" name="branchaddress3" id="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></li>
+        <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></li>
+        <li><label for="branchfax">Fax</label><input type="text" name="branchfax" id="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></li>
+        <li><label for="branchemail">E-mail</label><input type="text" name="branchemail" id="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></li>
+        <li><label for="branchip">IP</label><input type="text" name="branchip" id="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
+        <li><label for="branchprinter">Library Printer</label>
             <select id="branchprinter" name="branchprinter">
                 <option value="">None</option>
             <!-- TMPL_LOOP NAME="printerloop" -->
@@ -78,7 +77,8 @@
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchprinter" --></option>
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </select></p>
+            </select></li></ol>
+			</fieldset>
         <p><input type="submit" value="Submit" /></p>
     </form>
 <!-- /TMPL_IF -->
@@ -185,25 +185,16 @@
         <td><!-- TMPL_VAR name="categoryname" --></td>
         <td><!-- TMPL_VAR name="categorycode" --></td>
         <td><!-- TMPL_VAR name="codedescription" --></td>
-        <td>
-            <form action="<!-- TMPL_VAR name="action" -->" method="post">
-            <input type="hidden" name="op" value="editcategory" />
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
-            <input type="submit" value="Edit" />
-            </form>
+        <td><a href="<!-- TMPL_VAR name="action" -->?op=editcategory&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="HTML" -->">Edit</a>
         </td>
-        <td>
-            <form action="<!-- TMPL_VAR name="action" -->" method="post">
-            <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
-            <input type="hidden" name="op" value="delete_category" /><input type="submit" value="Delete" />
-            </form>
+        <td><a href="<!-- TMPL_VAR name="action" -->?op=delete_category&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="HTML" -->">Delete</a>
         </td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
     <!-- TMPL_ELSE -->
         <p>
-            <b>No Agency Categories defined.</b>
+            No Agency Categories defined.
         </p>
     <!-- /TMPL_IF --> <!-- NAME="branchcategories" -->
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><p>
@@ -213,31 +204,30 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="editcategory" -->
-    
+    <h3><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="addcategory_validate" />
-    <table>
-        <caption><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --></caption>
-        <tr>
-            <td>Category code</td>
-            <td>
+    <fieldset class="rows">
+        
+        <ol><li>
                 <!-- TMPL_IF name="categorycode" -->
-                    <input type="hidden" name="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
+				<span class="label">Category code: </span>
+                    <input type="hidden" name="categorycode" id="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                     <!-- TMPL_VAR name="categorycode" -->
                 <!-- TMPL_ELSE -->
-                    <input type="text" name="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
+            <label for="categorycode">Category code:</label>
+                    <input type="text" name="categorycode" id="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
-            </td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td><input type="text" name="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" /></td>
-        </tr>
-        <tr>
-            <td>Description</td>
-            <td><input type="text" name="codedescription" size="40" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" /></td>
-        </tr>
-    </table><input type="submit" value="Update" />
+            </li>
+        <li>
+            <label for="categoryname">Name: </label>
+            <input type="text" name="categoryname" id="categoryname" size="40" maxlength="80" value="<!-- TMPL_VAR name="categoryname" escape="HTML" -->" />
+        </li>
+        <li>
+            <label for="codedescription">Description: </label>
+            <input type="text" name="codedescription" id="codedescription" size="70" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />
+        </li></ol>
+    </fieldset><input type="submit" value="Update" />
     </form>
 <!-- /TMPL_IF -->
 

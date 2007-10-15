@@ -1,13 +1,13 @@
 <!-- Begin Members Resident Search Box -->
 <div id="header_search">
-	<div id="z3950_search">
+	<div id="z3950_search" class="residentsearch">
 	<p class="tip">Z39.50 Server Search:</p>
 	<form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
                 <input type="text" name="description" size="40" value="<!-- TMPL_VAR NAME="searchfield" -->" />
                 <input type="submit" name="search" value="Search" />
         </form>
 	</div>
-	<div id="circ_search">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
@@ -17,7 +17,7 @@
 	<input value="Submit" type="submit" />
 	</form>
 	</div>	
-	<div id="catalog_search">
+	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />

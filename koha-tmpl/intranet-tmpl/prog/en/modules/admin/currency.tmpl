@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo; 
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
@@ -68,7 +68,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
@@ -86,37 +86,31 @@
 <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 <input type="hidden" name="op" value="add_validate" />
 
-	<table>
-	<caption><!-- TMPL_IF NAME="searchfield" -->
+	<fieldset class="rows">
+	<legend><!-- TMPL_IF NAME="searchfield" -->
 		Modify currency
 	<!-- TMPL_ELSE -->
 		Add currency
-	<!-- /TMPL_IF --></caption>
-	<!-- TMPL_IF NAME="searchfield" -->
-		<tr>
-			<th>Currency</th>
-			<td>
-				<input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-			</td>
-		</tr>
+	<!-- /TMPL_IF --></legend>
+	<ol><!-- TMPL_IF NAME="searchfield" -->
+		<li>
+			<span class="label">Currency: </span>
+			<input type="hidden" name="currency" id="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
+			</li>
 	<!-- TMPL_ELSE -->
-		<tr>
-			<th>Currency</th>
-			<td>
-				<input type="text" name="currency" size="50" maxlength="50" onblur="toUC(this);" />
-			</td>
-		</tr>
+		<li>
+			<label for="currency">Currency: </label>
+			<input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" />
+			</li>
 	<!-- /TMPL_IF -->
 
-        	<tr>
-			<th>Rate</th	>
-			<td>
-				<input type="text" name="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
-			</td>
-		</tr>
-        </table>
+        	<li>
+			<label for="rate">Rate: </label>
+			<input type="text" name="rate" id="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
+			</li></ol>
+        </fieldset>
 		
-		<input type="button" value="OK" onclick="Check(this.form)" /> <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;" />
+		<input type="submit" value="Submit" onclick="Check(this.form)" /> 
         </form>
 
 <!-- /TMPL_IF -->
@@ -184,8 +178,8 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Edit" /></form></td>
-                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Delete" /></form></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

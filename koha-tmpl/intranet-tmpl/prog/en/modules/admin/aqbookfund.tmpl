@@ -166,37 +166,30 @@
   <input type="hidden" name="op" value="add_validate" />
   <input type="hidden" name="checked" value="0" />
 
-  <table>
-    <caption><!-- TMPL_VAR name="header" --></caption>
+  <fieldset class="rows">
+    <legend><!-- TMPL_VAR name="header" --></legend>
     
-  <!-- TMPL_IF name="add_or_modify" -->
-    <tr>
-      <th>Book fund</th>
-      <td>
-        <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
+  <ol><!-- TMPL_IF name="add_or_modify" -->
+    <li>
+      	<span class="label">Book fund: </span>
+        <input type="hidden" name="bookfundid" id="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
         <!-- TMPL_VAR name="bookfundid" -->
-      </td>
-    </tr>
+    </li>
   <!-- TMPL_ELSE -->
-    <tr>
-      <th>Book fund</th>
-      <td>
-        <input type="text" name="bookfundid" size="5" maxlength="5" onblur="toUC(this)" />
-      </td>
-    </tr>
+    <li>
+      <label for="bookfundid">Book fund: </label>
+      <input type="text" name="bookfundid" id="bookfundid" size="5" maxlength="5" onblur="toUC(this)" />
+    </li>
   <!-- /TMPL_IF --> <!-- add_or_modify -->
     
-    <tr>
-      <th>Name</th>
-      <td>
-        <input type="text" name="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" />
-      </td>
-    </tr>
+    <li>
+      <label for="bookfundname">Name: </label>
+	  <input type="text" name="bookfundname" id="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" />
+      </li>
 
-    <tr>
-      <th>Branch</th>
-      <td>
-        <select name="branchcode">
+    <li>
+      <label for="branchcode">Branch: </label>
+      <select name="branchcode" id="branchcode">
           <option value="">None</option>
   <!-- TMPL_LOOP NAME="branches" -->
     <!-- TMPL_IF NAME="selected" -->
@@ -206,10 +199,9 @@
     <!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
   	</select>
-      </td>
-    </tr>
+    </li></ol>
     
-  </table>
+  </fieldset>
 
   <p>
     <input type="button" value="Submit" onclick="Check(this.form); return false;" />

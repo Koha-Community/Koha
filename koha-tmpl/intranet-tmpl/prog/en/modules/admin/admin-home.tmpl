@@ -11,101 +11,67 @@
 <div id="doc" class="yui-t7">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-g"><h1>System Administration</h1>
+	<div id="yui-main" class="sysprefs">
+	<div class="yui-g"><h1>System Preferences</h1>
 
-<table>
-<caption>System Preferences</caption>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/systempreferences.pl">Global system preferences</a></td>
-	<td>Manage global system preferences like MARC flavor, date format, administrator e-mail, and templates.</td>
-</tr>
-</table>
-<table>
-<caption>Configure these parameters in the order they appear</caption>
-<tr>
-<th colspan="2">Basic parameters</th>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches and agency categories</a></td>
-	<td>Define libraries, branches and agency categories.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/aqbookfund.pl">Accounts and budgets</a></td>
-	<td>Accounts and budgets administration for acquisitions.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></td>
-	<td>Define currencies and exchange rates used for acquisitions.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types and circulation codes</a></td>
-	<td>Define item types and circulation codes used for circulation rules.</td>
-</tr>
+<dl>
+	<dt><a href="/cgi-bin/koha/admin/systempreferences.pl">Global system preferences</a></dt>
+	<dd>Manage global system preferences like MARC flavor, date format, administrator e-mail, and templates.</dd>
+</dl>
 
-<tr>
-<th colspan="2">Patrons and circulation</th>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a></td>
-	<td>Define patron categories.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></td>
-	<td>Define cities and towns that your patrons live in.</td>
-</tr>	
-<tr>
-	<td><a href="/cgi-bin/koha/admin/roadtype.pl" >Road types</a>
-	</td>
-	<td>Define road types (street, avenue, way, etc.). Road types display as authorized values when adding/editing patrons and can be used in geographic statistics.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/issuingrules.pl">Circulation rules</a></td>
-	<td>Define circulation rules in a matrix for libraries / patrons / itemtypes / circ codes (number of checkouts, duration, fee, etc.).</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/finesrules.pl">Fines rules</a></td>
-	<td>Define fines in a matrix for libraries / patrons / itemtypes (cost, grace period, etc.).</td>
-</tr>
-<tr>
-<th colspan="2">Catalogue</th>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></td>
-	<td>Define categories and authorised values for them.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></td>
-	<td>Create and manage Bibliographic frameworks that define the characteristics of your MARC Records (field and subfield definitions) as well as templates for the MARC editor.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha -> MARC mapping</a></td>
-	<td>Define the mappingbetween the Koha transactional database (SQL) and the MARC Bibliographic records. Note that the mapping can be defined through MARC Bibliographic Framework. This tool is just a shortcut to speed up linkage.</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></td>
-	<td>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition.</td></tr>
-<tr>
-    <td><a href="/cgi-bin/koha/admin/authtypes.pl">MARC Authorities framework</a></td>
-    <td>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).</td>
-</tr>
 
-<tr>
-<th colspan="2">Additional parameters</th>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/stopwords.pl">Stopwords</a></td>
-	<td>Words ignored during search</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></td>
-	<td>Printers (UNIX paths).</td>
-</tr>
-<tr>
-	<td><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a></td>
-	<td>Define which servers to query for MARC data in the integrated Z39.50 client.</td>
-</tr>
-</table>
+<div class="hint"><h4>Hint:</h4><p>Configure these parameters in the order they appear.</p></div>
+<h3>Basic parameters</h3>
+<dl>
+	<dt><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches and agency categories</a></dt>
+	<dd>Define libraries, branches and agency categories.</dd>
+	<dt><a href="/cgi-bin/koha/admin/aqbookfund.pl">Accounts and budgets</a></dt>
+	<dd>Accounts and budgets administration for acquisitions.</dd>
+	<dt><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></dt>
+	<dd>Define currencies and exchange rates used for acquisitions.</dd>
+	<dt><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types and circulation codes</a></dt>
+	<dd>Define item types and circulation codes used for circulation rules.</dd>
+</dl>
+
+<h3>Patrons and circulation</h3>
+<dl>
+	<dt><a href="/cgi-bin/koha/admin/categorie.pl">Patron categories</a></dt>
+	<dd>Define patron categories.</dd>
+	<dt><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></dt>
+	<dd>Define cities and towns that your patrons live in.</dd>
+	<dt><a href="/cgi-bin/koha/admin/roadtype.pl" >Road types</a>
+	</dt>
+	<dd>Define road types (street, avenue, way, etc.). Road types display as authorized values when adding/editing patrons and can be used in geographic statistics.</dd>
+	<dt><a href="/cgi-bin/koha/admin/issuingrules.pl">Circulation rules</a></dt>
+	<dd>Define circulation rules in a matrix for libraries / patrons / itemtypes / circ codes (number of checkouts, duration, fee, etc.).</dd>
+	<dt><a href="/cgi-bin/koha/admin/finesrules.pl">Fines rules</a></dt>
+	<dd>Define fines in a matrix for libraries / patrons / itemtypes (cost, grace period, etc.).</dd>
+</dl>
+
+<h3>Catalogue</h3>
+<dl>
+	<dt><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorised values</a></dt>
+	<dd>Define categories and authorised values for them.</dd>
+	<dt><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></dt>
+	<dd>Create and manage Bibliographic frameworks that define the characteristics of your MARC Records (field and subfield definitions) as well as templates for the MARC editor.</dd>
+	<dt><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></dt>
+	<dd>Define the mappingbetween the Koha transactional database (SQL) and the MARC Bibliographic records. Note that the mapping can be defined through MARC Bibliographic Framework. This tool is just a shortcut to speed up linkage.</dd>
+	<dt><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></dt>
+	<dd>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition.</dd>
+    <dt><a href="/cgi-bin/koha/admin/authtypes.pl">MARC Authorities framework</a></dt>
+    <dd>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).</dd>
+</dl>
+
+<h3>Additional parameters</h3>
+<dl>
+	<dt><a href="/cgi-bin/koha/admin/stopwords.pl">Stopwords</a></dt>
+	<dd>Words ignored during search</dd>
+	<dt><a href="/cgi-bin/koha/admin/printers.pl">Printers</a></dt>
+	<dd>Printers (UNIX paths).</dd>
+	<dt><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 servers</a></dt>
+	<dd>Define which servers to query for MARC data in the integrated Z39.50 client.</dd>
+</dl>
+
 
 </div>
 </div>

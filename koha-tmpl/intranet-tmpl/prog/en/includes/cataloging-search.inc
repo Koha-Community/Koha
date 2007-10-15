@@ -1,13 +1,13 @@
 <!-- Begin Circulation Resident Search Box -->
 <div id="header_search">
-<div id="addbooks_search">
+<div id="addbooks_search" class="residentsearch">
 	<p class="tip">Search the catalog and the reservoir:</p>
 	<form name="search" action="addbooks.pl">
         <input type="text" name="q"  size="40" class="focus" />
         <input type="submit" value="Search" />
 	</form>
 </div>
-	<div id="circ_search">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
