@@ -326,8 +326,14 @@
                                 </td>
                                 <td>
                                     <!-- TMPL_IF NAME="items_loop" -->
-                                        <span class="available">
+                                        
                                         <!-- TMPL_LOOP NAME="items_loop" -->
+                                        <!--TMPL_IF Name="unavailable"-->
+                                        <span class="unavailable">
+                                        <!--TMPL_ELSE-->
+                                        <span class="available">
+                                        <!--/TMPL_IF -->
+                                        
                                             <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchcode" -->
                                             <i>
                                         <!-- TMPL_IF name="location" --><!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
@@ -338,16 +344,14 @@
                                             </a>
                                         <!-- /TMPL_IF -->
                                         </i>
+                                        <!-- TMPL_IF NAME="onloancount" -->, On loan until <!-- TMPL_VAR NAME="due_date" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="wthdrawncount" -->, Withdrawn<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="itemlostcount" -->, Lost<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="orderedcount" -->, On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
                                          <br />
-                                        <!-- /TMPL_LOOP -->
                                         </span>
+                                        <!-- /TMPL_LOOP -->
                                     <!-- /TMPL_IF -->
-                                    <span class="unavailable">
-                                        <!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->),<br /> <!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
-                                    </span>
                                 </td>
                                 <td>
                                     <!-- TMPL_IF NAME="norequests" -->

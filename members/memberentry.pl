@@ -143,7 +143,7 @@ if ( $guarantorid eq ''){
     }
 }
 #builds default userid
-if ( ($newdata{'userid'} eq '')){
+if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
   my $onefirstnameletter=substr($data{'firstname'},0,1);
   my $fivesurnameletter=substr($data{'surname'},0,9);
   $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);

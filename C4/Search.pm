@@ -972,9 +972,13 @@ sub searchResults {
             $norequests = 1;
             if ( $item->{wthdrawn} ) {
                 $wthdrawn_count++;
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{wthdrawn}=1;
             }
             elsif ( $item->{itemlost} ) {
                 $itemlost_count++;
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemlost}=1;
             }
             unless ( $item->{notforloan}) {
                 # OK, this one can be issued, so at least one can be reserved
@@ -982,6 +986,7 @@ sub searchResults {
             }
             if ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
             {
+                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
                 $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{onloancount} = 1;
                 $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{due_date} = $item->{due_date};
                 $onloan_count++;
@@ -1009,8 +1014,10 @@ sub searchResults {
                 count          => $items->{$key}->{count}==1 ?"":$items->{$key}->{count},
                 itemcallnumber => $items->{$key}->{itemcallnumber},
                 location => $items->{$key}->{location},
-                onloancount         => $items->{$key}->{onloancount},
+                onloancount      => $items->{$key}->{onloancount},
                 due_date         => $items->{$key}->{due_date},
+                wthdrawn      => $items->{$key}->{wthdrawn},
+                lost         => $items->{$key}->{itemlost},
             };
             push @items_loop, $this_item;
         }

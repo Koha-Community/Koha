@@ -591,8 +591,6 @@ sub ModMember {
     $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} ) if ($data{'dateofbirth'} );
     $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'} ) if ($data{'dateexpiry'} );
     $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} ) if ($data{'dateenrolled'} );
-#     warn Data::Dumper::Dumper(%data);
-    #   warn "num user".$data{'borrowernumber'};
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
     my %hashborrowerfields;  
@@ -601,7 +599,6 @@ sub ModMember {
     }  
     my $query;
     my $sth;
-    $data{'userid'} = '' if ( $data{'password'} eq '' );  
     my @parameters;  
     
     # test to know if u must update or not the borrower password
