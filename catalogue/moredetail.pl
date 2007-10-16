@@ -97,6 +97,7 @@ foreach my $item (@$items){
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => $items);
 $template->param(loggedinuser => $loggedinuser);
+$template->param(biblionumber => $biblionumber);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
