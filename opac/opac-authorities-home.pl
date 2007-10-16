@@ -55,12 +55,12 @@ foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtype
 }
 
 if ( $op eq "do_search" ) {
-	my @marclist = $query->param('marclist');
-	my @and_or = $query->param('and_or');
-	my @excluding = $query->param('excluding');
-	my @operator = $query->param('operator');
-	my $orderby = $query->param('orderby');
-	my @value = $query->param('value');
+    my @marclist = $query->param('marclist');
+    my @and_or = $query->param('and_or');
+    my @excluding = $query->param('excluding');
+    my @operator = $query->param('operator');
+    my $orderby = $query->param('orderby');
+    my @value = $query->param('value');
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 19 if ( !defined $resultsperpage );
@@ -68,7 +68,7 @@ if ( $op eq "do_search" ) {
     my ( $results, $total, @fields ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator,
         \@value, $startfrom * $resultsperpage,
-        $resultsperpage, $authtypecode );
+        $resultsperpage, $authtypecode, $orderby );
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-authoritiessearchresultlist.tmpl",

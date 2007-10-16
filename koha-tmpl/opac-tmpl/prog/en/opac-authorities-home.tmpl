@@ -58,7 +58,12 @@
                 <input type="hidden" name="and_or" value="and">
                 <input type="hidden" name="excluding" value="">
             </p>
-            <p>(add % at the end of your word if you want to use right-truncation : <b>theor%</b> will find theory &amp; theories)</p>
+            <p><label>Order by :</label><select name="orderby">
+                <option value="">None</option>
+                    <option value="HeadingAsc" selected="SELECTED">Heading Ascendant</option>
+                    <option value="HeadingDsc">Heading Descendant</option>
+                </select>
+            </p>
             <p>
                 <input type="submit" value="OK" class="submit">
             </p>
