@@ -32,8 +32,6 @@ use C4::Acquisition;     # GetRecentAcqui
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
 
-my $limit = $input->param('recentacqui');
-
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-main.tmpl",
@@ -43,42 +41,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { borrow => 1 },
     }
 );
-
-if ($limit) {
-    my $recentacquiloop = GetRecentAcqui($limit);
-
-    #     warn Data::Dumper::Dumper($recentacquiloop);
-    $template->param( recentacquiloop => $recentacquiloop, );
-}
-
-# SearchMyLibraryFirst
-if ( C4::Context->preference("SearchMyLibraryFirst") ) {
-    if ( C4::Context->userenv ) {
-        my $branches = GetBranches();
-        my @branchloop;
-
-        foreach my $thisbranch (sort keys %$branches ) {
-            my $selected = 1
-              if ( C4::Context->userenv
-                && ( $thisbranch eq C4::Context->userenv->{branch} ) );
-
-#         warn $thisbranch;
-#         warn C4::Context->userenv;
-#         warn C4::Context->userenv->{branch};
-#         warn " => ".C4::Context->userenv && ($thisbranch eq C4::Context->userenv->{branch});
-            my %row = (
-                value      => $thisbranch,
-                selected   => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-            push @branchloop, \%row;
-        }
-        $template->param( "mylibraryfirst" => 1, branchloop => \@branchloop );
-    }
-    else {
-        $template->param( "mylibraryfirst" => 0 );
-    }
-}
 
 my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
 my @languages;

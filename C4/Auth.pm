@@ -260,7 +260,7 @@ sub get_template_and_user {
         );
     }
     else {
-		warn "template type should be OPAC, here it is=[" . $in->{'type'} . "]" unless ( $in->{'type'} eq 'opac' );
+        warn "template type should be OPAC, here it is=[" . $in->{'type'} . "]" unless ( $in->{'type'} eq 'opac' );
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
@@ -297,6 +297,7 @@ sub get_template_and_user {
             reviewson              => C4::Context->preference("reviewson"),
             hide_marc              => C4::Context->preference("hide_marc"),
             patronimages           => C4::Context->preference("patronimages"),
+            mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
         );
     }
