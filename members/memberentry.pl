@@ -101,10 +101,10 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 
 my %newdata;
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
-    my @names= $borrower_data && $op ne 'save' ? keys %$borrower_data : $input->param();
+    my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
-        $newdata{$key} = $input->param($key) || '';
-        $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
+        $newdata{$key} = $input->param($key) if ($input->param($key));
+        $newdata{$key} =~ s/\"/&quot;/gg unless ($key eq 'borrowernotes' or $key eq 'opacnote');
     }
     $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
     $newdata{'dateexpiry'}=format_date_in_iso($newdata{'dateexpiry'}) if ($newdata{dateexpiry});  
@@ -170,7 +170,7 @@ if ($op eq 'save' || $op eq 'insert'){
     my $userenv = C4::Context->userenv;
     if ($userenv && $userenv->{flags} != 1){
       warn "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
-      unless ($userenv->{branch} eq $newdata{'branchcode'}){
+      unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
         $nok=1;
       }
