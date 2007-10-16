@@ -328,6 +328,8 @@ sub create_input {
                     value=\"$value\"
                     class=\"input_marceditor\"
                     tabindex=\"1\"
+                    size=\"67\"
+                    maxlength=\"255\" 
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
                         onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
@@ -349,16 +351,18 @@ sub create_input {
 #         my ( $function_name, $javascript,$extended_param );
         
         $subfield_data{marc_value} =
-		"<input tabindex=\"1\"
+                "<input tabindex=\"1\"
                         type=\"text\"
                         id=\"".$subfield_data{id}."\"
-			name=\"".$subfield_data{id}."\"
-			value=\"$value\"
+                        name=\"".$subfield_data{id}."\"
+                        value=\"$value\"
                         class=\"input_marceditor\"
-			onfocus=\"Focus$function_name($index_tag)\"
-			onblur=\"Blur$function_name($index_tag); \" \/>
-		<a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
-		$javascript";
+                        onfocus=\"Focus$function_name($index_tag)\"
+                        size=\"67\"
+                        maxlength=\"255\" 
+                        onblur=\"Blur$function_name($index_tag); \" \/>
+                        <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
+                $javascript";
         # it's an hidden field
     }
     elsif ( $tag eq '' ) {
@@ -367,6 +371,8 @@ sub create_input {
                     type=\"hidden\"
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
+                    size=\"67\"
+                    maxlength=\"255\" 
                     value=\"$value\" \/>
             ";
     }
@@ -377,6 +383,8 @@ sub create_input {
                     name=\"".$subfield_data{id}."\"
                     class=\"input_marceditor\"
                     tabindex=\"1\"
+                    size=\"67\"
+                    maxlength=\"255\" 
                     value=\"$value\"
             \/>";
 
@@ -400,6 +408,8 @@ sub create_input {
                            name=\"".$subfield_data{id}."\"
                            class=\"input_marceditor\"
                            tabindex=\"1\"
+                            size=\"67\"
+                            maxlength=\"255\" 
                            >$value</textarea>
                 ";
         }
@@ -410,6 +420,8 @@ sub create_input {
                         name=\"".$subfield_data{id}."\"
                         value=\"$value\"
                         tabindex=\"1\"
+                        size=\"67\"
+                        maxlength=\"255\" 
                         class=\"input_marceditor\"
                 \/>
                 ";
