@@ -24,7 +24,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 $VERSION = 0.03;
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(DHTMLcalendar);
+@EXPORT_OK = qw(DHTMLcalendar format_date_in_iso format_date);
 
 my $prefformat = C4::Context->preference('dateformat');
 my $debug = $ENV{'DEBUG'} || 0;
@@ -130,6 +130,14 @@ sub visual {
 	}
 	$self eq __PACKAGE__ and return $format_map{$prefformat};
 	return $format_map{ eval { $self->{'dateformat'} } || $prefformat} ;
+}
+
+# like the functions from the old C4::Date.pm
+sub format_date {
+	return __PACKAGE__ -> new(shift,'iso')->output((@_) ? shift : $prefformat);
+}
+sub format_date_in_iso {
+	return __PACKAGE__ -> new(shift,$prefformat)->output('iso');
 }
 
 1;
