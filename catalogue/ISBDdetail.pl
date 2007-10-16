@@ -141,7 +141,7 @@ foreach my $isbdfield ( split /#/, $bloc ) {
                         $subf[$i][1], '', $dbh );
                     my $tagsubf = $tag . $subfieldcode;
                     $calculated =~
-s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue\{$1$tagsubf$2\}$2/g;
+s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
                 }
 
                 # field builded, store the result
