@@ -410,7 +410,6 @@ function searchauthority() {
 <!-- /TMPL_IF -->
 
 <div id="authoritytabs" class="toptabs numbered">
-<!--TMPL_UNLESS Name="singletab"-->
        <ul> <!-- TMPL_LOOP name="BIG_LOOP" -->
             <li><!-- TMPL_IF name="number" -->
                 <a href="/cgi-bin/authorities/authorties.pl#tab<!-- TMPL_VAR name="number" -->XX"><!-- TMPL_VAR name="number"--></a>
@@ -418,114 +417,112 @@ function searchauthority() {
                 <a href="/cgi-bin/authorities/authorties.pl#tab<!-- TMPL_VAR name="number" -->XX"><!-- TMPL_VAR name="number"--></a>
             <!-- /TMPL_IF --></li>
         <!--  /TMPL_LOOP --></ul>
-<!--/TMPL_UNLESS-->
 
 <!-- TMPL_LOOP name="BIG_LOOP" -->
-<!-- hide every tab except the 1st -->
-<!--TMPL_UNLESS Name="singletab"-->
-    <!-- TMPL_IF name="number" -->
-        <div id="tab<!-- TMPL_VAR name="number" -->XX">
-    <!-- TMPL_ELSE -->
-        <div id="tab<!-- TMPL_VAR name="number" -->XX">
-    <!-- /TMPL_IF -->
-<!-- /TMPL_UNLESS -->
-    
-    <!-- TMPL_LOOP NAME="innerloop" -->
-        <!-- TMPL_IF NAME="tag" -->
-<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
-        <div class="tag_title" name="div_indicator">
-            <!-- TMPL_UNLESS name="hide_marc" -->
-                <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
-                <!-- TMPL_IF NAME="fixedfield" -->
-                <input tabindex="1"
-                            class="indicator flat"
-                            type="text"
-                            style="display:none;"
-                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
-                            size="2"
-                            maxlength="2"
-                            value="<!-- TMPL_VAR NAME="indicator" -->" />
-                <!-- TMPL_ELSE -->
-                <input tabindex="1"
-                            class="indicator flat"
-                            type="text"
-                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
-                            size="2"
-                            maxlength="2"
-                            value="<!-- TMPL_VAR NAME="indicator" -->" />
-                <!-- /TMPL_IF --> -
+    <!-- hide every tab except the 1st -->
+            <!-- TMPL_IF name="number" -->
+                <div id="tab<!-- TMPL_VAR name="number" -->XX">
             <!-- TMPL_ELSE -->
-                <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1"
-                        type="hidden"
-                        name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                        value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
-                <!-- TMPL_ELSE -->
-                    <input tabindex="1"
-                        type="hidden"
-                        name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
-                        value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_UNLESS -->
-
-            <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-            <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="repeatable" -->
-                <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
+                <div id="tab<!-- TMPL_VAR name="number" -->XX">
             <!-- /TMPL_IF -->
-            
-        </div>
-
-        <!-- TMPL_LOOP NAME="subfield_loop" -->
-            <!--  One line on the marc editor -->
-            <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->">
-            
-                <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
-                <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                        <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
-                <!-- /TMPL_UNLESS --> 
-                
+        
+        <!-- TMPL_LOOP NAME="innerloop" -->
+            <!-- TMPL_IF NAME="tag" -->
+                <div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
+                <div class="tag_title" name="div_indicator">
                 <!-- TMPL_UNLESS name="hide_marc" -->
-                    <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')" alt="Move Up" title="Move Up" />
-                        <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
-                            style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
-                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                            value="<!-- TMPL_VAR NAME="subfield" -->"
-                            size="1"
-                            maxlength="1"
-                            class="flat"
-                            tabindex="-1" />
+                    <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                    <!-- TMPL_IF NAME="fixedfield" -->
+                    <input tabindex="1"
+                                class="indicator flat"
+                                type="text"
+                                style="display:none;"
+                                name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
+                                size="2"
+                                maxlength="2"
+                                value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <!-- TMPL_ELSE -->
+                    <input tabindex="1"
+                                class="indicator flat"
+                                type="text"
+                                name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
+                                size="2"
+                                maxlength="2"
+                                value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <!-- /TMPL_IF --> -
                 <!-- TMPL_ELSE -->
-                    <input type="hidden"
-                        name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
-                        value="<!-- TMPL_VAR NAME="subfield" -->"/>
+                    <!-- TMPL_IF NAME="fixedfield" -->
+                        <input tabindex="1"
+                            type="hidden"
+                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
+                            value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
+                    <!-- TMPL_ELSE -->
+                        <input tabindex="1"
+                            type="hidden"
+                            name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'-->"
+                            value="<!-- TMPL_VAR NAME="indicator" --><!-- TMPL_VAR name="random" -->" />
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_UNLESS -->
-            
+    
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
-                        <!-- TMPL_VAR NAME="marc_lib" -->
-                    <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
-                    </label>
+                    <a onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag_lib" --></a>
                 <!-- /TMPL_UNLESS -->
-                
-                <!-- TMPL_VAR NAME="marc_value" -->
-                
-                <!-- TMPL_IF NAME="repeatable" -->
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
+                <!-- TMPL_IF name="repeatable" -->
+                    <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
                 
             </div>
-            <!-- End of the line -->
-            
+    
+            <!-- TMPL_LOOP NAME="subfield_loop" -->
+                <!--  One line on the marc editor -->
+                <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->">
+                
+                    <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
+                    <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                            <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield" >
+                    <!-- /TMPL_UNLESS --> 
+                    
+                    <!-- TMPL_UNLESS name="hide_marc" -->
+                        <img class="buttonUp" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')" alt="Move Up" title="Move Up" />
+                            <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->"
+                                style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text"
+                                name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                                value="<!-- TMPL_VAR NAME="subfield" -->"
+                                size="1"
+                                maxlength="1"
+                                class="flat"
+                                tabindex="-1" />
+                    <!-- TMPL_ELSE -->
+                        <input type="hidden"
+                            name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
+                            value="<!-- TMPL_VAR NAME="subfield" -->"/>
+                    <!-- /TMPL_UNLESS -->
+                
+                    <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
+                        <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
+                            <!-- TMPL_VAR NAME="marc_lib" -->
+                        <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
+                        </label>
+                    <!-- /TMPL_UNLESS -->
+                    
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    
+                    <!-- TMPL_IF NAME="repeatable" -->
+                        <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
+                    <!-- /TMPL_IF -->
+                    
+                </div>
+                <!-- End of the line -->
+                
+            <!-- /TMPL_LOOP -->
+            </div>
+            <!-- /TMPL_IF --><!-- tag -->
         <!-- /TMPL_LOOP -->
         </div>
-        <!-- /TMPL_IF --><!-- tag -->
-    <!-- /TMPL_LOOP -->
-    </div>
 <!-- /TMPL_LOOP -->
-<!--TMPL_UNLESS Name="singletab"-->
-</div>	
+
+<!-- TMPL_UNLESS Name="singletab" -->
+    </div>	
 <!--/TMPL_UNLESS-->
 </div>
 

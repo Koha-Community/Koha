@@ -417,7 +417,7 @@ sub GetTagsLabels {
 
 
   # check that authority exists
-  $sth=$dbh->prepare("select count(*) from auth_tag_structure where authtypecode=?");
+  $sth=$dbh->prepare("SELECT count(*) FROM auth_tag_structure WHERE authtypecode=?");
   $sth->execute($authtypecode);
   my ($total) = $sth->fetchrow;
   $authtypecode="" unless ($total >0);
