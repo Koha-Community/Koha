@@ -367,16 +367,19 @@ sub build_tabs ($$$$$) {
             if ( $record ne -1 && ( $record->field($tag) || $tag eq '000' ) ) {
                 my @fields;
                 if ( $tag ne '000' ) {
-                                @fields = $record->field($tag);
+                    @fields = $record->field($tag);
                 }
                 else {
                   push @fields, $record->leader(); # if tag == 000
                 }
-    # loop through each field
+                # loop through each field
                 foreach my $field (@fields) {
-                    
                     my @subfields_data;
                     if ($field->tag()<10) {
+                        next
+                        if (
+                            $tagslib->{ $field->tag() }->{ '@' }->{tab}
+                            ne $tabloop );
                       next if ($tagslib->{$field->tag()}->{'@'}->{hidden});
                       my %subfield_data;
                       $subfield_data{marc_lib}=$tagslib->{$field->tag()}->{'@'}->{lib};
@@ -389,7 +392,13 @@ sub build_tabs ($$$$$) {
                   # loop through each subfield
                       for my $i (0..$#subf) {
                         $subf[$i][0] = "@" unless $subf[$i][0];
-                        next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{hidden});
+                        next
+                        if (
+                            $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab}
+                            ne $tabloop );
+                        next
+                        if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }
+                            ->{hidden} );
                         my %subfield_data;
                         $subfield_data{marc_lib}=$tagslib->{$field->tag()}->{$subf[$i][0]}->{lib};
                         if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{isurl}) {
@@ -410,7 +419,7 @@ sub build_tabs ($$$$$) {
                     }
                     if ($#subfields_data>=0) {
                       my %tag_data;
-                      $tag_data{tag}=$field->tag().' -'. $tagslib->{$field->tag()}->{lib};
+                      $tag_data{tag}=$field->tag().' - '. $tagslib->{$field->tag()}->{lib};
                       $tag_data{subfield} = \@subfields_data;
                       push (@loop_data, \%tag_data);
                     }
@@ -418,6 +427,7 @@ sub build_tabs ($$$$$) {
               }
             }
             if ( $#loop_data >= 0 ) {
+                warn "pushing : $tabloop = ".Data::Dumper::Dumper(@loop_data);
                 push @BIG_LOOP, {
                     number    => $tabloop,
                     innerloop => \@loop_data,
