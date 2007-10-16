@@ -101,6 +101,11 @@ sub FindDuplicate {
     my ( $biblionumber, $title );
 
     # search duplicate on ISBN, easy and fast..
+    # ... normalize first
+    if ( $result->{isbn} ) {
+        $result->{isbn} =~ s/\(.*$//;
+        $result->{isbn} =~ s/\s+$//; 
+    }
     #$search->{'avoidquerylog'}=1;
     if ( $result->{isbn} ) {
         $query = "isbn=$result->{isbn}";
