@@ -1,8 +1,8 @@
 #!/bin/perl
 
-use Test::More tests => 82;
+use Test::More tests => 91;
 BEGIN {
-		use_ok('C4::Dates');
+	use_ok('C4::Dates', qw(format_date format_date_in_iso));
 }
 
 my %thash = (
@@ -13,20 +13,31 @@ my %thash = (
 	  		   '19890921    143907'     ],
 );
 
+my ($today, $today0, $val, $re, $syspref);
 my @formats = sort keys %thash;
-diag "\nNote: CGI::Carp may throw an initial error here.  Ignore that.\n";
-diag "Testing " . scalar(@formats) . " formats.\nTesting no input:\n";
-my ($today, $today0, $val, $re);
+diag "\n Testing Legacy Functions: format_date and format_date_in_iso";
+ok($syspref = C4::Dates->new->format(),         "Your system preference is: $syspref");
+print "\n";
+foreach (@{$thash{'iso'}}) {
+	ok($val = format_date($_),                  "format_date('$_'): $val"            );
+}
+foreach (@{$thash{$syspref}}) {
+	ok($val = format_date_in_iso($_),           "format_date_in_iso('$_'): $val"     );
+}
 ok($today0 = C4::Dates->today(),                "(default) CLASS ->today : $today0" );
+diag "\nTesting " . scalar(@formats) . " formats.\nTesting no input (defaults):\n";
+print "\n";
 foreach (@formats) {
 	my $pre = sprintf '(%-6s)', $_;
 	ok($date = C4::Dates->new(),                "$pre Date Creation   : new()");
 	ok($_ eq ($format = $date->format($_)),     "$pre format($_)      : $format" );
+	ok($format = $date->visual(),  				"$pre visual()        : $format" );
 	ok($today  = $date->output(),               "$pre output()        : $today" );
 	ok($today  = $date->today(),                "$pre object->today   : $today" );
 	print "\n";
 }
 
+diag "\nTesting with inputs:\n";
 foreach my $format (@formats) {
 	my $pre = sprintf '(%-6s)', $format;
   foreach my $testval (@{$thash{ $format }}) {
