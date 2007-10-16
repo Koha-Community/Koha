@@ -57,9 +57,9 @@ my $branch = $input->param('branch');
 my $itemtype = $input->param('itemtype');
 my $timeLimit = $input->param('timeLimit') || 3;
 my $whereclause;
-$whereclause .= 'items.homebranch='.$dbh->quote($branch)." AND " if ($branch); 
+$whereclause .= 'items.homebranch='.$dbh->quote($branch)." AND " if ($branch);
 $whereclause .= 'biblioitems.itemtype='.$dbh->quote($itemtype)." AND " if $itemtype;
-$whereclause .= 'TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.$timeLimit*30 if $timeLimit < 999;
+$whereclause .= ' TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.($timeLimit*30).' AND ' if $timeLimit < 999;
 $whereclause =~ s/ AND $//;
 $whereclause = " WHERE ".$whereclause if $whereclause;
 
@@ -100,7 +100,7 @@ for my $branch_hash (sort keys %$branches ) {
     my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
     push @branch_loop,
       {
-        value      => "branch: $branch_hash",
+        value      => "$branch_hash",
         branchname => $branches->{$branch_hash}->{'branchname'},
         selected => $selected
       };
