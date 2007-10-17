@@ -104,6 +104,7 @@ sub slashifyDate {
 
 sub DisplayISBN {
     my ($isbn) = @_;
+    if (length ($isbn)<13){
     my $seg1;
     if ( substr( $isbn, 0, 1 ) <= 7 ) {
         $seg1 = substr( $isbn, 0, 1 );
@@ -146,6 +147,52 @@ sub DisplayISBN {
     $seg3 = substr( $seg3, 0, length($seg3) - 1 );
     my $seg4 = substr( $x, -1, 1 );
     return "$seg1-$seg2-$seg3-$seg4";
+    } else {
+      my $seg1;
+      $seg1 = substr( $isbn, 0, 3 );
+      my $seg2;
+      if ( substr( $isbn, 3, 1 ) <= 7 ) {
+          $seg2 = substr( $isbn, 3, 1 );
+      }
+      elsif ( substr( $isbn, 3, 2 ) <= 94 ) {
+          $seg2 = substr( $isbn, 3, 2 );
+      }
+      elsif ( substr( $isbn, 3, 3 ) <= 995 ) {
+          $seg2 = substr( $isbn, 3, 3 );
+      }
+      elsif ( substr( $isbn, 3, 4 ) <= 9989 ) {
+          $seg2 = substr( $isbn, 3, 4 );
+      }
+      else {
+          $seg2 = substr( $isbn, 3, 5 );
+      }
+      my $x = substr( $isbn, length($seg2) +3);
+      my $seg3;
+      if ( substr( $x, 0, 2 ) <= 19 ) {
+  
+          # if(sTmp2 < 10) sTmp2 = "0" sTmp2;
+          $seg3 = substr( $x, 0, 2 );
+      }
+      elsif ( substr( $x, 0, 3 ) <= 699 ) {
+          $seg3 = substr( $x, 0, 3 );
+      }
+      elsif ( substr( $x, 0, 4 ) <= 8399 ) {
+          $seg3 = substr( $x, 0, 4 );
+      }
+      elsif ( substr( $x, 0, 5 ) <= 89999 ) {
+          $seg3 = substr( $x, 0, 5 );
+      }
+      elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
+          $seg3 = substr( $x, 0, 6 );
+      }
+      else {
+          $seg3 = substr( $x, 0, 7 );
+      }
+      my $seg4 = substr( $x, length($seg3) );
+      $seg4 = substr( $seg4, 0, length($seg4) - 1 );
+      my $seg5 = substr( $x, -1, 1 );
+      return "$seg1-$seg2-$seg3-$seg4-$seg5";       
+    }    
 }
 
 # FIXME.. this should be moved to a MARC-specific module
