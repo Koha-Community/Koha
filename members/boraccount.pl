@@ -33,17 +33,15 @@ use C4::Members;
 
 my $input=new CGI;
 
-my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-#my %tmpldata = pathtotemplate ( template => 'boraccount.tmpl', theme => $theme );
-#my $template = HTML::Template->new(filename => $tmpldata{'path'}, die_on_bad_params => 0);
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/boraccount.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {borrowers => 1},
-			     debug => 1,
-			     });
+                            query => $input,
+                            type => "intranet",
+                            authnotrequired => 0,
+                            flagsrequired => {borrowers => 1},
+                            debug => 1,
+                            });
 
 my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
@@ -53,48 +51,48 @@ my $data=GetMember($borrowernumber,'borrowernumber');
 my ($total,$accts,$numaccts)=GetMemberAccountRecords($borrowernumber);
 my $totalcredit;
 if($total <= 0){
-	$totalcredit = 1;
+        $totalcredit = 1;
 }
 my @accountrows; # this is for the tmpl-loop
 
 my $toggle;
 for (my $i=0;$i<$numaccts;$i++){
-	if($i%2){
-		$toggle = 0;
-	} else {
-		$toggle = 1;
-	}
-  $accts->[$i]{'toggle'} = $toggle;
-  $accts->[$i]{'amount'}+=0.00;
-  if($accts->[$i]{'amount'} <= 0){
-  	$accts->[$i]{'amountcredit'} = 1;
-  }
-  $accts->[$i]{'amountoutstanding'}+=0.00;
-  if($accts->[$i]{'amountoutstanding'} <= 0){
-  	$accts->[$i]{'amountoutstandingcredit'} = 1;
-  }
-  my %row = (   'date'              => format_date($accts->[$i]{'date'}),
-  		'amountcredit' => $accts->[$i]{'amountcredit'},
-  		'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
-  		'toggle' => $accts->[$i]{'toggle'},
-		'description'       => $accts->[$i]{'description'},
-  		'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
-		'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}) );
-
-  if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
-    $row{'printtitle'}=1;
-    $row{'title'} = $accts->[$i]{'title'};
-  }
-
-  push(@accountrows, \%row);
+    if($i%2){
+            $toggle = 0;
+    } else {
+            $toggle = 1;
+    }
+    $accts->[$i]{'toggle'} = $toggle;
+    $accts->[$i]{'amount'}+=0.00;
+    if($accts->[$i]{'amount'} <= 0){
+        $accts->[$i]{'amountcredit'} = 1;
+    }
+    $accts->[$i]{'amountoutstanding'}+=0.00;
+    if($accts->[$i]{'amountoutstanding'} <= 0){
+        $accts->[$i]{'amountoutstandingcredit'} = 1;
+    }
+    my %row = ( 'date'              => format_date($accts->[$i]{'date'}),
+                'amountcredit' => $accts->[$i]{'amountcredit'},
+                'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
+                'toggle' => $accts->[$i]{'toggle'},
+                'description'       => $accts->[$i]{'description'},
+                'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
+                'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}) );
+    
+    if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
+        $row{'printtitle'}=1;
+        $row{'title'} = $accts->[$i]{'title'};
+    }
+    
+    push(@accountrows, \%row);
 }
 
 $template->param(
-			firstname       => $data->{'firstname'},
-			surname         => $data->{'surname'},
-			borrowernumber          => $borrowernumber,
-			total           => sprintf("%.2f",$total),
-			totalcredit => $totalcredit,
-			accounts        => \@accountrows );
+                firstname       => $data->{'firstname'},
+                surname         => $data->{'surname'},
+                borrowernumber          => $borrowernumber,
+                total           => sprintf("%.2f",$total),
+                totalcredit => $totalcredit,
+                accounts        => \@accountrows );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -32,6 +32,7 @@ use C4::Circulation;
 use C4::Overdues;
 use Date::Manip qw/Date_DaysSince1BC/;
 use C4::Biblio;
+use strict;
 
 open (FILE,'>/tmp/fines') || die;
 # FIXME
@@ -39,8 +40,9 @@ open (FILE,'>/tmp/fines') || die;
 # better to rely on the length of the array @$data and turn the
 # for loop below into a foreach loop?
 #
-my ($numOverdueItems,$data)=Getoverdues();
-print $numOverdueItems if $DEBUG;
+my $DEBUG =1;
+my $data=Getoverdues();
+# warn "Overdues : = ".scalar(@$data)." => ".Data::Dumper::Dumper($data);
 my $overdueItemsCounted=0 if $DEBUG;
 # FIXME - There's got to be a better way to figure out what day
 # today is.
@@ -48,7 +50,7 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $mon++;
 $year=$year+1900;
 my $date=Date_DaysSince1BC($mon,$mday,$year);
-print $date if $DEBUG;
+# print "DATE : ".$date if $DEBUG;
 if ($mon < '10'  ){
 $mon="0".$mon;
 }
@@ -58,13 +60,13 @@ $mday="0".$mday;
 my $reference = $year."".$mon;
 my $borrowernumber;
 
-for (my $i=0;$i<$numOverdueItems;$i++){
+for (my $i=0;$i<scalar(@$data);$i++){
   my @dates=split('-',$data->[$i]->{'date_due'});
   my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);
   my $datedue=$data->[$i]->{'date_due'};
   my $due="$dates[2]/$dates[1]/$dates[0]";
   my $borrower=BorType($data->[$i]->{'borrowernumber'});
-  my $starter;    
+  my $starter;
       
  if ($date2 <= $date){
     $overdueItemsCounted++ if $DEBUG;
@@ -77,7 +79,8 @@ for (my $i=0;$i<$numOverdueItems;$i++){
     
     my ($delays1,$delays2,$delays3)=GetOverdueDelays($borrower->{'categorycode'});
     my $issuingrules=GetIssuingRules($data->[$i]->{'itemnumber'},$borrower->{'categorycode'});
- 
+
+# warn "$delays1  and $delays2  and $delays3";
 if($delays1  and $delays2  and $delays3)  {
     
     my $debarredstatus=CheckBorrowerDebarred($borrower->{'borrowernumber'});
@@ -85,27 +88,31 @@ if($delays1  and $delays2  and $delays3)  {
     if (($issuingrules->{'fine'} > 0) || ($issuingrules->{'fine'} ne '' )){
 
         #DELAYS 1##########################################
+#         warn "$amount > 0 && $daycount >= $delays1 && $daycount < $delays2";
         if ($amount > 0 && $daycount >= $delays1 && $daycount < $delays2){
-        my $debarred1=GetOverduerules($borrower->{'categorycode'},1);
-        (UpdateBorrowerDebarred($borrower->{'borrowernumber'}))if(($debarred1 eq '1' ) and ($debarredstatus eq '0'));
-        UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
-        my $getnotifyid=CheckExistantNotifyid($borrower->{'borrowernumber'},$datedue);
-    
-        my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},1,$datedue);
-            if ($update eq '0'){
-                        if ($getnotifyid eq '0'){
-                            $starter=GetNextIdNotify($reference,$borrower->{'borrowernumber'});
-    
-                        }
-                        else{
-                            $starter=$getnotifyid;
-                        }
-    
-            }
-        UpdateAccountLines($starter,1,$borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'});
+            # FIXME : already in GetIssuingRules ?
+            my $debarred1=GetOverduerules($borrower->{'categorycode'},1);
+            (UpdateBorrowerDebarred($borrower->{'borrowernumber'}))if(($debarred1 eq '1' ) and ($debarredstatus eq '0'));
+            # save fine
+            UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
+            # is there an open "dossier" for this date & borrower
+            my $getnotifyid=CheckExistantNotifyid($borrower->{'borrowernumber'},$datedue);
+        
+            my $update=CheckAccountLineLevelInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},1,$datedue);
+                if ($update eq '0'){
+                    if ($getnotifyid eq '0'){
+                        $starter=GetNextIdNotify($reference,$borrower->{'borrowernumber'});
+
+                    }
+                    else{
+                        $starter=$getnotifyid;
+                    }
+        
+                }
+            UpdateAccountLines($starter,1,$borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'});
         }
         ###############################################
-    
+        #SANOP specific
         if ($daycount>=$delays2) {
     
             $amount=$issuingrules->{'fine'} * ($delays2);
@@ -135,6 +142,7 @@ if($delays1  and $delays2  and $delays3)  {
             }
             my $items=GetItems($data->[$i]->{'itemnumber'});
             my $todaydate=$year."-".$mon."-".$mday;
+            # add item price, the item is considered as lost.
             my $description="Item Price";
             my $typeaccount="IP";
             my $level="3";
@@ -168,6 +176,7 @@ if ($borrower->{'category_type'} eq 'C'){
  }
 }
 
+my $numOverdueItems=scalar(@$data);
 if ($DEBUG) {
    print <<EOM
 

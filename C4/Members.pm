@@ -1104,17 +1104,15 @@ sub GetMemberAccountRecords {
     my @acctlines;
     my $numlines = 0;
     my $strsth      = qq(
-SELECT * 
-FROM accountlines 
-WHERE borrowernumber=?);
+                        SELECT * 
+                        FROM accountlines 
+                        WHERE borrowernumber=?);
     my @bind = ($borrowernumber);
     if ($date && $date ne ''){
-    $strsth.="
-AND date < ? ";
-    push(@bind,$date);
+            $strsth.=" AND date < ? ";
+            push(@bind,$date);
     }
-    $strsth.="
-ORDER BY date desc,timestamp DESC";
+    $strsth.=" ORDER BY date desc,timestamp DESC";
     my $sth= $dbh->prepare( $strsth );
     $sth->execute( @bind );
     my $total = 0;
@@ -1148,16 +1146,15 @@ sub GetBorNotifyAcctRecord {
     my $dbh = C4::Context->dbh;
     my @acctlines;
     my $numlines = 0;
-    my $query    = qq|	SELECT * 
-			FROM accountlines 
-			WHERE borrowernumber=? 
-			AND notify_id=? 
-			AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
-			AND amountoutstanding != '0' 
-			ORDER BY notify_id,accounttype
-		|;
-    my $sth = $dbh->prepare($query);
-
+    my $sth = $dbh->prepare(
+            "SELECT * 
+                FROM accountlines 
+                WHERE borrowernumber=? 
+                    AND notify_id=? 
+                    AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
+                    AND amountoutstanding != '0' 
+                ORDER BY notify_id,accounttype
+                ");
     $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {

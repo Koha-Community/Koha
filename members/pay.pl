@@ -51,7 +51,6 @@ my $user = $input->remote_user;
 
 # get account details
 my $branches = GetBranches();
-my $printers = GetPrinters();
 my $branch   = GetBranch( $input, $branches );
 
 my @names = $input->param;
@@ -90,8 +89,6 @@ if ( $check == 0 ) {
     }
 
     my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
-
-#       creation d'une fonction qui va nous retourner le notify_id dans un tableau
 
     my @allfile;
     my @notify = NumberNotifyId($borrowernumber);
@@ -132,7 +129,6 @@ if ( $check == 0 ) {
             'total'    => $totalnotify
           };
     }
-
     $template->param(
         allfile        => \@allfile,
         firstname      => $data->{'firstname'},

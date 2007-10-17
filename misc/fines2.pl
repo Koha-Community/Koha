@@ -32,6 +32,7 @@ use C4::Circulation;
 use C4::Overdues;
 use Date::Manip;
 use C4::Biblio;
+use strict;
 
 open (FILE,'>/tmp/fines') || die;
 # FIXME
@@ -39,8 +40,9 @@ open (FILE,'>/tmp/fines') || die;
 # better to rely on the length of the array @$data and turn the
 # for loop below into a foreach loop?
 #
-my ($numOverdueItems,$data)=Getoverdues();
-print $numOverdueItems if $DEBUG;
+my $DEBUG=0;
+my ($data)=Getoverdues();
+print scalar(@$data) if $DEBUG;
 my $overdueItemsCounted=0 if $DEBUG;
 
 # FIXME - There's got to be a better way to figure out what day
@@ -61,99 +63,69 @@ my $borrowernumber;
 #
 my $total=0;
 
-# FIXME
-# this probably ought to be a global variable or constant
-# defined in a central place
-#
-# Yep
-my $maxFine=5;
-
-# FIXME
-# delete both of these?
-#my $borrowernumber2=$data->[0]->{'borrowernumber'};
-#my $i2=1;
+# get the maxfine parameter
+my $maxFine=C4::Context->preference("MaxFine") || 999999999;
 
 # FIXME
 # This should be rewritten to be a foreach loop
 # Also, this loop is really long, and could be better grokked if broken
 # into a number of smaller, separate functions
 #
-for (my $i=0;$i<$numOverdueItems;$i++){
-  my @dates=split('-',$data->[$i]->{'date_due'});
-  my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);
-  my $due="$dates[2]/$dates[1]/$dates[0]";
-  my $borrower=BorType($data->[$i]->{'borrowernumber'});
-  if ($date2 <= $date){
-    $overdueItemsCounted++ if $DEBUG;
-    my $difference=$date-$date2;
-    my ($amount,$type,$printout)=
-    CalcFine($data->[$i]->{'itemnumber'},
-         $borrower->{'categorycode'},
-         $difference);
-    if ($amount > $maxFine){
-      $amount=$maxFine;
+for (my $i=0;$i<scalar(@$data);$i++){
+    my @dates=split('-',$data->[$i]->{'date_due'});
+    my $date2=Date_DaysSince1BC($dates[1],$dates[2],$dates[0]);
+    my $due="$dates[2]/$dates[1]/$dates[0]";
+    my $borrower=BorType($data->[$i]->{'borrowernumber'});
+    if ($date2 <= $date){
+        $overdueItemsCounted++ if $DEBUG;
+        my $difference=$date-$date2;
+        my ($amount,$type,$printout)=
+        CalcFine($data->[$i],
+            $borrower->{'categorycode'},
+            $difference);
+        if ($amount > $maxFine){
+            $amount=$maxFine;
+        }
+        if ($amount > 0){
+            UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
+            if ($borrower->{'categorycode'} eq 'C'){  # FIXME
+                my $dbh = C4::Context->dbh;
+                my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
+                $sth->execute($borrower->{'guarantor'});
+                my $tdata=$sth->fetchrow_hashref;
+                $sth->finish;
+                $borrower->{'phone'}=$tdata->{'phone'};
+            }
+            print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$borrower->{'emailaddress'}\t$borrower->{'phone'}\t$borrower->{'streetaddress'}\t$borrower->{'city'}\t$amount\n" if $DEBUG;
+        }
+        if ($difference >= C4::Context->preference("NoReturnSetLost")){
+            my $borrower=BorType($data->[$i]->{'borrowernumber'});
+            if ($borrower->{'cardnumber'} ne ''){
+                my $cost=ReplacementCost($data->[$i]->{'itemnumber'});
+                my $dbh = C4::Context->dbh;
+                my $accountno=C4::Accounts::getnextacctno($data->[$i]->{'borrowernumber'});
+                my $item=GetBiblioFromItemNumber($data->[$i]->{'itemnumber'});
+                if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
+                    # FIXME this should be a separate function
+                    my $sth=$dbh->prepare("INSERT INTO accountlines
+                    (borrowernumber,itemnumber,accountno,date,amount,
+                    description,accounttype,amountoutstanding) VALUES
+                    (?,?,?,now(),?,?,'L',?)");
+                    $sth->execute($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
+                    $accountno,$cost,"Lost item $item->{'title'} $item->{'barcode'} $due",$cost);
+                    $sth->finish;
+                    $sth=$dbh->prepare("UPDATE items SET itemlost=2 WHERE itemnumber=?");
+                    $sth->execute($data->[$i]->{'itemnumber'});
+                    $sth->finish;
+                }
+            }
+        }
     }
-    if ($amount > 0){
-      UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
-
-#
-# FIXME
-# If this isn't needed it should be deleted
-#
-#      if ($amount ==5){
-#          marklost();
-#      }
-
-       if ($borrower->{'categorycode'} eq 'C'){  # FIXME
-                                             # this should be a
-                                                 # separate function
-                                                 #
-     my $dbh = C4::Context->dbh;
-     my $sth=$dbh->prepare("Select * from borrowers where borrowernumber=?");
-     $sth->execute($borrower->{'guarantor'});
-     my $tdata=$sth->fetchrow_hashref;
-     $sth->finish;
-     $borrower->{'phone'}=$tdata->{'phone'};
-       }
-       print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$borrower->{'emailaddress'}\t$borrower->{'phone'}\t$borrower->{'streetaddress'}\t$borrower->{'city'}\t$amount\n";
-    } else { # FIXME
-         # if this is really useless, the whole else clause should be
-         # deleted.
-             #
-#      print "$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t0 fine\n";
-    }
-    if ($difference >= 28){ # FIXME
-                        # this should be a separate function
-                            #
-      my $borrower=BorType($data->[$i]->{'borrowernumber'});
-      if ($borrower->{'cardnumber'} ne ''){
-        my $cost=ReplacementCost($data->[$i]->{'itemnumber'});
-    my $dbh = C4::Context->dbh;
-    my $accountno=C4::Circulation::Circ2::getnextacctno($data->[$i]->{'borrowernumber'});
-    my $item=GetBiblioFromItemNumber($data->[$i]->{'itemnumber'});
-    if ($item->{'itemlost'} ne '1' && $item->{'itemlost'} ne '2' ){
-              # FIXME
-              # this should be a separate function
-              #
-      my $sth=$dbh->prepare("INSERT INTO accountlines
-      (borrowernumber,itemnumber,accountno,date,amount,
-      description,accounttype,amountoutstanding) VALUES
-      (?,?,?,now(),?,?,'L',?)");
-      $sth->execute($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
-      $accountno,$cost,"Lost item $item->{'title'} $item->{'barcode'} $due",$cost);
-      $sth->finish;
-      $sth=$dbh->prepare("update items set itemlost=2 where itemnumber=?");
-      $sth->execute($data->[$i]->{'itemnumber'});
-      $sth->finish;
-    }
-      }
-    }
-
-  }
 }
 
 if ($DEBUG) {
-   print <<EOM
+    my $numOverdueItems=scalar(@$data);
+    print <<EOM
 
 Number of Overdue Items counted $overdueItemsCounted
 Number of Overdue Items reported $numOverdueItems

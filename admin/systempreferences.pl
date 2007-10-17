@@ -130,6 +130,8 @@ my %tabsysprefs;
     $tabsysprefs{patronimages}="Members";
     $tabsysprefs{MinPasswordLength}="Members";
     $tabsysprefs{uppercasesurnames}="Members";
+    $tabsysprefs{NoReturnSetLost}="Members";
+    $tabsysprefs{MaxFine}="Members";
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";

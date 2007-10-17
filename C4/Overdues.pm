@@ -104,11 +104,9 @@ push @EXPORT, qw(
 
 =item Getoverdues
 
-  ($count, $overdues) = &Getoverdues();
+  ($overdues) = &Getoverdues();
 
-Returns the list of all overdue books.
-
-C<$count> is the number of elements in C<@{$overdues}>.
+Returns the list of all overdue books, with their itemtype.
 
 C<$overdues> is a reference-to-array. Each element is a
 reference-to-hash whose keys are the fields of the issues table in the
@@ -120,8 +118,13 @@ Koha database.
 sub Getoverdues {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-        "Select * from issues where date_due < now() and returndate is
-  NULL order by borrowernumber "
+        "SELECT issues.*,biblioitems.itemtype FROM issues 
+                LEFT JOIN items USING (itemnumber)
+                LEFT JOIN biblioitems USING (biblioitemnumber)
+                WHERE date_due < now() 
+                    AND returndate IS 
+                    NULL ORDER BY borrowernumber 
+        "
     );
     $sth->execute;
 
@@ -220,20 +223,36 @@ or "Final Notice".
 
 #'
 sub CalcFine {
-    my ( $itemnumber, $bortype, $difference , $dues  ) = @_;
+    my ( $item, $bortype, $difference , $dues  ) = @_;
     my $dbh = C4::Context->dbh;
-    my $data = GetIssuingRules($itemnumber,$bortype);
     my $amount = 0;
     my $printout;
-    my $countspecialday=&GetSpecialHolidays($dues,$itemnumber);
-    my $countrepeatableday=&GetRepeatableHolidays($dues,$itemnumber,$difference);    
+    # calculate how many days the patron is late
+    my $countspecialday=&GetSpecialHolidays($dues,$item->{itemnumber});
+    my $countrepeatableday=&GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
     my $countalldayclosed = $countspecialday + $countrepeatableday;
-    my $daycount = $difference - $countalldayclosed;    
+    my $daycount = $difference - $countalldayclosed;
+    # get issuingrules (fines part will be used)
+    my $data = GetIssuingRules($item->{'itemtype'},$bortype);
     my $daycounttotal = $daycount - $data->{'firstremind'};
+    if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
         if ($data->{'firstremind'} < $daycount)
-    {
-    $amount   = $daycounttotal*$data->{'fine'};
+            {
+            $amount   = int($daycounttotal/$data->{'chargeperiod'})*$data->{'fine'};
+        }
+    } else {
+        # get fines default rules
+        my $data = GetIssuingRules($item->{'itemtype'},'*');
+        $daycounttotal = $daycount - $data->{'firstremind'};
+        if ($data->{'firstremind'} < $daycount)
+            {
+                if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
+                    $amount   = int($daycounttotal/$data->{'chargeperiod'})*$data->{'fine'};
+                }
+            }
     }
+    
+    warn "Calc Fine for $item->{'itemnumber'}, $bortype, $difference , $dues = $amount / $daycount";
  return ( $amount, $data->{'chargename'}, $printout ,$daycounttotal ,$daycount );
 }
 
@@ -441,10 +460,10 @@ sub UpdateFine {
             my $diff = $amount - $data->{'amount'};
             my $out  = $data->{'amountoutstanding'} + $diff;
             my $sth2 = $dbh->prepare(
-                "update accountlines set date=now(), amount=?,
-      amountoutstanding=?,accounttype='FU' where
-      borrowernumber=? and itemnumber=?
-      and (accounttype='FU' or accounttype='O') and description like ?"
+                "UPDATE accountlines SET date=now(), amount=?,
+      amountoutstanding=?,accounttype='FU' WHERE
+      borrowernumber=? AND itemnumber=?
+      AND (accounttype='FU' OR accounttype='O') AND description LIKE ?"
             );
             $sth2->execute( $amount, $out, $data->{'borrowernumber'},
                 $data->{'itemnumber'}, "%$due%" );
@@ -460,7 +479,7 @@ sub UpdateFine {
         # I think this else-clause deals with the case where we're adding
         # a new fine.
         my $sth4 = $dbh->prepare(
-            "select title from biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber where items.itemnumber=?"
+            "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
         );
         $sth4->execute($itemnum);
         my $title = $sth4->fetchrow_hashref;
@@ -475,11 +494,11 @@ sub UpdateFine {
 #         $sth3->finish;
 #         $accountno[0]++;
 # begin transaction
-  my $nextaccntno = getnextacctno($borrowernumber);
+  my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
     my $sth2 = $dbh->prepare(
-            "Insert into accountlines
+            "INSERT INTO accountlines
     (borrowernumber,itemnumber,date,amount,
-    description,accounttype,amountoutstanding,accountno) values
+    description,accounttype,amountoutstanding,accountno) VALUES
     (?,?,now(),?,?,'FU',?,?)"
         );
         $sth2->execute( $borrowernumber, $itemnum, $amount,
@@ -581,7 +600,7 @@ sub GetFine {
 
 =item GetIssuingRules
 
-$data = &GetIssuingRules($itemnumber,$categorycode);
+$data = &GetIssuingRules($itemtype,$categorycode);
 
 Looks up for all issuingrules an item info 
 
@@ -595,20 +614,16 @@ category he or she belongs to.
 =cut 
 
 sub GetIssuingRules {
-   my ($itemnumber,$categorycode)=@_;
+   my ($itemtype,$categorycode)=@_;
    my $dbh   = C4::Context->dbh();    
    my $query=qq|SELECT * 
-        FROM items,biblioitems,itemtypes,issuingrules
-        WHERE items.itemnumber=?
-        AND items.biblioitemnumber=biblioitems.biblioitemnumber
-        AND biblioitems.itemtype=itemtypes.itemtype
-        AND issuingrules.itemtype=itemtypes.itemtype
-        AND issuingrules.categorycode=?
-        AND  (items.itemlost <> 1
-        OR items.itemlost is NULL)|;
+        FROM issuingrules
+        WHERE issuingrules.itemtype=?
+            AND issuingrules.categorycode=?
+        |;
     my $sth = $dbh->prepare($query);
     #  print $query;
-    $sth->execute($itemnumber,$categorycode);
+    $sth->execute($itemtype,$categorycode);
     my ($data) = $sth->fetchrow_hashref;
    $sth->finish;
 return ($data);
@@ -697,8 +712,8 @@ sub NumberNotifyId{
     my @notify;
     my $sth=$dbh->prepare($query);
         $sth->execute($borrowernumber);
-          while ( my $numberofotify=$sth->fetchrow_array){
-    push (@notify,$numberofotify);
+          while ( my ($numberofnotify)=$sth->fetchrow){
+    push (@notify,$numberofnotify);
     }
     $sth->finish;
 
