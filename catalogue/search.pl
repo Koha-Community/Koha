@@ -214,7 +214,7 @@ query parser.
 # load the branches
 my $branches = GetBranches();
 my @branch_loop;
-push @branch_loop, {value => "", branchname => "All Branches", };
+#push @branch_loop, {value => "", branchname => "All Branches", };
 for my $branch_hash (sort keys %$branches) {
     push @branch_loop, {value => "branch: $branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
