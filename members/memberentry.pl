@@ -127,10 +127,10 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
   my $guarantordata=GetMember($guarantorid);
   $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
   if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
-    $newdata{'contactfirstname'}=$guarantordata->{'firstname'}; 
-    $newdata{'contactname'}=$guarantordata->{'surname'};
-    $newdata{'contacttitle'}=$guarantordata->{'title'};  
-    map {$newdata{$_}=$guarantordata->{$_}}('streetnumber','address','streettype','address2','zipcode','city','phone','phonepro','mobile','fax','email','emailpro');
+    $data{'contactfirstname'}=$guarantordata->{'firstname'}; 
+    $data{'contactname'}=$guarantordata->{'surname'};
+    $data{'contacttitle'}=$guarantordata->{'title'};  
+    map {$data{$_}=$guarantordata->{$_}}('streetnumber','address','streettype','address2','zipcode','city','phone','phonepro','mobile','fax','email','emailpro');
   }
 }
 
