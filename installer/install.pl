@@ -12,15 +12,15 @@ use strict;    # please develop with the strict pragma
 
 use CGI;
 
-#
-### Main Body ####
-#
 my $query = new CGI;
-my $step  = $query->param('step') || 0;
+my $step  = $query->param('step');
 
-my ($language, $template, $loggedinuser, $cookie);
+my $language = $query->param('language');
+my ( $template, $loggedinuser, $cookie );
 
-if ($language = $query->param('language')) {	# assignment, not comparison
+my $all_languages = getAllLanguages();
+
+if ( defined($language) ) {
     setlanguagecookie( $query, $language, "install.pl?step=1" );
 }
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -35,34 +35,25 @@ if ($language = $query->param('language')) {	# assignment, not comparison
 
 my %info;
 $info{'dbname'} = C4::Context->config("database");
-$info{'dbms'  } = (
-      C4::Context->config("db_scheme")
+$info{'dbms'} =
+  (   C4::Context->config("db_scheme")
     ? C4::Context->config("db_scheme")
     : "mysql" );
-foreach (qw(hostname user password)) {
-	$info{$_} = C4::Context->config($_);
-}
-($info{'hostname'}, $info{'port'}) = ($1,$2)
-   if $info{'hostname'} =~ /([^:]*):([0-9]+)/;
+$info{'hostname'} = C4::Context->config("hostname");
+( $info{'hostname'}, $info{'port'} ) = ( $1, $2 )
+  if $info{'hostname'} =~ /([^:]*):([0-9]+)/;
+$info{'user'}     = C4::Context->config("user");
+$info{'password'} = C4::Context->config("pass");
 my $dbh = DBI->connect(
     "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
       . ( $info{port} ? ":$info{port}" : "" ),
     $info{'user'}, $info{'password'}
 );
 
-   if ($step == 1) {&step_one  ;}
-elsif ($step == 2) {&step_two  ;}
-elsif ($step == 3) {&step_three;}
-else               {&step_else ;}
-
-output_html_with_http_headers $query, $cookie, $template->output;
-
-#
-### Subroutines ###
-# 
-sub step_one {
-    # Checking ALL perl Modules and services needed are installed.
-    # Whenever there is an error, add a report to the page
+if ( $step && $step == 1 ) {
+    #First Step
+    #Checking ALL perl Modules and services needed are installed.
+    #Whenever there is an error, adding a report to the page
     $template->param( language => 1 );
     my $problem;
 
@@ -73,70 +64,113 @@ sub step_one {
 
     # We could here use a special find
     my @missing = ();
-	my @required = qw(
-		ZOOM
-		LWP::Simple
-		XML::Simple
-		MARC::File::XML
-		MARC::File::USMARC
-		DBI
-		Date::Manip
-		DBD::mysql
-		HTML::Template::Pro
-		Date::Calc
-		Digest::MD5
-		MARC::Record
-		List::MoreUtils
-		XML::RSS
-		CGI::Carp
-		Mail::Sendmail
-	);
-	my %optional = (
-		  'PDF::API2'            => 'usagebarcode',
-		  'PDF::Reuse::Barcode'  => 'usagebarcode',
-		  'PDF::Report'          => 'usagebarcode',
-		  'Data::Random'         => 'usagebarcode',
-		'Algorithm::CheckDigits' => 'usagebarcode',
-		  'GD::Barcode'          => 'usagebarcode usagespine',
-		  'GD::Barcode::UPCE'    => 'usagepine',
-		  'Net::LDAP'            => 'usageLDAP',
-		  'Mail::Sendmail'       => 'usagemail',
-	);
-	push @missing, map {{name => $_}} grep {! eval {require $_}} @required;
+    unless ( eval { require ZOOM } ) {
+        push @missing, { name => "ZOOM" };
+    }
+    unless ( eval { require LWP::Simple } ) {
+        push @missing, { name => "LWP::Simple" };
+    }
+    unless ( eval { require XML::Simple } ) {
+        push @missing, { name => "XML::Simple" };
+    }
+    unless ( eval { require MARC::File::XML } ) {
+        push @missing, { name => "MARC::File::XML" };
+    }
+    unless ( eval { require MARC::File::USMARC } ) {
+        push @missing, { name => "MARC::File::USMARC" };
+    }
+    unless ( eval { require DBI } ) {
+        push @missing, { name => "DBI" };
+    }
+    unless ( eval { require Date::Manip } ) {
+        push @missing, { name => "Date::Manip" };
+    }
+    unless ( eval { require DBD::mysql } ) {
+        push @missing, { name => "DBD::mysql" };
+    }
+    unless ( eval { require HTML::Template } ) {
+        push @missing, { name => "HTML::Template::Pro" };
+    }
+    unless ( eval { require HTML::Template } ) {
+        push @missing, { name => "Date::Calc" };
+    }
+    unless ( eval { require Digest::MD5 } ) {
+        push @missing, { name => "Digest::MD5" };
+    }
+    unless ( eval { require MARC::Record } ) {
+        push @missing, { name => "MARC::Record" };
+    }
+    unless ( eval { require Mail::Sendmail } ) {
+        push @missing, { name => "Mail::Sendmail", usagemail => 1 };
+    }
+    unless ( eval { require List::MoreUtils } ) {
+        push @missing, { name => "List::MoreUtils" };
+    }
+    unless ( eval { require XML::RSS } ) {
+        push @missing, { name => "XML::RSS" };
+    }
+    unless ( eval { require CGI::Carp } ) {
+        push @missing, { name => "CGI::Carp" };
+    }
+
 
 # The following modules are not mandatory, depends on how the library want to use Koha
-	if ($#missing) {   # only when $#missing (is >= 0), so this isn't fatal
-		foreach my $module (keys %optional) {
-    		unless ( eval { require $module } ) {
-				my @usages = split /\s+/, $optional{$module};
-            	push @missing, { name => $module, map {$_ => 1} @usages };
-        	}
-		}
-    	$template->param( missings => \@missing );
+    unless ( eval { require PDF::API2 } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "PDF::API2", usagebarcode => 1 };
+        }
     }
-    $template->param( 'checkmodule' => 1 ) unless (scalar(@missing) && $problem);
-}
+    unless ( eval { require GD::Barcorde } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing,
+              { name => "GD::Barcode", usagebarcode => 1, usagespine => 1 };
+        }
+    }
+    unless ( eval { require Data::Random } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "Data::Random", usagebarcode => 1 };
+        }
+    }
+    unless ( eval { require PDF::Reuse::Barcode } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "PDF::Reuse::Barcode", usagebarcode => 1 };
+        }
+    }
+    unless ( eval { require PDF::Report } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "PDF::Report", usagebarcode => 1 };
+        }
+    }
+    unless ( eval { require Net::LDAP } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "Algorithm::CheckDigits", usagebarcode => 1 };
+        }
+    }
+    unless ( eval { require GD::Barcode::UPCE } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "GD::Barcode::UPCE", usagepine => 1 };
+        }
+    }
+    unless ( eval { require Net::LDAP } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing, { name => "Net::LDAP", usageLDAP => 1 };
+        }
+    }
+    $template->param( missings => \@missing ) if ( scalar(@missing) > 0 );
+    $template->param( 'checkmodule' => 1 )
+      unless ( scalar(@missing) && $problem );
 
-sub line_check ($) {
-	my $line = shift;
-	return 1 if (
-		index( $line, 'ALL PRIVILEGES' ) > 0
-		|| (   ( index( $line, 'SELECT' ) > 0 )
-			&& ( index( $line, 'INSERT' ) > 0 )
-			&& ( index( $line, 'UPDATE' ) > 0 )
-			&& ( index( $line, 'DELETE' ) > 0 )
-			&& ( index( $line, 'CREATE' ) > 0 )
-			&& ( index( $line, 'DROP' ) > 0 ) )
-	  );
-	return 0;
 }
-
-sub step_two {
-		# STEP 2 Check Database connection and access
+elsif ( $step && $step == 2 ) {
+#
+#STEP 2 Check Database conn~ection and access
+#
     $template->param(%info);
     my $checkmysql = $query->param("checkmysql");
     $template->param( 'mysqlconnection' => $checkmysql );
-    if ($checkmysql and $dbh) {
+    if ($checkmysql) {
+        if ($dbh) {
+
             # Can connect to the mysql
             $template->param( "checkdatabaseaccess" => 1 );
             if ( $info{dbms} eq "mysql" ) {
@@ -148,68 +182,102 @@ sub step_two {
                 }
 
                 #Check if user have all necessary grants on this database.
-                my $rq = $dbh->prepare( "SHOW GRANTS FOR \'$info{user}\'\@'$info{hostname}'");
+                my $rq =
+                  $dbh->prepare(
+                    "SHOW GRANTS FOR \'$info{user}\'\@'$info{hostname}'");
                 $rq->execute;
                 my $grantaccess;
-                my $dbname = $info{dbname};
                 while ( my ($line) = $rq->fetchrow ) {
-                    if ( $line =~ /$dbname/ || index( $line, '*.*' ) > 0 ) {
-                        line_check($line) and $grantaccess = 1;
+                    my $dbname = $info{dbname};
+                    if ( $line =~ m/$dbname/ || index( $line, '*.*' ) > 0 ) {
+                        $grantaccess = 1
+                          if (
+                            index( $line, 'ALL PRIVILEGES' ) > 0
+                            || (   ( index( $line, 'SELECT' ) > 0 )
+                                && ( index( $line, 'INSERT' ) > 0 )
+                                && ( index( $line, 'UPDATE' ) > 0 )
+                                && ( index( $line, 'DELETE' ) > 0 )
+                                && ( index( $line, 'CREATE' ) > 0 )
+                                && ( index( $line, 'DROP' ) > 0 ) )
+                          );
                     }
                 }
                 unless ($grantaccess) {
-                    $rq = $dbh->prepare("SHOW GRANTS FOR \'$info{user}\'\@'\%'");
+                    $rq =
+                      $dbh->prepare("SHOW GRANTS FOR \'$info{user}\'\@'\%'");
                     $rq->execute;
                     while ( my ($line) = $rq->fetchrow ) {
-                        if ( $line =~ /$dbname/ || index( $line, '*.*' ) > 0 ) {
-                        	line_check($line) and $grantaccess = 1;
+                        my $dbname = $info{dbname};
+                        if ( $line =~ m/$dbname/ || index( $line, '*.*' ) > 0 )
+                        {
+                            $grantaccess = 1
+                              if (
+                                index( $line, 'ALL PRIVILEGES' ) > 0
+                                || (   ( index( $line, 'SELECT' ) > 0 )
+                                    && ( index( $line, 'INSERT' ) > 0 )
+                                    && ( index( $line, 'UPDATE' ) > 0 )
+                                    && ( index( $line, 'DELETE' ) > 0 )
+                                    && ( index( $line, 'CREATE' ) > 0 )
+                                    && ( index( $line, 'DROP' ) > 0 ) )
+                              );
                         }
                     }
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
             }
-        } else {
+        }
+        else {
             $template->param( "error" => DBI::err, "message" => DBI::errstr );
         }
+    }
 }
-
-sub step_three {
-		# STEP 3 : database setup
-    my $op = $query->param('op') || '';
-    if ($op eq 'finished') {		# we have finished, just redirect to mainpage.
+elsif ( $step && $step == 3 ) {
+#
+#
+# STEP 3 : database setup
+#
+# 
+    my $op = $query->param('op');
+    if ( $op && $op eq 'finished' ) {
+        #
+        # we have finished, just redirect to mainpage.
+        #
         print $query->redirect("/cgi-bin/koha/mainpage.pl");
         exit 1;
     }
-    elsif ($op eq 'finish') {
+    elsif ( $op && $op eq 'finish' ) {
         my $kohaversion=C4::Context::KOHAVERSION;
         # remove the 3 last . to have a Perl number
         $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-		my $finish;
         if (C4::Context->preference('Version')) {
             warn "UPDATE Version";
-            $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+            my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
+            $finish->execute($kohaversion);
         } else {
             warn "INSERT Version";
-            $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Do not change this value manually, it is written by the webinstaller')");
+            my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. Don t change this value manually, it s holded by the webinstaller')");
+            $finish->execute($kohaversion);
         }
 
-        $finish->execute($kohaversion);
         # Installation is finished.
         # We just deny anybody acess to install
         # And we redirect people to mainpage.
-        # The installer wil have to relogin since we do not pass cookie to redirection.
+        # The installer wil have to relogin since we donot pass cookie to redirection.
         $template->param( "$op" => 1 );
     }
-    elsif ($op eq 'Nozebra') {
-        if ($query->param($op)) {
-            $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='$op'");
+    elsif ( $op && $op eq 'Nozebra' ) {
+        if ($query->param('Nozebra')) {
+            $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
         } else {
-            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='$op'");
+            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
         }
         $template->param( "$op" => 1 );
     }
-    elsif ($op eq 'addframeworks') {
+    elsif ( $op && $op eq 'addframeworks' ) {
+    #
     # 1ST install, 3rd sub-step : insert the SQL files the user has selected
+    #
+
         #Framework importing and reports
         my $lang;
         my %hashlevel;
@@ -221,12 +289,14 @@ sub step_three {
             $aa[-1] lt $bb[-1]
         } $query->param('framework');
         $dbh->do('SET FOREIGN_KEY_CHECKS=0');
-        my $request = $dbh->prepare(
+        my $request =
+          $dbh->prepare(
             "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
           );
         $request->execute;
         my ($systempreference) = $request->fetchrow;
         foreach my $file (@fnames) {
+
             #      warn $file;
             undef $/;
             my $strcmd = "mysql "
@@ -236,17 +306,19 @@ sub step_three {
               . ( $info{password} ? " -p$info{password}"   : "" )
               . " $info{dbname} ";
             my $error = qx($strcmd < $file 2>&1);
-            my @file = split qr(\/|\\), $file;		# odd use of qr
-			my $fsize = scalar(@file);
-            $lang = $file[$fsize-3] unless ($lang);
-            my $level = $file[$fsize-2];
-            unless ($error and index($systempreference, $file[$fsize-1]) >= 0) {
-                $systempreference .= "$file[$fsize-1]|"
+            my @file = split qr(\/|\\), $file;
+            $lang = $file[ scalar(@file) - 3 ] unless ($lang);
+            my $level = $file[ scalar(@file) - 2 ];
+            unless ($error) {
+                $systempreference .= "$file[scalar(@file)-1]|"
+                  unless (
+                    index( $systempreference, $file[ scalar(@file) - 1 ] ) >=
+                    0 );
             }
 
             #Bulding here a hierarchy to display files by level.
             push @{ $hashlevel{$level} },
-              { "fwkname" => $file[$fsize-1], "error" => $error };
+              { "fwkname" => $file[ scalar(@file) - 1 ], "error" => $error };
         }
 
         #systempreference contains an ending |
@@ -255,7 +327,8 @@ sub step_three {
         map { push @list, { "level" => $_, "fwklist" => $hashlevel{$_} } }
           keys %hashlevel;
         my $fwk_language;
-        for my $each_language (getAllLanguages()) {
+        for my $each_language (@$all_languages) {
+
             # 		warn "CODE".$each_language->{'language_code'};
             # 		warn "LANG:".$lang;
             if ( $lang eq $each_language->{'language_code'} ) {
@@ -279,7 +352,7 @@ sub step_three {
         $template->param( "$op" => 1 );
         $dbh->do('SET FOREIGN_KEY_CHECKS=1');
     }
-    elsif ($op eq 'selectframeworks') {
+    elsif ( $op && $op eq 'selectframeworks' ) {
         #
         #
         # 1ST install, 2nd sub-step : show the user the sql datas he can insert in the database.
@@ -287,25 +360,25 @@ sub step_three {
         #
         # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
         
-        # Framework Selection
-        # sql data for import are supposed to be located in installer/data/<language>/<level>
+        #Framework Selection
+        #sql data for import are supposed to be located in installer/data/<language>/<level>
         # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
-        # Where <level> is a category of requirement : required, recommended, optional
+        # Where <level> is a category of requirement : required, recommended optional
         # level should contain :
         #   SQL File for import With a readable name.
         #   txt File taht explains what this SQL File is meant for.
         # Could be VERY useful to have A Big file for a kind of library.
         # But could also be useful to have some Authorised values data set prepared here.
         # Framework Selection is achieved through checking boxes.
-        my $langchoice = $query->param('fwklanguage') ||
-        				 $query->cookie('KohaOpacLanguage') ;
+        my $langchoice = $query->param('fwklanguage');
+        $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $dir = C4::Context->config('intranetdir') . "/installer/data/";
         opendir( MYDIR, $dir );
         my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my $frmwklangs = getFrameworkLanguages();
         my @languages;
-        map {				# inappropriate use of map in void context
+        map {
             push @languages,
               {
                 'dirname'             => $_->{'language_code'},
@@ -316,12 +389,14 @@ sub step_three {
         } @$frmwklangs;
         $template->param( "languagelist" => \@languages );
         undef $/;
-        $dir = C4::Context->config('intranetdir') . "/installer/data/$langchoice";
-        opendir ( MYDIR, $dir ) or warn "Cannot read directory $dir";
+        $dir =
+          C4::Context->config('intranetdir') . "/installer/data/$langchoice";
+        opendir( MYDIR, $dir ) || warn "no open $dir";
         @listdir = sort grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my @levellist;
-        my $request = $dbh->prepare(
+        my $request =
+          $dbh->prepare(
             "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
           );
         $request->execute;
@@ -342,12 +417,12 @@ sub step_three {
             closedir MYDIR;
             my %cell;
             my @frameworklist;
-            map {							# inappropriate use of map in void context
+            map {
                 my $name = substr( $_, 0, -4 );
                 open FILE, "< $dir/$name.txt";
                 my $lines = <FILE>;
                 $lines =~ s/\n|\r/<br \/>/g;
-                use utf8;					# this doesn't even make sense here.
+                use utf8;
                 utf8::encode($lines) unless ( utf8::is_utf8($lines) );
                 push @frameworklist,
                   {
@@ -375,7 +450,7 @@ sub step_three {
         $template->param( "levelloop" => \@levellist );
         $template->param( "$op"       => 1 );
     }
-    elsif ($op eq 'importdatastructure' ) {
+    elsif ( $op && $op eq 'importdatastructure' ) {
         #
         #
         # 1st install, 1st "sub-step" : import kohastructure
@@ -398,7 +473,7 @@ sub step_three {
         );
         $dbh->disconnect;
     }
-    elsif ($op eq 'updatestructure' ) {
+    elsif ( $op && $op eq 'updatestructure' ) {
         #
         # Not 1st install, the only sub-step : update database
         #
@@ -417,9 +492,9 @@ sub step_three {
     }
     else {
         #
-        # Check wether it's a 1st install or an update
+        # check wether it's a 1st install or an update
         #
-        # Check if there are enough tables.
+        #Check if there are enough tables.
         # Paul has cleaned up tables so reduced the count
         #I put it there because it implied a data import if condition was not satisfied.
         my $dbh = DBI->connect(
@@ -436,7 +511,9 @@ sub step_three {
         #
         if ( $count < 70 ) {
             $template->param( "count" => $count, "proposeimport" => 1 );
-        } else {
+        }
+        else {
+            #
             # we have tables, propose to select files to upload or updatedatabase
             #
             $template->param( "count" => $count, "default" => 1 );
@@ -445,22 +522,27 @@ sub step_three {
             # if there is, then we just need to upgrade
             # if there is none, then we need to install the database
             #
-            if (my $dbversion = C4::Context->preference('Version')) {
-            	$dbversion =~ s/(.*)\.(..)(..)(...)/$1.$2.$3.$4/;
-                $template->param( "upgrading" => 1,
-                                  "dbversion" => $dbversion,
+            my $dbversion = C4::Context->preference('Version');
+            $dbversion =~ /(.*)\.(..)(..)(...)/;
+            $dbversion = "$1.$2.$3.$4";
+            if (C4::Context->preference('Version')) {
+                $template->param("upgrading" => 1,
+                                "dbversion" => $dbversion,
                                 "kohaversion" => C4::Context->KOHAVERSION,
                                 );
             }
         }
+
         $dbh->disconnect;
     }
 }
+else {
 
-sub step_else {
     # LANGUAGE SELECTION page by default
     # using opendir + language Hash
+
     my $langavail = getTranslatedLanguages();
+
     my @languages;
     foreach (@$langavail) {
         push @languages,
@@ -473,12 +555,14 @@ sub step_else {
     $template->param( languages => \@languages );
     if ($dbh) {
         my $rq =
-          $dbh->prepare("SELECT * from systempreferences WHERE variable='Version'");
-        if ( $rq->execute && $rq->fetchrow) {
-			$query->redirect("install.pl?step=3");
+          $dbh->prepare(
+            "SELECT * from systempreferences WHERE variable='Version'");
+        if ( $rq->execute ) {
+            my ($version) = $rq->fetchrow;
+            if ($version) {
+                $query->redirect("install.pl?step=3");
+            }
         }
     }
 }
-
-
-
+output_html_with_http_headers $query, $cookie, $template->output;
