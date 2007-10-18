@@ -964,7 +964,7 @@ sub searchResults {
             SELECT date_due,returndate 
             FROM issues 
             WHERE itemnumber=? AND returndate IS NULL");
-
+        my $items_count=scalar(@fields);
         foreach my $field (@fields) {
             my $item;
             foreach my $code ( keys %subfieldstosearch ) {
@@ -1027,6 +1027,7 @@ sub searchResults {
             push @items_loop, $this_item;
         }
         $oldbiblio->{norequests}    = $norequests;
+        $oldbiblio->{items_count}    = $items_count;
         $oldbiblio->{items_loop}    = \@items_loop;
         $oldbiblio->{onloancount}   = $onloan_count;
         $oldbiblio->{wthdrawncount} = $wthdrawn_count;

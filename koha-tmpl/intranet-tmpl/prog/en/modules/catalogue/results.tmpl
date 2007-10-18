@@ -263,6 +263,7 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>Title</th>
+                        <th>Item count</th>
                         <th>Location</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -323,6 +324,12 @@
                                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                                     </p>
                                 <!-- /TMPL_IF -->
+                                </td>
+                                <td>
+                                                    <!-- TMPL_IF NAME="items_count" -->
+                                                    <!-- TMPL_VAR NAME="items_count" -->
+                                                    <!-- /TMPL_IF -->
+                                                      
                                 </td>
                                 <td>
                                     <!-- TMPL_IF NAME="items_loop" -->

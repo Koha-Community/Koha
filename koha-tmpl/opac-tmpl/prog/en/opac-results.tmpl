@@ -236,6 +236,7 @@ Error :
             <tr>
                 <th><input type="checkbox" name="select_all" onClick="SelectAll()" /></th>
                 <th>Title</th>
+                <th>Item count</th>
                 <th>Location</th>
                 <!-- TMPL_IF NAME="RequestOnOpac" -->
                 <th>Reservation</th>
@@ -300,6 +301,11 @@ Error :
                         </p>
                         <!-- /TMPL_IF -->
                     </td>
+                    <td >
+                        <!-- TMPL_IF NAME="items_count" -->
+                        <!-- TMPL_VAR NAME="items_count" -->
+                        <!-- /TMPL_IF-->
+                    </td>          
                     <td width="20%">
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
