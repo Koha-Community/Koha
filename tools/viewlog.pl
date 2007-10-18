@@ -23,9 +23,9 @@ use C4::Auth;
 use CGI;
 use C4::Context;
 use C4::Koha;
+use C4::Dates;
 use C4::Output;
 use C4::Log;
-use Date::Manip;
 
 =head1 viewlog.pl
 
@@ -64,7 +64,6 @@ if ($do_it) {
     my $total = scalar @$results;
     
     if ( $output eq "screen" ) {
-
         # Printing results to screen
         $template->param (
             total    => $total,
@@ -80,43 +79,27 @@ if ($do_it) {
             info     => $info,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
-        exit;
-    }
-    else {
-
+    } else {
         # Printing to a csv file
         print $input->header(
             -type       => 'application/vnd.sun.xml.calc',
             -attachment => "$basename.csv",
             -filename   => "$basename.csv"
         );
-        my $sep;
-        $sep = C4::Context->preference("delimiter");
-
+        my $sep = C4::Context->preference("delimiter");
         foreach my $line (@$results) {
-            if ( $module eq "catalogue" ) {
-                print $line->{timestamp} . $sep;
-                print $line->{firstname} . $sep;
-                print $line->{surname} . $sep;
-                print $line->{action} . $sep;
-                print $line->{info} . $sep;
-                print $line->{title} . $sep;
-                print $line->{author} . $sep;
-            }
-        }
-
-        exit;
+            ($module eq "catalogue") or next;
+			foreach (qw(timestamp firstname surname action info title author)) {
+				print $line->{$_} . $sep;
+			}	
+		}
     }
-}
-else {
-    my $dbh = C4::Context->dbh;
+	exit;
+} else {
     my @values;
     my %labels;
     my %select;
-    my $req;
-
     my @mime = ( C4::Context->preference("MIME") );
-
     my $CGIextChoice = CGI::scrolling_list(
         -name     => 'MIME',
         -id       => 'MIME',
@@ -124,7 +107,6 @@ else {
         -size     => 1,
         -multiple => 0
     );
-
     my @dels         = ( C4::Context->preference("delimiter") );
     my $CGIsepChoice = CGI::scrolling_list(
         -name     => 'sep',
@@ -133,12 +115,11 @@ else {
         -size     => 1,
         -multiple => 0
     );
-
     $template->param(
         total        => 0,
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
