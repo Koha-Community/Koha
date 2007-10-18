@@ -1,0 +1,47 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Circulation</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Circulation</div>
+
+<div id="doc" class="yui-t7">
+   
+   <div id="bd">
+	<div class="yui-g"> 
+
+<h1>Circulation</h1>
+
+<div class="yui-u first">	
+	<ul>
+		<li><a href="/cgi-bin/koha/circ/circulation.pl">Check Out</a></li>
+		<li><a href="/cgi-bin/koha/circ/returns.pl">Check In</a></li>
+		<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
+	<!-- TMPL_UNLESS NAME="AutoLocation" -->
+	    <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
+	<!-- /TMPL_UNLESS -->
+	</ul>
+	</div>
+
+	<div class="yui-u">
+	
+<h5>Circulation Reports</h5>
+<ul>
+	<li>    <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="holds to retrieve off the shelf">Holds to pull</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Holds awaiting pickup</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/transferstodo.pl" title="transfers to do from your library">Transfers to do</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/transferstoreceive.pl" title="transfers to receive at your library">Transfers to receive</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Overdues</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Fines</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Daily reconciliation</a></li>
+</ul>
+	
+	</div>
+
+</div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
