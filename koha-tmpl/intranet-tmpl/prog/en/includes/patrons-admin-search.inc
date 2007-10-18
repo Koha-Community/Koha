@@ -1,13 +1,13 @@
 <!-- Begin Members Resident Search Box -->
 <div id="header_search">
-	<div id="roadtype_search">
-	<p class="tip">Road Type Search:</p>
-		<form action="<TMPL_VAR NAME="script_name">" method="post">
-		<input type="text" name="road_type" value="<!-- TMPL_VAR NAME="searchfield" -->" size="40" />
-		<input type="submit" name="submit" value="OK" class="button" />
-	</form>
+	<div id="patron_category_search" class="residentsearch">
+	<p class="tip">Search by Patron Category Name:</p>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="text" name="description" size="40" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+		<input type="submit" name="search" value="Search" />
+	</form>	
 	</div>
-	<div id="circ_search">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
@@ -17,7 +17,7 @@
 	<input value="Submit" type="submit" />
 	</form>
 	</div>	
-	<div id="catalog_search">
+	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
@@ -25,7 +25,7 @@
 		</form>
 	</div>
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/roadtype.pl#roadtype_search">Search Road Types</a></li>
+			<li><a href="/cgi-bin/koha/admin/categorie.pl#patron_category_search">Search Patron Categories</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
 			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	

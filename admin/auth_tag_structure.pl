@@ -114,6 +114,7 @@ if ($op eq 'add_form') {
 		push @authorised_values, $category;
 	}
 	my $authorised_value  = CGI::scrolling_list(-name=>'authorised_value',
+	        -id=>'authorised_value',
 			-values=> \@authorised_values,
 			-size=>1,
  			-tabindex=>'',

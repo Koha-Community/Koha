@@ -8,11 +8,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Fines</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
 
 <div id="bd">
     <div id="yui-main">
-    <div class="yui-b">
+    <div class="yui-g">
     
     <h1>Defining <!-- TMPL_IF NAME="branch" -->fining rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default fining rules<!-- /TMPL_IF --></h1>
             
@@ -54,7 +54,7 @@
             </tr>
             <!-- TMPL_LOOP NAME="row" -->
                 <tr>
-                    <th><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
+                    <th scope="row"><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
                     <!-- TMPL_LOOP NAME="cell" -->
                         <!-- TMPL_IF NAME="toggle" -->
                             <td class="highlight">
@@ -71,9 +71,6 @@
     </form>
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

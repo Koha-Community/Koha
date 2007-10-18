@@ -154,6 +154,7 @@ if ($op eq 'add_form') {
 	}
 	# push koha system categories
 	my $tab_list = CGI::scrolling_list(-name=>'searchfield',
+	        -id=>'searchfield',
 			-values=> \@category_list,
 			-default=>"",
 			-size=>1,

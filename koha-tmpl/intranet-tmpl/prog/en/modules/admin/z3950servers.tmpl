@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="else" -->z39.50 Servers<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->z39.50 Server Added<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->z39.50 Server Deleted<!-- /TMPL_IF --></title>
+<!-- TMPL_IF NAME="add_form" --> z39.50 Servers &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->z39.50 Servers &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" -->z39.50 Servers &rsaquo; z39.50 Server Added<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->z39.50 Servers &rsaquo; z39.50 Server Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <!-- TMPL_IF NAME="add_form" -->
@@ -84,10 +84,10 @@
 <!-- TMPL_INCLUDE NAME="z3950-admin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->z39.50 Servers<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->z39.50 Server Added<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->z39.50 Server Deleted<!-- /TMPL_IF --></div>
+<!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; z39.50 Server Added<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; z39.50 Server Deleted<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -106,74 +106,74 @@
         <!-- TMPL_ELSE -->
                 <h1>Add Z39.50 Server</h1>
         <!-- /TMPL_IF -->                
-        <table>
-        <!-- TMPL_IF NAME="searchfield" -->
-                <tr>
-                        <th scope="row">Z39.50 Server</th>
-                        <td>
+        <fieldset class="rows">
+        <ol><!-- TMPL_IF NAME="searchfield" -->
+                <li>
+                        <span class="label">Z39.50 Server: </span>
+                        
                                 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-                        </td>
-                </tr>
+                        
+                </li>
         <!-- TMPL_ELSE -->
-                <tr>
-                        <th scope="row">Z39.50 Server</th>
-                        <td>
-                                <input type="text" name="searchfield" size="65" maxlength="100" onblur="toUC(this)" />
-                        </td>
-                </tr>
+                <li>
+                        <label for="searchfield">Z39.50 Server: </label>
+                        
+                                <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" />
+                        
+                </li>
         <!-- /TMPL_IF -->
 
-		<tr>
-			<th scope="row">Hostname</th>
-			<td>
-				<input type="text" name="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Port</th>
-			<td>
-				<input type="text" name="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Database</th>
-			<td>
-				<input type="text" name="db" value="<!-- TMPL_VAR NAME="db" -->" />
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Userid</th>
-			<td>
-				<input type="text" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Password</th>
-			<td>
-				<input type="text" name="password" value="<!-- TMPL_VAR NAME="password" -->" />
-			</td>
-		</tr>
-		<tr>
-			<th scope="row">Checked (searched by default)</th>
-			<td>
-				<input type="text" size="1" name="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </td></tr>
-		<tr>
-			<th scope="row">Rank (display order)</th>
-			<td>
-				<input type="text" name="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
-			</td>
-		</tr>
-				<tr>
-			<th scope="row">Syntax (z3950 can send<br />
-			 records in various format. Choose one)</th>
-			<td>
-				<select name="syntax">
+		<li>
+			<label for="host">Hostname: </label>
+			
+				<input type="text" name="host" id="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
+			
+		</li>
+		<li>
+			<label for="port">Port: </label>
+			
+				<input type="text" name="port" id="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
+			
+		</li>
+		<li>
+			<label for="db">Database: </label>
+			
+				<input type="text" name="db" id="db" value="<!-- TMPL_VAR NAME="db" -->" />
+			
+		</li>
+		<li>
+			<label for="userid">Userid: </label>
+			
+				<input type="text" name="userid" id="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
+			
+		</li>
+		<li>
+			<label for="password">Password: </label>
+			
+				<input type="text" name="password" id="password" value="<!-- TMPL_VAR NAME="password" -->" />
+			
+		</li>
+		<li>
+			<label for="checked">Checked (searched by default): </label>
+			
+				<input type="text" size="1" name="checked" id="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </li>
+		<li>
+			<label for="rank">Rank (display order): </label>
+			
+				<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
+			
+		</li>
+				<li>
+			<label for="syntax">Syntax (z3950 can send<br />
+			 records in various format. Choose one): </label>
+			
+				<select name="syntax" id="syntax">
 					<option value="USMARC">USMARC</option>
 					<option value="UNIMARC">UNIMARC</option>
 				</select>
-			</td>
-		</tr>
-        </table><input type="button" value="<!-- TMPL_IF NAME="searchfield" -->Update Z39.50 Server<!-- TMPL_ELSE -->Add Z39.50 Server<!-- /TMPL_IF -->" onclick="Check(this.form)" />  <input type="button" value="Cancel" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->';" />
+			
+		</li></ol>
+        </fieldset><input type="button" value="<!-- TMPL_IF NAME="searchfield" -->Update Z39.50 Server<!-- TMPL_ELSE -->Add Z39.50 Server<!-- /TMPL_IF -->" onclick="Check(this.form)" /> 
         </form>
 <!-- /TMPL_IF -->
 
@@ -187,47 +187,47 @@
 <!-- TMPL_IF NAME="delete_confirm" -->
 	<!-- TMPL_VAR NAME="reqsel" -->
 <h3>Confirm Deletion of Server <!-- TMPL_VAR NAME="searchfield" --></h3>	
-        <table>
-                <tr>
-                        <td>Site</td>
-                        <td>
+        <ul>
+                <li>
+                        <strong>Site: </strong>
+                        
                                 <!-- TMPL_VAR NAME="searchfield" -->
-                        </td>
-                </tr>
-                <tr>
-                        <td>Hostname</td>
-                        <td><!-- TMPL_VAR NAME="host" --></td>
-                </tr>
-                <tr>
-                        <td>Port</td>
-                        <td><!-- TMPL_VAR NAME="port" --></td>
-                </tr>
-                <tr>
-                        <td>Database</td>
-                        <td><!-- TMPL_VAR NAME="db" --></td>
-                </tr>
-                <tr>
-                        <td>Userid</td>
-                        <td><!-- TMPL_VAR NAME="userid" --></td>
-                </tr>
-                <tr>
-                        <td>Password</td>
-                        <td><!-- TMPL_VAR NAME="password" --></td>
-                </tr>
-                <tr>
-                        <td>Checked</td>
-                        <td><!-- TMPL_VAR NAME="checked" --></td>
-                </tr>
-                <tr>
-                        <td>Rank</td>
-                        <td><!-- TMPL_VAR NAME="rank" --></td>
-                </tr>
-                <tr>
-                        <td>                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                        
+                </li>
+                <li>
+                        <strong>Hostname: </strong>
+                        <!-- TMPL_VAR NAME="host" -->
+                </li>
+                <li>
+                        <strong>Port: </strong>
+                        <!-- TMPL_VAR NAME="port" -->
+                </li>
+                <li>
+                        <strong>Database: </strong>
+                        <!-- TMPL_VAR NAME="db" -->
+                </li>
+                <li>
+                        <strong>Userid: </strong>
+                        <!-- TMPL_VAR NAME="userid" -->
+                </li>
+                <li>
+                        <strong>Password: </strong>
+                        <!-- TMPL_VAR NAME="password" -->
+                </li>
+                <li>
+                        <strong>Checked: </strong>
+                        <!-- TMPL_VAR NAME="checked" -->
+                </li>
+                <li>
+                        <strong>Rank: </strong>
+                        <!-- TMPL_VAR NAME="rank" -->
+                </li>
+ 	</ul>
+                                        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                         <input type="hidden" name="op" value="delete_confirmed" />
-                        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Server" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form></td>
-                </tr>
-	</table>
+                        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Server" /></form>  <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
+
+
 
 <!-- /TMPL_IF -->
 
@@ -266,8 +266,8 @@
                         <td><!-- TMPL_VAR NAME="checked" --></td>
                         <td><!-- TMPL_VAR NAME="rank" --></td>
 						<td><!-- TMPL_VAR NAME="syntax" --></td>
-                        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="name" -->" /><input type="submit" value="Edit" /></form></td>
-                        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="name" -->" /><input type="submit" value="Delete" /></form></td>                
+                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td>
+                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                
 			</tr>
                 <!-- /TMPL_LOOP -->
 	</table>

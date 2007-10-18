@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Authority MARC framework <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" -->
-    <!-- TMPL_IF NAME="heading-modify-tag-p" -->&rsaquo; Modify tag<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="heading-add-tag-p" -->&rsaquo; Add tag<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE -->&rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->&rsaquo; Confirm Deletion<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" -->&rsaquo; Data Deleted<!-- /TMPL_IF --></title>
+    <!-- TMPL_IF NAME="heading-modify-tag-p" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --> &rsaquo; Modify tag<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="heading-add-tag-p" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --> &rsaquo; Add tag<!-- /TMPL_IF -->
+    <!-- TMPL_ELSE -->&rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --> &rsaquo; Confirm Deletion<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --> &rsaquo; Data Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -62,9 +62,9 @@ return false;
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" -->
-    <!-- TMPL_IF NAME="heading-modify-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Modify tag<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="heading-add-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Add tag<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Confirm Deletion<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Data Deleted<!-- TMPL_ELSE -->Authority MARC Framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+    <!-- TMPL_IF NAME="heading-modify-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Modify tag<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="heading-add-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Add tag<!-- /TMPL_IF -->
+    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Confirm Deletion<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Data Deleted<!-- TMPL_ELSE -->Authority MARC Framework: <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -86,45 +86,42 @@ return false;
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-        <p><label>Tag</label><!-- TMPL_VAR NAME="searchfield" --></p>
-        <p><label>Text for librarians</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape="HTML" -->" size="40" maxlength="100" /></p>
-        <p><label>Text for opac</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></p>
-        <p><label for="repeatable">Repeatable</label>
+        <fieldset class="rows"><ol>
+		<li><span class="label">Tag</span><!-- TMPL_VAR NAME="searchfield" --></li>
+        <li><label for="liblibrarian">Text for librarians</label><input type="text" name="liblibrarian" id="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape="HTML" -->" size="40" maxlength="100" /></li>
+        <li><label for="libopac">Text for opac</label><input type="text" name="libopac" id="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></li>
+        <li><label for="repeatable">Repeatable</label>
             <!-- TMPL_IF NAME="repeatable" -->
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" />
             <!-- /TMPL_IF -->
-        </p>
-        <p><label for="mandatory">Mandatory</label>
+        </li>
+        <li><label for="mandatory">Mandatory</label>
             <!-- TMPL_IF NAME="mandatory" -->
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" />
             <!-- /TMPL_IF -->
-            </p>
-        <p><label>Authorised value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</p>
-        <p><input type="button" value="OK" class="button" onclick="Check(this.form)" /></p>
+            </li>
+        <li><label for="authorised_value">Authorised value</label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorised value list)</li>
+</ol></fieldset>
+        <p><input type="button" value="Submit" class="button" onclick="Check(this.form)" /></p>
     </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 <h3>Confirm Deletion</h3>
-<table>
-    <tr>
-        <td>tag</td>
-        <td><!-- TMPL_VAR NAME="searchfield" --></td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td>
-    </tr>
-    
-    <tr><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+
+		<ul>
+			<li><strong>Tag: </strong><!-- TMPL_VAR NAME="searchfield" --> <!-- TMPL_VAR NAME="liblibrarian" --></li>
+		</ul>
+		
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
-        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="YES"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" class="submit" /></form></td></tr>
-</table>
+        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="YES"></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NO" class="submit" /></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->

@@ -74,13 +74,13 @@ function Check(f) {
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="checked" value="0" />
-        <!-- TMPL_IF NAME="frameworkcode" -->
-            <p><label for="frameworkcode">Framework Code</label><input type="hidden" id="frameworkcode" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><!-- TMPL_VAR NAME="frameworkcode" --></p>
+<fieldset class="rows">	<ol><!-- TMPL_IF NAME="frameworkcode" -->
+            <li><span class="label">Framework Code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><!-- TMPL_VAR NAME="frameworkcode" --></li>
         <!-- TMPL_ELSE -->
-            <p><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></p>
+            <li><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
         <!-- /TMPL_IF -->
-        <p><label for="description">Description</label>
-        <input type="text" name="frameworktext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></p>
+        <li><label for="description">Description</label>
+        <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></li></ol></fieldset>
         <p>	<input type="submit" value="Submit" class="submit" onclick="Check(this.form)" /></p>
     </form>
 <!-- /TMPL_IF -->
@@ -109,7 +109,7 @@ function Check(f) {
     <tr>
         <td>&nbsp;</td>
         <td>Default framework</td>
-        <td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">MARC structure</td>
+        <td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">MARC structure</a></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
     </tr>
@@ -127,8 +127,7 @@ function Check(f) {
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
     <input type="hidden" name="op" value="add_form" />
     <input type="submit" value="Add framework" />
-    <td><!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --></td>
-    <td><!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF --></td>
+    <!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
 </form>
 
 <!-- /TMPL_IF -->

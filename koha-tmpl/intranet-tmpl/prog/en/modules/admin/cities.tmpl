@@ -52,7 +52,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cities-admin-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="cities-admin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> Add City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
@@ -74,24 +74,21 @@
 	<input type="hidden" name="checked" value="0" />
 	<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" />
 
-	<!-- TMPL_IF NAME="cityid" -->
-		<p class="p_borrowers">
-	
-		<label>City id</label>
-		<label><b><!-- TMPL_VAR NAME="cityid" --></b></label>
-		</p>
+<fieldset class="rows"><ol>	<!-- TMPL_IF NAME="cityid" -->
+		<li>
+		<span class="label">City ID</span><!-- TMPL_VAR NAME="cityid" --></li>
 	<!-- /TMPL_IF -->
-	<p>
-	<label>City name</label>
-	<input  type="text" name="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
-	</p>
-	<p>				
-	<label>City zipcode</label>
-	<input type="text" name="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->" />
-	</p>
+	<li>
+	<label for="city_name">City name</label>
+	<input  type="text" name="city_name" id="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
+	</li>
+	<li>				
+	<label for="city_zipcode">City zipcode</label>
+	<input type="text" name="city_zipcode" id="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->" />
+	</li></ol></fieldset>
 	
 	<p>
-		<input class="button" type="button" onclick="Check(this.form)" value="OK" />
+		<input class="button" type="button" onclick="Check(this.form)" value="Submit" />
 	</p>
 	</form>
 
@@ -140,18 +137,18 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
-	<h2>Cities management</h2>
+	<h2>Cities</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		Searching: <!-- TMPL_VAR NAME="searchfield" -->
 	<!-- /TMPL_IF -->
 
-	<table>
+<!-- TMPL_IF NAME="loop" -->	<table>
 		<tr>
-			<th>City id</th>
+			<th>City ID</th>
 			<th>City name</th>
 			<th>City zipcode</th>
-			<th> </th>
-			<th> </th>
+			<th>&nbsp;</th>
+			<th>&nbsp;</th>
 			
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
@@ -164,12 +161,12 @@
 			<td><!-- TMPL_VAR NAME="city_name" --></td>
 			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
 			
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">edit</a></td>
-			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">delete</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Edit</a></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;cityid=<!-- TMPL_VAR NAME="cityid" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
-
-	</table>
+	</table><!-- /TMPL_IF -->
+	
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="add_form" />
 		<p><input type="submit" class="button" value="Add a city"  alt="Add city" /></p>

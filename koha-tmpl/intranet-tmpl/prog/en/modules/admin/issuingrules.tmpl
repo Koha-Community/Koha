@@ -8,17 +8,16 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Issuing Rules</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
 
 <div id="bd">
     <div id="yui-main">
-    <div class="yui-b">
+    <div class="yui-g">
 
     <h1>Defining <!-- TMPL_IF NAME="branch" -->issuing rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default issuing rules<!-- /TMPL_IF --></h1>
     <div class="help">
         <h3>HINT for issues</h3>
-        <p>Each box needs to be filled in with issuelength,maxissues</p>
-        <p>eq 21,5 enables 5 issues for 21 days</p>
+        <p>Each box needs to be filled in with issuelength,maxissues. For example: 21,5 enables 5 issues for 21 days</p>
     </div>
 
     <div class="help">
@@ -27,6 +26,7 @@
             <li>If a cell is not filled, the value in the default column (top right) is used</li>
             <li>If a total is filled (last line), the patron must fit both itemtype and total rule</li>
             <li>If a rule is filled for a given branch, it is used, otherwise, it's the rule of the "default" branch</li>
+		</ul>
     </div>
         <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
         <label for="branch">Select a library :</label>
@@ -53,7 +53,7 @@
                 </tr>
                 <!-- TMPL_LOOP NAME="row" -->
                     <tr>
-                        <th><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
+                        <th scope="row"><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
                         <!-- TMPL_LOOP NAME="cell" -->
                             <!-- TMPL_IF NAME="toggle" -->
                                 <td class="highlight">
@@ -70,9 +70,6 @@
         </form>
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
