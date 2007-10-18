@@ -20,7 +20,6 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id$
 
 =head1 NAME
 
@@ -125,7 +124,6 @@ else {    # this shelf doesn't already exist.
     output_html_with_http_headers $query, $cookie, $template->output;
 }
 
-# $Log$
 # Revision 1.8  2007/04/24 13:54:29  hdl
 # functions that were in C4::Interface::CGI::Output are now in C4::Output.
 # So this implies quite a change for files.

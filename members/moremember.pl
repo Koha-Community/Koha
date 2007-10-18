@@ -17,7 +17,6 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id$
 
 =head1 moremember.pl
 
@@ -38,7 +37,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Members;
-use C4::Date;
+use C4::Dates;
 use C4::Reserves;
 use C4::Circulation;
 use C4::Koha;
@@ -53,15 +52,9 @@ my $input = new CGI;
 my $print = $input->param('print');
 my $template_name;
 
-if ( $print eq "page" ) {
-    $template_name = "members/moremember-print.tmpl";
-}
-elsif ( $print eq "slip" ) {
-    $template_name = "members/moremember-receipt.tmpl";
-}
-else {
-    $template_name = "members/moremember.tmpl";
-}
+if    ($print eq "page") { $template_name = "members/moremember-print.tmpl";   }
+elsif ($print eq "slip") { $template_name = "members/moremember-receipt.tmpl"; }
+else {                     $template_name = "members/moremember.tmpl";         }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -80,10 +73,7 @@ my $data           = GetMember( $borrowernumber ,'borrowernumber');
 my $reregistration = $input->param('reregistration');
 
 if ( not defined $data ) {
-    $template->param (
-        unknowuser => 1
-    );
-    output_html_with_http_headers $input, $cookie, $template->output;
+    $template->param (unknowuser => 1);
     exit;
 }
 
@@ -101,17 +91,14 @@ my $category_type = $borrowercategory->{'category_type'};
 # in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
 $template->param( $data->{'categorycode'} => 1 ); 
 
-$data->{'dateenrolled'} = format_date( $data->{'dateenrolled'} );
-$data->{'dateexpiry'}   = format_date( $data->{'dateexpiry'} );
-$data->{'dateofbirth'}  = format_date( $data->{'dateofbirth'} );
-$data->{'IS_ADULT'}     = ( $data->{'categorycode'} ne 'I' );
+foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+		$data->{$_} = C4::Dates->new($data->{$_}, 'iso')->output()
+		or die ("failed C4::Dates->new(" . $data->{$_} . ", 'iso')->output()");
+}
+$data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
-if (   $data->{'debarred'}
-    || $data->{'gonenoaddress'}
-    || $data->{'lost'}
-    || $data->{'borrowernotes'} )
-{
-    $template->param( flagged => 1 );
+for (qw(debarred gonenoaddress lost borrowernotes)) {
+	 $data->{$_} and $template->param(flagged => 1) and last;
 }
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
@@ -120,13 +107,9 @@ $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
     my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
-    $data->{'address'}   = $data2->{'address'};
-    $data->{'city'}      = $data2->{'city'};
-    $data->{'B_address'} = $data2->{'B_address'};
-    $data->{'B_city'}    = $data2->{'B_city'};
-    $data->{'phone'}     = $data2->{'phone'};
-    $data->{'mobile'}    = $data2->{'mobile'};
-    $data->{'zipcode'}   = $data2->{'zipcode'};
+	foreach (qw(address city B_address B_city phone mobilezipcode)) {
+    	$data->{$_} = $data2->{$_};
+	}
 }
 
 if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
@@ -142,30 +125,25 @@ if ( $category_type eq 'A' ) {
     my ( $count, $guarantees ) = GetGuarantees( $data->{'borrowernumber'} );
     my @guaranteedata;
     for ( my $i = 0 ; $i < $count ; $i++ ) {
-        push(
-            @guaranteedata,
+        push(@guaranteedata,
             {
                 borrowernumber => $guarantees->[$i]->{'borrowernumber'},
                 cardnumber     => $guarantees->[$i]->{'cardnumber'},
                 name           => $guarantees->[$i]->{'firstname'} . " "
-                  . $guarantees->[$i]->{'surname'}
+                                . $guarantees->[$i]->{'surname'}
             }
         );
     }
     $template->param( guaranteeloop => \@guaranteedata );
     ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
-
 }
 else {
     if ($data->{'guarantorid'}){
-      my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
-      $template->param( 
-              guarantor => 1,
-              guarantorborrowernumber => $guarantor->{'borrowernumber'},
-              guarantorcardnumber     => $guarantor->{'cardnumber'},
-              guarantorfirstname      => $guarantor->{'firstname'},
-              guarantorsurname        => $guarantor->{'surname'}
-          );
+    my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
+    $template->param(guarantor => 1);
+		foreach (qw(borrowernumber cardnumber firstname surname)) {        
+			  $template->param("guarantor$_" => $guarantor->{$_});
+        }
     }
 }
 
@@ -201,13 +179,13 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 #
 my ( $count, $issue ) = GetPendingIssues($borrowernumber);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
-my $today       = POSIX::strftime("%Y%m%d", localtime);
+my $today       = POSIX::strftime("%Y%m%d", localtime);	# iso format
 my @issuedata;
 my $totalprice = 0;
 my $toggle     = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $datedue = $issue->[$i]{'date_due'};
-    $issue->[$i]{'date_due'} = format_date( $issue->[$i]{'date_due'} );
+    $issue->[$i]{'date_due'} = C4::Dates->new($issue->[$i]{'date_due'})->output('iso');
     my %row = %{ $issue->[$i] };
     $totalprice += $issue->[$i]{'replacementprice'};
     $row{'replacementprice'} = $issue->[$i]{'replacementprice'};
@@ -228,12 +206,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
     #check item is not reserved
     my ( $restype, $reserves ) = CheckReserves( $issue->[$i]{'itemnumber'} );
-    if ($restype) {
-        $row{'norenew'} = 1;
-    }
-    else {
-        $row{'norenew'} = 0;
-    }
+    $row{'norenew'} = ($restype) ? 1 : 0;
     push( @issuedata, \%row );
 }
 
@@ -250,10 +223,8 @@ if ($borrowernumber) {
         eval{
             scalar @$num_res;
         };
-        if($@){
-            next;
-        }
-    
+        ($@) and next;	# is this eval just a dumb way of checking to see if the arrays have any elements?
+
         my %getreserv;
         
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
@@ -261,17 +232,15 @@ if ($borrowernumber) {
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
             GetTransfers( $num_res->{'itemnumber'} );
 
-        $getreserv{waiting}       = 0;
-        $getreserv{transfered}    = 0;
-        $getreserv{nottransfered} = 0;
+		foreach (qw(waiting transfered nottransfered)) {
+				$getreserv{$_} = 0;
+		}
 
-        $getreserv{reservedate}    = format_date( $num_res->{'reservedate'} );
-        $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
-        $getreserv{title}          = $getiteminfo->{'title'};
-        $getreserv{itemtype}       = $itemtypeinfo->{'description'};
-        $getreserv{author}         = $getiteminfo->{'author'};
-        $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
-        $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
+        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'})->output() or die "Cannot get new($num_res->{'reservedate'}) from C4::Dates";
+		foreach (qw(biblionumber title author barcodereserv itemcallnumber )) {
+				$getreserv{$_} = $getiteminfo->{$_};
+		}
+        $getreserv{itemtype}  = $itemtypeinfo->{'description'};
 
         # 		check if we have a waitin status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
@@ -283,7 +252,7 @@ if ($borrowernumber) {
         if ($transfertwhen) {
             $getreserv{color}      = 'transfered';
             $getreserv{transfered} = 1;
-            $getreserv{datesent}   = format_date($transfertwhen);
+            $getreserv{datesent}   = C4::Dates->new($transfertwhen, 'iso')->output() or die "Cannot get new($transfertwhen, 'iso') from C4::Dates";
             $getreserv{frombranch} = GetBranchName($transfertfrom);
         }
 
@@ -314,7 +283,6 @@ if ($borrowernumber) {
 
     # return result to the template
     $template->param( reservloop => \@reservloop );
-
 }
 
 # current alert subscriptions

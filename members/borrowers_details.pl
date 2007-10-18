@@ -2,7 +2,6 @@
 # NOTE: This file uses standard 8-space tabs
 #       DO NOT SET TAB SIZE TO 4
 
-# $Id$
 
 #script to set up screen for modification of borrower details
 #written 20/12/99 by chris@katipo.co.nz

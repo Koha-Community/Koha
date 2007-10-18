@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #written 7/3/2002 by Finlay
 #script to display reports

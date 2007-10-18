@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 # script to find a guarantor
 

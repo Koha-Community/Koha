@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# $Id$
 
 # Copyright 2006 SAN OUEST PROVENCE et Paul POULAIN
 #
@@ -32,7 +31,7 @@ use C4::Context;
 use C4::Output;
 use C4::Members;
 use C4::Koha;
-use C4::Date;
+use C4::Dates;
 use C4::Input;
 use C4::Log;
 use C4::Branch; # GetBranches
@@ -42,8 +41,12 @@ my %data;
 
 my $dbh = C4::Context->dbh;
 
+<<<<<<< HEAD:members/memberentry.pl
 
 
+=======
+my $step=$input->param('step') || 0;
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/memberentrygen.tmpl",
            query => $input,
@@ -74,22 +77,20 @@ my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
 my $borrower_data;
 
-
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
 #function  to automatic setup the mandatory  fields (visual with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
-$template->param( "mandatory$_" => 1);    
+		$template->param( "mandatory$_" => 1);    
 }
-$template->param("add"=>1) if ($op eq 'add');
+$template->param(   "add"  => 1) if (  $op eq 'add');
 $template->param("checked" => 1) if ($nodouble eq 1);
 my $categorycode=$input->param('categorycode');
 ($borrower_data=GetMember($borrowernumber,'borrowernumber')) if ($op eq 'modify' or $op eq 'save');
 $categorycode=$borrower_data->{'categorycode'} unless $categorycode;
-my $category_type;
-$category_type = $input->param('category_type');
+my $category_type = $input->param('category_type');
 unless ($category_type or !($categorycode)){
   my $borrowercategory= GetBorrowercategory($categorycode);
   $category_type = $borrowercategory->{'category_type'};
@@ -111,11 +112,26 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     $newdata{'dateofbirth'}=format_date_in_iso($newdata{'dateofbirth'}) if ($newdata{dateofbirth});  
 }
 
+<<<<<<< HEAD:members/memberentry.pl
 #############test for member being unique #############
 if ($op eq 'insert'){
         my $category_type_send=$category_type if ($category_type eq 'I'); 
         my $check_category; # recover the category code of the doublon suspect borrowers
         ($check_member,$check_category)= checkuniquemember($category_type_send,($newdata{'surname'}?$newdata{'surname'}:$data{'surname'}),($newdata{'firstname'}?$newdata{'firstname'}:$data{'firstname'}),($newdata{'dateofbirth'}?$newdata{'dateofbirth'}:$data{'dateofbirth'}));
+=======
+
+  # WARN : some tests must be done whatever the step, because the librarian can click on any tab.
+  #############test for member being unique #############
+  if ($op eq 'insert'){
+          my $category_type_send=$category_type if ($category_type eq 'I'); 
+          my $check_category; # recover the category code of the doublon suspect borrowers
+          ($check_member,$check_category) = checkuniquemember(
+				$category_type_send,
+				($newdata{'surname'  } ? $newdata{'surname'  } : $data{'surname'  }),
+				($newdata{'firstname'} ? $newdata{'firstname'} : $data{'firstname'}),
+				($newdata{'dateofbirth'} ? C4::Dates->new($newdata{'dateofbirth'})->output('iso') : $data{'dateofbirth'})
+		  );
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
           
   #   recover the category type if the borrowers is a doublon 
         my $tmpborrowercategory=GetBorrowercategory($check_category);
@@ -123,6 +139,7 @@ if ($op eq 'insert'){
 }
 
   #recover all data from guarantor address phone ,fax... 
+<<<<<<< HEAD:members/memberentry.pl
 if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
   my $guarantordata=GetMember($guarantorid);
   $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
@@ -131,15 +148,76 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
     $data{'contactname'}=$guarantordata->{'surname'};
     $data{'contacttitle'}=$guarantordata->{'title'};  
     map {$data{$_}=$guarantordata->{$_}}('streetnumber','address','streettype','address2','zipcode','city','phone','phonepro','mobile','fax','email','emailpro');
+=======
+  if ($category_type eq 'C' and $guarantorid ne '' ){
+    my $guarantordata=GetMember($guarantorid);
+    $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
+    if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
+      $newdata{'contactfirstname'} = $guarantordata->{'firstname'}; 
+      $newdata{'contactname'     } = $guarantordata->{'surname'};
+      $newdata{'contacttitle'    } = $guarantordata->{'title'};  
+      map {$newdata{$_}=$guarantordata->{$_}}('streetnumber','address','streettype','address2','zipcode','city','phone','phonepro','mobile','fax','email','emailpro');
+	  #  This use of map is improper (void context).  Should be foreach, probably.
+    }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   }
 }
 
+<<<<<<< HEAD:members/memberentry.pl
 ###############test to take the right zipcode and city name ##############
 if ( $guarantorid eq ''){
   if ($select_city){
     my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
     $newdata{'city'}= $borrower_city;
     $newdata{'zipcode'}=$borrower_zipcode;
+=======
+  # CHECKS step by step
+# STEP 1
+    if ($op eq 'insert' && checkcardnumber($cardnumber)){ 
+      push @errors, 'ERROR_cardnumber';
+      $nok = 1;
+    } 
+    ###############test to take the right zipcode and city name ##############
+    if ( $guarantorid eq ''){
+      if ($select_city){
+        my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
+        $newdata{'city'   } = $borrower_city;
+        $newdata{'zipcode'} = $borrower_zipcode;
+        }
+    }
+    my $dateofbirthmandatory=0;
+    map {$dateofbirthmandatory=1 if $_ eq "dateofbirth"} @field_check;		# improper use of map (void context).  Probably "foreach" or even "grep" should be used.
+    if ($category_type ne 'I' && $newdata{dateofbirth} && $dateofbirthmandatory) {
+      my $age = GetAge(C4::Dates->new($data{dateofbirth})->output('iso'));
+      my $borrowercategory=GetBorrowercategory($data{'categorycode'});   
+      if (($age > $borrowercategory->{'upperagelimit'}) or ($age < $borrowercategory->{'dateofbirthrequired'})) {
+        push @errors, 'ERROR_age_limitations';
+        $nok = 1;
+      }
+    }
+
+# STEP 2
+    if ( ($newdata{'userid'} eq '')){
+      my $onefirstnameletter=substr($data{'firstname'},0,1);
+      my $fivesurnameletter =substr($data{'surname'},0,5);
+      $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
+    }
+#   }
+# STEP 3
+  if ($op eq 'insert'){
+	  my $loginexist;
+	  # Check if the userid is unique
+	  if ( !Check_Userid($data{'userid'},$borrowernumber)) {
+		  push @errors, "ERROR_login_exist";
+		  $nok = $loginexist = 1;
+    } else {
+      $borrowernumber = &AddMember(%newdata);
+        if ($data{'organisations'}){            
+          # need to add the members organisations
+          my @orgs=split(/\|/,$data{'organisations'});
+          add_member_orgs($borrowernumber,\@orgs);
+        }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
     }
 }
 #builds default userid
@@ -223,11 +301,16 @@ if ($op eq 'save'){
 	}
 }
 
+<<<<<<< HEAD:members/memberentry.pl
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
 }
 
+=======
+($delete) and print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 if ($nok){
+<<<<<<< HEAD:members/memberentry.pl
   $op="add" if ($op eq "insert");
   $op="modify" if ($op eq "save");
   %data=%newdata; 
@@ -235,6 +318,12 @@ if ($nok){
   unless ($step){  
     $template->param( step_1 => 1,step_2 => 1,step_3 => 1);
   }  
+=======
+  $op = "add"    if ($op eq "insert");
+  $op = "modify" if ($op eq "save"  );
+  %data = %newdata; 
+  $template->param( updtype => ($op eq "insert"?'I':'M'),step_1=>1,step_2=>1,step_3=>1,allsteps=>1);
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 } 
 if (C4::Context->preference("IndependantBranches")) {
   my $userenv = C4::Context->userenv;
@@ -276,9 +365,14 @@ if ($ethnicitycategoriescount>=0) {
   $template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
 }
   
+<<<<<<< HEAD:members/memberentry.pl
   
 my $action="WHERE category_type=?";
 ($categories,$labels)=GetborCatFromCatType($category_type,$action);
+=======
+  my $action="WHERE category_type=?";
+  ($categories,$labels)=GetborCatFromCatType($category_type,$action);
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   
 if(scalar(@$categories)){
       #if you modify the borrowers you must have the right value for his category code
@@ -293,6 +387,7 @@ if(scalar(@$categories)){
   $template->param(catcodepopup=>$catcodepopup);
 }
   #test in city
+<<<<<<< HEAD:members/memberentry.pl
 $select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
 ($default_city=$select_city) if ($step eq 0);
 if ($select_city eq '' ){
@@ -307,7 +402,24 @@ my $citypopup = CGI::popup_menu(-name=>'select_city',
         -labels=>$name_city,
         -default=>$default_city
         );  
+=======
+  $select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
+  ($default_city=$select_city) if ($step eq 0);
+  if ($select_city eq '' ){
+		  $default_city=getidcity($data{'city'});
+  }
+  my($cityid,$name_city)=GetCities();
+  $template->param( city_cgipopup => 1) if ($cityid );
+  my $citypopup = CGI::popup_menu(-name=>'select_city',
+          -id => 'select_city',
+          -values=>$cityid,
+          -labels=>$name_city,
+#             -override => 1,
+          -default=>$default_city
+          );  
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   
+<<<<<<< HEAD:members/memberentry.pl
 my $default_roadtype;
 $default_roadtype=$data{'streettype'} ;
 my($roadtypeid,$road_type)=GetRoadTypes();
@@ -319,7 +431,21 @@ my $roadpopup = CGI::popup_menu(-name=>'streettype',
           -override => 1,
         -default=>$default_roadtype
         );  
+=======
+  my $default_roadtype;
+  $default_roadtype=$data{'streettype'} ;
+  my($roadtypeid,$road_type)=GetRoadTypes();
+    $template->param( road_cgipopup => 1) if ($roadtypeid );
+  my $roadpopup = CGI::popup_menu(-name=>'streettype',
+          -id => 'streettype',
+          -values=>$roadtypeid,
+            -labels=>$road_type,
+            -override => 1,
+          -default=>$default_roadtype
+          );  
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
 my $default_borrowertitle;
 $default_borrowertitle=$data{'title'} ;
 my($borrowertitle)=GetTitles();
@@ -329,8 +455,36 @@ my $borrotitlepopup = CGI::popup_menu(-name=>'title',
               -override => 1,
               -default=>$default_borrowertitle
         );    
+=======
+  my $default_borrowertitle;
+  $default_borrowertitle=$data{'title'} ;
+  my($borrowertitle)=GetTitles();
+  my $borrotitlepopup = CGI::popup_menu(-name=>'title',
+                -id => 'btitle',
+                -values=>$borrowertitle,
+                -override => 1,
+                -default=>$default_borrowertitle
+  );    
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
+=======
+  my @relshipdata;
+  foreach (map {$_ || ''} split /,|\|/, C4::Context->preference('BorrowerRelationship')) {
+    my %row = ('relationship' => $_);
+    if ($data{'relationship'} eq $_) {
+      $row{'selected'}=' selected';
+    } else {
+      $row{'selected'}='';
+    }
+    push(@relshipdata, \%row);
+  }
+  my %flags = ( 'gonenoaddress' => ['gonenoaddress', 'Gone no address '],
+          'lost'          => ['lost', 'Lost'],
+          'debarred'      => ['debarred', 'Debarred']);
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
 my @relationships = split /,|\|/,C4::Context->preference('BorrowerRelationship');
 my @relshipdata;
 while (@relationships) {
@@ -340,6 +494,21 @@ while (@relationships) {
     $row{'selected'}=' selected';
   } else {
     $row{'selected'}='';
+=======
+  my @flagdata;
+  foreach my $key (keys(%flags)) {
+		  my %row =  ('key'   => $key,
+			  'name'  => $flags{$key}[0],
+			  'html'  => $flags{$key}[1]);
+		  if ($data{$key}) {
+			$row{'yes'}=' checked';
+			$row{'no'}='';
+		  } else {
+			$row{'yes'}='';
+			$row{'no'}=' checked';
+		  }
+		  push(@flagdata, \%row);
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   }
   push(@relshipdata, \%row);
 }
@@ -363,7 +532,12 @@ if ($data{$key}) {
 push(@flagdata, \%row);
 }
 
+<<<<<<< HEAD:members/memberentry.pl
+=======
+  ($modify) and $template->param( modify => 1 );
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
 #get Branches
 my @branches;
 my @select_branch;
@@ -382,9 +556,35 @@ foreach my $branch (sort keys %$branches) {
     $select_branches{$branch} = $branches->{$branch}->{'branchname'};
     $default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
 }
+=======
+  #Convert dateofbirth to correct format
+  my @branches;
+  my @select_branch;
+  my %select_branches;
+  my $branches=GetBranches();
+  my $default;
+  # -----------------------------------------------------
+  #  the value of ip from the branches hash table
+#     my $select_ip;
+  # $ip is the ip of user when is connect to koha 
+#     my $ip = $ENV{'REMOTE_ADDR'};
+  
+  # -----------------------------------------------------
+  foreach my $branch (keys %$branches) {
+    if ((not C4::Context->preference("IndependantBranches")) || (C4::Context->userenv->{'flags'} == 1)) {
+      push @select_branch, $branch;
+      $select_branches{$branch} = $branches->{$branch}->{'branchname'};
+    } else {
+      push @select_branch,$branch if ($branch eq C4::Context->userenv->{'branch'});
+      $select_branches{$branch} = $branches->{$branch}->{'branchname'} if ($branch eq C4::Context->userenv->{'branch'});
+    }
+    $default = C4::Context->userenv->{'branch'};
+  }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 # --------------------------------------------------------------------------------------------------------
   #in modify mod :default value from $CGIbranch comes from borrowers table
   #in add mod: default value come from branches table (ip correspendence)
+<<<<<<< HEAD:members/memberentry.pl
 $default=$data{'branchcode'}  if ($op eq 'modify');
 my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -name   => 'branchcode',
@@ -417,18 +617,60 @@ if (C4::Context->preference("memberofinstitution")){
         
     );
 }
-
+=======
+  $default=$data{'branchcode'}  if ($op eq 'modify');
+  my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
+             -name   => 'branchcode',
+             -values => \@select_branch,
+             -labels => \%select_branches,
+             -size   => 1,
+             -override => 1,  
+                   -multiple =>0,
+             -default => $default,
+          );
+  my $CGIorganisations;
+  my $member_of_institution;
+  if (C4::Context->preference("memberofinstitution")){
+     my $organisations=get_institutions();
+     my @orgs;
+     my %org_labels;
+     foreach my $organisation (keys %$organisations) {
+         push @orgs,$organisation;
+         $org_labels{$organisation}=$organisations->{$organisation}->{'surname'};
+     }
+     $member_of_institution=1;
+     
+     $CGIorganisations = CGI::scrolling_list( -id => 'organisations',
+         -name     => 'organisations',
+         -labels   => \%org_labels,
+         -values   => \@orgs,
+         -size     => 5,
+         -multiple => 'true'
+     );
+  }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
 # --------------------------------------------------------------------------------------------------------
 
+<<<<<<< HEAD:members/memberentry.pl
 my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data{'sort1'});
 if ($CGIsort1) {
   $template->param(CGIsort1 => $CGIsort1);
+=======
+  my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data{'sort1'});
+  if ($CGIsort1) {
+    $template->param(CGIsort1 => $CGIsort1);
+  }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   $template->param( sort1 => $data{'sort1'});
+<<<<<<< HEAD:members/memberentry.pl
 } else {
   $template->param( sort1 => $data{'sort1'});
 }
+=======
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
 my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data{'sort2'});
 if ($CGIsort2) {
   $template->param(CGIsort2 =>$CGIsort2);
@@ -442,13 +684,48 @@ if ($nok) {
     $template->param(nok => 1);
 }
   
+=======
+  my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data{'sort2'});
+  if ($CGIsort2) {
+    $template->param(CGIsort2 => $CGIsort2);
+  } else {
+    $template->param( sort2 => $data{'sort2'});
+  }
+  # increase step to see next page
+  if ($nok) {
+      foreach (@errors, 'nok') {
+          $template->param( $_ => 1);
+      }
+  }
+#   else {
+#       $step++ if $op eq 'add';
+#   }
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   #Formatting data for display    
   
+<<<<<<< HEAD:members/memberentry.pl
 if ($data{'dateenrolled'} eq ''){
   my $today= sprintf('%04d-%02d-%02d', Today());
   $data{'dateenrolled'}=$today;
 }
+=======
+  if ($data{'dateenrolled'} eq ''){
+    my $today= sprintf('%04d-%02d-%02d', Today());
+    #insert ,in field "dateenrolled" , the current date
+    $data{'dateenrolled'}=$today;
+    $data{'dateexpiry'} = GetExpiryDate($data{'categorycode'},$today);
+  }
+  
+  $data{'surname'     } = uc($data{'surname'});
+  $data{'contactname' } = uc($data{'contactname'});
+  $data{'firstname'   } = ucfirst(lc $data{'firstname'});
+  $data{'contactfirstname'}= ucfirst(lc $data{'contactfirstname'});
+  $data{'dateenrolled'} = C4::Dates->new($data{'dateenrolled'})->output;
+  $data{'dateexpiry'  } = C4::Dates->new($data{'dateexpiry'  })->output;
+  $data{'dateofbirth' } = C4::Dates->new($data{'dateofbirth' })->output;
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
 
+<<<<<<< HEAD:members/memberentry.pl
 $data{'surname'}=uc($data{'surname'});
 $data{'firstname'}=ucfirst(lc $data{'firstname'});
 $data{'dateenrolled'}=format_date($data{'dateenrolled'});
@@ -491,6 +768,41 @@ $template->param(
   CGIbranch => $CGIbranch,
   memberofinstution => $member_of_institution,
   CGIorganisations => $CGIorganisations,
+=======
+#   warn "$step";
+  $template->param(%data);
+  $template->param(
+    BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
+    category_type => $category_type,#to know the category type of the borrower
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    select_city  => $select_city,
+    "step_$step" => 1,			# associate with step to know where you are
+    "$category_type"  => 1,		# associate with step to know where you are
+    step    => $step,
+    destination   => $destination,	# for redirect
+    check_member  => $check_member,	# to know if the borrower already exist(=>1) or not (=>0) 
+    flags   => $data{'flags'},   
+    "op$op"   => 1,
+    nodouble  => $nodouble,
+    borrowernumber  => $borrowernumber,	# register number
+    "contacttitle_".$data{'contacttitle'} => "SELECTED",
+    guarantorid => $guarantorid,
+    ethcatpopup => $ethcatpopup,
+    relshiploop => \@relshipdata,
+    citypopup   => $citypopup,
+    roadpopup   => $roadpopup,  
+    borrotitlepopup => $borrotitlepopup,
+    guarantorinfo   => $guarantorinfo,
+    flagloop   => \@flagdata,
+    dateformat => C4::Dates->visual(),
+    check_categorytype =>$check_categorytype, # to recover the category type with checkcategorytype function
+    modify     => $modify,
+    nok     => $nok,	# flag to know if an error 
+    CGIbranch => $CGIbranch,
+    memberofinstution => $member_of_institution,
+    CGIorganisations => $CGIorganisations,
+    );
+>>>>>>> Removing CVS tags $Id$ and $Log$. Lots of files, not much change.:members/memberentry.pl
   
   );
 output_html_with_http_headers $input, $cookie, $template->output;

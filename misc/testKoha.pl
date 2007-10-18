@@ -1,6 +1,5 @@
 #!/usr/bin/perl -w
 
-# $Id$
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -71,7 +70,6 @@ runtests (@tests);
 
 exit;
 
-# $Log$
 # Revision 1.7  2007/06/18 03:20:19  rangi
 # Finishing up the last of the tests
 #

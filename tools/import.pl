@@ -1,14 +1,11 @@
 #!/usr/bin/perl
 
-# $Id$
-
 # Script for handling import of MARC data into Koha db
 #   and Z39.50 lookups
 
 # Koha library project  www.koha.org
 
 # Licensed under the GPL
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -96,7 +93,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
-# $Log$
+#
 # Revision 1.5  2007/04/24 13:54:30  hdl
 # functions that were in C4::Interface::CGI::Output are now in C4::Output.
 # So this implies quite a change for files.

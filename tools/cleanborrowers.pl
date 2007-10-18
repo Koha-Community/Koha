@@ -17,7 +17,6 @@
 #
 #   Written by Antoine Farnault antoine@koha-fr.org on Nov. 2006.
 
-# $Id$
 
 =head1 cleanborrowers.pl
 

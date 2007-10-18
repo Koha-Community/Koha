@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 # Database Updater
 # This script checks for required updates to the database.
@@ -2214,5 +2213,4 @@ sub SetVersion {
 }
 exit;
 
-# $Log$
 # Revision 1.172  2007/07/19 10:21:22  hdl

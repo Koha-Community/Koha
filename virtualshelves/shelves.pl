@@ -280,7 +280,6 @@ sub shelves {
 }
 
 #
-# $Log$
 # Revision 1.13  2007/04/24 13:54:29  hdl
 # functions that were in C4::Interface::CGI::Output are now in C4::Output.
 # So this implies quite a change for files.

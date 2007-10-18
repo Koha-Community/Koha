@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 #
 # This file is part of Koha.
 #

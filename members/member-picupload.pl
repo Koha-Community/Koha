@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 # script to upload a picture to a borrowerimages directory.
 # checks to see if its either displaying the upload form

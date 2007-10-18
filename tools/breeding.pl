@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 # Script for handling import of MARC data into Koha db
 #   and Z39.50 lookups
@@ -99,7 +98,6 @@ my $file;
 
 #---------------
 # log cleared, as marcimport is (almost) rewritten from scratch.
-# $Log$
 # Revision 1.3  2007/04/24 13:54:30  hdl
 # functions that were in C4::Interface::CGI::Output are now in C4::Output.
 # So this implies quite a change for files.

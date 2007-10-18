@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #writen 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details

@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #script to delete items
 #written 2/5/00

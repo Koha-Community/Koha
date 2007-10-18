@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #script to recieve orders
 #written by chris@katipo.co.nz 24/2/2000

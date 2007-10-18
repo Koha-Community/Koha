@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #written 14/1/2000
 #script to display reports

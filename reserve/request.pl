@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #writen 2/1/00 by chris@katipo.oc.nz
 # Copyright 2000-2002 Katipo Communications

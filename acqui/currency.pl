@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-# $Id$
 
 #written by chris@katipo.co.nz
 #9/10/2000
