@@ -1075,7 +1075,7 @@ sub NZgetRecords {
 sub NZanalyse {
     my ($string,$server) = @_;
     # $server contains biblioserver or authorities, depending on what we search on.
-    warn "querying : $string on $server";
+    #warn "querying : $string on $server";
     $server='biblioserver' unless $server;
     # if we have a ", replace the content to discard temporarily any and/or/not inside
     my $commacontent;
@@ -1156,7 +1156,7 @@ sub NZanalyse {
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value $operator ?");
-            warn "$left / $operator / $right\n";
+            # warn "$left / $operator / $right\n";
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$right) {
                 my $biblionumbers;

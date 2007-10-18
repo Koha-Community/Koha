@@ -2,9 +2,9 @@
 <title>Koha &rsaquo; Catalogue &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Core + Skin CSS -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css"/>
 <!-- OPTIONAL: Menu Stylesheet (required for creating buttons of type "menu" and "split") -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css"/>
 
 <!-- Dependencies -->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -122,7 +122,7 @@ function yuiToolbar(){
 		
 		<ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
-            <li><strong>Authors:</strong><ul>
+            <li><strong>Additional Authors:</strong><ul>
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                 <li><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
                     <!-- TMPL_VAR NAME="value" -->
@@ -154,7 +154,7 @@ function yuiToolbar(){
 <div class="yui-u"><!-- TMPL_IF NAME="AmazonContent" -->
 		<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
 <!-- TMPL_ELSE -->
-	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0">
+	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
 <!-- /TMPL_IF --></div>
 		
 		<div class="yui-u">

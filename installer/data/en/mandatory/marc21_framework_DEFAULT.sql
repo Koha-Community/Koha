@@ -96,6 +96,20 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 -- 		('942', 'l', 'Classification subclass (DDC after decimal or LCC number after letters', 'Classification subclass', 0, 0, 'biblioitems.subclass', 9, '', '', '', NULL, 0, '', '', '', NULL);
 
 
+-- rel_2_2 primary biblioitems Field/Subfields
+
+
+-- INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES
+-- ('942', 'ADDED ENTRY ELEMENTS (KOHA)', 'ADDED ENTRY ELEMENTS (KOHA)', 0, 0, '', '');
+
+-- INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
+-- ('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
+-- ('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
+-- ('942', 'j', 'Location (call number prefix code)', 'Location (call number prefix code)', 0, 0, 'biblioitems.classification', 9, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('942', 'k', 'Classification base (DDC to decimal or LCC letter class padded after single letter classes with trailing 0', 'Classification base', 0, 0, 'biblioitems.dewey', 9, '', '', '', NULL, 0, '', '', '', NULL),
+-- ('942', 'l', 'Classification subclass (DDC after decimal or LCC number after letters', 'Classification subclass', 0, 0, 'biblioitems.subclass', 9, '', '', '', NULL, 0, '', '', '', NULL);
+
+
 -- Current primary biblioitems Field/Subfields
 
 
@@ -103,16 +117,16 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('942', 'ADDED ENTRY ELEMENTS (KOHA)', 'ADDED ENTRY ELEMENTS (KOHA)', 0, 0, '', '');
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
-		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, '', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, '', '', '', NULL),
-		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
-		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
-		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, '', '', '', NULL),
-		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, '', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, '', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, '', '', '', NULL);
+('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, '', '', '', NULL),
+('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'CN_SOURCE', '', '', NULL, 0, '', '', '', NULL),
+('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
+('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
+('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
+('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
+('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, '', '', '', NULL),
+('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, '', '', '', NULL),
+('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, '', '', '', NULL),
+('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -416,7 +430,6 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 1, 0, 'items.paidfor', 10, '', '', '', NULL, 7, '', '', '', NULL),
 		('952', 'y', 'Koha item type', 'Koha item type', 1, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, '', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 1, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, '', '', '', NULL);
-
 
 
 
@@ -806,7 +819,6 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('u7f', 'PRICE INFORMATION (RLIN)', 'PRICE INFORMATION (RLIN)', 1, 0, '', ''),
 		('u90', 'TAPE OUTPUT, TAPE (RLIN)', 'TAPE OUTPUT, TAPE (RLIN)', 0, 0, '', ''),
 		('ufi', 'FISCAL INFORMATION, FI (RLIN)', 'FISCAL INFORMATION, FI (RLIN)', 1, 0, '', '');
-
 
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
@@ -4461,6 +4473,3 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('ufi', 'g', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL),
 		('ufi', 'h', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL),
 		('ufi', 'n', 'FI', 'FI', 0, 0, '', 9, '', '', '', 0, 5, '', '', '', NULL);
-
-
-

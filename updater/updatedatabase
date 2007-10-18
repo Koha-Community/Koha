@@ -146,6 +146,144 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.009";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+
+    # Create backups of call number columns
+    # in case default migration needs to be customized
+    #
+    # UPGRADE NOTE: temp_upg_biblioitems_call_num should be dropped 
+    #               after call numbers have been transformed to the new structure
+    #
+    # Not bothering to do the same with deletedbiblioitems -- assume
+    # default is good enough.
+    $dbh->do("CREATE TABLE `temp_upg_biblioitems_call_num` AS 
+              SELECT `biblioitemnumber`, `biblionumber`,
+                     `classification`, `dewey`, `subclass`,
+                     `lcsort`, `ccode`
+              FROM `biblioitems`");
+
+    # biblioitems changes
+    $dbh->do("ALTER TABLE `biblioitems` CHANGE COLUMN `volumeddesc` `volumedesc` TEXT");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `cn_source` VARCHAR(10) DEFAULT NULL AFTER `ccode`");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `cn_class` VARCHAR(30) DEFAULT NULL AFTER `cn_source`");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `cn_item` VARCHAR(10) DEFAULT NULL AFTER `cn_class`");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `cn_suffix` VARCHAR(10) DEFAULT NULL AFTER `cn_item`");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `cn_sort` VARCHAR(30) DEFAULT NULL AFTER `cn_suffix`");
+    $dbh->do("ALTER TABLE `biblioitems` ADD `totalissues` INT(10) AFTER `cn_sort`");
+
+    # default mapping of call number columns:
+    #   cn_class = concatentation of classification + dewey, 
+    #              trimmed to fit -- assumes that most users do not
+    #              populate both classification and dewey in a single record
+    #   cn_item  = subclass
+    #   cn_source = left null 
+    #   cn_sort = lcsort 
+    #
+    # After upgrade, cn_sort will have to be set based on whatever
+    # default call number scheme user sets as a preference.  Misc
+    # script will be added at some point to do that.
+    #
+    $dbh->do("UPDATE `biblioitems` 
+              SET cn_class = SUBSTR(TRIM(CONCAT_WS(' ', `classification`, `dewey`)), 1, 30)");
+    $dbh->do("UPDATE `biblioitems` SET cn_item = subclass");
+    $dbh->do("UPDATE `biblioitems` SET `cn_sort` = `lcsort`");
+
+    # Now drop the old call number columns
+    $dbh->do("ALTER TABLE `biblioitems` DROP COLUMN `classification`");
+    $dbh->do("ALTER TABLE `biblioitems` DROP COLUMN `dewey`");
+    $dbh->do("ALTER TABLE `biblioitems` DROP COLUMN `subclass`");
+    $dbh->do("ALTER TABLE `biblioitems` DROP COLUMN `lcsort`");
+    $dbh->do("ALTER TABLE `biblioitems` DROP COLUMN `ccode`");
+
+    # deletedbiblio changes
+    $dbh->do("ALTER TABLE `deletedbiblio` ALTER COLUMN `frameworkcode` SET DEFAULT ''");
+    $dbh->do("ALTER TABLE `deletedbiblio` DROP COLUMN `marc`");
+    $dbh->do("ALTER TABLE `deletedbiblio` ADD `datecreated` DATE NOT NULL AFTER `timestamp`");
+    $dbh->do("UPDATE deletedbiblio SET datecreated = timestamp");
+
+    # deletedbiblioitems changes
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `publicationyear` TEXT");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` CHANGE `volumeddesc` `volumedesc` TEXT");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `collectiontitle` MEDIUMTEXT DEFAULT NULL AFTER `volumedesc`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `collectionissn` TEXT DEFAULT NULL AFTER `collectiontitle`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `collectionvolume` MEDIUMTEXT DEFAULT NULL AFTER `collectionissn`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `editionstatement` TEXT DEFAULT NULL AFTER `collectionvolume`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `editionresponsibility` TEXT DEFAULT NULL AFTER `editionstatement`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `place` VARCHAR(255) DEFAULT NULL AFTER `size`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` MODIFY `marc` BLOB");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `cn_source` VARCHAR(10) DEFAULT NULL AFTER `url`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `cn_class` VARCHAR(30) DEFAULT NULL AFTER `cn_source`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `cn_item` VARCHAR(10) DEFAULT NULL AFTER `cn_class`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `cn_suffix` VARCHAR(10) DEFAULT NULL AFTER `cn_item`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `cn_sort` VARCHAR(30) DEFAULT NULL AFTER `cn_suffix`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD `totalissues` INT(10) AFTER `cn_sort`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD KEY `isbn` (`isbn`)");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` ADD KEY `publishercode` (`publishercode`)");
+
+    $dbh->do("UPDATE `deletedbiblioitems` 
+              SET cn_class = SUBSTR(TRIM(CONCAT_WS(' ', `classification`, `dewey`)), 1, 30)");
+    $dbh->do("UPDATE `deletedbiblioitems` SET cn_item = subclass");
+    $dbh->do("UPDATE `deletedbiblioitems` SET `cn_sort` = `lcsort`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` DROP COLUMN `classification`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` DROP COLUMN `dewey`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` DROP COLUMN `subclass`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` DROP COLUMN `lcsort`");
+    $dbh->do("ALTER TABLE `deletedbiblioitems` DROP COLUMN `ccode`");
+
+    # deleteditems changes
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `barcode` VARCHAR(20) DEFAULT NULL");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `price` DECIMAL(8,2) DEFAULT NULL");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `replacementprice` DECIMAL(8,2) DEFAULT NULL");
+    $dbh->do("ALTER TABLE `deleteditems` DROP `bulk`");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `itemcallnumber` VARCHAR(30) DEFAULT NULL AFTER `wthdrawn`");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `holdingbranch` VARCHAR(10) DEFAULT NULL");
+    $dbh->do("ALTER TABLE `deleteditems` DROP `interim`");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP AFTER `paidfor`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP `cutterextra`");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `cn_source` VARCHAR(10) DEFAULT NULL AFTER `onloan`");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `cn_sort` VARCHAR(30) DEFAULT NULL AFTER `cn_source");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `ccode` VARCHAR(10) DEFAULT NULL AFTER `cn_sort`");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `materials` VARCHAR(10) DEFAULT NULL AFTER `ccode`");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `uri` VARCHAR(255) DEFAULT NULL AFTER `materials`");
+    $dbh->do("ALTER TABLE `deleteditems` MODIFY `marc` LONGBLOB AFTER `uri`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP KEY `barcode`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP KEY `itembarcodeidx`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP KEY `itembinoidx`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP KEY `itembibnoidx`");
+    $dbh->do("ALTER TABLE `deleteditems` ADD UNIQUE KEY `delitembarcodeidx` (`barcode`)");
+    $dbh->do("ALTER TABLE `deleteditems` ADD KEY `delitembinoidx` (`biblioitemnumber`)");
+    $dbh->do("ALTER TABLE `deleteditems` ADD KEY `delitembibnoidx` (`biblionumber`)");
+    $dbh->do("ALTER TABLE `deleteditems` ADD KEY `delhomebranch` (`homebranch`)");
+    $dbh->do("ALTER TABLE `deleteditems` ADD KEY `delholdingbranch` (`holdingbranch`)");
+    $dbh->do("UPDATE `deleteditems` SET `ccode` = `itype`");
+    $dbh->do("ALTER TABLE `deleteditems` DROP `itype`");
+    $dbh->do("UPDATE `deleteditems` SET `cn_sort` = `itemcallnumber`");
+
+    # items changes
+    $dbh->do("ALTER TABLE `items` ADD `cn_source` VARCHAR(10) DEFAULT NULL AFTER `onloan`");
+    $dbh->do("ALTER TABLE `items` ADD `cn_sort` VARCHAR(30) DEFAULT NULL AFTER `cn_source");
+    $dbh->do("ALTER TABLE `items` ADD `ccode` VARCHAR(10) DEFAULT NULL AFTER `cn_sort`");
+    $dbh->do("ALTER TABLE `items` ADD `materials` VARCHAR(10) DEFAULT NULL AFTER `ccode`");
+    $dbh->do("ALTER TABLE `items` ADD `uri` VARCHAR(255) DEFAULT NULL AFTER `materials`");
+    $dbh->do("ALTER TABLE `items` DROP KEY `itembarcodeidx`");
+    $dbh->do("ALTER TABLE `items` ADD UNIQUE KEY `itembarcodeidx` (`barcode`)");
+
+    # map items.itype to items.ccode
+    $dbh->do("UPDATE `items` SET `ccode` = `itype`");
+
+    # set cn_sort to itemcallnumber -- as with biblioitems.cn_sort,
+    # will have to be subsequently updated per user's default 
+    # classification scheme
+    $dbh->do("UPDATE `items` SET `cn_sort` = `itemcallnumber`");
+
+    $dbh->do("ALTER TABLE `items` DROP `cutterextra`");
+    $dbh->do("ALTER TABLE `items` DROP `itype`");
+
+    print "Upgrade to $DBversion done (major changes to biblio, biblioitems, items, and deleted* versions of same\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

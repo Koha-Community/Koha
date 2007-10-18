@@ -128,7 +128,7 @@ if ($op eq "additem") {
     if ($onloan){
     $nextop="additem";
     } else {
-        &DelItem($biblionumber,$itemnumber);
+        &DelItem($dbh,$biblionumber,$itemnumber);
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
         #$nextop="additem";
     }
@@ -165,8 +165,6 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
-my %indicators;
-$indicators{995}='  ';
 # now, build existiing item list
 my $temp = GetMarcBiblio( $biblionumber );
 my @fields = $temp->fields();
@@ -183,12 +181,17 @@ foreach my $field (@fields) {
     my %this_row;
 # loop through each subfield
     for my $i (0..$#subf) {
-        next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  ne 10 && ($field->tag() ne $itemtagfield && $subf[$i][0] ne $itemtagsubfield));
+        next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab} ne 10 
+		&& ($field->tag() ne $itemtagfield 
+		&& $subf[$i][0] ne $itemtagsubfield));
+
         $witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+
         $this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
-        if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+        
+		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
             #verifying rights
-            my $userenv = C4::Context->userenv;
+            my $userenv = C4::Context->userenv();
             unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subf[$i][1]))){
                     $this_row{'nomod'}=1;
             }
@@ -199,7 +202,7 @@ foreach my $field (@fields) {
         push(@big_array, \%this_row);
     }
 }
-#fill big_row with missing datas
+#fill big_row with missing data
 foreach my $subfield_code  (keys(%witness)) {
     for (my $i=0;$i<=$#big_array;$i++) {
         $big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
@@ -209,6 +212,7 @@ my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbran
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
 # now, construct template !
+# First, the existing items for display
 my @item_value_loop;
 my @header_value_loop;
 for (my $i=0;$i<=$#big_array; $i++) {
@@ -230,10 +234,10 @@ foreach my $subfield_code (sort keys(%witness)) {
     push(@header_value_loop, \%header_value);
 }
 
-# next item form
+# now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("select authorised_value,lib from authorised_values where category=? order by lib");
+my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
 
 foreach my $tag (sort keys %{$tagslib}) {
   my $previous_tag = '';
