@@ -1,4 +1,7 @@
-#!/bin/perl
+#!/usr/bin/perl
+
+use strict;
+use warnings;
 
 use Test::More tests => 91;
 BEGIN {
@@ -13,7 +16,7 @@ my %thash = (
 	  		   '19890921    143907'     ],
 );
 
-my ($today, $today0, $val, $re, $syspref);
+my ($date, $format, $today, $today0, $val, $re, $syspref);
 my @formats = sort keys %thash;
 diag "\n Testing Legacy Functions: format_date and format_date_in_iso";
 ok($syspref = C4::Dates->new->format(),         "Your system preference is: $syspref");
@@ -38,7 +41,7 @@ foreach (@formats) {
 }
 
 diag "\nTesting with inputs:\n";
-foreach my $format (@formats) {
+foreach $format (@formats) {
 	my $pre = sprintf '(%-6s)', $format;
   foreach my $testval (@{$thash{ $format }}) {
 	ok($date = C4::Dates->new($testval,$format),      "$pre Date Creation   : new('$testval','$format')");

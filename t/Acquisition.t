@@ -1,20 +1,18 @@
-BEGIN { $| = 1; print "1..3\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use C4::Acquisition;
-$loaded = 1;
-print "ok 1\n";
+#!/usr/bin/perl
+#
+# This Koha test module is a stub!  
+# Add more tests here!!!
 
-$basketno=NewBasket(1,1);
-if ($basketno){
-  print "ok 2\n";
-}
-else {
-  print "not ok 2\n";
+use strict;
+use warnings;
+
+use Test::More tests => 3;
+
+BEGIN {
+        use_ok('C4::Acquisition');
 }
 
-if ($basket=GetBasket($basketno)){
-  print "ok 3\n";
-}
-else {
-  print "not ok 3\n";
-}
+my ($basket, $basketno);
+ok($basketno = NewBasket(1,1),			"NewBasket(  1 , 1  ) returns $basketno");
+ok($basket   = GetBasket($basketno),	"GetBasket($basketno) returns $basket");
+

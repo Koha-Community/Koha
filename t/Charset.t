@@ -1,5 +1,8 @@
+#!/usr/bin/perl
+#
+
 use strict;
-use C4::Interface::CGI::Output;
+use C4::Interface::CGI::Output;	# 
 
 use vars qw( @tests );
 use vars qw( $loaded );

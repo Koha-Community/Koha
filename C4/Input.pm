@@ -62,14 +62,14 @@ checkdigit at the end of C<$cardnumber>. Returns a true value iff
 C<$cardnumber> has a valid check digit.
 
 =cut
+
 #'
-sub checkdigit {
+sub checkdigit ($;$) {
 
 	my ($infl, $nounique) =  @_;
 	$infl = uc $infl;
 
-
-	#Check to make sure the cardnumber is unique
+	# Check to make sure the cardnumber is unique
 
 	#FIXME: We should make the error for a nonunique cardnumber
 	#different from the one where the checkdigit on the number is
@@ -77,9 +77,8 @@ sub checkdigit {
 
 	unless ( $nounique )
 	{
-		my $dbh=C4::Context->dbh;
 		my $query=qq{SELECT * FROM borrowers WHERE cardnumber=?};
-		my $sth=$dbh->prepare($query);
+		my $sth=C4::Context->prepare($query);
 		$sth->execute($infl);
 		my %results = $sth->fetchrow_hashref();
 		if ( $sth->rows != 0 )
@@ -93,25 +92,22 @@ sub checkdigit {
 
 	my @weightings = (8,4,6,3,5,2,1);
 	my $sum;
-	my $i = 1;
-	my $valid = 0;
-
-	foreach $i (1..7) {
+	foreach my $i (1..7) {
 		my $temp1 = $weightings[$i-1];
 		my $temp2 = substr($infl,$i,1);
 		$sum += $temp1 * $temp2;
 	}
 	my $rem = ($sum%11);
 	if ($rem == 10) {
-	$rem = "X";
+		$rem = "X";
 	}
 	if ($rem eq substr($infl,8,1)) {
-		$valid = 1;
+		return 1;
 	}
-	return $valid;
+	return 0;
 } # sub checkdigit
 
-=item checkvalidisbn
+=item checkvalidisbn		# Obsolete Function!
 
   $valid = &checkvalidisbn($isbn);
 
@@ -119,41 +115,23 @@ Returns a true value iff C<$isbn> is a valid ISBN: it must be ten
 digits long (counting "X" as a digit), and must have a valid check
 digit at the end.
 
-=cut
-#'
-#--------------------------------------
-# Determine if a number is a valid ISBN number, according to length
-#   of 10 digits and valid checksum
-sub checkvalidisbn {
-	use strict;
-	my ($q)=@_ ;	# Input: ISBN number
-	
-	my $isbngood = 0; # Return: true or false
-	
-	$q=~s/x$/X/g;   # upshift lower case X
-	$q=~s/[^X\d]//g;
-	$q=~s/X.//g;
-	
-		#return 0 if $q is not ten digits long
-		if (length($q)!=10) {
-			return 0;
-		}
-		
-		#If we get to here, length($q) must be 10
-	my $checksum=substr($q,9,1);
-	my $isbn=substr($q,0,9);
-	my $i;
-	my $c=0;
-	for ($i=0; $i<9; $i++) {
+sub checkvalidisbn ($) {	# Obsolete Function!
+	my ($q) = shift or return undef;
+	$q=~s/[^Xx\d]//g;
+	 /(\d{9})(X|\d)/i or
+	/(\d{12})(X|\d)/i or return 0; 
+	my $checksum = $2;
+	my $isbn     = $1;
+	my $c = 0;
+	my $max = length $isbn;
+	for (my $i=0; $i<$max; $i++) {
 		my $digit=substr($q,$i,1);
 		$c+=$digit*(10-$i);
 	}
 	$c %= 11;
-	($c==10) && ($c='X');
-	$isbngood = $c eq $checksum;
-	return $isbngood;
-
-} # sub checkvalidisbn
+	($c==10) and $c = 'X';
+	return ($c eq $checksum) ? 1 : 0;
+}
 
 =item buildCGISort
 
@@ -163,8 +141,8 @@ Returns the scrolling list with name $input_name, built on authorised Values nam
 Returns NULL if no authorised values found
 
 =cut
+
 sub buildCGIsort {
-    use strict;
 	my ($name,$input_name,$data) = @_;
 	my $dbh=C4::Context->dbh;
 	my $query=qq{SELECT * FROM authorised_values WHERE category=? order by lib};

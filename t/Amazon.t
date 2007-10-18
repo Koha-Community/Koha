@@ -1,7 +1,14 @@
-# Basic compile test only at this stage, needs to be fleshed out
+#!/usr/bin/perl
+#
+# This Koha test module is a stub!  
+# Add more tests here!!!
 
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use C4::Amazon;
-$loaded = 1;
-print "ok 1\n";
+use strict;
+use warnings;
+
+use Test::More tests => 1;
+
+BEGIN {
+        use_ok('C4::Amazon');
+}
+

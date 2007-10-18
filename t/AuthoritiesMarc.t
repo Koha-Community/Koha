@@ -9,6 +9,6 @@ use warnings;
 use Test::More tests => 1;
 
 BEGIN {
-        use_ok('C4::Maintainance');
+        use_ok('C4::AuthoritiesMarc');
 }
 

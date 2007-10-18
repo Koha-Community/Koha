@@ -1,5 +1,14 @@
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use C4::Branch;
-$loaded = 1;
-print "ok 1\n";
+#!/usr/bin/perl
+#
+# This Koha test module is a stub!  
+# Add more tests here!!!
+
+use strict;
+use warnings;
+
+use Test::More tests => 1;
+
+BEGIN {
+        use_ok('C4::Branch');
+}
+

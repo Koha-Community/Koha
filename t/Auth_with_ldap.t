@@ -1,5 +1,12 @@
-BEGIN { $| = 1; print "1..1\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use C4::Auth_with_ldap;
-$loaded = 1;
-print "ok 1\n";
+#!/bin/perl
+#
+
+use strict;
+use warnings;
+
+use Test::More tests => 1;
+
+BEGIN {
+        use_ok('C4::Auth_with_ldap');
+}
+
