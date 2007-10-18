@@ -38,7 +38,7 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 my $dbh = C4::Context->dbh;
-my $total;
+my $total = 0;
 # checks itemnum field
 my $sth = $dbh->prepare("select tab from marc_subfield_structure where kohafield=\"items.itemnumber\"");
 $sth->execute;
@@ -148,26 +148,24 @@ if ($res && $res2 eq 10 && $field eq "branches") {
 $sth = $dbh->prepare("select count(*) from itemtypes");
 $sth->execute;
 ($res) = $sth->fetchrow;
-unless ($res) {
+if ($res) {
+	$template->param(itemtypes_empty =>0);
+} else {
 	$template->param(itemtypes_empty =>1);
 	$total++;
 }
 
+
 $sth = $dbh->prepare("select count(*) from branches");
 $sth->execute;
 ($res) = $sth->fetchrow;
-unless ($res) {
+if ($res) {
+	$template->param(branches_empty =>0);
+} else {
 	$template->param(branches_empty =>1);
 	$total++;
 }
 
-$sth = $dbh->prepare("select count(*) from marc_biblio where frameworkcode is NULL");
-$sth->execute;
-($res) = $sth->fetchrow;
-if ($res) {
-	$template->param(frameworknull =>1);
-	$total++;
-}
 $sth = $dbh->prepare("select count(*) from marc_subfield_structure where frameworkcode is NULL");
 $sth->execute;
 ($res) = $sth->fetchrow;
