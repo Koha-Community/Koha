@@ -571,18 +571,44 @@ sub buildQuery {
             # we use IsAlpha unicode definition, to deal correctly with diacritics.
             # otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
             # and don't find anything...
-            foreach (keys %{C4::Context->stopwords}) {
-                $operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
-                $operand=~ s/^$_\P{IsAlpha}/ /i;
-                $operand=~ s/\P{IsAlpha}$_$/ /i;
-            }
-            my $index   = $indexes[$i];
             my $stemmed_operand;
             my $stemming      = C4::Context->parameters("Stemming")     || 0;
             my $weight_fields = C4::Context->parameters("WeightFields") || 0;
 
+            # We Have to do this more carefully.
+            #Since Phrase Search Is Phrase search.
+            #phrase "Physics In Collision" will not be found if we do it like that.
+            my $index   = $indexes[$i];
+            my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+            if (index($index,"phr")<0 && index($index,",")>0){                  
+              #operand may be a wordlist deleting stopwords      
+              foreach (keys %{C4::Context->stopwords}) {
+                  $operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
+                  $operand=~ s/^$_\P{IsAlpha}/ /i;
+                  $operand=~ s/\P{IsAlpha}$_$/ /i;
+              }
+              #now coping with words      
+              my @wordlist= split (/\s/,$operand);
+              foreach my $word (@wordlist){
+                if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
+                  $word=~s/\*//;
+                  push @rightlefttruncated,$word;
+                } elsif(index($word,"*")==0 && index($word,"*",1)<0){        
+                  $word=~s/\*//;
+                  push @lefttruncated,$word;
+                } elsif (index($word,"*")==length($word)-1){        
+                  $word=~s/\*//;
+                  push @righttruncated,$word;
+                } elsif (index($word,"*")<0){        
+                  push @nontruncated,$word;
+                } else {
+                  push @regexpr,$word;
+                }        
+              }       
+            }      
+            
             if ( $operands[$i] ) {
-			$operand =~ s/^(and |or |not )//i;
+			         $operand =~ s/^(and |or |not )//i;
 
 # STEMMING FIXME: need to refine the field weighting so stemmed operands don't disrupt the query ranking
                 if ($stemming) {
@@ -703,8 +729,23 @@ sub buildQuery {
                         $human_search_desc .= "  $operands[$i]";
                     }
                     else {
+                      if (scalar(@righttruncated)+scalar(@lefttruncated)+scalar(@rightlefttruncated)>0){
+                         $query.= "$index: @nontruncated " if (scalar(@nontruncated)>0);
+                         if (scalar(@righttruncated)>0){
+                          $query .= "and $index,rtrn:@righttruncated ";
+                         }            
+                         if (scalar(@lefttruncated)>0){
+                          $query .= "and $index,ltrn:@lefttruncated ";
+                         }            
+                         if (scalar(@rightlefttruncated)>0){
+                          $query .= "and $index,rltrn:@rightlefttruncated ";
+                         }
+                        $query=~s/^and//;
+                        $human_search_desc .= $query;
+                      } else {           
                         $query             .= " $index: $operand";
                         $human_search_desc .= "  $index: $operands[$i]";
+                      }            
                     }
                     $previous_operand = 1;
                 }
@@ -799,9 +840,9 @@ sub buildQuery {
     $human_search_desc =~ s/^ //g;
     my $koha_query = $query;
 
-#     warn "QUERY:".$koha_query;
-#     warn "SEARCHDESC:".$human_search_desc;
-#     warn "FEDERATED QUERY:".$federated_query;
+#      warn "QUERY:".$koha_query;
+#      warn "SEARCHDESC:".$human_search_desc;
+#      warn "FEDERATED QUERY:".$federated_query;
     return ( undef, $human_search_desc, $koha_query, $federated_query );
 }
 
