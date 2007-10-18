@@ -250,7 +250,7 @@ sub get_template_and_user {
             AutoLocation       => C4::Context->preference("AutoLocation"),
             hide_marc          => C4::Context->preference("hide_marc"),
             patronimages       => C4::Context->preference("patronimages"),
-            "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+            "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
             advancedMARCEditor      => C4::Context->preference("advancedMARCEditor"),
             suggestion              => C4::Context->preference("suggestion"),
             virtualshelves          => C4::Context->preference("virtualshelves"),
