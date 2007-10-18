@@ -140,12 +140,7 @@ if ( $barcode eq '' && $print eq 'maybe' ) {
     $print = 'yes';
 }
 
-my $inprocess = $query->param('inprocess');
-if ( $barcode eq '' ) {
-    $inprocess = '';
-}
-else {
-}
+my $inprocess = ($barcode eq '') ? '' : $query->param('inprocess');
 
 if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
     $template->param(
@@ -249,7 +244,7 @@ if ($barcode) {
         my $noerror    = 1;
         my $noquestion = 1;
 #         Get the item title for more information
-    my $getmessageiteminfo  = GetBiblioFromItemNumber( undef, $barcode );
+    	my $getmessageiteminfo  = GetBiblioFromItemNumber($barcode);
     
         foreach my $impossible ( keys %$error ) {
             $template->param(
@@ -383,8 +378,8 @@ if ($borrowernumber) {
 # make the issued books table.
 my $todaysissues = '';
 my $previssues   = '';
-my @realtodayissues;
-my @realprevissues;
+my @todaysissues;
+my @previousissues;
 my $allowborrow;
 ## ADDED BY JF: new itemtype issuingrules counter stuff
 my $issued_itemtypes_loop;
@@ -396,144 +391,47 @@ my $issued_itemtypes_flags;            #hashref that stores flags
 if ($borrower) {
 
 # get each issue of the borrower & separate them in todayissues & previous issues
-    my @todaysissues;
-    my @previousissues;
     my ($countissues,$issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
 
     # split in 2 arrays for today & previous
-    my $dbh = C4::Context->dbh;
     foreach my $it ( @$issueslist ) {
         my $issuedate = $it->{'issuedate'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
+		($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
+						$it->{'itemnumber'}, $borrower->{'borrowernumber'}
+		);
+		$it->{'charge'} = sprintf("%.2f", $it->{'charge'});
+        ($it->{'can_renew'}, $it->{'can_renew_error'}) = CanBookBeRenewed( 
+						$borrower->{'borrowernumber'},$it->{'itemnumber'}
+		);
+		my ($restype, $reserves) = CheckReserves($it->{'itemnumber'});
+		($restype) and $it->{'can_renew'} = 0;
+
+		$it->{'dd'} = format_date($it->{'date_due'});
+        my $datedue = format_date($it->{'date_due'});
+        $datedue =~ s/-//g;
+		$it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
+        ($it->{'author'} eq '') and $it->{'author'} = ' ';
+
+        # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
+        $issued_itemtypes_count->{ $it->{'itemtype'} }++;
+
         if ( $todaysdate == $issuedate ) {
-            (
-                $it->{'charge'},
-                $it->{'itemtype_charge'}
-              )
-              = GetIssuingCharges(
-                $it->{'itemnumber'},
-                $borrower->{'borrowernumber'}
-              );
-            $it->{'charge'} =
-              sprintf( "%.2f", $it->{'charge'} );
-            (
-                $it->{'can_renew'},
-                $it->{'can_renew_error'}
-              )
-              = CanBookBeRenewed(
-                $borrower->{'borrowernumber'},
-                $it->{'itemnumber'}
-              );
-            my ( $restype, $reserves ) =
-              CheckReserves( $it->{'itemnumber'} );
-            if ($restype) {
-                $it->{'can_renew'} = 0;
-            }
             push @todaysissues, $it;
-        }
-        else {
-            (
-                $it->{'charge'},
-                $it->{'itemtype_charge'}
-              )
-              = GetIssuingCharges(
-                $it->{'itemnumber'},
-                $borrower->{'borrowernumber'}
-              );
-            $it->{'charge'} =
-              sprintf( "%.2f", $it->{'charge'} );
-            (
-                $it->{'can_renew'},
-                $it->{'can_renew_error'}
-              )
-              = CanBookBeRenewed(
-                $borrower->{'borrowernumber'},
-                $it->{'itemnumber'}
-              );
-            my ( $restype, $reserves ) =
-              CheckReserves( $it->{'itemnumber'} );
-            if ($restype) {
-                $it->{'can_renew'} = 0;
-            }
+        } else {
             push @previousissues, $it;
         }
     }
-    my $od;    # overdues
-    my $i = 0;
-    my $togglecolor;
-
-    # parses today & build Template array
-    foreach my $book ( sort { $b->{'timestamp'} <=> $a->{'timestamp'} }
-        @todaysissues )
-    {
-        #warn "TIMESTAMP".$book->{'timestamp'};
-        # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
-        $issued_itemtypes_count->{ $book->{'itemtype'} }++;
-
-        my $dd      = $book->{'date_due'};
-        my $datedue = $book->{'date_due'};
-
-        #$dd=format_date($dd);
-        $datedue =~ s/-//g;
-        if ( $datedue < $todaysdate ) {
-            $od = 1;
-        }
-        else {
-            $od = 0;
-        }
-        if ( $i % 2 ) {
-            $togglecolor = 0;
-        }
-        else {
-            $togglecolor = 1;
-        }
-        $book->{'togglecolor'} = $togglecolor;
-        $book->{'od'}          = format_date($od);
-        $book->{'dd'}          = format_date($dd);
-        if ( $book->{'author'} eq '' ) {
-            $book->{'author'} = ' ';
-        }
-        push @realtodayissues, $book;
-        $i++;
+    @todaysissues   = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @todaysissues;
+    @previousissues = sort { $b->{'date_due' } <=> $a->{'date_due' } } @previousissues;
+    my $i = 1;
+	foreach my $book (@todaysissues) {
+        $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
     }
-
-    # parses previous & build Template array
-    $i = 0;
-    foreach my $book ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
-        @previousissues )
-    {
-
-        # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
-        $issued_itemtypes_count->{ $book->{'itemtype'} }++;
-
-        my $dd      = format_date($book->{'date_due'});
-        my $datedue = format_date($book->{'date_due'});
-
-        #$dd=format_date($dd);
-        my $pcolor = '';
-        my $od     = '';
-        $datedue =~ s/-//g;
-        if ( $datedue < $todaysdate ) {
-            $od = 1;
-        }
-        else {
-            $od = 0;
-        }
-        if ( $i % 2 ) {
-            $togglecolor = 0;
-        }
-        else {
-            $togglecolor = 1;
-        }
-        $book->{'togglecolor'} = $togglecolor;
-        $book->{'dd'}          = $dd;
-        $book->{'od'}          = $od;
-        if ( $book->{'author'} eq '' ) {
-            $book->{'author'} = ' ';
-        }
-        push @realprevissues, $book;
-        $i++;
+    $i = 1;
+	foreach my $book (@previousissues) {
+        $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
     }
 }
 
@@ -729,8 +627,8 @@ $template->param(
     stickyduedate     => $stickyduedate,
     message           => $message,
     CGIselectborrower => $CGIselectborrower,
-    todayissues       => \@realtodayissues,
-    previssues        => \@realprevissues,
+    todayissues       => \@todaysissues,
+    previssues        => \@previousissues,
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
