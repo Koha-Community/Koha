@@ -27,7 +27,7 @@ use C4::Search;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
@@ -1198,8 +1198,6 @@ Paul POULAIN paul.poulain@free.fr
 
 =cut
 
-# $Id$
-# $Log$
 # Revision 1.50  2007/07/26 15:14:05  toins
 # removing warn compilation.
 #

@@ -23,7 +23,7 @@ use vars qw($VERSION @EXPORT);
 # use Date::Calc;
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 =head1 NAME
 

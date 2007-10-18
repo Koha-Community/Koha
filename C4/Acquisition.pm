@@ -17,7 +17,6 @@ package C4::Acquisition;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id$
 
 use strict;
 require Exporter;
@@ -30,7 +29,7 @@ use Time::localtime;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 # used in receiveorder subroutine
 # to provide library specific handling

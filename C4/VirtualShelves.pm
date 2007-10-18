@@ -3,7 +3,6 @@
 
 package C4::VirtualShelves;
 
-# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -29,7 +28,7 @@ use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 =head1 NAME
 

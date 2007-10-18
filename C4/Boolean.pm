@@ -1,6 +1,5 @@
 package C4::Boolean;
 
-# $Id$
 
 #package to handle Boolean values in the parameters table
 # Note: This is just a utility module; it should not be instantiated.

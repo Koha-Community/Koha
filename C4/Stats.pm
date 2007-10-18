@@ -1,6 +1,5 @@
 package C4::Stats;
 
-# $Id$
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -25,9 +24,7 @@ use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = $VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
-};
+$VERSION = 3.00;
 
 =head1 NAME
 

@@ -21,7 +21,6 @@ package C4::Output;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id$
 
 # NOTE: I'm pretty sure this module is deprecated in favor of
 # templates.
@@ -35,7 +34,7 @@ use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 =head1 NAME
 

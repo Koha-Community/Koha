@@ -16,7 +16,6 @@ package C4::Context;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id$
 use strict;
 
 BEGIN {
@@ -944,7 +943,6 @@ Joshua Ferraro <jmf at liblime dot com>
 
 =cut
 
-# $Log$
 # Revision 1.57  2007/05/22 09:13:55  tipaul
 # Bugfixes & improvements (various and minor) :
 # - updating templates to have tmpl_process3.pl running without any errors

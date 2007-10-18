@@ -1,6 +1,5 @@
 package C4::Z3950;
 
-# $Id$
 
 # Routines for handling Z39.50 lookups
 
@@ -42,7 +41,7 @@ require Exporter;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g; shift(@v).".".join( "_", map { sprintf "%03d", $_ } @v ); };
+$VERSION = 3.00;
 
 =head1 NAME
 
@@ -304,7 +303,6 @@ Koha Developement team <info@koha.org>
 =cut
 
 #--------------------------------------
-# $Log$
 # Revision 1.14  2007/03/09 14:31:47  tipaul
 # rel_3_0 moved to HEAD
 #

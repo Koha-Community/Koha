@@ -29,9 +29,7 @@ require Exporter;
 our ( $VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS );
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
-};
+$VERSION = 3.00;
 
 =head1 NAME
 

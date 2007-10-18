@@ -18,7 +18,6 @@ package C4::Record;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 #
-# $Id$
 #
 use strict;# use warnings; #FIXME: turn off warnings before release
 
@@ -33,8 +32,7 @@ use XML::LibXML;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-                shift(@v) . "." . join("_", map {sprintf "%03d", $_ } @v); };
+$VERSION = 3.00;
 
 @ISA = qw(Exporter);
 
@@ -568,6 +566,5 @@ Joshua Ferraro <jmf@liblime.com>
 
 =head1 MODIFICATIONS
 
-# $Id$
 
 =cut
