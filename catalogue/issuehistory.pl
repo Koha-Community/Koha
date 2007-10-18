@@ -23,6 +23,8 @@ use C4::Auth;
 use C4::Output;
 
 use C4::Circulation;    # GetBiblioIssues
+use C4::Biblio;    # GetBiblio GetBiblioFromItemNumber
+use C4::Date;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -39,22 +41,36 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $params = $query->Vars;
 
 my $biblionumber = $params->{'biblionumber'};
+my $itemnumber = $params->{'itemnumber'};
 my $title        = $params->{'title'};
 my $author       = $params->{'author'};
 
-my $issues = GetBiblioIssues($biblionumber);
-my $total  = scalar @$issues;
-
-if ( $total && !$title ) {
-    $title  = $issues->[0]->{'title'};
-    $author = $issues->[0]->{'author'};
-}
-
+my ($issues,$biblio,$title,$author,$barcode);
+if ($itemnumber){
+$issues=GetItemIssues($itemnumber);
+$biblio=GetBiblioFromItemNumber($itemnumber);
+$biblionumber=$biblio->{biblionumber};
+$barcode=$issues->[0]->{barcode};
 $template->param(
-    biblionumber => $biblionumber,
+    %$biblio,
+    barcode=> $barcode,
+);
+} else {
+my @biblio;
+$issues = GetBiblioIssues($biblionumber);
+my (undef,@biblio)=GetBiblio($biblionumber);
+my $total  = scalar @$issues;
+$template->param(
+    %{$biblio[0]},
+);
+} 
+foreach (@$issues){
+  $_->{date_due}=format_date($_->{date_due});
+  $_->{issuedate}=format_date($_->{issuedate});
+  $_->{returndate}=format_date($_->{returndate});
+}
+$template->param(
     total        => scalar @$issues,
-    title        => $title,
-    author       => $author,
     issues       => $issues
 );
 

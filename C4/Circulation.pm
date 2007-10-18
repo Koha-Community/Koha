@@ -1468,8 +1468,10 @@ sub GetItemIssues {
 
     my $sth = $dbh->prepare(
         "SELECT * FROM issues 
+        LEFT JOIN borrowers ON borrowers.borrowernumber 
+        LEFT JOIN items ON items.itemnumber=issues.itemnumber 
     WHERE
-    itemnumber=?".($history?"":" AND returndate IS NULL ").
+    issues.itemnumber=?".($history?"":" AND returndate IS NULL ").
     "ORDER BY issues.date_due DESC"
     );
     $sth->execute($itemnumber);
@@ -1480,7 +1482,6 @@ sub GetItemIssues {
             $data->{'overdue'} = 1;
         }
         my $itemnumber = $data->{'itemnumber'};
-
         push @GetItemIssues, $data;
     }
     $sth->finish;
@@ -1504,7 +1505,7 @@ sub GetBiblioIssues {
     return undef unless $biblionumber;
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT issues.*,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
+        SELECT issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
         FROM issues
             LEFT JOIN borrowers ON borrowers.borrowernumber = issues.borrowernumber
             LEFT JOIN items ON issues.itemnumber = items.itemnumber
