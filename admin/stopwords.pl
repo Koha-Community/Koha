@@ -46,20 +46,19 @@ use C4::Auth;
 
 sub StringSearch  {
 	my ($env,$searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="";
-	my $sth=$dbh->prepare("Select word from stopwords where (word like ?) order by word");
+	my $sth = C4::Context->dbh->prepare("
+		SELECT word from stopwords WHERE (word like ?) order by word
+	");
 	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
+			push(@results,$data);
+			$cnt ++;
 	}
-	#  $sth->execute;
 	$sth->finish;
 	return ($cnt,\@results);
 }
@@ -91,15 +90,13 @@ $template->param(script_name => $script_name,
 if ($op eq 'add_form') {
 	$template->param(add_form => 1);
 	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select word from stopwords where word=?");
+		my $sth=$dbh->prepare("SELECT word from stopwords where word=?");
 		$sth->execute($searchfield);
-		$data=$sth->fetchrow_hashref;
+		my $data=$sth->fetchrow_hashref;	# why bother ??
 		$sth->finish;
 	}
-
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -118,9 +115,9 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select word from stopwords where word=?");
+	my $sth=$dbh->prepare("SELECT word from stopwords where word=?");
 	$sth->execute($searchfield);
-	my $data=$sth->fetchrow_hashref;
+	my $data=$sth->fetchrow_hashref;		# why bother ?
 	$sth->finish;
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -144,15 +141,7 @@ if ($op eq 'add_form') {
 		my %row = (word => $results->[$i]{'word'},
 			   toggle => $toggle);
 		push @loop, \%row;
-
-                if ( $toggle eq 'white' )
-                {
-                        $toggle = '#ffffcc';
-                }
-                else
-                {
-                        $toggle = 'white';
-                }
+		$toggle = ($toggle eq 'white') ? '#ffffcc' : 'white' ;
 	}
 	$template->param(loop => \@loop);
 
@@ -165,9 +154,11 @@ if ($op eq 'add_form') {
 				 nextpage => $offset+$pagesize);
 	}
 }
-$template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
+
+$template->param(
+	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
+	     intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+	            IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 
