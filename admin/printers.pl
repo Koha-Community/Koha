@@ -44,19 +44,19 @@ use C4::Output;
 use C4::Auth;
 
 sub StringSearch  {
-	my ($searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
+	my ($searchstring,$type)=@_;		# why bother with $type if we don't use it?!
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $query="";
-	my $sth=$dbh->prepare("Select printername,printqueue,printtype from printers where (printername like ?) order by printername");
+	my $sth = C4::Context->dbh->prepare("
+		SELECT printername,printqueue,printtype from printers 
+		WHERE (printername like ?) order by printername
+	");
 	$sth->execute("$data[0]%");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
+		push(@results,$data);
+		$cnt ++;
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -76,14 +76,14 @@ my $pagesize=20;
 my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "admin/printers.tmpl",
-                             query => $input,
-                             type => "intranet",
-                             authnotrequired => 0,
- 			     flagsrequired => {parameters => 1},
-			      debug => 1,
-                             });
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	   template_name => "admin/printers.tmpl",
+			   query => $input,
+			 	type => "intranet",
+	 authnotrequired => 0,
+ 	   flagsrequired => {parameters => 1},
+		       debug => 1,
+});
 
 
 $template->param(searchfield => $searchfield,
@@ -99,7 +99,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=?");
+		my $sth=$dbh->prepare("SELECT printername,printqueue,printtype from printers where printername=?");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -113,7 +113,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace printers (printername,printqueue,printtype) values (?,?,?)");
+	my $sth=$dbh->prepare("REPLACE printers (printername,printqueue,printtype) values (?,?,?)");
 	$sth->execute($input->param('printername'),$input->param('printqueue'),$input->param('printtype'));
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
@@ -152,15 +152,7 @@ if ($op eq 'add_form') {
 			    printtype   => $results->[$i]{'printtype'},
 			    toggle      => $toggle);
 		push @loop, \%row;
-
-                if ( $toggle eq 'white' )
-                {
-                        $toggle = '#ffffcc';
-                }
-                else
-                {
-                        $toggle = 'white';
-                }
+		$toggle = ($toggle eq 'white') ? '#ffffcc' : 'white';
 	}
 	
 	$template->param(loop => \@loop);
@@ -169,7 +161,7 @@ if ($op eq 'add_form') {
 		$template->param(offsetgtzero => 1,
 				 prevpage => $offset-$pagesize);
 	}
-	print "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	print "&nbsp;" x 6;
 	if ($offset+$pagesize<$count) {
 		$template->param(ltcount => 1,
 				 nextpage => $offset+$pagesize);
