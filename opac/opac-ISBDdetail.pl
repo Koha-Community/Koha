@@ -107,6 +107,8 @@ my $res;
 #     $bloc =~ s/\n//g;
 my $bloc = $ISBD;
 my $blocres;
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$itemtype);
+
 foreach my $isbdfield ( split /#/, $bloc ) {
 
     #         $isbdfield= /(.?.?.?)/;
@@ -119,38 +121,40 @@ foreach my $isbdfield ( split /#/, $bloc ) {
     #         warn "==> $1 / $2 / $3 / $4";
     #         my $fieldvalue=substr($isbdfield,0,3);
     if ( $fieldvalue > 0 ) {
+        my $hasputtextbefore = 0;
+        my @fieldslist = $record->field($fieldvalue);
+        @fieldslist = sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
 
         #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
         #             warn "FV : $fieldvalue";
-        my $hasputtextbefore = 0;
-        foreach my $field ( $record->field($fieldvalue) ) {
-            my $calculated = $analysestring;
-            my $tag        = $field->tag();
-            if ( $tag < 10 ) {
+        foreach my $field ( @fieldslist ) {
+          my $calculated = $analysestring;
+          my $tag        = $field->tag();
+          if ( $tag < 10 ) {
+          }
+          else {
+            my @subf = $field->subfields;
+            for my $i ( 0 .. $#subf ) {
+            my $subfieldcode  = $subf[$i][0];
+            my $subfieldvalue =
+            GetAuthorisedValueDesc( $tag, $subf[$i][0],
+              $subf[$i][1], '', $tagslib );
+            my $tagsubf = $tag . $subfieldcode;
+            $calculated =~
+        s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
             }
-            else {
-                my @subf = $field->subfields;
-                for my $i ( 0 .. $#subf ) {
-                    my $subfieldcode  = $subf[$i][0];
-                    my $subfieldvalue =
-                      GetAuthorisedValueDesc( $tag, $subf[$i][0],
-                        $subf[$i][1], '', $tagslib );
-                    my $tagsubf = $tag . $subfieldcode;
-                    $calculated =~
-s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-                }
-
-                # field builded, store the result
-                if ( $calculated && !$hasputtextbefore )
-                {    # put textbefore if not done
-                    $blocres .= $textbefore;
-                    $hasputtextbefore = 1;
-                }
-
-                # remove punctuation at start
-                $calculated =~ s/^( |;|:|\.|-)*//g;
-                $blocres .= $calculated;
+        
+            # field builded, store the result
+            if ( $calculated && !$hasputtextbefore )
+            {    # put textbefore if not done
+            $blocres .= $textbefore;
+            $hasputtextbefore = 1;
             }
+        
+            # remove punctuation at start
+            $calculated =~ s/^( |;|:|\.|-)*//g;
+            $blocres .= $calculated;
+          }
         }
         $blocres .= $textafter if $hasputtextbefore;
     }

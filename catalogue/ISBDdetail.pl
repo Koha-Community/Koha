@@ -111,6 +111,10 @@ my $res;
 #     $bloc =~ s/\n//g;
 my $bloc = $ISBD;
 my $blocres;
+
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$itemtype);
+# @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
+
 foreach my $isbdfield ( split /#/, $bloc ) {
 
     #         $isbdfield= /(.?.?.?)/;
@@ -127,7 +131,9 @@ foreach my $isbdfield ( split /#/, $bloc ) {
    #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
    #             warn "FV : $fieldvalue";
         my $hasputtextbefore = 0;
-        foreach my $field ( $record->field($fieldvalue) ) {
+        my @fieldslist = $record->field($fieldvalue);
+        @fieldslist= sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
+        foreach my $field ( @fieldslist ) {
             my $calculated = $analysestring;
             my $tag        = $field->tag();
             if ( $tag < 10 ) {
@@ -140,10 +146,8 @@ foreach my $isbdfield ( split /#/, $bloc ) {
                       get_authorised_value_desc( $itemtype,$tagslib, $tag, $subf[$i][0],
                         $subf[$i][1], '', $dbh );
                     my $tagsubf = $tag . $subfieldcode;
-                    $calculated =~
-s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                    $calculated =~s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
                 }
-
                 # field builded, store the result
                 if ( $calculated && !$hasputtextbefore )
                 {    # put textbefore if not done
