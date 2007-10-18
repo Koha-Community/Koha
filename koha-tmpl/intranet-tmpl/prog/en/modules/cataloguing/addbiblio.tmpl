@@ -56,19 +56,37 @@ function AreMandatoriesNotOk(){
     var tab = new Array();
     var label = new Array();
     var flag=0;
+    var tabflag= new Array();  
     <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
                    	tab.push("<!-- TMPL_VAR NAME='number' -->");
                    	label.push("<!-- TMPL_VAR NAME='marc_lib' -->");
                 <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
     for(var i=0,len=mandatories.length; i<len ; i++){
+        var tag=mandatories[i].substr(4,3);
+        var subfield=mandatories[i].substr(17,1);
+        var tagnumber=mandatories[i].substr(19,mandatories[i].lastIndexOf("_")-19);
+        tabflag[tag+subfield+tagnumber]=new Array();
+        tabflag[tag+subfield+tagnumber][0]=0;
         if( ! document.getElementById(mandatories[i]).value){
-            flag = 1;
+            tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
             document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
             document.getElementById(mandatories[i]).focus();
-            StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
-        }
+            tabflag[tag+subfield+tagnumber][1]=label[i];
+            tabflag[tag+subfield+tagnumber][2]=tab[i];
+        } else {
+            tabflag[tag+subfield+tagnumber][0] = 1;
+        }    
     }
+    for (var tagsubfieldid in tabflag){
+      if (tabflag[tagsubfieldid][0]==0){
+        var tag=tagsubfieldid.substr(0,3);
+        var subfield=tagsubfieldid.substr(3,1);    
+        StrAlert += "\t* "+_("tag ")+tag+_(" subfield ")+subfield+" "+tabflag[tagsubfieldid][1]+_(" in tab ")+tabflag[tagsubfieldid][2]+"\n";
+        //StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n"; 
+        flag=1;    
+      }   
+    }   
     if(flag){
 	    return StrAlert;
 	} else {
