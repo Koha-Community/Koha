@@ -118,7 +118,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 ('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, '', '', '', NULL),
-('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'CN_SOURCE', '', '', NULL, 0, '', '', '', NULL),
+('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, '', '', '', NULL),
 ('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 ('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
 ('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
@@ -399,7 +399,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', 'CN_SOURCE', NULL, 0, '', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, '', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, '', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
@@ -418,7 +418,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'l', 'Koha issues (times borrowed)', 'Koha issues (times borrowed)', 0, 0, 'items.issues', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'm', 'Koha renewals', 'Koha renewals', 0, 0, 'items.renewals', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'n', 'Koha reserves (requests)', 'Koha reserves (requests)', 0, 0, 'items.reserves', 10, '', '', '', NULL, -5, '', '', '', NULL),
-		('952', 'o', 'Koha full call number', 'Koha full call number', 0, 0, 'items.itemcallnumber', 10, '', 'marc21_itemcallnumber.pl', NULL, 0, 0, '', '', '', NULL),
+		('952', 'o', 'Koha full call number', 'Koha full call number', 0, 0, 'items.itemcallnumber', 10, '', NULL, NULL, 0, 0, '', '', '', NULL),
 		('952', 'p', 'Piece designation (barcode)', 'Piece designation (barcode)', 0, 0, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
 		('952', 'q', 'Koha out on loan', 'Koha out on loan', 1, 0, 'items.onloan', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'r', 'Koha date last seen', 'Koha date last seen', 1, 0, 'items.datelastseen', 10, '', '', '', NULL, -5, '', '', '', NULL),
