@@ -399,7 +399,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.withdrawn', 10, 'WITHDRAWN', '', '', 0, 0, '', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', 'marc21_classcodes.pl', NULL, 0, '', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', 'CN_SOURCE', NULL, 0, '', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, '', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, '', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
