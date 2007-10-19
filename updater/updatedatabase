@@ -283,6 +283,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.010";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("CREATE INDEX `userid` ON borrowers (`userid`) ");
+    print "Upgrade to $DBversion done (userid index added)\n";
+    SetVersion ($DBversion);
+}
+
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
