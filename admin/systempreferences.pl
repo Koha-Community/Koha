@@ -109,6 +109,7 @@ my %tabsysprefs;
     $tabsysprefs{TransfersMaxDaysWarning}="Circulation";
     $tabsysprefs{useDaysMode}="Circulation";
     $tabsysprefs{ReservesNeedReturns}="Circulation";
+    $tabsysprefs{CircAutocompl}="Circulation";
 
 # Intranet
     $tabsysprefs{TemplateEncoding}="Intranet";

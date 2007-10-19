@@ -653,4 +653,5 @@ if ($stickyduedate) {
 $template->param(
     SpecifyDueDate     => C4::Context->preference("SpecifyDueDate")
 );
+$template->param( CircAutocompl => C4::Context->preference("CircAutocompl") );
 output_html_with_http_headers $query, $cookie, $template->output;
