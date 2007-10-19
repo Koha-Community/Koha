@@ -60,7 +60,7 @@ my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber = $input->param('itemnumber');
-
+warn Data::Dumper::Dumper($input->param());
 my $op = $input->param('op');
 
 # find itemtype
@@ -142,6 +142,9 @@ if ($op eq "additem") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
+  warn "tags :@tags"  ;
+  warn "subfields :@subfields"  ;
+  warn "values :@values"  ;
 #    my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
         my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
@@ -346,7 +349,7 @@ foreach my $tag (sort keys %{$tagslib}) {
           }
       }
       $subfield_data{marc_value} =CGI::scrolling_list(
-          -name     => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
+          -name     => "field_value",
           -values   => \@authorised_values,
           -default  => $value,
           -labels   => \%authorised_lib,
@@ -363,7 +366,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
+                    name=\"field_value\"
                     value=\"$value\"
                     class=\"input_marceditor\"
                     tabindex=\"1\"
@@ -393,7 +396,7 @@ foreach my $tag (sort keys %{$tagslib}) {
                 "<input tabindex=\"1\"
                         type=\"text\"
                         id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
+                        name=\"field_value\"
                         value=\"$value\"
                         class=\"input_marceditor\"
                         onfocus=\"Focus$function_name(".$subfield_data{random}.")\"
@@ -409,7 +412,7 @@ foreach my $tag (sort keys %{$tagslib}) {
             "<input tabindex=\"1\"
                     type=\"hidden\"
                     id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
+                    name=\"field_value\"
                     size=\"67\"
                     maxlength=\"255\" 
                     value=\"$value\" \/>
@@ -419,7 +422,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
+                    name=\"field_value\"
                     class=\"input_marceditor\"
                     tabindex=\"1\"
                     size=\"67\"
@@ -444,7 +447,7 @@ foreach my $tag (sort keys %{$tagslib}) {
                 "<textarea cols=\"70\"
                            rows=\"4\"
                            id=\"".$subfield_data{id}."\"
-                           name=\"".$subfield_data{id}."\"
+                           name=\"field_value\"
                            class=\"input_marceditor\"
                            tabindex=\"1\"
                             size=\"67\"
@@ -456,7 +459,7 @@ foreach my $tag (sort keys %{$tagslib}) {
             $subfield_data{marc_value} =
                 "<input type=\"text\"
                         id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
+                        name=\"field_value\"
                         value=\"$value\"
                         tabindex=\"1\"
                         size=\"67\"
