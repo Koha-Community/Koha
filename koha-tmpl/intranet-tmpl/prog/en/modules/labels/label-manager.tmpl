@@ -1,12 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo;  Labels</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 function Plugin(batch_id) {
 	window.open("label-item-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=600,height=460,toolbar=no,scrollbars=yes');
 }
 </script>
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
@@ -18,23 +19,11 @@ function Plugin(batch_id) {
 	<div id="yui-main">
 	<div class="yui-b">
 
+<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 
 <!-- TMPL_UNLESS NAME="batch_id" -->
-<div class="details">
-<a class="button" href="/cgi-bin/koha/labels/label-manager.pl?op=add_batch">Create New Batch</a> 
 
-<!-- <form style="padding: 3px 30px; border-left: 1px solid black;border-right: 1px solid black;margin: 0 20px;" name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
-<select name="batch_id">
-    <!-- TMPL_LOOP NAME="batches" -->
-        <option value="<!-- TMPL_VAR NAME="batch_id" -->" <!-- TMPL_IF NAME="active" --> selected  <!-- /TMPL_IF -->>
-        <!-- TMPL_VAR NAME="batch_id" --></option>
-    <!-- /TMPL_LOOP -->
-</select>
-<input type="submit" value="Open Existing Batch">
-</form>
--->
-</div>
 <!-- TMPL_IF NAME="batches" -->
 <h2>Label Batches</h2>
 <table>
@@ -69,7 +58,6 @@ function Plugin(batch_id) {
 
 <!-- TMPL_ELSE -->
 <div class="details">
-<br /> 
 
         <a class="button" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->); return false;">Add item(s) to batch</a> &nbsp;&nbsp;&nbsp;&nbsp;
 		<a class="button" href="/cgi-bin/koha/labels/label-manager.pl?batch_id=">Return to batch summary</a>&nbsp;&nbsp;&nbsp;&nbsp;

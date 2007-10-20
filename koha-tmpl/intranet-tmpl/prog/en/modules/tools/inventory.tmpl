@@ -17,9 +17,9 @@
 
     <h1>Inventory/Stocktaking</h1>
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        <fieldset>
+        <fieldset class="rows">
         <legend>Select items you want to check</legend>
-        <p>
+        <ol><li>
         <label for="branchloop">Branch</label><select id="branchloop" name="branchcode">
         <!-- TMPL_LOOP NAME="branchloop" -->
             <!-- TMPL_IF name="selected" -->
@@ -29,15 +29,15 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
-        </p>
-        <p>
-            <label for="minlocation">Item Location (items.itemcallnumber) between</label> 
-                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> 
-            <label for="maxlocation">and</label> 
+        </li>
+        <li>
+            <label for="minlocation">Item location between: </label> 
+                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> (items.itemcallnumber)  </li>
+           <li><label for="maxlocation">...and: </label> 
                 <input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
-        </p>
+        </li>
         <!-- TMPL_IF NAME="authorised_values" -->
-        <p>
+        <li>
             <label for="locationloop">Item Location (items.location) is</label> 
         <select id="locationloop" name="location">
                 <option value="">Filter location</option>
@@ -48,9 +48,9 @@
                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->"><!-- TMPL_VAR NAME='lib' --></option>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
-        </select>        </p>
+        </select>        </li>
         <!-- /TMPL_IF -->
-        <p><label for="datelastseen">Not seen since:</label>
+        <li><label for="datelastseen">Not seen since:</label>
             <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datelastseen_button" alt="Show Calendar" />
             <script type="text/javascript">
@@ -62,23 +62,22 @@
             }
             );
             </script>
-        </p>
-        <p><label for="pagesize">Show:</label>
-            <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" />
-            <label for="offset"> items beginning at offset</label>
+        </li>
+        <li><label for="pagesize">Show: </label>
+            <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" /> items</li>
+          <li><label for="offset">Beginning at offset: </label>
             <input type="text" id="offset" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" size="5" maxlength="5" />
-        </p>
-        <p>
+        </li></ol>
+  </fieldset>
             <input type="hidden" name="op" value="do_it" />
-            <input type="submit" value="OK" class="button" />
-        </p>
-        </fieldset>
+            <input type="submit" value="Submit" class="button" />
     </form>
     <form name="barcodefile" method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        <fieldset>
+        <fieldset class="rows">
             <legend>Use a barcode file</legend>
-            <p><label for="uploadbarcodes">Barcode file name :</label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></p>
-            <p><label for="setdate">Set datelastseen to :</label> <input type="text" id="setdate" name="setdate" />
+			<ol>
+            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
+            <li><label for="setdate">Set date last seen to :</label> <input type="text" id="setdate" name="setdate" />
              <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" alt="Show Calendar" />
             <script type="text/javascript">
             Calendar.setup(
@@ -89,9 +88,9 @@
             }
             );
             </script>
-</p>
-            <p><input type="submit" value="OK" class="button" /></p>
+</li></ol>
         </fieldset>
+            <p><input type="submit" value="Submit" class="button" /></p>
     </form>
     <!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
     <!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> can't be opened</p><!-- /TMPL_IF-->

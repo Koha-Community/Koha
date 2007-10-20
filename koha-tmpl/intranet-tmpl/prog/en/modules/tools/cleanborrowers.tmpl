@@ -58,8 +58,8 @@
     <fieldset>
     <legend>What do you want to do ?</legend>
         <p><input id="checkborrower" type="checkbox" name="checkbox" value="borrower" checked="checked" />
-        Delete borrower who has not borrowed since:
-        <input size="10" id="date1" name="filterdate1" value="<!-- TMPL_VAR NAME="filterdate1"-->" type="text" /></p>
+        <label for="checkborrower">Delete borrower who has not borrowed since:</label>
+        <input size="10" id="date1" name="filterdate1" value="<!-- TMPL_VAR NAME="filterdate1"-->" type="text" />
             <script type="text/javascript">
                 Calendar.setup(
                  {
@@ -67,12 +67,11 @@
                      ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                  }
                 );
-            </script>
+            </script></p>
         
-        <br />
         <p><input id="checkissue" type="checkbox" name="checkbox" value="issue" checked="checked" />
-        Anonymize issue history older than
-        <input size="10" id="date2" name="filterdate2" value="<!-- TMPL_VAR NAME="filterdate2"-->" type="text" /></p>
+        <label for="checkissue">Anonymize issue history older than</label>
+        <input size="10" id="date2" name="filterdate2" value="<!-- TMPL_VAR NAME="filterdate2"-->" type="text" />
             <script type="text/javascript">
                 Calendar.setup(
                  {
@@ -80,10 +79,9 @@
                      ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                  }
                 );
-            </script>
-            
-            <br />
-            <input type="submit" value="OK" />
+            </script></p>
+
+            <input type="submit" value="Submit" />
             
             <!-- hidden here -->
             <input type="hidden" name="step2" value="1" />

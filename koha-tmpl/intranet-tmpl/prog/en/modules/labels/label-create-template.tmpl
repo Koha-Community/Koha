@@ -5,7 +5,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels &rsaquo; Create Label Template</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,46 +15,54 @@
 
 <form name="input" action="/cgi-bin/koha/labels/label-create-template.pl" method="get">
 
-<h3>Create Label Template</h3>
+<fieldset class="rows">
+<legend>Create Label Template</legend>
 
+<ol>
 
+<li><label for="tmpl_code">Template Code:</label> <input type="text"  size="40" name="tmpl_code" id="tmpl_code" /></li>
+<li><label for="tmpl_desc">Template Description:</label> <textarea cols="40" rows="3" name="tmpl_desc" id="tmpl_desc"></textarea></li>
 
-<h3>Template Settings</h3>
-<table>
-
-Template Code: <input type="text"  size="40" name="tmpl_code" /><br />
-Template Description: <textarea name="tmpl_desc" cols="40" rows="3" name="tmpl_desc" ></textarea><br />
-
-<tr>
-        <td>Page Width:</td><td><input type="text"  size="2" name="page_width" /></td>
-        <td>Page Height:</td><td><input type="text" size="2" name="page_height" /></td>
-</tr>
-<tr>
-        <td>Label Width:</td><td><input type="text"  size="2" name="label_width" /></td>
-        <td>Label Height:</td><td><input type="text" size="2" name="label_height" /></td>
-</tr>
-<tr>
-        <td>Top Page Margin:</td><td><input type="text" size="2" name="topmargin" /></td>
-        <td>Left Page Margin:</td><td><input type="text" size="2" name="leftmargin" /></td>
-</tr>
-<tr>
-        <td>Number of Columns:</td><td><input type="text" size="2" name="cols" /></td>
-        <td>Number of Rows:</td><td><input type="text" size="2" name="rows" /></td>
-</tr>
-<tr>
-        <td>Gap between Columns:</td><td><input type="text" size="2" name="colgap" /></td>
-        <td>Gap between Rows:</td><td><input type="text" size="2" name="rowgap" /></td>
-</tr>
-</table>
-
-
-Units: <select name="units">
+<li><label for="units">Units: </label><select id="units" name="units">
     <!-- TMPL_LOOP NAME="units" -->
         <option value="<!-- TMPL_VAR NAME="unit" -->"><!-- TMPL_VAR NAME="desc" --></option>
     <!-- /TMPL_LOOP -->
-</select>
-Font Size: <input type="textbox" name="fontsize"  size="1" value="" />
-Active: <input type="checkbox" name="active" />
+</select></li>
+<li>
+        <label for="page_width">Page Width:</label><input type="text"  size="2" name="page_width" id="page_width" />
+</li>
+<li>
+        <label for="page_height">Page Height:</label><input type="text" size="2" name="page_height" id="page_height" />
+</li>
+<li>
+        <label for="label_width">Label Width:</label><input type="text"  size="2" name="label_width" id="label_width" />
+</li>
+<li>
+        <label for="label_height">Label Height:</label><input type="text" size="2" name="label_height" id="label_height" />
+</li>
+<li>
+        <label for="topmargin">Top Page Margin:</label><input type="text" size="2" name="topmargin" id="topmargin" />
+</li>
+<li>
+        <label for="leftmargin">Left Page Margin:</label><input type="text" size="2" name="leftmargin" id="leftmargin" />
+</li>
+<li>
+        <label for="cols">Number of Columns:</label><input type="text" size="2" name="cols" id="cols" />
+</li>
+<li>
+        <label for="rows">Number of Rows:</label><input type="text" size="2" name="rows" id="rows" />
+</li>
+<li>
+        <label for="colgap">Gap between Columns:</label><input type="text" size="2" name="colgap" id="colgap" />
+</li>
+<li>
+        <label for="rowgap">Gap between Rows:</label><input type="text" size="2" name="rowgap" id="rowgap" />
+</li>
+
+<li class="radio"><label for="fontsize">Font Size:</label> <input type="textbox" id="fontsize" name="fontsize"  size="1" value="" /></li>
+<li class="radio"><label for="active">Active: </label><input type="checkbox" id="active" name="active" /></li>
+</ol>
+</fieldset>
         <input type="hidden" name="op" value="create" />
         <input type="submit" value="Save" />
         <input type="reset" value="Reset" />

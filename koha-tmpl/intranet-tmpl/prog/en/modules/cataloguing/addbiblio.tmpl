@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 
@@ -425,7 +426,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	}
 </style>
 </head>
-<body>
+<body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
@@ -465,15 +466,32 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 <!-- /TMPL_IF -->
 	
-<div id="action">
-    <!-- TMPL_IF name="biblionumber" -->
-        <input type="submit" value="Save Bibliographic Record" />
-    <!-- TMPL_ELSE -->
-        <input type="submit" value="Add Bibliographic Record" />
-    <!-- /TMPL_IF -->
-    <input type="button" value="z39.50 Search" onclick="PopupZ3950(); return false;" />
-	<label for="Frameworks">Change framework: </label><!--TMPL_VAR Name="framework" -->
-	<input type="hidden" name="op" value="addbiblio" />
+<div id="toolbar">
+
+<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("addbiblio");
+	   // this breaks z3950 search  new YAHOO.widget.Button("z3950search");
+	}
+
+	//]]>
+	</script>
+
+		<ul class="toolbar">
+			<li><input id="addbiblio" type="submit" value="Save" /></li>
+			<li><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
+			<li id="changeframework"><label for="Frameworks">Change framework: </label><!--TMPL_VAR Name="framework" -->	<input type="hidden" name="op" value="addbiblio" /></li>
+		</ul>
 </div>
 
 <!--TMPL_IF Name="popup"-->

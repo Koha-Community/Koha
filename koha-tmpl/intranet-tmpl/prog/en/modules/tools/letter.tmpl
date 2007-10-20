@@ -1,23 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Notices<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF name="modify" --> &rsaquo; Modify notice<!-- TMPL_ELSE --> &rsaquo; Add notice<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> &rsaquo; Notice added<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <!-- TMPL_IF NAME="add_form" -->
 	<script type="text/javascript">
 	//<![CDATA[
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 		function isNotNull(f,noalert) {
 			if (f.value.length ==0) {
 	return false;
 			}
 			return true;
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 		function toUC(f) {
 			var x=f.value.toUpperCase();
 			f.value=x;
 			return true;
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 		function isNum(v,maybenull) {
 		var n = new Number(v.value);
 		if (isNaN(n)) {
@@ -28,14 +29,14 @@
 		}
 		return true;
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 		function isDate(f) {
 			var t = Date.parse(f.value);
 			if (isNaN(t)) {
 				return false;
 			}
 		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 		function Check(f) {
 			var ok=1;
 			var _alertString="";
@@ -94,24 +95,25 @@
 		</script>
 	<!-- /TMPL_IF -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="letters-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF name="modify" --><a href="/cgi-bin/koha/tools/letter.pl">Noticess</a> &rsaquo; Modify notice<!-- TMPL_ELSE --> <a href="/cgi-bin/koha/tools/letter.pl">Notices</a> &rsaquo; Add notice<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/tools/letter.pl">Notices</a> &rsaquo; Notice added<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/tools/letter.pl">Notices</a> &rsaquo; Confirm Deletion<!-- TMPL_ELSE -->Notices<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<!-- TMPL_IF NAME="add_form" --><div id="doc" class="yui-t7"><!-- TMPL_ELSE --><div id="doc3" class="yui-t2"><!-- /TMPL_IF -->
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 
 	<!-- TMPL_IF NAME="else" -->
+<!-- TMPL_INCLUDE NAME="tools-notices-toolbar.inc" -->
 		
 		<!-- TMPL_IF NAME="search" -->
-		<br />You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b><p><br />
+		<p>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b></p>
 		<!-- /TMPL_IF -->
-		<table>
+		<!-- TMPL_IF NAME="letter" --><table>
 		<tr>
 			<th>Module</th>
 			<th>Code</th>
@@ -133,26 +135,21 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 		</table>
-		<form action="/cgi-bin/koha/tools/letter.pl" method="post">
-			<input type="hidden" name="op" value="add_form" />
-			<p>
-			<input type="submit" class="button" value="Add Notice" title="Add Notice" alt="Add Notice" />
-			</p>
-		</form>
+		<!-- /TMPL_IF -->
+
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="add_form" -->
 	
-	<!-- TMPL_IF name="modify" -->
-			<h2>Modify letter</h2>
-		<!-- TMPL_ELSE -->
-			<h2>Add letter</h2>
-		<!-- /TMPL_IF -->
+	
 		<form action="/cgi-bin/koha/tools/letter.pl" name="Aform" method="post">
 		<input type="hidden" name="op" value="add_validate" />
 		<input type="hidden" name="checked" value="0" />
+		<fieldset class="rows">
+		<legend><!-- TMPL_IF name="modify" -->Modify letter<!-- TMPL_ELSE -->Add letter<!-- /TMPL_IF --></legend>
+		<ol>
 		<!-- TMPL_IF NAME="modify" -->
-			<p>
+			<li>
 				<label for="module">Koha module:</label>
 				<select name="module" id="module">
                                     <!--TMPL_IF Name="catalogue"-->
@@ -186,14 +183,14 @@
                                     <option value="members">Members</option>
                                     <!--/TMPL_IF-->
 				</select>
-			</p>
-			<p>
-				<label for="code">Code:</label><input type="hidden" id="code" name="code" value="<!-- TMPL_VAR NAME="code" -->" /><!-- TMPL_VAR NAME="code" -->
-			</p>
+			</li>
+			<li>
+				<span class="label">Code:</span><input type="hidden" id="code" name="code" value="<!-- TMPL_VAR NAME="code" -->" /><!-- TMPL_VAR NAME="code" -->
+			</li>
 		<!-- /TMPL_IF -->
 		
 		<!-- TMPL_IF NAME="adding" -->
-			<p>
+			<li>
 				<label for="module">Koha module:</label>
 				<select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
 						<!--TMPL_IF Name="catalogue"-->
@@ -227,31 +224,33 @@
 						<option value="members">Members</option>
 						<!--/TMPL_IF-->
 				</select>
-			</p>
-			<p>
+			</li>
+			<li>
 				<label for="code">Code:</label><input type="text" id="code" name="code" size="20" maxlength="20" />
-			</p>
+			</li>
 		<!-- /TMPL_IF -->
 		
-		<p>
+		<li>
 			<label for="name">Name:</label><input type="text" id="name" name="name" size="60" value="<!-- TMPL_VAR NAME="name" -->" />
-		</p>
-		<p>
-			<label for="title">Title (mail subject):</label><input type="text" id="title" name="title" size="60" value="<!-- TMPL_VAR NAME="title" -->" />
-		</p>
-		<p>
-			<label for="SQLfieldname">Content (mail content):</label>
-		</p>
-		<p>		
+		</li>
+		<li>
+			<label for="title">Message Subject:</label><input type="text" id="title" name="title" size="60" value="<!-- TMPL_VAR NAME="title" -->" />
+		</li>
+		<li>
+			<label for="SQLfieldname">Message Body:</label>
+		</li>
+		<li>		
 		<select name="SQLfieldname" id="SQLfieldname" size="9">
 			<!-- TMPL_LOOP name="SQLfieldname" -->
 				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
 			<!-- /TMPL_LOOP -->
 		</select>
         <input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insert" />
-        <textarea name="content" cols="100" rows="15"><!-- TMPL_VAR NAME="content" --></textarea>
-		</p>
-		<p><input type="button" value="OK" onclick="Check(this.form)" class="button" /></p>
+        <textarea name="content" cols="80" rows="15"><!-- TMPL_VAR NAME="content" --></textarea>
+		</li>
+		</ol>
+		</fieldset>
+		<p><input type="button" value="Submit" onclick="Check(this.form)" class="button" /></p>
 		</form>
 	<!-- /TMPL_IF -->
 	
@@ -300,8 +299,8 @@
 
 </div>
 </div>
-<div class="yui-b">
+<!-- TMPL_UNLESS NAME="add_form" --><div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
-</div>
+</div><!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

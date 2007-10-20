@@ -16,11 +16,13 @@
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
 
-<p><label for="layoutname">Layout Name</label>
-<input type="textbox" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></p>
+<fieldset class="rows">
+<legend>Create Layout</legend>
+<ol><li><label for="layoutname">Layout Name</label>
+<input type="text" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></li>
 
-<p><label for="tx_title">Choose Order Of Fields to Print</label></p>
-
+<li><fieldset>
+<legend>Choose Order Of Fields to Print</legend>
 <table summary="fields to print">
 <tr>
         <td>
@@ -196,7 +198,7 @@
        </select>
         <label>Sub-Class</label>
         </td>
-        <td>
+        <td colspan="2">
         <select name="tx_itemcallnumber">
           <option value="0" selected="selected"></option>
         <option value="1">1</option>
@@ -213,9 +215,9 @@
         <label>Call Number</label>
         </td>
   </tr>
-</table>
+</table></fieldset></li>
 
-<p><label for="barcodetype">Choose Barcode Type</label>
+<li><label for="barcodetype">Choose Barcode Type: </label>
 <select name="barcodetype" id="barcodetype">
     <!-- TMPL_LOOP NAME="barcode_types" -->
 	<!-- TMPL_IF NAME="active" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
@@ -223,9 +225,9 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 		<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select></p>
+</select></li>
 
-<p><label for="printingtype">Choose Layout Type</label>
+<li><label for="printingtype">Choose Layout Type: </label>
 <select name="printingtype" id="printingtype">
     <!-- TMPL_LOOP NAME="printingtypes" -->
 	<!-- TMPL_IF NAME="active" -->
@@ -234,12 +236,12 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select></p>
-<p>
-<label for="startlabel">Start printing from Label number:<input type="textbox" name="startlabel" id="startlabel" size="2" value="1" /></label></p>
+</select></li>
+<li>
+<label for="startlabel">Start printing from Label number: </label> <input type="text" name="startlabel" id="startlabel" size="2" value="1" /></li>
 
 
-<p><label for="guidebox">Draw Guide Boxes<input type="checkbox" id="guidebox" name="guidebox" value="1" /></label></p>
+<li><label for="guidebox">Draw Guide Boxes: </label><input type="checkbox" id="guidebox" name="guidebox" value="1" /></li></ol></fieldset>
 <p>		<input type="hidden" name="op" value="add_layout" />
         <input type="submit" value="Submit" /></p>
 </form>
