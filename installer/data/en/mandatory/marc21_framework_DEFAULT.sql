@@ -411,7 +411,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'b', 'Sublocation or collection (holding branch)', 'Sublocation or collection (holding branch)', 1, 0, 'items.holdingbranch', 10, 'branches', '', '', 0, 0, '', '', '', NULL),
 		('952', 'c', 'Shelving location', 'Shelving location', 1, 0, 'items.location', 10, 'SHELF_LOC', '', '', 0, 0, '', '', '', NULL),
 		('952', 'd', 'Date acquired', 'Date acquired', 0, 0, 'items.dateaccessioned', 10, '', '', 'dateaccessioned.pl', 0, 0, '', '', '', NULL),
-		('952', 'e', 'Source of acquisition', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', 'bookseller.pl', 0, 0, '', '', '', NULL),
+		('952', 'e', 'Source of acquisition', 'Source of acquisition', 1, 0, 'items.booksellerid', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'f', 'Coded location qualifier', 'Coded location qualifier', 1, 0, 'items.coded_location_qualifier', 10, '', '', 'marc21_locationqualifier.pl', NULL, 0, '', '', '', NULL),
 		('952', 'g', 'Cost, normal purchase price', 'Cost, normal purchase price', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'j', 'Shelving control number', 'Shelving control number', 0, 0, 'items.stack', 10, 'STACK', '', '', NULL, -1, '', '', '', NULL),
