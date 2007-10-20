@@ -33,8 +33,8 @@
 
 use strict;
 use CGI;
-use C4::Auth;
 use C4::Context;
+use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Dates;
@@ -220,13 +220,7 @@ if ($borrowernumber) {
     my @borrowerreserv = GetReservesFromBorrowernumber($borrowernumber );
     my @reservloop;
     foreach my $num_res (@borrowerreserv) {
-        eval{
-            scalar @$num_res;
-        };
-        ($@) and next;	# is this eval just a dumb way of checking to see if the arrays have any elements?
-
         my %getreserv;
-        
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
         my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
@@ -235,8 +229,8 @@ if ($borrowernumber) {
 		foreach (qw(waiting transfered nottransfered)) {
 				$getreserv{$_} = 0;
 		}
-
-        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'})->output() or die "Cannot get new($num_res->{'reservedate'}) from C4::Dates";
+#       Joe this line fails, can you take a look please
+#        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'})->output() or die "Cannot get new($num_res->{'reservedate'}) from C4::Dates";
 		foreach (qw(biblionumber title author barcodereserv itemcallnumber )) {
 				$getreserv{$_} = $getiteminfo->{$_};
 		}
