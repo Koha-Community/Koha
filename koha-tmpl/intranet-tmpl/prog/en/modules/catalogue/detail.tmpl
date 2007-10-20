@@ -1,21 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Core + Skin CSS -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css"/>
-<!-- OPTIONAL: Menu Stylesheet (required for creating buttons of type "menu" and "split") -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css"/>
-
-<!-- Dependencies -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/element/element-beta-min.js"></script>
-
-<!-- OPTIONAL: Menu and Container Core (required for creating buttons of type "menu" and "split") -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/container/container_core-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/menu/menu-min.js"></script>
-
-<!-- Source file -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/button/button-beta-min.js"></script>
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 function Dopop(link) {
@@ -41,47 +27,6 @@ function confirm_deletion(count) {
 		
     }
 }
-
-// prepare DOM for YUI Toolbar
-
- $(document).ready(function() {
- 	$("#edititems").parent().remove();
-	$("#duplicatebiblio").parent().remove();
-	$("#editmenucontainer").empty();
-	yuiToolbar();
- });
-
-// YUI Toolbar Functions
-
-       var editmenu = [
-            { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=" },
-            { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
-            { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=duplicate" }
-        ];
-        
-        var oEditMenu = new YAHOO.widget.Button({
-				type: "menu",
-				label: "Edit",
-				name: "editmenubutton",
-				menu: editmenu,
-				container: "editmenucontainer"
-		 });   
-
-function yuiToolbar(){
-	 YAHOO.toolbar.init = function () {
-                    var oAddbiblio = new YAHOO.widget.Button("addbiblio");
-                    var oEditbiblio = new YAHOO.widget.Button("editbiblio");
-                    var oEdititems = new YAHOO.widget.Button("edititems");
-                    var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
-                    var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
-                    var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
-                    var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
-                    <!-- TMPL_UNLESS name="bi_notforloan" -->
-                        var oPlacehold = new YAHOO.widget.Button("placehold");		 
-                    <!-- /TMPL_UNLESS -->
-    } ();
-}
-	
 //]]>
 </script>
 </head>

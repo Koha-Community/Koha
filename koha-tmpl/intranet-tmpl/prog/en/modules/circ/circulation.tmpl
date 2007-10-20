@@ -5,6 +5,7 @@
 (<!-- TMPL_VAR NAME="cardnumber" -->)
 <!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
@@ -14,7 +15,7 @@
 </script>
 
 </head>
-<body>
+<body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
@@ -33,13 +34,9 @@
 	<div class="yui-b">
 <!-- TMPL_IF NAME="borrowernumber" -->
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
-<!-- TMPL_ELSE -->
-<!--     <h1>Circulation &rsaquo; Checkouts</h1> -->
 <!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
-<!-- Branch: <a href="/cgi-bin/koha/circ/selectbranchprinter.pl" title="change"><!-- TMPL_VAR NAME="branchname"--></a>
-<!-- TMPL_IF name="printername" --> | Printer: <!-- TMPL_VAR NAME="printername" --><!-- /TMPL_IF -->-->
 
 <!-- TMPL_IF NAME="borrowernumber" -->
 
@@ -741,10 +738,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <table>
         <tr>
             <th>Hold date</th>
-            <th>Barcode</th>
+            <th>Status</th>
             <th>Title</th>
             <th>Author</th>
-            <th>Localisation</th>
+            <th>Call Number</th>
         </tr>
         <!-- TMPL_LOOP NAME="reservloop" -->
         <tr class="<!-- TMPL_VAR NAME="color" -->">
@@ -752,8 +749,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <!-- TMPL_VAR NAME="reservedate" -->
                     </td>
                     <td>
-                        <!-- TMPL_IF name="barcodereserv" -->
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
+                        <!-- TMPL_IF name="barcodereserv" --><!-- TMPL_VAR NAME="barcodereserv" -->
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="waitingposition" -->
                         Hold priority :
@@ -761,7 +757,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <!-- /TMPL_IF -->
                     </td>
                     <td>
-                        <!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
                         <!-- TMPL_IF name="waiting" -->
                         <br />
