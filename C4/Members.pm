@@ -149,7 +149,7 @@ C<$count> is the number of elements in C<$borrowers>.
 
 #'
 #used by member enquiries from the intranet
-#called by member.pl
+#called by member.pl and circ/circulation.pl
 sub SearchMember {
     my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
     my $dbh   = C4::Context->dbh;
@@ -157,14 +157,27 @@ sub SearchMember {
     my $count;
     my @data;
     my @bind = ();
-
+	
+	# this is used by circulation everytime a new borrowers cardnumber is scanned
+	# so we can check an exact match first, if that works return, otherwise do the rest
+    $query = "SELECT * FROM borrowers
+                    LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
+		              WHERE cardnumber = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($searchstring);
+    my $data = $sth->fetchall_arrayref({});
+    if (@$data){
+		return ( scalar(@$data), $data );
+	}
+    $sth->finish;
+		
     if ( $type eq "simple" )    # simple search for one letter only
     {
-        $query =
-          "SELECT * 
-           FROM borrowers
-           LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
-                  ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
+        $query =  "SELECT *
+             FROM borrowers
+             LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
+                    ($category_type?" AND category_type = ".$dbh->quote($category_type):""); 
+
         $query .=
          " WHERE (surname LIKE ? OR cardnumber like ?) ";
         if (C4::Context->preference("IndependantBranches") && !$showallbranches){
