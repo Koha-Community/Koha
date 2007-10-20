@@ -240,10 +240,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="borrowernumber" -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
-    <legend>Check Out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></legend>
-
-    <p>
-    <label for="barcode">Enter item barcode: </label><input type="text" name="barcode" class="focus" size="14" /></p>
+   
+    <label for="barcode">Enter item barcode: </label>
+	<div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></div>
+	<input type="text" name="barcode" id="barcode" class="focus" size="14" /></p>
     
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
