@@ -564,13 +564,13 @@ sub ModAuthority {
 ### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
 ### the $merge flag is now depreceated and will be removed at code cleaning
   if (C4::Context->preference('dontmerge') ){
-  # save the file in localfile/modified_authorities
+  # save the file in tmp/modified_authorities
       my $cgidir = C4::Context->intranetdir ."/cgi-bin";
       unless (opendir(DIR,"$cgidir")) {
               $cgidir = C4::Context->intranetdir."/";
       }
   
-      my $filename = $cgidir."/localfile/modified_authorities/$authid.authid";
+      my $filename = $cgidir."/tmp/modified_authorities/$authid.authid";
       open AUTH, "> $filename";
       print AUTH $authid;
       close AUTH;
