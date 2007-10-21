@@ -282,6 +282,7 @@ sub editbranchform {
           {
             categoryname    => $cat->{'categoryname'},
             categorycode    => $cat->{'categorycode'},
+            categorytype    => $cat->{'categorytype'},
             codedescription => $cat->{'codedescription'},
             checked         => $checked,
           };
@@ -303,13 +304,19 @@ sub editcatform {
     my ($categorycode,$innertemplate) = @_;
     warn "cat : $categorycode";
     my $data;
-    if ($categorycode) {
+	my @cats;
+    $innertemplate->param( categorytype => \@cats);
+	if ($categorycode) {
         $data = GetBranchCategory($categorycode);
         $data = $data->[0];
-        $innertemplate->param( categorycode    => $data->{'categorycode'} );
-        $innertemplate->param( categoryname    => $data->{'categoryname'} );
-        $innertemplate->param( codedescription => $data->{'codedescription'} );
+        $innertemplate->param(	categorycode    => $data->{'categorycode'} ,
+        				categoryname    => $data->{'categoryname'},
+        				codedescription => $data->{'codedescription'} ,
+						);
     }
+	for my $ctype (GetCategoryTypes()) {
+		push @cats , { type => $ctype , selected => ($data->{'categorytype'} eq $ctype) };
+	}
 }
 
 sub deleteconfirm {
@@ -328,7 +335,7 @@ sub branchinfotable {
         $branchinfo = GetBranchInfo($branchcode);
     }
     else {
-        $branchinfo = GetBranchInfo();
+        $branchinfo = GetBranchInfo(undef,'properties');
     }
     my $toggle;
     my $i;
@@ -408,20 +415,20 @@ sub branchinfotable {
         $i++;
     }
     my @branchcategories = ();
-    my $catinfo          = GetBranchCategory();
-    $i = 0;
-    foreach my $cat (@$catinfo) {
-        ( $i % 2 ) ? ( $toggle = 1 ) : ( $toggle = 0 );
-        push @branchcategories,
-          {
-            toggle          => $toggle,
-            categoryname    => $cat->{'categoryname'},
-            categorycode    => $cat->{'categorycode'},
-            codedescription => $cat->{'codedescription'},
-          };
-        $i++;
-    }
-
+	for my $ctype ( GetCategoryTypes() ) {
+    	my $catinfo = GetBranchCategories(undef,$ctype);
+    	my @categories;
+		foreach my $cat (@$catinfo) {
+	       	push @categories,
+        	  {
+        	    categoryname    => $cat->{'categoryname'},
+        	    categorycode    => $cat->{'categorycode'},
+        	    codedescription => $cat->{'codedescription'},
+        	    categorytype => $cat->{'categorytype'},
+        	  };
+    	}
+	push @branchcategories, { categorytype => $ctype , $ctype => 1 , catloop => \@categories};
+	}
     $innertemplate->param(
         branches         => \@loop_data,
         branchcategories => \@branchcategories
@@ -429,7 +436,7 @@ sub branchinfotable {
 
 }
 
-# FIXME logic seems wrong
+# FIXME logic seems wrong   ##  sub is not used.
 sub branchcategoriestable {
     my $innertemplate = shift;
     #Needs to be implemented...

@@ -114,9 +114,9 @@
             <th>Name</th>
             <th>Code</th>
             <th>Address</th>
-            <th>Category</th>
-            <th>Library IP</th>
-            <th>Library Printer</th>
+            <th>Properties</th>
+            <th>IP</th>
+            <th>Printer</th>
             <th colspan="2">&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP name="branches" -->
@@ -143,7 +143,6 @@
                 </td>
                 <td>
                     <!-- TMPL_IF name="no-categories-p" -->
-                        (no categories set)
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_LOOP name="category_list" -->
                             <!-- TMPL_VAR name="categoryname" --><br />
@@ -171,8 +170,10 @@
     </form>
     
     <!-- TMPL_IF NAME="branchcategories" -->
-    <table>
-    <caption>Agency Categories</caption>
+   
+   <!-- TMPL_LOOP NAME="branchcategories" -->
+	<table>
+    <caption>Agency Categories:  <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --></caption>
     <tr>
         <th>Name</th>
         <th>Code</th>
@@ -180,7 +181,7 @@
         <th>&nbsp;</th>
         <th>&nbsp;</th>
     </tr>
-    <!-- TMPL_LOOP name="branchcategories" -->
+    <!-- TMPL_LOOP name="catloop" -->
         <tr>
         <td><!-- TMPL_VAR name="categoryname" --></td>
         <td><!-- TMPL_VAR name="categorycode" --></td>
@@ -192,6 +193,8 @@
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
+    <!-- /TMPL_LOOP -->
+
     <!-- TMPL_ELSE -->
         <p>
             No Agency Categories defined.
@@ -216,7 +219,7 @@
                     <!-- TMPL_VAR name="categorycode" -->
                 <!-- TMPL_ELSE -->
             <label for="categorycode">Category code:</label>
-                    <input type="text" name="categorycode" id="categorycode" size="5" maxlength="5" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
+                    <input type="text" name="categorycode" id="categorycode" size="11" maxlength="10" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
             </li>
         <li>
@@ -226,7 +229,16 @@
         <li>
             <label for="codedescription">Description: </label>
             <input type="text" name="codedescription" id="codedescription" size="70" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />
-        </li></ol>
+        </li>
+		<li>
+		<label for="categorytype">Category Type</label>
+            <select id="categorytype" name="categorytype">
+            <!-- TMPL_LOOP NAME="categorytype" -->
+                <option value="<!-- TMPL_VAR NAME="type" -->" <!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="type" --></option>
+                <!-- /TMPL_LOOP -->
+            </select>
+		</li>
+		</ol>
     </fieldset><input type="submit" value="Update" />
     </form>
 <!-- /TMPL_IF -->

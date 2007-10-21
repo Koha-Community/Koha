@@ -53,6 +53,9 @@ The functions in this module deal with branches.
    &ModBranch
    &CheckBranchCategorycode
    &GetBranchInfo
+   &GetCategoryTypes
+   &GetBranchCategories
+   &GetBranchesInCategory
    &ModBranchCategoryInfo
    &DelBranch
    &DelBranchCategory
@@ -64,6 +67,9 @@ The functions in this module deal with branches.
   returns informations about ALL branches.
   Create a branch selector with the following code
   IndependantBranches Insensitive...
+  GetBranchInfo() returns the same information without the problems of this function 
+  (namespace collision, mainly).  You should probably use that, and replace GetBranches()
+  with GetBranchInfo() where you see it in the code.
   
 =head3 in PERL SCRIPT
 
@@ -118,7 +124,8 @@ sub GetBranches {
             # you to list the categories that a branch belongs to:
             # you'd have to list keys %$branch, and remove those keys
             # that aren't fields in the "branches" table.
-            $branch->{$cat} = 1;
+         #   $branch->{$cat} = 1;
+            $branch->{category}{$cat} = 1;
         }
         $branches{ $branch->{'branchcode'} } = $branch;
     }
@@ -268,6 +275,23 @@ sub GetBranchCategory {
     return \@results;
 }
 
+=head2 GetCategoryTypes
+
+$categorytypes = GetCategoryTypes;
+returns a list of category types.
+Currently these types are HARDCODED.
+type: 'searchdomain' defines a group of agencies that the calling library may search in.
+Other usage of agency categories falls under type: 'properties'.
+	to allow for other uses of categories.
+The searchdomain bit may be better implemented as a separate module, but
+the categories were already here, and minimally used.
+=cut
+
+	#TODO  manage category types.  rename possibly to 'agency domains' ? as borrowergroups are called categories.
+sub GetCategoryTypes() {
+	return ( 'searchdomain','properties');
+}
+
 =head2 GetBranch
 
 $branch = GetBranch( $query, $branches );
@@ -302,7 +326,6 @@ sub GetBranchDetail {
     return $branchname;
 }
 
-
 =head2 get_branchinfos_of
 
   my $branchinfos_of = get_branchinfos_of(@branchcodes);
@@ -330,19 +353,75 @@ sub get_branchinfos_of {
     return C4::Koha::get_infos_of( $query, 'branchcode' );
 }
 
+=head2 GetBranchCategories
+
+  my $categories = GetBranchCategories($branchcode,$categorytype);
+
+Returns a list ref of anon hashrefs with keys eq columns of branchcategories table,
+i.e. categorycode, categorydescription, categorytype, categoryname.
+if $branchcode and/or $categorytype are passed, limit set to categories that
+$branchcode is a member of , and to $categorytype.
+
+=cut
+
+sub GetBranchCategories($$) {
+    my ($branchcode,$categorytype) = @_;
+	my $dbh = C4::Context->dbh();
+	my $select = "SELECT c.* FROM branchcategories c";
+	my (@where, @bind);
+	if($branchcode) {
+		$select .= ",branchrelations r, branches b ";
+		push @where, "c.categorycode=r.categorycode and r.branchcode=? ";  
+		push @bind , $branchcode;
+	}
+	if ($categorytype) {
+		push @where, " c.categorytype=? ";
+		push @bind, $categorytype;
+	}
+    my $sth=$dbh->prepare( $select . " where " . join(" and ", @where) );
+	$sth->execute(@bind);
+	
+	my $branchcats = $sth->fetchall_arrayref({});
+	$sth->finish();
+	return( $branchcats );
+}
+
+
+=head2 GetBranchesInCategory
+
+  my $branches = GetBranchesInCategory($categorycode);
+
+Returns a href:  keys %$branches eq (branchcode,branchname) .
+
+=cut
+
+sub GetBranchesInCategory($) {
+    my ($categorycode) = @_;
+	my $dbh = C4::context->dbh();
+	my $sth=$dbh->prepare( "SELECT branchcode, branchname FROM branchrelations r, branches b 
+							where r.branchcode=b.branchcode and r.categorycode=?");
+    $sth->execute($categorycode);
+	my $branches = $sth->fetchall_hashref;
+	$sth->finish();
+	return( $branches );
+}
+
 =head2 GetBranchInfo
 
 $results = GetBranchInfo($branchcode);
 
 returns C<$results>, a reference to an array of hashes containing branches.
-
+if $branchcode, just this branch, with associated categories.
+if ! $branchcode && $categorytype, all branches in the category.
 =cut
 
 sub GetBranchInfo {
-    my ($branchcode) = @_;
+    my ($branchcode,$categorytype) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
-    if ($branchcode) {
+
+
+	if ($branchcode) {
         $sth =
           $dbh->prepare(
             "Select * from branches where branchcode = ? order by branchcode");
@@ -354,10 +433,16 @@ sub GetBranchInfo {
     }
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
-        my $nsth =
-          $dbh->prepare(
-            "select categorycode from branchrelations where branchcode = ?");
-        $nsth->execute( $data->{'branchcode'} );
+		my @bind = ($data->{'branchcode'});
+        my $query= "select r.categorycode from branchrelations r";
+		$query .= ", branchcategories c " if($categorytype);
+		$query .= " where  branchcode=? ";
+		if($categorytype) { 
+			$query .= " and c.categorytype=? and r.categorycode=c.categorycode";
+			push @bind, $categorytype;
+		}
+        my $nsth=$dbh->prepare($query);
+		$nsth->execute( @bind );
         my @cats = ();
         while ( my ($cat) = $nsth->fetchrow_array ) {
             push( @cats, $cat );
@@ -395,8 +480,8 @@ sub ModBranchCategoryInfo {
 
     my ($data) = @_;
     my $dbh    = C4::Context->dbh;
-    my $sth    = $dbh->prepare("replace branchcategories (categorycode,categoryname,codedescription) values (?,?,?)");
-    $sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'} );
+    my $sth    = $dbh->prepare("replace branchcategories (categorycode,categoryname,codedescription,categorytype) values (?,?,?,?)");
+    $sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'} );
     $sth->finish;
 }
 

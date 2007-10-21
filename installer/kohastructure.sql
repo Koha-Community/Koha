@@ -489,9 +489,10 @@ CREATE TABLE `borrowers` (
 
 DROP TABLE IF EXISTS `branchcategories`;
 CREATE TABLE `branchcategories` (
-  `categorycode` varchar(4) NOT NULL default '',
-  `categoryname` mediumtext,
+  `categorycode` char(10) NOT NULL default '',
+  `categoryname` varchar(32),
   `codedescription` mediumtext,
+  `categorytype` varchar(16),
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -522,7 +523,8 @@ CREATE TABLE `branches` (
 DROP TABLE IF EXISTS `branchrelations`;
 CREATE TABLE `branchrelations` (
   `branchcode` char(10) NOT NULL default '',
-  `categorycode` varchar(4) NOT NULL default '',
+  `categorycode` char(10) NOT NULL default '',
+  `relation`  char(10) default NULL,
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
