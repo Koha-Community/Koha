@@ -54,7 +54,7 @@ my ($template, $borrowernumber, $cookie)
 
 my $branches = GetBranches();
 my @branch_loop;
-push @branch_loop, {value => "", branchname => "All Branches", };
+push @branch_loop, {value => "", branchname => "All Locations", };
 for my $branch_hash (keys %$branches) {
 	push @branch_loop, {value => "$branch_hash",
 	                   branchname => $branches->{$branch_hash}->{'branchname'}, 

@@ -33,10 +33,7 @@ die;
 $|=1; # flushes output
 
 my $dbh = C4::Context->dbh;
-my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-unless (opendir(DIR, "$cgidir")) {
-		$cgidir = C4::Context->intranetdir."/";
-} 
+my $cgidir = C4::Context->intranetdir."/";
 
 my $starttime = gettimeofday;
 my $sth = $dbh->prepare("select biblionumber from biblio");
@@ -44,9 +41,9 @@ $sth->execute;
 my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
 	my $record = GetMarcBiblio($biblionumber);
-	my $filename = $cgidir."/zebra/biblios/BIBLIO".$biblionumber."iso2709";
+	my $filename = $cgidir."/tmp/BIBLIO".$biblionumber.".iso2709";
 	open F,"> $filename";
-	print F $record->as_xml();
+	print F $record->as_usmarc();
 	close F;
 	$i++;
 	print "\r$i" unless ($i % 100);

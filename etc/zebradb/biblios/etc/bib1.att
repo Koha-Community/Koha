@@ -104,48 +104,75 @@ att 1034            ctype
 att 1035            Anywhere
 att 1036            Author-Title-Subject
 
-# Koha Specific Stuff
-att 8001			Extent
-att 8910                       Koha-Auth-Number
+# Koha Local-Use Biblio Indexes
+att 9001			Control-number
+att 9002			biblioitemnumber
+att 9003			totalissues
+att 9004			cn-bib-source
+att 9005			cn-bib-sort
+att 9006			itemtype
+att 9007			cn-class
+att 9008			cn-item
+att 9009			cn-prefix
+att 9010			cn-suffix
 
+# Items Index
+att 8001 withdrawn
+att 8002 lost
+att 8003 classification-source
+att 8004 materials-specified
+att 8005 damaged
+att 8006 restricted
+att 8007 cn-sort
+att 8008 notforloan
+att 8009 ccode
+att 8010 itemnumber
+att 8011 Code-institution
+att 8012 holdingbranch
+att 8013 location
+att 8014 Date-of-acquisition
+att 8015 acqsource
+att 8016 coded-location-qualifier
+att 8017 price
+att 8018 stack
+att 8019 issues
+att 8020 renewals
+att 8021 reserves
+att 8022 Local-classification
+att 8023 barcode
+att 8024 onloan
+att 8025 datelastseen
+att 8026 datelastborrowed
+att 8027 copynumber
+att 8028 uri
+att 8029 replacementprice
+att 8030 replacementpricedate
+
+# att 8001			Extent
+# att 8910			Koha-Auth-Number
 # record length according to the leader
-att 8005			llength
+# att 8005			llength
 #att 8002			Summary	
 #att 8900			Call-Number
-
 # Usually Target Audience 008/22
 att 8822			ta
-
 # Usually Form of item 008/23
 att 8823			ff8-23
-
 # Usually Nature of contents 008/24-27
 att 8824			ff8-24-27
-
 # Usually Content-type, also Form of item for maps 008/29
 att 8829			ff8-29
-
 # Usually Literary Form 008/33
 att 8833			lf
 #att 8833			ff8-33
-
 # Usually Biography, also Special format characteristics for maps 008/34
 att 8834			bio
 #att 8834			ff8-34
-
 att 8700			ff7-00
 att 8701			ff7-01
 att 8702			ff7-02
 att 8703			ff7-01-02
-
-att 9529			shelf-location
-att 9100			dynixbib-id
-att 9520			withdrawn
-att 9521			lost
-att 9522			onloan
-att 9523			popularity
-att 9526			barcode
 # Author-personal-bibliography - lastname,firstname in 100$a
-att 8900		Author-personal-bibliography
+#att 8900		Author-personal-bibliography
 # Author-in-order - firstname lastname in 245$c statement of responsibility
-att 8901		Author-in-order
+#att 8901		Author-in-order

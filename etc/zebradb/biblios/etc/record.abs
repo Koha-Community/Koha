@@ -17,7 +17,7 @@ esetname B @
 
 marc usmarc.mar
 systag sysno rank
-xpath disable
+xpath enable
 
 # pl = Published Place
 # ta = Target Audience 002/22
@@ -32,10 +32,10 @@ xpath disable
 
 all any
 # melm 000 		rtype:n:range(data,06,1),Bib-level:w:range(data,07,01)
-# xelm /record/leader llength:w:range(data,0,5),rtype:w:range(data,6,1),Bib-level:w:range(data,7,1)
-
+xelm /record/leader llength:w:range(data,0,5),rtype:w:range(data,6,1),Bib-level:w:range(data,7,1)
 # example: xelm /record/leader l1:w:range(data,0,5),l2:w:range(data,10,2)
-#melm 001		Local-number
+
+melm 001		Control-number
 melm 005		Date,Date/time-last-modified
 melm 007		Microform-generation:n:range(data,11,1),Material-type,ff7-00:w:range(data,0,1),ff7-01:w:range(data,1,1),ff7-02:w:range(data,2,1),ff7-01-02:w:range(data,0,2)
 
@@ -213,25 +213,58 @@ melm 811$t      Author-title,Name-and-title,Title,Title-series
 melm 811		Author,Author-name-corporate,Name,Conference-name
 melm 830		Title,Title-series
 melm 840		Title,Title-series
-melm 852$a		Code-institution
 
-melm 959$0		withdrawn:n
-melm 959$1		lost:n
-melm 959$2		onloan
+###############################
+# Koha Local-Use Biblio Indexes
+melm 999$c		Local-Number !:w,!:p,!:s
+melm 999$d		biblioitemnumber:n,!:s
+melm 942$0		totalissues:n,!:s
+melm 942$2		cn-bib-source
+melm 942$6		cn-bib-sort:n,!:s
+melm 942$c		itemtype:w
 
-# c is collection code, d is the new item type
-# Record-source is homebranch.
-melm 959$n      Record-source
-melm 942$c      Material-type
-melm 942$d      Material-type
-melm 910$a	dynixbib-id:n
-#melm 942$k		Call-Number
-#melm 942$k		Local-Number !:w,!:p,!:s
-#melm 942$k		Local-classification:w,Local-classification:p,Local-classification:s
-melm 959$d		Local-classification,Local-classification:w,Local-classification:p,Local-classification:s
-melm 959$p		Stock-number
-melm 959$c		shelf-location
-melm 959$s		popularity:n,popularity:s
-melm 959$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
-melm 959$t		Material-type
-melm 959$b		barcode,barcode:n
+# need to check bib1
+melm 942$h		cn-class
+melm 942$i		cn-item
+melm 942$k		cn-prefix
+melm 942$m		cn-suffix
+
+# Items Indexes
+melm 952$0		withdrawn:n,!:w
+melm 952$1		lost:n,!:w
+melm 952$2		classification-source
+melm 952$3		materials-specified	
+melm 952$4		damaged:n,!:w
+melm 952$5		restricted:n,!:w
+melm 952$6		cn-sort:n,!:s
+melm 952$7		notforloan:n,!:w
+melm 952$8		ccode
+melm 952$9		itemnumber:n,!:s
+melm 952$a		Code-institution
+melm 952$b		holdingbranch
+melm 952$c		location
+
+#dateaccessioned
+melm 952$d		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
+melm 952$e		acqsource
+melm 952$f		coded-location-qualifier
+melm 952$g		price
+#melm 952$h		
+#melm 952$i		
+melm 952$j		stack:n,!:w
+#melm 952$k		
+melm 952$l		issues:n,!:w
+melm 952$m		renewals:n,!:w
+melm 952$n		reserves:n,!:w
+melm 952$o		Local-classification:w,Local-classification:p,Local-classification:s
+melm 952$p		barcode,!:n
+melm 952$q		onloan:n,!:w
+melm 952$r		datelastseen
+melm 952$s		datelastborrowed
+melm 952$t		copynumber
+melm 952$u		uri:u,!:w
+melm 952$v		replacementprice
+melm 952$w		replacementpricedate
+#melm 952$x
+#melm 952$y
+#melm 952$z
