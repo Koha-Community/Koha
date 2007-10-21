@@ -298,6 +298,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.011";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE `branchcategories` CHANGE `categorycode` `categorycode` char(10) ");
+	$dbh->do("ALTER TABLE `branchcategories` CHANGE `categoryname` `categoryname` varchar(32) ");
+	$dbh->do("ALTER TABLE `branchcategories` ADD COLUMN `categorytype` varchar(16) ");
+	$dbh->do("ALTER TABLE `branchrelations` CHANGE `cateorycode` `cateorycode` char(10) ");
+    print "Upgrade to $DBversion done (added branchcategory type)\n";
+    SetVersion ($DBversion);
+}
+
 
 
 =item DropAllForeignKeys($table)

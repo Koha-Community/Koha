@@ -524,7 +524,6 @@ DROP TABLE IF EXISTS `branchrelations`;
 CREATE TABLE `branchrelations` (
   `branchcode` char(10) NOT NULL default '',
   `categorycode` char(10) NOT NULL default '',
-  `relation`  char(10) default NULL,
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
