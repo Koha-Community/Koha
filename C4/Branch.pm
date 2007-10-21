@@ -275,6 +275,41 @@ sub GetBranchCategory {
     return \@results;
 }
 
+=head2 GetBranchCategories
+
+  my $categories = GetBranchCategories($branchcode,$categorytype);
+
+Returns a list ref of anon hashrefs with keys eq columns of branchcategories table,
+i.e. categorycode, categorydescription, categorytype, categoryname.
+if $branchcode and/or $categorytype are passed, limit set to categories that
+$branchcode is a member of , and to $categorytype.
+
+=cut
+
+sub GetBranchCategories {
+    my ($branchcode,$categorytype) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "SELECT c.* FROM branchcategories c";
+	my (@where, @bind);
+	if($branchcode) {
+		$query .= ",branchrelations r, branches b ";
+		push @where, "c.categorycode=r.categorycode and r.branchcode=? ";  
+		push @bind , $branchcode;
+	}
+	if ($categorytype) {
+		push @where, " c.categorytype=? ";
+		push @bind, $categorytype;
+	}
+	$query .= " where " . join(" and ", @where) if(@where);
+	$query .= " order by categorytype,c.categorycode";
+	my $sth=$dbh->prepare( $query);
+	$sth->execute(@bind);
+	
+	my $branchcats = $sth->fetchall_arrayref({});
+	$sth->finish();
+	return( $branchcats );
+}
+
 =head2 GetCategoryTypes
 
 $categorytypes = GetCategoryTypes;
@@ -353,39 +388,6 @@ sub get_branchinfos_of {
     return C4::Koha::get_infos_of( $query, 'branchcode' );
 }
 
-=head2 GetBranchCategories
-
-  my $categories = GetBranchCategories($branchcode,$categorytype);
-
-Returns a list ref of anon hashrefs with keys eq columns of branchcategories table,
-i.e. categorycode, categorydescription, categorytype, categoryname.
-if $branchcode and/or $categorytype are passed, limit set to categories that
-$branchcode is a member of , and to $categorytype.
-
-=cut
-
-sub GetBranchCategories($$) {
-    my ($branchcode,$categorytype) = @_;
-	my $dbh = C4::Context->dbh();
-	my $select = "SELECT c.* FROM branchcategories c";
-	my (@where, @bind);
-	if($branchcode) {
-		$select .= ",branchrelations r, branches b ";
-		push @where, "c.categorycode=r.categorycode and r.branchcode=? ";  
-		push @bind , $branchcode;
-	}
-	if ($categorytype) {
-		push @where, " c.categorytype=? ";
-		push @bind, $categorytype;
-	}
-    my $sth=$dbh->prepare( $select . " where " . join(" and ", @where) );
-	$sth->execute(@bind);
-	
-	my $branchcats = $sth->fetchall_arrayref({});
-	$sth->finish();
-	return( $branchcats );
-}
-
 
 =head2 GetBranchesInCategory
 
@@ -397,13 +399,16 @@ Returns a href:  keys %$branches eq (branchcode,branchname) .
 
 sub GetBranchesInCategory($) {
     my ($categorycode) = @_;
-	my $dbh = C4::context->dbh();
-	my $sth=$dbh->prepare( "SELECT branchcode, branchname FROM branchrelations r, branches b 
+	my @branches;
+	my $dbh = C4::Context->dbh();
+	my $sth=$dbh->prepare( "SELECT b.branchcode FROM branchrelations r, branches b 
 							where r.branchcode=b.branchcode and r.categorycode=?");
     $sth->execute($categorycode);
-	my $branches = $sth->fetchall_hashref;
+	while (my $branch = $sth->fetchrow) {
+		push @branches, $branch;
+	}
 	$sth->finish();
-	return( $branches );
+	return( \@branches );
 }
 
 =head2 GetBranchInfo

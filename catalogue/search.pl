@@ -162,13 +162,12 @@ my ($template,$borrowernumber,$cookie);
 # decide which template to use
 my $template_name;
 my @params = $cgi->param("limit");
-if ((@params>=1) || ($cgi->param("q")) ) {
+if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) ) {
     $template_name = 'catalogue/results.tmpl';
 }
 else {
     $template_name = 'catalogue/advsearch.tmpl';
 }
-
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => $template_name,
@@ -216,9 +215,12 @@ my $branches = GetBranches();
 my @branch_loop;
 #push @branch_loop, {value => "", branchname => "All Branches", };
 for my $branch_hash (sort keys %$branches) {
-    push @branch_loop, {value => "branch: $branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
+    push @branch_loop, {value => "branch:$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
-$template->param(branchloop => \@branch_loop,);
+
+my $categories = GetBranchCategories(undef,'searchdomain');
+
+$template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 
 # load the itemtypes (Called Collection Codes in the template -- used for circ rules )
 my $itemtypes = GetItemTypes;
@@ -344,6 +346,10 @@ my @operands;
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits;
 @limits = split("\0",$params->{'limit'}) if $params->{'limit'};
+
+if($params->{'multibranchlimit'}) {
+push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+}
 
 my $available;
 foreach my $limit(@limits) {
