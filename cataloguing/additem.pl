@@ -60,8 +60,16 @@ my $dbh = C4::Context->dbh;
 my $error = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber = $input->param('itemnumber');
-warn Data::Dumper::Dumper($input->param());
 my $op = $input->param('op');
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {editcatalogue => 1},
+                 debug => 1,
+                 });
 
 # find itemtype
 my $frameworkcode = &GetFrameworkCode($biblionumber);
@@ -142,20 +150,16 @@ if ($op eq "additem") {
     # build indicator hash.
     my @ind_tag = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-  warn "tags :@tags"  ;
-  warn "subfields :@subfields"  ;
-  warn "values :@values"  ;
-#    my $itemnumber = $input->param('itemnumber');
+    #    my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
     $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
-# MARC::Record builded => now, record in DB
-# warn "R: ".$record->as_formatted;
+    # MARC::Record builded => now, record in DB
+    # warn "R: ".$record->as_formatted;
     # check that the barcode don't exist already
     my $addedolditem = TransformMarcToKoha($dbh,$itemrecord);
     my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
-#         $nextop= "additem";
     } else {
         my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemrecord,$biblionumber,$itemnumber,0);
     $itemnumber="";
@@ -167,14 +171,6 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 # build screen with existing items. and "new" one
 #-------------------------------------------------------------------------------
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
-                 query => $input,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 1},
-                 debug => 1,
-                 });
 
 # now, build existiing item list
 my $temp = GetMarcBiblio( $biblionumber );
@@ -193,14 +189,14 @@ foreach my $field (@fields) {
 # loop through each subfield
     for my $i (0..$#subf) {
         next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab} ne 10 
-		&& ($field->tag() ne $itemtagfield 
-		&& $subf[$i][0] ne $itemtagsubfield));
+                && ($field->tag() ne $itemtagfield 
+                && $subf[$i][0] ne $itemtagsubfield));
 
         $witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
 
         $this_row{$subf[$i][0]} =$subf[$i][1] if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
         
-		if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+        if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
             #verifying rights
             my $userenv = C4::Context->userenv();
             unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $subf[$i][1]))){
@@ -285,7 +281,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
     }
-    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne '');
+    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1));
     #testing branch value if IndependantBranches.
     my $test = (C4::Context->preference("IndependantBranches")) &&
               ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
@@ -293,12 +289,12 @@ foreach my $tag (sort keys %{$tagslib}) {
 #         print $input->redirect(".pl?biblionumber=$biblionumber") if ($test);
         # search for itemcallnumber if applicable
     if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
-      my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
-      my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
-			my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
-			my $temp2 = $temp->field($CNtag);
-			if ($temp2) {
-				$value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
+        my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
+        my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
+        my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
+        my $temp2 = $temp->field($CNtag);
+        if ($temp2) {
+                $value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
 #remove any trailing space incase one subfield is used
         $value=~s/^\s+|\s+$//g;
       }

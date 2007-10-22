@@ -414,8 +414,6 @@ sub ModBiblio {
 
     # modify the other koha tables
 	use Data::Dumper;
-	warn "OLDBIB:";
-	warn Dumper($oldbiblio);
 
     _koha_modify_biblio( $dbh, $oldbiblio );
     _koha_modify_biblioitem( $dbh, $oldbiblio );
