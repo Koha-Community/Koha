@@ -101,12 +101,12 @@ if ($op eq "additem") {
     }
 # check for item barcode # being unique
     my $addedolditem = TransformMarcToKoha($dbh,$record);
-    my $exists = get_item_from_barcode($addedolditem->{'barcode'});
-    push @errors,"barcode_not_unique" if($exists);
+    my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
+    push @errors,"barcode_not_unique" if($exist_itemnumber);
     # if barcode exists, don't create, but report The problem.
-    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItem($record,$biblionumber) unless ($exists);
-    if ($exists) {
-    $nextop = "additem";
+    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItem($record,$biblionumber) unless ($exist_itemnumber);
+    if ($exist_itemnumber) {
+        $nextop = "additem";
         $itemrecord = $record;
     } else {
         $nextop = "additem";
@@ -147,11 +147,19 @@ if ($op eq "additem") {
   warn "values :@values"  ;
 #    my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
-        my $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
+    $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
 # MARC::Record builded => now, record in DB
 # warn "R: ".$record->as_formatted;
-    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemrecord,$biblionumber,$itemnumber,0);
+    # check that the barcode don't exist already
+    my $addedolditem = TransformMarcToKoha($dbh,$itemrecord);
+    my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
+    if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
+        push @errors,"barcode_not_unique";
+#         $nextop= "additem";
+    } else {
+        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemrecord,$biblionumber,$itemnumber,0);
     $itemnumber="";
+    }
     $nextop="additem";
 }
 
