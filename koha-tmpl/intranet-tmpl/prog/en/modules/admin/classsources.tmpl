@@ -189,8 +189,15 @@ function CheckRuleForm(f) {
                   value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
        </li>
        <li><span class="label">Filing Routine</span>
-           <input type="text" id="sort_routine" name="sort_routine" size="30" maxlength="30" 
-                  value="<!-- TMPL_VAR name="sort_routine" escape="HTML" -->" />
+           <select id="sort_routine" name="sort_routine">
+           <!-- TMPL_LOOP name="routines_dropdown" -->
+             <!-- TMPL_IF name="selected" -->
+             <option value="<!-- TMPL_VAR name="routine" -->" selected="selected"><!-- TMPL_VAR name="routine" --></option>
+             <!-- TMPL_ELSE -->
+             <option value="<!-- TMPL_VAR name="routine" -->"><!-- TMPL_VAR name="routine" --></option>
+             <!-- /TMPL_IF -->
+           <!-- /TMPL_LOOP -->
+           </select>
        </li>
     </ol>
   </fieldset>

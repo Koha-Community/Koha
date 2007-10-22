@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::ClassSource;
+use C4::ClassSortRoutine;
 
 my $script_name = "/cgi-bin/koha/admin/classsources.pl";
 
@@ -186,6 +187,7 @@ sub add_class_sort_rule_form {
         sort_rule_form => 1,
         confirm_op => "add_sort_rule_confirmed"
     );
+    get_class_sort_routines($template, "");
 }
 
 sub add_class_sort_rule {
@@ -230,6 +232,25 @@ sub edit_class_sort_rule_form {
         description => $rule->{'description'},
         sort_routine => $rule->{'sort_routine'}
     );
+
+    get_class_sort_routines($template, $rule->{'sort_routine'});
+
+}
+
+sub get_class_sort_routines {
+    my ($template, $current_routine) = @_;
+
+    my @sort_routines = GetSortRoutineNames();
+    my @sort_form = ();
+
+    foreach my $sort_routine (sort @sort_routines) {    
+        push @sort_form,
+          {
+            routine  => $sort_routine,
+            selected => $sort_routine eq $current_routine ? 1 : 0
+          }
+    }
+    $template->param(routines_dropdown => \@sort_form);
 
 }
 
