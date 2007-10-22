@@ -3,33 +3,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
-
 //<![CDATA[
 
 	 $(document).ready(function() {
  		$('#bibliotabs').tabs();
 	 });
-
-function confirm_deletion(count) {
-
-	 var is_confirmed;
-	if (count>0){
-		is_confirmed= alert('you have [ '+ count +' ] item(s) linked \n you must delete all items before delete this biblio');
-	}
-    else{
-		    is_confirmed= confirm('Are you sure you want to delete this biblio? ');
-	}
-
-     if (is_confirmed) {
-        if (count=0){
-			window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
-		}
-    }
-}
-
-function Dopop(link) {
-    window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
-}
 
 function Changefwk(FwkList) {
 	var fwk = FwkList.options[FwkList.selectedIndex].value;
@@ -419,7 +397,6 @@ function Changefwk(FwkList) {
 </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

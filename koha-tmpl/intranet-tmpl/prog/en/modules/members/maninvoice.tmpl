@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Borrowers &rsaquo; Create Manual Invoice</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -13,29 +14,28 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
-<!-- TMPL_IF NAME="ERROR" -->
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" --><!-- TMPL_IF NAME="ERROR" -->
 <!-- TMPL_IF NAME="ITEMNUMBER" -->
   ERROR an invalid itemnumber was entered, please hit back and try again
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
-	<table>
-	<caption>Manual Invoice</caption>
-	<tr><th scope="row">Borrowernumber</th><td><!-- TMPL_VAR Name="borrowernumber" --></td></tr>
-	<tr><th scope="row">Type</th><td><select name="type">
+	<fieldset class="rows">
+	<legend>Manual Invoice</legend>
+	<ol>
+	<li><label for="type">Type: </label><select name="type" id="type">
 <option value="L">Lost Item</option>
 <option value="F">Fine</option>
 <option value="A">Account Management Fee</option>
 <option value="N">New Card</option>
 <option value="M">Sundry</option>
 <option value="REF">Cash Refund</option>
-</select></td></tr>
-	<tr><th scope="row">Itemnumber</th><td><input type="text" name="itemnum" /></td></tr>
-	<tr><th scope="row">Description</th><td><input type="text" name="desc" size="50" /></td></tr>
-	<tr><th scope="row">Amount</th><td>$<input type="text" name="amount" /></td></tr>
-	</table>
-<input type="submit" name="add" value="Add Charge" />
+</select></li>
+	<li><label for="itemnum">Itemnumber: </label><input type="text" name="itemnum" id="itemnum" /></li>
+	<li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
+	<li><label for="amount">Amount: </label><input type="text" name="amount" id="amount" /></li>
+	</ol></fieldset>
+<input type="submit" name="add" value="Save" />
 </form>
 
 <form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" /><input type="submit" value="Cancel" /></form>
@@ -46,7 +46,7 @@
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

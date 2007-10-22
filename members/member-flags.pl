@@ -70,7 +70,7 @@ if ($input->param('newflags')) {
 	push @loop, \%row;
     }
 
-    $template->param(member => $member,
+    $template->param(borrowernumber => $member,
 			surname => $bor->{'surname'},
 			firstname => $bor->{'firstname'},
 			loop => \@loop,

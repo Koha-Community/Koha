@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Pay Fines for  <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></title>
+<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -13,9 +14,9 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 
-<h1>Pay Fines for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h1>
-<form action="/cgi-bin/koha/members/pay.pl" method="post">
+<!-- TMPL_IF NAME="allfile" --><form action="/cgi-bin/koha/members/pay.pl" method="post">
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
 
 <table>
@@ -64,8 +65,7 @@
 <!--/TMPL_IF-->
 <!-- /TMPL_LOOP  -->
 </table>
-<input type="submit" name="submit"  value="Make Payment" class="submit" /></form>
-<form action="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Return to Patron Record" /></form>
+<input type="submit" name="submit"  value="Make Payment" class="submit" /></form><!-- TMPL_ELSE --><p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> has no outstanding fines.</p><!-- /TMPL_IF -->
 
 </div>
 </div>
