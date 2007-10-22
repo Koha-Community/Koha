@@ -103,8 +103,8 @@ my %newdata;
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
-        $newdata{$key} = $input->param($key) if ($input->param($key));
-        $newdata{$key} =~ s/\"/&quot;/gg unless ($key eq 'borrowernotes' or $key eq 'opacnote');
+        $newdata{$key} = $input->param($key) if (defined $input->param($key));
+        $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
     $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
     $newdata{'dateexpiry'}=format_date_in_iso($newdata{'dateexpiry'}) if ($newdata{dateexpiry});  
