@@ -80,7 +80,7 @@
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
         <div class="yui-skin-sam">
             <div id="borrowerautocomplete" class="autocomplete">
-                <input id="findborrower" name="findborrower" class="focus" type="text" />
+                <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
                 <input id="ysearchsubmit" type="submit" value="Submit">
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
