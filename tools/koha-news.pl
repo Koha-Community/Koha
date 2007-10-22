@@ -103,9 +103,11 @@ else {
     foreach my $new ( @$opac_news ) {
         next unless $new->{'expirationdate'};
         # next if $new->{'expirationdate'} eq '0000-00-00';  # now saved as null
-        if (Date_to_Days( split "-" ,$new->{'expirationdate'} ) < Date_to_Days(&Today) ){
-            $new->{'hasexpirated'} = 1;
-        }
+          $new->{'expirationdate'}=format_date_in_iso($new->{'expirationdate'});
+          my @date = split (/-/,$new->{'expirationdate'});
+          if ($date[0]*$date[1]*$date[2]>0 && Date_to_Days( @date ) < Date_to_Days(&Today) ){
+              $new->{'hasexpirated'} = 1;
+          }
     }
     
     $template->param(

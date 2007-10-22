@@ -106,7 +106,7 @@ sub getTranslatedLanguages {
     my @languages;
     my $lang;
     
-    if ( $interface eq 'opac' ) {
+    if ($interface && $interface eq 'opac' ) {
         $htdocs = C4::Context->config('opachtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             (@languages) = _get_language_dirs($htdocs,$theme);
@@ -119,7 +119,7 @@ sub getTranslatedLanguages {
             return _get_final_languages($all_languages,@languages);
         }
     }
-    elsif ( $interface eq 'intranet' ) {
+    elsif ($interface && $interface eq 'intranet' ) {
         $htdocs = C4::Context->config('intrahtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             @languages = _get_language_dirs($htdocs,$theme);
