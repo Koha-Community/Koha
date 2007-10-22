@@ -29,6 +29,7 @@ use ZOOM;
 use C4::Koha;
 use C4::Date;
 use C4::Log; # logaction
+use C4::ClassSource;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -343,7 +344,7 @@ WHERE frameworkcode=?
 
     # add the item
     &AddItemInMarc( $record, $item->{'biblionumber'},$frameworkcode );
-    
+   
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
         if C4::Context->preference("CataloguingLog");
     
@@ -3449,7 +3450,7 @@ sub _koha_modify_biblioitem {
 	my $error;
 
 	# re-calculate the cn_sort, it may have changed
-	my ($cn_sort) = _biblioitem_cn_sort($biblioitem->{'cn_class'}, $biblioitem->{'cn_source'}, );
+	my ($cn_sort) = GetClassSort($biblioitem->{'cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
 
 	my $query = 
 	"UPDATE biblioitems 
@@ -3547,7 +3548,7 @@ sub _koha_add_biblioitem {
     my $bibitemnum = $$data[0] + 1;
     $sth->finish();
 
-    my ($cn_sort) = _biblioitem_cn_sort( $biblioitem->{'cn_class'},$biblioitem->{'cn_source'} );
+	my ($cn_sort) = GetClassSort($biblioitem->{'cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
     my $query =
     "INSERT INTO biblioitems SET
 		biblioitemnumber = ?,
@@ -3642,11 +3643,7 @@ sub _koha_new_items {
     my $itemnumber = $data->{'MAX(itemnumber)'} + 1;
     $sth->finish;
 
-    my ($items_cn_sort) = _items_cn_sort(
-        $dbh,
-        $item->{'biblioitemnumber'},
-        $item->{'itemcallnumber'}
-    );
+    my ($items_cn_sort) = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
 
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
     if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
@@ -3737,7 +3734,7 @@ sub _koha_modify_item {
 	my $error;
 
 	# calculate items_cn_sort
-    my ($items_cn_sort) = _items_cn_sort( $dbh, $item->{'biblioitemnumber'}, $item->{'itemcallnumber'} );
+    my ($items_cn_sort) = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
 
     my $query = "UPDATE items SET ";
 	my @bind;
@@ -3907,94 +3904,6 @@ sub _koha_delete_item {
 }
 
 =head1 UNEXPORTED FUNCTIONS
-
-=over 4
-
-=head2 _biblioitem_cn_sort
-
-$lc = _biblioitem_cn_sort($classification);
-
-=back
-
-=cut
-
-sub _biblioitem_cn_sort {
-    my ($classification,$source) = @_;
-    $classification =~ s/^\s+|\s+$//g;
-    my $i = 0;
-    my $lc2;
-    my $lc1;
-
-    for ( $i = 0 ; $i < length($classification) ; $i++ ) {
-        my $c = ( substr( $classification, $i, 1 ) );
-        if ( $c ge '0' && $c le '9' ) {
-
-            $lc2 = substr( $classification, $i );
-            last;
-        }
-        else {
-            $lc1 .= substr( $classification, $i, 1 );
-
-        }
-    }    #while
-
-    my $other = length($lc1);
-    if ( !$lc1 ) {
-        $other = 0;
-    }
-
-    my $extras;
-    if ( $other < 4 ) {
-        for ( 1 .. ( 4 - $other ) ) {
-            $extras .= "0";
-        }
-    }
-    $lc1 .= $extras;
-    $lc2 =~ s/^ //g;
-
-    $lc2 =~ s/ //g;
-    $extras = "";
-    ##Find the decimal part of $lc2
-    my $pos = index( $lc2, "." );
-    if ( $pos < 0 ) { $pos = length($lc2); }
-    if ( $pos >= 0 && $pos < 5 ) {
-        ##Pad lc2 with zeros to create a 5digit decimal needed in marc record to sort as numeric
-
-        for ( 1 .. ( 5 - $pos ) ) {
-            $extras .= "0";
-        }
-    }
-    $lc2 = $extras . $lc2;
-    return ( $lc1 . $lc2 );
-}
-
-=head2 _items_cn_sort
-
-=over 4
-
-$cutterextra = items_cn_sort( $dbh, $biblioitem, $callnumber );
-
-=back
-
-=cut
-
-sub _items_cn_sort {
-    my ( $dbh, $biblioitem, $callnumber ) = @_;
-    my $sth =
-      $dbh->prepare(
-		"SELECT cn_source,cn_class,cn_item
-		FROM biblioitems
-		WHERE biblioitemnumber=?"
-      );
-
-    $sth->execute($biblioitem);
-    my ( $cn_source, $cn_class, $cn_item ) = $sth->fetchrow;
-    my $all         = $cn_class . " " . $cn_item;
-    my $total       = length($all);
-    my $items_cn_sort = substr( $callnumber, $total - 1 );
-
-    return $items_cn_sort;
-}
 
 =head2 ModBiblioMarc
 

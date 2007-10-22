@@ -21,6 +21,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Koha;
+use C4::ClassSortRoutine;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -47,18 +48,20 @@ sources and sorting rules.
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-   &GetClassSources
-   &AddClassSource
-   &GetClassSource
-   &ModClassSource
-   &DelClassSource
-   &GetClassSortRules
-   &AddClassSortRule
-   &GetClassSortRule
-   &ModClassSortRule
-   &DelClassSortRule
+    &GetClassSources
+    &AddClassSource
+    &GetClassSource
+    &ModClassSource
+    &DelClassSource
+    &GetClassSortRules
+    &AddClassSortRule
+    &GetClassSortRule
+    &ModClassSortRule
+    &DelClassSortRule
   
-   &GetSourcesForSortRule
+    &GetSourcesForSortRule
+    &GetClassSort
+    
 );
 
 =head2 GetClassSources
@@ -317,6 +320,35 @@ sub GetSourcesForSortRule {
     }
     $sth->finish();
     return @sources;
+
+}
+
+=head2 GetClassSort
+
+  my $cn_sort = GetClassSort($cn_source, $cn_class, $cn_item);
+
+Get the sort key corresponding to the classification part and item part
+and the defined call number source.
+
+=cut
+
+sub GetClassSort {
+
+    my ($cn_source, $cn_class, $cn_item) = @_;
+
+    my $source_ref = GetClassSource($cn_source);
+    unless (defined $source_ref) {
+        $source_ref = GetClassSource(C4::Context->preference("DefaultClassificationSource"));
+    }
+    my $routine = "";
+    if (defined $source_ref) {
+        my $rule_ref = GetClassSortRule($source_ref->{'class_sort_rule'});
+        if (defined $rule_ref) {
+            $routine = $rule_ref->{'sort_routine'};
+        }
+    } 
+
+    return GetClassSortKey($routine, $cn_class, $cn_item);
 
 }
 
