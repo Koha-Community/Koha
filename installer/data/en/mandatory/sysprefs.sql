@@ -104,6 +104,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type)  VALUE
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebra','1','If ON, Zebra indexing is turned off, simpler setup, but slower searches','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebraIndexes','0','Enter a specific hash for NoZebra indexes. Enter : \'indexname\' => \'100a,245a,500*\',\'index2\' => \'...\'','','Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use mysql or a temporary file for storing session data','mysql|tmp','Choice');  
-
-
-
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('CircAutocompl','1','If ON, autocompletion is enabled for the Circulation input',NULL,'YesNo');
