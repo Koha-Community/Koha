@@ -69,6 +69,7 @@ my %tabsysprefs;
     $tabsysprefs{Intranet_includes}="Admin";
     $tabsysprefs{AutoLocation}="Admin";
     $tabsysprefs{DebugLevel}="Admin";
+    $tabsysprefs{SessionStorage}="Admin";
 
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
@@ -96,6 +97,9 @@ my %tabsysprefs;
     $tabsysprefs{NoZebraIndexes}="Catalogue";
     $tabsysprefs{ReceiveBackIssues}="Catalogue";
     $tabsysprefs{DefaultClassificationSource}="Catalogue";
+    $tabsysprefs{SearchMyLibraryFirst}="Catalogue";
+    $tabsysprefs{RoutingSerials}="Catalogue";
+    $tabsysprefs{BiblioAddsAuthorities}="Catalogue";
     
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -135,6 +139,7 @@ my %tabsysprefs;
     $tabsysprefs{uppercasesurnames}="Members";
     $tabsysprefs{NoReturnSetLost}="Members";
     $tabsysprefs{MaxFine}="Members";
+    $tabsysprefs{NotifyBorrowerDeparture}="Members";
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";
