@@ -2,26 +2,6 @@
 <title>Koha &rsaquo; Patrons &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
-<script type="text/javascript">
-//<![CDATA[
-function confirm_deletion() {
-    var is_confirmed = window.confirm('Click OK to confirm deletion');
-    var borrowernumbervalue=document.form.borrowernumber.value; 
-   
-    if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
-    }
-}
-
-function confirm_reregistration() {
-    var is_confirmed = window.confirm('Click OK to confirm renewal');
-    var borrowernumbervalue1=document.form.borrowernumber.value;
-    if (is_confirmed) {
-    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber='+borrowernumbervalue1+'';
-    }
-}
-//]]>
-</script>
 </head>
 <body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
