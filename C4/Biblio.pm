@@ -393,12 +393,19 @@ sub ModBiblio {
     
     # adding biblionumber
     my ($tag_biblionumber, $subfield_biblionumber) = GetMarcFromKohaField('biblio.biblionumber',$frameworkcode);
-    $record->append_fields(
-	    MARC::Field->new(
-		    $tag_biblionumber,'','',$subfield_biblionumber => $biblionumber
-	    )
-    ) unless ($record->subfield($tag_biblionumber,$subfield_biblionumber));
-    
+    if ($tag_biblionumber < 10) {
+        $record->append_fields(
+                MARC::Field->new(
+                        $tag_biblionumber, $biblionumber
+                )
+        ) unless $record->field($tag_biblionumber);
+    } else {
+        $record->append_fields(
+                MARC::Field->new(
+                        $tag_biblionumber,'','',$subfield_biblionumber => $biblionumber
+                )
+        ) unless ($record->subfield($tag_biblionumber,$subfield_biblionumber));
+    }
     # update the MARC record (that now contains biblio and items) with the new record data
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     
