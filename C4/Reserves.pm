@@ -94,8 +94,7 @@ C4::Reserves - Koha functions for dealing with reservation.
   &GetReservesToBranch
   &GetReserveCount
   &GetReserveFee
-  &GetReservesForBranch
-  &GetReservesToBranch
+
   &GetOtherReserves
   
   &ModReserveFill

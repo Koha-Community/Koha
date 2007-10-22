@@ -100,16 +100,20 @@ my $strsth =
  LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE isnull(cancellationdate)
-  && reserves.found is NULL
-  && items.holdingbranch=?
- ";
+ AND reserves.found is NULL ";
 
+if (C4::Context->preference('IndependantBranches')){
+	$strsth .= " items.holdingbranch=? ";
+}
 $strsth .= $sqlorderby;
-
 my $sth = $dbh->prepare($strsth);
 
-$sth->execute(C4::Context->userenv->{'branch'});
-
+if (C4::Context->preference('IndependantBranches')){
+	$sth->execute(C4::Context->userenv->{'branch'});
+}
+else {
+	$sth->execute();
+}	
 my @reservedata;
 my $previous;
 my $this;

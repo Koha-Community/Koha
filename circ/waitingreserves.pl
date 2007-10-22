@@ -108,8 +108,15 @@ if ($item) {
 
 my @reservloop;
 
-my @getreserves = GetReservesForBranch($default);
-
+my @getreserves;
+if (C4::Context->preference('IndependantBranches')){
+	@getreserves = GetReservesForBranch($default);
+}
+else {
+	@getreserves = GetReservesForBranch($default);
+	# need to have a routine to get all waiting reserves
+}	
+	
 foreach my $num (@getreserves) {
     my %getreserv;
     my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
