@@ -145,9 +145,16 @@ $context = undef;        # Initially, no context is set
 
 sub KOHAVERSION {
     my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+
+    # 2 cases here : on CVS install, $cgidir does not need a /cgi-bin
+    # on a standard install, /cgi-bin need to be added.
+    # test one, then the other
+    # FIXME - is this all really necessary?
     unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
-            $cgidir = C4::Context->intranetdir;
+        $cgidir = C4::Context->intranetdir;
+        closedir(DIR);
     }
+
     do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
     return kohaversion();
 }
