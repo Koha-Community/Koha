@@ -92,8 +92,9 @@ my $category_type = $borrowercategory->{'category_type'};
 $template->param( $data->{'categorycode'} => 1 ); 
 
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		$data->{$_} = C4::Dates->new($data->{$_}, 'iso')->output()
-		or die ("failed C4::Dates->new(" . $data->{$_} . ", 'iso')->output()");
+		my $tempdate = C4::Dates->new($data->{$_})->output('iso')
+			or warn ("Invalid $_ = " . $data->{$_});
+		$data->{$_} = $tempdate || '';
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
@@ -139,8 +140,8 @@ if ( $category_type eq 'A' ) {
 }
 else {
     if ($data->{'guarantorid'}){
-    my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
-    $template->param(guarantor => 1);
+	    my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
+		$template->param(guarantor => 1);
 		foreach (qw(borrowernumber cardnumber firstname surname)) {        
 			  $template->param("guarantor$_" => $guarantor->{$_});
         }
