@@ -54,7 +54,7 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 			<li><span class="label">Current Library:</span> <!-- TMPL_VAR NAME="holdingbranch" --></li>
 			<li><span class="label">Last seen:</span> <!-- TMPL_VAR NAME="datelastseen" --></li>
 			<li><span class="label">Last borrowed:</span> <!-- TMPL_IF NAME="datelastborrowed" --><!-- TMPL_VAR NAME="datelastborrowed" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>
-			<li><span class="label">Item Status:</span> <!-- TMPL_IF NAME="issue" -->On issue to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Available <!-- /TMPL_IF --></li>
+			<li><span class="label">Item Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
 			<!-- TMPL_IF NAME="issue" --><li><span class="label">Date Due:</span> <!-- TMPL_VAR NAME="date_due" --></li><!-- /TMPL_IF -->
 			<li><span class="label">Last Borrower 1:</span> <!-- TMPL_IF NAME="card0" --><!-- TMPL_VAR NAME="card0" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>
 			<li><span class="label">Last Borrower 2:</span> <!-- TMPL_IF NAME="card1" --><!-- TMPL_VAR NAME="card1" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>

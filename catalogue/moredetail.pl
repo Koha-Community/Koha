@@ -76,8 +76,8 @@ my $order = GetOrder($ordernum);
 $results[0]=$data;
 
 foreach my $item (@$items){
-	$item->{itemlostloop}= GetAuthorisedValues('ITEMLOST');
-	$item->{itemdamagedloop}= GetAuthorisedValues('DAMAGED');
+	$item->{itemlostloop}= GetAuthorisedValues('LOST',$item->{itemlost});
+	$item->{itemdamagedloop}= GetAuthorisedValues('DAMAGED',$item->{damaged});
     $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});

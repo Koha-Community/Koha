@@ -53,8 +53,6 @@ $VERSION = 3.00;
   &GetPrinters &GetPrinter
   &GetItemTypes &getitemtypeinfo
   &GetCcodes
-  &GetAuthItemlost
-  &GetAuthItembinding
   &get_itemtypeinfos_of
   &getframeworks &getframeworkinfo
   &getauthtypes &getauthtype
@@ -285,36 +283,6 @@ sub GetCcodes {
     while ( my $data = $sth->fetchrow_hashref ) {
         if ( $data->{category} eq "CCODE" ) {
             $count++;
-            $results[$count] = $data;
-
-            #warn "data: $data";
-        }
-    }
-    $sth->finish;
-    return ( $count, @results );
-}
-
-=head2
-
-grab itemlost authorized values
-
-=cut
-
-sub GetAuthItemlost {
-    my $itemlost = shift;
-    my $count    = 0;
-    my @results;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "SELECT * FROM authorised_values ORDER BY authorised_value");
-    $sth->execute;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{category} eq "ITEMLOST" ) {
-            $count++;
-            if ( $itemlost eq $data->{'authorised_value'} ) {
-                $data->{'selected'} = 1;
-            }
             $results[$count] = $data;
 
             #warn "data: $data";
@@ -829,15 +797,24 @@ Set C<$category> on input args if you want to limits your query to this one. Thi
 =cut
 
 sub GetAuthorisedValues {
-    my $category = shift;
+    my ($category,$selected) = @_;
+	my $count = 0;
+	my @results;
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
     $query .= " WHERE category = '" . $category . "'" if $category;
 
     my $sth = $dbh->prepare($query);
     $sth->execute;
-    my $data = $sth->fetchall_arrayref({});
-    return $data;
+	while (my $data=$sth->fetchrow_hashref) {
+		if ($selected eq $data->{'authorised_value'} ) {
+			$data->{'selected'} = 1;
+		}
+		$results[$count] = $data;
+		$count++;
+	}
+    #my $data = $sth->fetchall_arrayref({});
+    return \@results; #$data;
 }
 
 =item fixEncoding
