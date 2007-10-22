@@ -155,8 +155,8 @@ function CreateKey(){
                 <!-- TMPL_LOOP NAME="item_loop" -->
                 <tr>
                     <!-- TMPL_VAR NAME="item_value" -->
-                    <td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
-                    <td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Delete</a></td>
+                    <!-- TMPL_IF Name="nomod"--> <td colspan="2">&nbsp;</td><!--TMPL_ELSE--><td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
+                    <td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Delete</a></td><!--/TMPL_IF-->
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>

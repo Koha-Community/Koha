@@ -25,6 +25,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
+use C4::Branch; # XXX subfield_is_koha_internal_p
 use Date::Calc qw(Today);
 
 use MARC::File::XML;
@@ -256,7 +257,7 @@ foreach my $tag (sort keys %{$tagslib}) {
  
     my $index_subfield= int(rand(1000000)); 
     if($subfield eq '@'){
-        $subfield_data{id} = "tag_".$tag."_subfield_0_".$index_subfield;
+        $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
     } else {
          $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
     }
@@ -308,18 +309,18 @@ foreach my $tag (sort keys %{$tagslib}) {
   
       #---- branch
       if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-          my $sth =
-            $dbh->prepare(
-              "select branchcode,branchname from branches order by branchname");
-          $sth->execute;
-          push @authorised_values, ""
-            unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-  
-          while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
-              push @authorised_values, $branchcode;
-              $authorised_lib{$branchcode} = $branchname;
+          #Use GetBranches($onlymine)
+          my $onlymine=C4::Context->preference('IndependantBranches') && 
+                  C4::Context->userenv && 
+                  C4::Context->userenv->{flags}!=1 && 
+                  C4::Context->userenv->{branch};
+          my $branches = GetBranches($onlymine);
+          my @branchloop;
+          foreach my $thisbranch ( sort keys %$branches ) {
+              push @authorised_values, $thisbranch;
+              $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
           }
-  
+          
           #----- itemtypes
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {

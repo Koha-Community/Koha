@@ -29,6 +29,7 @@ use C4::Context;
 use MARC::Record;
 use C4::Log;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
+use C4::Branch;    # XXX subfield_is_koha_internal_p
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -163,16 +164,16 @@ sub build_authorized_values_list ($$$$$$$) {
 
     #---- branch
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-        my $sth =
-          $dbh->prepare(
-            "select branchcode,branchname from branches order by branchname");
-        $sth->execute;
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-
-        while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
-            push @authorised_values, $branchcode;
-            $authorised_lib{$branchcode} = $branchname;
+        #Use GetBranches($onlymine)
+        my $onlymine=C4::Context->preference('IndependantBranches') && 
+                C4::Context->userenv && 
+                C4::Context->userenv->{flags}!=1 && 
+                C4::Context->userenv->{branch};
+        my $branches = GetBranches($onlymine);
+        my @branchloop;
+        foreach my $thisbranch ( sort keys %$branches ) {
+            push @authorised_values, $thisbranch;
+            $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
         }
 
         #----- itemtypes
