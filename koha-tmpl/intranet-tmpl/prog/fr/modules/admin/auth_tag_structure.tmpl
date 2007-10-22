@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Grilles d'autoritévérification MARC :  <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" -->
-    <!-- TMPL_IF NAME="heading-modify-tag-p" -->&rsaquo; Modifier le champ<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="heading-add-tag-p" -->&rsaquo; Ajouter un champ<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE -->&rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->&rsaquo; Confirmer la suppression<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" -->&rsaquo; Donnée supprimée<!-- /TMPL_IF --></title>
+    <!-- TMPL_IF NAME="heading-modify-tag-p" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage<!-- TMPL_ELSE -->Grille par défaut<!-- /TMPL_IF --> &rsaquo; Modifier le champ<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="heading-add-tag-p" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage<!-- TMPL_ELSE -->Grille par défaut<!-- /TMPL_IF --> &rsaquo; Ajouter un champ<!-- /TMPL_IF -->
+    <!-- TMPL_ELSE -->&rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage<!-- TMPL_ELSE -->Grille par défaut<!-- /TMPL_IF --> &rsaquo; Confirmer la suppression<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" -->&rsaquo; <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage<!-- TMPL_ELSE -->Grille par défaut<!-- /TMPL_IF --> &rsaquo; Donnée supprimée<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -62,9 +62,9 @@ return false;
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" -->
-    <!-- TMPL_IF NAME="heading-modify-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc<a> &rsaquo; Modifier le champ<!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="heading-add-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc pour</a> &rsaquo; Ajouter un champ<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc pour</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc </a> &rsaquo; Confirmer la suppression<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc pour</a> &rsaquo; Entrée supprimée<!-- TMPL_ELSE -->Grille d'autorité MARC<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+    <!-- TMPL_IF NAME="heading-modify-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité </a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille par défaut</a><!-- /TMPL_IF --> &rsaquo; Modifier le champ<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="heading-add-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité </a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille par défaut</a><!-- /TMPL_IF --> &rsaquo; Ajouter un champ<!-- /TMPL_IF -->
+    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc pour</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité </a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille par défaut</a><!-- /TMPL_IF --> &rsaquo; Confirmer la suppression<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Grille d'autorité Marc pour</a> &rsaquo; Entrée supprimée<!-- TMPL_ELSE -->Grille d'autorité MARC <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Grille de catalogage<!-- TMPL_ELSE -->Grille par défaut<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -86,45 +86,42 @@ return false;
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-        <p><label>Champ</label><!-- TMPL_VAR NAME="searchfield" --></p>
-        <p><label>Texte pour les bibliothécaires</label><input type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape="HTML" -->" size="40" maxlength="100" /></p>
-        <p><label>Texte à l'OPAC</label><input type="text" name="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></p>
-        <p><label for="repeatable">Répétable</label>
+        <fieldset class="rows"><ol>
+		<li><span class="label">Champ</span><!-- TMPL_VAR NAME="searchfield" --></li>
+        <li><label for="liblibrarian">Texte pour les bibliothécaires</label><input type="text" name="liblibrarian" id="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" escape="HTML" -->" size="40" maxlength="100" /></li>
+        <li><label for="libopac">Texte à l'OPAC</label><input type="text" name="libopac" id="libopac" value="<!-- TMPL_VAR NAME="libopac" escape="HTML" -->" size="40" maxlength="100" /></li>
+        <li><label for="repeatable">Répétable</label>
             <!-- TMPL_IF NAME="repeatable" -->
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="repeatable" id="repeatable" value="1" />
             <!-- /TMPL_IF -->
-        </p>
-        <p><label for="mandatory">Obligatoire</label>
+        </li>
+        <li><label for="mandatory">Obligatoire</label>
             <!-- TMPL_IF NAME="mandatory" -->
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" checked="checked" />
             <!-- TMPL_ELSE -->
                 <input type="checkbox" name="mandatory" id="mandatory" value="1" />
             <!-- /TMPL_IF -->
-            </p>
-        <p><label>Valeur autorisée</label><!-- TMPL_VAR NAME="authorised_value" --> (si vous sélectionnez une valeur ici, les indicateurs seront limités à la liste des valeurs autorisées)</p>
-        <p><input type="button" value="OK" class="button" onclick="Check(this.form)" /></p>
+            </li>
+        <li><label for="authorised_value">Valeur autorisée</label><!-- TMPL_VAR NAME="authorised_value" --> (si vous sélectionnez une valeur ici, les indicateurs seront limités à la liste des valeurs autorisées)</li>
+</ol></fieldset>
+        <p><input type="button" value="Valider" class="button" onclick="Check(this.form)"></p>
     </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 <h3>Confirmer la suppression</h3>
-<table>
-    <tr>
-        <td>Champ</td>
-        <td><!-- TMPL_VAR NAME="searchfield" --></td>
-    </tr>
-    <tr>
-        <td>&nbsp;</td><td><!-- TMPL_VAR NAME="liblibrarian" --></td>
-    </tr>
-    
-    <tr><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+
+		<ul>
+			<li><strong>Champ : </strong><!-- TMPL_VAR NAME="searchfield" --> <!-- TMPL_VAR NAME="liblibrarian" --></li>
+		</ul>
+		
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
-        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="OUI"></form></td><td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NON" class="submit"></form></td></tr>
-</table>
+        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="OUI"></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="NON" class="submit"></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->

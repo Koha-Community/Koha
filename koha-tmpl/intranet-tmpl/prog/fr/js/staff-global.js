@@ -1,5 +1,7 @@
 // staff-global.js
 
+function _(s) { return s } // dummy function for gettext
+
  $(document).ready(function() {
  	$(".focus").focus();
 	$('#toplevelmenu').clickMenu(); 

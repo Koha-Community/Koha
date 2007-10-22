@@ -2,9 +2,9 @@
 <title>Koha &rsaquo; Catalogue &rsaquo; Détails pour <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Core + Skin CSS -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/button/assets/skins/sam/button.css"/>
 <!-- OPTIONAL: Menu Stylesheet (required for creating buttons of type "menu" and "split") -->
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css"/>
 
 <!-- Dependencies -->
 <script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
@@ -24,10 +24,10 @@ function Dopop(link) {
 function confirm_deletion(count) {
         var is_confirmed;
 	if (count>0){
-		    is_confirmed= alert(_('you have [ '+ count +' ] item(s) linked \n you must delete all items before delete this biblio'));
+		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
 		    }
         else{
-		    is_confirmed= confirm(_('Êtes vous sûr de vouloir supprimer cette nogice?'));
+		    is_confirmed= confirm(_('Êtes vous sûr de vouloir supprimer cet exemplaire ?'));
 	}
 
     
@@ -41,60 +41,51 @@ function confirm_deletion(count) {
 		
     }
 }
-      // "contentready" event handler for the "toolbar" <div>
-	 YAHOO.example.init = function () {
-      YAHOO.util.Event.onContentReady("toolbar", function () {
-			var oAddbiblio = new YAHOO.widget.Button("addbiblio");
-            var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
-			var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
-			var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
-			var oPlacehold = new YAHOO.widget.Button("placehold");
-			var oEditButton = new YAHOO.widget.Button("editbutton", { type: "menu", menu: "editbuttonselect" });
-			 });
+
+// prepare DOM for YUI Toolbar
+
+ $(document).ready(function() {
+ 	$("#edititems").parent().remove();
+	$("#duplicatebiblio").parent().remove();
+	$("#editmenucontainer").empty();
+	yuiToolbar();
+ });
+
+// YUI Toolbar Functions
+
+       var editmenu = [
+            { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=" },
+            { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
+            { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=duplicate" }
+        ];
+        
+        var oEditMenu = new YAHOO.widget.Button({
+				type: "menu",
+				label: "Edit",
+				name: "editmenubutton",
+				menu: editmenu,
+				container: "editmenucontainer"
+		 });   
+
+function yuiToolbar(){
+	 YAHOO.toolbar.init = function () {
+                    var oAddbiblio = new YAHOO.widget.Button("addbiblio");
+                    var oEditbiblio = new YAHOO.widget.Button("editbiblio");
+                    var oEdititems = new YAHOO.widget.Button("edititems");
+                    var oDuplicatebiblio = new YAHOO.widget.Button("duplicatebiblio");
+                    var oDeletebiblio = new YAHOO.widget.Button("deletebiblio");
+                    var oAddtoshelf = new YAHOO.widget.Button("addtoshelf");
+                    var oPrintbiblio = new YAHOO.widget.Button("printbiblio");
+                    <!-- TMPL_UNLESS name="bi_notforloan" -->
+                        var oPlacehold = new YAHOO.widget.Button("placehold");		 
+                    <!-- /TMPL_UNLESS -->
     } ();
+}
 	
 //]]>
 </script>
-<style type="text/css">
-#toolbar {
-}
-
-#addbiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -155px;
-	background-repeat : no-repeat;
-}
-
-#deletebiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -188px;
-	background-repeat : no-repeat;
-}
-
-#printbiblio a {
-	padding-left : 2.1em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -243px;
-	background-repeat : no-repeat;
-}
-
-#addtoshelf a {
-	padding-left : 2.2em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -124px;
-	background-repeat : no-repeat;
-}
-
-#placehold a {
-	padding-left : 2.2em;
-	background-image: url("/intranet-tmpl/prog/img/opac-buttons.gif");
-	background-position : 0 -215px;
-	background-repeat : no-repeat;
-}
-</style>
 </head>
+
 <body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -131,7 +122,7 @@ function confirm_deletion(count) {
 		
 		<ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
-            <li><strong>Auteurs : </strong><ul>
+            <li><strong>Autres auteurs :</strong><ul>
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                 <li><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
                     <!-- TMPL_VAR NAME="value" -->
@@ -160,9 +151,11 @@ function confirm_deletion(count) {
 		</ul>
 		</div>
 		
-		<div class="yui-u">
-<!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Image de couverture"></a><!-- /TMPL_IF -->
-</div>
+<div class="yui-u"><!-- TMPL_IF NAME="AmazonContent" -->
+		<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Image de couverture"></a>
+<!-- TMPL_ELSE -->
+	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
+<!-- /TMPL_IF --></div>
 		
 		<div class="yui-u">
 		<ul>
@@ -245,16 +238,21 @@ function confirm_deletion(count) {
                     <td><!-- TMPL_IF name="datedue" -->
                             Prêté à : <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
                         <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="notforloan" -->
-                                <!-- TMPL_VAR name="notforloan" -->
+                            <!-- TMPL_IF name="bi_notforloan" -->
+                                Type de document exclu du prêt
                             <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF name="itemlost"-->
-                                    Exemplaire(s) perdu(s)
+                                <!-- TMPL_IF name="notforloan" -->
+                                    <!-- TMPL_VAR name="notforloan" -->
                                 <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF NAME="wthdrawn" -->Exemplaire annulé<!-- TMPL_ELSE -->Disponible<!-- /TMPL_IF -->
+                                    <!-- TMPL_IF name="itemlost"-->
+                                        Exemplaire(s) perdu(s)
+                                    <!-- TMPL_ELSE -->
+                                    <!-- TMPL_IF NAME="wthdrawn" -->Exemplaire annulé<!-- TMPL_ELSE -->Disponible<!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF --></td>
+                        <!-- /TMPL_IF -->
+                        </td>
                     <td><!-- TMPL_VAR NAME="datedue" --></td>
                     <td><!-- TMPL_VAR NAME="datelastseen" --></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>

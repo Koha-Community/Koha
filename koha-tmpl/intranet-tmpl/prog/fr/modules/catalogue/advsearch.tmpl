@@ -431,14 +431,15 @@
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Localisation et disponibilité :  </legend>
         <p>
-        <label>Bibliothèque</label><select name="limit" id="branchloop">
+        <label>Site</label><select name="limit" id="branchloop">
+        <option value="">Tous sites</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
         <!-- /TMPL_LOOP -->
         </select>
         </p>
         <p>
-        <label for="available-items">Tous les documents actuellement disponibles</label><input type="checkbox" id="available-items" name="limit" value="Date de retour : 0000-00-00"></p>
+        <label for="available-items">Seulement les documents actuellement disponibles</label><input type="checkbox" id="available-items" name="limit" value="Date de retour : 0000-00-00"></p>
     </fieldset>
 <!-- /AVAILABILITY LIMITS -->
 

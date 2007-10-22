@@ -1,26 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; Détails du catalogue MARC pour <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script language="JavaScript" type="text/javascript">
-function active(numlayer){
-    for (i=0; i <= 10 ; i++ ) {
-        var tab = document.getElementById(i+'XX');
-        if (numlayer==i) {
-            tab.setAttribute("class","content_visible");
-            var tabactive=document.getElementById('link'+i);
-            tabactive.removeAttribute("class");
-            tabactive.setAttribute("class","tab_active");
-        } else {
-            tab.setAttribute("class","content_hidden");
-            try {
-                var tabactive=document.getElementById('link'+i);
-                tabactive.removeAttribute("class");
-                tabactive.setAttribute("class","tab_inactive");
-            }
-            catch(e){};
-        }
-    }
-}
+<script type="text/javascript">
+
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#bibliotabs').tabs();
+	 });
 
 function confirm_deletion(count) {
 
@@ -48,11 +35,7 @@ function Changefwk(FwkList) {
 	window.location = "MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
 }
 
-function Addbiblio(op) {
-	var fwk = document.forms['f'].Frameworks.options[document.forms['f'].Frameworks.selectedIndex].value;
-	window.location = "../cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode="+fwk+"&op="+op; 
-}
-
+//]]>
 </script>
 </head>
 <body>
@@ -77,54 +60,56 @@ function Addbiblio(op) {
 
     <p><b>Avec la grille : <!--TMPL_VAR Name="framework" --></b></p>
     
-    <div id="tabs">
-        <!-- TMPL_IF NAME="0XX" -->
-            <a href="javascript:active(0)" class="tab_active" id="link0">0</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="1XX" -->
-            <a href="javascript:active(1)" class="tab_inactive" id="link1">1</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="2XX" -->
-            <a href="javascript:active(2)" class="tab_inactive" id="link2">2</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="3XX" -->
-            <a href="javascript:active(3)" class="tab_inactive" id="link3">3</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="4XX" -->
-            <a href="javascript:active(4)" class="tab_inactive" id="link4">4</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="5XX" -->
-            <a href="javascript:active(5)" class="tab_inactive" id="link5">5</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="6XX" -->
-            <a href="javascript:active(6)" class="tab_inactive" id="link6">6</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="7XX" -->
-            <a href="javascript:active(7)" class="tab_inactive" id="link7">7</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="8XX" -->
-            <a href="javascript:active(8)" class="tab_inactive" id="link8">8</a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="9XX" -->
-            <a href="javascript:active(9)" class="tab_inactive" id="link9">9</a>
-        <!-- /TMPL_IF -->
-            <a href="javascript:active(10)" class="tab_inactive" id="link10">Exemplaires</a>
-    </div>
-
-    <div name="0XX" id="0XX" class="content_visible">
+<div id="bibliotabs" class="toptabs numbered">
+	<ul>
+            <!-- TMPL_IF name="0XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab0XX">0</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="1XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab1XX">1</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="2XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab2XX">2</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="3XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab3XX">3</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="4XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab4XX">4</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="5XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab5XX">5</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="6XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab6XX">6</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="7XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab7XX">7</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="8XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab8XX">8</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="9XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab9XX">9</a></li>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="10XX" -->
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab10XX">Exemplaires(s)</a></li>
+            <!-- /TMPL_IF -->
+        </ul>
+    <div id="tab0XX">
         <!-- TMPL_LOOP NAME="0XX" -->
-                <!-- TMPL_IF name="tag" -->
-                	<div class="tag">
-                    <div class="tag_title">
-                        <!-- TMPL_VAR NAME="tag" -->
-                    </div>
-                <!-- TMPL_ELSE -->
-                    <div class="tag">
-                <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="tag" -->
+                <div class="tag">
+                <div class="tag_title">
+                    <!-- TMPL_VAR NAME="tag" -->
+                </div>
+            <!-- TMPL_ELSE -->
+                <div class="tag">
+            <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p class="subfield_line">
-                    <label class="labelsubfield">&nbsp;
-                    <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
+                    <label>&nbsp;
+                    <!-- TMPL_UNLESS name="hide_marc" --><!-- TMPL_VAR NAME="marc_subfield" --><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
                     <!-- TMPL_IF name="link" -->
@@ -137,12 +122,11 @@ function Addbiblio(op) {
                     <!-- /TMPL_IF -->
                 </p>
             <!-- /TMPL_LOOP -->
-            </div>
             </div> <!-- class='tag' -->
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="1XX" class="content_hidden">
+    <div id="tab1XX">
         <!-- TMPL_LOOP NAME="1XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -154,7 +138,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -169,11 +153,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="2XX" class="content_hidden">
+    <div id="tab2XX">
         <!-- TMPL_LOOP NAME="2XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -185,7 +168,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -200,11 +183,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="3XX" class="content_hidden">
+    <div id="tab3XX">
         <!-- TMPL_LOOP NAME="3XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -216,7 +198,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -231,11 +213,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="4XX" class="content_hidden">
+    <div id="tab4XX">
         <!-- TMPL_LOOP NAME="4XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -247,7 +228,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -262,11 +243,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div  id="5XX" class="content_hidden">
+    <div  id="tab5XX">
         <!-- TMPL_LOOP NAME="5XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -278,7 +258,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -293,11 +273,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="6XX" class="content_hidden">
+    <div id="tab6XX">
         <!-- TMPL_LOOP NAME="6XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -309,7 +288,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -324,11 +303,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div  id="7XX" class="content_hidden">
+    <div  id="tab7XX">
         <!-- TMPL_LOOP NAME="7XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -340,7 +318,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -355,11 +333,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="8XX" class="content_hidden">
+    <div id="tab8XX">
         <!-- TMPL_LOOP NAME="8XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -371,7 +348,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -386,11 +363,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="9XX" class="content_hidden">
+    <div id="tab9XX">
         <!-- TMPL_LOOP NAME="9XX" -->
                 <!-- TMPL_IF name="tag" -->
                     <div class="tag">
@@ -402,7 +378,7 @@ function Addbiblio(op) {
                 <!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="subfield" -->
                 <p>
-                    <label class="labelsubfield">&nbsp;
+                    <label>&nbsp;
                     <!-- TMPL_UNLESS name="hide_marc" --><b><!-- TMPL_VAR NAME="marc_subfield" --></b><!-- /TMPL_UNLESS -->
                     <span title="<!-- TMPL_VAR name="long_desc" -->"><!-- TMPL_VAR NAME="short_desc" --></span></label>
                     <!-- TMPL_VAR NAME="marc_value" -->
@@ -417,11 +393,10 @@ function Addbiblio(op) {
                 </p>
             <!-- /TMPL_LOOP -->
             </div>
-            </div>
         <!-- /TMPL_LOOP -->
     </div>
     
-    <div id="10XX" class="content_hidden">
+    <div id="tab10XX">
         <table>
                 <tr>
                     <!-- TMPL_LOOP NAME="item_header_loop" -->
@@ -438,6 +413,7 @@ function Addbiblio(op) {
         </table>
     </div>
 
+</div>
 </div>
 </div>
 <div class="yui-b">

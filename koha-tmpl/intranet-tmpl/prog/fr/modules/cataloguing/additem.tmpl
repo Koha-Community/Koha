@@ -3,7 +3,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
-function _(s) { return s } // dummy function for gettext
 function active(numlayer)
 {
     for (i=10; i < 11 ; i++ ) {
@@ -52,6 +51,78 @@ function confirm_deletion(biblionumber,itemnumber) {
     window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
     }
 }
+
+function CloneSubfield(index){
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var new_key = CreateKey();
+    var new_id  = original.getAttribute('id')+new_key;
+    
+    // set the attribute for the new 'div' subfields
+    var inputs     = clone.getElementsByTagName('input');
+    var selects    = clone.getElementsByTagName('select');
+    var textareas  = clone.getElementsByTagName('textarea');
+        
+    // input
+    var id_input = "";
+    for(var i=0,len=inputs.length; i<len ; i++ ){
+        id_input = inputs[i].getAttribute('id')+new_key;
+        inputs[i].setAttribute('id',id_input);
+        inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+    }
+    
+    // select 
+    for(var i=0,len=selects.length; i<len ; i++ ){
+        id_input = selects[i].getAttribute('id')+new_key;
+        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
+        selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+    }
+    
+    // textarea
+    for(var i=0,len=textareas.length; i<len ; i++ ){
+        id_input = textareas[i].getAttribute('id')+new_key;
+        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
+        textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+    }
+    
+    <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
+    // when cloning a subfield, reset its label too.
+    var label = clone.getElementsByTagName('label')[0];
+    label.setAttribute('for',id_input);
+    <!-- /TMPL_UNLESS -->
+    
+    // setting a new if for the parent div
+    clone.setAttribute('id',new_id);
+    
+    var CloneButtonPlus;
+    try {
+      var spans = clone.getElementsByTagName('span');
+      if(spans.length){
+          for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
+            if(spans[i].getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus = spans[i];
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                    var buttonUp = clone.getElementsByTagName('img')[0];
+                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
+                }
+            }
+        }
+    }
+    catch(e){
+        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    }
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
+}
+
+/**
+ * This function create a random number
+ */
+function CreateKey(){
+    return parseInt(Math.random() * 100000);
+}
+
+
 //]]>
 </script>
 </head>
@@ -100,13 +171,18 @@ function confirm_deletion(biblionumber,itemnumber) {
         <h2>Modifier exemplaire</h2>
     <!-- /TMPL_IF -->	
         <!-- TMPL_LOOP NAME="item" -->
-            <p>
+               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+   
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
                 <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-            </p>
+                <!-- TMPL_IF NAME="repeatable" -->
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
+                <!-- /TMPL_IF -->
+   
+            </div>   
         <!-- /tmpl_loop -->
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
     <!-- TMPL_IF name="barcode_not_unique" -->

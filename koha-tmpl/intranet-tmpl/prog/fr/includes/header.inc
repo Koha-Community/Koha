@@ -2,7 +2,7 @@
 	
 <div id="toplevelnav">
 <ul id="toplevelmenu">
-	<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li><!-- /TMPL_IF -->
 	 <!-- TMPL_IF NAME="CAN_user_borrowers" --><li><a href="/cgi-bin/koha/members/members-home.pl">Adhérents</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li><!-- /TMPL_IF -->
 	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">Plus</a><ul>
@@ -12,7 +12,7 @@
 	<li><a href="/cgi-bin/koha/serials/serials-home.pl">Périodiques</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_reports" --><li><a href="/cgi-bin/koha/reports/reports-home.pl">Bilans et statistiques</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_tools" --><li><a href="/cgi-bin/koha/tools/tools-home.pl">Outils</a></li><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="CAN_user_parameters" --><li><a href="/cgi-bin/koha/admin/admin-home.pl">AdministrationKoha</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_parameters" --><li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li><!-- /TMPL_IF -->
 	<li><a href="/cgi-bin/koha/about.pl">A propos de Koha</a></li></ul></li>
 </ul>
 </div>

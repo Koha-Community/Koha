@@ -16,6 +16,8 @@
     <!-- TMPL_ELSE -->
         <span class="problem">Pas de téléphone enregistré.</span>    
     <!-- /TMPL_IF --></li>
+	<li><!-- TMPL_VAR NAME="borrowerphonepro" --></li>
+	<li><!-- TMPL_VAR NAME="borrowermobile" --></li>
 	    <!-- TMPL_IF NAME="borroweremail" -->
    <li> <a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="borroweremail" --></a></li>
     <!-- /TMPL_IF -->

@@ -52,7 +52,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="roadtype-admin-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="roadtype-admin-search.inc" -->
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/roadtype.pl">Type de voie</a> &rsaquo;  <!-- TMPL_IF NAME="roadtypeid" --> Modifier un type de voie<!-- TMPL_ELSE --> Ajouter un type de voie<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/roadtype.pl">Imprimante</a> &rsaquo; Confirmer la suppression<!-- TMPL_ELSE --> Type de voie<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
@@ -73,20 +73,16 @@
 	<input type="hidden" name="checked" value="0" />
 	<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" />
 
+<fieldset class="rows"><ol>
 <!-- TMPL_IF NAME="roadtypeid" -->
-
-	<p>
-	<label>Type de voie</label>
-	<label><b><!-- TMPL_VAR NAME="roadtypeid" --></b></label>
-	</p>
-	
+<li>
+	<span class="label">Type de voie : </span><!-- TMPL_VAR NAME="roadtypeid" -->
+	</li>
 <!-- /TMPL_IF -->
-	<p>			
-	<label>Type de voie</label>
-		
-	<input  type="text" name="road_type" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="road_type" ESCAPE="HTML" -->" />
-				
-	</p>
+	<li>			
+		<label for="road_type">Type de voie : </label>
+	<input  type="text" name="road_type" id="road_type" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="road_type" ESCAPE="HTML" -->" />
+	</li></ol></fieldset>
 	
 	<p>					  
 	<input class="button" type="button" onclick="Check(this.form)" value="OK" />	
@@ -96,23 +92,20 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 	<h3>Confirmer la suppression du type de voie</h3>
-	<table>
-		<tr>
-			<th>Identifiant type de voie </th>
-			<td><!-- TMPL_VAR NAME="roadtypeid" --></td>
-		</tr>
-		<tr>
-			<th>Type de voie</th>
-			<td><!-- TMPL_VAR NAME="road_type" --></td>
-		</tr>
-		<tr>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	<ul>
+		<li>
+			<strong>Identifiant type de voie : </strong>
+			<!-- TMPL_VAR NAME="roadtypeid" --></td>
+		</li>
+		<li>
+			<strong>Type de voie : </strong>
+			<!-- TMPL_VAR NAME="road_type" -->
+		</li>
+
+	</ul><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" /><input type="submit" value="OUI"></form></td>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="NON"></form></td>
-		</tr>	
-	</table>
+			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" /><input type="submit" value="Oui, supprimer"></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" value="Non, ne pas supprimer"></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
@@ -121,8 +114,7 @@
 		Rechercher <!-- TMPL_VAR NAME="searchfield" -->
 	<!-- /TMPL_IF -->
 
-
-	<table>
+<!-- TMPL_IF NAME="loop" -->	<table>
 		<tr>
 			<th>Type de voie</th>
 			<th colspan="2">&nbsp;</th>
@@ -138,8 +130,8 @@
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;roadtypeid=<!-- TMPL_VAR NAME="roadtypeid" -->">Supprimer</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
-
-	</table>
+	</table><!-- /TMPL_IF -->
+	
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="hidden" name="op" value="add_form" />
 		<p><input type="submit" class="button" value="Ajouter un type de voie"></p>

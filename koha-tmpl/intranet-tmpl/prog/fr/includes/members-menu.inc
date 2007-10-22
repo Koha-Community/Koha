@@ -3,7 +3,7 @@
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A">Adulte</a></li>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C">Enfant</a></li>
     <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P">Professionnel</a></li>
-    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Collectivités</a></li>
+    <li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Collectivité</a></li>
 </ul>
 <!-- TMPL_IF NAME="borrowernumber" -->
 <h5>Détails de l'adhérent</h5>

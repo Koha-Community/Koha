@@ -1,6 +1,6 @@
 <!-- Begin Members Resident Search Box -->
 <div id="header_search">
-	<div id="patron_search">
+	<div id="patron_search" class="residentsearch">
 	<p class="tip">Entrer le n° de carte d'adhérent ou une partie du nom : </p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
     <input id="searchmember" size="25" name="member" type="text" /> Trié par
@@ -11,7 +11,7 @@
     <input value="Rechercher" type="submit">
 </form>
 	</div>
-	<div id="circ_search">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Entrer le n° de carte d'adhérent ou une partie du nom : </p>
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
@@ -21,7 +21,7 @@
 	<input value="Valider" type="submit">
 	</form>
 	</div>	
-	<div id="catalog_search">
+	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Entrer les termes de recherche :</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche." class="form-text">
@@ -29,9 +29,9 @@
 		</form>
 	</div>
 			<ul>
-			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Rechercher adhérents</a></li>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Préter</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Rechercher dans le catalogue</a></li>
+			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Recherche adhérents</a></li>
+			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Prêt</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Recherche catalogue</a></li>
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->

@@ -111,7 +111,7 @@ if (alreadyreserved > "0"){
 			<fieldset class="brief">
 		        <label for="patron">Adhérent :  </label>
 				<div class="hint">(Entrer le n° de carte d'adhérent ou une partie du nom)</div>
-                <input type="text" size="20" id="patron" name="findborrower" /> 
+                <input type="text" size="20" id="patron" class="focus" name="findborrower" /> 
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
                 <input type="submit" value="Rechercher">
 			</fieldset>
@@ -234,7 +234,7 @@ if (alreadyreserved > "0"){
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="transfertwhen" -->
-            Document en transfert de la bibliothèque de <!-- TMPL_VAR NAME="transfertfrom" -->, à : <!-- TMPL_VAR NAME="transfertto" -->, le : <!-- TMPL_VAR NAME="transfertwhen" -->
+            Document en transfert du site de <!-- TMPL_VAR NAME="transfertfrom" -->, à : <!-- TMPL_VAR NAME="transfertto" -->, le : <!-- TMPL_VAR NAME="transfertwhen" -->
         <!-- /TMPL_IF -->
             </td>
             <td>

@@ -18,7 +18,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> &rsaquo;<!-- TMPL_IF NAME="borrowernumber" --> <a href="/cgi-bin/koha/circ/circulation.pl">Prêts</a> &rsaquo; <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- TMPL_ELSE --> <strong>En prêt</strong><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;<!-- TMPL_IF NAME="borrowernumber" --> <a href="/cgi-bin/koha/circ/circulation.pl">Prêts</a> &rsaquo; <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- TMPL_ELSE --> <strong>En prêt</strong><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -599,7 +599,7 @@ Pas d'adhérent trouvétéléphone enregistré. <span class="ex"><!-- TMPL_VAR n
 </fieldset>
 </form>
 
-<div id="patronlists">
+<div id="patronlists" class="toptabs">
 
 <ul>   
 <li>    <!--TMPL_IF NAME="issuecount"-->

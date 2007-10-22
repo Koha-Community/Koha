@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo;système
-<!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="add_form" -->Liens MARC &rsaquo; ><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Liens MARC <!-- TMPL_VAR name="tagfield" --><!-- /TMPL_IF --></title>
 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -9,17 +9,23 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/koha2marclinks.pl">Liaisons MARC </a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Liens MARC <!-- TMPL_VAR name="tagfield" --><!-- /TMPL_IF --></div>
-
+<!-- TMPL_IF name="add_form" -->
+<div id="doc" class="yui-t7">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-g">
+<!-- TMPL_ELSE -->
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_form" -->
-<!-- -->
 <h1><!-- TMPL_VAR name="action" --></h1>
 	<p>Choisir et valider 1 des champs suivants pour <b><!-- TMPL_VAR name="tablename" -->.<!-- TMPL_VAR name="kohafield" --></b></p><table>
 <tr><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">	<input type="hidden" name="op" value="add_validate" />
@@ -123,7 +129,7 @@
 	</table>
 <!-- /TMPL_IF -->
 
-<!-- -->
+
 <!-- TMPL_IF name="else" -->
 
 <h1>Liens MARC <!-- TMPL_VAR name="tagfield" --></h1>
@@ -152,8 +158,10 @@
 
 </div>
 </div>
+<!-- TMPL_UNLESS name="add_form" -->
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
+<!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

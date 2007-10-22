@@ -26,14 +26,16 @@
             <tr><th>Date</th>
             <th>Nom de famille</th>
             <th>Prénom</th>
+            <th>Code à barres</th>
+            <th>Code site</th>
             <th>Site de prêt</th>
             <th>Renouvellement</th>
             <th>Date de retour</th>
             <th>Date de retour</th></tr>
         <!-- TMPL_LOOP NAME="issues" -->
             <tr>
-                <td><!-- TMPL_IF NAME="timestamp" -->
-                        <!-- TMPL_VAR NAME="timestamp" -->
+                <td><!-- TMPL_IF NAME="issuedate" -->
+                        <!-- TMPL_VAR NAME="issuedate" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
                     <!-- /TMPL_IF --></td>
@@ -46,6 +48,16 @@
                     <!-- /TMPL_IF --></td>
                 <td><!-- TMPL_IF NAME="firstname" -->
                         <!-- TMPL_VAR NAME="firstname" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="barcode" -->
+                        <!-- TMPL_VAR NAME="barcode" -->
+                    <!-- TMPL_ELSE -->
+                        &nbsp;
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="branchcode" -->
+                        <!-- TMPL_VAR NAME="branchcode" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
                     <!-- /TMPL_IF --></td>

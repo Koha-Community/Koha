@@ -104,6 +104,30 @@
     </tr>
 <!-- /TMPL_IF -->
 <!-- -->
+<!-- TMPL_IF name="itemtypes_empty" -->
+    <tr>
+        <td>Type de document non défini</td>
+        <td>Vous devez créer au moins un type de document</td>
+    </tr>
+<!-- TMPL_ELSE -->
+    <tr>
+        <td>OK</td>
+        <td>Au moins un type de document existe</td>
+    </tr>
+<!-- /TMPL_IF -->
+<!-- -->
+<!-- TMPL_IF name="branches_empty" -->
+    <tr>
+        <td>Site non défini</td>
+        <td>Vous devez créer au moins 1 site</td>
+    </tr>
+<!-- TMPL_ELSE --> 
+    <tr>
+        <td>OK</td>             
+        <td>Au moins un site existe</td>
+    </tr>                                       
+<!-- /TMPL_IF -->
+<!-- -->
 <!-- TMPL_IF name="biblionumber" -->
     <tr>
         <td>biblio et biblionumber</td>
@@ -122,7 +146,7 @@
             <td>Il y a une valeur NULL dans frameworkcode. Vérifier les tables suivantes<br />
                 <li>select * from marc_subfield_structure where frameworkcode is NULL</li>
                 <li>select * from marc_tag_structure where frameworkcode is NULL</li>
-                <li>select * from marc_biblio where frameworkcode is NULL</li></td>
+            </td>
         </tr>
     <!-- TMPL_ELSE -->
         <tr>

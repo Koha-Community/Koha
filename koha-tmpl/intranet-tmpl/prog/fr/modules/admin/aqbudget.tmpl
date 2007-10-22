@@ -241,26 +241,21 @@
 <!-- TMPL_IF name="add_form" -->
 
 <form action="/cgi-bin/koha/admin/aqbudget.pl" name="Aform" method="post">
-  <fieldset>
+  <fieldset class="rows">
     <legend><!-- TMPL_IF NAME="aqbudgetid" -->Modifier<!-- TMPL_ELSE -->Ajouter<!-- /TMPL_IF --> budget</legend>
     <input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="checked" value="0" />
 
-    <table>
-      <tr>
-        <th>Ligne de crédit</th>
-        <td>
-          <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" />
+    
+     <ol> <li>
+        <span class="label">Ligne de crédit : </span>
+        <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR NAME="bookfundid" -->" />
           <!-- TMPL_VAR NAME="bookfundname" -->
-        </td>
-      </tr>
+      </li>
 
-      <tr>
-        <th>
-          <label for="startdate">Date de début (<!-- TMPL_VAR NAME="dateformat" -->)</label>
-        </th>
-        <td>
-          <input type="text" size="8" maxlength="10" id="startdate" name="startdate" value="<!-- TMPL_VAR Name="startdate" -->" />
+      <li>
+          <label for="startdate">Date de début (<!-- TMPL_VAR NAME="dateformat" -->) : </label>
+			<input type="text" size="8" maxlength="10" id="startdate" name="startdate" value="<!-- TMPL_VAR Name="startdate" -->" />
           <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="startdate_button" alt="Voir calendrier">
           <script type="text/javascript">
 //<![CDATA[
@@ -273,13 +268,10 @@
             );
           //]]>
 </script>
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="enddate">Date de fin (<!-- TMPL_VAR NAME="dateformat" -->)</label>
-        </th>
-        <td>
+        
+      </li>
+      <li>
+          <label for="enddate">Date de fin (<!-- TMPL_VAR NAME="dateformat" -->) : </label>
           <input type="text" size="8" maxlength="10" id="enddate" name="enddate" value="<!-- TMPL_VAR Name="enddate" -->" />
           <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="enddate_button" alt="Voir calendrier">
           <script type="text/javascript">
@@ -293,28 +285,23 @@
             );
           //]]>
 </script>
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="budgetamount">Montant budget</label>
-        </th>
-        <td>
+        
+      </li>
+      <li>
+          <label for="budgetamount">Montant budget : </label>
           <input type="text" name="budgetamount" id="budgetamount" value="<!-- TMPL_VAR NAME="budgetamount" -->" size="8" />
-        </td>
-      </tr>
-      <tr>
-        <th>
-          <label for="branch">Site</label>
-        </th>
-        <td>
+        
+      </li>
+      <li>
+          <label for="branch">Site :  </label>
+        
   <!-- TMPL_IF NAME="disable_branchselection" -->
           <!-- Pierrick's note: I've found that a disabled select was not -->
           <!-- giving its value to Perl :-/ So I use a hidden field trick -->
           <input type="hidden" name="branch" id="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
           <select name="branch" disabled="disabled">
   <!-- TMPL_ELSE -->
-          <select name="branch">
+          <select name="branch" id="branch">
   <!-- /TMPL_IF -->
 
             <option value="">----</option>
@@ -326,19 +313,18 @@
     <!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
           </select>
-        </td>
-      </tr>
-    </table>
+        
+      </li></ol>
+    
 
   <!-- TMPL_IF NAME="aqbudgetid" -->
     <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
   <!-- /TMPL_IF -->
 
+  </fieldset>
     <p id="action">
       <input type="button" value="Valider" onclick="Check(this.form)">
-      <input type="submit" value="Annuler" onclick="location.href='/cgi-bin/koha/admin/aqbudget.pl'; return false;">
-    </p>
-  </fieldset>
+     </p>
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
 

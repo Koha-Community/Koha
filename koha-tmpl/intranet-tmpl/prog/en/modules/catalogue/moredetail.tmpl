@@ -114,7 +114,12 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
 
 <!-- TMPL_IF NAME="wthdrawn" --><input type="hidden" name="wthdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="wthdrawn" value="1" /><!-- /TMPL_IF -->
-<input type="submit" name="submit" class="submit" value="<!-- TMPL_IF NAME="wthdrawn" -->Restore<!-- TMPL_ELSE -->Make Withdrawn<!-- /TMPL_IF -->" /></form></li>
+<!-- TMPL_IF NAME="wthdrawn" -->
+    <input type="submit" name="submit" class="submit" value="Restore" />
+<!-- TMPL_ELSE -->
+    <input type="submit" name="submit" class="submit" value="Make Withdrawn" />
+<!-- /TMPL_IF -->
+</form></li>
 
 
 <li><span class="label">Total Issues:</span><!-- TMPL_IF NAME="" --><!-- TMPL_VAR NAME="issues" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View Circulation History</a>)</li>

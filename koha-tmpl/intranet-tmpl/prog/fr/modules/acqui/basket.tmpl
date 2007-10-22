@@ -3,7 +3,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_UNLESS name="closedate" -->
 <script type="text/javascript">
-//<![CDATA[            function confirm_close() {
+//<![CDATA[
+            function confirm_close() {
                 var is_confirmed = confirm('Are you sure you want to close this basket?');
                 if (is_confirmed) {
                     window.location = "/cgi-bin/koha/acqui/booksellers.pl?op=close&basketno=<!-- TMPL_VAR NAME="basketno" -->&supplier=<!-- TMPL_VAR name="booksellerid" -->";
@@ -15,7 +16,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo;<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->Nouveau <!-- /TMPL_UNLESS -->Panier d'achat <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> pour <!-- TMPL_VAR NAME="name" --></div>
@@ -69,7 +70,7 @@
                     <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <!-- TMPL_IF name="closedate" -->
                         <td><p>
-                            <!-- TMPL_VAR NAME="title" --><br />
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><br />
                                 <!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -78,7 +79,7 @@
                     <!-- TMPL_ELSE -->
                         <td>
                             <p>
-                            <!-- TMPL_VAR NAME="title" --></p>
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
                                 <p><!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -149,7 +150,7 @@
             <ul><li><label for="q">A partir d'une notice existante :  </label><input id="q" type="text"  size="25" name="q" />
             <input type="submit" value="Rechercher"></li>
             <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">A partir d'une suggestion</a></li>
-            <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Nouvelle notice</a></li>
+            <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Nouvelle commande</a></li>
             </ul>
         </form>
     </div>

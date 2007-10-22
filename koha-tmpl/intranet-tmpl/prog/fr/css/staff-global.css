@@ -12,6 +12,11 @@ body {
 	text-align : left;
 }
 
+br.clear {
+	clear : both;
+	line-height : 1px;
+}
+
 form {
 	display : inline;
 }
@@ -56,6 +61,10 @@ strong {
 
 em {
 	font-style : italic;
+}
+
+label {
+    font-style : italic;
 }
 
 #hd {
@@ -245,6 +254,7 @@ div#header_search {
 	float: left;
 	padding-left : 14.2em;
 	margin: .3em 0 .5em 0;
+	min-height : 52px;
 }
 
 div#header_search input {
@@ -262,7 +272,7 @@ div#header_search ul.link-tabs li.off a {
 	padding : 0.1em .5em .2em .5em;
 }
 
-div#circ_search,div#catalog_search,div#patron_search,div#subscription_search,div#addbooks_search,div#notices_search,div#printer_search,div#checkin_search,div#suggestions_search,div#roadtype_search,div#stopword_search {
+div#header_search div.residentsearch {
 	border : 0;
 	border-bottom : 1px solid #FF9900;
 	padding : 0 0 .2em 0;
@@ -408,35 +418,20 @@ dd {
 
 div#toolbar {
 	background-color : #F3F3F3;
+	margin-bottom : .7em;
 }
 
 ul.toolbar {
+	padding-left : 0;
+}
+
+.yui-menu-button  {
+	
 }
 
 ul.toolbar li {
 	display : inline;
-	float : left;
 	list-style : none;
-}
-
-ul.toolbar li a {
-	background-color : #F3F3F3;
-	border : 1px solid #F3F3F3;
-	display : block;
-	margin : 3px;
-	padding : 3px;
-	text-decoration : none;
-}
-
-ul.toolbar li a:hover {
-	background-color : #FFFFCC;
-}
-
-ul.toolbar li:last-child a:hover {
-}
-
-ul.toolbar ul {
-	display : none;
 }
 
 div.message {
@@ -529,7 +524,7 @@ fieldset.rows legend {
 fieldset.rows label, fieldset.rows span.label {  
 	float: left;  
 	font-weight : bold;
-	width: 12em;  
+	width: 9em;  
 	margin-right: 1em;  
 	text-align: right;
 }
@@ -554,6 +549,17 @@ width: 100%;
 
 fieldset.rows.left li {
 	padding-bottom : .4em;
+}
+
+fieldset.rows li.radio {
+	padding-left: 9em;
+	width : auto;
+}
+
+fieldset.rows li.radio label {
+	float : none;
+	width : auto;
+	margin : 0 0 0 1em;
 }
 
 fieldset.rows ol.radio label {
@@ -590,6 +596,11 @@ fieldset.action {
 
 fieldset.rows fieldset.action {
 	padding : 0 0 1em 1em;
+}
+
+fieldset.rows .inputnote {
+	float : left;
+	margin : .5em 0 0 10em;
 }
 
 .tabs-nav li {
@@ -648,15 +659,15 @@ fieldset.rows fieldset.action {
     background: none;
 }
 
-#patronlists .tabs-nav a {
+.toptabs .tabs-nav a {
     top: 0;
  }
 
-#patronlists .tabs-nav li {
+.toptabs .tabs-nav li {
 	margin-right : .5em;
 }
 
-#patronlists .tabs-nav li a {
+.toptabs .tabs-nav li a {
 	background-color : #F3F3F3;
 	border-top : 1px solid #E8E8E8;
 	border-left : 1px solid #E8E8E8;
@@ -666,11 +677,11 @@ fieldset.rows fieldset.action {
 	text-decoration : none;
 }
 
-#patronlists .tabs-nav li.tabs-selected  {
+.toptabs .tabs-nav li.tabs-selected  {
 	background-color : #FFF;
 }
 
-#patronlists .tabs-nav li.tabs-selected a {
+.toptabs .tabs-nav li.tabs-selected a {
 	background-color : #FFF;
 	border-top : 1px solid #E8E8E8;
 	border-left : 1px solid #E8E8E8;
@@ -680,6 +691,15 @@ fieldset.rows fieldset.action {
 	text-align : center;
 }
 
+.toptabs.numbered .tabs-nav li {
+	min-width : 3em;
+}
+
+.toptabs .tabs-container {
+	border : 1px solid #E8E8E8;
+	padding : 1em;
+}
+
 .checkedout {
 	color : #999999;
 	font-style : italic;
@@ -687,4 +707,93 @@ fieldset.rows fieldset.action {
 
 .subfield_not_filled {
 	background-color : #FFFF99;
+}
+.content_hidden {
+    visibility:hidden; /* you propably don't need to change this one */
+    display:none;
+}
+
+/* the property for the displayed tab */
+.content_visible {
+    visibility:visible; /* you propably don't need to change this one */
+    display:block;
+}
+#addbiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-new.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#deletebiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-delete.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#printbiblio a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-print.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#addtoshelf a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-add-to-shelf.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#placehold a {
+	padding-left : 34px;
+	background-image: url("/intranet-tmpl/prog/img/toolbar-hold.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+div.error {
+	border : 2px dashed #990000;
+	background-color : #FFFF99;
+	padding : .5em;
+	margin : 1em;
+}
+
+ol.bibliodetails {
+	float: left;
+	margin : 0 0 1em 1em;
+}
+
+ol.bibliodetails li {
+	border-bottom: 1px solid #E8E8E8;
+	list-style-type : none;
+	padding : .1em;
+}
+
+ol.bibliodetails span.label {
+	border-right : 1px solid #E8E8E8;
+	float : left;
+	font-weight: bold;
+	width: 12em;  
+	margin-right: 1em;  
+}
+
+div.sysprefs h3 {
+	margin : .2em 0 .2em .4em;
+}
+
+div.sysprefs dl {
+	margin-left : 1.5em;
+}
+
+div.sysprefs div.hint {
+	width : 25%;
+	float : right;
+	padding : .5em;
+	margin : .7em;
+}
+
+tr.highlight td {
+	background-color : #F6F6F6;
 }

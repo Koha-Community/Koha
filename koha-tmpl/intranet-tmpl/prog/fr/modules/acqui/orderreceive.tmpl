@@ -4,7 +4,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Réception de commande pour <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Colis <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --> (Commande N°<!-- TMPL_VAR NAME="ordernumber" -->)</div>
 
@@ -50,7 +50,7 @@
         <!-- TMPL_IF name="unitprice"-->
          <input type="text" size="20" name="cost" value="<!-- TMPL_VAR NAME="unitprice" -->" />
         <!-- TMPL_ELSE -->
-            <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="rrp" -->" />
+            <input type="text" size="20" name="cost" value="<!-- TMPL_VAR name="ecost" -->" />
         <!-- /TMPL_IF --></p>
         <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
     <!-- TMPL_IF name="catview" -->

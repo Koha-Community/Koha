@@ -1,10 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Autorités</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
 <script language="JavaScript" type="text/javascript">
 function Help() {
     newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
@@ -20,12 +16,20 @@ function searchauthority() {
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="authorities-search.inc" -->
 
-<div id="doc3" class="yui-t2">
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; Autorités</div>
+
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-g">
+	
+	<!-- TMPL_INCLUDE NAME="authorities-toolbar.inc" -->
 
 <fieldset id="authorities_authorities_home_search">
   <legend>Recherche autorité</legend>
@@ -81,7 +85,7 @@ function searchauthority() {
     <div id="action">
           <p><label>Trié par :</label><select name="orderby">
          <option value="">Aucun</option>
-	    <option value="HeadingAsc">Vedette croissant</option>
+	    <option value="HeadingAsc" selected="SELECTED">Vedette croissant</option>
 	    <option value="HeadingDsc">Vedette décroissant</option>
 	  </select>
       <input type="submit" value="Rechercher">
@@ -90,28 +94,8 @@ function searchauthority() {
   </form>
 </fieldset>
     
-<fieldset id="authorities_authorities_home_add">
-  <legend>Ajouter autorité</legend>
 
-  <form name="f2" method="post" action="authorities.pl">
-    <p><label for="add_authtypecode">Type d'autorité</label>
-        <select id="add_authtypecode" name="authtypecode">
-<!-- TMPL_LOOP name="authtypesloop" -->
-  <!-- TMPL_IF name="selected" -->
-        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="authtypetext" --></option>
-  <!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="authtypetext" --></option>
-  <!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-        </select>
-    </p>
-    <div id="action">
-      <input type="submit" value="Ajouter" class="button">
-    </div>
-  </form>
-</fieldset>
 
-</div>
 </div>
 </div>
 

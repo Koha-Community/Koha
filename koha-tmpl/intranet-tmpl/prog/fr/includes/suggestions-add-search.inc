@@ -1,6 +1,6 @@
 <!-- Begin Members Resident Search Box -->
 <div id="header_search">
-	<div id="suggestions_search">
+	<div id="suggestions_search" class="residentsearch">
 	<p class="tip">Rechercher suggestions</p>
 	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
 	<label for="searchtitle">Civilité : </label> <input type="text" id="searchtitle" name="title" value="<!-- TMPL_VAR NAME="title"-->" />
@@ -9,7 +9,7 @@
     <input type="submit" class="button" value="Rechercher suggestions">
         </form>
 	</div>
-	<div id="circ_search">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Entrer le n° de carte d'adhérent ou une partie du nom : </p>
 	<form action="/cgi-bin/koha/circ/circulation.pl" method="post">
 			<label for="findborrower"> </label>
@@ -19,7 +19,7 @@
 	<input value="Valider" type="submit">
 	</form>
 	</div>	
-	<div id="catalog_search">
+	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Entrer les termes de recherche :</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche." class="form-text">
@@ -28,8 +28,8 @@
 	</div>
 			<ul>
 			<li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->#suggestions_search">Rechercher imprimantesinternet</a></li>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Préter</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Rechercher dans le catalogue</a></li>
+			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Prêt</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Recherche catalogue</a></li>
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->

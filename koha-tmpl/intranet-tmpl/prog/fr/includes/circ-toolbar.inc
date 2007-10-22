@@ -1,5 +1,5 @@
 <div id="toolbar"><ul class="toolbar">
-	<li><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Préter</a></li>
+	<li><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Prêt</a></li>
 	<!-- TMPL_IF name="adultborrower" --><li><a href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Ajouter un enfant</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="category_type" -->
             <!--TMPL_IF NAME="guarantor"-->

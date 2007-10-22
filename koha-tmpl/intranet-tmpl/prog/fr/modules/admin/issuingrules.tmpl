@@ -8,74 +8,68 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Règles de prêt</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div id="doc" class="yui-t7">
 
-	<h1>Définition <!-- TMPL_IF NAME="branch" -->règles de prêt pour <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->règles de prêt par défaut<!-- /TMPL_IF --></h1>
-	<div class="help">
-		<h3>CONSEIL pour les prêts</h3>
-		<p>Remplir chaque case  avec la durée du prêt, le nombre maximum de prêts</p>
-		<p>autorise 5 prêts pour 21 jours</p>
-	</div>
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-g">
 
-	<div class="help">
-		<h3>Valeurs par défaut</h3>
-		<p> Si une case n'est pas remplie, la première des valeurs suivantes est recherchée : </p>
-		<ul>
-			<li>Même site et même catégorie d'adhérent et type de document*</li>
-			<li>Même site, même type de document et catégorie d'adhérent *</li>
-			<li>Même type de document, catégorie d'adhérent et site *</li>
-			<li>Partout</li>
-			<li>Si rien n'est défini, la valeur par défaut est 21,5 (fixé dans le code)</li>
+    <h1>Définition <!-- TMPL_IF NAME="branch" -->règles de prêt pour <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->règles de prêt par défaut<!-- /TMPL_IF --></h1>
+    <div class="help">
+        <h3>CONSEIL pour les prêts</h3>
+        <p>Remplir chaque case  avec la durée du prêt, le nombre maximum de prêts. Par exemple : 21,5 permet 5 prêts pour 21 jours</p>
+    </div>
+
+    <div class="help">
+        <h3>Valeurs par défaut</h3>
+        <ul>
+            <li>Si une case n'est pas remplie, la valeur saisie dans la colonne de droite ("défaut") est utilisée</li>
+            <li>Si un total est saisi (ligne du bas), l'adhérent doit remplir à la fois la règle du type de documents et la règle du total.</li>
+            <li>Si une règle est saisie pour un site donné, elle est utilisée. Sinon, la règle pour le site "par défaut" est prise en compte.</li>
 		</ul>
-	</div>
-		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
-		<label for="branch">Sélection d'un site : </label>
-			<select id="branch" name="branch">
-				<option value="">Par défaut</option>
-			<!-- TMPL_LOOP NAME="branchloop" -->
-				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- TMPL_ELSE -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP --></select>
-			<input type="submit" value="Sélectionner">
-		</form>
-		<form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
-			<input type="hidden" name="op" value="save" />
-			<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-			
-			<table>
-			<caption>Définition des règles de prêt pour <!-- TMPL_VAR NAME="branch" --></caption>
-			<tr>
-				<th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th scope="col"><!-- TMPL_VAR NAME="in_title" --></th><!-- /TMPL_LOOP -->
-			</tr>
-			<!-- TMPL_LOOP NAME="row" -->
-				<tr>
-					<th><!-- TMPL_VAR NAME="categorycode" --></th>
-					<!-- TMPL_LOOP NAME="cell" -->
-						<!-- TMPL_IF NAME="toggle" -->
-   <td class="highlight">
-<!-- TMPL_ELSE -->
-   <td>
-<!-- /TMPL_IF -->
-							<input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10" />
-						</td>
-					<!-- /TMPL_LOOP -->
-				</tr>
-			<!-- /TMPL_LOOP -->
-			</table>
-			
-			<input type="submit" value="Valider les modifications">
-		</form>
+    </div>
+        <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
+        <label for="branch">Sélection d'un site : </label>
+            <select id="branch" name="branch">
+                <option value="">Par défaut</option>
+                <!-- TMPL_LOOP NAME="branchloop" -->
+                    <!-- TMPL_IF NAME="selected" -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                    <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select>
+            <input type="submit" value="Sélectionner">
+        </form>
+        <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
+            <input type="hidden" name="op" value="save" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
+            
+            <table>
+                <caption>Définition des règles de prêt pour <!-- TMPL_VAR NAME="branch" --></caption>
+                <tr>
+                    <th>&nbsp;</th><!-- TMPL_LOOP NAME="title" --><th scope="col"><!-- TMPL_IF EXPR="in_title eq '*'" -->Par défaut<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="in_title" --><!-- /TMPL_IF --></th><!-- /TMPL_LOOP -->
+                </tr>
+                <!-- TMPL_LOOP NAME="row" -->
+                    <tr>
+                        <th scope="row"><!-- TMPL_IF name="total" -->Total <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></th>
+                        <!-- TMPL_LOOP NAME="cell" -->
+                            <!-- TMPL_IF NAME="toggle" -->
+                                <td class="highlight">
+                            <!-- TMPL_ELSE -->
+                                <td>
+                            <!-- /TMPL_IF -->
+                                <input name="<!-- TMPL_VAR NAME="issuingname" -->" value="<!-- TMPL_VAR NAME="issuingvalue" -->" size="6" maxlength="10" />
+                            </td>
+                        <!-- /TMPL_LOOP -->
+                    </tr>
+                <!-- /TMPL_LOOP -->
+            </table>
+            <input type="submit" value="Valider les modifications">
+        </form>
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

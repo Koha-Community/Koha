@@ -9,7 +9,9 @@
 	
 
 <h1>Recherche catalogue</h1>
-
+<!-- TMPL_IF name="no_query" -->
+    <div class="warning">Vous devez saisir un terme de recherche sur </div>
+<!-- /TMPL_IF -->
 <form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="post">
     <input type="hidden" name="op" value="do_search" />
     <input type="hidden" name="type" value="intranet" />

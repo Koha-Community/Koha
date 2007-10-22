@@ -260,6 +260,7 @@
                     <tr>
                         <th>&nbsp;</th>
                         <th>Titre</th>
+                        <th>Nombre de documents</th>
                         <th>Localisation</th>
                         <th>&nbsp;</th>
                     </tr>
@@ -322,29 +323,39 @@
                                 <!-- /TMPL_IF -->
                                 </td>
                                 <td>
+                                                    <!-- TMPL_IF NAME="items_count" -->
+                                                    <!-- TMPL_VAR NAME="items_count" -->
+                                                    <!-- /TMPL_IF -->
+                                                      
+                                </td>
+                                <td>
                                     <!-- TMPL_IF NAME="items_loop" -->
-                                        <span class="available">
+                                        
                                         <!-- TMPL_LOOP NAME="items_loop" -->
+                                        <!--TMPL_IF Name="unavailable"-->
+                                        <span class="unavailable">
+                                        <!--TMPL_ELSE-->
+                                        <span class="available">
+                                        <!--/TMPL_IF -->
+                                        
                                             <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchcode" -->
                                             <i>
                                         <!-- TMPL_IF name="location" --><!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="itemcallnumber" --><!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->
-                                         <!-- TMPL_IF name="classification" -->
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
-                                                <!-- TMPL_VAR NAME="classification" -->
+                                         <!-- TMPL_IF name="cn_class" -->
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="cn_class" -->
                                             </a>
                                         <!-- /TMPL_IF -->
                                         </i>
+                                        <!-- TMPL_IF NAME="onloancount" -->En prêt jusqu'au <!-- TMPL_VAR NAME="due_date" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="wthdrawncount" -->, Exemplaire retiré<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="itemlostcount" -->, Perdu<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="orderedcount" -->, En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
                                          <br />
-                                        <!-- /TMPL_LOOP -->
                                         </span>
+                                        <!-- /TMPL_LOOP -->
                                     <!-- /TMPL_IF -->
-                                    <span class="unavailable">
-                                        <!-- TMPL_IF NAME="onloancount" --> En prêt (<!-- TMPL_VAR NAME="onloancount" -->)<br /> <!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="wthdrawncount" --> Exemplaire retiré (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="itemlostcount" --> Perdu (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
-                                        <!-- TMPL_IF NAME="orderedcount" --> En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
-                                    </span>
                                 </td>
                                 <td>
                                     <!-- TMPL_IF NAME="norequests" -->

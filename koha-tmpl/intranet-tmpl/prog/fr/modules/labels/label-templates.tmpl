@@ -38,11 +38,11 @@
 				<a href="/cgi-bin/koha/labels/label-edit-template.pl?tmpl_id=<!-- TMPL_VAR NAME="tmpl_id" -->">Modifier</a>
         </td>
    		<td>
-				<a href="/cgi-bin/koha/labels/label-templates.pl?op=delete&tmpl_id=<!-- TMPL_VAR NAME="tmpl_id" -->">Supprimer</a>
+				<a href="/cgi-bin/koha/labels/label-templates.pl?op=delete&amp;tmpl_id=<!-- TMPL_VAR NAME="tmpl_id" -->">Supprimer</a>
         </td>
 		  <td>
 <!-- TMPL_IF NAME="active" -->
-    <input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" checked />
+    <input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" checked="checked" />
 <!-- TMPL_ELSE -->
     <input type="radio" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" />
 <!-- /TMPL_IF -->
@@ -52,7 +52,7 @@
 <!-- /TMPL_LOOP -->
  <tr><td colspan="5" align="right">
  <input class="button" type="submit" value="Définir le modèle actif">
-        <input type="hidden" name=op value="set_active_template">
+        <input type="hidden" name="op" value="set_active_template" />
 </td></tr>
 </table>
 

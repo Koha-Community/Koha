@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;système
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration système &rsaquo; Devises &amp; Taux de change &rsaquo; 
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Devise supprimée<!-- /TMPL_IF -->
@@ -68,7 +68,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise<!-- TMPL NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/currency.pl">Devises &amp; Taux de change</a>&rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modifier une devise '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Ajouter une devise<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la devise <!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Devise supprimée<!-- /TMPL_IF -->
@@ -86,37 +86,31 @@
 <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 <input type="hidden" name="op" value="add_validate" />
 
-	<table>
-	<caption><!-- TMPL_IF NAME="searchfield" -->
+	<fieldset class="rows">
+	<legend><!-- TMPL_IF NAME="searchfield" -->
 		Modifier la devise
 	<!-- TMPL_ELSE -->
 		Ajouter une devise
-	<!-- /TMPL_IF --></caption>
-	<!-- TMPL_IF NAME="searchfield" -->
-		<tr>
-			<th>Devise</th>
-			<td>
-				<input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-			</td>
-		</tr>
+	<!-- /TMPL_IF --></legend>
+	<ol><!-- TMPL_IF NAME="searchfield" -->
+		<li>
+			<span class="label">Devise : </span>
+			<input type="hidden" name="currency" id="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
+			</li>
 	<!-- TMPL_ELSE -->
-		<tr>
-			<th>Devise</th>
-			<td>
-				<input type="text" name="currency" size="50" maxlength="50" onblur="toUC(this);" />
-			</td>
-		</tr>
+		<li>
+			<label for="currency">Devise : </label>
+			<input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" />
+			</li>
 	<!-- /TMPL_IF -->
 
-        	<tr>
-			<th>Taux</th	>
-			<td>
-				<input type="text" name="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
-			</td>
-		</tr>
-        </table>
+        	<li>
+			<label for="rate">Taux : </label>
+			<input type="text" name="rate" id="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
+			</li></ol>
+        </fieldset>
 		
-		<input type="button" value="OK" onclick="Check(this.form)" /> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;">
+		<input type="submit" value="Valider" onclick="Check(this.form)"> 
         </form>
 
 <!-- /TMPL_IF -->
@@ -184,8 +178,8 @@
 		<tr>
 			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Modifier"></form></td>
-                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="currency" -->" /><input type="submit" value="Supprimer"></form></td>
+			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Modifier</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Supprimer</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

@@ -20,6 +20,9 @@
             if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
                 var code     = subfields[i];   // code is the first input 
                 var subfield = subfields[i+1]; // subfield the second
+            <!-- TMPL_IF NAME="clear" -->
+                if (subfield){subfield.value="" ;}
+            <!--TMPL_ELSE-->      
                 if(code.value=='9'){
                         subfield.value = "<!-- TMPL_VAR NAME="authid" -->";
                 }
@@ -30,11 +33,12 @@
                     }
                 <!-- /TMPL_LOOP -->
             <!-- /TMPL_LOOP -->
+            <!--/TMPL_IF-->
             }
         }
-        
       	opener.close();
        	window.close();
+            
        	return false;
     }
 </script>

@@ -1,9 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;système <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Catégories d'adhérents <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->Catégorie supprimée<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="else" -->Catégories adhérent<!-- /TMPL_IF --></title>
+<!-- TMPL_IF NAME="delete_confirm" --><!-- TMPL_IF NAME="totalgtzero" -->Impossible de supprimer cette catégorie (utilisée <!-- TMPL_VAR NAME="categorycode" --> fois)<!-- TMPL_ELSE -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" -->Catégorie supprimée<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -72,12 +71,12 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="patrons-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->Donnée enregistrée<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirmed" -->Catégorie supprimée<!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/categorie.pl">Catégories de lecteurs</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Modifier la catégorie <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Ajouter une catégorie<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/categorie.pl">Catégories de lecteurs</a> &rsaquo; donnée enregistrée<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/categorie.pl">Catégories de lecteurs</a> &rsaquo; <!-- TMPL_IF NAME="totalgtzero" -->Impossible de supprimer cette catégorie (utilisée <!-- TMPL_VAR NAME="categorycode" --> fois)<!-- TMPL_ELSE -->Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/categorie.pl">Catégories de lecteurs</a> &rsaquo; Catégories supprimée<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Catégories adhérent<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
@@ -99,19 +98,19 @@
 	<!-- TMPL_ELSE -->
 		<h1>Ajouter une catégorie</h1>
 	<!-- /TMPL_IF -->
-	<table>
-	<!-- TMPL_IF NAME="categorycode" -->
-	<tr><th>Code catégorie</th><td><!-- TMPL_VAR NAME="categorycode" -->
-				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="hidden" name="is_a_modif" value="1" /></td></tr>
+	<fieldset class="rows">
+	<ol><!-- TMPL_IF NAME="categorycode" -->
+	<li><span class="label">Code catégorie</span><!-- TMPL_VAR NAME="categorycode" -->
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="hidden" name="is_a_modif" value="1" /></li>
 	<!-- TMPL_ELSE -->
-	<tr><th>Code catégorie</th><td><input type="text" name="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></td></tr>
+	<li><label for="categorycode">Code catégorie</label><input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	<!-- /TMPL_IF -->
-	<tr><th>Description</th><td>&nbsp; <input type="text" name="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->" /></td></tr>
-	<tr><th>Durée d'inscription</th><td>&nbsp; <input type="text" name="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> mois</td></tr>
-	<tr><th>Age requis</th><td>&nbsp; <input type="text" name="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> ans</td></tr>
-	<tr><th>Limite d'âge supérieure</th><td>&nbsp; <input type="text" name="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> ans</td></tr>
-	<tr><th>Frais d'inscription</th><td><input type="text" name="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /> €</td></tr>
-	<tr><th>Message de retard demandé</th><td>&nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
+	<li><label for="description">Description</label>&nbsp; <input type="text" name="description" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->" /></li>
+	<li><label for="enrolmentperiod">Durée d'inscription</label>&nbsp; <input type="text" name="enrolmentperiod" id="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> mois</li>
+	<li><label for="dateofbirthrequired">Age requis</label>&nbsp; <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> ans</li>
+	<li><label for="upperagelimit">Limite d'âge supérieure</label>&nbsp; <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> ans</li>
+	<li><label for="enrolmentfee">Frais d'inscription</label><input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /> €</li>
+	<li><label for="overduenoticerequired">Message de retard demandé</label>&nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
 			<!-- TMPL_IF NAME="overduenoticerequired" -->
 						<option value="0">Non</option>
 						<option value="1" selected="selected">Oui</option>
@@ -119,19 +118,19 @@
 						<option value="0" selected="selected">Non</option>
 						<option value="1">Oui</option>
 			<!-- /TMPL_IF -->
-					</select></td></tr>
-	<tr><th>Droits de réservation</th><td><input type="text" name="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /> €</td></tr>
-	<tr><th>Type de catégorie</th><td><select name="category_type" >
+					</select></li>
+	<li><label for="reservefee">Droits de réservation</label><input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /> €</li>
+	<li><label for="category_type">Type de catégorie</label><select name="category_type" id="category_type">
 						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Sélectionnez un type de catégorie</option><!-- TMPL_ELSE --><option value="">Sélectionnez un type de catégorie</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adulte</option><!-- TMPL_ELSE --><option value="A">Adulte</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_C" --><option value="C" selected="selected">Enfant</option><!-- TMPL_ELSE --><option value="C">Enfant</option><!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Collectivités</option><!-- TMPL_ELSE --><option value="I">Collectivités</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Collectivité</option><!-- TMPL_ELSE --><option value="I">Collectivité</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professionnel</option><!-- TMPL_ELSE --><option value="P">Professionnel</option><!-- /TMPL_IF -->
-					</select></td>
-	</tr>
-</table>
+					</select>
+	</li></ol>
+</fieldset>
 
-	<p>				<input type="button" value='<!-- TMPL_IF NAME="categorycode" -->Valider les modifications<!-- TMPL_ELSE -->Ajout catégorie<!-- /TMPL_IF -->' onclick="Check(this.form);"> <input type="button" value="Annuler" onclick="location.href='<!-- TMPL_VAR NAME="script_name" -->'; return false;"></p>
+	<p>				<input type="submit" value='<!-- TMPL_IF NAME="categorycode" -->Valider les modifications<!-- TMPL_ELSE -->Ajout catégorie<!-- /TMPL_IF -->' onclick="Check(this.form);"> </p>
 	</form>
 
 <!-- /TMPL_IF -->
@@ -149,23 +148,23 @@
         	
 	<!-- TMPL_IF NAME="totalgtzero" --><h3>Cette catégorie est utilisée <!-- TMPL_VAR NAME="categorycode" --> fois. Suppression impossible!</h3><!-- TMPL_ELSE --><h2>Confirmer la suppression de la catégorie <!-- TMPL_VAR NAME="categorycode" --> ?</h2><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="totalgtzero" --><div class="error">Cet enregistrement est utilisé <!-- TMPL_VAR NAME="total" --> fois. Suppression impossible<!-- /TMPL_IF -->
-	<div class="compact"><table>
-	<tr><th>Code catégorie</th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
-	<tr><th>Description</th><td><!-- TMPL_VAR NAME="description" --></td></tr>
-	<tr><th>Durée d'inscription</th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> mois</td></tr>
-	<tr><th>Age requis</th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> années</td></tr>
-	<tr><th>Limite d'âge supérieure</th><td><!-- TMPL_VAR NAME="upperagelimit" --> années</td></tr>
-	<tr><th>Frais d'inscription</th><td><!-- TMPL_VAR NAME="enrolmentfee" --> €</td></tr>
-	<tr><th>Message de retard demandé</th><td><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td></tr>
-	<tr><th>Droits de réservation</th><td><!-- TMPL_VAR NAME="reservefee" --> €</td></tr>
-</table>
+	<ul>
+	<li><strong>Code catégorie : </strong><!-- TMPL_VAR NAME="categorycode" --></li>
+	<li><strong>Description : </strong><!-- TMPL_VAR NAME="description" --></li>
+	<li><strong>Durée d'inscription : </strong><!-- TMPL_VAR NAME="enrolmentperiod" --> mois</li>
+	<li><strong>Age requis </strong><!-- TMPL_VAR NAME="dateofbirthrequired" --> années</li>
+	<li><strong>Limite d'âge supérieure : </strong><!-- TMPL_VAR NAME="upperagelimit" --> années</li>
+	<li><strong>Frais d'inscription : </strong><!-- TMPL_VAR NAME="enrolmentfee" --> €</li>
+	<li><strong>Message de retard demandé </strong><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></li>
+	<li><strong>Droits de réservation : </strong><!-- TMPL_VAR NAME="reservefee" --> €</li>
+</ul>
 		<!-- TMPL_IF NAME="totalgtzero" -->
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="OK" /></form>
 		<!-- TMPL_ELSE -->
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /> <input type="submit" value="Supprimer cette catégorie"></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Ne pas supprimer"></form>
-		<!-- /TMPL_IF -->
+		<!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
@@ -181,10 +180,7 @@
 <!-- TMPL_IF NAME="searchfield" -->
 		Vous recherchiez <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="text" name="description" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-		<input type="submit" name="search" value="Rechercher">
-	</form>	
+
         <table>
 		<tr>
 			<th scope="col">Code</th>
@@ -216,8 +212,8 @@
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
-                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="add_form" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" value="Modifier"></form></td>
-                        <td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="op" value="delete_confirm" /><input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="submit" value="Supprimer"></form></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Modifier</a></td>
+						<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Supprimer</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
