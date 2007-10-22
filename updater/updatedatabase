@@ -309,7 +309,42 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
+$DBversion = "3.00.00.012";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `class_sort_rules` (
+                               `class_sort_rule` varchar(10) NOT NULL default '',
+                               `description` mediumtext,
+                               `sort_routine` varchar(30) NOT NULL default '',
+                               PRIMARY KEY (`class_sort_rule`),
+                               UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
+                             ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `class_sources` (
+                               `cn_source` varchar(10) NOT NULL default '',
+                               `description` mediumtext,
+                               `used` tinyint(4) NOT NULL default 0,
+                               `class_sort_rule` varchar(10) NOT NULL default '',
+                               PRIMARY KEY (`cn_source`),
+                               UNIQUE KEY `cn_source_idx` (`cn_source`),
+                               KEY `used_idx` (`used`),
+                               CONSTRAINT `class_source_ibfk_1` FOREIGN KEY (`class_sort_rule`) 
+                                          REFERENCES `class_sort_rules` (`class_sort_rule`)
+                             ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) 
+              VALUES('DefaultClassificationSource','ddc',
+                     'Default classification scheme used by the collection. E.g., Dewey, LCC, etc.', NULL,'free')");
+    $dbh->do("INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`) VALUES
+                               ('dewey', 'Default filing rules for DDC', 'Dewey'),
+                               ('lcc', 'Default filing rules for LCC', 'LCC'),
+                               ('generic', 'Generic call number filing rules', 'Generic')");
+    $dbh->do("INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
+                            ('ddc', 'Dewey Decimal Classification', 1, 'dewey'),
+                            ('lcc', 'Library of Congress Classification', 1, 'lcc'),
+                            ('udc', 'Universal Decimal Classification', 0, 'generic'),
+                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic'),
+                            ('z', 'Other/Generic Classification Scheme', 0, 'generic')");
+    print "Upgrade to $DBversion done (classification sources added)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
