@@ -304,7 +304,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE `branchcategories` CHANGE `categoryname` `categoryname` varchar(32) ");
 	$dbh->do("ALTER TABLE `branchcategories` ADD COLUMN `categorytype` varchar(16) ");
 	$dbh->do("UPDATE `branchcategories` SET `categorytype` = 'properties'");
-	$dbh->do("ALTER TABLE `branchrelations` CHANGE `cateorycode` `cateorycode` char(10) ");
+	$dbh->do("ALTER TABLE `branchrelations` CHANGE `categorycode` `categorycode` char(10) ");
     print "Upgrade to $DBversion done (added branchcategory type)\n";
     SetVersion ($DBversion);
 }
