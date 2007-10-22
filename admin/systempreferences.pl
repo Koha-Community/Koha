@@ -46,6 +46,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Koha;
 use C4::Languages;
+use C4::ClassSource;
 use C4::Output;
 use C4::Context;
 
@@ -94,6 +95,7 @@ my %tabsysprefs;
     $tabsysprefs{NoZebra}="Catalogue";
     $tabsysprefs{NoZebraIndexes}="Catalogue";
     $tabsysprefs{ReceiveBackIssues}="Catalogue";
+    $tabsysprefs{DefaultClassificationSource}="Catalogue";
     
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -357,6 +359,20 @@ if ($op eq 'add_form') {
             next if $currently_selected_themes->{$theme};
             push @options, { option => $theme, counter => $counter };
             $counter++;
+        }
+    } elsif ($data->{'type'} eq 'ClassSource') {
+        $template->param('type-choice' => 1);
+        my $type='';
+        @options=();
+        my $sources = GetClassSources();
+        my $counter=0;
+        foreach my $cn_source (sort keys %$sources) {
+            if ($cn_source eq $data->{'value'}) {
+                push @options, { option => $cn_source, counter => $counter, selected => 1 };
+            } else {
+                push @options, { option => $cn_source, counter => $counter };
+            }
+            $counter++; 
         }
     } elsif ($data->{'type'} eq 'Languages') {
         $template->param('type-choice' => 1);

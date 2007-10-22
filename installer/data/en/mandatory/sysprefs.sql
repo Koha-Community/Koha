@@ -39,6 +39,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IssuingInProcess','0','If ON, disables fines if the patron is issuing item that accumulate debt',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('item-level_itypes','1','If ON, enables Item-level Itemtype / Issuing Rules','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemcallnumber','082ab','The MARC field/subfield that is used to calculate the itemcallnumber (Dewey would be 082ab or 092ab; LOC would be 050ab or 090ab) could be 852hi from an item record',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('DefaultClassificationSource','ddc','Default classification scheme used by the collection. E.g., Dewey, LCC, etc.', NULL,'ClassSources');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('KohaAdminEmailAddress','root@localhost','Define the email address where patron modification requests are sent','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('kohaspsuggest','','Track search queries, turn on by defining host:dbname:user:pass','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LabelMARCView','standard','Define how a MARC record will display','standard|economical','Choice');

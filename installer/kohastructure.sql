@@ -611,6 +611,35 @@ CREATE TABLE `cities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `class_sort_rules`
+--
+
+DROP TABLE IF EXISTS `class_sort_rules`;
+CREATE TABLE `class_sort_rules` (
+  `class_sort_rule` varchar(10) NOT NULL default '',
+  `description` mediumtext,
+  `sort_routine` varchar(30) NOT NULL default '',
+  PRIMARY KEY (`class_sort_rule`),
+  UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `class_sources`
+--
+
+DROP TABLE IF EXISTS `class_sources`;
+CREATE TABLE `class_sources` (
+  `cn_source` varchar(10) NOT NULL default '',
+  `description` mediumtext,
+  `used` tinyint(4) NOT NULL default 0,
+  `class_sort_rule` varchar(10) NOT NULL default '',
+  PRIMARY KEY (`cn_source`),
+  UNIQUE KEY `cn_source_idx` (`cn_source`),
+  KEY `used_idx` (`used`),
+  CONSTRAINT `class_source_ibfk_1` FOREIGN KEY (`class_sort_rule`) REFERENCES `class_sort_rules` (`class_sort_rule`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `currency`
 --
 
