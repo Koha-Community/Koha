@@ -17,9 +17,10 @@ package C4::Context;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use Data::Dumper;
 
 BEGIN {
-	if ($ENV{'USER_AGENT'})	{
+	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;
 		import CGI::Carp qw(fatalsToBrowser);
 			sub handle_errors {
