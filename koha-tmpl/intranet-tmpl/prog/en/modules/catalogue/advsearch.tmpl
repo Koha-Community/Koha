@@ -69,45 +69,45 @@
                 <p><label for="scan">Scan Indexes</label><input type="checkbox" name="scan" id="scan" value="1" /></p>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-		<div>
-        <!-- TMPL_IF NAME="expanded_options" -->
-            <select name="op">
-                <option value="and" selected="selected">and</option>
-                <option value="or">or</option>
-                <option value="not">not</option>
+        <div>
+            <!-- TMPL_IF NAME="expanded_options" -->
+                <select name="op">
+                    <option value="and" selected="selected">and</option>
+                    <option value="or">or</option>
+                    <option value="not">not</option>
+                </select>
+            <!-- /TMPL_IF --> 
+            <select name="idx">
+                <option value="kw,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
+                <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
+                <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+                <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+                <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+                <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name Phrase</option>
+                <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
+                <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
+                <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
+                <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Language</option>
+                <option value="nt,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Notes/Comments</option>
+                <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher</option>
+                <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher Location</option>
+                <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
+                <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
+                <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
+                <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
+                <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+                <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
+                <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
+                <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
+                <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
+                <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Series Title</option>
+                <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
             </select>
-        <!-- /TMPL_IF --> 
-        <select name="idx">
-    <option value="kw,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
-    <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
-    <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
-    <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
-    <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
-    <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name Phrase</option>
-    <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
-    <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
-    <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
-    <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Language</option>
-    <option value="nt,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Notes/Comments</option>
-    <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher</option>
-    <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher Location</option>
-    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
-    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
-    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
-    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-    <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
-    <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
-    <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
-    <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
-    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-    <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Series Title</option>
-    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
-
-        </select>
-        <input id="search_box" type="text" size="30" name="q" title="Enter search terms" value="" class="focus" />
-        <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="add_field" -->
-                <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+            <input id="search_box" type="text" size="30" name="q" title="Enter search terms" value="" class="focus" />
+            <!-- TMPL_IF NAME="expanded_options" -->
+                <!-- TMPL_IF NAME="add_field" -->
+                    <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
+                <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 		</div>
