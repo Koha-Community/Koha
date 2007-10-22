@@ -52,7 +52,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             <li>
                 <label for="number">Appear in position </label>
                 <!-- TMPL_IF NAME="number"-->
-                    <input id="number" size="3" name="number" type="text" checked="checked" />
+                    <input id="number" size="3" name="number" type="text" checked="checked" value="<!-- TMPL_VAR NAME="number"  -->" />
                 <!-- TMPL_ELSE -->
                     <input id="number" size="3" name="number" type="text" />
                 <!-- /TMPL_IF -->

@@ -26,7 +26,7 @@ use CGI;
 use C4::Auth;
 use C4::Koha;
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(format_date_in_iso);
 use C4::Output;
 use C4::NewsChannels;
 use C4::Languages;
@@ -37,7 +37,7 @@ my $cgi = new CGI;
 my $id             = $cgi->param('id');
 my $title          = $cgi->param('title');
 my $new            = $cgi->param('new');
-my $expirationdate = $cgi->param('expirationdate');
+my $expirationdate = format_date_in_iso($cgi->param('expirationdate'));
 my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
 
@@ -102,12 +102,11 @@ else {
     
     foreach my $new ( @$opac_news ) {
         next unless $new->{'expirationdate'};
-        # next if $new->{'expirationdate'} eq '0000-00-00';  # now saved as null
-          $new->{'expirationdate'}=format_date_in_iso($new->{'expirationdate'});
-          my @date = split (/-/,$new->{'expirationdate'});
-          if ($date[0]*$date[1]*$date[2]>0 && Date_to_Days( @date ) < Date_to_Days(&Today) ){
-              $new->{'hasexpirated'} = 1;
-          }
+       	$new->{'expirationdate'}=format_date_in_iso($new->{'expirationdate'});
+        my @date = split (/-/,$new->{'expirationdate'});
+        if ($date[0]*$date[1]*$date[2]>0 && Date_to_Days( @date ) < Date_to_Days(&Today) ){
+			$new->{'hasexpirated'} = 1;
+        }
     }
     
     $template->param(
@@ -117,6 +116,6 @@ else {
 		);
 }
 $template->param(
-				DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(C4::Context->preference('dateformat')) ,
+				DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
 		);
 output_html_with_http_headers $cgi, $cookie, $template->output;
