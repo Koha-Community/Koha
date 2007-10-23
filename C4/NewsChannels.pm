@@ -20,7 +20,7 @@ package C4::NewsChannels;
 use strict;
 
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(DHTMLcalendar format_date);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -50,7 +50,7 @@ This module provides the functions needed to admin the news channels and its cat
   &news_channels &get_new_channel &del_channels &add_channel &update_channel
   &news_channels_categories &get_new_channel_category &del_channels_categories
   &add_channel_category &update_channel_category &news_channels_by_category
-&add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
+  &add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
   &add_opac_electronic &upd_opac_electronic &del_opac_electronic &get_opac_electronic &get_opac_electronics
 );
 
@@ -307,6 +307,7 @@ sub get_opac_news {
     my $count = 0;
     while (my $row = $sth->fetchrow_hashref) {
         if ((($limit) && ($count < $limit)) || (!$limit)) {
+			# format the dates in the user's requested format defined in sysprefs
             $row->{'newdate'} = format_date($row->{'newdate'});
             $row->{'expirationdate'} = format_date($row->{'expirationdate'});
             push @opac_news, $row;
@@ -327,8 +328,9 @@ sub get_opac_news {
 sub GetNewsToDisplay {
     my $lang = shift;
     my $dbh = C4::Context->dbh;
+	my $dateformat = C4::Dates->DHTMLcalendar;
     my $query = "
-     SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
+     SELECT *,DATE_FORMAT(timestamp, '$dateformat') AS newdate
      FROM   opac_news
      WHERE   (
         expirationdate > CURRENT_DATE()
@@ -395,7 +397,8 @@ sub get_opac_electronic {
 sub get_opac_electronics {
     my ($section, $lang) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_electronic";
+	my $dateformat = C4::Dates->DHTMLcalendar;
+    my $query = "SELECT *, DATE_FORMAT(timestamp, '$dateformat') AS newdate FROM opac_electronic";
     if ($lang) {
         $query.= " WHERE lang = '" .$lang ."' ";
     }
