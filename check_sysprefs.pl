@@ -3,7 +3,7 @@
 # script to test for missing systempreferences
 # export KOHA_CONF
 # export PERL5LIB
-# then ./check_sysprefs.pl
+# then ./check_sysprefs.pl path  (if path is blank it will use .)
 
 use File::Find;
 use C4::Context;
