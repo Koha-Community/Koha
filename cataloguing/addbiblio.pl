@@ -382,7 +382,6 @@ sub create_input {
                             size=\"67\"
                             maxlength=\"255\" 
                             onblur=\"Blur$function_name($index_tag); \" \/>
-                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
                             <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id})'; return false;)\" title=\"Tag Editor\">...</a>
                     $javascript";
         } else {
