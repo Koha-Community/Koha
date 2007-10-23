@@ -45,7 +45,7 @@ Generates sorting key using the following rules:
 
 * Concatenates class and item part.
 * Converts to uppercase.
-* Removes leading and trailing whitespace
+* Removes leading and trailing whitespace and '/'
 * Separates alphabetic prefix from the rest of the call number
 * Splits into tokens on whitespaces and periods.
 * Leaves first digit group as is.
@@ -61,6 +61,7 @@ sub get_class_sort_key {
     my $init = uc "$cn_class $cn_item";
     $init =~ s/^\s+//;
     $init =~ s/\s+$//;
+    $init =~ s!/!!g;
     $init =~ s/^([\p{IsAlpha}]+)/$1 /;
     my @tokens = split /\.|\s+/, $init;
     my $digit_group_count = 0;
