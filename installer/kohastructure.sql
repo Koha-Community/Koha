@@ -92,7 +92,7 @@ CREATE TABLE `aqbasket` (
   `basketno` int(11) NOT NULL auto_increment,
   `creationdate` date default NULL,
   `closedate` date default NULL,
-  `booksellerid` int(11) NOT NULL default '1',
+  `booksellerid` int(11) NOT NULL default 1,
   `authorisedby` varchar(10) default NULL,
   `booksellerinvoicenumber` mediumtext,
   PRIMARY KEY  (`basketno`),
@@ -106,10 +106,10 @@ CREATE TABLE `aqbasket` (
 
 DROP TABLE IF EXISTS `aqbookfund`;
 CREATE TABLE `aqbookfund` (
-  `bookfundid` char(10) NOT NULL default '',
+  `bookfundid` varchar(10) NOT NULL default '',
   `bookfundname` mediumtext,
   `bookfundgroup` varchar(5) default NULL,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`bookfundid`,`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -169,12 +169,12 @@ CREATE TABLE `aqbooksellers` (
 
 DROP TABLE IF EXISTS `aqbudget`;
 CREATE TABLE `aqbudget` (
-  `bookfundid` char(10) NOT NULL default '',
+  `bookfundid` varchar(10) NOT NULL default '',
   `startdate` date NOT NULL default 0,
   `enddate` date default NULL,
   `budgetamount` decimal(13,2) default NULL,
   `aqbudgetid` tinyint(4) NOT NULL auto_increment,
-  `branchcode` char(10) default NULL,
+  `branchcode` varchar(10) default NULL,
   PRIMARY KEY  (`aqbudgetid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -186,8 +186,8 @@ DROP TABLE IF EXISTS `aqorderbreakdown`;
 CREATE TABLE `aqorderbreakdown` (
   `ordernumber` int(11) default NULL,
   `linenumber` int(11) default NULL,
-  `branchcode` char(10) default NULL,
-  `bookfundid` char(10) NOT NULL default '',
+  `branchcode` varchar(10) default NULL,
+  `bookfundid` varchar(10) NOT NULL default '',
   `allocation` smallint(6) default NULL,
   KEY `ordernumber` (`ordernumber`),
   KEY `bookfundid` (`bookfundid`),
@@ -277,7 +277,7 @@ DROP TABLE IF EXISTS `auth_subfield_structure`;
 CREATE TABLE `auth_subfield_structure` (
   `authtypecode` varchar(10) NOT NULL default '',
   `tagfield` varchar(3) NOT NULL default '',
-  `tagsubfield` char(1) NOT NULL default '',
+  `tagsubfield` varchar(1) NOT NULL default '',
   `liblibrarian` varchar(255) NOT NULL default '',
   `libopac` varchar(255) NOT NULL default '',
   `repeatable` tinyint(4) NOT NULL default 0,
@@ -301,13 +301,13 @@ CREATE TABLE `auth_subfield_structure` (
 
 DROP TABLE IF EXISTS `auth_tag_structure`;
 CREATE TABLE `auth_tag_structure` (
-  `authtypecode` char(10) NOT NULL default '',
-  `tagfield` char(3) NOT NULL default '',
-  `liblibrarian` char(255) NOT NULL default '',
-  `libopac` char(255) NOT NULL default '',
+  `authtypecode` varchar(10) NOT NULL default '',
+  `tagfield` varchar(3) NOT NULL default '',
+  `liblibrarian` varchar(255) NOT NULL default '',
+  `libopac` varchar(255) NOT NULL default '',
   `repeatable` tinyint(4) NOT NULL default 0,
   `mandatory` tinyint(4) NOT NULL default 0,
-  `authorised_value` char(10) default NULL,
+  `authorised_value` varchar(10) default NULL,
   PRIMARY KEY  (`authtypecode`,`tagfield`),
   CONSTRAINT `auth_tag_structure_ibfk_1` FOREIGN KEY (`authtypecode`) REFERENCES `auth_types` (`authtypecode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -332,9 +332,9 @@ CREATE TABLE `auth_types` (
 DROP TABLE IF EXISTS `authorised_values`;
 CREATE TABLE `authorised_values` (
   `id` int(11) NOT NULL auto_increment,
-  `category` char(10) NOT NULL default '',
-  `authorised_value` char(80) NOT NULL default '',
-  `lib` char(80) default NULL,
+  `category` varchar(10) NOT NULL default '',
+  `authorised_value` varchar(80) NOT NULL default '',
+  `lib` varchar(80) default NULL,
   PRIMARY KEY  (`id`),
   KEY `name` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -367,8 +367,8 @@ CREATE TABLE `biblio` (
 
 DROP TABLE IF EXISTS `biblio_framework`;
 CREATE TABLE `biblio_framework` (
-  `frameworkcode` char(4) NOT NULL default '',
-  `frameworktext` char(255) NOT NULL default '',
+  `frameworkcode` varchar(4) NOT NULL default '',
+  `frameworktext` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -451,7 +451,7 @@ CREATE TABLE `borrowers` (
   `B_email` text,
   `B_phone` mediumtext,
   `dateofbirth` date default NULL,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `categorycode` varchar(10) NOT NULL default '',
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
@@ -466,7 +466,7 @@ CREATE TABLE `borrowers` (
   `relationship` varchar(100) default NULL,
   `ethnicity` varchar(50) default NULL,
   `ethnotes` varchar(255) default NULL,
-  `sex` char(1) default NULL,
+  `sex` varchar(1) default NULL,
   `password` varchar(30) default NULL,
   `flags` int(11) default NULL,
   `userid` varchar(30) default NULL,
@@ -489,7 +489,7 @@ CREATE TABLE `borrowers` (
 
 DROP TABLE IF EXISTS `branchcategories`;
 CREATE TABLE `branchcategories` (
-  `categorycode` char(10) NOT NULL default '',
+  `categorycode` varchar(10) NOT NULL default '',
   `categoryname` varchar(32),
   `codedescription` mediumtext,
   `categorytype` varchar(16),
@@ -502,7 +502,7 @@ CREATE TABLE `branchcategories` (
 
 DROP TABLE IF EXISTS `branches`;
 CREATE TABLE `branches` (
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `branchname` mediumtext NOT NULL,
   `branchaddress1` mediumtext,
   `branchaddress2` mediumtext,
@@ -522,8 +522,8 @@ CREATE TABLE `branches` (
 
 DROP TABLE IF EXISTS `branchrelations`;
 CREATE TABLE `branchrelations` (
-  `branchcode` char(10) NOT NULL default '',
-  `categorycode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
+  `categorycode` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
@@ -581,7 +581,7 @@ CREATE TABLE `categories` (
   `overduenoticerequired` tinyint(1) default NULL,
   `issuelimit` smallint(6) default NULL,
   `reservefee` decimal(28,6) default NULL,
-  `category_type` char(1) NOT NULL default 'A',
+  `category_type` varchar(1) NOT NULL default 'A',
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -605,8 +605,8 @@ CREATE TABLE `categorytable` (
 DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `cityid` int(11) NOT NULL auto_increment,
-  `city_name` char(100) NOT NULL default '',
-  `city_zipcode` char(20) default NULL,
+  `city_name` varchar(100) NOT NULL default '',
+  `city_zipcode` varchar(20) default NULL,
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -750,7 +750,7 @@ CREATE TABLE `deletedborrowers` (
   `B_email` text,
   `B_phone` mediumtext,
   `dateofbirth` date default NULL,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `categorycode` varchar(2) default NULL,
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
@@ -765,7 +765,7 @@ CREATE TABLE `deletedborrowers` (
   `relationship` varchar(100) default NULL,
   `ethnicity` varchar(50) default NULL,
   `ethnotes` varchar(255) default NULL,
-  `sex` char(1) default NULL,
+  `sex` varchar(1) default NULL,
   `password` varchar(30) default NULL,
   `flags` int(11) default NULL,
   `userid` varchar(30) default NULL,
@@ -845,7 +845,7 @@ CREATE TABLE `issues` (
   `borrowernumber` int(11) default NULL,
   `itemnumber` int(11) default NULL,
   `date_due` date default NULL,
-  `branchcode` char(10) default NULL,
+  `branchcode` varchar(10) default NULL,
   `issuingbranch` varchar(18) default NULL,
   `returndate` date default NULL,
   `lastreneweddate` date default NULL,
@@ -878,7 +878,7 @@ CREATE TABLE `issuingrules` (
   `chargename` varchar(100) default NULL,
   `maxissueqty` int(4) default NULL,
   `issuelength` int(4) default NULL,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   PRIMARY KEY  (`branchcode`,`categorycode`,`itemtype`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`)
@@ -958,7 +958,7 @@ CREATE TABLE `itemtypes` (
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels` (
   `labelid` int(11) NOT NULL auto_increment,
-  `batch_id` varchar(10) NOT NULL default '1',
+  `batch_id` varchar(10) NOT NULL default 1,
   `itemnumber` varchar(100) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`labelid`)
@@ -971,23 +971,23 @@ CREATE TABLE `labels` (
 DROP TABLE IF EXISTS `labels_conf`;
 CREATE TABLE `labels_conf` (
   `id` int(4) NOT NULL auto_increment,
-  `barcodetype` char(100) default '',
-  `title` int(1) default '0',
-  `itemtype` int(1) default '0',
-  `barcode` int(1) default '0',
-  `dewey` int(1) default '0',
-  `class` int(1) default '0',
-  `subclass` int(1) default '0',
-  `itemcallnumber` int(1) default '0',
-  `author` int(1) default '0',
-  `issn` int(1) default '0',
-  `isbn` int(1) default '0',
-  `startlabel` int(2) NOT NULL default '1',
-  `printingtype` char(32) default 'BAR',
-  `layoutname` char(20) NOT NULL default 'TEST',
-  `guidebox` int(1) default '0',
-  `active` tinyint(1) default '1',
-  `fonttype` char(10) default NULL,
+  `barcodetype` varchar(100) default '',
+  `title` int(1) default 0,
+  `itemtype` int(1) default 0,
+  `barcode` int(1) default 0,
+  `dewey` int(1) default 0,
+  `class` int(1) default 0,
+  `subclass` int(1) default 0,
+  `itemcallnumber` int(1) default 0,
+  `author` int(1) default 0,
+  `issn` int(1) default 0,
+  `isbn` int(1) default 0,
+  `startlabel` int(2) NOT NULL default 1,
+  `printingtype` varchar(32) default 'BAR',
+  `layoutname` varchar(20) NOT NULL default 'TEST',
+  `guidebox` int(1) default 0,
+  `active` tinyint(1) default 1,
+  `fonttype` varchar(10) default NULL,
   `subtitle` int(1) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -999,21 +999,21 @@ CREATE TABLE `labels_conf` (
 DROP TABLE IF EXISTS `labels_templates`;
 CREATE TABLE `labels_templates` (
   `tmpl_id` int(4) NOT NULL auto_increment,
-  `tmpl_code` char(100) character set utf8 collate utf8_unicode_ci default '',
-  `tmpl_desc` char(100) character set utf8 collate utf8_unicode_ci default '',
-  `page_width` float default '0',
-  `page_height` float default '0',
-  `label_width` float default '0',
-  `label_height` float default '0',
-  `topmargin` float default '0',
-  `leftmargin` float default '0',
-  `cols` int(2) default '0',
-  `rows` int(2) default '0',
-  `colgap` float default '0',
-  `rowgap` float default '0',
+  `tmpl_code` varchar(100) character set utf8 collate utf8_unicode_ci default '',
+  `tmpl_desc` varchar(100) character set utf8 collate utf8_unicode_ci default '',
+  `page_width` float default 0,
+  `page_height` float default 0,
+  `label_width` float default 0,
+  `label_height` float default 0,
+  `topmargin` float default 0,
+  `leftmargin` float default 0,
+  `cols` int(2) default 0,
+  `rows` int(2) default 0,
+  `colgap` float default 0,
+  `rowgap` float default 0,
   `active` int(1) default NULL,
-  `units` char(20) character set utf8 collate utf8_unicode_ci default 'PX',
-  `fontsize` int(4) NOT NULL default '3',
+  `units` varchar(20) character set utf8 collate utf8_unicode_ci default 'PX',
+  `fontsize` int(4) NOT NULL default 3,
   PRIMARY KEY  (`tmpl_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -1058,7 +1058,7 @@ CREATE TABLE `marc_breeding` (
 DROP TABLE IF EXISTS `marc_subfield_structure`;
 CREATE TABLE `marc_subfield_structure` (
   `tagfield` varchar(3) NOT NULL default '',
-  `tagsubfield` char(1) NOT NULL default '',
+  `tagsubfield` varchar(1) NOT NULL default '',
   `liblibrarian` varchar(255) NOT NULL default '',
   `libopac` varchar(255) NOT NULL default '',
   `repeatable` tinyint(4) NOT NULL default 0,
@@ -1086,13 +1086,13 @@ CREATE TABLE `marc_subfield_structure` (
 
 DROP TABLE IF EXISTS `marc_tag_structure`;
 CREATE TABLE `marc_tag_structure` (
-  `tagfield` char(3) NOT NULL default '',
-  `liblibrarian` char(255) NOT NULL default '',
-  `libopac` char(255) NOT NULL default '',
+  `tagfield` varchar(3) NOT NULL default '',
+  `liblibrarian` varchar(255) NOT NULL default '',
+  `libopac` varchar(255) NOT NULL default '',
   `repeatable` tinyint(4) NOT NULL default 0,
   `mandatory` tinyint(4) NOT NULL default 0,
-  `authorised_value` char(10) default NULL,
-  `frameworkcode` char(4) NOT NULL default '',
+  `authorised_value` varchar(10) default NULL,
+  `frameworkcode` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`frameworkcode`,`tagfield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1157,13 +1157,13 @@ CREATE TABLE `opac_news` (
 
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `categorycode` varchar(2) NOT NULL default '',
   `delay1` int(4) default 0,
   `letter1` varchar(20) default NULL,
-  `debarred1` char(1) default 0,
+  `debarred1` varchar(1) default 0,
   `delay2` int(4) default 0,
-  `debarred2` char(1) default 0,
+  `debarred2` varchar(1) default 0,
   `letter2` varchar(20) default NULL,
   `delay3` int(4) default 0,
   `letter3` varchar(20) default NULL,
@@ -1177,9 +1177,9 @@ CREATE TABLE `overduerules` (
 
 DROP TABLE IF EXISTS `printers`;
 CREATE TABLE `printers` (
-  `printername` char(40) NOT NULL default '',
-  `printqueue` char(20) default NULL,
-  `printtype` char(20) default NULL,
+  `printername` varchar(40) NOT NULL default '',
+  `printqueue` varchar(20) default NULL,
+  `printtype` varchar(20) default NULL,
   PRIMARY KEY  (`printername`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1190,7 +1190,7 @@ CREATE TABLE `printers` (
 DROP TABLE IF EXISTS `repeatable_holidays`;
 CREATE TABLE `repeatable_holidays` (
   `id` int(11) NOT NULL auto_increment,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `weekday` smallint(6) default NULL,
   `day` smallint(6) default NULL,
   `month` smallint(6) default NULL,
@@ -1221,14 +1221,14 @@ CREATE TABLE `reserves` (
   `borrowernumber` int(11) NOT NULL default 0,
   `reservedate` date default NULL,
   `biblionumber` int(11) NOT NULL default 0,
-  `constrainttype` char(1) default NULL,
-  `branchcode` char(10) default NULL,
+  `constrainttype` varchar(1) default NULL,
+  `branchcode` varchar(10) default NULL,
   `notificationdate` date default NULL,
   `reminderdate` date default NULL,
   `cancellationdate` date default NULL,
   `reservenotes` mediumtext,
   `priority` smallint(6) default NULL,
-  `found` char(1) default NULL,
+  `found` varchar(1) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `itemnumber` int(11) default NULL,
   `waitingdate` date default NULL,
@@ -1264,7 +1264,7 @@ CREATE TABLE `reviews` (
 DROP TABLE IF EXISTS `roadtype`;
 CREATE TABLE `roadtype` (
   `roadtypeid` int(11) NOT NULL auto_increment,
-  `road_type` char(100) NOT NULL default '',
+  `road_type` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`roadtypeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1294,7 +1294,7 @@ CREATE TABLE `serial` (
 
 DROP TABLE IF EXISTS sessions;                         
 CREATE TABLE sessions (
-  `id` char(32) NOT NULL,
+  `id` varchar(32) NOT NULL,
   `a_session` text NOT NULL,
   UNIQUE KEY id (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1306,11 +1306,11 @@ CREATE TABLE sessions (
 DROP TABLE IF EXISTS `special_holidays`;
 CREATE TABLE `special_holidays` (
   `id` int(11) NOT NULL auto_increment,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `day` smallint(6) NOT NULL default 0,
   `month` smallint(6) NOT NULL default 0,
   `year` smallint(6) NOT NULL default 0,
-  `isexception` smallint(1) NOT NULL default '1',
+  `isexception` smallint(1) NOT NULL default 1,
   `title` varchar(50) NOT NULL default '',
   `description` text NOT NULL,
   PRIMARY KEY  (`id`)
@@ -1396,7 +1396,7 @@ CREATE TABLE `subscription` (
   `whenmorethan3` int(11) default 0,
   `setto3` int(11) default NULL,
   `lastvalue3` int(11) default NULL,
-  `issuesatonce` tinyint(3) NOT NULL default '1',
+  `issuesatonce` tinyint(3) NOT NULL default 1,
   `firstacquidate` date default NULL,
   `manualhistory` tinyint(1) NOT NULL default 0,
   `irregularity` text,
@@ -1405,7 +1405,7 @@ CREATE TABLE `subscription` (
   `distributedto` text,
   `internalnotes` longtext,
   `callnumber` text,
-  `branchcode` char(10) NOT NULL default '',
+  `branchcode` varchar(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1501,8 +1501,8 @@ CREATE TABLE `tags` (
 DROP TABLE IF EXISTS `userflags`;
 CREATE TABLE `userflags` (
   `bit` int(11) NOT NULL default 0,
-  `flag` char(30) default NULL,
-  `flagdesc` char(255) default NULL,
+  `flag` varchar(30) default NULL,
+  `flagdesc` varchar(255) default NULL,
   `defaulton` int(11) default NULL,
   PRIMARY KEY  (`bit`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1514,9 +1514,9 @@ CREATE TABLE `userflags` (
 DROP TABLE IF EXISTS `virtualshelves`;
 CREATE TABLE `virtualshelves` (
   `shelfnumber` int(11) NOT NULL auto_increment,
-  `shelfname` char(255) default NULL,
-  `owner` char(80) default NULL,
-  `category` char(1) default NULL,
+  `shelfname` varchar(255) default NULL,
+  `owner` varchar(80) default NULL,
+  `category` varchar(1) default NULL,
   PRIMARY KEY  (`shelfnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1567,8 +1567,8 @@ DROP TABLE IF EXISTS `zebraqueue`;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
   `biblio_auth_number` int(11) NOT NULL default 0,
-  `operation` char(20) NOT NULL default '',
-  `server` char(20) NOT NULL default '',
+  `operation` varchar(20) NOT NULL default '',
+  `server` varchar(20) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
