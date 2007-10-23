@@ -430,7 +430,7 @@ foreach my $tag (sort keys %{$tagslib}) {
                             size=\"67\"
                             maxlength=\"255\" 
                             onblur=\"Blur$function_name(".$subfield_data{random}."); \" \/>
-                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
                     $javascript";
         } else {
             warn "Plugin Failed: $plugin";
