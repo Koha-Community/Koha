@@ -74,6 +74,8 @@ my %tabsysprefs;
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
     $tabsysprefs{AuthDisplayHierarchy}="Authorities";
+	$tabsysprefs{dontmerge}="Authorities";
+	$tabsysprefs{BiblioAddsAuthorities}="Authorities";
 # Catalogue
     $tabsysprefs{advancedMARCEditor}="Catalogue";
     $tabsysprefs{autoBarcode}="Catalogue";
@@ -97,9 +99,7 @@ my %tabsysprefs;
     $tabsysprefs{NoZebraIndexes}="Catalogue";
     $tabsysprefs{ReceiveBackIssues}="Catalogue";
     $tabsysprefs{DefaultClassificationSource}="Catalogue";
-    $tabsysprefs{SearchMyLibraryFirst}="Catalogue";
     $tabsysprefs{RoutingSerials}="Catalogue";
-    $tabsysprefs{BiblioAddsAuthorities}="Catalogue";
     
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -161,6 +161,7 @@ my %tabsysprefs;
     $tabsysprefs{opacheader}="OPAC";
     
 # OPACFeatures
+	$tabsysprefs{SearchMyLibraryFirst}="OPACFeatures";
     $tabsysprefs{Disable_Dictionary}="OPACFeatures";
     $tabsysprefs{hidelostitems}="OPACFeatures";
     $tabsysprefs{opacbookbag}="OPACFeatures";
