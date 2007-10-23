@@ -3738,22 +3738,14 @@ sub _koha_modify_item {
     my ( $dbh, $item ) = @_;
 	my $error;
 
-	# calculate items_cn_sort
-    my ($items_cn_sort) = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
+	# calculate items.cn_sort
+    $item->{'cn_sort'} = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
 
     my $query = "UPDATE items SET ";
 	my @bind;
 	for my $key ( keys %$item ) {
-		# special cases first
-		if ($key eq 'cn_sort') {
-			$query.="cn_sort=?,";
-			push @bind, $items_cn_sort;
-		}
-		# now all the rest
-		else {
-			$query.="$key=?,";
-			push @bind, $item->{$key};
-		}
+		$query.="$key=?,";
+		push @bind, $item->{$key};
     }
 	$query =~ s/,$//;
     $query .= " WHERE itemnumber=?";

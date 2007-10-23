@@ -390,26 +390,41 @@ foreach my $tag (sort keys %{$tagslib}) {
         my $cgidir = C4::Context->intranetdir . "/cgi-bin/cataloguing/value_builder";
         unless ( opendir( DIR, "$cgidir" ) ) {
             $cgidir = C4::Context->intranetdir . "/cataloguing/value_builder";
+            closedir( DIR );
         }
         my $plugin = $cgidir . "/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
-        do $plugin || die "Plugin Failed: ".$plugin;
-        my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-        my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-#         my ( $function_name, $javascript,$extended_param );
+        if (do $plugin) {
+            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
+            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
         
-        $subfield_data{marc_value} =
-                "<input tabindex=\"1\"
-                        type=\"text\"
+            $subfield_data{marc_value} =
+                    "<input tabindex=\"1\"
+                            type=\"text\"
+                            id=\"".$subfield_data{id}."\"
+                            name=\"field_value\"
+                            value=\"$value\"
+                            class=\"input_marceditor\"
+                            onfocus=\"Focus$function_name(".$subfield_data{random}.")\"
+                            size=\"67\"
+                            maxlength=\"255\" 
+                            onblur=\"Blur$function_name(".$subfield_data{random}."); \" \/>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
+                    $javascript";
+        } else {
+            warn "Plugin Failed: $plugin";
+            # supply default input form
+            $subfield_data{marc_value} =
+                "<input type=\"text\"
                         id=\"".$subfield_data{id}."\"
                         name=\"field_value\"
                         value=\"$value\"
-                        class=\"input_marceditor\"
-                        onfocus=\"Focus$function_name(".$subfield_data{random}.")\"
+                        tabindex=\"1\"
                         size=\"67\"
                         maxlength=\"255\" 
-                        onblur=\"Blur$function_name(".$subfield_data{random}."); \" \/>
-                        <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
-                $javascript";
+                        class=\"input_marceditor\"
+                \/>
+                ";
+        }
         # it's an hidden field
     }
     elsif ( $tag eq '' ) {

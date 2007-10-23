@@ -343,21 +343,35 @@ sub create_input {
         my $cgidir = C4::Context->intranetdir . "/cgi-bin/cataloguing/value_builder";
         unless ( opendir( DIR, "$cgidir" ) ) {
             $cgidir = C4::Context->intranetdir . "/cataloguing/value_builder";
+            closedir( DIR );
         }
         my $plugin = $cgidir . "/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
-        do $plugin || die "Plugin Failed: ".$plugin;
-        my $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
-        my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
-#         my ( $function_name, $javascript,$extended_param );
+        if (do $plugin) {
+            my $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
+            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
         
-        $subfield_data{marc_value} =
-                "<input tabindex=\"1\"
-                        type=\"text\"
+            $subfield_data{marc_value} =
+                    "<input tabindex=\"1\"
+                            type=\"text\"
+                            id=\"".$subfield_data{id}."\"
+                            name=\"".$subfield_data{id}."\"
+                            value=\"$value\"
+                            class=\"input_marceditor\"
+                            onfocus=\"Focus$function_name($index_tag)\"
+                            size=\"67\"
+                            maxlength=\"255\" 
+                            onblur=\"Blur$function_name($index_tag); \" \/>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
+                    $javascript";
+        } else {
+            warn "Plugin Failed: $plugin";
+            # supply default input form
+            $subfield_data{marc_value} =
+                "<input type=\"text\"
                         id=\"".$subfield_data{id}."\"
                         name=\"".$subfield_data{id}."\"
                         value=\"$value\"
-                        class=\"input_marceditor\"
-                        onfocus=\"Focus$function_name($index_tag)\"
+                        tabindex=\"1\"
                         size=\"67\"
                         maxlength=\"255\" 
                         onblur=\"Blur$function_name($index_tag); \" \/>
