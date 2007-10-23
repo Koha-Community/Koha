@@ -424,10 +424,7 @@ sub preference
     my $self = shift;
     my $var = shift;        # The system preference to return
     my $retval;            # Return value
-    my $dbh = C4::Context->dbh;    # Database handle
-    if ($dbh){
-    my $sth;            # Database query handle
-
+    my $dbh = C4::Context->dbh or return 0;
     # Look up systempreferences.variable==$var
     $retval = $dbh->selectrow_array(<<EOT);
         SELECT    value
@@ -436,9 +433,6 @@ sub preference
         LIMIT    1
 EOT
     return $retval;
-    } else {
-      return 0
-    }
 }
 
 sub boolean_preference ($) {
