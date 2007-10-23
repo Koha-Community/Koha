@@ -362,6 +362,7 @@ sub create_input {
                             maxlength=\"255\" 
                             onblur=\"Blur$function_name($index_tag); \" \/>
                             <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'; return false;)\" title=\"Tag Editor\">...</a>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id})'; return false;)\" title=\"Tag Editor\">...</a>
                     $javascript";
         } else {
             warn "Plugin Failed: $plugin";
@@ -374,9 +375,10 @@ sub create_input {
                         tabindex=\"1\"
                         size=\"67\"
                         maxlength=\"255\" 
-                        onblur=\"Blur$function_name($index_tag); \" \/>
-                        <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-                $javascript";
+                        class=\"input_marceditor\"
+                \/>
+                ";
+        }
         # it's an hidden field
     }
     elsif ( $tag eq '' ) {
