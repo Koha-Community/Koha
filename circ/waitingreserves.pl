@@ -110,11 +110,12 @@ my @reservloop;
 
 my @getreserves;
 if (C4::Context->preference('IndependantBranches')){
+	# get reserves for the branch we are logged into
 	@getreserves = GetReservesForBranch($default);
 }
 else {
-	@getreserves = GetReservesForBranch($default);
-	# need to have a routine to get all waiting reserves
+	# get all reserves waiting
+	@getreserves = GetReservesForBranch();
 }	
 	
 foreach my $num (@getreserves) {
@@ -124,7 +125,7 @@ foreach my $num (@getreserves) {
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
     $getreserv{'waitingdate'} = format_date( $num->{'waitingdate'} );
 
-    next unless $num->{'waitingdate'} ne '0000-00-00';
+    next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
     my ( $waiting_year, $waiting_month, $waiting_day ) = split /-/,
       $num->{'waitingdate'};
     ( $waiting_year, $waiting_month, $waiting_day ) =

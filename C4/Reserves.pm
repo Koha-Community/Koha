@@ -555,15 +555,22 @@ sub GetReservesToBranch {
 sub GetReservesForBranch {
     my ($frombranch) = @_;
     my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare( "
-        SELECT borrowernumber,reservedate,itemnumber,waitingdate
+	my $query        = "SELECT borrowernumber,reservedate,itemnumber,waitingdate
         FROM   reserves 
         WHERE   priority='0'
             AND cancellationdate IS NULL 
-            AND found='W' 
-            AND branchcode=?
-        ORDER BY waitingdate" );
-    $sth->execute($frombranch);
+            AND found='W' ";
+    if ($frombranch){
+        $query .= " AND branchcode=? ";
+	}
+    $query .= "ORDER BY waitingdate" ;
+    my $sth = $dbh->prepare($query);
+    if ($frombranch){
+		$sth->execute($frombranch);
+	}
+    else {
+		$sth->execute();
+	}
     my @transreserv;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
