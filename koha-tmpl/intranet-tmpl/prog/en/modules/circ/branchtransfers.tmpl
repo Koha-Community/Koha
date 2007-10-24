@@ -8,15 +8,13 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Transfers</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
 
 
 <!-- TMPL_IF Name="found" -->
-    <h3>Reserve Found</h3>
+   <div class="yui-g"> <h3>Reserve Found</h3>
     <table>
         <caption>
             <!-- TMPL_IF Name="reserved" -->
@@ -87,11 +85,43 @@
                             </form>
                         </td>
                 </tr>
-    </table>
+    </table></div>
 
 <!-- TMPL_ELSE -->
-
-        <h4>Messages</h4>
+	<div class="yui-ge">
+   <div class="yui-u first">     
+    <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
+        <fieldset class="brief">
+            <legend>Transfer</legend>
+            <ol>
+			<li>
+                <label for="tobranchcd">Destination library: </label>
+                
+                    <select name="tobranchcd" id="tobranchcd">
+                        <!-- TMPL_LOOP Name="branchoptionloop" -->
+                            <option value="<!-- TMPL_VAR Name="code" -->" <!-- TMPL_VAR Name="selected" -->>
+                                <!-- TMPL_VAR Name="name" -->
+                            </option>
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                
+            </li>
+            <li>
+                <label for="barcode">Enter barcode: </label>
+                <input name="barcode" id="barcode" size="15" class="focus" /> <input type="submit" value="Submit" />
+            </li>
+			</ol>
+        </fieldset>
+        <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
+        <!-- TMPL_LOOP Name="trsfitemloop" -->
+            <input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
+            <input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
+            <input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
+        <!-- /TMPL_LOOP -->
+    </form></div>
+ 
+	 
+	 <div class="yui-u"><h4>Messages</h4>
 		<ul>
                 <!-- TMPL_IF Name="reqmessage" -->
                     <!-- TMPL_IF Name="cancelled" -->
@@ -116,38 +146,12 @@
 <!-- TMPL_VAR Name="name" --> and has been returned.</li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-			</ul>
-    <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
-        <table>
-            <caption>Transfer</caption>
-            <tr>
-                <th scope="row">Destination library:</th>
-                <td>
-                    <select name="tobranchcd">
-                        <!-- TMPL_LOOP Name="branchoptionloop" -->
-                            <option value="<!-- TMPL_VAR Name="code" -->" <!-- TMPL_VAR Name="selected" -->>
-                                <!-- TMPL_VAR Name="name" -->
-                            </option>
-                        <!-- /TMPL_LOOP -->
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th scope="row">Enter barcode</th>
-                <td><input name="barcode" size="15" class="focus" /></td>
-            </tr>
-        </table>
-        <input type="hidden" name="tobranchcd" value="<!-- TMPL_VAR Name="tobrancd" -->" />
-        <!-- TMPL_LOOP Name="trsfitemloop" -->
-            <input type="hidden" name="bc-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
-            <input type="hidden" name="fb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="frombrcd" -->" />
-            <input type="hidden" name="tb-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="tobrcd" -->" />
-        <!-- /TMPL_LOOP -->
-        <input type="submit" value="Do transfer" />
-    </form>
-        
+			</ul></div><!-- /yui-u -->
+			</div><!-- /yui-ge -->
+	 
     <!-- TMPL_IF Name="trsfitemloop" -->
-        <table>
+        <div class="yui-g">
+		<table>
             <caption>Transfered Items</caption>
             <tr>
                 <th>Bar Code</th>
@@ -167,13 +171,11 @@
                 </tr>
             <!-- /TMPL_LOOP -->
         </table>
+		</div>
     <!-- /TMPL_IF -->
+	
+	
 <!-- /TMPL_IF -->
 
-</div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -105,7 +105,7 @@ else {
        	#$new->{'expirationdate'}=format_date_in_iso($new->{'expirationdate'});
         my @date = split (/-/,$new->{'expirationdate'});
         if ($date[0]*$date[1]*$date[2]>0 && Date_to_Days( @date ) < Date_to_Days(&Today) ){
-			$new->{'hasexpirated'} = 1;
+			$new->{'expired'} = 1;
         }
     }
     

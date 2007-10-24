@@ -97,20 +97,20 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                         <th>&nbsp;</th>
                     </tr>
                     <!-- TMPL_LOOP NAME="opac_news" -->
-                        <tr>
+                         <!-- TMPL_IF NAME="expired" -->
+                            <tr class="expired">
+                            <!-- TMPL_ELSE -->
+                            <tr>
+                            <!-- /TMPL_IF -->
                             <td>
                                 <input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->" />
                             </td>
                             <td><!-- TMPL_VAR NAME="lang" --></td>
                             <td><!-- TMPL_VAR NAME="number" --></td>
                             <td><!-- TMPL_VAR NAME="newdate" --></td>
-                            <td><!-- TMPL_VAR NAME="expirationdate" --></td>
+                            <td><!-- TMPL_VAR NAME="expirationdate" --> <!-- TMPL_IF NAME="expired" -->(<span class="expired">expired</span>)<!-- /TMPL_IF --></td>
                             <td><!-- TMPL_VAR NAME="title" --></td>
-                            <!-- TMPL_IF NAME="hasexpirated" -->
-                            <td class="hasexpirated">
-                            <!-- TMPL_ELSE -->
-                            <td>
-                            <!-- /TMPL_IF -->
+                           <td>
                                 <!-- TMPL_VAR NAME="new" -->
                             </td>
                             <td><a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=<!-- TMPL_VAR NAME="idnew" -->">Edit</a></td>
