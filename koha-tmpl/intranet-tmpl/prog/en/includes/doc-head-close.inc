@@ -56,3 +56,8 @@
 <!-- TMPL_IF NAME="login" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/login.css" /><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="wizard" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/wizard.css" />
 <!-- /TMPL_IF -->
+
+<!-- local colors -->
+<!-- TMPL_IF name="intranetcolorstylesheet" -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->" />
+<!-- /TMPL_IF -->
