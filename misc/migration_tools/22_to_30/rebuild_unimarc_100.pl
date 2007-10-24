@@ -21,9 +21,9 @@ $|=1; # flushes output
 print "Creating/updating field 100 if needed\n";
 while (my ($biblionumber,$time)=$sth->fetchrow ){
 #   my $record;
-print "record : $biblionumber \n";
+# print "record : $biblionumber \n";
     my $record = GetMarcBiblio($biblionumber);
-print "=> ".$record->as_formatted;
+# print "=> ".$record->as_formatted;
     MARCmodrecord($biblionumber,$record,$time);
 #
 }
@@ -35,7 +35,7 @@ sub MARCmodrecord {
         $record->leader('     nac  22     1u 4500');
         $update=1;
         my $string;
-        if ($record->subfield(100,"a")) {
+        if ($record->field(100)) {
             $string = substr($record->subfield(100,"a")."                                   ",0,35);
             my $f100 = $record->field(100);
             $record->delete_field($f100);
