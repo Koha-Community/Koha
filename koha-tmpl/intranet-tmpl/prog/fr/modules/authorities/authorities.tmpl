@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha -- Détails autorité</title>
+<title>Koha &rsaquo; Autorités &rsaquo; <!-- TMPL_IF name="authid" -->Modifier autorité N°<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Ajout autorité (<!-- TMPL_VAR name="authtypetext" -->)<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <script type="text/javascript">
@@ -393,8 +393,6 @@ function searchauthority() {
     <div id="action">
 <!-- TMPL_IF name="authid" -->
     <input type="button" value="Valider" onclick="Check(this.form)" accesskey="w">
-<!-- TMPL_ELSE -->
-    <input type="button" value="Ajouter autorité" onclick="Check(this.form)" accesskey="w">
 <!-- /TMPL_IF -->
     </div>
 
@@ -549,8 +547,6 @@ function searchauthority() {
 <div id="action">
     <!-- TMPL_IF name="authid" -->
         <input type="button" value="Valider" onclick="Check(this.form)" accesskey="w">
-    <!-- TMPL_ELSE -->
-        <input type="button" value="Ajouter autorité" onclick="Check(this.form)" accesskey="w">
     <!-- /TMPL_IF -->
 </div>
 </form>

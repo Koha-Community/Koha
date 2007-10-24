@@ -8,10 +8,14 @@
 	 */
 	function add_field() {
 	    var ButtonPlus = document.getElementById('ButtonPlus');
-	    var line       = ButtonPlus.parentNode;
-	    var dad        = line.parentNode;
-	    dad.appendChild(line.cloneNode(true));
-	    line.removeChild(ButtonPlus);
+		var line = ButtonPlus.parentNode;
+		var dad  = line.parentNode;
+		dad.appendChild(line.cloneNode(true));
+		line.removeChild(ButtonPlus);
+	    //var line       = ButtonPlus.parentNode;
+	    //var dad        = line.parentNode;
+	    //dad.appendChild(line.cloneNode(true));
+	    //line.removeChild(ButtonPlus);
 	}
 </script>
 </head>
@@ -65,47 +69,48 @@
                 <p><label for="scan">Parcourir les index : </label><input type="checkbox" name="scan" id="scan" value="1" /></p>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="expanded_options" -->
-            <select name="op">
-                <option value="and" selected="selected">et</option>
-                <option value="or">ou</option>
-                <option value="not">sauf</option>
+        <div>
+            <!-- TMPL_IF NAME="expanded_options" -->
+                <select name="op">
+                    <option value="and" selected="selected">et</option>
+                    <option value="or">ou</option>
+                    <option value="not">sauf</option>
+                </select>
+            <!-- /TMPL_IF --> 
+            <select name="idx">
+                <option value="kw,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Tous les mots</option>
+                <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Auteur</option>
+                <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Auteur (expression)</option>
+                <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de société</option>
+                <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de congrès</option>
+                <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Auteur collectif (expression)</option>
+                <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de congrès (expression)</option>
+                <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->> &nbsp;&nbsp;&nbsp;&nbsp; Nom de personne</option>
+                <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de personne (expression)</option>
+                <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Langue</option>
+                <option value="nt,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Remarques/Commentaires</option>
+                <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Editeur</option>
+                <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Lieu de publication</option>
+                <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Date de publication</option>
+                <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Numéro normalisé</option>
+                <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
+                <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
+                <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Cote</option>
+                <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Sujet</option>
+                <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Sujet (expression)</option>
+                <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre</option>
+                <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Titre (expression)</option>
+                <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Titre de collection</option>
+                <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Code à barres</option>
             </select>
-        <!-- /TMPL_IF --> 
-        <select name="idx">
-    <option value="kw,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Tous les mots</option>
-    <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Auteur</option>
-    <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Auteur (expression)</option>
-    <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de société</option>
-    <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de congrès</option>
-    <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Auteur collectif (expression)</option>
-    <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de congrès (expression)</option>
-    <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->> &nbsp;&nbsp;&nbsp;&nbsp; Nom de personne</option>
-    <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de personne (expression)</option>
-    <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Langue</option>
-    <option value="nt,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Remarques/Commentaires</option>
-    <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Editeur</option>
-    <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Lieu de publication</option>
-    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Date de publication</option>
-    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Numéro normalisé</option>
-    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
-    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-    <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Cote</option>
-    <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Sujet</option>
-    <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Sujet (expression)</option>
-    <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre</option>
-    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Titre (expression)</option>
-    <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Titre de collection</option>
-    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Code à barres</option>
-
-        </select>
-        <input id="search_box" type="text" size="30" name="q" title="Entrer les termes de recherche" value="" class="focus">
-        <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="add_field" -->
-                <a href="JavaScript:add_field();" id="ButtonPlus" title="Ajouter un autre champ">[+]</a>
+            <input id="search_box" type="text" size="30" name="q" title="Entrer les termes de recherche" value="" class="focus">
+            <!-- TMPL_IF NAME="expanded_options" -->
+                <!-- TMPL_IF NAME="add_field" -->
+                    <a href="JavaScript:add_field();" id="ButtonPlus" title="Ajouter un autre champ">[+]</a>
+                <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-
+		</div>
     <!-- /TMPL_LOOP -->
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
@@ -431,15 +436,27 @@
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Localisation et disponibilité :  </legend>
         <p>
-        <label>Site</label><select name="limit" id="branchloop">
+        <label for="available-items">Seulement les documents actuellement disponibles</label><input type="checkbox" id="available-items" name="limit" value="Date de retour : 0000-00-00"></p>
+        <p>
+        <label>Bibliothèques individuelles </label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">Tous sites</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
         <!-- /TMPL_LOOP -->
         </select>
+		<!-- <input type='hidden' name='limit' value='branch: MAIN' /> -->
         </p>
-        <p>
-        <label for="available-items">Seulement les documents actuellement disponibles</label><input type="checkbox" id="available-items" name="limit" value="Date de retour : 0000-00-00"></p>
+        <!-- TMPL_IF NAME="searchdomainloop" -->
+		<p>OU<p> <!-- should addjs to grey out group pulldown if a library is selected. -->
+		<p>
+        <label>Groupes de bibliothèques</label><select name="multibranchlimit" id="categoryloop">
+        <option value=""> -- aucun -- </option>
+        <!-- TMPL_LOOP NAME="searchdomainloop" -->
+        <option value="<!-- TMPL_VAR NAME='categorycode' -->"><!-- TMPL_VAR NAME='categoryname' --></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        </p>
+		<!-- /TMPL_IF -->
     </fieldset>
 <!-- /AVAILABILITY LIMITS -->
 

@@ -7,16 +7,18 @@
 <div id="action">
 
 <!-- TMPL_UNLESS NAME="norequests" -->
-	<!-- TMPL_IF NAME="RequestOnOpac" -->
-		<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-		Faire une Réservation
-		</a>
-	<!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS name="bi_notforloan" -->
+        <!-- TMPL_IF NAME="RequestOnOpac" -->
+            <a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            Faire une Réservation
+            </a>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
         <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue MARC </a> <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue ISBD</a> <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"> Imprimer </a>
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+        <a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Ajouter à mon étagère virtuelle
         </a>
     <!-- /TMPL_IF -->
@@ -47,6 +49,9 @@
         <!-- TMPL_VAR NAME="subtitle" --> ;
         <!-- /TMPL_LOOP -->
         &nbsp;
+        <!-- TMPL_IF name="seriestitle" --><!-- TMPL_VAR name="seriestitle" --><!--/TMPL_IF-->
+        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" -->, <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
+        <!-- TMPL_VAR name="volumedesc" -->&nbsp;
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="author" -->
@@ -59,11 +64,12 @@
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <p><label><b>Autres auteurs:</b></label>
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->">
-            <!-- TMPL_VAR NAME="value" -->
-        </a>&nbsp;
+        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->"> <!-- TMPL_VAR NAME="value" --> </a>&nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
     </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="editionstatement" -->
+    <p><label><b>Information d'édition</b></label><!-- TMPL_VAR name="editionstatement" --><!-- TMPL_IF name="editionresponsibility" -->/<!-- TMPL_VAR name="editionresponsibility" --><!-- /TMPL_IF-->&nbsp;</p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="illus" -->
     <p><label><b>Ill.:</b></label><!-- TMPL_VAR name="illus" -->&nbsp;</p>
@@ -71,7 +77,7 @@
     <!-- TMPL_IF name="publishercode" -->
     <p><label><b>Publié par :</b></label>
         <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
-            <!-- TMPL_VAR NAME="publishercode" -->
+            <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF-->
         </a>&nbsp;
     </p>
     <!-- /TMPL_IF -->
@@ -88,19 +94,27 @@
     <!-- TMPL_IF name="issn" -->
     <p><label><b>ISSN :</b></label><!-- TMPL_VAR NAME="issn" -->&nbsp;</p>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="seriestitle" -->
+    <!-- TMPL_IF name="collectiontitle" -->
     <p><label><b>Collection : </b></label>
-        <!-- TMPL_VAR NAME="seriestitle" -->
-        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" -->, <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
-        <!-- TMPL_VAR name="volumedesc" -->&nbsp;
+        <!-- TMPL_VAR NAME="collectiontitle" -->
+        <!-- TMPL_IF name="collectionissn" -->, ISSN <!-- TMPL_VAR name="collectionissn" -->    <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="collectionvolume" -->; <!-- TMPL_VAR name="collectionvolume" --> <!-- /TMPL_IF -->
+        &nbsp;
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="unititles" -->
+    <p><label><b>Titre uniforme</b></label>
+        <!-- TMPL_LOOP name="unititles" -->
+        <!-- TMPL_VAR NAME="unititle" --> ;
+        <!-- /TMPL_LOOP -->
+        &nbsp;
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="MARCSUBJCTS" -->
     <p><label><b>Sujets : </b></label></p>
     <p>
         <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-        <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
-        &nbsp;
+        <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a> &nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
     </p>
     <!-- /TMPL_IF -->
@@ -119,21 +133,11 @@
     <p><label><b>Notes : </b></label><!-- TMPL_VAR NAME="notes" --></p>
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="unititle" -->
-    <p><label><b>Autre titre: </b></label><!-- TMPL_VAR NAME="unititle" --></p>
-    <!-- /TMPL_IF -->
     <!-- TMPL_IF name="classification" -->
     <p><label><b>classification:</b></label><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="dewey" -->
     <p><label><b>Dewey :</b></label><!-- TMPL_VAR name="dewey" --></p>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="URLS" -->
-    <p><label><b>URL : </b></label>
-        <!-- TMPL_LOOP name="URLS" -->
-        <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
-        <!-- /TMPL_LOOP -->
-    </p>
     <!-- /TMPL_IF -->
     <p><label><b>Type de document : </b></label>
         <!-- TMPL_IF name="description" -->
@@ -142,6 +146,19 @@
         <!-- TMPL_VAR NAME="itemtype" -->
         <!-- /TMPL_IF -->
     </p>
+    <!-- TMPL_IF name="MARCURLS" -->
+	<!-- TMPL_IF NAME="count" -->
+	<p><label><b>Ressource en ligne</b></label>
+    <ul>    <!-- TMPL_LOOP name="MARCURLS" -->
+		<li><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
+			<br /><!-- /TMPL_IF --> 
+		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
+		<a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="linktext" --></a>
+			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
+            <!-- /TMPL_LOOP --></ul>
+    </p>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_IF name="count" -->
@@ -160,18 +177,26 @@
             <td><!-- TMPL_VAR NAME="description" --></td>
             <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
             <td>
-                <!-- TMPL_IF name="datedue" -->
-                En prêt à (<!-- TMPL_VAR NAME="cardnumber" -->)
+                <!-- TMPL_IF name="bi_notforloan" -->
+                    Exclu du prêt
                 <!-- TMPL_ELSE -->
-                <!-- TMPL_IF name="notforloan" -->
-                <!-- TMPL_VAR name="notforloan" -->
-                <!-- TMPL_ELSE -->
-                <!-- TMPL_IF name="itemlost"-->
-                Document perdu
-                <!-- TMPL_ELSE -->
-                <!-- TMPL_IF NAME="wthdrawn" -->Document supprimé<!-- TMPL_ELSE -->Disponible<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="datedue" -->
+                    En prêt
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF name="notforloan" -->
+                            <!-- TMPL_VAR name="notforloan" -->
+                        <!-- TMPL_ELSE -->
+                            <!-- TMPL_IF name="itemlost"-->
+                                Document perdu
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_IF NAME="wthdrawn" -->
+                                    Document supprimé
+                                <!-- TMPL_ELSE -->
+                                    Disponible
+                                <!-- /TMPL_IF -->
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
             </td>
             <td><!-- TMPL_VAR NAME="datedue" --></td>

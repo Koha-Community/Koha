@@ -11,9 +11,13 @@
 </div>
 <div id="opac-main-search">
     Rechercher
-    <form name="searchform" method="POST" action="/cgi-bin/koha/opac-search.pl" id="searchform">
-        <input type="text" name="q" style="width: 30%;"/>
-        <input type="submit" value="OUI" class="submit">
+    <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(<!-- TMPL_VAR name="LoginBranchcode" --> seulement)<!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <form name="searchform" method="post" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+        <input type="text" name="q" style="width: 30%;" />
+        <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
+            <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
+        <!-- /TMPL_IF --><!-- /TMPL_IF -->
+        <input type="submit" value="OK" class="submit" />
     </form>
     <a href="/cgi-bin/koha/opac-search.pl">plus d'options de recherche</a>
 </div>

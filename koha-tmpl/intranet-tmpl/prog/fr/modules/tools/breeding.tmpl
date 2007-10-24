@@ -15,7 +15,6 @@
 	<div class="yui-b">
 
 <h1>Acquisition de données MARC</h1>
-<h4>Importer dans le réservoir</h4>
 
 <!-- TMPL_IF name="uploadmarc" -->
 <p>Résultats de l'importation : </p>
@@ -35,32 +34,34 @@
 	<li>Bien sûr, si l'ISBN existe déjà dans la base de données active, la notice sera ignorée.</li>
 </ul>
 <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
-<table>
-	<tr>
-		<th scope="row"><label for="uploadmarc">Sélectionnez le fichier à importer :  </label></th>
-		<td>
+<fieldset class="rows"><legend>Importer dans le réservoir</legend><ol>
+	<li>
+		<label for="uploadmarc">Sélectionnez le fichier à importer :  </label>
+		
 			<input type="file" id="uploadmarc" name="uploadmarc" />
-		</td>
-	</tr>
-	<tr>
-		<th scope="row"><label for="filename">Nom de cette importation :  </label></th>
-		<td>
+		
+	</li>
+	<li>
+		<label for="filename">Nom de cette importation :  </label>
+		
 			<input type="text" id="filename" name="filename" />
-		</td>
-	</tr>
-	<tr>
-		<th scope="row"><label for="syntax">Format des données : </label></th>
-		<td>
+		
+	</li>
+	<li>
+		<label for="syntax">Format des données : </label>
+		
 			<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
-		</td>
-	</tr>
-	<tr>
-		<th scope="row" rowspan="2">Si l'ISBN est déjà dans le réservoir :  </th>
-		<td><input type="radio" name="overwrite_biblio" value="0" checked="checked" /> Ignorer celle-ci, garder l'existante</td></tr>
-<tr><td>
-			<input type="radio" name="overwrite_biblio" value="1" /> Écraser la notice existante avec celle-ci</td>
-	</tr>
-</table><input type="submit" value="Importer">
+		
+	</li></ol></fieldset>
+	<fieldset class="rows">
+	<legend>Si l'ISBN est déjà dans le réservoir :  </legend>
+	<ol>
+	<li class="radio">
+		<input type="radio" name="overwrite_biblio" id="keep" value="0" checked="checked" /> <label for="keep">Ignorer celui-ci, garder l'existant.</label></li>
+<li class="radio">
+			<input type="radio" name="overwrite_biblio" id="overwrite" value="1" /> <label for="overwrite">Écraser la notice existante avec celle-ci</label>
+	</li>
+</ol></fieldset><input type="submit" value="Importer">
 </form>
 <!-- /TMPL_IF -->
 

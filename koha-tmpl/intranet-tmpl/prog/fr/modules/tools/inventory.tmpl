@@ -17,9 +17,9 @@
 
     <h1>Inventaire/récolement</h1>
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        <fieldset>
+        <fieldset class="rows">
         <legend>Sélectionnez les exemplaires que vous souhaitez vérifier</legend>
-        <p>
+        <ol><li>
         <label for="branchloop">Site</label><select id="branchloop" name="branchcode">
         <!-- TMPL_LOOP NAME="branchloop" -->
             <!-- TMPL_IF name="selected" -->
@@ -29,15 +29,15 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
-        </p>
-        <p>
-            <label for="minlocation">Cote de l'exemplaire ((items.itemcallnumber) entre</label> 
-                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> 
-            <label for="maxlocation">et</label> 
+        </li>
+        <li>
+            <label for="minlocation">Localisation entre : </label> 
+                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> (cote de l'exemplaire)  </li>
+           <li><label for="maxlocation">... et : </label> 
                 <input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
-        </p>
+        </li>
         <!-- TMPL_IF NAME="authorised_values" -->
-        <p>
+        <li>
             <label for="locationloop">La localisation du document (items.location) est</label> 
         <select id="locationloop" name="location">
                 <option value="">Filtrer sur la localisation</option>
@@ -48,9 +48,9 @@
                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->"><!-- TMPL_VAR NAME='lib' --></option>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
-        </select>        </p>
+        </select>        </li>
         <!-- /TMPL_IF -->
-        <p><label for="datelastseen">Pas vu depuis : </label>
+        <li><label for="datelastseen">Pas vu depuis : </label>
             <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datelastseen_button" alt="Voir calendrier">
             <script type="text/javascript">
@@ -62,23 +62,22 @@
             }
             );
             </script>
-        </p>
-        <p><label for="pagesize">Voir : </label>
-            <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" />
-            <label for="offset"> exemplaires débutant à l'offset</label>
+        </li>
+        <li><label for="pagesize">Voir :  </label>
+            <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" /> document(s)</li>
+          <li><label for="offset">exemplaires débutant à l'offset </label>
             <input type="text" id="offset" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" size="5" maxlength="5" />
-        </p>
-        <p>
+        </li></ol>
+  </fieldset>
             <input type="hidden" name="op" value="do_it" />
-            <input type="submit" value="OK" class="button" />
-        </p>
-        </fieldset>
+            <input type="submit" value="Valider" class="button">
     </form>
     <form name="barcodefile" method="post" action="/cgi-bin/koha/tools/inventory.pl">
-        <fieldset>
+        <fieldset class="rows">
             <legend>Utilisez un champ de code à barres</legend>
-            <p><label for="uploadbarcodes">Nom de fichier code à barres : </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></p>
-            <p><label for="setdate">Vu pour la dernière fois le :</label> <input type="text" id="setdate" name="setdate" />
+			<ol>
+            <li><label for="uploadbarcodes">Nom de fichier code à barres : </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
+            <li><label for="setdate">Vu pour la dernière fois le :</label> <input type="text" id="setdate" name="setdate" />
              <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" alt="Voir calendrier">
             <script type="text/javascript">
             Calendar.setup(
@@ -89,9 +88,9 @@
             }
             );
             </script>
-</p>
-            <p><input type="submit" value="OK" class="button" /></p>
+</li></ol>
         </fieldset>
+            <p><input type="submit" value="Valider" class="button"></p>
     </form>
     <!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> exemplaires modifiés : vu pour la dernière fois fixé à <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
     <!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> ne peut être ouvert</p><!-- /TMPL_IF-->

@@ -19,21 +19,19 @@
 </p>
 
 <form method="post" action="/cgi-bin/koha/tools/export.pl">
-    <fieldset>
-    <legend>
-        Sélectionnez les notices à exporter :
-    </legend>
-        <p>
-            <label for="start">à partir de la notice numéro</label>
+    <fieldset class="rows">
+    <legend> Sélectionnez les notices à exporter : </legend>
+        <ol><li>
+            <label for="start">à partir de la notice numéro : </label>
             <input id="start" type="text" name="StartingBiblionumber" size="5" />
-        </p>
-        <p>
+        </li>
+        <li>
             <label for="end">à la notice N° : </label>
             <input id="end" type="text" name="EndingBiblionumber" size="5" />
-        </p>
+        </li>
         
-        <p>
-            <label for="itemtype" >Type document</label>
+        <li>
+            <label for="itemtype">Type document </label>
             <select name="itemtype" id="itemtype">
                 <option value="">-- Tout --</option>
                 <!-- TMPL_LOOP NAME="itemtypeloop" -->
@@ -44,10 +42,10 @@
 <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </select>
-        </p>
+        </li>
         
-        <p>
-            <label for="branch">Site</label>
+        <li>
+            <label for="branch">Site : </label>
             <select id="branch" name="branch">
             <option value="">-- Tout --</option>
                 <!-- TMPL_LOOP name="branchloop" -->
@@ -57,44 +55,42 @@
 				<!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                 </select>
-        </p>
-        <p>
-            <label for="startcn">à partir de la cote</label>
+        </li>
+        <li>
+            <label for="startcn">à partir de la cote : </label>
             <input id="startcn" type="text" name="start_callnumber" size="5" />
-        </p>
-        <p>
+        </li>
+        <li>
             <label for="endcn">à la cote :  </label>
             <input id="endcn" type="text" name="end_callnumber" size="5" />
-        </p>
+        </li></ol>
     </fieldset>
-    <fieldset>
-    <legend>
-        Options
-    </legend>
-        <p>
+    <fieldset class="rows">
+    <legend> Options</legend>
+<ol>        <li>
         <label for="dont_export_item">Ne pas exporter les exemplaires</label>
         <input id="dont_export_item" type="checkbox" name="dont_export_item" />
-        </p>
-        <p>
+        </li>
+        <li>
         <label for="dont_export_fields">Ne pas exporter les champs</label>
         <input id="dont_export_fields" type="text" name="dont_export_fields" /> <i>séparé par un blanc. (par exemple : 100a 200 606)</i>
-        </p>
+        </li></ol>
     </fieldset>
-    <fieldset>
+    <fieldset class="rows">
     <legend>
         Format de sortie
     </legend>
-        <p>
-            <label for="output_format">en </label>
+        <ol><li>
+            <label for="output_format">Format du fichier : </label>
             <select id="output_format" name="output_format">
                 <option value="marc">marc</option>
                 <option value="xml">xml</option>
             </select>
-            format.
-        </p>
-        <p>
+            
+        </li>
+        <li>
         <label for="filename">Nom du fichier :</label><input id="filename" type="text" name="filename" value="koha.mrc" />
-        </p>
+        </li></ol>
     </fieldset>
     <input type="hidden" name="op" value="export" />
     <input type="submit" value="Exportation" class="button">

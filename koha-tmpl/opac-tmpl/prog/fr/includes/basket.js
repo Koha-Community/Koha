@@ -161,7 +161,7 @@ function addMultiple(){
 
 function addSelToShelf() {
     var items = document.getElementById('records').value;
-    document.location = "/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber="+items;
+    document.location = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
 }
 
 function addSelRecords(valSel) { // function for adding a selection of biblios to the basket

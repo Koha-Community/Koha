@@ -1,0 +1,331 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Sources de classification
+<!-- TMPL_IF name="class_source_form" -->
+  <!-- TMPL_IF name="edit_class_source" -->
+    &rsaquo; Modifier la source de classification
+  <!-- TMPL_ELSE -->
+    &rsaquo; Ajout source de classification
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="sort_rule_form" -->
+  <!-- TMPL_IF name="edit_sort_rule" -->
+    &rsaquo; Modifier la règle de remplissage
+  <!-- TMPL_ELSE -->
+    &rsaquo; Ajouter une règle de remplissage
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_class_source_form" -->
+  &rsaquo; Confirmer la suppression de la règle de remplissage <!-- TMPL_VAR name="class_source" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_sort_rule_form" -->
+  &rsaquo; Confirmer la suppression de la règle de remplissage <!-- TMPL_VAR name="sort_rule" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_sort_rule_impossible" -->
+  &rsaquo; Impossible de supprimer la règle de remplissage <!-- TMPL_VAR name="sort_rule" -->
+<!-- /TMPL_IF -->
+</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+
+function DoCancel(f) {
+  f.op.value='';
+  document.Aform.submit();
+}
+
+function CheckSourceForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.class_source.value.length==0) {
+        _alertString += "\n- " + _("Code de source de classification manquant");
+    }
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("code de règle de remplissage manquant");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description manquante");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+function CheckRuleForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("code de règle de remplissage manquant");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description manquante");
+    }
+    if (f.sort_routine.value.length==0) {
+        _alertString += "\n- " + _("Routine de tri absente");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Formulaire non soumis à cause du (des) problème(s) suivant(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+//]]>
+</script>
+
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Sources de classifications
+<!-- TMPL_IF name="class_source_form" -->
+  <!-- TMPL_IF name="edit_class_source" -->
+    &rsaquo; Modifier la source de classification
+  <!-- TMPL_ELSE -->
+    &rsaquo; Ajout source de classification
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="sort_rule_form" -->
+  <!-- TMPL_IF name="edit_sort_rule" -->
+    &rsaquo; Modifier la règle de remplissage
+  <!-- TMPL_ELSE -->
+    &rsaquo; Ajouter une règle de remplissage
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_class_source_form" -->
+  &rsaquo; Confirmer la suppression de la règle de remplissage <!-- TMPL_VAR name="class_source" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_sort_rule_form" -->
+  &rsaquo; Confirmer la suppression de la règle de remplissage <!-- TMPL_VAR name="sort_rule" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_sort_rule_impossible" -->
+  &rsaquo; Impossible de supprimer la règle de remplissage <!-- TMPL_VAR name="sort_rule" -->
+<!-- /TMPL_IF -->
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<!-- TMPL_IF name="class_source_form" -->
+  <!-- TMPL_IF name="edit_class_source" -->
+<h2>Modifier la source de classification</h2>
+  <!-- TMPL_ELSE -->
+<h2>Ajouter une source de classification</h2>
+  <!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <fieldset class="rows">
+    <ol>
+      <li><span class="label">Source de classification</span>
+          <!-- TMPL_IF name="edit_class_source" -->
+            <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
+            <!-- TMPL_VAR name="class_source" -->
+          <!-- TMPL_ELSE -->
+            <input type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
+          <!-- /TMPL_IF -->
+       </li>
+       <li><span class="label">Description</span>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
+       </li>
+       <li><span class="label">Source utilisée ?</span>
+           <input type="checkbox" id="used" name="used" value="Utilisé" checked="yes">
+       </li>
+       <li><span class="label">Règle de remplissage</span>
+           <select id="sort_rule" name="sort_rule">
+           <!-- TMPL_LOOP name="rules_dropdown" -->
+             <!-- TMPL_IF name="selected" -->
+             <option value="<!-- TMPL_VAR name="rule" -->" selected="selected"><!-- TMPL_VAR name="description" --> (<!-- TMPL_VAR name="rule" -->)</option>
+             <!-- TMPL_ELSE -->
+             <option value="<!-- TMPL_VAR name="rule" -->"><!-- TMPL_VAR name="description" --> (<!-- TMPL_VAR name="rule" -->)</option>
+             <!-- /TMPL_IF -->
+           <!-- /TMPL_LOOP -->
+           </select>
+       </li>    
+    </ol>
+  </fieldset>
+  <p id="action">
+    <!-- TMPL_IF name="edit_class_source" -->
+    <input type="button" value="Valider les modifications" onclick="CheckSourceForm(this.form)">
+    <!-- TMPL_ELSE -->
+    <input type="button" value="Ajouter une source de classification" onclick="CheckSourceForm(this.form)">
+    <!-- /TMPL_IF-->
+    <input type="button" value="Annuler" onclick="DoCancel(this.form)">
+  </p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="sort_rule_form" -->
+  <!-- TMPL_IF name="edit_sort_rule" -->
+<h2>Modifier la règle de remplissage</h2>
+  <!-- TMPL_ELSE -->
+<h2>Ajouter une règle de remplissage</h2>
+  <!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <fieldset class="rows">
+    <ol>
+      <li><span class="label">Code de la règle de remplissage</span>
+          <!-- TMPL_IF name="edit_sort_rule" -->
+            <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
+            <!-- TMPL_VAR name="sort_rule" -->
+          <!-- TMPL_ELSE -->
+            <input type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
+          <!-- /TMPL_IF -->
+       </li>
+       <li><span class="label">Description</span>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
+       </li>
+       <li><span class="label">Routine de remplissage</span>
+           <select id="sort_routine" name="sort_routine">
+           <!-- TMPL_LOOP name="routines_dropdown" -->
+             <!-- TMPL_IF name="selected" -->
+             <option value="<!-- TMPL_VAR name="routine" -->" selected="selected"><!-- TMPL_VAR name="routine" --></option>
+             <!-- TMPL_ELSE -->
+             <option value="<!-- TMPL_VAR name="routine" -->"><!-- TMPL_VAR name="routine" --></option>
+             <!-- /TMPL_IF -->
+           <!-- /TMPL_LOOP -->
+           </select>
+       </li>
+    </ol>
+  </fieldset>
+  <p id="action">
+  <!-- TMPL_IF name="edit_sort_rule" -->
+        <input type="button" value="Valider les modifications" onclick="CheckRuleForm(this.form)">
+    <!-- TMPL_ELSE -->
+        <input type="button" value="Ajouter une règle de remplissage" onclick="CheckRuleForm(this.form)">    <!-- /TMPL_IF-->
+    <input type="button" value="Annuler" onclick="DoCancel(this.form)">
+  </p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_class_source_form" -->
+<h2>Confirmer la suppression de la source de classificatio <!-- TMPL_VAR name="class_source" --> ?</h2>
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
+  <p id="action">
+    <input type="submit" value="Supprimer la source de classification">
+    <input type="button" value="Annuler" onclick="DoCancel(this.form)">
+  </p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_sort_rule_form" -->
+<h2>Confirmer la suppression de la règle de remplissage <!-- TMPL_VAR name="sort_rule" --> ?</h2>
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
+  <p id="action">
+    <input type="submit" value="Supprimer la règle de remplissage">
+    <input type="button" value="Annuler" onclick="DoCancel(this.form)">
+  </p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_sort_rule_impossible" -->
+<h2>Impossible de supprimer la règle de remplissage <!-- TMPL_VAR name="sort_rule" --></h2>
+<p>La règle de remplissage <!-- TMPL_VAR name="sort_rule" --> est utilisée par au moins une source de classification. Vous devez supprimer toute définition de source de classification avant de supprimer la règle de remplissage.
+</p>
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="else"-->" />
+  <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
+  <p id="action">
+    <input type="button" value="Reculer" onclick="DoCancel(this.form)">
+  </p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="display_lists" -->
+<h2>Sources de classification</h2>
+<!-- TMPL_IF name="added_source" -->
+<span class="problem">Source de classification <!-- TMPL_VAR name="added_source" --> ajoutée</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="edited_source" -->
+<span class="problem">Source de classification <!-- TMPL_VAR name="edited_source" --> modifiée</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="deleted_source" -->
+<span class="problem">Source de classification <!-- TMPL_VAR name="deleted_source" --> supprimée</span>
+<!-- /TMPL_IF -->
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Utilisé</th>
+    <th>Règle de remplissage</th>
+    <th>Actions</th>
+  </tr>
+  <!-- TMPL_LOOP name="class_sources" -->
+  <tr>
+    <td><!-- TMPL_VAR name="code" --></td>
+    <td><!-- TMPL_VAR name="description" --></td>
+    <td><!-- TMPL_IF name="used" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
+    <td><!-- TMPL_VAR name="sortrule" --></td>
+    <td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=edit_source&amp;class_source=<!-- TMPL_VAR name="code" escape="HTML" -->">Modifier</a> <a href="<!-- TMPL_VAR name="script_name" -->?op=delete_source&amp;class_source=<!-- TMPL_VAR name="code" escape="HTML" -->">Supprimer</a>
+    </td>
+  </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+
+<p><a href="<!-- TMPL_VAR name="script_name" -->?op=add_source">Ajouter une source de classification</a></p>
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+<h2>Règles de remplissage</h2>
+<!-- TMPL_IF name="added_rule" -->
+<span class="problem">Règle de remplissage <!-- TMPL_VAR name="added_rule" --> ajoutée</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="edited_rule" -->
+<span class="problem">Règle de remplissage <!-- TMPL_VAR name="edited_rule" --> modifiée</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="deleted_rule" -->
+<span class="problem">Règle de remplissage <!-- TMPL_VAR name="deleted_rule" --> supprimée</span>
+<!-- /TMPL_IF -->
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Routine de tri</th>
+    <th>Actions</th>
+  </tr>
+  <!-- TMPL_LOOP name="class_sort_rules" -->
+  <tr>
+    <td><!-- TMPL_VAR name="rule" --></td>
+    <td><!-- TMPL_VAR name="description" --></td>
+    <td><!-- TMPL_VAR name="sort_routine" --></td>
+    <td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=edit_sort_rule&amp;sort_rule=<!-- TMPL_VAR name="rule" escape="HTML" -->">Modifier</a> <a href="<!-- TMPL_VAR name="script_name" -->?op=delete_sort_rule&amp;sort_rule=<!-- TMPL_VAR name="rule" escape="HTML" -->">Supprimer</a>
+    </td>
+  </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+
+<p><a href="<!-- TMPL_VAR name="script_name" -->?op=add_sort_rule">Ajouter une règle de remplissage</a></p>
+
+
+
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

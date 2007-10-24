@@ -1,4 +1,4 @@
-@import url( /intranet-tmpl/prog/en/lib/yui/reset-fonts-grids.css) all;
+@import url("/intranet-tmpl/prog/en/lib/yui/reset-fonts-grids.css");
 
 a, a:link, a:visited, a:active {
 	color : #0000CC;
@@ -63,7 +63,7 @@ em {
 	font-style : italic;
 }
 
-label {
+.subfield-label {
     font-style : italic;
 }
 
@@ -718,14 +718,14 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#addbiblio a {
+#addbiblio a, #addchild a {
 	padding-left : 34px;
 	background-image: url("/intranet-tmpl/prog/img/toolbar-new.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
-#deletebiblio a {
+#deletebiblio a, #deletepatron a {
 	padding-left : 34px;
 	background-image: url("/intranet-tmpl/prog/img/toolbar-delete.gif");
 	background-position : center left;
@@ -796,4 +796,14 @@ div.sysprefs div.hint {
 
 tr.highlight td {
 	background-color : #F6F6F6;
+}
+
+#circ_circulation_issue label {
+	font-size: 105%;
+	font-weight : bold;
+}
+
+#circ_circulation_issue div.hint {
+	color : #666666;
+	margin: .2em 0;
 }

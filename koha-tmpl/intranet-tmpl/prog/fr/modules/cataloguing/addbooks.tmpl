@@ -1,13 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogage : </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 	$(document).ready(function() {
 	$('#header_search').tabs();
  });
 </script>
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cataloging-search.inc" -->
 
@@ -17,34 +18,12 @@
    
    <div id="bd">
 	<div id="yui-main">
+	
+<!-- TMPL_INCLUDE NAME="cataloging-toolbar.inc" -->
+	
 	<!-- TMPL_IF name="noitemsfound" -->
 		Pas d'exemplaire(s) trouvé(s)
 	<!-- /TMPL_IF -->
-	
-<div id="addbooks_add_without_search">
-	<!-- TMPL_IF NAME="NOTMARC" -->
-		<form action="addbiblio.pl">
-			<input type="submit" value="Ajouter une notice sans recherche">
-		</form>
-	<!-- TMPL_ELSE -->
-		<form name="f" action="addbiblio.pl" method="post">
-		<h3>Créer une notice bibliographique à partir de zéro</h3>
-		<p>
-			<label for="frameworkcode">Choisir une grille : </label>
-			<select name="frameworkcode" id="frameworkcode">
-				<option value="">Par défaut</option>
-				<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
-					<option value="<!-- TMPL_VAR NAME="value" -->">
-						<!-- TMPL_VAR NAME="frameworktext" -->
-					</option>
-				<!-- /TMPL_LOOP -->
-			</select>
-			<input type="submit" value="Ajouter une notice sans recherche">
-		</p>
-		</form>
-			<!-- /TMPL_IF -->
-</div>
-
 
 <!-- display the search results -->
 

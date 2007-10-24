@@ -22,15 +22,15 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME= "Ask_data" -->
-         <!-- TMPL_IF NAME="OpacPasswordChange" -->
+        <!-- TMPL_IF NAME="OpacPasswordChange" -->
         <h1>Modifiez votre mot de passe</h1>
         <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="get">
             <p><label for="password">Mot de passe actuel :</label><input type="password" id="Oldkey" size="25"  name="Oldkey" /></p>
             <p><label for="Newkey">Nouveau mot de passe :</label><input type="password" id="Newkey"  size="25"  name="Newkey" /></p>
             <p><label for="Confirm">Confirmez votre nouveau mot de passe :</label><input type="password"  id="Confirm" size="25" name="Confirm" /></p>
             <p><input type="submit" value="Proposer les modifications à la bibliothèque" class="submit"></p>
-            <!-- TMPL_ELSE -->
-            <div class="error">Vous ne pouvez pas changez votre mot de passe.</div>
+        <!-- TMPL_ELSE -->
+            <div class="error">Vous ne pouvez pas changer votre mot de passe.</div>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     

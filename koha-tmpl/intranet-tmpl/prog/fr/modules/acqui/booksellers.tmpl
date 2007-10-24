@@ -1,12 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Recherche fournisseur <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Recherche fournisseur <!-- TMPL_VAR name="supplier" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo;<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Accueil</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Recherche fournisseur <em><!-- TMPL_VAR name="supplier" --></em> </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -74,9 +75,6 @@
 			</tr>
 		<!-- /TMPL_LOOP -->
 		</table>
-</div>
-<div id="action">
-    <a href="supplier.pl?op=enter">Ajout d'un fournisseur</a>
 </div>
 </div>
 </div>

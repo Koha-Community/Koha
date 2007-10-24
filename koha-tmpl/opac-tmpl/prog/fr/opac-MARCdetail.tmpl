@@ -13,10 +13,10 @@
 		</a>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue simple </a> <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue ISBD</a> <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"> Imprimer </a>
+        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue MARC </a> <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> Vue ISBD</a> <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;"> Imprimer </a>
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="/cgi-bin/koha/opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbookbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+        <a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Ajouter à mon étagère virtuelle
         </a>
     <!-- /TMPL_IF -->
@@ -133,9 +133,9 @@
         <table>
                 <tr>
                     <!-- TMPL_LOOP name="item_header_loop" -->
-                        <tr>
+                        <th>
                             <!-- TMPL_VAR name="header_value" -->
-                        </tr>
+                        </th>
                     <!-- /TMPL_LOOP -->
                 </tr>
                 <!-- TMPL_LOOP name="item_loop" -->

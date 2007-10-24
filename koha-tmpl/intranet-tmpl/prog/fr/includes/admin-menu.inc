@@ -27,6 +27,7 @@
 	<li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Liens Koha => MARC</a></li>
 	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">Validation grilles de catalogage</a></li>
     <li><a href="/cgi-bin/koha/admin/authtypes.pl">Grille d'autorité Marc</a></li>
+    <li><a href="/cgi-bin/koha/admin/classsources.pl">Sources de classification</a></li>
 </ul>
 
 <h5>Paramètres divers</h5>

@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha poste bibliothécaire</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css"> #koha-news { border: 1px solid #EEEEEE; margin: .2em;} #koha-news h3 {background-color: #EEEEEE; padding : .3em; margin: 0;} .newsitem {margin: .3em; border-bottom: 1px solid #EEE;} .newsitem:last-child {border-bottom : 0;} .newsfooter {font-size: 80%; color: #CCCCCC;} </style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -10,9 +11,13 @@
 	<div class="yui-u first">
         <!-- TMPL_IF name="koha_news_count" -->
 		<div id="koha-news">
-            <!-- TMPL_VAR name="koha_news_count" --> annonces récentesnouvelles
+            <h3>Nouvelles</h3>
+			<!-- <!-- TMPL_VAR name="koha_news_count" --> recent news item(s) -->
             <!-- TMPL_LOOP name="koha_news" -->
-                     <!-- TMPL_VAR name="title" --> le <!-- TMPL_VAR name="newdate" --> <!-- TMPL_VAR name="new" -->
+                    <div class="newsitem" id="news<!-- TMPL_VAR NAME="idnew" -->"><h4><!-- TMPL_VAR name="title" --></h4>
+					 <p><!-- TMPL_VAR name="new" --></p>
+					<p class="newsfooter"> Posté le : <!-- TMPL_VAR name="newdate" --> <!-- TMPL_IF NAME="CAN_user_tools" -->
+    <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&id=<!-- TMPL_VAR NAME="idnew" -->">Modifier</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=<!-- TMPL_VAR NAME="idnew" -->">Supprimer</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">Nouveau</a><!-- /TMPL_IF --></p></div>
             <!-- /TMPL_LOOP -->
 		</div><!-- /koha-news -->
         <!-- /TMPL_IF -->

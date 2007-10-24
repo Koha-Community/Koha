@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; Détails des exemplaires de  <!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
@@ -53,7 +54,7 @@ NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Modif
 			<li><span class="label">Site actuel : </span> <!-- TMPL_VAR NAME="holdingbranch" --></li>
 			<li><span class="label">Vu pour la dernière fois :</span> <!-- TMPL_VAR NAME="datelastseen" --></li>
 			<li><span class="label">Emprunté pour la dernière fois le : </span> <!-- TMPL_IF NAME="datelastborrowed" --><!-- TMPL_VAR NAME="datelastborrowed" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>
-			<li><span class="label">Etat de l'exemplaire : </span> <!-- TMPL_IF NAME="issue" -->Prêté à : <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Disponible <!-- /TMPL_IF --></li>
+			<li><span class="label">Etat de l'exemplaire : </span> <!-- TMPL_IF NAME="issue" -->Prêté à : <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Non sorti <!-- /TMPL_IF --></li>
 			<!-- TMPL_IF NAME="issue" --><li><span class="label">Date de retour :</span> <!-- TMPL_VAR NAME="date_due" --></li><!-- /TMPL_IF -->
 			<li><span class="label">Dernier emprunteur 1 :</span> <!-- TMPL_IF NAME="card0" --><!-- TMPL_VAR NAME="card0" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>
 			<li><span class="label">Dernier emprunteur 2 :</span> <!-- TMPL_IF NAME="card1" --><!-- TMPL_VAR NAME="card1" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></li>

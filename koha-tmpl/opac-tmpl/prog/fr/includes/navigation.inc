@@ -1,10 +1,11 @@
 <div id="menu">
-			<ul>
+			
             <!-- TMPL_VAR NAME="OpacNav" -->
             <li><a href="/cgi-bin/koha/opac-main.pl">Recherche simple</a></li>
             <li><a href="/cgi-bin/koha/opac-search.pl">Recherche avancée</a></li>
             <li>Feuilleter le catalogue :</li>
             
+            <ul>
             <!-- TMPL_IF name="OpacBrowser" -->
                 <li><a href="/cgi-bin/koha/opac-browser.pl">par hiérarchie</a></li>
             <!-- /TMPL_IF -->
@@ -26,6 +27,7 @@
                     </script></span>
                 </a>
             </li>
+            </ul>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="loggedinusername" -->
                 <!-- TMPL_IF name="virtualshelves" -->
@@ -35,7 +37,7 @@
                     <li><a href="opac-suggestions.pl">Suggestions</a></li>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
-            </ul>
+            
  </div>
 
  <div id="main"> <!-- MAIN Body start here -->

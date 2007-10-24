@@ -16,11 +16,13 @@
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
 
-<p><label for="layoutname">Nom du format</label>
-<input type="textbox" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></p>
+<fieldset class="rows">
+<legend>Créer un nouveau modèle d'étiquette</legend>
+<ol><li><label for="layoutname">Nom du format</label>
+<input type="text" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></li>
 
-<p><label for="tx_title">Choisir l'order des champs à imprimer</label></p>
-
+<li><fieldset>
+<legend>Choisir l'order des champs à imprimer</legend>
 <table summary="fields to print">
 <tr>
         <td>
@@ -196,7 +198,7 @@
        </select>
         <label>Sous-classification</label>
         </td>
-        <td>
+        <td colspan="2">
         <select name="tx_itemcallnumber">
           <option value="0" selected="selected"></option>
         <option value="1">1</option>
@@ -213,9 +215,9 @@
         <label>Cote</label>
         </td>
   </tr>
-</table>
+</table></fieldset></li>
 
-<p><label for="barcodetype">Choisissez le type de code à barres</label>
+<li><label for="barcodetype">Choisissez le type de code à barres </label>
 <select name="barcodetype" id="barcodetype">
     <!-- TMPL_LOOP NAME="barcode_types" -->
 	<!-- TMPL_IF NAME="active" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
@@ -223,9 +225,9 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 		<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select></p>
+</select></li>
 
-<p><label for="printingtype">Choisissez le type de présentation</label>
+<li><label for="printingtype">Choisissez le type de présentation </label>
 <select name="printingtype" id="printingtype">
     <!-- TMPL_LOOP NAME="printingtypes" -->
 	<!-- TMPL_IF NAME="active" -->
@@ -234,12 +236,12 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select></p>
-<p>
-<label for="startlabel">Commencer l'impression à l'étiquette numéro : <input type="textbox" name="startlabel" id="startlabel" size="2" value="1" /></label></p>
+</select></li>
+<li>
+<label for="startlabel">Commencer l'impression à l'étiquette numéro :  </label> <input type="text" name="startlabel" id="startlabel" size="2" value="1" /></li>
 
 
-<p><label for="guidebox">Tracer des cases modèles<input type="checkbox" id="guidebox" name="guidebox" value="1" /></label></p>
+<li><label for="guidebox">Tracer des cases modèles </label><input type="checkbox" id="guidebox" name="guidebox" value="1" /></li></ol></fieldset>
 <p>		<input type="hidden" name="op" value="add_layout" />
         <input type="submit" value="Valider"></p>
 </form>

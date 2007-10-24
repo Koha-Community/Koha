@@ -108,7 +108,7 @@ Catalogue <!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Accueil bibliothèque de
         <th colspan="2">Titre</th>
         <th>Cote</th>
         <th>Retour le</th>
-        <th>Renouveller</th>
+        <!-- TMPL_UNLESS name="patron_flagged" --><th>Renouveller</th><!-- /TMPL_UNLESS -->
         <th>Amendes</th>
         </tr>
         <!-- TMPL_LOOP NAME="ISSUES" -->
@@ -136,6 +136,7 @@ Catalogue <!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Accueil bibliothèque de
                 <!-- TMPL_ELSE -->
                     <td><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- /TMPL_IF -->
+                <!-- TMPL_UNLESS name="patron_flagged" -->
                 <td>
                     <!-- TMPL_IF NAME="status" -->
                         <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renouveller</a>
@@ -143,6 +144,7 @@ Catalogue <!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Accueil bibliothèque de
                         Pas renouvelable
                     <!-- /TMPL_IF -->
                 </td>
+                <!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_IF NAME="charges" -->Oui<!-- TMPL_ELSE -->Non<!-- /TMPL_IF --></td>
             </tr>
         <!-- /TMPL_LOOP -->
@@ -172,8 +174,22 @@ Catalogue <!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Accueil bibliothèque de
                 </td>
                 <td><!-- TMPL_VAR NAME="reservedate" --></td>
                 <td><!-- TMPL_VAR Name="branch" --></td>
-                <td><!-- TMPL_IF NAME="atdestination" -->
-                                En attente à <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="holdingbranch" -->En transit de <!-- TMPL_VAR NAME="holdingbranch" --> vers <!-- TMPL_VAR Name="branch" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --><!-- /TMPL_IF --></td>
+                <td>
+                    <!-- TMPL_IF Name="wait" -->
+                        <!-- TMPL_IF NAME="atdestination" -->
+                            <!-- TMPL_IF name="found" -->
+                            Document en attente à <b> <!-- TMPL_VAR NAME="wbrname" --> </b>
+                            <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" --> />
+                        <!-- TMPL_ELSE -->
+                            En attente de retrait
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_ELSE -->
+                        Document en cours de transfert vers <b><!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value=<!-- TMPL_VAR NAME="wbrcd" -->>
+                        <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                        Pas disponible
+                    <!-- /TMPL_IF -->
+                </td>
             </tr>
             <!-- /TMPL_LOOP -->
         </table>

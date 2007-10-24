@@ -32,11 +32,3 @@
 </div>
 <!-- /TMPL_IF -->
 
-<ul>
-	<li><a href="/cgi-bin/koha/circ/returns.pl">Retours</a></li>
-	<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfert</a></li>
-	<!-- TMPL_UNLESS NAME="AutoLocation" -->
-            <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Définir un site</a></li>
-	<!-- /TMPL_UNLESS -->
-</ul>
-

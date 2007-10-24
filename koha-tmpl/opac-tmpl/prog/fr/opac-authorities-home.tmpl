@@ -58,9 +58,14 @@
                 <input type="hidden" name="and_or" value="and">
                 <input type="hidden" name="excluding" value="">
             </p>
-            <p>(Ajouter % à la fin du mot si vous souhaitez utiliser une troncature droite : <b>théor%</b> renverra à théorie & théorique)</p>
+            <p><label>Ordonner par :</label><select name="orderby">
+                <option value="">Aucun</option>
+                    <option value="HeadingAsc" selected="SELECTED">Autorité croissante</option>
+                    <option value="HeadingDsc">Autorité décroissante</option>
+                </select>
+            </p>
             <p>
-                <input type="submit" value="OUI" class="submit">
+                <input type="submit" value="OK" class="submit">
             </p>
         </div>
     </form>

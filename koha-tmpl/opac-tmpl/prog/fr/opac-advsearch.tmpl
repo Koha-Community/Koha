@@ -2,7 +2,7 @@
 <!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalogue -- Recherche avancée
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="masthead-basic.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
 
@@ -58,37 +58,37 @@
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
             <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Mot de la notice</option>
-            <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Auteur</option>
+            <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Auteur</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression auteur</option>
-                <option value="cpn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Nom de société</option>
-                <option value="cfn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Nom de congrès</option>
+                <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Nom de société</option>
+                <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Nom de congrès</option>
                 <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression Nom de société</option>
                 <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression Nom de congrès</option>
-                <option value="pn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de personne</option>
+                <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Nom de personne</option>
                 <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression Nom de personne</option>
             <!-- /TMPL_IF -->
             <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Langue</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="nt" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Notes/commentaires</option>
             <!-- /TMPL_IF -->
-            <option value="pb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Editeur</option>
-            <option value="pl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Lieu de publication</option>
+            <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Editeur</option>
+            <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Lieu de publication</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Numéro normalisé</option>
                 <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;ISBN</option>
                 <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;ISSN</option>
                 <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Cote</option>
             <!-- /TMPL_IF -->
-            <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Sujet</option>
+            <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Sujet</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression Sujet</option>
             <!-- /TMPL_IF -->
-            <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre</option>
+            <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre</option>
             <!-- TMPL_IF NAME="expanded_options" -->
                 <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp;Expression Titre</option>
             <!-- /TMPL_IF -->
-                <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre de collections</option>
+                <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Titre de collections</option>
         </select>
         <input type="text" size="30" name="q" title="Saisissez les termes de la recherche" value="">
         <!-- TMPL_IF NAME="expanded_options" -->
@@ -417,7 +417,11 @@
         <label>Site</label><select name="limit" id="branchloop">
         <option value="">Tous sites</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
+        <!--TMPL_IF Name="selected"-->
+        <option value="<!-- TMPL_VAR NAME='value' -->" selected><!-- TMPL_VAR NAME='branchname' --></option>
+        <!--TMPL_ELSE-->    
         <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
+        <!--/TMPL_IF-->    
         <!-- /TMPL_LOOP -->
         </select>
         </p>
@@ -427,21 +431,81 @@
 <!-- /AVAILABILITY LIMITS -->
 
 <!-- RANK LIMITS -->
-<!-- TMPL_IF NAME="sort_by_loop" -->
     <fieldset><legend>Tri par : </legend>
         <p><select id="sort_by" name="sort_by">
             <option value="">Champ de tri, classé par pertinence</option>
-            <!-- TMPL_LOOP NAME="sort_by_loop" -->
-            <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
-            <!-- /TMPL_LOOP -->
+        <!--TMPL_IF Name="9523a"-->
+          <option value="1=9523 &gt;i" selected>Popularité (plus au moins)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=9523 &gt;i">Popularité (plus au moins)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="9523d"-->
+          <option value="1=9523 &lt;i" selected>Popularité (moins au plus)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=9523 &lt;i">Popularité (moins au plus)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="1003d"-->
+          <option value="1=1003 &lt;i" selected>Auteur (A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=1003 &lt;i">Auteur (A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="1003a"-->
+         <option value="1=1003 &gt;i" selected>Auteur (Z-A)</option>
+        <!--TMPL_ELSE -->
+         <option value="1=1003 &gt;i">Auteur (Z-A)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="20d"-->
+          <option value="1=20 &lt;i" selected>Cote (0-9 puis A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=20 &lt;i">Cote (0-9 puis A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="20a"-->
+          <option value="1=20 &gt;i" selected>Cote (Z-A puis 9-0)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=20 &gt;i">Cote (Z-A puis 9-0)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31a"-->
+          <option value="1=31 &gt;i" selected>Dates</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &gt;i">Dates</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31a"-->
+          <option value="1=31 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &gt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31d"-->
+          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="32a"-->
+          <option value="1=32 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus récent au plus ancien</option>
+        <!--TMPL_ELSE -->
+          <option value="1=32 &gt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus récent au plus ancien</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="32d"-->
+          <option value="1=32 &lt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus ancien au plus récent</option>
+        <!--TMPL_ELSE -->
+          <option value="1=32 &lt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus ancien au plus récent</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="4d"-->
+          <option value="1=4 &lt;i" selected>Titre (A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=4 &lt;i">Titre (A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="4a"-->
+          <option value="1=4 &gt;i" selected>Titre (Z-A)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=4 &gt;i">Titre (Z-A)</option>
+        <!--/TMPL_IF-->
         </select>
         </p>
     </fieldset>
-<!-- /TMPL_IF -->
 <!-- RANK LIMITS -->
 <!-- SEARCH BUTTONS -->
 <p>
-    <input class="submit" type="submit" accesskey="s" name="do" title="Rechercher" value="OUI">
+    <input class="submit" type="submit" accesskey="s" name="do" title="Rechercher" value="OK">
     <!-- TMPL_IF NAME="expanded_options" -->
         <a href="/cgi-bin/koha/opac-search.pl">[Moins d'options]</a>
     <!-- TMPL_ELSE -->

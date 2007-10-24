@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Périodiques &rsaquo; <!-- TMPL_IF name="mod" --> Modifier un abonnement<!-- TMPL_ELSE -->Ajouter un abonnement<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Périodiques &rsaquo; <!-- TMPL_IF name="mod" --> Modifier un abonnement à <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_ELSE -->Ajouter abonnement<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
@@ -790,7 +790,7 @@ window.onload = irregular_order();
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/serials/subscription-add.pl">Périodiques</a> &rsaquo;  <!-- TMPL_IF name="mod" --> Modifier un abonnement<!-- TMPL_ELSE -->Ajouter un abonnement<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/serials/subscription-add.pl">Périodiques</a> &rsaquo;  <!-- TMPL_IF name="mod" --> Modifier l'abonnement à <i><!-- TMPL_VAR name="bibliotitle" --></i><!-- TMPL_ELSE -->Ajouter abonnement<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t7">
    
@@ -798,12 +798,10 @@ window.onload = irregular_order();
    <div class="yui-g">
 
 <!-- TMPL_IF name="mod" -->
-    <h1>Modifier un abonnement</h1>
     <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
         <input type="hidden" name="op" value="modsubscription" />
         <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
 <!-- TMPL_ELSE -->
-    <h1>Ajout d'un abonnement </h1>
     <form method="post" action="/cgi-bin/koha/serials/subscription-add.pl" name="f">
         <input type="hidden" name="op" value="addsubscription" />
 <!-- /TMPL_IF -->
@@ -1191,8 +1189,6 @@ window.onload = irregular_order();
 <!--/TMPL_IF-->
 <!-- TMPL_IF name="mod" -->
     <input type="button" value="Enregistrer abonnement" onclick="Check(this.form)" accesskey="w">
-<!-- TMPL_ELSE -->
-    <input type="button" value="Ajouter un abonnement" onclick="Check(this.form)" accesskey="w">
 <!-- /TMPL_IF -->
 </div>
 

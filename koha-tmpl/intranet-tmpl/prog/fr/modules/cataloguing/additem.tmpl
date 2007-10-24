@@ -56,7 +56,9 @@ function CloneSubfield(index){
     var original = document.getElementById(index); //original <div>
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
-    var new_id  = original.getAttribute('id')+new_key;
+    var old_id =  original.getAttribute('id');
+    old_id=old_id.substr(12);
+    var new_id  = old_id+new_key;
     
     // set the attribute for the new 'div' subfields
     var inputs     = clone.getElementsByTagName('input');
@@ -68,21 +70,21 @@ function CloneSubfield(index){
     for(var i=0,len=inputs.length; i<len ; i++ ){
         id_input = inputs[i].getAttribute('id')+new_key;
         inputs[i].setAttribute('id',id_input);
-        inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+        inputs[i].setAttribute('name',inputs[i].getAttribute('name'));
     }
     
     // select 
     for(var i=0,len=selects.length; i<len ; i++ ){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
-        selects[i].setAttribute('name',selects[i].getAttribute('name')+new_key);
+        selects[i].setAttribute('name',selects[i].getAttribute('name'));
     }
     
     // textarea
     for(var i=0,len=textareas.length; i<len ; i++ ){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
-        textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
+        textareas[i].setAttribute('name',textareas[i].getAttribute('name'));
     }
     
     <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
@@ -138,9 +140,6 @@ function CreateKey(){
 
 <h1>Exemplaires pour <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> par <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Notice #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 
-    <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
-    <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 <div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->
         <h2>Exemplaire(s) existant(s)</h2>
@@ -165,6 +164,9 @@ function CreateKey(){
 </div>
 
 <div id="cataloguing_additem_newitem">
+    <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
+    <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <!-- TMPL_IF name="opisadd" -->
         <h2>Nouvel exemplaire</h2>
     <!-- TMPL_ELSE -->
@@ -184,6 +186,8 @@ function CreateKey(){
    
             </div>   
         <!-- /tmpl_loop -->
+    <input type="hidden" name="indicator" value=" " />
+    <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
     <!-- TMPL_IF name="barcode_not_unique" -->
         ERREUR : Code à barres déjà utilisé !

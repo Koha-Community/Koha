@@ -5,6 +5,7 @@
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
     <h1>Feuilleter notre catalogue</h1>
+        <!-- TMPL_IF name="HIERARCHY_LOOP" -->
         <ul>
         <li>
             <!-- TMPL_VAR name="description" --> <a href="opac-browser.pl">Niveau principal</a>
@@ -33,4 +34,7 @@
             </ul>
         <!-- /TMPL_LOOP -->
         </ul>
+        <!-- TMPL_ELSE -->
+            <div class="warning">La table du feuilletage est vite. Cette fonctionnalité n'est pas correctement installée. Allez sur le <a href="http://wiki.koha.org/doku.php?id=opacbrowser">wiki</a> pour avoir plus d'information sur sa mise en place.</div>
+        <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

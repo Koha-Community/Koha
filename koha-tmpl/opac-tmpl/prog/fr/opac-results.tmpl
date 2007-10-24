@@ -54,7 +54,7 @@ Erreur :
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
 <h1>Parcourir l'index :</h1>
-<form action="/cgi-bin/koha/opac-search.pl" method="POST">
+<form action="/cgi-bin/koha/opac-search.pl" method="post">
     <table>
         <tr>
             <td>
@@ -85,7 +85,7 @@ Erreur :
     </table>
 </form>
 
-<form action="/cgi-bin/koha/opac-search.pl" method="POST">
+<form action="/cgi-bin/koha/opac-search.pl" method="post">
     <table>
         <tr>
             <th>Terme/Expression</th>
@@ -105,7 +105,7 @@ Erreur :
 </form>
 <!-- TMPL_ELSE -->
 
-<form action="/cgi-bin/koha/opac-search.pl" method="POST" name="myform" id="mainform">
+<form action="/cgi-bin/koha/opac-search.pl" method="post" name="myform" id="mainform">
     
     <!-- TMPL_IF NAME="searchdesc" -->
     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
@@ -114,14 +114,76 @@ Erreur :
     <div class="searchresults">
         
         <!-- RE-SORT START -->
-        <!-- TMPL_IF NAME="sort_by_loop" -->
+        <!-- TMPL_IF NAME="sort_by" -->
         <p>
             Trier les résultats
             <select id="sort_by" name="sort_by" onChange="javascript:document.myform.submit();">
                 <option value="">Champ de tri, classé par pertinence</option>
-                <!-- TMPL_LOOP NAME="sort_by_loop" -->
-                <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
-                <!-- /TMPL_LOOP -->
+        <!--TMPL_IF Name="9523a"-->
+          <option value="1=9523 &gt;i" selected>Popularité (plus au moins)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=9523 &gt;i">Popularité (plus au moins)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="9523d"-->
+          <option value="1=9523 &lt;i" selected>Popularité (moins au plus)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=9523 &lt;i">Popularité (moins au plus)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="1003d"-->
+          <option value="1=1003 &lt;i" selected>Auteur (A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=1003 &lt;i">Auteur (A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="1003a"-->
+         <option value="1=1003 &gt;i" selected>Auteur (Z-A)</option>
+        <!--TMPL_ELSE -->
+         <option value="1=1003 &gt;i">Auteur (Z-A)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="20d"-->
+          <option value="1=20 &lt;i" selected>Cote (0-9 puis A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=20 &lt;i">Cote (0-9 puis A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="20a"-->
+          <option value="1=20 &gt;i" selected>Cote (Z-A puis 9-0)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=20 &gt;i">Cote (Z-A puis 9-0)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31a"-->
+          <option value="1=31 &gt;i" selected>Dates</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &gt;i">Dates</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31a"-->
+          <option value="1=31 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &gt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus récent au plus ancien</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="31d"-->
+          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
+        <!--TMPL_ELSE -->
+          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Date de publication/copyright : du plus ancien au plus récent</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="32a"-->
+          <option value="1=32 &gt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus récent au plus ancien</option>
+        <!--TMPL_ELSE -->
+          <option value="1=32 &gt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus récent au plus ancien</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="32d"-->
+          <option value="1=32 &lt;i" selected>&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus ancien au plus récent</option>
+        <!--TMPL_ELSE -->
+          <option value="1=32 &lt;i">&nbsp;&nbsp;&nbsp;Date d'acquisition : du plus ancien au plus récent</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="4d"-->
+          <option value="1=4 &lt;i" selected>Titre (A-Z)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=4 &lt;i">Titre (A-Z)</option>
+        <!--/TMPL_IF-->
+        <!--TMPL_IF Name="4a"-->
+          <option value="1=4 &gt;i" selected>Titre (Z-A)</option>
+        <!--TMPL_ELSE -->
+          <option value="1=4 &gt;i">Titre (Z-A)</option>
+        <!--/TMPL_IF-->
             </select>
         </p>
         <!-- /TMPL_IF -->
@@ -130,6 +192,7 @@ Erreur :
         <!-- ######### -->
         <!-- FACETS START -->
         <!-- TMPL_IF NAME="opacfacets" -->
+        <!-- TMPL_IF NAME="NoZebra" -->
         <div id="facets" >
             <dl>
             <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Affinez votre recherche</dt>
@@ -156,6 +219,7 @@ Erreur :
             </dd>
         </div>
         <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
         <!-- FACETS END -->
         
         <!-- ######### -->
@@ -170,6 +234,7 @@ Erreur :
             <tr>
                 <th><input type="checkbox" name="select_all" onClick="SelectAll()" /></th>
                 <th>Titre</th>
+                <th>Nombre de documents</th>
                 <th>Localisation</th>
                 <!-- TMPL_IF NAME="RequestOnOpac" -->
                 <th>Réservation</th>
@@ -202,17 +267,17 @@ Erreur :
                         <p>
                             <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
                             <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
                             </a> <!-- TMPL_VAR NAME="subtitle" -->
                             <!-- TMPL_ELSE -->
                             <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
                             <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
                             </a> <!-- TMPL_VAR NAME="subtitle" -->
                             <!-- TMPL_ELSE -->
                             <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" -->
-                            </a> <!-- TMPL_VAR NAME="subtitle" -->
+                                <b><!-- TMPL_VAR NAME="title" --></b>
+                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
                         </p>
@@ -234,11 +299,16 @@ Erreur :
                         </p>
                         <!-- /TMPL_IF -->
                     </td>
-                    <td>
+                    <td >
+                        <!-- TMPL_IF NAME="items_count" -->
+                        <!-- TMPL_VAR NAME="items_count" -->
+                        <!-- /TMPL_IF-->
+                    </td>          
+                    <td width="20%">
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
                             <!-- TMPL_LOOP NAME="items_loop" -->
-                                <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchname" -->
+                                <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchcode" -->
                                 <i>
                                 <!-- TMPL_IF name="location" --> <!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="itemcallnumber" --> <!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->
@@ -249,15 +319,15 @@ Erreur :
                                 <!-- /TMPL_IF -->
                                 </i>
                                 <br />
+                                <span class="unavailable">
+                                    <!-- TMPL_IF NAME="onloancount" --> En prêt (retour le <!-- TMPL_VAR name="due_date" -->)<br /> <!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="wthdrawncount" --> Retiré (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="itemlostcount" --> Perdu (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="orderedcount" --> En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
+                                </span>
                             <!-- /TMPL_LOOP -->
                         </span>
                         <!-- /TMPL_IF -->
-                        <span class="unavailable">
-                            <!-- TMPL_IF NAME="onloancount" --> En prêt (<!-- TMPL_VAR NAME="onloancount" -->),<br /> <!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="wthdrawncount" --> Retiré (<!-- TMPL_VAR NAME="wthdrawncount" -->),<br /> <!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="itemlostcount" --> Perdu (<!-- TMPL_VAR NAME="itemlostcount" -->)<br /><!-- /TMPL_IF -->
-                            <!-- TMPL_IF NAME="orderedcount" --> En commande (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
-                        </span>
                     </td>
                     <!-- TMPL_IF NAME="RequestOnOpac" -->
                     <td>

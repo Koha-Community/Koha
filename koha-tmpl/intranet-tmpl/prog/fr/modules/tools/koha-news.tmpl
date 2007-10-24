@@ -2,27 +2,29 @@
 <title>Koha &rsaquo; Outils &rsaquo; AnnoncesLogs</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<!-- TMPL_UNLESS NAME="add_form" --><!-- TMPL_INCLUDE NAME="yui-toolbars.inc" --><!-- /TMPL_UNLESS -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/reports/tools-home.pl">Outils</a> &rsaquo; Annonces</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl"> Accueil </a> &rsaquo;<a href="/cgi-bin/koha/reports/tools-home.pl">Outils</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/tools/koha-news.pl">Annonces</a> &rsaquo;  <!-- TMPL_IF NAME="id" -->
+Modifier annonce<!-- TMPL_ELSE -->Ajouter une annonce<!-- /TMPL_IF --><!-- TMPL_ELSE -->Annonces<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
-   
+<!-- TMPL_IF NAME="add_form" --><div id="doc" class="yui-t7"><!-- TMPL_ELSE --><div id="doc3" class="yui-t2"><!-- /TMPL_IF -->
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+ 
+<!-- TMPL_UNLESS NAME="add_form" --><!-- TMPL_INCLUDE NAME="tools-news-toolbar.inc" --><!-- /TMPL_UNLESS -->
 
-
-<div id="koha-news_main" class="searchresults">
-    <h1> Annonces OPAC et KOHA</h1>
-    <!-- TMPL_IF name="add_form" -->
+<!-- TMPL_IF name="add_form" -->
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
             <input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
-            <p>
+			<fieldset class="rows">
+			<legend>Annonces OPAC et KOHA</legend>
+           <ol> <li>
             <label for="lang">Langue</label>
             <select id="lang" name="lang">
                 <option value="koha">Interface bibliothécaire</option>
@@ -30,12 +32,12 @@
                     <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="language" -->" selected="selected"><!-- TMPL_VAR name="language" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="language" -->"><!-- TMPL_VAR name="language" --></option><!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </select>
-            </p>
-            <p>
+            </li>
+            <li>
                 <label for="title">Titre</label>
                 <input id="title" size="30" type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
-            </p>
-            <p>
+            </li>
+            <li>
                 <label for="expirationdate">Date d'expiration</label>
                 <input id="expirationdate" type="text" name="expirationdate" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
                 <script type="text/javascript">
@@ -46,28 +48,27 @@
                     }
                     );
                 </script>
-            </p>
-            <p>
+            </li>
+            <li>
                 <label for="number">S'affiche en position </label>
                 <!-- TMPL_IF NAME="number"-->
                     <input id="number" size="3" name="number" type="text" checked="checked" />
                 <!-- TMPL_ELSE -->
                     <input id="number" size="3" name="number" type="text" />
                 <!-- /TMPL_IF -->
-            </p>
-            <p>Nouvelles</p>
-            <textarea name="new" cols="75" rows="10"><!-- TMPL_VAR NAME="new" --></textarea>
-            <p>
+            </li>
+            <li><label for="new">Nouvelles</label>
+            <textarea name="new" id="new"  cols="75" rows="10"><!-- TMPL_VAR NAME="new" --></textarea></li>
+            </ol>
+			</fieldset>
+  
                 <input class="button" type="submit" value="Valider">
                 <input class="button" type="button" value="Annuler" onclick="window.location.href='/cgi-bin/koha/tools/opac-news.pl'">
-            </p>
         </form>
-		</div>
     <!-- TMPL_ELSE -->
-        <div id="koha-news_filter">
-            <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" />
-            <label>Langue</label>
-            <select name="lang">
+        <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl">
+            <label for="lang">Langue</label>
+            <select name="lang" id="lang">
             <option value="">Tous</option>
             <option value="koha">Interface bibliothécaire</option>
                 <!-- TMPL_LOOP name="lang_list" -->
@@ -82,10 +83,8 @@
             </select>
             <input type="submit" class="button" value="Sélectionner">
             </form>
-        </div>
         <!-- TMPL_IF NAME="opac_news_count" -->
-        <div id="koha-news_list">
-            <form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('Are you sure you want to delete the selected news?')">
+        <form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('Are you sure you want to delete the selected news?')">
                 <table>
                     <tr>
                         <th>&nbsp;</th>
@@ -121,21 +120,14 @@
                 <input type="hidden" name="op" value="del" />
                 <input type="submit" class="button" value="Supprimer la sélection">
             </form>
-			</div>
         <!-- TMPL_ELSE -->
             <p>Pas de nouvelles enregistrées</p>
         <!-- /TMPL_IF -->
-        <div id="action">
-          <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">Ajouter des nouvelles</a>
-        </div>
-		</div>
     <!-- /TMPL_IF -->
-
-
 </div>
 </div>
-<div class="yui-b">
+<!-- TMPL_UNLESS NAME="add_form" --><div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
-</div>
+</div><!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
