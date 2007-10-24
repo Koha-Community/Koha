@@ -88,10 +88,6 @@ $template->param(
     name                    => $name,
     from_placed_on          => $from_placed_on,
     to_placed_on            => $to_placed_on,
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
     DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
 );
 

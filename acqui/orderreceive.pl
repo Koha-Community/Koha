@@ -192,10 +192,6 @@ if ( $count == 1 ) {
         unitprice             => $results[0]->{'unitprice'},
         invoice               => $invoice,
         daterecieved          => $daterecieved,
-        intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav        => C4::Context->preference("IntranetNav"),
     );
 }
 else {
@@ -220,10 +216,6 @@ else {
         supplierid              => $supplierid,
         invoice                 => $invoice,
         daterecieved            => $daterecieved,
-        intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav        => C4::Context->preference("IntranetNav"),
     );
 
 }

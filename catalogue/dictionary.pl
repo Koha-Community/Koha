@@ -251,9 +251,6 @@ $template->param(search => $search[0],
 		marclist =>$field,
 		type=>$type,
 		anindex => $input->param('index'),
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 
 # Print the page

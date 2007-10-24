@@ -522,10 +522,6 @@ $template->param(
     branchname              => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
     printer                 => $printer,
     errmsgloop              => \@errmsgloop,
-    intranetcolorstylesheet =>
-      C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
 );
 
 # actually print the page!

@@ -148,9 +148,6 @@ foreach my $suggestion (@$suggestions) {
 $template->param(
     suggestions_loop        => \@suggestions_loop,
     "op_$op"                => 1,
-    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    IntranetNav        => C4::Context->preference("IntranetNav"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

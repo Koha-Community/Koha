@@ -62,9 +62,6 @@ $template->param(minlocation => $minlocation,
 				offset => $offset,
 				pagesize => $pagesize,
 				datelastseen => $datelastseen,
-				intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
 				);
 if ($uploadbarcodes && length($uploadbarcodes)>0){
 	my $dbh=C4::Context->dbh;

@@ -115,10 +115,6 @@ else {    # this shelf doesn't already exist.
         title             => $biblios[0]->{'title'},
         author            => $biblios[0]->{'author'},
         CGIvirtualshelves => $CGIvirtualshelves,
-        intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-        IntranetNav        => C4::Context->preference("IntranetNav"),
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

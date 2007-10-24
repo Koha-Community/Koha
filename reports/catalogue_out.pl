@@ -58,9 +58,6 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 if ($do_it) {
 # Displaying results
