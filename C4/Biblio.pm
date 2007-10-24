@@ -27,7 +27,7 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
 use C4::Koha;
-use C4::Date;
+use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
 
@@ -216,61 +216,7 @@ sub AddBiblio {
     $olddata->{'biblionumber'} = $biblionumber;
     ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
 
-    # we must add bibnum and bibitemnum in MARC::Record...
-    # we build the new field with biblionumber and biblioitemnumber
-    # we drop the original field
-    # we add the new builded field.
-    ( my $biblio_tag, my $biblio_subfield ) = GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
-    ( my $biblioitem_tag, my $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
-
-    my $newfield;
-
-    # biblionumber & biblioitemnumber are in different fields
-    if ( $biblio_tag != $biblioitem_tag ) {
-
-        # deal with biblionumber
-        if ( $biblio_tag < 10 ) {
-            $newfield = MARC::Field->new( $biblio_tag, $biblionumber );
-        }
-        else {
-            $newfield =
-              MARC::Field->new( $biblio_tag, '', '',
-                "$biblio_subfield" => $biblionumber );
-        }
-
-        # drop old field and create new one...
-        my $old_field = $record->field($biblio_tag);
-        $record->delete_field($old_field);
-        $record->append_fields($newfield);
-
-        # deal with biblioitemnumber
-        if ( $biblioitem_tag < 10 ) {
-            $newfield = MARC::Field->new( $biblioitem_tag, $biblioitemnumber, );
-        }
-        else {
-            $newfield =
-              MARC::Field->new( $biblioitem_tag, '', '',
-                "$biblioitem_subfield" => $biblioitemnumber, );
-        }
-        # drop old field and create new one...
-        $old_field = $record->field($biblioitem_tag);
-        $record->delete_field($old_field);
-        $record->insert_fields_ordered($newfield);
-
-# biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
-    }
-    else {
-        my $newfield = MARC::Field->new(
-            $biblio_tag, '', '',
-            "$biblio_subfield" => $biblionumber,
-            "$biblioitem_subfield" => $biblioitemnumber
-        );
-
-        # drop old field and create new one...
-        my $old_field = $record->field($biblio_tag);
-        $record->delete_field($old_field);
-        $record->insert_fields_ordered($newfield);
-    }
+    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
     # now add the record
     $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
@@ -391,21 +337,15 @@ sub ModBiblio {
         $record->append_fields($field);
     }
     
-    # adding biblionumber
-    my ($tag_biblionumber, $subfield_biblionumber) = GetMarcFromKohaField('biblio.biblionumber',$frameworkcode);
-    if ($tag_biblionumber < 10) {
-        $record->append_fields(
-                MARC::Field->new(
-                        $tag_biblionumber, $biblionumber
-                )
-        ) unless $record->field($tag_biblionumber);
-    } else {
-        $record->append_fields(
-                MARC::Field->new(
-                        $tag_biblionumber,'','',$subfield_biblionumber => $biblionumber
-                )
-        ) unless ($record->subfield($tag_biblionumber,$subfield_biblionumber));
-    }
+    # update biblionumber and biblioitemnumber in MARC
+    # FIXME - this is assuming a 1 to 1 relationship between
+    # biblios and biblioitems
+    my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
+    $sth->execute($biblionumber);
+    my ($biblioitemnumber) = $sth->fetchrow;
+    $sth->finish();
+    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+
     # update the MARC record (that now contains biblio and items) with the new record data
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     
@@ -413,10 +353,8 @@ sub ModBiblio {
     my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
 
     # modify the other koha tables
-	use Data::Dumper;
-
-    _koha_modify_biblio( $dbh, $oldbiblio );
-    _koha_modify_biblioitem( $dbh, $oldbiblio );
+    _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
+    _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
 }
 
@@ -447,6 +385,12 @@ sub ModItem {
         my $frameworkcode = GetFrameworkCode( $biblionumber );
         ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode );
         my $olditem       = TransformMarcToKoha( $dbh, $record, $frameworkcode,'items');
+        $olditem->{'biblionumber'} = $biblionumber;
+        my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
+        $sth->execute($biblionumber);
+        my ($biblioitemnumber) = $sth->fetchrow;
+        $sth->finish(); 
+        $olditem->{'biblioitemnumber'} = $biblioitemnumber;
         _koha_modify_item( $dbh, $olditem );
         return $biblionumber;
     }
@@ -495,9 +439,9 @@ sub ModBiblioframework {
     my ( $biblionumber, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-        "UPDATE biblio SET frameworkcode=? WHERE biblionumber=$biblionumber"
+        "UPDATE biblio SET frameworkcode=? WHERE biblionumber=?"
     );
-    $sth->execute($frameworkcode);
+    $sth->execute($frameworkcode, $biblionumber);
     return 1;
 }
 
@@ -2412,59 +2356,160 @@ sub TransformHtmlToMarc {
 
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $table ) = @_;
+
     my $result;
 
-	# sometimes we only want to return the items data
-	if ($table eq 'items') {
-	    my $sth = $dbh->prepare("SHOW COLUMNS FROM items");
-   		$sth->execute();
-    	while ( (my $field) = $sth->fetchrow ) {
-        	$result = &TransformMarcToKohaOneField( "items", $field, $record, $result, $frameworkcode );
-    	}
-		return $result;
-	}
-
-    my $sth2 = $dbh->prepare("SHOW COLUMNS FROM biblio");
-    $sth2->execute();
-    my $field;
-    while ( ($field) = $sth2->fetchrow ) {
-        $result = &TransformMarcToKohaOneField( "biblio", $field, $record, $result, $frameworkcode );
+    # sometimes we only want to return the items data
+    if ($table eq 'items') {
+        my $sth = $dbh->prepare("SHOW COLUMNS FROM items");
+        $sth->execute();
+        while ( (my $field) = $sth->fetchrow ) {
+            my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
+            my $key = _disambiguate($table, $field);
+            if ($result->{$key}) {
+                $result->{$key} .= " | " . $value;
+            } else {
+                $result->{$key} = $value;
+            }
+        }
+        return $result;
+    } else {
+        my @tables = ('biblio','biblioitems','items');
+        foreach my $table (@tables){
+            my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
+            $sth2->execute;
+            while (my ($field) = $sth2->fetchrow){
+                # FIXME use of _disambiguate is a temporary hack
+                # $result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
+                my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
+                my $key = _disambiguate($table, $field);
+                if ($result->{$key}) {
+                    # FIXME - hack to not bring in duplicates of the same value
+                    unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($value eq "")) {
+                        $result->{$key} .= " | " . $value;
+                    }
+                } else {
+                    $result->{$key} = $value;
+                }
+            }
+            $sth2->finish();
+        }
+        # modify copyrightdate to keep only the 1st year found
+        my $temp = $result->{'copyrightdate'};
+        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+        if ( $1 > 0 ) {
+            $result->{'copyrightdate'} = $1;
+        }
+        else {                      # if no cYYYY, get the 1st date.
+            $temp =~ m/(\d\d\d\d)/;
+            $result->{'copyrightdate'} = $1;
+        }
+    
+        # modify publicationyear to keep only the 1st year found
+        $temp = $result->{'publicationyear'};
+        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+        if ( $1 > 0 ) {
+            $result->{'publicationyear'} = $1;
+        }
+        else {                      # if no cYYYY, get the 1st date.
+            $temp =~ m/(\d\d\d\d)/;
+            $result->{'publicationyear'} = $1;
+        }
+        return $result;
     }
-    my $sth2 = $dbh->prepare("SHOW COLUMNS FROM biblioitems");
-    $sth2->execute();
-    while ( ($field) = $sth2->fetchrow ) {
-		if ( $field eq 'notes' ) { $field = 'bnotes'; }
-        $result = &TransformMarcToKohaOneField( "biblioitems", $field, $record, $result, $frameworkcode );
-    }
-    $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
-    $sth2->execute();
-    while ( ($field) = $sth2->fetchrow ) {
-        $result = &TransformMarcToKohaOneField( "items", $field, $record, $result, $frameworkcode );
-    }
-
-    # modify copyrightdate to keep only the 1st year found
-    my $temp = $result->{'copyrightdate'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'copyrightdate'} = $1;
-    }
-    else {                      # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'copyrightdate'} = $1;
-    }
-
-    # modify publicationyear to keep only the 1st year found
-    $temp = $result->{'publicationyear'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'publicationyear'} = $1;
-    }
-    else {                      # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'publicationyear'} = $1;
-    }
-    return $result;
 }
+
+
+=head2 _disambiguate
+
+=over 4
+
+$newkey = _disambiguate($table, $field);
+
+This is a temporary hack to distinguish between the
+following sets of columns when using TransformMarcToKoha.
+
+items.cn_source & biblioitems.cn_source
+items.cn_sort & biblioitems.cn_sort
+
+Columns that are currently NOT distinguished (FIXME
+due to lack of time to fully test) are:
+
+biblio.notes and biblioitems.notes
+biblionumber
+timestamp
+biblioitemnumber
+
+FIXME - this is necessary because prefixing each column
+name with the table name would require changing lots
+of code and templates, and exposing more of the DB
+structure than is good to the UI templates, particularly
+since biblio and bibloitems may well merge in a future
+version.  In the future, it would also be good to 
+separate DB access and UI presentation field names
+more.
+
+=back
+
+=cut
+
+sub _disambiguate {
+    my ($table, $column) = @_;
+    if ($column eq "cn_sort" or $column eq "cn_source") {
+        return $table . '.' . $column;
+    } else {
+        return $column;
+    }
+
+}
+
+=head2 get_koha_field_from_marc
+
+=over 4
+
+$result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
+
+Internal function to map data from the MARC record to a specific non-MARC field.
+FIXME: this is meant to replace TransformMarcToKohaOneField after more testing.
+
+=back
+
+=cut
+
+sub get_koha_field_from_marc {
+    my ($koha_table,$koha_column,$record,$frameworkcode) = @_;
+    my ( $tagfield, $subfield ) = GetMarcFromKohaField( $koha_table.'.'.$koha_column, $frameworkcode );  
+    my $kohafield;
+    foreach my $field ( $record->field($tagfield) ) {
+        if ( $field->tag() < 10 ) {
+            if ( $kohafield ) {
+                $kohafield .= " | " . $field->data();
+            }
+            else {
+                $kohafield = $field->data();
+            }
+        }
+        else {
+            if ( $field->subfields ) {
+                my @subfields = $field->subfields();
+                foreach my $subfieldcount ( 0 .. $#subfields ) {
+                    if ( $subfields[$subfieldcount][0] eq $subfield ) {
+                        if ( $kohafield ) {
+                            $kohafield .=
+                              " | " . $subfields[$subfieldcount][1];
+                        }
+                        else {
+                            $kohafield =
+                              $subfields[$subfieldcount][1];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return $kohafield;
+} 
+
 
 =head2 TransformMarcToKohaOneField
 
@@ -3323,6 +3368,75 @@ sub _find_value {
     return ( $indicator, @result );
 }
 
+=head2 _koha_marc_update_bib_ids
+
+=over 4
+
+_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+
+Internal function to add or update biblionumber and biblioitemnumber to
+the MARC XML.
+
+=back
+
+=cut
+
+sub _koha_marc_update_bib_ids {
+    my ($record, $frameworkcode, $biblionumber, $biblioitemnumber) = @_;
+
+    # we must add bibnum and bibitemnum in MARC::Record...
+    # we build the new field with biblionumber and biblioitemnumber
+    # we drop the original field
+    # we add the new builded field.
+    my ($biblio_tag, $biblio_subfield ) = GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
+    my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
+
+    if ($biblio_tag != $biblioitem_tag) {
+        # biblionumber & biblioitemnumber are in different fields
+
+        # deal with biblionumber
+        my ($new_field, $old_field);
+        if ($biblio_tag < 10) {
+            $new_field = MARC::Field->new( $biblio_tag, $biblionumber );
+        } else {
+            $new_field =
+              MARC::Field->new( $biblio_tag, '', '',
+                "$biblio_subfield" => $biblionumber );
+        }
+
+        # drop old field and create new one...
+        $old_field = $record->field($biblio_tag);
+        $record->delete_field($old_field);
+        $record->append_fields($new_field);
+
+        # deal with biblioitemnumber
+        if ($biblioitem_tag < 10) {
+            $new_field = MARC::Field->new( $biblioitem_tag, $biblioitemnumber, );
+        } else {
+            $new_field =
+              MARC::Field->new( $biblioitem_tag, '', '',
+                "$biblioitem_subfield" => $biblioitemnumber, );
+        }
+        # drop old field and create new one...
+        $old_field = $record->field($biblioitem_tag);
+        $record->delete_field($old_field);
+        $record->insert_fields_ordered($new_field);
+
+    } else {
+        # biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
+        my $new_field = MARC::Field->new(
+            $biblio_tag, '', '',
+            "$biblio_subfield" => $biblionumber,
+            "$biblioitem_subfield" => $biblioitemnumber
+        );
+
+        # drop old field and create new one...
+        my $old_field = $record->field($biblio_tag);
+        $record->delete_field($old_field);
+        $record->insert_fields_ordered($new_field);
+    }
+}
+
 =head2 _koha_add_biblio
 
 =over 4
@@ -3392,7 +3506,7 @@ sub _koha_add_biblio {
 
 =over 4
 
-my ($biblionumber,$error) == _koha_modify_biblio($dbh,$biblio);
+my ($biblionumber,$error) == _koha_modify_biblio($dbh,$biblio,$frameworkcode);
 
 Internal function for updating the biblio table
 
@@ -3401,7 +3515,7 @@ Internal function for updating the biblio table
 =cut
 
 sub _koha_modify_biblio {
-    my ( $dbh, $biblio ) = @_;
+    my ( $dbh, $biblio, $frameworkcode ) = @_;
 	my $error;
 
     my $query = "
@@ -3421,7 +3535,7 @@ sub _koha_modify_biblio {
     my $sth = $dbh->prepare($query);
     
     $sth->execute(
-		$biblio->{'frameworkcode'},
+		$frameworkcode,
         $biblio->{'author'},
         $biblio->{'title'},
         $biblio->{'unititle'},
@@ -3440,22 +3554,25 @@ sub _koha_modify_biblio {
     return ( $biblio->{'biblionumber'},$error );
 }
 
-=head2 _koha_modify_biblioitem
+=head2 _koha_modify_biblioitem_nonmarc
 
 =over 4
 
-my ($biblioitemnumber,$error) = _koha_modify_biblioitem( $dbh, $biblioitem );
+my ($biblioitemnumber,$error) = _koha_modify_biblioitem_nonmarc( $dbh, $biblioitem );
+
+Updates biblioitems row except for marc and marcxml, which should be changed
+via ModBiblioMarc
 
 =back
 
 =cut
 
-sub _koha_modify_biblioitem {
+sub _koha_modify_biblioitem_nonmarc {
     my ( $dbh, $biblioitem ) = @_;
 	my $error;
 
 	# re-calculate the cn_sort, it may have changed
-	my ($cn_sort) = GetClassSort($biblioitem->{'cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+	my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
 
 	my $query = 
 	"UPDATE biblioitems 
@@ -3480,15 +3597,13 @@ sub _koha_modify_biblioitem {
 		size     		= ?,
 		place     		= ?,
 		lccn     		= ?,
-		marc     		= ?,
 		url     		= ?,
         cn_source  		= ?,
         cn_class        = ?,
         cn_item        	= ?,
 		cn_suffix       = ?,
 		cn_sort        	= ?,
-		totalissues     = ?,
-		marcxml     	= ?
+		totalissues     = ?
         where biblioitemnumber = ?
 		";
 	my $sth = $dbh->prepare($query);
@@ -3514,19 +3629,17 @@ sub _koha_modify_biblioitem {
 		$biblioitem->{'size'},
 		$biblioitem->{'place'},
 		$biblioitem->{'lccn'},
-		$biblioitem->{'marc'},
 		$biblioitem->{'url'},
-		$biblioitem->{'cn_source'},
+		$biblioitem->{'biblioitems.cn_source'},
 		$biblioitem->{'cn_class'},
 		$biblioitem->{'cn_item'},
 		$biblioitem->{'cn_suffix'},
 		$cn_sort,
 		$biblioitem->{'totalissues'},
-		$biblioitem->{'marcxml'},
 		$biblioitem->{'biblioitemnumber'}
 	);
     if ( $dbh->errstr ) {
-		$error.="ERROR in _koha_modify_biblioitem $query".$dbh->errstr;
+		$error.="ERROR in _koha_modify_biblioitem_nonmarc $query".$dbh->errstr;
         warn $error;
     }
 	return ($biblioitem->{'biblioitemnumber'},$error);
@@ -3553,7 +3666,7 @@ sub _koha_add_biblioitem {
     my $bibitemnum = $$data[0] + 1;
     $sth->finish();
 
-	my ($cn_sort) = GetClassSort($biblioitem->{'cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+	my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
     my $query =
     "INSERT INTO biblioitems SET
 		biblioitemnumber = ?,
@@ -3613,7 +3726,7 @@ sub _koha_add_biblioitem {
         $biblioitem->{'lccn'},
         $biblioitem->{'marc'},
         $biblioitem->{'url'},
-        $biblioitem->{'cn_source'},
+        $biblioitem->{'biblioitems.cn_source'},
         $biblioitem->{'cn_class'},
         $biblioitem->{'cn_item'},
         $biblioitem->{'cn_suffix'},
@@ -3648,7 +3761,7 @@ sub _koha_new_items {
     my $itemnumber = $data->{'MAX(itemnumber)'} + 1;
     $sth->finish;
 
-    my ($items_cn_sort) = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
+    my ($items_cn_sort) = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
 
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
     if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
@@ -3711,7 +3824,7 @@ sub _koha_new_items {
 			$item->{'paidfor'},
 			$item->{'location'},
 			$item->{'onloan'},
-			$item->{'cn_source'},
+			$item->{'items.cn_source'},
 			$items_cn_sort,
 			$item->{'ccode'},
 			$item->{'materials'},
@@ -3739,7 +3852,7 @@ sub _koha_modify_item {
 	my $error;
 
 	# calculate items.cn_sort
-    $item->{'cn_sort'} = GetClassSort($item->{'cn_source'}, $item->{'itemcallnumber'}, "");
+    $item->{'cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
 
     my $query = "UPDATE items SET ";
 	my @bind;
