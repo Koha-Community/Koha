@@ -159,8 +159,13 @@ function CheckRuleForm(f) {
     </ol>
   </fieldset>
   <p id="action">
-    <input type="button" value="<!-- TMPL_IF name="edit_class_source" -->Save Changes<!-- TMPL_ELSE -->Add Classification Source<!-- /TMPL_IF-->"
+    <!-- TMPL_IF name="edit_class_source" -->
+    <input type="button" value="Save Changes"
            onclick="CheckSourceForm(this.form)" />
+    <!-- TMPL_ELSE -->
+    <input type="button" value="Add Classification Source"
+           onclick="CheckSourceForm(this.form)" />
+    <!-- /TMPL_IF-->
     <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
   </p>
 </form>
@@ -202,8 +207,12 @@ function CheckRuleForm(f) {
     </ol>
   </fieldset>
   <p id="action">
-    <input type="button" value="<!-- TMPL_IF name="edit_sort_rule" -->Save Changes<!-- TMPL_ELSE -->Add Filing Rule<!-- /TMPL_IF-->"
+  <!-- TMPL_IF name="edit_sort_rule" -->
+        <input type="button" value="Save Changes"
            onclick="CheckRuleForm(this.form)" />
+    <!-- TMPL_ELSE -->
+        <input type="button" value="Add Filing Rule"
+           onclick="CheckRuleForm(this.form)" />    <!-- /TMPL_IF-->
     <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
   </p>
 </form>
