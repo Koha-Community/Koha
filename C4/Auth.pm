@@ -254,7 +254,8 @@ sub get_template_and_user {
             virtualshelves          => C4::Context->preference("virtualshelves"),
             LibraryName             => C4::Context->preference("LibraryName"),
             KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
-			IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
+            IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
+            IndependantBranches     => C4::Context->preference("IndependantBranches"),
         );
     }
     else {
@@ -721,7 +722,7 @@ sub checkauth {
         IntranetNav        => C4::Context->preference("IntranetNav"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
-
+        IndependantBranches     => C4::Context->preference("IndependantBranches"),
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
