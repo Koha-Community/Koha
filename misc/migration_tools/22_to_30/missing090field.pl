@@ -61,7 +61,7 @@ sub MARCmodbiblionumber{
     
     if ($update){	
         &ModBiblioMarc($record,$biblionumber,'');
-        print "\n modified : $biblionumber \n".$record->as_formatted;	
+        print "\n modified : $biblionumber \n";	
     }
     
 }
