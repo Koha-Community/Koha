@@ -608,7 +608,7 @@ sub buildQuery {
             }      
             
             if ( $operands[$i] ) {
-			         $operand =~ s/^(and |or |not )//i;
+                $operand =~ s/^(and |or |not )//i;
 
 # STEMMING FIXME: need to refine the field weighting so stemmed operands don't disrupt the query ranking
                 if ($stemming) {
