@@ -216,6 +216,7 @@ $template->param(
     trsfitemloop            => \@trsfitemloop,
     branchoptionloop        => \@branchoptionloop,
     errmsgloop              => \@errmsgloop,
+    CircAutocompl           => C4::Context->preference("CircAutocompl")
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 
