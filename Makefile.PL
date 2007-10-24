@@ -105,7 +105,6 @@ WriteMakefile(
 'Date::Calc' => 5.4,
 'Date::Manip' => 5.44,
 'Digest::MD5' => 2.36,
-'Event' => 1.06,
 'File::Temp' => 0.16,
 'GD::Barcode::UPCE' => 1.1,
 'Getopt::Long' => 2.35,
