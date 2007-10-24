@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Impossible de supprimer l'adhérent</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -12,8 +13,7 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
-	<h3>Impossible de supprimer cet adhérent</h3>
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->	<h3>Impossible de supprimer cet adhérent</h3>
 		<ul><!-- TMPL_IF name="ItemsOnIssues" -->
 			<li>Cet adhérent a <!-- TMPL_VAR name="ItemsOnIssues" --> document(s) en prêt.</li>
 		<!-- /TMPL_IF -->

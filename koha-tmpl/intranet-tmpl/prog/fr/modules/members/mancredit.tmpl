@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Adhérent &rsaquo; créer un crédit manuel</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -13,21 +14,20 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
-<h2>Crédit manuel</h2>
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 <form action="/cgi-bin/koha/members/mancredit.pl" method="post">
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
 
-<table>
-	<tr><th scope="row">Numéro d'adhérent</th><td><!-- TMPL_VAR Name="borrowernumber" --></td></tr>
-	<tr><th scope="row">Type de crédit</th><td><select name="type">
+<fieldset class="rows">
+<legend>Crédit manuel</legend><ol>
+	<li><label for="type">Type de crédit : </label><select name="type" id="type">
 <option value="C">Crédit</option>
 <option value="F">Dette remise</option>
-</select></td></tr>
-	<tr><th scope="row">Numéro d'exemplaire</th><td><input type="text" name="itemnum" /></td></tr>
-	<tr><th scope="row">Description</th><td><input type="text" name="desc" size="50" /></td></tr>
-	<tr><th scope="row">Montant</th><td><input type="text" name="amount" /> €</td></tr>
-</table>
+</select></li>
+	<li><label for="itemnum">Numéro d'exemplaire : </label><input type="text" name="itemnum" id="itemnum" /></li>
+	<li><label for="desc">Description : </label><input type="text" name="desc" size="50" id="desc" /></li>
+	<li><label for="amount">Montant : </label><input type="text" name="amount" id="amount" /></li>
+</ol></fieldset>
 
 <input type="submit" name="add" value="Ajouter  crédit">
 </form>

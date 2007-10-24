@@ -2,6 +2,23 @@
 	<script type="text/javascript">
 	//<![CDATA[
 
+function confirm_deletion() {
+    var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
+    var borrowernumbervalue=document.form.borrowernumber.value; 
+   
+    if (is_confirmed) {
+            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
+    }
+}
+
+function confirm_reregistration() {
+    var is_confirmed = window.confirm('Are you sure you want to renew this patron\'s registration?');
+    var borrowernumbervalue1=document.form.borrowernumber.value;
+    if (is_confirmed) {
+    window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber='+borrowernumbervalue1+'';
+    }
+}
+
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
@@ -17,14 +34,14 @@
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: "Print Page", url: "#" },
-	        { text: "Print Slip", url: "#" }
+	        { text: "Print Page", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
+	        { text: "Print Slip", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
 	    ];
 	
 		var moremenu = [
-			{ text: "Renew Patron", url: "javascript:confirm_reregistration();"},
+			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
 			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"},
-			{ text: "Delete", url: "javascript:confirm_deletion();"},
+			{ text: "Delete", onclick: { fn: confirm_deletion } },
 		]
 
 	    new YAHOO.widget.Button({
@@ -73,9 +90,9 @@
                 <li><a id="editpatron" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=A">Modifier</a></li>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-	<li><a id="addnote" href="Someone please write this">Ajouter note</a></li>
+	<li><a id="addnote" href="/cgi-bin/koha/members/addnotes.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Ajouter note</a></li>
 	<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Changer mot de passe</a></li>
-	<li id="printmenuc"><a id="printpage" href="#">Imprimer page</a></li>
-	<li><a id="printslip" href="#">Imprimer ticket</a></li>
-	<li id="moremenuc"><a id="renewpatron" href="javascript:confirm_reregistration();">Renouveler compte</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Définir permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Supprimer</a></li>
+	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Imprimer page</a></li>
+	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Imprimer ticket</a></li>
+	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renouveler compte</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Définir permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Supprimer</a></li>
 </ul></div>

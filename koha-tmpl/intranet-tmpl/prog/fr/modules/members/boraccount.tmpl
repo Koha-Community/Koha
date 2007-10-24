@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Compte de <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></title>
+<title>Koha &rsaquo;Adhérents &rsaquo; Compte pour <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -13,12 +14,8 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
-<!-- The manual invoice and credit buttons -->
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" --><!-- The manual invoice and credit buttons -->
 <div id="action">
-    <div class="edit">
-        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Retour à la fiche d'adhérent</a>
-    </div>
     <div class="view">
         <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Payer amendes</a> <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Créer dette manuellement</a> <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Encaisser crédit</a>
     </div>

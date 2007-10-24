@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo;  Adhérents &rsaquo; Définir les permissions de <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" -->Résultats de recherche</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="members-search.inc" -->
 
@@ -13,9 +14,10 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 
 <form method="post" action="/cgi-bin/koha/members/member-flags.pl">
-    <input type="hidden" name="member" value="<!-- TMPL_VAR NAME="member" -->" />
+    <input type="hidden" name="member" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="newflags" value="1" />
     <h1>Déterminer les habilitations de <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></h1>
 <table>
@@ -46,7 +48,7 @@
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

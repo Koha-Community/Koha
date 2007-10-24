@@ -22,6 +22,7 @@
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Détermine les serveurs Z3950 sur lesquels vous voulez que Koha cherche." class="form-text">
 				<input type="submit" name="op" id="opac-submit" value="Valider" class="form-submit">
+				<input type="hidden" name="idx" value="kw,wrdl" />
 		</form>
 	</div>
 			<ul>

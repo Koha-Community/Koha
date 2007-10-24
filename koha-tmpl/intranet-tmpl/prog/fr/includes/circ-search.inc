@@ -19,8 +19,9 @@
 	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Entrer les termes de recherche :</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-			 <input type="text" name="q" id="search-form" size="40" />
-				<input type="submit" name="op" id="opac-submit" value="Valider" class="form-submit">
+                    <input type="text" name="q" id="search-form" size="40" />
+                    <input type="hidden" name="idx" value="kw,wrdl" />
+                    <input type="submit" name="op" id="opac-submit" value="Valider" class="form-submit">
 		</form>
 	</div>
 			<ul>
