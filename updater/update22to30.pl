@@ -1821,7 +1821,7 @@ my $DBversion = "3.00.00.000";
     foreach $table ( keys %requiretables ) {
         unless ( $existingtables{$table} ) {
         print "Adding $table table...\n" unless $silent;
-            my $sth = $dbh->prepare("create table $table $requiretables{$table}");
+            my $sth = $dbh->prepare("create table $table $requiretables{$table} ENGINE=InnoDB DEFAULT CHARSET=utf8");
             $sth->execute;
             if ( $sth->err ) {
                 print "Error : $sth->errstr \n";
