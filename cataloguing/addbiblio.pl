@@ -31,6 +31,7 @@ use C4::Log;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Branch;    # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
+use C4::ImportBatch;
 
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
@@ -44,9 +45,9 @@ our($tagslib,$authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 
 =item MARCfindbreeding
 
-    $record = MARCfindbreeding($dbh, $breedingid);
+    $record = MARCfindbreeding($breedingid);
 
-Look up the breeding farm with database handle $dbh, for the
+Look up the import record repository for the record with
 record with id $breedingid.  If found, returns the decoded
 MARC::Record; otherwise, -1 is returned (FIXME).
 Returns as second parameter the character encoding.
@@ -54,11 +55,8 @@ Returns as second parameter the character encoding.
 =cut
 
 sub MARCfindbreeding {
-    my ( $dbh, $id ) = @_;
-    my $sth =
-      $dbh->prepare("select file,marc,encoding from marc_breeding where id=?");
-    $sth->execute($id);
-    my ( $file, $marc, $encoding ) = $sth->fetchrow;
+    my ( $id ) = @_;
+    my ($marc, $encoding) = GetImportRecordMarc($id);
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
@@ -768,7 +766,7 @@ if (($biblionumber) && !($breedingid)){
 	$record = GetMarcBiblio($biblionumber);
 }
 if ($breedingid) {
-    ( $record, $encoding ) = MARCfindbreeding( $dbh, $breedingid ) ;
+    ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
 }
 
 $is_a_modif = 0;

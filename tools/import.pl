@@ -77,7 +77,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
 	while (<$uploadmarc>) {
 		$marcrecord.=$_;
 	}
-	my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax,int(rand(99999)));
+	my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax,int(rand(99999)), 'batch');
 
 	$template->param(imported => $imported,
 							alreadyindb => $alreadyindb,

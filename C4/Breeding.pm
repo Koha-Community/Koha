@@ -21,6 +21,7 @@ use strict;
 use C4::Biblio;
 use C4::Koha;
 use MARC::File::USMARC;
+use C4::ImportBatch;
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -35,12 +36,13 @@ C4::Breeding : script to add a biblio in marc_breeding table.
 =head1 SYNOPSIS
 
     use C4::Scan;
-    &ImportBreeding($marcrecords,$overwrite_biblio,$filename,$z3950random);
+    &ImportBreeding($marcrecords,$overwrite_biblio,$filename,$z3950random,$batch_type);
 
     C<$marcrecord> => the MARC::Record
     C<$overwrite_biblio> => if set to 1 a biblio with the same ISBN will be overwritted.
                                 if set to 0 a biblio with the same isbn will be ignored (the previous will be kept)
-                                if set to -1 the biblio will be added anyway (more than 1 biblio with the same ISBN possible in the breeding
+                                if set to -1 the biblio will be added anyway (more than 1 biblio with the same ISBN 
+                                possible in the breeding
     C<$encoding> => USMARC
                         or UNIMARC. used for char_decoding.
                         If not present, the parameter marcflavour is used instead
@@ -60,22 +62,30 @@ C4::Breeding : script to add a biblio in marc_breeding table.
 
 =head2 ImportBreeding
 
-	ImportBreeding($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random);
+	ImportBreeding($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random,$batch_type);
 
 	TODO description
 
 =cut
 
 sub ImportBreeding {
-    my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random) = @_;
+    my ($marcrecords,$overwrite_biblio,$filename,$encoding,$z3950random,$batch_type) = @_;
     my @marcarray = split /\x1D/, $marcrecords;
     
     my $dbh = C4::Context->dbh;
+    
+    my $batch_id = 0;
+    if ($batch_type eq 'z3950') {
+        $batch_id = GetZ3950BatchId($filename);
+    } else {
+        # create a new one
+        # FIXME - handle comments
+        $batch_id = AddImportBatch('create_new', 'staging', 'batch', $filename, '');
+    }
     my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");
     my $searchissn = $dbh->prepare("select biblioitemnumber from biblioitems where issn=?");
-    my $searchbreeding = $dbh->prepare("select id from marc_breeding where isbn=? and title=?");
-    my $insertsql = $dbh->prepare("insert into marc_breeding (file,isbn,title,author,marc,encoding,z3950random) values(?,?,?,?,?,?,?)");
-    my $replacesql = $dbh->prepare("update marc_breeding set file=?,isbn=?,title=?,author=?,marc=?,encoding=?,z3950random=? where id=?");
+    # FIXME -- not sure that this kind of checking is actually needed
+    my $searchbreeding = $dbh->prepare("select import_record_id from import_biblios where isbn=? and title=?");
     
     $encoding = C4::Context->preference("marcflavour") unless $encoding;
     # fields used for import results
@@ -86,23 +96,20 @@ sub ImportBreeding {
     my $breedingid;
     for (my $i=0;$i<=$#marcarray;$i++) {
         my $marcrecord = FixEncoding($marcarray[$i]."\x1D");
-        
+       
+        # FIXME - currently this does nothing 
         my @warnings = $marcrecord->warnings();
         
         if (scalar($marcrecord->fields()) == 0) {
             $notmarcrecord++;
         } else {
             my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,'');
-            my $isbnlength=10;
-            if($oldbiblio->{isbn}){
-                $isbnlength = length($oldbiblio->{isbn});
-            }
-            # if isbn found and biblio does not exist, add it. If isbn found and biblio exists, overwrite or ignore depending on user choice
+            # if isbn found and biblio does not exist, add it. If isbn found and biblio exists, 
+            # overwrite or ignore depending on user choice
             # drop every "special" char : spaces, - ...
-            $oldbiblio->{isbn} =~ s/ |-|\.//g,
-            $oldbiblio->{isbn} = substr($oldbiblio->{isbn},0,$isbnlength);
-            $oldbiblio->{issn} =~ s/ |-|\.//g,
-            $oldbiblio->{issn} = substr($oldbiblio->{issn},0,10);
+            $oldbiblio->{isbn} =~ s/\(.*$//;
+            $oldbiblio->{isbn} =~ tr/ -_//;
+            $oldbiblio->{isbn} = uc $oldbiblio->{isbn}; 
             # search if biblio exists
             my $biblioitemnumber;
             if ($oldbiblio->{isbn}) {
@@ -117,6 +124,9 @@ sub ImportBreeding {
             if ($biblioitemnumber) {
                 $alreadyindb++;
             } else {
+                # FIXME - in context of batch load,
+                # rejecting records because already present in the reservoir
+                # not correct in every case.
                 # search in breeding farm
                 if ($oldbiblio->{isbn}) {
                     $searchbreeding->execute($oldbiblio->{isbn},$oldbiblio->{title});
@@ -128,13 +138,11 @@ sub ImportBreeding {
                 if ($breedingid && $overwrite_biblio eq '0') {
                     $alreadyinfarm++;
                 } else {
-                    my $recoded;
-                    $recoded = $marcrecord->as_usmarc();
                     if ($breedingid && $overwrite_biblio eq '1') {
-                        $replacesql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,$isbnlength),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random,$breedingid);
+                        ModBiblioInBatch($breedingid, $marcrecord);
                     } else {
-                        $insertsql ->execute($filename,substr($oldbiblio->{isbn}.$oldbiblio->{issn},0,$isbnlength),$oldbiblio->{title},$oldbiblio->{author},$recoded,$encoding,$z3950random);
-                    	$breedingid=$dbh->{'mysql_insertid'};
+                        my $import_id = AddBiblioToBatch($batch_id, $imported, $marcrecord, $encoding, $z3950random);
+                        $breedingid = $import_id;
                     }
                     $imported++;
                 }
@@ -165,7 +173,11 @@ sub BreedingSearch {
     my $sth;
     my @results;
 
-    $query = "Select id,file,isbn,title,author from marc_breeding where ";
+    $query = "SELECT import_record_id, file_name, isbn, title, author
+              FROM  import_biblios 
+              JOIN import_records USING (import_record_id)
+              JOIN import_batches USING (import_batch_id)
+              WHERE ";
     if ($z3950random) {
         $query .= "z3950random = ?";
         @bind=($z3950random);
@@ -187,6 +199,12 @@ sub BreedingSearch {
     $sth->execute(@bind);
     while (my $data = $sth->fetchrow_hashref) {
             $results[$count] = $data;
+            # FIXME - hack to reflect difference in name 
+            # of columns in old marc_breeding and import_records
+            # There needs to be more separation between column names and 
+            # field names used in the templates </soapbox>
+            $data->{'file'} = $data->{'file_name'};
+            $data->{'id'} = $data->{'import_record_id'};
             $count++;
     } # while
 
