@@ -837,6 +837,109 @@ CREATE TABLE `ethnicity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `import_batches`
+--
+
+DROP TABLE IF EXISTS `import_batches`;
+CREATE TABLE `import_batches` (
+  `import_batch_id` int(11) NOT NULL auto_increment,
+  `template_id` int(11) default NULL,
+  `branchcode` varchar(10) default NULL,
+  `num_biblios` int(11) NOT NULL default 0,
+  `num_items` int(11) NOT NULL default 0,
+  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `overlay_action` enum('replace', 'create_new', 'use_template') NOT NULL default 'create_new',
+  `import_status` enum('staging', 'staged', 'importing', 'imported', 'reverting', 'reverted', 'cleaned') NOT NULL default 'staging',
+  `batch_type` enum('batch', 'z3950') NOT NULL default 'batch',
+  `file_name` varchar(100),
+  `comments` mediumtext,
+  PRIMARY KEY (`import_batch_id`),
+  KEY `branchcode` (`branchcode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `import_records`
+--
+
+DROP TABLE IF EXISTS `import_records`;
+CREATE TABLE `import_records` (
+  `import_record_id` int(11) NOT NULL auto_increment,
+  `import_batch_id` int(11) NOT NULL,
+  `branchcode` varchar(10) default NULL,
+  `record_sequence` int(11) NOT NULL default 0,
+  `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `import_date` DATE default NULL,
+  `marcxml` longtext NOT NULL,
+  `marcxml_old` longtext NOT NULL,
+  `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio',
+  `overlay_status` enum('no_match', 'auto_match', 'manual_match', 'match_applied') NOT NULL default 'no_match',
+  `status` enum('error', 'staged', 'imported', 'reverted', 'items_reverted') NOT NULL default 'staged',
+  `import_error` mediumtext,
+  `encoding` varchar(40) NOT NULL default '',
+  `z3950random` varchar(40) default NULL,
+  PRIMARY KEY (`import_record_id`),
+  CONSTRAINT `import_records_ifbk_1` FOREIGN KEY (`import_batch_id`)
+             REFERENCES `import_batches` (`import_batch_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `branchcode` (`branchcode`),
+  KEY `batch_sequence` (`import_batch_id`, `record_sequence`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for `import_record_matches`
+--
+DROP TABLE IF EXISTS `import_record_matches`;
+CREATE TABLE `import_record_matches` (
+  `import_record_id` int(11) NOT NULL,
+  `candidate_match_id` int(11) NOT NULL,
+  `score` int(11) NOT NULL default 0,
+  CONSTRAINT `import_record_matches_ibfk_1` FOREIGN KEY (`import_record_id`) 
+             REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `record_score` (`import_record_id`, `score`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `import_biblios`
+--
+
+DROP TABLE IF EXISTS `import_biblios`;
+CREATE TABLE `import_biblios` (
+  `import_record_id` int(11) NOT NULL,
+  `matched_biblionumber` int(11) default NULL,
+  `control_number` varchar(25) default NULL,
+  `original_source` varchar(25) default NULL,
+  `title` varchar(128) default NULL,
+  `author` varchar(80) default NULL,
+  `isbn` varchar(14) default NULL,
+  `issn` varchar(9) default NULL,
+  `has_items` tinyint(1) NOT NULL default 0,
+  CONSTRAINT `import_biblios_ibfk_1` FOREIGN KEY (`import_record_id`) 
+             REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `matched_biblionumber` (`matched_biblionumber`),
+  KEY `title` (`title`),
+  KEY `isbn` (`isbn`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `import_items`
+--
+
+DROP TABLE IF EXISTS `import_items`;
+CREATE TABLE `import_items` (
+  `import_items_id` int(11) NOT NULL auto_increment,
+  `import_record_id` int(11) NOT NULL,
+  `itemnumber` int(11) default NULL,
+  `branchcode` varchar(10) default NULL,
+  `status` enum('error', 'staged', 'imported', 'reverted') NOT NULL default 'staged',
+  `marcxml` longtext NOT NULL,
+  `import_error` mediumtext,
+  PRIMARY KEY (`import_items_id`),
+  CONSTRAINT `import_items_ibfk_1` FOREIGN KEY (`import_record_id`) 
+             REFERENCES `import_records` (`import_record_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `itemnumber` (`itemnumber`),
+  KEY `branchcode` (`branchcode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `issues`
 --
 
