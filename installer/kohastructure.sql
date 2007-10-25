@@ -869,6 +869,7 @@ CREATE TABLE `import_records` (
   `record_sequence` int(11) NOT NULL default 0,
   `upload_timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `import_date` DATE default NULL,
+  `marc` longblob NOT NULL,
   `marcxml` longtext NOT NULL,
   `marcxml_old` longtext NOT NULL,
   `record_type` enum('biblio', 'auth', 'holdings') NOT NULL default 'biblio',
