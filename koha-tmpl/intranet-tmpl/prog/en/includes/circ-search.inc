@@ -147,20 +147,30 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 <!-- /TMPL_IF -->
 
     </form>
-	</div>
-	<div id="catalog_search" class="residentsearch">
-	<p class="tip">Enter search keywords:</p>
-		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-                    <input type="text" name="q" id="search-form" size="40" />
-                    <input type="hidden" name="idx" value="kw,wrdl" />
-                    <input type="submit" name="op" id="opac-submit" value="Submit"  class="form-submit" />
-		</form>
-	</div>
-			<ul>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
-			</ul>	
+</div>  
+
+<div id="checkin_search" class="residentsearch">
+    <p class="tip">Scan a barcode to check in:</p>
+    <form method="post" action="/cgi-bin/koha/circ/returns.pl">
+        <input name="barcode" id="ret_barcode" size="40" maxlength="14" />
+        <input value="Submit" type="submit" />
+    </form>
+</div>
+
+<div id="catalog_search" class="residentsearch">
+    <p class="tip">Enter search keywords:</p>
+    <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
+        <input type="text" name="q" id="search-form" size="40" />
+        <input type="submit" name="op" id="opac-submit" value="Submit"  class="form-submit" />
+    </form>
+</div>
+
+<ul>
+    <li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
+    <li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li>
+    <li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
+</ul>   
+
 </div>
 
 <!-- End Circulation Resident Search Box -->

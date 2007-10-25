@@ -102,8 +102,7 @@
     <p class="tip">Entrer les termes de recherche :</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         <input type="text" name="q" id="search-form" size="40" />
-=======
->>>>>>> french translation updated (again...):koha-tmpl/intranet-tmpl/prog/fr/includes/circ-search-autocompl.inc
+        <input type="submit" name="op" id="opac-submit" value="Valider" class="form-submit">
     </form>
 </div>
 
