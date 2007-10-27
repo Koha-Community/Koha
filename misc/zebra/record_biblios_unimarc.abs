@@ -1,4 +1,3 @@
-
 # indexing rules. It
 # results in a server which provides a passable Bath level 0 and 1 service
 ############################################################################
@@ -39,8 +38,8 @@ melm 200$b      Material-type,Koha-ItemType
 
 
 #melm 100$9   Cross-Reference !:w
-melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),Date-of-publication:n:range(data,9,4),Date-of-publication:n:range(data,13,4),Date-of-publication:s:range(data,9,4),Date-of-publication:s:range(data,13,4),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2)
-#,char-encoding:n:range(data,30,2),script-title:n:range(data,34,2)
+#melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),Date-of-publication:n:range(data,9,4),Date-of-publication:n:range(data,13,4),Date-of-publication:s:range(data,9,4),Date-of-publication:s:range(data,13,4),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2)
+melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
 melm 101     Language
 melm 102$a     Country-heading
 
@@ -86,58 +85,58 @@ melm 200$b      Material-type
 melm 101$a		Code-Language:w
 
 ############ AUTHORS ##################
-# main author
-melm 200$f		author:w,author:p,author:s
-# other authors
-melm 200$g		author:w,author:p
-# physical author
+# main Author
+melm 200$f		Author:w,Author:p,Author:s
+# other Authors
+melm 200$g		Author:w,Author:p
+# physical Author
 melm 700$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 700$a    author,Author-name-personal                                                       !:w,!:p
-melm 700    author,Author-name-personal                                                       !:w,!:p
-
+melm 700$a    Author,Author-name-personal,Author:p,Author-name-personal:p                                                  melm 700    Author,Author-name-personal,Author:p,Author-name-personal:p                                                    
 melm 701$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 701    author,Author-name-personal                                                       !:w,!:p
+melm 701    Author,Author-name-personal,Author:p,Author-name-personal:p
 melm 702$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 702    author,Author-name-personal                                                       !:w,!:p
-# collective author
+melm 702    Author,Author-name-personal,Author:p,Author-name-personal:p
+# collective Author
 melm 710$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 710    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
+melm 710    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
 melm 711$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 711    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
+melm 711    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
+
 melm 712$9        Koha-Auth-Number,Koha-Auth-Number:n
-melm 712    author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name !:w,!:p
+melm 712    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
+
 
 
 ############## TITLE ##################
-# main title
-melm 200$a		title:w,title:p,title:s
-# title 2
-melm 200$c		title:w,title:p
-# // title
-melm 200$d		title:w,title:p
-# subtitle
-melm 200$e		title:w,title:p
+# main Title
+melm 200$a		Title:w,Title:p,Title:s
+# Title 2
+melm 200$c		Title:w,Title:p
+# // Title
+melm 200$d		Title:w,Title:p
+# subTitle
+melm 200$e		Title:w,Title:p
 
-melm 205    Title !:w,!:p
+melm 205    Title,Title:p
 
-melm 208    Serials !:w,!:p
-melm 207    Printed-Music !:w,!:p
+melm 208    Serials,Serials:p
+melm 207    Printed-Music,Printed-Music:p
 
 
 
-melm 210$a    Place-Publication !:w,!:p
-melm 210$c    Publisher   !:w,!:p
-melm 210$d    Date-of-Publication,Date-of-Publication,Date !:y:s
+melm 210$a    Place-Publication,Place-Publication:p
+melm 210$c    Publisher,Publisher:p
+melm 210$d    Date-of-Publication:y,Date:y,Date-of-Publication:s,Date:s
 
 melm 215        Physical-detail
 
 #Series
 melm 225$a      Title-series
 melm 225$d      Title-series
-#Subtitle
+#SubTitle
 melm 225$e      Title-series 
 #Authors
-melm 225$f      Author,Author-Title-series
+melm 225$f      Author,Author:p,Author-Title-series
 #Part-Title
 melm 225$h      Title-series 
 #Part Number
@@ -206,25 +205,25 @@ melm 432$t    Title
 melm 440$t    Title
 melm 441$t    Title
 melm 445$t    Title
-melm 400$d    Date-of-Publication !:n,!:s
-melm 401$d    Date-of-Publication !:n,!:s
-melm 403$d    Date-of-Publication !:n,!:s
-melm 410$d    Date-of-Publication !:n,!:s
-melm 412$d    Date-of-Publication !:n,!:s
-melm 413$d    Date-of-Publication !:n,!:s
-melm 414$d    Date-of-Publication !:n,!:s
-melm 415$d    Date-of-Publication !:n,!:s
-melm 416$d    Date-of-Publication !:n,!:s
-melm 417$d    Date-of-Publication !:n,!:s
-melm 418$d    Date-of-Publication !:n,!:s
-melm 419$d    Date-of-Publication !:n,!:s
-melm 420$d    Date-of-Publication !:n,!:s
-melm 430$d    Date-of-Publication !:n,!:s
-melm 431$d    Date-of-Publication !:n,!:s
-melm 432$d    Date-of-Publication !:n,!:s
-melm 440$d    Date-of-Publication !:n,!:s
-melm 441$d    Date-of-Publication !:n,!:s
-melm 445$d    Date-of-Publication !:n,!:s
+melm 400$d    Date-of-Publication:n,Date-of-Publication:s
+melm 401$d    Date-of-Publication:n,Date-of-Publication:s
+melm 403$d    Date-of-Publication:n,Date-of-Publication:s
+melm 410$d    Date-of-Publication:n,Date-of-Publication:s
+melm 412$d    Date-of-Publication:n,Date-of-Publication:s
+melm 413$d    Date-of-Publication:n,Date-of-Publication:s
+melm 414$d    Date-of-Publication:n,Date-of-Publication:s
+melm 415$d    Date-of-Publication:n,Date-of-Publication:s
+melm 416$d    Date-of-Publication:n,Date-of-Publication:s
+melm 417$d    Date-of-Publication:n,Date-of-Publication:s
+melm 418$d    Date-of-Publication:n,Date-of-Publication:s
+melm 419$d    Date-of-Publication:n,Date-of-Publication:s
+melm 420$d    Date-of-Publication:n,Date-of-Publication:s
+melm 430$d    Date-of-Publication:n,Date-of-Publication:s
+melm 431$d    Date-of-Publication:n,Date-of-Publication:s
+melm 432$d    Date-of-Publication:n,Date-of-Publication:s
+melm 440$d    Date-of-Publication:n,Date-of-Publication:s
+melm 441$d    Date-of-Publication:n,Date-of-Publication:s
+melm 445$d    Date-of-Publication:n,Date-of-Publication:s
 melm 400    Link
 melm 401    Link
 melm 403    Link
@@ -245,7 +244,7 @@ melm 440    Link
 melm 441    Link
 melm 445    Link
 
-# authorities title
+# Authorities Title
 melm 500$9    Koha-Auth-Number,Koha-Auth-Number:n
 melm 501$9    Koha-Auth-Number,Koha-Auth-Number:n
 melm 503$9    Koha-Auth-Number,Koha-Auth-Number:n
@@ -266,62 +265,62 @@ melm 540$9    Koha-Auth-Number,Koha-Auth-Number:n
 melm 541$9    Koha-Auth-Number,Koha-Auth-Number:n
 melm 545$9    Koha-Auth-Number,Koha-Auth-Number:n
 
-melm 500		title
-melm 501		title
-melm 503		title
-melm 510		title
-melm 512		title
-melm 513		title
-melm 514		title
-melm 515		title
-melm 516		title
-melm 517		title
-melm 518		title
-melm 519		title
-melm 520		title
-melm 530		title
-melm 531		title
-melm 532		title
-melm 540		title
-melm 541		title
-melm 545		title
+melm 500		Title,Title:p
+melm 501		Title,Title:p
+melm 503		Title,Title:p
+melm 510		Title,Title:p
+melm 512		Title,Title:p
+melm 513		Title,Title:p
+melm 514		Title,Title:p
+melm 515		Title,Title:p
+melm 516		Title,Title:p
+melm 517		Title,Title:p
+melm 518		Title,Title:p
+melm 519		Title,Title:p
+melm 520		Title,Title:p
+melm 530		Title,Title:p
+melm 531		Title,Title:p
+melm 532		Title,Title:p
+melm 540		Title,Title:p
+melm 541		Title,Title:p
+melm 545		Title,Title:p
 
 
 ########## NOTES #################
-melm 300$a		Note	!:w,!:p
-melm 301$a		Note	!:w,!:p
-melm 302$a		Note	!:w,!:p
-melm 303$a		Note	!:w,!:p
-melm 304$a		Note	!:w,!:p
-melm 305$a		Note	!:w,!:p
-melm 306$a		Note	!:w,!:p
-melm 307$a		Note	!:w,!:p
-melm 308$a		Note	!:w,!:p
-melm 309$a		Note	!:w,!:p
-melm 310$a		Note	!:w,!:p
-melm 311$a		Note	!:w,!:p
-melm 312$a		Note	!:w,!:p
-melm 313$a		Note	!:w,!:p
-melm 314$a		Note	!:w,!:p
-melm 315$a		Note	!:w,!:p
-melm 316$a		Note	!:w,!:p
-melm 317$a		Note	!:w,!:p
-melm 318$a		Note	!:w,!:p
-melm 320$a		Note	!:w,!:p
-melm 321$a		Note	!:w,!:p
-melm 322$a		Note	!:w,!:p
-melm 323$a		Note	!:w,!:p
-melm 324$a		Note	!:w,!:p
-melm 325$a		Note	!:w,!:p
-melm 326$a		Note	!:w,!:p
-melm 327$a		Note	!:w,!:p
-melm 328$a		Note	!:w,!:p
-melm 330$a		Note	!:w,!:p
-melm 332$a		Note	!:w,!:p
-melm 333$a		Note	!:w,!:p
-melm 336$a		Note	!:w,!:p
-melm 337$a		Note	!:w,!:p
-melm 345$a		Note	!:w,!:p
+melm 300$a		Note,Note:p
+melm 301$a		Note,Note:p
+melm 302$a		Note,Note:p
+melm 303$a		Note,Note:p
+melm 304$a		Note,Note:p
+melm 305$a		Note,Note:p
+melm 306$a		Note,Note:p
+melm 307$a		Note,Note:p
+melm 308$a		Note,Note:p
+melm 309$a		Note,Note:p
+melm 310$a		Note,Note:p
+melm 311$a		Note,Note:p
+melm 312$a		Note,Note:p
+melm 313$a		Note,Note:p
+melm 314$a		Note,Note:p
+melm 315$a		Note,Note:p
+melm 316$a		Note,Note:p
+melm 317$a		Note,Note:p
+melm 318$a		Note,Note:p
+melm 320$a		Note,Note:p
+melm 321$a		Note,Note:p
+melm 322$a		Note,Note:p
+melm 323$a		Note,Note:p
+melm 324$a		Note,Note:p
+melm 325$a		Note,Note:p
+melm 326$a		Note,Note:p
+melm 327$a		Note,Note:p
+melm 328$a		Note,Note:p
+melm 330$a		Note,Note:p
+melm 332$a		Note,Note:p
+melm 333$a		Note,Note:p
+melm 336$a		Note,Note:p
+melm 337$a		Note,Note:p
+melm 345$a		Note,Note:p
 
 ########### SUBJECTS (6xx) ##################
 melm 600$9      Koha-Auth-Number,Koha-Auth-Number:n
@@ -333,14 +332,14 @@ melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n
 
-melm 600$a		author,Author-name-personal                                                       !:w,!:p
+melm 600$a		Author,Author-name-personal,Author:p,Author-name-personal:p
 melm 600		subject-heading,subject-heading:p
-melm 601$a		author,Author-name-personal                                                       !:w,!:p
+melm 601$a		Author,Author-name-personal,Author:p,Author-name-personal:p
 melm 601		subject-heading,subject-heading:p
-melm 604$a		author,Author-name-personal                                                       !:w,!:p
-melm 604$t		title
-melm 610$t		title
-melm 605$a		title
+melm 604$a		Author,Author-name-personal,Author:p,Author-name-personal:p
+melm 604$t		Title
+melm 610$t		Title
+melm 605$a		Title
 melm 606		subject-heading,subject-heading:p
 melm 610		subject-heading
 
@@ -359,14 +358,13 @@ melm 676$a		Dewey-classification:w,Dewey-classification:s
 #############"# item information (based on 995) ###############
 melm 995$j		LC-card-number:s
 
-melm 995$k		Call-Number:p,Local-classification:p,lcn:p
-
 #melm 952$a		Local-classification
 #melm 995$a		Record-source
 melm 995$a		Branch,Host-item
 melm 995$c		Branch,Record-Source
 melm 995$d		Branch,Record-Source
 melm 995$f		Stock-number
+melm 995$k    Call-Number,Local-Classification,lcn,Call-Number:p,Local-Classification:p,lcn:p
 melm 995$s      popularity:n,popularity:s
 melm 995$n    onloan:d,onloan:n,onloan:s
 #melm 952$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
