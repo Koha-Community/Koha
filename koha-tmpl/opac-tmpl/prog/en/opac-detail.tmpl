@@ -64,7 +64,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="author" -->
     <p><label><b>Author: </b></label>
-        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->">
+        <a href="/cgi-bin/koha/opac-search.pl?q=au,wrdl:<!-- TMPL_VAR NAME="author" -->">
             <!-- TMPL_VAR NAME="author" -->&nbsp;
         </a>
     </p>
@@ -72,7 +72,7 @@
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <p><label><b>Additional Author:</b></label>
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->">
+        <a href="/cgi-bin/koha/opac-search.pl?q=au,wrdl:<!-- TMPL_VAR NAME="value" -->">
             <!-- TMPL_VAR NAME="value" -->
         </a>&nbsp;|&nbsp;
         <!-- /TMPL_LOOP -->
@@ -86,7 +86,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="publishercode" -->
     <p><label><b>Published by :</b></label>
-        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
+        <a href="/cgi-bin/koha/opac-search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode"-->">
             <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF-->
         </a>&nbsp;
     </p>
