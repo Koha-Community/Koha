@@ -59,5 +59,5 @@
 
 <!-- local colors -->
 <!-- TMPL_IF name="intranetcolorstylesheet" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->" />
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->" />
 <!-- /TMPL_IF -->
