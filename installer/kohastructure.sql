@@ -1511,6 +1511,7 @@ CREATE TABLE `subscription` (
   `callnumber` text,
   `branchcode` varchar(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
+  `lastbranch` varchar(4),
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
