@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use C4::Context;
 use C4::Scheduler;
 use C4::Reports;
 use C4::Auth;                                                                                                                                              
@@ -25,44 +26,56 @@ use CGI;
 use C4::Output;                                                                                                                                            
 
 my $input = new CGI;
+
+my $base = C4::Context->config('intranetdir');
+my $command = "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; ".$base."/tools/runreport.pl $report $format $email";
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	    {
-			        template_name   => "tools/scheduler.tmpl",
-			          query           => $input,
-			          type            => "intranet",
-			          authnotrequired => 0,
-			          flagsrequired   => { editcatalogue => 1 },
-			          debug           => 1,
-			      }
-	); 
+		template_name   => "tools/scheduler.tmpl",
+		query           => $input,
+		type            => "intranet",
+		authnotrequired => 0,
+		flagsrequired   => { editcatalogue => 1 },
+		debug           => 1,
+	    }
+	);
 
 my $mode=$input->param('mode');
+
 if ($mode eq 'job_add') {
 	my $startday   = $input->param('startday');
 	my $startmonth = $input->param('startmonth');
 	my $startyear  = $input->param('startyear');
 	my $starttime  = $input->param('starttime');
+	my $recurring = $input->param('recurring');	
 	$starttime  =~ s/\://g;
 	my $start = $startyear . $startmonth . $startday . $starttime;
 	my $report=$input->param('report');
 	my $format=$input->param('format');
 	my $email=$input->param('email');
-	my $base = "/nzkoha/intranet";   # EDIT THIS
-	my $command = "EXPORT KOHA_CONF=\"/nzkoha/etc/koha-kapiti.conf\"; ".$base."/tools/runreport.pl $report $format $email"; # EDIT THIS
-	add_job($start,$command);
+	if ($recurring){
+	    my $frequency = $input->param('frequency');
+	    add_cron_job($start,$command);
+	}
+	else {
+	    add_at_job($start,$command);
+	}
 }
 
 if ($mode eq 'job_change'){
 	my $jobid = $input->param('jobid');
 	if ($input->param('delete')){
-		remove_job($jobid);
+		remove_at_job($jobid);
 	}
 }
+
 my $jobs = get_jobs();
 my @jobloop;
  foreach my $job (values %$jobs) {
-	             push @jobloop,$job;
-	         }
+     push @jobloop,$job;
+}
+
 @jobloop = sort {$a->{TIME} cmp $b->{TIME}} @jobloop;
 my $reports = get_saved_reports();                                                                                                                     
 $template->param( 'savedreports' => $reports ); 

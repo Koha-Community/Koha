@@ -29,7 +29,7 @@ $VERSION = 0.01;
 
 @ISA = qw(Exporter);
 @EXPORT =
-  qw(get_jobs get_job add_job remove_job);
+  qw(get_jobs get_at_jobs get_at_job add_at_job remove_at_job);
 
 =head1 NAME
 
@@ -55,33 +55,45 @@ This will return all scheduled jobs
 =cut
 
 sub get_jobs {
+    my $jobs = get_at_jobs();
+# add call to get cron jobs here too
+    return ($jobs);
+}
+
+=item get_at_jobs();
+
+This will return all At scheduled jobs
+
+=cut
+
+sub get_at_jobs {
 	my %jobs = Schedule::At::getJobs();
 	return (\%jobs);
 }
 
-=item get_job($id)
+=item get_at_job($id)
 
-This will return the job with the given id
+This will return the At job with the given id
 
 =cut
 
-sub get_job {
+sub get_at_job {
 	my ($id)=@_;
 	my %jobs = chedule::At::getJobs(JOBID => $id);
 }
 
-=item add_job ($time,$command)
+=item add_at_job ($time,$command)
 
 Given a timestamp and a command this will schedule the job to run at that time
 
 =cut
 
-sub add_job {
+sub add_at_job {
 	my ($time,$command) = @_;
 	Schedule::At::add(TIME => $time, COMMAND => $command, TAG => $command);
 }
 
-sub remove_job {
+sub remove_at_job {
 	my ($jobid)=@_;
 	Schedule::At::remove(JOBID => $jobid);
 }
