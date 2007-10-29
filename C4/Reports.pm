@@ -217,18 +217,18 @@ This is what get_columns returns.
 =cut
 
 sub build_query {
-    my ( $columns, $criteria, $orderby, $area, $totals ) = @_;
+    my ( $columns, $criteria, $orderby, $area, $totals, $definition ) = @_;
 ### $orderby
     my $keys   = $keys{$area};
     my $tables = $table_areas{$area};
 
     my $sql =
-      _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals );
+      _build_query( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition );
     return ($sql);
 }
 
 sub _build_query {
-    my ( $tables, $columns, $criteria, $keys, $orderby, $totals ) = @_;
+    my ( $tables, $columns, $criteria, $keys, $orderby, $totals, $definition) = @_;
 ### $orderby
     # $keys is an array of joining constraints
     my $dbh           = C4::Context->dbh();
@@ -245,6 +245,21 @@ sub _build_query {
 		$criteria =~ s/AND/WHERE/;
         $query .= " $criteria";
     }
+	if ($definition){
+		my @definitions = split(',',$definition);
+		my $deftext;
+		foreach my $def (@definitions){
+			my $defin=get_from_dictionary('',$def);
+			$deftext .=" ".$defin->[0]->{'saved_sql'};
+		}
+		if ($query =~ /WHERE/i){
+			$query .= $deftext;
+		}
+		else {
+			$deftext  =~ s/AND/WHERE/;
+			$query .= $deftext;			
+		}
+	}
     if ($totals) {
         my $groupby;
         my @totcolumns = split( ',', $totals );
@@ -487,10 +502,25 @@ sub save_dictionary {
 }
 
 sub get_from_dictionary {
+	my ($area,$id) = @_;
 	my $dbh = C4::Context->dbh();
 	my $query = "SELECT * FROM reports_dictionary";
+	if ($area){
+		$query.= " WHERE area = ?";
+	}
+	elsif ($id){
+		$query.= " WHERE id = ?"
+	}
 	my $sth = $dbh->prepare($query);
-	$sth->execute;
+	if ($id){
+		$sth->execute($id);
+	}
+	elsif ($area) {
+		$sth->execute($area);
+	}
+	else {
+		$sth->execute();
+	}
 	my @loop;
 	while (my $data = $sth->fetchrow_hashref()){
 		push @loop,$data;

@@ -115,6 +115,7 @@ elsif ( $phase eq 'Choose these columns' ) {
     my $type    = $input->param('type');
     my @columns = $input->param('columns');
     my $column  = join( ',', @columns );
+	my $definitions = get_from_dictionary($area);
     $template->param(
         'build4' => 1,
         'area'   => $area,
@@ -122,13 +123,16 @@ elsif ( $phase eq 'Choose these columns' ) {
         'column' => $column,
     );
     my $criteria = get_criteria($area);
-    $template->param( 'criteria' => $criteria );
+    $template->param( 'criteria' => $criteria,
+	'definitions' => $definitions);
 }
 
 elsif ( $phase eq 'Choose these criteria' ) {
     my $area     = $input->param('area');
     my $type     = $input->param('type');
     my $column   = $input->param('column');
+	my @definitions = $input->param('definition');
+	my $definition = join (',',@definitions);
     my @criteria = $input->param('criteria_column');
 	my $query_criteria;
     foreach my $crit (@criteria) {
@@ -143,6 +147,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
         'area'           => $area,
         'type'           => $type,
         'column'         => $column,
+		'definition'     => $definition,
         'criteriastring' => $query_criteria,
     );
 
@@ -185,6 +190,7 @@ elsif ( $phase eq 'Choose Totals' ) {
     my $type     = $input->param('type');
     my $column   = $input->param('column');
     my $criteria = $input->param('criteria');
+	my $definition = $input->param('definition');
     my @total_by = $input->param('total_by');
     my $totals;
     foreach my $total (@total_by) {
@@ -199,6 +205,7 @@ elsif ( $phase eq 'Choose Totals' ) {
         'column'         => $column,
         'criteriastring' => $criteria,
         'totals'         => $totals,
+		'definition'    => $definition,
     );
 
     # get columns
@@ -232,6 +239,7 @@ elsif ( $phase eq 'Build Report' ) {
     my $column   = $input->param('column');
     my $crit     = $input->param('criteria');
     my $totals   = $input->param('totals');
+	my $definition = $input->param('definition');
 #    my @criteria = split( ',', $crit );
     my $query_criteria=$crit;
     # split the columns up by ,
@@ -251,7 +259,7 @@ elsif ( $phase eq 'Build Report' ) {
 
     # get the sql
     my $sql =
-      build_query( \@columns, $query_criteria, $query_orderby, $area, $totals );
+      build_query( \@columns, $query_criteria, $query_orderby, $area, $totals, $definition );
     $template->param(
         'showreport' => 1,
         'sql'        => $sql,

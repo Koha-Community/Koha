@@ -140,6 +140,12 @@ align          : "Tl"
 <br />
 <!-- /TMPL_LOOP -->
 <br />
+<!-- TMPL_IF NAME="definitions" -->
+Dictionary Definitions <br />
+<!-- TMPL_LOOP NAME="definitions" -->
+<input type=checkbox name="definition" value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --><br />
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
 <input type="submit" name="phase" value="Choose these criteria">
 </form>
 <!-- /TMPL_IF -->
@@ -151,6 +157,7 @@ align          : "Tl"
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
+<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
 <input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
 <!-- TMPL_LOOP NAME="total_by" -->
 <input type=checkbox name="total_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
@@ -176,6 +183,7 @@ align          : "Tl"
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
 <input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
+<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
 <input type="hidden" name="totals" value="<!-- TMPL_VAR NAME="totals" -->">
 <!-- TMPL_LOOP NAME="order_by" -->
 <input type=checkbox name="order_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
