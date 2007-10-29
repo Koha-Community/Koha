@@ -363,6 +363,7 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
+  # warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -376,6 +377,7 @@ sub checkauth {
 
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
+    warn "about to check version";
     unless (C4::Context->preference('Version')) {
       if ($type ne 'opac') {
         warn "Install required, redirecting to Installer";
@@ -416,8 +418,6 @@ sub checkauth {
 		}
 =======
 #         my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-		# this should be a system preference will work on this today, by default it will use mysql
-		# but you can set it to use temporary files
         my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
 >>>>>>> Commenting out some noisy warns:C4/Auth.pm
         C4::Context->_new_userenv($sessionID);
@@ -429,6 +429,8 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
+#             warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
+#                 ".$session->param('surname').",      ".$session->param('branch');
         }
         my $ip;
         my $lasttime;
@@ -550,6 +552,7 @@ sub checkauth {
                   = $sth->fetchrow
                   if ( $sth->rows );
 
+#         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                 unless ( $sth->rows ) {
                     my $sth =
                       $dbh->prepare(
@@ -564,6 +567,7 @@ sub checkauth {
                       = $sth->fetchrow
                       if ( $sth->rows );
 
+#           warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
                         (
