@@ -24,6 +24,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Output;
 # use Smart::Comments;
+# use Data::Dumper;
 
 # set the version for version checking
 $VERSION = 0.01;
@@ -31,7 +32,9 @@ $VERSION = 0.01;
 @ISA = qw(Exporter);
 @EXPORT =
   qw(get_report_types get_report_areas get_columns build_query get_criteria
-  save_report get_saved_reports execute_query get_saved_report create_compound run_compound);
+  save_report get_saved_reports execute_query get_saved_report create_compound run_compound
+  get_column_type get_distinct_values save_dictionary get_from_dictionary
+  delete_definition);
 
 our %table_areas;
 $table_areas{'1'} =
@@ -420,6 +423,91 @@ sub create_compound {
 	return ($mastertables,$subtables);
 }
 
+=item get_column_type($column)
+
+This takes a column name of the format table.column and will return what type it is
+(free text, set values, date)
+
+=cut
+
+sub get_column_type {
+	my ($tablecolumn) = @_;
+	my ($table,$column) = split(/\./,$tablecolumn);
+	my $dbh = C4::Context->dbh();
+	my $catalog;
+	my $schema;
+
+	# mysql doesnt support a column selection, set column to %
+	my $tempcolumn='%';
+	my $sth = $dbh->column_info( $catalog, $schema, $table, $tempcolumn ) || die $dbh->errstr;
+	while (my $info = $sth->fetchrow_hashref()){
+		if ($info->{'COLUMN_NAME'} eq $column){
+			#column we want
+			if ($info->{'TYPE_NAME'} eq 'CHAR'){
+				$info->{'TYPE_NAME'} = 'distinct';
+			}
+			return $info->{'TYPE_NAME'};		
+		}
+	}
+	$sth->finish();
+}
+
+=item get_distinct_values($column)
+
+Given a column name, return an arrary ref of hashrefs suitable for use as a tmpl_loop 
+with the distinct values of the column
+
+=cut
+
+sub get_distinct_values {
+	my ($tablecolumn) = @_;
+	my ($table,$column) = split(/\./,$tablecolumn);
+	my $dbh = C4::Context->dbh();
+	my $query =
+	  "SELECT distinct($column) as availablevalues FROM $table";
+	my $sth = $dbh->prepare($query);
+	$sth->execute();
+	my @values;
+	while ( my $row = $sth->fetchrow_hashref() ) {
+		push @values, $row;
+	}
+	$sth->finish();
+	return \@values;
+}	
+
+sub save_dictionary {
+	my ($name,$description,$sql,$area) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "INSERT INTO reports_dictionary (name,description,saved_sql,area,date_created,date_modified)
+  VALUES (?,?,?,?,now(),now())";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($name,$description,$sql,$area) || return 0;
+    $sth->finish();
+    return 1;
+}
+
+sub get_from_dictionary {
+	my $dbh = C4::Context->dbh();
+	my $query = "SELECT * FROM reports_dictionary";
+	my $sth = $dbh->prepare($query);
+	$sth->execute;
+	my @loop;
+	while (my $data = $sth->fetchrow_hashref()){
+		push @loop,$data;
+		
+		}
+	$sth->finish();
+	return (\@loop);
+}
+
+sub delete_definition {
+	my ($id) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "DELETE FROM reports_dictionary WHERE id = ?";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($id);
+	$sth->finish();
+	}
 =head1 AUTHOR
 
 Chris Cormack <crc@liblime.com>
