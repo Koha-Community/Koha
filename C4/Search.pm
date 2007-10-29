@@ -963,6 +963,7 @@ sub searchResults {
             my $old_term = $term;
             if ( length($term) > 3 ) {
                 $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\])//g;
+				$term =~ s/\\//g;
 
                 #FIXME: is there a better way to do this?
                 $oldbiblio->{'title'} =~ s/$term/<span class=term>$&<\/span>/gi;
