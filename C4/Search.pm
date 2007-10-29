@@ -577,11 +577,12 @@ sub _remove_stopwords {
 sub _add_truncation {
 	my ($operand,$index) = @_;
 	my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
-	# if the index contains more than one qualifier, but not phrase:    
-	if (index($index,"phr")<0 && index($index,",")>0){
-	# 2. add truncation qualifiers if applicable
+	# if the index contains more than one qualifier, but not phrase, add truncation qualifiers
+	#if (index($index,"phr")<0 && index($index,",")>0){
+	warn "ADDING TRUNCATION QUALIFIERS";
 		my @wordlist= split (/\s/,$operand);
 		foreach my $word (@wordlist){
+			warn "WORD: $word";
 			if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
 				$word=~s/\*//;
 				push @rightlefttruncated,$word;
@@ -603,14 +604,14 @@ sub _add_truncation {
                         
 			}
 		}
-	}
-	return (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+	#}
+	return (\@nontruncated,\@righttruncated,\@lefttruncated,\@rightlefttruncated,\@regexpr);
 }
 
 sub _build_stemmed_operand {
-	my $operand = $_;
+	my ($operand) = @_;
 	my $stemmed_operand;
- 	$operand =~ s/^(and |or |not )//i;
+ 	#$operand =~ s/^(and |or |not )//i;
 	# STEMMING FIXME: may need to refine the field weighting so stemmed operands don't 
 	# disrupt the query ranking, this needs more testing
 	# FIXME: the locale should be set based on the user's language and/or search choice
@@ -630,19 +631,20 @@ sub _build_stemmed_operand {
 			$stemmed_operand .= "$stem";
 			$stemmed_operand .= "?" unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
 			$stemmed_operand .= " ";
-			$stemmed_operand =~ s/(and|or|not)//g;
-			#warn "STEM: $stemmed_operand";
 	}
+	warn "STEMMED OPERAND: $stemmed_operand";
 	return $stemmed_operand;
 }
 
 sub _build_weighted_query {
+	# FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
+	# pretty well but will work much better when we have an actual query parser
 	my ($operand,$stemmed_operand,$index) = @_;
     my $stemming      = C4::Context->preference("QueryStemming")     || 0;
     my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
 
-    my $weighted_query .= " rk=(";     # Specifies that we're applying rank
+    my $weighted_query .= " (rk=(";     # Specifies that we're applying rank
 	# keyword has different weight properties
 	if ( ( $index =~ /kw/ ) || ( !$index ) ) {
 	# a simple way to find out if this query uses an index
@@ -652,30 +654,31 @@ sub _build_weighted_query {
 		else {
 			$weighted_query .=" Title-cover,ext,r1=\"$operand\"";   # title cover as exact
 			$weighted_query .=" or ti,ext,r2=\"$operand\"";             # exact title elsewhere
-			#$weighted_query .= " or ti,phr,r3=$operand";          # index as phrase
+			$weighted_query .= " or ti,phr,r3=\"$operand\"";          # index as phrase
 			#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
-			$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # all the words in the query (wordlist)
-			$weighted_query .= " or wrd,fuzzy,r9=$operand" if $fuzzy_enabled; # add fuzzy
-			$weighted_query .= " or wrd,right-Truncation=$stemmed_operand" if $stemming; # add stemming
+			#$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # all the words in the query (wordlist)
+			$weighted_query .= " or wrd,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy
+			$weighted_query .= " or wrd,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming
 			# embedded sorting: 0 a-z; 1 z-a
 			#$weighted_query .= ") or (sort1,aut=1";
 		}
                     
 	}
-	elsif ( $index =~ /au/ ) {
-		$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
-		#$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
-		$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
-		$weighted_query .= " or $index,rt,wrd,r3=$operand";
-	}
-	elsif ( $index =~ /ti/ ) {
-		$weighted_query .=" Title-cover,ext,r1=$operand"; # index label as exact
-		$weighted_query .= " or Title-series,ext,r2=$operand";
-		#$weighted_query .= " or ti,ext,r2=$operand";
-		#$weighted_query .= " or ti,phr,r3=$operand";
-		#$weighted_query .= " or ti,wrd,r3=$operand";
-		$weighted_query .=" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
-		$weighted_query .=" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
+	#TODO: build better cases based on specific search indexes
+	#elsif ( $index =~ /au/ ) {
+	#	$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
+	#	#$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
+	#	$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
+	#	$weighted_query .= " or $index,rt,wrd,r3=$operand";
+	#}
+	#elsif ( $index =~ /ti/ ) {
+	#	$weighted_query .=" Title-cover,ext,r1=$operand"; # index label as exact
+	#	$weighted_query .= " or Title-series,ext,r2=$operand";
+	#	#$weighted_query .= " or ti,ext,r2=$operand";
+	#	#$weighted_query .= " or ti,phr,r3=$operand";
+	#	#$weighted_query .= " or ti,wrd,r3=$operand";
+	#	$weighted_query .=" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
+	#	$weighted_query .=" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
 		#$weighted_query .= " or Title-cover,wrd,r5=$operand";
 		#$weighted_query .= " or ti,ext,r6=$operand";
 		#$weighted_query .= " or ti,startswith,phr,r7=$operand";
@@ -685,16 +688,16 @@ sub _build_weighted_query {
 		#$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
 		#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
 		#$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
-	}
+	#}
 	else {
 		$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
 		#$weighted_query .= " or $index,ext,r2=$operand";            # index as exact
 		$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
 		$weighted_query .= " or $index,rt,wrd,r3=$operand";
 		$weighted_query .=" or $index,wrd,r5=$operand";    # index as word right-truncated
-		$weighted_query .= " or $index,wrd,fuzzy,r8=$operand";
+		$weighted_query .= " or $index,wrd,fuzzy,r8=$operand" if $fuzzy_enabled;
 	}
-	$weighted_query .= ")";    # close rank specification
+	$weighted_query .= "))";    # close rank specification
 	return $weighted_query;
 }
 
@@ -708,14 +711,13 @@ sub buildQuery {
     my @limits    = @$limits    if $limits;
     my @sort_by   = @$sort_by   if $sort_by;
 
-            
 	my $stemming      = C4::Context->preference("QueryStemming")     || 0;
 	my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
 	my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
 
     my $human_search_desc;      # a human-readable query
     my $machine_search_desc;    #a machine-readable query
-	warn "OPERATORS: >@operators< INDEXES: >@indexes< OPERANDS: >@operands< LIMITS: >@limits< SORTS: >@sort_by<";
+	#warn "OPERATORS: >@operators< INDEXES: >@indexes< OPERANDS: >@operands< LIMITS: >@limits< SORTS: >@sort_by<";
 	my $query = $operands[0];
 # STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
 # we can't handle field weighting, stemming until a formal query parser is written
@@ -750,66 +752,64 @@ sub buildQuery {
 			if ( $operands[$i] ) {
             	my $operand = $operands[$i];
             	my $index   = $indexes[$i];
-            	my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+				# if there's no index, don't use one, it will throw a CCL error
+				my $index_plus; $index_plus = "$index:" if $index;
+				my $index_plus_comma; $index_plus_comma="$index_plus," if $index;
 
 				# Remove Stopwords	
 				$operand = _remove_stopwords($operand,$index);
 
 				# Handle Truncation
-				my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr) = _add_truncation($operand,$index);
+				my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
+				($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _add_truncation($operand,$index);
+				#warn "TRUNCATION: NON:@$nontruncated RIGHT:@$righttruncated LEFT:@$lefttruncated RIGHTLEFT:@$rightlefttruncated REGEX:@$regexpr";
 
 				# Handle Stemming
           		my $stemmed_operand;
 				$stemmed_operand = _build_stemmed_operand($operand) if $stemming;
 
-				# FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
-				# pretty well but will work much better when we have an actual query parser
-                my $weighted_query = _build_weighted_query($operand,$stemmed_operand,$index) if $weight_fields;
+				# Handle Field Weighting
+				my $weighted_operand;
+                $weighted_operand = _build_weighted_query($operand,$stemmed_operand,$index) if $weight_fields;
 
-                # only add an operator if there is a previous operand
+				# proves we're operating in multi-leaf mode
+				# $weighted_operand = "$weighted_operand and $weighted_operand";
+				$operand = $weighted_operand if $weight_fields;
+
+                # If there's a previous operand, we need to add an operator
                 if ($previous_operand) {
                     if ( $operators[ $i - 1 ] ) {
-                        $query .= " $operators[$i-1] $index: $operand";
-                        if ( !$index ) {
-                            $human_search_desc .=
-                              "  $operators[$i-1] $operands[$i]";
-                        }
-                        else {
-                            $human_search_desc .=
-                              "  $operators[$i-1] $index: $operands[$i]";
-                        }
+						$human_search_desc .="  $operators[$i-1] $index_plus $operands[$i]";
+						$query .= " $operators[$i-1] $index_plus $operand";
                     }
-
                     # the default operator is and
                     else {
-                        $query             .= " and $index: $operand";
-                        $human_search_desc .= "  and $index: $operands[$i]";
+                        $query             .= " and $index_plus $operand";
+                        $human_search_desc .= " and $index_plus $operands[$i]";
                     }
                 }
+				# There's no previous operand - FIXME: completely ignoring our $query, no field weighting, no stemming
+				# FIXME: also, doesn't preserve original order
                 else { 
-                    if ( !$index ) {
-                        $query             .= " $operand";
-                        $human_search_desc .= "  $operands[$i]";
-                    }
-                    else {
-                      if (scalar(@righttruncated)+scalar(@lefttruncated)+scalar(@rightlefttruncated)>0){
-                         $query.= "$index: @nontruncated " if (scalar(@nontruncated)>0);
-                         if (scalar(@righttruncated)>0){
-                          $query .= "and $index,rtrn:@righttruncated ";
-                         }            
-                         if (scalar(@lefttruncated)>0){
-                          $query .= "and $index,ltrn:@lefttruncated ";
-                         }            
-                         if (scalar(@rightlefttruncated)>0){
-                          $query .= "and $index,rltrn:@rightlefttruncated ";
-                         }
-                        $query=~s/^and//;
+					# if there are terms to fit with truncation
+					if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
+						# add the non-truncated ones first
+						$query.= "$index_plus @$nontruncated " if (scalar(@$nontruncated)>0);
+						if (scalar(@$righttruncated)>0){
+							$query .= "and $index_plus_comma"."rtrn:@$righttruncated ";
+						}            
+						if (scalar(@$lefttruncated)>0){
+							$query .= "and $index_plus_comma"."ltrn:@$lefttruncated ";
+						}            
+						if (scalar(@$rightlefttruncated)>0){
+							$query .= "and $index_plus_comma"."rltrn:@$rightlefttruncated ";
+						}
+                        $query=~s/^and//; # FIXME: this is cheating :-)
                         $human_search_desc .= $query;
-                      } else {           
-                        $query             .= " $index: $operand";
-                        $human_search_desc .= "  $index: $operands[$i]";
-                      }            
-                    }
+					} else {           
+                        $query             .= " $index_plus $operand";
+                        $human_search_desc .= "  $index_plus $operands[$i]";
+					}            
                     $previous_operand = 1;
                 }
             }    #/if $operands
@@ -880,7 +880,7 @@ sub buildQuery {
         $limit_search_desc = " and ($limit_search_desc)" if $limit_search_desc;
 
     }
-	warn "LIMIT: $limit_query";
+	#warn "LIMIT: $limit_query";
     $query             .= $limit_query;
     $human_search_desc .= $limit_search_desc;
 

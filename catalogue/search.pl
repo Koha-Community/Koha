@@ -361,7 +361,7 @@ my @operators;
 @operators = split("\0",$params->{'op'}) if $params->{'op'};
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
-# can be simple or complex
+# can be single or multiple parameters separated by comma: kw,right-Truncation 
 my @indexes;
 @indexes = split("\0",$params->{'idx'});
 
@@ -387,7 +387,6 @@ $template->param(available => $available);
 push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limit-yr'};
 
 # Params that can only have one value
-my $query = $params->{'q'};
 my $scan = $params->{'scan'};
 my $results_per_page = $params->{'count'} || 20;
 my $page = $cgi->param('page') || 1;
@@ -403,7 +402,7 @@ my $federated_query;
 my $query_type; # usually not needed, but can be used to trigger ccl, cql, or pqf queries if set
 my @results;
 ## I. BUILD THE QUERY
-($error,$search_desc,$koha_query,$federated_query,$query_type) = buildQuery($query,\@operators,\@operands,\@indexes,\@limits);
+($error,$search_desc,$koha_query,$federated_query,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total; # the total results for the whole set
