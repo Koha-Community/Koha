@@ -327,11 +327,24 @@ Sub report:<select name="subreport">
 
 
 <!-- TMPL_IF NAME="retresults" -->
+<h1>Saved Report Results</h1>
+<h2><!-- TMPL_VAR NAME="name" --></h2>
+<p><!-- TMPL_VAR NAME="notes" --></p>
 <table>
 <!-- TMPL_LOOP NAME="results" -->
 <!-- TMPL_VAR NAME = "row" -->
 <!-- /TMPL_LOOP -->
 </table>
+<p>Download the report</p>
+</table>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<select name="format">
+<option value="csv">Comma Separated Text</option>
+<option value="tab">Tab Separated Text</option>
+</select>
+<input type="submit" name="phase" value="Export">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
+</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="showsql" -->
