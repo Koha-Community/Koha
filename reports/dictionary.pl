@@ -109,7 +109,7 @@ elsif ($phase eq 'New Term step 4'){
 			$tmp_hash{'distinct'} = 1;
 			  
 		}
-		if ($type eq 'DATE'){
+		if ($type eq 'DATE' || $type eq 'DATETIME'){
 			$tmp_hash{'date'}=1;
 		}
 		if ($type eq 'TEXT'){
