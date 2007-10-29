@@ -1,0 +1,76 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Tools &rsaquo; Stage MARC Records For Import</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Stage MARC Records For Import</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Stage MARC Records For Import</h1>
+
+<!-- TMPL_IF name="uploadmarc" -->
+<p>MARC Staging results :</p>
+<ul>
+	<li><!-- TMPL_VAR name="total" -->  records in file</li>
+	<li><!-- TMPL_VAR name="import_errors" --> records not staged because of MARC error</li>
+	<li><!-- TMPL_VAR name="staged" --> records staged</li>
+    <!-- TMPL_IF name="checked_matches" -->
+	<li><!-- TMPL_VAR name="matched" --> records with at least one match in catalogue</li>
+    <!-- TMPL_ELSE -->
+    <li>Did not check for matches with existing records in catalogue</li>
+    <!-- /TMPL_IF -->
+    <li><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Manage staged records</a></li>
+	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
+</ul>
+<!-- TMPL_ELSE -->
+<ul>
+	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalogue.</li>
+	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
+</ul>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<fieldset class="rows">
+<legend>Stage records into the reservoir</legend><ol>
+	<li>
+		<label for="uploadmarc">Select the file to stage: </label>
+		
+			<input type="file" id="uploadmarc" name="uploadmarc" /><br />
+		
+	</li>
+	<li>
+		<label for="comments">Notes about this file: </label>
+		
+			<input type="text" id="comments" name="comments" />
+		
+	</li>
+	<li>
+		<label for="syntax">Character encoding: </label>
+		
+			<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		
+	</li>
+</ol></fieldset>
+	<fieldset class="rows">
+	<legend>Look for existing records in catalogue?</legend><ol><li class="radio">
+		 
+		<input type="radio" id="check_for_matchesno" name="check_for_matches" value="0" checked="checked" /><label for="check_for_matchesno">Do not look for matching records (using ISBN)</label></li>
+<li class="radio">
+			<input type="radio" id="check_for_matchesyes" name="check_for_matches" value="1" /><label for="check_for_matchesyes">Look for matching records</label>
+	</li></ol></fieldset><input type="submit" value="Import" />
+</form>
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

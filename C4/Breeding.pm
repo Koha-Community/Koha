@@ -80,7 +80,6 @@ sub ImportBreeding {
         $batch_id = GetZ3950BatchId($filename);
     } else {
         # create a new one
-        # FIXME - handle comments
         $batch_id = AddImportBatch('create_new', 'staging', 'batch', $filename, '');
     }
     my $searchisbn = $dbh->prepare("select biblioitemnumber from biblioitems where isbn=?");

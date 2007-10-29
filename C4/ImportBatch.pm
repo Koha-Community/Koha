@@ -51,12 +51,18 @@ use C4::ImportBatch;
     GetZ3950BatchId
     GetImportRecordMarc
     AddImportBatch
+    GetImportBatch
     AddBiblioToBatch
     ModBiblioInBatch
 
     BatchStageMarcRecords
     BatchFindBibDuplicates
     BatchCommitBibRecords
+    BatchRevertBibRecords
+
+    GetImportBatchRangeDesc
+    GetNumberOfNonZ3950ImportBatches
+    GetImportBibliosRange
     
     GetImportBatchStatus
     SetImportBatchStatus
@@ -64,6 +70,9 @@ use C4::ImportBatch;
     SetImportBatchOverlayAction
     GetImportRecordOverlayStatus
     SetImportRecordOverlayStatus
+    GetImportRecordStatus
+    SetImportRecordStatus
+    GetImportRecordMatches
     SetImportRecordMatches
 );
 
@@ -147,21 +156,52 @@ sub AddImportBatch {
 
 }
 
+=head2 GetImportBatch 
+
+=over 4
+
+my $row = GetImportBatch($batch_id);
+
+=back
+
+Retrieve a hashref of an import_batches row.
+
+=cut
+
+sub GetImportBatch {
+    my ($batch_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("SELECT * FROM import_batches WHERE import_batch_id = ?");
+    $sth->bind_param(1, $batch_id);
+    $sth->execute();
+    my $result = $sth->fetchrow_hashref;
+    $sth->finish();
+    return $result;
+
+}
+
 =head2 AddBiblioToBatch 
 
 =over 4
 
-my $import_record_id = AddBiblioToBatch($batch_id, $record_sequence, $marc_record, $encoding, $z3950random);
+my $import_record_id = AddBiblioToBatch($batch_id, $record_sequence, $marc_record, $encoding, $z3950random, $update_counts);
 
 =back
 
 =cut
 
 sub AddBiblioToBatch {
-    my ($batch_id, $record_sequence, $marc_record, $encoding, $z3950random) = @_;
+    my $batch_id = shift;
+    my $record_sequence = shift;
+    my $marc_record = shift;
+    my $encoding = shift;
+    my $z3950random = shift;
+    my $update_counts = @_ ? shift : 1;
 
     my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'biblio', $encoding, $z3950random);
     _add_biblio_fields($import_record_id, $marc_record);
+    _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
 }
 
@@ -210,13 +250,14 @@ sub  BatchStageMarcRecords {
             push @invalid_records, $marc_blob;
         } else {
             $num_valid++;
-            $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $marc_flavor, int(rand(99999)));
+            $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $marc_flavor, int(rand(99999)), 0);
         }
     }
     unless ($leave_as_staging) {
         SetImportBatchStatus($batch_id, 'staged');
     }
-    # FIXME batch_code, number of bibs, number of items
+    # FIXME branch_code, number of bibs, number of items
+    _update_batch_record_counts($batch_id);
     return ($batch_id, $num_valid, @invalid_records);
 }
 
@@ -305,22 +346,173 @@ sub BatchCommitBibRecords {
             ($overlay_action eq 'replace' and $rowref->{'overlay_status'} eq 'no_match')) {
             $num_added++;
             my ($biblionumber, $biblioitemnumber) = AddBiblio($marc_record, '');
+            my $sth = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
+            $sth->execute($biblionumber, $rowref->{'import_record_id'});
+            $sth->finish();
+            SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } else {
             $num_updated++;
             my $biblionumber = GetBestRecordMatch($rowref->{'import_record_id'});
             my ($count, $oldbiblio) = GetBiblio($biblionumber);
             my $oldxml = GetXmlBiblio($biblionumber);
             ModBiblio($marc_record, $biblionumber, $oldbiblio->{'frameworkcode'});
-            my $dbh = C4::Context->dbh;
-            my $sth = $dbh->prepare("UPDATE import_records SET marcxml_old = ? WHERE import_record_id = ?");
+            my $sth = $dbh->prepare_cached("UPDATE import_records SET marcxml_old = ? WHERE import_record_id = ?");
             $sth->execute($oldxml, $rowref->{'import_record_id'});
             $sth->finish();
+            my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
+            $sth2->execute($biblionumber, $rowref->{'import_record_id'});
+            $sth2->finish();
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
+            SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         }
     }
     $sth->finish();
-    SetImportBatchStatus('imported');
+    SetImportBatchStatus($batch_id, 'imported');
     return ($num_added, $num_updated, $num_ignored);
+}
+
+=head2 BatchRevertBibRecords
+
+=over 4
+
+my ($num_deleted, $num_errors, $num_reverted, $num_ignored) = BatchRevertBibRecords($batch_id);
+
+=back
+
+=cut
+
+sub BatchRevertBibRecords {
+    my $batch_id = shift;
+
+    my $num_deleted = 0;
+    my $num_errors = 0;
+    my $num_reverted = 0;
+    my $num_ignored = 0;
+    # commit (i.e., save, all records in the batch)
+    # FIXME biblio only at the moment
+    SetImportBatchStatus('reverting');
+    my $overlay_action = GetImportBatchOverlayAction($batch_id);
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT import_record_id, status, overlay_status, marcxml_old, encoding, matched_biblionumber
+                             FROM import_records
+                             JOIN import_biblios USING (import_record_id)
+                             WHERE import_batch_id = ?");
+    $sth->execute($batch_id);
+    while (my $rowref = $sth->fetchrow_hashref) {
+        if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'reverted') {
+            $num_ignored++;
+        }
+        if ($overlay_action eq 'create_new' or
+            ($overlay_action eq 'replace' and $rowref->{'overlay_status'} eq 'no_match')) {
+            my $error = DelBiblio($rowref->{'matched_biblionumber'});
+            if (defined $error) {
+                $num_errors++;
+            } else {
+                $num_deleted++;
+                SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
+            }
+        } else {
+            $num_reverted++;
+            my $old_record = MARC::Record->new_from_xml($rowref->{'marcxml_old'}, 'UTF-8', $rowref->{'encoding'});
+            my $biblionumber = $rowref->{'matched_biblionumber'};
+            my ($count, $oldbiblio) = GetBiblio($biblionumber);
+            ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
+            SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
+        }
+    }
+    $sth->finish();
+    SetImportBatchStatus($batch_id, 'reverted');
+    return ($num_deleted, $num_errors, $num_reverted, $num_ignored);
+}
+
+=head2 GetImportBatchRangeDesc
+
+=over 4
+
+my $results = GetImportBatchRangeDesc($offset, $results_per_group);
+
+=back
+
+Returns a reference to an array of hash references corresponding to
+import_batches rows (sorted in descending order by import_batch_id)
+start at the given offset.
+
+=cut
+
+sub GetImportBatchRangeDesc {
+    my ($offset, $results_per_group) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("SELECT * FROM import_batches
+                                    WHERE batch_type = 'batch'
+                                    ORDER BY import_batch_id DESC
+                                    LIMIT ? OFFSET ?");
+    $sth->bind_param(1, $results_per_group);
+    $sth->bind_param(2, $offset);
+
+    my $results = [];
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @$results, $row;
+    }
+    $sth->finish();
+    return $results;
+}
+
+=head2 GetNumberOfImportBatches 
+
+=over 4
+
+my $count = GetNumberOfImportBatches();
+
+=back
+
+=cut
+
+sub GetNumberOfNonZ3950ImportBatches {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT COUNT(*) FROM import_batches WHERE batch_type='batch'");
+    $sth->execute();
+    my ($count) = $sth->fetchrow_array();
+    $sth->finish();
+    return $count;
+}
+
+=head2 GetImportBibliosRange
+
+=over 4
+
+my $results = GetImportBibliosRange($batch_id, $offset, $results_per_group);
+
+=back
+
+Returns a reference to an array of hash references corresponding to
+import_biblios/import_records rows for a given batch
+starting at the given offset.
+
+=cut
+
+sub GetImportBibliosRange {
+    my ($batch_id, $offset, $results_per_group) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("SELECT title, author, isbn, issn, import_record_id, record_sequence,
+                                           status, overlay_status
+                                    FROM   import_records
+                                    JOIN   import_biblios USING (import_record_id)
+                                    WHERE  import_batch_id = ?
+                                    ORDER BY import_record_id LIMIT ? OFFSET ?");
+    $sth->bind_param(1, $batch_id);
+    $sth->bind_param(2, $results_per_group);
+    $sth->bind_param(3, $offset);
+    my $results = [];
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @$results, $row;
+    }
+    $sth->finish();
+    return $results;
+
 }
 
 =head2 GetBestRecordMatch
@@ -476,6 +668,85 @@ sub SetImportRecordOverlayStatus {
 
 }
 
+=head2 GetImportRecordStatus
+
+=over 4
+
+my $overlay_status = GetImportRecordStatus($import_record_id);
+
+=back
+
+=cut
+
+sub GetImportRecordStatus {
+    my ($import_record_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT status FROM import_records WHERE import_record_id = ?");
+    $sth->execute($import_record_id);
+    my ($overlay_status) = $sth->fetchrow_array();
+    $sth->finish();
+    return $overlay_status;
+
+}
+
+
+=head2 SetImportRecordStatus
+
+=over 4
+
+SetImportRecordStatus($import_record_id, $new_overlay_status);
+
+=back
+
+=cut
+
+sub SetImportRecordStatus {
+    my ($import_record_id, $new_overlay_status) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("UPDATE import_records SET status = ? WHERE import_record_id = ?");
+    $sth->execute($new_overlay_status, $import_record_id);
+    $sth->finish();
+
+}
+
+=head2 GetImportRecordMatches
+
+=over 4
+
+my $results = GetImportRecordMatches($import_record_id, $best_only);
+
+=back
+
+=cut
+
+sub GetImportRecordMatches {
+    my $import_record_id = shift;
+    my $best_only = @_ ? shift : 0;
+
+    my $dbh = C4::Context->dbh;
+    # FIXME currently biblio only
+    my $sth = $dbh->prepare_cached("SELECT title, author, biblionumber, score
+                                    FROM import_records
+                                    JOIN import_record_matches USING (import_record_id)
+                                    JOIN biblio ON (biblionumber = candidate_match_id)
+                                    WHERE import_record_id = ?
+                                    ORDER BY score DESC, biblionumber DESC");
+    $sth->bind_param(1, $import_record_id);
+    my $results = [];
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @$results, $row;
+        last if $best_only;
+    }
+    $sth->finish();
+
+    return $results;
+    
+}
+
+
 =head2 SetImportRecordMatches
 
 =over 4
@@ -567,6 +838,22 @@ sub _parse_biblio_fields {
     my $dbh = C4::Context->dbh;
     my $bibliofields = TransformMarcToKoha($dbh, $marc_record, '');
     return ($bibliofields->{'title'}, $bibliofields->{'author'}, $bibliofields->{'isbn'}, $bibliofields->{'issn'});
+
+}
+
+sub _update_batch_record_counts {
+    my ($batch_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("UPDATE import_batches SET num_biblios = (
+                                    SELECT COUNT(*)
+                                    FROM import_records
+                                    WHERE import_batch_id = import_batches.import_batch_id
+                                    AND record_type = 'biblio')
+                                    WHERE import_batch_id = ?");
+    $sth->bind_param(1, $batch_id);
+    $sth->execute();
+    $sth->finish();
 
 }
 

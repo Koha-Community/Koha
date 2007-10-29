@@ -1,0 +1,196 @@
+#!/usr/bin/perl
+
+# Copyright (C) 2007 LibLime
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+
+# standard or CPAN modules used
+use CGI;
+use MARC::File::USMARC;
+
+# Koha modules used
+use C4::Context;
+use C4::Auth;
+use C4::Input;
+use C4::Output;
+use C4::Biblio;
+use C4::ImportBatch;
+use C4::Matcher;
+
+my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
+
+my $input = new CGI;
+my $op = $input->param('op');
+my $import_batch_id = $input->param('import_batch_id');
+
+# record list displays
+my $offset = $input->param('offset') || 0;
+my $results_per_page = $input->param('results_per_page') || 10; 
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "tools/manage-marc-import.tmpl",
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {parameters => 1},
+                 debug => 1,
+                 });
+
+if ($op) {
+    $template->param(script_name => $script_name, $op => 1);
+} else {
+    $template->param(script_name => $script_name);
+}
+
+if ($op eq "") {
+    # displaying a list
+    if ($import_batch_id eq "") {
+        import_batches_list($template, $offset, $results_per_page);
+    } else {
+        import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
+    }
+} elsif ($op eq "commit-batch") {
+    commit_batch($template, $import_batch_id);
+    import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
+} elsif ($op eq "revert-batch") {
+    revert_batch($template, $import_batch_id);
+    import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
+} elsif ($op eq "clean-batch") {
+    ;
+}
+
+output_html_with_http_headers $input, $cookie, $template->output;
+
+exit 0;
+
+sub import_batches_list {
+    my ($template, $offset, $results_per_page) = @_;
+    my $batches = GetImportBatchRangeDesc($offset, $results_per_page);
+
+    my @list = ();
+    foreach my $batch (@$batches) {
+        push @list, {
+            import_batch_id => $batch->{'import_batch_id'},
+            num_biblios => $batch->{'num_biblios'},
+            num_items => $batch->{'num_items'},
+            upload_timestamp => $batch->{'upload_timestamp'},
+            import_status => $batch->{'import_status'},
+            file_name => $batch->{'file_name'},
+            comments => $batch->{'comments'}
+        };
+    }
+    $template->param(batch_list => \@list); 
+    my $num_batches = GetNumberOfNonZ3950ImportBatches();
+    add_page_numbers($template, $offset, $results_per_page, $num_batches);
+    $template->param(offset => $offset);
+    $template->param(range_top => $offset + $results_per_page - 1);
+    $template->param(num_results => $num_batches);
+    $template->param(results_per_page => $results_per_page);
+
+}
+
+sub commit_batch {
+    my ($template, $import_batch_id) = @_;
+    my ($num_added, $num_updated, $num_ignored) = BatchCommitBibRecords($import_batch_id);
+    $template->param(did_commit => 1);
+    $template->param(num_added => $num_added);
+    $template->param(num_updated => $num_updated);
+    $template->param(num_ignored => $num_ignored);
+}
+
+sub revert_batch {
+    my ($template, $import_batch_id) = @_;
+    my ($num_deleted, $num_errors, $num_reverted, $num_ignored) = BatchRevertBibRecords($import_batch_id);
+    $template->param(did_revert => 1);
+    $template->param(num_deleted => $num_deleted);
+    $template->param(num_errors => $num_errors);
+    $template->param(num_reverted => $num_reverted);
+    $template->param(num_ignored => $num_ignored);
+}
+
+sub import_biblios_list {
+    my ($template, $import_batch_id, $offset, $results_per_page) = @_;
+
+    my $batch = GetImportBatch($import_batch_id);
+    my $biblios = GetImportBibliosRange($import_batch_id, $offset, $results_per_page);
+    my @list = ();
+    foreach my $biblio (@$biblios) {
+        my $citation = $biblio->{'title'};
+        $citation .= " $biblio->{'author'}" if $biblio->{'author'};
+        $citation .= " (" if $biblio->{'issn'} or $biblio->{'isbn'};
+        $citation .= $biblio->{'isbn'} if $biblio->{'isbn'};
+        $citation .= ", " if $biblio->{'issn'} and $biblio->{'isbn'};
+        $citation .= $biblio->{'issn'} if $biblio->{'issn'};
+        $citation .= ")" if $biblio->{'issn'} or $biblio->{'isbn'};
+        my $match = GetImportRecordMatches($biblio->{'import_record_id'}, 1);
+        push @list, {
+            import_record_id => $biblio->{'import_record_id'},
+            citation => $citation,
+            status => $biblio->{'status'},
+            record_sequence => $biblio->{'record_sequence'},
+            overlay_status => $biblio->{'overlay_status'},
+            match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
+            match_citation => $#$match > -1 ? $match->[0]->{'title'} . ' ' . $match->[0]->{'author'} : '',
+            match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
+        };
+    }
+    my $num_biblios = $batch->{'num_biblios'};
+    $template->param(biblio_list => \@list); 
+    add_page_numbers($template, $offset, $results_per_page, $num_biblios);
+    $template->param(offset => $offset);
+    $template->param(range_top => $offset + $results_per_page - 1);
+    $template->param(num_results => $num_biblios);
+    $template->param(results_per_page => $results_per_page);
+    $template->param(import_batch_id => $import_batch_id);
+    batch_info($template, $batch);
+    
+}
+
+sub batch_info {
+    my ($template, $batch) = @_;
+    $template->param(batch_info => 1);
+    $template->param(file_name => $batch->{'file_name'});
+    $template->param(comments => $batch->{'comments'});
+    $template->param(import_status => $batch->{'import_status'});
+    $template->param(upload_timestamp => $batch->{'upload_timestamp'});
+    $template->param(num_biblios => $batch->{'num_biblios'});
+    $template->param(num_items => $batch->{'num_biblios'});
+    if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
+        $template->param(can_commit => 1);
+    }
+    if ($batch->{'import_status'} eq 'imported') {
+        $template->param(can_revert => 1);
+    }
+}
+
+sub add_page_numbers {
+    my ($template, $offset, $results_per_page, $total_results) = @_;
+    my $max_pages = POSIX::ceil($total_results / $results_per_page);
+    return if $max_pages < 2;
+    my $current_page = int($offset / $results_per_page) + 1;
+    my @pages = ();
+    for (my $i = 1; $i <= $max_pages; $i++) {
+        push @pages, {
+            page_number => $i,
+            current_page => ($current_page == $i) ? 1 : 0,
+            offset => ($i - 1) * $results_per_page
+        }
+    }
+    $template->param(pages => \@pages);
+}
+
