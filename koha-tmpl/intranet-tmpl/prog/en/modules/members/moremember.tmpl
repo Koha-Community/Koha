@@ -5,7 +5,7 @@
 </head>
 <body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="members-search.inc" -->
+<!-- TMPL_INCLUDE NAME="patron-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --> </div>
 
@@ -16,7 +16,7 @@
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 
-<div class="yui-g" style="border : 1px solid #CCCCCC;">
+<div class="yui-g">
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron does not exist.
 <!-- TMPL_ELSE -->
@@ -45,7 +45,7 @@
 <!-- /TMPL_IF -->
 
 
- <div class="yui-u first" style="border-right : 1px solid #CCCCCC;">
+ <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
 <h3>
     <!-- TMPL_UNLESS NAME="I" -->
@@ -102,9 +102,9 @@
     <h3>Alternate Address</h3>
     <!-- TMPL_UNLESS NAME="I"-->
       <!-- TMPL_UNLESS NAME="C"-->
-  <p><strong>Alternate address: </strong><!-- TMPL_VAR NAME="B_address" --></p>
-      <p><strong>Alternate city: </strong><!-- TMPL_VAR NAME="B_city" --></p>
-      <p><strong>Alternate zipcode: </strong><!-- TMPL_VAR NAME="B_zipcode" --></p>
+  <p><!-- TMPL_VAR NAME="B_address" --><br />
+      <!-- TMPL_VAR NAME="B_city" --><br />
+      <!-- TMPL_VAR NAME="B_zipcode" --></p>
   <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
  
@@ -170,9 +170,9 @@
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table>
         <tr>
-            <th scope="col">Date due</th>
             <th scope="col">Title</th>
             <th scope="col">Barcode</th>
+            <th scope="col">Date due</th>
             <th scope="col">Itemtype</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
@@ -190,17 +190,9 @@
         <tr>
             <!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
-            <td><!-- TMPL_VAR NAME="date_due" --></td>
-            <td>
-                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                    <!-- TMPL_VAR NAME="title" -->
-                </a></p>
-                <p><!-- TMPL_VAR name="author" -->
-                    <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF -->
-                    <!-- TMPL_IF name="publicationyear" -->- <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
-                </p>
-            </td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->            </td>
             <td><!-- TMPL_VAR NAME="barcode" --></td>
+            <td><!-- TMPL_VAR NAME="date_due" --></td>
             <td>
                 <!-- TMPL_VAR NAME="itemtype_description" -->
                 <!-- TMPL_IF NAME="itemtype_image" -->
@@ -240,6 +232,8 @@
 <div id="patrons-items-reserved" class="yui-g">
 	<h2>Patron current holds</h2>
 <!-- TMPL_IF NAME="reservloop" -->
+<form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
+	<input type="hidden" name="from" value="borrower" />
 	<table>
 		<tr>
 			<th>Hold date</th>
@@ -247,7 +241,7 @@
 			<th>Title</th>
 			<th>Author</th>
 			<th>Localisation</th>
-			<th>Details</th>
+			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="reservloop" -->
 		<tr class="<!-- TMPL_VAR NAME="color" -->">
@@ -264,7 +258,7 @@
 						<!-- /TMPL_IF -->
 					</td>
 					<td>
-						<!-- TMPL_VAR NAME="title" --> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
+						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
 						<!-- TMPL_IF name="waiting" -->
 						<i>This item is available</i>
@@ -281,12 +275,17 @@
 					</td>
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
-					<td>
-					    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">view holds </a>
-					</td>
+					<td><select name="rank-request">
+			<option value="n">No</option>
+			<option value="del">Yes</option>
+			</select>
+		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /></td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
+			<p><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></p>
+	</form>
 	<!-- TMPL_ELSE -->
 	<p>Patron has nothing on hold.</p>
 	<!-- /TMPL_IF -->

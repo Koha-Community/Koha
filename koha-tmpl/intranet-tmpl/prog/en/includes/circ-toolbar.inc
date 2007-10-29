@@ -75,7 +75,7 @@ function confirm_reregistration() {
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="checkout" href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Check Out</a></li>
+	<li><a id="checkout" href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Check Out</a></li>
 	<!-- TMPL_IF name="adultborrower" --><li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Add child</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="category_type" -->
             <!--TMPL_IF NAME="guarantor"-->

@@ -103,11 +103,10 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="message" -->
-<p>
+<!-- TMPL_INCLUDE NAME="patron-toolbar.inc" -->
+<h4>
 No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
-<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=A" />Add adult</a>
-<a href="/cgi-bin/koha/members/memberentry.pl?op=add&category_type=C" />Add child</a>  
-</p>
+</h4>
 <!-- /TMPL_IF -->
 
 
@@ -139,12 +138,13 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- BARCODE ENTRY -->
 
 <!-- TMPL_IF NAME="borrowernumber" -->
-<div class="yui-g"><div class="yui-u first"><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
+<div class="yui-g">
+<!-- TMPL_UNLESS NAME="noissues" -->
+<div class="yui-u first"><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
-   
     <label for="barcode">Enter item barcode: </label>
 	<div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></div>
-	<input type="text" name="barcode" id="barcode" class="focus" size="14" /></p>
+	<input type="text" name="barcode" id="barcode" class="focus" size="14" />
     
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
@@ -511,26 +511,35 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     </fieldset>
 
 </fieldset>
-</form></div><div class="yui-u">    
+</form></div><!-- /TMPL_UNLESS --><!-- /unless noissues -->
+
+<!-- TMPL_IF NAME="noissues" --><div><!-- TMPL_ELSE --><div class="yui-u"><!-- /TMPL_IF -->
 	
     <!-- TMPL_IF NAME="flagged" -->
-        <div class="messages" style="border: 1px solid #CCC; padding: .7em; margin-top : 1em; margin-bottom : .3em;">
-		<h3>Attention:</h3>
+		<!-- TMPL_IF NAME="noissues" -->
+        <div id="circmessages" class="circmessage warning">
+		<!-- TMPL_ELSE -->
+        <div id="circmessages" class="circmessage attention">
+		<!-- /TMPL_IF -->
+		<h3><!-- TMPL_IF NAME="noissues" -->Cannot Check Out!<!-- TMPL_ELSE -->Attention:<!-- /TMPL_IF --></h3>
 		<ul>
-			<!--TMPL_IF Name="warndeparture"--><li> Patron card has expired or will expire soon.</li><!--/TMPL_IF-->
-            <!-- TMPL_IF NAME="gna" --><li>Address: Patron's address in doubt</li><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="lost" --><li>Lost: Patron's card is lost</li><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="dbarred" --><li>
-                Restricted: Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a></li><!-- /TMPL_IF -->
-        	<!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" -->Overdues: See highlighted items <a href="#checkouts">below</a><!-- /TMPL_IF --></li>
+			<!--TMPL_IF Name="warndeparture"--><li><span class="circ-hlt">Expiration:</span> Patron card has expired or will expire soon.</li><!--/TMPL_IF-->
+            <!-- TMPL_IF NAME="gna" --><li class="blocker"><span class="circ-hlt">Address:</span> Patron's address in doubt</li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="lost" --><li class="blocker"><span class="circ-hlt">Lost: </span>Patron's card is lost</li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="dbarred" --><li class="blocker">
+               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a></li><!-- /TMPL_IF -->
+        	<!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" --><span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a><!-- /TMPL_IF --></li>
             <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="charges" --><li>Fines: Patron has 
+        <!-- TMPL_IF NAME="charges" --><li><span class="circ-hlt">Fines:</span> Patron has 
             <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines</a>.
             Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li><!-- /TMPL_IF -->
 
+			</ul>
+        </div>
+
 			<!-- TMPL_IF NAME="WaitingReserveLoop" -->	
-			<li>
-			    <strong>Holds waiting:</strong>
+			<div id="holdswaiting" class="circmessage">
+		    <h4>Holds waiting:</h4>
 			        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
 			            <ul> 
 			                <li> <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"-->,<!-- /TMPL_IF --> reserved on <!-- TMPL_VAR NAME="reservedate"--> 
@@ -540,17 +549,14 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			                </li>
 			            </ul>
 			    <!-- /TMPL_LOOP -->
-			</li>
+			</div>
 			<!-- /TMPL_IF --><!-- /If WaitingReserveLoop -->
 
-			</ul>
-
-        </div>
     <!-- /TMPL_IF --> <!-- /If flagged -->
 	<!-- TMPL_IF name="notes" -->
-			<div id="circnotes" style="border: 1px solid #CCC; padding: .7em;">
+			<div id="circnotes" class="circmessage">
 			<h4>Notes:</h4>
-            <p><!-- TMPL_VAR name="notesmsg" --></>
+            <p><!-- TMPL_VAR name="notesmsg" --></p>
 			</div>
     <!-- /TMPL_IF --> <!-- /If notes -->
 
@@ -588,8 +594,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />	
         <table>
     <tr>
-        <th>Title</th>
         <th>Due date</th>
+        <th>Title</th>
         <th>Itemtype</th>
         <th>Call no</th>
         <th>Barcode</th>
@@ -604,12 +610,12 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_ELSE -->
     <tr class="highlight">
     <!-- /TMPL_IF -->
+        <td><!-- TMPL_VAR NAME="dd" --></td>
         <td>
         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
        <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF -->
         </td>
-        <td><!-- TMPL_VAR NAME="dd" --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
             <!-- TMPL_IF NAME="itemtype_image" -->
@@ -641,11 +647,11 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <tr class="highlight">
     <!-- /TMPL_IF -->
         <td>
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
-        <br /><!-- TMPL_VAR NAME="author" --> - <!-- TMPL_VAR name="itemnotes" -->
+        <!-- TMPL_VAR NAME="dd" -->
         </td>
         <td>
-        <!-- TMPL_VAR NAME="dd" -->
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
+        <br /><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF -->
         </td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
@@ -692,19 +698,18 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <th>Call Number</th>
         </tr>
         <!-- TMPL_LOOP NAME="reservloop" -->
-                <tr class="<!-- TMPL_VAR NAME="color" -->">
+        <tr class="<!-- TMPL_VAR NAME="color" -->">
                     <td>
                         <!-- TMPL_VAR NAME="reservedate" -->
                     </td>
                     <td>
-<!-- TMPL_IF name="barcodereserv" -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="waitingposition" -->
-Hold priority :
-<b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
-<!-- /TMPL_IF -->
-</td>
+                        <!-- TMPL_IF name="barcodereserv" --><!-- TMPL_VAR NAME="barcodereserv" -->
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="waitingposition" -->
+                        Hold priority :
+                        <b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
+                        <!-- /TMPL_IF -->
+                    </td>
                     <td>
                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
 
