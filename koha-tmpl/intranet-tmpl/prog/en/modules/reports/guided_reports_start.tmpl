@@ -13,7 +13,7 @@
 
 <div id="doc3" class="yui-t2">
 
-   <div id="bd">
+    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
 
@@ -23,14 +23,14 @@
      <h2>Guided Reports</h2>
      <p>Use the guided reports engine to create non standard reports.
 This feature aims to provide some middle ground between the built in
-canned reports and requiring a DBA to write the SQL code for you.</p>
+canned reports and writing custom SQL reports.</p>
      <form action="/cgi-bin/koha/reports/guided_reports.pl">
-     <h3>Build and Run existing Reports</h3>     	   						    			      
+     <h3>Build And Run Reports</h3>     	   						    			      
 		<input type="submit" name="phase" value="Build new"/>
 		<input type="submit" name="phase" value="Used saved"/>
 		<input type="submit" name="phase" value="Create report from SQL"/>
 <!--		<input type="submit" name="phase" value="Create Compound Report"/> -->
-<h3>Define Custom Criteria</h3>
+<h3>Reports Dictionary</h3>
 <p>Use the reports dictionary to define custom criteria to use in your
 reports</p>
 <input type="submit" name="phase" value="View Dictionary"/>
@@ -39,12 +39,12 @@ reports</p>
 
 <!-- TMPL_IF NAME="saved1" -->
 <h1>Load Saved Reports</h1>
-Choose the report from the list
+<p>Choose the report to run from the list</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <select name="reports">
-<!-- TMPL_LOOP NAME="savedreports" -->
-<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
-<!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="savedreports" -->
+	<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
+	<!-- /TMPL_LOOP -->
 </select>
 <input type="submit" name="phase" value="Run this report">
 </form>
@@ -84,14 +84,17 @@ Choose the report from the list
 </form>
 Tabular:
 <img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-tabular-graphic.gif" />
-Summary:
+<!--- Summary and Matrix reports have not yet been implemented-->
+<!--Summary:
 <img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-summary-graphic.gif" />
 Matrix:
-<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />
+<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />-->
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="build3" -->
 <h3>Step 3 of 6: Select Columns for Display</h3>
+<p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
@@ -160,7 +163,7 @@ align          : "Tl"
 <!-- /TMPL_LOOP -->
 </table><br />
 <!-- TMPL_IF NAME="definitions" -->
-Dictionary Definitions <br />
+<h4>Dictionary Definitions</h4> <br />
 <table>
 <!-- TMPL_LOOP NAME="definitions" -->
 
@@ -205,7 +208,7 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td>
 
 
 <!-- TMPL_IF NAME="build6" -->
-<h3>Step 6 of 6: Select the ordering</h3>
+<h3>Step 6 of 6: Select how you want the report ordered</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
@@ -245,6 +248,7 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="save" -->
+<h1>Save Your Custom Report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
@@ -262,6 +266,7 @@ Notes: <textarea name="notes"></textarea><br />
 <!-- TMPL_LOOP NAME="results" -->
 <!-- TMPL_VAR NAME="row" -->
 <!-- /TMPL_LOOP -->
+<p>Download the report</p>
 </table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <select name="format">
