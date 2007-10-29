@@ -193,6 +193,9 @@
 
 </div>
 </div>
+<!-- TMPL_IF NAME="UNIMARC" -->
+<!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" -->
+<!-- TMPL_ELSE -->
 <div id="sidebar">
 <!-- SUBTYPE LIMITS -->
         <fieldset>
@@ -258,6 +261,7 @@
        </p>
 
 </fieldset>
+<!-- /TMPL_ELSE -->
 
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Location and availability: </legend>

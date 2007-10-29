@@ -183,14 +183,11 @@ if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || (
     $template_name = 'catalogue/results.tmpl';
 }
 else {
-	# use a UNIMARC-specific template if UNIMARC
-	if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
-	$template_name = 'catalogue/advsearch_unimarc.tmpl';
-	}
-	else {
     $template_name = 'catalogue/advsearch.tmpl';
-	}
 	$template_type = 'advsearch';
+}
+if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+	$template->param('UNIMARC' => 1);
 }
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
