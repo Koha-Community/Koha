@@ -119,6 +119,7 @@ Matrix:
 <select id="selectedColumns" name="columns" multiple size="25" style="width:200px;height:300px;"></select>
 <input type="button" name="delete" value="delete" class="button" onClick="delColumn()"/>
 
+<input type=button value="Back" onClick="history.go(-1)">
 <input type="submit" name="phase" value="Choose these columns">
 </form>
 <!-- /TMPL_IF -->
@@ -169,7 +170,8 @@ TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-<input type="submit" name="phase" value="Choose these criteria">
+<input type=button value="Back" onClick="history.go(-1)">
+ <input type="submit" name="phase" value="Choose these criteria">
 </form>
 <!-- /TMPL_IF -->
 
@@ -196,7 +198,8 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td>
 </td></tr>
 <!-- /TMPL_LOOP -->
 </table>
-<input type="submit" name="phase" value="Choose Totals">
+<input type=button value="Back" onClick="history.go(-1)">
+ <input type="submit" name="phase" value="Choose These Operations">
 </form>
 <!-- /TMPL_IF -->
 
@@ -224,7 +227,8 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 <!-- /TMPL_LOOP -->
 </table>
 <br />
-<input type="submit" name="phase" value="Build Report">
+<input type=button value="Back" onClick="history.go(-1)">
+ <input type="submit" name="phase" value="Build Report">
 </form>
 <!-- /TMPL_IF -->
 
