@@ -826,6 +826,7 @@ sub buildQuery {
         $limit_search_desc = " and ($limit_search_desc)" if $limit_search_desc;
 
     }
+	warn "LIMIT: $limit_query";
     $query             .= $limit_query;
     $human_search_desc .= $limit_search_desc;
 

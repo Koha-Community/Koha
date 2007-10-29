@@ -179,7 +179,7 @@ my ($template,$borrowernumber,$cookie);
 my $template_name;
 my $template_type;
 my @params = $cgi->param("limit");
-if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) ) {
+if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'catalogue/results.tmpl';
 }
 else {
@@ -236,7 +236,7 @@ my $branches = GetBranches();
 my @branch_loop;
 #push @branch_loop, {value => "", branchname => "All Branches", };
 for my $branch_hash (sort keys %$branches) {
-    push @branch_loop, {value => "branch:$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
+    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
 
 my $categories = GetBranchCategories(undef,'searchdomain');
@@ -372,7 +372,7 @@ my @limits;
 @limits = split("\0",$params->{'limit'}) if $params->{'limit'};
 
 if($params->{'multibranchlimit'}) {
-push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+push @limits, join(" or ", map { "homebranch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
 }
 
 my $available;
