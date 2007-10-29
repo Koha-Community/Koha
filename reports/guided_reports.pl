@@ -35,6 +35,7 @@ Script to control the guided report creation
 =cut
 
 my $input = new CGI;
+my $referer = $input->referer();
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "reports/guided_reports_start.tmpl",
@@ -554,6 +555,9 @@ elsif ($phase eq 'Delete Definition'){
 	delete_definition($id);
 	print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=View%20Dictionary");
 	}
+
+$template->param( 'referer' => $referer );
+
 
 if (!$no_html){
 	output_html_with_http_headers $input, $cookie, $template->output;
