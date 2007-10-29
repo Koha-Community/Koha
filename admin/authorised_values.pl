@@ -99,11 +99,6 @@ if ($op eq 'add_form') {
 							lib => $data->{'lib'},
 							id => $data->{'id'}
 							);
-	if ($data->{'category'}) {
-		$template->param(category => "<input type=\"hidden\" name=\"category\" value=\"'$data->{'category'}'\" />$data->{'category'}");
-	} else {
-		$template->param(category => "<input type=\"text\" name=\"category\" id=\"category\" size=\"8\" maxlength=\"8\" />");
-	}
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
@@ -126,6 +121,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$id = $input->param('id') unless $id;
 	$template->param(searchfield => $searchfield,
+							Tlib => $data->{'lib'},
 							Tvalue => $data->{'authorised_value'},
 							id =>$id,
 							);
