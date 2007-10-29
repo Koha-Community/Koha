@@ -19,7 +19,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter',';','Define the default separator character for exporting reports',';|tabulation|,|/|\\|#','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Disable_Dictionary','1','If ON, disable Authority Searching and OPAC Dictionary','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption','1','If ON, enable MARC field searching',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption','0','If ON, set advanced search to be expanded by default',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FinesLog','1','If ON, log fines',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist','0','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hidelostitems','0','If ON, disables display of\"lost\" items in OPAC.','','YesNo');
@@ -110,3 +110,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SearchMyLibraryFirst','1','If ON, OPAC searches return results limited by the user\'s library by default if they are logged in',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('dontmerge','1','If ON, modifying an authority record will not update all associated bibliographic records immediately, ask your system administrator to enable the merge_authotities.pl cron job',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BiblioAddsAuthorities','1','If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryStemming','1','If ON, enables query stemming',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryFuzzy','1','If ON, enables fuzzy option for searches',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryWeightFields','1','If ON, enables field weighting',NULL,'YesNo');
