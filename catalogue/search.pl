@@ -23,14 +23,14 @@
 
 =head1 NAME
 
-search - a search script for finding records in a Koha system (Version 2.4)
+search - a search script for finding records in a Koha system (Version 3.0)
 
 =head1 OVERVIEW
 
-This script contains a demonstration of a new search API for Koha 2.4. It is
-designed to be simple to use and configure, yet capable of performing feats
-like stemming, field weighting, relevance ranking, support for multiple 
-query language formats (CCL, CQL, PQF), full or nearly full support for the
+This script contains a new search API for Koha 3.0. It is designed to be 
+simple to use and configure, yet capable of performing feats like stemming,
+field weighting, relevance ranking, support for multiple  query language
+formats (CCL, CQL, PQF), full or nearly full support for the
 bib1 attribute set, extended attribute sets defined in Zebra profiles, access
 to the full range of Z39.50 query options, federated searches on Z39.50
 targets, etc.
@@ -68,9 +68,13 @@ etc. These are not stored in the template for two reasons:
 
 =over
 
-=item 1. Efficiency - we have more control over objects inside the script, and it's possible to not duplicate things like indexes (if the search indexes were stored in the template they would need to be repeated)
+=item 1. Efficiency - we have more control over objects inside the script, 
+and it's possible to not duplicate things like indexes (if the search indexes 
+were stored in the template they would need to be repeated)
 
-=item 2. Customization - if these elements were moved to the sql database it would allow a simple librarian to determine which fields to display on the page without editing any html (also how the fields should behave when being searched).
+=item 2. Customization - if these elements were moved to the sql database it 
+would allow a simple librarian to determine which fields to display on the page 
+without editing any html (also how the fields should behave when being searched).
 
 =back
 
@@ -103,34 +107,46 @@ There are several types of queries needed in the process of search and retrieve:
 
 =item 1 Koha query - the query that is passed to Zebra
 
-This is the most complex query that needs to be built.The original design goal was to use a custom CCL2PQF query parser to translate an incoming CCL query into a multi-leaf query to pass to Zebra. It needs to be multi-leaf to allow field weighting, koha-specific relevance ranking, and stemming. When I have a chance I'll try to flesh out this section to better explain.
+This is the most complex query that needs to be built. The original design goal 
+was to use a custom CCL2PQF query parser to translate an incoming CCL query into
+a multi-leaf query to pass to Zebra. It needs to be multi-leaf to allow field 
+weighting, koha-specific relevance ranking, and stemming. When I have a chance 
+I'll try to flesh out this section to better explain.
 
-This query incorporates query profiles that aren't compatible with non-Zebra Z39.50 targets to acomplish the field weighting and relevance ranking.
+This query incorporates query profiles that aren't compatible with non-Zebra 
+Z39.50 targets to acomplish the field weighting and relevance ranking.
 
 =item 2 Federated query - the query that is passed to other Z39.50 targets
 
-This query is just the user's query expressed in CCL CQL, or PQF for passing to a non-zebra Z39.50 target (one that doesn't support the extended profile that Zebra does).
+This query is just the user's query expressed in CCL CQL, or PQF for passing to a 
+non-zebra Z39.50 target (one that doesn't support the extended profile that Zebra does).
 
-=item 3 Search description - passed to the template / saved for future refinements of the query (by user)
+=item 3 Search description - passed to the template / saved for future refinements of 
+the query (by user)
 
-This is a simple string that completely expresses the query in a way that can be parsed by Koha for future refinements of the query or as a part of a history feature. It differs from the human search description in several ways:
+This is a simple string that completely expresses the query in a way that can be parsed 
+by Koha for future refinements of the query or as a part of a history feature. It differs
+from the human search description:
 
 1. it does not contain commas or = signs
-2. 
 
 =item 4 Human search description - what the user sees in the search_desc area
 
-This is a simple string nearly identical to the Search description, but more human readable. It will contain = signs or commas, etc.
+This is a simple string nearly identical to the Search description, but more human 
+readable. It will contain = signs or commas, etc.
 
 =back
 
 =head3 2. Perform the Search
 
-This section takes the query strings and performs searches on the named servers, including the Koha Zebra server, stores the results in a deeply nested object, builds 'faceted results', and returns these objects.
+This section takes the query strings and performs searches on the named servers, including
+the Koha Zebra server, stores the results in a deeply nested object, builds 'faceted results',
+and returns these objects.
 
 =head3 3. Build HTML
 
-The final major section of this script takes the objects collected thusfar and builds the HTML for output to the template and user.
+The final major section of this script takes the objects collected thusfar and builds the
+HTML for output to the template and user.
 
 =head3 Additional Notes
 
@@ -161,12 +177,20 @@ my ($template,$borrowernumber,$cookie);
 
 # decide which template to use
 my $template_name;
+my $template_type;
 my @params = $cgi->param("limit");
 if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) ) {
     $template_name = 'catalogue/results.tmpl';
 }
 else {
+	# use a UNIMARC-specific template if UNIMARC
+	if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+	$template_name = 'catalogue/advsearch_unimarc.tmpl';
+	}
+	else {
     $template_name = 'catalogue/advsearch.tmpl';
+	}
+	$template_type = 'advsearch';
 }
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
@@ -187,10 +211,7 @@ query parser.
 =cut
 
 ## URI Re-Writing
-# FIXME: URI re-writing should be tested more carefully and may better
-# handled by mod_rewrite or something else. The code below almost works,
-# but doesn't quite handle limits correctly when they are the only
-# param passed -- I'll work on this soon -- JF
+# Deprecated, but preserved because it's interesting :-)
 #my $rewrite_flag;
 #my $uri = $cgi->url(-base => 1);
 #my $relative_url = $cgi->url(-relative=>1);
@@ -198,7 +219,7 @@ query parser.
 #warn "URI:$uri";
 #my @cgi_params_list = $cgi->param();
 #my $url_params = $cgi->Vars;
-
+#
 #for my $each_param_set (@cgi_params_list) {
 #    $uri.= join "",  map "\&$each_param_set=".$_, split("\0",$url_params->{$each_param_set}) if $url_params->{$each_param_set};
 #}
@@ -222,7 +243,7 @@ my $categories = GetBranchCategories(undef,'searchdomain');
 
 $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 
-# load the itemtypes (Called Collection Codes in the template -- used for circ rules )
+# load the itemtypes
 my $itemtypes = GetItemTypes;
 my @itemtypesloop;
 my $selected=1;
@@ -246,14 +267,10 @@ $template->param(itemtypeloop => \@itemtypesloop);
 # $template->param(itypeloop=>\@itype_loop,);
 
 # load the languages ( for switching from one template to another )
-# my @languages_options = displayLanguages($cgi);
-# my $languages_count = @languages_options;
-# if($languages_count > 1){
-#         $template->param(languages => \@languages_options);
-# }
+$template->param(languages_loop => getTranslatedLanguages('intranet','prog'));
 
 # The following should only be loaded if we're bringing up the advanced search template
-if ( $template_name eq "catalogue/advsearch.tmpl" ) {
+if ( $template_type eq 'advsearch' ) {
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
@@ -264,24 +281,31 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
     # determine what to display next to the search boxes (ie, boolean option
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
-    # FIXME: this stuff should be cleaned up a bit and the html should be turned
-    # into flags for the template -- I'll work on that soon -- JF
     my @search_boxes_array;
-    my $search_boxes_count = 1; # should be a syspref
-    for (my $i=0;$i<=$search_boxes_count;$i++) {
-        if ($i==0) {
+    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") | 3; # FIXME: should be a syspref
+    for (my $i=1;$i<=$search_boxes_count;$i++) {
+		# if it's the first one, don't display boolean option, but show scan indexes
+        if ($i==1) {
             push @search_boxes_array,
                 {
-                search_boxes_label => 1,
                 scan_index => 1,
                 };
         
         }
+		# if it's the last one, show the 'add field' box
         elsif ($i==$search_boxes_count) {
             push @search_boxes_array,
                 {
-                add_field => "1",};
+				boolean => 1,
+                add_field => 1,
+				};
         }
+		else {
+			push @search_boxes_array,
+				{
+				boolean => 1,
+				};
+		}
 
     }
     $template->param(uc(C4::Context->preference("marcflavour")) => 1,
@@ -291,14 +315,7 @@ if ( $template_name eq "catalogue/advsearch.tmpl" ) {
     my $languages_limit_loop = getAllLanguages();
     $template->param(search_languages_loop => $languages_limit_loop,);
     
-    my $expanded_options;
-    if (not defined $cgi->param('expanded_options')){
-        $expanded_options = C4::Context->preference("expandedSearchOption");
-    }
-    else {
-        $expanded_options = $cgi->param('expanded_options');
-    }
-    $template->param(expanded_options => $expanded_options);
+    $template->param(expanded_options => $cgi->param('expanded_options') | C4::Context->preference("expandedSearchOption"));
 
     # load the sort_by options for the template
     my $sort_by = $cgi->param('sort_by');

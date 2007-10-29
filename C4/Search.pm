@@ -572,8 +572,8 @@ sub buildQuery {
             # otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
             # and don't find anything...
             my $stemmed_operand;
-            my $stemming      = C4::Context->parameters("Stemming")     || 0;
-            my $weight_fields = C4::Context->parameters("WeightFields") || 0;
+            my $stemming      = C4::Context->preference("Stemming")     || 0;
+            my $weight_fields = C4::Context->preference("WeightFields") || 0;
 
             # We Have to do this more carefully.
             #Since Phrase Search Is Phrase search.

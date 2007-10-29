@@ -1,5 +1,5 @@
 <div id="header">
-	
+
 <div id="toplevelnav">
 <ul id="toplevelmenu">
 	<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li><!-- /TMPL_IF -->
