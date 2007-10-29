@@ -1373,6 +1373,40 @@ CREATE TABLE `roadtype` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `saved_sql`
+--
+
+DROP TABLE IF EXISTS `saved_sql`;
+CREATE TABLE saved_sql (
+   `id` int(11) NOT NULL auto_increment,
+   `borrowernumber` int(11) default NULL,
+   `date_created` datetime default NULL,
+   `last_modified` datetime default NULL,
+   `savedsql` text,
+   `last_run` datetime default NULL,
+   `report_name` varchar(255) default NULL,
+   `type` varchar(255) default NULL,
+   `notes` text,
+   PRIMARY KEY  (`id`),
+   KEY boridx (`borrowernumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for `saved_reports`
+--
+
+DROP TABLE IF EXISTS `saved_reports`;
+CREATE TABLE saved_reports (
+   `id` int(11) NOT NULL auto_increment,
+   `report_id` int(11) default NULL,
+   `report` longtext,
+   `date_run` datetime default NULL,
+   PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		   
+		   
+--
 -- Table structure for table `serial`
 --
 
