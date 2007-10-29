@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha -- Reports</title>
+<title>Koha -- Guided Reports</title>
 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
@@ -129,8 +129,8 @@ Matrix:
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
 <table>
-<tr><td><!-- TMPL_LOOP NAME="criteria" -->
-<input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
+<!-- TMPL_LOOP NAME="criteria" -->
+<tr><td><input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
 NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> 
 </td><td>
 <!-- TMPL_IF NAME="date" -->
@@ -151,20 +151,21 @@ align          : "Tl"
 <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
 <!-- /TMPL_LOOP -->
 </select>
-</td><tr>
+
 <!-- /TMPL_IF -->
 <br />
 <!-- /TMPL_LOOP -->
-<br />
+</td></tr></table><br />
 <!-- TMPL_IF NAME="definitions" -->
 Dictionary Definitions <br />
-<!-- TMPL_LOOP NAME="definitions" -->
 <table>
+<!-- TMPL_LOOP NAME="definitions" -->
+
        <tr><td><input type=checkbox name="definition" value="<!--
 TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
-</table>
-<br />
+
 <!-- /TMPL_LOOP -->
+</table>
 <!-- /TMPL_IF -->
 <input type="submit" name="phase" value="Choose these criteria">
 </form>
