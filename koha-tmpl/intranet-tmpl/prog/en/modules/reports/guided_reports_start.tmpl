@@ -298,7 +298,7 @@ Type:
 <!-- /TMPL_LOOP -->
 </select>
 <br />
-SQl: <textarea name="sql" cols=30 rows=10></textarea><br />
+SQL: <textarea name="sql" cols=30 rows=10></textarea><br />
 <input type="submit" name="phase" value="Save Report">
 </form>
 <!-- /TMPL_IF -->
@@ -336,16 +336,7 @@ Sub report:<select name="subreport">
 <!-- TMPL_VAR NAME = "row" -->
 <!-- /TMPL_LOOP -->
 </table>
-<p>Download the report</p>
-</table>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<select name="format">
-<option value="csv">Comma Separated Text</option>
-<option value="tab">Tab Separated Text</option>
-</select>
-<input type="submit" name="phase" value="Export">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
-</form>
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="showsql" -->
