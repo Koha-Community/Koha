@@ -23,6 +23,7 @@ require Exporter;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Output;
+use XML::Simple;
 # use Smart::Comments;
 # use Data::Dumper;
 
@@ -325,22 +326,28 @@ sub get_criteria {
 }
 
 sub execute_query {
-    my ( $sql, $type, $format ) = @_;
+    my ( $sql, $type, $format, $id ) = @_;
     my $dbh = C4::Context->dbh();
 
     # take this line out when in production
-    $sql .= " LIMIT 10";
+	if ($format eq 'url'){
+		}
+	else {
+		$sql .= " LIMIT 10";
+	}
     my $sth = $dbh->prepare($sql);
     $sth->execute();
 	my $colnames=$sth->{'NAME'};
 	my @results;
-	my $row = join ('</th><th>',@$colnames);
-	$row = "<tr><th>$row</th></tr>";
+	my $row;
 	my %temphash;
+	$row = join ('</th><th>',@$colnames);
+	$row = "<tr><th>$row</th></tr>";
 	$temphash{'row'} = $row;
 	push @results, \%temphash;
-    
     my $string;
+	my %xmlhash;
+	my $i=1;
     while ( my @data = $sth->fetchrow_array() ) {
 
             # tabular
@@ -359,14 +366,25 @@ sub execute_query {
 				$row = join(",",@data);
 				$string .="\n" . $row;
 			}
-
+		if ($format eq 'url'){
+			my $temphash;
+			@$temphash{@$colnames}=@data;
+			$xmlhash{$i}=$temphash;
+			$i++;
+		}
             push @results, \%temphash;
 #        }
     }
     $sth->finish();
-    if ( $format eq 'text' || $format eq 'tab' || $format eq 'csv') {
+    if ( $format eq 'text' || $format eq 'tab' || $format eq 'csv' ) {
         return $string;
     }
+	elsif ($format eq 'url') {
+		my $url;
+		my $xml = XMLout(\%xmlhash);
+		store_results($id,$xml);
+		return $url;
+	}
     else {
         return ( \@results );
     }
@@ -387,6 +405,15 @@ sub save_report {
     $sth->execute( 0, $sql, $name, $type, $notes );
     $sth->finish();
 
+}
+
+sub store_results {
+	my ($id,$xml)=@_;
+	my $dbh = C4::Context->dbh();
+	my $query = "INSERT INTO saved_reports (report_id,report,date_run) VALUES (?,?,now())";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($id,$xml);
+	$sth->finish();
 }
 
 sub delete_report {
