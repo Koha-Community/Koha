@@ -76,6 +76,16 @@ elsif ( $phase eq 'Used saved' ) {
     $template->param( 'savedreports' => $reports );
 }
 
+elsif ( $phase eq 'Delete Saved') {
+	
+	# delete a report from the saved reports list
+	$no_html = 1;
+	my $id = $input->param('reports');
+	delete_report($id);
+    print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=Used%20saved");
+	
+}		
+
 elsif ( $phase eq 'Report on this Area' ) {
 
     # they have choosen a new report and the area to report on

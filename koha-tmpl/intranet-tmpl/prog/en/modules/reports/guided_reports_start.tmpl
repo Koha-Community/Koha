@@ -42,14 +42,17 @@ reports</p>
 <!-- TMPL_IF NAME="saved1" -->
 <h1>Load Saved Reports</h1>
 <p>Choose the report to run from the list</p>
+<table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
-<select name="reports">
-	<!-- TMPL_LOOP NAME="savedreports" -->
-	<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
-	<!-- /TMPL_LOOP -->
-</select>
-<input type="submit" name="phase" value="Run this report">
+<th>Report Name</th><th>Type</th><th>Notes</th><th>Delete</th>
+<!-- TMPL_LOOP NAME="savedreports" -->
+<tr><td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Run%20this%20report"><!-- TMPL_VAR NAME="report_name" --></td>
+<td><!-- TMPL_VAR NAME="type" --></td>
+<td><!-- TMPL_VAR NAME="notes" --></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
+<!-- /TMPL_LOOP -->
 </form>
+</table>
 <!-- /TMPL_IF -->
 
 

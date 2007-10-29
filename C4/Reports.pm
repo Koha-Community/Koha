@@ -34,7 +34,7 @@ $VERSION = 0.01;
   qw(get_report_types get_report_areas get_columns build_query get_criteria
   save_report get_saved_reports execute_query get_saved_report create_compound run_compound
   get_column_type get_distinct_values save_dictionary get_from_dictionary
-  delete_definition);
+  delete_definition delete_report);
 
 our %table_areas;
 $table_areas{'1'} =
@@ -388,6 +388,15 @@ sub save_report {
     $sth->finish();
 
 }
+
+sub delete_report {
+	my ( $id ) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "DELETE FROM saved_sql WHERE id = ?";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($id);
+	$sth->finish();
+}	
 
 sub get_saved_reports {
     my $dbh   = C4::Context->dbh();
