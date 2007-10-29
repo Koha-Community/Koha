@@ -314,8 +314,15 @@ if ( $template_type eq 'advsearch' ) {
     # load the language limits (for search)
     my $languages_limit_loop = getAllLanguages();
     $template->param(search_languages_loop => $languages_limit_loop,);
-    
-    $template->param(expanded_options => $cgi->param('expanded_options') | C4::Context->preference("expandedSearchOption"));
+
+	# use the global setting by default
+	if ( C4::Context->preference("expandedSearchOption") == 1) {
+		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
+	}
+	# but let the user override it
+   	if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
+    	$template->param( expanded_options => $cgi->param('expanded_options'));
+	}
 
     # load the sort_by options for the template
     my $sort_by = $cgi->param('sort_by');
@@ -354,11 +361,7 @@ my @operators;
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be simple or complex
 my @indexes;
-if ($params->{'idx'}) {
-    @indexes = split("\0",$params->{'idx'});
-} else {
-    $indexes[0] = 'kw,wrdl';
-}
+@indexes = split("\0",$params->{'idx'});
 
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
@@ -421,28 +424,30 @@ if ($@ || $error) {
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
+
+# FIXME: This belongs in tools/ not in the primary search results page
 my $op=$cgi->param("operation");
 if ($op eq "bulkedit"){
-        my ($countchanged,$listunchanged)=
-          ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
+	my ($countchanged,$listunchanged)=
+	ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
                       $params->{"tagsubfield"},
                       $params->{"inputvalue"},
                       $params->{"targetvalue"},
                       $params->{"test"}
                       );
-        $template->param(bulkeditresults=>1,
+	$template->param(bulkeditresults=>1,
                       tagsubfield=>$params->{"tagsubfield"},
                       inputvalue=>$params->{"inputvalue"},
                       targetvalue=>$params->{"targetvalue"},
                       countchanged=>$countchanged,
                       countunchanged=>scalar(@$listunchanged),
                       listunchanged=>$listunchanged);
-}
 
-if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
-#Edit Catalogue Permissions
-  $template->param(bulkedit => 1);
-  $template->param(tagsubfields=>GetManagedTagSubfields());
+	if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
+	#Edit Catalogue Permissions
+  		$template->param(bulkedit => 1);
+  		$template->param(tagsubfields=>GetManagedTagSubfields());
+	}
 }
 # At this point, each server has given us a result set
 # now we build that set for template display

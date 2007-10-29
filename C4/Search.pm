@@ -113,6 +113,8 @@ sub FindDuplicate {
         $result->{title} =~ s /\"//g;
         $result->{title} =~ s /\(//g;
         $result->{title} =~ s /\)//g;
+		# remove valid operators
+		$result->{title} =~ s/(and|or|not)//g;
         $query = "ti,ext=$result->{title}";
         $query .= " and mt=$result->{itemtype}" if ($result->{itemtype});    
         if ($result->{author}){
@@ -120,6 +122,8 @@ sub FindDuplicate {
           $result->{author} =~ s /\"//g;
           $result->{author} =~ s /\(//g;
           $result->{author} =~ s /\)//g;
+		  # remove valid operators
+		  $result->{author} =~ s/(and|or|not)//g;
           $query .= " and au,ext=$result->{author}";
         }     
     }
@@ -331,14 +335,22 @@ sub getRecords {
             }
         };
         if ($@) {
-            warn "prob with query  toto $query_to_use " . $@;
+            warn "WARNING: query problem with $query_to_use " . $@;
         }
 
         # concatenate the sort_by limits and pass them to the results object
         my $sort_by;
         foreach my $sort (@sort_by) {
-            $sort_by .= $sort . " ";    # used to be $sort,
+            if ($sort eq "author_az") {
+                $sort_by.="1=1003 &lt;i ";
+            }
+            elsif ($sort eq "author_za") {
+                $sort_by.="1=1003 &gt;i ";
+            }
+
+            #$sort_by .= $sort . " ";    # used to be $sort,
         }
+		warn "SORTING: $sort_by";
         $results[$i]->sort( "yaz", $sort_by ) if $sort_by;
     }
     while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
@@ -524,18 +536,6 @@ sub buildQuery {
 
     my $human_search_desc;      # a human-readable query
     my $machine_search_desc;    #a machine-readable query
-        # FIXME: the locale should be set based on the syspref
-    my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
-
-# FIXME: these should be stored in the db so the librarian can modify the behavior
-    $stemmer->add_exceptions(
-        {
-            'and' => 'and',
-            'or'  => 'or',
-            'not' => 'not',
-        }
-    );
-
 
 # STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
 # we can't handle field weighting, stemming until a formal query parser is written
@@ -572,14 +572,17 @@ sub buildQuery {
             # otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
             # and don't find anything...
             my $stemmed_operand;
-            my $stemming      = C4::Context->preference("Stemming")     || 0;
-            my $weight_fields = C4::Context->preference("WeightFields") || 0;
-
+            my $stemming      = C4::Context->preference("QueryStemming")     || 0;
+            my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
+			my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
+			
             # We Have to do this more carefully.
             #Since Phrase Search Is Phrase search.
             #phrase "Physics In Collision" will not be found if we do it like that.
             my $index   = $indexes[$i];
             my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+
+			# if the operator contains more than one qualifier, but not phrase
             if (index($index,"phr")<0 && index($index,",")>0){                  
               #operand may be a wordlist deleting stopwords      
               foreach (keys %{C4::Context->stopwords}) {
@@ -612,6 +615,17 @@ sub buildQuery {
 
 # STEMMING FIXME: need to refine the field weighting so stemmed operands don't disrupt the query ranking
                 if ($stemming) {
+    				# FIXME: the locale should be set based on the user's language and/or search choice
+    				my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
+    				# FIXME: these should be stored in the db so the librarian can modify the behavior
+    				$stemmer->add_exceptions(
+        			{   
+            		'and' => 'and',
+            		'or'  => 'or',
+            		'not' => 'not',
+        			}
+    				);
+
                     my @words = split( / /, $operands[$i] );
                     my $stems = $stemmer->stem(@words);
                     foreach my $stem (@$stems) {
@@ -620,7 +634,7 @@ sub buildQuery {
                           unless ( $stem =~ /(and$|or$|not$)/ )
                           || ( length($stem) < 3 );
                         $stemmed_operand .= " ";
-
+						$stemmed_operand =~ s/(and|or|not)//g;
                         #warn "STEM: $stemmed_operand";
                     }
 
@@ -641,18 +655,15 @@ sub buildQuery {
                             $weighted_query .= " $operand";
                         }
                         else {
-                            $weighted_query .=
-                              " Title-cover,ext,r1=\"$operand\""
-                              ;    # index label as exact
-                            $weighted_query .=
-                              " or ti,ext,r2=$operand";    # index as exact
-                             #$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
-                             #$weighted_query .= " or any,ext,r4=$operand";         # index as exact
-                            $weighted_query .=
-                              " or kw,wrdl,r5=$operand";    # index as exact
-                            $weighted_query .= " or wrd,fuzzy,r9=$operand";
-                            $weighted_query .= " or wrd=$stemmed_operand"
-                              if $stemming;
+                            $weighted_query .=" Title-cover,ext,r1=\"$operand\""; 	# title cover as exact
+                            $weighted_query .=" or ti,ext,r2=\"$operand\"";    			# exact title elsewhere
+                            #$weighted_query .= " or ti,phr,r3=$operand";          # index as phrase
+                            #$weighted_query .= " or any,ext,r4=$operand";         # index as exact
+                            $weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # all the words in the query (wordlist)
+                            $weighted_query .= " or wrd,fuzzy,r9=$operand" if $fuzzy_enabled; # add fuzzy
+                            $weighted_query .= " or wrd,right-Truncation=$stemmed_operand" if $stemming; # add stemming
+							# embedded sorting: 0 a-z; 1 z-a
+							#$weighted_query .= ") or (sort1,aut=1";
                         }
                     }
                     elsif ( $index =~ /au/ ) {
@@ -671,10 +682,8 @@ sub buildQuery {
                         #$weighted_query .= " or ti,ext,r2=$operand";
                         #$weighted_query .= " or ti,phr,r3=$operand";
                         #$weighted_query .= " or ti,wrd,r3=$operand";
-                        $weighted_query .=
-" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
-                        $weighted_query .=
-" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
+                        $weighted_query .=" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
+                        $weighted_query .=" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
 
                         #$weighted_query .= " or Title-cover,wrd,r5=$operand";
                         #$weighted_query .= " or ti,ext,r6=$operand";
@@ -682,12 +691,12 @@ sub buildQuery {
                         #$weighted_query .= " or ti,phr,r8=$operand";
                         #$weighted_query .= " or ti,wrd,r9=$operand";
 
-   #$weighted_query .= " or ti,ext,r2=$operand";         # index as exact
-   #$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
-   #$weighted_query .= " or any,ext,r4=$operand";         # index as exact
-   #$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
+   						#$weighted_query .= " or ti,ext,r2=$operand";         # index as exact
+   						#$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
+   						#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
+   						#$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
                     }
-                    else {
+                    else { 
                         $weighted_query .=
                           " $index,ext,r1=$operand";    # index label as exact
                          #$weighted_query .= " or $index,ext,r2=$operand";            # index as exact
@@ -761,9 +770,7 @@ sub buildQuery {
         # FIXME: not quite right yet ... will work on this soon -- JF
         my $type = $1 if $limit =~ m/([^:]+):([^:]*)/;
         if ( $limit =~ /available/ ) {
-            $limit_query .=
-" (($query and datedue=0000-00-00) or ($query and datedue=0000-00-00 not lost=1) or ($query and datedue=0000-00-00 not lost=2))";
-
+            $limit_query .= " (($query and datedue=0000-00-00) or ($query and datedue=0000-00-00 not lost=1) or ($query and datedue=0000-00-00 not lost=2))";
             #$limit_search_desc.=" and available";
         }
         elsif ( ($limit_query) && ( index( $limit_query, $type, 0 ) > 0 ) ) {
@@ -840,9 +847,9 @@ sub buildQuery {
     $human_search_desc =~ s/^ //g;
     my $koha_query = $query;
 
-#      warn "QUERY:".$koha_query;
-#      warn "SEARCHDESC:".$human_search_desc;
-#      warn "FEDERATED QUERY:".$federated_query;
+    #warn "QUERY:".$koha_query;
+    #warn "SEARCHDESC:".$human_search_desc;
+    #warn "FEDERATED QUERY:".$federated_query;
     return ( undef, $human_search_desc, $koha_query, $federated_query );
 }
 
@@ -1056,7 +1063,7 @@ sub searchResults {
             my $this_item = {
                 branchname     => $branches{$items->{$key}->{branchcode}},
                 branchcode     => $items->{$key}->{branchcode},
-                count          => $items->{$key}->{count}==1 ?"":$items->{$key}->{count},
+                count          => $items->{$key}->{count},
                 itemcallnumber => $items->{$key}->{itemcallnumber},
                 location => $items->{$key}->{location},
                 onloancount      => $items->{$key}->{onloancount},

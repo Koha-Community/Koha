@@ -57,9 +57,9 @@
 			<!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="boolean" -->
                 <select name="op">
-                    <option value="+" selected="selected">and</option>
-                    <option value="|">or</option>
-                    <option value="!">not</option>
+                    <option value="" selected="selected">and</option>
+                    <option value="or">or</option>
+                    <option value="not">not</option>
                 </select>
             <!-- /TMPL_IF --> 
 			<!-- /TMPL_IF -->
@@ -106,7 +106,8 @@
 
 <!-- ITEMTYPE LIMITS -->
     <div id="itemtypelist">
-    <h2>Limit type to: match any of the following:</h2>
+	<fieldset>
+     <legend>Limit type to: match any of the following:</legend>
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
@@ -118,6 +119,7 @@
       <!--/TMPL_LOOP-->
       </tr>
     </table>
+	</fieldset>
     </div>
 <!-- /ITEMTYPE LIMITS -->
 
@@ -194,7 +196,7 @@
 <div id="sidebar">
 <!-- SUBTYPE LIMITS -->
         <fieldset>
-        <legend>Subtype limits</legend><p>
+        <legend>Subtype limits:</legend><p>
         
         <select name="limit" class="subtype">
             <option value="" selected="selected" class="menuheader">Any Audience</option>
