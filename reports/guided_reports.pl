@@ -22,7 +22,7 @@ use C4::Auth;
 use CGI;
 use C4::Output;
 use C4::Reports;
-
+use CGI::Carp qw(fatalsToBrowser);
 =head1 NAME
 
 Script to control the guided report creation
@@ -338,6 +338,95 @@ elsif ($phase eq 'Save Compound'){
 	$template->param( 'save_compound' => 1,
 		master=>$mastertables,
 		subsql=>$subtables
+	);
+}
+
+elsif ($phase eq 'View Dictionary'){
+	# view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
+	( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/dictionary.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+	);
+	my $areas = C4::Reports::get_report_areas();
+	$template->param( 'areas' => $areas ,
+	'start_dictionary' => 1,
+	);
+}
+elsif ($phase eq 'Add New Definition'){
+	# display form allowing them to add a new definition
+	( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/dictionary.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+	);
+	$template->param( 'new_dictionary' => 1,
+	);
+}
+
+elsif ($phase eq 'New Term step 2'){
+	# Choosing the area
+	( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/dictionary.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+	);
+	my $areas = C4::Reports::get_report_areas();
+	$template->param( 'step_2' => 1,
+		'areas' => $areas,
+	);
+	my $definition_name=$input->param('definition_name');
+	my $definition_description=$input->param('definition_description');		
+}
+
+elsif ($phase eq 'New Term step 3'){
+	# Choosing the columns
+	( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/dictionary.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+	);
+	my $area = $input->param('areas');
+	my $columns = get_columns($area);
+	$template->param( 'step_3' => 1,
+		'area' => $area,
+		'columns' => $columns,
+	);
+}
+
+elsif ($phase eq 'New Term step 4'){
+	# Choosing the columns
+	( $template, $borrowernumber, $cookie ) = get_template_and_user(
+    {
+        template_name   => "reports/dictionary.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { editcatalogue => 1 },
+        debug           => 1,
+    }
+	);
+	$template->param( 'step_4' => 1,
 	);
 }
 
