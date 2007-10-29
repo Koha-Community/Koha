@@ -68,7 +68,7 @@
                         <label for="scan-index">Indexed in:</label>
                         <select name="idx" id="scan-index">
                             <option value="">Any Word</option>
-                            <option value="any/phr:">Any Phrase</option>
+                            <option value="any,phr:">Any Phrase</option>
                             <option value="ti:">Title</option>
                             <option value="ti,phr:">Title Phrase</option>
                             <option value="au,phr:">Author</option>
@@ -341,7 +341,7 @@
                                         <span class="available">
                                         <!--/TMPL_IF -->
                                         
-                                            <!-- TMPL_VAR NAME="count" --> <!-- TMPL_VAR NAME="branchcode" -->
+                                            (<!-- TMPL_VAR NAME="count" -->) <!-- TMPL_VAR NAME="branchcode" -->
                                             <i>
                                         <!-- TMPL_IF name="location" --><!-- TMPL_VAR name="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="itemcallnumber" --><!-- TMPL_VAR name="itemcallnumber" --><!-- /TMPL_IF -->
@@ -362,10 +362,10 @@
                                 </td>
                                 <td>
                                     <!-- TMPL_IF NAME="norequests" -->
-                                        Not Reserveable
+                                        No holds allowed
                                     <!-- TMPL_ELSE -->
                                         <a class="reserve" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                                            Reserves
+                                            Holds
                                         </a>
                                     <!-- /TMPL_IF -->
                                 </td>
@@ -399,6 +399,7 @@
 </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="facets.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
