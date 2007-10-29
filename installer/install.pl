@@ -163,7 +163,7 @@ if ( $step && $step == 1 ) {
 }
 elsif ( $step && $step == 2 ) {
 #
-#STEP 2 Check Database conn~ection and access
+#STEP 2 Check Database connection and access
 #
     $template->param(%info);
     my $checkmysql = $query->param("checkmysql");
@@ -372,29 +372,23 @@ elsif ( $step && $step == 3 ) {
         # Framework Selection is achieved through checking boxes.
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
-        my $dir = C4::Context->config('intranetdir') . "/installer/data/";
-        opendir( MYDIR, $dir );
-        my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
-        closedir MYDIR;
-        my $frmwklangs = getFrameworkLanguages();
-        my @languages;
-        map {
-            push @languages,
-              {
-                'dirname'             => $_->{'language_code'},
-                'languagedescription' => $_->{'language_name'},
-                'checked' => ( $_->{'language_code'} eq $langchoice )
-              }
-              if ( $_->{'language_code'} );
-        } @$frmwklangs;
-        $template->param( "languagelist" => \@languages );
+        my $marcflavour = $query->param('marcflavour');
+        $marcflavour = C4::Context->preference('marcflavour') unless ($marcflavour);
+        #Insert into database the selected marcflavour
+        my $request =
+          $dbh->prepare(
+            "INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marcflavour','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
+          );
+        $request->execute;
+    
         undef $/;
-        $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$langchoice";
+        my $dir =
+          C4::Context->config('intranetdir') . "/installer/data/$langchoice/marcflavour/".lc($marcflavour);
         opendir( MYDIR, $dir ) || warn "no open $dir";
-        @listdir = sort grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
+        my @listdir = sort grep { !/^\.|CVS|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
-        my @levellist;
+                  
+        my @fwklist;
         my $request =
           $dbh->prepare(
             "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
@@ -407,19 +401,16 @@ elsif ( $step && $step == 3 ) {
             $frameworksloaded{$_} = 1;
         }
         foreach my $requirelevel (@listdir) {
-            $dir =
-              C4::Context->config('intranetdir')
-              . "/installer/data/$langchoice/$requirelevel";
-            opendir( MYDIR, $dir );
+            opendir( MYDIR, "$dir/$requirelevel" );
             my @listname =
-              grep { !/^\.|CVS/ && -f "$dir/$_" && $_ =~ m/\.sql$/ }
+              grep { !/^\.|CVS/ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
               readdir(MYDIR);
             closedir MYDIR;
             my %cell;
             my @frameworklist;
             map {
                 my $name = substr( $_, 0, -4 );
-                open FILE, "< $dir/$name.txt";
+                open FILE, "< $dir/$requirelevel/$name.txt";
                 my $lines = <FILE>;
                 $lines =~ s/\n|\r/<br \/>/g;
                 use utf8;
@@ -427,7 +418,7 @@ elsif ( $step && $step == 3 ) {
                 push @frameworklist,
                   {
                     'fwkname'        => $name,
-                    'fwkfile'        => "$dir/$_",
+                    'fwkfile'        => "$dir/$requirelevel/$_",
                     'fwkdescription' => $lines,
                     'checked'        => (
                         (
@@ -441,13 +432,100 @@ elsif ( $step && $step == 3 ) {
             my @fwks =
               sort { $a->{'fwkname'} lt $b->{'fwkname'} } @frameworklist;
 
-  #       $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
+#             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
+            $cell{"frameworks"} = \@fwks;
+            $cell{"label"}      = ucfirst($requirelevel);
+            $cell{"code"}       = lc($requirelevel);
+            push @fwklist, \%cell;
+        }
+        $template->param( "frameworksloop" => \@fwklist );
+        $template->param( "marcflavour" => ucfirst($marcflavour));
+        
+        $dir =
+          C4::Context->config('intranetdir') . "/installer/data/$langchoice";
+        opendir( MYDIR, $dir ) || warn "no open $dir";
+        @listdir = sort grep { !/^\.|CVS|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
+        closedir MYDIR;
+        my @levellist;
+        foreach ( split( /\|/, $frameworksloaded ) ) {
+            $frameworksloaded{$_} = 1;
+        }
+        foreach my $requirelevel (@listdir) {
+            opendir( MYDIR, "$dir/$requirelevel" );
+            my @listname =
+              grep { !/^\.|CVS/ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
+              readdir(MYDIR);
+            closedir MYDIR;
+            my %cell;
+            my @frameworklist;
+            map {
+                my $name = substr( $_, 0, -4 );
+                open FILE, "< $dir/$requirelevel/$name.txt";
+                my $lines = <FILE>;
+                $lines =~ s/\n|\r/<br \/>/g;
+                use utf8;
+                utf8::encode($lines) unless ( utf8::is_utf8($lines) );
+                push @frameworklist,
+                  {
+                    'fwkname'        => $name,
+                    'fwkfile'        => "$dir/$requirelevel/$_",
+                    'fwkdescription' => $lines,
+                    'checked'        => (
+                        (
+                            $frameworksloaded{$_}
+                              || ( $requirelevel =~
+                                /(mandatory|requi|oblig|necess)/i )
+                        ) ? 1 : 0
+                    )
+                  };
+            } @listname;
+            my @fwks =
+              sort { $a->{'fwkname'} lt $b->{'fwkname'} } @frameworklist;
+
+#             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
             $cell{"frameworks"} = \@fwks;
             $cell{"label"}      = ucfirst($requirelevel);
             $cell{"code"}       = lc($requirelevel);
             push @levellist, \%cell;
         }
         $template->param( "levelloop" => \@levellist );
+        $template->param( "$op"       => 1 );
+    }
+    elsif ( $op && $op eq 'choosemarc' ) {
+        #
+        #
+        # 1ST install, 2nd sub-step : show the user the marcflavour available.
+        #
+        #
+        
+        #Choose Marc Flavour
+        #sql data are supposed to be located in installer/data/<language>/marcflavour/marcflavourname
+        # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
+        # Where <level> is a category of requirement : required, recommended optional
+        # level should contain :
+        #   SQL File for import With a readable name.
+        #   txt File taht explains what this SQL File is meant for.
+        # Could be VERY useful to have A Big file for a kind of library.
+        # But could also be useful to have some Authorised values data set prepared here.
+        # Marcflavour Selection is achieved through radiobuttons.
+        my $langchoice = $query->param('fwklanguage');
+        $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
+        my $dir =
+          C4::Context->config('intranetdir') . "/installer/data/$langchoice/marcflavour";
+        opendir( MYDIR, $dir ) || warn "no open $dir";
+        my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
+        closedir MYDIR;
+        my $marcflavour=C4::Context->preference("marcflavour");    
+        my @flavourlist;
+        foreach my $marc (@listdir) {
+            my %cell=(    
+            "label"=> ucfirst($marc),
+            "code"=>uc($marc),
+            "checked"=>uc($marc) eq $marcflavour);      
+#             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
+            push @flavourlist, \%cell;
+        }
+        $template->param( "flavourloop" => \@flavourlist );
         $template->param( "$op"       => 1 );
     }
     elsif ( $op && $op eq 'importdatastructure' ) {

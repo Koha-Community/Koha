@@ -80,23 +80,56 @@
     <h1>Congratulations, Installation complete</h1>
     <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p> 
 <!--/TMPL_IF-->
+<!--TMPL_IF Name="choosemarc"-->
+    <h2 align="center">Select your MARC flavour</h2>
+    <form name="frameworkselection" method="post" action="install.pl">   
+    <input type="hidden" name="step" value="3" />
+    <input type="hidden" name="op" value="selectframeworks" />
+    <p>  
+    <!--TMPL_LOOP Name="flavourloop"-->
+    <div>
+            <!--TMPL_IF Name="checked"-->
+                <input type="radio" name="marcflavour" value="<!--TMPL_VAR Name="code"-->" checked /> <!--TMPL_VAR Name="label"--> <br/>
+            <!--TMPl_ELSE-->
+                <input type="radio" name="marcflavour" value="<!--TMPL_VAR Name="code"-->" /> <!--TMPL_VAR Name="label"--> <br/>
+            <!--/TMPL_IF-->
+    </div>
+    <!--/TMPL_LOOP-->
+    </p>
+    <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+    </form>
+<!--/TMPL_IF-->
 
 <!--TMPL_IF Name="selectframeworks"-->
     <h2 align="center">Selecting Default Settings</h2>
     <form name="frameworkselection" method="post" action="install.pl">
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="addframeworks" />
-    <p>Each language has a set of default settings that cover a wide range of configuration options. Please select a language from the dropdown or use the default lanaguage already selected.</p>
     
-    <p><select name="fwklanguage" onchange="javascript:refresh(this.value)">
-    <!--TMPL_LOOP Name="languagelist" -->
-    <!--TMPL_IF Name="checked"--><option value="<!--TMPL_VAR Name="dirname"-->" selected="selected"><!--TMPL_VAR Name="languagedescription"--></option>
-    <!--TMPL_ELSE--><option value="<!--TMPL_VAR Name="dirname"-->"><!--TMPL_VAR Name="languagedescription"--></option>
-    <!--/TMPL_IF-->
+    <h2>MARC Frameworks: <!--TMPL_VAR Name="marcflavour"--></h2>
+    <!--TMPL_LOOP Name="frameworksloop"-->
+    <div>
+    <h3><!--TMPL_VAR Name="label"--></h3>
+    <!--TMPL_LOOP Name="frameworks"-->
+        <table style="border:1px;vertical-align:top;">
+        <tr>
+        <td style="vertical-align:top;">
+            <!--TMPL_IF Name="checked"-->
+                <input type="checkbox" name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" checked="checked" />
+            <!--TMPl_ELSE-->
+                <input type="checkbox" name="framework" value="<!--TMPL_VAR Name="fwkfile"-->" />
+            <!--/TMPL_IF-->
+        </td>
+        <td>
+            <!--TMPL_VAR Name="fwkdescription"-->
+            <em>(<!--TMPL_VAR Name="fwkname"-->)</em>
+        </td>
+        </table>
     <!--/TMPL_LOOP-->
-    </select>
+    </div>
     </p>
-    <p>
+    <!--/TMPL_LOOP-->
+    <h2>Other data</h2>
     <!--TMPL_LOOP Name="levelloop"-->
     <div>
     <h3><!--TMPL_VAR Name="label"--></h3>
@@ -211,7 +244,7 @@
         </p>
     <!-- TMPL_ELSE -->
         <p>We are ready to do some basic configuration. Please 
-            <a href="install.pl?step=3&amp;op=selectframeworks" class="button">install basic configuration settings</a>
+            <a href="install.pl?step=3&amp;op=choosemarc" class="button">install basic configuration settings</a>
             to continue the installation.
         </p>
     <!-- /TMPL_IF -->
