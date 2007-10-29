@@ -409,7 +409,7 @@ if ($borrower) {
 		($restype) and $it->{'can_renew'} = 0;
 
 		$it->{'dd'} = format_date($it->{'date_due'});
-        my $datedue = format_date($it->{'date_due'});
+        my $datedue = $it->{'date_due'};
         $datedue =~ s/-//g;
 		$it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
