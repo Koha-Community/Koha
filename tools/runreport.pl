@@ -9,13 +9,13 @@ use Mail::Sendmail;
 my ($report,$format,$email) = @ARGV;
 
 my ($sql,$type) = get_saved_report($report);
-my $results = execute_query($sql,$type,$format); 
+my $results = execute_query($sql,$type,$format,$report); 
 my $message;
 if ($format eq 'text'){
 	$message="<table>$results</table>";	
 }
 if ($format eq 'url'){
-	$message="something";
+	$message="$results";
 }
 
 if ($email){

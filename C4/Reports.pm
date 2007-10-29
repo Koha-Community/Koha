@@ -24,6 +24,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Output;
 use XML::Simple;
+use XML::Dumper;
 # use Smart::Comments;
 # use Data::Dumper;
 
@@ -35,15 +36,15 @@ $VERSION = 0.01;
   qw(get_report_types get_report_areas get_columns build_query get_criteria
   save_report get_saved_reports execute_query get_saved_report create_compound run_compound
   get_column_type get_distinct_values save_dictionary get_from_dictionary
-  delete_definition delete_report);
+  delete_definition delete_report format_results);
 
 our %table_areas;
 $table_areas{'1'} =
   [ 'borrowers', 'statistics','items', 'biblioitems' ];    # circulation
 $table_areas{'2'} = [ 'items', 'biblioitems', 'biblio' ];   # catalogue
-$table_areas{'3'} = [ 'borrowers', 'accountlines' ];        # patrons
+$table_areas{'3'} = [ 'borrowers' ];        # patrons
 $table_areas{'4'} = ['aqorders', 'biblio', 'items'];        # acquisitions
-
+$table_areas{'5'} = [ 'borrowers', 'accountlines' ];        # accounts
 our %keys;
 $keys{'1'} = [
     'statistics.borrowernumber=borrowers.borrowernumber',
@@ -54,11 +55,12 @@ $keys{'2'} = [
     'items.biblioitemnumber=biblioitems.biblioitemnumber',
     'biblioitems.biblionumber=biblio.biblionumber'
 ];
-$keys{'3'} = ['borrowers.borrowernumber=accountlines.borrowernumber'];
+$keys{'3'} = [ ];
 $keys{'4'} = [
 	'aqorders.biblionumber=biblio.biblionumber',
 	'biblio.biblionumber=items.biblionumber'
 ];
+$keys{'5'} = ['borrowers.borrowernumber=accountlines.borrowernumber'];
 
 # have to do someting here to know if its dropdown, free text, date etc
 
@@ -73,7 +75,7 @@ $criteria{'2'} =
   [ 'biblioitems.itemtype', 'items.holdingbranch', 'items.homebranch' ,'items.itemlost'];
 $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
-
+$criteria{'5'} = ['borrowers.branchcode'];
 
 our %columns;
 my $columns_def_file = "columns.def";
@@ -139,9 +141,9 @@ sub get_report_areas {
     my $dbh = C4::Context->dbh();
 
     # FIXME these should be in the database
-    my @reports = ( 'Circulation', 'Catalog', 'Patrons', 'Acquisitions' );
+    my @reports = ( 'Circulation', 'Catalog', 'Patrons', 'Acquisitions', 'Accounts');
     my @reports2;
-    for ( my $i = 0 ; $i < 4 ; $i++ ) {
+    for ( my $i = 0 ; $i < 5 ; $i++ ) {
         my %hashrep;
         $hashrep{id}   = $i + 1;
         $hashrep{name} = $reports[$i];
@@ -346,8 +348,7 @@ sub execute_query {
 	$temphash{'row'} = $row;
 	push @results, \%temphash;
     my $string;
-	my %xmlhash;
-	my $i=1;
+	my @xmlarray;
     while ( my @data = $sth->fetchrow_array() ) {
 
             # tabular
@@ -369,8 +370,7 @@ sub execute_query {
 		if ($format eq 'url'){
 			my $temphash;
 			@$temphash{@$colnames}=@data;
-			$xmlhash{$i}=$temphash;
-			$i++;
+			push @xmlarray,$temphash;
 		}
             push @results, \%temphash;
 #        }
@@ -380,8 +380,9 @@ sub execute_query {
         return $string;
     }
 	elsif ($format eq 'url') {
-		my $url;
-		my $xml = XMLout(\%xmlhash);
+		my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
+		my $dump = new XML::Dumper;
+		my $xml = $dump->pl2xml( \@xmlarray );
 		store_results($id,$xml);
 		return $url;
 	}
@@ -410,11 +411,45 @@ sub save_report {
 sub store_results {
 	my ($id,$xml)=@_;
 	my $dbh = C4::Context->dbh();
-	my $query = "INSERT INTO saved_reports (report_id,report,date_run) VALUES (?,?,now())";
+	my $query = "SELECT * FROM saved_reports WHERE report_id=?";
 	my $sth = $dbh->prepare($query);
-	$sth->execute($id,$xml);
+	$sth->execute($id);
+	if (my $data=$sth->fetchrow_hashref()){
+		my $query2 = "UPDATE saved_reports SET report=?,date_run=now() WHERE report_id=?";
+		my $sth2 = $dbh->prepare($query2);
+	    $sth2->execute($xml,$id);
+		$sth2->finish();
+	}
+	else {
+		my $query2 = "INSERT INTO saved_reports (report_id,report,date_run) VALUES (?,?,now())";
+		my $sth2 = $dbh->prepare($query2);
+		$sth2->execute($id,$xml);
+		$sth2->finish();
+	}
 	$sth->finish();
 }
+
+sub format_results {
+	my ($id) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "SELECT * FROM saved_reports WHERE report_id = ?";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($id);
+	my $data = $sth->fetchrow_hashref();
+	my $dump = new XML::Dumper;
+	my $perl = $dump->xml2pl( $data->{'report'} );
+	foreach my $row (@$perl) {
+		my $htmlrow="<tr>";
+		foreach my $key (keys %$row){
+			$htmlrow .= "<td>$row->{$key}</td>";
+		}
+		$htmlrow .= "</tr>";
+		$row->{'row'} = $htmlrow;
+	}
+	$sth->finish;
+	return $perl;
+	
+}	
 
 sub delete_report {
 	my ( $id ) = @_;
@@ -427,7 +462,9 @@ sub delete_report {
 
 sub get_saved_reports {
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT * FROM saved_sql ORDER by date_created";
+    my $query = "SELECT *,saved_sql.id AS id FROM saved_sql 
+    LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
+    ORDER by date_created";
     my $sth   = $dbh->prepare($query);
     $sth->execute();
     my @reports;

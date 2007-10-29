@@ -86,6 +86,17 @@ elsif ( $phase eq 'Delete Saved') {
 	
 }		
 
+elsif ($phase eq 'retrieve results') {
+	my $id = $input->param('id');
+	my $results = format_results($id);
+	# do something
+	$template->param(
+		'retresults' => 1,
+		'results' => $results,
+		);
+	
+}
+
 elsif ( $phase eq 'Report on this Area' ) {
 
     # they have choosen a new report and the area to report on

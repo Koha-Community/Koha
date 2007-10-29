@@ -44,11 +44,13 @@ reports</p>
 <p>Choose the report to run from the list</p>
 <table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
-<th>Report Name</th><th>Type</th><th>Notes</th><th>Delete</th>
+<th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Delete</th>
 <!-- TMPL_LOOP NAME="savedreports" -->
 <tr><td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Run%20this%20report"><!-- TMPL_VAR NAME="report_name" --></td>
 <td><!-- TMPL_VAR NAME="type" --></td>
 <td><!-- TMPL_VAR NAME="notes" --></td>
+<td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
+</td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
 </form>
@@ -88,12 +90,12 @@ reports</p>
 <br />
 </form>
 Tabular:
-<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-tabular-graphic.gif" />
+<img src="/intranet-tmpl/prog/img/reports-tabular-graphic.gif" />
 <!--- Summary and Matrix reports have not yet been implemented-->
 <!--Summary:
-<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-summary-graphic.gif" />
+<img src="/intranet-tmpl/prog/img/reports-summary-graphic.gif" />
 Matrix:
-<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />-->
+<img src="/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />-->
 
 <!-- /TMPL_IF -->
 
@@ -321,6 +323,16 @@ Sub report:<select name="subreport">
 <!-- TMPL_VAR NAME="master" --> <br />
 <!-- TMPL_VAR NAME="subsql" -->
 <!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="retresults" -->
+<table>
+<!-- TMPL_LOOP NAME="results" -->
+<!-- TMPL_VAR NAME = "row" -->
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+
 </div>
 </div>
 </div>
