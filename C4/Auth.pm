@@ -363,7 +363,6 @@ has authenticated.
 
 sub checkauth {
     my $query = shift;
-  # warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -405,6 +404,7 @@ sub checkauth {
         $loggedin = 1;
     }
     elsif ( $sessionID = $query->cookie("CGISESSID")) {
+<<<<<<< HEAD:C4/Auth.pm
 		my $storage_method = C4::Context->preference('SessionStorage');
 		my $session;
 		if ($storage_method eq 'mysql'){
@@ -414,6 +414,12 @@ sub checkauth {
 			# catch all defaults to tmp should work on all systems
 			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
 		}
+=======
+#         my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+		# this should be a system preference will work on this today, by default it will use mysql
+		# but you can set it to use temporary files
+        my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+>>>>>>> Commenting out some noisy warns:C4/Auth.pm
         C4::Context->_new_userenv($sessionID);
         if ($session){
             C4::Context::set_userenv(
@@ -423,8 +429,6 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
-#             warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
-#                 ".$session->param('surname').",      ".$session->param('branch');
         }
         my $ip;
         my $lasttime;
@@ -546,7 +550,6 @@ sub checkauth {
                   = $sth->fetchrow
                   if ( $sth->rows );
 
-#         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                 unless ( $sth->rows ) {
                     my $sth =
                       $dbh->prepare(
@@ -561,7 +564,6 @@ sub checkauth {
                       = $sth->fetchrow
                       if ( $sth->rows );
 
-#           warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
                         (
