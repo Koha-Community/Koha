@@ -338,6 +338,21 @@ Sub report:<select name="subreport">
 <!-- TMPL_VAR NAME="sql" -->
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="save_successful" -->
+<!-- TMPL_VAR NAME="sql" -->
+<h1>Save Your Custom Report</h1>
+<h2>Your report has been saved</h2>
+<p>The report you have created has now been saved. You can now</p>
+<ul>
+	<li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used+saved">Saved Reports Page</a></li>
+	<li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler Tool</a></li>
+	<li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used+saved">Guided Reports</a></li>
+</ul>
+
+
+
+<!-- /TMPL_IF -->
+
 </div>
 </div>
 </div>
