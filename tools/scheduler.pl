@@ -28,7 +28,7 @@ use C4::Output;
 my $input = new CGI;
 
 my $base = C4::Context->config('intranetdir');
-my $command = "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; ".$base."/tools/runreport.pl $report $format $email";
+my $CONFIG_NAME="/home/crc/koha/etc/koha-production.xml";
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	    {
@@ -54,6 +54,7 @@ if ($mode eq 'job_add') {
 	my $report=$input->param('report');
 	my $format=$input->param('format');
 	my $email=$input->param('email');
+	my $command = "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; ".$base."/tools/runreport.pl $report $format $email";
 	if ($recurring){
 	    my $frequency = $input->param('frequency');
 	    add_cron_job($start,$command);
