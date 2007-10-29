@@ -129,7 +129,8 @@ Matrix:
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
 <table>
 <tr><td><!-- TMPL_LOOP NAME="criteria" -->
-<input type=checkbox name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="description" --> = 
+<input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
+NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> = 
 </td><td>
 <!-- TMPL_IF NAME="date" -->
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
@@ -144,12 +145,12 @@ align          : "Tl"
 </script>          
 </td>
 <!-- TMPL_ELSE -->
-</td><td><select name="<!-- TMPL_VAR NAME="name" -->_value"></td>
+<td><select name="<!-- TMPL_VAR NAME="name" -->_value">
 <!-- TMPL_LOOP NAME="values" -->
-<td><option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
-</td><tr></table>
+<option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
 <!-- /TMPL_LOOP -->
 </select>
+</td><tr></table>
 <!-- /TMPL_IF -->
 <br />
 <!-- /TMPL_LOOP -->
