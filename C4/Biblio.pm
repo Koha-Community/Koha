@@ -2359,24 +2359,58 @@ sub TransformHtmlToMarc {
 
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $table ) = @_;
+    
     my $result;
-	my @tables = ('biblio','biblioitems','items');
-	foreach my $table (@tables){
-		my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
-		$sth2->execute;
-		while (my ($field) = $sth2->fetchrow){
-            # id like to do this, it will break lots of other places, but doing it will stop the namespace clashes			
-#			$result->{$table.'.'.$field} = get_kohafield_from_marc($table,$field,$record,$frameworkcode);
-            # so for now doing this
-			$result = TransformMarcToKohaOneField( $table, $field, $record, $result, $frameworkcode );
+
+	# sometimes we only want to return the items data
+	# hmm this was just added, ill tidy this up too later
+	if ($table eq 'items') {
+	    my $sth = $dbh->prepare("SHOW COLUMNS FROM items");
+   		$sth->execute();
+    	while ( (my $field) = $sth->fetchrow ) {
+        	$result = &TransformMarcToKohaOneField( "items", $field, $record, $result, $frameworkcode );
+    	}
+		return $result;
+    }
+	else {
+		my @tables = ('biblio','biblioitems','items');
+		foreach my $table (@tables){
+			my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
+			$sth2->execute;
+			while (my ($field) = $sth2->fetchrow){
+				# id like to do this, it will break lots of other places, but doing it will stop the namespace clashes			
+#				$result->{$table.'.'.$field} = get_kohafield_from_marc($table,$field,$record,$frameworkcode);
+				# so for now doing this\
+				$result = TransformMarcToKohaOneField( $table, $field, $record, $result, $frameworkcode );
+			}
 		}
-	}
+
+		# not sure about this stuff, will revisit
+		#
+		# modify copyrightdate to keep only the 1st year found
+		my $temp = $result->{'copyrightdate'};
+		$temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+		if ( $1 > 0 ) {
+			$result->{'copyrightdate'} = $1;
+		}
+		else {                      # if no cYYYY, get the 1st date.
+			$temp =~ m/(\d\d\d\d)/;
+			$result->{'copyrightdate'} = $1;
+		}
 	
-	# not sure about this stuff, will revisit
-    #
-
-
-
+		# modify publicationyear to keep only the 1st year found
+		$temp = $result->{'publicationyear'};
+		$temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+		if ( $1 > 0 ) {
+			$result->{'publicationyear'} = $1;
+		}
+		else {                      # if no cYYYY, get the 1st date.
+			$temp =~ m/(\d\d\d\d)/;
+			$result->{'publicationyear'} = $1;
+		}
+		return $result;
+	}		
+}
 =head2 _disambiguate
 
 =over 4
@@ -2454,9 +2488,7 @@ sub get_kohafield_from_marc {
         }
     }
     return $kohafield;
-
 }	
-
 
 
 =head2 TransformMarcToKohaOneField
