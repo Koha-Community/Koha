@@ -154,7 +154,7 @@
   <!-- /TMPL_IF --> <!-- bookfund -->
 
 <p>
-  <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form">Add bookfund</a>
+  <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form">Add fund</a>
   <a href="aqbudget.pl">Show all budgets</a>
 </p>
 
@@ -171,13 +171,13 @@
     
   <ol><!-- TMPL_IF name="add_or_modify" -->
     <li>
-      	<span class="label">Book fund: </span>
+      	<span class="label">Fund: </span>
         <input type="hidden" name="bookfundid" id="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
         <!-- TMPL_VAR name="bookfundid" -->
     </li>
   <!-- TMPL_ELSE -->
     <li>
-      <label for="bookfundid">Book fund: </label>
+      <label for="bookfundid">Fund: </label>
       <input type="text" name="bookfundid" id="bookfundid" size="5" maxlength="5" onblur="toUC(this)" />
     </li>
   <!-- /TMPL_IF --> <!-- add_or_modify -->
@@ -188,7 +188,7 @@
       </li>
 
     <li>
-      <label for="branchcode">Branch: </label>
+      <label for="branchcode">Library: </label>
       <select name="branchcode" id="branchcode">
           <option value="">None</option>
   <!-- TMPL_LOOP NAME="branches" -->
@@ -221,7 +221,7 @@
 <h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></h3>
 <table>
   <tr>
-    <th>Book fund</th>
+    <th>Fund</th>
     <td><!-- TMPL_VAR name="bookfundid" --></td>
   </tr>
   <tr>
