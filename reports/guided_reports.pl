@@ -186,7 +186,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
     $template->param( 'total_by' => \@total_by );
 }
 
-elsif ( $phase eq 'Choose Totals' ) {
+elsif ( $phase eq 'Choose These Operations' ) {
     my $area     = $input->param('area');
     my $type     = $input->param('type');
     my $column   = $input->param('column');
