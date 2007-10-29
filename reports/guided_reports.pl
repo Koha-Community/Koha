@@ -98,11 +98,13 @@ elsif ( $phase eq 'Show SQL'){
 
 elsif ($phase eq 'retrieve results') {
 	my $id = $input->param('id');
-	my $results = format_results($id);
+	my ($results,$name,$notes) = format_results($id);
 	# do something
 	$template->param(
 		'retresults' => 1,
 		'results' => $results,
+		'name' => $name,
+		'notes' => $notes,
 		);
 	
 }

@@ -447,8 +447,12 @@ sub format_results {
 		$row->{'row'} = $htmlrow;
 	}
 	$sth->finish;
-	return $perl;
-	
+	$query = "SELECT * FROM saved_sql WHERE id = ?";
+	$sth = $dbh->prepare($query);
+	$sth->execute($id);
+	$data = $sth->fetchrow_hashref();
+    $sth->finish();
+	return ($perl,$data->{'report_name'},$data->{'notes'});	
 }	
 
 sub delete_report {
