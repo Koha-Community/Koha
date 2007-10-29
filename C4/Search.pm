@@ -555,9 +555,152 @@ sub getRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
+sub _remove_stopwords {
+	my ($operand,$index) = @_;
+ 	# if the index contains more than one qualifier, but not phrase:    
+	if (index($index,"phr")<0 && index($index,",")>0){
+	# operand may be a wordlist deleting stopwords
+	# remove stopwords from operand : parse all stopwords & remove them (case insensitive)
+	#       we use IsAlpha unicode definition, to deal correctly with diacritics.
+	#       otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
+	#       and don't find anything...
+		foreach (keys %{C4::Context->stopwords}) {
+			$operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
+			$operand=~ s/^$_\P{IsAlpha}/ /i;
+			$operand=~ s/\P{IsAlpha}$_$/ /i;
+                    
+		}
+	}
+	return $operand;
+}
+
+sub _add_truncation {
+	my ($operand,$index) = @_;
+	my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+	# if the index contains more than one qualifier, but not phrase:    
+	if (index($index,"phr")<0 && index($index,",")>0){
+	# 2. add truncation qualifiers if applicable
+		my @wordlist= split (/\s/,$operand);
+		foreach my $word (@wordlist){
+			if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
+				$word=~s/\*//;
+				push @rightlefttruncated,$word;
+			} 
+			elsif(index($word,"*")==0 && index($word,"*",1)<0){
+				$word=~s/\*//;
+				push @lefttruncated,$word;
+                        
+			} 
+			elsif (index($word,"*")==length($word)-1){
+				$word=~s/\*//;
+				push @righttruncated,$word;
+			} 
+			elsif (index($word,"*")<0){
+				push @nontruncated,$word;
+			}
+			else {
+				push @regexpr,$word;
+                        
+			}
+		}
+	}
+	return (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
+}
+
+sub _build_stemmed_operand {
+	my $operand = $_;
+	my $stemmed_operand;
+ 	$operand =~ s/^(and |or |not )//i;
+	# STEMMING FIXME: may need to refine the field weighting so stemmed operands don't 
+	# disrupt the query ranking, this needs more testing
+	# FIXME: the locale should be set based on the user's language and/or search choice
+	my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
+	# FIXME: these should be stored in the db so the librarian can modify the behavior
+	$stemmer->add_exceptions(
+			{
+				'and' => 'and',
+                'or'  => 'or',
+                'not' => 'not',
+			}
+                    
+		);
+	my @words = split( / /, $operand );
+	my $stems = $stemmer->stem(@words);
+	foreach my $stem (@$stems) {
+			$stemmed_operand .= "$stem";
+			$stemmed_operand .= "?" unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
+			$stemmed_operand .= " ";
+			$stemmed_operand =~ s/(and|or|not)//g;
+			#warn "STEM: $stemmed_operand";
+	}
+	return $stemmed_operand;
+}
+
+sub _build_weighted_query {
+	my ($operand,$stemmed_operand,$index) = @_;
+    my $stemming      = C4::Context->preference("QueryStemming")     || 0;
+    my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
+    my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
+
+    my $weighted_query .= " rk=(";     # Specifies that we're applying rank
+	# keyword has different weight properties
+	if ( ( $index =~ /kw/ ) || ( !$index ) ) {
+	# a simple way to find out if this query uses an index
+		if ( $operand =~ /(\=|\:)/ ) {
+			$weighted_query .= " $operand";
+		}
+		else {
+			$weighted_query .=" Title-cover,ext,r1=\"$operand\"";   # title cover as exact
+			$weighted_query .=" or ti,ext,r2=\"$operand\"";             # exact title elsewhere
+			#$weighted_query .= " or ti,phr,r3=$operand";          # index as phrase
+			#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
+			$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # all the words in the query (wordlist)
+			$weighted_query .= " or wrd,fuzzy,r9=$operand" if $fuzzy_enabled; # add fuzzy
+			$weighted_query .= " or wrd,right-Truncation=$stemmed_operand" if $stemming; # add stemming
+			# embedded sorting: 0 a-z; 1 z-a
+			#$weighted_query .= ") or (sort1,aut=1";
+		}
+                    
+	}
+	elsif ( $index =~ /au/ ) {
+		$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
+		#$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
+		$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
+		$weighted_query .= " or $index,rt,wrd,r3=$operand";
+	}
+	elsif ( $index =~ /ti/ ) {
+		$weighted_query .=" Title-cover,ext,r1=$operand"; # index label as exact
+		$weighted_query .= " or Title-series,ext,r2=$operand";
+		#$weighted_query .= " or ti,ext,r2=$operand";
+		#$weighted_query .= " or ti,phr,r3=$operand";
+		#$weighted_query .= " or ti,wrd,r3=$operand";
+		$weighted_query .=" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
+		$weighted_query .=" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
+		#$weighted_query .= " or Title-cover,wrd,r5=$operand";
+		#$weighted_query .= " or ti,ext,r6=$operand";
+		#$weighted_query .= " or ti,startswith,phr,r7=$operand";
+		#$weighted_query .= " or ti,phr,r8=$operand";
+		#$weighted_query .= " or ti,wrd,r9=$operand";
+		#$weighted_query .= " or ti,ext,r2=$operand";         # index as exact
+		#$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
+		#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
+		#$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
+	}
+	else {
+		$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
+		#$weighted_query .= " or $index,ext,r2=$operand";            # index as exact
+		$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
+		$weighted_query .= " or $index,rt,wrd,r3=$operand";
+		$weighted_query .=" or $index,wrd,r5=$operand";    # index as word right-truncated
+		$weighted_query .= " or $index,wrd,fuzzy,r8=$operand";
+	}
+	$weighted_query .= ")";    # close rank specification
+	return $weighted_query;
+}
+
 # build the query itself
 sub buildQuery {
-    my ( $query, $operators, $operands, $indexes, $limits, $sort_by ) = @_;
+    my ( $operators, $operands, $indexes, $limits, $sort_by ) = @_;
 
     my @operators = @$operators if $operators;
     my @indexes   = @$indexes   if $indexes;
@@ -565,14 +708,20 @@ sub buildQuery {
     my @limits    = @$limits    if $limits;
     my @sort_by   = @$sort_by   if $sort_by;
 
+            
+	my $stemming      = C4::Context->preference("QueryStemming")     || 0;
+	my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
+	my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
+
     my $human_search_desc;      # a human-readable query
     my $machine_search_desc;    #a machine-readable query
-
+	warn "OPERATORS: >@operators< INDEXES: >@indexes< OPERANDS: >@operands< LIMITS: >@limits< SORTS: >@sort_by<";
+	my $query = $operands[0];
 # STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
 # we can't handle field weighting, stemming until a formal query parser is written
-# I'll work on this soon -- JF
-#if (!$query) { # form-based
-# check if this is a known query language query, if it is, return immediately:
+
+# check if this is a known query language query, if it is, return immediately,
+# the user is responsible for constructing valid syntax:
     if ( $query =~ /^ccl=/ ) {
         return ( undef, $', $', $', 'ccl' );
     }
@@ -582,166 +731,40 @@ sub buildQuery {
     if ( $query =~ /^pqf=/ ) {
         return ( undef, $', $', $', 'pqf' );
     }
-    if ( $query =~ /(\(|\))/ ) {    # sorry, too complex
+    if ( $query =~ /(\(|\))/ ) {    # sorry, too complex, assume CCL
         return ( undef, $query, $query, $query, 'ccl' );
     }
 
-# form-based queries are limited to non-nested a specific depth, so we can easily
+# form-based queries are limited to non-nested at a specific depth, so we can easily
 # modify the incoming query operands and indexes to do stemming and field weighting
 # Once we do so, we'll end up with a value in $query, just like if we had an
 # incoming $query from the user
     else {
-        $query = ""
-          ; # clear it out so we can populate properly with field-weighted stemmed query
-        my $previous_operand
-          ;    # a flag used to keep track if there was a previous query
-               # if there was, we can apply the current operator
+        $query = ""; # clear it out so we can populate properly with field-weighted stemmed query
+        my $previous_operand;    # a flag used to keep track if there was a previous query
+               					# if there was, we can apply the current operator
+		# for every operand
         for ( my $i = 0 ; $i <= @operands ; $i++ ) {
-            my $operand = $operands[$i];
-            # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
-            # we use IsAlpha unicode definition, to deal correctly with diacritics.
-            # otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
-            # and don't find anything...
-            my $stemmed_operand;
-            my $stemming      = C4::Context->preference("QueryStemming")     || 0;
-            my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
-			my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
-			
-            # We Have to do this more carefully.
-            #Since Phrase Search Is Phrase search.
-            #phrase "Physics In Collision" will not be found if we do it like that.
-            my $index   = $indexes[$i];
-            my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
 
-			# if the operator contains more than one qualifier, but not phrase
-            if (index($index,"phr")<0 && index($index,",")>0){                  
-              #operand may be a wordlist deleting stopwords      
-              foreach (keys %{C4::Context->stopwords}) {
-                  $operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
-                  $operand=~ s/^$_\P{IsAlpha}/ /i;
-                  $operand=~ s/\P{IsAlpha}$_$/ /i;
-              }
-              #now coping with words      
-              my @wordlist= split (/\s/,$operand);
-              foreach my $word (@wordlist){
-                if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
-                  $word=~s/\*//;
-                  push @rightlefttruncated,$word;
-                } elsif(index($word,"*")==0 && index($word,"*",1)<0){        
-                  $word=~s/\*//;
-                  push @lefttruncated,$word;
-                } elsif (index($word,"*")==length($word)-1){        
-                  $word=~s/\*//;
-                  push @righttruncated,$word;
-                } elsif (index($word,"*")<0){        
-                  push @nontruncated,$word;
-                } else {
-                  push @regexpr,$word;
-                }        
-              }       
-            }      
-            
-            if ( $operands[$i] ) {
-                $operand =~ s/^(and |or |not )//i;
+			# COMBINE OPERANDS, INDEXES AND OPERATORS
+			if ( $operands[$i] ) {
+            	my $operand = $operands[$i];
+            	my $index   = $indexes[$i];
+            	my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
 
-# STEMMING FIXME: need to refine the field weighting so stemmed operands don't disrupt the query ranking
-                if ($stemming) {
-    				# FIXME: the locale should be set based on the user's language and/or search choice
-    				my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
-    				# FIXME: these should be stored in the db so the librarian can modify the behavior
-    				$stemmer->add_exceptions(
-        			{   
-            		'and' => 'and',
-            		'or'  => 'or',
-            		'not' => 'not',
-        			}
-    				);
+				# Remove Stopwords	
+				$operand = _remove_stopwords($operand,$index);
 
-                    my @words = split( / /, $operands[$i] );
-                    my $stems = $stemmer->stem(@words);
-                    foreach my $stem (@$stems) {
-                        $stemmed_operand .= "$stem";
-                        $stemmed_operand .= "?"
-                          unless ( $stem =~ /(and$|or$|not$)/ )
-                          || ( length($stem) < 3 );
-                        $stemmed_operand .= " ";
-						$stemmed_operand =~ s/(and|or|not)//g;
-                        #warn "STEM: $stemmed_operand";
-                    }
+				# Handle Truncation
+				my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr) = _add_truncation($operand,$index);
 
-                    #$operand = $stemmed_operand;
-                }
+				# Handle Stemming
+          		my $stemmed_operand;
+				$stemmed_operand = _build_stemmed_operand($operand) if $stemming;
 
-# FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
-# pretty well but will work much better when we have an actual query parser
-                my $weighted_query;
-                if ($weight_fields) {
-                    $weighted_query .=
-                      " rk=(";    # Specifies that we're applying rank
-                                  # keyword has different weight properties
-                    if ( ( $index =~ /kw/ ) || ( !$index ) )
-                    { # FIXME: do I need to add right-truncation in the case of stemming?
-                          # a simple way to find out if this query uses an index
-                        if ( $operand =~ /(\=|\:)/ ) {
-                            $weighted_query .= " $operand";
-                        }
-                        else {
-                            $weighted_query .=" Title-cover,ext,r1=\"$operand\""; 	# title cover as exact
-                            $weighted_query .=" or ti,ext,r2=\"$operand\"";    			# exact title elsewhere
-                            #$weighted_query .= " or ti,phr,r3=$operand";          # index as phrase
-                            #$weighted_query .= " or any,ext,r4=$operand";         # index as exact
-                            $weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # all the words in the query (wordlist)
-                            $weighted_query .= " or wrd,fuzzy,r9=$operand" if $fuzzy_enabled; # add fuzzy
-                            $weighted_query .= " or wrd,right-Truncation=$stemmed_operand" if $stemming; # add stemming
-							# embedded sorting: 0 a-z; 1 z-a
-							#$weighted_query .= ") or (sort1,aut=1";
-                        }
-                    }
-                    elsif ( $index =~ /au/ ) {
-                        $weighted_query .=
-                          " $index,ext,r1=$operand";    # index label as exact
-                         #$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
-                        $weighted_query .=
-                          " or $index,phr,r3=$operand";    # index as phrase
-                        $weighted_query .= " or $index,rt,wrd,r3=$operand";
-                    }
-                    elsif ( $index =~ /ti/ ) {
-                        $weighted_query .=
-                          " Title-cover,ext,r1=$operand"; # index label as exact
-                        $weighted_query .= " or Title-series,ext,r2=$operand";
-
-                        #$weighted_query .= " or ti,ext,r2=$operand";
-                        #$weighted_query .= " or ti,phr,r3=$operand";
-                        #$weighted_query .= " or ti,wrd,r3=$operand";
-                        $weighted_query .=" or (title-sort-az=0 or Title-cover,startswithnt,st-word,r3=$operand #)";
-                        $weighted_query .=" or (title-sort-az=0 or Title-cover,phr,r6=$operand)";
-
-                        #$weighted_query .= " or Title-cover,wrd,r5=$operand";
-                        #$weighted_query .= " or ti,ext,r6=$operand";
-                        #$weighted_query .= " or ti,startswith,phr,r7=$operand";
-                        #$weighted_query .= " or ti,phr,r8=$operand";
-                        #$weighted_query .= " or ti,wrd,r9=$operand";
-
-   						#$weighted_query .= " or ti,ext,r2=$operand";         # index as exact
-   						#$weighted_query .= " or ti,phr,r3=$operand";              # index as  phrase
-   						#$weighted_query .= " or any,ext,r4=$operand";         # index as exact
-   						#$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
-                    }
-                    else { 
-                        $weighted_query .=
-                          " $index,ext,r1=$operand";    # index label as exact
-                         #$weighted_query .= " or $index,ext,r2=$operand";            # index as exact
-                        $weighted_query .=
-                          " or $index,phr,r3=$operand";    # index as phrase
-                        $weighted_query .= " or $index,rt,wrd,r3=$operand";
-                        $weighted_query .=
-                          " or $index,wrd,r5=$operand"
-                          ;    # index as word right-truncated
-                        $weighted_query .= " or $index,wrd,fuzzy,r8=$operand";
-                    }
-                    $weighted_query .= ")";    # close rank specification
-                    $operand = $weighted_query;
-                }
+				# FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
+				# pretty well but will work much better when we have an actual query parser
+                my $weighted_query = _build_weighted_query($operand,$stemmed_operand,$index) if $weight_fields;
 
                 # only add an operator if there is a previous operand
                 if ($previous_operand) {
@@ -763,7 +786,7 @@ sub buildQuery {
                         $human_search_desc .= "  and $index: $operands[$i]";
                     }
                 }
-                else {
+                else { 
                     if ( !$index ) {
                         $query             .= " $operand";
                         $human_search_desc .= "  $operands[$i]";
@@ -995,14 +1018,13 @@ sub searchResults {
             $summary =~ s/\n/<br>/g;
             $oldbiblio->{summary} = $summary;
         }
-        # add spans to search term in results
+        # add spans to search term in results for search term highlighting
         foreach my $term ( keys %$span_terms_hashref ) {
-
-            #warn "term: $term";
             my $old_term = $term;
             if ( length($term) > 3 ) {
                 $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\])//g;
 				$term =~ s/\\//g;
+				$term =~ s/\*//g;
 
                 #FIXME: is there a better way to do this?
                 $oldbiblio->{'title'} =~ s/$term/<span class=term>$&<\/span>/gi;
