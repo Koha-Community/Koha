@@ -22,7 +22,7 @@
 <p>Use the dictionary to define custom criteria for reporting.</p>
 
 <h2>Current Terms</h2>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 Filter By Area <select name="areas">
 <option value="All">All</option>
 <!-- TMPL_LOOP NAME="areas" -->     
@@ -45,7 +45,7 @@ Filter By Area <select name="areas">
 <td><!-- TMPL_VAR NAME="description" --></td>
 <td><!-- TMPL_VAR NAME="area" --></td>
 <td><!-- TMPL_VAR NAME="saved_sql" --></td>
-<td><form method="post" action="/cgi-bin/koha/reports/guided_reports.pl">
+<td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
 <input type="submit" name="phase" value="Delete Definition"><input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
 </form></td>
 </tr>
@@ -56,7 +56,7 @@ Filter By Area <select name="areas">
 
 <!-- TMPL_IF NAME="new_dictionary" -->
 <h1>Add New Definition</h1>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 
 <p><b>1 Name</b> | 2 Area | 3 Columns | 4 Values</p>
 <table>
@@ -79,7 +79,7 @@ Filter By Area <select name="areas">
 <h1>Add New Definition</h1>
 
 <p>1 Name | <b>2 Area</b> | 3 Columns | 4 Values</p>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <input type="hidden" name="phase" value="New Term step 3">
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
 <input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
@@ -97,7 +97,7 @@ Select table <select name="areas">
 <h1>Add New Definition</h1>
 
 <p>1 Name | 2 Area | <b>3 Columns</b> | 4 Values</p>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">      
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
 <input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
@@ -136,7 +136,7 @@ Select table <select name="areas">
 <h1>Add New Definition</h1>
 
 <p>1 Name | 2 Area | 3 Columns | <b>4 Values</b></p>
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
 <input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
@@ -205,7 +205,7 @@ align          : "Tl"
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_5" -->
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">      
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">    
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">           
 <input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
