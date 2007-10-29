@@ -406,7 +406,6 @@ sub checkauth {
         $loggedin = 1;
     }
     elsif ( $sessionID = $query->cookie("CGISESSID")) {
-<<<<<<< HEAD:C4/Auth.pm
 		my $storage_method = C4::Context->preference('SessionStorage');
 		my $session;
 		if ($storage_method eq 'mysql'){
@@ -416,10 +415,6 @@ sub checkauth {
 			# catch all defaults to tmp should work on all systems
 			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
 		}
-=======
-#         my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-        my $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
->>>>>>> Commenting out some noisy warns:C4/Auth.pm
         C4::Context->_new_userenv($sessionID);
         if ($session){
             C4::Context::set_userenv(
