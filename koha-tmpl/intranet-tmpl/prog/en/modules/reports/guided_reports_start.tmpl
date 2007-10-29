@@ -8,7 +8,8 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Reports</a> &rsaquo; <strong>Guided Reports Wizard </strong></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <strong>Guided Reports Wizard </strong></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -37,7 +38,7 @@ reports</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="saved1" -->
-<h1>Load Saved Reports<h1>
+<h1>Load Saved Reports</h1>
 Choose the report from the list
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <select name="reports">
@@ -130,7 +131,7 @@ Matrix:
 <table>
 <tr><td><!-- TMPL_LOOP NAME="criteria" -->
 <input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
-NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> = 
+NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> 
 </td><td>
 <!-- TMPL_IF NAME="date" -->
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
@@ -150,7 +151,7 @@ align          : "Tl"
 <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
 <!-- /TMPL_LOOP -->
 </select>
-</td><tr></table>
+</td><tr>
 <!-- /TMPL_IF -->
 <br />
 <!-- /TMPL_LOOP -->
@@ -158,7 +159,11 @@ align          : "Tl"
 <!-- TMPL_IF NAME="definitions" -->
 Dictionary Definitions <br />
 <!-- TMPL_LOOP NAME="definitions" -->
-<input type=checkbox name="definition" value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --><br />
+<table>
+       <tr><td><input type=checkbox name="definition" value="<!--
+TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
+</table>
+<br />
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 <input type="submit" name="phase" value="Choose these criteria">
