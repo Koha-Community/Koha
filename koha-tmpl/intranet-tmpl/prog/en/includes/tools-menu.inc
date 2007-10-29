@@ -5,6 +5,7 @@
 	<li><a href="/cgi-bin/koha/tools/holidays.pl">Holidays</a></li>
 	<li><a href="/cgi-bin/koha/tools/letter.pl">Notices</a></li>
 	<li><a href="/cgi-bin/koha/tools/overduerules.pl">Notice/status triggers</a></li>
+	<li><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Manage OPAC reviews</a></li>
 	<li><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></li>
 	<li><a href="/cgi-bin/koha/tools/inventory.pl">Inventory/stocktaking</a></li>
 	<li><a href="/cgi-bin/koha/tools/export.pl">Export bibs/holdings</a></li>
