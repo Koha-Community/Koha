@@ -304,7 +304,7 @@ elsif ( $phase eq 'Save' ) {
     my $sql  = $input->param('sql');
     my $type = $input->param('type');
     $template->param(
-        'save' => 1,
+        'save_successful' => 1,
         'sql'  => $sql,
         'type' => $type
     );
@@ -317,6 +317,9 @@ elsif ( $phase eq 'Save Report' ) {
     my $type = $input->param('type');
 	my $notes = $input->param('notes');
     save_report( $sql, $name, $type, $notes );
+	$template->param(
+		'save_successful' => 1,
+	);
 }
 
 elsif ( $phase eq 'Execute' ) {
