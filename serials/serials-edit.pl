@@ -72,6 +72,8 @@ use C4::Output;
 use C4::Context;
 use C4::Serials;
 
+#use Smart::Comments;
+
 my $query = new CGI;
 my $dbh = C4::Context->dbh;
 my @serialids = $query->param('serialid');
@@ -221,7 +223,8 @@ if ($op eq 'serialchangestatus') {
             #New Item
             # if autoBarcode is ON, calculate barcode...
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
-            if (C4::Context->preference('autoBarcode')) {
+            if (C4::Boolean::true_p(C4::Context->preference("autoBarcode")) != 0 ) {
+
               unless ($record->field($tagfield)->subfield($tagsubfield)) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
