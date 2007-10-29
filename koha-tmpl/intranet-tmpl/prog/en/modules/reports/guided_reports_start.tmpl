@@ -246,12 +246,13 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 
 <!-- TMPL_IF NAME="showreport" -->
 <!-- TMPL_VAR NAME="sql" -->
-
-<p>
+<h1>Confirm Custom Report</h1>
+<p>Your report will be generated with the following SQL statement. <p> 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-<input type="submit" name="phase" value="Save">  <input type="submit" name="phase" value="Execute">
+<p>You will need to save the report before you can execute it</p>
+<input type=button value="Back" onClick="history.go(-1)"><input type="submit" name="phase" value="Save">  
 </form>
 <!-- /TMPL_IF -->
 
