@@ -1,0 +1,130 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Reports</a> &rsaquo; <strong>Guided Reports Wizard </strong></div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<div id="main">
+<form name="form1" action="scheduler.pl" method="post">
+<input type="hidden" name="mode" value="job_add">
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr><td>Current server time is</td>
+<td><!-- TMPL_VAR NAME="time" --></td></tr>
+<tr><td class="cell">Time</td>
+<td class="cell"><input type="text" name="starttime" value="" maxlength="5" size="5" /></td>
+<td class="cell"><select name="startday">
+<option value="01">1</option>			
+<option value="02">2</option>
+<option value="03">3</option>
+<option value="04">4</option>
+<option value="05">5</option>
+<option value="06">6</option>
+<option value="07">7</option>
+<option value="08">8</option>
+<option value="09">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>		
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>														
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+
+</select>
+</td>
+<td class="cell"><select name="startmonth">
+<option value="01">Jan</option>
+<option value="02">Feb</option>
+<option value="03">Mar</option>
+<option value="04">Apr</option>		
+<option value="05">May</option>
+<option value="06">Jun</option>
+<option value="07">Jul</option>
+<option value="08">Aug</option>
+<option value="09">Sep</option>
+<option value="10">Oct</option>
+<option value="11">Nov</option>
+<option value="12">Dec</option>
+</select>
+</td>
+<td class="cell"><select name="startyear">
+<option value="2007">2007</option>
+<option value="2008">2008</option>
+
+</select>
+</td>
+</tr>
+<tr><td class="cell">Report</td><td>
+<select name="report">
+<!-- TMPL_LOOP NAME="savedreports" -->                                   
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>                  
+<!-- /TMPL_LOOP -->
+</select>
+</tr>
+<tr><td class="cell">Output Format</td>
+<td><select name="format">
+<option value="text">Text</option>
+</select></td>
+</tr>
+<tr><td class="cell">Email</td>
+<td>
+<input type=text name=email>
+</td></tr>
+<tr><td><input class="submit-button" type="submit" value="Add">
+</td></tr>
+</table>
+</form>
+  
+<h2>Jobs already entered</h2>
+<table>
+<tr>
+<th>Date/Time</th>
+<th>Action</th>
+<th>&nbsp;</th>
+</tr>
+<TMPL_LOOP NAME="JOBS">
+<form action="scheduler.pl" method="post">
+<input type=hidden name=mode value="job_change">
+
+<tr>
+<td><TMPL_VAR NAME="TIME"></td>
+<td><TMPL_VAR NAME="TAG"></td>
+<td><input type="submit" value="Edit"/>&nbsp;<input type="submit" name="delete" value="Delete" /></td>
+</tr>
+<input type=hidden name=jobid value="<TMPL_VAR NAME="JOBID">">
+</form>
+</TMPL_LOOP>
+</table>
+
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="guided-reports-view.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
