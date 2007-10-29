@@ -458,7 +458,7 @@ sub get_column_type {
 	while (my $info = $sth->fetchrow_hashref()){
 		if ($info->{'COLUMN_NAME'} eq $column){
 			#column we want
-			if ($info->{'TYPE_NAME'} eq 'CHAR'){
+			if ($info->{'TYPE_NAME'} eq 'CHAR' || $info->{'TYPE_NAME'} eq 'VARCHAR'){
 				$info->{'TYPE_NAME'} = 'distinct';
 			}
 			return $info->{'TYPE_NAME'};		

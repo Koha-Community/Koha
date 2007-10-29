@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-use CGI::Carp qw(fatalsToBrowser);
+use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
 use strict;
 use C4::Auth;
 use CGI;
@@ -462,8 +462,11 @@ elsif ($phase eq 'New Term step 4'){
 		if ($type eq 'DATE'){
 			$tmp_hash{'date'}=1;
 		}
+		if ($type eq 'TEXT'){
+			$tmp_hash{'text'}=1;
+		}
 #		else {
-#			die $type;#
+#			warn $type;#
 #			}
 		push @column_loop,\%tmp_hash;
 		}
@@ -535,27 +538,15 @@ elsif ($phase eq 'New Term step 5'){
 }
 
 elsif ($phase eq 'New Term step 6'){
-	# Choosing the columns
-	( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "reports/dictionary.tmpl",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { editcatalogue => 1 },
-        debug           => 1,
-    }
-	);
+	# Saving
 	my $area = $input->param('area');
 	my $definition_name=$input->param('definition_name');
 	my $definition_description=$input->param('definition_description');		
 	my $sql=$input->param('sql');
 	save_dictionary($definition_name,$definition_description,$sql,$area);
-	$template->param( 'step_6' => 1,
-		'area' => $area,
-		'definition_name' => $definition_name,
-		'definition_description' => $definition_description,
-	);
+	$no_html=1;
+	print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=View%20Dictionary");	
+
 }
 elsif ($phase eq 'Delete Definition'){
 	$no_html=1;
