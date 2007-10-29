@@ -346,8 +346,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+<<<<<<< HEAD:updater/updatedatabase
 $DBversion = "3.00.00.013";
+=======
+
+>>>>>>> Updating updatedatabase and kohaversion.pl for new reports tables:updater/updatedatabase
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+<<<<<<< HEAD:updater/updatedatabase
     $dbh->do("CREATE TABLE `import_batches` (
               `import_batch_id` int(11) NOT NULL auto_increment,
               `template_id` int(11) default NULL,
@@ -458,6 +463,32 @@ $DBversion = "3.00.00.014";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE subscription ADD lastbranch VARCHAR(4)");
     print "Upgrade to $DBversion done (userid index added)\n";
+	SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.015";	
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("CREATE TABLE `saved_sql` (
+		   `id` int(11) NOT NULL auto_increment,
+		   `borrowernumber` int(11) default NULL,
+		   `date_created` datetime default NULL,
+		   `last_modified` datetime default NULL,
+		   `savedsql` text,
+		   `last_run` datetime default NULL,
+		   `report_name` varchar(255) default NULL,
+		   `type` varchar(255) default NULL,
+		   `notes` text,
+		   PRIMARY KEY  (`id`),
+		   KEY boridx (`borrowernumber`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    $dbh->do("CREATE TABLE `saved_reports` (
+		   `id` int(11) NOT NULL auto_increment,
+		   `report_id` int(11) default NULL,
+		   `report` longtext,
+		   `date_run` datetime default NULL,
+		   PRIMARY KEY  (`id`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    print "Upgrade to $DBversion done (saved_sql and saved_reports added)\n";
     SetVersion ($DBversion);
 }
 
