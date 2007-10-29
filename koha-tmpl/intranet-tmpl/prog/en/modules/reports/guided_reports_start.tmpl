@@ -20,16 +20,24 @@
 
 <!-- TMPL_IF NAME="start" -->
      <h2>Guided Reports</h2>
+     <p>Use the guided reports engine to create non standard reports.
+This feature aims to provide some middle ground between the built in
+canned reports and requiring a DBA to write the SQL code for you.</p>
      <form action="/cgi-bin/koha/reports/guided_reports.pl">
+     <h3>Build and Run existing Reports</h3>     	   						    			      
 		<input type="submit" name="phase" value="Build new"/>
 		<input type="submit" name="phase" value="Used saved"/>
 		<input type="submit" name="phase" value="Create report from SQL"/>
 <!--		<input type="submit" name="phase" value="Create Compound Report"/> -->
-		<input type="submit" name="phase" value="View Dictionary"/>
+<h3>Define Custom Criteria</h3>
+<p>Use the reports dictionary to define custom criteria to use in your
+reports</p>
+<input type="submit" name="phase" value="View Dictionary"/>
 	</form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="saved1" -->
+<h1>Load Saved Reports<h1>
 Choose the report from the list
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <select name="reports">
@@ -43,6 +51,7 @@ Choose the report from the list
 
 
 <!-- TMPL_IF NAME="build1" -->
+<h1>Build A Report</h1>
 <h3>Step 1 of 6: Choose a Module to Report on</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <select name="areas">
@@ -57,6 +66,7 @@ Choose the report from the list
 
 
 <!-- TMPL_IF NAME="build2" -->
+<h1>Build A Report</h1>
 <h3>Step 2 of 6: Pick a Report Type</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
@@ -117,8 +127,10 @@ Matrix:
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
-<!-- TMPL_LOOP NAME="criteria" -->
+<table>
+<tr><td><!-- TMPL_LOOP NAME="criteria" -->
 <input type=checkbox name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="description" --> = 
+</td><td>
 <!-- TMPL_IF NAME="date" -->
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
 <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />                 
@@ -130,11 +142,12 @@ button         : "buttonfrom1",
 align          : "Tl" 
 });     
 </script>          
-
+</td>
 <!-- TMPL_ELSE -->
-<select name="<!-- TMPL_VAR NAME="name" -->_value">
+</td><td><select name="<!-- TMPL_VAR NAME="name" -->_value"></td>
 <!-- TMPL_LOOP NAME="values" -->
-<option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
+<td><option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
+</td><tr></table>
 <!-- /TMPL_LOOP -->
 </select>
 <!-- /TMPL_IF -->
