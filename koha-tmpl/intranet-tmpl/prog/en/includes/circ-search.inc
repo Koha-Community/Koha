@@ -161,7 +161,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         <input type="text" name="q" id="search-form" size="40" />
-        <input type="submit" name="op" id="opac-submit" value="Submit"  class="form-submit" />
+        <input type="submit" class="form-submit" value="Submit"/>
     </form>
 </div>
 
