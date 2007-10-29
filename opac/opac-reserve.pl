@@ -28,6 +28,7 @@ use C4::Date;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
+use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 
@@ -145,6 +146,7 @@ $template->param( itemcount => $itemcount );
 my %types;
 my %itemtypes;
 my @duedates;
+#die @items;
 foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
