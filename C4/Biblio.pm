@@ -26,6 +26,9 @@ use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
+
+use Data::Dumper;
+
 use C4::Koha;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
@@ -2356,68 +2359,22 @@ sub TransformHtmlToMarc {
 
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $table ) = @_;
-
     my $result;
+	my @tables = ('biblio','biblioitems','items');
+	foreach my $table (@tables){
+		my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
+		$sth2->execute;
+		while (my ($field) = $sth2->fetchrow){
+            # id like to do this, it will break lots of other places, but doing it will stop the namespace clashes			
+#			$result->{$table.'.'.$field} = get_kohafield_from_marc($table,$field,$record,$frameworkcode);
+            # so for now doing this
+			$result = TransformMarcToKohaOneField( $table, $field, $record, $result, $frameworkcode );
+		}
+	}
+	
+	# not sure about this stuff, will revisit
+    #
 
-    # sometimes we only want to return the items data
-    if ($table eq 'items') {
-        my $sth = $dbh->prepare("SHOW COLUMNS FROM items");
-        $sth->execute();
-        while ( (my $field) = $sth->fetchrow ) {
-            my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-            my $key = _disambiguate($table, $field);
-            if ($result->{$key}) {
-                $result->{$key} .= " | " . $value;
-            } else {
-                $result->{$key} = $value;
-            }
-        }
-        return $result;
-    } else {
-        my @tables = ('biblio','biblioitems','items');
-        foreach my $table (@tables){
-            my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
-            $sth2->execute;
-            while (my ($field) = $sth2->fetchrow){
-                # FIXME use of _disambiguate is a temporary hack
-                # $result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-                my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-                my $key = _disambiguate($table, $field);
-                if ($result->{$key}) {
-                    # FIXME - hack to not bring in duplicates of the same value
-                    unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($value eq "")) {
-                        $result->{$key} .= " | " . $value;
-                    }
-                } else {
-                    $result->{$key} = $value;
-                }
-            }
-            $sth2->finish();
-        }
-        # modify copyrightdate to keep only the 1st year found
-        my $temp = $result->{'copyrightdate'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
-            $result->{'copyrightdate'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'copyrightdate'} = $1;
-        }
-    
-        # modify publicationyear to keep only the 1st year found
-        $temp = $result->{'publicationyear'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
-            $result->{'publicationyear'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'publicationyear'} = $1;
-        }
-        return $result;
-    }
-}
 
 
 =head2 _disambiguate
@@ -2463,23 +2420,12 @@ sub _disambiguate {
 
 }
 
-=head2 get_koha_field_from_marc
+# sub to replace TransformMarcToKohaOneField
 
-=over 4
-
-$result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-
-Internal function to map data from the MARC record to a specific non-MARC field.
-FIXME: this is meant to replace TransformMarcToKohaOneField after more testing.
-
-=back
-
-=cut
-
-sub get_koha_field_from_marc {
-    my ($koha_table,$koha_column,$record,$frameworkcode) = @_;
-    my ( $tagfield, $subfield ) = GetMarcFromKohaField( $koha_table.'.'.$koha_column, $frameworkcode );  
-    my $kohafield;
+sub get_kohafield_from_marc {
+	my ($koha_table,$koha_field,$record,$frameworkcode) = @_;
+	my ( $tagfield, $subfield ) = GetMarcFromKohaField( $koha_table.'.'.$koha_field, $frameworkcode );  
+	my $kohafield;
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->tag() < 10 ) {
             if ( $kohafield ) {
@@ -2508,7 +2454,9 @@ sub get_koha_field_from_marc {
         }
     }
     return $kohafield;
-} 
+
+}	
+
 
 
 =head2 TransformMarcToKohaOneField
