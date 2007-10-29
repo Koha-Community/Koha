@@ -1,0 +1,304 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha -- Reports</title>
+
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Reports</a> &rsaquo; <strong>Guided Reports Wizard </strong></div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+	<div class="details">
+
+<!-- TMPL_IF NAME="start" -->
+	<form action="/cgi-bin/koha/reports/guided_reports.pl">
+		<input type="submit" name="phase" value="Build new"/>
+		<input type="submit" name="phase" value="Used saved"/>
+		<input type="submit" name="phase" value="Create report from SQL"/>
+		<input type="submit" name="phase" value="Create Compound Report"/>
+	</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="saved1" -->
+Choose the report from the list
+<form action="/cgi-bin/koha/reports/guided_reports.pl">
+<select name="reports">
+<!-- TMPL_LOOP NAME="savedreports" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+<input type="submit" name="phase" value="Run this report">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="build1" -->
+<h3>Step 1 of 6: Choose a Module to Report on</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl">
+<select name="areas">
+<!-- TMPL_LOOP NAME="areas" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+<br />
+<input type="submit" name="phase" value="Report on this Area">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="build2" -->
+<h3>Step 2 of 6: Pick a Report Type</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+<select name="types">
+<!-- TMPL_LOOP NAME="types" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+<br />
+<input type="submit" name="phase" value="Choose this type">
+<br />
+</form>
+Tabular:
+<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-tabular-graphic.gif" />
+Summary:
+<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-summary-graphic.gif" />
+Matrix:
+<img src="http://staff-crc.dev.kohalibrary.com/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="build3" -->
+<h3>Step 3 of 6: Select Columns for Display</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+	<select id="availableColumns" name="oldcolumns2" multiple size="25" style="width:200px;height:300px;">
+<!-- TMPL_LOOP NAME="columns" -->
+<!-- TMPL_IF NAME="table" -->
+
+<!-- TMPL_IF NAME="__first__" -->
+<!-- TMPL_ELSE -->
+</optgroup>
+<!-- /TMPL_IF -->
+
+<optgroup label="<!-- TMPL_VAR NAME="table"-->">
+<!-- TMPL_ELSE -->
+<option value="<!-- TMPL_VAR NAME="name" -->">
+<!-- TMPL_IF NAME="description" --><!-- TMPL_VAR NAME="description" -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_VAR NAME="name" -->
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+</option>
+<!-- /TMPL_LOOP -->
+</select>
+<input type="button" name="Add" value="Add" class="button" onClick="addColumn()"/>
+<select id="selectedColumns" name="columns" multiple size="25" style="width:200px;height:300px;"></select>
+<input type="button" name="delete" value="delete" class="button" onClick="delColumn()"/>
+
+<input type="submit" name="phase" value="Choose these columns">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="build4" -->
+<h3>Step 4 of 6: Select Criteria to Limit on </h3>
+
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
+<!-- TMPL_LOOP NAME="criteria" -->
+<input type=checkbox name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="description" --> = 
+<!-- TMPL_IF NAME="date" -->
+<input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
+<img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />                 
+<script type="text/javascript">   
+Calendar.setup({  
+inputField     : "<!-- TMPL_VAR NAME="name" -->_value",                               
+ifFormat       : "%Y-%m-%d",                               
+button         : "buttonfrom1",                               
+align          : "Tl" 
+});     
+</script>          
+
+<!-- TMPL_ELSE -->
+<select name="<!-- TMPL_VAR NAME="name" -->_value">
+<!-- TMPL_LOOP NAME="values" -->
+<option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+<!-- /TMPL_IF -->
+<br />
+<!-- /TMPL_LOOP -->
+<br />
+<input type="submit" name="phase" value="Choose these criteria">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="build5" -->
+<h3>Step 5 of 6: Pick which columns to total</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
+<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
+<!-- TMPL_LOOP NAME="total_by" -->
+<input type=checkbox name="total_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
+<select name="<!-- TMPL_VAR NAME="name" -->_tvalue">
+
+<!-- TMPL_LOOP NAME="select" -->
+<option value="<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+
+<br />
+<!-- /TMPL_LOOP -->
+<br />
+<input type="submit" name="phase" value="Choose Totals">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="build6" -->
+<h3>Step 6 of 6: Select the ordering</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
+<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
+<input type="hidden" name="totals" value="<!-- TMPL_VAR NAME="totals" -->">
+<!-- TMPL_LOOP NAME="order_by" -->
+<input type=checkbox name="order_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
+<select name="<!-- TMPL_VAR NAME="name" -->_ovalue">
+
+<!-- TMPL_LOOP NAME="select" -->
+<option value="<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+
+<br />
+<!-- /TMPL_LOOP -->
+<br />
+<input type="submit" name="phase" value="Build Report">
+</form>
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="showreport" -->
+<!-- TMPL_VAR NAME="sql" -->
+
+<p>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<input type="submit" name="phase" value="Save">  <input type="submit" name="phase" value="Execute">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="save" -->
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+Report Name: <input type="text" name="reportname"> <br />
+Notes: <textarea name="notes"></textarea><br />
+<input type="submit" name="phase" value="Save Report">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="execute" -->
+Show results
+<table>
+<!-- TMPL_LOOP NAME="results" -->
+<!-- TMPL_VAR NAME="row" -->
+<!-- /TMPL_LOOP -->
+</table>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<select name="format">
+<option value="csv">Comma Separated Text</option>
+<option value="tab">Tab Separated Text</option>
+</select>
+<input type="submit" name="phase" value="Export">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="create" -->
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+Report Name: <input type="text" name="reportname"> <br />
+Type:
+<select name="types">
+<!-- TMPL_LOOP NAME="types" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+<br />
+SQl: <textarea name="sql" cols=30 rows=10></textarea><br />
+<input type="submit" name="phase" value="Save Report">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="compound" -->
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+Master: <select name="master">
+<!-- TMPL_LOOP NAME="savedreports" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+ &nbsp;
+Sub report:<select name="subreport">
+<!-- TMPL_LOOP NAME="savedreports" -->
+<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
+<!-- /TMPL_LOOP -->
+</select>
+<br />
+<input type="submit" name="phase" value="Save Compound">
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="save_compound" -->
+<!-- TMPL_VAR NAME="master" --> <br />
+<!-- TMPL_VAR NAME="subsql" -->
+<!-- /TMPL_IF -->
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="guided-reports-view.inc" -->
+</div>
+</div>
+<script type="text/javascript">
+function setObjects() {
+	selectedColumnsObj=document.getElementById('selectedColumns');
+	availableColumnsObj=document.getElementById('availableColumns');
+}
+setObjects();
+
+function addColumn() {
+	for (i=0;i<availableColumnsObj.length;i++) {
+		if (availableColumnsObj.options[i].selected==true) {
+			var newColumnObj=document.createElement("OPTION");
+			newColumnObj.value=availableColumnsObj.options[i].value;
+			newColumnObj.text=availableColumnsObj.options[i].text;
+			selectedColumnsObj.appendChild(newColumnObj);
+			newColumnObj.selected=true;
+		}
+	}
+}
+
+function delColumn() {
+	for (i=0;i<=selectedColumnsObj.options.length;i++) {
+		if (selectedColumnsObj.options.selectedIndex>=0)
+		selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
+	}
+}
+</script>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
