@@ -132,7 +132,7 @@ Matrix:
 <!-- TMPL_LOOP NAME="criteria" -->
 <tr><td><input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
 NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> 
-</td><td>
+</td>
 <!-- TMPL_IF NAME="date" -->
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
 <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />                 
@@ -144,7 +144,7 @@ button         : "buttonfrom1",
 align          : "Tl" 
 });     
 </script>          
-</td>
+
 <!-- TMPL_ELSE -->
 <td><select name="<!-- TMPL_VAR NAME="name" -->_value">
 <!-- TMPL_LOOP NAME="values" -->
@@ -153,7 +153,6 @@ align          : "Tl"
 </select>
 
 <!-- /TMPL_IF -->
-<br />
 <!-- /TMPL_LOOP -->
 </td></tr></table><br />
 <!-- TMPL_IF NAME="definitions" -->
@@ -180,8 +179,10 @@ TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
 <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
 <input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
 <input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
+<table>
 <!-- TMPL_LOOP NAME="total_by" -->
-<input type=checkbox name="total_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
+<tr><td><input type=checkbox name="total_by" value="<!-- TMPL_VAR
+NAME="name" -->"> <!-- TMPL_VAR NAME="name"-->
 <select name="<!-- TMPL_VAR NAME="name" -->_tvalue">
 
 <!-- TMPL_LOOP NAME="select" -->
@@ -189,9 +190,9 @@ TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
 <!-- /TMPL_LOOP -->
 </select>
 
-<br />
+</td></tr>
 <!-- /TMPL_LOOP -->
-<br />
+</table>
 <input type="submit" name="phase" value="Choose Totals">
 </form>
 <!-- /TMPL_IF -->
@@ -206,17 +207,19 @@ TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
 <input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
 <input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
 <input type="hidden" name="totals" value="<!-- TMPL_VAR NAME="totals" -->">
-<!-- TMPL_LOOP NAME="order_by" -->
-<input type=checkbox name="order_by" value="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name"-->
+<table><!-- TMPL_LOOP NAME="order_by" -->
+<tr><td><input type=checkbox name="order_by" value="<!-- TMPL_VAR
+NAME="name" -->"> <!-- TMPL_VAR NAME="name"-->
 <select name="<!-- TMPL_VAR NAME="name" -->_ovalue">
 
 <!-- TMPL_LOOP NAME="select" -->
 <option value="<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></option>
 <!-- /TMPL_LOOP -->
 </select>
+</td></tr>
 
-<br />
 <!-- /TMPL_LOOP -->
+</table>
 <br />
 <input type="submit" name="phase" value="Build Report">
 </form>
@@ -245,7 +248,9 @@ Notes: <textarea name="notes"></textarea><br />
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="execute" -->
-Show results
+<h1>Show results</h1>
+<h2>Report Name</h2>
+<p>Report description</p>
 <table>
 <!-- TMPL_LOOP NAME="results" -->
 <!-- TMPL_VAR NAME="row" -->
