@@ -134,7 +134,7 @@ Matrix:
 NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> 
 </td>
 <!-- TMPL_IF NAME="date" -->
-<input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
+<td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" >                                             
 <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />                 
 <script type="text/javascript">   
 Calendar.setup({  
@@ -144,17 +144,17 @@ button         : "buttonfrom1",
 align          : "Tl" 
 });     
 </script>          
-
+</td></tr>
 <!-- TMPL_ELSE -->
 <td><select name="<!-- TMPL_VAR NAME="name" -->_value">
 <!-- TMPL_LOOP NAME="values" -->
 <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
 <!-- /TMPL_LOOP -->
 </select>
-
+</td></tr>
 <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-</td></tr></table><br />
+</table><br />
 <!-- TMPL_IF NAME="definitions" -->
 Dictionary Definitions <br />
 <table>
