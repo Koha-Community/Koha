@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Add to Virtual Shelf</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <style type="text/css">
-   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin: auto; text-align:left; }
+   #custom-doc { width:34.62em;*width:33.78em;min-width:450px; margin:auto; margin-top: .4em;text-align:left; } 
    </style>
 </head>
 <body>
@@ -11,42 +11,44 @@
    <div id="bd">
 
 
-<h1>Add 
+<h3>Add 
     <i><!-- TMPL_VAR NAME="title" --></i>
     <!-- TMPL_IF NAME="author" -->
         by <!-- TMPL_VAR NAME="author" -->
     <!-- /TMPL_IF --> to a virtual shelf
-</h1>
+</h3>
 
-<form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+<!-- TMPL_IF NAME="CGIvirtualshelves" --><form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    
-    <b>Select an existing shelf</b>
-    <p>
-        <label>Add to virtual shelf</label><!-- TMPL_VAR NAME="CGIvirtualshelves" -->
-    </p>
+    <fieldset class="rows">
+    <legend>Select an existing shelf</legend>
+    <ol>
+        <li><label>Choose shelf</label><!-- TMPL_VAR NAME="CGIvirtualshelves" --></li>
+    </ol>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    <input type="submit" value="Add to virtual shelf" class="submit" />
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /></fieldset>
+	</fieldset>
 </form>
-<p>...or...</p>
+<h4>...or...</h4><!-- /TMPL_IF -->
+
 <form name="f2" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
-    <b>Add to a new shelf:</b>
-        <p>
+    <fieldset class="rows"><legend>Add to a new shelf:</legend>
+        <ol><li>
             <label for="newvirtualshelf">
                 Shelf name:
             </label>
 			<input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
-        </p>
-        <p>
+        </li>
+        <li>
             <label for="category">Category:</label>
             <select name="category" id="category">
                 <option value="1">Private</option>
                 <option value="2">Public</option>
 				<option value="3">Free</option>
             </select>
-        </p>
-    <input type="submit" value="Add to virtual shelf" class="submit" /> 
+        </li></ol>
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /></fieldset> </fieldset>
 </form>
 
 </div>

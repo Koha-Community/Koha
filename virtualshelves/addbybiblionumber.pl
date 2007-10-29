@@ -100,7 +100,7 @@ else {    # this shelf doesn't already exist.
         push( @shelvesloop, $element );
         $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
     }
-
+	if(@shelvesloop gt 0){
     my $CGIvirtualshelves = CGI::scrolling_list(
         -name     => 'shelfnumber',
         -values   => \@shelvesloop,
@@ -109,12 +109,15 @@ else {    # this shelf doesn't already exist.
         -tabindex => '',
         -multiple => 0
     );
+    $template->param(
+	        CGIvirtualshelves => $CGIvirtualshelves,
+    );
+	}
 
     $template->param(
         biblionumber      => $biblionumber,
         title             => $biblios[0]->{'title'},
         author            => $biblios[0]->{'author'},
-        CGIvirtualshelves => $CGIvirtualshelves,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;
