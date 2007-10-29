@@ -1135,26 +1135,6 @@ CREATE TABLE `letter` (
   PRIMARY KEY  (`module`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
---
--- Table structure for table `marc_breeding`
---
-
-DROP TABLE IF EXISTS `marc_breeding`;
-CREATE TABLE `marc_breeding` (
-  `id` bigint(20) NOT NULL auto_increment,
-  `file` varchar(80) NOT NULL default '',
-  `isbn` varchar(10) NOT NULL default '',
-  `title` varchar(128) default NULL,
-  `author` varchar(80) default NULL,
-  `marc` longblob,
-  `encoding` varchar(40) NOT NULL default '',
-  `z3950random` varchar(40) default NULL,
-  PRIMARY KEY  (`id`),
-  KEY `title` (`title`),
-  KEY `isbn` (`isbn`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 --
 -- Table structure for table `marc_subfield_structure`
 --

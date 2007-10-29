@@ -31,7 +31,8 @@ $VERSION = 0.01;
 
 =head1 NAME
 
-C4::Breeding : script to add a biblio in marc_breeding table.
+C4::Breeding : module to add biblios to import_records via
+               the breeding/reservoir API.
 
 =head1 SYNOPSIS
 
@@ -50,7 +51,7 @@ C4::Breeding : script to add a biblio in marc_breeding table.
 
 =head1 DESCRIPTION
 
-    ImportBreeding import MARC records in the reservoir (marc_breeding table).
+    ImportBreeding import MARC records in the reservoir (import_records/import_batches tables).
     the records can be properly encoded or not, we try to reencode them in utf-8 if needed.
     works perfectly with BNF server, that sends UNIMARC latin1 records. Should work with other servers too.
     the FixEncoding sub is in Koha.pm, as it's a general usage sub.
@@ -161,7 +162,8 @@ C<$isbn> contains isbn or issn,
 C<$random> contains the random seed from a z3950 search.
 
 C<$count> is the number of items in C<@results>. C<@results> is an
-array of references-to-hash; the keys are the items from the C<marc_breeding> table of the Koha database.
+array of references-to-hash; the keys are the items from the C<import_records> and
+C<import_biblios> tables of the Koha database.
 
 =cut
 

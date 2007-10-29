@@ -423,6 +423,34 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
               KEY `itemnumber` (`itemnumber`),
               KEY `branchcode` (`branchcode`)
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+    $dbh->do("INSERT INTO `import_batches`
+                (`overlay_action`, `import_status`, `batch_type`, `file_name`)
+              SELECT distinct 'create_new', 'staged', 'z3950', `file`
+              FROM   `marc_breeding`");
+
+    $dbh->do("INSERT INTO `import_records`
+                (`import_batch_id`, `record_sequence`, `marc`, `record_type`, `status`,
+                `encoding`, `z3950random`, `marcxml`, `marcxml_old`)
+              SELECT `import_batch_id`, 1, `marc`, 'biblio', 'staged', `encoding`, `z3950random`, '', ''
+              FROM `marc_breeding`
+              JOIN `import_batches` ON (`file_name` = `file`)");
+
+    $dbh->do("INSERT INTO `import_biblios`
+                (`import_record_id`, `title`, `author`, `isbn`)
+              SELECT `import_record_id`, `title`, `author`, `isbn`
+              FROM   `marc_breeding`
+              JOIN   `import_records` USING (`z3950random`)");
+
+    $dbh->do("UPDATE `import_batches` 
+              SET `num_biblios` = (
+              SELECT COUNT(*)
+              FROM `import_records`
+              WHERE `import_batch_id` = `import_batches`.`import_batch_id`
+              )");
+
+    $dbh->do("DROP TABLE `marc_breeding`");
+
     SetVersion ($DBversion);
 }
 

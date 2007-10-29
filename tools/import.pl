@@ -37,6 +37,8 @@ use C4::Input;
 use C4::Output;
 use C4::Biblio;
 use C4::Breeding;
+use C4::ImportBatch;
+use C4::Matcher;
 
 #------------------
 # Constants
@@ -59,7 +61,7 @@ my $dbh = C4::Context->dbh;
 
 my $uploadmarc=$input->param('uploadmarc');
 my $overwrite_biblio = $input->param('overwrite_biblio');
-my $filename = $input->param('filename');
+my $comments = $input->param('comments');
 my $syntax = $input->param('syntax');
 my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "tools/import.tmpl",
@@ -72,18 +74,26 @@ my ($template, $loggedinuser, $cookie)
 
 $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
 						uploadmarc => $uploadmarc);
+my $filename = $uploadmarc;
 if ($uploadmarc && length($uploadmarc)>0) {
 	my $marcrecord='';
 	while (<$uploadmarc>) {
 		$marcrecord.=$_;
 	}
-	my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax,int(rand(99999)), 'batch');
+	#my ($notmarcrecord,$alreadyindb,$alreadyinfarm,$imported) = ImportBreeding($marcrecord,$overwrite_biblio,$filename,$syntax,int(rand(99999)), 'batch');
 
-	$template->param(imported => $imported,
-							alreadyindb => $alreadyindb,
-							alreadyinfarm => $alreadyinfarm,
-							notmarcrecord => $notmarcrecord,
-							total => $imported+$alreadyindb+$alreadyinfarm+$notmarcrecord,
+    # FIXME branch code
+    my ($batch_id, $num_valid, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, $comments, '', 1);
+    my $matcher = C4::Matcher->new('biblio');
+    $matcher->add_matchpoint("020", "a", '', 'isbn', 1000);
+    my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
+    my ($num_added, $num_updated, $num_ignored) = BatchCommitBibRecords($batch_id);
+
+	$template->param(imported => $num_valid,
+							alreadyindb => $num_with_matches,
+							alreadyinfarm => 0,
+							notmarcrecord => scalar(@import_errors),
+							total => $num_valid + scalar(@import_errors)
 							);
 
 }
