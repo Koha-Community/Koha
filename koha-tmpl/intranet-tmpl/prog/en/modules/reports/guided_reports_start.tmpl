@@ -44,14 +44,14 @@ reports</p>
 <p>Choose the report to run from the list</p>
 <table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
-<th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Delete</th>
+<th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Saved SQL</th><th>Delete</th>
 <!-- TMPL_LOOP NAME="savedreports" -->
 <tr><td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Run%20this%20report"><!-- TMPL_VAR NAME="report_name" --></td>
 <td><!-- TMPL_VAR NAME="type" --></td>
 <td><!-- TMPL_VAR NAME="notes" --></td>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
-<td>Show SQL</td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Show%20SQL">Show SQL</a></td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
 </form>
@@ -268,8 +268,8 @@ Notes: <textarea name="notes"></textarea><br />
 
 <!-- TMPL_IF NAME="execute" -->
 <h1>Show results</h1>
-<h2>Report Name</h2>
-<p>Report description</p>
+<h2><!-- TMPL_VAR NAME="name" --></h2>
+<p><!-- TMPL_VAR NAME="notes" --></p>
 <table>
 <!-- TMPL_LOOP NAME="results" -->
 <!-- TMPL_VAR NAME="row" -->
@@ -332,6 +332,10 @@ Sub report:<select name="subreport">
 <!-- TMPL_VAR NAME = "row" -->
 <!-- /TMPL_LOOP -->
 </table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="showsql" -->
+<!-- TMPL_VAR NAME="sql" -->
 <!-- /TMPL_IF -->
 
 </div>

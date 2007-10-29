@@ -86,6 +86,16 @@ elsif ( $phase eq 'Delete Saved') {
 	
 }		
 
+elsif ( $phase eq 'Show SQL'){
+	
+	my $id = $input->param('reports');
+	my $sql = get_sql($id);
+	$template->param(
+		'sql' => $sql,
+		'showsql' => 1,
+		);
+}
+
 elsif ($phase eq 'retrieve results') {
 	my $id = $input->param('id');
 	my $results = format_results($id);
@@ -324,12 +334,14 @@ elsif ( $phase eq 'Execute' ) {
 elsif ($phase eq 'Run this report'){
     # execute a saved report
 	my $report = $input->param('reports');
-	my ($sql,$type) = get_saved_report($report);
+	my ($sql,$type,$name,$notes) = get_saved_report($report);
 	my $results = execute_query($sql,$type);
     $template->param(
         'results' => $results,
 		'sql' => $sql,
-        'execute' => 1
+        'execute' => 1,
+		'name' => $name,
+		'notes' => $notes,
     );
 }	
 

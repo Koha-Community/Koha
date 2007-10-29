@@ -29,14 +29,14 @@ use XML::Dumper;
 # use Data::Dumper;
 
 # set the version for version checking
-$VERSION = 0.01;
+$VERSION = 0.11;
 
 @ISA = qw(Exporter);
 @EXPORT =
   qw(get_report_types get_report_areas get_columns build_query get_criteria
   save_report get_saved_reports execute_query get_saved_report create_compound run_compound
   get_column_type get_distinct_values save_dictionary get_from_dictionary
-  delete_definition delete_report format_results);
+  delete_definition delete_report format_results get_sql );
 
 our %table_areas;
 $table_areas{'1'} =
@@ -483,7 +483,7 @@ sub get_saved_report {
     $sth->execute($id);
     my $data = $sth->fetchrow_hashref();
     $sth->finish();
-    return ( $data->{'savedsql'}, $data->{'type'} );
+    return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'} );
 }
 
 =item create_compound($masterID,$subreportID)
@@ -610,7 +610,19 @@ sub delete_definition {
 	my $sth = $dbh->prepare($query);
 	$sth->execute($id);
 	$sth->finish();
-	}
+}
+
+sub get_sql {
+	my ($id) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "SELECT * FROM saved_sql WHERE id = ?";
+	my $sth = $dbh->prepare($query);
+	$sth->execute($id);
+	my $data=$sth->fetchrow_hashref();
+	$sth->finish();	
+	return $data->{'savedsql'};
+}
+
 =head1 AUTHOR
 
 Chris Cormack <crc@liblime.com>
