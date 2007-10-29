@@ -342,16 +342,47 @@ sub getRecords {
         my $sort_by;
         foreach my $sort (@sort_by) {
             if ($sort eq "author_az") {
-                $sort_by.="1=1003 &lt;i ";
+                $sort_by.="1=1003 <i ";
             }
             elsif ($sort eq "author_za") {
-                $sort_by.="1=1003 &gt;i ";
+                $sort_by.="1=1003 >i ";
             }
-
-            #$sort_by .= $sort . " ";    # used to be $sort,
+			elsif ($sort eq "popularity_asc") {
+				$sort_by.="1=9003 <i ";
+			}
+			elsif ($sort eq "popularity_dsc") {
+                $sort_by.="1=9003 >i ";
+            }
+			elsif ($sort eq "call_number_asc") {
+                $sort_by.="1=20  <i ";
+            }
+			elsif ($sort eq "call_number_dsc") {
+                $sort_by.="1=20 >i ";
+            }
+			elsif ($sort eq "pubdate_asc") {
+                $sort_by.="1=31 <i ";
+            }
+			elsif ($sort eq "pubdate_dsc") {
+                $sort_by.="1=31 >i ";
+            }
+			elsif ($sort eq "acqdate_asc") {
+                $sort_by.="1=32 <i ";
+            }
+			elsif ($sort eq "acqdate_dsc") {
+                $sort_by.="1=32 >i ";
+            }
+			elsif ($sort eq "title_az") {
+                $sort_by.="1=4 <i ";
+            }
+			elsif ($sort eq "title_za") {
+                $sort_by.="1=4 >i ";
+            }
         }
-		warn "SORTING: $sort_by";
-        $results[$i]->sort( "yaz", $sort_by ) if $sort_by;
+		if ($sort_by) {
+			if ( $results[$i]->sort( "yaz", $sort_by ) < 0) {
+     			warn "WARNING sort $sort_by failed";
+ 			}
+		}
     }
     while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
         my $ev = $zconns[ $i - 1 ]->last_event();

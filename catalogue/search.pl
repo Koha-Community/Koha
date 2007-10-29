@@ -343,7 +343,12 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 my @sort_by;
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
-#
+
+# FIXME: this is a quick hack
+foreach my $sort (@sort_by) {
+	$template->param($sort => 1);
+}
+
 # Use the servers defined, or just search our local catalog(default)
 my @servers;
 @servers = split("\0",$params->{'server'}) if $params->{'server'};
