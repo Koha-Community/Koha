@@ -738,7 +738,7 @@ sub GetSerials {
     $count=5 unless ($count);
     my @serials;
     my $query =
-      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes 
+      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes
                         FROM   serial
                         WHERE  subscriptionid = ? AND status NOT IN (2,4,5) 
                         ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
@@ -753,7 +753,7 @@ sub GetSerials {
     }
     # OK, now add the last 5 issues arrives/missing
     $query =
-      "SELECT   serialid,serialseq, status, planneddate, publisheddate,notes
+      "SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
        FROM     serial
        WHERE    subscriptionid = ?
        AND      (status in (2,4,5))
@@ -793,7 +793,7 @@ sub GetSerials2 {
     my ($subscription,$status) = @_;
     my $dbh = C4::Context->dbh;
     my $query = qq|
-                 SELECT   serialid,serialseq, status, planneddate, publisheddate,notes
+                 SELECT   serialid,serialseq, status, planneddate, publisheddate,notes, routingnotes
                  FROM     serial 
                  WHERE    subscriptionid=$subscription AND status IN ($status)
                  ORDER BY publisheddate,serialid DESC
