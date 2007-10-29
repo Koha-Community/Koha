@@ -31,29 +31,31 @@
 #
 # any fields except cardnumber can be blank but the number of fields must match
 # dates should be in the format you have set up Koha to expect
+# branchcode and categorycode need to be valid
 
 use strict;
 use C4::Auth;
 use C4::Output;
 use C4::Date;
 use C4::Context;
+use C4::Members;
 
 use Text::CSV;
 use CGI;
 
 my @columnkeys = (
-    'cardnumber',   'surname',          'firstname',    'title',
-    'othernames',   'initials',         'streetnumber', 'streettype',
-    'address',      'address2',         'city',         'email',
-    'phone',        'mobile',           'fax',          'emailpro',
-    'phonepro',     'B_streetnumber',   'B_streettype', 'B_address',
-    'B_city',       'B_zipcode',        'B_email',      'B_phone',
-    'dateofbirth',  'branchcode',       'categorycode', 'dateenrolled',
-    'dateexpiry',   'gonenoaddress',    'lost',         'debarred',
-    'contactname',  'contactfirstname', 'contacttitle', 'borrowernotes',
-    'relationship', 'ethnicity',        'ethnotes',     'sex',
-    'userid',       'opacnote',         'contactnote',  'password',
-    'sort1',        'sort2'
+    'cardnumber',    'surname',      'firstname',        'title',
+    'othernames',    'initials',     'streetnumber',     'streettype',
+    'address',       'address2',     'city',             'zipcode',
+    'email',         'phone',        'mobile',           'fax',
+    'emailpro',      'phonepro',     'B_streetnumber',   'B_streettype',
+    'B_address',     'B_city',       'B_zipcode',        'B_email',
+    'B_phone',       'dateofbirth',  'branchcode',       'categorycode',
+    'dateenrolled',  'dateexpiry',   'gonenoaddress',    'lost',
+    'debarred',      'contactname',  'contactfirstname', 'contacttitle',
+    'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',
+    'sex',           'userid',       'opacnote',         'contactnote',
+    'password',      'sort1',        'sort2'
 );
 
 my $input = new CGI;
@@ -86,11 +88,15 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         my @columns = $csv->fields();
         my %borrower;
         if ( @columns == @columnkeys ) {
+
             @borrower{@columnkeys} = @columns;
-            if ( GetMember( $borrower{'cardnumber'}, 'cardnumber' ) ) {
+            if ( my $member =
+                GetMember( $borrower{'cardnumber'}, 'cardnumber' ) )
+            {
 
                 # borrower exists
                 if ($overwrite_cardnumber) {
+                    $borrower{'borrowernumber'} = $member->{'borrowernumber'};
                     ModMember(%borrower);
                     $overwritten++;
                 }
@@ -99,8 +105,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 }
             }
             else {
-                AddMember(%borrower);
-                $imported++;
+                my $borrowernumber = AddMember(%borrower);
+                if ($borrowernumber) {
+                    $imported++;
+                }
+                else {
+                    $invalid;
+                }
             }
         }
         else {
