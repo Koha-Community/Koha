@@ -579,10 +579,11 @@ sub _add_truncation {
 	my (@nontruncated,@righttruncated,@lefttruncated,@rightlefttruncated,@regexpr);
 	# if the index contains more than one qualifier, but not phrase, add truncation qualifiers
 	#if (index($index,"phr")<0 && index($index,",")>0){
-	warn "ADDING TRUNCATION QUALIFIERS";
+	# warn "ADDING TRUNCATION QUALIFIERS";
+		$operand =~ s/ //g;
 		my @wordlist= split (/\s/,$operand);
 		foreach my $word (@wordlist){
-			warn "WORD: $word";
+			#warn "WORD: $word";
 			if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
 				$word=~s/\*//;
 				push @rightlefttruncated,$word;
@@ -632,7 +633,7 @@ sub _build_stemmed_operand {
 			$stemmed_operand .= "?" unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
 			$stemmed_operand .= " ";
 	}
-	warn "STEMMED OPERAND: $stemmed_operand";
+	#warn "STEMMED OPERAND: $stemmed_operand";
 	return $stemmed_operand;
 }
 

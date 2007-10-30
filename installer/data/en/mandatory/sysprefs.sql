@@ -46,7 +46,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog','1','If ON, log all notices sent',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Define library name as shown on main opac page','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marc','1','Turn on MARC support',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');
+-- INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode','OSt','Define MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.htm','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine','9999','Maximum fine a patron can have for a single late return','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding','5','maximum amount withstanding to be able make reserves','','Integer');
