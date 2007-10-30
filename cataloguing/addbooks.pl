@@ -77,13 +77,6 @@ if ($query) {
         exit;
     }
     
-	if(not defined $marcresults){
-		$template->param(query => $query);
-		warn "no result found";
-		output_html_with_http_headers $input, $cookie, $template->output;
-        exit;
-	}
-
     # format output
     my $total = scalar @$marcresults;
     my @newresults = searchResults( $query, $total, $results_per_page, $page-1, @$marcresults );
