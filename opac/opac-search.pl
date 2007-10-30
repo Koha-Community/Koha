@@ -240,7 +240,7 @@ my $imgdir = getitemtypeimagesrc();
 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row = (
         number   => $cnt++,
-        imageurl => $imgdir . "/" . $itemtypes->{$thisitemtype}->{'imageurl'},
+        imageurl => $itemtypes->{$thisitemtype}->{'imageurl'}?$imgdir . "/" . $itemtypes->{$thisitemtype}->{'imageurl'}:'',
         code     => $thisitemtype,
         selected => $selected,
         description => $itemtypes->{$thisitemtype}->{'description'},
