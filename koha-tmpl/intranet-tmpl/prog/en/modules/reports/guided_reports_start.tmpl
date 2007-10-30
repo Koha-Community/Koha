@@ -24,18 +24,27 @@
      <p>Use the guided reports engine to create non standard reports.
 This feature aims to provide some middle ground between the built in
 canned reports and writing custom SQL reports.</p>
-     <form action="/cgi-bin/koha/reports/guided_reports.pl">
+
      <h3>Build And Run Reports</h3>     	   						    			      
-		<input type="submit" name="phase" value="Build new"/>
-		<input type="submit" name="phase" value="Used saved"/>
-		<input type="submit" name="phase" value="Create report from SQL"/>
-<!--		<input type="submit" name="phase" value="Create Compound Report"/> -->
+	      <form action="/cgi-bin/koha/reports/guided_reports.pl">
+		  <input type="hidden" name="phase" value="Build new" />
+		<input type="submit" name="submit" value="Build new"/>
+		</form>
+		<form action="/cgi-bin/koha/reports/guided_reports.pl">
+		<input type="hidden" name="phase" value="Used saved"/>
+		<input type="submit" name="submit" value="Used saved"/>
+		</form>
+		<form action="/cgi-bin/koha/reports/guided_reports.pl">
+		<input type="hidden" name="phase" value="Create report from SQL"/>
+		<input type="submit" name="submit" value="Create report from SQL"/>
+        </form>
 </form>
 <h3>Reports Dictionary</h3>
 <p>Use the reports dictionary to define custom criteria to use in your
 reports</p>
 <form action="/cgi-bin/koha/reports/dictionary.pl">
-<input type="submit" name="phase" value="View Dictionary"/>
+<input type="hidden" name="phase" value="View Dictionary"/>
+<input type="submit" name="submit" value="View Dictionary"/>
 </form>
 <!-- /TMPL_IF -->
 
@@ -70,7 +79,8 @@ reports</p>
 </select>
 <br />
 <input type=button value="Back" onClick="history.go(-1)">
- <input type="submit" name="phase" value="Report on this Area">
+<input type="hidden" name="phase" value="Report on this Area">
+<input type="submit" name="submit" value="Report on this Area">
 </form>
 <!-- /TMPL_IF -->
 
@@ -87,7 +97,8 @@ reports</p>
 </select>
 <br />
 <input type=button value="Back" onClick="history.go(-1)">
- <input type="submit" name="phase" value="Choose this type">
+<input type="hidden" name="phase" value="Choose this type">
+<input type="submit" name="submit" value="Choose this type">
 <br />
 </form>
 Tabular:
@@ -131,7 +142,8 @@ Matrix:
 <input type="button" name="delete" value="delete" class="button" onClick="delColumn()"/>
 
 <input type=button value="Back" onClick="history.go(-1)">
-<input type="submit" name="phase" value="Choose these columns">
+<input type="hidden" name="phase" value="Choose these columns">
+<input type="submit" name="submit" value="Choose these columns">
 </form>
 <!-- /TMPL_IF -->
 
@@ -182,7 +194,8 @@ TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
 </table>
 <!-- /TMPL_IF -->
 <input type=button value="Back" onClick="history.go(-1)">
- <input type="submit" name="phase" value="Choose these criteria">
+<input type="hidden" name="phase" value="Choose these criteria">
+<input type="submit" name="submit" value="Choose these criteria">
 </form>
 <!-- /TMPL_IF -->
 
@@ -210,7 +223,8 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td>
 <!-- /TMPL_LOOP -->
 </table>
 <input type=button value="Back" onClick="history.go(-1)">
- <input type="submit" name="phase" value="Choose These Operations">
+<input type="hidden" name="phase" value="Choose These Operations">
+<input type="submit" name="submit" value="Choose These Operations">
 </form>
 <!-- /TMPL_IF -->
 
@@ -239,20 +253,26 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 </table>
 <br />
 <input type=button value="Back" onClick="history.go(-1)">
- <input type="submit" name="phase" value="Build Report">
+<input type="hidden" name="phase" value="Build Report">
+<input type="submit" name="submit" value="Build Report">
 </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="showreport" -->
-<!-- TMPL_VAR NAME="sql" -->
 <h1>Confirm Custom Report</h1>
-<p>Your report will be generated with the following SQL statement. <p> 
+<p>Your report will be generated with the following SQL statement.
+<p> 
+<!-- TMPL_VAR NAME="sql" -->
+</p>
+
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 <p>You will need to save the report before you can execute it</p>
-<input type=button value="Back" onClick="history.go(-1)"><input type="submit" name="phase" value="Save">  
+<input type=button value="Back" onClick="history.go(-1)">
+<input type="hidden" name="phase" value="Save">  
+<input type="submit" name="submit" value="Save">  
 </form>
 <!-- /TMPL_IF -->
 
@@ -263,7 +283,8 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
 Report Name: <input type="text" name="reportname"> <br />
 Notes: <textarea name="notes"></textarea><br />
-<input type="submit" name="phase" value="Save Report">
+<input type="hidden" name="phase" value="Save Report">
+<input type="submit" name="submit" value="Save Report">
 </form>
 <!-- /TMPL_IF -->
 
@@ -282,8 +303,9 @@ Notes: <textarea name="notes"></textarea><br />
 <option value="csv">Comma Separated Text</option>
 <option value="tab">Tab Separated Text</option>
 </select>
-<input type="submit" name="phase" value="Export">
 <input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
+<input type="hidden" name="phase" value="Export">
+<input type="submit" name="submit" value="Export">
 </form>
 <!-- /TMPL_IF -->
 
@@ -300,7 +322,8 @@ Type:
 </select>
 <br />
 SQL: <textarea name="sql" cols=30 rows=10></textarea><br />
-<input type="submit" name="phase" value="Save Report">
+<input type="hidden" name="phase" value="Save Report">
+<input type="submit" name="submit" value="Save Report">
 </form>
 <!-- /TMPL_IF -->
 
@@ -318,7 +341,8 @@ Sub report:<select name="subreport">
 <!-- /TMPL_LOOP -->
 </select>
 <br />
-<input type="submit" name="phase" value="Save Compound">
+<input type="hidden" name="phase" value="Save Compound">
+<input type="submit" name="submit" value="Save Compound">
 </form>
 <!-- /TMPL_IF -->
 

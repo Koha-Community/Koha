@@ -306,7 +306,7 @@ elsif ( $phase eq 'Save' ) {
     my $sql  = $input->param('sql');
     my $type = $input->param('type');
     $template->param(
-        'save_successful' => 1,
+        'save' => 1,
         'sql'  => $sql,
         'type' => $type
     );
