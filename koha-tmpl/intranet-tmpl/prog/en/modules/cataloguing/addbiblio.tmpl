@@ -225,7 +225,7 @@ function CloneField(index) {
             // button ...
             var spans=0;
             try {
-                spans = divs[i].getElementsByTagName('span');
+                spans = divs[i].getElementsByTagName('a');
             } catch(e) {
                 // no spans
             }
@@ -245,7 +245,6 @@ function CloneField(index) {
                                 }
                             } else {
                                 if(buttonDotOnClick.match('Dopop')) {  // -2- It's a auth value
-                                    
                                     var re1 = /&index=.*',/;
                                     var re2 = /,.*\)/;
 
