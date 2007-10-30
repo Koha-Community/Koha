@@ -346,13 +346,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-<<<<<<< HEAD:updater/updatedatabase
 $DBversion = "3.00.00.013";
-=======
-
->>>>>>> Updating updatedatabase and kohaversion.pl for new reports tables:updater/updatedatabase
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-<<<<<<< HEAD:updater/updatedatabase
     $dbh->do("CREATE TABLE `import_batches` (
               `import_batch_id` int(11) NOT NULL auto_increment,
               `template_id` int(11) default NULL,
