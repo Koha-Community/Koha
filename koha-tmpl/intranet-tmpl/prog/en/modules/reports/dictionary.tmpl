@@ -29,7 +29,9 @@ Filter By Area <select name="areas">
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
 </select> 
-<input name="phase" value="Filter Dictionary" type="submit"> <input name="phase" value="Add New Definition" type="submit">
+<!-- <input name="phase" value="Filter Dictionary" type="submit"> -->
+<input name="phase" value="Add New Definition" type="phase">
+<input name="submit" value="Add New Definition" type="submit">
 </form>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
@@ -46,7 +48,9 @@ Filter By Area <select name="areas">
 <td><!-- TMPL_VAR NAME="area" --></td>
 <td><!-- TMPL_VAR NAME="saved_sql" --></td>
 <td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-<input type="submit" name="phase" value="Delete Definition"><input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+<input type="hidden" name="phase" value="Delete Definition">
+<input type="submit" name="submit" value="Delete Definition">
 </form></td>
 </tr>
 <!-- /TMPL_LOOP -->
