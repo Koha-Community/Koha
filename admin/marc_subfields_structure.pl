@@ -205,7 +205,7 @@ if ( $op eq 'add_form' ) {
           . "<input type=\"hidden\" name=\"tagsubfield\" value=\""
           . $data->{'tagsubfield'}
           . "\" id=\"tagsubfield\" />";
-        $row_data{subfieldcode} = $data->{'tagsubfield'};
+        $row_data{subfieldcode} = $data->{'tagsubfield'} eq '@'?'_':$data->{'tagsubfield'};
         $row_data{liblibrarian} = CGI::escapeHTML( $data->{'liblibrarian'} );
         $row_data{libopac}      = CGI::escapeHTML( $data->{'libopac'} );
         $row_data{seealso}      = CGI::escapeHTML( $data->{'seealso'} );
@@ -416,6 +416,7 @@ elsif ( $op eq 'add_validate' ) {
         my $tagfield    = $input->param('tagfield');
         my $tagsubfield = $tagsubfield[$i];
         $tagsubfield = "@" unless $tagsubfield ne '';
+        $tagsubfield = "@" if $tagsubfield eq '_';
         my $liblibrarian     = $liblibrarian[$i];
         my $libopac          = $libopac[$i];
         my $repeatable       = $input->param("repeatable$i") ? 1 : 0;
