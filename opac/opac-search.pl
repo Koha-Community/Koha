@@ -370,11 +370,7 @@ my @operators;
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be simple or complex
 my @indexes;
-if ($params->{'idx'}) {
-    @indexes = split("\0",$params->{'idx'});
-} else {
-    $indexes[0] = 'kw,wrdl';
-}
+@indexes = split( "\0", $params->{'idx'} ) if $params->{'idx'};
 
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
