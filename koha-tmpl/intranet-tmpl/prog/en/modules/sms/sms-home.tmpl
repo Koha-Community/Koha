@@ -1,0 +1,40 @@
+﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>SMS Administration</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+       <div id="yui-main">
+	       <div class="yui-b"><div class="yui-g">
+<h1>NEULIS SMS Administration</h1>
+
+
+<table>
+<caption>SMS Messaging </caption>
+<!--TMPL_IF NAME="error"--><div class="error"><!--TMPL_VAR NAME="error"--> </div><!--/TMPL_IF-->
+<form action="/cgi-bin/koha/sms/sms.pl" method="post">
+<tr><input type="hidden" value="sendsms" name="operation"/>
+	<td >Your Message<textarea name="message"  cols="35" rows="4"><!--TMPL_VAR NAME="message"--></textarea></td>
+</tr>
+<tr>
+	<td>Phone:<input type="text" name="phone" value="<!--TMPL_VAR NAME="phone"-->"/>5338644143</th>
+	
+</tr>
+	<tr>
+	
+	<td><input type="submit" value="Send SMS"></td>
+</tr>
+</form>
+
+<th>Şu anda sadece KTcell abonelerine mesaj gönderilebilir. Rezervasyonu gelenler için kullanın!</th>
+
+</table>
+</div>
+</div>
+    </div>
+<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
