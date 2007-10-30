@@ -1284,6 +1284,22 @@ CREATE TABLE `repeatable_holidays` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `reports_dictionary`
+-- 
+
+DROP TABLE IF EXISTS `reports_dictionary`
+CREATE TABLE reports_dictionary (
+   `id` int(11) NOT NULL auto_increment,
+   `name` varchar(255) default NULL,
+   `description` text,
+   `date_created` datetime default NULL,
+   `date_modified` datetime default NULL,
+   `saved_sql` text,
+   `area` int(11) default NULL,
+   PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `reserveconstraints`
 --
 
