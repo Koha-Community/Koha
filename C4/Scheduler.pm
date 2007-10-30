@@ -22,7 +22,6 @@ require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
-use Smart::Comments;
 use Schedule::At;
 # set the version for version checking
 $VERSION = 0.01;
