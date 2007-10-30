@@ -61,7 +61,7 @@ my @serverloop = ();
 my @serverhost;
 my @breeding_loop = ();
 
-my $DEBUG = 1;    # if set to 1, many debug message are send on syslog.
+my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
 
 unless ($random)
 {    # this var is not useful anymore just kept to keep rel2_2 compatibility
@@ -135,11 +135,11 @@ else {
             $option1->option( 'preferredRecordSyntax', $server->{syntax} );
             $oConnection[$s] = create ZOOM::Connection($option1)
               || $DEBUG
-              && warn( "something went wrong: " . $oConnection[$s]->errmsg() );
+              && warn( "" . $oConnection[$s]->errmsg() );
             warn( "server data", $server->{name}, $server->{port} ) if $DEBUG;
             $oConnection[$s]->connect( $server->{host}, $server->{port} )
               || $DEBUG
-              && warn( "something went wrong: " . $oConnection[$s]->errmsg() );
+              && warn( "" . $oConnection[$s]->errmsg() );
             $serverhost[$s] = $server->{host};
             $encoding[$s]   = $server->{syntax};
             $s++;
@@ -205,7 +205,6 @@ else {
                         $imported,      $breedingid
                       )
                       = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
-
                     my %row_data;
                     if ( $i % 2 ) {
                         $toggle = "#ffffcc";

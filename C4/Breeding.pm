@@ -121,7 +121,7 @@ sub ImportBreeding {
                 	($biblioitemnumber) = $searchissn->fetchrow;
                 }
             }
-            if ($biblioitemnumber) {
+            if ($biblioitemnumber && $overwrite_biblio ne 2) {
                 $alreadyindb++;
             } else {
                 # FIXME - in context of batch load,
