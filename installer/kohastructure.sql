@@ -475,7 +475,7 @@ CREATE TABLE `borrowers` (
   `sort1` varchar(80) default NULL,
   `sort2` varchar(80) default NULL,
   UNIQUE KEY `cardnumber` (`cardnumber`),
-  KEY `borrowernumber` (`borrowernumber`),
+  PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `userid` (`userid`),
