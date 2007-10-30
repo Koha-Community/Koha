@@ -393,6 +393,8 @@ function searchauthority() {
     <div id="action">
 <!-- TMPL_IF name="authid" -->
     <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
+<!-- TMPL_ELSE -->
+    <input type="button" value="Add" onclick="Check(this.form)" accesskey="w" />
 <!-- /TMPL_IF -->
     </div>
 
@@ -547,6 +549,8 @@ function searchauthority() {
 <div id="action">
     <!-- TMPL_IF name="authid" -->
         <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
+    <!-- TMPL_ELSE -->
+        <input type="button" value="Add" onclick="Check(this.form)" accesskey="w" />
     <!-- /TMPL_IF -->
 </div>
 </form>
