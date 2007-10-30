@@ -373,13 +373,15 @@ elsif ( $step && $step == 3 ) {
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $marcflavour = $query->param('marcflavour');
+        if ($marcflavour){    
+          my $request =
+            $dbh->prepare(
+              "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marcflavour','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
+            );     
+          $request->execute;
+        };    
         $marcflavour = C4::Context->preference('marcflavour') unless ($marcflavour);
         #Insert into database the selected marcflavour
-        my $request =
-          $dbh->prepare(
-            "INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marcflavour','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
-          );
-        $request->execute;
     
         undef $/;
         my $dir =
@@ -396,10 +398,10 @@ elsif ( $step && $step == 3 ) {
         $request->execute;
         my ($frameworksloaded) = $request->fetchrow;
         my %frameworksloaded;
-
         foreach ( split( /\|/, $frameworksloaded ) ) {
             $frameworksloaded{$_} = 1;
         }
+        
         foreach my $requirelevel (@listdir) {
             opendir( MYDIR, "$dir/$requirelevel" );
             my @listname =
@@ -447,9 +449,6 @@ elsif ( $step && $step == 3 ) {
         @listdir = sort grep { !/^\.|CVS|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my @levellist;
-        foreach ( split( /\|/, $frameworksloaded ) ) {
-            $frameworksloaded{$_} = 1;
-        }
         foreach my $requirelevel (@listdir) {
             opendir( MYDIR, "$dir/$requirelevel" );
             my @listname =

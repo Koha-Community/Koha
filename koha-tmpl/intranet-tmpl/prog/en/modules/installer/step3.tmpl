@@ -106,6 +106,7 @@
     <input type="hidden" name="step" value="3" />
     <input type="hidden" name="op" value="addframeworks" />
     
+    <!--TMPL_IF Name="frameworksloop"-->
     <h2>MARC Frameworks: <!--TMPL_VAR Name="marcflavour"--></h2>
     <!--TMPL_LOOP Name="frameworksloop"-->
     <div>
@@ -130,6 +131,7 @@
     </p>
     <!--/TMPL_LOOP-->
     <h2>Other data</h2>
+    <!--/TMPL_IF -->
     <!--TMPL_LOOP Name="levelloop"-->
     <div>
     <h3><!--TMPL_VAR Name="label"--></h3>
