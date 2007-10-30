@@ -9,124 +9,125 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/koha2marclinks.pl">MARC Links</a> &rsaquo; <!-- TMPL_VAR name="action" --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/koha2marclinks.pl">MARC Links</a> &rsaquo; Connect<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC Links <!-- TMPL_VAR name="tagfield" --><!-- /TMPL_IF --></div>
 <!-- TMPL_IF name="add_form" -->
 <div id="doc" class="yui-t7">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-g">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-g">
 <!-- TMPL_ELSE -->
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_form" -->
-<h1><!-- TMPL_VAR name="action" --></h1>
-	<p>Choose and validate 1 of the following for <!-- TMPL_VAR name="tablename" -->.<!-- TMPL_VAR name="kohafield" --></p><table>
+<h1>Connect a koha field and a MARC subfield</h1>
+    <p>Choose and validate 1 MARC subfield for <!-- TMPL_VAR name="tablename" -->.<!-- TMPL_VAR name="kohafield" -->. That will modify <b>all frameworks</b> which is usually what you need, but you have been warned.</p>
+    <table>
 <tr><td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">	<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist0" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist0" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
 
-		<td>	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" /><input type="submit" value="OK" />
-			<!-- TMPL_VAR name="marclist1" -->	</form>
-		</td>
-	</tr>
-	<tr>
+        <td>	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" /><input type="submit" value="OK" />
+            <!-- TMPL_VAR name="marclist1" -->	</form>
+        </td>
+    </tr>
+    <tr>
 
-		<td>
-				<form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist2" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist3" --><input type="submit" value="OK" />	</form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist4" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
+        <td>
+                <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist2" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist3" --><input type="submit" value="OK" />	</form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist4" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
 
-		<td>	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist5" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist6" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist7" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist8" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-	
-		<td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-			<input type="hidden" name="op" value="add_validate" />
-			<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-			<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-			<!-- TMPL_VAR name="marclist9" --><input type="submit" value="OK" /></form>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
-				<input type="hidden" name="op" value="add_validate" />
-				<input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
-				<input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
-				<input type="hidden" name="choice" value="" />
-				<input type="submit" value="Click to &quot;Unmap&quot;" />
-			</form>
-		</td>
-	</tr>
-	</table>
+        <td>	<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist5" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist6" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist7" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist8" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+    
+        <td><form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+            <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+            <!-- TMPL_VAR name="marclist9" --><input type="submit" value="OK" /></form>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+                <input type="hidden" name="op" value="add_validate" />
+                <input type="hidden" name="tablename" value="<!-- TMPL_VAR name="tablename" -->" />
+                <input type="hidden" name="kohafield" value="<!-- TMPL_VAR name="kohafield" -->" />
+                <input type="hidden" name="choice" value="" />
+                <input type="submit" value="Click to &quot;Unmap&quot;" />
+            </form>
+        </td>
+    </tr>
+    </table>
 <!-- /TMPL_IF -->
 
 
@@ -138,19 +139,19 @@
 </form>
 <table>
 <tr>
-	<th>Koha Field</th>
-	<th>Tag</th>
-	<th>Subfield</th>
-	<th>Lib</th>
-	<th>&nbsp;</th>
+    <th>Koha Field</th>
+    <th>Tag</th>
+    <th>Subfield</th>
+    <th>Lib</th>
+    <th>&nbsp;</th>
 </tr>
 <!-- TMPL_LOOP name="loop" -->
 <tr>
-	<td><a href="<!-- TMPL_VAR name="edit" -->"><!-- TMPL_VAR name="kohafield" --></a></td>
-	<td><!-- TMPL_VAR name="tagfield" --></td>
-	<td><!-- TMPL_VAR name="tagsubfield" --></td>
-	<td><!-- TMPL_VAR name="liblibrarian" --></td>
-	<td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
+    <td><a href="<!-- TMPL_VAR name="edit" -->"><!-- TMPL_VAR name="kohafield" --></a></td>
+    <td><!-- TMPL_VAR name="tagfield" --></td>
+    <td><!-- TMPL_VAR name="tagsubfield" --></td>
+    <td><!-- TMPL_VAR name="liblibrarian" --></td>
+    <td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
