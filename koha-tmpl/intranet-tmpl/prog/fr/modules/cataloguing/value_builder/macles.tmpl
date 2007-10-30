@@ -4,83 +4,89 @@
 <html>
 <head>
 <title>Gestion_des_index_MACLES</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/common-style.css" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/includes/marc-editor.css" />
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+
+    $(document).ready(function() {
+        $('#macles').tabs();
+    });
+//]]>
+</script>
 </head>
 
-<body onload="Activate(0);load_macles(630);">
+<body  class="yui-skin-sam">
+<!-- onload="Activate(0);load_macles(630);" -->
+
 <h1>Gestion des index MACLES</h1>
 <form name="f_pop"> <!-- onsubmit="add_macles('630');"> -->
 
-<div class="tabbed">
-	<div class="tabs">
-        <!--TMPL_LOOP name="BIGLOOP" -->
-            <a href="#" onclick="Activate('<!-- TMPL_VAR name="number"-->'); return false;" id="link<!-- TMPL_VAR name="number"-->"><!-- TMPL_VAR name="number"--></a>
-        <!--/TMPL_LOOP -->
-	</div>
-
-<!-- RESET PAGINATION -->
-<!-- TMPL_LOOP name="BIGLOOP" -->
-<!-- hide every tab except the 1st -->
-<!-- TMPL_IF name="number" -->
-    <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:hidden">
-<!-- TMPL_ELSE -->
-    <div name="<!-- TMPL_VAR name="number" -->XX" id="<!-- TMPL_VAR name="number" -->XX" class="tab" style="visibility:visible">
-<!-- /TMPL_IF -->
-          <h2> <!--TMPL_VAR Name="hdr_tab"--></h2>
-	  <a href="#" class="button" onclick="add_macles('630');">Envoyer</a>
-          <!-- <input type="submit" class="button" value="Envoyer" /> -->
-          <a class="button" href="" onclick="load_macles(630);">R&eacute;initialiser</a> <a class="button" href="javascript:uncheck_tab(<!-- TMPL_VAR name="number" -->)">d&eacute;selectionner onglet</a>
-          <input type="reset" class="button" value="d&eacute;selectionner tout" />
-        <!--TMPL_IF Name="Table"-->
-          <table>
-            <tr>
-              <th>Espace\\Temps</th>
-              <!--TMPL_LOOP Name="col_hdr"-->
-                <th scope="col" id="<!--TMPL_VAR Name="colvalue"-->">  <!--TMPL_VAR Name="collib" ESCAPE="HTML"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="colvalue"-->" onclick="check_col('<!--TMPL_VAR Name="colvalue"-->')" />
-                </th>
-              <!--/TMPL_LOOP-->
-            </tr>
-            <!--TMPL_LOOP Name="lines"-->
-            <tr>
-                <th scope="row" id="<!--TMPL_VAR Name="rowvalue"-->">  <!--TMPL_VAR Name="rowlib" ESCAPE="HTML"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="rowvalue"-->" onclick="check_row('<!--TMPL_VAR Name="rowvalue"-->')" />
-                </th>
-                <!--TMPL_LOOP Name="cells"-->
-                <td headers="<!--TMPL_VAR Name="rowvalue"--> <!--TMPL_VAR Name="colvalue"-->">
-                  <span title="<!--TMPL_LOOP Name="libs" --><!--TMPL_VAR Name="lib" ESCAPE="HTML"--> - <!--/TMPL_LOOP-->">
-                  <!--TMPL_VAR Name="celvalue"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="celvalue"-->" value="<!--TMPL_VAR Name="celvalue"-->" />
-                  </span>
-                </td>
+<div id="macles" class="toptabs numbered">
+    <ul>
+    <!--TMPL_LOOP name="BIGLOOP" -->
+        <li><a href="#tab<!-- TMPL_VAR name="number" -->XX""><!-- TMPL_VAR name="number"--></a></li>
+    <!--/TMPL_LOOP -->
+    </ul>
+    <!-- RESET PAGINATION -->
+    <!-- TMPL_LOOP name="BIGLOOP" -->
+    <!-- TMPL_IF name="number" -->
+        <div id="tab<!-- TMPL_VAR name="number" -->XX">
+    <!-- TMPL_ELSE -->
+        <div id="tab<!-- TMPL_VAR name="number" -->XX">
+    <!-- /TMPL_IF -->
+            <h2> <!--TMPL_VAR Name="hdr_tab"--></h2>
+            <a href="#" class="button" onclick="add_macles('630');">Envoyer</a>
+            <!-- <input type="submit" class="button" value="Envoyer" /> -->
+            <a class="button" href="" onclick="load_macles(630);">R&eacute;initialiser</a>
+            <a class="button" href="javascript:uncheck_tab(<!-- TMPL_VAR name="number" -->)">d&eacute;selectionner onglet</a>
+            <input type="reset" class="button" value="d&eacute;selectionner tout" />
+            <!--TMPL_IF Name="Table"-->
+            <table>
+                <tr>
+                <th>Espace\Temps</th>
+                <!--TMPL_LOOP Name="col_hdr"-->
+                    <th scope="col" id="<!--TMPL_VAR Name="colvalue"-->">  <!--TMPL_VAR Name="collib" ESCAPE="HTML"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="colvalue"-->" onclick="check_col('<!--TMPL_VAR Name="colvalue"-->')" />
+                    </th>
                 <!--/TMPL_LOOP-->
-            </tr>
+                </tr>
+                <!--TMPL_LOOP Name="lines"-->
+                <tr>
+                    <th scope="row" id="<!--TMPL_VAR Name="rowvalue"-->">  <!--TMPL_VAR Name="rowlib" ESCAPE="HTML"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="rowvalue"-->" onclick="check_row('<!--TMPL_VAR Name="rowvalue"-->')" />
+                    </th>
+                    <!--TMPL_LOOP Name="cells"-->
+                    <td headers="<!--TMPL_VAR Name="rowvalue"--> <!--TMPL_VAR Name="colvalue"-->">
+                    <span title="<!--TMPL_LOOP Name="libs" --><!--TMPL_VAR Name="lib" ESCAPE="HTML"--> - ><!--/TMPL_LOOP-->">  <!--TMPL_VAR Name="celvalue"--> <br /><input type="checkbox" name="<!--TMPL_VAR Name="celvalue"-->" value="<!--TMPL_VAR Name="celvalue"-->" />
+                    </span>
+                    </td>
+                    <!--/TMPL_LOOP-->
+                </tr>
+                <!--/TMPL_LOOP-->
+            </table>
+            <!--/TMPL_IF-->
+            <!--TMPL_IF Name="Lists" -->
+            <h2>s&eacute;lection au moyen d'une liste de descripteurs</h2>
+            <!--TMPL_LOOP name="Lists"-->
+                <h3><!--TMPL_VAR name="lib"--></h3>
+                <!--TMPL_LOOP name="liblist" -->
+                <a href="#<!--TMPL_VAR Name="listvalue"-->" onclick="check_multiple(<!--TMPL_VAR Name="listvalue"-->)"> <!--TMPL_VAR name="listlib" ESCAPE="HTML"--></a><br />
+                <!--/TMPL_LOOP-->
             <!--/TMPL_LOOP-->
-          </table>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="Lists" -->
-          <h2>s&eacute;lection au moyen d'une liste de descripteurs</h2>
-          <!--TMPL_LOOP name="Lists"-->
-            <h3><!--TMPL_VAR name="lib"--></h3>
-            <!--TMPL_LOOP name="liblist" -->
-              <a href="#<!--TMPL_VAR Name="listvalue"-->" onclick="check_multiple(<!--TMPL_VAR Name="listvalue"-->)"> <!--TMPL_VAR name="listlib" ESCAPE="HTML"--></a><br />
+            <!--/TMPL_IF-->
+            <!--TMPL_UNLESS Name="Table"-->
+            <!-- Listes simples :Onglets 0 et 9-->
+            <!--TMPL_LOOP Name="lines"-->
+                <h3><!--TMPL_VAR Name="rowvalue" ESCAPE="HTML"-->&nbsp;-&nbsp;<!--TMPL_VAR Name="rowlib" ESCAPE="HTML"-->&nbsp;<input type="checkbox" name="<!--TMPL_VAR Name="rowvalue"-->" onclick="check_row('<!--TMPL_VAR Name="rowvalue"-->')" /></h3>
+                <!--TMPL_LOOP Name="cells"-->
+                <p><!--TMPL_VAR Name="celvalue" ESCAPE="HTML"--> &nbsp;-&nbsp;<!--TMPL_LOOP Name="libs" -->
+                        <!--TMPL_VAR Name="lib" ESCAPE="HTML"--> &nbsp;
+                    <!--/TMPL_LOOP-->
+                    <input type="checkbox" name="<!--TMPL_VAR Name="celvalue"-->" value="<!--TMPL_VAR Name="celvalue"-->" />
+                </p>
+                <!--/TMPL_LOOP-->
             <!--/TMPL_LOOP-->
-          <!--/TMPL_LOOP-->
-        <!--/TMPL_IF-->
-        <!--TMPL_UNLESS Name="Table"-->
-        <!-- Listes simples :Onglets 0 et 9-->
-          <!--TMPL_LOOP Name="lines"-->
-            <h3><!--TMPL_VAR Name="rowvalue" ESCAPE="HTML"-->&nbsp;-&nbsp;<!--TMPL_VAR Name="rowlib" ESCAPE="HTML"-->&nbsp;<input type="checkbox" name="<!--TMPL_VAR Name="rowvalue"-->" onclick="check_row('<!--TMPL_VAR Name="rowvalue"-->')" /></h3>
-            <!--TMPL_LOOP Name="cells"-->
-              <p><!--TMPL_VAR Name="celvalue" ESCAPE="HTML"--> &nbsp;-&nbsp;<!--TMPL_LOOP Name="libs" -->
-                    <!--TMPL_VAR Name="lib" ESCAPE="HTML"--> &nbsp;
-                 <!--/TMPL_LOOP-->
-                 <input type="checkbox" name="<!--TMPL_VAR Name="celvalue"-->" value="<!--TMPL_VAR Name="celvalue"-->" />
-              </p>
-            <!--/TMPL_LOOP-->
-          <!--/TMPL_LOOP-->
-        <!--/TMPL_UNLESS-->
-    </div>
-<!-- /TMPL_LOOP -->
+            <!--/TMPL_UNLESS-->
+        </div>
+    <!-- /TMPL_LOOP -->
 </div>
 </form>
 <script language="JavaScript" type="text/javascript">
