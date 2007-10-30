@@ -1177,7 +1177,7 @@ sub NZgetRecords {
 sub NZanalyse {
     my ($string,$server) = @_;
     # $server contains biblioserver or authorities, depending on what we search on.
-    #warn "querying : $string on $server";
+    warn "querying : $string on $server";
     $server='biblioserver' unless $server;
     # if we have a ", replace the content to discard temporarily any and/or/not inside
     my $commacontent;
@@ -1247,12 +1247,12 @@ sub NZanalyse {
         my $right = $3;
         my $results;
         # automatic replace for short operators
-        $left='title' if $left eq 'ti';
-        $left='author' if $left eq 'au';
-        $left='publisher' if $left eq 'pb';
-        $left='subject' if $left eq 'su';
-        $left='koha-Auth-Number' if $left eq 'an';
-        $left='keyword' if $left eq 'kw';
+        $left='title' if $left =~ '^ti';
+        $left='author' if $left =~ '^au';
+        $left='publisher' if $left =~ '^pb';
+        $left='subject' if $left =~ '^su';
+        $left='koha-Auth-Number' if $left =~ '^an';
+        $left='keyword' if $left =~ '^kw';
         if ($operator) {
             #do a specific search
             my $dbh = C4::Context->dbh;
@@ -1273,9 +1273,15 @@ sub NZanalyse {
                 if ($results) {
                     my @leftresult = split /;/, $biblionumbers;
                     my $temp;
-                    foreach (@leftresult) {
-                        if ($results =~ "$_;") {
-                            $temp .= "$_;$_;";
+                    foreach my $entry (@leftresult) { # $_ contains biblionumber,title-weight
+                        # remove weight at the end
+                        my $cleaned = $entry;
+                        $cleaned =~ s/-\d*$//;
+                        # if the entry already in the hash, take it & increase weight
+#                         warn "===== $cleaned =====";
+                        if ($results =~ "$cleaned") {
+                            $temp .= "$entry;$entry;";
+#                             warn "INCLUDING $entry";
                         }
                     }
                     $results = $temp;
@@ -1299,15 +1305,23 @@ sub NZanalyse {
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
+#                 warn "RES for $_ = $biblionumbers";
                     my @leftresult = split /;/, $biblionumbers;
                     my $temp;
-                    foreach (@leftresult) {
-                        if ($results =~ "$_;") {
-                            $temp .= "$_;$_;";
+                    foreach my $entry (@leftresult) { # $_ contains biblionumber,title-weight
+                        # remove weight at the end
+                        my $cleaned = $entry;
+                        $cleaned =~ s/-\d*$//;
+                        # if the entry already in the hash, take it & increase weight
+#                         warn "===== $cleaned =====";
+                        if ($results =~ "$cleaned") {
+                            $temp .= "$entry;$entry;";
+#                             warn "INCLUDING $entry";
                         }
                     }
                     $results = $temp;
                 } else {
+#                 warn "NEW RES for $_ = $biblionumbers";
                     $results = $biblionumbers;
                 }
             }

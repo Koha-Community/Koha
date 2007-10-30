@@ -100,7 +100,6 @@ while (my ($biblionumber) = $sth->fetchrow) {
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
-    $title = quotemeta $title;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
