@@ -60,6 +60,7 @@ if ( $op eq "do_search" ) {
     my @excluding = $query->param('excluding');
     my @operator  = $query->param('operator');
     my @value     = $query->param('value');
+    my $orderby   = $query->param('orderby');
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 19 if ( !defined $resultsperpage );
@@ -67,7 +68,7 @@ if ( $op eq "do_search" ) {
     my ( $results, $total ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
         $startfrom * $resultsperpage,
-        $resultsperpage, $authtypecode );    # $orderby);
+        $resultsperpage, $authtypecode, $orderby);
 
     # multi page display gestion
     my $displaynext = 0;
