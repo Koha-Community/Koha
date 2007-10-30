@@ -186,9 +186,6 @@ else {
     $template_name = 'catalogue/advsearch.tmpl';
 	$template_type = 'advsearch';
 }
-if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
-	$template->param('UNIMARC' => 1);
-}
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => $template_name,
@@ -198,6 +195,9 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     flagsrequired   => { catalogue => 1 },
     }
 );
+if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+	$template->param('UNIMARC' => 1);
+}
 
 =head1 BUGS and FIXMEs
 
