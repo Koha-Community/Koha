@@ -8,10 +8,6 @@
 	}
 function confirm_deletion() {
 		var count = <!-- TMPL_VAR NAME="count" -->;
-		if(!count){ alert("no count!");
-		return false; } else {
-		alert(count);
-		}
         var is_confirmed;
 	if (count>0){
 		    is_confirmed= alert(_('There are [ '+ count +' ] item(s) attached to this record \n You must delete all items before deleting this record.'));
