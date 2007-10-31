@@ -371,7 +371,7 @@ sub SendAlerts {
         # prepare the letter...
         # search the biblionumber
         my $strsth =
-"select serial.*,subscription.*, biblio.title from serial LEFT JOIN subscription on serial.subscriptionid=subscription.subscriptionid LEFT JOIN biblio on serial.biblionumber=biblio.biblionumber where serial.serialid IN ("
+"select serial.*,subscription.*, biblio.* from serial LEFT JOIN subscription on serial.subscriptionid=subscription.subscriptionid LEFT JOIN biblio on serial.biblionumber=biblio.biblionumber where serial.serialid IN ("
           . join( ",", @$externalid ) . ")";
         my $sthorders = $dbh->prepare($strsth);
         $sthorders->execute;

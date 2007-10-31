@@ -193,8 +193,14 @@ if ( $op eq 'add_form' ) {
             );
             push @SQLfieldname, \%line;
         }
-
-        # add biblio specific tables.
+        my %line = ( 'value' => "", 'text' => '---Biblio---' );
+        push @SQLfieldname, \%line;
+        my %line = ('value' => "biblio.title",'text'  => "Title");
+        push @SQLfieldname, \%line;
+        my %line = ('value' => "biblio.author",'text'  => "Author");
+        push @SQLfieldname, \%line;
+        my %line = ('value' => "biblio.serial",'text'  => "Serial");
+        push @SQLfieldname, \%line;
     }
     else {
         my $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
