@@ -939,16 +939,16 @@ sub GetNextSeq {
 
   $newlastvalue1 = $val->{lastvalue1};
   # check if we have to increase the new value.
-  $newinnerloop1 = $val->{innerloop1}+1;
-  $newinnerloop1=0 if ($newinnerloop1 >= $val->{every1});
+  $newinnerloop1 = $val->{innerloop1}+$val->{add1};
+  $newinnerloop1=0 if ($newinnerloop1 >= $val->{every1}-$val->{setto1});
   $newlastvalue1 += $val->{add1} if ($newinnerloop1<1); # <1 to be true when 0 or empty.
   $newlastvalue1=$val->{setto1} if ($newlastvalue1>$val->{whenmorethan1}); # reset counter if needed.
   $calculated =~ s/\{X\}/$newlastvalue1/g;
   
   $newlastvalue2 = $val->{lastvalue2};
   # check if we have to increase the new value.
-  $newinnerloop2 = $val->{innerloop2}+1;
-  $newinnerloop2=0 if ($newinnerloop2 >= $val->{every2});
+  $newinnerloop2 = $val->{innerloop2}+$val->{add2};
+  $newinnerloop2=0 if ($newinnerloop2 >= $val->{every2}-$val->{setto2});
   $newlastvalue2 += $val->{add2} if ($newinnerloop2<1); # <1 to be true when 0 or empty.
   $newlastvalue2=$val->{setto2} if ($newlastvalue2>$val->{whenmorethan2}); # reset counter if needed.
   if ( $pattern == 6 ) {
@@ -968,8 +968,8 @@ sub GetNextSeq {
   
   $newlastvalue3 = $val->{lastvalue3};
   # check if we have to increase the new value.
-  $newinnerloop3 = $val->{innerloop3}+1;
-  $newinnerloop3=0 if ($newinnerloop3 >= $val->{every3});
+  $newinnerloop3 = $val->{innerloop3}+$val->{add3};
+  $newinnerloop3=0 if ($newinnerloop3 >= $val->{every3}-$val->{setto3});
   $newlastvalue3 += $val->{add3} if ($newinnerloop3<1); # <1 to be true when 0 or empty.
   $newlastvalue3=$val->{setto3} if ($newlastvalue3>$val->{whenmorethan3}); # reset counter if needed.
   $calculated =~ s/\{Z\}/$newlastvalue3/g;
