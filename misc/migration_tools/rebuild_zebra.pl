@@ -574,8 +574,9 @@ rank:rank-1
             };
             if($@){
                 print "  There was some pb getting biblio : #".$biblionumber."\n";
-            next;
+                next;
             }
+            next unless $record;
 #             warn $record->as_formatted;
 # die if $record->subfield('090','9') eq 11;
     #         print $record;
