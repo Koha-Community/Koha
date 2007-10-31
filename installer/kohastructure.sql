@@ -1700,12 +1700,13 @@ CREATE TABLE `z3950servers` (
 -- Table structure for table `zebraqueue`
 --
 
-DROP TABLE IF EXISTS `zebraqueue`;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
-  `biblio_auth_number` int(11) NOT NULL default 0,
-  `operation` varchar(20) NOT NULL default '',
-  `server` varchar(20) NOT NULL default '',
+  `biblio_auth_number` int(11) NOT NULL default '0',
+  `operation` char(20) NOT NULL default '',
+  `server` char(20) NOT NULL default '',
+  `done` int(11) NOT NULL default '0',
+  `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

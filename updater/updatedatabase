@@ -505,7 +505,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }	
 
 $DBversion = "3.00.00.017";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {                                                                                    
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE action_logs DROP PRIMARY KEY");
 	$dbh->do("ALTER TABLE action_logs ADD KEY  timestamp (timestamp,user)");
 	$dbh->do("ALTER TABLE action_logs ADD action_id INT(11) NOT NULL FIRST");
@@ -514,6 +514,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
   	print "Upgrade to $DBversion done (added column to action_logs)\n";
 	SetVersion ($DBversion);
 }
+
+$DBversion = "3.00.00.018";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE `zebraqueue` 
+                    ADD `done` INT NOT NULL DEFAULT '0',
+                    ADD `time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ; 
+            ");
+    print "Upgrade to $DBversion done (adding timestamp and done columns to zebraque table to improve problem tracking) added)\n";
+    SetVersion ($DBversion);
+}	
 
 =item DropAllForeignKeys($table)
 

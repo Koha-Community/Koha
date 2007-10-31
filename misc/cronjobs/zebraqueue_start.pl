@@ -13,7 +13,7 @@ use utf8;
 ### ZEBRA SERVER UPDATER
 ##Uses its own database handle
 my $dbh=C4::Context->dbh;
-my $readsth=$dbh->prepare("select id,biblio_auth_number,operation,server from zebraqueue");
+my $readsth=$dbh->prepare("SELECT id,biblio_auth_number,operation,server FROM zebraqueue WHERE done=0");
 #my $delsth=$dbh->prepare("delete from zebraqueue where id =?");
 
 
@@ -64,7 +64,7 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
             ## it's Broken XML-- Should not reach here-- but if it does -lets protect ZEBRA
             if ($@){
                 warn $@;
-                my $delsth=$dbh->prepare("delete from zebraqueue where id =?");
+                my $delsth=$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE id =?");
                 $delsth->execute($id);
                 next;
             }
@@ -82,14 +82,14 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
         # so, delete everything for this biblionumber
         if ($operation eq 'delete_record') {
             print "deleting biblio deletion $biblionumber\n" if $verbose;
-            $delsth =$dbh->prepare("delete from zebraqueue where biblio_auth_number =?");
+            $delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =?");
             $delsth->execute($biblionumber);
         # if it's not a deletion, delete every pending specialUpdate for this biblionumber
         # in case the user add biblio, then X items, before this script runs
         # this avoid indexing X+1 times where just 1 is enough.
         } else {
             print "deleting special date for $biblionumber\n" if $verbose;
-            $delsth =$dbh->prepare("delete from zebraqueue where biblio_auth_number =? and operation='specialUpdate'");
+            $delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =? and operation='specialUpdate'");
             $delsth->execute($biblionumber);
         }
     }
