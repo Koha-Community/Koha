@@ -597,7 +597,6 @@ Exported function (core API) for deleting an item record in Koha.
 
 sub DelItem {
     my ( $dbh, $biblionumber, $itemnumber ) = @_;
-    my $dbh = C4::Context->dbh;
 	
 	# check the item has no current issues
 	
@@ -3700,7 +3699,7 @@ sub _koha_add_biblioitem {
         cn_sort         = ?,
         totalissues     = ?
         ";
-	my $sth = $dbh->prepare($query);
+	$sth = $dbh->prepare($query);
     $sth->execute(
 		$bibitemnum,
         $biblioitem->{'biblionumber'},
@@ -3800,7 +3799,7 @@ sub _koha_new_items {
 			materials 			= ?,
 			uri 				= ?
           ";
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
 	$sth->execute(
             $itemnumber,
 			$item->{'biblionumber'},
