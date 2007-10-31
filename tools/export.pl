@@ -114,7 +114,7 @@ if ($op eq "export") {
             print $record->as_xml_record($marcflavour);
         }
         else {
-            print $record->as_formatted; 
+            print $record->as_usmarc(); 
         }
     }
     exit;
