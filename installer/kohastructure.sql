@@ -1289,7 +1289,7 @@ CREATE TABLE `repeatable_holidays` (
 -- Table structure for table `reports_dictionary`
 -- 
 
-DROP TABLE IF EXISTS `reports_dictionary`
+DROP TABLE IF EXISTS `reports_dictionary`;
 CREATE TABLE reports_dictionary (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
