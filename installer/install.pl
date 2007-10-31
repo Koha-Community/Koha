@@ -599,10 +599,10 @@ elsif ( $step && $step == 3 ) {
             # if there is, then we just need to upgrade
             # if there is none, then we need to install the database
             #
-            my $dbversion = C4::Context->preference('Version');
-            $dbversion =~ /(.*)\.(..)(..)(...)/;
-            $dbversion = "$1.$2.$3.$4";
             if (C4::Context->preference('Version')) {
+                my $dbversion = C4::Context->preference('Version');
+                $dbversion =~ /(.*)\.(..)(..)(...)/;
+                $dbversion = "$1.$2.$3.$4";
                 $template->param("upgrading" => 1,
                                 "dbversion" => $dbversion,
                                 "kohaversion" => C4::Context->KOHAVERSION,
