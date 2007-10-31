@@ -132,6 +132,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.lastvaluetemp1.value=sYear;
         document.f.periodicity.value='8';
         document.f.numberingmethod.value=_('{Y} {X}');
+        moreoptions_seasons(text[15],sYear);
         display_table(0);
         is_season = 1;
         break;
@@ -376,7 +377,7 @@ function moreoptions_seasons(x,y){
 document.getElementById("irregularity").innerHTML = '';
 document.getElementById("more_options").innerHTML = '';
 var textbox = '';
-    // alert("X: "+x+"Year: "+y);
+    //alert("X: "+x+"Year: "+y);
     if(x){
         var hemi_select = parseInt('<!-- TMPL_VAR NAME="hemisphere" -->');
         textbox +="<li><label for=\"hemisphere\">"+ text[7]  +"<\/label><select name='hemisphere' id=\"hemisphere\" onchange='hemispheres(this.options[this.selectedIndex].value)'>";
@@ -404,6 +405,7 @@ var textbox = '';
         textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
+
     }
     document.getElementById("more_options").innerHTML = textbox;
 }
