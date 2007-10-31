@@ -451,6 +451,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
     $dbh->do("DROP TABLE `marc_breeding`");
 
+    print "Upgrade to $DBversion done (import_batches et al. added)\n";
     SetVersion ($DBversion);
 }
 
