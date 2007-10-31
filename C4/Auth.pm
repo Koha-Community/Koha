@@ -376,7 +376,7 @@ sub checkauth {
 
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
-    warn "about to check version";
+    #warn "about to check version";
     unless (C4::Context->preference('Version')) {
       if ($type ne 'opac') {
         warn "Install required, redirecting to Installer";
