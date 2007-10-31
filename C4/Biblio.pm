@@ -1611,11 +1611,14 @@ sub GetMarcBiblio {
      $marcxml =~ s/\x0c//g;  
 #   warn $marcxml;
     my $record = MARC::Record->new();
-     
-      $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8",C4::Context->preference('marcflavour'))} if ($marcxml);
-     if ($@) {warn $@;}
+    if ($marcxml) {
+        $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour'))};
+        if ($@) {warn $@;}
 #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
-    return $record;
+        return $record;
+    } else {
+        return undef;
+    }
 }
 
 =head2 GetXmlBiblio
