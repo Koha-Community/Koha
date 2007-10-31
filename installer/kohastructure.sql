@@ -59,13 +59,15 @@ CREATE TABLE `accountoffsets` (
 
 DROP TABLE IF EXISTS `action_logs`;
 CREATE TABLE `action_logs` (
+  `action_id` int(11) NOT NULL auto_increment,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `user` int(11) NOT NULL default 0,
   `module` text,
   `action` text,
   `object` int(11) default NULL,
   `info` text,
-  PRIMARY KEY  (`timestamp`,`user`)
+  PRIMARY KEY (`action_id`),
+  KEY  (`timestamp`,`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
