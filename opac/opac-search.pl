@@ -408,7 +408,7 @@ my @results;
 
 ## I. BUILD THE QUERY
 ( $error, $search_desc, $koha_query, $federated_query, $query_type ) =
-  buildQuery( $query, \@operators, \@operands, \@indexes, \@limits );
+  buildQuery( \@operators, \@operands, \@indexes, \@limits );
 
 # warn "query : $koha_query";
 ## II. DO THE SEARCH AND GET THE RESULTS
