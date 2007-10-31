@@ -430,9 +430,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
               FROM   `marc_breeding`");
 
     $dbh->do("INSERT INTO `import_records`
-                (`import_batch_id`, `record_sequence`, `marc`, `record_type`, `status`,
+                (`import_batch_id`, `import_record_id`, `record_sequence`, `marc`, `record_type`, `status`,
                 `encoding`, `z3950random`, `marcxml`, `marcxml_old`)
-              SELECT `import_batch_id`, 1, `marc`, 'biblio', 'staged', `encoding`, `z3950random`, '', ''
+              SELECT `import_batch_id`, `id`, 1, `marc`, 'biblio', 'staged', `encoding`, `z3950random`, '', ''
               FROM `marc_breeding`
               JOIN `import_batches` ON (`file_name` = `file`)");
 
@@ -440,7 +440,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                 (`import_record_id`, `title`, `author`, `isbn`)
               SELECT `import_record_id`, `title`, `author`, `isbn`
               FROM   `marc_breeding`
-              JOIN   `import_records` USING (`z3950random`)");
+              JOIN   `import_records` ON (`import_record_id` = `id`)");
 
     $dbh->do("UPDATE `import_batches` 
               SET `num_biblios` = (
