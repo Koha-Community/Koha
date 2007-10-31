@@ -509,7 +509,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE action_logs DROP PRIMARY KEY");
 	$dbh->do("ALTER TABLE action_logs ADD KEY  timestamp (timestamp,user)");
 	$dbh->do("ALTER TABLE action_logs ADD action_id INT(11) NOT NULL FIRST");
-	$dbh->do("UPDATE action_logs SET action_id = if (@a, @a:=@a+1, @a:=1)");
+	$dbh->do("UPDATE action_logs SET action_id = if (\@a, \@a:=\@a+1, \@a:=1)");
     $dbh->do("ALTER TABLE action_logs MODIFY action_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY");
   	print "Upgrade to $DBversion done (added column to action_logs)\n";
 	SetVersion ($DBversion);
