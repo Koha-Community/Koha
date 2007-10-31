@@ -221,20 +221,21 @@ if ($op eq 'serialchangestatus') {
           my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
           if ($item=~/^N/){
             #New Item
+
             # if autoBarcode is ON, calculate barcode...
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
-            if (C4::Boolean::true_p(C4::Context->preference("autoBarcode")) != 0 ) {
+            if (C4::Context->preference("autoBarcode") ne  'OFF'  ) {
 
-              unless ($record->field($tagfield)->subfield($tagsubfield)) {
+   eval {    $record->field($tagfield)->subfield($tagsubfield) };
+            if ($@) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;
                 $newbarcode++;
+
                 # OK, we have the new barcode, now create the entry in MARC record
-                my $fieldItem = $record->field($tagfield);
-                $record->delete_field($fieldItem);
-                $fieldItem->add_subfields($tagsubfield => $newbarcode);
-                $record->insert_fields_ordered($fieldItem);
+                $record->add_fields( $tagfield, "1", "0",
+                    $tagsubfield => $newbarcode );
               }
             }
             # check for item barcode # being unique
