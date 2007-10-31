@@ -580,7 +580,7 @@ sub _add_truncation {
 	# if the index contains more than one qualifier, but not phrase, add truncation qualifiers
 	#if (index($index,"phr")<0 && index($index,",")>0){
 	# warn "ADDING TRUNCATION QUALIFIERS";
-		$operand =~ s/ //g;
+		$operand =~ s/^ //g;
 		my @wordlist= split (/\s/,$operand);
 		foreach my $word (@wordlist){
 			#warn "WORD: $word";
@@ -755,7 +755,7 @@ sub buildQuery {
             	my $index   = $indexes[$i];
 				# if there's no index, don't use one, it will throw a CCL error
 				my $index_plus; $index_plus = "$index:" if $index;
-				my $index_plus_comma; $index_plus_comma="$index_plus," if $index;
+				my $index_plus_comma; $index_plus_comma="$index," if $index;
 
 				# Remove Stopwords	
 				$operand = _remove_stopwords($operand,$index);
@@ -809,7 +809,7 @@ sub buildQuery {
                         $human_search_desc .= $query;
 					} else {           
                         $query             .= " $index_plus $operand";
-                        $human_search_desc .= "  $index_plus $operands[$i]";
+                        $human_search_desc .= " $index_plus $operands[$i]";
 					}            
                     $previous_operand = 1;
                 }
