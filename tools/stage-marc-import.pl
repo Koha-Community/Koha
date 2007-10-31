@@ -60,6 +60,7 @@ my $dbh = C4::Context->dbh;
 
 my $uploadmarc=$input->param('uploadmarc');
 my $check_for_matches = $input->param('check_for_matches');
+my $parse_items = $input->param('parse_items');
 my $comments = $input->param('comments');
 my $syntax = $input->param('syntax');
 my ($template, $loggedinuser, $cookie)
@@ -81,7 +82,8 @@ if ($uploadmarc && length($uploadmarc)>0) {
 	}
 
     # FIXME branch code
-    my ($batch_id, $num_valid, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, $comments, '', 0);
+    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
+                                                                                   $comments, '', $parse_items, 0);
     my $matcher = C4::Matcher->new('biblio');
     $matcher->add_matchpoint("020", "a", '', 'isbn', 1000);
     my $num_with_matches = 0;
@@ -90,11 +92,10 @@ if ($uploadmarc && length($uploadmarc)>0) {
         $checked_matches = 1;
         $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
     }
-    # FIXME we're not committing now
-    # my ($num_added, $num_updated, $num_ignored) = BatchCommitBibRecords($batch_id);
 
 	$template->param(staged => $num_valid,
  	                 matched => $num_with_matches,
+                     num_items => $num_items,
                      import_errors => scalar(@import_errors),
                      total => $num_valid + scalar(@import_errors),
                      checked_matches => $checked_matches,

@@ -27,6 +27,7 @@
     <!-- TMPL_ELSE -->
     <li>Did not check for matches with existing records in catalogue</li>
     <!-- /TMPL_IF -->
+	<li><!-- TMPL_VAR name="num_items" --> item records found and staged</li>
     <li><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Manage staged records</a></li>
 	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
 </ul>
@@ -63,7 +64,21 @@
 		<input type="radio" id="check_for_matchesno" name="check_for_matches" value="0" checked="checked" /><label for="check_for_matchesno">Do not look for matching records (using ISBN)</label></li>
 <li class="radio">
 			<input type="radio" id="check_for_matchesyes" name="check_for_matches" value="1" /><label for="check_for_matchesyes">Look for matching records</label>
-	</li></ol></fieldset><input type="submit" value="Import" />
+	</li></ol></fieldset>
+  <fieldset class="rows">
+    <legend>Check for embedded item record data?</legend>
+    <ol>
+      <li class="radio">
+        <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
+        <label for="parse_itemsyes">Yes</label>
+      </li>
+      <li class="radio">
+        <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
+        <label for="parse_itemsno">No</label>
+      </li>
+    </ol>
+  </fieldset>
+  <input type="submit" value="Stage for import" />
 </form>
 <!-- /TMPL_IF -->
 

@@ -106,18 +106,20 @@ sub import_batches_list {
 
 sub commit_batch {
     my ($template, $import_batch_id) = @_;
-    my ($num_added, $num_updated, $num_ignored) = BatchCommitBibRecords($import_batch_id);
+    my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($import_batch_id);
     $template->param(did_commit => 1);
     $template->param(num_added => $num_added);
     $template->param(num_updated => $num_updated);
+    $template->param(num_items_added => $num_items_added);
     $template->param(num_ignored => $num_ignored);
 }
 
 sub revert_batch {
     my ($template, $import_batch_id) = @_;
-    my ($num_deleted, $num_errors, $num_reverted, $num_ignored) = BatchRevertBibRecords($import_batch_id);
+    my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = BatchRevertBibRecords($import_batch_id);
     $template->param(did_revert => 1);
     $template->param(num_deleted => $num_deleted);
+    $template->param(num_items_deleted => $num_items_deleted);
     $template->param(num_errors => $num_errors);
     $template->param(num_reverted => $num_reverted);
     $template->param(num_ignored => $num_ignored);

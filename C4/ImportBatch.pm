@@ -227,19 +227,21 @@ sub ModBiblioInBatch {
 
 =over 4
 
-($batch_id, $num_records, @invalid_records) = BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
-                                                                    $comments, $branch_code, $leave_as_staging);
+($batch_id, $num_records, $num_items, @invalid_records) = BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
+                                                                                $comments, $branch_code, $parse_items,
+                                                                                $leave_as_staging);
 
 =back
 
 =cut
 
 sub  BatchStageMarcRecords {
-    my ($marc_flavor, $marc_records, $file_name, $comments, $branch_code, $leave_as_staging) = @_;
+    my ($marc_flavor, $marc_records, $file_name, $comments, $branch_code, $parse_items, $leave_as_staging) = @_;
 
     my $batch_id = AddImportBatch('create_new', 'staging', 'batch', $file_name, $comments);
     my @invalid_records = ();
     my $num_valid = 0;
+    my $num_items = 0;
     # FIXME - for now, we're dealing only with bibs
     my $rec_num = 0;
     foreach my $marc_blob (split(/\x1D/, $marc_records)) {
@@ -251,6 +253,10 @@ sub  BatchStageMarcRecords {
         } else {
             $num_valid++;
             $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $marc_flavor, int(rand(99999)), 0);
+            if ($parse_items) {
+                my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 0);
+                $num_items += scalar(@import_items_ids);
+            }
         }
     }
     unless ($leave_as_staging) {
@@ -258,7 +264,48 @@ sub  BatchStageMarcRecords {
     }
     # FIXME branch_code, number of bibs, number of items
     _update_batch_record_counts($batch_id);
-    return ($batch_id, $num_valid, @invalid_records);
+    return ($batch_id, $num_valid, $num_items, @invalid_records);
+}
+
+=head2 AddItemsToImportBiblio
+
+=over 4
+
+my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, $update_counts);
+
+=back
+
+=cut
+
+sub AddItemsToImportBiblio {
+    my $batch_id = shift;
+    my $import_record_id = shift;
+    my $marc_record = shift;
+    my $update_counts = @_ ? shift : 0;
+
+    my @import_items_ids = ();
+   
+    my $dbh = C4::Context->dbh; 
+    my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+    foreach my $item_field ($marc_record->field($item_tag)) {
+        my $item_marc = MARC::Record->new();
+        $item_marc->append_fields($item_field);
+        $marc_record->delete_field($item_field);
+        my $sth = $dbh->prepare_cached("INSERT INTO import_items (import_record_id, status, marcxml)
+                                        VALUES (?, ?, ?)");
+        $sth->bind_param(1, $import_record_id);
+        $sth->bind_param(2, 'staged');
+        $sth->bind_param(3, $item_marc->as_xml());
+        $sth->execute();
+        push @import_items_ids, $dbh->{'mysql_insertid'};
+        $sth->finish();
+    }
+
+    if ($#import_items_ids > -1) {
+        _update_batch_record_counts($batch_id) if $update_counts;
+        _update_import_record_marc($import_record_id, $marc_record);
+    }
+    return @import_items_ids;
 }
 
 =head2 BatchFindBibDuplicates
@@ -315,7 +362,7 @@ sub BatchFindBibDuplicates {
 
 =over 4
 
-my ($num_added, $num_updated, $num_ignored) = BatchCommitBibRecords($batch_id);
+my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($batch_id);
 
 =back
 
@@ -326,6 +373,7 @@ sub BatchCommitBibRecords {
 
     my $num_added = 0;
     my $num_updated = 0;
+    my $num_items_added = 0;
     my $num_ignored = 0;
     # commit (i.e., save, all records in the batch)
     # FIXME biblio only at the moment
@@ -349,6 +397,7 @@ sub BatchCommitBibRecords {
             my $sth = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth->execute($biblionumber, $rowref->{'import_record_id'});
             $sth->finish();
+            $num_items_added += BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } else {
             $num_updated++;
@@ -362,20 +411,59 @@ sub BatchCommitBibRecords {
             my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth2->execute($biblionumber, $rowref->{'import_record_id'});
             $sth2->finish();
+            $num_items_added += BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         }
     }
     $sth->finish();
     SetImportBatchStatus($batch_id, 'imported');
-    return ($num_added, $num_updated, $num_ignored);
+    return ($num_added, $num_updated, $num_items_added, $num_ignored);
+}
+
+=head2 BatchCommitItems
+
+=over 4
+
+$num_items_added = BatchCommitItems($import_record_id, $biblionumber);
+
+=back
+
+=cut
+
+sub BatchCommitItems {
+    my ($import_record_id, $biblionumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $num_items_added = 0;
+    my $sth = $dbh->prepare("SELECT import_items_id, import_items.marcxml, encoding
+                             FROM import_items
+                             JOIN import_records USING (import_record_id)
+                             WHERE import_record_id = ?
+                             ORDER BY import_items_id");
+    $sth->bind_param(1, $import_record_id);
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        my $item_marc = MARC::Record->new_from_xml($row->{'marcxml'}, 'UTF-8', $row->{'encoding'});
+        my ($item_biblionumber, $biblionumber, $itemnumber) = AddItem($item_marc, $biblionumber);
+        my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
+        $updsth->bind_param(1, 'imported');
+        $updsth->bind_param(2, $itemnumber);
+        $updsth->bind_param(3, $row->{'import_items_id'});
+        $updsth->execute();
+        $updsth->finish();
+        $num_items_added++;
+    }
+    $sth->finish();
+    return $num_items_added;
 }
 
 =head2 BatchRevertBibRecords
 
 =over 4
 
-my ($num_deleted, $num_errors, $num_reverted, $num_ignored) = BatchRevertBibRecords($batch_id);
+my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = BatchRevertBibRecords($batch_id);
 
 =back
 
@@ -387,6 +475,7 @@ sub BatchRevertBibRecords {
     my $num_deleted = 0;
     my $num_errors = 0;
     my $num_reverted = 0;
+    my $num_items_deleted = 0;
     my $num_ignored = 0;
     # commit (i.e., save, all records in the batch)
     # FIXME biblio only at the moment
@@ -404,6 +493,7 @@ sub BatchRevertBibRecords {
         }
         if ($overlay_action eq 'create_new' or
             ($overlay_action eq 'replace' and $rowref->{'overlay_status'} eq 'no_match')) {
+            $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
             my $error = DelBiblio($rowref->{'matched_biblionumber'});
             if (defined $error) {
                 $num_errors++;
@@ -416,13 +506,48 @@ sub BatchRevertBibRecords {
             my $old_record = MARC::Record->new_from_xml($rowref->{'marcxml_old'}, 'UTF-8', $rowref->{'encoding'});
             my $biblionumber = $rowref->{'matched_biblionumber'};
             my ($count, $oldbiblio) = GetBiblio($biblionumber);
+            $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
             ModBiblio($old_record, $biblionumber, $oldbiblio->{'frameworkcode'});
             SetImportRecordStatus($rowref->{'import_record_id'}, 'reverted');
         }
     }
     $sth->finish();
     SetImportBatchStatus($batch_id, 'reverted');
-    return ($num_deleted, $num_errors, $num_reverted, $num_ignored);
+    return ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored);
+}
+
+=head2 BatchRevertItems
+
+=over 4
+
+my $num_items_deleted = BatchRevertItems($import_record_id, $biblionumber);
+
+=back
+
+=cut
+
+sub BatchRevertItems {
+    my ($import_record_id, $biblionumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $num_items_deleted = 0;
+
+    my $sth = $dbh->prepare_cached("SELECT import_items_id, itemnumber
+                                   FROM import_items
+                                   WHERE import_record_id = ?");
+    $sth->bind_param(1, $import_record_id);
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref()) {
+        DelItem($dbh, $biblionumber, $row->{'itemnumber'});
+        my $updsth = $dbh->prepare("UPDATE import_items SET status = ? WHERE import_items_id = ?");
+        $updsth->bind_param(1, 'reverted');
+        $updsth->bind_param(2, $row->{'import_items_id'});
+        $updsth->execute();
+        $updsth->finish();
+        $num_items_deleted++;
+    }
+    $sth->finish();
+    return $num_items_deleted;
 }
 
 =head2 GetImportBatchRangeDesc
@@ -848,6 +973,16 @@ sub _update_batch_record_counts {
     my $sth = $dbh->prepare_cached("UPDATE import_batches SET num_biblios = (
                                     SELECT COUNT(*)
                                     FROM import_records
+                                    WHERE import_batch_id = import_batches.import_batch_id
+                                    AND record_type = 'biblio')
+                                    WHERE import_batch_id = ?");
+    $sth->bind_param(1, $batch_id);
+    $sth->execute();
+    $sth->finish();
+    $sth = $dbh->prepare_cached("UPDATE import_batches SET num_items = (
+                                    SELECT COUNT(*)
+                                    FROM import_records
+                                    JOIN import_items USING (import_record_id)
                                     WHERE import_batch_id = import_batches.import_batch_id
                                     AND record_type = 'biblio')
                                     WHERE import_batch_id = ?");
