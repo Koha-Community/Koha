@@ -134,7 +134,6 @@
       <!-- TMPL_IF NAME="branchname" -->
       <!-- TMPL_VAR name="branchname" -->
       <!-- TMPL_ELSE -->
-      None
       <!-- /TMPL_IF -->
     </td>
     <td>
@@ -163,7 +162,18 @@
 
 <!-- TMPL_IF name="add_form" -->
 <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
+
+
+<!-- TMPL_IF name="header-is-modify-p" -->
+  <input type="hidden" name="op" value="mod_validate" />
+  <input type="hidden" name="current_branch" value="<!-- TMPL_VAR name="current_branch" -->"
+  <!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="header-is-add-p" -->
   <input type="hidden" name="op" value="add_validate" />
+  <!-- /TMPL_IF -->
+
+
   <input type="hidden" name="checked" value="0" />
 
   <fieldset class="rows">
@@ -190,7 +200,7 @@
     <li>
       <label for="branchcode">Library: </label>
       <select name="branchcode" id="branchcode">
-          <option value="">None</option>
+          <option value="">----</option>
   <!-- TMPL_LOOP NAME="branches" -->
     <!-- TMPL_IF NAME="selected" -->
           <option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -209,13 +219,25 @@
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
 
+
 <!-- TMPL_IF name="add_validate" -->
-<h3>Data Recorded</h3>
+<h3>Bookfund Added</h3>
 
 <p>
   <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
 </p>
 <!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="mod_validate" -->
+<h3>Bookfund Modified</h3>
+
+<p>
+  <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
+</p>
+<!-- /TMPL_IF -->
+
+
 
 <!-- TMPL_IF name="delete_confirm" -->
 <h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></h3>
