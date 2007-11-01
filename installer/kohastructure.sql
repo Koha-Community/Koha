@@ -347,7 +347,7 @@ CREATE TABLE `authorised_values` (
 
 DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` (
-  `biblionumber` int(11) NOT NULL default 0,
+  `biblionumber` int(11) NOT NULL auto_increment,
   `frameworkcode` varchar(4) NOT NULL default '',
   `author` mediumtext,
   `title` mediumtext,
@@ -380,7 +380,7 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default 0,
+  `biblioitemnumber` int(11) NOT NULL default auto_increment,
   `biblionumber` int(11) NOT NULL default 0,
   `volume` mediumtext,
   `number` mediumtext,
@@ -996,7 +996,7 @@ CREATE TABLE `issuingrules` (
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
-  `itemnumber` int(11) NOT NULL default 0,
+  `itemnumber` int(11) NOT NULL default auto_increment,
   `biblionumber` int(11) NOT NULL default 0,
   `biblioitemnumber` int(11) NOT NULL default 0,
   `barcode` varchar(20) default NULL,

@@ -3460,20 +3460,13 @@ sub _koha_add_biblio {
 
 	my $error;
 
-	# get the next biblionumber
-    my $sth = $dbh->prepare("SELECT MAX(biblionumber) FROM biblio");
-    $sth->execute();
-    my $data = $sth->fetchrow_arrayref();
-    my $biblionumber = $$data[0] + 1;
 	# set the series flag
     my $serial = 0;
     if ( $biblio->{'seriestitle'} ) { $serial = 1 };
 
-    $sth->finish();
 	my $query = 
         "INSERT INTO biblio
-		SET biblionumber  = ?, 
-			frameworkcode = ?,
+		SET frameworkcode = ?,
 			author = ?,
 			title = ?,
 			unititle =?,
@@ -3484,9 +3477,8 @@ sub _koha_add_biblio {
 			datecreated=NOW(),
 			abstract = ?
 		";
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     $sth->execute(
-        $biblionumber,
 		$frameworkcode,
         $biblio->{'author'},
         $biblio->{'title'},
@@ -3498,6 +3490,7 @@ sub _koha_add_biblio {
         $biblio->{'abstract'}
     );
 
+    my $biblionumber = $dbh->{'mysql_insertid'};
 	if ( $dbh->errstr ) {
 		$error.="ERROR in _koha_add_biblio $query".$dbh->errstr;
         warn $error;
@@ -3666,16 +3659,10 @@ Internal function to add a biblioitem
 sub _koha_add_biblioitem {
     my ( $dbh, $biblioitem ) = @_;
 	my $error;
-    my $sth = $dbh->prepare("SELECT MAX(biblioitemnumber) FROM biblioitems");
-    $sth->execute();
-    my $data       = $sth->fetchrow_arrayref;
-    my $bibitemnum = $$data[0] + 1;
-    $sth->finish();
 
 	my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
     my $query =
     "INSERT INTO biblioitems SET
-		biblioitemnumber = ?,
         biblionumber    = ?,
         volume          = ?,
         number          = ?,
@@ -3706,9 +3693,8 @@ sub _koha_add_biblioitem {
         cn_sort         = ?,
         totalissues     = ?
         ";
-	$sth = $dbh->prepare($query);
+	my $sth = $dbh->prepare($query);
     $sth->execute(
-		$bibitemnum,
         $biblioitem->{'biblionumber'},
         $biblioitem->{'volume'},
         $biblioitem->{'number'},
@@ -3739,6 +3725,7 @@ sub _koha_add_biblioitem {
         $cn_sort,
         $biblioitem->{'totalissues'}
     );
+    my $bibitemnum = $dbh->{'mysql_insertid'};
     if ( $dbh->errstr ) {
 		$error.="ERROR in _koha_add_biblioitem $query".$dbh->errstr;
 		warn $error;
@@ -3761,12 +3748,6 @@ sub _koha_new_items {
     my ( $dbh, $item, $barcode ) = @_;
 	my $error;
 
-    my $sth = $dbh->prepare("SELECT MAX(itemnumber) FROM items");
-    $sth->execute();
-    my $data       = $sth->fetchrow_hashref;
-    my $itemnumber = $data->{'MAX(itemnumber)'} + 1;
-    $sth->finish;
-
     my ($items_cn_sort) = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
 
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()
@@ -3776,7 +3757,6 @@ sub _koha_new_items {
 	}
 	my $query = 
            "INSERT INTO items SET
-            itemnumber         	= ?,
 			biblionumber     	= ?,
             biblioitemnumber    = ?,
 			barcode          	= ?,
@@ -3806,9 +3786,8 @@ sub _koha_new_items {
 			materials 			= ?,
 			uri 				= ?
           ";
-    $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
 	$sth->execute(
-            $itemnumber,
 			$item->{'biblionumber'},
 			$item->{'biblioitemnumber'},
             $barcode,
@@ -3836,6 +3815,7 @@ sub _koha_new_items {
 			$item->{'materials'},
 			$item->{'uri'},
     );
+    my $itemnumber = $dbh->{'mysql_insertid'};
     if ( defined $sth->errstr ) {
         $error.="ERROR in _koha_new_items $query".$sth->errstr;
     }
