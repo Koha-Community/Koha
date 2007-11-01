@@ -380,7 +380,7 @@ CREATE TABLE `biblio_framework` (
 
 DROP TABLE IF EXISTS `biblioitems`;
 CREATE TABLE `biblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default auto_increment,
+  `biblioitemnumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) NOT NULL default 0,
   `volume` mediumtext,
   `number` mediumtext,
@@ -996,7 +996,7 @@ CREATE TABLE `issuingrules` (
 
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
-  `itemnumber` int(11) NOT NULL default auto_increment,
+  `itemnumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) NOT NULL default 0,
   `biblioitemnumber` int(11) NOT NULL default 0,
   `barcode` varchar(20) default NULL,
