@@ -61,6 +61,8 @@ use C4::Bookfund;
 use C4::Output;
 use C4::Date;
 
+# use Smart::Comments;
+
 my $dbh = C4::Context->dbh;
 my $input = new CGI;
 my $script_name="/cgi-bin/koha/admin/aqbookfund.pl";
@@ -94,7 +96,7 @@ $template->param(action => $script_name);
 
 my $branches = GetBranches;
 
-################## ADD_FORM ##################################
+#-----############# ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
@@ -106,6 +108,7 @@ if ($op eq 'add_form') {
 	if ($bookfundid) {
 	    $header = "Modify book fund";
 	    $template->param('header-is-modify-p' => 1);
+	    $template->param('current_branch' =>  $branchcodeid);
 	} else {
 	    $header = "Add book fund";
 	    $template->param('header-is-add-p' => 1);
@@ -140,22 +143,17 @@ if ($op eq 'add_form') {
 
 } # END $OP eq ADD_FORM
 
-################## ADD_VALIDATE ##################################
+#-----############# ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 elsif ($op eq 'add_validate') {
+### add
 	my $bookfundid = uc $input->param('bookfundid');
-
-    my $number = Countbookfund($bookfundid,$branchcodeid);
-
-    my $bookfund_already_exists = $number > 0 ? 1 : 0;
-
-    if ($bookfund_already_exists) {
         my $bookfundname = $input->param('bookfundname');
         my $branchcode = $input->param('branchcode') || undef;
-         warn "name :$bookfundname branch:$branchcode";
-        ModBookFund($bookfundname,$bookfundid,$branchcode);
-    }
-    else {
+
+    my $number = Countbookfund($bookfundid,$branchcodeid);
+    if ($number == 0 ) {
+
         NewBookFund(
             $bookfundid,
             $input->param('bookfundname'),
@@ -165,7 +163,36 @@ elsif ($op eq 'add_validate') {
     $input->redirect('aqbookfund.pl');
 # END $OP eq ADD_VALIDATE
 }
-################## DELETE_CONFIRM ##################################
+
+#-----############# MOD_VALIDATE ##################################
+# called by add_form, used to insert/modify data in DB
+elsif ($op eq 'mod_validate') {
+### mod ddddddddddddddddd
+
+	my $bookfundid = uc $input->param('bookfundid');
+        my $bookfundname = $input->param('bookfundname');
+        my $branchcode = $input->param('branchcode') || undef;
+        my $current_branch = $input->param('current_branch') || undef;
+
+warn "$bookfundid, $bookfundname, $branchcode";
+
+    my $number = Countbookfund($bookfundid,$branchcodeid);
+### $number
+
+
+    if ($number < 2)  {
+         warn "name :$bookfundname branch:$branchcode";
+        ModBookFund($bookfundname,$bookfundid,$current_branch, $branchcode);
+    }
+   $input->redirect('aqbookfund.pl');
+# END $OP eq ADD_VALIDATE
+}
+
+
+
+
+
+#-----############# DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 
 elsif ($op eq 'delete_confirm') {
@@ -176,7 +203,7 @@ elsif ($op eq 'delete_confirm') {
 } # END $OP eq DELETE_CONFIRM
 
 
-################## DELETE_CONFIRMED ##################################
+#-----############# DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 elsif ($op eq 'delete_confirmed') {
     DelBookFund(uc($input->param('bookfundid')),$branchcodeid);
@@ -184,7 +211,7 @@ elsif ($op eq 'delete_confirmed') {
 }# END $OP eq DELETE_CONFIRMED
 
 
-################## DEFAULT ##################################
+#-----############# DEFAULT ##################################
 else { # DEFAULT
     my ($query, $sth);
 
