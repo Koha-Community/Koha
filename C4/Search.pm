@@ -583,9 +583,8 @@ sub _add_truncation {
 		$operand =~ s/^ //g;
 		my @wordlist= split (/\s/,$operand);
 		foreach my $word (@wordlist){
-			#warn "WORD: $word";
-			if (index($word,"*")==0 && index($word,"*",1)==length($word)-2){
-				$word=~s/\*//;
+			if (index($word,"*")==0 && index($word,"*",1)==length($word)-1){
+				$word=~s/\*//g;
 				push @rightlefttruncated,$word;
 			} 
 			elsif(index($word,"*")==0 && index($word,"*",1)<0){
@@ -763,7 +762,7 @@ sub buildQuery {
 				# Handle Truncation
 				my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
 				($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _add_truncation($operand,$index);
-				#warn "TRUNCATION: NON:@$nontruncated RIGHT:@$righttruncated LEFT:@$lefttruncated RIGHTLEFT:@$rightlefttruncated REGEX:@$regexpr";
+				warn "TRUNCATION: NON:@$nontruncated RIGHT:@$righttruncated LEFT:@$lefttruncated RIGHTLEFT:@$rightlefttruncated REGEX:@$regexpr";
 
 				# Handle Stemming
           		my $stemmed_operand;
