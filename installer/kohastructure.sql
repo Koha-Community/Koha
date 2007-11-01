@@ -820,7 +820,7 @@ CREATE TABLE `deleteditems` (
   `uri` varchar(255) default NULL,
   `marc` longblob,
   PRIMARY KEY  (`itemnumber`),
-  UNIQUE KEY `delitembarcodeidx` (`barcode`),
+  KEY `delitembarcodeidx` (`barcode`),
   KEY `delitembinoidx` (`biblioitemnumber`),
   KEY `delitembibnoidx` (`biblionumber`),
   KEY `delhomebranch` (`homebranch`),
