@@ -19,8 +19,7 @@ package C4::Bookfund;
 
 
 use strict;
-use Smart::Comments;
-
+# use Smart::Comments;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -316,9 +315,8 @@ sub NewBookFund{
 
 =head3 ModBookFund
 
-&ModBookFund($bookfundname,$branchcode,$bookfundid);
-this function update the bookfundname and the branchcode on aqbookfund table
-on database.
+&ModBookFund($bookfundname,$bookfundid,$current_branch, $branchcode) =
+this function update the bookfundname and the branchcode on aqbookfund table on database.
 
 =cut
 
@@ -339,7 +337,8 @@ sub ModBookFund {
     ### $retval
 
     # budgets depending on a bookfund must have the same branchcode
-    # if the bookfund branchcode is set
+
+    # if the bookfund branchcode is set, and previous update is successfull, then update aqbudget.branchcode too.
     if (defined $branchcode && $retval > 0) {
         my $query = "UPDATE  aqbudget  
             SET     branchcode = ?
