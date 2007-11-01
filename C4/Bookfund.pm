@@ -19,6 +19,7 @@ package C4::Bookfund;
 
 
 use strict;
+use Smart::Comments;
 
 
 use vars qw($VERSION @ISA @EXPORT);
@@ -321,49 +322,35 @@ on database.
 
 =cut
 
+
 sub ModBookFund {
     my ($bookfundname,$bookfundid,$current_branch, $branchcode) = @_;
 
     my $dbh = C4::Context->dbh;
-=c
-    my $query = "
-        UPDATE aqbookfund
-        SET    bookfundname = ?,
-               branchcode = ?
-        WHERE  bookfundid = ?
-        AND branchcode= ?
-    ";
-    warn "$bookfundname,$branchcode, $bookfundid,$current_branch";
 
-    my $sth=$dbh->prepare($query);
-    $sth->execute($bookfundname,"$branchcode", $bookfundid,"$current_branch");
-=cut
-
- my $retval = $dbh->do('
+    my $retval = $dbh->do("
      UPDATE aqbookfund
-        SET    bookfundname = $bookfundname, 
-               branchcode = $branchcode
-        WHERE  bookfundid = $bookfundid
-        AND branchcode= $current_branch
-    ');
+        SET    bookfundname = '$bookfundname', 
+               branchcode = '$branchcode'
+        WHERE  bookfundid = '$bookfundid'
+        AND branchcode = '$current_branch'
+    ");
 
-    warn "$bookfundname,$branchcode, $bookfundid,$current_branch";
-### $retval
+    ### $retval
 
-
-
-# budgets depending on a bookfund must have the same branchcode
-# if the bookfund branchcode is set
-    if (defined $branchcode) {
-        $query = "
-            UPDATE  aqbudget
+    # budgets depending on a bookfund must have the same branchcode
+    # if the bookfund branchcode is set
+    if (defined $branchcode && $retval > 0) {
+        my $query = "UPDATE  aqbudget  
             SET     branchcode = ?
-            WHERE   bookfundid = ?
-        ";
-        $sth=$dbh->prepare($query);
+            WHERE   bookfundid = ? ";
+
+        my $sth=$dbh->prepare($query);
         $sth->execute($branchcode, $bookfundid) ;
     }
 }
+
+
 
 #-------------------------------------------------------------#
 
