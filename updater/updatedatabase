@@ -534,7 +534,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.00.00.019";
+$DBversion = "3.00.00.020";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE deleteditems 
               DROP KEY `delitembarcodeidx`,
