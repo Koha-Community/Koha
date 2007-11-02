@@ -1,14 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions &rsaquo; Order search</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_IF NAME="suggestions_loop" -->Orders search &rsaquo; Search Results<!-- TMPL_ELSE -->Order search<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-calendar.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-history-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Order search</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_IF NAME="suggestions_loop" --><a href="/cgi-bin/koha/acqui/histsearch.pl">Orders search</a> &rsaquo; Search Results<!-- TMPL_ELSE -->Order search<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -16,29 +16,14 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	
-
-
-	<h1>Order search</h1>
-	<div id="acqui_histsearch">
-		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
-		<table>
-			<tr>
-				<th>&nbsp;</th>
-				<th>Title</th>
-				<th>Author</th>
-				<th>Supplier</th>
-				<th>Placed on</th>
-				<th>Recieved on</th>
-				<th>Quantity ordered</th>
-				<th>Unit cost</th>
-				<th>&nbsp;</th>
-			</tr>
-			<tr>
-					<th>Filter By:</th>
-					<th><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" /></th>
-					<th><input type="text" name="author" value="<!-- TMPL_VAR name="author" -->" /></th>
-					<th><input type="text" name="name" value="<!-- TMPL_VAR name="name" -->" /></th>
-					<th><label for="from">From</label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
+		<!-- TMPL_UNLESS NAME="suggestions_loop" --><form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+<fieldset class="rows">
+	<legend>Search Orders</legend>
+					<ol>
+					<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="<!-- TMPL_VAR name="title"-->" /></li>
+					<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="<!-- TMPL_VAR name="author" -->" /></li>
+					<li><label for="name">Supplier: </label> <input type="text" name="name" id="name" value="<!-- TMPL_VAR name="name" -->" /></li>
+					<li><label for="from">From: </label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
 						<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" />
 						<script language="JavaScript" type="text/javascript">
 							function validate1(date) {
@@ -65,8 +50,8 @@
 									dateStatusFunc : validate1
 								}
 							);
-						</script>
-						<label for="to">To</label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
+						</script></li>
+						<li><label for="to">To: </label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
 						<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
 						<script type="text/javascript">
 							function validate2(date) {
@@ -94,12 +79,25 @@
 									dateStatusFunc : validate2
 								}
 							);
-						</script></th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-					<th>&nbsp;</th>
-					<th><input type="submit" value="Set Filter" /></th>
+						</script></li>
+			</ol>
+			</fieldset>
+			<fieldset class="action"><input type="submit" value="Search" /></fieldset>
+		</form><!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF NAME="suggestions_loop" --><h1>Search Results</h1>
+	<div id="acqui_histsearch">
+		<table>
+			<tr>
+				<th>&nbsp;</th>
+				<th>Title</th>
+				<th>Author</th>
+				<th>Supplier</th>
+				<th>Placed on</th>
+				<th>Received on</th>
+				<th>Quantity ordered</th>
+				<th>Unit cost</th>
 			</tr>
+			
 			<!-- TMPL_LOOP NAME="suggestions_loop" -->
 				<tr>
 					<td>		    <!-- TMPL_IF NAME="invoicenumber" -->
@@ -115,12 +113,10 @@
 					<td><!-- TMPL_VAR name="datereceived" --></td>
 					<td><!-- TMPL_VAR name="quantity" --></td>
 					<td><!-- TMPL_VAR name="ecost" --></td>
-					<td>&nbsp;</td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		</form>
-	</div>
+	</div><!-- TMPL_ELSE --><!-- /TMPL_IF -->
 
 </div>
 </div>

@@ -22,20 +22,19 @@ function confirm_deletion() {
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-g">
-	
-<!-- TMPL_UNLESS NAME="enter" --><!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" --><!-- /TMPL_UNLESS -->
-	
-<!--TMPL_IF Name="enter"-->
-    <form action="updatesupplier.pl" method="post">
-    
-    <input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
-    
-    <!-- TMPL_IF name="id" -->
+	<!--TMPL_IF Name="enter"-->
+	    <!-- TMPL_IF name="id" -->
         <h1>Update: <!-- TMPL_VAR NAME="name" --></h1>
     <!-- TMPL_ELSE -->
         <h1>Add supplier</h1>
     <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="enter" --><!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" --><!-- /TMPL_UNLESS -->
+<!--TMPL_IF Name="enter"-->
+    <form action="updatesupplier.pl" method="post">
+	<div class="yui-g">
+	<div class="yui-u first">
+        <input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
         <fieldset class="rows">
             <legend>Company details</legend>
             <ol><li><label for="company">Company Name</label>
@@ -51,6 +50,8 @@ function confirm_deletion() {
             <li><label for="website">Website</label>
                 <input type="text" size="40" id="website" name="website" value="<!-- TMPL_VAR NAME="url" -->" /></li></ol>
         </fieldset>
+		</div>
+		<div class="yui-u">
         <fieldset class="rows">
             <legend>Contact details</legend>
            <ol> <li><label for="company_contact_name">Contact Name</label>
@@ -68,6 +69,9 @@ function confirm_deletion() {
             <li><label for="contact_notes">Notes</label>
                 <textarea id="contact_notes" name="contact_notes" cols="40" rows="4"><!-- TMPL_VAR NAME="contnotes" --></textarea></li></ol>
         </fieldset>
+		</div>
+	</div>
+		<div class="yui-g">
         <fieldset class="rows">
             <legend>Ordering information</legend>
             <ol class="radio"><li><label for="activestatus" class="radio">Supplier is:</label>
@@ -101,7 +105,7 @@ function confirm_deletion() {
 				<!-- TMPL_ELSE -->
                     <input type="radio" name="gst" id="gstyes" value="1" /><label for="gstyes">Yes</label>
                     <input type="radio" name="gst" id="gstno" value="0" checked="checked" /><label for="gstno">No</label>
-				<!-- /TMPL_IF --></li><!-- TMPL_ELSE --><input type="hidden" name="gst" value="0" /><!-- /TMPL_IF -->
+				<!-- /TMPL_IF --></li><!-- /TMPL_IF -->
 			
             <!-- TMPL_IF NAME="GST" --><li>Ordering prices
 				<!-- TMPL_IF name="listincgst" -->
@@ -110,7 +114,7 @@ function confirm_deletion() {
 				<!-- TMPL_ELSE -->
                     <input type="radio" id="list_gstyes" name="list_gst" value="1" /><label for="list_gstyes">include GST</label>
                     <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" /><label for="list_gstno">don't include GST</label>
-				<!-- /TMPL_IF --></li><!-- TMPL_ELSE --><input type="hidden" name="list_gst" value="0" /><!-- /TMPL_IF -->
+				<!-- /TMPL_IF --></li><!-- /TMPL_IF -->
 			
             <!-- TMPL_IF NAME="GST" --><li>Invoice prices
 				<!-- TMPL_IF name= "invoiceincgst" -->
@@ -119,19 +123,24 @@ function confirm_deletion() {
 					<!-- TMPL_ELSE -->
                     <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1"><label for="invoice_gstyes">include GST</label>
                     <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" /><label for="invoice_gstno">don't include GST</label>
-				<!-- /TMPL_IF --></li><!-- TMPL_ELSE --><input type="hidden"  name="invoice_gst" value="0" /><!-- /TMPL_IF -->
+				<!-- /TMPL_IF --></li><!-- /TMPL_IF -->
             <li><label for="discount">Discount</label>
                 <input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
             <li><label for="notes">Notes</label>
-                <textarea cols="40" rows="4" id="notes" name="notes" ><!-- TMPL_VAR NAME="notes" --></textarea></li></ol>
+                <textarea cols="40" rows="4" id="notes" name="notes" ><!-- TMPL_VAR NAME="notes" --></textarea></li></ol>			
+			<!-- TMPL_UNLESS NAME="GST" -->
+				<input type="hidden" name="gst" value="0" />
+				<input type="hidden" name="list_gst" value="0" />
+				<input type="hidden"  name="invoice_gst" value="0" />
+			<!-- /TMPL_UNLESS -->
         </fieldset>
-        <p><input type="submit" value="Save" /></p>
+        <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="id" -->">Cancel</a></fieldset>
+		</div>
     </form>
 <!--TMPL_ELSE-->
-    <h1>Information for : <!-- TMPL_VAR NAME="name" --></h1>
-
-        <div id="supplier-company-details">
-            <h3>Company details</h3>
+    <h1><!-- TMPL_VAR NAME="name" --></h1>
+		<div class="yui-g">
+        <div id="supplier-company-details" class="yui-u first">
             <p><strong>Company Name: </strong>
                 <!-- TMPL_VAR NAME="name" --></p>
             <p><strong>Postal Address: </strong>
@@ -145,7 +154,7 @@ function confirm_deletion() {
            <!-- TMPL_IF NAME="url" --> <p><strong>Web site: </strong>
                 <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a></p><!-- /TMPL_IF -->
         </div>
-        <div id="supplier-contact-details">
+        <div id="supplier-contact-details" class="yui-u">
             <h3>Contact details</h3>
             <p><strong>Contact name: </strong>
                 <!-- TMPL_VAR NAME="contact" --></p>
@@ -159,11 +168,12 @@ function confirm_deletion() {
                 <!-- TMPL_VAR NAME="contfax" --></p>
             <!-- TMPL_IF NAME="contemail" --><p><strong>E-mail: </strong>
                 <a href="mailto:<!-- TMPL_VAR NAME="contemail" -->"><!-- TMPL_VAR NAME="contemail" --></a></p><!-- /TMPL_IF -->
-            <p><strong>Notes: </strong>
-                <!-- TMPL_VAR NAME="contnotes" --></p>
+            <!-- TMPL_IF NAME="contnotes" --><p><strong>Notes: </strong>
+                <!-- TMPL_VAR NAME="contnotes" --></p><!-- /TMPL_IF -->
         
         </div>
-        <div id="supplier-ordering-information">
+		</div>
+        <div id="supplier-ordering-information" class="yui-g">
         <h3>Ordering information</h3>
             <p><strong>Supplier is: </strong>
                     <!-- TMPL_IF name="active" -->
@@ -183,13 +193,12 @@ function confirm_deletion() {
                     <!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p>
             <p><strong>Discount: </strong>
                 <!-- TMPL_VAR NAME="discount" --> %</p>
-            <p><strong>Notes: </strong>
-                <!-- TMPL_VAR NAME="notes" --></p>
+            <!-- TMPL_IF NAME="notes" --><p><strong>Notes: </strong>
+                <!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
         </div>
 
 <!--/TMPL_IF-->
 
-</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
