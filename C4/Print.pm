@@ -24,7 +24,7 @@ require Exporter;
 use C4::Context;
 use C4::Circulation;
 use C4::Members;
-use C4::Date;
+use C4::Dates qw(format_date);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -70,8 +70,8 @@ from C<&GetBorrowerIssues>.
 =cut
 
 # FIXME - It'd be nifty if this could generate pretty PostScript.
-sub remoteprint {
-    my ($items, $borrower ) = @_;
+sub remoteprint ($$) {
+    my ($items, $borrower) = @_;
 
     (return)
       unless ( C4::Context->boolean_preference('printcirculationslips') );
@@ -124,7 +124,7 @@ sub remoteprint {
         print PRINTER "$itemdata->{'date_due'}\r\n";
         $i++;
     }
-    print PRINTER "\r\n\r\n\r\n\r\n\r\n\r\n\r\n";
+    print PRINTER "\r\n" x 7 ;
     close PRINTER;
 
     #system("lpr /tmp/$file");
@@ -132,20 +132,18 @@ sub remoteprint {
 
 sub printreserve {
     my ( $branchname, $bordata, $itemdata ) = @_;
-    my $file    = time;
     my $printer = '';
     (return) unless ( C4::Context->boolean_preference('printreserveslips') );
     if ( $printer eq "" || $printer eq 'nulllp' ) {
-        open( PRINTER, ">>/tmp/kohares" );
+        open( PRINTER, ">>/tmp/kohares" )
+		  or die "Could not write to /tmp/kohares";
     }
     else {
         open( PRINTER, "| lpr -P $printer >/dev/null" )
           or die "Couldn't write to queue:$!\n";
     }
-    my @da         = localtime( time() );
-    my $todaysdate = "$da[2]:$da[1]  $da[3]/$da[4]/$da[5]";
-
-#(1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf ("%0.2d", $datearr[3]);
+    my @da = localtime();
+    my $todaysdate = "$da[2]:$da[1]  " . C4::Dates->today();
     my $slip = <<"EOF";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Date: $todaysdate;
@@ -182,8 +180,8 @@ EOF
 =cut
 
 #'
-sub printslip {
-    my ( $borrowernumber ) = @_;
+sub printslip ($) {
+    my ( $borrowernumber ) = shift;
     my ( $borrower, $flags ) = GetMemberDetails( $borrowernumber);
 	my ($countissues,$issueslist) = GetPendingIssues($borrowernumber); 
 	foreach my $it (@$issueslist){
