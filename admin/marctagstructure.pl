@@ -153,24 +153,45 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$sth=$dbh->prepare("replace marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
-	my $tagfield       =$input->param('tagfield');
-	my $liblibrarian  = $input->param('liblibrarian');
-	my $libopac       =$input->param('libopac');
-	my $repeatable =$input->param('repeatable');
-	my $mandatory =$input->param('mandatory');
-	my $authorised_value =$input->param('authorised_value');
-	unless (C4::Context->config('demo') eq 1) {
-		$sth->execute($tagfield,
-							$liblibrarian,
-							$libopac,
-							$repeatable?1:0,
-							$mandatory?1:0,
-							$authorised_value,
-							$frameworkcode
-							);
+    if ($input->param('modif')) {
+        $sth=$dbh->prepare("UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?");
+        my $tagfield       =$input->param('tagfield');
+        my $liblibrarian  = $input->param('liblibrarian');
+        my $libopac       =$input->param('libopac');
+        my $repeatable =$input->param('repeatable');
+        my $mandatory =$input->param('mandatory');
+        my $authorised_value =$input->param('authorised_value');
+        unless (C4::Context->config('demo') eq 1) {
+            $sth->execute(  $liblibrarian,
+                            $libopac,
+                            $repeatable?1:0,
+                            $mandatory?1:0,
+                            $authorised_value,
+                            $frameworkcode,
+                            $tagfield
+                                );
+        }
+        $sth->finish;
+	} else {
+        $sth=$dbh->prepare("INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
+        my $tagfield       =$input->param('tagfield');
+        my $liblibrarian  = $input->param('liblibrarian');
+        my $libopac       =$input->param('libopac');
+        my $repeatable =$input->param('repeatable');
+        my $mandatory =$input->param('mandatory');
+        my $authorised_value =$input->param('authorised_value');
+        unless (C4::Context->config('demo') eq 1) {
+            $sth->execute($tagfield,
+                                $liblibrarian,
+                                $libopac,
+                                $repeatable?1:0,
+                                $mandatory?1:0,
+                                $authorised_value,
+                                $frameworkcode
+                                );
+        }
+        $sth->finish;
 	}
-	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE

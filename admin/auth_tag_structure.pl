@@ -143,24 +143,46 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	$sth=$dbh->prepare("replace auth_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,authtypecode) values (?,?,?,?,?,?,?)");
-	my $tagfield       =$input->param('tagfield');
-	my $liblibrarian  = $input->param('liblibrarian');
-	my $libopac       =$input->param('libopac');
-	my $repeatable =$input->param('repeatable');
-	my $mandatory =$input->param('mandatory');
-	my $authorised_value =$input->param('authorised_value');
-	unless (C4::Context->config('demo') eq 1) {
-		$sth->execute($tagfield,
-						$liblibrarian,
-						$libopac,
-						$repeatable?1:0,
-						$mandatory?1:0,
-						$authorised_value,
-						$authtypecode
-						);
-	}
-	$sth->finish;
+    if ($input->param('modif')) {
+        $sth=$dbh->prepare("UPDATE auth_tag_structure SET tagfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, authorised_value=? WHERE authtypecode=? AND tagfield=?");
+        my $tagfield       =$input->param('tagfield');
+        my $liblibrarian  = $input->param('liblibrarian');
+        my $libopac       =$input->param('libopac');
+        my $repeatable =$input->param('repeatable');
+        my $mandatory =$input->param('mandatory');
+        my $authorised_value =$input->param('authorised_value');
+        unless (C4::Context->config('demo') eq 1) {
+            $sth->execute(
+                            $liblibrarian,
+                            $libopac,
+                            $repeatable?1:0,
+                            $mandatory?1:0,
+                            $authorised_value,
+                            $authtypecode,
+                            $tagfield,
+                            );
+        }
+        $sth->finish;
+    } else {
+        $sth=$dbh->prepare("INSERT INTO auth_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,authtypecode) VALUES (?,?,?,?,?,?,?)");
+        my $tagfield       =$input->param('tagfield');
+        my $liblibrarian  = $input->param('liblibrarian');
+        my $libopac       =$input->param('libopac');
+        my $repeatable =$input->param('repeatable');
+        my $mandatory =$input->param('mandatory');
+        my $authorised_value =$input->param('authorised_value');
+        unless (C4::Context->config('demo') eq 1) {
+            $sth->execute($tagfield,
+                            $liblibrarian,
+                            $libopac,
+                            $repeatable?1:0,
+                            $mandatory?1:0,
+                            $authorised_value,
+                            $authtypecode
+                            );
+        }
+        $sth->finish;
+    }
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=$tagfield&authtypecode=$authtypecode\">";
 	exit;
 													# END $OP eq ADD_VALIDATE

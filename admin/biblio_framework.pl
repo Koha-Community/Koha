@@ -95,9 +95,15 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace biblio_framework (frameworkcode,frameworktext) values (?,?)");
-	$sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
-	$sth->finish;
+    if ($input->param('modif')) {
+        my $sth=$dbh->prepare("UPDATE biblio_framework SET frameworktext=? WHERE frameworkcode=?");
+        $sth->execute($input->param('frameworktext'),$input->param('frameworkcode'));
+        $sth->finish;
+    } else {
+        my $sth=$dbh->prepare("INSERT into biblio_framework (frameworkcode,frameworktext) values (?,?)");
+        $sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
+        $sth->finish;
+    }
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
