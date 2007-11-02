@@ -1,17 +1,19 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Print Receipt for <!-- TMPL_VAR NAME="cardnumber" --></title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/print.css" />
 </head>
 <body>
 
-<div id="doc3">
-   
-   <div id="bd">
+<div id="receipt">
 
-<h3>Library</h3>
+<h3><!-- TMPL_VAR name="LibraryName" --></h3>
 <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><br /><!-- /TMPL_IF -->
 Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber">"><!-- TMPL_VAR NAME="cardnumber" --></a><br />
+
 <!-- TMPL_VAR NAME="todaysdate" --><br />
+
 <table>
 	<caption>Issues</caption>
 	<tr>
@@ -27,7 +29,7 @@ Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR 
 		</tr>
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
-	</table>
+</table>
 	
 	<table>
 	<caption>Overdues</caption>
@@ -43,10 +45,5 @@ Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR 
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	</table>
-
-
-<!-- endmenu -->
-
-</div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

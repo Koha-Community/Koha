@@ -1,19 +1,21 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Summary for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/print.css" />
 </head>
 <body>
 
-<div id="doc3">
-   <div id="bd">
+<div id="main">
 
 <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->">Account Summary: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a></h3>
 
-<ul><li><!-- TMPL_VAR NAME="streetaddress" --></li><li><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></li>
+<ul><li><!-- TMPL_VAR NAME="address" --><br /><!-- TMPL_VAR NAME="address2" --></li><li><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></li>
 <li><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->(no phone number on file)<!-- /TMPL_IF --></li>
-<li><!-- TMPL_IF NAME="emailaddress" --><!-- TMPL_VAR NAME="emailaddress" --><!-- TMPL_ELSE -->(no email on file)<!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="email" --><!-- TMPL_VAR NAME="email" --><!-- TMPL_ELSE -->(no email on file)<!-- /TMPL_IF --></li>
 </ul>
 
+<!-- TMPL_IF NAME="issueloop" -->
 <table>
 	<caption>Items Checked Out</caption>
 	<tr>
@@ -38,7 +40,9 @@
 	</tr>
 	<!-- /TMPL_LOOP -->
 	</table>
+	<!-- /TMPL_IF -->
 	
+<!-- TMPL_IF NAME="reserveloop" -->
 <table>
 	<caption>Items on Reserve</caption>
 	<tr>
@@ -56,12 +60,7 @@
 		<td><!-- TMPL_VAR NAME="reservedate2" --></td>
 	</tr>
 	<!-- /tmpl_loop -->
-
 </table>
-
-
-<!-- endmenu -->
-
-</div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
