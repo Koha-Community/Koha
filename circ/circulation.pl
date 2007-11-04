@@ -299,7 +299,7 @@ if ($borrowernumber) {
         my %getreserv;
         my %getWaitingReserveInfo;
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-        my $itemtypeinfo = getitemtypeinfo( $getiteminfo->{'itemtype'} );
+        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itype')) ? $getiteminfo->{'ccode'} : $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers( $num_res->{'itemnumber'} );
 
@@ -348,7 +348,7 @@ if ($borrowernumber) {
 #         if we don't have a reserv on item, we put the biblio infos and the waiting position
         if ( $getiteminfo->{'title'} eq '' ) {
             my $getbibinfo = GetBiblioItemData( $num_res->{'biblionumber'} );
-            my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );
+            my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );  # fixme - we should have item-level reserves here ?
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
             $getreserv{waitingposition} = $num_res->{'priority'};
@@ -447,12 +447,12 @@ FROM issuingrules
   LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype)
   WHERE categorycode=?
 " );
-my @issued_itemtypes_count;
+#my @issued_itemtypes_count;  # huh?
 $issueqty_sth->execute("*");
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
     # subtract how many of each this borrower has
-    $data->{'count'} = $issued_itemtypes_count->{ $data->{'description'} };
+    $data->{'count'} = $issued_itemtypes_count->{ $data->{'description'} };  
     $data->{'left'}  =
       ( $data->{'maxissueqty'} -
           $issued_itemtypes_count->{ $data->{'description'} } );
