@@ -71,12 +71,21 @@ if ( $newpassword ) {
 			surname     => $bor->{'surname'},
 			firstname   => $bor->{'firstname'},
 			borrowernumber => $bor->{'borrowernumber'},
+			cardnumber => $bor->{'cardnumber'},
+		    categorycode => $bor->{'categorycode'},
+		    category_type => $bor->{'category_type'},
+		    category_description => $bor->{'description'},
+		    address => $bor->{'address'},
+			address2 => $bor->{'address2'},
+		    city => $bor->{'city'},
+			zipcode => $bor->{'zipcode'},
+			phone => $bor->{'phone'},
+			email => $bor->{'email'},
+		    branchcode => $bor->{'branchcode'},
 			userid      => $bor->{'userid'},
 			defaultnewpassword => $defaultnewpassword );
 
 
 }
-
-$template->param( member => $member,
 
 output_html_with_http_headers $input, $cookie, $template->output;

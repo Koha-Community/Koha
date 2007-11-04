@@ -71,8 +71,20 @@ if ($input->param('newflags')) {
     }
 
     $template->param(borrowernumber => $member,
-			surname => $bor->{'surname'},
-			firstname => $bor->{'firstname'},
+		    borrowernumber => $bor->{'borrowernumber'},
+    		cardnumber => $bor->{'cardnumber'},
+		    surname => $bor->{'surname'},
+		    firstname => $bor->{'firstname'},
+		    categorycode => $bor->{'categorycode'},
+		    category_type => $bor->{'category_type'},
+		    category_description => $bor->{'description'},
+		    address => $bor->{'address'},
+			address2 => $bor->{'address2'},
+		    city => $bor->{'city'},
+			zipcode => $bor->{'zipcode'},
+			phone => $bor->{'phone'},
+			email => $bor->{'email'},
+		    branchcode => $bor->{'branchcode'},
 			loop => \@loop,
 			);
 

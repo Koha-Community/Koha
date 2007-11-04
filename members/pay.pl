@@ -133,6 +133,17 @@ if ( $check == 0 ) {
         firstname      => $data->{'firstname'},
         surname        => $data->{'surname'},
         borrowernumber => $borrowernumber,
+		cardnumber => $data->{'cardnumber'},
+	    categorycode => $data->{'categorycode'},
+	    category_type => $data->{'category_type'},
+	    category_description => $data->{'description'},
+	    address => $data->{'address'},
+		address2 => $data->{'address2'},
+	    city => $data->{'city'},
+		zipcode => $data->{'zipcode'},
+		phone => $data->{'phone'},
+		email => $data->{'email'},
+	    branchcode => $data->{'branchcode'},
         total          => sprintf( "%.2f", $total )
     );
     output_html_with_http_headers $input, $cookie, $template->output;

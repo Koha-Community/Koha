@@ -79,13 +79,13 @@ else
 
 
 my @resultsdata;
-my $background = 0;
+my $toggle = 0;
 for (my $i=0; $i < $count; $i++){
   #find out stats
   my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
 
   my %row = (
-    background => $background,
+    toggle => $toggle,
     count => $i+1,
     borrowernumber => $results->[$i]{'borrowernumber'},
     cardnumber => $results->[$i]{'cardnumber'},
@@ -94,8 +94,10 @@ for (my $i=0; $i < $count; $i++){
     categorycode => $results->[$i]{'categorycode'},
     category_type => $results->[$i]{'category_type'},
     category_description => $results->[$i]{'description'},
-    streetaddress => $results->[$i]{'streetaddress'},
+    address => $results->[$i]{'address'},
+	address2 => $results->[$i]{'address2'},
     city => $results->[$i]{'city'},
+	zipcode => $results->[$i]{'zipcode'},
     branchcode => $results->[$i]{'branchcode'},
     overdues => $od,
     issues => $issue,
@@ -105,7 +107,7 @@ for (my $i=0; $i < $count; $i++){
     sort1 => $results->[$i]{'sort1'},
     sort2 => $results->[$i]{'sort2'},
     );
-  if ( $background ) { $background = 0; } else {$background = 1; }
+  if ( $toggle ) { $toggle = 0; } else {$toggle = 1; }
   push(@resultsdata, \%row);
 }
 

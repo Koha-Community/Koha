@@ -1,11 +1,12 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 <div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h5>
 <ul>
-	        <li><!-- TMPL_IF NAME="streetaddress"-->
-            <!-- TMPL_VAR NAME="streetaddress" -->,
+	        <li><!-- TMPL_IF NAME="address"-->
+            <!-- TMPL_VAR NAME="address" -->
         <!-- TMPL_ELSE -->
             <span class="problem">No address stored for patron.</span>
         <!-- /TMPL_IF --></li>
+		<!-- TMPL_IF NAME="address2" --><li><!-- TMPL_VAR NAME="address2" --></li><!-- /TMPL_IF -->
        <li> <!-- TMPL_IF NAME="city" -->
             <!-- TMPL_VAR NAME="city" -->
         <!-- TMPL_ELSE -->

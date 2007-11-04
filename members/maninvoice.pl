@@ -77,6 +77,16 @@ if ($add){
                     borrowernumber => $borrowernumber,
                     firstname => $data->{'firstname'},
                     surname  => $data->{'surname'},
+					cardnumber => $data->{'cardnumber'},
+				    categorycode => $data->{'categorycode'},
+	    			category_type => $data->{'category_type'},
+				    category_description => $data->{'description'},
+				    address => $data->{'address'},
+					address2 => $data->{'address2'},
+				    city => $data->{'city'},
+					zipcode => $data->{'zipcode'},
+					phone => $data->{'phone'},
+					email => $data->{'email'},
     );
     print $input->header(
 	    -type => 'utf-8',

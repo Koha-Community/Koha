@@ -9,15 +9,15 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <!-- TMPL_IF NAME="searching" --><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Search Results<!-- TMPL_ELSE -->Patrons<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 	
 <!-- TMPL_INCLUDE NAME="patron-toolbar.inc" -->
 
-<div>
+<!-- TMPL_UNLESS NAME="resultsloop" --><div>
     Browse by last name:
     <a href="/cgi-bin/koha/members/member.pl?member=a">A</a>
     <a href="/cgi-bin/koha/members/member.pl?member=b">B</a>
@@ -45,9 +45,11 @@
     <a href="/cgi-bin/koha/members/member.pl?member=x">X</a>
     <a href="/cgi-bin/koha/members/member.pl?member=y">Y</a>
     <a href="/cgi-bin/koha/members/member.pl?member=z">Z</a>
-</div>
+</div><!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="resultsloop" -->
+    <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="member" --></span></h3>
+	<div class="results"><!-- TMPL_VAR Name ="numresults" --> patrons found.</div>
 <div class="searchresults">
     <table>
     <tr>
@@ -58,6 +60,7 @@
     <th>OD/Issues</th>
     <th>Fines</th>
     <th>Notes</th>
+	<th>&nbsp;</th>
     </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
     <!-- TMPL_IF name="overdue" -->
@@ -70,14 +73,13 @@
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <td><!-- TMPL_VAR NAME="cardnumber" --></td>
-    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a>
-    <!-- TMPL_VAR NAME="streetaddress" --> <!-- TMPL_VAR NAME="city" -->
-    </td>
+    <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> <br /> <!-- TMPL_VAR NAME="address" --><!-- TMPL_IF NAME="address2" --><br /><!-- TMPL_VAR NAME="address2" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="city" --><br /><!-- TMPL_VAR NAME=city --><!-- /TMPL_IF --></td>
     <td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
     <td><!-- TMPL_VAR NAME="branchcode" --></td>
     <td><!-- TMPL_VAR NAME="odissue" --></td>
     <td><!-- TMPL_VAR NAME="fines" --></td>
     <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
+	<td><a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit</a></td>
     </tr>
     <!-- /TMPL_LOOP -->
     </table>

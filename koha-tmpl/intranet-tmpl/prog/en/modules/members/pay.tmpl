@@ -16,6 +16,16 @@
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 
+<!-- The manual invoice and credit buttons -->
+<div class="toptabs">
+<ul class="tabs-nav">
+	<li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Account</a></li>
+	<li class="tabs-selected"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Pay fines</a></li>
+	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Invoice</a></li>
+	<li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Credit</a></li>
+</ul>
+<div class="tabs-container">
+
 <!-- TMPL_IF NAME="allfile" --><form action="/cgi-bin/koha/members/pay.pl" method="post">
 	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
 
@@ -66,12 +76,13 @@
 <!-- /TMPL_LOOP  -->
 </table>
 <input type="submit" name="submit"  value="Make Payment" class="submit" /></form><!-- TMPL_ELSE --><p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> has no outstanding fines.</p><!-- /TMPL_IF -->
+</div></div>
 
 </div>
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

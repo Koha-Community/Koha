@@ -15,19 +15,12 @@
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
-<!-- TMPL_IF NAME="showfulllink" -->
-<ul>
-	<li>Showing All Items</li>
-	<li><a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show Last 50 Items Only</a></li>
-</ul>
-<!-- TMPL_ELSE -->
-<ul>
-	<li>Showing Last 50 Items</li>
-	<li><a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a></li>
-</ul>
-<!-- /TMPL_IF -->
-<h1>Reading Record for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+<h1>Reading Record</h1>
+
 <table>
+<tr><td colspan="4"><!-- TMPL_IF NAME="showfulllink" -->Showing All Items |
+	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show Last 50 Items Only</a> <!-- TMPL_ELSE -->	Showing Last 50 Items | 
+	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></td></tr>
 <tr>
 	<th>
 		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
@@ -42,35 +35,27 @@
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
 <!-- TMPL_IF NAME="toggle" -->
-    <tr class="highlight">
+    <!-- TMPL_IF NAME="returndate" --><tr class="highlight"><!-- TMPL_ELSE --><tr class="highlight onissue"><!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-    <tr>
+    <!-- TMPL_IF NAME="returndate" --><tr><!-- TMPL_ELSE --><tr class="onissue"><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="returndate" -->
+
             <td>
-        <!-- TMPL_ELSE --> 
-            <td class="onissue" >
         <!-- /TMPL_IF -->
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                 <!-- TMPL_VAR name="title" -->
             </a>
         </td>
-        <!-- TMPL_IF NAME="returndate" -->
+
             <td>
-        <!-- TMPL_ELSE -->
-            <td class="onissue">
         <!-- /TMPL_IF -->
         <!-- TMPL_VAR name="author" --></td>
-	<!-- TMPL_IF NAME="returndate" -->
+
             <td>
-        <!-- TMPL_ELSE -->
-            <td class="onissue">
         <!-- /TMPL_IF -->
         <!-- TMPL_VAR NAME="classification" --></td>
-        <!-- TMPL_IF NAME="returndate" -->
+
             <td>
-        <!-- TMPL_ELSE -->
-            <td class="onissue">
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="returndate" -->
             <!-- TMPL_VAR name="returndate" -->
@@ -81,13 +66,12 @@
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-<form action="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /> <input type="submit" value="Return to Patron Record" /></form>
 
 </div>
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

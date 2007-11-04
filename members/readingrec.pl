@@ -85,6 +85,16 @@ $template->param(
 						limit => $limit,
 						firstname => $data->{'firstname'},
 						cardnumber => $data->{'cardnumber'},
+					    categorycode => $data->{'categorycode'},
+					    category_type => $data->{'category_type'},
+					    category_description => $data->{'description'},
+					    address => $data->{'address'},
+						address2 => $data->{'address2'},
+					    city => $data->{'city'},
+						zipcode => $data->{'zipcode'},
+						phone => $data->{'phone'},
+						email => $data->{'email'},
+			   			branchcode => $data->{'branchcode'},
 						showfulllink => ($count > 50),					
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
