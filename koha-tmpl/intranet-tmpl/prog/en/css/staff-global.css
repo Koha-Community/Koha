@@ -887,7 +887,7 @@ div.first fieldset {
 
 .dialog div.confirm {
   background-color: #fff;
-  background : url(../../img/dialog-bg.gif) repeat-x left 20px !important;
+  background : url(../../img/dialog-bg.gif) repeat-x left 0 !important;
   font: 1em sans-serif;
   border: 1px solid #bcbcbc;
   padding: 4px !important;
@@ -897,5 +897,20 @@ div.first fieldset {
   }
   
  div.confirm input {
- 	border : 
+ 	background-color : #FFF;
+ 	border : 1px solid #bcbcbc;
+	margin : .4em;
+	padding : .4em .4em .4em 25px;
+ }
+ 
+ div.confirm input.approve {
+ 	background : #FFF url(../../img/approve.gif) no-repeat 4px center;
+ }
+
+ div.confirm input.deny {
+ 	background : #FFF url(../../img/deny.gif) no-repeat 4px center;
+ }
+ 
+ div.confirm input:hover {
+ 	background-color : #ffc;
  }
