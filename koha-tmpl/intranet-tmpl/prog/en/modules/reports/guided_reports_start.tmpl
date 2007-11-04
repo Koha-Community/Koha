@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha -- Guided Reports</title>
+<title>Koha &rsaquo; Reports &rsaquo; Guided Reports<!-- TMPL_IF NAME="create" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Create from SQL</strong><!-- /TMPL_IF --></title>
 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
@@ -9,9 +9,10 @@
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <strong>Guided Reports Wizard </strong></div>
+&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a><!-- TMPL_IF NAME="start" --> &rsaquo; <strong>Guided Reports Wizard </strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="saved1" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Saved Reports</strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="create" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Create from SQL</strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="showsql" -->
+ &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; Saved Reports &rsaquo; <strong>SQL View</strong><!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc3" class="yui-t1">
 
     <div id="bd">
     <div id="yui-main">
@@ -49,7 +50,7 @@ reports</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="saved1" -->
-<h1>Load Saved Reports</h1>
+<h1>Saved Reports</h1>
 <p>Choose the report to run from the list</p>
 <table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
@@ -310,20 +311,18 @@ Notes: <textarea name="notes"></textarea><br />
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="create" -->
-<h1>Create Report From SQL</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-Report Name: <input type="text" name="reportname"> <br />
-Notes: <textarea name="notes"></textarea><br />
-Type:
-<select name="types">
-<!-- TMPL_LOOP NAME="types" -->
-<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
-<!-- /TMPL_LOOP -->
-</select>
-<br />
-SQL: <textarea name="sql" cols=30 rows=10></textarea><br />
-<input type="hidden" name="phase" value="Save Report">
-<input type="submit" name="submit" value="Save Report">
+<fieldset class="rows">
+<legend>Create Report From SQL</legend>
+<ol>
+	<li><label for="reportname">Report Name:</label> <input type="text" id="reportname" name="reportname" /> </li>
+	<li><label for="notes">Notes:</label> <textarea  id="notes" name="notes" cols="50" rows="2"></textarea></li>
+	<li><label for="types">Type:</label><select id="types"  name="types"><!-- TMPL_LOOP NAME="types" --><option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option><!-- /TMPL_LOOP --></select></li>
+	<li><label for="sql">SQL: </label><textarea  id="sql" name="sql" cols="50" rows="10"></textarea></li>
+</ol>
+</fieldset>
+
+<fieldset class="action"><input type="hidden" name="phase" value="Save Report" /><input type="submit" name="submit" value="Save Report" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -341,8 +340,8 @@ Sub report:<select name="subreport">
 <!-- /TMPL_LOOP -->
 </select>
 <br />
-<input type="hidden" name="phase" value="Save Compound">
-<input type="submit" name="submit" value="Save Compound">
+<input type="hidden" name="phase" value="Save Compound" />
+<input type="submit" name="submit" value="Save Compound" />
 </form>
 <!-- /TMPL_IF -->
 
@@ -391,6 +390,7 @@ Sub report:<select name="subreport">
 </div>
 </div>
 <script type="text/javascript">
+//<![CDATA[
 function setObjects() {
 	selectedColumnsObj=document.getElementById('selectedColumns');
 	availableColumnsObj=document.getElementById('availableColumns');
@@ -415,5 +415,6 @@ function delColumn() {
 		selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
 	}
 }
+//]]>
 </script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,6 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha -- Reports</title>
-
+<title>Koha &rsaquo; Reports &rsaquo; Guided Reports &rsaquo; Dictionary</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
@@ -30,8 +29,8 @@ Filter By Area <select name="areas">
 <!-- /TMPL_LOOP -->                
 </select> 
 <!-- <input name="phase" value="Filter Dictionary" type="submit"> -->
-<input name="phase" value="Add New Definition" type="phase">
-<input name="submit" value="Add New Definition" type="submit">
+<input name="phase" value="Add New Definition" type="hidden" />
+<input name="submit" value="Add New Definition" type="submit" />
 </form>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
@@ -40,6 +39,7 @@ Filter By Area <select name="areas">
 <th>Description</th>
 <th>Area</th>
 <th>Definition</th>
+<th>&nbsp;</th>
 </tr>
 <!-- TMPL_LOOP NAME="definitions" -->
 <tr valign="top">
@@ -48,9 +48,9 @@ Filter By Area <select name="areas">
 <td><!-- TMPL_VAR NAME="area" --></td>
 <td><!-- TMPL_VAR NAME="saved_sql" --></td>
 <td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
-<input type="hidden" name="phase" value="Delete Definition">
-<input type="submit" name="submit" value="Delete Definition">
+<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
+<input type="hidden" name="phase" value="Delete Definition" />
+<input type="submit" name="submit" value="Delete Definition" />
 </form></td>
 </tr>
 <!-- /TMPL_LOOP -->
@@ -74,8 +74,8 @@ Filter By Area <select name="areas">
 </tr>
 </table>
 																													  
-<input type="hidden" name="phase" value="New Term step 2">
-<input name="submit" value="Next" type="submit">
+<input type="hidden" name="phase" value="New Term step 2" />
+<input name="submit" value="Next" type="submit" />
 </form>
 <!-- /TMPL_IF -->
 
@@ -84,16 +84,16 @@ Filter By Area <select name="areas">
 
 <p>1 Name | <b>2 Area</b> | 3 Columns | 4 Values</p>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="phase" value="New Term step 3">
-<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
-<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
+<input type="hidden" name="phase" value="New Term step 3" />
+<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
+<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->" />
 Select table <select name="areas">
 <!-- TMPL_LOOP NAME="areas" -->     
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
 </select>
                                                                             
-<input name="submit" value="Next" type="submit">
+<input name="submit" value="Next" type="submit" />
 </form>
 <!-- /TMPL_IF -->
 
@@ -102,11 +102,11 @@ Select table <select name="areas">
 
 <p>1 Name | 2 Area | <b>3 Columns</b> | 4 Values</p>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
-<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
+<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->"> / 
 
-<select id="availableColumns" name="oldcolumns2" multiple size="25" style="width:200px;height:300px;">    
+<select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
 <!-- TMPL_LOOP NAME="columns" -->                              
 <!-- TMPL_IF NAME="table" -->                                                                                                      
 <!-- TMPL_IF NAME="__first__" -->                              
@@ -126,13 +126,13 @@ Select table <select name="areas">
 </option>      
 <!-- /TMPL_LOOP -->                
 </select>      
-<input type="button" name="Add" value="Add" class="button" onClick="addColumn()"/>
+<input type="button" name="Add" value="Add" class="button" onClick="addColumn()" />
 
-<select id="selectedColumns" name="columns" multiple size="25" style="width:200px;height:300px;"></select>             
-<input type="button" name="delete" value="delete" class="button" onClick="delColumn()"/>           
+<select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>             
+<input type="button" name="delete" value="delete" class="button" onClick="delColumn()" />           
                                                                             
-<input type="hidden" name="phase" value="New Term step 4">
-<input type="submit" name="submit" value="Next">            
+<input type="hidden" name="phase" value="New Term step 4" />
+<input type="submit" name="submit" value="Next" />  
 </form>    
 <!-- /TMPL_IF -->
 
@@ -141,32 +141,32 @@ Select table <select name="areas">
 
 <p>1 Name | 2 Area | 3 Columns | <b>4 Values</b></p>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">
-<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
-<input type="hidden" name="columnstring" value="<!-- TMPL_VAR NAME="columnstring" -->">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
+<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->" />
+<input type="hidden" name="columnstring" value="<!-- TMPL_VAR NAME="columnstring" -->" />
 
 <!-- TMPL_LOOP NAME="columns" -->
 <p>
-<input type=hidden name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->">
+<input type="hidden" name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->" />
 <!-- TMPL_VAR NAME="name" -->
 <!-- TMPL_IF NAME="distinct" -->
-<select name="<!-- TMPL_VAR NAME="name" -->_value">                    
-<!-- TMPL_LOOP NAME="values" -->                             
+<select name="<!-- TMPL_VAR NAME="name" -->_value"> 
+<!-- TMPL_LOOP NAME="values" -->           
 <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>      
-<!-- /TMPL_LOOP -->                
-</select>  
+<!-- /TMPL_LOOP -->   
+</select>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="date" -->
 <table>
-<tr valign="top">	   
-<td><input type="radio" name="<!-- TMPL_VAR NAME="name" -->_all" value="all">All Dates</td>
+<tr valign="top">
+<td><input type="radio" name="<!-- TMPL_VAR NAME="name" -->_all" value="all" />All Dates</td>
 <td>OR</td>
-<td><input type="radio" name="dates" value="range">Date Range<br />
+<td><input type="radio" name="dates" value="range" />Date Range<br />
 <table>
 <tr>
 <td>Start of Date Range</td>
-<td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_start_value" name="<!-- TMPL_VAR NAME="name" -->_start_value" value="" >      
+<td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_start_value" name="<!-- TMPL_VAR NAME="name" -->_start_value" value="" />      
 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    
 <script type="text/javascript">                            
 Calendar.setup({             
@@ -181,7 +181,7 @@ align          : "Tl"
 <tr>
 <td>End of Date Range</td>
 <td>
-<input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_end_value" name="<!-- TMPL_VAR NAME="name" -->_end_value" value="" >      
+<input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_end_value" name="<!-- TMPL_VAR NAME="name" -->_end_value" value="" />      
 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    
 <script type="text/javascript">                            
 Calendar.setup({             
@@ -197,23 +197,23 @@ align          : "Tl"
 </tr>
 </table>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="text">
-<p>Search string matches <input type="text" size="13" name="<!-- TMPL_VAR NAME="name" -->_value"></p>
+<!-- TMPL_IF NAME="text" -->
+<p>Search string matches <input type="text" size="13" name="<!-- TMPL_VAR NAME="name" -->_value" /></p>
 <!-- /TMPL_IF -->
 
 </p>
 <!-- /TMPL_LOOP -->
-<input type="hidden" name="phase" value="New Term step 5">
-<input type="submit" name="submit" value="Next">            
+<input type="hidden" name="phase" value="New Term step 5" />
+<input type="submit" name="submit" value="Next" />            
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_5" -->
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">    
-<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->">           
-<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->">
-<input type="hidden" name="columnstring" value="<!-- TMPL_VAR NAME="columnstring" -->">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />    
+<input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />           
+<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->" />
+<input type="hidden" name="columnstring" value="<!-- TMPL_VAR NAME="columnstring" -->" />
 
 <h3>Confirm Definition</h3>
 
@@ -242,9 +242,9 @@ align          : "Tl"
 <!-- /TMPL_LOOP -->
 </table>
 
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="query" -->">
-<input type="hidden" name="phase" value="New Term step 6">
-<input type="submit" name="submit" value="Save">            
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="query" -->" />
+<input type="hidden" name="phase" value="New Term step 6" />
+<input type="submit" name="submit" value="Save" />            
 
 </form>
 <!-- /TMPL_IF -->

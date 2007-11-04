@@ -76,19 +76,18 @@
 
 <!-- TMPL_IF NAME="add_form" -->
     
-        <!-- TMPL_IF NAME="modify" -->
-            <h1>Modify a system preference</h1>
-        <!-- TMPL_ELSE -->
-            <h1>Add a system preference</h1>
-        <!-- /TMPL_IF -->
+        
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-        
-        
-        <table>
-            <tr><td><label for="explanation">Explanation: </label></td><td><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></td></tr>
-            <tr><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label></td><td><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->"></td>
-            <!-- TMPL_ELSE --><td><label for="variable">Variable</label></td><td><input type="text" name="variable" id="variable" size="60" /></td><!-- /TMPL_IF --></tr>
-            <tr><td><label for="value">Value</label></td><td><!-- TMPL_IF NAME="type-free" -->
+                
+        <fieldset class="rows"><legend><!-- TMPL_IF NAME="modify" -->
+            Modify a system preference
+        <!-- TMPL_ELSE -->
+            Add a system preference
+        <!-- /TMPL_IF --></legend><ol>
+            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></li>
+            <li><!-- TMPL_IF NAME="searchfield" --><td><label>Variable</label><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->">
+            <!-- TMPL_ELSE --><td><label for="variable">Variable</label><input type="text" name="variable" id="variable" size="60" /><!-- /TMPL_IF --></li>
+            <li><label for="value">Value</label><!-- TMPL_IF NAME="type-free" -->
                     <textarea id="value" name="value" cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type-textarea" -->
@@ -110,16 +109,21 @@
                     <input type="radio" name="value" id="value" value="1" checked="checked"><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF -->ON
                 <!-- TMPL_IF NAME="value-no" -->	
                     <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->OFF<!-- /TMPL_IF -->
-                </td></tr>
-        </table>
-        <p><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <input type="button"  value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></p>
+                </li>
+        </ol></fieldset>
+        <fieldset class="action"><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <input type="button"  value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></fieldset>
         
-<h3>Koha internal</h3>		
-        Note: you should have no reasons to modify the following default values
-        <table>
-        <tr><td><label for="preftype">Variable type:</label></td><td><input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40"><span class="formfield-notes"> (Choice, YesNo, Integer, Textarea, Float, Themes, Languages, or ClassSource)</td></tr>
-        <tr><td><label for="prefoptions">Variable options:</label></td><td><input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" />(a choice list for Choice (separated by |) or cols|rows for Texarea)</td></tr>
-        </table>
+        <fieldset class="brief">
+		<legend>Koha internal</legend>
+		<div class="hint">Note: you should have no reasons to modify the following default values</div>
+		<ol>
+        <label for="preftype">Variable type:</label>
+		<div class="hint"> (Choice, YesNo, Integer, Textarea, Float, Themes, Languages, or ClassSource)</div>
+		<input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40">
+        <label for="prefoptions">Variable options:</label>
+		<div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
+		<input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" />
+		</fieldset>
         </form>
     <!-- /TMPL_IF -->
     
