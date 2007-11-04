@@ -27,7 +27,7 @@
 			<ul>
 			<li><a href="/cgi-bin/koha/admin/categorie.pl#patron_category_search">Search Patron Categories</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->

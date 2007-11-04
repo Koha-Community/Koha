@@ -18,7 +18,7 @@
 	</form>
 	</div>	
 			<ul>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#addbooks_search">Cataloguing Search</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloguing Search</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
 			</ul>	
 </div>

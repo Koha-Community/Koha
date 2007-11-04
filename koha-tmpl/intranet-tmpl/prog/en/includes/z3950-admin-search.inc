@@ -27,7 +27,7 @@
 			<ul>
 			<li><a href="/cgi-bin/koha/admin/z3950servers.pl#z3950_search">Search z390.50 Servers</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->

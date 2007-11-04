@@ -27,7 +27,7 @@
 			<ul>
 			<li><a href="/cgi-bin/koha/admin/currency.pl#currency_search">Search Currencies</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	
 </div>
 <!-- End Members Resident Search Box -->
