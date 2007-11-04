@@ -376,9 +376,9 @@ sub TooMany {
     my $dbh             = C4::Context->dbh;
 
  my $branch_issuer = C4::Context->userenv->{'branchcode'};
-
+#TODO : specify issuer or borrower for circrule.
   my $type = (C4::Context->preference('item-level_itype')) 
-  			? $item->{'itype'}         # item-level
+  			? $item->{'ccode'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
   
   my $sth =
@@ -395,7 +395,7 @@ sub TooMany {
                     AND i.itemnumber = s2.itemnumber 
                     AND s1.biblioitemnumber = s2.biblioitemnumber"
 				. (C4::Context->preference('item-level_itype'))
-				? " AND s2.itype=? "
+				? " AND s2.ccode=? "
                 : " AND s1.itemtype= ? ";
     my $sth2=  $dbh->prepare($query2);
     my $sth3 =
@@ -1621,7 +1621,7 @@ sub AddRenewal {
         my $borrower = GetMemberDetails( $borrowernumber, 0 );
 		my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
-             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+             (C4::Context->preference('item-level_itypes')) ? $biblio->{'ccode'} : $biblio->{'itemtype'} ,
 			$borrower->{'branchcode'}
         );
 		#FIXME --  choose issuer or borrower branch.

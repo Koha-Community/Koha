@@ -447,7 +447,7 @@ FROM issuingrules
   LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype)
   WHERE categorycode=?
 " );
-my @issued_itemtypes_count_loop;  # huh?
+#my @issued_itemtypes_count;  # huh?
 $issueqty_sth->execute("*");
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
