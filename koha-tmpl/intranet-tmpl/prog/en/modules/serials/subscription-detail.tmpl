@@ -113,7 +113,7 @@ function popup(subscriptionid) {
         <h2>Subscription information</h2>
         <p><label>Librarian identity:</label> <!-- TMPL_VAR name="librarian" --></p>
         <p><label>Supplier:</label> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="aqbooksellerid"-->"><!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</a></p>
-        <p><label>Biblio:</label> <i>(<!-- TMPL_VAR name="biblionumber" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="bibliotitle" --></a></p><br />
+        <p><label>Biblio:</label> <i>(<!-- TMPL_VAR name="bibnum" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="bibnum" -->"><!-- TMPL_VAR name="bibliotitle" --></a></p><br />
 <!-- TMPL_IF name="branchcode" --><p><label>Branch :</label> <!-- TMPL_VAR name="branchcode" -->&nbsp;</p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="callnumber" --><p><label>Call Number:</label> <!-- TMPL_VAR name="callnumber" -->&nbsp;</p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="letter" --><p><label>Patron alert with:</label> <!-- TMPL_VAR name="letter" -->&nbsp;</p><!-- /TMPL_IF -->
