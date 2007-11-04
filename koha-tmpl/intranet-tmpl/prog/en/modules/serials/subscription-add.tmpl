@@ -831,9 +831,9 @@ window.onload = irregular_order();
         <li>
             <label for="biblionumber">Biblio: (*)</label>
             
-                <input type="text" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" size="8" /> 
+                <input type="text" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR name="bibnum" -->" size="8" /> 
                 (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />)
-               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="biblionumber" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
+               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="bibnum" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
                 <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a><!--/TMPL_IF--></div>
             
         </li>

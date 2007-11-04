@@ -105,7 +105,7 @@ unless (@serialids){
 unless (scalar(@serialids)){
   my $string="serials-collection.pl?subscriptionid=".join(",",@subscriptionids);
   $string=~s/,$//;
- warn $string; 
+#  warn $string; 
   print $query->redirect($string);
 }
 my ($template, $loggedinuser, $cookie)
@@ -122,7 +122,7 @@ foreach my $tmpserialid (@serialids){
   my $data=GetSerialInformation($tmpserialid);
   $data->{publisheddate}=format_date($data->{publisheddate});
   $data->{planneddate}=format_date($data->{planneddate});
-  $data->{'editdisable'}=(HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'});
+  $data->{'editdisable'}=((HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'})||$data->{'cannotedit'});
   push @serialdatalist,$data;
 }
 my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});

@@ -17,7 +17,7 @@
 
 use strict;
 use CGI;
-use Date::Calc qw(Today Day_of_Year Week_Of_Year);
+use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days);
 use C4::Koha;
 use C4::Auth;
 use C4::Date;
@@ -54,7 +54,7 @@ my $weekarrayjs='';
 my $count = 0;
 my ($year, $month, $day) = Today;
 my $firstday = Day_of_Year($year,$month,$day);
-my ($wkno,$yr) = Week_Of_Year($year,$month,$day); # week starting monday
+my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         $count = $i;
@@ -105,9 +105,15 @@ $template->param(branchloop => \@branchloop,
 );
 
 if ($op eq 'mod'||$op eq 'dup') {
+
     my $subscriptionid = $query->param('subscriptionid');
 #     warn "irregularity :$irregularity numberpattern : $numberpattern, callnumber :$callnumber, firstacquidate :$firstacquidate";
     my $subs = &GetSubscription($subscriptionid);
+## FIXME : Check rights to edit if mod. Could/Should display an error message.
+    if ($subs->{'cannotedit'} && $op eq 'mod'){
+      warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+      print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+    }  
     $subs->{'startdate'}=format_date($subs->{'startdate'});
     $subs->{'firstacquidate'}=format_date($subs->{'firstacquidate'});
     $subs->{'histstartdate'}=format_date($subs->{'histstartdate'});

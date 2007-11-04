@@ -244,7 +244,14 @@ sub GetSerialInformation {
     my ($serialid) = @_;
     my $dbh        = C4::Context->dbh;
     my $query      = qq|
-        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid
+        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid|;
+       if (C4::Context->preference('IndependantBranches') && 
+              C4::Context->userenv && 
+              C4::Context->userenv->{'flags'} != 1 && C4::Context->userenv->{'branch'}){
+                $query.="
+      , ((subscription.branchcode <>\"".C4::Context->userenv->{'branch'}."\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
+        }
+            $query .= qq|             
         FROM   serial LEFT JOIN subscription ON subscription.subscriptionid=serial.subscriptionid
         WHERE  serialid = ?
     |;
@@ -287,7 +294,7 @@ sub GetSerialInformation {
     return $data;
 }
 
-=head2 GetSerialInformation
+=head2 AddItem2Serial
 
 =over 4
 
@@ -357,7 +364,14 @@ sub GetSubscription {
                 aqbudget.bookfundid,
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,
-                subscription.biblionumber as bibnum
+                subscription.biblionumber as bibnum);
+       if (C4::Context->preference('IndependantBranches') && 
+              C4::Context->userenv && 
+              C4::Context->userenv->{'flags'} != 1 && C4::Context->userenv->{'branch'}){
+                $query.="
+      , ((subscription.branchcode <>\"".C4::Context->userenv->{'branch'}."\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
+        }
+            $query .= qq(             
        FROM subscription
        LEFT JOIN subscriptionhistory ON subscription.subscriptionid=subscriptionhistory.subscriptionid
        LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid
@@ -371,7 +385,7 @@ sub GetSubscription {
 # #       warn "flags: ".C4::Context->userenv->{'flags'};
 #       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
 #     }
-#       warn "query : $query";
+#        warn "query : $query";
     my $sth = $dbh->prepare($query);
 #       warn "subsid :$subscriptionid";
     $sth->execute($subscriptionid);
@@ -404,25 +418,26 @@ sub GetFullSubscription {
             aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid
+            subscription.subscriptionid AS subscriptionid |;
+    if (C4::Context->preference('IndependantBranches') && 
+        C4::Context->userenv && 
+        C4::Context->userenv->{'flags'} != 1 && C4::Context->userenv->{'branch'}){
+      $query.="
+      , ((subscription.branchcode <>\"".C4::Context->userenv->{'branch'}."\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
+    }
+    $query.=qq|
   FROM      serial 
   LEFT JOIN subscription ON 
-          (serial.subscriptionid=subscription.subscriptionid AND subscription.biblionumber=serial.biblionumber)
+          (serial.subscriptionid=subscription.subscriptionid )
   LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid 
   LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
-  WHERE     serial.subscriptionid = ? |;
-    if (C4::Context->preference('IndependantBranches') && 
-        C4::Context->userenv && 
-        C4::Context->userenv->{'flags'} != 1){
-      $query.="
-  AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-    }
-    $query .=qq|
+  WHERE     serial.subscriptionid = ? 
   ORDER BY year DESC,
           IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
           serial.subscriptionid
           |;
+#     warn $query;   
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subs = $sth->fetchall_arrayref({});
@@ -480,8 +495,8 @@ sub PrepareSerialsData{
                 'bibliotitle'      => $subs->{'bibliotitle'},
                 'serials'          => [$subs],
                 'first'            => $first,
-                'branchcode'       => $subs->{'branchcode'},
-                'subscriptionid'   => $subs->{'subscriptionid'},
+#                 'branchcode'       => $subs->{'branchcode'},
+#                 'subscriptionid'   => $subs->{'subscriptionid'},
             };
         }
 
@@ -523,11 +538,11 @@ sub GetSubscriptionsFromBiblionumber {
        LEFT JOIN branches ON branches.branchcode=subscription.branchcode
        WHERE subscription.biblionumber = ?
     );
-    if (C4::Context->preference('IndependantBranches') && 
-        C4::Context->userenv && 
-        C4::Context->userenv->{'flags'} != 1){
-       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
-    }
+#     if (C4::Context->preference('IndependantBranches') && 
+#         C4::Context->userenv && 
+#         C4::Context->userenv->{'flags'} != 1){
+#        $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
+#     }
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my @res;
@@ -540,6 +555,11 @@ sub GetSubscriptionsFromBiblionumber {
         $subs->{ "periodicity" . $subs->{periodicity} } = 1;
         $subs->{ "numberpattern" . $subs->{numberpattern} } = 1;
         $subs->{ "status" . $subs->{'status'} } = 1;
+        $subs->{'cannotedit'}=(C4::Context->preference('IndependantBranches') && 
+                C4::Context->userenv && 
+                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{branch} && $subs->{branchcode} &&
+                (C4::Context->userenv->{branch} ne $subs->{branchcode}));
         if ( $subs->{enddate} eq '0000-00-00' ) {
             $subs->{enddate} = '';
         }
@@ -578,21 +598,22 @@ sub GetFullSubscriptionsFromBiblionumber {
             aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            subscription.subscriptionid AS subscriptionid
+            subscription.subscriptionid AS subscriptionid|;
+     if (C4::Context->preference('IndependantBranches') && 
+        C4::Context->userenv && 
+        C4::Context->userenv->{'flags'} != 1 && C4::Context->userenv->{'branch'}){
+      $query.="
+      , ((subscription.branchcode <>\"".C4::Context->userenv->{'branch'}."\") and subscription.branchcode <>\"\" and subscription.branchcode IS NOT NULL) as cannotedit ";
+     }
+      
+     $query.=qq|      
   FROM      serial 
   LEFT JOIN subscription ON 
-          (serial.subscriptionid=subscription.subscriptionid AND subscription.biblionumber=serial.biblionumber)
+          (serial.subscriptionid=subscription.subscriptionid)
   LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid 
   LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
-  WHERE     subscription.biblionumber = ? |;
-    if (C4::Context->preference('IndependantBranches') && 
-        C4::Context->userenv && 
-        C4::Context->userenv->{'flags'} != 1){
-      $query.="
-  AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-    }
-    $query .=qq|
+  WHERE     subscription.biblionumber = ? 
   ORDER BY year DESC,
           IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
           serial.subscriptionid
@@ -629,11 +650,6 @@ sub GetSubscriptions {
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
             WHERE biblio.biblionumber=?
         );
-        if (C4::Context->preference('IndependantBranches') && 
-            C4::Context->userenv && 
-            C4::Context->userenv->{'flags'} != 1){
-          $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-        }
         $query.=" ORDER BY title";
 #         warn "query :$query";
         $sth = $dbh->prepare($query);
@@ -642,17 +658,11 @@ sub GetSubscriptions {
     else {
         if ( $ISSN and $title ) {
             my $query = qq|
-                SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
-                    FROM   subscription
-                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                    WHERE (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
-            
-            if (C4::Context->preference('IndependantBranches') && 
-                C4::Context->userenv && 
-                C4::Context->userenv->{'flags'} != 1){
-              $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-            }
+                SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber        
+                FROM   subscription
+                LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                WHERE (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
             $query.=" ORDER BY title";
             $sth = $dbh->prepare($query);
             $sth->execute( $ISSN );
@@ -660,17 +670,12 @@ sub GetSubscriptions {
         else {
             if ($ISSN) {
                 my $query = qq(
-                    SELECT subscription.*,biblio.title,biblioitems.issn,,biblio.biblionumber
-                        FROM   subscription
-                        LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                        WHERE biblioitems.issn LIKE ?
+                    SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
+                    FROM   subscription
+                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                    WHERE biblioitems.issn LIKE ?
                 );
-                if (C4::Context->preference('IndependantBranches') && 
-                    C4::Context->userenv && 
-                    C4::Context->userenv->{'flags'} != 1){
-                  $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-                }
                 $query.=" ORDER BY title";
 #         warn "query :$query";
                 $sth = $dbh->prepare($query);
@@ -679,19 +684,14 @@ sub GetSubscriptions {
             else {
                 my $query = qq(
                     SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
-                        FROM   subscription
-                        LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                        WHERE 1
-                        ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
+                    FROM   subscription
+                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
+                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+                    WHERE 1
+                    ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
                 
-                warn $query;       
-                if (C4::Context->preference('IndependantBranches') && 
-                    C4::Context->userenv && 
-                    C4::Context->userenv->{'flags'} != 1){
-                  $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"''\")";
-                }
                 $query.=" ORDER BY title";
+#                 warn $query;       
                 $sth = $dbh->prepare($query);
                 $sth->execute;
             }
@@ -711,6 +711,11 @@ sub GetSubscriptions {
             $odd           = -$odd;
             $line->{toggle} = 1 if $odd == 1;
         }
+        $line->{'cannotedit'}=(C4::Context->preference('IndependantBranches') && 
+                C4::Context->userenv && 
+                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{branch} && $line->{branchcode} &&
+                (C4::Context->userenv->{branch} ne $line->{branchcode}));
         push @results, $line;
     }
     return @results;
@@ -1891,7 +1896,7 @@ sub GetLateOrMissingIssues {
    claimdate
 FROM      serial 
 LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
-LEFT JOIN biblio        ON serial.biblionumber=biblio.biblionumber
+LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
 WHERE subscription.subscriptionid = serial.subscriptionid 
 AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3))
@@ -1916,13 +1921,12 @@ FROM serial
 LEFT JOIN subscription 
 ON serial.subscriptionid=subscription.subscriptionid 
 LEFT JOIN biblio 
-ON serial.biblionumber=biblio.biblionumber
+ON subscription.biblionumber=biblio.biblionumber
 LEFT JOIN aqbooksellers 
 ON subscription.aqbooksellerid = aqbooksellers.id
 WHERE 
    subscription.subscriptionid = serial.subscriptionid 
 AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3))
-AND biblio.biblionumber = subscription.biblionumber 
 $byserial
 ORDER BY $order"
         );

@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials &rsaquo; Serial Collection information for <!-- TMPL_VAR name="bibliotitle" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 showlayer('<!-- TMPL_VAR NAME="yearmax"-->');
@@ -178,7 +179,7 @@ $(document).ready(function() {
 
 
 <!-- TMPL_IF NAME="years" --><form name="edition" action="serials-edit.pl">
-<div id="subscription-years">
+<div id="subscription_years" class="toptabs numbered">
 <ul>
 	<!-- TMPL_LOOP NAME="years" -->
         <!-- TMPL_IF NAME="year" -->
@@ -234,23 +235,27 @@ $(document).ready(function() {
                     <!-- TMPL_VAR Name="branchcode" -->
                 </td>
                 <td>
-                  <input type="hidden" name="subs" value="<!--TMPL_VAR Name="subscriptionid"-->" />
-                  <!--TMPL_IF Name="subscriptionexpired"-->
-                  <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled="disabled" />
-                  <!--TMPL_ELSE-->
-                    <!--TMPL_IF Name="status1"-->
+                  <!--TMPL_IF Name="cannotedit"-->
+                    disabled
+                  <!--TMPL_ELSE -->
+                    <input type="hidden" name="subs" value="<!--TMPL_VAR Name="subscriptionid"-->" />
+                    <!--TMPL_IF Name="subscriptionexpired"-->
+                    <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled="disabled" />
+                    <!--TMPL_ELSE-->
+                      <!--TMPL_IF Name="status1"-->
                     <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
-                    <!--TMPL_ELSE -->
-                    <!--TMPL_IF Name="status3"-->
-                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
-                    <!--TMPL_ELSE -->
-                      <!--TMPL_IF Name="status4"-->
-                      <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
                       <!--TMPL_ELSE -->
-                      <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" />
+                      <!--TMPL_IF Name="status3"-->
+                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
+                      <!--TMPL_ELSE -->
+                        <!--TMPL_IF Name="status4"-->
+                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
+                        <!--TMPL_ELSE -->
+                    <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" />
+                        <!--/TMPL_IF-->           
                       <!--/TMPL_IF-->           
-                    <!--/TMPL_IF-->           
-                    <!--/TMPL_IF-->           
+                      <!--/TMPL_IF-->           
+                    <!--/TMPL_IF -->
                   <!--/TMPL_IF -->
                 </td>
             </tr>

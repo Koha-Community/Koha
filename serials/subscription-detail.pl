@@ -41,14 +41,17 @@ my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$
 
 $subscriptionid = $query->param('subscriptionid');
 
-
+my $subs = &GetSubscription($subscriptionid);
 if ($op eq 'del') {
+    if ($subs->{'cannotedit'}){
+      warn "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+      print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+    }  
     &DelSubscription($subscriptionid);
     print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
     exit;
 
 }
-my $subs = &GetSubscription($subscriptionid);
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
@@ -90,6 +93,12 @@ $subs->{firstacquidate}=format_date($subs->{firstacquidate});
 $subs->{histstartdate}=format_date($subs->{histstartdate});
 $subs->{enddate}=format_date($subs->{enddate});
 $subs->{abouttoexpire}=abouttoexpire($subs->{subscriptionid});
+# Done in Serials.pm
+# $subs->{'donotedit'}=(C4::Context->preference('IndependantBranches') && 
+#         C4::Context->userenv && 
+#         C4::Context->userenv->{flags} !=1  && 
+#         C4::Context->userenv->{branch} && $subs->{branchcode} &&
+#         (C4::Context->userenv->{branch} ne $subs->{branchcode}));
 
 $template->param($subs);
 

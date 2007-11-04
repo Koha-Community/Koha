@@ -84,6 +84,10 @@ if ( $op eq "renew" ) {
 }
 
 my $subscription = GetSubscription($subscriptionid);
+if ($subscription->{'cannotedit'}){
+  warn "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+  print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+}  
 
 $template->param(
     startdate => format_date(

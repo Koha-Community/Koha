@@ -121,7 +121,7 @@ Serials updated :
                     <!-- TMPL_ELSE -->
                         <td>
                     <!-- /TMPL_IF -->
-						<a href="/cgi-bin/koha/serials/serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Issue History</a>
+						<a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Issue History</a>
 					</td>
                 <!-- TMPL_IF NAME="routing" -->
                     <!-- TMPL_IF name="toggle" -->
@@ -129,7 +129,11 @@ Serials updated :
                     <!-- TMPL_ELSE -->
                         <td>
                     <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="cannotedit" -->
+                  &nbsp;        
+                <!-- TMPL_ELSE -->
                         <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&amp;op=new<!-- /TMPL_UNLESS -->">Routing List</a>
+                <!-- /TMPL_IF -->
                     </td>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="toggle" -->
@@ -137,7 +141,11 @@ Serials updated :
                 <!-- TMPL_ELSE -->
                     <td>
                 <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="cannotedit" -->
+                  &nbsp;        
+                <!-- TMPL_ELSE -->
                   <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Serial receive</a>
+                <!-- /TMPL_IF -->
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
