@@ -17,7 +17,7 @@
 
 use strict;
 use CGI;
-use Date::Manip;
+use Date::Calc qw(Today Day_of_Year Week_Of_Year);
 use C4::Koha;
 use C4::Auth;
 use C4::Date;
@@ -52,15 +52,15 @@ my ($template, $loggedinuser, $cookie)
 
 my $weekarrayjs='';
 my $count = 0;
-my ($year, $month, $day) = UnixDate("today", "%Y", "%m", "%d");
-my $firstday = Date_DayOfYear($month,$day,$year);
-my $wkno = Date_WeekOfYear($month,$day,$year,1); # week starting monday
+my ($year, $month, $day) = Today;
+my $firstday = Day_of_Year($year,$month,$day);
+my ($wkno,$yr) = Week_Of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
         $count = $i;
         if($wkno > 52){$year++; $wkno=1;}
         if($count>365){$count=$i-365;}    
-        my ($y,$m,$d) = Date_NthDayOfYear($year,$count);
+        my ($y,$m,$d) = Add_Delta_Days(1,1,1,$i - 1);
         my $output = "$y-$m-$d";
         $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
         $wkno++;    

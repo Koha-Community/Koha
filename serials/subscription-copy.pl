@@ -3,7 +3,6 @@
 
 use strict;
 use CGI;
-use Date::Manip;
 
 use C4::Koha;
 use C4::Auth;
