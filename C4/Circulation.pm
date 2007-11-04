@@ -367,7 +367,7 @@ if the borrower borrows to much things
 # check if a book can be issued.
 
 
-sub TooMany () {
+sub TooMany {
     my $borrower        = shift;
     my $biblionumber = shift;
 	my $item		= shift;
@@ -375,22 +375,18 @@ sub TooMany () {
     my $branch_borrower = $borrower->{'branchcode'};
     my $dbh             = C4::Context->dbh;
 
-  #  why pass biblionumber when we already have the the biblio data in the item hash?
-  #  my $sth =
-  #    $dbh->prepare('SELECT itemtype FROM biblioitems WHERE biblionumber = ?');
-  #  $sth->execute($biblionumber);
-  #  my $type = $sth->fetchrow;
-  
+ my $branch_issuer = C4::Context->userenv->{'branchcode'};
+
   my $type = (C4::Context->preference('item-level_itype')) 
   			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
   
-  $sth =
+  my $sth =
       $dbh->prepare(
                 'SELECT * FROM issuingrules 
                         WHERE categorycode = ? 
-                            AND itemtype = ? 
-                            AND branchcode = ?'
+                            AND branchcode = ?
+                            AND itemtype = ? '
       );
 
     my $query2 = "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
@@ -417,7 +413,7 @@ sub TooMany () {
 
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on everything set";
-        $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+        $sth2->execute( $borrower->{'borrowernumber'}, $type );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/itemtype failed)" );
@@ -426,7 +422,7 @@ sub TooMany () {
         $sth->execute( $cat_borrower, '', $branch_borrower );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '*' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            $sth2->execute( $borrower->{'borrowernumber'}, $type );
             my $alreadyissued = $sth2->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/total failed)"  );
@@ -441,7 +437,7 @@ sub TooMany () {
 
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on 2 parameters (default categorycode)";
-        $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+        $sth2->execute( $borrower->{'borrowernumber'}, $type );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / itemtype failed)"  );
@@ -450,7 +446,7 @@ sub TooMany () {
         $sth->execute( '*', '*', $branch_borrower );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            $sth2->execute( $borrower->{'borrowernumber'}, $type );
             my $alreadyissued = $sth2->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / total failed)" );
@@ -465,7 +461,7 @@ sub TooMany () {
     
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on 1 parameter (default branch + categorycode)";
-        $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+        $sth2->execute( $borrower->{'borrowernumber'}, $type );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch/category/itemtype failed)"  );
@@ -474,7 +470,7 @@ sub TooMany () {
         $sth->execute( $cat_borrower, '*', '*' );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            $sth2->execute( $borrower->{'borrowernumber'}, $type );
             my $alreadyissued = $sth2->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / category / total failed)"  );
@@ -489,7 +485,7 @@ sub TooMany () {
 
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on default branch and default categorycode";
-        $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+        $sth2->execute( $borrower->{'borrowernumber'}, $type );
         my $alreadyissued = $sth2->fetchrow;
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / itemtype failed)"  );
@@ -498,7 +494,7 @@ sub TooMany () {
         $sth->execute( '*', '*', '*' );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, "%$type%" );
+            $sth2->execute( $borrower->{'borrowernumber'}, $type );
             my $alreadyissued = $sth2->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / total failed)"  );
@@ -615,15 +611,6 @@ sub itemissues {
                 ORDER BY returndate DESC,timestamp DESC"
         );
 
-#        $sth2 = $dbh->prepare("
-#            SELECT *
-#            FROM issues
-#                LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
-#            WHERE   itemnumber = ?
-#                AND returndate is not NULL
-#            ORDER BY returndate DESC,timestamp DESC
-#        ");
-
         $sth2->execute( $data->{'itemnumber'} );
         for ( my $i2 = 0 ; $i2 < 2 ; $i2++ )
         {    # FIXME : error if there is less than 3 pple borrowing this item
@@ -712,7 +699,8 @@ sub CanBookBeIssued {
     #
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
-    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
+    
+	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
     $needsconfirmation{TOO_MANY} = $toomany if $toomany;
 
     #
@@ -1046,7 +1034,7 @@ sub GetLoanLength {
     my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
-"select issuelength from issuingrules where categorycode=? and itemtype=? and branchcode=?"
+"select issuelength from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"
       );
 
 # try to find issuelength & return the 1st available.
@@ -1631,11 +1619,13 @@ sub AddRenewal {
 
         my $biblio = GetBiblioFromItemNumber($itemnumber);
         my $borrower = GetMemberDetails( $borrowernumber, 0 );
-        my $loanlength = GetLoanLength(
+		my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
-            $biblio->{'itemtype'},
-            $borrower->{'branchcode'}
+             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+			$borrower->{'branchcode'}
         );
+		#FIXME --  choose issuer or borrower branch.
+		#FIXME -- where's the calendar ?
         my ( $due_year, $due_month, $due_day ) =
           Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
         $datedue = "$due_year-$due_month-$due_day";
