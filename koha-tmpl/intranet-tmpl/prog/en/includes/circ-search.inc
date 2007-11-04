@@ -1,79 +1,7 @@
 <!-- Begin Circulation Resident Search Box -->
 
-<!-- TMPL_IF NAME="CircAutocompl" -->
-
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/utilities/utilities.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/autocomplete/autocomplete-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/element/element-beta-min.js"></script>
-
-<style type="text/css">
-.yui-skin-sam .yui-ac {
-    position:relative;
-    font-size:100%;
-}
-.yui-skin-sam .yui-ac-input { 
-    position:absolute;
-    width:100%;}
-.yui-skin-sam .yui-ac-container { 
-    position:absolute;
-    top:1.6em;
-    width:100%;
-}
-.yui-skin-sam .yui-ac-content {
-    position:absolute;
-    width:100%;
-    border:1px solid #808080;
-    background:#fff;
-    overflow:hidden;
-    z-index:9050;
-}
-.yui-skin-sam .yui-ac-shadow {
-    position:absolute;
-    margin:.3em;
-    width:100%;
-    background:#000;
-    -moz-opacity:0.10;
-    opacity:.10;
-    filter:alpha(opacity=10);
-    z-index:9049;
-}
-.yui-skin-sam .yui-ac-content ul {
-    margin:0;
-    padding:0;
-    width:100%;
-}
-.yui-skin-sam .yui-ac-content li {
-    margin:0;
-    padding:2px 5px;
-    cursor:default;
-    white-space:nowrap;
-}
-.yui-skin-sam .yui-ac-content li.yui-ac-prehighlight {
-    background:#B3D4FF;
-}
-.yui-skin-sam .yui-ac-content li.yui-ac-highlight {
-    background:#426FD9;
-    color:#FFF;
-}
-
-
-
-#borrowerautocomplete { width: 405px; text-align:left;} /* z-index needed on top instances for ie & sf absolute inside relative issue */
-.autocomplete { width:130px; }/* set width of widget here*/
-.autocomplete .yui-ac-highlight ,
-.autocomplete .yui-ac-highlight .sample-result,
-.autocomplete .yui-ac-highlight .sample-query { color:#FFF; }
-.autocomplete .sample-result { color: black; }
-.autocomplete .sample-query { color:#000; }
-#findborrower { position:static; width:335px; }  */
-#yborrowercontainer { text-align:left;width:300px; }
-</style>
-
-<script type="text/javascript">
-
+<!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
 YAHOO.util.Event.onContentReady("header_search", function() {
-
     new function() {
         // Define a custom formatter function
         this.fnCustomFormatter = function(oResultItem, sQuery) {
@@ -113,21 +41,15 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
 });    
-
-
-</script>
-
-<!-- /TMPL_IF -->
+</script><!-- /TMPL_IF -->
 
 <div id="header_search">
 
 <div id="circ_search" class="residentsearch">
     <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
-    
-<!-- TMPL_IF NAME="CircAutocompl" -->
-        
-    <div class="yui-skin-sam">
+    <!-- TMPL_IF NAME="CircAutocompl" -->
+    <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
@@ -136,16 +58,12 @@ YAHOO.util.Event.onContentReady("header_search", function() {
                 <input name="printer" value="" type="hidden" />
             </div>
         </div>
-
-<!-- TMPL_ELSE -->
-
+	<!-- TMPL_ELSE -->
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
             <input value="Submit" type="submit" />
-
-<!-- /TMPL_IF -->
-
+	<!-- /TMPL_IF -->
     </form>
 </div>  
 

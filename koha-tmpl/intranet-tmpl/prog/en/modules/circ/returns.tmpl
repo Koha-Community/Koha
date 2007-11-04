@@ -204,8 +204,7 @@
             </fieldset>
         </form>
     <!-- TMPL_IF NAME="errmsgloop" -->
-    <fieldset>
-        <legend>Error</legend>
+    <div class="message">
         <!-- TMPL_LOOP Name="errmsgloop" -->
                     <!-- TMPL_IF Name="badbarcode" -->
                         <p class="problem">No Item with barcode: <!-- TMPL_VAR Name="msg" --></p>
@@ -224,7 +223,7 @@
                     <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_IF -->
-    </fieldset>
+    </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF Name="returned" -->

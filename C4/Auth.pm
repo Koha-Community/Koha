@@ -255,6 +255,7 @@ sub get_template_and_user {
             KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
             IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
             IndependantBranches     => C4::Context->preference("IndependantBranches"),
+			CircAutocompl => C4::Context->preference("CircAutocompl"),
         );
     }
     else {

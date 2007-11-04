@@ -1,4 +1,4 @@
-
+<!-- Begin Acquisitions Resident Search Box -->
 <div id="header_search">
 <div id="supplier_search" class="residentsearch">
 	<p class="tip">Search suppliers:</p>
@@ -19,3 +19,4 @@
 			<li><a href="/cgi-bin/koha/acqui/histsearch.pl#orders_search">Orders Search</a></li>
 			</ul>	
 </div>
+<!-- End Acquisitions Resident Search Box -->
