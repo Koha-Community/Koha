@@ -447,7 +447,7 @@ FROM issuingrules
   LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype)
   WHERE categorycode=?
 " );
-#my @issued_itemtypes_count;  # huh?
+my @issued_itemtypes_count_loop;  # huh?
 $issueqty_sth->execute("*");
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
@@ -464,10 +464,10 @@ while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
         || ( $data->{'itemtype'} eq "*" )
         || ( $data->{'itemtype'} eq "CIRC" ) )
     {
-        push @issued_itemtypes_count, $data;
+        push @issued_itemtypes_count_loop, $data;
     }
 }
-$issued_itemtypes_loop = \@issued_itemtypes_count;
+$issued_itemtypes_loop = \@issued_itemtypes_count_loop;
 
 #### / JF
 
