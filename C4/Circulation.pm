@@ -367,18 +367,25 @@ if the borrower borrows to much things
 # check if a book can be issued.
 
 
-sub TooMany ($$) {
+sub TooMany () {
     my $borrower        = shift;
     my $biblionumber = shift;
+	my $item		= shift;
     my $cat_borrower    = $borrower->{'categorycode'};
     my $branch_borrower = $borrower->{'branchcode'};
     my $dbh             = C4::Context->dbh;
 
-    my $sth =
-      $dbh->prepare('SELECT itemtype FROM biblioitems WHERE biblionumber = ?');
-    $sth->execute($biblionumber);
-    my $type = $sth->fetchrow;
-    $sth =
+  #  why pass biblionumber when we already have the the biblio data in the item hash?
+  #  my $sth =
+  #    $dbh->prepare('SELECT itemtype FROM biblioitems WHERE biblionumber = ?');
+  #  $sth->execute($biblionumber);
+  #  my $type = $sth->fetchrow;
+  
+  my $type = (C4::Context->preference('item-level_itype')) 
+  			? $item->{'itype'}         # item-level
+			: $item->{'itemtype'};     # biblio-level
+  
+  $sth =
       $dbh->prepare(
                 'SELECT * FROM issuingrules 
                         WHERE categorycode = ? 
@@ -386,15 +393,15 @@ sub TooMany ($$) {
                             AND branchcode = ?'
       );
 
-    my $sth2 =
-      $dbh->prepare(
-            "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
+    my $query2 = "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
                 WHERE i.borrowernumber = ? 
                     AND i.returndate IS NULL 
                     AND i.itemnumber = s2.itemnumber 
-                    AND s1.itemtype LIKE ? 
                     AND s1.biblioitemnumber = s2.biblioitemnumber"
-      );
+				. (C4::Context->preference('item-level_itype'))
+				? " AND s2.itype=? "
+                : " AND s1.itemtype= ? ";
+    my $sth2=  $dbh->prepare($query2);
     my $sth3 =
       $dbh->prepare(
             'SELECT COUNT(*) FROM issues
@@ -705,7 +712,7 @@ sub CanBookBeIssued {
     #
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
-    my $toomany = TooMany( $borrower, $item->{biblionumber} );
+    my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
     $needsconfirmation{TOO_MANY} = $toomany if $toomany;
 
     #
