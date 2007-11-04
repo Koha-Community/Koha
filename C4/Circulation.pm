@@ -377,7 +377,7 @@ sub TooMany {
 
  my $branch_issuer = C4::Context->userenv->{'branchcode'};
 #TODO : specify issuer or borrower for circrule.
-  my $type = (C4::Context->preference('item-level_itype')) 
+  my $type = (C4::Context->preference('item-level_itypes')) 
   			? $item->{'ccode'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
   
@@ -394,7 +394,7 @@ sub TooMany {
                     AND i.returndate IS NULL 
                     AND i.itemnumber = s2.itemnumber 
                     AND s1.biblioitemnumber = s2.biblioitemnumber"
-				. (C4::Context->preference('item-level_itype'))
+				. (C4::Context->preference('item-level_itypes'))
 				? " AND s2.ccode=? "
                 : " AND s1.itemtype= ? ";
     my $sth2=  $dbh->prepare($query2);
@@ -958,9 +958,10 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
+		my $itype=(C4::Context->preference('item-level_itypes')) ? $biblio->{'itemtype'} : $biblio->{'ccode'};
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
-            $biblio->{'itemtype'},
+            $itype,
             $borrower->{'branchcode'}
         );
         my $datedue  = time + ($loanlength) * 86400;
@@ -1702,13 +1703,16 @@ sub GetIssuingCharges {
     my $item_type;
 
     # Get the book's item type and rental charge (via its biblioitem).
-    my $sth1 = $dbh->prepare(
-        "SELECT itemtypes.itemtype,rentalcharge FROM items
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-            LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-            WHERE items.itemnumber =?
-        "
-    );
+    my $qcharge =     "SELECT itemtypes.itemtype,rentalcharge FROM items
+            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
+	$qcharge .= (C4::Context->preference('item-level_itypes'))
+                ? " LEFT JOIN itemtypes ON items.ccode = itemtypes.itemtype "
+                : " LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
+	
+    $qcharge .=      "WHERE items.itemnumber =?";
+   
+warn $qcharge;
+    my $sth1 = $dbh->prepare($qcharge);
     $sth1->execute($itemnumber);
     if ( my $data1 = $sth1->fetchrow_hashref ) {
         $item_type = $data1->{'itemtype'};
