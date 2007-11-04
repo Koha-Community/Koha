@@ -4,30 +4,6 @@
 <!-- TMPL_INCLUDE NAME="yui-toolbars.inc" -->
 <script type="text/javascript">
 //<![CDATA[
-showlayer('<!-- TMPL_VAR NAME="yearmax"-->');
-
-function showlayer(numlayer)
-{
-	var yeardata=document.getElementsByName("yeardata");
-    for (i=0; i<yeardata.length; i++ ) {
-		ong=yeardata[i].getAttribute('id');
-        if (numlayer==ong) {
-			yeardata[i].setAttribute("class","content_visible");
-            var tabactive=document.getElementById('link'+numlayer);
-            tabactive.removeAttribute("class");
-            tabactive.setAttribute("class","tab_active");
-		} else {
-			yeardata[i].removeAttribute("class");
-            yeardata[i].setAttribute("class","content_hidden");
-            try {
-                var tabactive=document.getElementById('link'+ong);
-                tabactive.removeAttribute("class");
-                tabactive.setAttribute("class","tab_inactive");
-            }
-            catch(e){};
-		}
-	}
-}
 function addsubscriptionid()
 {
 	var tab=new Array();
@@ -62,7 +38,7 @@ $(document).ready(function() {
 //]]>
 </script>
 </head>
-<body>
+<body class="yui-skin-sam">
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
@@ -89,9 +65,9 @@ $(document).ready(function() {
 <caption> Subscription Summaries</caption>
 <!--/TMPL_IF-->
 <tr>
-  <th>Subs </th>
-  <th>Freq</th>
-  <th>Num pattern</th>
+  <th>Subscription Num. </th>
+  <th>Frequency</th>
+  <th>Numbering pattern</th>
   <th>Branch</th>
   <th>Call Number</th>
   <th>Notes</th>
