@@ -1037,7 +1037,7 @@ sub GetExpirationDate {
     my $enddate          = $subscription->{startdate};
 
 # we don't do the same test if the subscription is based on X numbers or on X weeks/months
-    if ($subscription->{periodicity}){
+    if (($subscription->{periodicity} % 16) >0){
       if ( $subscription->{numberlength} ) {
           #calculate the date of the last issue.
           my $length = $subscription->{numberlength};
@@ -1720,7 +1720,7 @@ sub HasSubscriptionExpired {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    if ($subscription->{periodicity}>0){
+    if (($subscription->{periodicity} % 16)>0){
       my $expirationdate   = GetExpirationDate($subscriptionid);
       my $query = qq|
             SELECT max(planneddate)
@@ -2285,7 +2285,7 @@ sub abouttoexpire {
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     my $per = $subscription->{'periodicity'};
-    if ($per>0){
+    if ($per % 16>0){
       my $expirationdate   = GetExpirationDate($subscriptionid);
       my $sth =
         $dbh->prepare(
@@ -2296,7 +2296,6 @@ sub abouttoexpire {
       my @res=split /-/,$res;
       @res=Date::Calc::Today if ($res[0]*$res[1]==0);
       my @endofsubscriptiondate=split/-/,$expirationdate;
-      my $per = $subscription->{'periodicity'};
       my $x;
       if ( $per == 1 ) {$x=7;}
       if ( $per == 2 ) {$x=7; }
@@ -2318,7 +2317,7 @@ sub abouttoexpire {
                     (@endofsubscriptiondate && 
                         Delta_Days($res[0],$res[1],$res[2],
                         $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) >= 0) );
-      return 0;
+    return 0;
    } elsif ($subscription->{numberlength}>0) {
     return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
    } else {return 0}
@@ -2589,7 +2588,7 @@ sub GetNextDate(@) {
     my @resultdate;
 
     #       warn "DOW $dayofweek";
-    if ( $subscription->{periodicity} == 0 ) {
+    if ( $subscription->{periodicity} % 16 == 0 ) {
       return 0;
     }  
     if ( $subscription->{periodicity} == 1 ) {
