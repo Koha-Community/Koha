@@ -50,27 +50,27 @@ our $password = 'koha';
 # Valid user barcode and corresponding user password/pin and full name
 our $user_barcode = '900002';
 our $user_pin     = 'password';
-our $user_fullname= 'firstname surname';
+our $user_fullname= 'Firstname SURNAME';
 our $user_homeaddr= '35 address';
 our $user_email   = 'patron@liblime.com';
-our $user_phone   = '555';
-our $user_birthday= '';
-our $user_ptype   = '';
-our $user_inet    = '';
+our $user_phone   = '555-1212';
+our $user_birthday= '1983-10-06';
+our $user_ptype   = 'PATRON';
+our $user_inet    = 'N';
 
 # Valid item barcode and corresponding title
-our $item_barcode = '1565921879';
-our $item_title   = 'Perl 5 desktop reference';
+our $item_barcode = '26000204';
+our $item_title   = 'A community of writers :';
 our $item_owner   = 'kohalibrary';
 
 # Another valid item
-our $item2_barcode = '0440242746';
-our $item2_title   = 'The deep blue alibi';
+our $item2_barcode = '26000548';
+our $item2_title   = 'Witch baby /';
 our $item2_owner   = 'kohalibrary';
 
 # An item with a diacritical in the title
-our $item_diacritic_barcode = '660';
-our $item_diacritic_title = 'Harry Potter y el cáliz de fuego';
+our $item_diacritic_barcode = '26000216';
+our $item_diacritic_title = 'Z : Zäch ';
 our $item_diacritic_owner = 'kohalibrary';
 
 # End configuration
