@@ -209,7 +209,7 @@ CGIs are copied to $(PREFIX)/lib/cgi-bin/koha/
 and other scripts to koha/
 
 =cut
-	foreach my $src ("mainpage.pl","help.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
+	foreach my $src ("mainpage.pl","help.pl","kohaversion.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
 		} else {
