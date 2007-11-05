@@ -1,0 +1,24 @@
+README for Open NSIP 3M-SIP Server
+
+DEPENDENCIES
+
+SIPServer is written entirely in Perl, but it require these CPAN
+perl modules to run:
+
+     Net::Server - The SIP server is a Net::Server::Prefork server
+     XML::LibXML
+     XML::Parser
+     XML::Simple - for parsing the config file
+     UNIVERSAL::require - for loading the correct ILS interface module
+     Clone - for running the test cases
+
+LOGGING
+
+SIPServer uses syslog() for status and debugging messages.  All
+syslog messages are logged using the syslog facility 'local6'.
+If you need to change this, because something else on your system
+is already using that facililty, just change the definition of
+'LOG_SIP' at the top of the file SIPServer.pm
+
+Make sure to update your syslog configuration to capture facility
+'local6' and record it.

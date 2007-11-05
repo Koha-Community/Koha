@@ -1,0 +1,55 @@
+<acsconfig xmlns="http://openncip.org/acs-config/1.0/">
+
+  <error-detect enabled="true" />
+
+<!-- Set Net::Server::PreFork runtime parameters -->
+<!--  <server-params
+           min_servers='1'
+           min_spare_servers='0' /> -->
+  
+  
+  <listeners>
+    <service
+      port="0:8080/tcp"
+      transport="http"
+      protocol="NCIP/1.0" />
+
+    <service
+      port="8023/tcp"
+      transport="telnet"
+      protocol="SIP/1.00"
+      timeout="60" />
+
+    <service
+      port="127.0.0.1:6001/tcp"
+      transport="RAW" 
+      protocol="SIP/2.00"
+      timeout="60" />
+  </listeners>
+
+  <accounts>
+      <login id="koha" password="koha" institution="kohalibrary">
+      </login>
+      <login id="koha2" password="koha2" institution="kohalibrary" />
+      <login id="lpl-sc" password="1234" institution="LPL" />
+      <login id="lpl-sc-beacock" password="xyzzy"
+             delimiter="|" error-detect="enabled" institution="LPL" />
+  </accounts>
+
+<!-- Institution tags will hold stuff used to interface to -->
+<!-- the rest of the ILS: authentication parameters, etc.  I -->
+<!-- don't know what yet, so it'll just be blank.  But there -->
+<!-- needs to be one institution stanza for each institution -->
+<!-- named in the accounts above. -->
+<institutions>
+    <institution id="kohalibrary" implementation="ILS" parms="">
+          <policy checkin="true" renewal="false"
+	  	  status_update="false" offline="false"
+		  timeout="600"
+	  	  retries="3" />
+    </institution>
+
+    <institution id="LPL" implementation="ILS">
+    </institution>
+</institutions>
+</acsconfig>

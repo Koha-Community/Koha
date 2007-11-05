@@ -1,0 +1,486 @@
+=head1 NAME
+
+ILS - Portability layer to interface between Open-SIP and ILS
+
+=head1 SYNOPSIS
+
+    use ILS;
+
+    # Initialize connection between SIP and the ILS
+    my $ils = new ILS (institution => 'Foo Public Library');
+
+    # Basic object access methods
+    $inst_name = $self->institution;
+    $bool = $self->support($operation);
+    $self->check_inst_id($inst_name, "error message");
+
+    # Check to see if certain protocol options are permitted
+    $bool = $self->checkout_ok;
+    $bool = $self->checkin_ok;
+    $bool = $self->status_update_ok;
+    $bool = $self->offline_ok;
+
+    $status = $ils->checkout($patron_id, $item_id, $sc_renew);
+
+    $status = $ils->checkin($item_id, $trans_date, $return_date,
+                            $current_loc, $item_props, $cancel);
+
+    $status = $ils->end_patron_session($patron_id);
+
+    $status = $ils->pay_fee($patron_id, $patron_pwd, $fee_amt,
+                            $fee_type, $pay_type, $fee_id, $trans_id,
+                            $currency);
+
+    $status = $ils->add_hold($patron_id, $patron_pwd, $item_id,
+			     $title_id, $expiry_date,
+			     $pickup_locn, $hold_type, $fee_ack);
+
+    $status = $ils->cancel_hold($patron_id, $patron_pwd,
+                                $item_id, $title_id);
+
+    $status = $ils->alter_hold($patron_id, $patron_pwd, $item_id,
+                               $title_id, $expiry_date,
+                               $pickup_locn, $hold_type,
+                               $fee_ack);
+
+    $status = $ils->renew($patron_id, $patron_pwd, $item_id,
+                          $title_id, $no_block, $nb_due_date,
+                          $third_party, $item_props, $fee_ack);
+
+    $status = $ils->renew_all($patron_id, $patron_pwd, $fee_ack);
+
+=head1 INTRODUCTION
+
+The ILS module defines a basic portability layer between the SIP
+server and the rest of the integrated library system.  It is the
+responsibility of the ILS vendor to implement the functions
+defined by this interface.  This allows the SIP server to be
+reasonably portable between ILS systems (of course, we won't know
+exactly I<how> portable the interface is until it's been used by
+a second ILS.
+
+Because no business logic is embedded in the SIP server code
+itself, the SIP protocol handler functions do almost nothing
+except decode the network messages and pass the parameters to the
+ILS module or one of its submodules, C<ILS::Patron> and
+C<ILS::Item>.  The SIP protocol query messages (Patron
+Information, or Item Status, for example), are implemented within
+the SIP server code by fetching a Patron, or Item, record and
+then retrieving the relevant information from that record.  See
+L<ILS::Patron> and L<ILS::Item> for the details.
+
+=head1 INITIALIZATION
+
+The first thing the SIP server does, after a terminal has
+successfully logged in, is initialize the ILS module by calling
+
+    $ils = new ILS $institution
+
+where C<$institution> is an object of type
+C<Sip::Configuration::Institution>, describing the institution to
+which the terminal belongs.  In general, this will be the single
+institution that the ILS supports, but it may be that in a
+consortial setting, the SIP server may support connecting to
+different ILSs based on the C<$institution> of the terminal.
+
+=head1 BASIC OBJECT ACCESS AND PROTOCOL SUPPORT
+
+The C<$ils> object supports a small set of simple access methods
+and methods that allow the SIP server to determine if certain
+protocol operations are permitted to the remote terminals.
+
+=head2 C<$inst_name = $self-E<gt>institution;>
+
+Returns the institution ID as a string, suitable for
+incorporating into a SIP response message.
+
+=head2 C<$bool = $self-E<gt>support($operation);>
+
+Reports whether this ILS implementation supports certain
+operations that are necessary to report information to the SIP
+terminal. The argument C<$operation> is a string from this list:
+
+=over
+
+=item C<'magnetic media'>
+
+Can the ILS properly report whether an item is (or contains)
+magnetic media, such as a videotape or a book with a floppy disk?
+
+=item C<'security inhibit'>
+
+Is the ILS capable of directing the terminal to ignore the
+security status of an item?
+
+=item C<'offline operation'>
+
+Does the ILS allow self-check units to operate when unconnected
+to the ILS?  That is, can a self-check unit check out items to
+patrons without checking the status of the items and patrons in
+real time?
+
+=back
+
+=head2 C<$bool = $self-E<gt>checkout_ok;>
+
+Are the self service terminals permitted to check items out to
+patrons?
+
+=head2 C<$bool = $self-E<gt>checkin_ok;>
+
+Are the self service terminals permitted to check items in?
+
+=head2 C<$bool = $self-E<gt>status_update_ok;>
+
+Are the self service terminals permitted to update patron status
+information.  For example, can terminals block patrons?
+
+=head2 C<$bool = $self-E<gt>offline_ok>;
+
+Are the self service terminals permitted to operate off-line.
+That is, can they perform their core self service operations when
+not in communication with the ILS?
+
+=head1 THE TRANSACTIONS
+
+In general, every protocol transaction that changes the status of
+some ILS object (Patron or Item) has a corresponding C<ILS>
+method.  Operations like C<Check In>, which are a function of
+both a patron and an item are C<ILS> functions, while others,
+like C<Patron Status> or C<Item Status>, which only depend on one
+type of object, are methods of the corresponding sub-module.
+
+In the stub implementation provided with the SIP system, the
+C<$status> objects returned by the various C<ILS> transactions
+are objects that are subclasses of a virtual C<ILS::Transaction>
+object, but this is not required of the SIP code, as long as the
+status objects support the appropriate methods.
+
+=head2 CORE TRANSACTION STATUS METHODS
+
+The C<$status> objects returned by all transactions must support
+the following common methods:
+
+=over 
+
+=item C<ok>
+
+Returns C<true> if the transaction was successful and C<false> if
+not.  Other methods can be used to find out what went wrong.
+
+=item C<item>
+
+Returns an C<ILS::Item> object corresponding to the item with the
+barcode C<$item_id>, or C<undef> if the barcode is invalid.
+
+=item C<patron>
+
+Returns a C<ILS::Patron> object corresponding to the patron with
+the barcode C<$patron_id>, or C<undef> if the barcode is invalid
+(ie, nonexistent, as opposed to "expired" or "delinquent").
+
+=item C<screen_msg>
+
+Optional. Returns a message that is to be displayed on the
+terminal's screen.  Some self service terminals read the value of
+this string and act based on it.  The configuration of the
+terminal, and the ILS implementation of this method will have to
+be coordinated.
+
+=item C<print_line>
+
+Optional.  Returns a message that is to be printed on the
+terminal's receipt printer.  This message is distinct from the
+basic transactional information that the terminal will be
+printing anyway (such as, the basic checkout information like the
+title and due date).
+
+=back
+
+=head2 C<$status = $ils-E<gt>checkout($patron_id, $item_id, $sc_renew)>
+
+Check out (or possibly renew) item with barcode C<$item_id> to
+the patron with barcode C<$patron_id>.  If C<$sc_renew> is true,
+then the self-check terminal has been configured to allow
+self-renewal of items, and the ILS may take this into account
+when deciding how to handle the case where C<$item_id> is already
+checked out to C<$patron_id>.
+
+The C<$status> object returned by C<checkout> must support the
+following methods:
+
+=over
+
+=item C<renewal_ok>
+
+Is this transaction actually a renewal?  That is, did C<$patron_id>
+already have C<$item_id> checked out?
+
+=item C<desensitize>
+
+Should the terminal desensitize the item?  This will be false for
+magnetic media, like videocassettes, and for "in library" items
+that are checked out to the patron, but not permitted to leave the
+building.
+
+=item C<security_inhibit>
+
+Should self checkout unit ignore the security status of this
+item?
+
+This method will only be used if
+
+    $ils->supports('security inhibit')
+
+returns C<true>.
+
+=item C<fee_amount>
+
+If there is a fee associated with the use of C<$item_id>, then
+this method should return the amount of the fee, otherwise it
+should return zero.  See also the C<sip_currency> and
+C<sip_fee_type> methods.
+
+=item C<sip_currency>
+
+The ISO currency code for the currency in which the fee
+associated with this item is denominated.  For example, 'USD' or
+'CAD'.
+
+=item C<sip_fee_type>
+
+A code indicating the type of fee associated with this item.  See
+the table in the protocol specification for the complete list of
+standard values that this function can return.
+
+=back
+
+=head2 C<$status = $ils-E<gt>checkin($item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel)>
+
+Check in item identified by barcode C<$item_id>.  This
+transaction took place at time C<$trans_date> and was effective
+C<$return_date> (to allow for backdating of items to when the
+branch closed, for example). The self check unit which received
+the item is located at C<$current_loc>, and the item has
+properties C<$item_props>.  The parameters C<$current_loc> and
+C<$item_props> are opaque strings passed from the self service
+unit to the ILS untranslated.  The configuration of the terminal,
+and the ILS implementation of this method will have to be
+coordinated.
+
+The C<$status> object returned by the C<checkin> operation must
+support the following methods:
+
+=over
+
+=item C<resensitize>
+
+Does the item need to be resensitized by the self check unit?
+
+=item C<alert>
+
+Should the self check unit generate an audible alert to notify
+staff that the item has been returned?
+
+=item C<sort_bin>
+
+Certain self checkin units provide for automated sorting of the
+returned items.  This function returns the bin number into which
+the received item should be placed.  This function may return the
+empty string, or C<undef>, to indicate that no sort bin has been
+specified.
+
+=back
+
+=head2 C<($status, $screen_msg, $print_line) = $ils-E<gt>end_patron_session($patron_id)>
+
+This function informs the ILS that the current patron's session
+has ended.  This allows the ILS to free up any internal state
+that it may be preserving between messages from the self check
+unit.  The function returns a boolean C<$status>, where C<true>
+indicates success, and two strings: a screen message to display
+on the self check unit's console, and a print line to be printed
+on the unit's receipt printer.
+
+=head2 C<$status = $ils-E<gt>pay_fee($patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency)>
+
+Reports that the self check terminal handled fee payment from
+patron C<$patron_id> (who has password C<$patron_pwd>, which is
+an optional parameter).  The other parameters are:
+
+=over
+
+=item C<$fee_amt>
+
+The amount of the fee.
+
+=item C<$fee_type>
+
+The type of fee, according a table in the SIP protocol
+specification.
+
+=item C<$pay_type>
+
+The payment method.  Defined in the SIP protocol specification.
+
+=item C<$fee_id>
+
+Optional. Identifies which particular fee was paid.  This
+identifier would have been sent from the ILS to the Self Check
+unit by a previous "Patron Information Response" message.
+
+=item C<$trans_id>
+
+Optional. A transaction identifier set by the payment device.
+This should be recorded by the ILS for financial tracking
+purposes.
+
+=item C<$currency>
+
+An ISO currency code indicating the currency in which the fee was
+paid.
+
+=back
+
+The status object returned by the C<pay_fee> must support the
+following methods:
+
+=over
+
+=item C<transaction_id>
+
+Transaction identifier of the transaction.  This parallels the
+optional C<$trans_id> sent from the terminal to the ILS.  This
+may return an empty string.
+
+=back
+
+=head2 C<$status = $ils-E<gt>add_hold($patron_id, $patron_pwd, $item_id, $title_id, $expiry_date, $pickup_locn, $hold_type, $fee_ack);>
+
+Places a hold for C<$patron_id> (optionally, with password
+C<$patron_pwd>) on the item described by either C<$item_id> or
+C<$title_id>. The other parameters are:
+
+=over
+
+=item C<$expiry_date>
+
+The date on which the hold should be cancelled.  This date is a
+SIP protocol standard format timestamp:
+
+    YYYYMMDDZZZZHHMMSS
+
+where the 'Z' characters indicate spaces.
+
+=item C<$pickup_location>
+
+The location at which the patron wishes to pick up the item when
+it's available.  The configuration of the terminal, and the ILS
+implementation of this parameter will have to be coordinated.
+
+=item C<$hold_type>
+
+The type of hold being placed: any copy, a specific copy, any
+copy from a particular branch or location.  See the SIP protocol
+specification for the exact values that this parameter might
+take.
+
+=item C<$fee_ack>
+
+Boolean.  If true, the patron has acknowleged that she is willing
+to pay the fee associated with placing a hold on this item.  If
+C<$fee_ack> is false, then the ILS should refuse to place the
+hold.
+
+=back
+
+=head2 C<$status = $ils-E<gt>cancel_hold($patron_id, $patron_pwd, $item_id, $title_id);>
+
+Cancel a hold placed by C<$patron_id> for the item identified by
+C<$item_id> or C<$title_id>.  The patron password C<$patron_pwd>
+may be C<undef>, if it was not provided by the terminal.
+
+=head2 C<$status = $ils-E<gt>alter_hold($patron_id, $patron_pwd, $item_id, $title_id, $expiry_date, $pickup_locn, $hold_type, $fee_ack);>
+
+The C<$status> object returned by C<$ils-E<gt>add_hold>,
+C<$ils-E<gt>cancel_hold>, and C<$ils-E<gt>alter_hold> must all
+support the same methods:
+
+=over
+
+=item C<expiration_date>
+
+Returns the expiry date for the placed hold, in seconds since the
+epoch.
+
+=item C<queue_position>
+
+Returns the new hold's place in the queue of outstanding holds.
+
+=item C<pickup_location>
+
+Returns the location code for the pickup location.
+
+=back
+
+=head2 C<$status = $ils-E<gt>renew($patron_id, $patron_pwd, $item_id, $title_id, $no_block, $nb_due_date, $third_party, $item_props, $fee_ack);>
+
+Renew the item identified by C<$item_id> or C<$title_id>, as
+requested by C<$patron_id> (with password C<$patron_pwd>).  The
+item has the properties C<$item_props> associated with it.
+
+If the patron renewed the item while the terminal was
+disconnected from the net, then it is a C<$no_block> transaction,
+and the due date assigned by the terminal, and reported to the
+patron was C<$nb_due_date> (so we have to honor it).
+
+If there is a fee associated with renewing the item, and the
+patron has agreed to pay the fee, then C<$fee_ack> will be
+C<'Y'>.
+
+If C<$third_party> is C<'Y'> and the book is not checked out to
+C<$patron_id>, but to some other person, then this is a
+third-party renewal; the item should be renewed for the person to
+whom it is checked out, rather than checking it out to
+C<$patron_id>, or the renewal should fail.
+
+The C<$status> object returned by C<$ils-E<gt>renew> must support
+the following methods:
+
+=over
+
+=item C<renewal_ok>
+
+Boolean.  If C<renewal_ok> is true, then the item was already
+checked out to the patron, so it is being renewed.  If
+C<renewal_ok> is false, then the patron did not already have the
+item checked out.
+
+NOTE: HOW IS THIS USED IN PRACTICE?
+
+=item C<desensitize>, C<security_inhibit>, C<fee_amount>, C<sip_currency>, C<sip_fee_type>, C<transaction_id>
+
+See C<$ils-E<gt>checkout> for these methods.
+
+=back
+
+=head2 C<$status = $ils-E<gt>renew_all($patron_id, $patron_pwd, $fee_ack);>
+
+Renew all items checked out by C<$patron_id> (with password
+C<$patron_pwd>).  If the patron has agreed to pay any fees
+associated with this transaction, then C<$fee_ack> will be
+C<'Y'>.
+
+The C<$status> object must support the following methods:
+
+=over
+
+=item C<renewed>
+
+Returns a list of the C<$item_id>s of the items that were renewed.
+
+=item C<unrenewed>
+
+Returns a list of the C<$item_id>s of the items that were not renewed.
+
+=back
