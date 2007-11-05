@@ -34,14 +34,16 @@ use Sip::Constants qw(:all);
 # 
 # Configuration parameters to run the test suite
 #
-our $instid = 'UWOLS';
-our $currency = 'CAD';
+our $instid = 'kohalibrary';
+our $currency = 'USD';
+#our $instid = 'UWOLS';
+#our $currency = 'CAD';
 our $server   = 'localhost:6001'; # Address of the SIP server
 
 # SIP username and password to connect to the server.  See the
 # SIP config.xml for the correct values.
-our $username = 'scclient';
-our $password = 'clientpwd';
+our $username = 'koha';
+our $password = 'koha';
 
 # ILS Information
 
@@ -59,17 +61,17 @@ our $user_inet    = 'Y';
 # Valid item barcode and corresponding title
 our $item_barcode = '1565921879';
 our $item_title   = 'Perl 5 desktop reference';
-our $item_owner   = 'UWOLS';
+our $item_owner   = 'kohalibrary';
 
 # Another valid item
 our $item2_barcode = '0440242746';
 our $item2_title   = 'The deep blue alibi';
-our $item2_owner   = 'UWOLS';
+our $item2_owner   = 'kohalibrary';
 
 # An item with a diacritical in the title
 our $item_diacritic_barcode = '660';
 our $item_diacritic_title = 'Harry Potter y el cáliz de fuego';
-our $item_diacritic_owner = 'UWOLS';
+our $item_diacritic_owner = 'kohalibrary';
 
 # End configuration
 
