@@ -1,9 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Tools &rsaquo; Task Scheduler</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <strong>Scheduler</strong></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <strong>Task Scheduler</strong></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -13,14 +16,16 @@
 
 <div id="main">
 <form name="form1" action="scheduler.pl" method="post">
-<input type="hidden" name="mode" value="job_add">
+<input type="hidden" name="mode" value="job_add" />
 
-<table border="0" cellspacing="0" cellpadding="0">
-<tr><td>Current server time is</td>
-<td><!-- TMPL_VAR NAME="time" --></td></tr>
-<tr><td class="cell">Time</td>
-<td class="cell"><input type="text" name="starttime" value="" maxlength="5" size="5" /></td>
-<td class="cell"><select name="startday">
+<fieldset class="rows">
+<legend>Task Scheduler</legend><ol>
+<li><span class="label">Current server time is:</span>
+<!-- TMPL_VAR NAME="time" --></li>
+<li><label for="starttime">Time:</label>
+<input type="text" name="starttime" id="starttime" value="" maxlength="5" size="5" /></li>
+<li><label for="startday">Date: </label>
+<select name="startday" id="startday">
 <option value="01">1</option>			
 <option value="02">2</option>
 <option value="03">3</option>
@@ -54,8 +59,8 @@
 <option value="31">31</option>
 
 </select>
-</td>
-<td class="cell"><select name="startmonth">
+
+<select name="startmonth">
 <option value="01">Jan</option>
 <option value="02">Feb</option>
 <option value="03">Mar</option>
@@ -69,62 +74,62 @@
 <option value="11">Nov</option>
 <option value="12">Dec</option>
 </select>
-</td>
-<td class="cell"><select name="startyear">
+
+<select name="startyear">
 <option value="2007">2007</option>
 <option value="2008">2008</option>
 
 </select>
-</td>
-</tr>
-<tr><td class="cell">Report</td><td>
-<select name="report">
+
+</li>
+<li><label for="report">Report:</label>
+<select name="report" id="report">
 <!-- TMPL_LOOP NAME="savedreports" -->                                   
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>                  
 <!-- /TMPL_LOOP -->
 </select>
-</tr>
-<tr><td class="cell">Output Format</td>
-<td><select name="format">
+</li>
+<li><label for="format">Output Format:</label>
+<select name="format" id="format">
 <option value="text">Text</option>
 <option value="url">URL</option>
-</select></td>
-</tr>
-<tr><td class="cell">Email</td>
-<td>
-<input type=text name=email>
-</td></tr>
-<tr><td><input class="submit-button" type="submit" value="Add">
-</td></tr>
-</table>
+</select>
+</li>
+<li><label for="email">Email:</label>
+
+<input type="text" name="email" id="email" size="50" />
+</li>
+</ol></fieldset>
+<fieldset class="action"><input class="submit-button" type="submit" value="Save" /></fieldset>
 </form>
   
-<h2>Jobs already entered</h2>
+<!-- TMPL_IF NAME="JOBS" --><h2>Jobs already entered</h2>
 <table>
 <tr>
 <th>Date/Time</th>
 <th>Action</th>
 <th>&nbsp;</th>
 </tr>
-<TMPL_LOOP NAME="JOBS">
+<!-- TMPL_LOOP NAME="JOBS" -->
 <form action="scheduler.pl" method="post">
-<input type=hidden name=mode value="job_change">
+<input type="hidden" name="mode" value="job_change" />
 
 <tr>
-<td><TMPL_VAR NAME="TIME"></td>
-<td><TMPL_VAR NAME="TAG"></td>
+<td><!-- TMPL_VAR NAME="TIME" --></td>
+<td><!-- TMPL_VAR NAME="TAG" --></td>
 <td><input type="submit" value="Edit"/>&nbsp;<input type="submit" name="delete" value="Delete" /></td>
 </tr>
-<input type=hidden name=jobid value="<TMPL_VAR NAME="JOBID">">
+<input type="hidden" name="jobid" value="<!-- TMPL_VAR NAME="JOBID" -->" />
 </form>
-</TMPL_LOOP>
-</table>
+<!-- /TMPL_LOOP -->
+</table><!-- /TMPL_IF -->
 
 
 </div>
 </div>
 </div>
 <div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="guided-reports-view.inc" -->
 </div>
 </div>

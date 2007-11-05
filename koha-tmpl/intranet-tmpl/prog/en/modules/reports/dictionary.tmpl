@@ -14,12 +14,14 @@
 <div id="bd">
 <div id="yui-main">
 <div class="yui-b">
-
-<div class="details">
+<!-- TMPL_IF NAME="start_dictionary" -->
+<!-- TMPL_INCLUDE NAME="dictionary-toolbar.inc" -->
+<!-- /TMPL_IF -->
 <h1>Dictionary</h1>
 <!-- TMPL_IF NAME="start_dictionary" -->
 <p>Use the dictionary to define custom criteria for reporting.</p>
 
+<!-- TMPL_IF NAME="definitions" -->
 <h2>Current Terms</h2>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 Filter By Area <select name="areas">
@@ -28,9 +30,7 @@ Filter By Area <select name="areas">
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
 </select> 
-<!-- <input name="phase" value="Filter Dictionary" type="submit"> -->
-<input name="phase" value="Add New Definition" type="hidden" />
-<input name="submit" value="Add New Definition" type="submit" />
+<input name="phase" value="Go" type="submit">
 </form>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
@@ -54,66 +54,89 @@ Filter By Area <select name="areas">
 </form></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</table>
+</table><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="new_dictionary" -->
-<h1>Add New Definition</h1>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 
-<p><b>1 Name</b> | 2 Area | 3 Columns | 4 Values</p>
-<table>
-<tr>
-<td>Definition Name:</td>
-<td><input type="text" name="definition_name"></td>
-</tr>
-<td>Definition Description:</td>
-<td><textarea name="definition_description"></textarea></td>
-
-</tr>
-</table>
+<div class="toptabs">
+<ul class="tabs-nav">
+	<li class="tabs-selected"><span class="a">Step 1: Name</span></li>
+	<li><span class="a">Step 2: Area</span></li>
+	<li><span class="a">Step 3: Columns</span></li>
+	<li><span class="a">Step 4: Values</span></li>
+</ul>
+<div class="tabs-container">
+<fieldset class="rows"><legend>Add New Definition</legend><ol>
+<li>
+<label for="definition_name">Definition Name:</label>
+<input type="text" id="definition_name" name="definition_name">
+</li>
+<li>
+<label for="definition_description">Definition Description:</label>
+<textarea name="definition_description" id="definition_description"></textarea>
+</li>
+</ol></fieldset>
 																													  
-<input type="hidden" name="phase" value="New Term step 2" />
-<input name="submit" value="Next" type="submit" />
+<fieldset class="action"><input type="hidden" name="phase" value="New Term step 2" />
+<input name="submit" value="Next" type="submit" /></fieldset>
 </form>
+</div>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_2" -->
-<h1>Add New Definition</h1>
-
-<p>1 Name | <b>2 Area</b> | 3 Columns | 4 Values</p>
+<div class="toptabs">
+<ul class="tabs-nav">
+	<li><span class="a">Step 1: Name</span></li>
+	<li class="tabs-selected"><span class="a">Step 2: Area</span></li>
+	<li><span class="a">Step 3: Columns</span></li>
+	<li><span class="a">Step 4: Values</span></li>
+</ul>
+<div class="tabs-container">
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="phase" value="New Term step 3" />
+<fieldset class="rows">
+<legend>Add New Definition</legend>
+<ol><li><input type="hidden" name="phase" value="New Term step 3" />
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
 <input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->" />
-Select table <select name="areas">
+<label for="areas">Select table </label><select name="areas" id="areas">
 <!-- TMPL_LOOP NAME="areas" -->     
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
-</select>
-                                                                            
-<input name="submit" value="Next" type="submit" />
+</select></li>
+</ol>
+</fieldset>                                                                            
+<fieldset class="action"><input name="submit" value="Next" type="submit" /></fieldset>
 </form>
+</div>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_3" -->
 <h1>Add New Definition</h1>
-
-<p>1 Name | 2 Area | <b>3 Columns</b> | 4 Values</p>
+<div class="toptabs">
+<ul class="tabs-nav">
+	<li><span class="a">Step 1: Name</span></li>
+	<li><span class="a">Step 2: Area</span></li>
+	<li class="tabs-selected"><span class="a">Step 3: Columns</span></li>
+	<li><span class="a">Step 4: Values</span></li>
+</ul>
+<div class="tabs-container">
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
-<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->"> / 
+<input type="hidden" name="definition_description" value="<!-- TMPL_VAR NAME="definition_description" -->" />
 
-<select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
+<table style="border: 0;"><tr><td><select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
 <!-- TMPL_LOOP NAME="columns" -->                              
 <!-- TMPL_IF NAME="table" -->                                                                                                      
 <!-- TMPL_IF NAME="__first__" -->                              
 <!-- TMPL_ELSE -->               
 </optgroup>        
-<!-- /TMPL_IF -->              
-                                                                            
+<!-- /TMPL_IF -->                                                         
 
 <optgroup label="<!-- TMPL_VAR NAME="table"-->">              
 <!-- TMPL_ELSE -->               
@@ -125,21 +148,30 @@ Select table <select name="areas">
 <!-- /TMPL_IF -->              
 </option>      
 <!-- /TMPL_LOOP -->                
-</select>      
-<input type="button" name="Add" value="Add" class="button" onClick="addColumn()" />
+</select></td>
 
-<select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>             
-<input type="button" name="delete" value="delete" class="button" onClick="delColumn()" />           
+<td><input type="button" name="Add" value="Add &gt;&gt;" class="button"  style="width : 6em; margin-bottom : .5em;" onclick="addColumn()" /><br /><input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width : 6em;"  onclick="delColumn()" />  </td>
+
+<td><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
+         
                                                                             
 <input type="hidden" name="phase" value="New Term step 4" />
 <input type="submit" name="submit" value="Next" />  
 </form>    
+</div>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_4" -->
 <h1>Add New Definition</h1>
-
-<p>1 Name | 2 Area | 3 Columns | <b>4 Values</b></p>
+<div class="toptabs">
+<ul class="tabs-nav">
+	<li><span class="a">Step 1: Name</span></li>
+	<li><span class="a">Step 2: Area</span></li>
+	<li><span class="a">Step 3: Columns</span></li>
+	<li class="tabs-selected"><span class="a">Step 4: Values</span></li>
+</ul>
+<div class="tabs-container">
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
 <input type="hidden" name="definition_name" value="<!-- TMPL_VAR NAME="definition_name" -->" />
@@ -206,6 +238,8 @@ align          : "Tl"
 <input type="hidden" name="phase" value="New Term step 5" />
 <input type="submit" name="submit" value="Next" />            
 </form>
+</div>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_5" -->
@@ -217,19 +251,20 @@ align          : "Tl"
 
 <h3>Confirm Definition</h3>
 
-<table>
-<tr>
-<td>Name:</td>
-<td><!-- TMPL_VAR NAME="definition_name" --></td>
-</tr>
-<tr>
-<td>Description:</td>
-<td><!-- TMPL_VAR NAME="definition_description" --></td>
-</tr>
-<tr>
-<td>Area:</td>
-<td><!-- TMPL_VAR NAME="area" --></td>
-</tr>
+<fieldset class="rows"><ol><li>
+<span class="label">Name:</span>
+<!-- TMPL_VAR NAME="definition_name" -->
+</li>
+<li>
+<span class="label">Description:</span>
+<!-- TMPL_VAR NAME="definition_description" -->
+</li>
+<li>
+<span class="label">Area:</span>
+<!-- TMPL_VAR NAME="area" -->
+</li></ol>
+
+<li><table>
 <tr>
 <th>Columns</th>
 <th>Values</th>
@@ -240,17 +275,14 @@ align          : "Tl"
 <td><!-- TMPL_VAR NAME="value" --></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</table>
+</table></li> </fieldset>  
 
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="query" -->" />
+<fieldset class="action"><input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="query" -->" />
 <input type="hidden" name="phase" value="New Term step 6" />
-<input type="submit" name="submit" value="Save" />            
+<input type="submit" name="submit" value="Save" />         </fieldset>
 
 </form>
 <!-- /TMPL_IF -->
-
-
-</div>
 </div>
 </div>
 <div class="yui-b">

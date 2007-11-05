@@ -640,16 +640,17 @@ fieldset.rows .inputnote {
 	list-style : none;
 }
 
-.tabs-nav a, .tabs-nav a span {
+.tabs-nav a, .tabs-nav a span, .tabs-nav span.a {
    background : none;
+	display : block;
 	padding: .2em .5em .25em .5em;
 }
 
-.tabs-nav a {
+.tabs-nav a, .tabs-nav span.a {
     z-index : auto;
 }
 
-.tabs-nav .tabs-selected a {
+.tabs-nav .tabs-selected a, .tabs-nav .tabs-selected span.a {
 	background-color : #FFFFCC;
 	border-top: 1px solid #FFFFCC;
 	border-right: 1px solid #FF9900;
@@ -661,11 +662,11 @@ fieldset.rows .inputnote {
 	top : -1px;
 }
 
-.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
+.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active, .tabs-nav span.a {
     background-position : inherit;
     outline: 0; /* prevent dotted border in Firefox */
 }
-.tabs-nav a, .tabs-nav .tabs-disabled a:hover, .tabs-nav .tabs-disabled a:focus, .tabs-nav .tabs-disabled a:active {
+.tabs-nav a, .tabs-nav .tabs-disabled a:hover, .tabs-nav .tabs-disabled a:focus, .tabs-nav .tabs-disabled a:active, .tabs-nav span.a {
     background-position: inherit;
 }
 
@@ -677,7 +678,7 @@ fieldset.rows .inputnote {
 	background-color : #FFFFCC;
 }
 
-.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
+.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active, .tabs-nav span.a {
 	 background : none;
     outline: 0; /* prevent dotted border in Firefox */
 }
@@ -695,7 +696,7 @@ fieldset.rows .inputnote {
 	margin-top : 1em;
 }
 
-.toptabs .tabs-nav a {
+.toptabs .tabs-nav a, .toptabs .tabs-nav span.a {
     top: 0;
  }
 
@@ -703,7 +704,7 @@ fieldset.rows .inputnote {
 	margin-right : .5em;
 }
 
-.toptabs .tabs-nav li a {
+.toptabs .tabs-nav li a, .toptabs .tabs-nav li span.a {
 	background-color : #F3F3F3;
 	border-top : 1px solid #E8E8E8;
 	border-left : 1px solid #E8E8E8;
@@ -717,7 +718,7 @@ fieldset.rows .inputnote {
 	background-color : #FFF;
 }
 
-.toptabs .tabs-nav li.tabs-selected a {
+.toptabs .tabs-nav li.tabs-selected a, .toptabs .tabs-nav li.tabs-selected span.a {
 	background-color : #FFF;
 	border-top : 1px solid #E8E8E8;
 	border-left : 1px solid #E8E8E8;
@@ -942,25 +943,3 @@ div.first fieldset {
  div.results {
  	padding : .7em 0;
  }
- 
- #section-nav ul {
- 	margin : .5em 0 .5em 2px;
-	padding : 0;
- }
- 
- #section-nav ul li {
- 	display : inline;
-	list-style-type : none;
- }
- 
- #section-nav ul li a {
- 	background-color : #d2e9f5;
-	border : 1px solid #69C;
-	padding : 2px 3px;
-	text-decoration : none;
- } 
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/css/staff-global.css
-
-=======
- 
->>>>>>> Correcting invalid markup in new YUI autocomplete search feature; Correcting and updating markup in guided reports.:koha-tmpl/intranet-tmpl/prog/en/css/staff-global.css
