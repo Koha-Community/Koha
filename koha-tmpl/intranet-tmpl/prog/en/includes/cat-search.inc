@@ -1,5 +1,5 @@
 <!-- Begin Catalogue Resident Search Box -->
-<!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+<!-- TMPL_IF NAME="CircAutocompl" --><!-- TMPL_IF NAME="CAN_user_circulate" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
@@ -42,8 +42,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 }
 });    
 //]]>
-</script><!-- /TMPL_IF -->
+</script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
+	<!-- TMPL_IF NAME="CAN_user_circulate" -->
 	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
@@ -65,8 +66,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<!-- /TMPL_IF -->
     </form>
 	</div>
+	<!-- /TMPL_IF -->
 	
-
+<!-- TMPL_IF NAME="CAN_user_circulate" -->
 <div id="checkin_search" class="residentsearch">
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
@@ -74,7 +76,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         <input value="Submit" type="submit" />
     </form>
 </div>
-	
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
 	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
@@ -82,10 +85,12 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 				<input type="submit" class="form-submit" value="Submit" />
 		</form>
 	</div>
+	<!-- /TMPL_IF -->
+	
 			<ul>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-    <li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li>
-			<li class="tabs-selected"><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
+			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li class="tabs-selected"><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
 <!-- End Catalogue Resident Search Box -->
