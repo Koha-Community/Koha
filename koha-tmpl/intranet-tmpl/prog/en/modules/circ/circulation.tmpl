@@ -96,12 +96,12 @@
     <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
     <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-    <input type="submit" class="approve" value="Yes, Check Out" accesskey="y" />
+    <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
 </form>
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-    <input type="submit" class="deny" value="No, Don't Check Out" accesskey="n" />
+    <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
 </form>
 
 </div></div></div></div>
@@ -665,7 +665,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_ELSE -->
         <tr class="highlight">
     <!-- /TMPL_IF -->
-        <td>
+        <!-- TMPL_IF NAME="od" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
         <!-- TMPL_VAR NAME="dd" -->
         </td>
         <td>
