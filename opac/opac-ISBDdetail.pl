@@ -142,6 +142,7 @@ foreach my $isbdfield ( split /#/, $bloc ) {
             my $tagsubf = $tag . $subfieldcode;
             $calculated =~
         s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+        $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
             }
         
             # field builded, store the result
