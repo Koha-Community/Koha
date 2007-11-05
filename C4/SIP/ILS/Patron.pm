@@ -25,7 +25,7 @@ our (@ISA, @EXPORT_OK);
 
 @EXPORT_OK = qw(invalid_patron);
 
-our %patron_db = (
+our %patron_example = (
 		  djfiander => {
 		      name => "David J. Fiander",
 		      id => 'djfiander',
@@ -70,6 +70,8 @@ warn Dumper($kp);
 	my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
 	my $dob= $kp->{dateofbirth};
 	$dob =~ s/\-//g;
+my $fines_out = GetMemberAccountRecords($kp->{borrowernumber});
+my ($num_cur_issues,$cur_issues) = GetPendingIssues($kp->{borrowernumber});
 
 	my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
 warn "i am debarred: $debarred";
@@ -80,29 +82,29 @@ warn "i am debarred: $debarred";
 		      id => $kp->{cardnumber},
 		      password => $pw,
 		      ptype => $kp->{categorycode}, # 'A'dult.  Whatever.
-		      birthdate => $dob,
+		      birthdate => $kp->{dateofbirth}, ##$dob,
 		      address => $adr,
 		      home_phone => $kp->{phone},
 		      email_addr => $kp->{email},
 		      charge_ok => (!$debarred) , ##  (C4::Context->preference('FinesMode') eq 'charge') || 0,
-		      renew_ok => 0,
-			  recall_ok => 0,
-		      hold_ok => 0,
-		      card_lost => 0,#$kp->{flags}->{LOST},
+		      renew_ok => 1,
+			  recall_ok => 1,
+		      hold_ok => 1,
+		      card_lost => ($kp->{lost} || $kp->{gonenoaddress}) ,
 		      claims_returned => 0,
-		      fines => 0,#$kp->{flags}->{CHARGES},
+		      fines => $fines_out,
 		      fees => 0,
 		      recall_overdue => 0,
 		      items_billed => 0,
-		      screen_msg => '',
+		      screen_msg => 'Greetings from Koha',
 		      print_line => '',
-		      items => [] ,
+		      items => ['one item','itemstring 2'] ,
 		      hold_items => [],#$kp->{flags}->{WAITING}{itemlist}->{biblionumber},
 		      overdue_items =>[], # [$kp->{flags}->{ODUES}{itemlisttext}],   ### FIXME -> this should be array, not texts string.
 		      fine_items => [],
 		      recall_items => [],
 		      unavail_holds => [],
-		      inet => 0,
+		      inet => '',
 			  );
 	} else {
 		syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
