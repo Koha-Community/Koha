@@ -448,6 +448,7 @@ FROM issuingrules
   WHERE categorycode=?
 " );
 #my @issued_itemtypes_count;  # huh?
+my @issued_itemtypes_count_loop;
 $issueqty_sth->execute("*");
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
