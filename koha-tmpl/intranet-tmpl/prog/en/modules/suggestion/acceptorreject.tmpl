@@ -3,15 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript">
  // <![CDATA[
-    /**
-     *  check(form);
-     *  This function check the form before submit it.
-     */
-     /*
-     function check(form){
-        return true;
-     }
-     */
+	
 	/**
 	 *  displayOther.
 	 *  This function display the select or an textaera to write a reason.
@@ -44,25 +36,29 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Suggestions Management</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;<!-- TMPL_IF NAME="op_accepted"--> <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Suggestions Management</a> &rsaquo; Accepted<!-- /TMPL_IF --><!-- TMPL_IF NAME="op_else"--> Suggestions Management<!-- /TMPL_IF --><!-- TMPL_IF NAME="op_rejected"--> <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Suggestions Management</a> &rsaquo; Rejected<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 
-    <h1>Suggestions Management</h1>
-    
-    <div id="action">
-        <a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=accepted">Accepted</a>
-        <a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=aorr_confirm">Waiting</a>
-        <a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=rejected">Rejected</a>
-    </div>
+    <h1>Suggestions</h1>
+	
+    <!-- TMPL_IF NAME="suggestions_loop" -->
+	<div class="toptabs">
+	<ul class="tabs-nav">
+			<!-- TMPL_IF NAME="op_accepted"--><li class="tabs-selected"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=accepted">Accepted</a></li>
+			<!-- TMPL_IF NAME="op_else" --><li class="tabs-selected"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=aorr_confirm">Waiting</a></li>
+			<!-- TMPL_IF NAME="op_rejected"--><li class="tabs-selected"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/suggestion/acceptorreject.pl?op=rejected">Rejected</a></li>
+		</ul>
+	<!-- /TMPL_IF -->
+	
+	<div class="tabs-container">
 
 <!-- TMPL_IF name="op_else" -->
     <!-- TMPL_IF NAME="suggestions_loop" -->
-    <b>Waiting suggestion,</b> accept or reject these suggestions with a reason.
     <form name="f" method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
     <input type="hidden" name="op" value="aorr_confirm" />
     <table>
@@ -73,7 +69,7 @@
             <th>Suggested by</th>
         </tr>
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
-            <tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
+            <!-- TMPL_IF name="even" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                 <td>
                     <select name="aorr">
                         <option value=""> -- Choose Action -- </option>
@@ -84,21 +80,20 @@
                 <td>
 
 		            <span id="span-select-reason<!-- TMPL_VAR NAME="suggestionid" -->" class="content_visible">
-                        <select name="reason<!-- TMPL_VAR name="suggestionid" -->" onchange="displayOther('<!-- TMPL_VAR NAME="suggestionid" -->');">
+                        <!-- TMPL_IF NAME="reasonsloop" --><select name="reason<!-- TMPL_VAR name="suggestionid" -->" onchange="displayOther('<!-- TMPL_VAR NAME="suggestionid" -->');">
 			                <option value=""> -- Choose a reason -- </option>
                             <!-- TMPL_LOOP NAME="reasonsloop" -->
                                 <option value="<!-- TMPL_VAR NAME="lib" -->"><!-- TMPL_VAR NAME="lib" --></option>
                             <!-- /TMPL_LOOP -->
 			                <option value="other">Others...</option>
-                        </select>
-                    <!-- TMPL_UNLESS NAME="reasonsloop"-->
-                        <span class="problem">No reasons defined on</span> <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised value</a>.
-                    <!-- /TMPL_UNLESS -->
+                        </select><!-- TMPL_ELSE --><span class="problem">No reasons defined in <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised values</a></span><!-- /TMPL_IF -->
 		    </span>
+			
 		    <span id="span-other-reason<!-- TMPL_VAR NAME="suggestionid" -->" class="content_hidden">
 			<input type="text" name="other-reason<!-- TMPL_VAR name="suggestionid" -->" value="write your reason here..." onclick="if(this.value === 'write your reason here...'){this.value=''}" />
-			<small><a href="JavaScript:displayOther('<!-- TMPL_VAR NAME="suggestionid" -->');">back to list</a></small>
+			<small><a href="#" onclick="displayOther('<!-- TMPL_VAR NAME="suggestionid" -->'); return false;">back to list</a></small>
 		    </span>
+			
                 </td>
                 <td>
 		<!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
@@ -114,21 +109,14 @@
             </tr>
         <!-- /TMPL_LOOP -->
         </table>
-        <input type="submit" value="Change Status" />
+        <fieldset class="action"><input type="submit" value="Change Status" /></fieldset>
 </form>
 <!-- TMPL_ELSE -->
-    <b>No waiting suggestion to accept or reject.</b>
+    <b>No waiting suggestions to accept or reject.</b>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="done" -->
-    <br />
-    <!-- TMPL_IF NAME="op_accepted"-->
-        <b>Accepted suggestion</b>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="op_rejected"-->
-        <b>Rejected suggestion</b>
-    <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="suggestions_loop" -->
         <table>
@@ -183,16 +171,16 @@
         <!-- /TMPL_LOOP -->
         </table>
     <!-- TMPL_ELSE -->
-        <br /><br />
-        No suggestion has already been 
+	
+		<h4>No suggestions have been 
         <!-- TMPL_IF NAME="op_accepted"-->
             accepted.
         <!-- TMPL_ELSE -->
             rejected.
-        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF --></h4>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-
+</div></div>
 
 </div>
 </div>

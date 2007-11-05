@@ -19,7 +19,7 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc3" class="yui-t2">
    

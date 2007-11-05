@@ -6,9 +6,9 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
@@ -99,32 +99,27 @@
 <!--/TMPL_IF-->
 </div>
     <div id="parcels_new_parcel">
-    <fieldset>
-    <legend>Receive a new Parcel </legend>
         <form method="get" action="parcel.pl">
-        <p>
+    <fieldset class="rows">
+    <legend>Receive a new Parcel</legend>
+       <ol> <li>
+            <label for="invoice">Parcel Code:</label>
             <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-            <label for="invoice">Parcel Code</label>
             <input type="text" size="20" id="invoice" name="invoice" />
-        </p>
-        <p>
-            <label for="gst">GST</label>
+        </li>
+        <li>
+            <label for="gst">GST:</label>
             <input type="text" size="20" id="gst" name="gst" />
-        </p>
-        <p>
-            <label for="freight">Freight</label>
+        </li>
+        <li>
+            <label for="freight">Freight:</label>
             <input type="text" size="20" id="freight" name="freight" />
-        </p>
-        <p>
-            <input type="submit" class="button" value="Save" />
-        </p>
-        </form>
+        </li></ol>
     </fieldset>
+            <fieldset class="action"><input type="submit" class="button" value="Save" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Cancel</a></fieldset>
+        </form>
     </div>
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

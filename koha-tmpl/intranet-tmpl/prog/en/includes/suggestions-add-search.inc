@@ -1,5 +1,6 @@
 <!-- Begin Suggestions Resident Search Box -->
 <!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+//<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
         // Define a custom formatter function
@@ -39,16 +40,17 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         //this.oAutoComp.queryDelay = 1;
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
-});    
-</script><!-- /TMPL_IF -->
+});
+ //]]>
+ </script>  <!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="suggestions_search" class="residentsearch">
 	<p class="tip">Suggestions Search:</p>
 	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
-	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" value="<!-- TMPL_VAR NAME="title"-->" />
-    <label for="searchauthor">Author:</label> <input type="text" id="searchauthor" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
-    <label for="searchpublishercode">Publisher:</label> <input type="text" id="searchpublishercode" name="publishercode" value="<!-- TMPL_VAR NAME="publishercode"-->" />
-    <input type="submit" class="button" value="Search Suggestions" />
+	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="<!-- TMPL_VAR NAME="title"-->" />
+    <label for="searchauthor">Author:</label> <input type="text" id="searchauthor" name="author" size="10" value="<!-- TMPL_VAR NAME="author" -->" />
+    <label for="searchpublishercode">Publisher:</label> <input type="text" id="searchpublishercode" name="publishercode" size="10" value="<!-- TMPL_VAR NAME="publishercode"-->" />
+    <input type="submit" class="button" value="Search" />
         </form>
 	</div>
 	<div id="circ_search" class="residentsearch">
@@ -80,7 +82,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 		</form>
 	</div>
 			<ul>
-			<li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->#suggestions_search">Search Printers</a></li>
+			<li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="supplierid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->#suggestions_search">Search Suggestions</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
 			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	

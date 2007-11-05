@@ -6,7 +6,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="suggestions-add-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Add order from a suggestion</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Shopping Basket <!-- TMPL_VAR NAME="basketno" --></a> &rsaquo; Add order from a suggestion</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,9 +15,8 @@
 	<div class="yui-b">
 	
 <h1>Suggestions</h1>
-<div id="acqui_suggestion_select">
-    <form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
-    <table>
+    <!-- TMPL_IF NAME="suggestions_loop" -->
+	<table>
         <tr>
             <th>Suggestion</th>
             <th>Suggested by</th>
@@ -54,9 +53,7 @@
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
-    </table>
-    </form>
-</div>
+    </table><!-- TMPL_ELSE -->There are no outstanding suggestions.<!-- /TMPL_IF -->
 </div>
 </div>
 <div class="yui-b">
