@@ -28,9 +28,8 @@
   </listeners>
 
   <accounts>
-      <login id="koha" password="koha" institution="kohalibrary">
-      </login>
-      <login id="koha2" password="koha2" institution="kohalibrary" />
+      <login id="koha" password="koha" delimiter="|" error-detect="enabled" institution="kohalibrary" />
+      <login id="koha2" password="koha" institution="kohalibrary2" />
       <login id="lpl-sc" password="1234" institution="LPL" />
       <login id="lpl-sc-beacock" password="xyzzy"
              delimiter="|" error-detect="enabled" institution="LPL" />
@@ -45,6 +44,11 @@
     <institution id="kohalibrary" implementation="ILS" parms="">
           <policy checkin="true" renewal="false"
 	  	  status_update="false" offline="false"
+		  timeout="600"
+	  	  retries="5" />
+    </institution>
+    <institution id="kohalibrary2" implementation="ILS" parms="">
+          <policy checkin="true" renewal="false"
 		  timeout="600"
 	  	  retries="3" />
     </institution>

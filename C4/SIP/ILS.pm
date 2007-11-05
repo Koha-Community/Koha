@@ -1,5 +1,5 @@
 #
-# ILS.pm: Test ILS interface module
+# ILS.pm: Koha ILS interface module
 #
 
 package ILS;
@@ -43,7 +43,9 @@ sub new {
     my ($class, $institution) = @_;
     my $type = ref($class) || $class;
     my $self = {};
-
+use Data::Dumper;
+warn " INSTITUTION:";
+warn Dumper($institution);
     syslog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
     $self->{institution} = $institution;
 

@@ -125,8 +125,7 @@ sub raw_transport {
 	    alarm $service->{timeout};
 	    $input = Sip::read_SIP_packet(*STDIN);
 	    alarm 0;
-
-	    if (!$input) {
+	if (!$input) {
 		# EOF on the socket
 		syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
 		return;
@@ -169,7 +168,6 @@ sub telnet_transport {
 	local $SIG{ALRM} = sub { die "alarm\n"; };
 	local $|;
 	my $timeout = 0;
-
 	$| = 1;			# Unbuffered output
 	$timeout = $config->{timeout} if (exists($config->{timeout}));
 
@@ -229,7 +227,6 @@ sub sip_protocol_loop {
     my $service = $self->{service};
     my $config = $self->{config};
     my $input;
-
     # Now that the terminal has logged in, the first message
     # we recieve must be an SC_STATUS message.  But it might be
     # an SC_REQUEST_RESEND.  So, as long as we keep receiving
@@ -253,7 +250,7 @@ sub sip_protocol_loop {
 
 	$status = Sip::MsgType::handle($input, $self, $expect);
 	next if $status eq REQUEST_ACS_RESEND;
-
+#### stopped here rch
 	if (!$status) {
 	    syslog("LOG_ERR", "raw_transport: failed to handle %s",
 		   substr($input, 0, 2));

@@ -14,6 +14,11 @@ use Exporter;
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
+use C4::Context;
+use C4::Koha;
+use C4::Members;
+use Digest::MD5 qw(md5_base64);
+
 our (@ISA, @EXPORT_OK);
 
 @ISA = qw(Exporter);
@@ -50,51 +55,64 @@ our %patron_db = (
 		      unavail_holds => [],
 		      inet => 1,
 		  },
-		  miker => {
-		      name => "Mike Rylander",
-		      id => 'miker',
-		      password => '6789',
-		      ptype => 'A', # 'A'dult.  Whatever.
-		      birthdate => '19640925',
-		      address => 'Somewhere in Atlanta',
-		      home_phone => '(404) 555 1235',
-		      email_addr => 'mrylander@gmail.com',
-		      charge_ok => 1,
-		      renew_ok => 1,
-		      recall_ok => 0,
-		      hold_ok => 1,
-		      card_lost => 0,
-		      claims_returned => 0,
-		      fines => 0,
-		      fees => 0,
-		      recall_overdue => 0,
-		      items_billed => 0,
-		      screen_msg => '',
-		      print_line => '',
-		      items => [],
-		      hold_items => [],
-		      overdue_items => [],
-		      fine_items => [],
-		      recall_items => [],
-		      unavail_holds => [],
-		      inet => 0,
-		  },
 		  );
 
 sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
+my %ilspatron;
+	my $kp = GetMember($patron_id,'cardnumber');
+warn "THIS IS what we et from getmember...";
+use Data::Dumper;
+warn Dumper($kp);
+    if ($kp) {
+	my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
+	my $dob= $kp->{dateofbirth};
+	$dob =~ s/\-//g;
 
-    if (!exists($patron_db{$patron_id})) {
-	syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
-	return undef;
+	my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
+warn "i am debarred: $debarred";
+#warn Dumper(%{$kp->{flags}});
+	my $adr = $kp->{streetnumber} . " ". $kp->{address}; 
+		%ilspatron = (
+		      name => $kp->{firstname} . " " . $kp->{surname},
+		      id => $kp->{cardnumber},
+		      password => $pw,
+		      ptype => $kp->{categorycode}, # 'A'dult.  Whatever.
+		      birthdate => $dob,
+		      address => $adr,
+		      home_phone => $kp->{phone},
+		      email_addr => $kp->{email},
+		      charge_ok => (!$debarred) , ##  (C4::Context->preference('FinesMode') eq 'charge') || 0,
+		      renew_ok => 0,
+			  recall_ok => 0,
+		      hold_ok => 0,
+		      card_lost => 0,#$kp->{flags}->{LOST},
+		      claims_returned => 0,
+		      fines => 0,#$kp->{flags}->{CHARGES},
+		      fees => 0,
+		      recall_overdue => 0,
+		      items_billed => 0,
+		      screen_msg => '',
+		      print_line => '',
+		      items => [] ,
+		      hold_items => [],#$kp->{flags}->{WAITING}{itemlist}->{biblionumber},
+		      overdue_items =>[], # [$kp->{flags}->{ODUES}{itemlisttext}],   ### FIXME -> this should be array, not texts string.
+		      fine_items => [],
+		      recall_items => [],
+		      unavail_holds => [],
+		      inet => 0,
+			  );
+	} else {
+		syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
+		return undef;
     }
 
-    $self = $patron_db{$patron_id};
+    $self =  \%ilspatron;
+	warn Dumper($self);
 
-    syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,
-	   $self->{id});
+    syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
 
     bless $self, $type;
     return $self;
@@ -186,10 +204,9 @@ sub recall_overdue {
 
 sub check_password {
     my ($self, $pwd) = @_;
+	my $md5pwd=$self->{password};  ### FIXME -  we're allowing access if user has no password.
 
-    # If the patron doesn't have a password,
-    # then we don't need to check
-    return (!$self->{password} || ($pwd && ($self->{password} eq $pwd)));
+return (!$self->{password} ||  md5_base64($pwd) eq $md5pwd );
 }
 
 sub currency {
