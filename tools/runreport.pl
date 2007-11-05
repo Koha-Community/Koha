@@ -2,6 +2,7 @@
 
 # fix this line
 use C4::Reports;
+use C4::Context;
 
 use Mail::Sendmail;
 
@@ -21,7 +22,7 @@ if ($format eq 'url'){
 if ($email){
 	my $to      = $email;
 	# should be koha admin email
-    my $from    = 'crc@liblime.com';
+    my $from    = C4::Context->preference('KohaAdminEmailAddress');
     my $subject = 'Automated job run';
     my %mail    = (
 		        To      => $to,
