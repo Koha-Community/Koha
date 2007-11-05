@@ -14,6 +14,8 @@ use Sys::Syslog qw(syslog);
 
 use ILS::Transaction;
 
+use C4::Biblio;
+
 our %item_db = (
 		'1565921879' => {
 				 title => "Perl 5 desktop reference",
@@ -42,14 +44,16 @@ sub new {
     my ($class, $item_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-
-
-    if (!exists($item_db{$item_id})) {
-	syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
-	return undef;
+	my $item = GetBiblioFromItemNumber( GetItemnumberFromBarcode($item_id) );
+	
+    if (! $item) {
+		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
+		warn "no item $item_id";
+		return undef;
     }
+    $item->{'id'} = $item->{'barcode'};
+    $self = $item;
 
-    $self = $item_db{$item_id};
     bless $self, $type;
 
     syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",

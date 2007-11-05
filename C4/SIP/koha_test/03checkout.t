@@ -89,11 +89,11 @@ my $test;
 ## Test this by checking out exactly the same book a second time.
 ## The only difference should be that the "Renewal OK" flag should now
 ## be 'Y'.
-#$test = clone($checkout_test_template);
-#$test->{id} = 'Checkout: patron renewal';
-#$test->{pat} = qr/^121YNY$datepat/;
-#
-#push @tests, $test;
+$test = clone($checkout_test_template);
+$test->{id} = 'Checkout: patron renewal';
+$test->{pat} = qr/^121YNY$datepat/;
+
+push @tests, $test;
 
 # NOW check it in
 

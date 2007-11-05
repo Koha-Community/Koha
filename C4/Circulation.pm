@@ -680,7 +680,7 @@ sub CanBookBeIssued {
 
     # DEBTS
     my ($amount) =
-      GetMemberAccountRecords( $borrower->{'borrowernumber'}, $duedate );
+      C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, $duedate );
     if ( C4::Context->preference("IssuingInProcess") ) {
         my $amountlimit = C4::Context->preference("noissuescharge");
         if ( $amount > $amountlimit && !$inprocess ) {
@@ -761,7 +761,7 @@ sub CanBookBeIssued {
     }
 
     # See if the item is on reserve.
-    my ( $restype, $res ) = CheckReserves( $item->{'itemnumber'} );
+    my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
         my $resbor = $res->{'borrowernumber'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
@@ -842,6 +842,8 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
 #   my ($borrower, $flags) = &GetMemberDetails($borrowernumber, 0);
     # find which item we issue
     my $item = GetItem('', $barcode);
+	
+	my $datedue;
     
     # get actual issuing if there is one
     my $actualissue = GetItemIssue( $item->{itemnumber});
@@ -888,7 +890,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
 
         # See if the item is on reserve.
         my ( $restype, $res ) =
-          CheckReserves( $item->{'itemnumber'} );
+          C4::Reserves::CheckReserves( $item->{'itemnumber'} );
         if ($restype) {
             my $resbor = $res->{'borrowernumber'};
             if ( $resbor eq $borrower->{'borrowernumber'} ) {
@@ -964,7 +966,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
             $itype,
             $borrower->{'branchcode'}
         );
-        my $datedue  = time + ($loanlength) * 86400;
+        $datedue  = time + ($loanlength) * 86400;
         my @datearr  = localtime($datedue);
         my $dateduef =
             sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]);
@@ -1019,6 +1021,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
     
     &logaction(C4::Context->userenv->{'number'},"CIRCULATION","ISSUE",$borrower->{'borrowernumber'},$biblio->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
+    return ($datedue);
   }  
 }
 
@@ -1619,8 +1622,8 @@ sub AddRenewal {
     if ( $datedue eq "" ) {
 
         my $biblio = GetBiblioFromItemNumber($itemnumber);
-        my $borrower = GetMemberDetails( $borrowernumber, 0 );
-		my $loanlength = GetLoanLength(
+        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
+        my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
              (C4::Context->preference('item-level_itypes')) ? $biblio->{'ccode'} : $biblio->{'itemtype'} ,
 			$borrower->{'branchcode'}

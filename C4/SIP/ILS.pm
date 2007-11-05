@@ -19,7 +19,7 @@ use ILS::Transaction::Renew;
 use ILS::Transaction::RenewAll;
 
 my %supports = (
-		'magnetic media'	=> 0,
+		'magnetic media'	=> 1,
 		'security inhibit'	=> 0,
 		'offline operation'	=> 0,
 		"patron status request" => 1,
@@ -43,9 +43,9 @@ sub new {
     my ($class, $institution) = @_;
     my $type = ref($class) || $class;
     my $self = {};
-use Data::Dumper;
-warn " INSTITUTION:";
-warn Dumper($institution);
+#use Data::Dumper;
+#warn " INSTITUTION:";
+#warn Dumper($institution);
     syslog("LOG_DEBUG", "new ILS '%s'", $institution->{id});
     $self->{institution} = $institution;
 
@@ -54,13 +54,13 @@ warn Dumper($institution);
 
 sub find_patron {
     my $self = shift;
-
+warn "finding patron";
     return ILS::Patron->new(@_);
 }
 
 sub find_item {
     my $self = shift;
-
+warn "find item";
     return ILS::Item->new(@_);
 }
 
@@ -135,34 +135,44 @@ sub checkout {
     my ($patron, $item, $circ);
 
     $circ = new ILS::Transaction::Checkout;
-
+warn "checking out";
     # BEGIN TRANSACTION
     $circ->patron($patron = new ILS::Patron $patron_id);
     $circ->item($item = new ILS::Item $item_id);
 
     if (!$patron) {
-	$circ->screen_msg("Invalid Patron");
+		$circ->screen_msg("Invalid Patron");
     } elsif (!$patron->charge_ok) {
-	$circ->screen_msg("Patron Blocked");
+		$circ->screen_msg("Patron Blocked");
     } elsif (!$item) {
-	$circ->screen_msg("Invalid Item");
-    } elsif (@{$item->hold_queue} && ($patron_id ne $item->hold_queue->[0])) {
-	$circ->screen_msg("Item on Hold for Another User");
+		$circ->screen_msg("Invalid Item");
+    } elsif ($item->hold_queue && @{$item->hold_queue} && ($patron_id ne $item->hold_queue->[0])) {
+		$circ->screen_msg("Item on Hold for Another User");
     } elsif ($item->{patron} && ($item->{patron} ne $patron_id)) {
 	# I can't deal with this right now
-	$circ->screen_msg("Item checked out to another patron");
+		$circ->screen_msg("Item checked out to another patron");
     } else {
-	$circ->ok(1);
-	# If the item is already associated with this patron, then
-	# we're renewing it.
-	$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
-	$item->{patron} = $patron_id;
-	$item->{due_date} = time + (14*24*60*60); # two weeks
-	push(@{$patron->{items}}, $item_id);
-	$circ->desensitize(!$item->magnetic);
+		$circ->do_checkout();
+		if ($circ->ok){
+			warn "circ is ok";
+			# If the item is already associated with this patron, then
+			# we're renewing it.
+			$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
+		
+			$item->{patron} = $patron_id;
+		$item->{due_date} = time + (14*24*60*60); # two weeks
+#			$item->{due_date} = $circ->{due};
+			warn "$item->{due_date}";
+			push(@{$patron->{items}}, $item_id);
+			$circ->desensitize(!$item->magnetic);
 
-	syslog("LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
-	       $patron_id, join(', ', @{$patron->{items}}));
+			syslog("LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
+				$patron_id, join(', ', @{$patron->{items}}));
+		}
+		else {
+			syslog("LOG_DEBUG", "ILS::Checkout Issue failed");
+			
+		}
     }
 
     # END TRANSACTION
@@ -208,7 +218,7 @@ sub pay_fee {
     my $trans;
     my $patron;
 
-    $trans = new ILS::Transaction::FeePayment;
+#    $trans = new ILS::Transaction::FeePayment;
 
     $patron = new ILS::Patron $patron_id;
 

@@ -59,8 +59,8 @@ our $user_ptype   = 'A';
 our $user_inet    = 'N';
 
 # Valid item barcode and corresponding title
-our $item_barcode = '26000204';
-our $item_title   = 'A community of writers :';
+our $item_barcode = '37000000012023';
+our $item_title   = 'The not-just-anybody family.';
 our $item_owner   = 'kohalibrary';
 
 # Another valid item
