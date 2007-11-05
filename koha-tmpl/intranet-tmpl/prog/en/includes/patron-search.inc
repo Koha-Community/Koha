@@ -10,7 +10,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             var city        = oResultItem[3];
             var zip         = oResultItem[4];
             var aMarkup = [
-                "<div class='sample-result'>",
+                "<div class=\"sample-result\">",
                 name,
                 " (",
                 cardnumber,
@@ -62,7 +62,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit">
+                <input id="ysearchsubmit" type="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>

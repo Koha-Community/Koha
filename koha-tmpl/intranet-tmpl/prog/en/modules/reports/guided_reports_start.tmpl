@@ -1,8 +1,37 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports &rsaquo; Guided Reports<!-- TMPL_IF NAME="create" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Create from SQL</strong><!-- /TMPL_IF --></title>
-
+<title>Koha &rsaquo; Reports <!-- TMPL_IF NAME="start" --> &rsaquo; Guided Reports Wizard <!-- /TMPL_IF --><!-- TMPL_IF NAME="saved1" --> &rsaquo; Guided Reports Wizard &rsaquo; Saved Reports<!-- /TMPL_IF --><!-- TMPL_IF NAME="create" --> &rsaquo; Guided Reports Wizard &rsaquo; Create from SQL<!-- /TMPL_IF --><!-- TMPL_IF NAME="showsql" -->
+ &rsaquo; Guided Reports Wizard &rsaquo; Saved Reports &rsaquo; SQL View<!-- /TMPL_IF --><!-- TMPL_IF NAME="execute" --> &rsaquo; Guided Reports Wizard &rsaquo; Saved Reports &rsaquo; <!-- TMPL_VAR NAME="name" --> Report<!-- /TMPL_IF --><!-- TMPL_IF NAME="build1" -->&rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 1: Choose a Module<!-- /TMPL_IF --><!-- TMPL_IF NAME="build2" -->&rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 2: Pick a Report Type<!-- /TMPL_IF --><!-- TMPL_IF NAME="build3" -->&rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 3 of 6: Select Columns for Display<!-- /TMPL_IF --><!-- TMPL_IF NAME="build4" --> &rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 4 of 6: Select Criteria to Limit on<!-- /TMPL_IF --><!-- TMPL_IF NAME="build5" --> &rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 5 of 6: Pick which columns to total<!-- /TMPL_IF --><!-- TMPL_IF NAME="build6" -->&rsaquo; Guided Reports Wizard &rsaquo; Build A Report, Step 6 of 6: Select how you want the report ordered<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<!-- TMPL_IF NAME="saved1" -->
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$(".confirmdelete").click(function(){
+		$(this).parents('tr').attr("class","warn");
+		if(confirm("Are you sure you want to "+$(this).attr("title")+"?")){
+			return false;
+		} else {
+			$(this).parents('tr').attr("class","");
+			return false;
+		}
+	});
+});
+//]]>
+ </script>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="showsql" -->
+<style type="text/css">
+	#sql { width: 90%; height: 9em; border: 1px solid #EEE; }
+</style>
+
+<script type="text/javascript">
+ $(document).ready(function() {
+ 	$("#sql").focus(function() {
+		$(this).select();
+		});
+ });
+ </script><!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -10,7 +39,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a><!-- TMPL_IF NAME="start" --> &rsaquo; <strong>Guided Reports Wizard </strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="saved1" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Saved Reports</strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="create" --> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <strong>Create from SQL</strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="showsql" -->
- &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; Saved Reports &rsaquo; <strong>SQL View</strong><!-- /TMPL_IF --></div>
+ &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used%20saved">Saved Reports</a> &rsaquo; <strong>SQL View</strong><!-- /TMPL_IF --><!-- TMPL_IF NAME="execute" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used%20saved">Saved Reports</a> &rsaquo; <em><!-- TMPL_VAR NAME="name" --></em> Report<!-- /TMPL_IF --><!-- TMPL_IF NAME="build1" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; Build A Report, Step 1: Choose a Module<!-- /TMPL_IF --><!-- TMPL_IF NAME="build2" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a>, Step 2: Pick a Report Type<!-- /TMPL_IF --><!-- TMPL_IF NAME="build3" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a>, Step 3 of 6: Select Columns for Display<!-- /TMPL_IF --><!-- TMPL_IF NAME="build4" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a>, Step 4 of 6: Select Criteria to Limit on<!-- /TMPL_IF --><!-- TMPL_IF NAME="build5" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a>, Step 5 of 6: Pick which columns to total<!-- /TMPL_IF --><!-- TMPL_IF NAME="build6" -->&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a>, Step 6 of 6: Select how you want the report ordered<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t1">
 
@@ -50,7 +79,7 @@ reports</p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="saved1" -->
-<h1>Saved Reports</h1>
+<!-- TMPL_IF NAME="savedreports" --><h1>Saved Reports</h1>
 <p>Choose the report to run from the list</p>
 <table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
@@ -62,63 +91,71 @@ reports</p>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Show%20SQL">Show SQL</a></td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
+<td><a class="confirmdelete" title="delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
 </form>
-</table>
+</table><!-- TMPL_ELSE --><h4>There are no saved reports. <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a></h4><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="build1" -->
 <h1>Build A Report</h1>
-<h3>Step 1 of 6: Choose a Module to Report on</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
-<select name="areas">
+<fieldset class="rows">
+<legend>Step 1 of 6: Choose a Module to Report on</legend>
+<ol><li><label for="areas">Choose: </label><select name="areas" id="areas">
 <!-- TMPL_LOOP NAME="areas" -->
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
 <!-- /TMPL_LOOP -->
-</select>
-<br />
-<input type=button value="Back" onClick="history.go(-1)">
+</select></li></ol>
+</fieldset>
+<fieldset class="action">
 <input type="hidden" name="phase" value="Report on this Area">
-<input type="submit" name="submit" value="Report on this Area">
+<input type="submit" name="submit" value="Next &gt;&gt;">
+
+</fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="build2" -->
 <h1>Build A Report</h1>
-<h3>Step 2 of 6: Pick a Report Type</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<select name="types">
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<fieldset class="rows"><legend>Step 2 of 6: Pick a Report Type</legend>
+<ol><li><label for="types">Choose: </label><select name="types" id="types">
 <!-- TMPL_LOOP NAME="types" -->
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
 <!-- /TMPL_LOOP -->
-</select>
-<br />
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Choose this type">
-<input type="submit" name="submit" value="Choose this type">
-<br />
+</select></li></ol></fieldset>
+
+<fieldset class="action">
+<input type="hidden" name="phase" value="Choose this type" />
+<input type="submit" name="submit" value="Next &gt;&gt;"></fieldset>
 </form>
-Tabular:
-<img src="/intranet-tmpl/prog/img/reports-tabular-graphic.gif" />
+</div>
+<div class="yui-gb"><div class="yui-u first">Tabular:
+<img src="/intranet-tmpl/prog/img/reports-tabular-graphic.gif" /></div>
+
 <!--- Summary and Matrix reports have not yet been implemented-->
-<!--Summary:
-<img src="/intranet-tmpl/prog/img/reports-summary-graphic.gif" />
-Matrix:
-<img src="/intranet-tmpl/prog/img/reports-matrix-graphic.gif" />-->
+<!--<div class="yui-u">Summary:
+<img src="/intranet-tmpl/prog/img/reports-summary-graphic.gif" /></div>
+<div class="yui-u">Matrix:
+<img src="/intranet-tmpl/prog/img/reports-matrix-graphic.gif" /></div>-->
 
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="build3" -->
 <h3>Step 3 of 6: Select Columns for Display</h3>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
+</div>
+
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-	<select id="availableColumns" name="oldcolumns2" multiple size="25" style="width:200px;height:300px;">
+	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+	<fieldset>
+<div class="yui-g">
+<div class="yui-u first">	<div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple size="25" style="width:200px;height:300px;">
 <!-- TMPL_LOOP NAME="columns" -->
 <!-- TMPL_IF NAME="table" -->
 
@@ -137,33 +174,41 @@ Matrix:
 <!-- /TMPL_IF -->
 </option>
 <!-- /TMPL_LOOP -->
-</select>
-<input type="button" name="Add" value="Add" class="button" onClick="addColumn()"/>
-<select id="selectedColumns" name="columns" multiple size="25" style="width:200px;height:300px;"></select>
-<input type="button" name="delete" value="delete" class="button" onClick="delColumn()"/>
+</select></div>
+<div style="width: 6.3em; float: right; margin-top: 100px"><input type="button" name="Add" value="Add &gt;&gt;" class="button" style="width:6em;" onclick="addColumn()" /><br />
+<input type="button" name="delete" value="&lt;&lt; Remove" class="button" style="width: 6em; margin: 1em 0;" onclick="delColumn()" /></div>
+</div>
 
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Choose these columns">
-<input type="submit" name="submit" value="Choose these columns">
+<div class="yui-u">
+<select id="selectedColumns" name="columns" multiple size="25" style="width:200px;height:300px;"></select>
+</div>
+</div>
+</fieldset>
+<div class="yui-g">
+<fieldset class="action">
+<input type="hidden" name="phase" value="Choose these columns" />
+<input type="submit" name="submit" value="Next &gt;&gt;" />
+</fieldset>
 </form>
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="build4" -->
-<h3>Step 4 of 6: Select Criteria to Limit on </h3>
-
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
-<table>
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->" />
+<fieldset><legend>Step 4 of 6: Select Criteria to Limit on</legend><table>
 <!-- TMPL_LOOP NAME="criteria" -->
-<tr><td><input type=checkbox name="criteria_column" value="<!-- TMPL_VAR
-NAME="name" -->"> <!-- TMPL_VAR NAME="description" --> 
+<tr><td><input type="checkbox" name="criteria_column" id="<!-- TMPL_VAR
+NAME="name" -->" value="<!-- TMPL_VAR
+NAME="name" -->" /> <label for="<!-- TMPL_VAR
+NAME="name" -->"><!-- TMPL_VAR NAME="description" --> </label>
 </td>
 <!-- TMPL_IF NAME="date" -->
 <td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name"
 -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value=""
-><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />                 
+/><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
 <script type="text/javascript">   
 Calendar.setup({  
 inputField     : "<!-- TMPL_VAR NAME="name" -->_value",                               
@@ -182,37 +227,37 @@ align          : "Tl"
 </td></tr>
 <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-</table><br />
+</table></fieldset>
+
 <!-- TMPL_IF NAME="definitions" -->
-<h4>Dictionary Definitions</h4> <br />
-<table>
+<fieldset><legend>Dictionary Definitions</legend><table>
 <!-- TMPL_LOOP NAME="definitions" -->
-
-       <tr><td><input type=checkbox name="definition" value="<!--
-TMPL_VAR NAME="id" -->"> <!-- TMPL_VAR NAME="name" --></td></tr>
-
+       <tr><td><input type="checkbox" name="definition" value="<!--
+TMPL_VAR NAME="id" -->" /> <!-- TMPL_VAR NAME="name" --></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Choose these criteria">
-<input type="submit" name="submit" value="Choose these criteria">
-</form>
+
+<fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
+<input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
+</form></fieldset>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="build5" -->
 <h3>Step 5 of 6: Pick which columns to total</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
-<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
-<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
-<table>
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->" />
+<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->" />
+<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->" />
+<fieldset><table>
 <!-- TMPL_LOOP NAME="total_by" -->
-<tr><td><input type=checkbox name="total_by" value="<!-- TMPL_VAR
-NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td>
+<tr><td><input type="checkbox" name="total_by" id="<!-- TMPL_VAR
+NAME="name" -->" value="<!-- TMPL_VAR
+NAME="name" -->" /> <label for="<!-- TMPL_VAR
+NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td>
 <td><select name="<!-- TMPL_VAR NAME="name" -->_tvalue">
 
 <!-- TMPL_LOOP NAME="select" -->
@@ -222,26 +267,28 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td>
 
 </td></tr>
 <!-- /TMPL_LOOP -->
-</table>
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Choose These Operations">
-<input type="submit" name="submit" value="Choose These Operations">
+</table></fieldset>
+
+<fieldset class="action"><input type="hidden" name="phase" value="Choose These Operations" />
+<input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="build6" -->
-<h3>Step 6 of 6: Select how you want the report ordered</h3>
+<h3>Step 6 of 6: Choose how you want the report ordered</h3>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->">
-<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->">
-<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->">
-<input type="hidden" name="totals" value="<!-- TMPL_VAR NAME="totals" -->">
-<table><!-- TMPL_LOOP NAME="order_by" -->
-<tr><td><input type=checkbox name="order_by" value="<!-- TMPL_VAR
-NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
+<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->" />
+<input type="hidden" name="criteria" value="<!-- TMPL_VAR NAME="criteriastring" -->" />
+<input type="hidden" name="definition" value="<!-- TMPL_VAR NAME="definition" -->" />
+<input type="hidden" name="totals" value="<!-- TMPL_VAR NAME="totals" -->" />
+<fieldset><table><!-- TMPL_LOOP NAME="order_by" -->
+<tr><td><input type="checkbox" id="<!-- TMPL_VAR
+NAME="name" -->" name="order_by" value="<!-- TMPL_VAR
+NAME="name" -->" /> <label for="<!-- TMPL_VAR
+NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 <select name="<!-- TMPL_VAR NAME="name" -->_ovalue">
 
 <!-- TMPL_LOOP NAME="select" -->
@@ -251,62 +298,64 @@ NAME="name" -->"> <!-- TMPL_VAR NAME="name"--></td><td>
 </td></tr>
 
 <!-- /TMPL_LOOP -->
-</table>
-<br />
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Build Report">
-<input type="submit" name="submit" value="Build Report">
+</table></fieldset>
+
+<fieldset class="action">
+<input type="hidden" name="phase" value="Build Report" />
+<input type="submit" name="submit" value="Finish" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="showreport" -->
 <h1>Confirm Custom Report</h1>
-<p>Your report will be generated with the following SQL statement.
+<p>Your report will be generated with the following SQL statement.</p>
 <p> 
 <!-- TMPL_VAR NAME="sql" -->
 </p>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <p>You will need to save the report before you can execute it</p>
-<input type=button value="Back" onClick="history.go(-1)">
-<input type="hidden" name="phase" value="Save">  
-<input type="submit" name="submit" value="Save">  
+<fieldset class="action"><input type="hidden" name="phase" value="Save" />  
+<input type="submit" name="submit" value="Save" />  </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="save" -->
-<h1>Save Your Custom Report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-Report Name: <input type="text" name="reportname"> <br />
-Notes: <textarea name="notes"></textarea><br />
-<input type="hidden" name="phase" value="Save Report">
-<input type="submit" name="submit" value="Save Report">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<fieldset class="rows">
+<legend>Save Your Custom Report</legend>
+<ol>
+	<li><label for="reportname">Report Name: </label><input type="text" id="reportname" name="reportname" /></li>
+	<li><label for="notes">Notes:</label> <textarea name="notes" id="notes"></textarea></li>
+</ol></fieldset>
+<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
+<input type="submit" name="submit" value="Save Report" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="execute" -->
-<h1>Show results</h1>
-<h2><!-- TMPL_VAR NAME="name" --></h2>
+<h1><!-- TMPL_VAR NAME="name" --></h1>
 <p><!-- TMPL_VAR NAME="notes" --></p>
 <table>
 <!-- TMPL_LOOP NAME="results" -->
 <!-- TMPL_VAR NAME="row" -->
 <!-- /TMPL_LOOP -->
-<p>Download the report</p>
 </table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<select name="format">
+<fieldset class="action">
+<label for="format">Download the report: </label>
+<select name="format" id="format">
 <option value="csv">Comma Separated Text</option>
 <option value="tab">Tab Separated Text</option>
 </select>
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->">
-<input type="hidden" name="phase" value="Export">
-<input type="submit" name="submit" value="Export">
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="phase" value="Export" />
+<input type="submit" name="submit" value="Download" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -322,7 +371,8 @@ Notes: <textarea name="notes"></textarea><br />
 </ol>
 </fieldset>
 
-<fieldset class="action"><input type="hidden" name="phase" value="Save Report" /><input type="submit" name="submit" value="Save Report" /></fieldset>
+<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
+<input type="submit" name="submit" value="Save Report" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -364,12 +414,10 @@ Sub report:<select name="subreport">
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="showsql" -->
-<!-- TMPL_VAR NAME="sql" -->
+<textarea id="sql"><!-- TMPL_VAR NAME="sql" --></textarea>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="save_successful" -->
-<!-- TMPL_VAR NAME="sql" -->
-<h1>Save Your Custom Report</h1>
 <h2>Your report has been saved</h2>
 <p>The report you have created has now been saved. You can now</p>
 <ul>

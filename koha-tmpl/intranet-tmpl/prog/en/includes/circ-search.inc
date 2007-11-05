@@ -1,6 +1,7 @@
 <!-- Begin Circulation Resident Search Box -->
 
 <!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+//<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
         // Define a custom formatter function
@@ -11,7 +12,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             var city        = oResultItem[3];
             var zip         = oResultItem[4];
             var aMarkup = [
-                "<div class='sample-result'>",
+                "<div class=\"sample-result\">",
                 name,
                 " (",
                 cardnumber,
@@ -41,6 +42,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
 });    
+//]]>
 </script><!-- /TMPL_IF -->
 
 <div id="header_search">
@@ -53,7 +55,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit">
+                <input id="ysearchsubmit" type="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>
