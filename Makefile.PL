@@ -17,7 +17,8 @@
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
 # See http://www.koha.org/wiki/?page=KohaInstaller
-
+#
+# 2007-11-05 Corrected CGI copy to include entire 'installer' subdir structure. -fbcit
 use ExtUtils::MakeMaker;
 use POSIX;
 
@@ -208,7 +209,7 @@ CGIs are copied to $(PREFIX)/lib/cgi-bin/koha/
 and other scripts to koha/
 
 =cut
-	foreach my $src ("mainpage.pl","help.pl",glob("*/*.pl"),glob("installer/*.pm"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
+	foreach my $src ("mainpage.pl","help.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
 		} else {
