@@ -387,6 +387,7 @@ my $issued_itemtypes_count;
 my $issued_itemtypes_allowed_count;    # hashref with total allowed by itemtype
 my $issued_itemtypes_remaining;        # hashref with remaining
 my $issued_itemtypes_flags;            #hashref that stores flags
+my @issued_itemtypes_count_loop;
 
 if ($borrower) {
 
@@ -450,6 +451,7 @@ FROM issuingrules
 #my @issued_itemtypes_count;  # huh?
 my @issued_itemtypes_count_loop;
 $issueqty_sth->execute("*");
+
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
     # subtract how many of each this borrower has
