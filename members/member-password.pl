@@ -88,4 +88,6 @@ if ( $newpassword ) {
 
 }
 
+$template->param( member => $member);
+
 output_html_with_http_headers $input, $cookie, $template->output;

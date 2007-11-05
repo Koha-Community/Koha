@@ -61,21 +61,20 @@ sub new {
     my ($class, $patron_id) = @_;
     my $type = ref($class) || $class;
     my $self;
-my %ilspatron;
+	my %ilspatron;
 	my $kp = GetMember($patron_id,'cardnumber');
-use Data::Dumper;
-warn Dumper($kp);
+#	use Data::Dumper;
+#	warn Dumper($kp);
     if ($kp) {
-	my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
-	my $dob= $kp->{dateofbirth};
-	$dob =~ s/\-//g;
-my $fines_out = GetMemberAccountRecords($kp->{borrowernumber});
-my ($num_cur_issues,$cur_issues) = GetPendingIssues($kp->{borrowernumber});
-
-	my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
-warn "i am debarred: $debarred";
+		my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
+		my $dob= $kp->{dateofbirth};
+		$dob =~ s/\-//g;
+		my $fines_out = GetMemberAccountRecords($kp->{borrowernumber});
+		my ($num_cur_issues,$cur_issues) = GetPendingIssues($kp->{borrowernumber});
+		my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
+# warn "i am debarred: $debarred";
 #warn Dumper(%{$kp->{flags}});
-	my $adr = $kp->{streetnumber} . " ". $kp->{address}; 
+		my $adr = $kp->{streetnumber} . " ". $kp->{address}; 
 		%ilspatron = (
 		      name => $kp->{firstname} . " " . $kp->{surname},
 		      id => $kp->{cardnumber},
@@ -111,7 +110,7 @@ warn "i am debarred: $debarred";
     }
 
     $self =  \%ilspatron;
-	warn Dumper($self);
+#	warn Dumper($self);
 
     syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
 
@@ -206,8 +205,9 @@ sub recall_overdue {
 sub check_password {
     my ($self, $pwd) = @_;
 	my $md5pwd=$self->{password};  ### FIXME -  we're allowing access if user has no password.
-
-return (!$self->{password} ||  md5_base64($pwd) eq $md5pwd );
+	warn "check $self->{password} $pwd";
+    warn "$self->{name}";	
+	return (!$self->{password} ||  md5_base64($pwd) eq $md5pwd );
 }
 
 sub currency {

@@ -14,7 +14,7 @@ my $invalid_uname = { id => 'Invalid username',
 		      pat => qr/^940/,
 		      fields => [], };
 
-my $invalid_pwd = { id => 'Invalid username',
+my $invalid_pwd = { id => 'Invalid password',
 		      msg => "9300CN$username|COinvalid$password|CPThe floor|",
 		      pat => qr/^940/,
 		      fields => [], };

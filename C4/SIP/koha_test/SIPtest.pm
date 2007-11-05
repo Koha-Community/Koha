@@ -49,13 +49,13 @@ our $password = 'koha';
 
 # Valid user barcode and corresponding user password/pin and full name
 our $user_barcode = '900002';
-our $user_pin     = 'password';
+our $user_pin     = 'sip test';
 our $user_fullname= 'Firstname SURNAME';
 our $user_homeaddr= '35 address';
 our $user_email   = 'patron@liblime.com';
 our $user_phone   = '555-1212';
 our $user_birthday= '1983-10-06';
-our $user_ptype   = 'PATRON';
+our $user_ptype   = 'A';
 our $user_inet    = 'N';
 
 # Valid item barcode and corresponding title

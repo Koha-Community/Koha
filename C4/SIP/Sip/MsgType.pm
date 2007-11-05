@@ -285,7 +285,7 @@ sub new {
 	# so we'll just do it.
 	$protocol_version = 2;
     }
-warn "PROTOCOL: $protocol_version";	
+#warn "PROTOCOL: $protocol_version";	
     if (!exists($handlers{$msgtag})) {
 	syslog("LOG_WARNING",
 	       "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'",
@@ -485,9 +485,9 @@ sub handle_patron_status {
 
     ($lang, $date) = @{$self->{fixed_fields}};
     $fields = $self->{fields};
-warn Dumper($fields);
-warn FID_INST_ID;
-warn $fields->{(FID_INST_ID)};
+#warn Dumper($fields);
+#warn FID_INST_ID;
+#warn $fields->{(FID_INST_ID)};
     $ils->check_inst_id($fields->{(FID_INST_ID)}, "handle_patron_status");
 
     $patron = $ils->find_patron($fields->{(FID_PATRON_ID)});
