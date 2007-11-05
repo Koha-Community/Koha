@@ -16,7 +16,7 @@
 	<div class="yui-b"><div class="yui-g">
     <h1>An Error has Occurred!</h1>
     <h2>Error 401</h2>
-    <ul>
+    <ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
         <li>This error means that you aren't authorized to view this page</li>	
         <li>To report this error, you can <a href="mailto:<!-- TMPL_VAR NAME="admin" -->">email the Koha Administrator</a>.</li>
         <li>Use top menu bar to navigate to another part of Koha.</li>
@@ -27,7 +27,7 @@
 <div class="yui-u first">
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
 	<h3><a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a></h3>
-	<ul><li>
+	<ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;"><li>
        <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
         <label for="navfindborrower">Check out to:</label>
             <input id="navfindborrower" name="findborrower" type="text" size="10" />
@@ -41,7 +41,7 @@
 		<!-- /TMPL_IF -->
 		  <!-- TMPL_IF NAME="CAN_user_borrowers" -->
 		<h3><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></h3>
-		<ul>
+		<ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
         <li><form action="/cgi-bin/koha/members/member.pl" method="post">
            <label for="navmember">Search:&nbsp;</label>
            <input id="navmember" type="text" size="10" name="member" />
@@ -52,7 +52,7 @@
 	<!-- /TMPL_IF -->
 		  <!-- TMPL_IF NAME="CAN_user_catalogue" -->
                 <h3><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></h3>
-				<ul>
+				<ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
                     <li>
                         <form name="searchform" method="get" action="/cgi-bin/koha/catalogue/search.pl" id="searchform">
                         <input type="hidden" name="idx" value="" />
@@ -72,7 +72,7 @@
 
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
     <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></h3>
-	<ul>
+	<ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
@@ -83,7 +83,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_parameters" -->
    <h3> <a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a></h3>
-   			<ul>
+   			<ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
             <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></li>
         </ul>
     <!-- /TMPL_IF -->
