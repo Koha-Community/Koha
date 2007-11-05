@@ -12,6 +12,8 @@ use POSIX qw(strftime);
 use ILS;
 use ILS::Transaction;
 
+use C4::Circulation;
+
 our @ISA = qw(ILS::Transaction);
 
 my %fields = (
@@ -32,6 +34,16 @@ sub new {
 
     return bless $self, $class;
 }
+
+sub do_checkin {
+	my $self = shift;
+	my $barcode = $self->{item}->{id};
+	my $branch='ALB'; # gotta set this
+	my $return = AddReturn($barcode,$branch);
+	$self->ok($return);
+	return $self;
+}
+
 
 sub resensitize {
     my $self = shift;

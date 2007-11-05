@@ -135,7 +135,6 @@ sub checkout {
     my ($patron, $item, $circ);
 
     $circ = new ILS::Transaction::Checkout;
-warn "checking out";
     # BEGIN TRANSACTION
     $circ->patron($patron = new ILS::Patron $patron_id);
     $circ->item($item = new ILS::Item $item_id);
@@ -160,9 +159,9 @@ warn "checking out";
 			$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
 		
 			$item->{patron} = $patron_id;
-		$item->{due_date} = time + (14*24*60*60); # two weeks
-#			$item->{due_date} = $circ->{due};
-			warn "$item->{due_date}";
+#		$item->{due_date} = time + (14*24*60*60); # two weeks
+			$item->{due_date} = $circ->{due};
+#			warn "$item->{due_date}";
 			push(@{$patron->{items}}, $item_id);
 			$circ->desensitize(!$item->magnetic);
 
@@ -191,12 +190,13 @@ sub checkin {
 
     # It's ok to check it in if it exists, and if it was checked out
     $circ->ok($item && $item->{patron});
-
+    $circ->do_checkin();    
     if ($circ->ok) {
-	$circ->patron($patron = new ILS::Patron $item->{patron});
-	delete $item->{patron};
-	delete $item->{due_date};
-	$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
+		$circ->patron($patron = new ILS::Patron $item->{patron});
+		delete $item->{patron};
+		delete $item->{due_date};
+		$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
+		
     }
     # END TRANSACTION
 
