@@ -79,9 +79,7 @@ sub do_checkout {
 		$self->{'due'} = $datedue;
 		$self->ok(1);
 	}
-	else {
-
-		
+	else {		
 		warn "cant issue";
 		use Data::Dumper;
 		warn Dumper $issuingimpossible;

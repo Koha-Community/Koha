@@ -159,9 +159,7 @@ sub checkout {
 			$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
 		
 			$item->{patron} = $patron_id;
-#		$item->{due_date} = time + (14*24*60*60); # two weeks
 			$item->{due_date} = $circ->{due};
-#			warn "$item->{due_date}";
 			push(@{$patron->{items}}, $item_id);
 			$circ->desensitize(!$item->magnetic);
 
@@ -187,10 +185,11 @@ sub checkin {
     $circ = new ILS::Transaction::Checkin;
     # BEGIN TRANSACTION
     $circ->item($item = new ILS::Item $item_id);
-
-    # It's ok to check it in if it exists, and if it was checked out
-    $circ->ok($item && $item->{patron});
+    
     $circ->do_checkin();    
+	# It's ok to check it in if it exists, and if it was checked out
+	$circ->ok($item && $item->{patron});
+
     if ($circ->ok) {
 		$circ->patron($patron = new ILS::Patron $item->{patron});
 		delete $item->{patron};
@@ -396,61 +395,60 @@ sub renew {
     my $trans;
 
     $trans = new ILS::Transaction::Renew;
-
     $trans->patron($patron = new ILS::Patron $patron_id);
 
     if (!$patron) {
-	$trans->screen_msg("Invalid patron barcode.");
+		$trans->screen_msg("Invalid patron barcode.");
 
-	return $trans;
+		return $trans;
     } elsif (!$patron->renew_ok) {
-	$trans->screen_msg("Renewals not allowed.");
+		$trans->screen_msg("Renewals not allowed.");
 
-	return $trans;
+		return $trans;
     }
 
     if (defined($title_id)) {
 	# renewing a title, rather than an item (sort of)
 	# This is gross, but in a real ILS it would be better
-	foreach my $i (@{$patron->{items}}) {
-	    $item = new ILS::Item $i;
-	    last if ($title_id eq $item->title_id);
-	    $item = undef;
-	}
+		foreach my $i (@{$patron->{items}}) {
+			$item = new ILS::Item $i;
+			last if ($title_id eq $item->title_id);
+			$item = undef;
+		}
     } else {
-	foreach my $i (@{$patron->{items}}) {
-	    if ($i == $item_id) {
-		# We have it checked out
-		$item = new ILS::Item $item_id;
-		last;
-	    }
-	}
+		foreach my $i (@{$patron->{items}}) {
+			if ($i == $item_id) {
+				# We have it checked out
+				$item = new ILS::Item $item_id;
+				last;
+			}
+		}
     }
 
     $trans->item($item);
 
     if (!defined($item)) {
 	# It's not checked out to $patron_id
-	$trans->screen_msg("Item not checked out to " . $patron->name);
+		$trans->screen_msg("Item not checked out to " . $patron->name);
     } elsif (!$item->available($patron_id)) {
-	 $trans->screen_msg("Item has outstanding holds");
+		$trans->screen_msg("Item has outstanding holds");
     } else {
-	$trans->renewal_ok(1);
+		$trans->renewal_ok(1);
 
-	$trans->desensitize(0);	# It's already checked out
+		$trans->desensitize(0);	# It's already checked out
+		$trans->do_renew();
+#		warn "done renew $trans->renewal_ok(1);";
 
-	if ($no_block eq 'Y') {
-	    $item->{due_date} = $nb_due_date;
-	} else {
-	    $item->{due_date} = time + (14*24*60*60); # two weeks
-	}
-	if ($item_props) {
-	    $item->{sip_item_properties} = $item_props;
-	}
-	$trans->ok(1);
-	$trans->renewal_ok(1);
-
-	return $trans;
+#		if ($no_block eq 'Y') {
+#			$item->{due_date} = $nb_due_date;
+#		} else {
+#			$item->{due_date} = time + (14*24*60*60); # two weeks
+#		}
+#		if ($item_props) {
+#			$item->{sip_item_properties} = $item_props;
+#		}
+#		$trans->ok(1);
+#		return $trans;
     }
 
     return $trans;

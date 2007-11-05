@@ -10,6 +10,9 @@ use strict;
 use ILS;
 use ILS::Transaction;
 
+use C4::Circulation;
+use C4::Members;
+
 our @ISA = qw(ILS::Transaction);
 
 my %fields = (
@@ -30,4 +33,18 @@ sub new {
     return bless $self, $class;
 }
 
+sub do_renew {
+	my $self = shift;
+	my $borrower = my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	if (CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber})){
+		my $datedue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
+		$self->{'due'} = $datedue;
+		$self->ok(1);
+		$self->renewal_ok(1);
+	}
+	else {
+		$self->ok(0);
+	}
+	return $self;
+}	
 1;

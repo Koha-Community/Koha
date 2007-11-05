@@ -89,39 +89,39 @@ my $test;
 ## Test this by checking out exactly the same book a second time.
 ## The only difference should be that the "Renewal OK" flag should now
 ## be 'Y'.
-$test = clone($checkout_test_template);
-$test->{id} = 'Checkout: patron renewal';
-$test->{pat} = qr/^121YNY$datepat/;
+#$test = clone($checkout_test_template);
+#$test->{id} = 'Checkout: patron renewal';
+#$test->{pat} = qr/^121YNY$datepat/;
 
-push @tests, $test;
+#push @tests, $test;
 
 # NOW check it in
 
 push @tests, $checkin_template;
 
 # Valid Patron, item with diacritical in the title
-$test = clone($checkout_test_template);
+#$test = clone($checkout_test_template);
+#
+#$test->{id} = 'Checkout: valid patron, diacritical character in title';
+#$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
 
-$test->{id} = 'Checkout: valid patron, diacritical character in title';
-$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
+#foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
+#    my $field =  $test->{fields}[$i];
 
-foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
-    my $field =  $test->{fields}[$i];
+#    if ($field->{field} eq FID_ITEM_ID) {
+#	$field->{pat} = qr/^$item_diacritic_barcode$/;
+#    } elsif ($field->{field} eq FID_TITLE_ID) {
+#	$field->{pat} = qr/^$item_diacritic_title\s*$/;
+#    } elsif ($field->{field} eq FID_OWNER) {
+#	$field->{pat} = qr/^$item_diacritic_owner$/;
+#    }
+#}
 
-    if ($field->{field} eq FID_ITEM_ID) {
-	$field->{pat} = qr/^$item_diacritic_barcode$/;
-    } elsif ($field->{field} eq FID_TITLE_ID) {
-	$field->{pat} = qr/^$item_diacritic_title\s*$/;
-    } elsif ($field->{field} eq FID_OWNER) {
-	$field->{pat} = qr/^$item_diacritic_owner$/;
-    }
-}
+#push @tests, $test;
 
-push @tests, $test;
-
-$test = clone($checkin_template);
-$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
-push @tests, $test;
+#$test = clone($checkin_template);
+#$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
+#push @tests, $test;
 
 # Valid Patron, Invalid Item_id
 $test = clone($checkout_test_template);

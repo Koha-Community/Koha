@@ -41,7 +41,7 @@ sub do_checkin {
 	my $branch='ALB'; # gotta set this
 	my $return = AddReturn($barcode,$branch);
 	$self->ok($return);
-	return $self;
+	return 1;
 }
 
 

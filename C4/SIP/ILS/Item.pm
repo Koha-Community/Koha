@@ -15,6 +15,8 @@ use Sys::Syslog qw(syslog);
 use ILS::Transaction;
 
 use C4::Biblio;
+use C4::Circulation;
+use C4::Members;
 
 our %item_db = (
 		'1565921879' => {
@@ -52,6 +54,10 @@ sub new {
 		return undef;
     }
     $item->{'id'} = $item->{'barcode'};
+	# check if its on issue and if so get the borrower
+	my $issue = GetItemIssue($item->{'itemnumber'});
+	my $borrower = GetMember($issue->{'borrowernumber'},'borrowernumber');
+	$item->{patron} = $borrower->{'cardnumber'};
     $self = $item;
 
     bless $self, $type;
