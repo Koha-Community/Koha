@@ -100,7 +100,7 @@ if (quantity ==0) {
 <!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" name="frusin">
-    <fieldset class="rows">
+<fieldset class="rows">
         <legend>Catalogue details</legend>
         <!-- TMPL_UNLESS name="existing" -->
 		<input type="hidden" name="existing" value="no" />
@@ -122,10 +122,10 @@ if (quantity ==0) {
         <ol><li>
             <!-- TMPL_IF name="biblio" -->
 			<span class="label">Title</span>
-                <input type="hidden" size="20" id="title" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
+                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
             <!-- TMPL_ELSE -->
-            <label for="title" class="required">Title</label>
-                <input type="text" id="title" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
+            <label for="entertitle" class="required">Title</label>
+                <input type="text" id="entertitle" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -134,7 +134,7 @@ if (quantity ==0) {
                 <input type="hidden" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
             <!-- TMPL_ELSE -->
             <label for="author">Author</label>
-                <input type="text" id="author" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" />
+                <input type="text" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -143,7 +143,7 @@ if (quantity ==0) {
                 <input type="hidden" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
             <!-- TMPL_ELSE -->
             <label for="publishercode"> Publisher</label>
-                <input type="text" id="publishercode" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
+                <input type="text" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -152,7 +152,7 @@ if (quantity ==0) {
                 <input type="hidden" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /><!-- TMPL_VAR NAME="copyrightdate" -->
             <!-- TMPL_ELSE -->
             <label for="copyrightdate">Copyright Date</label>
-                <input type="text" id="copyrightdate" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
+                <input type="text" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -165,7 +165,7 @@ if (quantity ==0) {
                 <input type="hidden" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
             <!-- TMPL_ELSE -->
             <label for="ISBN">ISBN</label>
-                <input type="text" id="ISBN" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
+                <input type="text" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -174,7 +174,7 @@ if (quantity ==0) {
                 <input type="hidden" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
             <!-- TMPL_ELSE -->
             <label for="series">Series</label>
-                <input type="text" id="series" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
+                <input type="text" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -189,7 +189,7 @@ if (quantity ==0) {
             </select>
         </li>
     </fieldset>
-    <fieldset class="rows">
+	<fieldset class="rows">
         <legend>Accounting details</legend>
             <li>
                 <!-- TMPL_IF name="close" -->
@@ -197,7 +197,7 @@ if (quantity ==0) {
                     <input type="hidden" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
                 <!-- TMPL_ELSE -->
                 <label for="quantity">Quantity</label>
-                    <input type="text" id="quantity" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
+                    <input type="text" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
                 <!--/TMPL_IF-->
             </li>
             <li>
@@ -215,7 +215,7 @@ if (quantity ==0) {
                     <input type="hidden" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
                 <label for="list_price">Supplier price</label>
-                    <input type="text" id="list_price" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
+                    <input type="text" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
                 <!--/TMPL_IF-->
             </li>
             <li>
@@ -224,7 +224,7 @@ if (quantity ==0) {
                     <input type="hidden" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /><!-- TMPL_VAR NAME="rrp" -->
                 <!-- TMPL_ELSE -->
                 <label for="rrp">Replacement Cost </label>
-                    <input type="text" id="rrp" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
+                    <input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
                 <!--/TMPL_IF-->
             </li>
             <li>
@@ -233,7 +233,7 @@ if (quantity ==0) {
                     <input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly="readonly"  />
                 <!-- TMPL_ELSE -->
                 <label for="ecost">Budgeted Cost</label>
-                    <input type="text" id="ecost" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
+                    <input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
                 <!--/TMPL_IF-->
             </li>
             <!-- TMPL_IF NAME="GST"-->
@@ -243,7 +243,7 @@ if (quantity ==0) {
                 <input type="text" id="" size="20" name="GST" value="" id="GST" readonly="readonly" />
 				<!-- TMPL_ELSE -->
                 <label for="GST">Budgeted GST</label>
-                <input type="text" id="GST" size="20" name="GST" id="GST" value="" />
+                <input type="text" size="20" name="GST" id="GST" value="" />
 				<!--/TMPL_IF-->
             </li>
             <!-- /TMPL_IF -->
@@ -252,7 +252,7 @@ if (quantity ==0) {
 			<label for="total">Total</label>
 				<input type="text" id="total" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <label for="total"><label for="">Total</label></label>
+                <label for="total">Total</label></label>
                 <input type="text" id="total" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" />
 				<!--/TMPL_IF-->
             </li>
@@ -273,7 +273,7 @@ if (quantity ==0) {
                 <label for="notes">Notes</label>
                 <input type="text" id="notes" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" />
             </li>
-            <li>The 2 following fields are available for your own usage. They can be useful for statistical purposes
+            <li><div>The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <!-- TMPL_IF Name="CGIsort1" -->
                     <!-- TMPL_VAR Name="CGIsort1" -->
                 <!-- TMPL_ELSE -->
@@ -290,9 +290,9 @@ if (quantity ==0) {
                 <!--/TMPL_IF -->
             </li></ol>
     </fieldset>
-    <p>
-        <input type="button" value="OK" onclick="check(this.form)" />
-    </p>
+    <fieldset class="action">
+        <input type="button" value="Save" onclick="check(this.form)" /> <!-- TMPL_IF name="suggestionid" --><a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- TMPL_ELSE --><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- /TMPL_IF -->
+    </fieldset>
 </form>
 </div>
 </div>
