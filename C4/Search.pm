@@ -558,7 +558,7 @@ sub getRecords {
 sub _remove_stopwords {
 	my ($operand,$index) = @_;
  	# if the index contains more than one qualifier, but not phrase:    
-	if (index($index,"phr")<0 && index($index,",")>0){
+	if ($index!~m/phr|ext/){
 	# operand may be a wordlist deleting stopwords
 	# remove stopwords from operand : parse all stopwords & remove them (case insensitive)
 	#       we use IsAlpha unicode definition, to deal correctly with diacritics.
@@ -580,20 +580,17 @@ sub _add_truncation {
 	# if the index contains more than one qualifier, but not phrase, add truncation qualifiers
 	#if (index($index,"phr")<0 && index($index,",")>0){
 	# warn "ADDING TRUNCATION QUALIFIERS";
-		$operand =~ s/^ //g;
+		$operand =~s/^ //g;
 		my @wordlist= split (/\s/,$operand);
 		foreach my $word (@wordlist){
-			if (index($word,"*")==0 && index($word,"*",1)==length($word)-1){
-				$word=~s/\*//g;
-				push @rightlefttruncated,$word;
+			if ($word=~s/^\*([^\*]+)\*$/$1/){
+        push @rightlefttruncated,$word;
 			} 
-			elsif(index($word,"*")==0 && index($word,"*",1)<0){
-				$word=~s/\*//;
+			elsif($word=~s/^\*([^\*]+)$/$1/){
 				push @lefttruncated,$word;
                         
 			} 
-			elsif (index($word,"*")==length($word)-1){
-				$word=~s/\*//;
+			elsif ($word=~s/^([^\*]+)\*$/$1/){
 				push @righttruncated,$word;
 			} 
 			elsif (index($word,"*")<0){
