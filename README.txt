@@ -42,7 +42,7 @@ Default installation instructions:
 2. make
 3. sudo make install
 4. ln -s /usr/share/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
-5. a2ensite koha && /etc/init.d/apache reload
+5. a2ensite koha && /etc/init.d/apache2 reload
 6. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
 7. Browse to http://servername:8080/ and answer the questions
 
