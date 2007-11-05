@@ -199,7 +199,7 @@ sub end_patron_session {
     my ($self, $patron_id) = @_;
 
     # success?, screen_msg, print_line
-    return (1, 'Thank you for using Evergreen!', '');
+    return (1, 'Thank you !', '');
 }
 
 sub pay_fee {

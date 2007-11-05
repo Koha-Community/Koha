@@ -63,7 +63,6 @@ sub new {
     my $self;
 my %ilspatron;
 	my $kp = GetMember($patron_id,'cardnumber');
-warn "THIS IS what we et from getmember...";
 use Data::Dumper;
 warn Dumper($kp);
     if ($kp) {
