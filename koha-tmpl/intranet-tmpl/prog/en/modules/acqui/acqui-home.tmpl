@@ -17,6 +17,8 @@
 
 <!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
 
+<div class="yui-g">
+<div class="yui-u first">
 <h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
@@ -24,13 +26,13 @@
     <!-- TMPL_IF name="nobudget" -->
         <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in Administration</span>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Supplier </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
+            <p><label for="supplierpage">Supplier </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
     <!-- TMPL_ELSE -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplier">Supplier: </label><input type="text" size="25" name="supplier" id="supplier" class="focus" />
+            <p><label for="supplierpage">Supplier: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
@@ -47,9 +49,9 @@
         <!-- /TMPL_IF -->
     </fieldset>
 </div>
+</div>
 
-
-<div id="acqui_acqui_home_currency">
+<div class="yui-u"><div id="acqui_acqui_home_currency">
 <!-- TMPL_IF NAME="loop_currency" -->
     <h2>Exchange rates</h2>
     <form action="/cgi-bin/koha/acqui/currency.pl">
@@ -57,6 +59,7 @@
         <tr>
             <th>Currency</th>
             <th>Rate</th>
+			<th>&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP name="loop_currency" -->
             <tr>
@@ -67,10 +70,10 @@
                         <input type="hidden" name="type" value="change" />
                         <input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
                 </td>
+				<td><input type="submit" value="Save" /></td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
-    <input type="submit" value="Save Exchange Rate" />
     </form>
 <!-- TMPL_ELSE -->
     <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button">
@@ -116,11 +119,13 @@
         </tfoot>
     </table>
     </div>
-    <!-- /TMPL_IF -->
-<div id="acqui_acqui_home_hints">
     <p>Use your reload button [ctrl + r] to get the most recent figures.
     Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
+    <!-- /TMPL_IF --></div>
     
+</div>
+
+<div id="acqui_acqui_home_hints">
     <h2>Help</h2>
     <p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
     <p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </p>
