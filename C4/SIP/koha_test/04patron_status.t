@@ -12,7 +12,7 @@ use SIPtest qw($datepat $textpat);
 my $patron_status_test_template = {
     id => 'Patron Status: valid patron, no patron password',
     msg => '2300120060101    084237AOUWOLS|AAdjfiander|ACterminal password|',
-    pat => qr/^24 [ Y]{13}001$datepat/,
+    pat => qr/^24[ Y]{15}001$datepat/,
     fields => [
 	       $SIPtest::field_specs{(FID_INST_ID)},
 	       $SIPtest::field_specs{(FID_SCREEN_MSG)},
