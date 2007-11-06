@@ -366,7 +366,7 @@ if ($op eq 'add_form') {
             push @options, { option => $theme, counter => $counter };
             $counter++;
         }
-    } elsif ($data->{'type'} eq 'ClassSource') {
+    } elsif ($data->{'type'} eq 'ClassSources') {
         $template->param('type-choice' => 1);
         my $type='';
         @options=();
