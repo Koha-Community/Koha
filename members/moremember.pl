@@ -50,6 +50,10 @@ my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 my $print = $input->param('print');
+my @failedrenews = $input->param('failedrenew');
+my @renew_failed;
+for (@failedrenews) { $renew_failed[$_] = 1; }
+
 my $template_name;
 
 if    ($print eq "page") { $template_name = "members/moremember-print.tmpl";   }
@@ -208,6 +212,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     #check item is not reserved
     my ( $restype, $reserves ) = CheckReserves( $issue->[$i]{'itemnumber'} );
     $row{'norenew'} = ($restype) ? 1 : 0;
+	$row{'renew_failed'} = $renew_failed[$issue->[$i]{'itemnumber'}];		
     push( @issuedata, \%row );
 }
 

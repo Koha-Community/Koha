@@ -44,16 +44,14 @@ my $branch=$input->param('branch');
 #
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber = $input->param("borrowernumber");
-
+my $failedrenews;
 foreach my $itemno (@data) {
-    #check status before renewing issue
-#    warn "CanBookbeRenewed";
+    # check status before renewing issue
     if (CanBookBeRenewed($borrowernumber,$itemno)){
-#	warn "$itemno can be renewed for $borrowernumber";
         AddRenewal($borrowernumber,$itemno,$branch);
-#	warn "renewal added";
-#    }else {
-#	warn "cannot renew";
+    }
+	else {
+		$failedrenews.="&failedrenew=$itemno";        
 	}
 }
 
@@ -62,11 +60,11 @@ foreach my $itemno (@data) {
 #
 if ($input->param('destination') eq "circ"){
     print $input->redirect(
-        '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber
+        '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber.$failedrenews
     );
 }
 else {
     print $input->redirect(
-        '/cgi-bin/koha/members/moremember.pl?borrowernumber='.$borrowernumber
+        '/cgi-bin/koha/members/moremember.pl?borrowernumber='.$borrowernumber.$failedrenews
     );
 }

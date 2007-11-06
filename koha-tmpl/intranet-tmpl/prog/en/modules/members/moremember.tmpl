@@ -214,6 +214,9 @@
             <!-- /TMPL_IF -->
             </td>
             <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
+			<!-- TMPL_IF NAME="renew_failed" -->
+			<td>Renewal Failed</td>
+			<!-- /TMPL_IF -->
         </tr>
         <!-- /tmpl_loop -->
         <tr>
