@@ -29,20 +29,20 @@ use C4::Output;
 
 
 sub StringSearch  {
-	my ($searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $sth=$dbh->prepare("Select * from auth_types where (authtypecode like ?) order by authtypecode");
-	$sth->execute("$data[0]%");
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return (scalar(@results),\@results);
+    my ($searchstring,$type)=@_;
+    my $dbh = C4::Context->dbh;
+    $searchstring=~ s/\'/\\\'/g;
+    my @data=split(' ',$searchstring);
+    my $count=@data;
+    my $sth=$dbh->prepare("SELECT * FROM auth_types WHERE (authtypecode like ?) ORDER BY authtypecode");
+    $sth->execute("$data[0]%");
+    my @results;
+    while (my $data=$sth->fetchrow_hashref){
+    push(@results,$data);
+    }
+    #  $sth->execute;
+    $sth->finish;
+    return (scalar(@results),\@results);
 }
 
 my $input = new CGI;
@@ -55,118 +55,118 @@ my $op = $input->param('op');
 $searchfield=~ s/\,//g;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/authtypes.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {parameters => 1},
+                debug => 1,
+                });
 
 if ($op) {
 $template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+                        $op              => 1); # we show only the TMPL_VAR names $op
 } else {
 $template->param(script_name => $script_name,
-						'else'              => 1); # we show only the TMPL_VAR names $op
+                        'else'              => 1); # we show only the TMPL_VAR names $op
 }
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
-	#start the page and read in includes
-	#---- if primkey exists, it's a modify action, so read values to modify...
-	my $data;
-	if ($authtypecode) {
-		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
-		$sth->execute($authtypecode);
-		$data=$sth->fetchrow_hashref;
-		$sth->finish;
-	}
-	warn "=> $data->{'authtypetext'} : ".$data->{'summary'};
-	$template->param(authtypecode => $authtypecode,
-							authtypetext => $data->{'authtypetext'},
-							auth_tag_to_report => $data->{'auth_tag_to_report'},
-							summary => $data->{'summary'},
-							);
-;
-													# END $OP eq ADD_FORM
+    #start the page and read in includes
+    #---- if primkey exists, it's a modify action, so read values to modify...
+    my $data;
+    if ($authtypecode) {
+        my $dbh = C4::Context->dbh;
+        my $sth=$dbh->prepare("SELECT * FROM auth_types WHERE authtypecode=?");
+        $sth->execute($authtypecode);
+        $data=$sth->fetchrow_hashref;
+        $sth->finish;
+        $template->param(authtypecode => $authtypecode,
+                    authtypetext => $data->{'authtypetext'},
+                    auth_tag_to_report => $data->{'auth_tag_to_report'},
+                    summary => $data->{'summary'},
+                    );
+    }
+                                                    # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace auth_types (authtypecode,authtypetext,auth_tag_to_report,summary) values (?,?,?,?)");
-	$sth->execute($input->param('authtypecode'),$input->param('authtypetext'),$input->param('auth_tag_to_report'),$input->param('summary'));
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
-	exit;
-													# END $OP eq ADD_VALIDATE
+    my $dbh = C4::Context->dbh;
+    if ($input->param('modif')) {
+        my $sth=$dbh->prepare("UPDATE auth_types SET authtypetext=? ,auth_tag_to_report=?, summary=? WHERE authtypecode=?");
+        $sth->execute($input->param('authtypetext'),$input->param('auth_tag_to_report'),$input->param('summary'),$input->param('authtypecode'));
+        $sth->finish;
+    } else {
+        my $sth=$dbh->prepare("INSERT INTO auth_types SET authtypetext=? ,auth_tag_to_report=?, summary=?, authtypecode=?");
+        $sth->execute($input->param('authtypetext'),$input->param('auth_tag_to_report'),$input->param('summary'),$input->param('authtypecode'));
+        $sth->finish;
+    }
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
+    exit;
+                                                    # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	#start the page and read in includes
-	my $dbh = C4::Context->dbh;
+    #start the page and read in includes
+    my $dbh = C4::Context->dbh;
 
-	my $total = 0;
-	for my $table ('auth_tag_structure') {
-	   my $sth=$dbh->prepare("select count(*) as total from $table where authtypecode=?");
-	   $sth->execute($authtypecode);
-	   $total += $sth->fetchrow_hashref->{total};
-	   $sth->finish;
-	}
+    my $total = 0;
+    for my $table ('auth_tag_structure') {
+    my $sth=$dbh->prepare("SELECT count(*) AS total FROM $table WHERE authtypecode=?");
+    $sth->execute($authtypecode);
+    $total += $sth->fetchrow_hashref->{total};
+    $sth->finish;
+    }
 
-	my $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
+    my $sth=$dbh->prepare("SELECT * FROM auth_types WHERE authtypecode=?");
+    $sth->execute($authtypecode);
+    my $data=$sth->fetchrow_hashref;
+    $sth->finish;
 
-	$template->param(authtypecode => $authtypecode,
-							authtypetext => $data->{'authtypetext'},
-							summary => $data->{'summary'},
-							total => $total);
-													# END $OP eq DELETE_CONFIRM
+    $template->param(authtypecode => $authtypecode,
+                            authtypetext => $data->{'authtypetext'},
+                            summary => $data->{'summary'},
+                            total => $total);
+                                                    # END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	#start the page and read in includes
-	my $dbh = C4::Context->dbh;
-	my $authtypecode=uc($input->param('authtypecode'));
-	my $sth=$dbh->prepare("delete from auth_tag_structure where authtypecode=?");
-	$sth->execute($authtypecode);
-	$sth=$dbh->prepare("delete from auth_subfield_structure where authtypecode=?");
-	$sth->execute($authtypecode);
-	$sth=$dbh->prepare("delete from auth_types where authtypecode=?");
-	$sth->execute($authtypecode);
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
-	exit;
-													# END $OP eq DELETE_CONFIRMED
+    #start the page and read in includes
+    my $dbh = C4::Context->dbh;
+    my $authtypecode=uc($input->param('authtypecode'));
+    my $sth=$dbh->prepare("DELETE FROM auth_types WHERE authtypecode=?");
+    $sth->execute($authtypecode);
+    $sth->finish;
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authtypes.pl\"></html>";
+    exit;
+                                                    # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle="white";
-	my @loop_data;
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row_data;
-		if ($toggle eq 'white'){
-			$row_data{toggle}="#ffffcc";
-		} else {
-			$row_data{toggle}="white";
-		}
-		$row_data{authtypecode} = $results->[$i]{'authtypecode'};
-		$row_data{authtypetext} = $results->[$i]{'authtypetext'};
-		$row_data{auth_tag_to_report} = $results->[$i]{'auth_tag_to_report'};
-		$row_data{summary} = $results->[$i]{'summary'};
-		push(@loop_data, \%row_data);
-	}
-	$template->param(loop => \@loop_data);
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(previous => "$script_name?offset=".$prevpage);
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(next => "$script_name?offset=".$nextpage);
-	}
+    my ($count,$results)=StringSearch($searchfield,'web');
+    my $toggle="white";
+    my @loop_data;
+    for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+        my %row_data;
+        if ($toggle eq 'white'){
+            $row_data{toggle}="#ffffcc";
+        } else {
+            $row_data{toggle}="white";
+        }
+        $row_data{authtypecode} = $results->[$i]{'authtypecode'};
+        $row_data{authtypetext} = $results->[$i]{'authtypetext'};
+        $row_data{auth_tag_to_report} = $results->[$i]{'auth_tag_to_report'};
+        $row_data{summary} = $results->[$i]{'summary'};
+        push(@loop_data, \%row_data);
+    }
+    $template->param(loop => \@loop_data);
+    if ($offset>0) {
+        my $prevpage = $offset-$pagesize;
+        $template->param(previous => "$script_name?offset=".$prevpage);
+    }
+    if ($offset+$pagesize<$count) {
+        my $nextpage =$offset+$pagesize;
+        $template->param(next => "$script_name?offset=".$nextpage);
+    }
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
 
