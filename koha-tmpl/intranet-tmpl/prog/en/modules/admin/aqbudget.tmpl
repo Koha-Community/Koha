@@ -84,21 +84,10 @@
 
 <!-- TMPL_IF name="else" -->
 <h1>Budgets</h1>
-
 <form action="/cgi-bin/koha/admin/aqbudget.pl" method="post">
-<table>
-  <tr>
-    <th>Book fund</th>
-    <th>Branch</th>
-    <th>Start date</th>
-    <th>End date</th>
-    <th>Budget amount</th>
-    <th>Actions</th>
-  </tr>
-
-  <tr class="filter">
-    <td>
-      <select name="filter_bookfundid">
+<fieldset class="rows"><legend>Search Budgets</legend><ol>
+    <li><label for="filter_bookfundid"> Book fund:</label>
+      <select name="filter_bookfundid" id="filter_bookfundid">
         <option value="">----</option>
     <!-- TMPL_LOOP name="filter_bookfundids" -->
       <!-- TMPL_IF NAME="selected" -->
@@ -108,9 +97,9 @@
       <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
       </select>
-    </td>
-    <td>
-      <select name="filter_branchcode">
+    </li>
+    <li><label for="filter_branchcode">Library:</label>
+      <select name="filter_branchcode" id="filter_branchcode">
         <option value="">----</option>
     <!-- TMPL_LOOP name="filter_branches" -->
       <!-- TMPL_IF NAME="selected" -->
@@ -120,9 +109,9 @@
       <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
       </select>
-    </td>
-    <td>
-      <select name="filter_startdate_sign">
+    </li>
+    <li><label for="filter_startdate_sign"> Start date:</label>
+      <select name="filter_startdate_sign" id="filter_startdate_sign">
     <!-- TMPL_IF NAME="filter_startdate_sign_equal_selected" -->
         <option value="=" selected="selected">=</option>
     <!-- TMPL_ELSE -->
@@ -154,9 +143,9 @@
         );
       //]]>
 </script>
-    </td>
-    <td>
-      <select name="filter_enddate_sign">
+    </li>
+    <li><label for="filter_enddate_sign"> End date:</label>
+      <select name="filter_enddate_sign" id="filter_enddate_sign">
     <!-- TMPL_IF NAME="filter_enddate_sign_equal_selected" -->
         <option value="=" selected="selected">=</option>
     <!-- TMPL_ELSE -->
@@ -175,7 +164,7 @@
         <option value="&lt;=">&lt;=</option>
     <!-- /TMPL_IF -->
       </select>
-      <input type="text" size="8" maxlength="10" id="filter_enddate" name="filter_enddate" value="<!-- TMPL_VAR Name="filter_enddate" -->" />
+      <input type="text" size="10" id="filter_enddate" name="filter_enddate" value="<!-- TMPL_VAR Name="filter_enddate" -->" />
       <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="filter_enddate_button" alt="Show Calendar" />
       <script type="text/javascript">
 //<![CDATA[
@@ -188,9 +177,9 @@
         );
       //]]>
 </script>
-    </td>
-    <td>
-      <select name="filter_amount_sign">
+    </li>
+    <li><label for="filter_amount_sign"> Budget amount:</label>
+      <select name="filter_amount_sign" id="filter_amount_sign">
     <!-- TMPL_IF NAME="filter_amount_sign_equal_selected" -->
         <option value="=" selected="selected">=</option>
     <!-- TMPL_ELSE -->
@@ -210,12 +199,21 @@
     <!-- /TMPL_IF -->
       </select>
       <input type="text" name="filter_amount" value="<!-- TMPL_VAR NAME="filter_amount" -->" size="8" />
-    </td>
-    <td>
-      <input type="submit" name="filter" value="Filter" />
-    </td>
+    </li>
+  </ol></fieldset>
+  <fieldset class="action"><input type="submit" name="filter" value="Search" /></fieldset>
+	</form>
+
+<table>
+  <tr>
+    <th>Book fund</th>
+    <th>Branch</th>
+    <th>Start date</th>
+    <th>End date</th>
+    <th>Budget amount</th>
+    <th colspan="2">Actions</th>
   </tr>
-  
+
   <!-- TMPL_LOOP name="budget" -->
     <!-- TMPL_IF NAME="toggle" -->
   <tr class="highlight">
@@ -228,13 +226,12 @@
     <td><!-- TMPL_VAR NAME="enddate" --></td>
     <td><!-- TMPL_VAR NAME="budgetamount" --></td>
     <td>
-      <a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">Edit</a>
+      <a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">Edit</a></td><td>
       <a href="/cgi-bin/koha/admin/aqbudget.pl?op=delete_confirm&amp;aqbudgetid=<!-- TMPL_VAR NAME="aqbudgetid" -->">Delete</a>
     </td>
   </tr>
   <!-- /TMPL_LOOP --> <!-- budget -->
 </table>
-</form>
 
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 <!-- /TMPL_IF --> <!-- else -->
@@ -323,14 +320,13 @@
   <!-- /TMPL_IF -->
 
   </fieldset>
-    <p id="action">
-      <input type="button" value="Submit" onclick="Check(this.form)" />
-     </p>
+    <fieldset class="action">
+      <input type="button" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudget.pl">Cancel</a>
+     </fieldset>
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
   <fieldset>
     <legend>Delete Book Budget?</legend>
 
@@ -351,15 +347,18 @@
       </tr>
     </table>
 
+  </fieldset>
+   <fieldset class="action">
+<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
-
-    <p id="action">
       <input type="submit" value="Delete this budget" />
+	  </form>
+	<form action="/cgi-bin/koha/admin/aqbudget.pl" method="get">
       <input type="submit" value="Do Not Delete" />
-    </p>
-  </fieldset>
-</form>
+	  </form>
+   </fieldset>
+
 <!-- /TMPL_IF -->
 
 </div>

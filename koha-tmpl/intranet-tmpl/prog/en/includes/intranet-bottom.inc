@@ -1,7 +1,7 @@
         </div>
 
 <!-- TMPL_IF NAME="languages_loop" -->
-		<div id="changelanguage">
+		<div id="changelanguage" class="ft">
 		<ul>
 		<!-- TMPL_LOOP NAME="languages_loop" -->
 		<li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="language_code" -->"><!-- TMPL_VAR NAME="language_name" --></a></li>

@@ -22,10 +22,11 @@ $(document).ready(function(){
 	});
 });
 
-function confirmDelete(s){
-		if (window.confirm(s))
-			return true;
+function confirmDelete(s,n){
+		if (window.confirm(s)) {
+			location.href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1"; } else { 
 		return false;
+		}
 	}
 	/**
 	 * this function checks all checkbox 
@@ -129,8 +130,9 @@ function confirmDelete(s){
         </tr>
         <!-- /TMPL_LOOP --><!-- /itemsloop -->
     </table>
-	
-	<!-- TMPL_IF name="manageshelf" -->
+			</fieldset>
+		<fieldset class="action">
+		<!-- TMPL_IF name="manageshelf" -->
         <!-- TMPL_IF NAME="itemsloop" -->
             <input type="submit" value="Remove selected Items" onclick="return confirmDelete('Are you sure you want to remove these items from the shelf?')" />
         <!-- /TMPL_IF --><!-- /itemsloop -->

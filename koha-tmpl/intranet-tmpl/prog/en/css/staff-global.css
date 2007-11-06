@@ -524,9 +524,9 @@ fieldset.brief ol, fieldset.brief li {
 	list-style-type : none;
 }
 
-fieldset.brief div.hint {
+fieldset.brief div.hint, fieldset.rows div.hint {
 	color : #999999;
-	font-size : 90%;
+	font-size : 95%;
 	margin-bottom : .4em;
 }
 
@@ -555,12 +555,21 @@ fieldset.rows label, fieldset.rows span.label {
 	text-align: right;
 }
 
+
 .yui-b fieldset.rows label, .yui-b fieldset.rows span.label {  
 	width: 9em;  
 }
 
+.yui-b fieldset.rows div.hint {
+	margin-left : 10.5em;
+}
+
 .yui-u fieldset.rows label, .yui-u fieldset.rows span.label {  
 	width: 6em;  
+}
+
+.yui-u fieldset.rows div.hint {
+	margin-left : 7.5em;
 }
 
 fieldset.rows.left label, fieldset.rows.left span.label {
@@ -951,4 +960,28 @@ div.first fieldset {
  
  .accesskey {
  	text-decoration : underline;
+ }
+ 
+ #changelanguage {
+	background-color : #F3F3F3;
+ 	border-top : 1px solid #E8E8E8;
+	font-size : 93%;
+	margin-top : 2em;
+	padding : .3em .5em .5em .5em;
+ }
+ 
+ #changelanguage ul {
+ 	margin : 0;
+	padding : 0;
+ }
+ 
+ #changelanguage li {
+ 	border-left : 1px solid #CCC;
+ 	display : inline;
+	list-style : none;
+	padding : 0 .5em;
+ }
+ 
+ #changelanguage li:first-child {
+ 	border-left : 0;
  }

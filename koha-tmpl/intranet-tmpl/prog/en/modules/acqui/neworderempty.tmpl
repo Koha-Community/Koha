@@ -90,12 +90,12 @@ if (quantity ==0) {
 
 <!-- TMPL_IF name="basketno" -->
 <div id="basket-details">Basket Details
-    <p>Basket Number: <!-- TMPL_VAR NAME="basketno" --></p>
-    <p>Managed By: <!-- TMPL_VAR NAME="authorisedbyname" --></p>
-    <p>Open On: <!-- TMPL_VAR NAME="creationdate" --></p>
-    <p>ForSupplier Id: <!-- TMPL_VAR NAME="booksellerid" --></p>
-    <p>Invoice Number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
-    <!-- TMPL_IF name="closedate" --><p>Closed On: <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
+  <ul>  <li>Basket number: <!-- TMPL_VAR NAME="basketno" --></li>
+    <li>Managed by: <!-- TMPL_VAR NAME="authorisedbyname" --></li>
+    <li>Open on: <!-- TMPL_VAR NAME="creationdate" --></li>
+    <li>For supplier id: <!-- TMPL_VAR NAME="booksellerid" --></li>
+    <li>Invoice number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></li>
+    <!-- TMPL_IF name="closedate" --><li>Closed on: <!-- TMPL_VAR name="closedate" --></li><!-- /TMPL_IF --></ul>
 </div>
 <!-- /TMPL_IF -->
 
@@ -124,61 +124,61 @@ if (quantity ==0) {
 			<span class="label">Title</span>
                 <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
             <!-- TMPL_ELSE -->
-            <label for="entertitle" class="required">Title</label>
+            <label for="entertitle" class="required">Title: </label>
                 <input type="text" id="entertitle" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblio" -->
-			<span class="label">Author</label>
+			<span class="label">Author: </label>
                 <input type="hidden" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
             <!-- TMPL_ELSE -->
-            <label for="author">Author</label>
+            <label for="author">Author: </label>
                 <input type="text" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblio" -->
-			<span class="label">Publisher</label>
+			<span class="label">Publisher: </label>
                 <input type="hidden" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
             <!-- TMPL_ELSE -->
-            <label for="publishercode"> Publisher</label>
+            <label for="publishercode"> Publisher: </label>
                 <input type="text" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblio" -->
-			<lspan class="label">Copyright Date</label>
+			<span class="label">Copyright date: </span>
                 <input type="hidden" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /><!-- TMPL_VAR NAME="copyrightdate" -->
             <!-- TMPL_ELSE -->
-            <label for="copyrightdate">Copyright Date</label>
+            <label for="copyrightdate">Copyright date: </label>
                 <input type="text" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="format">Format</label>
+            <label for="format">Format: </label>
             <!-- TMPL_VAR NAME="CGIitemtype" -->
         </li>
         <li>
             <!-- TMPL_IF name="biblio" -->
-			<span class="label">ISBN</label>
+			<span class="label">ISBN: </span>
                 <input type="hidden" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
             <!-- TMPL_ELSE -->
-            <label for="ISBN">ISBN</label>
+            <label for="ISBN">ISBN: </label>
                 <input type="text" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblio" -->
-			<span class="label">Series</label>
+			<span class="label">Series: </span>
                 <input type="hidden" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
             <!-- TMPL_ELSE -->
-            <label for="series">Series</label>
+            <label for="series">Series: </label>
                 <input type="text" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="branch">Branch</label>
+            <label for="branch">Branch: </label>
             <select name="branch" id="branch">
             <!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -188,96 +188,98 @@ if (quantity ==0) {
             <!-- /TMPL_LOOP -->
             </select>
         </li>
+		</ol>
     </fieldset>
 	<fieldset class="rows">
         <legend>Accounting details</legend>
+		<ol>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Quantity</label>
+			<span class="label">Quantity: </span>
                     <input type="hidden" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
                 <!-- TMPL_ELSE -->
-                <label for="quantity">Quantity</label>
+                <label for="quantity">Quantity: </label>
                     <input type="text" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
                 <!--/TMPL_IF-->
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Bookfund</label>
+			<span class="label">Bookfund: </span>
                     <input type="hidden" size="20" name="bookfund" id="bookfund" value="<!-- TMPL_VAR NAME="bookfundid" -->" /><!-- TMPL_VAR NAME="bookfundname" -->
                 <!-- TMPL_ELSE -->
-                <label for="bookfund">Bookfund</label>
+                <label for="bookfund">Bookfund: </label>
                     <!-- TMPL_VAR NAME="CGIbookfund" -->
                 <!--/TMPL_IF-->
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Supplier price</label>
+			<span class="label">Supplier price: </span>
                     <input type="hidden" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
-                <label for="list_price">Supplier price</label>
+                <label for="list_price">Supplier price: </label>
                     <input type="text" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
                 <!--/TMPL_IF-->
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Replacement Cost</label>
+			<span class="label">Replacement cost: </span>
                     <input type="hidden" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /><!-- TMPL_VAR NAME="rrp" -->
                 <!-- TMPL_ELSE -->
-                <label for="rrp">Replacement Cost </label>
+                <label for="rrp">Replacement cost : </label>
                     <input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" />
                 <!--/TMPL_IF-->
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<label for="ecost">Budgeted Cost</label>
+			<label for="ecost">Budgeted cost: </label>
                     <input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" readonly="readonly"  />
                 <!-- TMPL_ELSE -->
-                <label for="ecost">Budgeted Cost</label>
+                <label for="ecost">Budgeted Cost: </label>
                     <input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" />
                 <!--/TMPL_IF-->
             </li>
             <!-- TMPL_IF NAME="GST"-->
             <li>
 				<!-- TMPL_IF name="close" -->
-			<label for="GST">Budgeted GST</label>
+			<label for="GST">Budgeted GST: </label>
                 <input type="text" id="" size="20" name="GST" value="" id="GST" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <label for="GST">Budgeted GST</label>
+                <label for="GST">Budgeted GST: </label>
                 <input type="text" size="20" name="GST" id="GST" value="" />
 				<!--/TMPL_IF-->
             </li>
             <!-- /TMPL_IF -->
             <li>
                 <!-- TMPL_IF name="close" -->
-			<label for="total">Total</label>
+			<label for="total">Total: </label>
 				<input type="text" id="total" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <label for="total">Total</label></label>
+                <label for="total">Total: </label>
                 <input type="text" id="total" size="20" name="total" value="<!-- TMPL_VAR name="total" -->" />
 				<!--/TMPL_IF-->
             </li>
             <li>
 				<!-- TMPL_IF name="close" -->
-			<label for="cost">Actual Cost</label>
+			<label for="cost">Actual cost: </label>
                 <input type="text" id="cost" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" readonly="readonly" />
 				<!-- TMPL_ELSE -->
-                <label for="cost">Actual Cost</label>
+                <label for="cost">Actual cost: </label>
                 <input type="text" id="cost" size="20" name="cost" value="<!-- TMPL_VAR name="ecost"-->" />
 				<!--/TMPL_IF-->
             </li>
             <li>
-                <label for="invoice">Invoice Number</label>
-                <input type="text" id="invoice" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" />(usually empty)
+                <label for="invoice">Invoice number: </label>
+                <input type="text" id="invoice" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /> (usually empty)
             </li>
             <li>
-                <label for="notes">Notes</label>
-                <input type="text" id="notes" size="20" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" />
+                <label for="notes">Notes: </label>
+                <textarea id="notes" cols="30" rows="3" name="notes"><!-- TMPL_VAR NAME="notes" --></textarea>
             </li>
-            <li><div>The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
+            <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
                 <!-- TMPL_IF Name="CGIsort1" -->
                     <!-- TMPL_VAR Name="CGIsort1" -->
                 <!-- TMPL_ELSE -->
-                <label for="sort1">Sort field 1</label>
+                <label for="sort1">Sort field 1: </label>
                     <input type="text" id="sort1" size="20" name="sort1" value="<!-- TMPL_VAR NAME="sort1" -->" />
                 <!--/TMPL_IF -->
             </li>
@@ -285,7 +287,7 @@ if (quantity ==0) {
                 <!-- TMPL_IF Name="CGIsort2" -->
                     <!-- TMPL_VAR Name="CGIsort2" -->
                 <!-- TMPL_ELSE -->
-                <label for="sort2">Sort field 2</label>
+                <label for="sort2">Sort field 2: </label>
                     <input type="text" id="sort2" size="20" name="sort2" value="<!-- TMPL_VAR NAME="sort2" -->" />
                 <!--/TMPL_IF -->
             </li></ol>

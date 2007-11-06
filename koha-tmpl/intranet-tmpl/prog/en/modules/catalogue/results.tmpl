@@ -6,6 +6,8 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a>  &rsaquo; Search for <i><!-- TMPL_VAR NAME="searchdesc" --></i></div>
+
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -26,7 +28,6 @@
     <!-- TMPL_IF NAME="total" -->
     <h3>
         <!-- TMPL_VAR NAME="total" --> results found for '<!-- TMPL_VAR NAME="searchdesc" -->'
-        <a href="/cgi-bin/koha/catalogue/search.pl">Perform a new search</a>
     </h3>
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF NAME="searchdesc" -->
@@ -34,13 +35,11 @@
             <p>
                 No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
             </p>
-            <a href="/cgi-bin/koha/catalogue/search.pl" title="New search">Perform a new search</a>
         <!-- TMPL_ELSE -->
             <h3> No result found !</h3>
             <p>
             You did not specify any search criteria.
             </p>
-            <a href="/cgi-bin/koha/catalogue/search.pl" title="New search">Perform a new search</a>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     
@@ -94,7 +93,11 @@
                     <th>Count</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-                    <tr<!-- TMPL_IF name="even" --> class="highlight"<!-- /TMPL_IF -->>
+				<!-- TMPL_IF name="even" -->
+                    <tr class="highlight">
+				<!-- TMPL_ELSE -->
+					<tr>
+				<!-- /TMPL_IF -->
                         <td>
                             <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
@@ -312,7 +315,7 @@
         <!-- /TMPL_IF -->
     
        <div class="pages">
-           <!-- TMPL_VAR NAME='pagination_bar'-->
+           <!-- TMPL_VAR NAME="pagination_bar" -->
        </div>
     
         <!-- TMPL_IF NAME="outer_sup_results_loop" -->
@@ -334,7 +337,6 @@
 </div>
 </div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="cat-menu.inc" -->
 <!-- TMPL_INCLUDE NAME="facets.inc" -->
 </div>
 </div>

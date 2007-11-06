@@ -44,23 +44,23 @@
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                 <li><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
                     <!-- TMPL_VAR NAME="value" -->
-                </a>&nbsp;</li>
+                </a></li>
                 <!-- /TMPL_LOOP -->
 				</ul>
             </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="illus" -->
-            <li><strong>Illustrator:</strong> <!-- TMPL_VAR name="illus" -->&nbsp;</li>
+            <li><strong>Illustrator:</strong> <!-- TMPL_VAR name="illus" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="publishercode" -->
             <li><strong>Publisher:</strong>
                 <a href="/cgi-bin/koha/catalogue/search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode" -->">
                     <!-- TMPL_VAR NAME="publishercode" -->
-                </a>&nbsp;
+                </a>
             </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="publicationyear" -->
-            <li>in:<!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</li>
+            <li>in:<!-- TMPL_VAR NAME="publicationyear" --></li>
         <!-- /TMPL_IF -->
         <li><strong>Description:</strong>
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
@@ -78,10 +78,10 @@
 		<div class="yui-u">
 		<ul>
         <!-- TMPL_IF name="isbn" -->
-            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" -->&nbsp;</li>
+            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="issn" -->
-            <li><strong>ISSN:</strong><!-- TMPL_VAR NAME="issn" -->&nbsp;</li>
+            <li><strong>ISSN:</strong><!-- TMPL_VAR NAME="issn" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="collectiontitle" -->
             <li><strong>Collection: </strong>
@@ -93,7 +93,7 @@
             <ul>
                 <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
                     <li><a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="link" ESCAPE="URL"-->"><!-- TMPL_VAR NAME="label" --></a>
-                    &nbsp;</li>
+                    </li>
                 <!-- /TMPL_LOOP -->
 				</ul>
             </li>
@@ -126,7 +126,7 @@
         <!-- TMPL_IF name="URLS" -->
             <li><strong>URL:</strong> 
                 <!-- TMPL_LOOP name="URLS" -->
-                    <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>&nbsp;
+                    <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>
                 <!-- /TMPL_LOOP -->
             </li>
         <!-- /TMPL_IF -->

@@ -61,63 +61,30 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="bookfund-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Funds and Budgets </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="else" -->Funds and Budgets  <!-- /TMPL_IF --> <!-- TMPL_IF name="add_form" --><a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and Budgets</a> &rsaquo; Add book fund<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+	
+<!-- TMPL_UNLESS NAME="header-is-add-p" --><!-- TMPL_INCLUDE NAME="bookfund-admin-toolbar.inc" --><!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF name="else" -->
 <h1>Funds and budgets administration</h1>
   <!-- TMPL_IF NAME="bookfund" -->
+<form action="aqbudget.pl" method="post">
 <table>
   <tr>
     <th>Code</th>
     <th>Name</th>
     <th>Branch</th>
-    <th>Actions</th>
+    <th colspan="3">Actions</th>
   </tr>
 
-<form action="<!-- TMPL_VAR name="scriptname" -->" method="post">
-  <tr class="filter">
-    <td>
-      <select name="filter_bookfundid">
-        <option value="">----</option>
-    <!-- TMPL_LOOP name="filter_bookfundids" -->
-      <!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="bookfundid" -->" selected="selected"><!-- TMPL_VAR name="bookfundid" --></option>
-      <!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundid" --></option>
-      <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-      </select>
-    </td>
-    <td>
-      <input type="text" name="filter_bookfundname" value="<!-- TMPL_VAR name="filter_bookfundname" -->" />
-    </td>
-    <td>
-      <select name="filter_branchcode">
-        <option value="">----</option>
-    <!-- TMPL_LOOP name="filter_branches" -->
-      <!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="name" --></option>
-      <!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="name" --></option>
-      <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-      </select>
-    </td>
-    <td>
-      <input type="submit" name="filter" value="Filter" />
-    </td>
-  </tr>
-</form>
-
-<form action="aqbudget.pl" method="post">
     <!-- TMPL_LOOP name="bookfund" -->
       <!-- TMPL_IF NAME="toggle" -->
   <tr class="highlight">
@@ -137,8 +104,8 @@
       <!-- /TMPL_IF -->
     </td>
     <td>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Edit</a>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Delete</a>
+      <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Edit</a></td><td>
+      <a href="<!-- TMPL_VAR name="scriptname" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Delete</a></td><td>
       <a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Add budget</a>
       <!-- TMPL_IF NAME="has_budgets" -->
       <a href="aqbudget.pl?filter_bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Show budgets</a>
@@ -148,16 +115,15 @@
 
     <!-- /TMPL_LOOP --> <!-- bookfund -->
 </table>
+</form>
 
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
   <!-- /TMPL_IF --> <!-- bookfund -->
 
 <p>
-  <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form">Add fund</a>
   <a href="aqbudget.pl">Show all budgets</a>
 </p>
 
-</form>
 <!-- /TMPL_IF --> <!-- else -->
 
 <!-- TMPL_IF name="add_form" -->
@@ -213,9 +179,9 @@
     
   </fieldset>
 
-  <p>
-    <input type="button" value="Submit" onclick="Check(this.form); return false;" />
-  </p>
+  <fieldset class="action">
+    <input type="button" value="Submit" onclick="Check(this.form); return false;" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbookfund.pl">Cancel</a>
+  </fieldset>
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
 
