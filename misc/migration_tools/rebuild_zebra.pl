@@ -299,8 +299,11 @@ rank:rank-1
             eval {
                 $record = GetAuthority($authid);
             };
+            next unless $record;
             # force authid in case it's not here, otherwise, zebra will die on this authority
-            unless ($record->field('001')){
+            unless ($record->field('001')->data() eq $authid){
+                print "$authid don't exist for this authority :".$record->as_formatted;
+                $record->delete_field($record->field('001'));
                 $record->insert_fields_ordered(MARC::Field->new('001',$authid));
             }
             if($@){
