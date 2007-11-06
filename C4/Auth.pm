@@ -32,6 +32,8 @@ use C4::Koha;
 use C4::Branch; # GetBranches
 
 # use utf8;
+# use Net::LDAP;
+# use Net::LDAP qw(:all);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -50,13 +52,15 @@ C4::Auth - Authenticates Koha users
   my $query = new CGI;
 
   my ($template, $borrowernumber, $cookie) 
-    = get_template_and_user({
+    = get_template_and_user(
+        {
             template_name   => "opac-main.tmpl",
             query           => $query,
-            type            => "opac",
-            authnotrequired => 1,
-            flagsrequired   => {borrow => 1},
-    });
+      type            => "opac",
+      authnotrequired => 1,
+      flagsrequired   => {borrow => 1},
+  }
+    );
 
   print $query->header(
     -type => 'utf-8',
@@ -85,15 +89,15 @@ C4::Auth - Authenticates Koha users
 
 =item get_template_and_user
 
-	my ($template, $borrowernumber, $cookie)
-    	= get_template_and_user(
+  my ($template, $borrowernumber, $cookie)
+    = get_template_and_user(
         {
            template_name   => "opac-main.tmpl",
            query           => $query,
-           type            => "opac",
-           authnotrequired => 1,
-           flagsrequired   => {borrow => 1},
-        }
+     type            => "opac",
+     authnotrequired => 1,
+     flagsrequired   => {borrow => 1},
+  }
     );
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
@@ -128,27 +132,30 @@ sub get_template_and_user {
     if ($user or $insecure) {
 
 		# load the template variables for stylesheets and JavaScript
-		foreach (qw(css_libs css_module css_page css_widgets
-					 js_libs  js_module  js_page  js_widgets))
-		{
-			$template->param($_ => $in->{$_});	
-		}
+		$template->param( css_libs => $in->{'css_libs'} );
+		$template->param( css_module => $in->{'css_module'} );
+		$template->param( css_page => $in->{'css_page'} );
+		$template->param( css_widgets => $in->{'css_widgets'} );
+
+        $template->param( js_libs => $in->{'js_libs'} );
+        $template->param( js_module => $in->{'js_module'} );
+        $template->param( js_page => $in->{'js_page'} );
+        $template->param( js_widgets => $in->{'js_widgets'} );
 
 		# user info
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
         $borrowernumber = getborrowernumber($user);
-        my ($borr, $alternativeflags) = GetMemberDetails($borrowernumber);
-        my @bordat = ($borr);
+        my ( $borr, $alternativeflags ) =
+          GetMemberDetails( $borrowernumber );
+        my @bordat;
+        $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
 
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
-		my @params = (qw(circulate catalogue parameters borrowers permissions reserveforothers borrow 
-						editcatalogue updatecharges acquisition tools editauthorities serials reports));
-						# Not incl. management
         if (( $flags && $flags->{superlibrarian}==1) or $insecure==1) {
             $template->param( CAN_user_circulate        => 1 );
             $template->param( CAN_user_catalogue        => 1 );
@@ -167,29 +174,88 @@ sub get_template_and_user {
             $template->param( CAN_user_reports          => 1 );
         }
 
-        if ($flags) {
-			($flags->{parameters} == 1) and $template->param(CAN_user_management => 1);
-			foreach (@params) {
-				($flags->{$_} == 1) and $template->param('CAN_user_' . $_ => 1);
-			}
-			# terrible non-conformant param names ("s" gets dropped from the end!?)
-			($flags->{permissions}   == 1) and $template->param(CAN_user_permission   => 1);
-			($flags->{updatechanges} == 1) and $template->param(CAN_user_updatechange => 1);
-		}
+        if ( $flags && $flags->{circulate} == 1 ) {
+            $template->param( CAN_user_circulate => 1 );
+        }
+
+        if ( $flags && $flags->{catalogue} == 1 ) {
+            $template->param( CAN_user_catalogue => 1 );
+        }
+
+        if ( $flags && $flags->{parameters} == 1 ) {
+            $template->param( CAN_user_parameters => 1 );
+            $template->param( CAN_user_management => 1 );
+        }
+
+        if ( $flags && $flags->{borrowers} == 1 ) {
+            $template->param( CAN_user_borrowers => 1 );
+        }
+
+        if ( $flags && $flags->{permissions} == 1 ) {
+            $template->param( CAN_user_permission => 1 );
+        }
+
+        if ( $flags && $flags->{reserveforothers} == 1 ) {
+            $template->param( CAN_user_reserveforothers => 1 );
+        }
+
+        if ( $flags && $flags->{borrow} == 1 ) {
+            $template->param( CAN_user_borrow => 1 );
+        }
+
+        if ( $flags && $flags->{editcatalogue} == 1 ) {
+            $template->param( CAN_user_editcatalogue => 1 );
+        }
+
+        if ( $flags && $flags->{updatecharges} == 1 ) {
+            $template->param( CAN_user_updatecharge => 1 );
+        }
+
+        if ( $flags && $flags->{acquisition} == 1 ) {
+            $template->param( CAN_user_acquisition => 1 );
+        }
+
+        if ( $flags && $flags->{tools} == 1 ) {
+            $template->param( CAN_user_tools => 1 );
+        }
+  
+        if ( $flags && $flags->{editauthorities} == 1 ) {
+            $template->param( CAN_user_editauthorities => 1 );
+        }
+    
+        if ( $flags && $flags->{serials} == 1 ) {
+            $template->param( CAN_user_serials => 1 );
+        }
+
+        if ( $flags && $flags->{reports} == 1 ) {
+            $template->param( CAN_user_reports => 1 );
+        }
     }
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-            intranetstylesheet		=> C4::Context->preference("intranetstylesheet"),
-            IntranetNav        		=> C4::Context->preference("IntranetNav"),
-            intranetuserjs          => C4::Context->preference("intranetuserjs"),
-            LoginBranchnamei		=> (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
-            AutoLocation			=> C4::Context->preference("AutoLocation"),
-            advancedMARCEditor 		=> C4::Context->preference("advancedMARCEditor"),
-            IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
-            IndependantBranches   	=> C4::Context->preference("IndependantBranches"),
+            intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+            IntranetNav        => C4::Context->preference("IntranetNav"),
+            intranetuserjs     => C4::Context->preference("intranetuserjs"),
+            TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
+            AmazonContent      => C4::Context->preference("AmazonContent"),
+            LibraryName        => C4::Context->preference("LibraryName"),
+            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchname    => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
+            LoginFirstname     => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
+            LoginSurname       => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu", 
+            AutoLocation       => C4::Context->preference("AutoLocation"),
+            hide_marc          => C4::Context->preference("hide_marc"),
+            patronimages       => C4::Context->preference("patronimages"),
             "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
-			CircAutocompl 			=> C4::Context->preference("CircAutocompl"),
+            advancedMARCEditor      => C4::Context->preference("advancedMARCEditor"),
+            suggestion              => C4::Context->preference("suggestion"),
+            virtualshelves          => C4::Context->preference("virtualshelves"),
+            LibraryName             => C4::Context->preference("LibraryName"),
+            KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
+            IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
+            IndependantBranches     => C4::Context->preference("IndependantBranches"),
+			CircAutocompl => C4::Context->preference("CircAutocompl"),
         );
     }
     else {
@@ -197,19 +263,28 @@ sub get_template_and_user {
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
-		$template->param(
+  $template->param(
+            KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
+            suggestion             => "" . C4::Context->preference("suggestion"),
+            virtualshelves         => "" . C4::Context->preference("virtualshelves"),
             OpacNav                => "" . C4::Context->preference("OpacNav"),
             opacheader             => "" . C4::Context->preference("opacheader"),
             opaccredits            => "" . C4::Context->preference("opaccredits"),
             opacsmallimage         => "" . C4::Context->preference("opacsmallimage"),
             opaclargeimage         => "" . C4::Context->preference("opaclargeimage"),
-            opaclayoutstylesheet   => "" . C4::Context->preference("opaclayoutstylesheet"),
-            opaccolorstylesheet    => "" . C4::Context->preference("opaccolorstylesheet"),
-            opaclanguagesdisplay   => "" . C4::Context->preference("opaclanguagesdisplay"),
+            opaclayoutstylesheet   => "". C4::Context->preference("opaclayoutstylesheet"),
+            opaccolorstylesheet    => "". C4::Context->preference("opaccolorstylesheet"),
+            opaclanguagesdisplay   => "". C4::Context->preference("opaclanguagesdisplay"),
             opacuserlogin          => "" . C4::Context->preference("opacuserlogin"),
             opacbookbag            => "" . C4::Context->preference("opacbookbag"),
+            TemplateEncoding       => "". C4::Context->preference("TemplateEncoding"),
+            AmazonContent          => "" . C4::Context->preference("AmazonContent"),
+            LibraryName            => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle       => "" . $LibraryNameTitle,
-            LoginBranchname        => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:""), 
+            LoginBranchcode        => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginBranchname        => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"", 
+            LoginFirstname        => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
+            LoginSurname        => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu", 
             OpacPasswordChange     => C4::Context->preference("OpacPasswordChange"),
             opacreadinghistory     => C4::Context->preference("opacreadinghistory"),
             opacuserjs             => C4::Context->preference("opacuserjs"),
@@ -219,24 +294,12 @@ sub get_template_and_user {
             OpacBrowser            => C4::Context->preference("OpacBrowser"),
             RequestOnOpac          => C4::Context->preference("RequestOnOpac"),
             reviewson              => C4::Context->preference("reviewson"),
-            mylibraryfirst   	   => C4::Context->preference("SearchMyLibraryFirst"),
+            hide_marc              => C4::Context->preference("hide_marc"),
+            patronimages           => C4::Context->preference("patronimages"),
+            mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
         );
     }
-	# These are universal: used by both OPAC and INTRANET.
-	$template->param(
-            TemplateEncoding      => "" . C4::Context->preference("TemplateEncoding"),
-            suggestion            => "" . C4::Context->preference("suggestion"),
-            virtualshelves        => "" . C4::Context->preference("virtualshelves"),
-            KohaAdminEmailAddress => "" . C4::Context->preference("KohaAdminEmailAddress"),
-            hide_marc          => C4::Context->preference("hide_marc"),
-            patronimages       => C4::Context->preference("patronimages"),
-            AmazonContent      => C4::Context->preference("AmazonContent"),
-            LibraryName        => C4::Context->preference("LibraryName"),
-            LoginBranchcode    => (C4::Context->userenv?C4::Context->userenv->{ "branch"  }:"insecure"),
-            LoginFirstname     => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:  "Bel"   ),
-            LoginSurname       => (C4::Context->userenv?C4::Context->userenv->{ "surname" }:"Inconnu" ), 
-	);
     return ( $template, $borrowernumber, $cookie );
 }
 
@@ -383,7 +446,7 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
             open L, ">>/tmp/sessionlog";
-            my $time = localtime();
+            my $time = localtime( time() );
             printf L "%20s from %16s logged out at %30s (manually).\n", $userid,
               $ip, $time;
             close L;
@@ -433,10 +496,15 @@ sub checkauth {
     }
     unless ($userid) {
 		my $storage_method = C4::Context->preference('SessionStorage');
-		my $session = ($storage_method eq 'mysql') ? 
-		    CGI::Session->new("driver:MySQL", $sessionID, {Handle=>$dbh}     ) :
-			CGI::Session->new("driver:File" , $sessionID, {Directory=>'/tmp'}) ;			
-		# catch all defaults to tmp should work on all systems
+		my $session;
+		if ($storage_method eq 'mysql'){
+		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+		}
+		else {
+			# catch all defaults to tmp should work on all systems
+			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
+		}
+
         my $sessionID;
 		if ($session) {
 			$sessionID = $session->id;
@@ -448,7 +516,7 @@ sub checkauth {
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
         if ($return) {
             open L, ">>/tmp/sessionlog";
-            my $time = localtime();
+            my $time = localtime( time() );
             printf L "%20s from %16s logged in  at %30s.\n", $userid,
               $ENV{'REMOTE_ADDR'}, $time;
             close L;
@@ -466,8 +534,9 @@ sub checkauth {
                     $userflags,      $branchcode, $branchname,
                     $branchprinter,  $emailaddress
                 );
-                my $sth = $dbh->prepare(
-"SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
+                my $sth =
+                  $dbh->prepare(
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
                   );
                 $sth->execute($userid);
                 (
@@ -480,8 +549,9 @@ sub checkauth {
 
 #         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                 unless ( $sth->rows ) {
-                    my $sth = $dbh->prepare(
-"SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
+                    my $sth =
+                      $dbh->prepare(
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
                       );
                     $sth->execute($cardnumber);
                     (
@@ -505,7 +575,7 @@ sub checkauth {
                 }
 
 # launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
-                my $ip = $ENV{'REMOTE_ADDR'};
+                my $ip       = $ENV{'REMOTE_ADDR'};
                 # if they specify at login, use that
                 if ($query->param('branch')) {
                     $branchcode  = $query->param('branch');
@@ -540,27 +610,27 @@ sub checkauth {
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
-				$session->param('number',0);
-				$session->param('id',C4::Context->config('user'));
-				$session->param('cardnumber',C4::Context->config('user'));
-				$session->param('firstname',C4::Context->config('user'));
-				$session->param('surname',C4::Context->config('user'));
-				$session->param('branch','NO_LIBRARY_SET');
-				$session->param('branchname','NO_LIBRARY_SET');
-				$session->param('flags',1);
-				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-				$session->param('ip',$session->remote_addr());
-				$session->param('lasttime',time());
-			}
-            if ($session){
-                C4::Context::set_userenv(
-                     $session->param('number'),       $session->param('id'),
-                     $session->param('cardnumber'),   $session->param('firstname'),
-                     $session->param('surname'),      $session->param('branch'),
-                     $session->param('branchname'),   $session->param('flags'),
-                     $session->param('emailaddress'), $session->param('branchprinter')
-				);
-			}
+                        $session->param('number',0);
+                        $session->param('id',C4::Context->config('user'));
+                        $session->param('cardnumber',C4::Context->config('user'));
+                        $session->param('firstname',C4::Context->config('user'));
+                        $session->param('surname',C4::Context->config('user'));
+                        $session->param('branch','NO_LIBRARY_SET');
+                        $session->param('branchname','NO_LIBRARY_SET');
+                        $session->param('flags',1);
+                        $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+                        $session->param('ip',$session->remote_addr());
+                        $session->param('lasttime',time());
+                }
+                if ($session){
+                    C4::Context::set_userenv(
+                        $session->param('number'),       $session->param('id'),
+                        $session->param('cardnumber'),   $session->param('firstname'),
+                        $session->param('surname'),      $session->param('branch'),
+                        $session->param('branchname'),   $session->param('flags'),
+                        $session->param('emailaddress'), $session->param('branchprinter')
+                    );
+                }
         }
 
         else {
@@ -577,9 +647,11 @@ sub checkauth {
     {
         # successful login
         unless ($cookie) {
-            $cookie = $query->cookie( CGISESSID => '');
+            $cookie = $query->cookie( CGISESSID => ''
+            );
         }
     return ( $userid, $cookie, $sessionID, $flags );
+
     }
 
 #
@@ -620,11 +692,17 @@ sub checkauth {
       }       
       exit;
     }
-    my $template_name = ($type eq 'opac') ? 'opac-auth.tmpl' : 'auth.tmpl';
+    my $template_name;
+    if ( $type eq 'opac' ) {
+        $template_name = "opac-auth.tmpl";
+    }
+    else {
+        $template_name = "auth.tmpl";
+    }
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
     $template->param(
-    	login        => 1,
+    login        => 1,
         INPUTS               => \@inputs,
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
@@ -638,12 +716,14 @@ sub checkauth {
         opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
         opacuserjs           => C4::Context->preference("opacuserjs"),
-        intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-        intranetstylesheet   => C4::Context->preference("intranetstylesheet"),
-        IntranetNav          => C4::Context->preference("IntranetNav"),
-        intranetuserjs       => C4::Context->preference("intranetuserjs"),
-        TemplateEncoding     => C4::Context->preference("TemplateEncoding"),
-        IndependantBranches  => C4::Context->preference("IndependantBranches"),
+
+        intranetcolorstylesheet =>
+          C4::Context->preference("intranetcolorstylesheet"),
+        intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+        IntranetNav        => C4::Context->preference("IntranetNav"),
+        intranetuserjs     => C4::Context->preference("intranetuserjs"),
+        TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
+        IndependantBranches     => C4::Context->preference("IndependantBranches"),
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
@@ -665,11 +745,13 @@ sub checkauth {
 }
 
 sub checkpw {
+
     my ( $dbh, $userid, $password ) = @_;
 
     # INTERNAL AUTH
-    my $sth = $dbh->prepare(
-"SELECT password,cardnumber,borrowernumber,userid,firstname,surname,branchcode,flags from borrowers where userid=?"
+    my $sth =
+      $dbh->prepare(
+"select password,cardnumber,borrowernumber,userid,firstname,surname,branchcode,flags from borrowers where userid=?"
       );
     $sth->execute($userid);
     if ( $sth->rows ) {
@@ -678,13 +760,14 @@ sub checkpw {
           = $sth->fetchrow;
         if ( md5_base64($password) eq $md5password ) {
 
-            C4::Context->set_userenv($borrowernumber, $userid, $cardnumber,
+            C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
             return 1, $cardnumber;
         }
     }
-    $sth = $dbh->prepare(
-"SELECT password,cardnumber,borrowernumber,userid, firstname,surname,branchcode,flags from borrowers where cardnumber=?"
+    $sth =
+      $dbh->prepare(
+"select password,cardnumber,borrowernumber,userid, firstname,surname,branchcode,flags from borrowers where cardnumber=?"
       );
     $sth->execute($userid);
     if ( $sth->rows ) {
@@ -699,7 +782,7 @@ sub checkpw {
         }
     }
     if (   $userid && $userid eq C4::Context->config('user')
-        && $password eq C4::Context->config('pass') )
+        && "$password" eq C4::Context->config('pass') )
     {
 
 # Koha superuser account
@@ -707,7 +790,7 @@ sub checkpw {
         return 2;
     }
     if (   $userid && $userid eq 'demo'
-        && $password eq 'demo'
+        && "$password" eq 'demo'
         && C4::Context->config('demo') )
     {
 
@@ -780,6 +863,7 @@ sub getborrowernumber {
     return 0;
 }
 
+END { }    # module clean-up code here (global destructor)
 1;
 __END__
 
