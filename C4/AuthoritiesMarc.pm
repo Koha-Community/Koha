@@ -517,7 +517,7 @@ sub AddAuthority {
     $sth->finish;
   }else{
       $record->add_fields('001',$authid) unless ($record->field('001'));
-      if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a')){
+      if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
             $record->leader("     nx  j22             ");
             my $date=POSIX::strftime("%Y%m%d",localtime);    
             if ($record->field('100')){
