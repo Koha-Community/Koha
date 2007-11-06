@@ -207,10 +207,10 @@ else {
                       = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
                     my %row_data;
                     if ( $i % 2 ) {
-                        $toggle = "#ffffcc";
+                        $toggle = 1;
                     }
                     else {
-                        $toggle = "white";
+                        $toggle = 0;
                     }
                     $row_data{toggle}       = $toggle;
                     $row_data{server}       = $serverhost[$k];

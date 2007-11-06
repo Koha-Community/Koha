@@ -473,6 +473,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
+		$("#z3950searchc").empty();
 	    yuiToolbar();
 	 });
 
@@ -480,7 +481,13 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 	function yuiToolbar() {
 	    new YAHOO.widget.Button("addbiblio");
-	   // this breaks z3950 search  new YAHOO.widget.Button("z3950search");
+		new YAHOO.widget.Button({
+                                            id: "z3950search", 
+                                            type: "button", 
+                                            label: "z39.50 Search", 
+                                            container: "z3950searchc",
+											onclick: {fn:function(){PopupZ3950()}}
+                                        });
 	}
 
 	//]]>
@@ -488,7 +495,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 		<ul class="toolbar">
 			<li><input id="addbiblio" type="submit" value="Save" /></li>
-			<li><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
+			<li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
 			<li id="changeframework"><label for="Frameworks">Change framework: </label><!--TMPL_VAR Name="framework" -->	<input type="hidden" name="op" value="addbiblio" /></li>
 		</ul>
 </div>
