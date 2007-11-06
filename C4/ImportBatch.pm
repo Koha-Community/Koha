@@ -111,7 +111,7 @@ sub GetZ3950BatchId {
 
 =head2 GetImportRecordMarc
 
-=over4
+=over 4
 
 my ($marcblob, $encoding) = GetImportRecordMarc($import_record_id);
 
@@ -227,9 +227,10 @@ sub ModBiblioInBatch {
 
 =over 4
 
-($batch_id, $num_records, $num_items, @invalid_records) = BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
-                                                                                $comments, $branch_code, $parse_items,
-                                                                                $leave_as_staging);
+($batch_id, $num_records, $num_items, @invalid_records) = 
+    BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
+                          $comments, $branch_code, $parse_items,
+                          $leave_as_staging);
 
 =back
 
@@ -310,7 +311,7 @@ sub AddItemsToImportBiblio {
 
 =head2 BatchFindBibDuplicates
 
-=over4
+=over 4
 
 my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, $max_matches);
 
@@ -318,8 +319,8 @@ my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, $max_matches)
 
 Goes through the records loaded in the batch and attempts to 
 find duplicates for each one.  Sets the overlay action to
-'replace' if it was 'create_new', and sets the overlay status
-of each record to 'no_match' or 'auto_match' as appropriate.
+"replace" if it was "create_new", and sets the overlay status
+of each record to "no_match" or "auto_match" as appropriate.
 
 The $max_matches parameter is optional; if it is not supplied,
 it defaults to 10.
