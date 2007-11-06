@@ -172,7 +172,7 @@ if ($op eq 'addsubscription') {
     my $firstacquidate = $query->param('firstacquidate');    
     my $periodicity = $query->param('periodicity');
     my $dow = $query->param('dow');
-    my $irregularity = $query->param('irregularity');
+    my @irregularity = $query->param('irregular');
     my $numberlength = 0;
     my $weeklength = 0;
     my $monthlength = 0;
@@ -186,22 +186,24 @@ if ($op eq 'addsubscription') {
     } else {
         $numberlength = $sublength;
     }
-
     my $add1 = $query->param('add1');
     my $every1 = $query->param('every1');
     my $whenmorethan1 = $query->param('whenmorethan1');
     my $setto1 = $query->param('setto1');
     my $lastvalue1 = $query->param('lastvalue1');
+    my $innerloop1 =$query->param('innerloop1');
     my $add2 = $query->param('add2');
     my $every2 = $query->param('every2');
     my $whenmorethan2 = $query->param('whenmorethan2');
     my $setto2 = $query->param('setto2');
+    my $innerloop2 =$query->param('innerloop2');
     my $lastvalue2 = $query->param('lastvalue2');
     my $add3 = $query->param('add3');
     my $every3 = $query->param('every3');
     my $whenmorethan3 = $query->param('whenmorethan3');
     my $setto3 = $query->param('setto3');
     my $lastvalue3 = $query->param('lastvalue3');
+    my $innerloop3 =$query->param('innerloop3');
     my $numberingmethod = $query->param('numberingmethod');
     my $status = 1;
     my $biblionumber = $query->param('biblionumber');
@@ -212,13 +214,12 @@ if ($op eq 'addsubscription') {
 	my $letter = $query->param('letter');
     ### BugFIX : hdl doesnot know what innerloops or letter stand for but it seems necessary. So he adds them.
     my $manualhistory = $query->param('manualhist');
-    my ($innerloop1,$innerloop2,$innerloop3);
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-					$numberingmethod, $status, $notes,$letter,$firstacquidate,$irregularity,
+					$numberingmethod, $status, $notes,$letter,$firstacquidate,join(",",@irregularity),
                     $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes
 				);
 
