@@ -427,7 +427,6 @@ sub build_tabs ($$$$$) {
               }
             }
             if ( $#loop_data >= 0 ) {
-                warn "pushing : $tabloop = ".Data::Dumper::Dumper(@loop_data);
                 push @BIG_LOOP, {
                     number    => $tabloop,
                     innerloop => \@loop_data,
