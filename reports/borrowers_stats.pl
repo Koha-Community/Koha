@@ -234,7 +234,7 @@ foreach my $thisbranch (sort keys %$branches) {
 					hassort2 => $hassort2,
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice,
-					CGIBranch => $CGIBranch
+					CGIBranch => $CGIBranch,
 #					CGIBranch => \@branchloop
                         DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
                     );
