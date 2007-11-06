@@ -89,6 +89,9 @@ my $branches = GetBranches();
 
 my $printers = GetPrinters();
 
+my @failedrenews = $query->param('failedrenew');
+my @renew_failed;
+for (@failedrenews) { $renew_failed[$_] = 1; } 
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
@@ -414,7 +417,7 @@ if ($borrower) {
         $datedue =~ s/-//g;
 		$it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
-
+        $it->{'renew_failed'} = $renew_failed[$it->{'itemnumber'}];
         # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
         $issued_itemtypes_count->{ $it->{'itemtype'} }++;
 

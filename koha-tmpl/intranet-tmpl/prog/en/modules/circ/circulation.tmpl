@@ -652,6 +652,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
+		<!-- TMPL_IF NAME="renew_failed" -->
+		<td>Renewal Failed</td>
+		<!-- /TMPL_IF -->
     </tr>
     <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
     <!-- /TMPL_IF --> <!-- /if todayissues -->
@@ -689,6 +692,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
+		<!-- TMPL_IF NAME="renew_failed" -->
+		<td>Renewal Failed</td>
+		<!-- /TMPL_IF -->
+
     </tr>
     <!-- /TMPL_LOOP --> <!-- /loop previssues -->
 <!-- /TMPL_IF --> <!--/if previssues -->
