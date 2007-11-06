@@ -6,7 +6,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation.pl">Reports</a></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Reports</div>
 <div id="doc" class="yui-t7">
 
    <div id="bd">
@@ -25,6 +25,12 @@
 		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
 		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
+	</ul>
+	
+	<h2>Inactive</h2>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Patrons who haven't checked out</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items not checked out</a></li>
 	</ul></div>
 
 
@@ -32,25 +38,16 @@
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons checking out the most</a></li>
 		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Items checked out the most</a></li>
-	</ul></div>
-</div>
-
-
-<div class="yui-g">	<div class="yui-u first"><h2>Inactive</h2>
-	<ul>
-		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Patrons who haven't checked out</a></li>
-		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items not checked out</a></li>
-	</ul></div>
-
-
-	<div class="yui-u"><h2>Other</h2>
+	</ul>
+	
+	<h2>Other</h2>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Items lost</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Checkouts by patron category</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
 	</ul></div>
-	</div>
+</div>
 
 </div>
 </div>

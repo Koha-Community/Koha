@@ -106,6 +106,28 @@ Item Types Administration
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+	
+<!-- TMPL_IF NAME="else" --><div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newitemtype");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form">New Item Type</a></li>
+</ul></div><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add_form" -->
   <!-- TMPL_IF name="itemtype" -->
@@ -275,7 +297,6 @@ Item Types Administration
 
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
-<p><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form">Add Item type</a></p>
 <!-- /TMPL_IF -->
 
 

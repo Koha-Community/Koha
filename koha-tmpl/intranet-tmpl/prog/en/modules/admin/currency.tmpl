@@ -79,6 +79,30 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+	
+<!-- TMPL_IF NAME="else" -->
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newcurrency");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newcurrency" href="/cgi-bin/koha/admin/currency.pl?op=add_form">New Currency</a></li>
+</ul></div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_form" -->
         
@@ -110,7 +134,7 @@
 			</li></ol>
         </fieldset>
 		
-		<input type="submit" value="Submit" onclick="Check(this.form)" /> 
+		<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form)" /> </fieldset>
         </form>
 
 <!-- /TMPL_IF -->
@@ -163,7 +187,7 @@
 
 <!-- TMPL_IF NAME="else" -->
 
-<h2>Currencies</h2>
+<h2>Currencies and Exchange Rates</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->	
@@ -183,11 +207,6 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="add_form" />
-		<input type="submit" value="Add Currency" />
-        </form>
-
 	
 	<!-- TMPL_IF NAME="offsetgtzero" -->
 		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Prev</a>

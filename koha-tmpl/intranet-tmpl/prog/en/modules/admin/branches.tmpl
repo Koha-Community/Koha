@@ -26,6 +26,30 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+	
+	<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newbranch");
+		new YAHOO.widget.Button("newcategory");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add">New Library</a></li>
+	<li><a id="newcategory" href="/cgi-bin/koha/admin/branches.pl?op=editcategory">New Agency Category</a></li>
+</ul></div>
 
 <!-- TMPL_IF name="add" -->
   <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
@@ -164,10 +188,6 @@
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<form action="<!-- TMPL_VAR name="action" -->" method="post">
-        <p><input type="hidden" name="op" value="add" />
-        <input type="submit" value="Add New Library" /></p>
-    </form>
     
     <!-- TMPL_IF NAME="branchcategories" -->
    
@@ -181,7 +201,7 @@
         <th>&nbsp;</th>
         <th>&nbsp;</th>
     </tr>
-    <!-- TMPL_LOOP name="catloop" -->
+<!-- TMPL_IF NAME="catloop" --><!-- TMPL_LOOP name="catloop" -->
         <tr>
         <td><!-- TMPL_VAR name="categoryname" --></td>
         <td><!-- TMPL_VAR name="categorycode" --></td>
@@ -191,7 +211,7 @@
         <td><a href="<!-- TMPL_VAR name="action" -->?op=delete_category&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="HTML" -->">Delete</a>
         </td>
         </tr>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="5">No <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --> Defined</td></tr><!-- /TMPL_IF -->
     </table>
     <!-- /TMPL_LOOP -->
 
@@ -200,10 +220,6 @@
             No Agency Categories defined.
         </p>
     <!-- /TMPL_IF --> <!-- NAME="branchcategories" -->
-    <form action="<!-- TMPL_VAR name="action" -->" method="post"><p>
-        <input type="hidden" name="op" value="editcategory" />
-        <input type="submit" value="Add New Category" /></p>
-    </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="editcategory" -->
@@ -231,7 +247,7 @@
             <input type="text" name="codedescription" id="codedescription" size="70" maxlength="80" value="<!-- TMPL_VAR name="codedescription" escape="HTML" -->" />
         </li>
 		<li>
-		<label for="categorytype">Category Type</label>
+		<label for="categorytype">Category Type: </label>
             <select id="categorytype" name="categorytype">
             <!-- TMPL_LOOP NAME="categorytype" -->
                 <option value="<!-- TMPL_VAR NAME="type" -->" <!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="type" --></option>
