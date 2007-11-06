@@ -79,7 +79,15 @@
     <td><!-- TMPL_VAR NAME="odissue" --></td>
     <td><!-- TMPL_VAR NAME="fines" --></td>
     <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
-	<td><a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit</a></td>
+	<td><!-- TMPL_IF NAME="category_type" -->
+            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">Edit</a>
+<!-- TMPL_ELSE --> <!-- try with categorycode if no category_type -->
+ 	<!-- TMPL_IF NAME="categorycode" -->
+            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode"-->">Edit</a>
+    <!-- TMPL_ELSE --> <!-- if no categorycode, set category_type to A by default -->
+            <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=A">Edit</a>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF --></td>
     </tr>
     <!-- /TMPL_LOOP -->
     </table>
