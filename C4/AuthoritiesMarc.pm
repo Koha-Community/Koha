@@ -516,30 +516,24 @@ sub AddAuthority {
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
   }else{
-  ##Insert the recordID in MARC record 
-    unless ($record->field('001') && $record->field('001')->data() eq $authid){
-        $record->delete_field($record->field('001'));
-        $record->insert_fields_ordered(MARC::Field->new('001',$authid));
-    }
-    # check for field 100 in UNIMARC
-    if (($format eq "UNIMARCAUTH") && !$record->subfield('100','a')) {
-        $record->leader("     nx  j22             ");
-        my $date=POSIX::strftime("%Y%m%d",localtime);    
-        if ($record->field('100')){
-            $record->field('100')->update('a'=>$date."afrey50      ba0");
-        } else {      
-            $record->append_fields(
-            MARC::Field->new('100',' ',' '
-                ,'a'=>$date."afrey50      ba0")
-            );
-        }
-    }
-    # field 152 contains authtypecode (unused field in MARC21, correct place in UNIMARC)
-    $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
-    $dbh->do("lock tables auth_header WRITE");
-    my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
-    $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
-    $sth->finish;
+      $record->add_fields('001',$authid) unless ($record->field('001'));
+      if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a')){
+            $record->leader("     nx  j22             ");
+            my $date=POSIX::strftime("%Y%m%d",localtime);    
+            if ($record->field('100')){
+              $record->field('100')->update('a'=>$date."afrey50      ba0");
+            } else {      
+              $record->append_fields(
+                MARC::Field->new('100',' ',' '
+                  ,'a'=>$date."afrey50      ba0")
+              );
+            }      
+      }    
+      $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152'));
+      $dbh->do("lock tables auth_header WRITE");
+      my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
+      $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
+      $sth->finish;
   }
   $dbh->do("unlock tables");
   ModZebra($authid,'specialUpdate',"authorityserver",$record);
