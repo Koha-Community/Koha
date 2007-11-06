@@ -60,6 +60,7 @@ use C4::ImportBatch;
     BatchCommitBibRecords
     BatchRevertBibRecords
 
+    GetAllImportBatches
     GetImportBatchRangeDesc
     GetNumberOfNonZ3950ImportBatches
     GetImportBibliosRange
@@ -363,7 +364,8 @@ sub BatchFindBibDuplicates {
 
 =over 4
 
-my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($batch_id);
+my ($num_added, $num_updated, $num_items_added, $num_ignored) = 
+    BatchCommitBibRecords($batch_id, $progress_interval, $progress_callback);
 
 =back
 
@@ -371,6 +373,17 @@ my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRe
 
 sub BatchCommitBibRecords {
     my $batch_id = shift;
+
+    # optional callback to monitor status 
+    # of job
+    my $progress_interval = 0;
+    my $progress_callback = undef;
+    if ($#_ == 1) {
+        $progress_interval = shift;
+        $progress_callback = shift;
+        $progress_interval = 0 unless $progress_interval =~ /^\d+$/ and $progress_interval > 0;
+        $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
+    }
 
     my $num_added = 0;
     my $num_updated = 0;
@@ -386,7 +399,12 @@ sub BatchCommitBibRecords {
                              JOIN import_biblios USING (import_record_id)
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
+    my $rec_num = 0;
     while (my $rowref = $sth->fetchrow_hashref) {
+        $rec_num++;
+        if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
+            &$progress_callback($rec_num);
+        }
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'imported') {
             $num_ignored++;
         }
@@ -549,6 +567,35 @@ sub BatchRevertItems {
     }
     $sth->finish();
     return $num_items_deleted;
+}
+
+=head2 GetAllImportBatches
+
+=over 4
+
+my $results = GetAllImportBatches();
+
+=back
+
+Returns a references to an array of hash references corresponding
+to all import_batches rows (of batch_type 'batch'), sorted in 
+ascending order by import_batch_id.
+
+=cut
+
+sub  GetAllImportBatches {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("SELECT * FROM import_batches
+                                    WHERE batch_type = 'batch'
+                                    ORDER BY import_batch_id ASC");
+
+    my $results = [];
+    $sth->execute();
+    while (my $row = $sth->fetchrow_hashref) {
+        push @$results, $row;
+    }
+    $sth->finish();
+    return $results;
 }
 
 =head2 GetImportBatchRangeDesc
