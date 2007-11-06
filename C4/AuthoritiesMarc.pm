@@ -522,7 +522,7 @@ sub AddAuthority {
         $record->insert_fields_ordered(MARC::Field->new('001',$authid));
     }
     # check for field 100 in UNIMARC
-    if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a')){
+    if (($format eq "UNIMARCAUTH") && !$record->subfield('100','a')) {
         $record->leader("     nx  j22             ");
         my $date=POSIX::strftime("%Y%m%d",localtime);    
         if ($record->field('100')){
