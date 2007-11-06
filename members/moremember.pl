@@ -235,8 +235,7 @@ if ($borrowernumber) {
 		foreach (qw(waiting transfered nottransfered)) {
 				$getreserv{$_} = 0;
 		}
-#       Joe this line fails, can you take a look please
-#        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'})->output() or die "Cannot get new($num_res->{'reservedate'}) from C4::Dates";
+        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output(C4::Context->preference('dateformat'));
 		foreach (qw(biblionumber title author barcodereserv itemcallnumber )) {
 				$getreserv{$_} = $getiteminfo->{$_};
 		}
