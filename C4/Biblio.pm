@@ -2310,7 +2310,7 @@ sub TransformHtmlToMarc {
             if($tag < 10){ # no code for theses fields
     # in MARC editor, 000 contains the leader.
                 if ($tag eq '000' ) {
-                    $record->leader($cgi->param($params->[$j+1])) if length($cgi->param($params->[$j+1]))==24;
+                    $record->leader($cgi->param($params->[$j+1])) if length($cgi->param($params->[$j+1]))==25;
     # between 001 and 009 (included)
                 } else {
                     $newfield = MARC::Field->new(
@@ -2347,6 +2347,7 @@ sub TransformHtmlToMarc {
     }
     
     $record->append_fields(@fields);
+    warn "RESULT : ".$record->as_formatted;
     return $record;
 }
 
