@@ -667,25 +667,32 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
-      map {$query.= " and he=".$_->[1] if ($_->[0]=~/[A-z]/)}  $record->field($data->{tagfield})->subfields();
+      map {$query.= " and he,ext=".$_->[1] if ($_->[0]=~/[A-z]/)}  $record->field($data->{tagfield})->subfields();
+      warn $query;   
       my ($error,$results)=SimpleSearch($query,"authorityserver");
-    # there is at least 1 result => return the 1st one
-      if (@$results>1) {
+    # there is only 1 result 
+      if (scalar(@$results)==1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
+        $countlinked++;
+      }elsif (scalar(@$results)>1) {
+   #More than One result 
+   #This can comes out of a lack of a subfield.
+#         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
+#         $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
   $countlinked++;
       } else {
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
-  ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode
-     
-        my $authtypedata=GetAuthType($data->{authtypecode});
-        my $marcrecordauth=MARC::Record->new();
-        my $field=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$record->subfield($data->{tagfield},'a'));
-        map { $field->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $record->field($data->{tagfield})->subfields();
-        $marcrecordauth->insert_fields_ordered($field);
-        my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
-        $countcreated++;
-        $record->field($data->{tagfield})->add_subfields('9'=>$authid);
+  ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode     
+  ###NOTICE : This can be a problem. We should also look into other types and rejected forms.
+         my $authtypedata=GetAuthType($data->{authtypecode});
+         my $marcrecordauth=MARC::Record->new();
+         my $field=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$record->subfield($data->{tagfield},'a'));
+         map { $field->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $record->field($data->{tagfield})->subfields();
+         $marcrecordauth->insert_fields_ordered($field);
+         my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
+         $countcreated++;
+         $record->field($data->{tagfield})->add_subfields('9'=>$authid);
       }
     }  
   }
