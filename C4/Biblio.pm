@@ -1790,48 +1790,43 @@ sub GetMarcSubjects {
         $mintag = "600";
         $maxtag = "611";
     }
+	
+    my @marcsubjects;
+	my $subject = "";
+	my $subfield = "";
+	my $marcsubject;
 
-    my @marcsubjcts;
-
-    foreach my $field ( $record->fields ) {
+    foreach my $field ( $record->field('6..' )) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
+		my @subfields_loop;
         my @subfields = $field->subfields();
-        my $link = "su:";
-        my $label;
-        my $flag = 0;
-        my $authoritysep=C4::Context->preference("authoritysep");
-        for my $subject_subfield ( @subfields ) {
-            if (
-                $marcflavour ne 'MARC21'
-                and (
-                    ($subject_subfield->[0] eq '3') or
-                    ($subject_subfield->[0] eq '4') or
-                    ($subject_subfield->[0] eq '5')
-                )
-            )
-            {
-                next;
-            }
-            my $code = $subject_subfield->[0];
-            $label .= $subject_subfield->[1].$authoritysep unless ( $code == 9 );
-            $link  .= " and su-to:".$subject_subfield->[1]  unless ( $code == 9 );
-            if ( $code == 9 ) {
-                $link = "an:".$subject_subfield->[1];
-                $flag = 1;
-            }
-            elsif ( ! $flag ) {
-                $link =~ s/ and\ssu-to:$//;
-            }
-        }
-         $label =~ s/$authoritysep$//;
-        push @marcsubjcts,
-          {
-            label => $label,
-            link  => $link
-          }
-    }
-    return \@marcsubjcts;
-}    #end GetMarcSubjects
+		my $counter = 0;
+		my @link_loop;
+		for my $subject_subfield (@subfields ) {
+			# don't load unimarc subfields 3,4,5
+			next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ (3|4|5) ) );
+			my $code = $subject_subfield->[0];
+			my $value = $subject_subfield->[1];
+			my $linkvalue = $value;
+			$linkvalue =~ s/(\(|\))//g;
+			my $operator = " and " unless $counter==0;
+			push @link_loop, {link => $linkvalue, operator => $operator };
+			my $separator = C4::Context->preference("authoritysep") unless $counter==0;
+			# ignore $9
+			push @subfields_loop, {code => $code, value => $value, link_loop => \@link_loop, separator => $separator} unless ($subject_subfield->[0] == 9 );
+			# this needs to be added back in in a way that the template can expose it properly
+			#if ( $code == 9 ) {
+            #    $link = "an:".$subject_subfield->[1];
+            #    $flag = 1;
+            #}
+			$counter++;
+		}
+                
+		push @marcsubjects, { MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop };
+        
+	}
+        return \@marcsubjects;
+}  #end getMARCsubjects
 
 =head2 GetMarcAuthors
 

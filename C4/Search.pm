@@ -565,6 +565,7 @@ sub _remove_stopwords {
 	#       otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
 	#       and don't find anything...
 		foreach (keys %{C4::Context->stopwords}) {
+			next if ($_ =~/(and|or|not)/); # don't remove operators
 			$operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
 			$operand=~ s/^$_\P{IsAlpha}/ /i;
 			$operand=~ s/\P{IsAlpha}$_$/ /i;
@@ -747,6 +748,7 @@ sub buildQuery {
 
 			# COMBINE OPERANDS, INDEXES AND OPERATORS
 			if ( $operands[$i] ) {
+				warn "OP: $operands[$i]";
             	my $operand = $operands[$i];
             	my $index   = $indexes[$i];
 				# if there's no index, don't use one, it will throw a CCL error
@@ -755,7 +757,7 @@ sub buildQuery {
 
 				# Remove Stopwords	
 				$operand = _remove_stopwords($operand,$index);
-
+				warn "OP_SW: $operand";
 				# Handle Truncation
 				my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
 				($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _add_truncation($operand,$index);
