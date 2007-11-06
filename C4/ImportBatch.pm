@@ -231,15 +231,33 @@ sub ModBiblioInBatch {
 ($batch_id, $num_records, $num_items, @invalid_records) = 
     BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
                           $comments, $branch_code, $parse_items,
-                          $leave_as_staging);
+                          $leave_as_staging, 
+                          $progress_interval, $progress_callback);
 
 =back
 
 =cut
 
 sub  BatchStageMarcRecords {
-    my ($marc_flavor, $marc_records, $file_name, $comments, $branch_code, $parse_items, $leave_as_staging) = @_;
-
+    my $marc_flavor = shift;
+    my $marc_records = shift;
+    my $file_name = shift;
+    my $comments = shift;
+    my $branch_code = shift;
+    my $parse_items = shift;
+    my $leave_as_staging = shift;
+   
+    # optional callback to monitor status 
+    # of job
+    my $progress_interval = 0;
+    my $progress_callback = undef;
+    if ($#_ == 1) {
+        $progress_interval = shift;
+        $progress_callback = shift;
+        $progress_interval = 0 unless $progress_interval =~ /^\d+$/ and $progress_interval > 0;
+        $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
+    } 
+    
     my $batch_id = AddImportBatch('create_new', 'staging', 'batch', $file_name, $comments);
     my @invalid_records = ();
     my $num_valid = 0;
@@ -248,6 +266,9 @@ sub  BatchStageMarcRecords {
     my $rec_num = 0;
     foreach my $marc_blob (split(/\x1D/, $marc_records)) {
         $rec_num++;
+        if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
+            &$progress_callback($rec_num);
+        }
         my $marc_record = FixEncoding($marc_blob, "\x1D");
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {
@@ -314,7 +335,7 @@ sub AddItemsToImportBiblio {
 
 =over 4
 
-my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, $max_matches);
+my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, $max_matches, $progress_interval, $progress_callback);
 
 =back
 
@@ -326,12 +347,29 @@ of each record to "no_match" or "auto_match" as appropriate.
 The $max_matches parameter is optional; if it is not supplied,
 it defaults to 10.
 
+The $progress_interval and $progress_callback parameters are 
+optional; if both are supplied, the sub referred to by
+$progress_callback will be invoked every $progress_interval
+records using the number of records processed as the 
+singular argument.
+
 =cut
 
 sub BatchFindBibDuplicates {
     my $batch_id = shift;
     my $matcher = shift;
     my $max_matches = @_ ? shift : 10;
+
+    # optional callback to monitor status 
+    # of job
+    my $progress_interval = 0;
+    my $progress_callback = undef;
+    if ($#_ == 1) {
+        $progress_interval = shift;
+        $progress_callback = shift;
+        $progress_interval = 0 unless $progress_interval =~ /^\d+$/ and $progress_interval > 0;
+        $progress_interval = 0 unless 'CODE' eq ref $progress_callback;
+    }
 
     my $dbh = C4::Context->dbh;
     my $old_overlay_action = GetImportBatchOverlayAction($batch_id);
@@ -345,7 +383,12 @@ sub BatchFindBibDuplicates {
                              WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     my $num_with_matches = 0;
+    my $rec_num = 0;
     while (my $rowref = $sth->fetchrow_hashref) {
+        $rec_num++;
+        if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
+            &$progress_callback($rec_num);
+        }
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
         my @matches = $matcher->get_matches($marc_record, $max_matches);
         if (scalar(@matches) > 0) {
