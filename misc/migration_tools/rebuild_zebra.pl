@@ -299,6 +299,10 @@ rank:rank-1
             eval {
                 $record = GetAuthority($authid);
             };
+            # force authid in case it's not here, otherwise, zebra will die on this authority
+            unless ($record->field('001')){
+                $record->insert_fields_ordered(MARC::Field->new('001',$authid));
+            }
             if($@){
                 print "  There was some pb getting authority : ".$authid."\n";
             next;
@@ -495,75 +499,77 @@ rank:rank-1
         my $dbh=C4::Context->dbh;
         my $sth;
 	if ($noxml){
-	  $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
-	  $sth->execute();
-          my $i=0;
-          while (my ($biblionumber,$marc) = $sth->fetchrow) {
+        $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
+        $sth->execute();
+        my $i=0;
+        while (my ($biblionumber,$marc) = $sth->fetchrow) {
             my $record;
-	    $record=MARC::Record->new_from_usmarc($marc);
+            $record=MARC::Record->new_from_usmarc($marc);
             my $record_correct=1;
-            next unless $record->field($biblionumbertagfield);
-	    if ($biblionumbertagfield eq '001') {
+            # skip uncorrect records : isn't this bogus, as just after we reintroduce biblionumber if it's missing ?
+            # FIXME next unless $record->field($biblionumbertagfield);
+            # check if biblionumber is present, otherwise, add it on the fly
+            if ($biblionumbertagfield eq '001') {
                 unless ($record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
                     my $field;
                     # if the field where biblionumber is already exist, just update it, otherwise create it
-			    if ($record->field($biblionumbertagfield)) {
-				$field =  $record->field($biblionumbertagfield);
-				$field->update($biblionumber);
-			    } else {
-				my $newfield;
-				$newfield = MARC::Field->new( $biblionumbertagfield, $biblionumber);
-				$record->append_fields($newfield);
-			    }
-			}
-		    } else {
-			unless ($record->subfield($biblionumbertagfield,$biblionumbertagsubfield)) {
-			    $record_correct=0;
-			    my $field;
-			    # if the field where biblionumber is already exist, just update it, otherwise create it
-			    if ($record->field($biblionumbertagfield)) {
-				$field =  $record->field($biblionumbertagfield);
-				$field->add_subfields($biblionumbertagsubfield => $biblionumber);
-			    } else {
-				my $newfield;
-				$newfield = MARC::Field->new( $biblionumbertagfield,'','', $biblionumbertagsubfield => $biblionumber);
-				$record->append_fields($newfield);
-			    }
-			}
+                if ($record->field($biblionumbertagfield)) {
+                $field =  $record->field($biblionumbertagfield);
+                $field->update($biblionumber);
+                } else {
+                my $newfield;
+                $newfield = MARC::Field->new( $biblionumbertagfield, $biblionumber);
+                $record->append_fields($newfield);
+                }
+            }
+            } else {
+            unless ($record->subfield($biblionumbertagfield,$biblionumbertagsubfield)) {
+                $record_correct=0;
+                my $field;
+                # if the field where biblionumber is already exist, just update it, otherwise create it
+                if ($record->field($biblionumbertagfield)) {
+                $field =  $record->field($biblionumbertagfield);
+                $field->add_subfields($biblionumbertagsubfield => $biblionumber);
+                } else {
+                my $newfield;
+                $newfield = MARC::Field->new( $biblionumbertagfield,'','', $biblionumbertagsubfield => $biblionumber);
+                $record->append_fields($newfield);
+                }
+            }
     #             warn "FIXED BIBLIONUMBER".$record->as_formatted;
-		    }
-		    unless ($record->subfield($biblioitemnumbertagfield,$biblioitemnumbertagsubfield)) {
-				$record_correct=0;
-		    #             warn "INCORRECT BIBLIOITEMNUMBER :".$record->as_formatted;
-			my $field;
-				# if the field where biblionumber is already exist, just update it, otherwise create it
-				if ($record->field($biblioitemnumbertagfield)) {
-				    $field =  $record->field($biblioitemnumbertagfield);
-				    if ($biblioitemnumbertagfield <10) {
-					$field->update($biblionumber);
-				    } else {
-					$field->add_subfields($biblioitemnumbertagsubfield => $biblionumber);
-				    }
-				} else {
-				    my $newfield;
-				    if ($biblioitemnumbertagfield <10) {
-					$newfield = MARC::Field->new( $biblioitemnumbertagfield, $biblionumber);
-				    } else {
-					$newfield = MARC::Field->new( $biblioitemnumbertagfield,'','', $biblioitemnumbertagsubfield => $biblionumber);
-				    }
-				    $record->insert_grouped_field($newfield);
-			}
-	    #             warn "FIXED BIBLIOITEMNUMBER".$record->as_formatted;
-		    }
-		    my $leader=$record->leader;
-		    substr($leader,0,5)='     ';
-		    substr($leader,10,7)='22     ';
-		    $record->leader(substr($leader,0,24));
-        	    print OUT $record->as_usmarc();
-		}
-		close (OUT);
-	} else {
+            }
+            unless ($record->subfield($biblioitemnumbertagfield,$biblioitemnumbertagsubfield)) {
+                $record_correct=0;
+            #             warn "INCORRECT BIBLIOITEMNUMBER :".$record->as_formatted;
+            my $field;
+                # if the field where biblionumber is already exist, just update it, otherwise create it
+                if ($record->field($biblioitemnumbertagfield)) {
+                    $field =  $record->field($biblioitemnumbertagfield);
+                    if ($biblioitemnumbertagfield <10) {
+                    $field->update($biblionumber);
+                    } else {
+                    $field->add_subfields($biblioitemnumbertagsubfield => $biblionumber);
+                    }
+                } else {
+                    my $newfield;
+                    if ($biblioitemnumbertagfield <10) {
+                    $newfield = MARC::Field->new( $biblioitemnumbertagfield, $biblionumber);
+                    } else {
+                    $newfield = MARC::Field->new( $biblioitemnumbertagfield,'','', $biblioitemnumbertagsubfield => $biblionumber);
+                    }
+                    $record->insert_grouped_field($newfield);
+            }
+        #             warn "FIXED BIBLIOITEMNUMBER".$record->as_formatted;
+            }
+            my $leader=$record->leader;
+            substr($leader,0,5)='     ';
+            substr($leader,10,7)='22     ';
+            $record->leader(substr($leader,0,24));
+                print OUT $record->as_usmarc();
+        }
+        close (OUT);
+    } else {
         $sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber $limit");
         $sth->execute();
         my $i=0;
@@ -582,8 +588,10 @@ rank:rank-1
     #         print $record;
             # check that biblionumber & biblioitemnumber are stored in the MARC record, otherwise, add them & update the biblioitems.marcxml data.
             my $record_correct=1;
-            next unless $record->field($biblionumbertagfield);
-	    if ($biblionumbertagfield eq '001') {
+            # skip uncorrect records : isn't this bogus, as just after we reintroduce biblionumber if it's missing ?
+            # FIXME next unless $record->field($biblionumbertagfield);
+            # check if biblionumber is present, otherwise, add it on the fly
+            if ($biblionumbertagfield eq '001') {
                 unless ($record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
                     my $field;
