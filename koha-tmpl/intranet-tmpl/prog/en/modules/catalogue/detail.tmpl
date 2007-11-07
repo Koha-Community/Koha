@@ -166,7 +166,14 @@
                                     <!-- TMPL_IF name="itemlost"-->
                                         Item lost
                                     <!-- TMPL_ELSE -->
-                                    <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled<!-- TMPL_ELSE -->Available<!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled
+									<!-- TMPL_ELSE -->
+									  <!-- TMPL_IF NAME="count_reserves" -->
+									    <!-- TMPL_VAR NAME="count_reserves" -->
+									  <!-- TMPL_ELSE -->
+									     Available
+									  <!-- /TMPL_IF -->
+									<!-- /TMPL_IF -->
                                     <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
