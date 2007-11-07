@@ -115,15 +115,21 @@ Koha database.
 #'
 sub Getoverdues {
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "SELECT issues.*,biblioitems.itemtype FROM issues 
-                LEFT JOIN items USING (itemnumber)
-                LEFT JOIN biblioitems USING (biblioitemnumber)
-                WHERE date_due < now() 
-                    AND returndate IS 
-                    NULL ORDER BY borrowernumber 
-        "
-    );
+	my $itype_q = (C4::context->preference('item-level_itype')) ? " items.ccode as itemtype "
+    my $sth =  (C4::context->preference('item-level_itype')) ? 
+				$dbh->prepare(
+        			"SELECT issues.*,items.ccode as itemtype FROM issues 
+                	LEFT JOIN items USING (itemnumber)
+                	WHERE date_due < now() 
+                	    AND returndate IS NULL ORDER BY borrowernumber " )
+				:
+ 				$dbh->prepare(
+                    "SELECT issues.*,biblioitems.itemtype,items.ccode FROM issues 
+                    LEFT JOIN items USING (itemnumber)
+                    LEFT JOIN biblioitems USING (biblioitemnumber)
+                    WHERE date_due < now() 
+                        AND returndate IS 
+                        NULL ORDER BY borrowernumber " );
     $sth->execute;
 
     my @results;
@@ -1144,6 +1150,7 @@ display is filtered by branch
 
 sub GetOverduesForBranch {
     my ( $branch, $location) = @_;
+	my $itype_link =  (C4::context->preference('item-level_itype')) ?  " items.ccode " :  " biblioitems.itemtype ";
     if ( not $location ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("
@@ -1173,7 +1180,7 @@ sub GetOverduesForBranch {
             LEFT JOIN items ON items.itemnumber = issues.itemnumber
             LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
-            LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+            LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
             LEFT JOIN branches ON branches.branchcode = issues.branchcode
             WHERE ( issues.returndate  is null)
               AND ( accountlines.amountoutstanding  != '0.000000')
@@ -1224,7 +1231,7 @@ sub GetOverduesForBranch {
             LEFT JOIN items ON items.itemnumber = issues.itemnumber
             LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
-            LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+            LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
             LEFT JOIN branches ON branches.branchcode = issues.branchcode
            WHERE ( issues.returndate  is null )
              AND ( accountlines.amountoutstanding  != '0.000000')

@@ -704,6 +704,8 @@ labels.
 
 =cut
 
+# FIXME - why not use GetAuthorisedValues ??
+#
 sub get_notforloan_label_of {
     my $dbh = C4::Context->dbh;
 

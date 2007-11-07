@@ -652,12 +652,17 @@ sub GetBiblioData {
     my ( $bibnum ) = @_;
     my $dbh = C4::Context->dbh;
 
-    my $query = "
-        SELECT * , biblioitems.notes AS bnotes, itemtypes.notforloan as bi_notforloan, biblio.notes
-        FROM biblio
+    my $query =  C4::Context->preference('item-level_itype')  
+		? " SELECT * , biblioitems.notes AS bnotes, itemtypes.notforloan as bi_notforloan, biblio.notes
+        	FROM biblio
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
             LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-        WHERE biblio.biblionumber = ?
+        	WHERE biblio.biblionumber = ?
+            AND biblioitems.biblionumber = biblio.biblionumber "
+		: " SELECT * , biblioitems.notes AS bnotes, biblio.notes
+        	FROM biblio
+            LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
+        	WHERE biblio.biblionumber = ?
             AND biblioitems.biblionumber = biblio.biblionumber
     ";
     my $sth = $dbh->prepare($query);
@@ -726,25 +731,25 @@ sub GetItemsInfo {
     my $query = "SELECT *,items.notforloan as itemnotforloan
                  FROM items 
                  LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-                 LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-                 LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype
-                WHERE items.biblionumber = ?
-                ORDER BY items.dateaccessioned desc
-                 ";
+                 LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
+	$query .=  (C4::Context->preference('item-level_itype')) ?
+			   		 " LEFT JOIN itemtypes on items.ccode = itemtypes.itemtype "
+			   		: " LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype ";
+	$query .= "WHERE items.biblionumber = ? ORDER BY items.dateaccessioned desc" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $i = 0;
     my @results;
     my ( $date_due, $count_reserves );
 
+    my $isth    = $dbh->prepare(
+        "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname
+        FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
+        WHERE  itemnumber = ?
+            AND returndate IS NULL"
+       );
     while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = '';
-        my $isth    = $dbh->prepare(
-            "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname
-            FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
-            WHERE  itemnumber = ?
-                AND returndate IS NULL"
-        );
         $isth->execute( $data->{'itemnumber'} );
         if ( my $idata = $isth->fetchrow_hashref ) {
             $data->{borrowernumber} = $idata->{borrowernumber};
@@ -1135,13 +1140,14 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 sub GetBiblioItemData {
     my ($biblioitemnumber) = @_;
     my $dbh       = C4::Context->dbh;
-    my $sth       =
-      $dbh->prepare(
-	"SELECT *,biblioitems.notes AS bnotes
-		FROM biblioitems,biblio,itemtypes 
-	WHERE biblio.biblionumber = biblioitems.biblionumber 
-		AND biblioitemnumber = ? "
-      );
+	my $query = "SELECT *,biblioitems.notes AS bnotes
+		FROM biblio, biblioitems ";
+	if(C4::Context->preference('item-level_itype')) { 
+		$query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
+	}	 
+	$query .= " WHERE biblio.biblionumber = biblioitems.biblionumber 
+		AND biblioitemnumber = ? ";
+    my $sth       =  $dbh->prepare($query);
     my $data;
     $sth->execute($biblioitemnumber);
     $data = $sth->fetchrow_hashref;
