@@ -83,7 +83,6 @@ my %tabsysprefs;
     $tabsysprefs{IntranetBiblioDefaultView} = "Catalogue";
     $tabsysprefs{ISBD}="Catalogue";
     $tabsysprefs{itemcallnumber}="Catalogue";
-    $tabsysprefs{kohaspsuggest} = "Catalogue";
     $tabsysprefs{LabelMARCView}="Catalogue";
     $tabsysprefs{marc}="Catalogue";
     $tabsysprefs{marcflavour}="Catalogue";
@@ -179,6 +178,7 @@ my %tabsysprefs;
     $tabsysprefs{suggestion}="OPACFeatures";
     $tabsysprefs{OpacTopissue}="OPACFeatures";
     $tabsysprefs{OpacBrowser}="OPACFeatures";
+    $tabsysprefs{kohaspsuggest} = "OPACFeatures";
 
 # LOGFeatures
     $tabsysprefs{CataloguingLog}  = "LOGFeatures";
