@@ -7,6 +7,7 @@
 
 	 $(document).ready(function() {
  		$('#addbibliotabs').tabs();
+		$("#loading,.loading").hide();
 	 });
 
 function confirmnotdup(){
@@ -413,19 +414,14 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 }
 //]]>
 </script>
-<style type="text/css">
-	#addbibliotabs { margin-top : 1em; }
-	a.buttonPlus {
-		font-weight : bold;
-		text-decoration : none;
-	}
-	a.expandfield {
-		color : #000;
-		text-decoration : none;
-	}
-</style>
+<link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
+<script type="text/javascript">
+//<![CDATA[
+	   document.write("<div id=\"loading\"></div><div class=\"loading\">Loading...</div>");
+//]]>
+</script>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 

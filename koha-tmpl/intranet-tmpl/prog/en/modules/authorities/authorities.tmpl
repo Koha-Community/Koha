@@ -7,6 +7,10 @@
 
 	 $(document).ready(function() {
  		$('#authoritytabs').tabs();
+		$("#loading,.loading").hide();
+		$("#f").submit(function(){
+			return $(this).Check();
+		});
 	 });
 
 /**
@@ -360,14 +364,14 @@ function searchauthority() {
 }
 //]]>
 </script>
-<style type="text/css">
-	#authoritytabs {
-		margin-top : 1em;
-		margin-bottom : 1em;
-	}
-</style>
+<link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
+<script type="text/javascript">
+//<![CDATA[
+	   document.write("<div id=\"loading\"></div><div class=\"loading\">Loading...</div>");
+//]]>
+</script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority (<!-- TMPL_VAR name="authtypetext" -->)<!-- /TMPL_IF -->  </div>
@@ -390,13 +394,33 @@ function searchauthority() {
     <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
     <input type="hidden" name="authid" value="<!-- TMPL_VAR NAME="authid" -->" />
 
-    <div id="action">
-<!-- TMPL_IF name="authid" -->
-    <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
-<!-- TMPL_ELSE -->
-    <input type="button" value="Add" onclick="Check(this.form)" accesskey="w" />
-<!-- /TMPL_IF -->
-    </div>
+	<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	    $("#addauthc,#action").empty();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	var addauthButton = new YAHOO.widget.Button({
+                                            id: "addauth", 
+                                            type: "button", 
+                                            label: "Save", 
+                                            container: "addauthc",
+											onclick: {fn: Check }
+                                        });
+	var addauthButton2 = new YAHOO.widget.Button({
+                                            id: "addauth2", 
+                                            type: "button", 
+                                            label: "Save", 
+                                            container: "action",
+											onclick: {fn: Check }
+                                        });
+	} //]]>
+	</script>
+	<ul class="toolbar"><li id="addauthc"><input id="addauth" type="submit" value="Save" accesskey="w" /></li></ul></div>
 
 <!-- TMPL_IF name="duplicateauthid" -->
         <div class="problem">
@@ -547,11 +571,7 @@ function searchauthority() {
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
 <!-- /TMPL_IF -->
 <div id="action">
-    <!-- TMPL_IF name="authid" -->
-        <input type="button" value="Save" onclick="Check(this.form)" accesskey="w" />
-    <!-- TMPL_ELSE -->
-        <input type="button" value="Add" onclick="Check(this.form)" accesskey="w" />
-    <!-- /TMPL_IF -->
+        <input type="button" id="addauth2" value="Save" onclick="Check(this.form)" accesskey="w" />
 </div>
 </form>
 </fieldset>
