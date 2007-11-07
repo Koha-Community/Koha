@@ -183,7 +183,7 @@ if ($op eq 'add_form') {
         }
         $sth->finish;
     }
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=$tagfield&authtypecode=$authtypecode\">";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
