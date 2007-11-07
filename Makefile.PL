@@ -99,6 +99,7 @@ WriteMakefile(
 'CGI' => 3.15,
 'CGI::Carp' => 1.29,
 'CGI::Session' => '4.10',
+'Class::Factory::Util' => 1.7,
 'Class::Accessor' => 0.30,
 'DBD::mysql' => 3.0008,
 'DBI' => 1.53,
