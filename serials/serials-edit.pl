@@ -207,32 +207,29 @@ if ($op eq 'serialchangestatus') {
       }
       foreach my $item (keys %itemhash){
         # Verify Itemization is "Valid", i.e. serial status is Arrived or Missing
-        my $index;
+        my $index=-1;
         for (my $i=0; $i<scalar(@serialids);$i++){
-          $index = $i if ($itemhash{$item}->{'serial'} eq $serialids[$i]);
+          $index = $i if ($itemhash{$item}->{'serial'} eq $serialids[$i] || ($itemhash{$item}->{'serial'} == $newserial && $serialids[$i] eq "NEW"));
         }
-        if ($status[$index]==2){
+        if ($index>=0 && $status[$index]==2){
           my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                   $itemhash{$item}->{'subfields'},
                                   $itemhash{$item}->{'field_values'},
                                   $itemhash{$item}->{'ind_tag'},
                                   $itemhash{$item}->{'indicator'});
-#           warn $xml;
+  #           warn $xml;
           my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
           if ($item=~/^N/){
             #New Item
-
             # if autoBarcode is ON, calculate barcode...
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
             if (C4::Context->preference("autoBarcode") ne  'OFF'  ) {
-
-   eval {    $record->field($tagfield)->subfield($tagsubfield) };
-            if ($@) {
+              eval {    $record->field($tagfield)->subfield($tagsubfield) };
+              if ($@) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;
                 $newbarcode++;
-
                 # OK, we have the new barcode, now create the entry in MARC record
                 $record->add_fields( $tagfield, "1", "0",
                     $tagsubfield => $newbarcode );
