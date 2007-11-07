@@ -190,7 +190,7 @@ Error :
         <!-- ######### -->
         <!-- FACETS START -->
         <!-- TMPL_IF NAME="opacfacets" -->
-            <!-- TMPL_UNLESS NAME="NoZebra" -->
+            <!-- TMPL_IF NAME="facets_loop" -->
                 <div id="facets" >
                     <dl>
                     <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Refine Your Search</dt>
@@ -218,7 +218,7 @@ Error :
                     </ul>
                     </dd>
                 </div>
-            <!-- /TMPL_UNLESS -->
+            <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <!-- FACETS END -->
         
