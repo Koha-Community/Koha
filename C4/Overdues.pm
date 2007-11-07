@@ -115,8 +115,7 @@ Koha database.
 #'
 sub Getoverdues {
     my $dbh = C4::Context->dbh;
-	my $itype_q = (C4::context->preference('item-level_itype')) ? " items.ccode as itemtype "
-    my $sth =  (C4::context->preference('item-level_itype')) ? 
+    my $sth =  (C4::context->preference('item-level_itypes')) ? 
 				$dbh->prepare(
         			"SELECT issues.*,items.ccode as itemtype FROM issues 
                 	LEFT JOIN items USING (itemnumber)
@@ -1150,7 +1149,7 @@ display is filtered by branch
 
 sub GetOverduesForBranch {
     my ( $branch, $location) = @_;
-	my $itype_link =  (C4::context->preference('item-level_itype')) ?  " items.ccode " :  " biblioitems.itemtype ";
+	my $itype_link =  (C4::context->preference('item-level_itypes')) ?  " items.ccode " :  " biblioitems.itemtype ";
     if ( not $location ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("

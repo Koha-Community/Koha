@@ -258,7 +258,7 @@ sub AddItem {
     $sth =
       $dbh->prepare(
         "SELECT notforloan FROM itemtypes WHERE itemtype=?");
-    $sth->execute( C4::Context->preference('item-level_itype') ? $item->{'ccode'} : $itemtype );
+    $sth->execute( C4::Context->preference('item-level_itypes') ? $item->{'ccode'} : $itemtype );
     my $notforloan = $sth->fetchrow;
     ##Change the notforloan field if $notforloan found
     if ( $notforloan > 0 ) {
@@ -652,7 +652,7 @@ sub GetBiblioData {
     my ( $bibnum ) = @_;
     my $dbh = C4::Context->dbh;
 
-    my $query =  C4::Context->preference('item-level_itype')  
+    my $query =  C4::Context->preference('item-level_itypes')  
 		? " SELECT * , biblioitems.notes AS bnotes, itemtypes.notforloan as bi_notforloan, biblio.notes
         	FROM biblio
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
@@ -732,7 +732,7 @@ sub GetItemsInfo {
                  FROM items 
                  LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
                  LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
-	$query .=  (C4::Context->preference('item-level_itype')) ?
+	$query .=  (C4::Context->preference('item-level_itypes')) ?
 			   		 " LEFT JOIN itemtypes on items.ccode = itemtypes.itemtype "
 			   		: " LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype ";
 	$query .= "WHERE items.biblionumber = ? ORDER BY items.dateaccessioned desc" ;
@@ -1142,7 +1142,7 @@ sub GetBiblioItemData {
     my $dbh       = C4::Context->dbh;
 	my $query = "SELECT *,biblioitems.notes AS bnotes
 		FROM biblio, biblioitems ";
-	if(C4::Context->preference('item-level_itype')) { 
+	if(C4::Context->preference('item-level_itypes')) { 
 		$query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
 	}	 
 	$query .= " WHERE biblio.biblionumber = biblioitems.biblionumber 
