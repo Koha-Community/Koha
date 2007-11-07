@@ -1,5 +1,6 @@
 <!-- Begin Stopwords Resident Search Box -->
 <!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+//<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
         // Define a custom formatter function
@@ -39,7 +40,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         //this.oAutoComp.queryDelay = 1;
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
-});    
+});     //]]>
 </script><!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="stopword_search" class="residentsearch">

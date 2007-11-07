@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo; 
-<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
@@ -68,7 +68,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
@@ -84,20 +84,14 @@
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
-
 	// prepare DOM for YUI Toolbar
-
 	 $(document).ready(function() {
 	    yuiToolbar();
 	 });
-
 	// YUI Toolbar Functions
-
 	function yuiToolbar() {
 	    new YAHOO.widget.Button("newcurrency");
-	}
-
-	//]]>
+	}	//]]>
 	</script>
 	<ul class="toolbar">
 	<li><a id="newcurrency" href="/cgi-bin/koha/admin/currency.pl?op=add_form">New Currency</a></li>
@@ -114,7 +108,7 @@
 	<legend><!-- TMPL_IF NAME="searchfield" -->
 		Modify currency
 	<!-- TMPL_ELSE -->
-		Add currency
+		New currency
 	<!-- /TMPL_IF --></legend>
 	<ol><!-- TMPL_IF NAME="searchfield" -->
 		<li>

@@ -71,7 +71,29 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	
-<!-- TMPL_UNLESS NAME="header-is-add-p" --><!-- TMPL_INCLUDE NAME="bookfund-admin-toolbar.inc" --><!-- /TMPL_UNLESS -->
+<!-- TMPL_IF name="else" -->
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newfund");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newfund" href="/cgi-bin/koha/admin/aqbookfund.pl?op=add_form">New Fund</a></li>
+</ul></div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
 <h1>Funds and budgets administration</h1>
@@ -206,39 +228,33 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-<h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></h3>
-<table>
-  <tr>
-    <th>Fund</th>
-    <td><!-- TMPL_VAR name="bookfundid" --></td>
-  </tr>
-  <tr>
-    <th>Branch</th>
-    <td><!-- TMPL_VAR name="branchcode" --></td>
-  </tr>
-  <tr>
-    <th>Name</th>
-    <td><!-- TMPL_VAR name="bookfundname" --></td>
-  </tr>
-  <tr>
-    <th>Group</th>
-    <td><!-- TMPL_VAR name="bookfundgroup" --></td>
-  </tr>
-</table>
 
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
   <input type="hidden" name="op" value="delete_confirmed" />
   <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
   <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" -->" />
-
-  <div id="action">
-    <input type="submit" value="Delete this Fund" />
-  </div>
+	<fieldset><legend>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></legend>
+	<table>
+		  <tr>
+    <th scope="row">Fund: </th><td>
+    <!-- TMPL_VAR name="bookfundid" --></td></tr>
+  
+  <tr>
+    <th scope="row">Branch: </th><td>
+    <!-- TMPL_VAR name="branchcode" --></td></tr>
+  
+  <tr>
+    <th scope="row">Name: </th><td>
+    <!-- TMPL_VAR name="bookfundname" --></td></tr>
+  
+  <tr>
+    <th scope="row">Group: </th><td>
+    <!-- TMPL_VAR name="bookfundgroup" --></td></tr>
+  	</table>
+   <fieldset class="action"> <input type="submit" value="Yes, Delete this Fund" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbookfund.pl">Cancel</a></fieldset>
+  </fieldset>
 </form>
 
-<form action="<!-- TMPL_VAR name="action" -->" method="post">
-  <input type="submit" value="Do not Delete" />
-</form>
 <!-- /TMPL_IF --> <!-- delete_confirm -->
 
 <!-- TMPL_IF name="delete_confirmed" -->

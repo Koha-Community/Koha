@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" -->Road Types &rsaquo; <!-- TMPL_IF NAME="roadtypeid" --> Modify Road Type<!-- TMPL_ELSE --> Add Road Type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Road Types &rsaquo; Confirm Deletion of Road Type<!-- TMPL_ELSE --> Road Type<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" -->Road Types &rsaquo; <!-- TMPL_IF NAME="roadtypeid" --> Modify Road Type<!-- TMPL_ELSE --> New Road Type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Road Types &rsaquo; Confirm Deletion of Road Type<!-- TMPL_ELSE --> Road Type<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -53,7 +53,7 @@
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="roadtype-admin-search.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; <!-- TMPL_IF NAME="roadtypeid" --> Modify Road Type<!-- TMPL_ELSE --> Add Road Type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; Confirm Deletion of Road Type<!-- TMPL_ELSE --> Road Type<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; <!-- TMPL_IF NAME="roadtypeid" --> Modify Road Type<!-- TMPL_ELSE --> New Road Type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/roadtype.pl">Road Types</a> &rsaquo; Confirm Deletion of Road Type<!-- TMPL_ELSE --> Road Type<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -65,7 +65,7 @@
 	<!-- TMPL_IF NAME="roadtypeid" -->
 		<h1>Modify road type</h1>
 	<!-- TMPL_ELSE -->
-		<h1>Add road type</h1>
+		<h1>New road type</h1>
 	<!-- /TMPL_IF -->
 
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
@@ -84,9 +84,9 @@
 	<input  type="text" name="road_type" id="road_type" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="road_type" ESCAPE="HTML" -->" />
 	</li></ol></fieldset>
 	
-	<p>					  
-	<input class="button" type="button" onclick="Check(this.form)" value="OK" />	
-	</p>
+	<fieldset class="action">					  
+	<input class="button" type="button" onclick="Check(this.form)" value="Submit" />	<a class="cancel" href="/cgi-bin/koha/admin/roadtype.pl">Cancel</a>
+	</fieldset>
 	</form>
 <!-- /TMPL_IF -->
 
@@ -109,6 +109,29 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("addroad");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="addroad" href="/cgi-bin/koha/admin/roadtype.pl?op=add_form">New Road Type</a></li>
+</ul></div>
+
 	<h2>Road type</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		Search on  <!-- TMPL_VAR NAME="searchfield" -->
@@ -131,11 +154,6 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table><!-- /TMPL_IF -->
-	
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form" />
-		<p><input type="submit" class="button" value="Add road type" /></p>
-	</form>
 <!-- /TMPL_IF -->
 
 </div>

@@ -82,12 +82,12 @@ function CheckRuleForm(f) {
 
 //]]>
 </script>
-
+</head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Classification Sources
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="display_lists" -->Classification Sources<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/classsources.pl">Classification Sources</a><!-- /TMPL_IF -->
 <!-- TMPL_IF name="class_source_form" -->
   <!-- TMPL_IF name="edit_class_source" -->
     &rsaquo; Modify classification source
@@ -129,23 +129,25 @@ function CheckRuleForm(f) {
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
   <fieldset class="rows">
     <ol>
-      <li><span class="label">Classification source code</span>
+      <li>
           <!-- TMPL_IF name="edit_class_source" -->
+		  <span class="label">Classification source code: </span>
             <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
             <!-- TMPL_VAR name="class_source" -->
           <!-- TMPL_ELSE -->
+		  <label for="class_source">Classification source code: </label>
             <input type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
           <!-- /TMPL_IF -->
        </li>
-       <li><span class="label">Description</span>
+       <li><label for="description">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
                   value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
        </li>
-       <li><span class="label">Source in use?</span>
-           <input type="checkbox" id="used" name="used" value="used" 
-                  <!-- TMPL_IF name="used" -->checked="yes"<!-- /TMPL_IF--> />
+       <li><label for="used">Source in use?</label>
+           <!-- TMPL_IF NAME="used" --><input type="checkbox" id="used" name="used" value="used" checked="checked" /><!-- TMPL_ELSE -->
+		  <input type="checkbox" id="used" name="used" value="used" /><!-- /TMPL_IF -->
        </li>
-       <li><span class="label">Filing Rule</span>
+       <li><label for="sort_rule">Filing Rule: </label>
            <select id="sort_rule" name="sort_rule">
            <!-- TMPL_LOOP name="rules_dropdown" -->
              <!-- TMPL_IF name="selected" -->
@@ -158,16 +160,16 @@ function CheckRuleForm(f) {
        </li>    
     </ol>
   </fieldset>
-  <p id="action">
+  <fieldset class="action">
     <!-- TMPL_IF name="edit_class_source" -->
-    <input type="button" value="Save Changes"
+    <input type="button" value="Save"
            onclick="CheckSourceForm(this.form)" />
     <!-- TMPL_ELSE -->
-    <input type="button" value="Add Classification Source"
+    <input type="button" value="Save"
            onclick="CheckSourceForm(this.form)" />
     <!-- /TMPL_IF-->
-    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
-  </p>
+    <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+  </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -181,19 +183,21 @@ function CheckRuleForm(f) {
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
   <fieldset class="rows">
     <ol>
-      <li><span class="label">Filing rule code</span>
+      <li>
           <!-- TMPL_IF name="edit_sort_rule" -->
+		  <span class="label">Filing rule code: </span>
             <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
             <!-- TMPL_VAR name="sort_rule" -->
           <!-- TMPL_ELSE -->
+		  <label for="sort_rule">Filing rule code: </label>
             <input type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
           <!-- /TMPL_IF -->
        </li>
-       <li><span class="label">Description</span>
+       <li><label for="description">Description: </label>
            <input type="text" id="description" name="description" size="50" maxlength="250" 
                   value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
        </li>
-       <li><span class="label">Filing Routine</span>
+       <li><label for="sort_routine">Filing Routine: </label>
            <select id="sort_routine" name="sort_routine">
            <!-- TMPL_LOOP name="routines_dropdown" -->
              <!-- TMPL_IF name="selected" -->
@@ -206,15 +210,15 @@ function CheckRuleForm(f) {
        </li>
     </ol>
   </fieldset>
-  <p id="action">
+  <fieldset class="action">
   <!-- TMPL_IF name="edit_sort_rule" -->
-        <input type="button" value="Save Changes"
+        <input type="button" value="Save"
            onclick="CheckRuleForm(this.form)" />
     <!-- TMPL_ELSE -->
-        <input type="button" value="Add Filing Rule"
+        <input type="button" value="Save"
            onclick="CheckRuleForm(this.form)" />    <!-- /TMPL_IF-->
-    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
-  </p>
+    	<a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+  </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -256,6 +260,25 @@ remove it from all classification source definitions before trying again.
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="display_lists" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newsource");
+	    new YAHOO.widget.Button("newrule");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newsource" href="<!-- TMPL_VAR name="script_name" -->?op=add_source">New Classification Source</a></li>
+	<li><a id="newrule" href="<!-- TMPL_VAR name="script_name" -->?op=add_sort_rule">New Filing Rules</a></li>
+</ul></div>
+
 <h2>Classification Sources</h2>
 <!-- TMPL_IF name="added_source" -->
 <span class="problem">Added classification source <!-- TMPL_VAR name="added_source" --></span>
@@ -291,8 +314,6 @@ Delete</a>
 
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
-<p><a href="<!-- TMPL_VAR name="script_name" -->?op=add_source">Add Classification Source</a></p>
-
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 <h2>Classification Filing Rules</h2>
 <!-- TMPL_IF name="added_rule" -->
@@ -325,10 +346,6 @@ Delete</a>
   <!-- /TMPL_LOOP -->
 </table>
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
-
-<p><a href="<!-- TMPL_VAR name="script_name" -->?op=add_sort_rule">Add Filing Rule</a></p>
-
-
 
 <!-- /TMPL_IF -->
 

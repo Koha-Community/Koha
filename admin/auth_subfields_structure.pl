@@ -201,7 +201,8 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} =$data->{'tagsubfield'}."<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
+		$row_data{tagsubfieldinput} = "<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
+		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
 		$row_data{libopac} = CGI::escapeHTML($data->{'libopac'});
 		$row_data{seealso} = CGI::escapeHTML($data->{'seealso'});
@@ -314,7 +315,8 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfield} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
+		$row_data{tagsubfieldinput} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
+		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
 		$row_data{seealso} = "";
@@ -371,7 +373,8 @@ if ($op eq 'add_form') {
 	$template->param('use-heading-flags-p' => 1);
 	$template->param('heading-edit-subfields-p' => 1);
 	$template->param(action => "Edit subfields",
-							tagfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />$tagfield",
+							tagfield => $tagfield,
+							tagfieldinput => "<input type=\"hidden\" name=\"tagfield\" value=\"$tagfield\" />",
 							loop => \@loop_data,
 							more_subfields => $more_subfields,
 							more_tag => $tagfield);

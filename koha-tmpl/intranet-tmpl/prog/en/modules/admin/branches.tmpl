@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, &amp; Agency categories<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->New Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, &amp; Agency categories<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -9,11 +9,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  
 
-<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Agency Category <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->New Agency Category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; Confirm Deletion of Agency Category <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; 
-<!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries, Branches, &amp; Agency Categories</a> &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
 
@@ -26,7 +26,7 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-	
+	<!-- TMPL_IF name="else" -->
 	<div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
@@ -50,9 +50,10 @@
 	<li><a id="newbranch" href="/cgi-bin/koha/admin/branches.pl?op=add">New Library</a></li>
 	<li><a id="newcategory" href="/cgi-bin/koha/admin/branches.pl?op=editcategory">New Agency Category</a></li>
 </ul></div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add" -->
-  <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->Add library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
+  <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
 	<fieldset class="rows">
         <input type="hidden" name="op" value="add_validate" />
@@ -108,16 +109,12 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-    <h3>Confirm deletion of <!-- TMPL_VAR NAME="branchname" --> (<!-- TMPL_VAR NAME="branchcode" -->)?</h3>
-    <span class="form"><form action="<!-- TMPL_VAR name="action" -->" method="post">
-        <input type="hidden" name="op" value="delete_confirmed" />
+    <form action="<!-- TMPL_VAR name="action" -->" method="post">
+<fieldset><legend>Confirm deletion of <!-- TMPL_VAR NAME="branchname" --> (<!-- TMPL_VAR NAME="branchcode" -->)?</legend><input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
-            <input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
-        <input type="submit" value="Delete Library" />
-    </form> 
-    <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
-        <input type="submit" value="Do Not Delete" />
-    </form></span>
+        <input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
+        <fieldset class="action"><input type="submit" value="Delete Library" /> <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a></fieldset>
+</fieldset>    </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->

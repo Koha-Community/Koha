@@ -68,6 +68,28 @@ function Check(f) {
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+	
+<!-- TMPL_IF NAME="else" --><div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newframework");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form">New Framework</a></li>
+</ul></div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_form" -->
     <h1><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --></h1>
@@ -81,7 +103,7 @@ function Check(f) {
         <!-- /TMPL_IF -->
         <li><label for="description">Description</label>
         <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></li></ol></fieldset>
-        <p>	<input type="submit" value="Submit" class="submit" onclick="Check(this.form)" /></p>
+        <fieldset class="action">	<input type="submit" value="Submit" class="submit" onclick="Check(this.form)" /></fieldset>
     </form>
 <!-- /TMPL_IF -->
 
@@ -124,11 +146,7 @@ function Check(f) {
         </tr>
     <!-- /TMPL_LOOP -->
 </table>
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <input type="hidden" name="op" value="add_form" />
-    <input type="submit" value="Add framework" />
     <!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
-</form>
 
 <!-- /TMPL_IF -->
 </div>

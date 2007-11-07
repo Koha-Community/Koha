@@ -185,17 +185,16 @@ function displayMoreConstraint(numlayer){
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
+
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
-    <input type="hidden" name="op" value="add_form" />
+    <fieldset class="action"><input type="hidden" name="op" value="add_form" />
     <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="edit_tagfield" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="edit_frameworkcode" -->" />
     <input type="submit" value="Edit Subfields" />
+	<a class="cancel" href="marctagstructure.pl?searchfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Cancel</a>
+	</fieldset>
 </form>
-<form action="marctagstructure.pl" method="get">
-    <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
-    <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-    <input type="submit" value="Return to Marc Structure" />
-</form>
+
 <!-- TMPL_IF NAME="previous" -->
     <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0" />
 <!-- /TMPL_IF -->

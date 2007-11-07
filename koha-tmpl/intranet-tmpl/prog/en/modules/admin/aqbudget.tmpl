@@ -332,32 +332,30 @@
 
     <table>
       <tr>
-        <th>Start date</th>
+        <th scope="row">Start date: </th>
         <td><!-- TMPL_VAR NAME="startdate" --></td>
       </tr>
       
       <tr>
-        <th>End date</th>
+        <th scope="row">End date: </th>
         <td><!-- TMPL_VAR NAME="enddate" --></td>
       </tr>
       
       <tr>
-        <th>Budget Amount</th>
+        <th scope="row">Budget Amount: </th>
         <td><!-- TMPL_VAR NAME="budgetamount" --></td>
       </tr>
     </table>
 
   </fieldset>
-   <fieldset class="action">
 <form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+   <fieldset class="action">
     <input type="hidden" name="op" value="delete_confirmed" />
     <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
       <input type="submit" value="Delete this budget" />
-	  </form>
-	<form action="/cgi-bin/koha/admin/aqbudget.pl" method="get">
-      <input type="submit" value="Do Not Delete" />
-	  </form>
+	<a class="cancel" href="/cgi-bin/koha/admin/aqbudget.pl">Cancel</a>
    </fieldset>
+	  </form>
 
 <!-- /TMPL_IF -->
 

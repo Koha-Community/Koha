@@ -111,7 +111,7 @@
                     <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" /><!-- /TMPL_IF -->OFF<!-- /TMPL_IF -->
                 </li>
         </ol></fieldset>
-        <fieldset class="action"><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <input type="button"  value="Cancel" onclick="location.href='<!-- TMPL_VAR name="script_name" -->'; return false;" /></fieldset>
+        <fieldset class="action"><input type="submit" value="<!-- TMPL_IF NAME="modify" -->Save Changes<!-- TMPL_ELSE -->Add this Preference<!-- /TMPL_IF -->"> <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a></fieldset>
         
         <fieldset class="brief">
 		<legend>Koha internal</legend>

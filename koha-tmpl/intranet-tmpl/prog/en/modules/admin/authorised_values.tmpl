@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Authorized Values <!-- TMPL_IF name="add_form" --> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" --> &rsaquo;  New authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" --> &rsaquo; New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
@@ -11,8 +11,8 @@
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->New authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></div>
 
@@ -25,8 +25,8 @@
 <!-- TMPL_IF name="add_form" -->
 	<h1>
 	   <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" -->Add authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_category" -->Add category<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->New authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_category" -->New category<!-- /TMPL_IF -->
 	</h1>
 	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
@@ -54,26 +54,50 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-- -->
-<h3>Confirm Deletion</h3>
+	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
+<fieldset>
+<legend>Confirm Deletion</legend>
 <table>
 	<tr>
-		<td>Category</td>
-		<td>Variable</td>
-		<td>Value</td>
+		<th>Category</th>
+		<th>Variable</th>
+		<th>Value</th>
 	</tr>
 	<tr>
 		<td><!-- TMPL_VAR name="searchfield" --></td>
 	<td><!-- TMPL_VAR name="Tvalue" --></td>
 	<td><!-- TMPL_VAR name="Tlib" --></td></tr>
 	</table>
-	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
 		<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
-		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><input type="submit" value="Confirm Deletion" /></form> <form class="inline" action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><fieldset class="action"><input type="submit" value="Yes, Delete" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl">Cancel</a></fieldset></fieldset></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("addauth");
+	    new YAHOO.widget.Button("addcat");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	 <li><a id="addauth" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->">New Authorized value for <!-- TMPL_VAR name="category" --></a></li>
+    <li><a id="addcat" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New Category</a></li>
+</ul></div>
 
 <h1>Authorized values</h1>
 <p>This table is used in MARC definition. You can define as many categories as you want, and as many authorized values as you want in each category.</p>
@@ -104,11 +128,6 @@ the subfield is not entered through a free field, but though a list of authorize
 <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 	<input type="submit" value="&lt;&lt; Previous Page" /></form>
 <!-- /TMPL_IF --> 
-
-<div id="action">
-    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->">Add Authorized value for <!-- TMPL_VAR name="category" --></a>
-    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Add New Category</a>
-</div>
 
 <!-- TMPL_IF NAME="nextpage" -->
 <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">

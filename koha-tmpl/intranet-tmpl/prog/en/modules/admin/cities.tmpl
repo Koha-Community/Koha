@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" -->Cities &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> Add City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Cities &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" -->Cities &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> New City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Cities &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -54,7 +54,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cities-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> Add City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> New City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -66,7 +66,7 @@
 	<!-- TMPL_IF NAME="cityid" -->
 		<h1>Modify a city</h1>
 	<!-- TMPL_ELSE -->
-		<h1>Add a city</h1>
+		<h1>New city</h1>
 	<!-- /TMPL_IF -->
 
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
@@ -76,20 +76,20 @@
 
 <fieldset class="rows"><ol>	<!-- TMPL_IF NAME="cityid" -->
 		<li>
-		<span class="label">City ID</span><!-- TMPL_VAR NAME="cityid" --></li>
+		<span class="label">City ID: </span><!-- TMPL_VAR NAME="cityid" --></li>
 	<!-- /TMPL_IF -->
 	<li>
-	<label for="city_name">City name</label>
+	<label for="city_name">City name: </label>
 	<input  type="text" name="city_name" id="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
 	</li>
 	<li>				
-	<label for="city_zipcode">City zipcode</label>
+	<label for="city_zipcode">City zipcode: </label>
 	<input type="text" name="city_zipcode" id="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->" />
 	</li></ol></fieldset>
 	
-	<p>
-		<input class="button" type="button" onclick="Check(this.form)" value="Submit" />
-	</p>
+	<fieldset class="action">
+		<input class="button" type="button" onclick="Check(this.form)" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/cities.pl">Cancel</a>
+	</fieldset>
 	</form>
 
 <!-- /TMPL_IF -->
@@ -137,6 +137,29 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newcity");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newcity" href="/cgi-bin/koha/admin/cities.pl?op=add_form">New City</a></li>
+</ul></div>
+
 	<h2>Cities</h2>
 	<!-- TMPL_IF NAME="searchfield" -->
 		Searching: <!-- TMPL_VAR NAME="searchfield" -->
@@ -166,11 +189,6 @@
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table><!-- /TMPL_IF -->
-	
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="add_form" />
-		<p><input type="submit" class="button" value="Add a city"  alt="Add city" /></p>
-	</form>
 <!-- /TMPL_IF -->
 
 </div>

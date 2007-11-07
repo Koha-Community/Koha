@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="else" -->z39.50 Servers<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_form" --> z39.50 Servers &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --> z39.50 Servers &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->New z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->z39.50 Servers &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->z39.50 Servers &rsaquo; z39.50 Server Added<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->z39.50 Servers &rsaquo; z39.50 Server Deleted<!-- /TMPL_IF --></title>
@@ -45,34 +45,22 @@
                 var ok=1;
                 var _alertString="";
                 var alertString2;
-                if (f.searchfield.value.length==0) {
-                        _alertString += "- site name missing\n";
+                if (f.searchfield.value.length==0) {_alertString += "- site name missing\n";
                 }
-                if (f.host.value.length==0) {
-                        _alertString += "- host missing\n";
+                if (f.host.value.length==0) {_alertString += "- host missing\n";
                 }
-                if (f.port.value.length==0) {
-                        _alertString += "- port missing\n";
+                if (f.port.value.length==0) {_alertString += "- port missing\n";
                 }
-                if (f.db.value.length==0) {
-                        _alertString += "- database missing\n";
+                if (f.db.value.length==0) {_alertString += "- database missing\n";
                 }
-                if (isNaN(f.port.value)) {
-                        _alertString += "- port must be a number\n";
+                if (isNaN(f.port.value)) {_alertString += "- port must be a number\n";
                 }
-                if (isNaN(f.rank.value)) {
-                        _alertString += "- rank must be a number\n";
+                if (isNaN(f.rank.value)) {_alertString += "- rank must be a number\n";
                 }
-                if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {
-                        _alertString += "- checked must be 0 or 1\n";
+                if (isNaN(f.checked.value) || f.checked.value<0 || f.checked.value>1) {_alertString += "- checked must be 0 or 1\n";
                 }
-                if (_alertString.length==0) {
-                        document.Aform.submit();
-                } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\n";
-                        alertString2 += "------------------------------------------------------------------------------------\n\n";
-                        alertString2 += _alertString;
-                        alert(alertString2);
+                if (_alertString.length==0) {document.Aform.submit();
+                } else {alertString2 = "Form not submitted because of the following problem(s)\n";alertString2 += "------------------------------------------------------------------------------------\n\n";alertString2 += _alertString;alert(alertString2);
                 }
         }
         //]]>
@@ -84,7 +72,7 @@
 <!-- TMPL_INCLUDE NAME="z3950-admin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->z39.50 Servers<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->Add z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify z39.50 Server <!-- TMPL_VAR NAME="searchfield" --><!-- TMPL_ELSE -->New z39.50 Server<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; z39.50 Server Added<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/z3950servers.pl">z39.50 Servers</a> &rsaquo; z39.50 Server Deleted<!-- /TMPL_IF --></div>
@@ -96,84 +84,38 @@
 	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
-        
-
        
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
 <!-- TMPL_IF NAME="searchfield" -->
                 <h1>Modify Z39.50 Server</h1>
         <!-- TMPL_ELSE -->
-                <h1>Add Z39.50 Server</h1>
+                <h1>New Z39.50 Server</h1>
         <!-- /TMPL_IF -->                
         <fieldset class="rows">
         <ol><!-- TMPL_IF NAME="searchfield" -->
-                <li>
-                        <span class="label">Z39.50 Server: </span>
-                        
-                                <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-                        
-                </li>
+                <li><span class="label">Z39.50 Server: </span>        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" --></li>
         <!-- TMPL_ELSE -->
-                <li>
-                        <label for="searchfield">Z39.50 Server: </label>
-                        
-                                <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" />
-                        
-                </li>
+                <li><label for="searchfield">Z39.50 Server: </label>        <input type="text" name="searchfield" id="searchfield" size="65" maxlength="100" onblur="toUC(this)" /></li>
         <!-- /TMPL_IF -->
 
-		<li>
-			<label for="host">Hostname: </label>
-			
-				<input type="text" name="host" id="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
-			
+		<li><label for="host">Hostname: </label>	<input type="text" name="host" id="host" size="30" value="<!-- TMPL_VAR NAME="host" -->" />
 		</li>
-		<li>
-			<label for="port">Port: </label>
-			
-				<input type="text" name="port" id="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
-			
+		<li><label for="port">Port: </label>	<input type="text" name="port" id="port" size="5" value="<!-- TMPL_VAR NAME="port" -->" onblur="isNum(this)" />
 		</li>
-		<li>
-			<label for="db">Database: </label>
-			
-				<input type="text" name="db" id="db" value="<!-- TMPL_VAR NAME="db" -->" />
-			
+		<li><label for="db">Database: </label>	<input type="text" name="db" id="db" value="<!-- TMPL_VAR NAME="db" -->" />
 		</li>
-		<li>
-			<label for="userid">Userid: </label>
-			
-				<input type="text" name="userid" id="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
-			
+		<li><label for="userid">Userid: </label>	<input type="text" name="userid" id="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
 		</li>
-		<li>
-			<label for="password">Password: </label>
-			
-				<input type="text" name="password" id="password" value="<!-- TMPL_VAR NAME="password" -->" />
-			
+		<li><label for="password">Password: </label>	<input type="text" name="password" id="password" value="<!-- TMPL_VAR NAME="password" -->" />
 		</li>
-		<li>
-			<label for="checked">Checked (searched by default): </label>
-			
-				<input type="text" size="1" name="checked" id="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </li>
-		<li>
-			<label for="rank">Rank (display order): </label>
-			
-				<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
-			
-		</li>
-				<li>
-			<label for="syntax">Syntax (z3950 can send<br />
-			 records in various format. Choose one): </label>
-			
-				<select name="syntax" id="syntax">
-					<option value="USMARC">USMARC</option>
-					<option value="UNIMARC">UNIMARC</option>
-				</select>
-			
+		<li><label for="checked">Checked (searched by default): </label>	<input type="text" size="1" name="checked" id="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </li>
+		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
+		</li>	<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	<select name="syntax" id="syntax">		<option value="USMARC">USMARC</option>		<option value="UNIMARC">UNIMARC</option>	</select>
 		</li></ol>
-        </fieldset><input type="button" value="<!-- TMPL_IF NAME="searchfield" -->Update Z39.50 Server<!-- TMPL_ELSE -->Add Z39.50 Server<!-- /TMPL_IF -->" onclick="Check(this.form)" /> 
+        </fieldset>
+		
+		<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
         </form>
 <!-- /TMPL_IF -->
 
@@ -188,44 +130,15 @@
 	<!-- TMPL_VAR NAME="reqsel" -->
 <h3>Confirm Deletion of Server <!-- TMPL_VAR NAME="searchfield" --></h3>	
         <ul>
-                <li>
-                        <strong>Site: </strong>
-                        
-                                <!-- TMPL_VAR NAME="searchfield" -->
-                        
-                </li>
-                <li>
-                        <strong>Hostname: </strong>
-                        <!-- TMPL_VAR NAME="host" -->
-                </li>
-                <li>
-                        <strong>Port: </strong>
-                        <!-- TMPL_VAR NAME="port" -->
-                </li>
-                <li>
-                        <strong>Database: </strong>
-                        <!-- TMPL_VAR NAME="db" -->
-                </li>
-                <li>
-                        <strong>Userid: </strong>
-                        <!-- TMPL_VAR NAME="userid" -->
-                </li>
-                <li>
-                        <strong>Password: </strong>
-                        <!-- TMPL_VAR NAME="password" -->
-                </li>
-                <li>
-                        <strong>Checked: </strong>
-                        <!-- TMPL_VAR NAME="checked" -->
-                </li>
-                <li>
-                        <strong>Rank: </strong>
-                        <!-- TMPL_VAR NAME="rank" -->
-                </li>
- 	</ul>
-                                        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-                        <input type="hidden" name="op" value="delete_confirmed" />
-                        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Server" /></form>  <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
+                <li><strong>Site: </strong>        <!-- TMPL_VAR NAME="searchfield" --></li>
+                <li><strong>Hostname: </strong><!-- TMPL_VAR NAME="host" --></li>
+                <li><strong>Port: </strong><!-- TMPL_VAR NAME="port" --></li>
+                <li><strong>Database: </strong><!-- TMPL_VAR NAME="db" --></li>
+                <li><strong>Userid: </strong><!-- TMPL_VAR NAME="userid" --></li>
+                <li><strong>Password: </strong><!-- TMPL_VAR NAME="password" --></li>
+                <li><strong>Checked: </strong><!-- TMPL_VAR NAME="checked" --></li>
+                <li><strong>Rank: </strong><!-- TMPL_VAR NAME="rank" --></li>
+ 	</ul>                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Server" /></form>  <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
 
 
 
@@ -239,36 +152,33 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newserver");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newserver" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form">New z39.50 Server</a></li>
+</ul></div>
+
 <h3>Z39.50 Servers Admininistration</h3>
 
         <!-- TMPL_IF NAME="searchfield" -->
                 You searched for <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->		
 <table>
-                <tr>
-                        <th>Site</th>
-                        <th>Hostname/Port</th>
-                        <th>Database</th>
-                        <th>Userid</th>
-                        <th>Password</th>
-                        <th>Checked</th>
-                        <th>Rank</th>       
-						<th>Syntax</th>
-                        <th colspan="2">&nbsp;</th>
+                <tr><th>Site</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th colspan="2">&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-                        <td><!-- TMPL_VAR NAME="name" --></td>
-                        <td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td>
-                        <td><!-- TMPL_VAR NAME="db" --></td>
-                        <td><!-- TMPL_VAR NAME="userid" --></td>
-                        <td><!-- TMPL_VAR NAME="password" --></td>
-                        <td><!-- TMPL_VAR NAME="checked" --></td>
-                        <td><!-- TMPL_VAR NAME="rank" --></td>
-						<td><!-- TMPL_VAR NAME="syntax" --></td>
-                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                
-			</tr>
+               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="name" --></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>
                 <!-- /TMPL_LOOP -->
 	</table>
 
@@ -276,10 +186,7 @@
 	<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" />
 	<input type="submit" value="&lt;&lt; Prev">
 </form><!-- /TMPL_IF -->
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="add_form" />
-		<input type="submit" value="Add z39.50 Server" />
-</form>
+
 <!-- TMPL_IF NAME="ltcount" --><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
 	<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextpage" -->" />
 	<input type="submit" value="Next &gt;&gt;" />
