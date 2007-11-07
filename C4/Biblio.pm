@@ -257,8 +257,8 @@ sub AddItem {
     ( $item->{'biblioitemnumber'}, $itemtype ) = $sth->fetchrow;
     $sth =
       $dbh->prepare(
-        "SELECT notforloan FROM itemtypes WHERE itemtype='$itemtype'");
-    $sth->execute();
+        "SELECT notforloan FROM itemtypes WHERE itemtype=?");
+    $sth->execute( C4::Context->preference('item-level_itype') ? $item->{'ccode'} : $itemtype );
     my $notforloan = $sth->fetchrow;
     ##Change the notforloan field if $notforloan found
     if ( $notforloan > 0 ) {
