@@ -136,7 +136,7 @@ WriteMakefile(
 'Test' => 1.25,
 'Test::Harness' => 2.56,
 'Test::More' => 0.62,
-'Test::CSV' => 0.01,
+'Text::CSV' => 0.01,
 'Text::Wrap' => 2005.082401,
 'Time::HiRes' => 1.86,
 'Time::localtime' => 1.02,
