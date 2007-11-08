@@ -545,11 +545,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
- $dbh->do("ALTER TABLE items CHANGE homebranch homebranch VARCHAR(10)");
- $dbh->do("ALTER TABLE deleteditems CHANGE homebranch homebranch VARCHAR(10)");
- $dbh->do("ALTER TABLE statistics CHANGE branch branch VARCHAR(10)");
- $dbh->do("ALTER TABLE subscription CHANGE lastbranch lastbranch VARCHAR(10)");
+	$dbh->do("ALTER TABLE items CHANGE homebranch homebranch VARCHAR(10)");
+	$dbh->do("ALTER TABLE deleteditems CHANGE homebranch homebranch VARCHAR(10)");
+	$dbh->do("ALTER TABLE statistics CHANGE branch branch VARCHAR(10)");
+	$dbh->do("ALTER TABLE subscription CHANGE lastbranch lastbranch VARCHAR(10)");
     print "Upgrade to $DBversion done (extended missed branchcode columns to 10 chars)\n";
+	SetVersion ($DBversion);
+}	
+
+$DBversion = "3.00.00.022";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE items 
+                ADD `damaged` tinyint(1) default NULL");
+    print "Upgrade to $DBversion done (adding damaged column to items table)\n";
     SetVersion ($DBversion);
 }
 
@@ -558,6 +566,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 
 
+=======
+>>>>>>> BUMP to 021 : items.damaged added:updater/updatedatabase
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
