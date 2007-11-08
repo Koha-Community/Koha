@@ -163,6 +163,23 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="else" -->
+	
+	<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newstopword");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
+</ul></div>
+	
     <h1>System preferences admin</h1>
     <div id="action">
         <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin</a>
@@ -199,11 +216,6 @@
     </tr>
     <!-- /TMPL_LOOP -->
     </table>
-    
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="hidden" name="op" value="add_form" />
-        <input type="submit" value="Add a new System Preference" />
-    </form>
     
     <!-- /TMPL_IF -->
 
