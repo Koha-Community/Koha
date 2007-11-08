@@ -6,9 +6,9 @@
                         <option value="call_number_asc" <!-- TMPL_IF NAME="call_number_asc" -->selected="selected" <!-- /TMPL_IF -->>Call Number (Non-fiction 0-9 to Fiction A-Z)</option>
                         <option value="call_number_dsc" <!-- TMPL_IF NAME="call_number_dsc" -->selected="selected" <!-- /TMPL_IF -->>Call Number (Fiction Z-A to Non-fiction 9-0)</option>
                         <option value="pubdate_asc" <!-- TMPL_IF NAME="pubdate_asc" -->selected="selected" <!-- /TMPL_IF -->>Dates</option>
-                        <option value="pubdate_asc" <!-- TMPL_IF NAME="pubdate_asc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Newest to Oldest</option>
-                        <option value="pubdate_dsc" <!-- TMPL_IF NAME="pubdate_dsc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Oldest to Newest</option>
-                        <option value="acqdate_asc" <!-- TMPL_IF NAME="acqdate_asc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Acquisition Date: Newest to Oldest</option>
-                        <option value="acqdate_dsc" <!-- TMPL_IF NAME="acqdate_dsc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Acquisition Date: Oldest to Newest</option>
+                        <option value="pubdate_dsc" <!-- TMPL_IF NAME="pubdate_asc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Newest to Oldest</option>
+                        <option value="pubdate_asc" <!-- TMPL_IF NAME="pubdate_dsc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Oldest to Newest</option>
+                        <option value="acqdate_dsc" <!-- TMPL_IF NAME="acqdate_asc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Acquisition Date: Newest to Oldest</option>
+                        <option value="acqdate_asc" <!-- TMPL_IF NAME="acqdate_dsc" -->selected="selected" <!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;Acquisition Date: Oldest to Newest</option>
                         <option value="title_az" <!-- TMPL_IF NAME="title_az" -->selected="selected" <!-- /TMPL_IF -->>Title (A-Z)</option>
                         <option value="title_za" <!-- TMPL_IF NAME="title_za" -->selected="selected" <!-- /TMPL_IF -->>Title (Z-A)</option>
