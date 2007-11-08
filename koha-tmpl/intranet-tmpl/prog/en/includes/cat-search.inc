@@ -45,7 +45,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
-	<div id="circ_search" class="residentsearch primary">
+	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
     <!-- TMPL_IF NAME="CircAutocompl" -->
