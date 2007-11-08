@@ -565,11 +565,10 @@ sub _remove_stopwords {
 	#       otherwise, a french word like "leçon" is splitted in "le" "çon", le is an empty word, we get "çon"
 	#       and don't find anything...
 		foreach (keys %{C4::Context->stopwords}) {
-			next if ($_ =~/(and|or|not)/); # don't remove operators
+      next if ($_ =~/(and|or|not)/); # don't remove operators 
 			$operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
 			$operand=~ s/^$_\P{IsAlpha}/ /i;
 			$operand=~ s/\P{IsAlpha}$_$/ /i;
-                    
 		}
 	}
 	return $operand;
@@ -748,7 +747,6 @@ sub buildQuery {
 
 			# COMBINE OPERANDS, INDEXES AND OPERATORS
 			if ( $operands[$i] ) {
-				warn "OP: $operands[$i]";
             	my $operand = $operands[$i];
             	my $index   = $indexes[$i];
 				# if there's no index, don't use one, it will throw a CCL error
@@ -757,7 +755,7 @@ sub buildQuery {
 
 				# Remove Stopwords	
 				$operand = _remove_stopwords($operand,$index);
-				warn "OP_SW: $operand";
+
 				# Handle Truncation
 				my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
 				($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _add_truncation($operand,$index);
@@ -1236,7 +1234,7 @@ sub NZanalyse {
     # it's a leaf, do the real SQL query and return the result
     } else {
         $string =~  s/__X__/"$commacontent"/ if $commacontent;
-        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\// /g;
+        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
 #         warn "leaf : $string\n";
         # parse the string in in operator/operand/value again
         $string =~ /(.*)(=|>|>=|<|<=)(.*)/;
@@ -1348,7 +1346,7 @@ sub NZorder {
     #
     # order by POPULARITY
     #
-    if ($ordering =~ /1=9523/) {
+    if ($ordering =~ /popularity/) {
         my %result;
         my %popularity;
         # popularity is not in MARC record, it's builded from a specific query
@@ -1367,7 +1365,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=9523 >i') { # sort popularity DESC
+        if ($ordering eq 'popularity_dsc') { # sort popularity DESC
             foreach my $key (sort {$b cmp $a} (keys %popularity)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$popularity{$key}}->as_usmarc();
             }
@@ -1383,7 +1381,7 @@ sub NZorder {
     #
     # ORDER BY author
     #
-    } elsif ($ordering eq '1=1003 <i'){
+    } elsif ($ordering =~/author/){
         my %result;
         foreach (split /;/,$biblionumbers) {
             my ($biblionumber,$title) = split /,/,$_;
@@ -1402,7 +1400,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=1003 <i') { # sort by author desc
+        if ($ordering eq 'author_za') { # sort by author desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
@@ -1418,7 +1416,7 @@ sub NZorder {
     #
     # ORDER BY callnumber
     #
-    } elsif ($ordering eq '1=20 <i'){
+    } elsif ($ordering =~/callnumber/){
         my %result;
         foreach (split /;/,$biblionumbers) {
             my ($biblionumber,$title) = split /,/,$_;
@@ -1438,7 +1436,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=1003 <i') { # sort by title desc
+        if ($ordering eq 'call_number_dsc') { # sort by title desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
@@ -1451,7 +1449,7 @@ sub NZorder {
         $result_hash->{'hits'} = $numbers;
         $finalresult->{'biblioserver'} = $result_hash;
         return $finalresult;
-    } elsif ($ordering =~ /1=31/){ #pub year
+    } elsif ($ordering =~ /pubdate/){ #pub year
         my %result;
         foreach (split /;/,$biblionumbers) {
             my ($biblionumber,$title) = split /,/,$_;
@@ -1465,7 +1463,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=31 <i') { # sort by pubyear desc
+        if ($ordering eq 'pubdate_dsc') { # sort by pubyear desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
@@ -1481,7 +1479,7 @@ sub NZorder {
     #
     # ORDER BY title
     #
-    } elsif ($ordering =~ /1=4/) { 
+    } elsif ($ordering =~ /title/) { 
         # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
         my %result;
         foreach (split /;/,$biblionumbers) {
@@ -1495,7 +1493,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq '1=4 <i') { # sort by title desc
+        if ($ordering eq 'title_za') { # sort by title desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
