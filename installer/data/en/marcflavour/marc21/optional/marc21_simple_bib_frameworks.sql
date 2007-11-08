@@ -1,8 +1,8 @@
 -- *************************************************************
 --       SIMPLE KOHA 3.0 MARC 21 BIBLIOGRAPHIC FRAMEWORKS
 --
---                     PRETEST VERSION 0.1.6
---                          2007-10-24
+--                     PRETEST VERSION 0.1.7
+--                          2007-11-05
 --
 --                            edited
 --                            by thd
@@ -12,8 +12,8 @@
 --       SIMPLE KOHA 3.0 MARC 21 BIBLIOGRAPHIC FRAMEWORKS
 --                    POST-INSTALLATION SCRIPT
 --
---                     PRETEST VERSION 0.1.6
---                          2007-10-24
+--                     PRETEST VERSION 0.1.7
+--                          2007-11-05
 --
 --                            edited
 --                            by thd
@@ -22,8 +22,8 @@
 --
 --  KOHA 3.0 MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK
 --
---                    PRETEST VERSION 0.1.5
---                          2007-10-06
+--                    PRETEST VERSION 0.1.7
+--                          2007-11-05
 --
 --                            edited
 --                            by thd
@@ -33,8 +33,8 @@
 --          SIMPLE KOHA MARC 21 BIBLIOGRAPHIC FRAMEWORKS
 --                    POST-INSTALLATION SCRIPT
 --
---                     PRETEST VERSION 0.1.10
---                          2007-10-14
+--                     PRETEST VERSION 0.1.11
+--                          2007-11-05
 --
 --                           drafted
 --                      by thd for LibLime
@@ -47,8 +47,8 @@
 --     KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK
 --                    POST-INSTALLATION SCRIPT
 --
---                     PRETEST VERSION 0.2.7
---                          2007-10-14
+--                     PRETEST VERSION 0.2.8
+--                          2007-11-05
 --
 --                            edited
 --                      by thd for LibLime
@@ -57,8 +57,8 @@
 --
 --     KOHA MARC 21 STANDARD DEFAULT BIBLIOGRAPHIC FRAMEWORK
 --
---                     PRETEST VERSION 0.2.7
---                          2007-10-14
+--                     PRETEST VERSION 0.2.8
+--                          2007-11-05
 --
 --     original default requiring greater user customisation
 --                  created by a few Koha Hands
@@ -120,6 +120,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'BKS', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'BKS', '', '', NULL),
 
 
 
@@ -136,9 +137,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'BKS', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'BKS', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'BKS', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'BKS', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'BKS', '', '', NULL);
 
 
@@ -514,7 +515,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'BKS'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'BKS'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'BKS'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'BKS'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'BKS'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'BKS');
 
 
@@ -3958,32 +3959,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'BKS', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'BKS', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'BKS', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'BKS', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'BKS', '', '', NULL),
@@ -4026,6 +4037,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'CF', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'CF', '', '', NULL),
 
 
 
@@ -4042,9 +4054,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'CF', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'CF', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'CF', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'CF', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'CF', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'CF', '', '', NULL);
 
 
@@ -4421,7 +4433,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'CF'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'CF'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'CF'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'CF'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'CF'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'CF');
 
 
@@ -7865,32 +7877,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'CF', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'CF', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'CF', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'CF', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'CF', '', '', NULL),
@@ -7933,6 +7955,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'SR', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'SR', '', '', NULL),
 
 
 
@@ -7949,9 +7972,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'SR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'SR', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'SR', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'SR', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'SR', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SR', '', '', NULL);
 
 
@@ -8327,7 +8350,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'SR'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'SR'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'SR'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'SR'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'SR'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'SR');
 
 
@@ -11771,32 +11794,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'SR', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'SR', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'SR', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'SR', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SR', '', '', NULL),
@@ -11839,6 +11872,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'VR', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'VR', '', '', NULL),
 
 
 
@@ -11855,9 +11889,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'VR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'VR', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'VR', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'VR', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'VR', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'VR', '', '', NULL);
 
 
@@ -12233,7 +12267,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'VR'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'VR'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'VR'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'VR'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'VR'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'VR');
 
 
@@ -15677,32 +15711,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'VR', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'VR', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'VR', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'VR', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'VR', '', '', NULL),
@@ -15744,6 +15788,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'AR', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'AR', '', '', NULL),
 
 
 
@@ -15760,9 +15805,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'AR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'AR', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'AR', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'AR', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'AR', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'AR', '', '', NULL);
 
 
@@ -16137,7 +16182,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'AR'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'AR'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'AR'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'AR'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'AR'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'AR');
 
 
@@ -19581,32 +19626,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'AR', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'AR', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'AR', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'AR', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'AR', '', '', NULL),
@@ -19648,6 +19703,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'KT', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'KT', '', '', NULL),
 
 
 
@@ -19664,9 +19720,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'KT', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'KT', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'KT', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'KT', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'KT', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'KT', '', '', NULL);
 
 
@@ -20041,7 +20097,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'KT'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'KT'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'KT'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'KT'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'KT'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'KT');
 
 
@@ -23485,32 +23541,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'KT', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'KT', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'KT', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'KT', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'KT', '', '', NULL),
@@ -23553,6 +23619,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'IR', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'IR', '', '', NULL),
 
 
 
@@ -23569,9 +23636,9 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'IR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'IR', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'IR', '', '', NULL),
-		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'IR', '', '', NULL),
+		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'IR', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'IR', '', '', NULL);
 
 
@@ -23947,7 +24014,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'IR'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'IR'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'IR'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'IR'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'IR'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'IR');
 
 
@@ -27390,32 +27457,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'IR', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'IR', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'IR', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'IR', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'IR', '', '', NULL),
@@ -27456,6 +27533,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 
 
 -- 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', 'marc21_classcodes.pl', NULL, 0, 'SER', '', '', NULL),
+-- 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'SER', '', '', NULL),
 
 
 
@@ -27474,7 +27552,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, 'SER', '', '', NULL),
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', 'marc21_callnumber.pl', NULL, 0, 'SER', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'SER', '', '', NULL),
-		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, '', 9, '', '', '', NULL, 0, 'SER', '', '', NULL),
+		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'SER', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SER', '', '', NULL);
 
 
@@ -27848,7 +27926,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('984', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 'WLN AUTOMATIC HOLDINGS STATEMENT (OCLC)', 1, 0, '', 'SER'),
 		('987', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 'LOCAL ROMANIZATION/CONVERSION HISTORY (OCLC)', 1, 0, '', 'SER'),
 		('990', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 'EQUIVALENCES OR CROSS-REFERENCES [LOCAL, CANADA]', 1, 0, '', 'SER'),
-		('995', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMANDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'SER'),
+		('995', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 'RECOMMENDATION 995 [LOCAL, UNIMARC FRANCE]', 1, 0, '', 'SER'),
 		('998', 'LOCAL CONTROL INFORMATION (RLIN)', 'LOCAL CONTROL INFORMATION (RLIN)', 1, 0, '', 'SER');
 
 
@@ -31291,32 +31369,42 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('987', 'f', 'Note', 'Note', 0, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
 		('990', 'a', 'Link information for 9XX fields', 'Link information for 9XX fields', 1, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
 		('990', 'b', 'Link information for field corresponding to 9XX field', 'Link information for field corresponding to 9XX field', 1, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
-		('995', 'a', 'Origine du document, texte libre', 'Origine du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'b', 'Origine du document, donn&eacute;e cod&eacute;e', '', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'c', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'd', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'e', 'Genre d&eacute;taill&eacute;', 'Genre d&eacute;taill&eacute;', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'f', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 'Code &agrave; barres, suite alphanum&eacute;rique int&eacute;grale', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'g', 'Code &agrave; barres, pr&eacute;fixe', 'Code &agrave; barres, pr&eacute;fixe', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'h', 'Code &agrave; barres, incr&eacute;mentation', 'Code &agrave; barres, incr&eacute;mentation', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'i', 'Code &agrave; barres, suffixe', 'Code &agrave; barres, suffixe', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'j', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', '&Eacute;tablissement pr&ecirc;teur ou d&eacute;posant, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'k', 'Cote', 'Cote', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'l', 'Volumaison', 'Volumaison', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'm', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 'Date de pr&ecirc;t ou de d&eacute;p&ocirc;t', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'n', 'Date de restitution pr&eacute;vue', 'Date de restitution pr&eacute;vue', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'o', 'Cat&eacute;gorie de circulation', 'Cat&eacute;gorie de circulation', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'p', 'P&eacute;riodique', 'P&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'q', 'Public vis&eacute; (selon l\'&acirc;ge)', 'Public vis&eacute; (selon l\'&acirc;ge)', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'r', 'Type de document et support mat&eacute;riel', 'Type de document et support mat&eacute;riel', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 's', '&Eacute;l&eacute;ment de tri', '&Eacute;l&eacute;ment de tri', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'u', 'Note sur l\'exemplaire', 'Note sur l\'exemplaire', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'v', 'Note sur le num&eacute;ro de p&eacute;riodique', 'Note sur le num&eacute;ro de p&eacute;riodique', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'w', '&Eacute;tablissement cible du document, texte libre', '&Eacute;tablissement cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'x', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', '&Eacute;tablissement cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'y', 'Ensemble cible du document , texte libre', 'Ensemble cible du document, texte libre', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
-		('995', 'z', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 'Ensemble cible du document, donn&eacute;e cod&eacute;e', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
+		('995', '0', 'Withdrawn status [LOCAL, KOHA]', 'Withdrawn status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', '1', 'Lost status [LOCAL, KOHA]', 'Lost status [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', '2', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 'System code (specific classification or other scheme and edition) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
+		('995', '3', 'Use restrictions [LOCAL, KOHA]', 'Use restrictions [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', '4', 'Koha normalized classification for sorting [LOCAL, KOHA]', 'Koha normalized classification for sorting [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', '5', 'Coded location qualifier [LOCAL, KOHA]', 'Coded location qualifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', 'marc21_locationqualifier.pl', NULL, 5, 'SER', '', '', NULL),
+		('995', '6', 'Copy number [LOCAL, KOHA]', 'Copy number [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', NULL, 5, 'SER', '', '', NULL),
+		('995', '7', 'Uniform Resource Identifier [LOCAL, KOHA]', 'Uniform Resource Identifier [LOCAL, KOHA]', 1, 0, '', 9, '', '', '', 1, 5, 'SER', '', '', NULL),
+		('995', '8', 'Koha collection [LOCAL, KOHA]', 'Koha collection [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', '9', 'Internal item number (Koha itemnumber, autogenerated) [LOCAL, KOHA]', 'Internal itemnumber (Koha itemnumber) [LOCAL, KOHA]', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'a', 'Origin of the item (home branch) (free text)', 'Origin of item (home branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'b', 'Origin of item (home branch) (coded)', 'Origin of item (home branch (coded)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'c', 'Lending or holding organisation (holding branch) (free text)', 'Lending or holding organisation (holding branch) (free text)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'd', 'Lending or holding organisation (holding branch) code', 'Lending or holding organisation (holding branch) code', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'e', 'Genre detail', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'f', 'Barcode', 'Barcode', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'g', 'Barcode prefix', 'Barcode prefix', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'h', 'Barcode incrementation', 'Barcode incrementation', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'i', 'Barcode suffix', 'Barcode suffix', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'j', 'Section', 'Section', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'k', 'Call number (full call number)', 'Call number (full call number)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'l', 'Numbering (volume or other part)', 'Numbering (bound volume or other part)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 1, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'p', 'Serial', 'Serial', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'q', 'Intended audience (age level)', 'Intended audience (age level)', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 's', 'Acquisition mode', 'Acquisition mode', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 't', 'Genre', 'Genre', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'u', 'Copy note', 'Copy note', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'v', 'Periodical number', 'Periodical number', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'w', 'Recipient organisation code', 'Recipient organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'x', 'Recipient organisation, free text', 'Recipient organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'y', 'Recipient parent organisation code', 'Recipient parent organisation code', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
+		('995', 'z', 'Recipient parent organisation, free text', 'Recipient parent organisation, free text', 0, 0, '', 9, '', '', '', 0, 5, 'SER', '', '', NULL),
 		('998', 'b', 'Operator\'s initials, OID (RLIN)', 'Operator\'s initials, OID (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
 		('998', 'c', 'Cataloger\'s initials, CIN (RLIN)', 'Cataloger\'s initials, CIN (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
 		('998', 'd', 'First date, FD (RLIN)', 'First Date, FD (RLIN)', 0, 0, '', 9, '', '', '', 0, -6, 'SER', '', '', NULL),
