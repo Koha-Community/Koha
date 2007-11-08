@@ -21,7 +21,7 @@ function GetIt(bibno,title)
    <div id="bd">
 	
 
-<h1>Search results</h1>
+<h1>Biblio Search results</h1>
 <!-- TMPL_IF NAME="total"-->
 <table>
     <tr>
@@ -52,9 +52,17 @@ function GetIt(bibno,title)
     <!-- /TMPL_LOOP -->
     </table>
 <!-- TMPL_ELSE -->
-No result found for <b><!-- TMPL_VAR NAME="query" --></b>
+<h2>No result found for <b><!-- TMPL_VAR NAME="query" --></b></h2>
 <!-- /TMPL_IF-->
-
+<a onclick="Plugin(f)" href="">Search for another Biblio</a>
+<a class="button" href="#" onclick="window.close()">  Close</a></p>
 </div>
+
+<script type="text/javascript">
+function Plugin(f)
+{
+    window.open('subscription-bib-search.pl','FindABibIndex','width=800,height=400,toolbar=no,scrollbars=yes');
+}
+</script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
