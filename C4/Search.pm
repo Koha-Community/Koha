@@ -1237,10 +1237,16 @@ sub NZanalyse {
         $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
 #         warn "leaf : $string\n";
         # parse the string in in operator/operand/value again
-        $string =~ /(.*)(=|>|>=|<|<=)(.*)/;
+        $string =~ /(.*)(>=|<=)(.*)/;
         my $left = $1;
         my $operator = $2;
         my $right = $3;
+        unless ($operator) {
+            $string =~ /(.*)(>|<|=)(.*)/;
+            $left = $1;
+            $operator = $2;
+            $right = $3;
+        }
         my $results;
         # automatic replace for short operators
         $left='title' if $left =~ '^ti';
@@ -1253,17 +1259,19 @@ sub NZanalyse {
             #do a specific search
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
-            my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value $operator ?");
-            # warn "$left / $operator / $right\n";
+            my $sth = $dbh->prepare("SELECT biblionumbers,value FROM nozebra WHERE server=? AND indexname=? AND value $operator ?");
+            warn "$left / $operator / $right\n";
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$right) {
-                my $biblionumbers;
+                my ($biblionumbers,$value);
                 next unless $_;
-#                 warn "EXECUTE : $server, $left, $_";
+                warn "EXECUTE : $server, $left, $_";
                 $sth->execute($server, $left, $_);
-                while (my $line = $sth->fetchrow) {
-                    $biblionumbers .= $line;
-#                     warn "result : $line";
+                while (my ($line,$value) = $sth->fetchrow) {
+                    # if we are dealing with a numeric value, use only numeric results (in case of >=, <=, > or <)
+                    # otherwise, fill the result
+                    $biblionumbers .= $line unless ($right =~ /\d/ && $value =~ /\D/);
+                    warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
