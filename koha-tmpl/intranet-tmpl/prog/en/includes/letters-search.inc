@@ -42,7 +42,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 });    
 </script><!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="notices_search" class="residentsearch">
+	<div id="notices_search" class="residentsearch primary">
 	<p class="tip">Search Existing Notices:</p>
 <form action="/cgi-bin/koha/tools/letter.pl" method="post">
 		<input type="text" name="searchfield" size="40" value="" />

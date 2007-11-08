@@ -47,7 +47,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 
 <div id="header_search">
 
-<div id="circ_search" class="residentsearch">
+<div id="circ_search" class="residentsearch primary">
     <p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
     <!-- TMPL_IF NAME="CircAutocompl" -->

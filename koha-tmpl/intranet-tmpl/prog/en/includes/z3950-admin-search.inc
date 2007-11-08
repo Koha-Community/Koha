@@ -1,6 +1,6 @@
 <!-- Begin Members Resident Search Box -->
 <div id="header_search">
-	<div id="z3950_search" class="residentsearch">
+	<div id="z3950_search" class="residentsearch primary">
 	<p class="tip">Z39.50 Server Search:</p>
 	<form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
                 <input type="text" name="description" size="40" value="<!-- TMPL_VAR NAME="searchfield" -->" />

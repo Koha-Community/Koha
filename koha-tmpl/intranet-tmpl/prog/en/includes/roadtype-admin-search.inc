@@ -42,7 +42,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 });    
 </script><!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="roadtype_search" class="residentsearch">
+	<div id="roadtype_search" class="residentsearch primary">
 	<p class="tip">Road Type Search:</p>
 		<form action="<TMPL_VAR NAME="script_name">" method="post">
 		<input type="text" name="road_type" value="<!-- TMPL_VAR NAME="searchfield" -->" size="40" />

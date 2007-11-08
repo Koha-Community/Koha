@@ -44,7 +44,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
  //]]>
  </script>  <!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="suggestions_search" class="residentsearch">
+	<div id="suggestions_search" class="residentsearch primary">
 	<p class="tip">Suggestions Search:</p>
 	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
 	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="<!-- TMPL_VAR NAME="title"-->" />

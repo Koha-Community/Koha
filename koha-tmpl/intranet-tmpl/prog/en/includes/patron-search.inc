@@ -42,7 +42,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 });    
 </script><!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="patron_search" class="residentsearch">
+	<div id="patron_search" class="residentsearch primary">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
     <input id="searchmember" size="25" name="member" type="text" />
