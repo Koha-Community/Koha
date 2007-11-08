@@ -1158,7 +1158,7 @@ CREATE TABLE `marc_subfield_structure` (
   `isurl` tinyint(1) default NULL,
   `hidden` tinyint(1) default NULL,
   `frameworkcode` varchar(4) NOT NULL default '',
-  `seealso` varchar(600) default NULL,
+  `seealso` varchar(1100) default NULL,
   `link` varchar(80) default NULL,
   `defaultvalue` text default NULL,
   PRIMARY KEY  (`frameworkcode`,`tagfield`,`tagsubfield`),
