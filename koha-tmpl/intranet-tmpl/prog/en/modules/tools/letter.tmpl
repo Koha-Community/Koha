@@ -107,7 +107,22 @@
 	<div class="yui-b">
 
 	<!-- TMPL_IF NAME="else" -->
-<!-- TMPL_INCLUDE NAME="tools-notices-toolbar.inc" -->
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newnotice");
+	}
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newnotice" href="/cgi-bin/koha/tools/letter.pl?op=add_form">New Notice</a></li>
+</ul></div>
 		
 		<!-- TMPL_IF NAME="search" -->
 		<p>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b></p>
