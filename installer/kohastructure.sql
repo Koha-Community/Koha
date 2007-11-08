@@ -791,7 +791,7 @@ CREATE TABLE `deleteditems` (
   `barcode` varchar(20) default NULL,
   `dateaccessioned` date default NULL,
   `booksellerid` varchar(10) default NULL,
-  `homebranch` varchar(4) default NULL,
+  `homebranch` varchar(10) default NULL,
   `price` decimal(8,2) default NULL,
   `replacementprice` decimal(8,2) default NULL,
   `replacementpricedate` date default NULL,
@@ -1002,7 +1002,7 @@ CREATE TABLE `items` (
   `barcode` varchar(20) default NULL,
   `dateaccessioned` date default NULL,
   `booksellerid` varchar(10) default NULL,
-  `homebranch` varchar(4) default NULL,
+  `homebranch` varchar(10) default NULL,
   `price` decimal(8,2) default NULL,
   `replacementprice` decimal(8,2) default NULL,
   `replacementpricedate` date default NULL,
@@ -1544,7 +1544,7 @@ CREATE TABLE `subscription` (
   `callnumber` text,
   `branchcode` varchar(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
-  `lastbranch` varchar(4),
+  `lastbranch` varchar(10),
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
