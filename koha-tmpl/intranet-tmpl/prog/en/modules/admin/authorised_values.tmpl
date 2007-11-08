@@ -103,6 +103,13 @@
 <p>This table is used in MARC definition. You can define as many categories as you want, and as many authorized values as you want in each category.</p>
 <p>When you define the MARC subfield structure, you can link a subfield to a authorized-value category. When the user ask for adding of modifying a biblio,
 the subfield is not entered through a free field, but though a list of authorized values</p>
+<!-- TMPL_IF name="duplicate_category" -->
+<div>
+<span class="problem">Could not add value &quot;<!-- TMPL_VAR name="duplicate_value" -->&quot; for category 
+    &quot;<!-- TMPL_VAR name="duplicate_category" -->&quot; &mdash; value already present.
+</span>
+</div>
+<!-- /TMPL_IF -->
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
 <table>
 <tr>
@@ -134,6 +141,11 @@ the subfield is not entered through a free field, but though a list of authorize
 <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 	<input type="submit" value="Next Page &gt;&gt;" /></form>
 <!-- /TMPL_IF -->
+
+<div id="action">
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->">Add Authorized value for <!-- TMPL_VAR name="category" --></a>
+    <a href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">Add New Category</a>
+</div>
 
 <!-- /TMPL_IF -->
 

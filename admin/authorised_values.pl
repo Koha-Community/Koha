@@ -26,14 +26,14 @@ use C4::Output;
 use C4::Context;
 
 
-sub StringSearch  {
+sub AuthorizedValuesForCategory  {
 	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from authorised_values where (category like ?) order by category,authorised_value");
-	$sth->execute("$data[0]%");
+	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from authorised_values where (category = ?) order by category,authorised_value");
+	$sth->execute("$data[0]");
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
@@ -42,6 +42,18 @@ sub StringSearch  {
 	}
 	$sth->finish;
 	return ($cnt,\@results);
+}
+
+sub _already_exists {
+    my ($category, $authorised_value) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare_cached("SELECT COUNT(*) FROM authorised_values
+                                    WHERE category = ?
+                                    AND authorised_value = ?");
+    $sth->execute($category, $authorised_value);
+    my ($count) = $sth->fetchrow_array();
+    $sth->finish();
+    return $count;
 }
 
 my $input = new CGI;
@@ -103,14 +115,22 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
-	my $lib = $input->param('lib');
-	undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
+
+    if (_already_exists($input->param('category'), $input->param('authorised_value'))) {
+        $template->param(duplicate_category => $input->param('category'),
+                         duplicate_value =>  $input->param('authorised_value'),
+                         else => 1);
+        default_form();
+    } else {
+	    my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+	    my $lib = $input->param('lib');
+	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
 	
-	$sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'), $lib);
-	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
-	exit;
+	    $sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'), $lib);
+	    $sth->finish;
+	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
+	    exit;
+    }
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
@@ -141,6 +161,13 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
+    default_form();
+} #---- END $OP eq DEFAULT
+output_html_with_http_headers $input, $cookie, $template->output;
+
+exit 0;
+
+sub default_form {
 	# build categories list
 	my $sth = $dbh->prepare("select distinct category from authorised_values");
 	$sth->execute;
@@ -160,7 +187,7 @@ if ($op eq 'add_form') {
 	if (!$searchfield) {
 		$searchfield=$category_list[0];
 	}
-	my ($count,$results)=StringSearch($searchfield,'web');
+	my ($count,$results)=AuthorizedValuesForCategory($searchfield,'web');
 	my $toggle=1;
 	my @loop_data = ();
 	# builds value list
@@ -198,5 +225,5 @@ if ($op eq 'add_form') {
 						script_name => $script_name,
 		);
 	}
-} #---- END $OP eq DEFAULT
-output_html_with_http_headers $input, $cookie, $template->output;
+}
+
