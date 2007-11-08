@@ -137,7 +137,7 @@ sub edit_class_source_form {
         used => $source->{'used'},
     );
 
-    get_sort_rule_codes($template, $source->{'rule_code'});
+    get_sort_rule_codes($template, $source->{'class_sort_rule'});
 }
 
 sub edit_class_source {
