@@ -123,6 +123,7 @@ my %tabsysprefs;
     $tabsysprefs{IntranetNav}="Intranet";
     $tabsysprefs{intranetcolorstylesheet}="Intranet";
     $tabsysprefs{intranetuserjs}="Intranet";
+	$tabsysprefs{yuipath}="Intranet";
 # Members
     $tabsysprefs{automembernum}="Members";
     $tabsysprefs{checkdigit}="Members";

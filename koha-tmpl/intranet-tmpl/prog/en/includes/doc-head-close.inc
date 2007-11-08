@@ -1,6 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/clickmenu.css" />
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs.css" />
 <!-- TMPL_IF name="intranetstylesheet" -->
@@ -66,15 +65,15 @@
 <!-- OPTIONAL: Menu Stylesheet (required for creating buttons of type "menu" and "split") -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/yui/menu.css" />
 <!-- Dependencies -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/element/element-beta-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/element/element-beta-min.js"></script>
 <!-- OPTIONAL: Menu and Container Core (required for creating buttons of type "menu" and "split") -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/container/container_core-min.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/menu/menu-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/container/container_core-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu-min.js"></script>
 <!-- Source file -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/button/button-beta-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/button/button-beta-min.js"></script>
 <!-- TMPL_IF NAME="CircAutocompl" -->
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/utilities/utilities.js"></script>
-<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/utilities/utilities.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/autocomplete/autocomplete-min.js"></script>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/yui/autocomplete.css" />
 <!-- /TMPL_IF -->
