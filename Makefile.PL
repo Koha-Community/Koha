@@ -130,7 +130,7 @@ WriteMakefile(
 'PDF::Reuse' => 0.33,
 'PDF::Reuse::Barcode' => 0.05,
 'POSIX' => 1.09,
-'Schedule::At' => 1.06',
+'Schedule::At' => 1.06,
 'Term::ANSIColor' => 1.10,
 'Test' => 1.25,
 'Test::Harness' => 2.56,
