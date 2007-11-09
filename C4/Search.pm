@@ -687,12 +687,14 @@ sub _build_weighted_query {
 		#$weighted_query .= " or kw,wrd,r5=$operand";         # index as exact
 	#}
 	else {
-		$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
+		warn "WEIGHT GENERIC";
+		$weighted_query .=" $index=$operand";
+		#$weighted_query .=" $index,ext,r1=$operand";    # index label as exact
 		#$weighted_query .= " or $index,ext,r2=$operand";            # index as exact
-		$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
-		$weighted_query .= " or $index,rt,wrd,r3=$operand";
-		$weighted_query .=" or $index,wrd,r5=$operand";    # index as word right-truncated
-		$weighted_query .= " or $index,wrd,fuzzy,r8=$operand" if $fuzzy_enabled;
+		#$weighted_query .=" or $index,phr,r3=$operand";    # index as phrase
+		#$weighted_query .= " or $index,rt,wrd,r3=$operand";
+		#$weighted_query .=" or $index,wrd,r5=$operand";    # index as word right-truncated
+		#$weighted_query .= " or $index,wrd,fuzzy,r8=$operand" if $fuzzy_enabled;
 	}
 	$weighted_query .= "))";    # close rank specification
 	return $weighted_query;
@@ -749,17 +751,18 @@ sub buildQuery {
 			if ( $operands[$i] ) {
             	my $operand = $operands[$i];
             	my $index   = $indexes[$i];
+
 				# if there's no index, don't use one, it will throw a CCL error
-				my $index_plus; $index_plus = "$index:" if $index;
-				my $index_plus_comma; $index_plus_comma="$index," if $index;
+				my $index_plus;# $index_plus = "$index:" if $index;
+				my $index_plus_comma;# $index_plus_comma="$index," if $index;
 
 				# Remove Stopwords	
 				$operand = _remove_stopwords($operand,$index);
-
+				#warn "OP_SW: $operand";
 				# Handle Truncation
 				my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
 				($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _add_truncation($operand,$index);
-				warn "TRUNCATION: NON:@$nontruncated RIGHT:@$righttruncated LEFT:@$lefttruncated RIGHTLEFT:@$rightlefttruncated REGEX:@$regexpr";
+				#warn "TRUNCATION: NON:@$nontruncated RIGHT:@$righttruncated LEFT:@$lefttruncated RIGHTLEFT:@$rightlefttruncated REGEX:@$regexpr";
 
 				# Handle Stemming
           		my $stemmed_operand;
@@ -775,7 +778,8 @@ sub buildQuery {
 
                 # If there's a previous operand, we need to add an operator
                 if ($previous_operand) {
-                    if ( $operators[ $i - 1 ] ) {
+					# user-specified operator
+                    if ( $operators[$i-1] ) {
 						$human_search_desc .="  $operators[$i-1] $index_plus $operands[$i]";
 						$query .= " $operators[$i-1] $index_plus $operand";
                     }
@@ -812,7 +816,7 @@ sub buildQuery {
             }    #/if $operands
         }    # /for
     }
-
+	#warn "QUERY:".$query;
     # add limits
     my $limit_query;
     my $limit_search_desc;
@@ -1173,7 +1177,7 @@ sub NZgetRecords {
 sub NZanalyse {
     my ($string,$server) = @_;
     # $server contains biblioserver or authorities, depending on what we search on.
-    warn "querying : $string on $server";
+    #warn "querying : $string on $server";
     $server='biblioserver' unless $server;
     # if we have a ", replace the content to discard temporarily any and/or/not inside
     my $commacontent;
