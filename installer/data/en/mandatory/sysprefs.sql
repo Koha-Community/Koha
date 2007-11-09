@@ -113,3 +113,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryStemming','1','If ON, enables query stemming',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryFuzzy','1','If ON, enables fuzzy option for searches',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryWeightFields','1','If ON, enables field weighting',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries',NULL,'free');
