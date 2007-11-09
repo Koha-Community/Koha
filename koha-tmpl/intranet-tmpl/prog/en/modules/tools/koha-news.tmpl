@@ -78,8 +78,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             </ol>
 			</fieldset>
   
-                <input class="button" type="submit" value="Save" />
-                <input class="button" type="button" value="Cancel" onclick="window.location.href='/cgi-bin/koha/tools/opac-news.pl'" />
+                <fieldset class="action"><input class="button" type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/tools/opac-news.pl">Cancel</a></fieldset>
         </form>
     <!-- TMPL_ELSE -->
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl">
@@ -134,7 +133,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                     <!-- /TMPL_LOOP -->
                 </table>
                 <input type="hidden" name="op" value="del" />
-                <input type="submit" class="button" value="Delete selected" />
+                <fieldset class="action"><input type="submit" class="button" value="Delete selected" /></fieldset>
             </form>
         <!-- TMPL_ELSE -->
             <p>No news loaded</p>

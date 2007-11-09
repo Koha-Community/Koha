@@ -14,11 +14,14 @@
 	<div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-<!-- TMPL_INCLUDE NAME="label-status.inc" -->
 
 <!-- TMPL_IF NAME="layout_loop" -->
-<h2>Select a Current Layout</h2>
+<div class="yui-gc">
+<div class="yui-u first">
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
+<fieldset>
+<legend>Set Active Layout</legend>
+
 <table>
 <tr>
         <th>Layout</th>
@@ -43,7 +46,7 @@
                 <a href="/cgi-bin/koha/labels/label-edit-layout.pl?layout_id=<!-- TMPL_VAR NAME="id" -->">Edit</a>
         </td>
         <td>
-                <a href="/cgi-bin/koha/label-home.pl?op=delete_layout&layout_id=<!-- TMPL_VAR NAME="id"-->">Delete</a>
+                <a href="/cgi-bin/koha/label-home.pl?op=delete_layout&amp;layout_id=<!-- TMPL_VAR NAME="id"-->">Delete</a>
         </td>
 <td> <!-- TMPL_IF NAME="active" -->
 <input type="radio" name="layout_id" value="<!-- TMPL_VAR NAME="id" -->" checked="checked" />
@@ -52,13 +55,20 @@
 <!-- /TMPL_IF -->
         </td>
 </tr>
-
 <!-- /TMPL_LOOP -->
-<tr><td colspan="7">
-     <input type="submit" value="Set Active Layout" />
-        <input type="hidden" name=op value="set_active_layout" />
+
 </table>
-</form>
+</fieldset>
+<fieldset class="action">
+     <input type="submit" value="Save" />
+        <input type="hidden" name=op value="set_active_layout" /></fieldset>
+</form></div>
+<div class="yui-u">
+<!-- TMPL_INCLUDE NAME="label-status.inc" -->
+</div>
+</div>
+<!-- TMPL_ELSE -->
+<!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <!-- /TMPL_IF -->
 
 </div>

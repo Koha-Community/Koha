@@ -41,26 +41,22 @@
 <legend>Stage records into the reservoir</legend><ol>
 	<li>
 		<label for="uploadmarc">Select the file to stage: </label>
-		
-			<input type="file" id="uploadmarc" name="uploadmarc" /><br />
+		<input type="file" id="uploadmarc" name="uploadmarc" /><br />
 		
 	</li>
 	<li>
 		<label for="comments">Notes about this file: </label>
-		
-			<input type="text" id="comments" name="comments" />
+		<input type="text" id="comments" name="comments" />
 		
 	</li>
 	<li>
 		<label for="syntax">Character encoding: </label>
-		
-			<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+		<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
 		
 	</li>
 </ol></fieldset>
 	<fieldset class="rows">
 	<legend>Look for existing records in catalogue?</legend><ol><li class="radio">
-		 
 		<input type="radio" id="check_for_matchesno" name="check_for_matches" value="0" checked="checked" /><label for="check_for_matchesno">Do not look for matching records (using ISBN)</label></li>
 <li class="radio">
 			<input type="radio" id="check_for_matchesyes" name="check_for_matches" value="1" /><label for="check_for_matchesyes">Look for matching records</label>
@@ -78,7 +74,7 @@
       </li>
     </ol>
   </fieldset>
-  <input type="submit" value="Stage for import" />
+  <fieldset class="action"><input type="submit" value="Stage for import" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 

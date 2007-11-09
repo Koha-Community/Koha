@@ -1,40 +1,37 @@
 ﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>SMS Administration</title>
+<title>Koha &rsaquo; SMS Administration</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; SMS Administration</div>
 
 <div id="doc3" class="yui-t2">
 
    <div id="bd">
        <div id="yui-main">
-	       <div class="yui-b"><div class="yui-g">
-<h1>NEULIS SMS Administration</h1>
+	       <div class="yui-b">
 
-
-<table>
-<caption>SMS Messaging </caption>
 <!--TMPL_IF NAME="error"--><div class="error"><!--TMPL_VAR NAME="error"--> </div><!--/TMPL_IF-->
 <form action="/cgi-bin/koha/sms/sms.pl" method="post">
-<tr><input type="hidden" value="sendsms" name="operation"/>
-	<td >Your Message<textarea name="message"  cols="35" rows="4"><!--TMPL_VAR NAME="message"--></textarea></td>
-</tr>
-<tr>
-	<td>Phone:<input type="text" name="phone" value="<!--TMPL_VAR NAME="phone"-->"/>5338644143</th>
-	
-</tr>
-	<tr>
-	
-	<td><input type="submit" value="Send SMS"></td>
-</tr>
+<fieldset class="rows">
+<legend>SMS Messaging</legend>
+<ol>
+	<li><label for="message">Your Message: </label><textarea name="message" id="message" cols="35" rows="4"><!--TMPL_VAR NAME="message"--></textarea></li>
+	<li><label for="phone">Phone:</label><input type="text" name="phone" id="phone" value="<!--TMPL_VAR NAME="phone"-->"/> 5338644143</li>
+</ol>
+</fieldset>
+<fieldset class="action"><input type="submit" value="Send SMS"></fieldset>
 </form>
 
-<th>Şu anda sadece KTcell abonelerine mesaj gönderilebilir. Rezervasyonu gelenler için kullanın!</th>
+<div class="message">Şu anda sadece KTcell abonelerine mesaj gönderilebilir. Rezervasyonu gelenler için kullanın!</div>
 
-</table>
 </div>
 </div>
-    </div>
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Tools &rsaquo; Clean Patron Records</title>
+<title>Koha &rsaquo; Tools &rsaquo; Clean Patron Records <!-- TMPL_IF NAME="step2" -->&rsaquo; Confirm<!-- /TMPL_IF --><!-- TMPL_IF NAME="step3" -->&rsaquo; Finished<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
@@ -41,7 +41,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; Clean Patron Records</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>  &rsaquo; <!-- TMPL_IF NAME="step1" -->Clean Patron Records<!-- TMPL_ELSE --><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Clean Patron Records</a> &rsaquo; <!-- /TMPL_IF --><!-- TMPL_IF NAME="step2" -->Confirm<!-- /TMPL_IF --><!-- TMPL_IF NAME="step3" -->Finished<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -49,7 +49,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Delete some old patrons/Anonymize some issue history</h1>
+<h1>Delete some old patrons/Anonymize some check-out history</h1>
 
 <!-- TMPL_IF NAME="step1" -->
 <!-- step 1 START -->
@@ -70,7 +70,7 @@
             </script></p>
         
         <p><input id="checkissue" type="checkbox" name="checkbox" value="issue" checked="checked" />
-        <label for="checkissue">Anonymize issue history older than</label>
+        <label for="checkissue">Anonymize check-out history older than</label>
         <input size="10" id="date2" name="filterdate2" value="<!-- TMPL_VAR NAME="filterdate2"-->" type="text" />
             <script type="text/javascript">
                 Calendar.setup(
@@ -81,11 +81,11 @@
                 );
             </script></p>
 
-            <input type="submit" value="Submit" />
             
             <!-- hidden here -->
             <input type="hidden" name="step2" value="1" />
 			</fieldset>
+            <fieldset class="action"><input type="submit" value="Next &gt;&gt;" /></fieldset>
     </form>
 </div>
 <!-- step 1 END -->
@@ -94,40 +94,38 @@
 <!-- TMPL_IF NAME="step2" -->
 <!-- STEP 2 START -->
 <div id="step2">
+        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
     <fieldset>
         <legend>Warnings</legend>
-        <b>
-        <!-- TMPL_IF NAME="totalToDelete" --><!-- TMPL_VAR NAME="totalToDelete" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> patrons will be deleted.
-        <br />
-        <!-- TMPL_IF NAME="totalToAnonymize" --><!-- TMPL_VAR NAME="totalToAnonymize" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> issue history will be anonymized.
 
-        </b>
+        	<ul>
+        		<li><!-- TMPL_IF NAME="totalToDelete" --><!-- TMPL_VAR NAME="totalToDelete" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> patrons will be deleted.</li>
+        		<li><!-- TMPL_IF NAME="totalToAnonymize" --><!-- TMPL_VAR NAME="totalToAnonymize" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> check-out history will be anonymized.</li>
+        	</ul>
+
         <br />
-        <form name="f2" action="/cgi-bin/koha/tools/cleanborrowers.pl" method="post" onsubmit="return checkForm2(this);">
             <!-- TMPL_IF NAME="totalToDelete" -->
-                What do you want to do for deleted patrons ?<br />
-                <label for="delete">Delete completly theses patrons</label>
+                <fieldset><legend>What do you want to do for deleted patrons?</legend>
+                <label for="delete">Permanently delete these patrons</label>
                 <input id="delete" type="radio" name="radio" value="delete" checked="checked" />
                 
-                <label for="trash">Move to trash theses patrons</label>
+                <label for="trash">Move these patrons to the trash</label>
                 <input id="trash" type="radio" name="radio" value="trash" />
-                <input type="hidden" name="do_delete" value="<!-- TMPL_VAR NAME="totalToDelete" -->" />
-                <br />
+                <input type="hidden" name="do_delete" value="<!-- TMPL_VAR NAME="totalToDelete" -->" /></fieldset>
+
             <!-- /TMPL_IF -->
             <!--TMPL_IF NAME="totalToAnonymize"-->
-                <br />
-                Are you sure you want to anonymize issue history for <!-- TMPL_VAR NAME="totalToAnonymize"--> patrons ?
+
+                Check-out history for <!-- TMPL_VAR NAME="totalToAnonymize"--> patrons will be anonymized.
                 <input type="hidden" name="do_anonym" value="<!-- TMPL_VAR NAME="totalToAnonymize" -->" />
             <!-- /TMPL_IF -->
-            <br /><br />
-            <a href="JavaScript:back();" title="go back">Cancel</a>
-            <input type="submit" value=" OK " />
-            
+               
             <input type="hidden" name="step3" value="1" />
             <input type="hidden" name="filterdate1" value="<!-- TMPL_VAR NAME="filterdate1" -->" />
             <input type="hidden" name="filterdate2" value="<!-- TMPL_VAR NAME="filterdate2" -->" />
-        </form>
     </fieldset>
+	<fieldset class="action"><input type="submit" value="Finish" /> <a class="cancel" href="/cgi-bin/koha/tools/cleanborrowers.pl">Cancel</a></fieldset>
+        </form>
 </div>
 <!-- STEP 2 END -->
 <!-- /TMPL_IF -->
@@ -136,20 +134,23 @@
 <!-- Step 3 START -->
 
     <div id="step3">
-          <b>
+
           <!-- TMPL_IF NAME="do_delete" -->
                 <!-- TMPL_IF NAME="trash" -->
-                    <!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfuly moved to trash.
+                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfuly moved to trash.</h4>
                 <!-- TMPL_ELSE -->
-                    <!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfuly deleted.
+                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfully deleted.</h4>
                 <!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
+				<h4>No patron records have been removed.</h4>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="do_anonym" -->
-                All patrons whose issue history older than <!-- TMPL_VAR NAME="filterdate1" --> has been anonimized.
+                <h4>All patrons with checkouts older than <!-- TMPL_VAR NAME="filterdate1" --> have been anonymized.</h4>
+			<!-- TMPL_ELSE -->
+				<h4>No patron records have been anonymized.</h4>
             <!-- /TMPL_IF -->
-          </b>
+
     </div>
-    <a href="/cgi-bin/koha/tools/tools-home.pl">Go back to tools home.</a>
 <!-- Step 3 END -->
 <!-- /TMPL_IF -->
 

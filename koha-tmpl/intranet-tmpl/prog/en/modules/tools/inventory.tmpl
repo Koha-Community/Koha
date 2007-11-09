@@ -14,8 +14,9 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
     <h1>Inventory/Stocktaking</h1>
+	<div class="yui-g">
+	<div class="yui-u first">
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
@@ -70,14 +71,17 @@
         </li></ol>
   </fieldset>
             <input type="hidden" name="op" value="do_it" />
-            <input type="submit" value="Submit" class="button" />
+            <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
     </form>
+	</div>
+	
+	<div class="yui-u">
     <form name="barcodefile" method="post" action="/cgi-bin/koha/tools/inventory.pl">
         <fieldset class="rows">
             <legend>Use a barcode file</legend>
 			<ol>
             <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set date last seen to :</label> <input type="text" id="setdate" name="setdate" />
+            <li><label for="setdate">Set date last seen to:</label> <input type="text" id="setdate" name="setdate" />
              <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" alt="Show Calendar" />
             <script type="text/javascript">
             Calendar.setup(
@@ -90,17 +94,19 @@
             </script>
 </li></ol>
         </fieldset>
-            <p><input type="submit" value="Submit" class="button" /></p>
+            <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
     </form>
+	</div>
+	</div>
     <!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
     <!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> can't be opened</p><!-- /TMPL_IF-->
     <!--TMPL_LOOP Name="errorloop"-->
         <p class="error">
             <!--TMPL_VAR Name="barcode"-->
-            <!--TMPL_IF Name="ERR_BARCODE"--> : barcode not found<!--/TMPL_IF-->
-            <!--TMPL_IF Name="ERR_WTHDRAWN"--> : item withdrawn<!--/TMPL_IF-->
-            <!--TMPL_IF Name="ERR_ONLOAN_RET"--> : item was on loan. It was returned before marked as seen<!--/TMPL_IF-->
-            <!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"--> : item was on loan. couldn't be returned.<!--/TMPL_IF-->
+            <!--TMPL_IF Name="ERR_BARCODE"-->: barcode not found<!--/TMPL_IF-->
+            <!--TMPL_IF Name="ERR_WTHDRAWN"-->: item withdrawn<!--/TMPL_IF-->
+            <!--TMPL_IF Name="ERR_ONLOAN_RET"-->: item was on loan. It was returned before marked as seen<!--/TMPL_IF-->
+            <!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"-->: item was on loan. couldn't be returned.<!--/TMPL_IF-->
         </p>
     <!-- /TMPL_LOOP-->
     <!-- TMPL_IF NAME="loop" -->

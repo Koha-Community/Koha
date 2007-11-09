@@ -2,7 +2,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 function Plugin(batch_id) {
-	window.open("label-item-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=600,height=460,toolbar=no,scrollbars=yes');
+	window.open("label-item-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=640,height=400,toolbar=no,scrollbars=yes');
 }
 </script>
 </head>
@@ -17,12 +17,14 @@ function Plugin(batch_id) {
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-<!-- TMPL_INCLUDE NAME="label-status.inc" -->
 
 <!-- TMPL_UNLESS NAME="batch_id" -->
+<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 
 <!-- TMPL_IF NAME="batches" -->
+<div class="yui-g">
+
+<div class="yui-u first">
 <h2>Label Batches</h2>
 <table>
 <tr>
@@ -44,24 +46,56 @@ function Plugin(batch_id) {
                 <a href="/cgi-bin/koha/labels/label-manager.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Edit</a>
         </td>
         <td>
-                <a href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete</a>
+                <a href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete</a>
         </td>
           <td>
-		  <a class="button" style="float: right;"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch  <!-- TMPL_VAR NAME="batch_id" --></a>
+		  <a style="float: right;"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch  <!-- TMPL_VAR NAME="batch_id" --></a>
         </td></tr>
 <!-- /TMPL_LOOP -->
 </table>
-
+</div>
+<div class="yui-u">
+<!-- TMPL_INCLUDE NAME="label-status.inc" -->
+</div>
+</div>
+<!-- TMPL_ELSE -->
+<!-- TMPL_INCLUDE NAME="label-status.inc" -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_ELSE -->
-<div class="details">
 
-        <a class="button" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->); return false;">Add item(s) to batch</a> &nbsp;&nbsp;&nbsp;&nbsp;
-		<a class="button" href="/cgi-bin/koha/labels/label-manager.pl?batch_id=">Return to batch summary</a>&nbsp;&nbsp;&nbsp;&nbsp;
-        <a class="button" style="border:2px solid #634;" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete current batch (<!-- TMPL_VAR NAME="batch_id" -->)</a>&nbsp;&nbsp;&nbsp;&nbsp;
-<a class="button"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch: <!-- TMPL_VAR NAME="batch_id" --></a>
-</div>
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	 	$("#additemsc").empty();
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+		new YAHOO.widget.Button({
+                                            id: "additems", 
+                                            type: "button", 
+                                            label: "Add item(s) to batch", 
+                                            container: "additemsc",
+											onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->)}}
+                                        });
+		new YAHOO.widget.Button("deletebatch");
+		new YAHOO.widget.Button("generate");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	<li id="additemsc"><a id="additems" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->); return false;">Add item(s) to batch</a></li>
+	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete current batch</a></li>
+	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch</a></li>
+</ul></div>
 
 <h2>Items to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
 

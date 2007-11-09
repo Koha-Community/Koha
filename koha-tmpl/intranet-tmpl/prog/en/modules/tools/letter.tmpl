@@ -253,18 +253,18 @@
 		<li>
 			<label for="SQLfieldname">Message Body:</label>
 		</li>
-		<li>		
-		<select name="SQLfieldname" id="SQLfieldname" size="9">
+		<li>
+		<table>
+		<tr><td><select name="SQLfieldname" id="SQLfieldname" size="9">
 			<!-- TMPL_LOOP name="SQLfieldname" -->
 				<option value="<!-- TMPL_VAR name="value"-->"><!-- TMPL_VAR name="text"--></option>
 			<!-- /TMPL_LOOP -->
-		</select>
-        <input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insert" />
-        <textarea name="content" cols="80" rows="15"><!-- TMPL_VAR NAME="content" --></textarea>
+		</select></td><td><input type="button" name="insert" value="&gt;&gt;" onclick="insertValueQuery()" title="Insert" /></td><td><textarea name="content" cols="80" rows="15"><!-- TMPL_VAR NAME="content" --></textarea></td></tr></table>
+
 		</li>
 		</ol>
 		</fieldset>
-		<p><input type="button" value="Submit" onclick="Check(this.form)" class="button" /></p>
+		<fieldset class="action"><input type="button" value="Submit" onclick="Check(this.form)" class="button" /></fieldset>
 		</form>
 	<!-- /TMPL_IF -->
 	

@@ -21,7 +21,6 @@
 use strict;
 require Exporter;
 use CGI;
-use C4::Koha;
 use C4::Auth;
 use HTML::Template;
 use C4::Context;
@@ -31,6 +30,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::Acquisition;
 use C4::Search;
+use C4::Dates qw( DHTMLcalendar );
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
 #use Smart::Comments;
@@ -252,7 +252,7 @@ else {
 }
 # Print the page
 $template->param(
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 

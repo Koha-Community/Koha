@@ -10,28 +10,27 @@
 		<li>Set left- and bottom-margins of the page that you are going to use. This parameter will help to center the barcodes on the labels.</li>
 	</ul>
 	<br />
-	<form id="formulario" method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1">
+	<form method="post" action="<!-- TMPL_VAR NAME="SCRIPT_NAME" -->" name="form1">
 		<input type="hidden" name="saveSettings" value="1" />
-		<table>
-			<tr>
-				<th scope="row">
-					Label width (Expressed in mm)
-				</th><td> 
+		<fieldset class="rows"><ol>
+			<li>
+				<label for="labelWidth">
+					Label width (Expressed in mm): </label> 
 					<input id="labelWidth" type="text" name="labelWidth" size="5" value="<!-- TMPL_VAR NAME="LABEL_WIDTH" -->">
-				</td></tr>
-				<th scope="row">
-					Label heigth (Expressed in mm)
-				</th><td> 
+				</li>
+				<li>
+				<label for="labelHeigth">
+					Label heigth (Expressed in mm): </label> 
 					<input id="labelHeigth" type="text" name="labelHeigth" size="5" value="<!-- TMPL_VAR NAME="LABEL_HEIGTH" -->">
-				</td></tr>
-				<th scope="row">
-					System dpi
-				</th><td>
+				</li>
+				<li>
+				<label for="systemDpi">
+					System dpi: </label>
 					<input id="systemDpi" type="text" name="systemDpi" size="5" value="<!-- TMPL_VAR NAME="SYSTEM_DPI" -->">
-				</td></tr>
-				<th scope="row">
-					Page Type
-				</th>	<td>
+				</li>
+				<li>
+				<label for="pageType">
+					Page Type: </label>	
 					<select name="pageType" id="pageType" size="1">
 						<!-- TMPL_IF name="A4" -->
 							<option value="A4" selected="selected">A4</option>
@@ -48,28 +47,29 @@
 				        <!-- TMPL_ELSE -->
 							<option value="Legal">Legal</option>
 						<!-- /TMPL_IF -->    </select>
-				</td></tr>
-				<th scope="row">
-					Columns
-				</th>  <td>
+				</li>
+				<li>
+				<label for="columns">
+					Columns: </label>  
 					<input id="columns" type="text" name="columns" size="5" value="<!-- TMPL_VAR NAME="COLUMNS" -->">
-				</td></tr>
-				<th scope="row">
-					Rows
-				</th>   <td>
+				</li>
+				<li>
+				<label for="rows">
+					Rows: </label>   
 					<input id="rows" type="text" name="rows" size="5" value="<!-- TMPL_VAR NAME="ROWS" -->">
-				</td></tr>
-				<th scope="row">
-					Margin Bottom (Expressed in mm)
-				</th>   <td>
+				</li>
+				<li>
+				<label for="marginBottom">
+					Margin Bottom (Expressed in mm): </label>   
 					<input id="marginBottom" type="text" name="marginBottom" size="5" value="<!-- TMPL_VAR NAME="MARGIN_TOP" -->">
-				</td></tr>
-				<th scope="row">
-					Margin Left (Expressed in mm)
-				</th>   <td>
+				</li>
+				<li>
+				<label for="marginLeft">
+					Margin Left (Expressed in mm): </label>   
 					<input id="marginLeft" type="text" name="marginLeft" size="5" value="<!-- TMPL_VAR NAME="MARGIN_LEFT" -->">
-				</td></tr>
-			</table><input type="submit" value="Save Settings" />
+				</li>
+			</ol></fieldset>
+			<fieldset class="action"><input type="submit" value="Save Settings" /></fieldset>
 	</form>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
