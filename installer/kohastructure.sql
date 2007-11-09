@@ -1069,7 +1069,7 @@ CREATE TABLE `labels` (
   `itemnumber` varchar(100) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`labelid`)
-) ENGINE=MyISAM AUTO_INCREMENT=12143 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `labels_conf`
@@ -1077,27 +1077,30 @@ CREATE TABLE `labels` (
 
 DROP TABLE IF EXISTS `labels_conf`;
 CREATE TABLE `labels_conf` (
-  `id` int(4) NOT NULL auto_increment,
-  `barcodetype` varchar(100) default '',
-  `title` int(1) default 0,
-  `itemtype` int(1) default 0,
-  `barcode` int(1) default 0,
-  `dewey` int(1) default 0,
-  `class` int(1) default 0,
-  `subclass` int(1) default 0,
-  `itemcallnumber` int(1) default 0,
-  `author` int(1) default 0,
-  `issn` int(1) default 0,
-  `isbn` int(1) default 0,
-  `startlabel` int(2) NOT NULL default 1,
-  `printingtype` varchar(32) default 'BAR',
-  `layoutname` varchar(20) NOT NULL default 'TEST',
-  `guidebox` int(1) default 0,
-  `active` tinyint(1) default 1,
-  `fonttype` varchar(10) default NULL,
-  `subtitle` int(1) default NULL,
+ `id` int(4) NOT NULL auto_increment,
+  `barcodetype` char(100) default '',
+  `title` int(1) default '0',
+  `subtitle` int(1) default '0',
+  `itemtype` int(1) default '0',
+  `barcode` int(1) default '0',
+  `dewey` int(1) default '0',
+  `class` int(1) default NULL,
+  `subclass` int(1) default '0',
+  `itemcallnumber` int(1) default '0',
+  `author` int(1) default '0',
+  `issn` int(1) default '0',
+  `isbn` int(1) default '0',
+  `startlabel` int(2) NOT NULL default '1',
+  `printingtype` char(32) default 'BAR',
+  `layoutname` char(20) NOT NULL default 'TEST',
+  `guidebox` int(1) default '0',
+  `active` tinyint(1) default '1',
+  `fonttype` char(10) collate utf8_unicode_ci default NULL,
+  `ccode` char(4) collate utf8_unicode_ci default NULL,
+  `callnum_split` int(1) default NULL,
+  `text_justify` char(1) collate utf8_unicode_ci default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `labels_templates`
@@ -1105,24 +1108,24 @@ CREATE TABLE `labels_conf` (
 
 DROP TABLE IF EXISTS `labels_templates`;
 CREATE TABLE `labels_templates` (
-  `tmpl_id` int(4) NOT NULL auto_increment,
-  `tmpl_code` varchar(100) character set utf8 collate utf8_unicode_ci default '',
-  `tmpl_desc` varchar(100) character set utf8 collate utf8_unicode_ci default '',
-  `page_width` float default 0,
-  `page_height` float default 0,
-  `label_width` float default 0,
-  `label_height` float default 0,
-  `topmargin` float default 0,
-  `leftmargin` float default 0,
-  `cols` int(2) default 0,
-  `rows` int(2) default 0,
-  `colgap` float default 0,
-  `rowgap` float default 0,
+`tmpl_id` int(4) NOT NULL auto_increment,
+  `tmpl_code` char(100)  default '',
+  `tmpl_desc` char(100) default '',
+  `page_width` float default '0',
+  `page_height` float default '0',
+  `label_width` float default '0',
+  `label_height` float default '0',
+  `topmargin` float default '0',
+  `leftmargin` float default '0',
+  `cols` int(2) default '0',
+  `rows` int(2) default '0',
+  `colgap` float default '0',
+  `rowgap` float default '0',
   `active` int(1) default NULL,
-  `units` varchar(20) character set utf8 collate utf8_unicode_ci default 'PX',
-  `fontsize` int(4) NOT NULL default 3,
+  `units` char(20)  default 'PX',
+  `fontsize` int(4) NOT NULL default '3',
   PRIMARY KEY  (`tmpl_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `letter`
