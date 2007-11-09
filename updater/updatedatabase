@@ -561,6 +561,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.023";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	 $dbh->do("INSERT INTO `systempreferences` VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries','','free')");
+    print "Upgrade to $DBversion done (adding new system preference for controlling YUI path)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
