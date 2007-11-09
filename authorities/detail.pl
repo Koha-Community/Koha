@@ -370,7 +370,7 @@ sub build_tabs ($$$$$) {
                     @fields = $record->field($tag);
                 }
                 else {
-                  push @fields, $record->leader(); # if tag == 000
+                  push @fields, MARC::Field->new('000', $record->leader()); # if tag == 000
                 }
                 # loop through each field
                 foreach my $field (@fields) {
