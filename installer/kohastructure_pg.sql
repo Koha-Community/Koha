@@ -5,7 +5,7 @@
 -- **This script requires plpgsql be loaded into the pg koha db PRIOR to executing.**
 -- This could be done in this script. However, the user must have superuser priviledge. I'm not sure how the koha installer handles this.
 
-begin;
+--begin;
 
 --
 -- Function to generate populate timestamp fields on update
@@ -641,6 +641,33 @@ city_zipcode varchar(20) default NULL,
 PRIMARY KEY (cityid)
 );
 
+--
+-- Table structure for table class_sort_rules
+--
+
+CREATE TABLE class_sort_rules (
+  class_sort_rule varchar(10) UNIQUE NOT NULL default '',
+  description text,
+  sort_routine varchar(30) NOT NULL default '',
+  PRIMARY KEY (class_sort_rule)
+);
+CREATE INDEX class_sort_rule_idx ON class_sort_rules (class_sort_rule); 
+
+--
+-- Table structure for table class_sources
+--
+
+CREATE TABLE class_sources (
+  cn_source varchar(10) NOT NULL default '',
+  description text,
+  used int NOT NULL default 0,
+  class_sort_rule varchar(10) NOT NULL default '',
+  PRIMARY KEY (cn_source)
+--  This seems redundant -fbcit
+--  UNIQUE KEY cn_source_idx (cn_source),
+);
+CREATE INDEX used_idx ON class_sources (used);
+
 -- 
 -- Table structure for table currency
 -- 
@@ -1067,13 +1094,13 @@ libopac varchar(255) NOT NULL default '',
 mandatory int NOT NULL default 0,
 kohafield varchar(40) default NULL,
 tab int default NULL,
-authorised_value varchar(10) default NULL,
-authtypecode varchar(10) default NULL,
+authorised_value varchar(20) default NULL,
+authtypecode varchar(20) default NULL,
 value_builder varchar(80) default NULL,
 isurl int default NULL,
 hidden int default NULL,
 frameworkcode varchar(4) NOT NULL default '',
-seealso varchar(255) default NULL,
+seealso varchar(1100) default NULL,
 link varchar(80) default NULL,
 defaultvalue text default NULL,
 PRIMARY KEY (frameworkcode,tagfield,tagsubfield)
@@ -1627,6 +1654,7 @@ ALTER TABLE branchrelations ADD CONSTRAINT branchrelations_ibfk_2 FOREIGN KEY (c
 ALTER TABLE branchtransfers ADD CONSTRAINT branchtransfers_ibfk_1 FOREIGN KEY (frombranch) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE branchtransfers ADD CONSTRAINT branchtransfers_ibfk_2 FOREIGN KEY (tobranch) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE branchtransfers ADD CONSTRAINT branchtransfers_ibfk_3 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE class_sources ADD CONSTRAINT class_sources_ibfk_1 FOREIGN KEY (class_sort_rule) REFERENCES class_sort_rules (class_sort_rule);
 ALTER TABLE issues ADD CONSTRAINT issues_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) MATCH SIMPLE ON DELETE SET NULL ON UPDATE SET NULL;
 ALTER TABLE issues ADD CONSTRAINT issues_ibfk_2 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE SET NULL ON UPDATE SET NULL;
 ALTER TABLE items ADD CONSTRAINT items_ibfk_1 FOREIGN KEY (biblioitemnumber) REFERENCES biblioitems (biblioitemnumber) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -1639,4 +1667,4 @@ ALTER TABLE reserves ADD CONSTRAINT reserves_ibfk_4 FOREIGN KEY (branchcode) REF
 ALTER TABLE virtualshelfcontents ADD CONSTRAINT virtualshelfcontents_ibfk_1 FOREIGN KEY (shelfnumber) REFERENCES virtualshelves (shelfnumber) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE virtualshelfcontents ADD CONSTRAINT virtualshelfcontents_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE;
 
-commit;
+--commit;
