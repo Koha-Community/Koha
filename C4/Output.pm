@@ -99,9 +99,24 @@ sub gettemplate {
         opacsmallimage      => C4::Context->preference('opacsmallimage'),
         lang                => $lang
     );
-
+	warn "LANG: $lang";
+	# Languages and Locale
+	my $bidi;
+	my @template_languages;
+	my $languages_loop = getTranslatedLanguages($interface,$theme);
+	for my $language_hashref (@$languages_loop) {
+		if ($language_hashref->{language_code} eq $lang) {
+			$language_hashref->{current}++;
+			if ($language_hashref->{bidi}) {
+				$bidi = $language_hashref->{bidi};
+			}
+		}
+		push @template_languages, $language_hashref;
+	}
 	# load the languages ( for switching from one template to another )
-	$template->param(languages_loop => getTranslatedLanguages($interface,$theme));
+	$template->param(	languages_loop => \@template_languages,
+						bidi => $bidi
+	);
 
     return $template;
 }
@@ -114,19 +129,26 @@ sub themelanguage {
     #   if (!$query) {
     #     warn "no query";
     #   }
+
+	# set some defaults for language and theme
+	my $lang = $query->cookie('KohaOpacLanguage');
+	$lang = 'en' unless $lang;
+	my $theme = 'prog';
+
     my $dbh = C4::Context->dbh;
     my @languages;
     my @themes;
     if ( $section eq "intranet" ) {
         @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
+        pop @languages, $lang if $lang;
     }
     else {
 
       # we are in the opac here, what im trying to do is let the individual user
       # set the theme they want to use.
       # and perhaps the them as well.
-        my $lang = $query->cookie('KohaOpacLanguage');
+        #my $lang = $query->cookie('KohaOpacLanguage');
         if ($lang) {
 
             push @languages, $lang;
@@ -137,8 +159,6 @@ sub themelanguage {
             @themes    = split " ", C4::Context->preference("opacthemes");
         }
     }
-
-    my ( $theme, $lang );
 
  # searches through the themes and languages. First template it find it returns.
  # Priority is for getting the theme right.
@@ -156,12 +176,7 @@ sub themelanguage {
             }
         }
     }
-    if ( $theme and $lang ) {
-        return ( $theme, $lang );
-    }
-    else {
-        return ( 'prog', 'en' );
-    }
+    return ( $theme, $lang );
 }
 
 sub setlanguagecookie {
