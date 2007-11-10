@@ -105,26 +105,26 @@ sub getTranslatedLanguages {
         $htdocs = C4::Context->config('opachtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             (@languages) = _get_language_dirs($htdocs,$theme);
-            return _get_final_languages($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,@languages);
         }
         else {
             for my $theme ( _get_themes('opac') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _get_final_languages($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,@languages);
         }
     }
     elsif ($interface && $interface eq 'intranet' ) {
         $htdocs = C4::Context->config('intrahtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             @languages = _get_language_dirs($htdocs,$theme);
-            return _get_final_languages($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,@languages);
         }
         else {
             foreach my $theme ( _get_themes('opac') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _get_final_languages($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,@languages);
         }
     }
     else {
@@ -136,7 +136,7 @@ sub getTranslatedLanguages {
         foreach my $theme ( _get_themes('opac') ) {
             push @languages, _get_language_dirs($htdocs,$theme);
         }
-        return _get_final_languages($all_languages,@languages);
+        return _build_languages_arrayref($all_languages,@languages);
     }
 }
 
@@ -401,7 +401,7 @@ sub _get_language_dirs {
         return (@languages);
 }
 
-=head2 _get_final_languages 
+=head2 _build_languages_arrayref 
 
 Internal function for building the ref to array of hashes
 
@@ -409,7 +409,7 @@ FIXME: this could be rewritten and simplified using map
 
 =cut
 
-sub _get_final_languages {
+sub _build_languages_arrayref {
         my ($all_languages,@languages) = @_;
         my @final_languages;
         my %seen_languages;
