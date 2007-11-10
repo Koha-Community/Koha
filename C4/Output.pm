@@ -29,8 +29,9 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use HTML::Template::Pro;
+use C4::Languages qw(getTranslatedLanguages);
 
+use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
@@ -98,6 +99,9 @@ sub gettemplate {
         opacsmallimage      => C4::Context->preference('opacsmallimage'),
         lang                => $lang
     );
+
+	# load the languages ( for switching from one template to another )
+	$template->param(languages_loop => getTranslatedLanguages($interface,$theme));
 
     return $template;
 }

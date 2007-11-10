@@ -22,7 +22,7 @@ package C4::Languages;
 use strict; use warnings; #FIXME: turn off warnings before release
 require Exporter;
 use C4::Context;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 
@@ -37,14 +37,9 @@ use C4::Languages;
 =head1 FUNCTIONS
 
 =cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &getFrameworkLanguages
-  &getTranslatedLanguages
-  &getAllLanguages
-  );
-
+$VERSION = 3.00;
+@ISA = qw(Exporter);
+@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages);
 my $DEBUG = 0;
 
 =head2 getFrameworkLanguages
@@ -166,6 +161,7 @@ sub getAllLanguages {
             language_name =>
               "&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;",
             language_locale_name => "Arabic",
+			bidi	=> "rtl",
             ,
         },
         {
@@ -234,6 +230,7 @@ sub getAllLanguages {
             language_code          => "heb",
             language_name => "&#1506;&#1489;&#1512;&#1497;&#1514;",
             language_locale_name   => "Hebrew",
+			bidi => "rtl",
             ,
         },
         {

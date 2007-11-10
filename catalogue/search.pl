@@ -144,7 +144,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Search;
-use C4::Languages; # getAllLanguages
+use C4::Languages qw(getAllLanguages);
 use C4::Koha;
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
@@ -238,9 +238,6 @@ $template->param(itemtypeloop => \@itemtypesloop);
 # load the ccodes 
 # my ($ccodecount,@ccode_loop) = GetCcodes();
 # $template->param(ccodeloop=>\@ccode_loop,);
-
-# load the languages ( for switching from one template to another )
-$template->param(languages_loop => getTranslatedLanguages('intranet','prog'));
 
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
