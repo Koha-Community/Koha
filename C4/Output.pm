@@ -99,7 +99,7 @@ sub gettemplate {
         opacsmallimage      => C4::Context->preference('opacsmallimage'),
         lang                => $lang
     );
-	warn "LANG: $lang";
+	#warn "LANG: $lang";
 	# Languages and Locale
 	my $bidi;
 	my @template_languages;
