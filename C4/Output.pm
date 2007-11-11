@@ -81,8 +81,15 @@ sub gettemplate {
     #    warn "PATH : $path";
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
+
+	# if the template doesn't exist, load the English one as a last resort
+	my $filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
+	unless (-f $filename) {
+		$lang = 'en';
+		$filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
+	}
     my $template       = HTML::Template::Pro->new(
-        filename          => "$htdocs/$theme/$lang/modules/$tmplbase",
+		filename          => $filename,
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
