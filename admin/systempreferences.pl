@@ -45,7 +45,7 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
-use C4::Languages;
+use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Output;
 use C4::Context;

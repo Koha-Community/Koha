@@ -39,7 +39,7 @@ use C4::Languages;
 =cut
 $VERSION = 3.00;
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages);
+@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description);
 my $DEBUG = 0;
 
 =head2 getFrameworkLanguages
@@ -69,11 +69,12 @@ sub getFrameworkLanguages {
     # pull out all data for the dir names that exist
     for my $dirname (@listdir) {
         for my $language_set (@$all_languages) {
-            my $language_name = $language_set->{language_name};
-            my $language_locale_name = $language_set->{language_locale_name};
 
             if ($dirname eq $language_set->{language_code}) {
-                push @languages, {'language_code'=>$dirname, 'language_name'=>$language_name, 'language_locale_name'=>$language_locale_name}
+                push @languages, {
+					'language_code'=>$dirname, 
+					'language_description'=>$language_set->{language_description}, 
+					'language_native_descrition'=>$language_set->{language_native_description} }
             }
         }
     }
@@ -155,198 +156,36 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getAllLanguages {
-    my $languages_loop = [
-        {
-            language_code          => "ara",
-            language_name =>
-              "&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;",
-            language_locale_name => "Arabic",
-			bidi	=> "rtl",
-            ,
-        },
-        {
-            language_code          => "bul",
-            language_name =>
-              "&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;",
-            language_locale_name => "Bulgarian",
-            ,
-        },
-        {
-            language_code          => "chi",
-            language_name => "&#20013;&#25991;",
-            language_locale_name   => "Chinese",
-            ,
-        },
-        {
-            language_code          => "scr",
-            language_name => "Hrvatski",
-            language_locale_name   => "Croatian",
-            ,
-        },
-        {
-            language_code          => "cze",
-            language_name => "&#x010D;e&#353;tina",
-            language_locale_name   => "Czech",
-            ,
-        },
-        {
-            language_code          => "dan",
-            language_name => "D&aelig;nsk",
-            language_locale_name   => "Danish",
-            ,
-        },
-        {
-            language_code          => "dut",
-            language_name => "ned&#601;rl&#593;ns",
-            language_locale_name   => "Dutch",
-            ,
-        },
-        {
-            language_code          => "en",
-            language_name => "English",
-            language_locale_name   => "English",
-            ,
-        },
-        {
-            language_code          => "fr",
-            language_name => "Fran&ccedil;ais",
-            language_locale_name   => "French",
-            ,
-        },
-        {
-            language_code          => "ger",
-            language_name => "Deutsch",
-            language_locale_name   => "German",
-            ,
-        },
-        {
-            language_code          => "gre",
-            language_name =>
-              "&#949;&#955;&#955;&#951;&#957;&#953;&#954;&#940;",
-            language_locale_name => "Greek, Modern [1453- ]",
-            ,
-        },
-        {
-            language_code          => "heb",
-            language_name => "&#1506;&#1489;&#1512;&#1497;&#1514;",
-            language_locale_name   => "Hebrew",
-			bidi => "rtl",
-            ,
-        },
-        {
-            language_code          => "hin",
-            language_name => "&#2361;&#2367;&#2344;&#2381;&#2342;&#2368;",
-            language_locale_name   => "Hindi",
-            ,
-        },
-        {
-            language_code          => "hun",
-            language_name => "Magyar",
-            language_locale_name   => "Hungarian",
-            ,
-        },
-        {
-            language_code          => "ind",
-            language_name => "",
-            language_locale_name   => "Indonesian",
-            ,
-        },
-        {
-            language_code          => "ita",
-            language_name => "Italiano",
-            language_locale_name   => "Italian",
-            ,
-        },
-        {
-            language_code          => "jpn",
-            language_name => "&#26085;&#26412;&#35486;",
-            language_locale_name   => "Japanese",
-            ,
-        },
-        {
-            language_code          => "kor",
-            language_name => "&#54620;&#44397;&#50612;",
-            language_locale_name   => "Korean",
-            ,
-        },
-        {
-            language_code          => "lat",
-            language_name => "Latina",
-            language_locale_name   => "Latin",
-            ,
-        },
-        {
-            language_code          => "nor",
-            language_name => "Norsk",
-            language_locale_name   => "Norwegian",
-            ,
-        },
-        {
-            language_code          => "per",
-            language_name => "&#1601;&#1575;&#1585;&#1587;&#1609;",
-            language_locale_name   => "Persian",
-            ,
-        },
-        {
-            language_code          => "pol",
-            language_name => "Polski",
-            language_locale_name   => "Polish",
-            ,
-        },
-        {
-            language_code          => "por",
-            language_name => "Portugu&ecirc;s",
-            language_locale_name   => "Portuguese",
-            ,
-        },
-        {
-            language_code          => "rum",
-            language_name => "Rom&acirc;n&#259;",
-            language_locale_name   => "Romanian",
-            ,
-        },
-        {
-            language_code          => "rus",
-            language_name =>
-              "&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;",
-            language_locale_name => "Russian",
-            ,
-        },
-        {
-            language_code          => "spa",
-            language_name => "Espa&ntilde;ol",
-            language_locale_name   => "Spanish",
-            ,
-        },
-        {
-            language_code          => "swe",
-            language_name => "Svenska",
-            language_locale_name   => "Swedish",
-            ,
-        },
-        {
-            language_code          => "tha",
-            language_name =>
-              "&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;",
-            language_locale_name => "Thai",
-            ,
-        },
-        {
-            language_code          => "tur",
-            language_name => "T&uuml;rk&ccedil;e",
-            language_locale_name   => "Turkish",
-            ,
-        },
-        {
-            language_code          => "ukr",
-            language_name =>
-"&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;",
-            language_locale_name => "Ukrainian",
-            ,
-        },
+	my @languages_loop;
+	my $dbh=C4::Context->dbh;
+	my $current_language = 'en';
+	my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
+	$sth->execute();
+	while (my $language_subtag_registry = $sth->fetchrow_hashref) {
 
-    ];
-    return $languages_loop;
+		# pull out all the script descriptions for each language
+		my $sth2= $dbh->prepare('SELECT * FROM language_descriptions WHERE type=\'language\' AND subtag =?');
+		$sth2->execute($language_subtag_registry->{subtag});
+
+		# add the correct description info
+		while (my $language_descriptions = $sth2->fetchrow_hashref) {
+			
+			# Insert the language description using the current language script
+			#if ( $language_subtag_registry->{subtag}
+			if ( $current_language eq $language_descriptions->{lang} ) {
+				$language_subtag_registry->{language_description} = $language_descriptions->{description};
+				#warn "CUR:".$language_subtag_registry->{description};
+			}
+
+			# Insert the language name using the script	native to the language (FIXME: should really be based on script)
+			if  ($language_subtag_registry->{subtag} eq $language_descriptions->{lang}) {
+				$language_subtag_registry->{language_native_description} = $language_descriptions->{description};
+				#warn "NAT: Desc:$language_descriptions->{description} SubtagDesc: $language_subtag_registry->{language_description}";
+			}
+		}	
+		push @languages_loop, $language_subtag_registry;
+	}
+    return \@languages_loop;
 }
 
 =head2 _get_themes
@@ -393,9 +232,8 @@ sub _get_language_dirs {
         next if $language =~/png$/;
         next if $language =~/css$/;
         next if $language =~/CVS$/;
-        next if $language =~/itemtypeimg$/;
         next if $language =~/\.txt$/i;     #Don't read the readme.txt !
-        next if $language eq 'images';
+		next if $language =~/img/;
         push @languages, $language;
     }
         return (@languages);
@@ -413,18 +251,145 @@ sub _build_languages_arrayref {
         my ($all_languages,@languages) = @_;
         my @final_languages;
         my %seen_languages;
+		my %found_languages;
+		# Loop through the languages, pick the ones that are translated
         for my $language (@languages) {
+
+			# separate the language string into its subtag types
+			my $language_subtags_hashref = regex_lang_subtags($language);
             unless ($seen_languages{$language}) {
                 for my $language_code (@$all_languages) {
-                    if ($language eq $language_code->{'language_code'}) {
+                    if ($language_subtags_hashref->{language} eq $language_code->{'subtag'}) {
+						$language_code->{'language'} = $language;
+						$language_code->{'language_script'} = $language_subtags_hashref->{'script'};
+						$language_code->{'language_region'} = $language_subtags_hashref->{'region'};
+						$language_code->{'language_variant'} = $language_subtags_hashref->{'variant'};
                         push @final_languages, $language_code;
+						$found_languages{$language}++;
                     }
                 }
                 $seen_languages{$language}++;
+
+				# Handle languages not in our database with their code
+				unless ($found_languages{$language}) {
+					my $language_code;
+					$language_code->{'language'} = $language;
+					$language_code->{'language_code'} = $language;
+					push @final_languages, $language_code;
+				}
             }
         }
         return \@final_languages;
 }
+
+sub language_get_description {
+	my ($script,$lang) = @_;
+	my $dbh = C4::Context->dbh;
+	my $desc;
+	my $sth = $dbh->prepare('SELECT description FROM language_descriptions WHERE subtag=? AND lang=?');
+	$sth->execute($script,$lang);
+	while (my $descriptions = $sth->fetchrow_hashref) {
+		$desc = $descriptions->{'description'};
+	}
+	return $desc;
+}
+=head2 regex_lang_subtags
+
+This internal sub takes a string composed according to RFC 4646 as
+an input and returns a reference to a hash containing keys and values
+for ( language, script, region, variant, extension, privateuse )
+
+=cut
+
+sub regex_lang_subtags {
+    my $string = shift;
+
+    # Regex for recognizing RFC 4646 well-formed tags
+    # http://www.rfc-editor.org/rfc/rfc4646.txt
+
+    # regexes based on : http://unicode.org/cldr/data/tools/java/org/unicode/cldr/util/data/langtagRegex.txt
+    # The structure requires no forward references, so it reverses the order.
+    # The uppercase comments are fragments copied from RFC 4646
+    #
+    # Note: the tool requires that any real "=" or "#" or ";" in the regex be escaped.
+
+    my $alpha   = qr/[a-zA-Z]/ ;    # ALPHA
+    my $digit   = qr/[0-9]/ ;   # DIGIT
+    my $alphanum    = qr/[a-zA-Z0-9]/ ; # ALPHA / DIGIT
+    my $x   = qr/[xX]/ ;    # private use singleton
+    my $singleton = qr/[a-w y-z A-W Y-Z]/ ; # other singleton
+    my $s   = qr/[-]/ ; # separator -- lenient parsers will use [-_]
+
+    # Now do the components. The structure is slightly different to allow for capturing the right components.
+    # The notation (?:....) is a non-capturing version of (...): so the "?:" can be deleted if someone doesn't care about capturing.
+
+    my $extlang = qr{(?: $s $alpha{3} )}x ; # *3("-" 3ALPHA)
+    my $language    = qr{(?: $alpha{2,3} | $alpha{4,8} )}x ;
+    #my $language   = qr{(?: $alpha{2,3}$extlang{0,3} | $alpha{4,8} )}x ;   # (2*3ALPHA [ extlang ]) / 4ALPHA / 5*8ALPHA
+
+    my $script  = qr{(?: $alpha{4} )}x ;    # 4ALPHA 
+
+    my $region  = qr{(?: $alpha{2} | $digit{3} )}x ;     # 2ALPHA / 3DIGIT
+
+    my $variantSub  = qr{(?: $digit$alphanum{3} | $alphanum{5,8} )}x ;  # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
+    my $variant = qr{(?: $variantSub (?: $s$variantSub )* )}x ; # *("-" variant), 5*8alphanum / (DIGIT 3alphanum)
+
+    my $extensionSub    = qr{(?: $singleton (?: $s$alphanum{2,8} )+ )}x ;   # singleton 1*("-" (2*8alphanum))
+    my $extension   = qr{(?: $extensionSub (?: $s$extensionSub )* )}x ; # singleton 1*("-" (2*8alphanum))
+
+    my $privateuse  = qr{(?: $x (?: $s$alphanum{1,8} )+ )}x ;   # ("x"/"X") 1*("-" (1*8alphanum))
+
+    # Define certain grandfathered codes, since otherwise the regex is pretty useless.
+    # Since these are limited, this is safe even later changes to the registry --
+    # the only oddity is that it might change the type of the tag, and thus
+    # the results from the capturing groups.
+    # http://www.iana.org/assignments/language-subtag-registry
+    # Note that these have to be compared case insensitively, requiring (?i) below.
+
+    my $grandfathered   = qr{(?: (?i)
+        en $s GB $s oed
+    |   i $s (?: ami | bnn | default | enochian | hak | klingon | lux | mingo | navajo | pwn | tao | tay | tsu )
+    |   sgn $s (?: BE $s fr | BE $s nl | CH $s de)
+)}x;
+
+    # For well-formedness, we don't need the ones that would otherwise pass, so they are commented out here
+
+    #   |   art $s lojban
+    #   |   cel $s gaulish
+    #   |   en $s (?: boont | GB $s oed | scouse )
+    #   |   no $s (?: bok | nyn)
+    #   |   zh $s (?: cmn | cmn $s Hans | cmn $s Hant | gan | guoyu | hakka | min | min $s nan | wuu | xiang | yue)
+
+    # Here is the final breakdown, with capturing groups for each of these components
+    # The language, variants, extensions, grandfathered, and private-use may have interior '-'
+
+    #my $root = qr{(?: ($language) (?: $s ($script) )? 40% (?: $s ($region) )? 40% (?: $s ($variant) )? 10% (?: $s ($extension) )? 5% (?: $s ($privateuse) )? 5% ) 90% | ($grandfathered) 5% | ($privateuse) 5% };
+
+	$string =~  qr{^ (?:($language)) (?:$s($script))? (?:$s($region))?  (?:$s($variant))?  (?:$s($extension))?  (?:$s($privateuse))? $}xi;  # |($grandfathered) | ($privateuse) $}xi;
+	my %subtag = (
+        'language' => $1,
+        'script' => $2,
+        'region' => $3,
+        'variant' => $4,
+        'extension' => $5,
+        'privateuse' => $6,
+    );
+    return \%subtag;
+}
+
+# Script Direction Resources:
+# http://www.w3.org/International/questions/qa-scripts
+sub get_bidi {
+	my ($language_script)= @_;
+	my $dbh = C4::Context->dbh;
+	my $bidi;
+	my $sth = $dbh->prepare('SELECT bidi FROM language_bidi WHERE rfc4646_subtag=?');
+	$sth->execute($language_script);
+	while (my $result = $sth->fetchrow_hashref) {
+		$bidi = $result->{'bidi'};
+	}
+	return $bidi;
+};
 
 1;
 

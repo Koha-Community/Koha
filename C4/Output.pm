@@ -29,7 +29,7 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use C4::Languages qw(getTranslatedLanguages);
+use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description);
 
 use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
@@ -99,17 +99,20 @@ sub gettemplate {
         opacsmallimage      => C4::Context->preference('opacsmallimage'),
         lang                => $lang
     );
-	#warn "LANG: $lang";
-	# Languages and Locale
+
+	# Language, Script, and Locale
+	my $language_subtags_hashref = regex_lang_subtags($lang);
 	my $bidi;
+	$bidi = get_bidi($language_subtags_hashref->{script}) if $language_subtags_hashref->{script};
 	my @template_languages;
 	my $languages_loop = getTranslatedLanguages($interface,$theme);
 	for my $language_hashref (@$languages_loop) {
-		if ($language_hashref->{language_code} eq $lang) {
+			$language_hashref->{'language_script_description'} = language_get_description($language_hashref->{'language_script'},$lang);
+			$language_hashref->{'language_region_description'} = language_get_description($language_hashref->{'language_region'},$lang);
+			$language_hashref->{'language_variant_description'} = language_get_description($language_hashref->{'language_variant'},$lang);
+
+		if ($language_hashref->{language_code} eq $language_subtags_hashref->{language}) {
 			$language_hashref->{current}++;
-			if ($language_hashref->{bidi}) {
-				$bidi = $language_hashref->{bidi};
-			}
 		}
 		push @template_languages, $language_hashref;
 	}
