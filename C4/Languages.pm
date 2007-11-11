@@ -261,6 +261,7 @@ sub _build_languages_arrayref {
                 for my $language_code (@$all_languages) {
                     if ($language_subtags_hashref->{language} eq $language_code->{'subtag'}) {
 						$language_code->{'language'} = $language;
+						$language_code->{'language_code'} = $language;
 						$language_code->{'language_script'} = $language_subtags_hashref->{'script'};
 						$language_code->{'language_region'} = $language_subtags_hashref->{'region'};
 						$language_code->{'language_variant'} = $language_subtags_hashref->{'variant'};
