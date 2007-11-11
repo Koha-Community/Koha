@@ -119,9 +119,6 @@ sub gettemplate {
 			$language_hashref->{'language_variant_description'} = language_get_description($language_hashref->{'language_variant'},$lang);
 
 		if ($language_hashref->{'language_code'} eq $lang) {
-			warn "LANG: $lang";
-			warn "Code:".$language_hashref->{'language_code'};
-		#language_hashref->{language_code} eq $language_subtags_hashref->{language}) {
 			$language_hashref->{current}++;
 		}
 		push @template_languages, $language_hashref;
