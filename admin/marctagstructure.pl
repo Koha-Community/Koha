@@ -154,14 +154,14 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $tagfield       =$input->param('tagfield');
+	my $liblibrarian  = $input->param('liblibrarian');
+	my $libopac       =$input->param('libopac');
+	my $repeatable =$input->param('repeatable');
+	my $mandatory =$input->param('mandatory');
+	my $authorised_value =$input->param('authorised_value');
     if ($input->param('modif')) {
         $sth=$dbh->prepare("UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?");
-        my $liblibrarian  = $input->param('liblibrarian');
-        my $libopac       =$input->param('libopac');
-        my $repeatable =$input->param('repeatable');
-        my $mandatory =$input->param('mandatory');
-        my $authorised_value =$input->param('authorised_value');
-        unless (C4::Context->config('demo') eq 1) {
+         unless (C4::Context->config('demo') eq 1) {
             $sth->execute(  $liblibrarian,
                             $libopac,
                             $repeatable?1:0,
@@ -174,11 +174,6 @@ if ($op eq 'add_form') {
         $sth->finish;
 	} else {
         $sth=$dbh->prepare("INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
-        my $liblibrarian  = $input->param('liblibrarian');
-        my $libopac       =$input->param('libopac');
-        my $repeatable =$input->param('repeatable');
-        my $mandatory =$input->param('mandatory');
-        my $authorised_value =$input->param('authorised_value');
         unless (C4::Context->config('demo') eq 1) {
             $sth->execute($tagfield,
                                 $liblibrarian,
