@@ -378,7 +378,7 @@ sub TooMany {
  my $branch_issuer = C4::Context->userenv->{'branchcode'};
 #TODO : specify issuer or borrower for circrule.
   my $type = (C4::Context->preference('item-level_itypes')) 
-  			? $item->{'ccode'}         # item-level
+  			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
   
   my $sth =
@@ -395,7 +395,7 @@ sub TooMany {
                     AND i.itemnumber = s2.itemnumber 
                     AND s1.biblioitemnumber = s2.biblioitemnumber"
 				. (C4::Context->preference('item-level_itypes'))
-				? " AND s2.ccode=? "
+				? " AND s2.itype=? "
                 : " AND s1.itemtype= ? ";
     my $sth2=  $dbh->prepare($query2);
     my $sth3 =
@@ -960,7 +960,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
-		my $itype=(C4::Context->preference('item-level_itypes')) ? $biblio->{'itemtype'} : $biblio->{'ccode'};
+		my $itype=(C4::Context->preference('item-level_itypes')) ? $biblio->{'itemtype'} : $biblio->{'itype'};
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
             $itype,
@@ -1625,7 +1625,7 @@ sub AddRenewal {
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
-             (C4::Context->preference('item-level_itypes')) ? $biblio->{'ccode'} : $biblio->{'itemtype'} ,
+             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
 			$borrower->{'branchcode'}
         );
 		#FIXME --  choose issuer or borrower branch.
@@ -1709,7 +1709,7 @@ sub GetIssuingCharges {
     my $qcharge =     "SELECT itemtypes.itemtype,rentalcharge FROM items
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
 	$qcharge .= (C4::Context->preference('item-level_itypes'))
-                ? " LEFT JOIN itemtypes ON items.ccode = itemtypes.itemtype "
+                ? " LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
                 : " LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
 	
     $qcharge .=      "WHERE items.itemnumber =?";
