@@ -44,6 +44,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 -- Current Record ID Field/Subfields
 
+DELETE FROM `marc_tag_structure`;
+DELETE FROM `marc_subfield_structure`;
 
 INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES
 		('999', 'SYSTEM CONTROL NUMBERS (KOHA)', 'SYSTEM CONTROL NUMBERS (KOHA)', 1, 0, '', '');
