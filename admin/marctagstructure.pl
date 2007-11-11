@@ -153,9 +153,9 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
+	my $tagfield       =$input->param('tagfield');
     if ($input->param('modif')) {
         $sth=$dbh->prepare("UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?");
-        my $tagfield       =$input->param('tagfield');
         my $liblibrarian  = $input->param('liblibrarian');
         my $libopac       =$input->param('libopac');
         my $repeatable =$input->param('repeatable');
@@ -174,7 +174,6 @@ if ($op eq 'add_form') {
         $sth->finish;
 	} else {
         $sth=$dbh->prepare("INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
-        my $tagfield       =$input->param('tagfield');
         my $liblibrarian  = $input->param('liblibrarian');
         my $libopac       =$input->param('libopac');
         my $repeatable =$input->param('repeatable');
