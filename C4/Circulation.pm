@@ -960,7 +960,7 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
-		my $itype=(C4::Context->preference('item-level_itypes')) ? $biblio->{'itemtype'} : $biblio->{'itype'};
+		my $itype=(C4::Context->preference('item-level_itypes')) ?  $biblio->{'itype'} : $biblio->{'itemtype'} ;
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
             $itype,

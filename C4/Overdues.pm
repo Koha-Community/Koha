@@ -117,13 +117,13 @@ sub Getoverdues {
     my $dbh = C4::Context->dbh;
     my $sth =  (C4::context->preference('item-level_itypes')) ? 
 				$dbh->prepare(
-        			"SELECT issues.*,items.ccode as itemtype FROM issues 
+        			"SELECT issues.*,items.itype as itemtype FROM issues 
                 	LEFT JOIN items USING (itemnumber)
                 	WHERE date_due < now() 
                 	    AND returndate IS NULL ORDER BY borrowernumber " )
 				:
  				$dbh->prepare(
-                    "SELECT issues.*,biblioitems.itemtype,items.ccode FROM issues 
+                    "SELECT issues.*,biblioitems.itemtype,items.itype FROM issues 
                     LEFT JOIN items USING (itemnumber)
                     LEFT JOIN biblioitems USING (biblioitemnumber)
                     WHERE date_due < now() 
@@ -1149,7 +1149,7 @@ display is filtered by branch
 
 sub GetOverduesForBranch {
     my ( $branch, $location) = @_;
-	my $itype_link =  (C4::context->preference('item-level_itypes')) ?  " items.ccode " :  " biblioitems.itemtype ";
+	my $itype_link =  (C4::context->preference('item-level_itypes')) ?  " items.itype " :  " biblioitems.itemtype ";
     if ( not $location ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("

@@ -302,7 +302,7 @@ if ($borrowernumber) {
         my %getreserv;
         my %getWaitingReserveInfo;
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itype')) ? $getiteminfo->{'ccode'} : $getiteminfo->{'itemtype'} );
+        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itype')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers( $num_res->{'itemnumber'} );
 
