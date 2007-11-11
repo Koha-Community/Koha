@@ -215,7 +215,8 @@ sub GetReservesFromBiblionumber {
                 reservedate,
                 constrainttype,
                 found,
-                itemnumber
+                itemnumber,
+                reservenotes
         FROM     reserves
         WHERE     cancellationdate IS NULL
         AND    (found <> \'F\' OR found IS NULL)
