@@ -63,7 +63,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="bookfund-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="else" -->Funds and Budgets  <!-- /TMPL_IF --> <!-- TMPL_IF name="add_form" --><a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and Budgets</a> &rsaquo; Add book fund<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="else" -->Funds and Budgets  <!-- /TMPL_IF --> <!-- TMPL_IF name="add_form" --><a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and Budgets</a> &rsaquo; Add fund<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -154,7 +154,7 @@
 
 <!-- TMPL_IF name="header-is-modify-p" -->
   <input type="hidden" name="op" value="mod_validate" />
-  <input type="hidden" name="current_branch" value="<!-- TMPL_VAR name="current_branch" -->"
+  <input type="hidden" name="current_branch" value="<!-- TMPL_VAR name="current_branch" -->"/>
   <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="header-is-add-p" -->

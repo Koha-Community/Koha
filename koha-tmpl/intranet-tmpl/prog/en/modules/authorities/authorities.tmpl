@@ -424,7 +424,7 @@ function searchauthority() {
 
 <!-- TMPL_IF name="duplicateauthid" -->
         <div class="problem">
-                <p>Duplicate suspected with <a href="javascript:openWindow("detail.pl?authid=<!-- TMPL_VAR name="duplicateauthid" -->&amp;popup=1", "Duplicate Authority");" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
+                <p>Duplicate suspected with <a href="javascript:openWindow('detail.pl?authid=<!-- TMPL_VAR name=duplicateauthid -->&amp;popup=1', 'Duplicate Authority')" class="button"><!-- TMPL_VAR name="duplicateauthvalue" --></a></p>
                 <p>You must either :</p>
                 <ul>
                         <p><input type="checkbox" value="1" name="confirm_not_duplicate" />confirm it's not a duplicate (and click on <input type="button" value="Add authority" onclick="Check(this.form)" accesskey="w" class="button" /> again)</p>

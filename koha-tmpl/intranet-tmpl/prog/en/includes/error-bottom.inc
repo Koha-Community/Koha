@@ -8,7 +8,7 @@
 <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> ||
 <a href="/cgi-bin/koha/reports-home.pl">Reports</a> ||
 <a href="/cgi-bin/koha/admin-home.pl">Parameters</a> ||
-<a href="/cgi-bin/koha/about.pl">About</a> || 
+<a href="/cgi-bin/koha/about.pl">About Koha</a> || 
 Help
 </div>
 
