@@ -294,15 +294,25 @@ while ( my $record = $batch->next() ) {
     }
     print "$i : $nbitems items found\n" if $verbose;
     # now, create biblio and items with Addbiblio call.
+
     unless ($test_parameter) {
-        my ($bibid,$oldbibitemnum) = AddBiblio($newRecord,'');
-        warn "ADDED biblio NB $bibid in DB\n" if $verbose;
-        for (my $i=0;$i<=$#items;$i++) {
-#             warn "here is the biblioitemnumber $oldbibitemnum";
-            AddItem($items[$i],$bibid,$oldbibitemnum);
-        }
-    }
+        my ( $bibid, $oldbibitemnum );
+        eval { ( $bibid, $oldbibitemnum ) = AddBiblio( $newRecord, '' ); };
+        warn $@ if $@;
+        if ( $@ ) { 
+            warn "ERROR: Adding biblio $bibid failed\n" if $verbose
+        } else {
+            warn "ADDED biblio NB $bibid in DB\n" if $verbose;
+            for ( my $it = 0 ; $it <= $#items ; $it++ ) {
+                eval { AddItem( $items[$it], $bibid, $oldbibitemnum ); };
+                warn "ERROR: Adding item $it, rec $i failed\n" if ($@);
+            }       
+        }       
+    }      
+    last if $i == $number;
 }
+
+
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
