@@ -107,18 +107,26 @@ sub gettemplate {
         lang                => $lang
     );
 
-	# Language, Script, and Locale
+	# Bidirectionality
 	my $language_subtags_hashref = regex_lang_subtags($lang);
 	my $bidi;
 	$bidi = get_bidi($language_subtags_hashref->{script}) if $language_subtags_hashref->{script};
+
+	# Languages
+	my $current_lang = regex_lang_subtags($lang);
 	my @template_languages;
 	my $languages_loop = getTranslatedLanguages($interface,$theme);
 	for my $language_hashref (@$languages_loop) {
-			$language_hashref->{'language_script_description'} = language_get_description($language_hashref->{'language_script'},$lang);
-			$language_hashref->{'language_region_description'} = language_get_description($language_hashref->{'language_region'},$lang);
-			$language_hashref->{'language_variant_description'} = language_get_description($language_hashref->{'language_variant'},$lang);
+			$language_hashref->{'current_lang'} = $current_lang->{'language'};
+			$language_hashref->{'native_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'language_code'},'language');
+			warn "($language_hashref->{'language_code'},$language_hashref->{'current_lang'},$language_hashref->{'script_code'}";
+			$language_hashref->{'locale_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
+			$language_hashref->{'language_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
+			$language_hashref->{'script_description'} = language_get_description($language_hashref->{'script_code'},$language_hashref->{'current_lang'},'script');
+			$language_hashref->{'region_description'} = language_get_description($language_hashref->{'region_code'},$language_hashref->{'current_lang'},'region');
+			$language_hashref->{'variant_description'} = language_get_description($language_hashref->{'variant_code'},$language_hashref->{'current_lang'},'variant');
 
-		if ($language_hashref->{'language_code'} eq $lang) {
+		if ($language_hashref->{'language_lang'} eq $lang) {
 			$language_hashref->{current}++;
 		}
 		push @template_languages, $language_hashref;

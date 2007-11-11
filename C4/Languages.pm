@@ -74,7 +74,7 @@ sub getFrameworkLanguages {
                 push @languages, {
 					'language_code'=>$dirname, 
 					'language_description'=>$language_set->{language_description}, 
-					'language_native_descrition'=>$language_set->{language_native_description} }
+					'native_descrition'=>$language_set->{language_native_description} }
             }
         }
     }
@@ -260,11 +260,11 @@ sub _build_languages_arrayref {
             unless ($seen_languages{$language}) {
                 for my $language_code (@$all_languages) {
                     if ($language_subtags_hashref->{language} eq $language_code->{'subtag'}) {
-						$language_code->{'language'} = $language;
-						$language_code->{'language_code'} = $language;
-						$language_code->{'language_script'} = $language_subtags_hashref->{'script'};
-						$language_code->{'language_region'} = $language_subtags_hashref->{'region'};
-						$language_code->{'language_variant'} = $language_subtags_hashref->{'variant'};
+						$language_code->{'language_lang'} = $language;
+						$language_code->{'language_code'} = $language_subtags_hashref->{'language'};
+						$language_code->{'script_code'} = $language_subtags_hashref->{'script'};
+						$language_code->{'region_code'} = $language_subtags_hashref->{'region'};
+						$language_code->{'variant_code'} = $language_subtags_hashref->{'variant'};
                         push @final_languages, $language_code;
 						$found_languages{$language}++;
                     }
@@ -274,7 +274,7 @@ sub _build_languages_arrayref {
 				# Handle languages not in our database with their code
 				unless ($found_languages{$language}) {
 					my $language_code;
-					$language_code->{'language'} = $language;
+					$language_code->{'language_lang'} = $language;
 					$language_code->{'language_code'} = $language;
 					push @final_languages, $language_code;
 				}
@@ -284,11 +284,11 @@ sub _build_languages_arrayref {
 }
 
 sub language_get_description {
-	my ($script,$lang) = @_;
+	my ($script,$lang,$type) = @_;
 	my $dbh = C4::Context->dbh;
 	my $desc;
-	my $sth = $dbh->prepare('SELECT description FROM language_descriptions WHERE subtag=? AND lang=?');
-	$sth->execute($script,$lang);
+	my $sth = $dbh->prepare('SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?');
+	$sth->execute($script,$lang,$type);
 	while (my $descriptions = $sth->fetchrow_hashref) {
 		$desc = $descriptions->{'description'};
 	}
