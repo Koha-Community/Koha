@@ -51,7 +51,8 @@ sub handler_check {
  	my $dbh=C4::Context->dbh;
 	my $sth = $dbh->prepare("SELECT count(*) AS opcount FROM zebraqueue WHERE done = 0");
     $sth->execute;
-	if (my $data = $sth->fetchrow_hashref()){
+	my $data = $sth->fetchrow_hashref();
+	if ($data->{'opcount'} > 0){
 		Unix::Syslog::syslog LOG_INFO, "$data->{'opcount'} operations waiting to be run\n";
 		$sth->finish();
 		$kernel->yield('do_ops');
@@ -87,7 +88,7 @@ sub zebraop {
 				my $marc = GetMarcBiblio($data->{'biblio_auth_number'});
 				$marcxml = $marc->as_xml_record() if $marc;
 			} 
-			elsif ($data->{'server'} eq "authorityserver") {                                                                                                       
+			elsif ($data->{'server'} eq "authorityserver") {
 				$marcxml =C4::AuthoritiesMarc::GetAuthorityXML($data->{'biblio_auth_number'});
 			}
 			# check it's XML, just in case
@@ -119,7 +120,7 @@ sub zebraop {
 				# this avoid indexing X+1 times where just 1 is enough.
 			} else {
 				$delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =? and operation='specialUpdate'");
-				$delsth->execute($data->{'biblionumber'});
+				$delsth->execute($data->{'biblio_auth_number'});
 			}
 		}                            
 			};
