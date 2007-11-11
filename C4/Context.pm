@@ -487,7 +487,6 @@ sub Zconn {
     my $syntax=shift;
     if ( defined($context->{"Zconn"}->{$server}) ) {
         return $context->{"Zconn"}->{$server};
-
     # No connection object or it died. Create one.
     }else {
         $context->{"Zconn"}->{$server} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
@@ -518,21 +517,22 @@ sub _new_Zconn {
     $syntax = "usmarc" unless $syntax;
 
     my $host = $context->{'listen'}->{$server}->{'content'};
-    my $user = $context->{"serverinfo"}->{$server}->{"user"};
     my $servername = $context->{"config"}->{$server};
+    my $user = $context->{"serverinfo"}->{$server}->{"user"};
     my $password = $context->{"serverinfo"}->{$server}->{"password"};
+ $auth = 1 if($user && $password);   
     retry:
     eval {
         # set options
         my $o = new ZOOM::Options();
+        $o->option(user=>$user) if $auth;
+        $o->option(password=>$password) if $auth;
         $o->option(async => 1) if $async;
         $o->option(count => $piggyback) if $piggyback;
         $o->option(cqlfile=> $context->{"server"}->{$server}->{"cql2rpn"});
         $o->option(cclfile=> $context->{"serverinfo"}->{$server}->{"ccl2rpn"});
         $o->option(preferredRecordSyntax => $syntax);
         $o->option(elementSetName => "F"); # F for 'full' as opposed to B for 'brief'
-        $o->option(user=>$user) if $auth;
-        $o->option(password=>$password) if $auth;
         $o->option(databaseName => ($servername?$servername:"biblios"));
 
         # create a new connection object
