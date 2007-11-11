@@ -17,7 +17,6 @@ package C4::Context;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use Data::Dumper;
 
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
@@ -574,6 +573,8 @@ sub _new_Zconn {
 # returns it.
 sub _new_dbh
 {
+
+### $context
     ##correct name for db_schme        
     my $db_driver;
     if ($context->config("db_scheme")){
