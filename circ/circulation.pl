@@ -316,6 +316,7 @@ if ($borrowernumber) {
         $getreserv{author}         = $getiteminfo->{'author'};
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
+	$getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
 
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
@@ -359,7 +360,7 @@ if ($borrowernumber) {
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
             $getreserv{itemcallnumber}  = '----------';
-
+	    $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
         push( @reservloop, \%getreserv );
 
