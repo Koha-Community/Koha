@@ -596,6 +596,7 @@ sub BatchRevertItems {
 
     my $sth = $dbh->prepare_cached("SELECT import_items_id, itemnumber
                                    FROM import_items
+                                   JOIN items USING (itemnumber)
                                    WHERE import_record_id = ?");
     $sth->bind_param(1, $import_record_id);
     $sth->execute();
