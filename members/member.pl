@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-#script to do a borrower enquiery/brin up borrower details etc
+#script to do a borrower enquiry/bring up borrower details etc
 #written 20/12/99 by chris@katipo.co.nz
 
 

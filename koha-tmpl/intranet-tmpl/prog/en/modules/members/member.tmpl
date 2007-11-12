@@ -16,7 +16,8 @@
 	
 <!-- TMPL_INCLUDE NAME="patron-toolbar.inc" -->
 
-<!-- TMPL_UNLESS NAME="resultsloop" --><div>
+
+<div>
     Browse by last name:
     <a href="/cgi-bin/koha/members/member.pl?member=a">A</a>
     <a href="/cgi-bin/koha/members/member.pl?member=b">B</a>
@@ -44,7 +45,8 @@
     <a href="/cgi-bin/koha/members/member.pl?member=x">X</a>
     <a href="/cgi-bin/koha/members/member.pl?member=y">Y</a>
     <a href="/cgi-bin/koha/members/member.pl?member=z">Z</a>
-</div><!-- /TMPL_UNLESS -->
+</div>
+
 
 <!-- TMPL_IF NAME="resultsloop" -->
     <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="member" --></span></h3>
