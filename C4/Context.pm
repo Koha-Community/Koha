@@ -585,14 +585,17 @@ sub _new_dbh
 
     my $db_name   = $context->config("database");
     my $db_host   = $context->config("hostname");
+    my $db_port   = $context->config("port");
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
-    my $dbh= DBI->connect("DBI:$db_driver:$db_name:$db_host",
-                $db_user, $db_passwd);
-    # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
-    # this is better than modifying my.cnf (and forcing all communications to be in utf8)
-    $dbh->do("set NAMES 'utf8'") if ($dbh);
-    $dbh->{'mysql_enable_utf8'}=1; #enable
+    my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
+         $db_user, $db_passwd);
+    if ( $db_name eq 'mysql' ) { 
+        # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
+        # this is better than modifying my.cnf (and forcing all communications to be in utf8)
+        $dbh->do("set NAMES 'utf8'") if ($dbh);
+        $dbh->{'mysql_enable_utf8'}=1; #enable
+    }
     return $dbh;
 }
 
