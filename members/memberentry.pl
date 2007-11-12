@@ -206,20 +206,25 @@ if ($op eq 'insert'){
       my @orgs=split(/\|/,$data{'organisations'});
       add_member_orgs($borrowernumber,\@orgs);
     }
-    if($destination eq "circ"){
-      print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
+    if ($destination eq "circ")	{
+	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
     } else {
-      if ($loginexist == 0) {
-      print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-      }
+	if ($loginexist == 0) {
+	    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+	}
     }
   }
 }
 if ($op eq 'save'){
 	# test to know if another user have the same password and same login                                
 	unless ($nok){
-		&ModMember(%newdata);    
+	    &ModMember(%newdata);    
+	    if ($destination eq "circ")	{
+		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
+	    }
+	    else {
 		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+	    }
 	}
 }
 

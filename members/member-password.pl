@@ -33,6 +33,9 @@ $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 my $member=$input->param('member');
+my $cardnumber = $input->param('cardnumber');
+my $destination = $input->param('destination');
+
 my %member2;
 $member2{'borrowernumber'}=$member;
 # my $issues=GetBorrowerIssues(\%member2);
@@ -45,19 +48,26 @@ my ($bor,$flags)=GetMemberDetails( $member,'');
 my $newpassword = $input->param('newpassword');
 
 if ( $newpassword ) {
-	my $digest=md5_base64($input->param('newpassword'));
-	my $uid = $input->param('newuserid');
-	my $dbh=C4::Context->dbh;
-	if (changepassword($uid,$member,$digest)) {
-		$template->param(newpassword => $newpassword);
-		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
-	} else {
+    my $digest=md5_base64($input->param('newpassword'));
+    my $uid = $input->param('newuserid');
+    my $dbh=C4::Context->dbh;
+    warn $destination;
+    if (changepassword($uid,$member,$digest)) {
+	$template->param(newpassword => $newpassword);
+	if ($destination eq 'circ') {
+	    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");		
+	} 
+	else {
+	    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+	}
+    } 
+    else {
         $template->param(othernames => $bor->{'othernames'},
 						surname     => $bor->{'surname'},
 						firstname   => $bor->{'firstname'},
 						userid      => $bor->{'userid'},
 						defaultnewpassword => $newpassword );
-	}
+    }
 } else {
     my $userid = $bor->{'userid'};
 
@@ -67,23 +77,25 @@ if ( $newpassword ) {
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
     }
-	$template->param(	othernames => $bor->{'othernames'},
-			surname     => $bor->{'surname'},
-			firstname   => $bor->{'firstname'},
-			borrowernumber => $bor->{'borrowernumber'},
-			cardnumber => $bor->{'cardnumber'},
-		    categorycode => $bor->{'categorycode'},
-		    category_type => $bor->{'category_type'},
-		    category_description => $bor->{'description'},
-		    address => $bor->{'address'},
-			address2 => $bor->{'address2'},
-		    city => $bor->{'city'},
-			zipcode => $bor->{'zipcode'},
-			phone => $bor->{'phone'},
-			email => $bor->{'email'},
-		    branchcode => $bor->{'branchcode'},
-			userid      => $bor->{'userid'},
-			defaultnewpassword => $defaultnewpassword );
+    $template->param( othernames => $bor->{'othernames'},
+	    surname     => $bor->{'surname'},
+	    firstname   => $bor->{'firstname'},
+	    borrowernumber => $bor->{'borrowernumber'},
+	    cardnumber => $bor->{'cardnumber'},
+	    categorycode => $bor->{'categorycode'},
+	    category_type => $bor->{'category_type'},
+	    category_description => $bor->{'description'},
+	    address => $bor->{'address'},
+	    address2 => $bor->{'address2'},
+	    city => $bor->{'city'},
+	    zipcode => $bor->{'zipcode'},
+	    phone => $bor->{'phone'},
+	    email => $bor->{'email'},
+	    branchcode => $bor->{'branchcode'},
+	    userid      => $bor->{'userid'},
+	    destination => $destination,
+	    defaultnewpassword => $defaultnewpassword 
+	);
 
 
 }
