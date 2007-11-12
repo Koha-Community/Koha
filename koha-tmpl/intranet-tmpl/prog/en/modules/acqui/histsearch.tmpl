@@ -88,9 +88,9 @@
 	<div id="acqui_histsearch">
 		<table>
 			<tr>
-				<th>&nbsp;</th>
-				<th>Title</th>
-				<th>Author</th>
+				<th>Basket</th>
+				<th>Parcel</th>
+				<th>Summary</th>
 				<th>Supplier</th>
 				<th>Placed on</th>
 				<th>Received on</th>
@@ -100,15 +100,16 @@
 			
 			<!-- TMPL_LOOP NAME="suggestions_loop" -->
 				<tr>
-					<td>		    <!-- TMPL_IF NAME="invoicenumber" -->
-					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=<!-- TMPL_VAR NAME="invoicenumber"-->&amp;supplierid=<!-- TMPL_VAR NAME="id"-->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->">Parcel</a>
+                    <td><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
+					<td><!-- TMPL_IF NAME="invoicenumber" -->
+					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=<!-- TMPL_VAR NAME="invoicenumber"-->&amp;supplierid=<!-- TMPL_VAR NAME="id"-->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->"><!-- TMPL_VAR NAME="invoicenumber"--></a>
 					    <!-- TMPL_ELSE -->
 					        &nbsp;
 					    <!-- /TMPL_IF -->
 					</td>
-					<td><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="name" --></td>
+					<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                        <br /><!-- TMPL_VAR NAME="author" --></td>
+					<td><a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR NAME="name" --></a></td>
 					<td><!-- TMPL_VAR name="creationdate" --></td>
 					<td><!-- TMPL_VAR name="datereceived" --></td>
 					<td><!-- TMPL_VAR name="quantity" --></td>

@@ -1071,7 +1071,8 @@ sub GetHistory {
                 aqorders.ecost,
                 aqorders.ordernumber,
                 aqorders.booksellerinvoicenumber as invoicenumber,
-                aqbooksellers.id as id
+                aqbooksellers.id as id,
+                aqorders.biblionumber
             FROM aqorders 
             LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno 
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
