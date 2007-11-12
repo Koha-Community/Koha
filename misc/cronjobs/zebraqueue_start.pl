@@ -13,7 +13,12 @@ use utf8;
 ### ZEBRA SERVER UPDATER
 ##Uses its own database handle
 my $dbh=C4::Context->dbh;
-my $readsth=$dbh->prepare("SELECT id,biblio_auth_number,operation,server FROM zebraqueue WHERE done=0");
+my $readsth=$dbh->prepare("SELECT id,biblio_auth_number,operation,server FROM zebraqueue WHERE done=0 
+                           ORDER BY id DESC"); # NOTE - going in reverse order to catch deletes that
+                                               # occur after a string of updates (e.g., user deletes
+                                               # the items attached to a bib, then the items.
+                                               # Having a specialUpdate occur after a recordDelete
+                                               # should not occur.
 #my $delsth=$dbh->prepare("delete from zebraqueue where id =?");
 
 
@@ -33,7 +38,10 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
         # if the operation is a deletion, zebra requires that we give it the xml.
         # as it is no more in the SQL db, retrieve it from zebra itself.
         # may sound silly, but that's the way zebra works ;-)
-	    if ($operation =~ /delete/) {
+	    if ($operation =~ /delete/i) { # NOTE depending on version, delete operation
+                                       #      was coded 'delete_record' or 'recordDelete'.
+                                       #      'recordDelete' is the preferred one, as that's
+                                       #      what the ZOOM API wants.
 	       # 1st read the record in zebra
             my $Zconn=C4::Context->Zconn($server, 0, 1,'','xml');
             my $query = $Zconn->search_pqf( '@attr 1=Local-Number '.$biblionumber);
@@ -80,10 +88,12 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
         # did a modif (or item deletion) just before biblio deletion, there are some specialUpdage
         # that are pending and can't succeed, as we don't have the XML anymore
         # so, delete everything for this biblionumber
-        if ($operation eq 'delete_record') {
+        my $reset_readsth = 0;
+        if ($operation eq 'recordDelete') {
             print "deleting biblio deletion $biblionumber\n" if $verbose;
             $delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =?");
             $delsth->execute($biblionumber);
+            $reset_readsth = 1 if $delsth->rows() > 0;
         # if it's not a deletion, delete every pending specialUpdate for this biblionumber
         # in case the user add biblio, then X items, before this script runs
         # this avoid indexing X+1 times where just 1 is enough.
@@ -91,6 +101,13 @@ while (($id,$biblionumber,$operation,$server)=$readsth->fetchrow){
             print "deleting special date for $biblionumber\n" if $verbose;
             $delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =? and operation='specialUpdate'");
             $delsth->execute($biblionumber);
+            $reset_readsth = 1 if $delsth->rows() > 0;
+        }
+        if ($reset_readsth) {
+            # if we can ignore rows in zebraqueue because we've already
+            # touched a record, reset the query. 
+            $readsth->finish();
+            $readsth->execute();
         }
     }
 }

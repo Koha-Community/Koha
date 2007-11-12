@@ -563,7 +563,7 @@ sub DelBiblio {
     # - we need to read the biblio if NoZebra is set (to remove it from the indexes
     # - if something goes wrong, the biblio may be deleted from Koha but not from zebra
     #   and we would have no way to remove it (except manually in zebra, but I bet it would be very hard to handle the problem)
-    ModZebra($biblionumber, "delete_record", "biblioserver", undef);
+    ModZebra($biblionumber, "recordDelete", "biblioserver", undef);
 
     # delete biblioitems and items from Koha tables and save in deletedbiblioitems,deleteditems
     $sth =
