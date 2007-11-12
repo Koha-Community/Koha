@@ -173,35 +173,28 @@
     </ul>
     <!--/TMPL_LOOP-->
     <h2>Zebra or Nozebra ?</h2>
-    <p>Searching Koha's bibliographic and authorities databases can be acomplished in two ways:
-	Koha can utilize a textual index engine (Zebra) or use its own internal indexing scheme (NoZebra).
-	</p>
-    <p>You can change your selection after installation and re-index accordingly.</p>
-    <h3>Zebra</h3>
+    <p>Koha comes in 2 flavours : Zebra and NoZebra. You will now decide the version you need</p>
+    <p>some directions to help you choose:</p>
+    <h3>Zebra version</h3>
       <ul>
-        <li>Is highly scalable (can scale to tens of millions of bibliographic records. Examples of
-		Zebra Koha installations include:
-		http://catalog.ccfls.org/cgi-bin/koha/opac-main.pl or 
-		http://www.mediathequeouestprovence.fr/)
-		</li>
-        <li>Native support for Z39.50 and SRU servers for bibliographic and authoritiy data</li>
-		<li>Support for field-weighting, relevance ranking, truncation, stemming</li>
-		<li>Arbitrarily complex queries</li>
-        <li>Can be complex to configure and maintain</li>
+        <li>is highly scalable (can support easily more than 300 000 items on a public library with an OPAC widely accessed on the web : see http://catalog.ccfls.org/cgi-bin/koha/opac-main.pl or http://www.mediathequeouestprovence.fr/)<li>
+        <li>provide a public (external) z3950 server</li>
+        <li>is complex to configure and administrate</li>
     </ul>
-    <h3>NoZebra (internal Koha indexes)</h3>
+    <h3>NoZebra version</h3>
         <ul>
-			<li>Simple to configure and maintain</li>
-            <li>Hasn't been tested with data sets larger than 100,000 records</li>
-            <li>Does not provide a public (external) z3950 server</li>
+            <li>is available immediatly once Koha is installed</li>
+            <li>is probably not that speedy for catalogue with more than 100 000 items</li>
+            <li>does not provide a public (external) z3950 server</li>
         </ul>
-    <p>Note that, if you choose "Zebra", you must configure Zebra before your catalogue searching will work)</p>
-    <h3>Please Choose:</h3>
+    <p>Whatever you choose now, you can always change your mind and setup the other version.</p>
+    <p>Note that, if you choose "Zebra", you won't have a working koha, you must set up zebra first (catalogue search won't work, the rest will)</p>
+    <h3>What do you choose ?</h3>
         <form action="install.pl">
             <input type="hidden" name="step" value="3" />
             <input type="hidden" name="op" value="Nozebra" />
-            <p><input type="radio" name="NoZebra" value="1" />Nozebra: my catalogue is not that large and I want something simple to setup/maintain</p>
-            <p><input type="radio" name="NoZebra" value="0" />Zebra: I have a large catalogue, I understand I must configure Zebra after the installation has completed</p>
+            <p><input type="radio" name="NoZebra" value="1" />Nozebra: my catalogue is not that large and I want something simple to setup</p>
+            <p><input type="radio" name="NoZebra" value="0" />Zebra: I have a large catalogue, I'm not afraid having to setup more software on my server</p>
             <input type="submit" value="Choose" /></form>
         </form>
 <!-- /TMPL_IF -->
