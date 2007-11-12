@@ -4,6 +4,14 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#abouttabs').tabs();
+	 });
+//]]>
+</script>
 
 <div id="doc3" class="yui-t2">
    
@@ -11,100 +19,105 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 	
-	<h1>About Koha</h1>
-	
-<table>
-	<caption>Server information</caption>
-	<tr><th>Koha version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="kohaVersion" --></td></tr>
-	<tr><th>OS version ('uname -a'): </th><td><!-- TMPL_VAR ESCAPE="HTML" name="osVersion" --></td></tr>
-	<tr><th>Perl version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="perlVersion" --></td></tr>
-	<tr><th>MySQL version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="mysqlVersion" --></td></tr>
-	<tr><th>Apache version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="apacheVersion" --></td></tr>
-	<tr><th>Zebra version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="zebraVersion" --></td></tr>
-</table>
-
-<table>
-        <caption>Perl modules</caption>
-	<!-- TMPL_LOOP name="components" -->
-	<tr>
-	  <th><!-- TMPL_VAR NAME="name" --></th>
-          <td><!-- TMPL_VAR NAME="version" --></td>
-        </tr>
-	<!-- /TMPL_LOOP -->
-</table>
-
-	
-<h2>Special thanks to the following libraries</h2>
-<ul>
-	<li><strong>Horowhenua Library Trust</strong>, New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)</li>
-	<li>The <strong>Nelsonville Public Library</strong>, USA, Ohio (MARC support funding)</li>
-	<li><strong>EMN (Ecole des Mines de Nantes)</strong>, France (Suggestion, stats modules and improved ldap support funding)</li>
-	<li><strong>ENSMP (Ecole Nationale Supérieure des Mines de Paris)</strong>, France (biblio frameworks, MARC authorities, OPAC basket, Serials support funding)</li>
-	<li><strong>SAN-Ouest Provence </strong> Koha 3.0 members &amp; reserve modules.
-</ul>	
-	
-<h2>Core team</h2>
-<ul>
-	<li><strong>LibLime (Joshua Ferraro)</strong>, USA (Koha 3.0 Release Manager)</li>
-	<li><strong>Paul Poulain, Henri Damien Laurent, Antoine Farnault</strong>, France (Koha 2.0 &amp; 2.2 Release Manager)</li>
-	<li><strong>Katipo Communications (Chris Cormack)</strong>, New Zealand (Koha 1.0 &amp; 1.2 Release Manager)</li>
-	<li><strong>SAN-Ouest Provence (Bruno Toumi &amp; Arnaud Laurin)</strong>, France</li>
-</ul>
-	
-	
-	<h2>Thanks to</h2>
-<ul>
-	<li>Adam Thick</li>
-	<li>Andrew Hooper</li>
-	<li>Al Banks</li>
-	<li>Ambrose Li (translation tool)</li>
-	<li>Andrew Arensburger (the small and great C4::Context module)</li>
-	<li>Benedykt P. Barszcz (Polish for 2.0)</li>
-	<li>Brig C. McCoy</li>
-	<li>Daniel Holth</li>
-	<li>David Strainchamps</li>
-	<li>Dorian Meid (German translation)</li>
-	<li>doXulting (Matthieu Branlat) OPAC basket</li>
-	<li>Ed Summers (Some code and Perl packages like MARC::Record)</li>
-	<li>Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)</li>
-	<li>Florian Bischof</li>
-	<li>Francisco M. Marzoa Alonso</li>
-	<li>Glen Stewart</li>
-	<li>Henri-Damien Laurent</li>
-	<li>Jo Ransom</li>
-	<li>Kip DeGraaf</li>
-	<li>Marco Gaiarin</li>
-	<li>Md. Aftabuddin</li>
-	<li>Michaes Herman</li>
-	<li>Mike Hansen</li>
-	<li>Mike Johnson</li>
-	<li>Mike Mylonas</li>
-	<li>MJ Ray and Turo Technology LLP, (quality control, installer and updater, 2.0 release maintainer)</li>
-	<li>Nicholas Rosasco, (Documentation Compiler)</li>
-	<li>Nicolas Morin (French Translation in 2.0)</li>
-	<li>Pawel Skuza (Polish for 1.2)</li>
-	<li>Pate Eyler (Kaitiaki from 2002 to 2004)</li>
-	<li>Regula Sebastiao</li>
-	<li>Roger Buck</li>
-	<li>Ron Wickersham</li>
-	<li>Sebastiaan Durand</li>
-	<li>Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)</li>
-	<li>Stephen Hedges</li>
-	<li>Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)</li>
-</ul>
-	
-	
-	<h2>Translation</h2>
-<ul>
-	<li><strong>French: </strong>Pascale Nalon (ENSMP) and Jean Yves Lemaire (Chatel Saint Germain)</li>
-	<li><strong>Chinese: </strong>Ambrose Li</li>
-	<li><strong>Spanish: </strong>Andres Tarallo</li>
-	<li><strong>Italian: </strong>Giuseppe Angilella</li>
-</ul>
-
-</div>
-</div>
-	</div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
+	<div id="abouttabs" class="toptabs numbered">
+        <ul>
+        <li><a href="about.pl#about">About Koha</a></li>
+        <li><a href="about.pl#perl">Perl modules</a></li>
+        <li><a href="about.pl#team">Koha Team</a></li>
+        <li><a href="about.pl#translations">Translations</a></li>
+        </ul>
+        
+        <div id="about">
+            <h1>About Koha</h1>
+            
+        <table>
+            <caption>Server information</caption>
+            <tr><th>Koha version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="kohaVersion" --></td></tr>
+            <tr><th>OS version ('uname -a'): </th><td><!-- TMPL_VAR ESCAPE="HTML" name="osVersion" --></td></tr>
+            <tr><th>Perl version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="perlVersion" --></td></tr>
+            <tr><th>MySQL version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="mysqlVersion" --></td></tr>
+            <tr><th>Apache version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="apacheVersion" --></td></tr>
+            <tr><th>Zebra version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="zebraVersion" --></td></tr>
+        </table>
+        </div>
+        <div id="perl">
+            <table>
+                    <caption>Perl modules</caption>
+                    <tr>
+                <!-- TMPL_LOOP name="components" -->
+                        <th><!-- TMPL_VAR NAME="name" --></th>
+                        <td><!-- TMPL_VAR NAME="version" --></td>
+                    <!-- TMPL_UNLESS name="counter" --></tr><tr><!-- /TMPL_UNLESS -->
+                <!-- /TMPL_LOOP -->
+            </table>
+        </div>
+        <div id="team">
+            <h2>Special thanks to the following libraries</h2>
+            <ul>
+                <li><strong>Horowhenua Library Trust</strong>, New Zealand, and Rosalie Blake, Head of Libraries, (Koha 1.0)</li>
+                <li>The <strong>Nelsonville Public Library</strong>, USA, Ohio (MARC support funding)</li>
+                <li><strong>EMN (Ecole des Mines de Nantes)</strong>, France (Suggestion, stats modules and improved ldap support funding)</li>
+                <li><strong>ENSMP (Ecole Nationale Supérieure des Mines de Paris)</strong>, France (biblio frameworks, MARC authorities, OPAC basket, Serials support funding)</li>
+                <li><strong>SAN-Ouest Provence </strong> Koha 3.0 members &amp; reserve modules.
+            </ul>	
+                
+            <h2>Core team</h2>
+            <ul>
+                <li><strong>LibLime (Joshua Ferraro)</strong>, USA (Koha 3.0 Release Manager)</li>
+                <li><strong>BibLibre (Paul Poulain, Henri-Damien Laurent, Antoine Farnault)</strong>, France (Koha 2.0 &amp; 2.2 Release Manager)</li>
+                <li><strong>Katipo Communications (Chris Cormack)</strong>, New Zealand (Koha 1.0 &amp; 1.2 Release Manager)</li>
+                <li><strong>SAN-Ouest Provence (Bruno Toumi &amp; Arnaud Laurin)</strong>, France</li>
+            </ul>
+                
+                
+                <h2>Thanks to</h2>
+            <ul>
+                <li>Adam Thick</li>
+                <li>Andrew Hooper</li>
+                <li>Al Banks</li>
+                <li>Ambrose Li (translation tool)</li>
+                <li>Andrew Arensburger (the small and great C4::Context module)</li>
+                <li>Benedykt P. Barszcz (Polish for 2.0)</li>
+                <li>Brig C. McCoy</li>
+                <li>Daniel Holth</li>
+                <li>David Strainchamps</li>
+                <li>Dorian Meid (German translation)</li>
+                <li>doXulting (Matthieu Branlat) OPAC basket</li>
+                <li>Ed Summers (Some code and Perl packages like MARC::Record)</li>
+                <li>Esiee School (Jérome Vizcaino, Michel Lerenard, Pierre Cauchois)</li>
+                <li>Florian Bischof</li>
+                <li>Francisco M. Marzoa Alonso</li>
+                <li>Glen Stewart</li>
+                <li>Henri-Damien Laurent</li>
+                <li>Jo Ransom</li>
+                <li>Kip DeGraaf</li>
+                <li>Marco Gaiarin</li>
+                <li>Md. Aftabuddin</li>
+                <li>Michaes Herman</li>
+                <li>Mike Hansen</li>
+                <li>Mike Johnson</li>
+                <li>Mike Mylonas</li>
+                <li>MJ Ray and Turo Technology LLP, (quality control, installer and updater, 2.0 release maintainer)</li>
+                <li>Nicholas Rosasco, (Documentation Compiler)</li>
+                <li>Nicolas Morin (French Translation in 2.0)</li>
+                <li>Pawel Skuza (Polish for 1.2)</li>
+                <li>Pate Eyler (Kaitiaki from 2002 to 2004)</li>
+                <li>Regula Sebastiao</li>
+                <li>Roger Buck</li>
+                <li>Ron Wickersham</li>
+                <li>Sebastiaan Durand</li>
+                <li>Steve Tonnesen (early MARC work, Virtual Bookshelves concept, KohaCD)</li>
+                <li>Stephen Hedges</li>
+                <li>Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)</li>
+            </ul>
+        </div>
+        <div id="translations">
+            <h2>Translation</h2>
+            <ul>
+                <li><strong>French: </strong>Pascale Nalon (ENSMP) and Jean Yves Lemaire (Chatel Saint Germain)</li>
+            </ul>
+    
+        </div>
+    </div>
+</div></div></div></div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->

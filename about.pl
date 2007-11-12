@@ -56,17 +56,62 @@ $template->param(
     zebraVersion  => $zebraVersion,
 );
 my @component_names =
-    qw/MARC::File::XML   MARC::Charset     Class::Accessor
-       LWP::Simple       XML::Simple       Net::Z3950
-       Event             Net::LDAP         PDF::API2
-       Mail::Sendmail    MARC::Record      Digest::MD5
-       HTML::Template    DBD::mysql        
-       DBI               Net::Z3950::ZOOM
-       Date::Calc
+    qw/CGI
+CGI::Carp
+CGI::Session
+Class::Factory::Util
+Class::Accessor
+DBD::mysql
+DBI
+Data::Dumper
+Date::Calc
+Date::Manip
+Digest::MD5
+File::Temp
+GD::Barcode::UPCE
+Getopt::Long
+Getopt::Std
+HTML::Template::Pro
+HTTP::Cookies
+HTTP::Request::Common
+LWP::Simple
+LWP::UserAgent
+Lingua::Stem
+List::Util
+Locale::Language
+MARC::Charset
+MARC::File::XML
+MARC::Record
+MIME::Base64
+MIME::QuotedPrint
+Mail::Sendmail
+Net::Z3950::ZOOM
+PDF::API2
+PDF::API2::Page
+PDF::API2::Util
+PDF::Reuse
+PDF::Reuse::Barcode
+POSIX
+Schedule::At
+Term::ANSIColor
+Test
+Test::Harness
+Test::More
+Text::CSV
+Text::Wrap
+Time::HiRes
+Time::localtime
+Unicode::Normalize
+XML::Dumper
+XML::LibXML
+XML::SAX::ParserFactory
+XML::Simple
+XML::RSS
       /;
 
 my @components = ();
 
+my $counter=0;
 foreach my $component ( sort @component_names ) {
     my $version;
     if ( eval "require $component" ) {
@@ -78,12 +123,14 @@ foreach my $component ( sort @component_names ) {
     else {
         $version = 'module is missing';
     }
-
+    $counter++;
+    $counter=0 if $counter >3;
     push(
         @components,
         {
             name    => $component,
             version => $version,
+            counter => $counter,
         }
     );
 }
