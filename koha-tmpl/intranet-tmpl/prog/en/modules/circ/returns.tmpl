@@ -115,10 +115,10 @@
         </form>			
     <!-- /TMPL_IF -->
 
-    <!-- case of a return of item, but with no reservation after, if the document must return to his homebranch -->
+    <!-- case of a return of item, but with no reservation after, if the item must be  return to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
         <h2>This item must return to his homebranch :</h2>
-        <p><span class="problem">The document <!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->) Must be returned to his homebranch(<b><!-- TMPL_VAR NAME="homebranch" --></b>)</span></p>
+        <p><span class="problem">Please return '<!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)' to (<b><!-- TMPL_VAR NAME="homebranch" --></b>)</span></p>
             <form method="post" action="returns.pl">
                 <!-- TMPL_LOOP Name="inputloop" -->
                     <input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->" />
