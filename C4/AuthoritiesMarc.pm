@@ -653,7 +653,8 @@ sub GetAuthType {
     my ($authtypecode) = @_;
     my $dbh=C4::Context->dbh;
     my $sth;
-    if ($authtypecode){
+    if (defined $authtypecode){ # NOTE - in MARC21 framework, '' is a valid authority 
+                                # type
       $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
       $sth->execute($authtypecode);
     } else {
@@ -917,7 +918,7 @@ sub BuildSummary{
           foreach my $field ($record->field('5..')) {
               $altheading.= "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string();
           }
-          $summary .= ": ";
+          $summary .= ": " if $summary;
           $summary.=$heading.$seeheading.$altheading;
       }
   }
