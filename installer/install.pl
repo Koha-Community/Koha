@@ -596,7 +596,7 @@ elsif ( $step && $step == 3 ) {
         #
         #Do updatedatabase And report
         my $execstring =
-          C4::Context->config("intranetdir") . "/installer/updatedatabase.pl";
+          C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
         undef $/;
         my $string = qx($execstring 2>&1 1>/dev/null);				# added '1>/dev/null' to return only stderr in $string. Needs testing here. -fbcit
         if ($string) {
