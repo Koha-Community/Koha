@@ -20,7 +20,7 @@ my $layout_id = $query->param('layout_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "barcodes/label-edit-layout.tmpl",
+        template_name   => "labels/label-edit-layout.tmpl",
         query           => $query,
         type            => "intranet",
         authnotrequired => 1,

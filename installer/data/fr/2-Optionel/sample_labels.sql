@@ -10,6 +10,8 @@ INSERT INTO `labels_templates` VALUES
 UNLOCK TABLES; 
 LOCK TABLES `labels_conf` WRITE;
 /*!40000 ALTER TABLE `labels_conf` DISABLE KEYS */;
-INSERT INTO `labels_conf` VALUES (5,'CODE39',2,3,0,0,0,0,4,1,0,0,1,'BIBBAR','biblio and barcode',1,NULL,NULL,0),(6,'CODE39',2,0,0,0,3,4,0,1,0,3,1,'BAR','alternating',1,1,NULL,0);
+INSERT INTO `labels_conf` VALUES 
+(5,'CODE39',2,0,3,0,0,0,0,4,1,0,0,1,'BIBBAR','biblio and barcode',1,1,NULL,NULL,NULL,NULL),
+(6,'CODE39',2,0,0,0,0,3,4,0,1,0,3,1,'BAR','alternating',1,1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `labels_conf` ENABLE KEYS */;
 UNLOCK TABLES;

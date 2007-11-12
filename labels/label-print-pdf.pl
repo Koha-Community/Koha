@@ -19,7 +19,7 @@ print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' );
 
 my $spine_text = "";
 
-warn "label-print-pdf ***";
+#warn "label-print-pdf ***";
 
 # get the printing settings
 my $template    = GetActiveLabelTemplate();
@@ -142,7 +142,7 @@ else {
 
 }
 
-warn "ROW COL $rowcount, $colcount";
+#warn "ROW COL $rowcount, $colcount";
 
 #my $barcodetype; # = 'Code39';
 

@@ -10,7 +10,7 @@ use HTML::Template;
 use POSIX;
 
 #use Data::Dumper;
-use Smart::Comments;
+#use Smart::Comments;
 
 my $dbh   = C4::Context->dbh;
 my $query = new CGI;
