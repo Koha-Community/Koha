@@ -224,7 +224,7 @@ for my $branch_hash (sort keys %$branches ) {
     my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
     push @branch_loop,
       {
-        value      => "branch: $branch_hash",
+        value      => "homebranch:$branch_hash",
         branchname => $branches->{$branch_hash}->{'branchname'},
         selected => $selected
       };
