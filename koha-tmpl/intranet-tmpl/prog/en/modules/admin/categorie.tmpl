@@ -109,7 +109,7 @@
 	<li><label for="enrolmentperiod">Enrollment period: </label> &nbsp; <input type="text" name="enrolmentperiod" id="enrolmentperiod" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> months</li>
 	<li><label for="dateofbirthrequired">Age required: </label> &nbsp; <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> years</li>
 	<li><label for="upperagelimit">Upperage limit: </label> &nbsp; <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> years</li>
-	<li><label for="enrolmentfee">Enrollment fee: </label>$ <input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /></li>
+	<li><label for="enrolmentfee">Enrollment fee: </label>$<input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /></li>
 	<li><label for="overduenoticerequired">Overdue notice required: </label> &nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
 			<!-- TMPL_IF NAME="overduenoticerequired" -->
 						<option value="0">No</option>
@@ -119,7 +119,7 @@
 						<option value="1">Yes</option>
 			<!-- /TMPL_IF -->
 					</select></li>
-	<li><label for="reservefee">Reserve fee: </label>$ <input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></li>
+	<li><label for="reservefee">Reserve fee: </label>$<input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></li>
 	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
 						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Select a Category type</option><!-- TMPL_ELSE --><option value="">Select a Category type</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adult</option><!-- TMPL_ELSE --><option value="A">Adult</option><!-- /TMPL_IF -->
@@ -155,7 +155,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" --></td></tr>
 	<tr><th scope="row">Enrolment period: </th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
-	<tr><th scope="row">Age Required: </th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
+	<tr><th scope="row">Age required: </th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
 	<tr><th scope="row">Upperage limit: </th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
 	<tr><th scope="row">Enrolment fee: </th><td>$<!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
 	<tr><th scope="row">Overdue notice required: </th><td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
@@ -208,15 +208,15 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 
         <table>
 		<tr>
-			<th scope="col">Code</th>
-			<th scope="col">Category Name</th>
-			<th scope="col">Type</th>
-			<th scope="col">Enrollment Period</th>
-			<th scope="col">Age Required</th>
-			<th scope="col">Upper Age Limit</th>
-			<th scope="col">Enrollment Fee</th>
-			<th scope="col">Overdue</th>
- 			<th scope="col">Reservation Fee</th>
+			<th scope="col">Code:</th>
+			<th scope="col">Category name:</th>
+			<th scope="col">Type:</th>
+			<th scope="col">Enrollment period:</th>
+			<th scope="col">Age required:</th>
+			<th scope="col">Upper age limit:</th>
+			<th scope="col">Enrollment fee:</th>
+			<th scope="col">Overdue:</th>
+ 			<th scope="col">Reservation fee:</th>
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->

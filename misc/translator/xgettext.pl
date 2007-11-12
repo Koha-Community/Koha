@@ -258,7 +258,7 @@ sub convert_translation_file () {
     }
     # The following assumption is correct; that's what HTML::Template assumes
     if (!defined $charset_in) {
-	$charset_in = $charset_out = TmplTokenizer::charset_canon 'iso8859-1';
+	$charset_in = $charset_out = TmplTokenizer::charset_canon 'utf-8';
 	warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
     }
 }

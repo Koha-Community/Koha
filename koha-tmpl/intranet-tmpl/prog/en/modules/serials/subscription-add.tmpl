@@ -523,7 +523,7 @@ function irregularity_check(){
             }
             error=errortext;
         } else {
-            errortext +=expected+_(" issues expected ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
+            errortext +=expected+_("issues expected")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
             var count=0;
             for(var i=rollover;i<expected;i++){
                 errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
@@ -874,7 +874,7 @@ window.onload = irregular_order();
                     <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="lettername" --></option>
 <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-                </select> <div class="inputnote">(select a letter &amp; patrons will be able to "follow" this subscription and recieve a mail on every new issue)</div>
+                </select> <div class="inputnote">(select a notice and patrons on the routing list will receive notices for this subscription)</div>
             
         </li>
 	</ol>
@@ -1170,12 +1170,12 @@ window.onload = irregular_order();
     <h2>History</h2>
     <table>
         <tr>
-          <td>Starting date:</td>
+          <td>Starting date</td>
           <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /> (the date of the 1st subscription)</td>
         </tr>
         <tr>
-          <td>Ending date:</td>
-          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty : subscription still active)</td>
+          <td>Ending date</td>
+          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty subscription is still active)</td>
         </tr>
         <tr>
             <td>Received issues</td>
@@ -1186,7 +1186,7 @@ window.onload = irregular_order();
             <td><textarea name="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea></td>
         </tr>
         <tr>
-            <td>Opac's notes</td>
+            <td>OPAC notes</td>
             <td><textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></td>
         </tr>
         <tr>

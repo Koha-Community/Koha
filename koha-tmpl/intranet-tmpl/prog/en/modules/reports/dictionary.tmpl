@@ -24,7 +24,7 @@
 <!-- TMPL_IF NAME="definitions" -->
 <h2>Current Terms</h2>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-Filter By Area <select name="areas">
+Filter by area <select name="areas">
 <option value="All">All</option>
 <!-- TMPL_LOOP NAME="areas" -->     
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
@@ -192,12 +192,12 @@ Filter By Area <select name="areas">
 <!-- TMPL_IF NAME="date" -->
 <table>
 <tr valign="top">
-<td><input type="radio" name="<!-- TMPL_VAR NAME="name" -->_all" value="all" />All Dates</td>
+<td><input type="radio" name="<!-- TMPL_VAR NAME="name" -->_all" value="all" />All dates</td>
 <td>OR</td>
-<td><input type="radio" name="dates" value="range" />Date Range<br />
+<td><input type="radio" name="dates" value="range" />Date range<br />
 <table>
 <tr>
-<td>Start of Date Range</td>
+<td>Start of date range</td>
 <td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_start_value" name="<!-- TMPL_VAR NAME="name" -->_start_value" value="" />      
 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    
 <script type="text/javascript">                            
@@ -211,7 +211,7 @@ align          : "Tl"
 </td>
 </tr>
 <tr>
-<td>End of Date Range</td>
+<td>End of date range</td>
 <td>
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_end_value" name="<!-- TMPL_VAR NAME="name" -->_end_value" value="" />      
 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    

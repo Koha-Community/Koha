@@ -24,23 +24,24 @@
 <li><b>insecure --</b> The best choice is "no." If you choose "yes," users do not have to login and all information is open to anyone. Be careful if you set this to "yes!"</li>
 
 <li>
-	<p><b>ISBD --</b> Koha can display records in International Standard Bibliographic Description format. the syntax of this field is quite complex : </p>
-	<p>it's divided into blocks, that can contain a text before, X fields, each having -or not- a string before, a string after, and a text after :</p>
-	<p><b>#995|&lt;br&gt;Items :|{\n995b}{ - 995j}{/995k}|</b></p>
+	<p><b>ISBD --</b> Koha can display records in International Standard Bibliographic Description format. The syntax of this format is quite complex.</p>
+	<p>It's divided into blocks, that can contain text before, X fields, each having -or not- a string before, a string after, and text after :</p>
+	<code>#995|&lt;br&gt;Items :|{\n995b}{ - 995j}{/995k}|</code>
 	<p>means the "block" 995 has &lt;br&gt;Items : BEFORE, then fields 995b, 995j and 995k, repeated for each item (995 is an UNIMARC standard), then nothing after the block.</p>
 	<p> The # means "beginning of a block", the | is the separator of each part, the {} being used for each subfield. A subfield can have up to 3 digits BEFORE and up to 3 digits AFTER each subfield</p>
-	<p>The UNIMARC (partial) definition for ISBD is </p><i>
-	<p>#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ;
-		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|<br />
-		#230||{ ; 230a}|<br />
-		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|<br />
-		#210|&lt;br/&gt;&lt;label&gt;Editeur&lt;/label&gt;|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|<br />
-		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)<br />
-		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|<br />
-		#225|&lt;br/&gt;&lt;label&gt;Description&lt;/label&gt;|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)<br />
-		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;<br />
-		#995|&lt;br&gt;Exemplaires :|{\n995b}{ - 995j}{/995k}|<br />
-	</i></p>
+	<p>The UNIMARC (partial) definition for ISBD is </p>
+	<code>
+		#700|&lt;label&gt;Titre/auteur&lt;/label&gt;|{700a}{701a}{702a}| ;
+		#200||{200a}{ [200b] }{. 200c}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g}|
+		#230||{ ; 230a}|
+		#205||{ ; 205a}{ , 205b}{ = 205d}{ / 205f}{ ; 205g}|
+		#210|&lt;br/&gt;&lt;label&gt;Editeur&lt;/label&gt;|{ ; 210a}{ (210b) }{ : 210c}{, 210d}|
+		#210|(|{210e}{(210f)}{ : 210g}{, 210h}|)
+		#215|&lt;br/&gt;&lt;label&gt;&nbsp;&lt;/label&gt;|{ ; 215a}{ : 215c}{ ; 215d}{ + 215e}|
+		#225|&lt;br/&gt;&lt;label&gt;Description&lt;/label&gt;|{ (225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, I225x}{ ; 225v}|)
+		#606|&lt;br/&gt;&lt;label&gt;Sujets&lt;/label&gt;|{ 606a - }|&lt;br/&gt;&lt;br/&gt;
+		#995|&lt;br&gt;Exemplaires :|{\n995b}{ - 995j}{/995k}|
+	</code>
 </li>
 
 <li><b>KohaAdminEmailAddress --</b> The email address that will receive requests from borrowers for modification of their records.</li>
