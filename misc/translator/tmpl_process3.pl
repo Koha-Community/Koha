@@ -255,7 +255,8 @@ if (defined $href) {
 	    unless defined $href->{'""'};
     $charset_out = TmplTokenizer::charset_canon $2
 	    if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
-	    $charset_in = 'utf-8';
+	    $charset_in = 'UTF-8';
+	warn "Charset out: ".$charset_out;
 #     for my $msgid (keys %$href) {
 # 	if ($msgid =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/) {
 # 	    my $candidate = TmplTokenizer::charset_canon $2;
@@ -265,11 +266,17 @@ if (defined $href) {
 # 	}
 #     }
 }
+
+# set our charset in to UTF-8
 if (!defined $charset_in) {
     $charset_in = TmplTokenizer::charset_canon 'utf-8';
     warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
 }
-
+# set our charset out to UTF-8
+if (!defined $charset_out) {
+    $charset_out = TmplTokenizer::charset_canon 'utf-8';
+	warn "Warning: Charset Out defaulting to $charset_out\n";
+}
 my $xgettext = './xgettext.pl';	# actual text extractor script
 my $st;
 
@@ -288,8 +295,12 @@ if ($action eq 'create')  {
 	print $tmph1 "$input\n";
     }
     close $tmph1;
+	warn "I $charset_in O $charset_out";
     # Generate the specified po file ($str_file)
-    $st = system ($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2);
+    $st = system ($xgettext, '-s', '-f', $tmpfile1, '-o', $tmpfile2,
+			(defined $charset_in? ('-I', $charset_in): ()),
+	        (defined $charset_out? ('-O', $charset_out): ())
+	);
     # Run msgmerge so that the pot file looks like a real pot file
     # We need to help msgmerge a bit by pre-creating a dummy po file that has
     # the headers and the "" msgid & msgstr. It will fill in the rest.
