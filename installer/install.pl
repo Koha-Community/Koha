@@ -40,13 +40,12 @@ $info{'dbms'} =
     ? C4::Context->config("db_scheme")
     : "mysql" );
 $info{'hostname'} = C4::Context->config("hostname");
-( $info{'hostname'}, $info{'port'} ) = ( $1, $2 )
-  if $info{'hostname'} =~ /([^:]*):([0-9]+)/;
+$info{'port'} = C4::Context->config("port");
 $info{'user'}     = C4::Context->config("user");
 $info{'password'} = C4::Context->config("pass");
 my $dbh = DBI->connect(
-    "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
-      . ( $info{port} ? ":$info{port}" : "" ),
+    "DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
+      . ( $info{port} ? ";port=$info{port}" : "" ),
     $info{'user'}, $info{'password'}
 );
 
@@ -166,9 +165,9 @@ elsif ( $step && $step == 2 ) {
 #STEP 2 Check Database connection and access
 #
     $template->param(%info);
-    my $checkmysql = $query->param("checkmysql");
-    $template->param( 'mysqlconnection' => $checkmysql );
-    if ($checkmysql) {
+    my $checkdb = $query->param("checkdb");
+    $template->param( 'dbconnection' => $checkdb );
+    if ($checkdb) {
         if ($dbh) {
 
             # Can connect to the mysql
@@ -224,7 +223,23 @@ elsif ( $step && $step == 2 ) {
                     }
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
-            }
+            }	# End mysql connect check...
+	    
+	    elsif ( $info{dbms} eq "Pg" ) {
+		# Check if database has been created...
+		my $rv = $dbh->do( "SELECT * FROM pg_catalog.pg_database WHERE datname = \'$info{dbname}\';" );
+		if ( $rv == 1 )	{
+			$template->param( 'checkdatabasecreated' => 1 );
+		}
+
+		# Check if user has all necessary grants on this database...
+		my $rq = $dbh->do( "SELECT u.usesuper
+				    FROM pg_catalog.pg_user as u
+				    WHERE u.usename = \'$info{user}\';" );
+		if ( $rq == 1 ) {
+			$template->param( "checkgrantaccess" => 1 );
+		}
+            }	# End Pg connect check...
         }
         else {
             $template->param( "error" => DBI::err, "message" => DBI::errstr );
@@ -260,9 +275,9 @@ elsif ( $step && $step == 3 ) {
         }
 
         # Installation is finished.
-        # We just deny anybody acess to install
+        # We just deny anybody access to install
         # And we redirect people to mainpage.
-        # The installer wil have to relogin since we donot pass cookie to redirection.
+        # The installer will have to relogin since we do not pass cookie to redirection.
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'Nozebra' ) {
@@ -288,7 +303,8 @@ elsif ( $step && $step == 3 ) {
             my @bb = split /\/|\\/, ($b);
             $aa[-1] lt $bb[-1]
         } $query->param('framework');
-        $dbh->do('SET FOREIGN_KEY_CHECKS=0');
+	if ( $info{dbms} eq 'mysql' ) { $dbh->do('SET FOREIGN_KEY_CHECKS=0'); }
+	elsif ( $info{dbms} eq 'Pg' ) { $dbh->do('SET CONSTRAINTS ALL DEFERRED;'); }
         my $request =
           $dbh->prepare(
             "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
@@ -299,13 +315,25 @@ elsif ( $step && $step == 3 ) {
 
             #      warn $file;
             undef $/;
-            my $strcmd = "mysql "
-              . ( $info{hostname} ? " -h $info{hostname} " : "" )
-              . ( $info{port}     ? " -P $info{port} "     : "" )
-              . ( $info{user}     ? " -u $info{user} "     : "" )
-              . ( $info{password} ? " -p$info{password}"   : "" )
-              . " $info{dbname} ";
-            my $error = qx($strcmd < $file 2>&1);
+	    my $error;
+	    if ( $info{dbms} eq 'mysql' ) {
+            	my $strcmd = "mysql "
+              		. ( $info{hostname} ? " -h $info{hostname} " : "" )
+              		. ( $info{port}     ? " -P $info{port} "     : "" )
+              		. ( $info{user}     ? " -u $info{user} "     : "" )
+              		. ( $info{password} ? " -p$info{password}"   : "" )
+              		. " $info{dbname} ";
+            	$error = qx($strcmd < $file 2>&1 1>/dev/null);			# We want to send stdout to null and return only stderr... -fbcit
+    	    }
+	    elsif ( $info{dbms} eq 'Pg' ) { 
+            	my $strcmd = "psql "
+              		. ( $info{hostname} ? " -h $info{hostname} " : "" )
+              		. ( $info{port}     ? " -p $info{port} "     : "" )
+              		. ( $info{user}     ? " -U $info{user} "     : "" )
+#              		 . ( $info{password} ? " -W $info{password}"   : "" )
+              		. " $info{dbname} ";
+            	$error = qx($strcmd -f $file 2>&1 1>/dev/null);			# ...even more so with psql...
+    	    }
             my @file = split qr(\/|\\), $file;
             $lang = $file[ scalar(@file) - 3 ] unless ($lang);
             my $level = $file[ scalar(@file) - 2 ];
@@ -350,7 +378,8 @@ elsif ( $step && $step == 3 ) {
             "list"        => \@list
         );
         $template->param( "$op" => 1 );
-        $dbh->do('SET FOREIGN_KEY_CHECKS=1');
+	if ( $info{dbms} eq 'mysql' ) { $dbh->do('SET FOREIGN_KEY_CHECKS=1'); }
+	elsif ( $info{dbms} eq 'Pg' ) { $dbh->do('SET CONSTRAINTS ALL IMMEDIATE;'); }
     }
     elsif ( $op && $op eq 'selectframeworks' ) {
         #
@@ -385,9 +414,9 @@ elsif ( $step && $step == 3 ) {
     
         undef $/;
         my $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$langchoice/marcflavour/".lc($marcflavour);
+          C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour/".lc($marcflavour);
         opendir( MYDIR, $dir ) || warn "no open $dir";
-        my @listdir = sort grep { !/^\.|CVS|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
+        my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
                   
         my @fwklist;
@@ -405,7 +434,7 @@ elsif ( $step && $step == 3 ) {
         foreach my $requirelevel (@listdir) {
             opendir( MYDIR, "$dir/$requirelevel" );
             my @listname =
-              grep { !/^\.|CVS/ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
+              grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
               readdir(MYDIR);
             closedir MYDIR;
             my %cell;
@@ -444,15 +473,15 @@ elsif ( $step && $step == 3 ) {
         $template->param( "marcflavour" => ucfirst($marcflavour));
         
         $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$langchoice";
+          C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice";
         opendir( MYDIR, $dir ) || warn "no open $dir";
-        @listdir = sort grep { !/^\.|CVS|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
+        @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my @levellist;
         foreach my $requirelevel (@listdir) {
             opendir( MYDIR, "$dir/$requirelevel" );
             my @listname =
-              grep { !/^\.|CVS/ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
+              grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
               readdir(MYDIR);
             closedir MYDIR;
             my %cell;
@@ -498,7 +527,8 @@ elsif ( $step && $step == 3 ) {
         #
         
         #Choose Marc Flavour
-        #sql data are supposed to be located in installer/data/<language>/marcflavour/marcflavourname
+        #sql data are supposed to be located in installer/data/<dbms>/<language>/marcflavour/marcflavourname
+	# Where <dbms> is database type according to DBD syntax
         # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
         # Where <level> is a category of requirement : required, recommended optional
         # level should contain :
@@ -510,9 +540,9 @@ elsif ( $step && $step == 3 ) {
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$langchoice/marcflavour";
+          C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour";
         opendir( MYDIR, $dir ) || warn "no open $dir";
-        my @listdir = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
+        my @listdir = grep { !/^\./ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my $marcflavour=C4::Context->preference("marcflavour");    
         my @flavourlist;
@@ -533,22 +563,32 @@ elsif ( $step && $step == 3 ) {
         # 1st install, 1st "sub-step" : import kohastructure
         #
         #
-        my $dbh = DBI->connect(
-            "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
-              . ( $info{port} ? ":$info{port}" : "" ),
-            $info{'user'}, $info{'password'}
-        );
-        open( INPUT, "<kohastructure.sql" );
-        my $file = do { local $/ = undef; <INPUT> };
-        my @commands = split( /;/, $file );
-        pop @commands;
-        map { $dbh->do($_) } @commands;
-        close(INPUT);
+	my $datadir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}";
+	my $error;
+        if ( $info{dbms} eq 'mysql' ) {
+	    my $strcmd = "mysql "
+	        . ( $info{hostname} ? " -h $info{hostname} " : "" )
+	        . ( $info{port}     ? " -P $info{port} "     : "" )
+	        . ( $info{user}     ? " -u $info{user} "     : "" )
+	        . ( $info{password} ? " -p$info{password}"   : "" )
+	        . " $info{dbname} ";
+	    $error = qx($strcmd <$datadir/kohastructure.sql 2>&1 1>/dev/null);
+        }
+        elsif ( $info{dbms} eq 'Pg' ) { 
+            my $strcmd = "psql "
+                . ( $info{hostname} ? " -h $info{hostname} " : "" )
+                . ( $info{port}     ? " -p $info{port} "     : "" )
+                . ( $info{user}     ? " -U $info{user} "     : "" )
+#                . ( $info{password} ? " -W $info{password}"   : "" )		# psql will NOT accept a password, but prompts...
+                . " $info{dbname} ";						# Therefore, be sure to run 'trust' on localhost in pg_hba.conf -fbcit
+            $error = qx($strcmd -f $datadir/kohastructure.sql 2>&1 1>/dev/null);# Be sure to set 'client_min_messages = error' in postgresql.conf
+	    									# so that only true errors are returned to stderr or else the installer will
+										# report the import a failure although it really succeded -fbcit
+    	}
         $template->param(
-            "error" => $dbh->errstr,
+            "error" => $error,
             "$op"   => 1,
         );
-        $dbh->disconnect;
     }
     elsif ( $op && $op eq 'updatestructure' ) {
         #
@@ -556,9 +596,9 @@ elsif ( $step && $step == 3 ) {
         #
         #Do updatedatabase And report
         my $execstring =
-          C4::Context->config("intranetdir") . "/updater/updatedatabase";
+          C4::Context->config("intranetdir") . "/installer/updatedatabase.pl";
         undef $/;
-        my $string = qx|$execstring 2>&1|;
+        my $string = qx($execstring 2>&1 1>/dev/null);				# added '1>/dev/null' to return only stderr in $string. Needs testing here. -fbcit
         if ($string) {
             $string =~ s/\n|\r/<br \/>/g;
             $string =~
@@ -575,11 +615,15 @@ elsif ( $step && $step == 3 ) {
         # Paul has cleaned up tables so reduced the count
         #I put it there because it implied a data import if condition was not satisfied.
         my $dbh = DBI->connect(
-            "DBI:$info{dbms}:$info{dbname}:$info{hostname}"
-              . ( $info{port} ? ":$info{port}" : "" ),
-            $info{'user'}, $info{'password'}
+    		"DBI:$info{dbms}:dbname=$info{dbname};host=$info{hostname}"
+      		. ( $info{port} ? ";port=$info{port}" : "" ),
+            	$info{'user'}, $info{'password'}
         );
-        my $rq = $dbh->prepare( "SHOW TABLES FROM " . $info{'dbname'} );
+	my $rq;
+        if ( $info{dbms} eq 'mysql' ) { $rq = $dbh->prepare( "SHOW TABLES FROM " . $info{'dbname'} ); }
+	elsif ( $info{dbms} eq 'Pg' ) { $rq = $dbh->prepare( "SELECT *
+								FROM information_schema.tables
+								WHERE table_schema='public' and table_type='BASE TABLE';" ); }
         $rq->execute;
         my $data = $rq->fetchall_arrayref( {} );
         my $count = scalar(@$data);
