@@ -662,18 +662,18 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   $query->execute($frameworkcode);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
-    if ($record->field($data->{tagfield})){
-      next if ($record->subfield($data->{tagfield},'3')||$record->subfield($data->{tagfield},'9'));
+    foreach my $field ($record->field($data->{tagfield})){
+      next if ($field->subfield('3')||$field->subfield('9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
-      map {$query.= " and he,ext=".$_->[1] if ($_->[0]=~/[A-z]/)}  $record->field($data->{tagfield})->subfields();
+      map {$query.= " and he,ext=".$_->[1] if ($_->[0]=~/[A-z]/)}  $field->subfields();
       warn $query;   
       my ($error,$results)=SimpleSearch($query,"authorityserver");
     # there is only 1 result 
       if (scalar(@$results)==1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
-        $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
+        $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
       }elsif (scalar(@$results)>1) {
    #More than One result 
@@ -687,12 +687,12 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   ###NOTICE : This can be a problem. We should also look into other types and rejected forms.
          my $authtypedata=GetAuthType($data->{authtypecode});
          my $marcrecordauth=MARC::Record->new();
-         my $field=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$record->subfield($data->{tagfield},'a'));
-         map { $field->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $record->field($data->{tagfield})->subfields();
-         $marcrecordauth->insert_fields_ordered($field);
+         my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));
+         map { $authfield->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $field->subfields();
+         $marcrecordauth->insert_fields_ordered($authfield);
          my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
          $countcreated++;
-         $record->field($data->{tagfield})->add_subfields('9'=>$authid);
+         $field->add_subfields('9'=>$authid);
       }
     }  
   }

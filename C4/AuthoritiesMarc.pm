@@ -791,7 +791,12 @@ sub BuildSummary{
   my @fields = $record->fields();
   my $reported_tag;
   # if the library has a summary defined, use it. Otherwise, build a standard one
-  if ($summary) {
+  # FIXME - it appears that the summary field in the authority frameworks
+  #         can work as a display template.  However, this doesn't
+  #         suit the MARC21 version, so for now the "templating"
+  #         feature will be enabled only for UNIMARC for backwards
+  #         compatibility.
+  if ($summary and C4::Context->preference('marcflavour') eq 'UNIMARC') {
     my @fields = $record->fields();
     #             $reported_tag = '$9'.$result[$counter];
     foreach my $field (@fields) {
@@ -868,7 +873,12 @@ sub BuildSummary{
       $summary.= '<p><div class="label">'.$seeheading.'</div></p>' if ($seeheading);
       } else {
       # construct MARC21 summary
+          # FIXME - looping over 1XX is questionable
+          # since MARC21 authority should have only one 1XX
           foreach my $field ($record->field('1..')) {
+              next if "152" eq $field->tag(); # FIXME - 152 is not a good tag to use
+                                              # in MARC21 -- purely local tags really ought to be
+                                              # 9XX
               if ($record->field('100')) {
                   $heading.= $field->as_string('abcdefghjklmnopqrstvxyz68');
               } elsif ($record->field('110')) {
@@ -902,14 +912,12 @@ sub BuildSummary{
               }
           } #See From
           foreach my $field ($record->field('4..')) {
-              $seeheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-              $seeheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see:</i> ".$seeheading."<br />";
+              $seeheading.= "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>used for/see from:</i> ".$field->as_string();
           } #See Also
           foreach my $field ($record->field('5..')) {
-              $altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string()."<br />";
-              $altheading.= "&nbsp;&nbsp;&nbsp;".$field->as_string()."<br />";
-              $altheading.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$altheading."<br />";
+              $altheading.= "<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>see also:</i> ".$field->as_string();
           }
+          $summary .= ": ";
           $summary.=$heading.$seeheading.$altheading;
       }
   }
