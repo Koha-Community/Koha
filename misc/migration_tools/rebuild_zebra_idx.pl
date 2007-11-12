@@ -42,7 +42,7 @@ my $i=0;
 while ((my $biblionumber) = $sth->fetchrow) {
 	my $record = GetMarcBiblio($biblionumber);
 	my $filename = $cgidir."/tmp/BIBLIO".$biblionumber.".iso2709";
-	open F,"> $filename";
+	open F,">:utf8", $filename;
     eval {print F $record->as_usmarc(); };
     warn "ERROR: writing biblio $biblionumber failed" if $@;
 	close F;
