@@ -561,31 +561,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.00.00.023";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	 $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
-		 VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries','','free')");
-    print "Upgrade to $DBversion done (adding new system preference for controlling YUI path)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.00.00.024";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE biblioitems CHANGE  itemtype itemtype VARCHAR(10)");
-    print "Upgrade to $DBversion done (changing itemtype to (10))\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.00.00.025";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE items ADD COLUMN itype VARCHAR(10)");
-    if(C4::Context->preference('item-level_itypes')){
-    	$dbh->do('update items,biblioitems set items.itype=biblioitems.itemtype where items.biblionumber=biblioitems.biblionumber and itype is null');
-	}
-    print "Upgrade to $DBversion done (reintroduce items.itype - fill from itemtype)\n ";
-    SetVersion ($DBversion);
-}
-
 
 =item DropAllForeignKeys($table)
 
