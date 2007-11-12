@@ -1,3 +1,4 @@
+
 <yazgfs>
 <!-- [scheme:]host[:port][/databaseName] -->
 <!-- scheme: tcp, ssl, unix, http, sru -->
@@ -32,11 +33,15 @@
 </serverinfo>
 
 <!-- ADDITIONAL KOHA CONFIGURATION DIRECTIVE -->
+<!-- db_scheme should follow the DBD driver name --> 
+<!-- port info: mysql:3306 Pg:5432 (5433 on Debian) -->
 <config>
- <database>__MYSQL_DB__</database>
- <hostname>__MYSQL_HOST__</hostname>
- <user>__MYSQL_USER__</user>
- <pass>__MYSQL_PASS__</pass>
+ <db_scheme>__DB_TYPE__</db_scheme>
+ <database>__DB_NAME__</database>
+ <hostname>__DB_HOST__</hostname>
+ <port>__DB_PORT__</port>
+ <user>__DB_USER__</user>
+ <pass>__DB_PASS__</pass>
  <biblioserver>biblios</biblioserver>
  <biblioservershadow>1</biblioservershadow>
  <authorityserver>authorities</authorityserver>
