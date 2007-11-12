@@ -591,7 +591,7 @@ rank:rank-1
             # FIXME next unless $record->field($biblionumbertagfield);
             # check if biblionumber is present, otherwise, add it on the fly
             if ($biblionumbertagfield eq '001') {
-                unless ($record->field($biblionumbertagfield)->data()) {
+                unless ($record->field($biblionumbertagfield) && $record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
                     my $field;
                     # if the field where biblionumber is already exist, just update it, otherwise create it
