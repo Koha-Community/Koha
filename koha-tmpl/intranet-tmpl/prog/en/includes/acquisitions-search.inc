@@ -1,6 +1,6 @@
 <!-- Begin Acquisitions Resident Search Box -->
 <div id="header_search">
-<div id="supplier_search" class="residentsearch primary">
+<div id="supplier_search" class="residentsearch">
 	<p class="tip">Search suppliers:</p>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
            <input type="text" size="25" name="supplier" id="supplier" class="focus" />

@@ -44,7 +44,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 //]]>
 </script><!-- /TMPL_IF -->
 <div id="header_search">
-<div id="addbooks_search" class="residentsearch primary">
+<div id="addbooks_search" class="residentsearch">
 	<p class="tip">Search the catalog and the reservoir:</p>
 	<form name="search" action="addbooks.pl">
         <input type="text" name="q"  size="40" class="focus" />

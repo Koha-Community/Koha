@@ -1,4 +1,4 @@
-<div id="header" class="yui-g">
+<div id="header">
 
 <div id="toplevelnav">
 <ul id="toplevelmenu">

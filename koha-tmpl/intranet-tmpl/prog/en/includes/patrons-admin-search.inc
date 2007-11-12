@@ -44,7 +44,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 //]]>
 </script><!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="patron_category_search" class="residentsearch primary">
+	<div id="patron_category_search" class="residentsearch">
 	<p class="tip">Search by Patron Category Name:</p>
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 		<input type="text" name="description" size="40" value="<!-- TMPL_VAR NAME="searchfield" -->" />

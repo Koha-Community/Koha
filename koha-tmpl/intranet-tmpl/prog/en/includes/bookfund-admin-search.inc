@@ -44,7 +44,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
  //]]>
  </script>  <!-- /TMPL_IF -->
 <div id="header_search">
-	<div id="bookfund_search" class="residentsearch primary">
+	<div id="bookfund_search" class="residentsearch">
 	<p class="tip">Search Book Funds:</p>
 
 	<form action="/cgi-bin/koha/admin/aqbookfund.pl" method="post">
