@@ -17,11 +17,11 @@
         <h1>Defining <!-- TMPL_IF NAME="branch" -->overdue actions for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default overdue actions<!-- /TMPL_IF --></h1>
         <div class="help">
             <p>Delay is the number of days after an issue is due before an action is triggered. </p>
-            <p>If you want Koha to trigger an action (send a letter or debar member), delay is needed.</p>
+            <p>If you want Koha to trigger an action (send a letter or debar member), a delay value is required.</p>
             <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
         </div>
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
-            <label for="branch">Select a branch :</label>
+            <label for="branch">Select a library:</label>
                 <select id="branch" name="branch">
                     <option value="">Default</option>
                     <!-- TMPL_LOOP NAME="branchloop" -->
@@ -52,7 +52,7 @@
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
                 <table>
-                    <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default branch <!--/TMPL_IF-->
+                    <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF-->
                     <!--TMPL_IF Name="datasaved"-->
                         <br /><h3 align="center">INPUT SAVED</h3>
                     <!--/TMPL_IF -->
@@ -154,7 +154,7 @@
                 <fieldset class="action"><input type="submit" value="Save Changes" /></fieldset>
             </form>
             <!-- TMPL_ELSE -->
-                <div class="warning">You don't have defined a patron category, or the patron categories don't need overdue notices.</div>
+                <div class="warning">You don't have patron categories defined, or the patron categories are not set to receive overdue notices.</div>
                 <div class="warning">If this is not what you were expecting, go to <a href="../admin/categorie.pl">patron categories</p></div>
             <!-- /TMPL_IF -->
     </div>
