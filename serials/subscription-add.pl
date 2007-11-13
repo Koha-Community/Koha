@@ -124,7 +124,7 @@ if ($op eq 'mod'||$op eq 'dup') {
         $sublength = $subs->{numberlength};
         $sub_on = $subscription_types[0];
     } elsif ($subs->{weeklength}>0){
-        $sublength = $weeklength;
+        $sublength = $subs->{weeklength};
         $sub_on = $subscription_types[1];
     } else {
         $sublength = $subs->{monthlength};
