@@ -594,6 +594,73 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.027";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `marc_matchers` (
+                `matcher_id` int(11) NOT NULL auto_increment,
+                `code` varchar(10) NOT NULL default '',
+                `description` varchar(255) NOT NULL default '',
+                `record_type` varchar(10) NOT NULL default 'biblio',
+                `threshold` int(11) NOT NULL default 0,
+                PRIMARY KEY (`matcher_id`),
+                KEY `code` (`code`),
+                KEY `record_type` (`record_type`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `matchpoints` (
+                `matcher_id` int(11) NOT NULL,
+                `matchpoint_id` int(11) NOT NULL auto_increment,
+                `search_index` varchar(30) NOT NULL default '',
+                `score` int(11) NOT NULL default 0,
+                PRIMARY KEY (`matchpoint_id`),
+                CONSTRAINT `matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
+                           REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `matchpoint_components` (
+                `matchpoint_id` int(11) NOT NULL,
+                `matchpoint_component_id` int(11) NOT NULL auto_increment,
+                sequence int(11) NOT NULL default 0,
+                tag varchar(3) NOT NULL default '',
+                subfields varchar(40) NOT NULL default '',
+                offset int(4) NOT NULL default 0,
+                length int(4) NOT NULL default 0,
+                PRIMARY KEY (`matchpoint_component_id`),
+                KEY `by_sequence` (`matchpoint_id`, `sequence`),
+                CONSTRAINT `matchpoint_components_ifbk_1` FOREIGN KEY (`matchpoint_id`)
+                           REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `matchpoint_component_norms` (
+                `matchpoint_component_id` int(11) NOT NULL,
+                `sequence`  int(11) NOT NULL default 0,
+                `norm_routine` varchar(50) NOT NULL default '',
+                KEY `matchpoint_component_norms` (`matchpoint_component_id`, `sequence`),
+                CONSTRAINT `matchpoint_component_norms_ifbk_1` FOREIGN KEY (`matchpoint_component_id`)
+                           REFERENCES `matchpoint_components` (`matchpoint_component_id`) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `matcher_matchpoints` (
+                `matcher_id` int(11) NOT NULL,
+                `matchpoint_id` int(11) NOT NULL,
+                CONSTRAINT `matcher_matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
+                           REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `matcher_matchpoints_ifbk_2` FOREIGN KEY (`matchpoint_id`)
+                           REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `matchchecks` (
+                `matcher_id` int(11) NOT NULL,
+                `matchcheck_id` int(11) NOT NULL auto_increment,
+                `source_matchpoint_id` int(11) NOT NULL,
+                `target_matchpoint_id` int(11) NOT NULL,
+                PRIMARY KEY (`matchcheck_id`),
+                CONSTRAINT `matcher_matchchecks_ifbk_1` FOREIGN KEY (`matcher_id`)
+                           REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `matcher_matchchecks_ifbk_2` FOREIGN KEY (`source_matchpoint_id`)
+                           REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `matcher_matchchecks_ifbk_3` FOREIGN KEY (`target_matchpoint_id`)
+                           REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    print "Upgrade to $DBversion done (added C4::Matcher serialization tables)\n ";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
