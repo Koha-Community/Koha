@@ -9,25 +9,18 @@
         </style>
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name="opaccolorstylesheet" -->
-        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
+        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
     <!-- TMPL_ELSE -->
-        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/opac.css" />
+        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/opac.css" />
     <!-- /TMPL_IF -->
     <style type="text/css">
-        @import url(<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
+        @import url(<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
     </style>
 <!-- /TMPL_IF -->
-
-<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/includes/main.js" ></script>
-
-<!-- TMPL_IF NAME="AmazonContent" -->
-<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/includes/amazonimages.js" ></script>
-<!-- /TMPL_IF -->
-
-<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/includes/script.js" ></script>
-
-<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js" ></script>
-
+<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/main.js" ></script>
+<!-- TMPL_IF NAME="AmazonContent" --><script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js" ></script><!-- /TMPL_IF -->
+<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/script.js" ></script>
+<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/basket.js" ></script>
 <script type="text/javascript" language="javascript">
     function _(s) { return s } // dummy function for gettext
     var MSG_BASKET_EMPTY = _("You book bag is currently empty");

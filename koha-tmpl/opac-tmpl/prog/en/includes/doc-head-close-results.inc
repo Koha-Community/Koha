@@ -4,15 +4,15 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
 <!-- TMPL_IF NAME="searchdesc" --><!-- TMPL_IF name="total" --><link rel="alternate" type="application/rss+xml" title="RSS" href="http://a9.com/-/opensearch/search/B0007WF826/<!-- TMPL_VAR NAME="searchdesc" -->?count=10&amp;startPage=1" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="opacstylesheet" --><style type="text/css">
-    @import url(<!-- TMPL_VAR NAME='themelang' -->/includes/<!-- TMPL_VAR NAME="opacstylesheet" -->);
-</style><!-- TMPL_ELSE --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
+    @import url(<!-- TMPL_VAR NAME='themelang' -->/css/<!-- TMPL_VAR NAME="opacstylesheet" -->);
+</style><!-- TMPL_ELSE --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
 <style type="text/css">
-    @import url(<!-- TMPL_VAR NAME="themelang" -->/includes/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
+    @import url(<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
 </style><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="livesearch" --><style type="text/css">
-	@import url(<!-- TMPL_VAR NAME="themelang" -->/includes/livesearch.css);
+	@import url(<!-- TMPL_VAR NAME="themelang" -->/css/livesearch.css);
 </style><!-- /TMPL_IF -->
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
 <script type="text/javascript" language="javascript">
 	var MSG_BASKET_EMPTY = "You book bag is currently empty";
 	var MSG_RECORD_IN_BASKET = "This item is already in your book bag";
@@ -27,5 +27,5 @@
 	<!-- TMPL_VAR NAME="opacuserjs" -->
 </script>	
 <!-- /TMPL_IF -->
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/main.js"></script>
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/main.js"></script>
 </head>

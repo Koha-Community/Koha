@@ -3,13 +3,10 @@
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Language" content="en-us" />
 <style type="text/css"> 
-    @import url(<!-- TMPL_VAR NAME="themelang" -->/includes/print.css);
+    @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
 </style>
-
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/script.js"></script>
-
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/includes/basket.js"></script>
-
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
     <script type="text/javascript" language="javascript">
         var MSG_NO_RECORD_SELECTED = "No biblio selected";
         var MSG_NO_RECORD_ADDED = "No biblio added";
