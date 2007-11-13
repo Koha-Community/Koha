@@ -31,13 +31,23 @@ how to customise CPAN-installed modules, the same things should work
 for you with Koha.  If not, don't worry.  If you want to customise the
 installation more than described below, run "man ExtUtils::MakeMaker"
 
-You need to have a server running MySQL 5, Zebra and some webserver
-(preferably Apache) before installing Koha.  Create a database in
-MySQL called koha, owned by a kohaadmin user, with a password set.
+Koha 3.0 introduces multi-dbms support. With this release you may elect
+to install over MySQL 5 or PostgreSQL 8.2.5. Further databases will
+be added over time.
+
+You need to have a server running MySQL 5 or PostgreSQL 8.2.5, Zebra
+and some webserver (preferably Apache) before installing Koha.
+ 
+MySQL 5: Create a database called 'koha,' owned by 'kohaadmin'
+user, with a password set. Note: kohaadmin must have at least the
+following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP.
+
+PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin' 
+user, with a password set. Note: kohaadmin must be a superuser.
 
 Default installation instructions:
 
-0. export MYSQL_PASS=thePasswordYouChose
+0. export DB_PASS=thePasswordYouChose
 1. perl Makefile.PL
 2. make
 3. sudo make install
@@ -59,7 +69,7 @@ different directory like /opt/koha, then replace step 1 with:
 1c. export LOG_DIR=/opt/koha/log
 1d. perl Makefile.PL PREFIX=/opt/koha
 
-You can change most of the defaults in a similar way, such as MYSQL_HOST.
+You can change most of the defaults in a similar way, such as DB_HOST.
 For full instructions on how to override the default settings, run
 perldoc rewrite-config.PL
 
