@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Serials
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+</head>
+<body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
@@ -33,17 +34,13 @@
             </tr>
             <!-- TMPL_LOOP Name="serials" -->
             <tr>
-                <td>
-                    <!-- TMPL_VAR Name="publisheddate" -->
+                <td>    <!-- TMPL_VAR Name="publisheddate" -->
                 </td>
-                <td>
-                    <!-- TMPL_VAR Name="planneddate" -->
+                <td>    <!-- TMPL_VAR Name="planneddate" -->
                 </td>
-                <td>
-                    <!-- TMPL_VAR Name="serialseq" -->
+                <td>    <!-- TMPL_VAR Name="serialseq" -->
                 </td>
-                <td>
-                    <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
+                <td>    <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status2" -->Arrived<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->

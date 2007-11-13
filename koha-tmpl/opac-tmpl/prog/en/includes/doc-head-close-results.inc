@@ -28,4 +28,3 @@
 </script>	
 <!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/main.js"></script>
-</head>

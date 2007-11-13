@@ -13,6 +13,3 @@
         var MSG_CONFIRM_DEL_BASKET = "Are you sure you want to empty your book bag?"
         var MSG_CONFIRM_DEL_RECORDS = "Are you sure you want to remove the selected items?";
     </script>
-
-</head>
-<body onload="print();">

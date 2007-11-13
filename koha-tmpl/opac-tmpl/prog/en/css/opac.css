@@ -1,445 +1,415 @@
-@import url("/intranet-tmpl/prog/en/lib/yui/reset-fonts-grids.css");
+@import url("/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css");  
 
-/* color scheme :
-- #6699CC smooth blue for buttons background
-- #FFFFCC smooth yellow for button text
-- grey (
-
-- #990033 (red) for hovered links
-- #384b73 : light blue, for menus, text enhancement, footer & header
-
-- #eeeeee : light grey, for background color
-- #CCCCCC : for table backgrounds
-- #6BA037 : green for action buttons
-*/
-
-/* attribute for standard html tags */
-
-body {
-    font-family : Verdana, Geneva, Arial, sans-serif;
-    font-size : 1em;
-    background-color : white;
-    text-align: left;
-    margin-bottom:0px;
+a {
+	font-weight : bold;
 }
 
-h1 {
-    padding-top:25px;
-    color: #384b73;
-    font-size:1.5em;
-    text-align:left;
-}
-
-h2 {
-    color:#384b73;
-}
-
-h3 {
-    color:#384b73;
-}
-
-p {
-    margin:0px;
-    padding:0px;
-    clear:left;
-}
-
-label {
-    vertical-align:top;
-    display:block;
-    float:left;
-    margin-right:0.2em;
-    width:10em;
-    font-size:0.8em;
-}
-
-a:link, a:visited, a:active {
-    text-decoration : none;
-    color :#384b73;
+a, a:visited {
+	color : #006699;
 }
 
 a:hover {
-    text-decoration : none;
-    color: #990033;
-
+	text-decoration : none;
+	color : #990033;
 }
 
-fieldset {
-    display:inline;
-    border: 1px solid #384b73;
-    background-color:#F9F9FF;
-}
-
-table {
-    border-collapse : collapse;
-    border : 1px solid #CCCCCC;
-    margin : 1em 0;
+body {
+	background-color : white;
+	text-align : left;
 }
 
 caption {
-    font-size : 140%;
-    text-align : left;
-    font-weight : bold;
+	font-size : 140%;
+	text-align : left;
+	font-weight : bold;
 }
 
-td,th {
-    border : 1px solid #CCCCCC;
-    border-bottom : 1px solid #CCCCCC;
-    padding : 5px;
+fieldset {
+	border : 1px solid #dddddd;
 }
 
-th {
-    background:url( /opac-tmpl/prog/images/member-menu-background.gif);
-    background-repeat:repeat-x;
-    background-color:#ADC4E2;
-    color:#096C9D;
-    font-size:0.8em;
-    border : 1px solid #CCCCCC;
-    border-right: 1px solid #CCCCCC;
+h1 {
+	font-size : 138.5%;
 }
 
-th[scope=row] {
-    text-align : right;
+h1#libraryname {
+	font-weight : normal;
+	margin : .2em 0 .2em .5em;
+}
+
+h1#libraryname a {
+	text-decoration : none;
+}
+
+h1#libraryname a:hover {
+	color : #384B73;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight : bold;
+	margin : .5em 0;
+}
+
+h2 {
+	font-size : 131%;
+}
+
+h3 {
+	font-size : 123.1%;
+}
+
+h4 {
+	font-size : 116%;
+}
+
+h5 {
+	font-size : 108%;
+}
+
+h6 {
+	font-size : 100%;
 }
 
 input[type=submit], input[type=button], input[type=reset] {
-    background-color : #6BA037;
-    color : #FFFFFF;
-    font-size : 0.8em;
-    font-weight : bold;
-    border: 1px outset #666666;
+	background-color : #6BA037;
+	color : #FFFFFF;
+	font-weight : bold;
+	padding : 2px;
 }
 
-li {
-    list-style-type:square;
+p.searchresults {
+	background-color : #EFF1DC;
+}
+
+table {
+	border-collapse : collapse;
+	margin : 1em 0;
+	border-right : 1px solid #dddddd;
+	border-top : 1px solid #dddddd;
+}
+
+td,th {
+	border-left : 1px solid #dddddd;
+	border-bottom : 1px solid #dddddd;
+	padding : 5px;
+}
+
+th {
+	background-color : #eeeeee;
+}
+
+th[scope=row] {
+	text-align : right;
+}
+
+tr.highlight td, tr.highlight th {
+	background-color : #EEEEEE;
+	border : 1px solid #DDDDDD;
+	border-right : 1px solid #DDDDDD;
 }
 
 ul {
-    margin:0px;
+	list-style : disc;
+	padding-left : 1em;
 }
 
-/* attributes for search result list */
-.searchresults td, .searchresults th, .searchresults table {
-    border: 0;
-}
-.searchresults tr {
-    border-bottom : 1px solid #CCCCCC;
-}
-.searchresults table {
-    border-top : 0px solid #CCCCCC;
-    border: 1px solid #CCCCCC;
-}
-p.searchresults {
-    background-color : #EFF1DC;
-}
-.searchresults a.reserve {
-    background-color : transparent;
-    color : #006699;
-}
-.searchresults table tr:hover {
-    background-color: #FFFFCC;
-}
-tr.highlight td, tr.highlight th {
-    background-color : #EEEEEE;
-    border: 1px solid #DDDDDD;
-    border-right: 1px solid #DDDDDD;
+li {
+	list-style : disc;
 }
 
-/* the top part of the opac : (the LibraryName) */
-#masthead {
-    color: #000066;
-    margin-left:15%;
-    text-align:left;
-    font-size:150%;
-    font-weight:bold;
-    margin-bottom:5px;
+.available {
+	font-size : 0.75em;
 }
 
-/* The image on the top-left (the logo) */
-#masthead-image {
-    position:absolute;
-    left:10px;
-    top:10px;
-    background-color:white;
+.inwait {
+	background-color : #33CC99;
 }
 
-#masthead-image img {
-    background-color:white;
+/* css styles for reserves color alerts */
+.onloan {
+	background-color : #FFED3D;
+}
+
+.other {
+	background-color : #FF0000;
+}
+
+/* "problem" enhancement */
+.problem {
+	color : white;
+	background-color : red;
+}
+
+.reserved {
+	background-color : #8EBAFF;
+}
+
+/* style for search terms in catalogsearch */
+.term {
+	background-color : #ffffe0;
+	color : #990033;
+}
+
+a .term {
+	text-decoration : underline;
+}
+
+.transfered {
+	background-color : #F9FF9A;
+}
+
+.unavailable {
+	background-color : #FFED3D;
+}
+
+/* action buttons */
+#action {
+	margin-top : 15px;
+}
+
+#action a {
+	background-color : #6699cc;
+	color : #eeeeee;
+	font-size : 0.8em;
+	font-weight : bold;
+	border : 1px outset #666666;
+	margin-right : 5px;
+	padding : 0 5px 0 5px;
+}
+
+#action a:hover {
+	color : white;
+	border : 1px inset;
 }
 
 /* the itemtype list in advanced search */
 #advsearch-itemtype table {
-    border-collapse: separate;
-    border-spacing: 3px;
-    border : 0px;
-    margin : 0px;
-    background-color: white;
-    border: 0px solid #D8DEB8;
+	border-collapse : separate;
+	border-spacing : 3px;
+	border : 0px;
+	margin : 0px;
+	background-color : white;
+	border : 0px solid #D8DEB8;
 }
-}
+
 #advsearch-itemtype table tr td {
-    background-color: #F8F8EB;
-    border : 0px;
-    margin : 0px;
-    width:700px;
+	background-color : #F8F8EB;
+	border : 0px;
+	margin : 0px;
+	width : 700px;
 }
+
 #advsearch-itemtype td {
-    font-size:0.8em;
-    background-color:#F8F8EB;
+	font-size : 0.8em;
+	background-color : #F8F8EB;
 }
 
-/* the content part of every page */
-#main {
-    margin-left:15%;
-    margin-bottom:0px;
+#auth {
+	float : left;
 }
 
-/* the main menu (home, adv search) */
-
-#menu {
-    position:absolute;
-    padding:10px;
-    left:0px;
-    top:100px;
-    width:12%;
-    font-size:0.8em;
-    font-weight:bold;
-    color:#384b73;
-    background-color:#dddddd;
-}
-#menu ul a {
-    display:block;
-    margin:5px 5px 0px 5px;
-    padding :5px 5px 0px 5px;
-    text-decoration:none;
-    color:#384b73;
-    white-space: nowrap;
-    margin:0px;
-    padding:0px;
-}
-#menu ul a:hover {
-    display:block;
-    margin:0;
-    padding :0;
-    text-decoration:none;
-    color:#990033;
-    white-space: nowrap;
-}
-#menu ul {
-    padding:0 0 0 10px;
-    margin-left:5px;
-}
-#menu li {
-    list-style-type:none;
-    margin:0px;
-    padding:0 0 10px 0;
-}
-#menu ul li {
-    list-style-type:circle;
-    margin:0px;
-    padding:0 0 10px 0;
+#facets {
+	
 }
 
+/* the footer */
+#footer {
+	margin-top : 30px;
+	margin-left : 30%;
+	margin-right : 20%;
+	border-top : 1px solid #384b73;
+	color : #384b73;
+	font-size : 1em;
+	text-align : center;
+}
 
+/* facets bloc */
+/* the USER information block */
+#librarian_information {
+	float : right;
+	font-size : 10pt;
+}
 
-/***************/
-/* login block */
-/***************/
-#login {
-    position:absolute;
-    left:0px;
-    bottom:10px;
-    font-size:0.8em;
-    background-color : #dddddd;
-    padding:10px;
-    margin-right:84%;
-    width:12%;
+#members {
+	font-size : .8em;
+	font-weight : bold;
+	padding : 4px 0 4px 0;
+	background-image : url(../../images/member-menu-background.gif);
+	background-repeat : repeat-x;
+	border-top : 1px solid #9999CC;
+	border-bottom : 1px solid #9999CC;
+	background-color : #AFBCCF;
+	color : #000066;
 }
-#login input {
-    font-size:0.8em;
+
+#members a {
+	text-decoration : none;
 }
-#login label {
-    width:5em;
+
+#members a.card {
+	background-image : url(../images/card.gif);
+	background-position : left;
+	background-repeat : no-repeat;
+	display : block;
+	padding-left : 39px;
 }
-#login p {
-    margin:0px;
+
+#members a.logout {
+	font-weight : bold;
+	padding : 0 .3em 0 .3em;
+	text-decoration : none;
+}
+
+#members a.logout:link, #members a.logout:visited, #members a.logout:hover, #members a.logout:active {
+	background-image : url(../images/member-menu-background-logout.gif);
+	background-repeat : repeat-x;
+	color : #000000;
+}
+
+#members a:hover.logout {
+	background-image : url(../images/member-menu-background-logout-hover.gif);
+	background-repeat : repeat-x;
+	color : #000000;
+}
+
+#members li {
+	display : inline;
+	list-style : none;
+	margin : 0;
+}
+
+#members ul {
+	margin : 0;
+	padding : 0;
+	text-align : right;
+}
+
+#members ul li a:link, #members ul li a:visited, #members span.members {
+	background-image : url(../images/member-menu-background-link.gif);
+	background-repeat : repeat-x;
+	border-left : 1px solid #9999CC;
+	color : #006699;
+}
+
+#members ul li a:link, #members ul li a:visited, #members ul li a:hover, #members ul li a:active, #members span.members {
+	padding : 4px;
+}
+
+#members ul li a:hover {
+}
+
+#members ul li a:hover, #members ul li a:active {
+	background-image : url(../images/member-menu-background-hover.gif);
+	background-repeat : repeat-x;
+}
+
+#members ul li:last-child {
+}
+
+#members ul li:last-child a {
+	border-right : 1px solid #9999CC;
+}
+
+#opac-main-search {
+	background-image : url( /opac-tmpl/prog/images/menu-background.gif);
+	background-repeat : repeat-x;
+	background-color : #6699CC;
+	border-top : 1px solid #335599;
+	border-bottom : 1px solid #335599;
+	padding : 15px 0 15px 10px;
+	color : #FFFFCC;
+	font-size : 108%;
+	line-height : 116%;
+}
+
+#opac-main-search a, #opac-main-search a, #opac-main-search a:visited {
+	color : #FFFFCC;
+}
+
+#opac-main-search a:hover {
+	color : #FFFFFF;
+}
+
+#opac-main-search form {
+	display : inline;
+}
+
+#opac-main-search label {
+	font-weight : bold;
 }
 
 /***********************************************************/
 /* the user menu, for user option (and biblio detail view) */
 /***********************************************************/
 #usermenu {
-    float:right;
+	float : right;
 }
+
 #usermenu a {
-    background-color : #6BA037;
-    color : #FFFFFF;
-    font-size : 0.8em;
-    font-weight : bold;
-    border: 1px outset #666666;
-    display:block;
-    margin-bottom:3px;
+	background-color : #6BA037;
+	color : #FFFFFF;
+	font-size : 0.8em;
+	font-weight : bold;
+	border : 1px outset #666666;
+	display : block;
+	margin-bottom : 3px;
 }
+
 #usermenu a:hover {
-    border: 1px inset #666666;
+	border : 1px inset #666666;
 }
 
-/* the opac-news */
-#news {
-    width:20%;
-    float:right;
-    font-size:11px;
-}
-#news th {
-background-color:white;
-color:#384b73;
-}
-
-/* "problem" enhancement */
-.problem {
-color: white;
-background-color:red;
-}
-
-/* action buttons */
-#action {
-    margin-top:15px;
-}
-#action a {
-    background-color : #6699cc;
-    color : #eeeeee;
-    font-size : 0.8em;
-    font-weight : bold;
-    border: 1px outset #666666;
-    margin-right:5px;
-    padding:0 5px 0 5px;
-}
-#action a:hover {
-    color : white;
-    border: 1px inset;
-}
-
-#auth {
-    float:left;
-}
-
-/* facets bloc */
-#facets {
-    position:absolute;
-    right:1em;
-    font-size:0.8em;
-    margin:0px;
-    background-color:#eeeeee;
-    border:0px;
-}
-
-#facets dl {
-    margin:0px;
-    border:1px solid #CCCCCC;
-}
-#facets dd {
-    margin:0px;
-}
-#facets dt {
-    font-weight:bold;
-    background-color:#6BA037;
-    border: 1px outset #666666;
-    color:white;
-}
-
-#facets li {
-    list-style-type: none;
-    margin-left:0px;
+.suggestion {
+	background-color : #EEEEEB;
+	border : 1px solid #DDDED3;
+	margin : 10px auto;
+	padding : 4px;
+	width : 35%;
 }
 
 #facets ul {
-    list-style-type: none;
-    padding-left:10px;
-    margin-bottom:0px;
-    margin-top:0px;
+	margin : 0;
+	padding : 0;
 }
 
-/* the USER information block */
-#librarian_information {
-float:right;
-font-size:10pt;
+#facets ul li {
+	font-weight : bold;
+	text-align : left;
+	list-style : none;
 }
 
-/* the footer */
-#footer {
-    margin-top:30px;
-    margin-left:30%;
-    margin-right:20%;
-    border-top:1px solid #384b73;
-    color: #384b73;
-    font-size:1em;
-    text-align:center;
+#facets ul ul li {
+	border : 0;
+	font-size : 85%;
+	font-weight : normal;
+	padding : 2px;
+	text-align : left;
 }
 
-
-legend {
-font-weight:bold;
-color:#384b73;
+#facets ul ul li a {
+	font-weight : normal;
+	text-decoration : underline;
 }
 
-
-/* css styles for reserves color alerts */
-.onloan {
-    background-color: #FFED3D;
+#facets h4 {
+	font-size : 93%;
+	padding:3px;
+	text-align:center;
+	background-color:#E7E7CA;
+	line-height:1.8em;
+	margin-left:-1px;
+	margin-right:-1px;
+	margin-top:-1px;
 }
 
-.reserved {
-    background-color: #8EBAFF;
+#breadcrumbs {
+	padding : .7em;
 }
 
-.transfered {
-    background-color: #F9FF9A;
+strong {
+	font-weight : bold;
 }
 
-.inwait {
-    background-color: #33CC99;
-}
-
-.other {
-    background-color: #FF0000;
-}
-
-.available {
-    font-size:0.75em;
-}
-
-.unavailable {
-    background-color: #FFED3D;
-    font-size:0.75em;
-}
-
-/* style for search terms in catalogsearch */
-.term {
-background-color:lightyellow;
-color: #990033;
-}
-
-#opac-main-search {
-    background-image:url( /opac-tmpl/prog/images/menu-background.gif);
-    background-repeat:repeat-x;
-    background-color: #6699CC;
-    border-top: 1px solid #335599;
-    border-bottom: 1px solid #335599;
-    margin: 0 0 0 15%;
-    padding: 15px 0 15px 10px;
-    color:#FFFFCC;
-    font-weight:bold;
-}
-#opac-main-search a {
-    color:#FFFFCC;
-}
-#opac-main-search a:visited {
-    color:#FFFFCC;
-}
-#opac-main-search a:hover {
-    color:#FFFFFF;
-}
-
-#opac-main-search form {
-    display:inline;
+em {
+	font-style : italic;
 }

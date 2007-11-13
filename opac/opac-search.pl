@@ -283,7 +283,7 @@ if ( $template_name eq "opac-advsearch.tmpl" ) {
         if ( $i == 0 ) {
             push @search_boxes_array,
               {
-                search_boxes_label => "<span class='labels'>Search for:</span>",
+                search_boxes_label => "<span class=\"labels\">Search for:</span>",
                 scan_index         => 1,
               };
 

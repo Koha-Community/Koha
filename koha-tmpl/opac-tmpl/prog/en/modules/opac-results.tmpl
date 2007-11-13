@@ -1,6 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_VAR NAME="LibraryNameTitle" -->
-
+<!-- TMPL_VAR NAME="LibraryNameTitle" --> &rsaquo; 
 <!-- TMPL_IF NAME="searchdesc" -->
     Results of Search for '<!-- TMPL_VAR NAME="searchdesc" -->'
 <!-- TMPL_ELSE -->
@@ -8,12 +7,38 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+</head>
+<body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
 
-<!-- TMPL_IF NAME="koha_spsuggest" -->
-<div style="font-size: 12px;">Did you mean:
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+   
+<!-- TMPL_IF NAME="total" -->
+<div id="breadcrumbs" class="yui-g">
+<p><strong>&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</strong> returned <!-- TMPL_VAR NAME="total" --> results.</p>
+</div>
+<!-- TMPL_ELSE -->
+<div id="breadcrumbs" class="yui-g">
+<!-- TMPL_IF NAME="searchdesc" -->
+<h3>No Result found !</h3>
+<p>
+    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
+</p>
+<!-- TMPL_ELSE -->
+<h3> No result found !</h3>
+<p>
+    You did not specify any search criteria.
+</p>
+</div>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<div id="yui-main">
+
+	<div class="yui-b">
+  <!-- TMPL_IF NAME="koha_spsuggest" -->
+	Did you mean:
     <ul style="list-style: none;">
         <!-- TMPL_LOOP NAME="SPELL_SUGGEST" -->
         <li>
@@ -21,35 +46,15 @@
         </li>
         <!-- /TMPL_LOOP -->
     </ul>
-</div>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="total" -->
-<h3><!-- TMPL_VAR NAME="total" --> results found for '<!-- TMPL_VAR NAME="searchdesc" -->'. <a href="/cgi-bin/koha/opac-search.pl">[ Perform a new search ]</a></h3>
-<!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="searchdesc" -->
-<h3> No Result found !</h3>
-<p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
-</p>
-<a href="/cgi-bin/koha/opac-search.pl" title="New search">Perform a new search</a>
-<!-- TMPL_ELSE -->
-<h3> No result found !</h3>
-<p>
-    You did not specify any search criteria.
-</p>
-<a href="/cgi-bin/koha/opac-search.pl" title="New search">Perform a new search</a>
-<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="query_error" -->
-<br /><br />
-Error :
-<span  class="problem">
+<div class="error">
+	<h4>Error:</h4>
     <!-- TMPL_VAR NAME="query_error" -->
-</span>
-<!-- /TMPL_IF -->
-
+</div>
+<!-- /TMPL_IF -->	
+	
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
@@ -105,18 +110,18 @@ Error :
     </form>
 <!-- TMPL_ELSE -->
 
+    <div class="searchresults">
 <form action="/cgi-bin/koha/opac-search.pl" method="post" name="myform" id="mainform">
     
     <!-- TMPL_IF NAME="searchdesc" -->
     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
     <!-- /TMPL_IF -->
     
-    <div class="searchresults">
         
         <!-- RE-SORT START -->
-        <p>
+        <p style="float: right;">
             Re-sort results
-            <select id="sort_by" name="sort_by" onChange="javascript:document.myform.submit();">
+            <select id="sort_by" name="sort_by" onchange="javascript:document.myform.submit();">
                 <option value="">Field-weighted, Relevance Ranked</option>
         <!--TMPL_IF Name="9523a"-->
           <option value="1=9523 &gt;i" selected>Popularity (Most to Least)</option>
@@ -186,53 +191,16 @@ Error :
             </select>
         </p>
         <!-- RESORT END -->
-</form>
-        <!-- ######### -->
-        <!-- FACETS START -->
-        <!-- TMPL_IF NAME="opacfacets" -->
-            <!-- TMPL_IF NAME="facets_loop" -->
-                <div id="facets" >
-                    <dl>
-                    <dt onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">Refine Your Search</dt>
-                    <dd id="facets_list" style="display:none">
-                        <!-- TMPL_LOOP NAME="facets_loop" -->
-                        <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
-                            <ul>
-                                <!-- TMPL_LOOP NAME="facets" -->
-                                <li>
-                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
-                                        <!-- TMPL_VAR NAME="facet_label_value" -->
-                                    </a> (<!-- TMPL_VAR NAME="facet_count" -->)
-                                </li>
-                                <!-- /TMPL_LOOP -->
-                                <!-- TMPL_IF NAME="expandable" -->
-                                <li class="showmore">
-                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
-                                        Show More
-                                    </a>
-                                </li>
-                                <!-- /TMPL_IF -->
-                            </ul>
-                        </li>
-                        <!-- /TMPL_LOOP -->
-                    </ul>
-                    </dd>
-                </div>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
-        <!-- FACETS END -->
         
-        <!-- ######### -->
-        
-        <!-- TABLE RESULTS START -->
         <!-- TMPL_IF name="opacbookbag" -->
-            <form action="opac-searchresults.pl" method="get" name="bookbag_form">
-            <input type="submit" class="button" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
+            <input type="button" class="button" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
             <input type="reset" value="Clear All" class="button" />
         <!-- /TMPL_IF -->
+		
+        <!-- TABLE RESULTS START -->
         <table>
             <tr>
-                <th><input type="checkbox" name="select_all" onClick="SelectAll()" /></th>
+                <th><input type="checkbox" name="select_all" onclick="SelectAll()" /></th>
                 <th>Title</th>
                 <th>Item count</th>
                 <th>Location</th>
@@ -343,8 +311,8 @@ Error :
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
-        </div>
     </form>
+        </div>
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="PAGE_NUMBERS" -->
@@ -387,7 +355,49 @@ Error :
     
     
     <!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF name="suggestion" -->
+<div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div>
+<!-- /TMPL_IF -->
     
 </div>
 </div>
+<div class="yui-b">
+ <!-- ######### -->
+        <!-- FACETS START -->
+        <!-- TMPL_IF NAME="opacfacets" -->
+            <!-- TMPL_IF NAME="facets_loop" -->
+                <div id="facets" >
+                    <h4>Refine Your Search</h4>
+                    <ul>
+                        <!-- TMPL_LOOP NAME="facets_loop" -->
+                        <li id="<!-- TMPL_VAR NAME="type_id" -->"><!-- TMPL_VAR NAME="type_label" -->
+                            <ul>
+                                <!-- TMPL_LOOP NAME="facets" -->
+                                <li>
+                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
+                                        <!-- TMPL_VAR NAME="facet_label_value" -->
+                                    </a> (<!-- TMPL_VAR NAME="facet_count" -->)
+                                </li>
+                                <!-- /TMPL_LOOP -->
+                                <!-- TMPL_IF NAME="expandable" -->
+                                <li class="showmore">
+                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
+                                        Show More
+                                    </a>
+                                </li>
+                                <!-- /TMPL_IF -->
+                            </ul>
+                        </li>
+                        <!-- /TMPL_LOOP -->
+                    </ul>
+                </div>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+        <!-- FACETS END -->
+        
+        <!-- ######### -->
+</div>
+</div>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

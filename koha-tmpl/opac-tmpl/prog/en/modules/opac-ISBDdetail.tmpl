@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- ISBD
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+</head>
+<body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 
@@ -50,14 +51,11 @@
                 <tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
                 <!--TMPL_LOOP Name="latestserials"-->
                     <tr>
-                        <td>
-                            <!--TMPL_VAR Name="serialseq"-->
+                        <td>            <!--TMPL_VAR Name="serialseq"-->
                         </td>
-                        <td>
-                            <!--TMPL_VAR Name="planneddate"-->
+                        <td>            <!--TMPL_VAR Name="planneddate"-->
                         </td>
-                        <td>
-                            <!--TMPL_IF Name="status1"-->Pending
+                        <td>            <!--TMPL_IF Name="status1"-->Pending
                             <!--TMPL_ELSE -->
                                 <!-- TMPL_IF Name="status2"-->Arrived
                                 <!--TMPL_ELSE -->

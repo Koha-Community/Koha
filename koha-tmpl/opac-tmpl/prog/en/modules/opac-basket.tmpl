@@ -6,6 +6,8 @@
     <!-- TMPL_ELSE -->
     <!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" -->
 <!-- /TMPL_IF -->
+</head>
+<body>
 
 <div> <!-- main -->
 
@@ -67,11 +69,9 @@
         <!-- TMPL_IF name="MARCAUTHORS" -->
         <tr>
             <th scope="row">Authors</th>
-            <td>
-                <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
+            <td><!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                     <!-- TMPL_VAR NAME="value" -->
-            <!-- /TMPL_LOOP -->
-            </td>
+            <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
         
@@ -98,11 +98,9 @@
         <!-- TMPL_IF name="MARCSUBJCTS" -->
         <tr>
             <th scope="row">Subjects</th>
-            <td>
-                <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+            <td><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
                     <p><!-- TMPL_VAR NAME="label" --></p>
-            <!-- /TMPL_LOOP -->
-            </td>
+            <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
     
@@ -118,8 +116,7 @@
             <td>
             <!-- TMPL_LOOP NAME="MARCNOTES" -->
                 <p>- <!-- TMPL_VAR NAME="marcnote" --></p>
-            <!-- /TMPL_LOOP -->
-            </td>
+            <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
     
@@ -160,16 +157,14 @@
         </tr><!-- /TMPL_IF -->
         <tr>
             <th scope="row">Location</th>
-            <td>
-                <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+            <td><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
                 <p>
                     <!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" -->
                     <!-- TMPL_IF name="itemcallnumber" -->
                         (<!-- TMPL_VAR NAME="itemcallnumber" -->)
                     <!-- /TMPL_IF -->
                 </p>
-                <!-- /TMPL_LOOP -->
-            </td>
+                <!-- /TMPL_LOOP --></td>
         </tr>
     </table>
     <!-- /TMPL_LOOP -->
@@ -182,8 +177,7 @@
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-            <td>
-                <form>
+            <td><form>
                     <!-- TMPL_UNLESS NAME="print_basket" -->
                         <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
                         </label>
@@ -194,11 +188,9 @@
                             id="bib<!-- TMPL_VAR NAME="biblionumber" -->"
                             onclick="selRecord(value,checked);">
                     <!-- /TMPL_UNLESS -->
-                </form>
-            </td>
+                </form></td>
             <td><!-- TMPL_VAR name="itemtype" --></td>
-            <td>
-                <p>
+            <td><p>
                     <a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">
                         <!-- TMPL_VAR NAME="title" -->
                     </a>
@@ -210,8 +202,7 @@
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="notes" -->
                         <p><!-- TMPL_VAR name="notes" --></p>
-                        <!-- /TMPL_IF -->
-            </td>
+                        <!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="classification" --></td>
             </tr>
         <!-- /TMPL_LOOP -->

@@ -1028,16 +1028,16 @@ sub searchResults {
 				$term =~ s/\*//g;
 
                 #FIXME: is there a better way to do this?
-                $oldbiblio->{'title'} =~ s/$term/<span class=term>$&<\/span>/gi;
+                $oldbiblio->{'title'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'subtitle'} =~
-                  s/$term/<span class=term>$&<\/span>/gi;
+                  s/$term/<span class=\"term\">$&<\/span>/gi;
 
-                $oldbiblio->{'author'} =~ s/$term/<span class=term>$&<\/span>/gi;
-                $oldbiblio->{'publishercode'} =~ s/$term/<span class=term>$&<\/span>/gi;
-                $oldbiblio->{'place'} =~ s/$term/<span class=term>$&<\/span>/gi;
-                $oldbiblio->{'pages'} =~ s/$term/<span class=term>$&<\/span>/gi;
-                $oldbiblio->{'notes'} =~ s/$term/<span class=term>$&<\/span>/gi;
-                $oldbiblio->{'size'}  =~ s/$term/<span class=term>$&<\/span>/gi;
+                $oldbiblio->{'author'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                $oldbiblio->{'publishercode'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                $oldbiblio->{'place'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                $oldbiblio->{'pages'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                $oldbiblio->{'notes'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                $oldbiblio->{'size'}  =~ s/$term/<span class=\"term\">$&<\/span>/gi;
             }
         }
 
