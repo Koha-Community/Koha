@@ -17,6 +17,8 @@
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
 # See http://www.koha.org/wiki/?page=KohaInstaller
+# 
+# 2007/11/12	Added DB_PORT and changed other keywords to reflect multi-dbms support.	-fbcit
 
 use Sys::Hostname;
 use Socket;
@@ -43,7 +45,7 @@ The following configuration keywords are available:
 
 PREFIX,
 BASE_DIR, CGI_DIR, LOG_DIR,
-MYSQL_DB, MYSQL_HOST, MYSQL_PASS, MYSQL_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
+DB_TYPE, DB_HOST, DB_PORT, DB_NAME, DB_PASS, DB_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
 WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
 
 =head1 EXAMPLES
