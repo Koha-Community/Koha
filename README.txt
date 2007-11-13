@@ -43,7 +43,8 @@ user, with a password set. Note: kohaadmin must have at least the
 following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP.
 
 PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin' 
-user, with a password set. Note: kohaadmin must be a superuser.
+user, with a password set. Note: kohaadmin must be a superuser. You
+must also add plpgsql to the koha database.
 
 Default installation instructions:
 
