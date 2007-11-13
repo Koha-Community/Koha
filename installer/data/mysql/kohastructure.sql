@@ -1188,6 +1188,95 @@ CREATE TABLE `marc_tag_structure` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `marc_matchers`
+--
+
+DROP TABLE IF EXISTS `marc_matchers`;
+CREATE TABLE `marc_matchers` (
+  `matcher_id` int(11) NOT NULL auto_increment,
+  `description` varchar(255) NOT NULL default '',
+  `record_type` varchar(10) NOT NULL default 'biblio',
+  `threshold` int(11) NOT NULL default 0,
+  PRIMARY KEY (`matcher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `matchpoints`
+--
+DROP TABLE IF EXISTS `matchpoints`;
+CREATE TABLE `matchpoints` (
+  `matcher_id` int(11) NOT NULL,
+  `matchpoint_id` int(11) NOT NULL auto_increment,
+  `search_index` varchar(30) NOT NULL default '',
+  `score` int(11) NOT NULL default 0,
+  PRIMARY KEY (`matchpoint_id`),
+  CONSTRAINT `matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
+             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `matchpoint_components`
+--
+DROP TABLE IF EXISTS `matchpoint_components`;
+CREATE TABLE `matchpoint_components` (
+  `matchpoint_id` int(11) NOT NULL,
+  `matchpoint_component_id` int(11) NOT NULL auto_increment,
+  sequence int(11) NOT NULL default 0,
+  tag varchar(3) NOT NULL default '',
+  subfields varchar(40) NOT NULL default '',
+  offset int(4) NOT NULL default 0,
+  length int(4) NOT NULL default 0,
+  PRIMARY KEY (`matchpoint_component_id`),
+  CONSTRAINT `matchpoint_components_ifbk_1` FOREIGN KEY (`matchpoint_id`)
+             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `matcher_component_norms`
+--
+DROP TABLE IF EXISTS `matchpoint_component_norms`;
+CREATE TABLE `matchpoint_component_norms` (
+  `matchpoint_component_id` int(11) NOT NULL,
+  `sequence`  int(11) NOT NULL default 0,
+  `norm_routine` varchar(50) NOT NULL default '',
+  KEY `matchpoint_component_norms` (`matchpoint_component_id`, `sequence`),
+  CONSTRAINT `matchpoint_component_norms_ifbk_1` FOREIGN KEY (`matchpoint_component_id`)
+             REFERENCES `matchpoint_components` (`matchpoint_component_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `matcher_matchpoints`
+--
+DROP TABLE IF EXISTS `matcher_matchpoints`;
+CREATE TABLE `matcher_matchpoints` (
+  `matcher_id` int(11) NOT NULL,
+  `matchpoint_id` int(11) NOT NULL,
+  CONSTRAINT `matcher_matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
+             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `matcher_matchpoints_ifbk_2` FOREIGN KEY (`matchpoint_id`)
+             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `matchchecks`
+--
+DROP TABLE IF EXISTS `matchchecks`;
+CREATE TABLE `matchchecks` (
+  `matcher_id` int(11) NOT NULL,
+  `matchcheck_id` int(11) NOT NULL auto_increment,
+  `source_matchpoint_id` int(11) NOT NULL,
+  `target_matchpoint_id` int(11) NOT NULL,
+  PRIMARY KEY (`matchcheck_id`),
+  CONSTRAINT `matcher_matchchecks_ifbk_1` FOREIGN KEY (`matcher_id`)
+             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `matcher_matchchecks_ifbk_2` FOREIGN KEY (`source_matchpoint_id`)
+             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `matcher_matchchecks_ifbk_3` FOREIGN KEY (`target_matchpoint_id`)
+             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `mediatypetable`
 --
 
@@ -1217,6 +1306,7 @@ CREATE TABLE `notifys` (
 --
 -- Table structure for table `nozebra`
 --
+DROP TABLE IF EXISTS `nozebra`;
 CREATE TABLE `nozebra` (
                 `server` varchar(20)     NOT NULL,
                 `indexname` varchar(40)  NOT NULL,
@@ -1705,6 +1795,7 @@ CREATE TABLE `z3950servers` (
 -- Table structure for table `zebraqueue`
 --
 
+DROP TABLE IF EXISTS `zebraqueue`;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
   `biblio_auth_number` int(11) NOT NULL default '0',
