@@ -103,7 +103,7 @@ my $strsth =
  AND reserves.found is NULL ";
 
 if (C4::Context->preference('IndependantBranches')){
-	$strsth .= " items.holdingbranch=? ";
+	$strsth .= " AND items.holdingbranch=? ";
 }
 $strsth .= $sqlorderby;
 my $sth = $dbh->prepare($strsth);
