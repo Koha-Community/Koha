@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>About Koha</title>
+<title>Koha &rsaquo; About Koha</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -13,31 +13,31 @@
 //]]>
 </script>
 
-<div id="doc3" class="yui-t2">
+<div id="doc3" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+	<div class="yui-g">
+            <h1>About Koha</h1>
 	
 	<div id="abouttabs" class="toptabs numbered">
         <ul>
-        <li><a href="about.pl#about">About Koha</a></li>
+        <li><a href="about.pl#about">Server Information</a></li>
         <li><a href="about.pl#perl">Perl modules</a></li>
         <li><a href="about.pl#team">Koha Team</a></li>
         <li><a href="about.pl#translations">Translations</a></li>
         </ul>
         
         <div id="about">
-            <h1>About Koha</h1>
             
         <table>
             <caption>Server information</caption>
-            <tr><th>Koha version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="kohaVersion" --></td></tr>
-            <tr><th>OS version ('uname -a'): </th><td><!-- TMPL_VAR ESCAPE="HTML" name="osVersion" --></td></tr>
-            <tr><th>Perl version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="perlVersion" --></td></tr>
-            <tr><th>MySQL version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="mysqlVersion" --></td></tr>
-            <tr><th>Apache version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="apacheVersion" --></td></tr>
-            <tr><th>Zebra version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="zebraVersion" --></td></tr>
+            <tr><th scope="row">Koha version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="kohaVersion" --></td></tr>
+            <tr><th scope="row">OS version ('uname -a'): </th><td><!-- TMPL_VAR ESCAPE="HTML" name="osVersion" --></td></tr>
+            <tr><th scope="row">Perl version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="perlVersion" --></td></tr>
+            <tr><th scope="row">MySQL version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="mysqlVersion" --></td></tr>
+            <tr><th scope="row">Apache version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="apacheVersion" --></td></tr>
+            <tr><th scope="row">Zebra version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="zebraVersion" --></td></tr>
         </table>
         </div>
         <div id="perl">
@@ -45,7 +45,7 @@
                     <caption>Perl modules</caption>
                     <tr>
                 <!-- TMPL_LOOP name="components" -->
-                        <th><!-- TMPL_VAR NAME="name" --></th>
+                        <th scope="row"><!-- TMPL_VAR NAME="name" --></th>
                         <td><!-- TMPL_VAR NAME="version" --></td>
                     <!-- TMPL_UNLESS name="counter" --></tr><tr><!-- /TMPL_UNLESS -->
                 <!-- /TMPL_LOOP -->
@@ -58,15 +58,15 @@
                 <li>The <strong>Nelsonville Public Library</strong>, USA, Ohio (MARC support funding)</li>
                 <li><strong>EMN (Ecole des Mines de Nantes)</strong>, France (Suggestion, stats modules and improved ldap support funding)</li>
                 <li><strong>ENSMP (Ecole Nationale Supérieure des Mines de Paris)</strong>, France (biblio frameworks, MARC authorities, OPAC basket, Serials support funding)</li>
-                <li><strong>SAN-Ouest Provence </strong> Koha 3.0 members &amp; reserve modules.
+                <li><strong>SAN-Ouest Provence </strong> Koha 3.0 members and reserve modules.</li>
             </ul>	
                 
             <h2>Core team</h2>
             <ul>
                 <li><strong>LibLime (Joshua Ferraro)</strong>, USA (Koha 3.0 Release Manager)</li>
-                <li><strong>BibLibre (Paul Poulain, Henri-Damien Laurent, Antoine Farnault)</strong>, France (Koha 2.0 &amp; 2.2 Release Manager)</li>
-                <li><strong>Katipo Communications (Chris Cormack)</strong>, New Zealand (Koha 1.0 &amp; 1.2 Release Manager)</li>
-                <li><strong>SAN-Ouest Provence (Bruno Toumi &amp; Arnaud Laurin)</strong>, France</li>
+                <li><strong>BibLibre (Paul Poulain, Henri-Damien Laurent, Antoine Farnault)</strong>, France (Koha 2.0 and 2.2 Release Manager)</li>
+                <li><strong>Katipo Communications (Chris Cormack)</strong>, New Zealand (Koha 1.0 and 1.2 Release Manager)</li>
+                <li><strong>SAN-Ouest Provence (Bruno Toumi and Arnaud Laurin)</strong>, France</li>
             </ul>
                 
                 
@@ -119,5 +119,5 @@
     
         </div>
     </div>
-</div></div></div></div>
+</div></div></div>
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
