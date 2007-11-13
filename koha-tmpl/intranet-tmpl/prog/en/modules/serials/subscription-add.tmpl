@@ -523,7 +523,7 @@ function irregularity_check(){
             }
             error=errortext;
         } else {
-            errortext +=expected+_("issues expected")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
+            errortext +=expected+_(" issues expected, ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
             var count=0;
             for(var i=rollover;i<expected;i++){
                 errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
@@ -535,7 +535,7 @@ function irregularity_check(){
         }
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
+        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
         error=errortext;
     }
     if(error.length ==0){
