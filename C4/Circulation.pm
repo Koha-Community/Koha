@@ -727,7 +727,7 @@ sub CanBookBeIssued {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
             $issuingimpossible{NOTSAMEBRANCH} = 1
-              if ( $item->{'holdingbranch'} ne $userenv->{branch} );
+              if ( $item->{C4::Context->preference("HomeOrHoldingbranch")} ne $userenv->{branch} );
         }
     }
 

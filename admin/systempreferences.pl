@@ -61,6 +61,7 @@ my %tabsysprefs;
     $tabsysprefs{dateformat}="Admin";
     $tabsysprefs{delimiter}="Admin";
     $tabsysprefs{IndependantBranches}="Admin";
+    $tabsysprefs{HomeOrHoldingBranch}="Admin";
     $tabsysprefs{insecure}="Admin";
     $tabsysprefs{KohaAdmin}="Admin";
     $tabsysprefs{KohaAdminEmailAddress}="Admin";
