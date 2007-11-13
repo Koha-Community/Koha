@@ -745,7 +745,7 @@ sub GetItemsInfo {
     my ( $date_due, $count_reserves );
 
     my $isth    = $dbh->prepare(
-        "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname
+        "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname,borrowers.branchcode as bcode
         FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
         WHERE  itemnumber = ?
             AND returndate IS NULL"
@@ -759,13 +759,18 @@ sub GetItemsInfo {
             $data->{surname}     = $idata->{surname};
             $data->{firstname}     = $idata->{firstname};
             $datedue                = format_date( $idata->{'date_due'} );
+	    if (C4::Context->preference("IndependantBranches")){
+		my $userenv = C4::Context->userenv;
+		if ( ($userenv) && ( $userenv->{flags} != 1 ) ) { 
+		    $data->{'NOTSAMEBRANCH'} = 1 if ($idata->{'bcode'} ne $userenv->{branch});
+		}
+	    }
         }
         if ( $datedue eq '' ) {
             #$datedue="Available";
             my ( $restype, $reserves ) =
               C4::Reserves::CheckReserves( $data->{'itemnumber'} );
             if ($restype) {
-
                 #$datedue=$restype;
                 $count_reserves = $restype;
             }
