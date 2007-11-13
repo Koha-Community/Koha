@@ -40,8 +40,9 @@ my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$
     $numberingmethod, $status, $biblionumber, $bibliotitle, $callnumber, $notes, $hemisphere,$letter,$manualhistory,$histstartdate,$enddate,$missinglist,$recievedlist,$opacnote,$librariannote);
 
 $subscriptionid = $query->param('subscriptionid');
-
 my $subs = &GetSubscription($subscriptionid);
+$subs->{enddate} = GetExpirationDate($subscriptionid);
+
 if ($op eq 'del') {
     if ($subs->{'cannotedit'}){
       warn "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
