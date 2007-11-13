@@ -1,17 +1,21 @@
+
+
+
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Web Installer &rsaquo; Step 2</title>
 <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
 <div>
 <h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web Installer &rsaquo; Step 2</h1>
 <h2 align="center">Database settings:</h2>
 <ul>
+<li><em>database type : </em><!--TMPL_VAR NAME="dbms"--></li>
 <li><em>database name : </em><!--TMPL_VAR NAME="dbname"--></li>
 <li><em>database host : </em><!--TMPL_VAR NAME="hostname"--></li>
 <li><em>database port : </em><!--TMPL_VAR NAME="port"--> (probably OK if blank)</li>
 <li><em>database user : </em><!--TMPL_VAR NAME="user"--></li>
 </ul>
 <div>
-<!--TMPL_IF NAME="mysqlconnection"-->
-<form name="checkmysqlparameters" type="post" action="install.pl">
+<!--TMPL_IF NAME="dbconnection"-->
+<form name="checkdbparameters" type="post" action="install.pl">
   <!--TMPL_IF NAME="checkdatabaseaccess"-->
   <p>Connection established.</p>
      <!--TMPL_IF NAME="checkdatabasecreated"-->
@@ -20,7 +24,7 @@
   <p>User <code><!--TMPL_VAR NAME="user"--></code> has all required privileges on database <code><!--TMPL_VAR Name="dbname"--></code>.</p>
         <!--TMPL_ELSE-->
   <p class="error">user <code><!--TMPL_VAR NAME="user"--></code> doesn't have enough privilege on database <code><!--TMPL_VAR Name="dbname"--></code> </p>
-  <p class="tip"> Ask for or make a change in the user's privileges. Need help? See <a href=http://dev.mysql.com/doc/refman/4.1/en/grant.html>this page</a>. User <code><!--TMPL_VAR NAME="user"--></code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code><!--TMPL_VAR Name="dbname"--></code></p>
+  <p class="tip"> Ask for or make a change in the user's privileges. Need help? See <!--TMPL_IF NAME="mysql"--><a href=http://dev.mysql.com/doc/refman/4.1/en/grant.html><!--TMPL_ELSE-->http://www.postgresql.org/docs/8.2/interactive/sql-createrole.html<!--/TMPL_IF-->this page</a>. User <code><!--TMPL_VAR NAME="user"--></code> must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on <code><!--TMPL_VAR Name="dbname"--></code></p>
         <!--/TMPL_IF-->
       <!--TMPL_ELSE-->
   <p class="error">No database named <code><!--TMPL_VAR NAME="dbname"--></code> detected.</p>
@@ -46,7 +50,7 @@
 <!--TMPL_ELSE-->
 <form name="checkinformation" type="post" action="install.pl">
 <input type="hidden" name="step" value="2" />
-<input type="hidden" name="checkmysql" value="1" />
+<input type="hidden" name="checkdb" value="1" />
 <p> Please click Next to continue if this information is correct <input value="Next &gt;&gt;" type="submit" /></p>
 </form>
 <!--/TMPL_IF-->
