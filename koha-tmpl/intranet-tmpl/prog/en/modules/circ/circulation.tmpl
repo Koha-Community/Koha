@@ -187,6 +187,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="EXPIRED" -->
             <li><span class="problem">Patron's card is expired</span></li>
         <!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+	     <li><span class="problem">This item does not belong here!</span></li>
+	<!-- /TMPL_IF -->	 
         </ul>
 
     <!-- TMPL_IF NAME="memberofinstution" -->
