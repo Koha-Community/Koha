@@ -855,28 +855,11 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
     # check if we just renew the issue.
     #
     if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
-        # we renew, do we need to add some charge ?
-        my ( $charge, $itemtype ) = GetIssuingCharges(
-            $item->{'itemnumber'},
-            $borrower->{'borrowernumber'}
-        );
-        if ( $charge > 0 ) {
-            AddIssuingCharge(
-                $item->{'itemnumber'},
-                $borrower->{'borrowernumber'}, $charge
-            );
-            $item->{'charge'} = $charge;
-        }
-        &UpdateStats(
-            C4::Context->userenv->{'branch'},
-            'renew',                        $charge,
-            '',                             $item->{'itemnumber'},
-            $biblio->{'itemtype'}, $borrower->{'borrowernumber'}
-        );
         AddRenewal(
             $borrower->{'borrowernumber'},
             $item->{'itemnumber'}
         );
+
     }
     else {# it's NOT a renewal
         if ( $actualissue->{borrowernumber}) {
@@ -1659,7 +1642,7 @@ sub AddRenewal {
     $sth->finish;
 
     # Log the renewal
-    UpdateStats( C4::Context->userenv->{'branchcode'}, 'renew', '', '', $itemnumber );
+
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -1678,6 +1661,7 @@ sub AddRenewal {
             'Rent', $charge, $itemnumber );
         $sth->finish;
     }
+    UpdateStats( C4::Context->userenv->{'branchcode'}, 'renew', $charge, '', $itemnumber );
 }
 
 =head2 GetIssuingCharges
