@@ -247,7 +247,7 @@ if ($barcode) {
         my $noerror    = 1;
         my $noquestion = 1;
 #         Get the item title for more information
-    	my $getmessageiteminfo  = GetBiblioFromItemNumber($barcode);
+    	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
     
         foreach my $impossible ( keys %$error ) {
             $template->param(
@@ -265,6 +265,7 @@ if ($barcode) {
             $noquestion = 0;
         }
         $template->param(
+			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	
             day   => $day,
             month => $month,
             year  => $year
