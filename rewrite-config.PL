@@ -89,6 +89,7 @@ $prefix = $ENV{'PREFIX'} || "/usr";
   "__WEBSERVER_PORT_LIBRARIAN__" => "8080",
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
+  "__MARCFLAVOUR__" => "marc21",
 );
 
 # Override configuration from the environment
