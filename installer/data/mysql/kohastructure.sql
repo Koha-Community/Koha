@@ -1194,10 +1194,13 @@ CREATE TABLE `marc_tag_structure` (
 DROP TABLE IF EXISTS `marc_matchers`;
 CREATE TABLE `marc_matchers` (
   `matcher_id` int(11) NOT NULL auto_increment,
+  `code` varchar(10) NOT NULL default '',
   `description` varchar(255) NOT NULL default '',
   `record_type` varchar(10) NOT NULL default 'biblio',
   `threshold` int(11) NOT NULL default 0,
-  PRIMARY KEY (`matcher_id`)
+  PRIMARY KEY (`matcher_id`),
+  KEY `code` (`code`),
+  KEY `record_type` (`record_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1228,6 +1231,7 @@ CREATE TABLE `matchpoint_components` (
   offset int(4) NOT NULL default 0,
   length int(4) NOT NULL default 0,
   PRIMARY KEY (`matchpoint_component_id`),
+  KEY `by_sequence` (`matchpoint_id`, `sequence`),
   CONSTRAINT `matchpoint_components_ifbk_1` FOREIGN KEY (`matchpoint_id`)
              REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
