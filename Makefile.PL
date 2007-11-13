@@ -227,10 +227,10 @@ Templates are copied to koha/templates,
 
 =pod
 
-excluding non-files, CVS files and whitespace in filenames.
+excluding non-files and whitespace in filenames.
 
 =cut
-		if ((-f $src) && ($src !~ /(\/CVS\/|\s)/)) {
+		if ((-f $src) && ($src !~ /(\s)/)) {
 			$result{$src} = '$(INST_LIBDIR)/koha/templates/'.$src;
 		}
 	}
