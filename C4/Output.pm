@@ -81,7 +81,7 @@ sub gettemplate {
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     my $template       = HTML::Template::Pro->new(
-        filename          => "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase",
+        filename          => "$htdocs/$theme/$lang/modules/$tmplbase",
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
