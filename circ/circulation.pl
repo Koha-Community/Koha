@@ -316,7 +316,7 @@ if ($borrowernumber) {
         $getreserv{author}         = $getiteminfo->{'author'};
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
-	$getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
+		$getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
 
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
@@ -351,7 +351,7 @@ if ($borrowernumber) {
 
 #         if we don't have a reserv on item, we put the biblio infos and the waiting position
         if ( $getiteminfo->{'title'} eq '' ) {
-            my $getbibinfo = GetBiblioItemData( $num_res->{'biblionumber'} );
+            my $getbibinfo = GetBiblioData( $num_res->{'biblionumber'} );
             my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );  # fixme - we should have item-level reserves here ?
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
@@ -360,7 +360,7 @@ if ($borrowernumber) {
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
             $getreserv{itemcallnumber}  = '----------';
-	    $getreserv{biblionumber}    = $num_res->{'biblionumber'};
+	        $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
         push( @reservloop, \%getreserv );
 
