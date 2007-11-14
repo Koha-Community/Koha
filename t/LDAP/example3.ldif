@@ -1,0 +1,118 @@
+dn: dc=metavore,dc=com
+dc: metavore
+description: Metavore as a company
+objectclass: dcObject
+objectclass: organization
+objectclass: top
+o: metavore
+
+# dn: cn=Manager,dc=metavore,dc=com
+# objectclass: top
+# objectclass: organizationalRole
+# description: Manager of LDAP
+# cn: Manager
+
+dn: ou=people,dc=metavore,dc=com
+objectClass: organizationalunit
+objectClass: top
+ou: people
+description: Persons in the organization
+
+dn: cn=jts,dc=metavore,dc=com
+objectClass: inetOrgPerson
+o: metavore
+postalAddress: 345 Fake Street
+l: Cleveland
+st: Ohio
+postalCode: 43366
+initials: jts
+cn: jts
+cn: John Smith
+cn: John T. Smith
+givenname: John
+sn: Smith
+userid: jts
+userPassword: password1
+sn;lang-en: Smith
+sn;lang-de: Schmidt
+ou: people
+mail: fake_user@liblime.com
+telephoneNumber: 1 555 123-4567
+
+dn: cn=sss,dc=metavore,dc=com
+objectClass: inetOrgPerson
+o: metavore
+postalAddress: Hugstetter Str. 55
+l: Freiburg
+st: Baden-Wurttemberg
+postalCode: 79106
+initials: sss
+cn: sss
+cn: Steve Smith
+cn: Steve S. Smith
+givenname: Steve
+sn: Smith
+userid: sss
+userPassword: password1
+sn;lang-en: Smith
+sn;lang-de: Schmidt
+ou: people
+mail: fake_user@liblime.com
+telephoneNumber: +49 761 270-2020
+
+dn: cn=rch,dc=metavore,dc=com
+objectClass: inetOrgPerson
+o: metavore
+postalAddress: 449 E. State St.
+l: Athens
+st: Ohio
+initials: rch
+cn: rch
+cn: Ryan Higgins
+givenname: Ryan
+sn: Higgins
+userPassword: password2
+userid: rch
+ou: people
+mail: rch@liblime.com
+telephoneNumber: 1 740 593-6589
+
+dn: cn=jmf,dc=metavore,dc=com
+objectClass: person
+objectClass: inetOrgPerson
+o: metavore
+postalAddress: 449 E. State St.
+l: Athens
+st: Ohio
+initials: jmf
+cn: jmf
+cn: Josh M. Ferraro
+givenname: Josh
+sn: Ferraro
+userid: jmf
+userPassword: password3
+ou: people
+mail: jmf@liblime.com
+telephoneNumber: 1 740 707 7654
+
+# dn: o=University of Alaska Fairbanks, c=US
+# o: University of Alaska Fairbanks
+# description: Preparing Alaska for a brave new yesterday
+# description: leaf node only
+# 
+# dn: o=University of Colorado at Boulder, c=US
+# o: University of Colorado at Boulder
+# description: No personnel information
+# description: Institution of education and research
+# 
+# dn: o=University of Colorado at Denver, c=US
+# o: University of Colorado at Denver
+# o: UCD
+# o: CU/Denver
+# o: CU-Denver
+# description: Institute for Higher Learning and Research
+# 
+# dn: o=University of Florida, c=US
+# o: University of Florida
+# o: UFl
+# description: Warper of young minds
