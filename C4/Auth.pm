@@ -1,3 +1,4 @@
+
 # -*- tab-width: 8 -*-
 # NOTE: This file uses 8-character tabs; do not change the tab size!
 
@@ -412,9 +413,12 @@ sub checkauth {
 		if ($storage_method eq 'mysql'){
 		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
 		}
+		elsif ($storage_method eq 'Pg') {
+			$session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
+		}
 		else {
 			# catch all defaults to tmp should work on all systems
-			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
+			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
 		}
         C4::Context->_new_userenv($sessionID);
         if ($session){
@@ -500,6 +504,9 @@ sub checkauth {
 		my $session;
 		if ($storage_method eq 'mysql'){
 		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+		}
+		elsif ($storage_method eq 'Pg') {
+			$session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
 		}
 		else {
 			# catch all defaults to tmp should work on all systems
