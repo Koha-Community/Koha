@@ -114,5 +114,5 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryFuzzy','1','If ON, enables fuzzy option for searches',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryWeightFields','1','If ON, enables field weighting',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library reserve an item from another library','YesNo')"
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library reserve an item from another library','YesNo');
 
