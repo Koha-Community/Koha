@@ -82,8 +82,8 @@ my $ldappassword = 'metavore';
 
 my %config = (
 	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
-	replicate => 0,		#    add from LDAP to Koha database for new user
-	   update => 0,		# update from LDAP to Koha database for existing user
+	replicate => 1,		#    add from LDAP to Koha database for new user
+	   update => 1,		# update from LDAP to Koha database for existing user
 );
 
 sub description ($) {
@@ -216,7 +216,7 @@ WHERE 	cardnumber=?
 	die "Unexpected error after password update to $userid / $cardnumber.";
 }
 
-sub confirmer($$) {
+sub confirmer($$$) {
 	my    $sth = shift or return undef;
 	my $userid = shift or return undef;
 	my $digest = shift or return undef;
