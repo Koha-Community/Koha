@@ -673,6 +673,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "3.00.00.029";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE `import_batches` ADD `matcher_id` int(11) NULL AFTER `import_batch_id`");
+    print "Upgrade to $DBversion done (adding matcher_id to import_batches)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

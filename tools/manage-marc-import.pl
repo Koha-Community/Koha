@@ -72,11 +72,39 @@ if ($op eq "") {
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 } elsif ($op eq "clean-batch") {
     ;
+} elsif ($op eq "redo-matching") {
+    my $new_matcher_id = $input->param('new_matcher_id');
+    my $current_matcher_id = $input->param('current_matcher_id');
+    redo_matching($template, $import_batch_id, $new_matcher_id, $current_matcher_id);
+    import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
 exit 0;
+
+sub redo_matching {
+    my ($template, $import_batch_id, $new_matcher_id, $current_matcher_id) = @_;
+    my $rematch_failed = 0;
+    return if not defined $new_matcher_id and not defined $current_matcher_id;
+    return if $new_matcher_id == $current_matcher_id;
+    my $num_with_matches = 0;
+    if (defined $new_matcher_id and $new_matcher_id ne "") {
+        my $matcher = C4::Matcher->fetch($new_matcher_id);
+        if (defined $matcher) {
+            $num_with_matches = BatchFindBibDuplicates($import_batch_id, $matcher);
+            SetImportBatchMatcher($import_batch_id, $new_matcher_id);
+        } else {
+            $rematch_failed = 1;
+        }
+    } else {
+        $num_with_matches = BatchFindBibDuplicates($import_batch_id, undef);
+         SetImportBatchMatcher($import_batch_id, undef);
+    }
+    $template->param(rematch_failed => $rematch_failed);
+    $template->param(rematch_attempted => 1);
+    $template->param(num_with_matches => $num_with_matches);
+}
 
 sub import_batches_list {
     my ($template, $offset, $results_per_page) = @_;
@@ -178,6 +206,28 @@ sub batch_info {
     if ($batch->{'import_status'} eq 'imported') {
         $template->param(can_revert => 1);
     }
+    if (defined $batch->{'matcher_id'}) {
+        my $matcher = C4::Matcher->fetch($batch->{'matcher_id'});
+        if (defined $matcher) {
+            $template->param('current_matcher_id' => $batch->{'matcher_id'});
+            $template->param('current_matcher_code' => $matcher->code());
+            $template->param('current_matcher_description' => $matcher->description());
+        }
+    }
+    add_matcher_list($batch->{'matcher_id'});
+}
+
+sub add_matcher_list {
+    my $current_matcher_id = shift;
+    my @matchers = C4::Matcher::GetMatcherList();
+    if (defined $current_matcher_id) {
+        for (my $i = 0; $i <= $#matchers; $i++) {
+            if ($matchers[$i]->{'matcher_id'} == $current_matcher_id) {
+                $matchers[$i]->{'selected'} = 1;
+            }
+        }
+    }
+    $template->param(available_matchers => \@matchers);
 }
 
 sub add_page_numbers {

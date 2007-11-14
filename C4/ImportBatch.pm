@@ -21,7 +21,6 @@ use strict;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
-use C4::Matcher;
 require Exporter;
 
 
@@ -69,6 +68,8 @@ use C4::ImportBatch;
     SetImportBatchStatus
     GetImportBatchOverlayAction
     SetImportBatchOverlayAction
+    GetImportBatchMatcher
+    SetImportBatchMatcher
     GetImportRecordOverlayStatus
     SetImportRecordOverlayStatus
     GetImportRecordStatus
@@ -390,12 +391,16 @@ sub BatchFindBibDuplicates {
             &$progress_callback($rec_num);
         }
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
-        my @matches = $matcher->get_matches($marc_record, $max_matches);
+        my @matches = ();
+        if (defined $matcher) {
+            @matches = $matcher->get_matches($marc_record, $max_matches);
+        }
         if (scalar(@matches) > 0) {
             $num_with_matches++;
             SetImportRecordMatches($rowref->{'import_record_id'}, @matches);
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'auto_match');
         } else {
+            SetImportRecordMatches($rowref->{'import_record_id'}, ());
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'no_match');
         }
     }
@@ -838,6 +843,49 @@ sub SetImportBatchOverlayAction {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("UPDATE import_batches SET overlay_action = ? WHERE import_batch_id = ?");
     $sth->execute($new_overlay_action, $batch_id);
+    $sth->finish();
+
+}
+
+=head2 GetImportBatchMatcher
+
+=over 4
+
+my $matcher_id = GetImportBatchMatcher($batch_id);
+
+=back
+
+=cut
+
+sub GetImportBatchMatcher {
+    my ($batch_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT matcher_id FROM import_batches WHERE import_batch_id = ?");
+    $sth->execute($batch_id);
+    my ($matcher_id) = $sth->fetchrow_array();
+    $sth->finish();
+    return $matcher_id;
+
+}
+
+
+=head2 SetImportBatchMatcher
+
+=over 4
+
+SetImportBatchMatcher($batch_id, $new_matcher_id);
+
+=back
+
+=cut
+
+sub SetImportBatchMatcher {
+    my ($batch_id, $new_matcher_id) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("UPDATE import_batches SET matcher_id = ? WHERE import_batch_id = ?");
+    $sth->execute($new_matcher_id, $batch_id);
     $sth->finish();
 
 }

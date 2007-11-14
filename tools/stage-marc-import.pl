@@ -94,6 +94,7 @@ if ($uploadmarc && length($uploadmarc)>0) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
             $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
+            SetImportBatchMatcher($batch_id, $matcher_id);
         } else {
             $matcher_failed = 1;
         }

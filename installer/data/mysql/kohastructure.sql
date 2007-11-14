@@ -846,6 +846,7 @@ CREATE TABLE `ethnicity` (
 DROP TABLE IF EXISTS `import_batches`;
 CREATE TABLE `import_batches` (
   `import_batch_id` int(11) NOT NULL auto_increment,
+  `matcher_id` int(11) default NULL,
   `template_id` int(11) default NULL,
   `branchcode` varchar(10) default NULL,
   `num_biblios` int(11) NOT NULL default 0,

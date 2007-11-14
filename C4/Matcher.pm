@@ -166,6 +166,7 @@ sub fetch {
     my $sth = $dbh->prepare_cached("SELECT * FROM marc_matchers WHERE matcher_id = ?");
     $sth->execute($id);
     my $row = $sth->fetchrow_hashref;
+    $sth->finish();
     return undef unless defined $row;
 
     my $self = {};
