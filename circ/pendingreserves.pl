@@ -23,12 +23,12 @@ use C4::Context;
 use C4::Output;
 use CGI;
 use C4::Auth;
-use C4::Date;
+use C4::Dates qw/format_date format_date_in_iso/;
 
 my $input = new CGI;
 my $order = $input->param('order');
 my $startdate=$input->param('from');
-my $enddate=format_date_in_iso($input->param('to'));
+my $enddate=$input->param('to');
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
@@ -150,11 +150,11 @@ $sth->finish;
 
 $template->param(
     todaysdate      => format_date($todaysdate),
-    fro             => $startdate,
+    from             => $startdate,
     to              => $enddate,
     reserveloop     => \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
