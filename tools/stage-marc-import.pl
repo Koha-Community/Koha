@@ -59,7 +59,7 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $uploadmarc=$input->param('uploadmarc');
-my $check_for_matches = $input->param('check_for_matches');
+my $matcher_id = $input->param('matcher');
 my $parse_items = $input->param('parse_items');
 my $comments = $input->param('comments');
 my $syntax = $input->param('syntax');
@@ -84,13 +84,19 @@ if ($uploadmarc && length($uploadmarc)>0) {
     # FIXME branch code
     my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
                                                                                    $comments, '', $parse_items, 0);
-    my $matcher = C4::Matcher->new('biblio');
-    $matcher->add_matchpoint("020", "a", '', 'isbn', 1000);
     my $num_with_matches = 0;
     my $checked_matches = 0;
-    if ($check_for_matches) {
-        $checked_matches = 1;
-        $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
+    my $matcher_failed = 0;
+    my $matcher_code = "";
+    if ($matcher_id ne "") {
+        my $matcher = C4::Matcher->fetch($matcher_id);
+        if (defined $matcher) {
+            $checked_matches = 1;
+            $matcher_code = $matcher->code();
+            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
+        } else {
+            $matcher_failed = 1;
+        }
     }
 
 	$template->param(staged => $num_valid,
@@ -99,9 +105,15 @@ if ($uploadmarc && length($uploadmarc)>0) {
                      import_errors => scalar(@import_errors),
                      total => $num_valid + scalar(@import_errors),
                      checked_matches => $checked_matches,
+                     matcher_failed => $matcher_failed,
+                     matcher_code => $matcher_code,
                      import_batch_id => $batch_id
                     );
 
+} else {
+    # initial form
+    my @matchers = C4::Matcher::GetMatcherList();
+    $template->param(available_matchers => \@matchers);
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

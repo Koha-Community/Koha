@@ -23,9 +23,14 @@
 	<li><!-- TMPL_VAR name="import_errors" --> records not staged because of MARC error</li>
 	<li><!-- TMPL_VAR name="staged" --> records staged</li>
     <!-- TMPL_IF name="checked_matches" -->
-	<li><!-- TMPL_VAR name="matched" --> records with at least one match in catalogue</li>
+	<li><!-- TMPL_VAR name="matched" --> records with at least one match in catalogue per matching rule 
+        &quot;<!-- TMPL_VAR name="matcher_code" -->&quot;</li>
     <!-- TMPL_ELSE -->
-    <li>Did not check for matches with existing records in catalogue</li>
+        <!-- TMPL_IF name="matcher_failed" -->
+          <li>Record matching failed -- unable to retrieve selected matching rule.</li>
+        <!-- TMPL_ELSE -->
+          <li>Did not check for matches with existing records in catalogue</li>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	<li><!-- TMPL_VAR name="num_items" --> item records found and staged</li>
     <li><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Manage staged records</a></li>
@@ -55,12 +60,18 @@
 		
 	</li>
 </ol></fieldset>
-	<fieldset class="rows">
-	<legend>Look for existing records in catalogue?</legend><ol><li class="radio">
-		<input type="radio" id="check_for_matchesno" name="check_for_matches" value="0" checked="checked" /><label for="check_for_matchesno">Do not look for matching records (using ISBN)</label></li>
-<li class="radio">
-			<input type="radio" id="check_for_matchesyes" name="check_for_matches" value="1" /><label for="check_for_matchesyes">Look for matching records</label>
-	</li></ol></fieldset>
+  <fieldset class="rows">
+    <legend>Look for existing records in catalogue?</legend>
+    <ol><li><label for="matcher">Record matching rule</label>
+    <select name="matcher" id="matcher">
+       <option value="">Do not look for matching records</option> 
+       <!-- TMPL_LOOP name="available_matchers" -->
+          <option value="<!-- TMPL_VAR name="matcher_id" -->"><!-- TMPL_VAR name="code" --> (<!-- TMPL_VAR name="description" -->)
+          </option>
+       <!-- /TMPL_LOOP -->
+    </select>
+    </li></ol>
+  </fieldset>
   <fieldset class="rows">
     <legend>Check for embedded item record data?</legend>
     <ol>

@@ -62,7 +62,9 @@ sub process_batch {
     my $num_with_matches = 0;
     if ($match_bibs) {
         my $matcher = C4::Matcher->new('biblio');
-        $matcher->add_matchpoint("020", "a", '', 'isbn', 1000);
+        $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
+        $matcher->add_simple_required_check('245', 'a', -1, 0, '', 
+                                            '245', 'a', -1, 0, '');
         print "... looking for matches with records already in database\n";
         $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, \&print_progress);
         print "... finished looking for matches\n";
