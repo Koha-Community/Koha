@@ -64,9 +64,10 @@ my $todaysdate =
 
 my $dbh    = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere) = ("","");
-
-$sqldatewhere .= " && reservedate >= " . $dbh->quote($startdate)  if ($startdate) ;
-$sqldatewhere .= " && reservedate <= " . $dbh->quote($enddate)  if ($enddate) ;
+warn format_date_in_iso($startdate);
+warn format_date_in_iso($enddate);
+$sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
+$sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
 
 if ($order eq "borrower") {
 	$sqlorderby = " order by  borrower, reservedate";
@@ -100,6 +101,7 @@ my $strsth =
  LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE isnull(cancellationdate)
+ $sqldatewhere
  AND reserves.found is NULL ";
 
 if (C4::Context->preference('IndependantBranches')){
