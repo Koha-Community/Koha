@@ -104,7 +104,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type)  VALUES ('DebugLevel','2','Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','0|1|2','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebra','1','If ON, Zebra indexing is turned off, simpler setup, but slower searches','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebraIndexes','0','Enter a specific hash for NoZebra indexes. Enter : \'indexname\' => \'100a,245a,500*\',\'index2\' => \'...\'','','Free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use mysql or a temporary file for storing session data','mysql|tmp','Choice');  
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use database or a temporary file for storing session data','mysql|Pg|tmp','Choice');  
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('CircAutocompl','1','If ON, autocompletion is enabled for the Circulation input',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingSerials','1','If ON, serials routing is enabled',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SearchMyLibraryFirst','1','If ON, OPAC searches return results limited by the user\'s library by default if they are logged in',NULL,'YesNo');
