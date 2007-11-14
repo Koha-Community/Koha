@@ -668,9 +668,9 @@ sub AddMember {
     my $dbh = C4::Context->dbh;
     $data{'userid'} = '' unless $data{'password'};
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
-    $data{'dateofbirth'} = format_date_in_iso( $data{'dateofbirth'} );
-    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} );
-    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'} );
+    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
+    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
+    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
     my $query =
         "insert into borrowers set cardnumber="
       . $dbh->quote( $data{'cardnumber'} )
@@ -733,7 +733,7 @@ sub AddMember {
       . ",B_phone="
       . $dbh->quote( $data{'B_phone'} )
       . ",B_email="
-      . $dbh->quote( $data{'B_email'}, )
+      . $dbh->quote( $data{'B_email'} )
       . ",password="
       . $dbh->quote( $data{'password'} )
       . ",userid="
