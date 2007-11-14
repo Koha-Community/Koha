@@ -50,10 +50,74 @@ C4::Auth - Authenticates Koha users
     This module is specific to LDAP authentification. It requires Net::LDAP package and one or more
 	working LDAP servers.
 	To use it :
-	   * modify the code between LOCAL and /LOCAL to fit your LDAP server parameters & fields.
+	   * Modify ldapserver and ldapinfos via web "Preferences".
+	   * Modify the values (right side) of %mapping pairs, to match your LDAP fields.
+	   * Modify $ldapname and $ldappassword, if required.
 
 	It is assumed your user records are stored according to the inetOrgPerson schema, RFC#2798.
 	Thus the username must match the "uid" field, and the password must match the "userPassword" field.
+
+	Make sure that the required fields are populated in your LDAP database.  What are they?  Well, in
+	mysql you can check the database table "borrowers" like this:
+
+	mysql> show COLUMNS from borrowers;
+		+------------------+--------------+------+-----+---------+----------------+
+		| Field            | Type         | Null | Key | Default | Extra          |
+		+------------------+--------------+------+-----+---------+----------------+
+		| borrowernumber   | int(11)      | NO   | PRI | NULL    | auto_increment | 
+		| cardnumber       | varchar(16)  | YES  | UNI | NULL    |                | 
+		| surname          | mediumtext   | NO   |     |         |                | 
+		| firstname        | text         | YES  |     | NULL    |                | 
+		| title            | mediumtext   | YES  |     | NULL    |                | 
+		| othernames       | mediumtext   | YES  |     | NULL    |                | 
+		| initials         | text         | YES  |     | NULL    |                | 
+		| streetnumber     | varchar(10)  | YES  |     | NULL    |                | 
+		| streettype       | varchar(50)  | YES  |     | NULL    |                | 
+		| address          | mediumtext   | NO   |     |         |                | 
+		| address2         | text         | YES  |     | NULL    |                | 
+		| city             | mediumtext   | NO   |     |         |                | 
+		| zipcode          | varchar(25)  | YES  |     | NULL    |                | 
+		| email            | mediumtext   | YES  |     | NULL    |                | 
+		| phone            | text         | YES  |     | NULL    |                | 
+		| mobile           | varchar(50)  | YES  |     | NULL    |                | 
+		| fax              | mediumtext   | YES  |     | NULL    |                | 
+		| emailpro         | text         | YES  |     | NULL    |                | 
+		| phonepro         | text         | YES  |     | NULL    |                | 
+		| B_streetnumber   | varchar(10)  | YES  |     | NULL    |                | 
+		| B_streettype     | varchar(50)  | YES  |     | NULL    |                | 
+		| B_address        | varchar(100) | YES  |     | NULL    |                | 
+		| B_city           | mediumtext   | YES  |     | NULL    |                | 
+		| B_zipcode        | varchar(25)  | YES  |     | NULL    |                | 
+		| B_email          | text         | YES  |     | NULL    |                | 
+		| B_phone          | mediumtext   | YES  |     | NULL    |                | 
+		| dateofbirth      | date         | YES  |     | NULL    |                | 
+		| branchcode       | varchar(10)  | NO   | MUL |         |                | 
+		| categorycode     | varchar(10)  | NO   | MUL |         |                | 
+		| dateenrolled     | date         | YES  |     | NULL    |                | 
+		| dateexpiry       | date         | YES  |     | NULL    |                | 
+		| gonenoaddress    | tinyint(1)   | YES  |     | NULL    |                | 
+		| lost             | tinyint(1)   | YES  |     | NULL    |                | 
+		| debarred         | tinyint(1)   | YES  |     | NULL    |                | 
+		| contactname      | mediumtext   | YES  |     | NULL    |                | 
+		| contactfirstname | text         | YES  |     | NULL    |                | 
+		| contacttitle     | text         | YES  |     | NULL    |                | 
+		| guarantorid      | int(11)      | YES  |     | NULL    |                | 
+		| borrowernotes    | mediumtext   | YES  |     | NULL    |                | 
+		| relationship     | varchar(100) | YES  |     | NULL    |                | 
+		| ethnicity        | varchar(50)  | YES  |     | NULL    |                | 
+		| ethnotes         | varchar(255) | YES  |     | NULL    |                | 
+		| sex              | varchar(1)   | YES  |     | NULL    |                | 
+		| password         | varchar(30)  | YES  |     | NULL    |                | 
+		| flags            | int(11)      | YES  |     | NULL    |                | 
+		| userid           | varchar(30)  | YES  | MUL | NULL    |                | 
+		| opacnote         | mediumtext   | YES  |     | NULL    |                | 
+		| contactnote      | varchar(255) | YES  |     | NULL    |                | 
+		| sort1            | varchar(80)  | YES  |     | NULL    |                | 
+		| sort2            | varchar(80)  | YES  |     | NULL    |                | 
+		+------------------+--------------+------+-----+---------+----------------+
+		50 rows in set (0.01 sec)
+	
+		Then %mappings establishes the relationship between mysql field and LDAP attribute.
 
 =cut
 
@@ -64,21 +128,32 @@ C4::Auth - Authenticates Koha users
 # ~ then gets the LDAP entry
 # ~ and calls the memberadd if necessary
 
-my %mapping = (
+use vars qw(%mapping @ldaphosts $base $ldapname $ldappassword);
+
+%mapping = (
 	firstname     => 'givenName',
 	surname       => 'sn',
-	streetaddress => 'l',
+	address       => 'postalAddress',
+	city		  => 'l',
+	zipcode       => 'postalCode',
 	branchcode    => 'branch',
 	emailaddress  => 'mail',
 	categorycode  => 'employeeType',
-	city          => 'null',
 	phone         => 'telephoneNumber',
 );
 
-my (@ldaphosts) = (qw(localhost));		# potentially multiple LDAP hosts!
-my $base = "dc=metavore,dc=com";
-my $ldapname = "cn=Manager,$base";		# The LDAP user.
-my $ldappassword = 'metavore';
+my $prefhost;
+if ($prefhost = C4::Context->preference('ldapserver')) {	# assignment, not comparison
+	warn "Using preference from ldapserver: $prefhost";
+	(@ldaphosts) = split /\|/,$prefhost;	# Potentially multiple LDAP hosts!
+	$base = C4::Context->preference('ldapinfos') || '';		# probably will fail w/o base
+} else {
+	(@ldaphosts) = (qw(localhost));			# Potentially multiple LDAP hosts!
+	$base = "dc=metavore,dc=com";			# But only 1 base.
+}
+
+$ldapname     = "cn=Manager,$base";		# Your LDAP user.  				EDIT THIS LINE.
+$ldappassword = 'metavore';				# Your LDAP user's password.  	EDIT THIS LINE.
 
 my %config = (
 	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
