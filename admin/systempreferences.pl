@@ -75,8 +75,8 @@ my %tabsysprefs;
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
     $tabsysprefs{AuthDisplayHierarchy}="Authorities";
-	$tabsysprefs{dontmerge}="Authorities";
-	$tabsysprefs{BiblioAddsAuthorities}="Authorities";
+    $tabsysprefs{dontmerge}="Authorities";
+    $tabsysprefs{BiblioAddsAuthorities}="Authorities";
 # Catalogue
     $tabsysprefs{advancedMARCEditor}="Catalogue";
     $tabsysprefs{autoBarcode}="Catalogue";
@@ -116,6 +116,7 @@ my %tabsysprefs;
     $tabsysprefs{useDaysMode}="Circulation";
     $tabsysprefs{ReservesNeedReturns}="Circulation";
     $tabsysprefs{CircAutocompl}="Circulation";
+    $tabsysprefs{canreservefromotherbranches}="Circulation";
 
 # Intranet
     $tabsysprefs{TemplateEncoding}="Intranet";

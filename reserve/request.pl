@@ -317,13 +317,25 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
-
+	
+	# if independent branches is on we need to check if the person can reserve
+	# for branches they arent logged in to
+	if ( C4::Context->preference("IndependantBranches") ) { 
+	    if (! C4::Context->preference("canreservefromotherbranches")){
+		# cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
+		my $userenv = C4::Context->userenv; 
+		if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+		    $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
+		} 
+	    }
+	}
         # An item is available only if:
         if (
             not defined $reservedate    # not reserved yet
             and $issues->{'date_due'} eq ''         # not currently on loan
             and not $item->{itemlost}   # not lost
             and not $item->{notforloan} # not forbidden to loan
+	    and not $item->{cantreserve}
             and $transfertwhen eq ''    # not currently on transfert
           )
         {
