@@ -596,6 +596,9 @@ sub _new_dbh
         $dbh->do("set NAMES 'utf8'") if ($dbh);
         $dbh->{'mysql_enable_utf8'}=1; #enable
     }
+    elsif ( $db_driver eq 'Pg' ) {
+	    $dbh->do( "set client_encoding = 'UTF8';" );
+    }
     return $dbh;
 }
 
