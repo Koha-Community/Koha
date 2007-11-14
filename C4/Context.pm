@@ -61,7 +61,7 @@ use C4::Boolean;
 
 use vars qw($VERSION $AUTOLOAD $context @context_stack);
 
-$VERSION = '3.00.00.005';
+$VERSION = '3.00.00.025';
 
 =head1 NAME
 

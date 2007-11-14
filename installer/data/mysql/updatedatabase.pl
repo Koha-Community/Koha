@@ -11,6 +11,9 @@
 # - Would also be a good idea to offer to do a backup at this time...
 
 # NOTE:  If you do something more than once in here, make it table driven.
+
+# NOTE: Please keep the version in C4/Context.pm up-to-date!
+
 use strict;
 
 # CPAN modules
