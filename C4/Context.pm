@@ -187,11 +187,9 @@ Returns undef in case of error.
 
 =cut
 
-sub read_config_file {
-    my $fname = shift;    # Config file to read
-    my $retval = {};    # Return value: ref-to-hash holding the configuration
-    my $koha = XMLin($fname, keyattr => ['id'],forcearray => ['listen', 'server', 'serverinfo']);
-    return $koha;
+sub read_config_file {		# Pass argument naming config file to read
+    my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo']);
+    return $koha;			# Return value: ref-to-hash holding the configuration
 }
 
 # db_scheme2dbi
