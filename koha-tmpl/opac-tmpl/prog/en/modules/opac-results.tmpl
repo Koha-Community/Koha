@@ -121,73 +121,8 @@
         <!-- RE-SORT START -->
         <p style="float: right;">
             Re-sort results
-            <select id="sort_by" name="sort_by" onchange="javascript:document.myform.submit();">
-                <option value="">Field-weighted, Relevance Ranked</option>
-        <!--TMPL_IF Name="9523a"-->
-          <option value="1=9523 &gt;i" selected>Popularity (Most to Least)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=9523 &gt;i">Popularity (Most to Least)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="9523d"-->
-          <option value="1=9523 &lt;i" selected>Popularity (Least to Most)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=9523 &lt;i">Popularity (Least to Most)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="1003d"-->
-          <option value="1=1003 &lt;i" selected>Author (A-Z)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=1003 &lt;i">Author (A-Z)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="1003a"-->
-         <option value="1=1003 &gt;i" selected>Author (Z-A)</option>
-        <!--TMPL_ELSE -->
-         <option value="1=1003 &gt;i">Author (Z-A)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="20d"-->
-          <option value="1=20 &lt;i" selected>Call Number (Non-fiction 0-9 to Fiction A-Z)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=20 &lt;i">Call Number (Non-fiction 0-9 to Fiction A-Z)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="20a"-->
-          <option value="1=20 &gt;i" selected>Call Number (Fiction Z-A to Non-fiction 9-0)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=20 &gt;i">Call Number (Fiction Z-A to Non-fiction 9-0)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>Dates</option>
-        <!--TMPL_ELSE -->
-          <option value="1=31 &gt;i">Dates</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="31a"-->
-          <option value="1=31 &gt;i" selected>&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Newest to Oldest</option>
-        <!--TMPL_ELSE -->
-          <option value="1=31 &gt;i">&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Newest to Oldest</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="31d"-->
-          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Oldest to Newest</option>
-        <!--TMPL_ELSE -->
-          <option value="1=31 &lt;i">&nbsp;&nbsp;&nbsp;Publication/Copyright Date: Oldest to Newest</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="32a"-->
-          <option value="1=32 &gt;i" selected>&nbsp;&nbsp;&nbsp;Acquisition Date: Newest to Oldest</option>
-        <!--TMPL_ELSE -->
-          <option value="1=32 &gt;i">&nbsp;&nbsp;&nbsp;Acquisition Date: Newest to Oldest</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="32d"-->
-          <option value="1=32 &lt;i" selected>&nbsp;&nbsp;&nbsp;Acquisition Date: Oldest to Newest</option>
-        <!--TMPL_ELSE -->
-          <option value="1=32 &lt;i">&nbsp;&nbsp;&nbsp;Acquisition Date: Oldest to Newest</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="4d"-->
-          <option value="1=4 &lt;i" selected>Title (A-Z)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=4 &lt;i">Title (A-Z)</option>
-        <!--/TMPL_IF-->
-        <!--TMPL_IF Name="4a"-->
-          <option value="1=4 &gt;i" selected>Title (Z-A)</option>
-        <!--TMPL_ELSE -->
-          <option value="1=4 &gt;i">Title (Z-A)</option>
-        <!--/TMPL_IF-->
+            <select id="sort_by" name="sort_by" onChange="javascript:document.myform.submit();">
+<!--TMPL_INCLUDE Name="resort_form.inc"-->
             </select>
         </p>
         <!-- RESORT END -->
