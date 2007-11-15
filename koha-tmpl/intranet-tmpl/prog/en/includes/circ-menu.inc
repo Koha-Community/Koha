@@ -1,6 +1,7 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
-<div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h5>
+<div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h5>
 <ul>
+     <!-- TMPL_IF NAME="userid" --> <li> <!-- TMPL_VAR NAME="userid" -->  </li><!--/TMPL_IF-->
 	        <li><!-- TMPL_IF NAME="address"-->
             <!-- TMPL_VAR NAME="address" -->
         <!-- TMPL_ELSE -->

@@ -147,7 +147,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <div class="yui-u first"><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
     <label for="barcode">Enter item barcode: </label>
-	<div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></div>
+	<div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</div>
 	<input type="text" name="barcode" id="barcode" class="focus" size="14" />
     
         <!-- RESULT OF ISSUING REQUEST -->
@@ -525,7 +525,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 	
     <!-- TMPL_IF NAME="flagged" -->
 		<!-- TMPL_IF NAME="noissues" -->
-		 <div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></div>
+		 <div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</div>
         <div id="circmessages" class="circmessage warning">
 		<!-- TMPL_ELSE -->
         <div id="circmessages" class="circmessage attention">
