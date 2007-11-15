@@ -141,7 +141,11 @@ function ExpandField(index) {
     var divs = original.getElementsByTagName('div');
     for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
         if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
-            $(divs[i]).toggle();
+            if (divs[i].style.display == 'block') {
+                divs[i].style.display = 'none';
+            } else {
+                divs[i].style.display = 'block';
+            }
         }
     }
 }
