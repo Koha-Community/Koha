@@ -45,7 +45,7 @@ my $starttime = gettimeofday;
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
 # $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
-my $sth = $dbh->prepare("select biblionumber from biblio where biblionumber >54500");
+my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
 $sth->execute;
 # my ($biblionumbermax) =  $sth->fetchrow;
 # warn "$biblionumbermax <<==";
@@ -89,8 +89,7 @@ sub localNEWmodbiblio {
     $frameworkcode="" unless $frameworkcode;
     my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
     C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio );
-    C4::Biblio::_koha_modify_biblioitem( $dbh, $oldbiblio );
-
+    C4::Biblio::_koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
 }
 
@@ -98,6 +97,13 @@ sub localNEWmoditem {
     my ( $dbh, $record, $biblionumber, $itemnumber, $delete ) = @_;
 #     warn "NEWmoditem $biblionumber / $itemnumber / $delete ".$record->as_formatted;
     my $frameworkcode=GetFrameworkCode($biblionumber);
-    my $olditem = TransformMarcToKoha( $dbh, $record,$frameworkcode );
+    my $olditem = TransformMarcToKoha( $dbh, $record, $frameworkcode, 'items' );
+#     warn "OLDITEM : ".Data::Dumper::Dumper( $olditem );
+    my $sth =  $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
+    $sth->execute($biblionumber);
+    my ($biblioitemnumber) = $sth->fetchrow;
+    $sth->finish(); 
+    $olditem->{'biblioitemnumber'} = $biblioitemnumber;
     C4::Biblio::_koha_modify_item( $dbh, $olditem );
+#     die;
 }
