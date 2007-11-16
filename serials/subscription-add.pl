@@ -150,18 +150,12 @@ if ($op eq 'mod'||$op eq 'dup') {
             );
     $template->param(
                 "periodicity".$subs->{'periodicity'} => 1,
-                "dow".$subs->{'periodicity'} => 1,
-                "numberpattern".$subs->{'periodicity'} => 1,
+                "dow".$subs->{'dow'} => 1,
+                "numberpattern".$subs->{'numberpattern'} => 1,
                 );
 }
 
 if ($op eq 'addsubscription') {
-    my @irregular = $query->param('irregular');
-    my $irregular_count = scalar(@irregular);
-    for(my $i =0;$i<$irregular_count;$i++){
-        $irregularity .=$irregular[$i].",";
-    }
-    $irregularity =~ s/\,$//;
 
     my $auser = $query->param('user');
     my $branchcode = $query->param('branchcode');
