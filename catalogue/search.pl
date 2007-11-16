@@ -321,9 +321,6 @@ if ( $template_type eq 'advsearch' ) {
     	$template->param( expanded_options => $cgi->param('expanded_options'));
 	}
 
-    # load the sort_by options for the template
-    my $sort_by = $cgi->param('sort_by');
-
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
