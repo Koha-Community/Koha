@@ -1559,7 +1559,7 @@ sub NZorder {
         # for the requested page, replace biblionumber by the complete record
         # speed improvement : avoid reading too much things
         for (my $counter=$offset;$counter<=$offset+$results_per_page;$counter++) {
-            $result_hash->{'RECORDS'}[$counter] = GetMarcBiblio($result_hash->{'RECORDS'}[$counter])->as_usmarc;
+            $result_hash->{'RECORDS'}[$counter] = GetMarcBiblio($result_hash->{'RECORDS'}[$counter])->as_usmarc if $result_hash->{'RECORDS'}[$counter];
         }
         my $finalresult=();
         $result_hash->{'hits'} = $numbers;
