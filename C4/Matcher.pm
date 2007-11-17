@@ -62,6 +62,8 @@ foreach $match (@matches) {
 
 }
 
+my $matcher_description = $matcher->dump();
+
 =back
 
 =head1 FUNCTIONS
@@ -365,6 +367,29 @@ sub _store_matchpoint {
     return $matchpoint_id;
 }
 
+
+=head2 delete
+
+=over 4
+
+C4::Matcher->delete($id);
+
+=back
+
+Deletes the matcher of the specified ID
+from the database.
+
+=cut
+
+sub delete {
+    my $class = shift;
+    my $matcher_id = shift;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("DELETE FROM marc_matchers WHERE matcher_id = ?");
+    $sth->execute($matcher_id); # relying on cascading deletes to clean up everything
+}
+
 =head2 threshold
 
 =over 4
@@ -381,6 +406,26 @@ Accessor method.
 sub threshold {
     my $self = shift;
     @_ ? $self->{'threshold'} = shift : $self->{'threshold'};
+}
+
+=head2 _id
+
+=over 4
+
+$matcher->_id(123);
+my $id = $matcher->_id();
+
+=back
+
+Accessor method.  Note that using this method
+to set the DB ID of the matcher should not be
+done outside of the editing CGI.
+
+=cut
+
+sub _id {
+    my $self = shift;
+    @_ ? $self->{'id'} = shift : $self->{'id'};
 }
 
 =head2 code
@@ -483,7 +528,7 @@ sub add_simple_matchpoint {
 
     $self->add_matchpoint($index, $score, [
                           { tag => $source_tag, subfields => $source_subfields,
-                            offset => $source_offset, length => $source_length,
+                            offset => $source_offset, 'length' => $source_length,
                             norms => [ $source_normalizer ]
                           }
                          ]);
@@ -565,9 +610,9 @@ sub add_simple_required_check {
         $target_tag, $target_subfields, $target_offset, $target_length, $target_normalizer) = @_;
 
     $self->add_required_check(
-      [ { tag => $source_tag, subfields => $source_subfields, offset => $source_offset, length => $source_length,
+      [ { tag => $source_tag, subfields => $source_subfields, offset => $source_offset, 'length' => $source_length,
           norms => [ $source_normalizer ] } ],
-      [ { tag => $target_tag, subfields => $target_subfields, offset => $target_offset, length => $target_length,
+      [ { tag => $target_tag, subfields => $target_subfields, offset => $target_offset, 'length' => $target_length,
           norms => [ $target_normalizer ] } ]
     );
 }
@@ -644,6 +689,41 @@ sub get_matches {
     }
     return @results;
 
+}
+
+=head2 dump
+
+=over 4
+
+$description = $matcher->dump();
+
+=back
+
+Returns a reference to a structure containing all of the information
+in the matcher object.  This is mainly a convenience method to
+aid setting up a HTML editing form.
+
+=cut
+
+sub dump {
+    my $self = shift;
+   
+    my $result = {};
+
+    $result->{'matcher_id'} = $self->{'id'};
+    $result->{'code'} = $self->{'code'};
+    $result->{'description'} = $self->{'description'};
+
+    $result->{'matchpoints'} = [];
+    foreach my $matchpoint (@{ $self->{'matchpoints'} }) {
+        push @{  $result->{'matchpoints'} }, $matchpoint;
+    }
+    $result->{'matchchecks'} = [];
+    foreach my $matchcheck (@{ $self->{'required_checks'} }) {
+        push @{  $result->{'matchchecks'} }, $matchcheck;
+    }
+
+    return $result;
 }
 
 sub _passes_required_checks {

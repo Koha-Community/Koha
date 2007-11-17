@@ -1,0 +1,696 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Record Matching Rules
+<!-- TMPL_IF name="matching_rule_form" -->
+  <!-- TMPL_IF name="edit_matching_rule" -->
+    &rsaquo; Modify record matching rule
+  <!-- TMPL_ELSE -->
+    &rsaquo; Add record matching rule
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_matching_rule_form" -->
+  &rsaquo; Confirm deletion of record matching rule &quot;<!-- TMPL_VAR name="code" -->&quot;
+<!-- /TMPL_IF -->
+</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+
+var maxMatchPoint = <!-- TMPL_VAR name="max_matchpoint" -->;
+var maxMatchCheck = <!-- TMPL_VAR name="max_matchcheck" -->;
+
+function InsertMatchpoint(loc, index) {
+    var original= document.getElementById(index);
+    var clone = original.cloneNode(true);
+    clone.style.display = 'block';
+
+    // update IDs and form names
+    maxMatchPoint++;
+    clone.setAttribute('id', 'mp_' + maxMatchPoint);
+    var divs = clone.getElementsByTagName('div');
+    for (var i = 0; i < divs.length; i++) {
+        var s = divs[i].getAttribute('id');
+        if (s.match(/mp_num/)) {
+            divs[i].setAttribute('id', s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+    }
+    var inputs = clone.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+        var s = inputs[i].getAttribute('id');
+        if (s.match(/mp_num/)) {
+            inputs[i].setAttribute('id', s);
+            inputs[i].setAttribute('id', s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+        var s = inputs[i].getAttribute('name');
+        if (s.match(/mp_num/)) {
+            inputs[i].setAttribute('name', s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+    }
+
+    loc.parentNode.parentNode.insertBefore(clone, loc.nextSibling);
+}
+
+function InsertMatchcheck(loc, index) {
+    var original= document.getElementById(index);
+    var clone = original.cloneNode(true);
+    clone.style.display = 'block';
+
+    // update IDs and form names
+    maxMatchCheck++;
+    clone.setAttribute('id', 'mc_' + maxMatchCheck);
+    var divs = clone.getElementsByTagName('div');
+    for (var i = 0; i < divs.length; i++) {
+        var s = divs[i].getAttribute('id');
+        if (s.match(/mc_num/)) {
+            divs[i].setAttribute('id', s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+    }
+    var inputs = clone.getElementsByTagName('input');
+    for (var i = 0; i < inputs.length; i++) {
+        var s = inputs[i].getAttribute('id');
+        if (s.match(/mc_num/)) {
+            inputs[i].setAttribute('id', s);
+            inputs[i].setAttribute('id', s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+        var s = inputs[i].getAttribute('name');
+        if (s.match(/mc_num/)) {
+            inputs[i].setAttribute('name', s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+    }
+
+    loc.parentNode.parentNode.insertBefore(clone, loc.nextSibling);
+}
+
+function DeleteMatchpoint(loc) {
+    var parentdiv = loc.parentNode.parentNode.parentNode;
+    parentdiv.parentNode.removeChild(parentdiv);
+}
+
+function DeleteMatchcheck(loc) {
+    var parentdiv = loc.parentNode.parentNode.parentNode;
+    parentdiv.parentNode.removeChild(parentdiv);
+}
+
+function DoCancel(f) {
+  f.op.value='';
+  document.Aform.submit();
+}
+
+function CheckMatchingRuleForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.code.value.length==0) {
+        _alertString += "\n- " + _("Matching rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (f.threshold.value.length==0) {
+        _alertString += "\n- " + _("Threshold missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+function CheckRuleForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("Filing rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (f.sort_routine.value.length==0) {
+        _alertString += "\n- " + _("Sort routine missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="display_list" -->Record Matching Rules<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/matching-rules.pl">Record Matching Rules</a><!-- /TMPL_IF -->
+<!-- TMPL_IF name="matching_rule_form" -->
+  <!-- TMPL_IF name="edit_matching_rule" -->
+    &rsaquo; Modify record matching rule
+  <!-- TMPL_ELSE -->
+    &rsaquo; Add record matching rule
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_matching_rule_form" -->
+  &rsaquo; Confirm deletion of record matching rule &quot;<!-- TMPL_VAR name="code" -->&quot;
+<!-- /TMPL_IF -->
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<!-- TMPL_IF name="matching_rule_form" -->
+  <!-- TMPL_IF name="edit_matching_rule" -->
+<h2>Modify record matching rule</h2>
+  <!-- TMPL_ELSE -->
+<h2>Add record matching rule</h2>
+  <!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          <!-- TMPL_IF name="edit_matching_rule" -->
+		  <span class="label">Matching rule code: </span>
+            <input type="hidden" name="matcher_id" value="<!-- TMPL_VAR name="matcher_id" -->" />
+            <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" -->" />
+            <!-- TMPL_VAR name="code" -->
+          <!-- TMPL_ELSE -->
+		  <label for="code">Matching rule code: </label>
+            <input type="text" id="code" name="code"  size="10" maxlength="10" />
+          <!-- /TMPL_IF -->
+       </li>
+       <li><label for="description">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
+       </li>
+       <li><label for="description">Match threshold: </label>
+           <input type="text" id="threshold" name="threshold" size="5" maxlength="5" 
+                  value="<!-- TMPL_VAR name="threshold" escape="HTML" -->" />
+       </li>
+    </ol>
+  </fieldset>
+  <fieldset class="rows">
+  <legend >Match points <a class="button" onclick="InsertMatchpoint(this, 'mp_template')">Add matchpoint</a></legend>
+  <!-- TMPL_IF name="edit_matching_rule" -->
+  <!-- TMPL_LOOP name="matchpoints" -->
+  <div id="mp_<!-- TMPL_VAR name="mp_num" -->">
+  <fieldset class="rows">
+    <legend><a class="button" onclick="DeleteMatchpoint(this)">Remove this matchpoint</a></legend>
+    <ol>
+      <li>
+        <label for="mp_<!-- TMPL_VAR name="mp_num" -->_search_index">Search index: </label>
+        <input type ="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" 
+               name="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" size="20" 
+               value="<!-- TMPL_VAR name="index" -->"
+          maxlegnth="30" escape="HTML" />
+      </li>
+      <li>
+        <label for="mp_<!-- TMPL_VAR name="mp_num" -->_score">Score: </label>
+        <input type ="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_score" 
+               name="mp_<!-- TMPL_VAR name="mp_num" -->_score" size="5"
+               value="<!-- TMPL_VAR name="score" -->" 
+               maxlegnth="5" escape="HTML" />
+      </li>
+      <!-- TMPL_LOOP name="components" -->
+      <div id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->">
+      <fieldset class="rows">
+        <ol>
+          <li>
+            <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
+            <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   value="<!-- TMPL_VAR name="tag" -->"
+                   size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
+            <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   value="<!-- TMPL_VAR name="subfields" -->"
+                   size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
+            <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   value="<!-- TMPL_VAR name="offset" -->"
+                   size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
+            <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   value="<!-- TMPL_VAR name="length" -->"
+                   size="5" maxlength="5" escape="HTML" />
+          </li>
+          <!-- TMPL_LOOP name="norms" -->
+          <div id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num"-->">
+              <li>
+                <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n__<!-- TMPL_VAR name="norm_num"-->">Normalization rule: </label>
+                <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n__<!-- TMPL_VAR name="norm_num"-->_norm" 
+                       name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num"-->_norm" 
+                       value="<!-- TMPL_VAR name="norm" -->"
+                       size="20" maxnorms="50" escape="HTML" />
+              </li>
+          </div>
+          <!-- /TMPL_LOOP -->
+        </ol>
+      </fieldset>
+      </div>
+      <!-- /TMPL_LOOP -->
+    </ol>
+  </fieldset>
+  </div>
+  <!-- /TMPL_LOOP -->
+  <!-- TMPL_ELSE -->
+  <div id="mp_1">
+  <fieldset class="rows">
+    <legend><a class="button" onclick="DeleteMatchpoint(this)">Remove this matchpoint</a></legend>
+    <ol>
+      <li>
+        <label for="mp_1_search_index">Search index: </label>
+        <input type ="text" id="mp_1_search_index" name="mp_1_search_index" size="20" 
+          maxlegnth="30" escape="HTML" />
+      </li>
+      <li>
+        <label for="mp_1_score">Score: </label>
+        <input type ="text" id="mp_1_score" name="mp_1_score" size="5" maxlegnth="5" escape="HTML" />
+      </li>
+      <div id="mp_1_c_1">
+      <fieldset class="rows">
+        <ol>
+          <li>
+            <label for="mp_1_c_1_tag">Tag: </label>
+            <input type="text" id="mp_1_c_1_tag" name="mp_1_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_subfields">Subfields: </label>
+            <input type="text" id="mp_1_c_1_subfields" name="mp_1_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_offset">Offset: </label>
+            <input type="text" id="mp_1_c_1_offset" name="mp_1_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_length">Length: </label>
+            <input type="text" id="mp_1_c_1_length" name="mp_1_c_1_length" size="5" maxlength="5" escape="HTML" />
+          </li>
+          <div id="mp_1_c_1_n_1">
+            <li>
+              <label for="mp_1_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+        </ol>
+      </fieldset>
+      </div>
+    </ol>
+  </fieldset>
+  </div>
+  <!-- /TMPL_IF -->
+  </fieldset>
+  <fieldset class="rows">
+  <legend >Required match checks <a class="button" onclick="InsertMatchcheck(this, 'mc_template')">Add match check</a></legend>
+  <!-- TMPL_IF name="edit_matching_rule" -->
+  <!-- TMPL_LOOP name="matchchecks" -->
+  <div id="mc_<!-- TMPL_VAR name="mc_num" -->">
+  <fieldset class="rows">
+    <legend><a class="button" onclick="DeleteMatchcheck(this)">Remove this match check</a></legend>
+    <input type="hidden" id="mc_<!-- TMPL_VAR name="mc_num" -->_id" name="mc_<!-- TMPL_VAR name="mc_num" -->_id" value="1" />
+    <ol>
+      <!-- TMPL_LOOP name="src_components" -->
+      <div id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->">
+      <fieldset class="rows">
+        <legend>Source (incoming) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   value="<!-- TMPL_VAR name="tag" -->"
+                   size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   value="<!-- TMPL_VAR name="subfields" -->"
+                   size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   value="<!-- TMPL_VAR name="offset" -->"
+                   size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   value="<!-- TMPL_VAR name="length" -->"
+                   size="5" maxlength="5" escape="HTML" />
+          </li>
+          <!-- TMPL_LOOP name="norms" -->
+          <div id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->">
+            <li>
+              <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm">Normalization rule: </label>
+              <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
+                     name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
+                    value="<!-- TMPL_VAR name="norm" -->"
+                    size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+          <!-- /TMPL_LOOP -->
+        </ol>
+      </fieldset>
+      </div>
+      <!-- /TMPL_LOOP -->
+      <!-- TMPL_LOOP name="tgt_components" -->
+      <div id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->">
+      <fieldset class="rows">
+        <legend>Target (database) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
+                   value="<!-- TMPL_VAR name="tag" -->"
+                   size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
+                   value="<!-- TMPL_VAR name="subfields" -->"
+                   size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
+                   value="<!-- TMPL_VAR name="offset" -->"
+                   size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
+            <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length" 
+                   value="<!-- TMPL_VAR name="length" -->"
+                   size="5" maxlength="5" escape="HTML" />
+          </li>
+          <!-- TMPL_LOOP name="norms" -->
+          <div id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->">
+            <li>
+              <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm">Normalization rule: </label>
+              <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
+                     name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
+                    value="<!-- TMPL_VAR name="norm" -->"
+                    size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+          <!-- /TMPL_LOOP -->
+        </ol>
+      </fieldset>
+      </div>
+      <!-- /TMPL_LOOP -->
+    </ol>
+  </fieldset>
+  </div>
+  <!-- /TMPL_LOOP -->
+  <!-- TMPL_ELSE -->
+  <div id="mc_1">
+  <fieldset class="rows">
+    <legend><a class="button" onclick="DeleteMatchcheck(this)">Remove this match check</a></legend>
+    <input type="hidden" id="mc_1_id" name="mc_1_id" value="1" />
+    <ol>
+      <div id="mc_1_src_c_1">
+      <fieldset class="rows">
+        <legend>Source (incoming) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_1_src_c_1_tag">Tag: </label>
+            <input type="text" id="mc_1_src_c_1_tag" name="mc_1_src_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_subfields">Subfields: </label>
+            <input type="text" id="mc_1_src_c_1_subfields" name="mc_1_src_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_offset">Offset: </label>
+            <input type="text" id="mc_1_src_c_1_offset" name="mc_1_src_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_length">Length: </label>
+            <input type="text" id="mc_1_src_c_1_length" name="mc_1_src_c_1_length" size="5" maxlength="5" escape="HTML" />
+          </li>
+          <div id="mc_1_src_c_1_n_1">
+            <li>
+              <label for="mc_1_src_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+        </ol>
+      </fieldset>
+      </div>
+      <div id="mc_1_tgt_c_1">
+      <fieldset class="rows">
+        <legend>Target (database) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_1_tgt_c_1_tag">Tag: </label>
+            <input type="text" id="mc_1_tgt_c_1_tag" name="mc_1_tgt_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_subfields">Subfields: </label>
+            <input type="text" id="mc_1_tgt_c_1_subfields" name="mc_1_tgt_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_offset">Offset: </label>
+            <input type="text" id="mc_1_tgt_c_1_offset" name="mc_1_tgt_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_length">Length: </label>
+            <input type="text" id="mc_1_tgt_c_1_length" name="mc_1_tgt_c_1_length" size="5" maxlength="5" escape="HTML" />
+          </li>
+          <div id="mc_1_tgt_c_1_n_1">
+            <li>
+              <label for="mc_1_tgt_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+        </ol>
+      </fieldset>
+      </div>
+    </ol>
+  </fieldset>
+  </div>
+  <!-- /TMPL_IF -->
+  </fieldset>
+  <fieldset class="action">
+    <!-- TMPL_IF name="edit_matching_rule" -->
+    <input type="button" value="Save"
+           onclick="CheckMatchingRuleForm(this.form)" />
+    <!-- TMPL_ELSE -->
+    <input type="button" value="Save"
+           onclick="CheckMatchingRuleForm(this.form)" />
+    <!-- /TMPL_IF-->
+    <a class="cancel" href="/cgi-bin/koha/admin/matching-rules.pl">Cancel</a>
+  </fieldset>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_matching_rule_form" -->
+<h2>Confirm deletion of record matching rule &quot;<!-- TMPL_VAR name="code" -->&quot; (<!-- TMPL_VAR name="description" -->)?</h2>
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <input type="hidden" name="matcher_id" value="<!-- TMPL_VAR name="matcher_id" -->" />
+  <p id="action">
+    <input type="submit" value="Delete record matching rule" />
+    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
+  </p>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="display_list" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newrule");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newrule" href="<!-- TMPL_VAR name="script_name" -->?op=add_matching_rule">New Record Matching Rule</a></li>
+</ul></div>
+
+<h2>Record Matching Rules</h2>
+<!-- TMPL_IF name="added_matching_rule" -->
+<span class="problem">Added record matching rule &quot;<!-- TMPL_VAR name="added_matching_rule" -->&quot;</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="edited_matching_rule" -->
+<span class="problem">Modified record matching rule &quot;<!-- TMPL_VAR name="edited_matching_rule" -->&quot;</span>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="deleted_matching_rule" -->
+<span class="problem">Deleted record matching rule &quot;<!-- TMPL_VAR name="deleted_matching_rule" -->&quot;</span>
+<!-- /TMPL_IF -->
+<table>
+  <tr>
+    <th>#</th>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <!-- TMPL_LOOP name="available_matching_rules" -->
+  <tr>
+    <td><!-- TMPL_VAR name="matcher_id" --></td>
+    <td><!-- TMPL_VAR name="code" --></td>
+    <td><!-- TMPL_VAR name="description" --></td>
+    <td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=edit_matching_rule&amp;matcher_id=<!-- TMPL_VAR name="matcher_id" escape="HTML" -->">Edit</a>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=delete_matching_rule&amp;matcher_id=<!-- TMPL_VAR name="matcher_id" escape="HTML" -->">Delete</a>
+    </td>
+  </tr>
+  <!-- /TMPL_LOOP -->
+</table>
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+
+<!-- /TMPL_IF -->
+ 
+<div id="mp_template" style="display:none">
+  <fieldset class="rows">
+    <legend><a class="button" onclick="DeleteMatchpoint(this)">Remove this matchpoint</a></legend>
+    <ol>
+      <li>
+        <label for="mp_num_search_index">Search index: </label>
+        <input type ="text" id="mp_num_search_index" name="mp_num_search_index" size="20" 
+          maxlegnth="30" escape="HTML" />
+      </li>
+      <li>
+        <label for="mp_num_score">Score: </label>
+        <input type ="text" id="mp_num_score" name="mp_num_score" size="5" maxlegnth="5" escape="HTML" />
+      </li>
+      <div id="mp_num_c_1">
+      <fieldset class="rows">
+        <ol>
+          <li>
+            <label for="mp_num_c_1_tag">Tag: </label>
+            <input type="text" id="mp_num_c_1_tag" name="mp_num_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_subfields">Subfields: </label>
+            <input type="text" id="mp_num_c_1_subfields" name="mp_num_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_offset">Offset: </label>
+            <input type="text" id="mp_num_c_1_offset" name="mp_num_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_length">Length: </label>
+            <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+          </li>
+          <div id="mp_num_c_1_n_1">
+            <li>
+              <label for="mp_num_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            </li>
+          </div>
+        </ol>
+      </fieldset>
+      </div>
+    </ol>
+  </fieldset>
+</div>
+
+
+<div id="mc_template" style="display:none">
+<fieldset class="rows">
+  <legend><a class="button" onclick="DeleteMatchcheck(this)">Remove this match check</a></legend>
+  <input type="hidden" id="mc_num_id" name="mc_num_id" value="1" />
+  <ol>
+    <div id="mc_num_src_c_1">
+    <fieldset class="rows">
+      <legend>Source (incoming) record check field</legend>
+      <ol>
+        <li>
+          <label for="mc_num_src_c_1_tag">Tag: </label>
+          <input type="text" id="mc_num_src_c_1_tag" name="mc_num_src_c_1_tag" size="3" maxlength="3" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_subfields">Subfields: </label>
+          <input type="text" id="mc_num_src_c_1_subfields" name="mc_num_src_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_offset">Offset: </label>
+          <input type="text" id="mc_num_src_c_1_offset" name="mc_num_src_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_length">Length: </label>
+          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+        </li>
+        <div id="mc_num_src_c_1_n_1">
+          <li>
+            <label for="mc_num_src_c_1_n_1_norm">Normalization rule: </label>
+            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+          </li>
+        </div>
+      </ol>
+    </fieldset>
+    </div>
+    <div id="mc_num_tgt_c_1">
+    <fieldset class="rows">
+      <legend>Target (database) record check field</legend>
+      <ol>
+        <li>
+          <label for="mc_num_tgt_c_1_tag">Tag: </label>
+          <input type="text" id="mc_num_tgt_c_1_tag" name="mc_num_tgt_c_1_tag" size="3" maxlength="3" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_subfields">Subfields: </label>
+          <input type="text" id="mc_num_tgt_c_1_subfields" name="mc_num_tgt_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_offset">Offset: </label>
+          <input type="text" id="mc_num_tgt_c_1_offset" name="mc_num_tgt_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_length">Length: </label>
+          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+        </li>
+        <div id="mc_num_tgt_c_1_n_1">
+          <li>
+            <label for="mc_num_tgt_c_1_n_1_norm">Normalization rule: </label>
+            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+          </li>
+        </div>
+      </ol>
+    </fieldset>
+    </div>
+  </ol>
+</fieldset>
+</div>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

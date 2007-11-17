@@ -28,6 +28,7 @@
 	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></li>
     <li><a href="/cgi-bin/koha/admin/authtypes.pl">MARC Authorities framework</a></li>
     <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
+    <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
 </ul>
 
 <h5>Additional parameters</h5>
