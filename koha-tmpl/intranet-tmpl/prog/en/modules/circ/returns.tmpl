@@ -117,7 +117,7 @@
 
     <!-- case of a return of item, but with no reservation after, if the item must be  return to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
-        <h2>This item must return to his homebranch :</h2>
+        <h2>Send item to '<!-- TMPL_VAR NAME="homebranch" -->':</h2>
         <p><span class="problem">Please return '<!-- TMPL_VAR NAME="title" --> (<!-- TMPL_VAR NAME="author" -->)' to (<b><!-- TMPL_VAR NAME="homebranch" --></b>)</span></p>
             <form method="post" action="returns.pl">
                 <!-- TMPL_LOOP Name="inputloop" -->
