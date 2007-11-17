@@ -325,8 +325,8 @@ if ( $template_name eq "opac-advsearch.tmpl" ) {
 
     # load the sort_by options for the template
     my $sort_by      = $cgi->param('sort_by');
+    $template->param( $sort_by => 1);
     $sort_by=$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
-    $template->param( sort_by => $sort_by);
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -348,7 +348,7 @@ my @sort_by;
 # load the sort_by options for the template
 my $sort_by      = $params->{'sort_by'};
 $sort_by=~$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
-$template->param( sort_by => $sort_by);
+$template->param( $sort_by => 1);
 
 #
 # Use the servers defined, or just search our local catalog(default)
