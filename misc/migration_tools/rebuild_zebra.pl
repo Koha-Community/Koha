@@ -569,10 +569,12 @@ rank:rank-1
         }
         close (OUT);
     } else {
-        $sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber $limit");
+        $sth=$dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber $limit");
         $sth->execute();
         my $i=0;
         while (my ($biblionumber) = $sth->fetchrow) {
+            print ".";
+            print "\r$i" unless ($i++ %100);
             my $record;
             eval {
                 $record = GetMarcBiblio($biblionumber);
@@ -606,6 +608,7 @@ rank:rank-1
                 }
             } else {
                 unless ($record->subfield($biblionumbertagfield,$biblionumbertagsubfield)) {
+#                 warn "fixing biblionumber for $biblionumbertagfield,$biblionumbertagsubfield = $biblionumber";
                     $record_correct=0;
                     my $field;
                     # if the field where biblionumber is already exist, just update it, otherwise create it
@@ -618,11 +621,11 @@ rank:rank-1
                         $record->append_fields($newfield);
                     }
                 }
-    #             warn "FIXED BIBLIONUMBER".$record->as_formatted;
+#                 warn "FIXED BIBLIONUMBER".$record->as_formatted;
             }
             unless ($record->subfield($biblioitemnumbertagfield,$biblioitemnumbertagsubfield)) {
+#                 warn "fixing biblioitemnumber for $biblioitemnumbertagfield,$biblioitemnumbertagsubfield = $biblionumber";
                 $record_correct=0;
-    #             warn "INCORRECT BIBLIOITEMNUMBER :".$record->as_formatted;
                 my $field;
                 # if the field where biblionumber is already exist, just update it, otherwise create it
                 if ($record->field($biblioitemnumbertagfield)) {
@@ -643,13 +646,31 @@ rank:rank-1
                 }
     #             warn "FIXED BIBLIOITEMNUMBER".$record->as_formatted;
             }
+            my $encoding = C4::Context->preference("marcflavour");
+            # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
+            if ( $encoding eq "UNIMARC" ) {
+                my $string;
+                if ( length($record->subfield( 100, "a" )) == 35 ) {
+                    $string = $record->subfield( 100, "a" );
+                    my $f100 = $record->field(100);
+                    $record->delete_field($f100);
+                }
+                else {
+                    $string = POSIX::strftime( "%Y%m%d", localtime );
+                    $string =~ s/\-//g;
+                    $string = sprintf( "%-*s", 35, $string );
+                }
+                substr( $string, 22, 6, "frey50" );
+                unless ( $record->subfield( 100, "a" ) ) {
+                    $record->insert_grouped_field(
+                        MARC::Field->new( 100, "", "", "a" => $string ) );
+                }
+            }
             unless ($record_correct) {
                 my $update_xml = $dbh->prepare("update biblioitems set marcxml=? where biblionumber=?");
                 warn "UPDATING $biblionumber (missing biblionumber or biblioitemnumber in MARC record : ".$record->as_xml;
                 $update_xml->execute($record->as_xml,$biblionumber);
             }
-            print ".";
-            print "\r$i" unless ($i++ %100);
             # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
             # otherwise, if it's wron, zebra will fail miserabily (and never index what is after the failing record)
             my $leader=$record->leader;
