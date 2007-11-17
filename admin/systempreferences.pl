@@ -142,6 +142,13 @@ my %tabsysprefs;
     $tabsysprefs{NoReturnSetLost}="Members";
     $tabsysprefs{MaxFine}="Members";
     $tabsysprefs{NotifyBorrowerDeparture}="Members";
+# FRBA
+	$tabsysprefs{FRBRizeEditions}="FRBR";
+	$tabsysprefs{XISBN}="FRBR";
+	$tabsysprefs{OCLCAffiliateID}="FRBR";
+	$tabsysprefs{XISBNDailyLimit}="FRBR";
+	$tabsysprefs{PINESISBN}="FRBR";
+    $tabsysprefs{ThingISBN}="FRBR";
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";

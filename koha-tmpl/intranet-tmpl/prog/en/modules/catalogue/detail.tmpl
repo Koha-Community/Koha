@@ -195,6 +195,23 @@
 <!-- TMPL_ELSE -->
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="XISBNS" -->
+<p>Editions</p>
+<ul>
+<!-- TMPL_LOOP NAME="XISBNS" -->
+<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
+
+	<!-- TMPL_LOOP NAME=items -->
+	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
+	barcode:<!-- TMPL_VAR NAME="barcode" -->
+	<!-- /TMPL_LOOP -->
+
+<!-- /TMPL_LOOP -->
+</ul>
+<!-- /TMPL_IF -->
+
 </div>
 
 <!-- TMPL_IF name="subscriptionsnumber" -->

@@ -24,6 +24,7 @@ use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
 use C4::Serials;
+use C4::XISBN qw(get_xisbns);
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -100,5 +101,18 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},
 );
+
+# XISBN Stuff
+if (C4::Context->preference("FRBRizeEditions")==1) {
+	eval {
+		my $xisbn=$dat->{'isbn'};
+		$xisbn =~ s/(p|-|:| )//g;
+		$template->param(
+			xisbn => $xisbn,
+			XISBNS => get_xisbns($xisbn)
+		);
+	};
+	if ($@) { warn "XISBN Failed $@"; }
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;
