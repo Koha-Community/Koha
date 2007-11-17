@@ -212,6 +212,21 @@
 </ul>
 <!-- /TMPL_IF -->
 
+<div class="export">
+<form method="get" action="/cgi-bin/koha/catalogue/export.pl">
+<TABLE BORDER=1 BGCOLOR="#FFFFDD" style="width:300px; margin-right: auto; margin-left:auto;">  <TR>
+      <TH>Save Record</TH>   </TR>
+  <TR>     <TD> Select Download Format:    <SELECT NAME=format>        <OPTION VALUE=mods>MODS (XML)</OPTION>
+        <OPTION VALUE=dc>Dublin Core (XML)</OPTION>        <OPTION VALUE=marcxml>MARCXML</OPTION>
+        <OPTION VALUE=marc8>MARC (non-Unicode/MARC-8)</OPTION>
+        <OPTION VALUE=utf8>MARC (Unicode/UTF-8)</OPTION>    </SELECT>
+<INPUT TYPE="SUBMIT" NAME="SAVE" VALUE="Download Record"></TD>
+  </TR>  <TR><input type="hidden" name="op" value="export" /><INPUT TYPE="HIDDEN" NAME="bib" VALUE=<!-- TMPL_VAR NAME="biblionumber" -->/>
+  </TR></TABLE>
+</form>
+</div>
+
+
 </div>
 
 <!-- TMPL_IF name="subscriptionsnumber" -->

@@ -122,6 +122,7 @@ WriteMakefile(
 'MARC::Charset' => 0.95,
 'MARC::File::XML' => 0.86,
 'MARC::Record' => 1.38,
+'MARC::Crosswalk::DublinCore' => 0.02,
 'MIME::Base64' => 3.07,
 'MIME::QuotedPrint' => 3.07,
 'Mail::Sendmail' => 0.79,
