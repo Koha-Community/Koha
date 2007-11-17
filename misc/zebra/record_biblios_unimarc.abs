@@ -206,25 +206,25 @@ melm 432$t    Title,Title:p
 melm 440$t    Title,Title:p
 melm 441$t    Title,Title:p
 melm 445$t    Title,Title:p
-melm 400$d    Date-of-Publication:n,Date-of-Publication:s
-melm 401$d    Date-of-Publication:n,Date-of-Publication:s
-melm 403$d    Date-of-Publication:n,Date-of-Publication:s
-melm 410$d    Date-of-Publication:n,Date-of-Publication:s
-melm 412$d    Date-of-Publication:n,Date-of-Publication:s
-melm 413$d    Date-of-Publication:n,Date-of-Publication:s
-melm 414$d    Date-of-Publication:n,Date-of-Publication:s
-melm 415$d    Date-of-Publication:n,Date-of-Publication:s
-melm 416$d    Date-of-Publication:n,Date-of-Publication:s
-melm 417$d    Date-of-Publication:n,Date-of-Publication:s
-melm 418$d    Date-of-Publication:n,Date-of-Publication:s
-melm 419$d    Date-of-Publication:n,Date-of-Publication:s
-melm 420$d    Date-of-Publication:n,Date-of-Publication:s
-melm 430$d    Date-of-Publication:n,Date-of-Publication:s
-melm 431$d    Date-of-Publication:n,Date-of-Publication:s
-melm 432$d    Date-of-Publication:n,Date-of-Publication:s
-melm 440$d    Date-of-Publication:n,Date-of-Publication:s
-melm 441$d    Date-of-Publication:n,Date-of-Publication:s
-melm 445$d    Date-of-Publication:n,Date-of-Publication:s
+melm 400$d    Date-of-Publication:n
+melm 401$d    Date-of-Publication:n
+melm 403$d    Date-of-Publication:n
+melm 410$d    Date-of-Publication:n
+melm 412$d    Date-of-Publication:n
+melm 413$d    Date-of-Publication:n
+melm 414$d    Date-of-Publication:n
+melm 415$d    Date-of-Publication:n
+melm 416$d    Date-of-Publication:n
+melm 417$d    Date-of-Publication:n
+melm 418$d    Date-of-Publication:n
+melm 419$d    Date-of-Publication:n
+melm 420$d    Date-of-Publication:n
+melm 430$d    Date-of-Publication:n
+melm 431$d    Date-of-Publication:n
+melm 432$d    Date-of-Publication:n
+melm 440$d    Date-of-Publication:n
+melm 441$d    Date-of-Publication:n
+melm 445$d    Date-of-Publication:n
 melm 400    Link
 melm 401    Link
 melm 403    Link
@@ -294,32 +294,51 @@ melm 603$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 604$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 607$9      Koha-Auth-Number,Koha-Auth-Number:n
 melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 630$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 631$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 632$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 633$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 634$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 635$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 636$9      Koha-Auth-Number,Koha-Auth-Number:n
 
-melm 600$a		Author,Author-name-personal,Author:p,Author-name-personal:p
+melm 600$a		author,Personal-name,author:p,Personal-name:p
 melm 600		subject-heading,subject-heading:p
-melm 601$a		Author,Author-name-personal,Author:p,Author-name-personal:p
+melm 602$a    Personal-name,Personal-name:p
+melm 602    subject-heading,subject-heading:p
+melm 601$a		author,Corporate-name,Conference-name,author:p,Corporate-name:p,Conference-name:p
 melm 601		subject-heading,subject-heading:p
-melm 604$a		Author,Author-name-personal,Author:p,Author-name-personal:p
-melm 604$t		Title,Title:p
-melm 610$t		Title,Title:p
-melm 605$a		Title,Title:p
+melm 604$a		author
+melm 604$t		title
+melm 610$t		title
+melm 605$a		title
 melm 606		subject-heading,subject-heading:p
+melm 607    	subject-heading,subject-heading:p
+melm 630		subject-heading,subject-heading:p
+melm 631		subject-heading,subject-heading:p
+melm 632		subject-heading,subject-heading:p
+melm 633		subject-heading,subject-heading:p
+melm 634		subject-heading,subject-heading:p
+melm 635		subject-heading,subject-heading:p
+melm 636		subject-heading,subject-heading:p
 melm 610		subject-heading
-
-
-
+melm 640        subject-heading,subject-heading:p
+melm 641        subject-heading,subject-heading:p
+melm 642        subject-heading,subject-heading:p
+melm 643        subject-heading,subject-heading:p
+melm 644        subject-heading,subject-heading:p
+melm 645        subject-heading,subject-heading:p
+melm 646        subject-heading,subject-heading:p
 
 ######################
-
-
-
-
-#melm 650$9		Controlled-Subject-Index	
 
 melm 676$a		Dewey-classification:w,Dewey-classification:s
 
 #############"# item information (based on 995) ###############
+melm  995       item   # just to index every subfield
+
 melm 995$j		LC-card-number:s
 
 melm 995$a		homebranch,Host-item
@@ -332,5 +351,3 @@ melm 995$k      Call-Number,Local-Classification,lcn,Call-Number:p,Local-Classif
 melm 995$s      popularity:n,popularity:s
 melm 995$n      onloan:d,onloan:n,onloan:s
 melm 995$u      Note, Note:p
-#melm 952$v		Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
-#melm 952		Local-classification
