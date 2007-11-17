@@ -155,16 +155,16 @@ if ($op eq "additem") {
     my @indicator = $input->param('indicator');
     #    my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
-    $itemrecord=MARC::Record::new_from_xml($xml, 'UTF-8');
+    my $itemtosave=MARC::Record::new_from_xml($xml, 'UTF-8');
     # MARC::Record builded => now, record in DB
     # warn "R: ".$record->as_formatted;
     # check that the barcode don't exist already
-    my $addedolditem = TransformMarcToKoha($dbh,$itemrecord);
+    my $addedolditem = TransformMarcToKoha($dbh,$itemtosave);
     my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
     } else {
-        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemrecord,$biblionumber,$itemnumber,0);
+        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemtosave,$biblionumber,$itemnumber,0);
     $itemnumber="";
     }
     $nextop="additem";
