@@ -1811,6 +1811,13 @@ CREATE TABLE `zebraqueue` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `services_throttle`;
+CREATE TABLE `services_throttle` (
+  `service_type` varchar(10) NOT NULL default '',
+  `service_count` varchar(45) default NULL,
+  PRIMARY KEY  (`service_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

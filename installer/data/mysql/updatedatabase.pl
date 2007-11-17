@@ -680,6 +680,31 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.030";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+CREATE TABLE services_throttle (
+  service_type varchar(10) NOT NULL default '',
+  service_count varchar(45) default NULL,
+  PRIMARY KEY  (service_type)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('FRBRizeEditions',0,'','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo')");
+ $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('XISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo')");
+ $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free')");
+ $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('XISBNDailyLimit',499,'','The xISBN Web service is free for non-commercial use when usage does not exceed 500 requests per day','free')");
+ $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('PINESISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','YesNo')");
+ $dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type)
+       VALUES ('ThingISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo')");
+    print "Upgrade to $DBversion done (adding services throttle table and sysprefs for xISBN)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
