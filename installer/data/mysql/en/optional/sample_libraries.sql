@@ -19,7 +19,7 @@ INSERT INTO branches ( `branchcode`,`branchname`,`branchaddress1`) VALUES
 ('SRR','Shannon Reading Room',''),
 ('SHM','Shannon Mending',''),
 ('SHP','Shannon Processing',''),
-
+('IPT', 'Institut Protestant de Théologie',''),
 ('SAT1','Levin','449 E. State Street'),
 ('SAT2','Foxton','22 Main Street');
 
