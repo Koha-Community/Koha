@@ -55,42 +55,6 @@ use C4::Biblio;
 use C4::Acquisition;
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
 
-#---- Internal function ---
-sub get_authorised_value_desc ($$$$$$) {
-    my ( $tagslib, $tag, $subfield, $value, $framework, $dbh ) = @_;
-
-    #---- branch
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-
-#                return GetBranchDetail($value)->{branchname};
-               return $value;
-    }
-
-    #---- itemtypes
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-
-                  my $itemtypedef = getitemtypeinfo($value);
-              return $itemtypedef->{description};
-    }
-
-    #---- "true" authorized value
-    my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
-    if ( $category ne "" ) {
-        my $sth =
-          $dbh->prepare(
-"select lib from authorised_values where category = ? and authorised_value = ?"
-          );
-        $sth->execute( $category, $value );
-        my $data = $sth->fetchrow_hashref;
-        return $data->{'lib'};
-    }
-    else {
-        return $value;    # if nothing is found return the original value
-    }
-}
-
-#---------
 
 my $query        = new CGI;
 my $dbh          = C4::Context->dbh;
@@ -235,8 +199,9 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                         $subfield_data{authority} = $fields[$x_i]->subfield(9);
                     }
                     $subfield_data{marc_value} =
-                      get_authorised_value_desc( $tagslib, $fields[$x_i]->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $dbh );
+                      GetAuthorisedValueDesc( $fields[$x_i]->tag(),
+                        $subf[$i][0], $subf[$i][1], '', $tagslib);
+
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
                 $subfield_data{marc_tag}      = $fields[$x_i]->tag();
@@ -290,8 +255,9 @@ foreach my $field (@fields) {
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab} ne 10 );
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} );
         $witness{ $subf[$i][0] } =
-          $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
-        $this_row{ $subf[$i][0] } = $subf[$i][1];
+        $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
+        $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),
+                        $subf[$i][0], $subf[$i][1], '', $tagslib);
     }
     if (%this_row) {
         push( @big_array, \%this_row );
@@ -326,14 +292,14 @@ foreach my $subfield_code ( keys(%witness) ) {
     push( @header_value_loop, \%header_value );
 }
 
-my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
+my $subscriptionscount = CountSubscriptionFromBiblionumber($biblionumber);
 
-if ($subscriptionsnumber) {
+if ($subscriptionscount) {
     my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
     my $subscriptiontitle = $subscriptions->[0]{'bibliotitle'};
     $template->param(
         subscriptiontitle   => $subscriptiontitle,
-        subscriptionsnumber => $subscriptionsnumber,
+        subscriptionsnumber => $subscriptionscount,
     );
 }
 

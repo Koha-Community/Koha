@@ -48,38 +48,6 @@ use C4::Serials;    # CountSubscriptionFromBiblionumber
 
 #---- Internal function
 
-sub get_authorised_value_desc ($$$$$$$) {
-    my ( $itemtype, $tagslib, $tag, $subfield, $value, $framework, $dbh ) = @_;
-
-    #---- branch
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-        return GetBranchDetail($value)->{branchname};
-    }
-
-    #---- itemtypes
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-        my $itemtypedef = getitemtypeinfo($value);
-        return $itemtypedef->{description};
-    }
-
-    #---- "true" authorized value
-    my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
-
-    if ( $category ne "" ) {
-        my $sth =
-          $dbh->prepare(
-"select lib from authorised_values where category = ? and authorised_value = ?"
-          );
-        $sth->execute( $category, $value );
-        my $data = $sth->fetchrow_hashref;
-        return $data->{'lib'};
-    }
-    else {
-        return $value;    # if nothing is found return the original value
-    }
-}
-# ------
-
 
 my $query = new CGI;
 my $dbh = C4::Context->dbh;
@@ -143,8 +111,8 @@ foreach my $isbdfield ( split /#/, $bloc ) {
                 for my $i ( 0 .. $#subf ) {
                     my $subfieldcode  = $subf[$i][0];
                     my $subfieldvalue =
-                      get_authorised_value_desc( $itemtype,$tagslib, $tag, $subf[$i][0],
-                        $subf[$i][1], '', $dbh );
+                      GetAuthorisedValueDesc( $tag, $subf[$i][0],
+                        $subf[$i][1], $itemtype,$tagslib);
                     my $tagsubf = $tag . $subfieldcode;
                     $calculated =~s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
                 }
