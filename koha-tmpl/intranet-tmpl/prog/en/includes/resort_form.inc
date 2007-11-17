@@ -1,4 +1,4 @@
-                        <option value="">Field-weighted, Relevance Ranked</option>
+                        <option value="">Relevance</option>
                         <option value="popularity_dsc" <!-- TMPL_IF NAME="popularity_dsc" -->selected="selected" <!-- /TMPL_IF -->>Popularity (Most to Least)</option>
                         <option value="popularity_asc" <!-- TMPL_IF NAME="popularity_asc" -->selected="selected" <!-- /TMPL_IF -->>Popularity (Least to Most)</option>
                         <option value="author_az" <!-- TMPL_IF NAME="author_az" -->selected="selected" <!-- /TMPL_IF -->>Author (A-Z)</option>
