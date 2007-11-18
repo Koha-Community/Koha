@@ -2,6 +2,10 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('advancedMARCeditor','0','If ON, the MARC editor won\'t display field/subfield descriptions','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonContent','0','Turn ON Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonSimilarItems','0','Turn ON Amazon Similar Items feature  - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonContent','0','Turn ON Amazon Content in the OPAC - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonSimilarItems','0','Turn ON Amazon Similar Items feature  - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('XISBNAmazonSimilarItems','0','If ON, Amazon Similar Items will be passed through XISBN to find all associated works','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACXISBNAmazonSimilarItems','0','If ON, Amazon Similar Items in the OPAC will be passed through XISBN to find all associated works','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonDevKey','','See: aws-portal.amazon.com/gp/aws/developer/registration/index.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag','','See: associates.amazon.com/gp/flex/associates/apply-login.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions','0','Set to anonymous borrowernumber to enable Anonymous suggestions',NULL,'free');
@@ -117,8 +121,10 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library reserve an item from another library','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('FRBRizeEditions',0,'','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACFRBRizeEditions',0,'','If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('XISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('XISBNDailyLimit',499,'','The xISBN Web service is free for non-commercial use when usage does not exceed 500 requests per day','free');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('PINESISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('ThingISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo');
+

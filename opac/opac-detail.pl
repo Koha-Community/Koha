@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
 use C4::Amazon;
 use C4::Review;
 use C4::Serials;
@@ -132,17 +133,21 @@ $template->param(
     reviews             => $reviews
 );
 
-## Amazon.com stuff
-#not used unless preference set
-if ( C4::Context->preference("AmazonContent") == 1 ) {
-    use C4::Amazon;
-    $dat->{'amazonisbn'} = $dat->{'isbn'};
-    $dat->{'amazonisbn'} =~ s|-||g;
-
-    $template->param( amazonisbn => $dat->{amazonisbn} );
-
-    my $amazon_details = &get_amazon_details( $dat->{amazonisbn} );
-
+# XISBN Stuff
+my $xisbn=$dat->{'isbn'};
+$xisbn =~ s/(p|-| |:)//g;
+$template->param(amazonisbn => $xisbn);
+if (C4::Context->preference("OPACFRBRizeEditions")==1) {
+    eval {
+        $template->param(
+            xisbn => $xisbn,
+            XISBNS => get_xisbns($xisbn)
+        );
+    };
+    if ($@) { warn "XISBN Failed $@"; }
+}
+if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
+    my $amazon_details = &get_amazon_details( $xisbn );
     foreach my $result ( @{ $amazon_details->{Details} } ) {
         $template->param( item_description => $result->{ProductDescription} );
         $template->param( image            => $result->{ImageUrlMedium} );
@@ -155,7 +160,20 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
     for my $details ( @{ $amazon_details->{Details} } ) {
         next unless $details->{SimilarProducts};
         for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
-            push @products, +{ Product => $product };
+            if (C4::Context->preference("OPACAmazonSimilarItems") ) {
+                my $xbiblios;
+                my @xisbns;
+
+                if (C4::Context->preference("OPACXISBNAmazonSimilarItems") ) {
+                    my $xbiblio = get_biblio_from_xisbn($product);
+                    push @xisbns, $xbiblio;
+                    $xbiblios = \@xisbns;
+                }
+                else {
+                    $xbiblios = get_xisbns($product);
+                }
+                push @products, +{ product => $xbiblios };
+            }
         }
         next unless $details->{Reviews};
         for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
@@ -164,12 +182,13 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
         for my $reviews ( @{ $details->{Reviews}->{CustomerReview} } ) {
             push @reviews,
               +{
-                Summary => $reviews->{Summary},
-                Comment => $reviews->{Comment},
+                summary => $reviews->{Summary},
+                comment => $reviews->{Comment},
               };
         }
     }
     $template->param( SIMILAR_PRODUCTS => \@products );
     $template->param( AMAZONREVIEWS    => \@reviews );
 }
+
 output_html_with_http_headers $query, $cookie, $template->output;
