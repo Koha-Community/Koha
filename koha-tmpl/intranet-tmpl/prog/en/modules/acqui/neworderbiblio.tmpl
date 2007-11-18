@@ -18,18 +18,18 @@
 
 
 <!-- TMPL_IF NAME="total" -->
-<b><!-- TMPL_VAR NAME="total" --> results found.</b>
+<b><!-- TMPL_VAR NAME="total" --> results found</b>
 <!-- TMPL_ELSE -->
-<h3> No Result found !</h3>
+<h3> No results found</h3>
 <p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
+    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" -->
 </p>
 <a href="JavaScript:back();" title="New search">Perform a new search</a>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="query_error" -->
 <br /><br />
-<b>Error :</b>
+<b>Error:</b>
 <span class="problem">
     <!-- TMPL_VAR NAME="query_error" -->
 </span>

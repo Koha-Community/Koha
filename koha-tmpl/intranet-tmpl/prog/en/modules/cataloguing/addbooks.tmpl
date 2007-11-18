@@ -21,13 +21,13 @@
 <!-- TMPL_INCLUDE NAME="cataloging-toolbar.inc" -->
 	
 	<!-- TMPL_IF name="noitemsfound" -->
-		No items found
+		No results found
 	<!-- /TMPL_IF -->
 
 <!-- display the search results -->
 
 <!-- TMPL_IF NAME="total"-->
-<!-- TMPL_VAR NAME="total"--> Results found in catalogue.
+<!-- TMPL_VAR NAME="total"--> results found
 <!-- TMPL_VAR name='pagination_bar'-->
 <div class="searchresults">
     <table>
@@ -98,7 +98,7 @@
 </div>
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name='query'-->
-        <b>No Result found in catalogue.</b>
+        <b>No results found</b>
         <!-- TMPL_IF NAME="error" -->
             Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span>
         <!-- /TMPL_IF -->

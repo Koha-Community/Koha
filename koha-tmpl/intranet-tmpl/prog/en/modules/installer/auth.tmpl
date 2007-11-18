@@ -1,27 +1,29 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title><!-- TMPL_IF NAME="nopermission" -->Koha &rsaquo; Error: Access Denied<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="timed_out" -->Koha &rsaquo; Error: Session Timed Out --<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="different_ip" -->Koha &rsaquo; Error: IP Address Change -- <!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="invalid_username_or_password" -->Koha &rsaquo; Error Invalid Username or Password -- <!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="loginprompt" -->Koha &rsaquo; Welcome to the Koha Web Installer<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; 
+    <!-- TMPL_IF NAME="nopermission" -->Access denied<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="timed_out" -->Session timed out<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="different_ip" -->IP address change<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="invalid_username_or_password" -->Invalid username or password<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="loginprompt" -->Log in to Koha<!-- /TMPL_IF -->
+</title>
 
 <!-- TMPL_INCLUDE NAME="installer-doc-head-close.inc" -->
 <div id="login">
 <h1><a>Koha 3.0 Installer</a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
-<div id="login_error"><strong>Error</strong>: unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
+<div id="login_error"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
-<div id="login_error"><strong>Error</strong>: session timed out, please log in again</div>
+<div id="login_error"><strong>Error: </strong>Session timed out, please log in again</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
-<div id="login_error"><strong>Error</strong>: IP address has changed, please log in again </div>
+<div id="login_error"><strong>Error: </strong>IP address has changed, please log in again </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
-<div id="login_error"><strong>Error</strong>: Incorrect username or password</div>
+<div id="login_error"><strong>Error: </strong>Invalid username or password</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="loginprompt" -->

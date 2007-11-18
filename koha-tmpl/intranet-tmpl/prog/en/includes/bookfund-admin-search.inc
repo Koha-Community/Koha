@@ -1,4 +1,4 @@
-<!-- Begin Bookfund Admin Resident Search Box -->
+<!-- Begin Fund Admin Resident Search Box -->
 <!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
@@ -45,7 +45,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
  </script>  <!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="bookfund_search" class="residentsearch">
-	<p class="tip">Search Book Funds:</p>
+	<p class="tip">Search Funds:</p>
 
 	<form action="/cgi-bin/koha/admin/aqbookfund.pl" method="post">
       <label for="filter_bookfundid">Code: </label><select name="filter_bookfundid" id="filter_bookfundid">
@@ -102,7 +102,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 		</form>
 	</div>
 			<ul>
-			<li><a href="/cgi-bin/koha/admin/aqbookfund.pl#bookfund_search">Search Book Funds</a></li>
+			<li><a href="/cgi-bin/koha/admin/aqbookfund.pl#bookfund_search">Search Funds</a></li>
 			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
 			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
 			</ul>	

@@ -44,7 +44,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </script><!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="stopword_search" class="residentsearch">
-	<p class="tip">Stop Word Search:</p>
+	<p class="tip">Stop word search:</p>
 	    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="text" size="40" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit" name="ok" value="Search" />

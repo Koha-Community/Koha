@@ -45,7 +45,7 @@
                 var ok=1;
                 var _alertString="";
                 var alertString2;
-                if (f.searchfield.value.length==0) {_alertString += "- site name missing\n";
+                if (f.searchfield.value.length==0) {_alertString += "- target name missing\n";
                 }
                 if (f.host.value.length==0) {_alertString += "- host missing\n";
                 }
@@ -130,7 +130,7 @@
 	<!-- TMPL_VAR NAME="reqsel" -->
 <h3>Confirm Deletion of Server <!-- TMPL_VAR NAME="searchfield" --></h3>	
         <ul>
-                <li><strong>Site: </strong>        <!-- TMPL_VAR NAME="searchfield" --></li>
+                <li><strong>Target: </strong>        <!-- TMPL_VAR NAME="searchfield" --></li>
                 <li><strong>Hostname: </strong><!-- TMPL_VAR NAME="host" --></li>
                 <li><strong>Port: </strong><!-- TMPL_VAR NAME="port" --></li>
                 <li><strong>Database: </strong><!-- TMPL_VAR NAME="db" --></li>
@@ -175,7 +175,7 @@
                 You searched for <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->		
 <table>
-                <tr><th>Site</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th colspan="2">&nbsp;</th>
+                <tr><th>Target:</th><th>Hostname/Port:</th><th>Database:</th><th>Userid:</th><th>Password:</th><th>Checked:</th><th>Rank:</th>       			<th>Syntax:</th><th colspan="2">&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="loop" -->
                <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="name" --></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>

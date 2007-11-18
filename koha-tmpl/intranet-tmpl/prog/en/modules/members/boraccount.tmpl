@@ -20,17 +20,17 @@
 <ul class="tabs-nav">
 	<li class="tabs-selected"><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Account</a></li>
 	<li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Pay fines</a></li>
-	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Invoice</a></li>
-	<li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create Manual Credit</a></li>
+	<li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create manual invoice</a></li>
+	<li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >Create manual credit</a></li>
 </ul>
 <div class="tabs-container">
 <!-- The table with the account items -->
 <table>
   <tr>
   	<th>Date</th>
-    <th>Description of Charges</th>
+    <th>Description of charges</th>
     <th>Amount</th>
-    <th>Still Owed</th>
+    <th>Outstanding</th>
   </tr>
 
   <!-- TMPL_LOOP NAME="accounts" -->
@@ -45,7 +45,7 @@
   <!-- /TMPL_LOOP -->
 <tfoot>
   <tr>
-    <td colspan="3">Total Due</td>
+    <td colspan="3">Total due</td>
     <!-- TMPL_IF NAME="totalcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF -->$<!-- TMPL_VAR NAME="total" --></td>
   </tr>
   </tfoot>

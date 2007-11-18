@@ -99,8 +99,8 @@
         <legend>Warnings</legend>
 
         	<ul>
-        		<li><!-- TMPL_IF NAME="totalToDelete" --><!-- TMPL_VAR NAME="totalToDelete" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> patrons will be deleted.</li>
-        		<li><!-- TMPL_IF NAME="totalToAnonymize" --><!-- TMPL_VAR NAME="totalToAnonymize" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> check-out history will be anonymized.</li>
+        		<li><!-- TMPL_IF NAME="totalToDelete" --><!-- TMPL_VAR NAME="totalToDelete" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> patrons will be deleted</li>
+        		<li><!-- TMPL_IF NAME="totalToAnonymize" --><!-- TMPL_VAR NAME="totalToAnonymize" --> <!-- TMPL_ELSE -->0 <!-- /TMPL_IF --> check-out history will be anonymized</li>
         	</ul>
 
         <br />
@@ -116,7 +116,7 @@
             <!-- /TMPL_IF -->
             <!--TMPL_IF NAME="totalToAnonymize"-->
 
-                Check-out history for <!-- TMPL_VAR NAME="totalToAnonymize"--> patrons will be anonymized.
+                Check-out history for <!-- TMPL_VAR NAME="totalToAnonymize"--> patrons will be anonymized
                 <input type="hidden" name="do_anonym" value="<!-- TMPL_VAR NAME="totalToAnonymize" -->" />
             <!-- /TMPL_IF -->
                
@@ -137,17 +137,17 @@
 
           <!-- TMPL_IF NAME="do_delete" -->
                 <!-- TMPL_IF NAME="trash" -->
-                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfuly moved to trash.</h4>
+                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfuly moved to trash</h4>
                 <!-- TMPL_ELSE -->
-                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfully deleted.</h4>
+                    <h4><!-- TMPL_VAR NAME="TotalDel" --> patrons have been successfully deleted</h4>
                 <!-- /TMPL_IF -->
 			<!-- TMPL_ELSE -->
-				<h4>No patron records have been removed.</h4>
+				<h4>No patron records have been removed</h4>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="do_anonym" -->
-                <h4>All patrons with checkouts older than <!-- TMPL_VAR NAME="filterdate1" --> have been anonymized.</h4>
+                <h4>All patrons with checkouts older than <!-- TMPL_VAR NAME="filterdate1" --> have been anonymized</h4>
 			<!-- TMPL_ELSE -->
-				<h4>No patron records have been anonymized.</h4>
+				<h4>No patron records have been anonymized</h4>
             <!-- /TMPL_IF -->
 
     </div>

@@ -1,9 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Item Types <!-- TMPL_IF name="add_form" -->&rsaquo; 
   <!-- TMPL_IF name="itemtype" -->
-Modify item type '<!-- TMPL_VAR name="itemtype" -->'
+Modify Item Type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
-Add item type
+Add Item Type
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->&rsaquo; 
@@ -82,9 +82,9 @@ function Check(f) {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" -->
   <!-- TMPL_IF name="itemtype" -->
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Modify item type '<!-- TMPL_VAR name="itemtype" -->'
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Modify Item Type '<!-- TMPL_VAR name="itemtype" -->'
   <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Add item type
+<a href="/cgi-bin/koha/admin/itemtypes.pl">Item Types</a> &rsaquo; Add Item Type
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->
@@ -131,9 +131,9 @@ Item Types Administration
 
 <!-- TMPL_IF name="add_form" -->
   <!-- TMPL_IF name="itemtype" -->
-      <h3>Modify item type</h3>
+      <h3>Modify Item Type</h3>
   <!-- TMPL_ELSE -->
-      <h3>Add item type</h3>
+      <h3>Add Item Type</h3>
   <!-- /TMPL_IF -->
 <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
   <input type="hidden" name="op" value="add_validate" />
@@ -256,7 +256,7 @@ Item Types Administration
     <th>Image</th>
     <th>Code</th>
     <th>Description</th>
-    <th>Not for Loan</th>
+    <th>Not for loan</th>
     <th>Renewable</th>
     <th>Charge</th>
     <th>Actions</th>
@@ -277,7 +277,7 @@ Item Types Administration
     <td><!-- TMPL_IF NAME="notforloan" -->Yes<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
     <td>
     <!-- TMPL_IF NAME="renewalsallowed" -->
-      <!-- TMPL_VAR name="renewalsallowed" --> time(s)
+      <!-- TMPL_VAR name="renewalsallowed" --> times
     <!-- TMPL_ELSE -->
       No
     <!-- /TMPL_IF -->
