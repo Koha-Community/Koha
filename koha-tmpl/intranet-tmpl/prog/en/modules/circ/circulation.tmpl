@@ -736,7 +736,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <!-- TMPL_IF name="barcodereserv" --><!-- TMPL_VAR NAME="barcodereserv" -->
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="waitingposition" -->
-                        Hold priority :
+                        Hold priority
                         <b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
                         <!-- /TMPL_IF -->
                     </td>
@@ -749,13 +749,13 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" -->
                         <br />
-                        <i>This hold has been transfered from library : 
-                        <!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
+                        <i>This hold has been transfered from library
+                        <!-- TMPL_VAR NAME="frombranch" --> on  <!-- TMPL_VAR NAME="datesent" --> </i>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="nottransfered" -->
                         <br />
-                        <i>This hold hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <i>This hold hasn't been transfered yet from library  <!-- TMPL_VAR NAME="nottransferedby" --></i>
                         <!-- /TMPL_IF -->
                     </td>
                     <td><!-- TMPL_VAR NAME="author" --></td>
