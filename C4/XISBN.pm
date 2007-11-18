@@ -18,7 +18,7 @@ package C4::XISBN;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use XML::Simple;
-use LWP::Simple;
+#use LWP::Simple;
 use C4::Biblio;
 
 use LWP::UserAgent;
@@ -57,8 +57,6 @@ sub get_biblio_from_xisbn {
 	if ($xbib_data->{biblionumber}) {
 		$xbiblio = GetBiblioData($xbib_data->{biblionumber});
 		$xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
-		use Data::Dumper;
-		warn Dumper($xbiblio->{items});
 	}
 	return ($xbiblio);
 
