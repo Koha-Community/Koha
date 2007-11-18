@@ -24,7 +24,8 @@ use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
 use C4::Serials;
-use C4::XISBN qw(get_xisbns);
+use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
+use C4::Amazon;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -103,16 +104,61 @@ $template->param(
 );
 
 # XISBN Stuff
+my $xisbn=$dat->{'isbn'};
+$xisbn =~ s/(p|-| |:)//g;
+$template->param(amazonisbn => $xisbn);
 if (C4::Context->preference("FRBRizeEditions")==1) {
 	eval {
-		my $xisbn=$dat->{'isbn'};
-		$xisbn =~ s/(p|-|:| )//g;
 		$template->param(
 			xisbn => $xisbn,
 			XISBNS => get_xisbns($xisbn)
 		);
 	};
 	if ($@) { warn "XISBN Failed $@"; }
+}
+if ( C4::Context->preference("AmazonContent") == 1 ) {
+    my $amazon_details = &get_amazon_details( $xisbn );
+    foreach my $result ( @{ $amazon_details->{Details} } ) {
+        $template->param( item_description => $result->{ProductDescription} );
+        $template->param( image            => $result->{ImageUrlMedium} );
+        $template->param( list_price       => $result->{ListPrice} );
+        $template->param( amazon_url       => $result->{url} );
+    }
+
+    my @products;
+    my @reviews;
+    for my $details ( @{ $amazon_details->{Details} } ) {
+        next unless $details->{SimilarProducts};
+        for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
+			if (C4::Context->preference("AmazonSimilarItems") ) {
+				my $xbiblios;
+				my @xisbns;
+
+				if (C4::Context->preference("XISBNAmazonSimilarItems") ) {
+					my $xbiblio = get_biblio_from_xisbn($product);
+					push @xisbns, $xbiblio;
+					$xbiblios = \@xisbns;
+				}
+				else {
+					$xbiblios = get_xisbns($product);
+				}
+            	push @products, +{ product => $xbiblios };
+			}
+        }
+        next unless $details->{Reviews};
+        for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
+            $template->param( rating => $product * 20 );
+        }
+        for my $reviews ( @{ $details->{Reviews}->{CustomerReview} } ) {
+            push @reviews,
+              +{
+                summary => $reviews->{Summary},
+                comment => $reviews->{Comment},
+              };
+        }
+    }
+    $template->param( SIMILAR_PRODUCTS => \@products );
+    $template->param( AMAZONREVIEWS    => \@reviews );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

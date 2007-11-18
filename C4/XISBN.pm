@@ -47,11 +47,11 @@ This module provides facilities for retrieving XISBN, ThingISBN and XISBN conten
 );
 
 sub get_biblio_from_xisbn {
-	my $xisbn_data = shift;
+	my $xisbn = shift;
 	my $dbh = C4::Context->dbh;
 	my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
 	my $sth = $dbh->prepare($query);
-	$sth->execute($xisbn_data->{content});
+	$sth->execute($xisbn);
 	my $xbib_data =  $sth->fetchrow_hashref();
 	my $xbiblio;
 	if ($xbib_data->{biblionumber}) {
@@ -101,7 +101,7 @@ sub get_xisbns {
 	for my $response_data( @{ $response->{ isbn } } ) {
 		next if $unique_xisbns->{ $response_data->{content} };
 		$unique_xisbns->{ $response_data->{content} }++;
-		my $xbiblio= get_biblio_from_xisbn($response_data);
+		my $xbiblio= get_biblio_from_xisbn($response_data->{content});
 		push @xisbns, $xbiblio if $xbiblio; #response_data->{xbiblio}; #->{biblionumber}; # if $xbiblionumber;
         
 	}

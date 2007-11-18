@@ -23,7 +23,11 @@ if ($op eq "export") {
 	while (my ($marc) = $sth->fetchrow) {
 		if ($marc){
 
-			if ($format =~ /marcxml/) {
+			if ($format =~ /endnote/) {
+				$marc = marc2endnote($marc);
+				$format = 'endnote';
+			}
+			elsif ($format =~ /marcxml/) {
 				$marc = marc2marcxml($marc);
 			}
 			elsif ($format=~ /mods/) {

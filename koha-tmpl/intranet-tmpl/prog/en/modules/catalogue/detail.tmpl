@@ -68,12 +68,12 @@
 		</ul>
 		</div>
 		
-<!-- TMPL_IF NAME="AmazonContent" -->
 <div class="yui-u">
-    <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
-</div>
-<!-- /TMPL_IF -->
-		
+		<!-- TMPL_IF NAME="AmazonContent" -->
+		<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
+		<!-- TMPL_ELSE -->
+		<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
+		<!-- /TMPL_IF --></div>		
 		<div class="yui-u">
 		<ul>
         <!-- TMPL_IF name="isbn" -->
@@ -197,11 +197,12 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="XISBNS" -->
-<p>Editions</p>
+<h2>Editions</h2>
 <ul>
 <!-- TMPL_LOOP NAME="XISBNS" -->
 <li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
 
 	<!-- TMPL_LOOP NAME=items -->
 	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
@@ -212,12 +213,64 @@
 </ul>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- Amazon Reviews -->
+<div id="itemReviews">
+        <h2>Amazon Reader Reviews:</h2>
+        <h4>
+    <!-- TMPL_IF NAME="amazonisbn" -->
+        <a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="amazonisbn" -->&store=books">Add your own review</a></h4>
+    <!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="rating" -->
+		<h4>Rating (from Amazon.com):</h4>
+        <div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
+        <!-- TMPL_LOOP NAME="AMAZONREVIEWS" -->
+            <div class="content_set">
+            <!-- TMPL_IF NAME="summary" -->
+            <h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="comment" -->
+                <p><!-- TMPL_VAR NAME="comment" --></p>
+			<!-- /TMPL_IF -->
+            </div>
+    	<!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+
+    <div class="content_set">
+    <p class="error"> Sorry, there are no reviews available for this title. </p>
+    </div>
+
+    <!-- /TMPL_IF -->
+</div> <!-- itemReviews -->
+<!-- /TMPL_IF-->
+
+<!-- TMPL_IF NAME="SIMILAR_PRODUCTS" -->
+<h2>Similar Items</h2>
+
+<!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
+<!-- TMPL_LOOP NAME="product" -->
+
+<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
+    <!-- TMPL_LOOP NAME=items -->
+    <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
+    barcode:<!-- TMPL_VAR NAME="barcode" -->
+    <!-- /TMPL_LOOP -->
+
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
 <div class="export">
 <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
 <TABLE BORDER=1 BGCOLOR="#FFFFDD" style="width:300px; margin-right: auto; margin-left:auto;">  <TR>
       <TH>Save Record</TH>   </TR>
-  <TR>     <TD> Select Download Format:    <SELECT NAME=format>        <OPTION VALUE=mods>MODS (XML)</OPTION>
-        <OPTION VALUE=dc>Dublin Core (XML)</OPTION>        <OPTION VALUE=marcxml>MARCXML</OPTION>
+  <TR>     <TD> Select Download Format:    <SELECT NAME=format>        
+  		<OPTION VALUE=endnote>Endnote</OPTION>
+  		<OPTION VALUE=mods>MODS (XML)</OPTION>
+        <OPTION VALUE=dc>Dublin Core (XML)</OPTION>        
+		<OPTION VALUE=marcxml>MARCXML</OPTION>
         <OPTION VALUE=marc8>MARC (non-Unicode/MARC-8)</OPTION>
         <OPTION VALUE=utf8>MARC (Unicode/UTF-8)</OPTION>    </SELECT>
 <INPUT TYPE="SUBMIT" NAME="SAVE" VALUE="Download Record"></TD>
@@ -249,7 +302,7 @@
                 <tr>
                     <td><!--TMPL_VAR Name="serialseq"--></td>
                     <td><!--TMPL_VAR Name="planneddate"--></td>
-                    <td><!--TMPL_IF Name="status1"-->Waited
+                    <td><!--TMPL_IF Name="status1"-->Awaited
                         <!--TMPL_ELSE -->
                             <!-- TMPL_IF Name="status2"-->Arrived
                             <!--TMPL_ELSE -->

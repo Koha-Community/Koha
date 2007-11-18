@@ -1,6 +1,7 @@
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('acquisitions','normal','Choose Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions','simple|normal','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('advancedMARCeditor','0','If ON, the MARC editor won\'t display field/subfield descriptions','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonContent','0','Turn ON Amazon Content - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonSimilarItems','0','Turn ON Amazon Similar Items feature  - You MUST set AmazonDevKey and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonDevKey','','See: aws-portal.amazon.com/gp/aws/developer/registration/index.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag','','See: associates.amazon.com/gp/flex/associates/apply-login.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions','0','Set to anonymous borrowernumber to enable Anonymous suggestions',NULL,'free');

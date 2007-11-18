@@ -25,6 +25,7 @@ use strict;# use warnings; #FIXME: turn off warnings before release
 use MARC::Record; # marc2marcxml, marcxml2marc, html2marc, changeEncoding
 use MARC::File::XML; # marc2marcxml, marcxml2marc, html2marcxml, changeEncoding
 use MARC::Crosswalk::DublinCore; # marc2dcxml
+use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
 use XML::LibXSLT;
 use XML::LibXML;
@@ -39,6 +40,7 @@ $VERSION = 3.00;
 # only export API methods
 
 @EXPORT = qw(
+  &marc2endnote
   &marc2marc
   &marc2marcxml
   &marcxml2marc
@@ -286,6 +288,41 @@ sub marc2modsxml {
 	my $newxmlrecord = $stylesheet->output_string($results);
 	return ($newxmlrecord);
 }
+
+sub marc2endnote {
+    my ($marc) = @_;
+	my $marc_rec_obj =  MARC::Record->new_from_usmarc($marc);
+	my $f260 = $marc_rec_obj->field('260');
+	my $f260a = $f260->subfield('a') if $f260;
+    my $f710 = $marc_rec_obj->field('710');
+    my $f710a = $f710->subfield('a') if $f710;
+	my $f500 = $marc_rec_obj->field('500');
+	my $abstract = $f500->subfield('a') if $f500;
+	my $fields = {
+		DB => C4::Context->preference("LibraryName"),
+		Title => $marc_rec_obj->title(),	
+		Author => $marc_rec_obj->author(),	
+		Publisher => $f710a,
+		City => $f260a,
+		Year => $marc_rec_obj->publication_date,
+		Abstract => $abstract,
+	};
+	my $endnote;
+	my $style = new Biblio::EndnoteStyle();
+	my $template;
+	$template.= "DB - DB\n" if C4::Context->preference("LibraryName");
+	$template.="T1 - Title\n" if $marc_rec_obj->title();
+	$template.="A1 - Author\n" if $marc_rec_obj->author();
+	$template.="PB - Publisher\n" if  $f710a;
+	$template.="CY - City\n" if $f260a;
+	$template.="Y1 - Year\n" if $marc_rec_obj->publication_date;
+	$template.="AB - Abstract\n" if $abstract;
+	my ($text, $errmsg) = $style->format($template, $fields);
+	return ($text);
+	
+}
+
+
 =head2 html2marcxml
 
 =over 4
