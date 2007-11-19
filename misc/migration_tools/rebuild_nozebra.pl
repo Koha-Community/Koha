@@ -21,6 +21,7 @@ my $keep_export;
 my $reset;
 my $biblios;
 my $authorities;
+my $sysprefs;
 GetOptions(
 	'd:s'      => \$directory,
 	'reset'      => \$reset,
@@ -28,6 +29,7 @@ GetOptions(
 	'k'        => \$keep_export,
 	'b'        => \$biblios,
 	'a'        => \$authorities,
+	's'        => \$sysprefs,  # rebuild 'NoZebraIndexes' syspref
 	);
 
 $directory = "export" unless $directory;
@@ -38,7 +40,7 @@ $dbh->do("truncate nozebra");
 
 my %index = GetNoZebraIndexes();
 
-unless (%index) {
+if  (!%index || $sysprefs ) {
     if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
         $dbh->do("UPDATE systempreferences SET value=\"'title' => '200a,200c,200d,200e,225a,225d,225e,225f,225h,225i,225v,500*,501*,503*,510*,512*,513*,514*,515*,516*,517*,518*,519*,520*,530*,531*,532*,540*,541*,545*,604t,610t,605a',
         'author' =>'200f,600a,601a,604a,700a,700b,700c,700d,700a,701b,701c,701d,702a,702b,702c,702d,710a,710b,710c,710d,711a,711b,711c,711d,712a,712b,712c,712d',
@@ -56,7 +58,7 @@ unless (%index) {
         'host-item' => '995a,995c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
     } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
-		$dbh->do("UPDATE systempreferences SET values=\"'title' => '245a,245b',
+		$dbh->do("UPDATE systempreferences SET value=\"'title' => '245a,245b',
 		'author' => '100a',
 		'isbn' => '020a',
 		'issn' => '022a',
@@ -68,7 +70,7 @@ unless (%index) {
 		'subject' => '600a, 650a',
 		'dewey' => '082',
 		'bc' => '952p',
-		'host-item' => '952a, 952c'");
+        'host-item' => '952a,952c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
     }
 }
