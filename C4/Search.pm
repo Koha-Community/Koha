@@ -1413,11 +1413,11 @@ sub NZorder {
         my $result_hash;
         my $numbers=0;
         if ($ordering eq 'author_za') { # sort by author desc
-            foreach my $key (sort (keys %result)) {
+            foreach my $key (sort { $b cmp $a } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         } else { # sort by author ASC
-            foreach my $key (sort { $a cmp $b } (keys %result)) {
+            foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         }
@@ -1449,7 +1449,7 @@ sub NZorder {
         my $result_hash;
         my $numbers=0;
         if ($ordering eq 'call_number_dsc') { # sort by title desc
-            foreach my $key (sort (keys %result)) {
+            foreach my $key (sort { $b cmp $a } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         } else { # sort by title ASC
@@ -1466,7 +1466,7 @@ sub NZorder {
         foreach (split /;/,$biblionumbers) {
             my ($biblionumber,$title) = split /,/,$_;
             my $record=GetMarcBiblio($biblionumber);
-            my ($publicationyear_tag,$publicationyear_subfield)=GetMarcFromKohaField($dbh,'biblioitems.publicationyear');
+            my ($publicationyear_tag,$publicationyear_subfield)=GetMarcFromKohaField('biblioitems.publicationyear','');
             my $publicationyear=$record->subfield($publicationyear_tag,$publicationyear_subfield);
             # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
             # and we don't want to get only 1 result for each of them !!!
@@ -1476,11 +1476,11 @@ sub NZorder {
         my $result_hash;
         my $numbers=0;
         if ($ordering eq 'pubdate_dsc') { # sort by pubyear desc
-            foreach my $key (sort (keys %result)) {
+            foreach my $key (sort { $b cmp $a } (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         } else { # sort by pub year ASC
-            foreach my $key (sort { $b cmp $a } (keys %result)) {
+            foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key}->as_usmarc();
             }
         }
@@ -1505,7 +1505,7 @@ sub NZorder {
         # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers=0;
-        if ($ordering eq 'title_za') { # sort by title desc
+        if ($ordering eq 'title_az') { # sort by title desc
             foreach my $key (sort (keys %result)) {
                 $result_hash->{'RECORDS'}[$numbers++] = $result{$key};
             }
