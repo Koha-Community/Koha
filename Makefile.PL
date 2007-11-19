@@ -127,6 +127,7 @@ WriteMakefile(
 'MIME::Base64' => 3.07,
 'MIME::QuotedPrint' => 3.07,
 'Mail::Sendmail' => 0.79,
+'Net::Z3950::ZOOM' => 1.16,
 'PDF::API2' => 2.000,
 'PDF::API2::Page' => 2.000,
 'PDF::API2::Util' => 2.000,
@@ -149,7 +150,6 @@ WriteMakefile(
 'XML::SAX::ParserFactory' => 1.01,
 'XML::Simple' => 2.14,
 'XML::RSS' => 1.31,
-'ZOOM' => 1.16,
         },
 
 	# File tree mapping
