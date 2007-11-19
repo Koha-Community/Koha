@@ -67,16 +67,8 @@ while (my ($biblionumber)= $sth->fetchrow) {
         $nbitems++;
     }
 #     print "$biblionumber\n";
-    # now, create biblio and items with NEWnewXX call.
     my $frameworkcode = GetFrameworkCode($biblionumber);
     localNEWmodbiblio($dbh,$record,$biblionumber,$frameworkcode) unless $test_parameter;
-#     warn 'B=>'.$record->as_formatted;
-#     print "biblio done\n";
-    for (my $i=0;$i<=$#items;$i++) {
-        my $tmp = TransformMarcToKoha($dbh,$items[$i],$frameworkcode) unless $test_parameter; # finds the itemnumber
-        localNEWmoditem($dbh,$items[$i],$biblionumber,$tmp->{itemnumber},0) unless $test_parameter;
-#         print "1 item done\n";
-    }
 }
 # $dbh->do("unlock tables");
 my $timeneeded = time() - $starttime;
@@ -93,17 +85,3 @@ sub localNEWmodbiblio {
     return 1;
 }
 
-sub localNEWmoditem {
-    my ( $dbh, $record, $biblionumber, $itemnumber, $delete ) = @_;
-#     warn "NEWmoditem $biblionumber / $itemnumber / $delete ".$record->as_formatted;
-    my $frameworkcode=GetFrameworkCode($biblionumber);
-    my $olditem = TransformMarcToKoha( $dbh, $record, $frameworkcode, 'items' );
-#     warn "OLDITEM : ".Data::Dumper::Dumper( $olditem );
-    my $sth =  $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
-    $sth->execute($biblionumber);
-    my ($biblioitemnumber) = $sth->fetchrow;
-    $sth->finish(); 
-    $olditem->{'biblioitemnumber'} = $biblioitemnumber;
-    C4::Biblio::_koha_modify_item( $dbh, $olditem );
-#     die;
-}
