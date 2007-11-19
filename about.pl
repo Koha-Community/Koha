@@ -79,6 +79,7 @@ LWP::UserAgent
 Lingua::Stem
 List::Util
 Locale::Language
+MARC::Crosswalk::DublinCore
 MARC::Charset
 MARC::File::XML
 MARC::Record
@@ -104,6 +105,7 @@ Time::localtime
 Unicode::Normalize
 XML::Dumper
 XML::LibXML
+XML::LibXSLT
 XML::SAX::ParserFactory
 XML::Simple
 XML::RSS
