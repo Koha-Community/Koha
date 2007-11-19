@@ -1,8 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Add to My Virtual Shelf
+<!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog &rsaquo; Add to My Virtual Shelf
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+   #custom-doc { width:34.62em;*width:33.78em;min-width:450px; margin:auto; margin-top: .4em;text-align:left; } 
+   </style>
 </head>
 <body>
+<div id="custom-doc" class="yui-t7">
+
 <!-- TMPL_IF NAME="multiple"-->
     <h1>Add these <!-- TMPL_VAR NAME="total"--> biblios to a shelf</h1>
         <!-- TMPL_LOOP NAME="biblios"-->
@@ -20,31 +25,31 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="CGIvirtualshelves"-->
-<form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="POST">
-    <p><b>Select an Existing Virtualshelf</b></p>
-    <label>Add to virtual shelf</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" -->
+<form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+    <fieldset class="rows"><legend>Select an Existing List</legend>
+<ol><li>    <label for="shelfnumber">Add to list:</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" --></li></ol>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    <input type="hidden" name="modifyshelfcontents" value="1" />
-    <input type="submit" value="Add to virtual shelf" class="submit" />
+    <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
 </form>
 <p>...or...</p>
 <!-- /TMPL_IF -->
 
-<form name="f2" method="POST" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
-    <b>Add to a New Virtualshelf:</b>
-        <p>
+<form name="f2" method="post" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
+<fieldset class="rows">    <legend>Add to a New List:</legend>
+        <ol><li>
             <label for="newvirtualshelf">
                 Shelf Name:
             </label>
             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
-        </p>
-            <label for="category">Category:</label>
+        </li>
+         <li><label for="category">Category:</label>
             <select name="category" id="category">
                 <option value="1">Private</option>
                 <option value="2">Public</option>
-            </select>
+            </select></li></ol></fieldset>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    <input type="submit" value="Add to virtual shelf" class="submit" /> 
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
 </form>
 
 <p align="center">

@@ -33,16 +33,14 @@ function confirm_deletion() {
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
-	    $("#viewmarc").parent().remove();
-	    $("#viewisbd").parent().remove();
-	    $("#viewitems").parent().remove();
-		$("#viewmenuc").empty();
 	    $("#edititems").parent().remove();
 	    $("#duplicatebiblio").parent().remove();
 		$("#deletebiblio").parent().remove();
 	    $("#editmenuc").empty();
 		$("#addtoshelfc").empty();
 		$("#printbiblioc").empty();
+		$("#export").remove();
+		$("#addtoshelfc").before("<li id=\"savemenuc\"></li>");
 	    yuiToolbar();
 	 });
 
@@ -55,20 +53,21 @@ function confirm_deletion() {
 	        { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=duplicate" },
 			{ text: "Delete Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->",<!-- TMPL_IF NAME="count" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
 	    ];
-
-		var viewmenu = [
-	        { text: "Normal Display", url: "/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->", selected: true },
-	        { text: "MARC Display", url: "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
-	        { text: "ISBD Display", url: "/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
-	        { text: "Items Display", url: "/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" }
-	    ];
+		
+		var savemenu = [
+		{ text: "MODS (XML)", url: "/cgi-bin/koha/catalogue/export.pl?format=mods&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		{ text: "Dublin Core (XML)", url: "/cgi-bin/koha/catalogue/export.pl?format=dc&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		{ text: "MARCXML", url: "/cgi-bin/koha/catalogue/export.pl?format=marcxml&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		{ text: "MARC (non-Unicode/MARC-8)", url: "/cgi-bin/koha/catalogue/export.pl?format=marc8&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		{ text: "MARC (Unicode/UTF-8)", url: "/cgi-bin/koha/catalogue/export.pl?format=utf8&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		];
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "View",
-	        name: "viewmenubutton",
-	        menu: viewmenu,
-	        container: "viewmenuc"
+	        label: "Save",
+	        name: "savemenubutton",
+	        menu: savemenu,
+	        container: "savemenuc"
 	    });
 	    
 		new YAHOO.widget.Button({
@@ -113,11 +112,6 @@ function confirm_deletion() {
 	<li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=duplicate">Duplicate Record</a></li>
 	<li><a id="deletebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Delete</a></li>
 	
-	<li id="viewmenuc"><a id="viewnormal" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal View</a></li>
-	<li><a id="viewmarc" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></li>
-	<li><a id="viewisbd" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></li>
-	<li><a id="viewitems" href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Items View</a></li>
-
 	<li id="addtoshelfc"><a id="addtoshelf" href="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add to shelf</a></li>
 	<li id="printbiblioc"><a id="printbiblio" href="/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Print</a></li>
         <!-- TMPL_UNLESS name="bi_notforloan" -->

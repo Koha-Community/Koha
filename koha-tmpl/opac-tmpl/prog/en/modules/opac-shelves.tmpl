@@ -1,15 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> Catalog -- <!-- TMPL_IF Name="viewshelf" -->Contents of <!-- TMPL_VAR Name="shelfname" --><!-- TMPL_ELSE -->My Virtual Shelves<!-- /TMPL_IF --><!-- TMPL_INCLUDE name="doc-head-close.inc" -->
 </head>
-<!-- TMPL_IF NAME="OpacNav" --> <body id="withnav">
-<!--TMPL_ELSE-->
 <body>
-<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
-<div id="main_wrapper">
-<div id="main" class="searchresults">
-<div class="content-block">
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 <!-- TMPL_IF Name="viewshelf" -->
 <h3><a href="/cgi-bin/koha/opac-shelves.pl">Virtual Shelves</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <!-- TMPL_IF NAME="itemsloop" --><em><!-- TMPL_VAR Name="shelfname" --></em><!-- TMPL_ELSE -->The Virtual Shelf <em><!-- TMPL_VAR Name="shelfname" --></em> is empty<!-- /TMPL_IF --></h3>
 <form class="inline" action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform">
@@ -179,5 +176,9 @@
 </div>
 </div>
 </div>
-
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

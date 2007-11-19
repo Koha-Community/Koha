@@ -1,9 +1,13 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Library Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> &rsaquo; Library Catalog &rsaquo; <!-- TMPL_IF name="total" -->Authority Search Result<!-- TMPL_ELSE -->No results found<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 	<h1>Authority search results</h1>
 	<div id="pages">
@@ -31,6 +35,7 @@
 			<!-- /TMPL_IF -->
 		</div>
 
+			<!-- TMPL_IF name="total" -->
 <div class="searchresults">
 		<table>
 			<tr>
@@ -75,4 +80,13 @@
 				<!-- /TMPL_IF -->
 		</p>
 	</div>	
+			<!-- /TMPL_IF -->
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

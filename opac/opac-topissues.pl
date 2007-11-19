@@ -84,6 +84,8 @@ while (my $line= $sth->fetchrow_hashref) {
     push @results, $line;
 }
 
+if($timeLimit eq 999){ $timeLimit = 0 };
+
 $template->param(do_it => 1,
                 limit => $limit,
                 branch => $branches->{$branch}->{branchname},

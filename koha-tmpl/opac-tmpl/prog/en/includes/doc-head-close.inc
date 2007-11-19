@@ -24,7 +24,6 @@
         <![endif]-->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tabs.pack.js"></script>
-<script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/main.js"></script>
 <!-- TMPL_IF NAME="AmazonContent" --><script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
@@ -38,3 +37,10 @@
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your book bag");
 </script>
+<!-- TMPL_IF NAME="opacuserjs" -->
+<script language="JavaScript" type="text/javascript">
+	//<![CDATA[
+	<!-- TMPL_VAR NAME="opacuserjs" -->
+	//]]>
+</script>	
+<!-- /TMPL_IF -->

@@ -1,19 +1,23 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> -- Library Catalog
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
-
 <script language="JavaScript" type="text/javascript">
 function Dopop(link) {
     newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
 </script>
-    <fieldset>
-    <legend>Show</legend>
+</head>
+<body>
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
         <form method="post">
-            <p>the <select name="limit">
+		<fieldset class="rows">
+		<legend>See the Most Popular Titles</legend>
+          <ol>  <li><label for="limit">Show the top </label> <select name="limit" id="limit">
                             <option value ="10" checked>10</option>
                             <option value ="15">15</option>
                             <option value ="20">20</option>
@@ -21,9 +25,11 @@ function Dopop(link) {
                             <option value ="40">40</option>
                             <option value ="50">50</option>
                             <option value ="100">100</option>
-                        </select>
-                most issued documents owned by branch 
-                <select name="branch">
+                        </select> titles
+						</li>
+				<li>
+               <label for="branch">From: </label>
+                <select name="branch" id="branch">
                 <option value="">All branches</option>
                 <!-- TMPL_LOOP name="branchloop" -->
                     <option value="<!-- TMPL_VAR name="value" -->">
@@ -31,40 +37,43 @@ function Dopop(link) {
                     </option>
                 <!-- /TMPL_LOOP -->
                 </select>
-            </p>
-            <p>Limit palmares to
-                    <select name="itemtype">
+            </li>
+            <li><label for="itemtype">Limit to: </label>
+                    <select name="itemtype" id="itemtype">
                         <option value="">All item types</option>
                         <!-- TMPL_LOOP name="itemtypeloop" -->
                             <option value="<!-- TMPL_VAR name="value" -->">
                                 <!-- TMPL_VAR name="description" -->
                             </option>
                         <!-- /TMPL_LOOP -->
-                    </select>
-            acquired in the last <select name="timeLimit">
+                    </select></li>
+			<li>
+            <label for="timeLimit">Acquired in the last:</label> <select name="timeLimit" id="timeLimit">
                 <option value="3">3 months</option>
                 <option value="6">6 months</option>
                 <option value="12">12 months</option>
                 <option value="999">No limit</option>
-            <p>
-        <input TYPE="submit" value="OK" class="button reports">
-        <input type="hidden" name="do_it" value="1">
+            <li></ol>
+        <input type="hidden" name="do_it" value="1" />
+    </fieldset><fieldset class="action">
+        <input type="submit" value="Submit" /></fieldset>
         </form>
-    </fieldset>
+
     <!-- TMPL_IF NAME="results_loop" -->
-    <h1>The <!-- TMPL_VAR NAME="limit"--> most issued 
+    
+        <table>
+		<caption>The <!-- TMPL_VAR NAME="limit"--> most checked-out 
         <!-- TMPL_IF name="itemtype" -->
             <!-- TMPL_VAR name="itemtype" -->
-        <!-- TMPL_ELSE --> documents<!-- /TMPL_IF -->
-        available at
+        <!-- TMPL_ELSE --> titles<!-- /TMPL_IF -->
         <!-- TMPL_IF name="branch" -->
+        at 
         <!-- TMPL_VAR name="branch" -->
-        <!-- TMPL_ELSE --> the library<!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
         <!-- TMPL_IF name="timeLimit" -->
-        since <!-- TMPL_VAR name="timeLimit" --> months
-        <!-- TMPL_ELSE --> (no time limit)<!-- /TMPL_IF -->
-    </h1>
-        <table>
+        in the past <!-- TMPL_VAR name="timeLimit" --> months
+        <!-- TMPL_ELSE --> of all time<!-- /TMPL_IF -->
+    </caption>
             <tr>
                 <th>Title</th>
                 <th>Itemtype</th>
@@ -91,4 +100,12 @@ function Dopop(link) {
         </table>
    <!-- /TMPL_IF -->
 
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

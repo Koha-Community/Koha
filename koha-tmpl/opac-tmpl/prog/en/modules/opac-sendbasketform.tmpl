@@ -1,14 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Sending Your Book Bag
 <!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" -->
 </head>
-<body>
-<div id="window">
-<h3>Sending your book bag</h3>
-
+<body style="padding: 1em;">
 <!-- TMPL_IF NAME="email_add" -->
 
 	<!-- TMPL_IF NAME="SENT" -->
+		<h3>Message Sent</h3>
 	    <p>The book bag was sent to: <!-- TMPL_VAR NAME="email_add" --></p>
+		<p><a href="#" onclick="window.close(); return false;">Close window</a></p>
 	<!-- /TMPL_IF  -->
 	<!-- TMPL_IF NAME="error" -->
 	<p>Problem sending the book bag...</p>
@@ -18,28 +17,22 @@
 
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
 
-    <p>
+<fieldset class="rows"> 
+<legend>Sending your book bag</legend>
+<ol>   <li>
         <label for="email_add">E-mail Address:</label>
-        <input type="text" id="email_add" name="email_add" size="35" />
-    </p>
-    <p>
-            <label for="comment">Comment</label><br />
-            <textarea id="comment" name="comment" rows="7" cols="50"></textarea>
-    </p>
-    <p>
-        <input type="submit" value="Send" />
+        <input type="text" id="email_add" name="email_add" size="43" />
+    </li>
+    <li>
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+    </li>
+    <li>
         <input type="hidden" name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
-    </p>
+    </li></ol></fieldset>
+       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel" href="#" onclick="window.close(); return false;">Cancel</a> </fieldset>
 </form>
 
 <!-- /TMPL_IF -->
-<p>
-
-    <form action="opac-sendbasket.pl" method="get" />
-        <input type="submit" value="Close Window" onclick="window.close(); return false;" />
-    </form>
-</p>
-
-</div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -18,9 +18,9 @@
 
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
     <div class="yui-gb">
-    <h2><!-- TMPL_VAR NAME="title" --></h2>	
 	<div id="catalogue_detail_biblio" class="yui-u first">
-
+		
+    <h3><!-- TMPL_VAR NAME="title" --></h3>	
         <p>
             [
             <!-- TMPL_IF name="description" -->
@@ -51,16 +51,13 @@
         <!-- TMPL_IF name="illus" -->
             <li><strong>Illustrator:</strong> <!-- TMPL_VAR name="illus" --></li>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="publishercode" -->
-            <li><strong>Publisher:</strong>
-                <a href="/cgi-bin/koha/catalogue/search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode" -->">
-                    <!-- TMPL_VAR NAME="publishercode" -->
-                </a>
-            </li>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="publicationyear" -->
-            <li>in:<!-- TMPL_VAR NAME="publicationyear" --></li>
-        <!-- /TMPL_IF -->
+		<!-- TMPL_IF name="publishercode" -->
+    <li><strong>Published by:</strong>
+        <a href="/cgi-bin/koha/opac-search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode"-->">
+            <!-- TMPL_VAR NAME="publishercode" --> 
+        </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+    </li>
+    <!-- /TMPL_IF -->
         <li><strong>Description:</strong>
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
@@ -68,14 +65,13 @@
 		</ul>
 		</div>
 		
-
-<div class="yui-u">
-		<!-- TMPL_IF NAME="AmazonContent" -->
-		<a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover image" /></a>
-		<!-- TMPL_ELSE -->
-		<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
-		<!-- /TMPL_IF --></div>		
-		<div class="yui-u">
+<div class="yui-u"><!-- TMPL_IF NAME="AmazonContent" -->
+		<!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
+<!-- TMPL_ELSE -->
+	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
+<!-- /TMPL_IF --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></div>
+		
+		<div class="yui-u" style="margin-top: 1em;">
 		<ul>
         <!-- TMPL_IF name="isbn" -->
             <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li>
@@ -134,10 +130,9 @@
 
 </div>
 
-<div class="yui-g">
+<div class="yui-g" style="margin-top : 1em;">
 <!-- TMPL_IF name="count" -->
     <div id="catalogue_detail_items">
-        <caption><!-- TMPL_VAR NAME="count" --> item(s)</caption>
         <table>
             <tr>
                 <th>Item type</th>
@@ -213,75 +208,26 @@
 <!-- /TMPL_LOOP -->
 </ul>
 <!-- /TMPL_IF -->
+</div>
 
-<!-- TMPL_IF NAME="AmazonContent" -->
-<!-- Amazon Reviews -->
-<div id="itemReviews">
-        <h2>Amazon Reader Reviews:</h2>
-        <h4>
-    <!-- TMPL_IF NAME="amazonisbn" -->
-        <a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="amazonisbn" -->&store=books">Add your own review</a></h4>
-    <!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="rating" -->
-		<h4>Rating (from Amazon.com):</h4>
-        <div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
-        <!-- TMPL_LOOP NAME="AMAZONREVIEWS" -->
-            <div class="content_set">
-            <!-- TMPL_IF NAME="summary" -->
-            <h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
-            <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="comment" -->
-                <p><!-- TMPL_VAR NAME="comment" --></p>
-			<!-- /TMPL_IF -->
-            </div>
-    	<!-- /TMPL_LOOP -->
-    <!-- TMPL_ELSE -->
-
-    <div class="content_set">
-    <p class="error"> Sorry, there are no reviews available for this title. </p>
-    </div>
-
-    <!-- /TMPL_IF -->
-</div> <!-- itemReviews -->
-<!-- /TMPL_IF-->
-
-<!-- TMPL_IF NAME="SIMILAR_PRODUCTS" -->
-<h2>Similar Items</h2>
-
-<!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
-<!-- TMPL_LOOP NAME="product" -->
-
-<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
-    <!-- TMPL_LOOP NAME=items -->
-    <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
-    barcode:<!-- TMPL_VAR NAME="barcode" -->
-    <!-- /TMPL_LOOP -->
-
-<!-- /TMPL_LOOP -->
-<!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
-
-<div class="export">
+<div class="yui-g" id="export" style="margin-top: 1em;">
 <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
-<TABLE BORDER=1 BGCOLOR="#FFFFDD" style="width:300px; margin-right: auto; margin-left:auto;">  <TR>
-      <TH>Save Record</TH>   </TR>
-  <TR>     <TD> Select Download Format:    <SELECT NAME=format>        
-  		<OPTION VALUE=endnote>Endnote</OPTION>
-  		<OPTION VALUE=mods>MODS (XML)</OPTION>
-        <OPTION VALUE=dc>Dublin Core (XML)</OPTION>        
-		<OPTION VALUE=marcxml>MARCXML</OPTION>
-        <OPTION VALUE=marc8>MARC (non-Unicode/MARC-8)</OPTION>
-        <OPTION VALUE=utf8>MARC (Unicode/UTF-8)</OPTION>    </SELECT>
-<INPUT TYPE="SUBMIT" NAME="SAVE" VALUE="Download Record"></TD>
-  </TR>  <TR><input type="hidden" name="op" value="export" /><INPUT TYPE="HIDDEN" NAME="bib" VALUE=<!-- TMPL_VAR NAME="biblionumber" -->/>
-  </TR></TABLE>
+<table>  <tr>
+      <th>Save Record</th>   </tr>
+  <tr>     <td> Select Download Format:    <select name="format">
+ 		<option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+		<option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
+		<input type="submit" name="save" value="Download Record" /></td>
+  </tr>
+  <tr><input type="hidden" name="op" value="export" /><input type="hidden" NAME="bib" VALUE="<!-- TMPL_VAR name="biblionumber" -->" />
+  </tr></table>
 </form>
 </div>
 
 
-</div>
 
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div class="yui-g">

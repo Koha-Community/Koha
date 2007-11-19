@@ -111,38 +111,24 @@
 <!-- TMPL_ELSE -->
 
     <div class="searchresults">
-<form action="/cgi-bin/koha/opac-search.pl" method="post" name="myform" id="mainform">
+<form action="/cgi-bin/koha/opac-search.pl" method="post" name="bookbag_form" id="bookbag_form">
     
     <!-- TMPL_IF NAME="searchdesc" -->
     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
     <!-- /TMPL_IF -->
     
         
-        <!-- RE-SORT START -->
-        <p style="float: right;">
-            Re-sort results
-            <select id="sort_by" name="sort_by" onChange="javascript:document.myform.submit();">
-                <!--TMPL_INCLUDE Name="resort_form.inc"-->
-            </select>
-        </p>
-        <!-- RESORT END -->
-        
-        <!-- TMPL_IF name="opacbookbag" -->
-            <input type="button" class="button" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
-            <input type="reset" value="Clear All" class="button" />
-        <!-- /TMPL_IF -->
+
 		
         <!-- TABLE RESULTS START -->
         <table>
-            <tr>
-                <th><input type="checkbox" name="select_all" onclick="SelectAll()" /></th>
-                <th>Title</th>
-                <th>Item count</th>
-                <th>Location</th>
-                <!-- TMPL_IF NAME="RequestOnOpac" -->
-                <th>Reservation</th>
-                <!-- /TMPL_IF -->
-            </tr>
+		<tr><td colspan="3"><p class="searchresults">
+		<!-- RE-SORT START --> <label><select id="sort_by" name="sort_by" onchange="document.myform.submit();"> <!--TMPL_INCLUDE Name="resort_form.inc"--> </select></label> <!-- RESORT END -->
+        
+        <!-- TMPL_IF name="opacbookbag" --><a href="#" onclick="SelectAll()"><img src="/opac-tmpl/prog/images/checkall.gif" alt="Check All" border="0"></a>
+            <input type="button" class="button" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
+            <input type="reset" value="Clear All" class="button" />
+        <!-- /TMPL_IF --></p></td></tr>
             <!-- Actual Search Results -->
             <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
             <!-- TMPL_IF name="even" -->
@@ -150,11 +136,7 @@
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-                    <td>
-                        <!-- TMPL_IF name="opacbookbag" -->
-                            <input type="checkbox" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to book bag" />
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF NAME="AmazonContent" -->
+                    <td>                        <!-- TMPL_IF NAME="AmazonContent" -->
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                             <img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" />
                         </a>
@@ -166,48 +148,38 @@
                         <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
                     </td>
-                    <td>
-                        <p>
-                            <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                            <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <b><!-- TMPL_VAR NAME="title" --></b>
-                            </a> <!-- TMPL_VAR NAME="subtitle" -->
-                            <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                            <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <b><!-- TMPL_VAR NAME="title" --></b>
-                            </a> <!-- TMPL_VAR NAME="subtitle" -->
-                            <!-- TMPL_ELSE -->
-                            <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <b><!-- TMPL_VAR NAME="title" --></b>
-                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
-                            <!-- /TMPL_IF -->
-                            <!-- /TMPL_IF -->
-                        </p>
-                        <!-- TMPL_IF name="summary" -->
-                        <p><!-- TMPL_VAR name="summary" --></p>
-                        <!-- TMPL_ELSE -->
-                        <p>
-                            <!-- TMPL_IF NAME="author" -->
-                            <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a>
-                            <!-- TMPL_ELSE -->
-                            &nbsp;
-                            <!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
-                            <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
-                        </p>
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <td >
-                        <!-- TMPL_IF NAME="items_count" -->
-                        <!-- TMPL_VAR NAME="items_count" -->
-                        <!-- /TMPL_IF-->
-                    </td>          
-                    <td width="20%">
+                    <td><!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->by <a href="/search?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+				<p> <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF --></p>
+				<p class="availability">
+<!-- TMPL_IF NAME="items_loop" -->
+<span class="available"><strong>Copies available at:</strong> <!-- TMPL_LOOP NAME="items_loop" -->
+                <!-- <!-- TMPL_VAR NAME="branchcode" --> -->
+                <!-- TMPL_VAR NAME="branchname" -->
+                (<!-- TMPL_VAR NAME="count" -->),
+<!-- /TMPL_LOOP --></span>
+<!-- TMPL_ELSE -->
+<span class="unavailable">No copies available: </span>
+<!-- /TMPL_IF -->
+<span class="unavailable">
+<!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->), <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->), <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->)<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF --></span>
+				</p>
+		<p><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->">Place Reserve</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!--TMPL_IF NAME="opacbookbag" --><input type="checkbox" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to book bag" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="ccode" -->" title="<!-- TMPL_VAR NAME="ccode" -->" /><!--TMPL_IF NAME="opacbookbag" --></label><!-- /TMPL_IF --> <!-- TMPL_IF name="classification" -->
+                                    <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
+                                        <!-- TMPL_VAR NAME="classification" -->
+                                    </a>
+                                <!-- /TMPL_IF --></p> 
+			</td>
+                    <!-- /TMPL_IF -->
+					<td width="20%">
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
                             <!-- TMPL_LOOP NAME="items_loop" -->
@@ -232,17 +204,6 @@
                         </span>
                         <!-- /TMPL_IF -->
                     </td>
-                    <!-- TMPL_IF NAME="RequestOnOpac" -->
-                    <td>
-                        <!-- TMPL_IF NAME="norequests" -->
-                        Not Reserveable
-                        <!-- TMPL_ELSE -->
-                        <a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                            Reserves
-                        </a>
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <!-- /TMPL_IF -->
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>

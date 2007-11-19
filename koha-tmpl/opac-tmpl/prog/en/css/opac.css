@@ -169,9 +169,15 @@ h6 {
 
 input[type=submit], input[type=button], input[type=reset] {
 	background-color : #6BA037;
+	border:1px outset #666666;
 	color : #FFFFFF;
+	font-size : 93%;
 	font-weight : bold;
 	padding : 2px;
+}
+
+input[type=submit]:active, input[type=button], input[type=reset] {
+	border: 1px inset #666666;
 }
 
 p.searchresults {
@@ -183,6 +189,7 @@ table {
 	margin : 1em 0;
 	border-right : 1px solid #dddddd;
 	border-top : 1px solid #dddddd;
+	width : 100%;
 }
 
 td,th {
@@ -623,4 +630,99 @@ h2 span.hint {
 }
 a.cancel {
 	padding-left : 1em;
+}
+
+#usermenu {
+	margin-top : 1em;
+}
+
+#toolbar ul {
+	margin : 1em 0 0 0;
+	padding : 0;
+}
+
+#toolbar ul li {
+	display : inline;
+	list-style : none;
+}
+
+#toolbar ul li a {
+	border : 1px solid #afbccf;
+	padding : .3em;
+	text-decoration : none;
+	margin-right : .1em;
+}
+
+.searchresults input, .searchresults label, .searchresults select {
+	font-size: 90%;
+}
+
+.searchresults label {
+	float : right;
+	margin-top : 5px;
+}
+
+.searchresults p {
+	margin: 0;
+	padding: 0;
+	padding-top : .6em;
+}
+
+.searchresults p img {
+	vertical-align: middle;
+}
+
+.searchresults table td {
+	vertical-align: top;
+}
+
+p.searchresults {
+	background-color : #EFF1DC;
+	margin-top : -5px;
+	vertical-align : middle;
+	padding : 3px 3px 5px 5px;
+}
+
+.searchresults td, .searchresults th, .searchresults table {
+	border: 0;
+}
+
+.searchresults tr {
+	border-bottom : 1px solid #CCCCCC;
+}
+
+.searchresults table {
+	border-top : 0px solid #CCCCCC;
+}
+
+p.availability {
+	color:#666666;
+}
+
+.available {
+	font-size: 90%;
+}
+
+.searchresults a.reserve, .searchresults a.reserve:visited {
+	background-position:left top;
+	background-repeat:no-repeat;
+	float:right;
+	padding:2px 3px 2px 26px;
+}
+
+.searchresults a.reserve {
+	background-color:transparent;
+	color:#006699;
+}
+
+input.reserve, a.reserve {
+	background-image:url(/opac-tmpl/prog/images/placereserve.gif);
+}
+
+a.reserve {
+	background-color:#006699;
+	color:White;
+}
+.unavailable {
+	color: #990033;
 }

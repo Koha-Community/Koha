@@ -2,8 +2,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
     <h1>Subject cloud</h1>
     <p>This "cloud" show you the most used topics in our catalogue. Click on one of them to see the documents related to it</p>
@@ -18,4 +22,13 @@
         <!-- TMPL_LOOP name="LOOP" -->
             <a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR name="entry" ESCAPE="HTML" -->" style="font-size:<!-- TMPL_VAR name="weight" -->px;"><!-- TMPL_VAR name="entry" --></a>
         <!-- /TMPL_LOOP -->
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

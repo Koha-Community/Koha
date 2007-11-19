@@ -3,8 +3,15 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
- 		$('#bibliodescriptions').tabs();
-	 });
+ 			var $tabs = $('#bibliodescriptions').tabs({
+   			onClick: function(tab) {
+		       if ( $(tab).is('.external') ) {
+		           location.href = tab.href;
+		           return false;
+		       }
+		   }
+		});
+	 }); 
 //]]>
 </script>
 </head>
@@ -172,7 +179,7 @@
 
         <!-- TMPL_IF NAME="ISBD" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></li><!-- /TMPL_IF -->
 
-	<li> <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+	<li> <a class="external" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             MARC View
         </a></li>
 </ul>

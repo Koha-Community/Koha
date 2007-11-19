@@ -1,43 +1,31 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_VAR NAME="LibraryNameTitle" -->
-    Catalog -- Your Book Bag
-    <!-- TMPL_IF NAME="print_basket" -->
-        <!-- TMPL_INCLUDE NAME="doc-head-close-basket-print.inc" -->
-    <!-- TMPL_ELSE -->
-    <!-- TMPL_INCLUDE NAME="doc-head-close-basket.inc" -->
-<!-- /TMPL_IF -->
+<!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog &rsaquo; Your Book Bag
+    <!-- TMPL_IF NAME="print_basket" --></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<meta http-equiv="Content-Language" content="en-us" />
+<style type="text/css"> 
+    @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
+</style>
+    <!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><!-- /TMPL_IF -->
 </head>
 <body>
 
-<div> <!-- main -->
+<div id="doc" class="yui-t7">
 
 <!-- TMPL_UNLESS NAME="print_basket" -->
 <h1>Your Book Bag</h1>
 
-<div id="action">
-        <!-- TMPL_IF NAME="verbose" -->
-        <a href="opac-basket.pl" onclick="showLess(); return false;">Brief Display</a>
-        <!-- TMPL_ELSE -->
-        <a href="opac-basket.pl" onclick="showMore(); return false;">More Details</a>
-        <!-- /TMPL_IF -->
-        <a href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a>
-        <a href="opac-basket.pl" onclick="printBasket(); return false;">Print</a>
-        <a href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a>
-        <a href="opac-basket.pl" onclick="quit(); return false;">Hide Window</a>
+<div id="toolbar">
+<ul>
+	<li><!-- TMPL_IF NAME="verbose" --><a href="opac-basket.pl" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="opac-basket.pl" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF --></li>
+	<li><a href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>
+	<li><a href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
+	<li><a href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
+	<li><a href="opac-basket.pl" onclick="quit(); return false;">Hide Window</a></li>
+</ul>
         <!-- /TMPL_UNLESS -->
 </div>
-<br />
-<p>
-<b>Selected items :</b>
-<a href="javascript:delSelRecords();">
-    Remove
-</a> | 
-<!-- TMPL_IF NAME="loggedinusername" -->
-    <a href="javascript:addSelToShelf();">
-        Add to a shelf
-    </a>
-<!-- /TMPL_IF -->
-</p>
 
 <!-- TMPL_IF NAME="verbose" -->
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -47,18 +35,14 @@
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <form>
-                <input type="checkbox"
-                        value="<!-- TMPL_VAR NAME="biblionumber" -->"
-                        name="bib<!-- TMPL_VAR NAME="biblionumber" -->"
-                        id="bib<!-- TMPL_VAR NAME="biblionumber" -->"
-                        onclick="selRecord(value,checked)" />
+                <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
                 <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
             </form>
         <!-- /TMPL_IF -->
     </h3>
     <table>
-    
+    	
         <!-- TMPL_IF name="isbn" -->
         <tr>
             <th scope="row">ISBN</th>
@@ -170,14 +154,24 @@
     <!-- /TMPL_LOOP -->
 
 <!-- TMPL_ELSE -->
+	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form">
     <table>
+				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td><a href="#" onclick="SelectAll()"><img src="/opac-tmpl/prog/images/checkall.gif" alt="Check All" border="0" /></a></td><td colspan="3"><b>Selected items :</b>
+<a href="javascript:delSelRecords();">
+    Remove
+</a> | 
+<!-- TMPL_IF NAME="loggedinusername" -->
+    <a href="javascript:addSelToShelf();">
+        Add to a shelf
+    </a>
+<!-- /TMPL_IF --></td></tr><!-- /TMPL_UNLESS -->
         <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
             <!-- TMPL_IF NAME="even" -->
                 <tr class="highlight">
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-            <td><form>
+            <td>
                     <!-- TMPL_UNLESS NAME="print_basket" -->
                         <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
                         </label>

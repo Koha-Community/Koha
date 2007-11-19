@@ -1,5 +1,19 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- ISBD
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog &rsaquo; ISBD View
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+ 			var $tabs = $('#bibliodescriptions').tabs({
+   			onClick: function(tab) {
+		       if ( $(tab).is('.external') ) {
+		           location.href = tab.href;
+		           return false;
+		       }
+		   }
+		});
+	 }); 
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
@@ -9,39 +23,55 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-<div id="action">
+<div id="toolbar">
 
-<!-- TMPL_UNLESS NAME="norequests" -->
+<ul><!-- TMPL_UNLESS NAME="norequests" -->
 	<!-- TMPL_IF NAME="RequestOnOpac" -->
-		<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+		<li><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
 		Place Reserve
-		</a>
+		</a></li>
 	<!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
-        <a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+        <li><a href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             MARC View
-        </a>
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+        </a></li>
+        <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             Normal
-        </a>
-        <a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+        </a></li>
+        <li><a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Print
-        </a>
+        </a></li>
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+       <li> <a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Add to My Book List
-        </a>
+        </a></li>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-        <a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+        <li><a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Add to My Book Bag
-        </a>
+        </a></li></ul>
 </div>
     
     <h1>ISBD</h1>
     <!-- TMPL_VAR name="ISBD" -->
-        <!-- TMPL_IF name="subscriptionsnumber" -->
+    
+	<div id="bibliodescriptions" class="toptabs">
+<ul>   
+<!-- TMPL_IF name="subscriptionsnumber" --><li>
+            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-subscriptions">Subscriptions</a>
+    </li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-comments">Comments</a></li><!-- /TMPL_IF -->
+ 	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+
+      <li><a class="external"  href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal View</a></li>
+
+	<li> <a class="external" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            MARC View
+        </a></li>
+</ul>
+
+	<div id="opac-isbd-subscriptions">    <!-- TMPL_IF name="subscriptionsnumber" -->
         <h2>
             We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.
         </h2>
@@ -80,9 +110,10 @@
                 <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         <p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></div>
+	
 <!-- TMPL_IF NAME="reviewson" -->
-    <!-- TMPL_IF NAME="reviews" -->
+    <div id="opac-isbd-comments"><!-- TMPL_IF NAME="reviews" -->
     <h2>Reviews by members:</h2>
         <!--TMPL_LOOP NAME="reviews"-->
         <p>
@@ -111,12 +142,12 @@
         </a>
     <!-- TMPL_ELSE -->
         <br /><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to write a review here.
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
-<div id="itemReviews">
+<div id="opac-isbd-amazonreviews">
         <h2>Amazon Reader Reviews:</h2>
         <h4>
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -148,6 +179,7 @@
     <!-- /TMPL_IF -->
 </div> <!-- itemReviews -->
 <!-- /TMPL_IF-->
+</div>
 
 </div>
 </div>
