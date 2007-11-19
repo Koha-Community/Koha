@@ -25,7 +25,7 @@ my $readsth=$dbh->prepare("SELECT id,biblio_auth_number,operation,server FROM ze
 #AGAIN:
 
 #my $wait=C4::Context->preference('zebrawait') || 120;
-my $verbose = 1;
+my $verbose = 0;
 print "starting with verbose=$verbose\n" if $verbose;
 
 my ($id,$biblionumber,$operation,$server,$marcxml);
