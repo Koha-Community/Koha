@@ -110,6 +110,7 @@ for(my $i=0;$i<$hits;$i++) {
     #build the hash for the template.
     %resultsloop=%$biblio;
     $resultsloop{highlight}       = ($i % 2)?(1):(0);
+    $resultsloop{booksellerid} = $booksellerid;
 
     push @results, \%resultsloop;
 }
