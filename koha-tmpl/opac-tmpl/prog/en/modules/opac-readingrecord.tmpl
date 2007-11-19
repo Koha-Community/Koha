@@ -3,20 +3,32 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!--CONTENT-->
-    <!-- TMPL_INCLUDE name="usermenu.inc" -->
-<h3>Reading History of <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
 
 <!-- TMPL_UNLESS NAME="count" -->
-You have never borrowed anything from the library.
+You have never borrowed anything from this library.
 <!-- TMPL_ELSE -->
-<table>
+<div id="opac-user-readingrec" class="toptabs">
+<ul class="tabs-nav">
+
 <!-- TMPL_IF NAME="showfulllink" -->
-<tr><td colspan="4">Showing All Items | <a href="opac-readingrecord.pl?limit=">Show Last 50 Items Only</a></td></tr><!-- TMPL_ELSE -->
-<tr><td colspan="4">Showing Last 50 Items | <a href="opac-readingrecord.pl?limit=full">Show All Items</a></td></tr>
-<!-- /TMPL_IF --><tr>
+<!-- TMPL_IF NAME="limit" -->
+<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=">Show Last 50 Items Only</a></li>
+<!-- TMPL_ELSE -->
+<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full">Show All Items</a></li><li class="tabs-selected"><a href="#readingrec">Showing Last 50 Items</a></li>
+<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li>
+<!-- /TMPL_IF -->
+</ul>
+<div class="tabs-container"><table id="readingrec">
 <tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!-- TMPL_ELSE -->&nbsp;
         <!-- /TMPL_UNLESS --></th>
 <th><!-- TMPL_UNLESS --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Author</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_UNLESS --></th>
@@ -31,8 +43,16 @@ You have never borrowed anything from the library.
 </tr>
 
 <!-- /TMPL_LOOP -->
-</table>
+</table></div></div>
 
 <!-- /TMPL_UNLESS -->
 
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -3,16 +3,18 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
 <!--CONTENT-->
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
-        <!-- TMPL_INCLUDE name="usermenu.inc" -->
-        <h1>Account for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h1>
+        <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Fines and Charges</h3>
     <!-- /TMPL_LOOP -->
     
     <!-- TMPL_IF NAME="ACCOUNT_LINES" -->
-        <h3>Fines and Charges</h3>
         <table>
             <thead>
                 <tr>
@@ -25,7 +27,7 @@
             
             <tfoot>
             <tr>
-                <th colspan="3">Total Due</th>
+                <th class="sum" colspan="3">Total Due</th>
                 <td class="sum">$<!-- TMPL_VAR NAME="total" --></td>
             </tr>
             </tfoot>
@@ -47,4 +49,12 @@
         <h4>You have no Fines or Charges</h4>
     <!-- /TMPL_IF -->
     
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

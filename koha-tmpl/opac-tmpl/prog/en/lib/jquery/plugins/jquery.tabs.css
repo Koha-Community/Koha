@@ -1,0 +1,92 @@
+/* Caution! Ensure accessibility in print and other media types... */
+@media projection, screen { /* Use class for showing/hiding tab content, so that visibility can be better controlled in different media types... */
+    .tabs-hide {
+        display: none;
+    }
+}
+
+/* Hide useless elements in print layouts... */
+@media print {
+    .tabs-nav {
+        display: none;
+    }
+}
+
+/* Skin */
+.tabs-nav {
+    margin: 0;
+    padding: 0 0 0 4px;
+}
+
+.tabs-nav li {
+	list-style : none;
+}
+
+.tabs-nav:after { /* clearing without presentational markup, IE gets extra treatment */
+    display: block;
+    clear: both;
+    content: " ";
+}
+.tabs-nav li {
+    float: left;
+    margin: 0 0 0 1px;
+    min-width: 84px; /* be nice to Opera */
+}
+.tabs-nav a, .tabs-nav a span {
+    display: block;
+	padding: .2em .5em .25em .5em;
+}
+.tabs-nav a {
+    position: relative;
+    top: 1px;
+    /*z-index: 2;*/
+    white-space: nowrap; /* required in IE 6 */    
+}
+.tabs-nav .tabs-selected a {
+	background-color : #FFFFCC;
+	border-top: 1px solid #FFFFCC;
+	border-right: 1px solid #FF9900;
+	border-bottom: 1px solid #FF9900;
+	border-left: 1px solid #FFCC66;
+	font-weight : bold;
+	text-align : center;
+	text-decoration : none;
+	top : -1px;
+}
+
+.tabs-nav .tabs-selected a:hover {
+	color : #0000CC;
+}
+
+.tabs-nav .tabs-selected a, .tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active {
+    outline: 0; /* prevent dotted border in Firefox */
+}
+
+.tabs-nav a span {
+    width: 64px; /* IE 6 treats width as min-width */
+    min-width: 64px;
+    height: 18px; /* IE 6 treats height as min-height */
+    min-height: 18px;
+    padding-top: 6px;
+    padding-right: 0;
+}
+*>.tabs-nav a span { /* hide from IE 6 */
+    width: auto;
+    height: auto;
+}
+.tabs-nav .tabs-selected a span {
+    padding-top: 7px;
+}
+
+.tabs-nav .tabs-selected a:link, .tabs-nav .tabs-selected a:visited, .tabs-nav .tabs-disabled a:link, .tabs-nav .tabs-disabled a:visited { /* @ Opera, use pseudo classes otherwise it confuses cursor... */
+    cursor: text;
+}
+.tabs-nav a:hover, .tabs-nav a:focus, .tabs-nav a:active { /* @ Opera, we need to be explicit again here now... */
+    cursor: pointer;
+}
+.tabs-nav .tabs-disabled {
+    opacity: .4;
+}
+.tabs-container {
+    background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+}

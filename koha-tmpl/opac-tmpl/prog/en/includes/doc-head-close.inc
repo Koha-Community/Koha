@@ -17,6 +17,13 @@
         @import url(<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
     </style>
 <!-- /TMPL_IF -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs.css" />
+   <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
+        <!--[if lte IE 7]>
+        <link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs-ie.css" type="text/css" media="projection, screen">
+        <![endif]-->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tabs.pack.js"></script>
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/main.js"></script>
 <!-- TMPL_IF NAME="AmazonContent" --><script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>

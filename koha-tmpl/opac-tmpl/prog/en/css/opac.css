@@ -25,7 +25,100 @@ caption {
 }
 
 fieldset {
-	border : 1px solid #dddddd;
+	border : 2px solid #EEEEEE;
+	margin : 1em 1em 1em 0;
+	padding : 1em;
+}
+
+fieldset.rows {  
+border-width : 1px;
+border-bottom : 1px solid black;
+float : left;
+font-size : 90%;
+clear : left;
+margin: .9em 0 0 0;  
+padding: 0;
+width: 100%; 
+}
+
+fieldset.rows legend {  
+	margin-left: 1em;
+	font-weight: bold;
+	font-size : 110%;
+}
+
+fieldset.rows label, fieldset.rows span.label {  
+	float: left;  
+	font-weight : bold;
+	width: 9em;  
+	margin-right: 1em;  
+	text-align: right;
+}
+
+fieldset.rows fieldset {
+	border-width : 1px;
+	margin : 0;
+	padding : .3em;
+}
+
+fieldset.rows ol {  
+padding: 1em 1em 0 1em;  
+list-style-type: none;
+}
+
+fieldset.rows li {  
+float : left;
+clear : left;
+padding-bottom: 1em;
+list-style-type: none;
+width: 100%; 
+}
+
+fieldset.rows.left li {
+	padding-bottom : .4em;
+}
+
+fieldset.rows li.radio {
+	padding-left: 9em;
+	width : auto;
+}
+
+fieldset.rows li.radio label {
+	float : none;
+	width : auto;
+	margin : 0 0 0 1em;
+}
+
+fieldset.rows ol.radio label {
+	width : auto;
+	float : none;
+	margin-right : 0;
+}
+
+fieldset.rows ol.radio label.radio {
+	float : left;
+	width : 12em;
+	margin-right : 1em;
+}
+
+fieldset.rows table {
+	clear : both;
+	margin-left : 1em;
+}
+
+fieldset.rows td label {
+	float : none;
+	font-weight : normal;
+	width : auto;
+}
+
+fieldset.action {
+	clear : both;
+	float : none;
+	border : none;
+	margin : 0;
+	padding : 1em 0 .3em 0;
+	width : auto;
 }
 
 h1 {
@@ -52,6 +145,10 @@ h1,h2,h3,h4,h5,h6 {
 
 h2 {
 	font-size : 131%;
+}
+
+h2.author {
+	text-indent : .5em;
 }
 
 h3 {
@@ -91,11 +188,22 @@ table {
 td,th {
 	border-left : 1px solid #dddddd;
 	border-bottom : 1px solid #dddddd;
-	padding : 5px;
+	padding : 3px 5px;
 }
 
 th {
-	background-color : #eeeeee;
+	background-color:#EFF1DC;
+	font-weight : bold;
+	padding : 2px 4px;
+}
+
+th.sum {
+	text-align: right;
+}
+
+td.sum {
+	background-color: #FFC;
+	font-weight: bold;
 }
 
 th[scope=row] {
@@ -103,7 +211,7 @@ th[scope=row] {
 }
 
 tr.highlight td, tr.highlight th {
-	background-color : #EEEEEE;
+	background-color : #F3F3F3;
 	border : 1px solid #DDDDDD;
 	border-right : 1px solid #DDDDDD;
 }
@@ -164,22 +272,20 @@ a .term {
 
 /* action buttons */
 #action {
-	margin-top : 15px;
+	margin-top : .5em;
+}
+
+#action li {
+	list-style : none;
 }
 
 #action a {
-	background-color : #6699cc;
-	color : #eeeeee;
-	font-size : 0.8em;
-	font-weight : bold;
-	border : 1px outset #666666;
-	margin-right : 5px;
-	padding : 0 5px 0 5px;
-}
-
-#action a:hover {
-	color : white;
-	border : 1px inset;
+	background-color : #F3F3F3;
+	border : 1px solid #E8E8E8;
+	display : block;
+	margin : .2em;
+	padding : .5em;
+	text-decoration : none;
 }
 
 /* the itemtype list in advanced search */
@@ -341,23 +447,6 @@ a .term {
 /***********************************************************/
 /* the user menu, for user option (and biblio detail view) */
 /***********************************************************/
-#usermenu {
-	float : right;
-}
-
-#usermenu a {
-	background-color : #6BA037;
-	color : #FFFFFF;
-	font-size : 0.8em;
-	font-weight : bold;
-	border : 1px outset #666666;
-	display : block;
-	margin-bottom : 3px;
-}
-
-#usermenu a:hover {
-	border : 1px inset #666666;
-}
 
 .suggestion {
 	background-color : #EEEEEB;
@@ -425,15 +514,113 @@ em {
 #catalogue_detail_biblio p span.label {  
 	float: left;  
 	font-weight : bold;
-	width: 6em;  
+	width: 11em;  
 	margin-right: 1em;  
-	text-align: right;
 }
 
 #catalogue_detail_biblio p {  
-float : left;
-clear : left;
-padding-bottom: .3em;
-list-style-type: none;
-width: 100%; 
+	float : left;
+	clear : left;
+	padding-bottom: .3em;
+	list-style-type: none;
+	width: 100%; 
+}
+
+#catalogue_detail_biblio p span.biblionotes {
+	margin-left : 6em;
+}
+
+.toptabs {
+	margin-top : 1em;
+}
+
+.toptabs .tabs-nav a, .toptabs .tabs-nav span.a {
+    top: 0;
+ }
+
+.toptabs .tabs-nav li {
+	margin-right : .5em;
+}
+
+.toptabs .tabs-nav li a, .toptabs .tabs-nav li span.a {
+	background-color : #F3F3F3;
+	border-top : 1px solid #E8E8E8;
+	border-left : 1px solid #E8E8E8;
+	border-right : 1px solid #E8E8E8;
+	border-bottom : 0;
+	text-align : center;
+	text-decoration : none;
+}
+
+.toptabs .tabs-nav li.tabs-selected  {
+	background-color : #FFF;
+}
+
+.toptabs .tabs-nav li.tabs-selected a, .toptabs .tabs-nav li.tabs-selected span.a {
+	background-color : #FFF;
+	border-top : 1px solid #E8E8E8;
+	border-left : 1px solid #E8E8E8;
+	border-right : 1px solid #E8E8E8;
+	border-bottom : 1px solid #FFF;
+	margin-bottom : -5px;
+	padding-bottom : 5px;
+	text-align : center;
+}
+
+.toptabs.numbered .tabs-nav li {
+	min-width : 3em;
+}
+
+.toptabs .tabs-container {
+	border : 1px solid #E8E8E8;
+	padding : 1em;
+}
+
+.tabs-container {
+    border-top: 0;
+    padding : inherit;
+    background: #fff; /* declare background color for container to avoid distorted fonts in IE while fading */
+}
+
+#bookcover {
+	padding : 1em;
+	margin : 0 1em 1em 0;
+	float : left;
+}
+
+fieldset.brief {
+	border : 1px solid #E8E8E8;
+}
+
+fieldset.brief label {
+	display : block;
+	font-weight : bold;
+	padding : .3em 0;
+}
+
+fieldset.brief ol, fieldset.brief li {
+	list-style-type : none;
+}
+
+fieldset.brief div.hint, fieldset.rows div.hint {
+	color : #999999;
+	font-size : 95%;
+	margin-bottom : .4em;
+}
+
+#menu {
+	margin-top: 1em;
+}
+
+h2 span.hint {
+	font-size: 76%;
+	font-weight : normal;
+}
+.thumbnail {
+	border : 0;
+	float : left;
+	margin : 0pt 5px 5px 0pt;
+}
+a.cancel {
+	padding-left : 1em;
 }

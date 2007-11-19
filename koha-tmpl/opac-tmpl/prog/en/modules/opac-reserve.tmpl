@@ -3,19 +3,22 @@
 </head>
 <body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div id="yui-g">
 
 <!-- TMPL_IF NAME="message" -->
     <!-- TMPL_IF NAME="GNA" -->
     <p class="problem">
-        <strong>Sorry</strong>, you cannot place reserves because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
+        <strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
     </p>
     <p class="problem">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="lost" -->
     <p class="problem">
-        <strong>Sorry</strong>, you cannot place reserves because your library card has been marked as lost or stolen.
+        <strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.
     </p>
     <p class="problem">
         If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.
@@ -23,23 +26,23 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="debarred" -->
     <p class="error">
-        <strong>Sorry</strong>, you cannot place reserves because your account has been frozen.
+        <strong>Sorry</strong>, you cannot place holds because your account has been frozen.
     </p>
     <p class="problem">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="too_much_oweing" -->
     <p class="problem">
-        Sorry, you cannot make reserves because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.
+        Sorry, you cannot place holds because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="too_many_reserves" -->
-        <p class="error">Sorry, you cannot make more than <!-- TMPL_VAR NAME="too_many_reserves" --> reserves.
+        <p class="error">Sorry, you cannot place more than <!-- TMPL_VAR NAME="too_many_reserves" --> holds.
         </p>
         <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="already_reserved" -->
     <p class="problem">
-        You already have a reserve placed on this item.
+        You already have a hold placed on this item.
         <form action="/cgi-bin/koha/opac-detail.pl" method="post">
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="submit" class="icon back" value="Return to Item Detail Screen" />
@@ -53,7 +56,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="no_branch_selected" -->
     <p class="error">
-        You must select a branch for pickup!
+        You must select a library for pickup.
     </p>
     <!-- /TMPL_IF -->
 </div>
@@ -64,14 +67,12 @@
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
         <input type="hidden" name="item_types_selected" value="1">
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-        <h2>Reservation Details</h2>
-        <div class="form">
-            <h3>Reserving: <span class="title"><!-- TMPL_VAR NAME="title" -->, <!-- TMPL_IF NAME="author" --> (<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --></h3>
-            <p>For <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></p>
+        <h3>Place a hold on <span class="title"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
+            <p><strong>For:</strong> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></p>
             
         <!-- TMPL_LOOP name="bibitemloop" -->    
-            <p><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></p>
-            <!-- TMPL_IF NAME="publicationyear" --><p><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
+            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
             <table>
             <tr>
                 <th>Barcode</th>
@@ -178,7 +179,9 @@
 </div>
 <p><input type="submit" value="Finish and Place Reservation" class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();"></p>
 
-</FORM>
+</form>
 
 <!-- /TMPL_IF -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->

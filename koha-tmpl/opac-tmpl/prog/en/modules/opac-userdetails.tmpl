@@ -3,13 +3,13 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
 
-<!--CONTENT-->
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
-    <!-- TMPL_INCLUDE name="usermenu.inc" -->
-<h2>Personal Details: <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></h2>
-
+<h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Personal Details</h3>
 
 <table>
 <tr><th scope="row">Name:</th><td> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td></tr>
@@ -17,10 +17,8 @@
 Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 </table>
 
-
-<h3>Contact Details</h3>
-
 <table>
+<caption>Contact Details</caption>
 <tr><th scope="row">Mailing Address:</th><td><!-- TMPL_VAR NAME="address" -->, <!-- TMPL_VAR NAME="city" --></td></tr>
 
 <tr><th scope="row">Permanent Address:</th><td> <!-- TMPL_VAR NAME="B_address" -->, <!-- TMPL_VAR NAME="B_city" --></td></tr>
@@ -36,10 +34,9 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 <tr><th scope="row">Textmessaging:</th><td><!-- TMPL_IF NAME="opacnote" --><!-- TMPL_VAR NAME="opacnote" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 </table>
 
-
-<h3>Membership Details</h3>
-
-<table><tr><th scope="row">Membership Number:</th><td> <!-- TMPL_VAR NAME="borrowernumber" --></td></tr>
+<table>
+<caption>Membership Details</caption>
+<tr><th scope="row">Membership Number:</th><td> <!-- TMPL_VAR NAME="borrowernumber" --></td></tr>
 
 <tr><th scope="row">Membership Category:</th><td>  <!-- TMPL_VAR NAME="categorycode" --></td></tr>
 
@@ -51,16 +48,16 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 
 <!-- TMPL_IF NAME="joiningbranch" --><tr><th>Joining Branch:</th><td><!-- TMPL_VAR NAME="joiningbranch" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></table>
 
-
-<h3>Identity Details</h3>
-
-<table><tr><th scope="row">DoB:</th><td> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<table>
+<caption>Identity Details</caption>
+<tr><th scope="row">DoB:</th><td> <!-- TMPL_IF NAME="dateofbirth" --><!-- TMPL_VAR NAME="dateofbirth" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
 <tr><th scope="row">Sex:</th><td><!-- TMPL_IF NAME="sex" --><!-- TMPL_VAR NAME="sex" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr></table>
 
-<h3>Alternate Contact Details</h3>
 <!-- TMPL_IF NAME="contactname"-->
-<table><tr><th scope="row">Alternate Contact:</th><td> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<table>
+<caption>Alternate Contact Details</caption>
+<tr><th scope="row">Alternate Contact:</th><td> <!-- TMPL_IF NAME="contactname" --><!-- TMPL_VAR NAME="contactname" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
 <tr><th scope="row">Phone:</th><td> <!-- TMPL_IF NAME="B_phone" --><!-- TMPL_VAR NAME="B_phone" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 
@@ -71,11 +68,19 @@ Card Number:</th><td><!-- TMPL_VAR NAME="cardnumber" --></td></tr>
 <tr><th scope="row">Guarantor:</th><td> <!-- TMPL_IF NAME="guarantorid" --><!-- TMPL_VAR NAME="guarantorid" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --> </td></tr></table>
 
 <!-- TMPL_ELSE -->
-No alternate contact.<br /><br />
+<h4>No alternate contact on file.</h4>
 <!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
 <input type="submit" name="Modify" value="Modify Your Record" />
 </form>
 
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

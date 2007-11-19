@@ -1,0 +1,115 @@
+div.cmDiv
+{
+	border: 1px solid black;
+	background-color: #eee;
+}
+.clickMenu
+{
+	margin: 0;
+	padding: 0;
+	cursor: default;
+}
+.clickMenu, .clickMenu ul
+{
+	list-style: none;
+}
+.clickMenu ul
+{
+	margin: 0;
+	padding: 2px;
+	border: 1px solid black;
+	background-color: #eee;
+	min-width: 100px; /* ie doesnt know this :/ */
+	//float: left;/*ie again*/
+	//width: 100%;/*and again*/
+}
+.clickMenu div.outerbox
+{
+	display: none;
+	min-width: 106px; /* firefox produces animation-flickering when the box is bigger than this :/ */
+}
+.clickMenu div.inner
+{
+	//top: 20px; /* for ie */
+	left: 0;
+	margin: 0;
+}
+.clickMenu div.inner div.outerbox
+{
+	margin: 0;
+	left: 98px;
+	//left: 90px; /* for ie */
+	top: -3px;
+}
+.clickMenu li
+{
+	position: relative;
+	padding: 0 20px 0 2px;
+	/*white-space: nowrap; does not really work in ie */
+}
+.clickMenu li.main
+{
+	float: left;
+	padding: 0 10px;
+	background-color: #eee;
+	//height: 20px; /* for ie */
+}
+.clickMenu li.main li
+{
+	z-index: 2;
+	min-width: 78px;
+}
+.clickMenu li.hover
+{
+	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
+	background-color: #aaa;
+}
+.clickMenu img.liArrow
+{
+	position: absolute;
+	right: 5px;
+	top: 0.41em;
+}
+.clickMenu a
+{
+	text-decoration: none;
+	color: black;
+	cursor: default;
+}
+/* thats for the shadowbox */
+html>body div.outerbox
+{
+	padding: 0 5px 5px 0;
+}
+html>body div.shadowbox1
+{
+	position: absolute;
+	right: 0;
+	bottom: 5px;
+	width: 5px;
+	height: 100%;
+	background: url(myshadow.png) no-repeat right top;
+}
+html>body div.shadowbox2
+{
+	position: absolute;
+	bottom: 0;
+	right: 5px;
+	height: 5px;
+	width: 100%;
+	background: url(myshadow.png) left bottom;
+}
+html>body div.shadowbox3
+{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	height: 5px;
+	width: 5px;
+	background: url(myshadow.png) no-repeat right bottom;
+}
+html>body .innerbox
+{
+	margin: 0;
+	display: inherit;
+}

@@ -1,11 +1,13 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Account for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body><!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
+<body>
+<!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<!--CONTENT-->
-    <!-- TMPL_INCLUDE name="usermenu.inc" -->
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
 
     <!-- TMPL_IF NAME= "Error_messages" -->
         <h3>There was a problem with your submission</h3>
@@ -23,13 +25,15 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME= "Ask_data" -->
+	<h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->l../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Change your Password </h3>
+
         <!-- TMPL_IF NAME="OpacPasswordChange" -->
-        <h1>Change your Password</h1>
-        <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="get">
-            <p><label for="password">Current Password:</label><input type="password" id="Oldkey" size="25"  name="Oldkey" /></p>
-            <p><label for="Newkey">New Password:</label><input type="password" id="Newkey"  size="25"  name="Newkey" /></p>
-            <p><label for="Confirm">Re-Type New Password:</label><input type="password"  id="Confirm" size="25" name="Confirm" /></p>
-            <p><input type="submit" value="Submit Changes" class="submit" /></p>
+        <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="get"><fieldset class="rows">
+          <ol>  <li><label for="password">Current Password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
+            <li><label for="Newkey">New Password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" /></li>
+            <li><label for="Confirm">Re-Type New Password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" /></li></ol></fieldset>
+            <fieldset class="action"><input type="submit" value="Submit Changes" class="submit" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
+    </form>
         <!-- TMPL_ELSE -->
             <div class="error">You can't change your password.</div>
         <!-- /TMPL_IF -->
@@ -43,6 +47,13 @@
             <p><input type="submit" class="icon back" value="Return to Your Record" /></p>
         </form>
     <!-- /TMPL_IF -->
-    </form>
 
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

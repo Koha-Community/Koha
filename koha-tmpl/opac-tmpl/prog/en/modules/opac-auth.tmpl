@@ -3,7 +3,10 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div id="yui-g">
 
 <!--CONTENT-->
 <!-- TMPL_IF NAME="loginprompt" -->
@@ -30,14 +33,16 @@
 <!-- /TMPL_IF -->
 
 <form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
-<!-- TMPL_LOOP NAME="INPUTS" -->
+
+<fieldset class="brief"><!-- TMPL_LOOP NAME="INPUTS" -->
   <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->
-<table>
-<tr><th><label for="userid">Your card number</label></th><td>
-<input type="text"  size="25" id="userid"  name="userid" /></td>
-<tr><th><label for="password">Password or PIN</label></th><td><input type="password"  size="25" id="password"  name="password" /></td>
-</table>
+<ol>
+<li><label for="userid">Your card number</label>
+<input type="text"  size="25" id="userid"  name="userid" />
+<li><label for="password">Password or PIN</label><input type="password"  size="25" id="password"  name="password" />
+</ol></fieldset>
+
 <input type="submit" value="Log In" class="submit" />
   <h5>Don't have a password yet?</h5><p> If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
 <h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up.  </p>
@@ -45,4 +50,8 @@
 
 
 <!-- /TMPL_IF -->
+
+</div>
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

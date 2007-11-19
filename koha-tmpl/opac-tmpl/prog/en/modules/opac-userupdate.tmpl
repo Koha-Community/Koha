@@ -1,41 +1,50 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" --> Catalog -- Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
-<!-- TMPL_INCLUDE name="navigation.inc" -->
 
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
-<h3>Updating Details for <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --></h3>
+
+<h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Update Your Personal Details</h3>
+
 <p>Please make any necessary changes to your record.  Submitting the form will notify a library staff member, who will make the changes permanent.</p>
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
-<input type="hidden" name="title" value="">
-<table>
-<tr><th><label for="surname">Last Name</label></th><td><input id="surname" type="text"  size="25" value="<!-- TMPL_VAR name="surname" -->"  name="surname"></td></tr>
+<input type="hidden" name="title" value="" />
+<fieldset class="rows"><ol>
+<li><label for="surname">Last Name:</label> <input id="surname" type="text"  size="28" value="<!-- TMPL_VAR name="surname" -->"  name="surname" /></li>
 
-<tr><th><label for="firstname">First Name</label></th><td><input id="firstname" type="text"  size="25" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname"></td></tr>
+<li><label for="firstname">First Name:</label> <input id="firstname" type="text"  size="28" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname" /></li>
 
-<tr>
-    <th><label for="streetaddress">Mailing Address</label></th>
-    <td>
+<li>
+    <label for="streetaddress">Mailing Address:</label>
         <textarea id="streetaddress" cols="25"  name="streetaddress"><!--TMPL_VAR NAME="streetnumber"--> <!-- TMPL_VAR name="address" --> <!-- TMPL_VAR NAME="zipcode"--></textarea>
-    </td>
-</tr>
+</li>
 
-<tr><th><label for="city">City, State</label></th><td><input id="city" type="text"  size="25" value="<!-- TMPL_VAR name="city" -->"  name="city"></td></tr>
+<li><label for="city">City, State:</label> <input id="city" type="text"  size="28" value="<!-- TMPL_VAR name="city" -->"  name="city" /></li>
 
-<tr><th><label for="phone">Home Phone</label></th><td><input id="phone" type="text"  size="25" value="<!-- TMPL_VAR name="phone" -->"  name="phone"></td></tr>
+<li><label for="phone">Home Phone:</label> <input id="phone" type="text"  size="28" value="<!-- TMPL_VAR name="phone" -->"  name="phone" /></li>
 
-<tr><th><label for="faxnumber">Work/Fax phone</label></th><td><input id="faxnumber"  type="text"  size="25" value="<!-- TMPL_VAR name="fax" -->"  name="faxnumber"></td></tr>
+<li><label for="faxnumber">Work/Fax phone:</label> <input id="faxnumber"  type="text"  size="28" value="<!-- TMPL_VAR name="fax" -->"  name="faxnumber" /></li>
 
-<tr><th><label for="emailaddress">Email</label></th><td><input id="emailaddress" type="text"  size="25" value="<!-- TMPL_VAR name="email" -->"  name="emailaddress"></td></tr>
-</table>
-<p>Clicking 'Submit Changes' will send an email to a library staff member with the information you've entered.  You will then be returned to your patron record.</p>
-<p><input type="submit" value="Submit Changes"></p>
+<li><label for="emailaddress">Email:</label> <input id="emailaddress" type="text"  size="28" value="<!-- TMPL_VAR name="email" -->"  name="emailaddress" /></li>
+</ol></fieldset>
+<fieldset class="action">
+<input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-userdetails.pl">Cancel</a></fieldset>
 </form>
 
 <!-- /TMPL_LOOP -->
 
-</body>
-</html>
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
