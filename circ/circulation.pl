@@ -115,6 +115,7 @@ my $year           = $query->param('year');
 my $month          = $query->param('month');
 my $day            = $query->param('day');
 my $stickyduedate  = $query->param('stickyduedate');
+my $duedatespec    = $query->param('duedatespec');
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
@@ -129,6 +130,16 @@ my $print          = $query->param('print');
 # }
 #
 
+my ($datedue,$invalidduedate);
+if($duedatespec) {
+	$datedue=  C4::Dates->new($duedatespec );
+	$invalidduedate=1 unless $datedue;
+}
+#if (defined($year)) {
+#        $duedatespec = "$year-$month-$day";
+#} else {
+#        ($year, $month, $day) = ($duedatespec) ? split /-/, $duedatespec : (0,0,0);
+#}
 
 my @datearr = localtime( time() );
 
@@ -185,7 +196,7 @@ if ($findborrower) {
 # get the borrower information.....
 my $borrower;
 my @lines;
-
+warn $borrowernumber;
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
@@ -234,16 +245,15 @@ if ($borrowernumber) {
 #
 
 if ($barcode) {
-    $barcode = cuecatbarcodedecode($barcode);
-    my ( $datedue, $invalidduedate ) = fixdate( $year, $month, $day );
-    if ($issueconfirmed) {
+   # $barcode = cuecatbarcodedecode($barcode);
+    
+	if ($issueconfirmed) {
         AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
         $inprocess = 1;
     }
     else {
         my ( $error, $question ) =
-          CanBookBeIssued( $borrower, $barcode, $year, $month, $day,
-            $inprocess );
+          CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
         my $noerror    = 1;
         my $noquestion = 1;
 #         Get the item title for more information
@@ -645,13 +655,8 @@ $template->param(
 
 # set return date if stickyduedate
 if ($stickyduedate) {
-    my $t_year  = "year" . $year;
-    my $t_month = "month" . $month;
-    my $t_day   = "day" . $day;
     $template->param(
-        $t_year  => 1,
-        $t_month => 1,
-        $t_day   => 1,
+        duedatespec => $duedatespec,
     );
 }
 
@@ -660,7 +665,8 @@ if ($stickyduedate) {
 #}
 
 $template->param(
-    SpecifyDueDate     => C4::Context->preference("SpecifyDueDate")
+		SpecifyDueDate     => C4::Context->preference("SpecifyDueDate"),
+		CircAutocompl => C4::Context->preference("CircAutocompl") ,
+		DHTMLformat   => C4::Dates->DHTMLcalendar(),
 );
-$template->param( CircAutocompl => C4::Context->preference("CircAutocompl") );
 output_html_with_http_headers $query, $cookie, $template->output;

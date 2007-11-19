@@ -51,7 +51,7 @@ sub do_checkout {
 	my $borrower = GetMember( $patron_barcode, 'cardnumber' );
 #	use Data::Dumper;
 #	warn Dumper $borrower;
-	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued ( $borrower, $barcode, 0, 0, 0, 0 );
+	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued ( $borrower, $barcode );
 	my $noerror=1;
 	foreach my $impossible ( keys %$issuingimpossible ) {
 		# do something here so we pass these errors

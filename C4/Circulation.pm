@@ -633,14 +633,14 @@ sub itemissues {
 =head2 CanBookBeIssued
 
 $issuingimpossible, $needsconfirmation = 
-        CanBookBeIssued( $borrower, $barcode, $year, $month, $day, $inprocess );
-
+        CanBookBeIssued( $borrower, $barcode, $duedatespec, $inprocess );
+C<$duedatespec> is a C4::Dates object.
 C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =cut
 
 sub CanBookBeIssued {
-    my ( $borrower, $barcode, $year, $month, $day, $inprocess ) = @_;
+    my ( $borrower, $barcode, $duedate, $inprocess ) = @_;
     my %needsconfirmation;    # filled with problems that needs confirmations
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
@@ -648,10 +648,9 @@ sub CanBookBeIssued {
     my $dbh             = C4::Context->dbh;
 
     #
-    # DUE DATE is OK ?
+    # DUE DATE is OK ? -- should already have checked.
     #
-    my ( $duedate, $invalidduedate ) = fixdate( $year, $month, $day );
-    $issuingimpossible{INVALID_DATE} = 1 if ($invalidduedate);
+    #$issuingimpossible{INVALID_DATE} = 1 unless ($duedate);
 
     #
     # BORROWER STATUS
@@ -680,7 +679,7 @@ sub CanBookBeIssued {
 
     # DEBTS
     my ($amount) =
-      C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, $duedate );
+      C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, '' && $duedate->output('iso') );
     if ( C4::Context->preference("IssuingInProcess") ) {
         my $amountlimit = C4::Context->preference("noissuescharge");
         if ( $amount > $amountlimit && !$inprocess ) {
@@ -943,30 +942,30 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
-		my $itype=(C4::Context->preference('item-level_itypes')) ?  $biblio->{'itype'} : $biblio->{'itemtype'} ;
-        my $loanlength = GetLoanLength(
-            $borrower->{'categorycode'},
-            $itype,
-            $borrower->{'branchcode'}
-        );
-        $datedue  = time + ($loanlength) * 86400;
-        my @datearr  = localtime($datedue);
-        my $dateduef =
-            sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]);
+		my $dateduef;
         if ($date) {
             $dateduef = $date;
-        }
-       $dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
-       # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
-        if ( C4::Context->preference('ReturnBeforeExpiry')
-            && $dateduef gt $borrower->{dateexpiry} )
-        {
-            $dateduef = $borrower->{dateexpiry};
-        }
-        $sth->execute(
+        } else {
+			my $itype=(C4::Context->preference('item-level_itypes')) ?  $biblio->{'itype'} : $biblio->{'itemtype'} ;
+        	my $loanlength = GetLoanLength(
+        	    $borrower->{'categorycode'},
+        	    $itype,
+        	    $borrower->{'branchcode'}
+        	);
+        	$datedue  = time + ($loanlength) * 86400;
+        	my @datearr  = localtime($datedue);
+			$dateduef = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+			$dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
+		
+		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
+        	if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef gt $borrower->{dateexpiry} ) {
+        	    $dateduef = $borrower->{dateexpiry};
+        	}
+        };
+		$sth->execute(
             $borrower->{'borrowernumber'},
             $item->{'itemnumber'},
-            strftime( "%Y-%m-%d", localtime ),$dateduef, C4::Context->userenv->{'branch'}
+            strftime( "%Y-%m-%d", localtime ),$dateduef->output('iso'), C4::Context->userenv->{'branch'}
         );
         $sth->finish;
         $item->{'issues'}++;
@@ -1602,7 +1601,7 @@ sub AddRenewal {
 
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
-    if ( $datedue eq "" ) {
+    unless ( $datedue ) {
 
         my $biblio = GetBiblioFromItemNumber($itemnumber);
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
@@ -1615,7 +1614,7 @@ sub AddRenewal {
 		#FIXME -- where's the calendar ?
         my ( $due_year, $due_month, $due_day ) =
           Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
-        $datedue = "$due_year-$due_month-$due_day";
+        $datedue = C4::Dates->new( "$due_year-$due_month-$due_day",'iso');
 	$datedue=CheckValidDatedue($datedue,$itemnumber,$branch);
     }
 
@@ -1638,11 +1637,10 @@ sub AddRenewal {
                             AND itemnumber=? 
                             AND returndate IS NULL"
     );
-    $sth->execute( $datedue, $renews, $borrowernumber, $itemnumber );
+    $sth->execute( $datedue->output('iso'), $renews, $borrowernumber, $itemnumber );
     $sth->finish;
 
     # Log the renewal
-
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -1899,9 +1897,11 @@ C<$date_due>   = returndate calculate with no day check
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 
 =cut
-sub CheckValidDatedue{
+# Why not create calendar object?  - 
+# TODO add 'duedate' option to useDaysMode .
+sub CheckValidDatedue { 
 my ($date_due,$itemnumber,$branchcode)=@_;
-my @datedue=split('-',$date_due);
+my @datedue=split('-',$date_due->output('iso'));
 my $years=$datedue[0];
 my $month=$datedue[1];
 my $day=$datedue[2];
@@ -1917,7 +1917,7 @@ for (my $i=0;$i<2;$i++){
 		(($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
 		}
 	}
-my $newdatedue=$years."-".$month."-".$day;
+my $newdatedue=C4::Dates->new( $years."-".$month."-".$day,'iso');
 return $newdatedue;
 }
 =head2 CheckRepeatableHolidays
