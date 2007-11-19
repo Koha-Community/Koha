@@ -1031,7 +1031,7 @@ sub GetLoanLength {
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( $borrowertype, $itemtype, "" );
+    $sth->execute( $borrowertype, $itemtype, "*" );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
@@ -1046,7 +1046,7 @@ sub GetLoanLength {
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( $borrowertype, "*", "" );
+    $sth->execute( $borrowertype, "*", "*" );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
@@ -1056,12 +1056,12 @@ sub GetLoanLength {
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( "*", $itemtype, "" );
+    $sth->execute( "*", $itemtype, "*" );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( "*", "*", "" );
+    $sth->execute( "*", "*", "*" );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
@@ -1698,7 +1698,6 @@ sub GetIssuingCharges {
 	
     $qcharge .=      "WHERE items.itemnumber =?";
    
-warn $qcharge;
     my $sth1 = $dbh->prepare($qcharge);
     $sth1->execute($itemnumber);
     if ( my $data1 = $sth1->fetchrow_hashref ) {
