@@ -584,14 +584,17 @@ rank:rank-1
                 next;
             }
             next unless $record;
-#             warn $record->as_formatted;
 # die if $record->subfield('090','9') eq 11;
     #         print $record;
             # check that biblionumber & biblioitemnumber are stored in the MARC record, otherwise, add them & update the biblioitems.marcxml data.
             my $record_correct=1;
             # skip uncorrect records : isn't this bogus, as just after we reintroduce biblionumber if it's missing ?
             # FIXME next unless $record->field($biblionumbertagfield);
-            # check if biblionumber is present, otherwise, add it on the fly
+            #
+            #
+            # CHECK  biblionumber
+            #
+            #
             if ($biblionumbertagfield eq '001') {
                 unless ($record->field($biblionumbertagfield) && $record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
@@ -623,6 +626,11 @@ rank:rank-1
                 }
 #                 warn "FIXED BIBLIONUMBER".$record->as_formatted;
             }
+            #
+            #
+            # CHECK BIBLIOITEMNUMBER
+            #
+            #
             unless ($record->subfield($biblioitemnumbertagfield,$biblioitemnumbertagsubfield)) {
 #                 warn "fixing biblioitemnumber for $biblioitemnumbertagfield,$biblioitemnumbertagsubfield = $biblionumber";
                 $record_correct=0;
@@ -646,6 +654,11 @@ rank:rank-1
                 }
     #             warn "FIXED BIBLIOITEMNUMBER".$record->as_formatted;
             }
+            #
+            #
+            # CHECK FIELD 100
+            #
+            #
             my $encoding = C4::Context->preference("marcflavour");
             # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
             if ( $encoding eq "UNIMARC" ) {
@@ -661,7 +674,8 @@ rank:rank-1
                     $string = sprintf( "%-*s", 35, $string );
                 }
                 substr( $string, 22, 6, "frey50" );
-                unless ( $record->subfield( 100, "a" ) ) {
+                unless ( length($record->subfield( 100, "a" )) == 35 ) {
+                    $record->delete_field($record->field(100));
                     $record->insert_grouped_field(
                         MARC::Field->new( 100, "", "", "a" => $string ) );
                 }
