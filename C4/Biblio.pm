@@ -3091,10 +3091,13 @@ sub GetNoZebraIndexes {
     my %indexes;
     foreach my $line (split /('|"),/,$index) {
         $line =~ /(.*)=>(.*)/;
+warn $line;
         my $index = substr($1,1); # get the index, don't forget to remove initial ' or "
         my $fields = $2;
-        $index =~ s/'|"| //g;
-        $fields =~ s/'|"| //g;
+        $index =~ s/'|"|\s//g;
+
+
+        $fields =~ s/'|"|\s//g;
         $indexes{$index}=$fields;
     }
     return %indexes;
