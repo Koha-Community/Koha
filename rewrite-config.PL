@@ -44,7 +44,7 @@ guesses worked out by the script.
 The following configuration keywords are available:
 
 PREFIX,
-BASE_DIR, CGI_DIR, LOG_DIR,
+BASE_DIR, CGI_DIR, LOG_DIR, INSTALL_BASE,
 DB_TYPE, DB_HOST, DB_PORT, DB_NAME, DB_PASS, DB_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
 WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
 
@@ -65,7 +65,7 @@ $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
 # This is set here to rescue systems with broken DNS
 $myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
-$prefix = $ENV{'PREFIX'} || "/usr/local";
+$prefix = $ENV{'INSTALL_BASE'} || "/usr";
 
 # These are our configuration guesses
 # Keys were extracted by

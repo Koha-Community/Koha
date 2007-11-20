@@ -33,6 +33,7 @@ Makefile.PL - Koha packager and installer
 =head2 BASIC INSTALLATION
 
 	perl Makefile.PL
+	or perl Makefile.PL INSTALL_BASE=/path/to/your/home/dir
 	make
 	sudo make install
 
@@ -172,11 +173,11 @@ WriteMakefile(
 
    PL_FILES => { # generator => target(s)
       'rewrite-config.PL' => [
-         '$(PREFIX)/share/koha/etc/koha-conf.xml',
-         '$(PREFIX)/share/koha/etc/koha-httpd.conf',
-         '$(PREFIX)/share/koha/etc/zebradb/etc/passwd',
-         '$(PREFIX)/share/koha/etc/zebradb/zebra-biblios.cfg',
-         '$(PREFIX)/share/koha/etc/zebradb/zebra-authorities.cfg'
+         '$(INSTALL_BASE)/share/koha/etc/koha-conf.xml',
+         '$(INSTALL_BASE)/share/koha/etc/koha-httpd.conf',
+         '$(INSTALL_BASE)/share/koha/etc/zebradb/etc/passwd',
+         '$(INSTALL_BASE)/share/koha/etc/zebradb/zebra-biblios.cfg',
+         '$(INSTALL_BASE)/share/koha/etc/zebradb/zebra-authorities.cfg'
          ]
    }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
@@ -216,16 +217,18 @@ C4/*.pm is copied to perl's lib namespace.
 
 =pod
 
-CGIs are copied to $(PREFIX)/lib/cgi-bin/koha/
+CGIs are copied to $(INSTALL_BASE)/lib/cgi-bin/koha/
 and other scripts to koha/
 
 =cut
 	foreach my $src ("mainpage.pl","help.pl","kohaversion.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
+	  if (-f $src) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
 		} else {
-			$result{$src} = '$(PREFIX)/lib/cgi-bin/koha/'.$src;
+			$result{$src} = '$(INSTALL_BASE)/lib/cgi-bin/koha/'.$src;
 		}
+	  }
 	}
 
 =pod
@@ -253,14 +256,14 @@ etc files are copied to /usr/share/koha/etc/
 	# Misc etc to koha/etc
 	foreach my $src (glob("etc/zebradb/*/*/*"),glob("etc/zebradb/*/*"),glob("etc/zebradb/*"),glob("etc/*")) {
 		if (-f $src) {
-			$result{$src} = '$(PREFIX)/share/koha/'.$src;
+			$result{$src} = '$(INSTALL_BASE)/share/koha/'.$src;
 		}
 	}
 	
 	# set up zebra with the appropriate language and marc config
-    $result{"etc/zebradb/lang_defs/sort-string-$lang_value.chr"} = '$(PREFIX)/share/koha/etc/zebradb/etc/sort-string-utf.chr';
-    $result{"etc/zebradb/marc_defs/biblios-$marc_value.abs"} = '$(PREFIX)/share/koha/etc/zebradb/biblios/etc/record.abs';
-	$result{"etc/zebradb/marc_defs/authorities-$marc_value.abs"} = '$(PREFIX)/share/koha/etc/zebradb/authorities/etc/record.abs';
+    $result{"etc/zebradb/lang_defs/sort-string-$lang_value.chr"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/etc/sort-string-utf.chr';
+    $result{"etc/zebradb/marc_defs/biblios-$marc_value.abs"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/biblios/etc/record.abs';
+	$result{"etc/zebradb/marc_defs/authorities-$marc_value.abs"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/authorities/etc/record.abs';
 	return \%result;
 }
 
