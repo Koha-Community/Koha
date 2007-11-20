@@ -32,8 +32,8 @@ Makefile.PL - Koha packager and installer
 
 =head2 BASIC INSTALLATION
 
-	perl Makefile.PL
-	or perl Makefile.PL INSTALL_BASE=/path/to/your/home/dir
+	perl Makefile.PL 
+	or perl Makefile.PL INSTALL_BASE=/path/to/your/home/dir MARCFLAVOUR=marc21 LANGUAGE=en
 	make
 	sudo make install
 
@@ -88,16 +88,24 @@ to generate initial configuration files in future.
 
 =cut
 
-my $message = "What version of MARC marc21 or unimarc?";
-my $marc_value = prompt($message);
-$message = "Which language fr or en?";
-my $lang_value = prompt($message);
+my $marc_value;
+my $lang_value;
+
+
+while ($marc_value ne 'marc21' && $marc_value ne 'unimarc'){
+   my $message= "Chose your flavour of MARC, unimarc or marc21 [marc21]";
+   $marc_value=prompt($message) || 'marc21';
+}
+if ($lang_value ne 'en' && $lang_value ne 'fr'){
+   my $message= "Choose your language, en or fr [en]";
+   $lang_value=prompt($message) || 'en';
+}
 
 WriteMakefile(
 
     NAME => 'koha',
     #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
-    VERSION_FROM => 'C4/Context.pm',
+    VERSION_FROM => 'kohaversion.pl',
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
@@ -221,7 +229,8 @@ CGIs are copied to $(INSTALL_BASE)/lib/cgi-bin/koha/
 and other scripts to koha/
 
 =cut
-	foreach my $src ("mainpage.pl","help.pl","kohaversion.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl")) {
+	foreach my $src ("mainpage.pl","help.pl","kohaversion.pl",glob("*/*.pl"),glob("installer/*"),glob("installer/*/*/*/*"),glob("installer/*/*/*/*/*"),glob("*/*/*.pl"),glob("*/*/*/*.pl"),glob("installer/*/*/*.sql"))
+{
 	  if (-f $src) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
