@@ -87,6 +87,9 @@ C4::Auth - Authenticates Koha users
   &checkauth
   &get_template_and_user
 );
+@EXPORT_OK = qw(
+  &check_api_auth
+);
 
 =item get_template_and_user
 
@@ -750,6 +753,253 @@ sub checkauth {
       ),
       $template->output;
     exit;
+}
+
+=item check_api_auth
+
+  ($status, $cookie, $sessionId) = check_api_auth($query, $userflags);
+
+Given a CGI query containing the parameters 'userid' and 'password' and/or a session
+cookie, determine if the user has the privileges specified by C<$userflags>.
+
+C<check_api_auth> is is meant for authenticating users of web services, and
+consequently will always return and will not attempt to redirect the user
+agent.
+
+If a valid session cookie is already present, check_api_auth will return a status
+of "ok", the cookie, and the Koha session ID.
+
+If no session cookie is present, check_api_auth will check the 'userid' and 'password
+parameters and create a session cookie and Koha session if the supplied credentials
+are OK.
+
+Possible return values in C<$status> are:
+
+=over 4
+
+=item "ok" -- user authenticated; C<$cookie> and C<$sessionid> have valid values.
+
+=item "failed" -- credentials are not correct; C<$cookie> and C<$sessionid> are undef
+
+=item "maintenance" -- DB is in maintenance mode; no login possible at the moment
+
+=item "expired -- session cookie has expired; API user should resubmit userid and password
+
+=back
+
+=cut
+
+sub check_api_auth {
+    my $query = shift;
+    my $flagsrequired = shift;
+
+    my $dbh     = C4::Context->dbh;
+    my $timeout = C4::Context->preference('timeout');
+    $timeout = 600 unless $timeout;
+
+    unless (C4::Context->preference('Version')) {
+        # database has not been installed yet
+        return ("maintenance", undef, undef);
+    }
+    my $kohaversion=C4::Context::KOHAVERSION;
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    if (C4::Context->preference('Version') < $kohaversion) {
+        # database in need of version update; assume that
+        # no API should be called while databsae is in
+        # this condition.
+        return ("maintenance", undef, undef);
+    }
+
+    # FIXME -- most of what follows is a copy-and-paste
+    # of code from checkauth.  There is an obvious need
+    # for refactoring to separate the various parts of
+    # the authentication code, but as of 2007-11-19 this
+    # is deferred so as to not introduce bugs into the
+    # regular authentication code for Koha 3.0.
+
+    # see if we have a valid session cookie already
+    # however, if a userid parameter is present (i.e., from
+    # a form submission, assume that any current cookie
+    # is to be ignored
+    my $sessionID = undef;
+    unless ($query->param('userid')) {
+        $sessionID = $query->cookie("CGISESSID");
+    }
+    if ($sessionID) {
+        my $storage_method = C4::Context->preference('SessionStorage');
+        my $session;
+        if ($storage_method eq 'mysql'){
+            $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+        }
+        elsif ($storage_method eq 'Pg') {
+            $session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
+        }
+        else {
+            # catch all defaults to tmp should work on all systems
+            $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+        }
+        C4::Context->_new_userenv($sessionID);
+        if ($session) {
+            C4::Context::set_userenv(
+                $session->param('number'),       $session->param('id'),
+                $session->param('cardnumber'),   $session->param('firstname'),
+                $session->param('surname'),      $session->param('branch'),
+                $session->param('branchname'),   $session->param('flags'),
+                $session->param('emailaddress'), $session->param('branchprinter')
+            );
+
+            my $ip = $session->param('ip');
+            my $lasttime = $session->param('lasttime');
+            my $userid = $session->param('id');
+            if ( $lasttime < time() - $timeout ) {
+                # time out
+                $session->delete();
+                C4::Context->_unset_userenv($sessionID);
+                $userid    = undef;
+                $sessionID = undef;
+                return ("expired", undef, undef);
+            } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+                # IP address changed
+                $session->delete();
+                C4::Context->_unset_userenv($sessionID);
+                $userid    = undef;
+                $sessionID = undef;
+                return ("expired", undef, undef);
+            } else {
+                my $cookie = $query->cookie( CGISESSID => $session->id );
+                $session->param('lasttime',time());
+                my $flags = haspermission( $dbh, $userid, $flagsrequired );
+                if ($flags) {
+                    return ("ok", $cookie, $sessionID);
+                } else {
+                    $session->delete();
+                    C4::Context->_unset_userenv($sessionID);
+                    $userid    = undef;
+                    $sessionID = undef;
+                    return ("failed", undef, undef);
+                }
+            }
+        } else {
+            return ("expired", undef, undef);
+        }
+    } else {
+        # new login
+        my $userid = $query->param('userid');   
+        my $password = $query->param('password');   
+        unless ($userid and $password) {
+            # caller did something wrong, fail the authenticateion
+            return ("failed", undef, undef);
+        }
+        my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
+        if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
+            my $storage_method = C4::Context->preference('SessionStorage');
+            my $session;
+            if ($storage_method eq 'mysql'){
+                $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+            } elsif ($storage_method eq 'Pg') {
+                $session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
+            } else {
+                # catch all defaults to tmp should work on all systems
+                $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+            }
+            return ("failed", undef, undef) unless $session;
+
+            my $sessionID = $session->id;
+            C4::Context->_new_userenv($sessionID);
+            my $cookie = $query->cookie(CGISESSID => $sessionID);
+            if ( $return == 1 ) {
+                my (
+                    $borrowernumber, $firstname,  $surname,
+                    $userflags,      $branchcode, $branchname,
+                    $branchprinter,  $emailaddress
+                );
+                my $sth =
+                  $dbh->prepare(
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
+                  );
+                $sth->execute($userid);
+                (
+                    $borrowernumber, $firstname,  $surname,
+                    $userflags,      $branchcode, $branchname,
+                    $branchprinter,  $emailaddress
+                ) = $sth->fetchrow if ( $sth->rows );
+
+                unless ($sth->rows ) {
+                    my $sth = $dbh->prepare(
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
+                      );
+                    $sth->execute($cardnumber);
+                    (
+                        $borrowernumber, $firstname,  $surname,
+                        $userflags,      $branchcode, $branchname,
+                        $branchprinter,  $emailaddress
+                    ) = $sth->fetchrow if ( $sth->rows );
+
+                    unless ( $sth->rows ) {
+                        $sth->execute($userid);
+                        (
+                            $borrowernumber, $firstname, $surname, $userflags,
+                            $branchcode, $branchname, $branchprinter, $emailaddress
+                        ) = $sth->fetchrow if ( $sth->rows );
+                    }
+                }
+
+                my $ip       = $ENV{'REMOTE_ADDR'};
+                # if they specify at login, use that
+                if ($query->param('branch')) {
+                    $branchcode  = $query->param('branch');
+                    $branchname = GetBranchName($branchcode);
+                }
+                my $branches = GetBranches();
+                my @branchesloop;
+                foreach my $br ( keys %$branches ) {
+                    #     now we work with the treatment of ip
+                    my $domain = $branches->{$br}->{'branchip'};
+                    if ( $domain && $ip =~ /^$domain/ ) {
+                        $branchcode = $branches->{$br}->{'branchcode'};
+
+                        # new op dev : add the branchprinter and branchname in the cookie
+                        $branchprinter = $branches->{$br}->{'branchprinter'};
+                        $branchname    = $branches->{$br}->{'branchname'};
+                    }
+                }
+                $session->param('number',$borrowernumber);
+                $session->param('id',$userid);
+                $session->param('cardnumber',$cardnumber);
+                $session->param('firstname',$firstname);
+                $session->param('surname',$surname);
+                $session->param('branch',$branchcode);
+                $session->param('branchname',$branchname);
+                $session->param('flags',$userflags);
+                $session->param('emailaddress',$emailaddress);
+                $session->param('ip',$session->remote_addr());
+                $session->param('lasttime',time());
+            } elsif ( $return == 2 ) {
+                #We suppose the user is the superlibrarian
+                $session->param('number',0);
+                $session->param('id',C4::Context->config('user'));
+                $session->param('cardnumber',C4::Context->config('user'));
+                $session->param('firstname',C4::Context->config('user'));
+                $session->param('surname',C4::Context->config('user'));
+                $session->param('branch','NO_LIBRARY_SET');
+                $session->param('branchname','NO_LIBRARY_SET');
+                $session->param('flags',1);
+                $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+                $session->param('ip',$session->remote_addr());
+                $session->param('lasttime',time());
+            } 
+            C4::Context::set_userenv(
+                $session->param('number'),       $session->param('id'),
+                $session->param('cardnumber'),   $session->param('firstname'),
+                $session->param('surname'),      $session->param('branch'),
+                $session->param('branchname'),   $session->param('flags'),
+                $session->param('emailaddress'), $session->param('branchprinter')
+            );
+            return ("ok", $cookie, $sessionID);
+        } else {
+            return ("failed", undef, undef);
+        }
+    } 
 }
 
 sub checkpw {

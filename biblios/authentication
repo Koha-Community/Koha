@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+
+# Copyright 2007 LibLime
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+
+use strict;
+use CGI;
+use C4::Auth qw/check_api_auth/;
+use XML::Simple;
+
+my $query = new CGI;
+
+# The authentication strategy for the biblios web 
+# services is as follows.
+# 
+# 1. biblios POSTs to the authenticate API with URL-encoded
+# form parameters 'userid' and 'password'.  If the credentials
+# belong to a valid user with the 'editcatalogue' privilege,
+# a session cookie is returned and a Koha session created.  Otherwise, an 
+# appropriate error is returned.
+# 2. For subsequent calls to the biblios APIs, the user agent
+# should submit the same session cookie.  If the cookie is
+# not supplied or does not correspond to a valid session, the API
+# will redirect to this authentication API.
+# 3. The session cookie should not be (directly) sent back to the user's
+# web browser, but instead should be stored and submitted by biblios.
+
+
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
+
+if ($status eq "ok") {
+    print $query->header(-type => 'text/xml', cookie => $cookie);
+} else {
+    print $query->header(-type => 'text/xml');
+}
+print XMLout({ status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
