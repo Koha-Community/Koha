@@ -87,6 +87,11 @@ to generate initial configuration files in future.
 
 =cut
 
+my $message = "What version of MARC marc21 or unimarc?";
+my $marc_value = prompt($message);
+$message = "Which language fr or en?";
+my $lang_value = prompt($message);
+
 WriteMakefile(
 
     NAME => 'koha',
@@ -239,6 +244,7 @@ excluding non-files and whitespace in filenames.
 			$result{$src} = '$(INST_LIBDIR)/koha/templates/'.$src;
 		}
 	}
+	
 =pod
 
 etc files are copied to /usr/share/koha/etc/
@@ -250,8 +256,11 @@ etc files are copied to /usr/share/koha/etc/
 			$result{$src} = '$(PREFIX)/share/koha/'.$src;
 		}
 	}
-
-
+	
+	# set up zebra with the appropriate language and marc config
+    $result{"etc/zebradb/lang_defs/sort-string-$lang_value.chr"} = '$(PREFIX)/share/koha/etc/zebradb/etc/sort-string-utf.chr';
+    $result{"etc/zebradb/marc_defs/biblios-$marc_value.abs"} = '$(PREFIX)/share/koha/etc/zebradb/biblios/etc/record.abs';
+	$result{"etc/zebradb/marc_defs/authorities-$marc_value.abs"} = '$(PREFIX)/share/koha/etc/zebradb/authorities/etc/record.abs';
 	return \%result;
 }
 
