@@ -96,7 +96,7 @@ while ($marc_value ne 'marc21' && $marc_value ne 'unimarc'){
    my $message= "Chose your flavour of MARC, unimarc or marc21 [marc21]";
    $marc_value=prompt($message) || 'marc21';
 }
-if ($lang_value ne 'en' && $lang_value ne 'fr'){
+while ($lang_value ne 'en' && $lang_value ne 'fr'){
    my $message= "Choose your language, en or fr [en]";
    $lang_value=prompt($message) || 'en';
 }
