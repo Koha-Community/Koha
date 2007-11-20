@@ -237,6 +237,9 @@ and other scripts to koha/
 	  if (-f $src) {
 		if ($src =~ /(misc|updater|rss)\//) {
 			$result{$src} = '$(INST_BIN)/koha/'.$src;
+		}
+		elsif ($src =~ /opac\//){
+		    $result{$src} = '$(INST_BIN)/cgi-bin/'.$src;
 		} else {
 			$result{$src} = '$(INST_BIN)/cgi-bin/koha/'.$src;
 		}
