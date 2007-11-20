@@ -109,6 +109,7 @@ WriteMakefile(
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
+	INSTALLSITEBIN => '$(INSTALL_BASE)/lib',
     PREREQ_PM => {
 'Biblio::EndnoteStyle' => 0.05,
 'CGI' => 3.15,
@@ -181,11 +182,11 @@ WriteMakefile(
 
    PL_FILES => { # generator => target(s)
       'rewrite-config.PL' => [
-         '$(INSTALL_BASE)/share/koha/etc/koha-conf.xml',
-         '$(INSTALL_BASE)/share/koha/etc/koha-httpd.conf',
-         '$(INSTALL_BASE)/share/koha/etc/zebradb/etc/passwd',
-         '$(INSTALL_BASE)/share/koha/etc/zebradb/zebra-biblios.cfg',
-         '$(INSTALL_BASE)/share/koha/etc/zebradb/zebra-authorities.cfg'
+         '$(INST_LIBDIR)/etc/koha-conf.xml',
+         '$(INST_LIBDIR)/etc/koha-httpd.conf',
+         '$(INST_LIBDIR)/etc/zebradb/etc/passwd',
+         '$(INST_LIBDIR)/etc/zebradb/zebra-biblios.cfg',
+         '$(INST_LIBDIR)/etc/zebradb/zebra-authorities.cfg'
          ]
    }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
@@ -196,6 +197,8 @@ WriteMakefile(
 #     # fake target to check permissions
 #     'misc/chmod.PL' => '$(INST_LIBDIR)/fake-target'
 #     }
+   
+
    # need to set ownerships
    # need to load koha.sql
    # need to link koha-httpd.conf
@@ -233,9 +236,9 @@ and other scripts to koha/
 {
 	  if (-f $src) {
 		if ($src =~ /(misc|updater|rss)\//) {
-			$result{$src} = '$(INST_LIBDIR)/koha/'.$src;
+			$result{$src} = '$(INST_BIN)/koha/'.$src;
 		} else {
-			$result{$src} = '$(INSTALL_BASE)/lib/cgi-bin/koha/'.$src;
+			$result{$src} = '$(INST_BIN)/cgi-bin/koha/'.$src;
 		}
 	  }
 	}
@@ -265,14 +268,14 @@ etc files are copied to /usr/share/koha/etc/
 	# Misc etc to koha/etc
 	foreach my $src (glob("etc/zebradb/*/*/*"),glob("etc/zebradb/*/*"),glob("etc/zebradb/*"),glob("etc/*")) {
 		if (-f $src) {
-			$result{$src} = '$(INSTALL_BASE)/share/koha/'.$src;
+			$result{$src} = '$(INST_LIBDIR)/'.$src;
 		}
 	}
 	
 	# set up zebra with the appropriate language and marc config
-    $result{"etc/zebradb/lang_defs/sort-string-$lang_value.chr"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/etc/sort-string-utf.chr';
-    $result{"etc/zebradb/marc_defs/biblios-$marc_value.abs"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/biblios/etc/record.abs';
-	$result{"etc/zebradb/marc_defs/authorities-$marc_value.abs"} = '$(INSTALL_BASE)/share/koha/etc/zebradb/authorities/etc/record.abs';
+    $result{"etc/zebradb/lang_defs/sort-string-$lang_value.chr"} = '$(INST_LIBDIR)/etc/zebradb/etc/sort-string-utf.chr';
+    $result{"etc/zebradb/marc_defs/biblios-$marc_value.abs"} = '$(INST_LIBDIR)/etc/zebradb/biblios/etc/record.abs';
+	$result{"etc/zebradb/marc_defs/authorities-$marc_value.abs"} = '$(INST_LIBDIR)/etc/zebradb/authorities/etc/record.abs';
 	return \%result;
 }
 
