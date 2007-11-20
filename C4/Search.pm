@@ -27,6 +27,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 3.00;
+$DEBUG=0;
 
 =head1 NAME
 
@@ -726,7 +727,7 @@ sub buildQuery {
 
                 # Remove Stopwords  
                 $operand = _remove_stopwords($operand,$index);
-                warn "OPERAND w/out STOPWORDS: >$operand<";
+                warn "OPERAND w/out STOPWORDS: >$operand<" if $DEBUG;
 
                 my $indexes_set;
 
@@ -734,7 +735,7 @@ sub buildQuery {
                 my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
                 my $truncated_operand;
                 ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _detect_truncation($operand,$index);
-                warn "TRUNCATION: NON:>@$nontruncated< RIGHT:>@$righttruncated< LEFT:>@$lefttruncated< RIGHTLEFT:>@$rightlefttruncated< REGEX:>@$regexpr<";
+                warn "TRUNCATION: NON:>@$nontruncated< RIGHT:>@$righttruncated< LEFT:>@$lefttruncated< RIGHTLEFT:>@$rightlefttruncated< REGEX:>@$regexpr<" if $DEBUG;
                 # Apply Truncation
                 # Problem is when build_weights gets ahold if this is wraps in quotes which breaks the truncation :/
                 if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
@@ -762,17 +763,17 @@ sub buildQuery {
                     }
                 }
                 $operand = $truncated_operand if $truncated_operand;
-                warn "TRUNCATED OPERAND: >$truncated_operand<";
+                warn "TRUNCATED OPERAND: >$truncated_operand<" if $DEBUG;
 
                 # Handle Stemming
                 my $stemmed_operand;
                 $stemmed_operand = _build_stemmed_operand($operand) if $stemming;
-                warn "STEMMED OPERAND: >$stemmed_operand<";
+                warn "STEMMED OPERAND: >$stemmed_operand<" if $DEBUG;
 
                 # Handle Field Weighting
                 my $weighted_operand;
                 $weighted_operand = _build_weighted_query($operand,$stemmed_operand,$index) if $weight_fields;
-                warn "FIELD WEIGHTED OPERAND: >$weighted_operand<";
+                warn "FIELD WEIGHTED OPERAND: >$weighted_operand<" if $DEBUG;
                 $operand = $weighted_operand if $weight_fields;
                 $indexes_set = 1 if $weight_fields;
 
@@ -824,7 +825,7 @@ sub buildQuery {
             }    #/if $operands
         }    # /for
     }
-    warn "QUERY BEFORE LIMITS: >$query<";
+    warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
     # add limits
     my $limit_query;
     my $limit_search_desc;
@@ -911,9 +912,9 @@ sub buildQuery {
     $human_search_desc =~ s/^ //g;
     my $koha_query = $query;
 
-    #warn "QUERY:".$koha_query;
-    #warn "SEARCHDESC:".$human_search_desc;
-    #warn "FEDERATED QUERY:".$federated_query;
+    warn "QUERY:".$koha_query if $DEBUG;
+    warn "SEARCHDESC:".$human_search_desc if $DEBUG;
+    warn "FEDERATED QUERY:".$federated_query if $DEBUG;
     return ( undef, $human_search_desc, $koha_query, $federated_query );
 }
 
