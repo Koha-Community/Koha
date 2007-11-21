@@ -184,7 +184,14 @@
             <div id="searchresults">
 				<form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="myform" id="mainform">
                 <!-- TMPL_IF NAME="searchdesc" -->
-                    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
+					<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
+					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+					<!-- /TMPL_LOOP -->
+					<!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
+					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                    <!-- /TMPL_LOOP -->
+
+
                 <!-- /TMPL_IF -->
  				<!-- RE-SORT START -->
                     <p>

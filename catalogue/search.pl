@@ -335,10 +335,9 @@ my $params = $cgi->Vars;
 
 # Params that can have more than one value
 # sort by is used to sort the query
+# in theory can have more than one but generally there's just one
 my @sort_by;
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
-
-# FIXME: this is a quick hack
 foreach my $sort (@sort_by) {
 	$template->param($sort => 1);
 }
@@ -401,6 +400,30 @@ my @results;
 
 ## I. BUILD THE QUERY
 ( $error,$query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+
+## parse the query_cgi string and put it into a form suitable for <input>s
+my @query_inputs;
+for my $this_cgi ( split('&',$query_cgi) ) {
+	next unless $this_cgi;
+	$this_cgi =~ m/(.*=)(.*)/;
+	my $input_name = $1;
+	my $input_value = $2;
+	$input_name =~ s/=$//;
+	push @query_inputs, { input_name => $input_name, input_value => $input_value };
+}
+$template->param ( QUERY_INPUTS => \@query_inputs );
+
+## parse the limit_cgi string and put it into a form suitable for <input>s
+my @limit_inputs;
+for my $this_cgi ( split('&',$limit_cgi) ) {
+	next unless $this_cgi;
+    $this_cgi =~ m/(.*=)(.*)/;
+    my $input_name = $1;
+    my $input_value = $2;
+    $input_name =~ s/=$//;
+    push @limit_inputs, { input_name => $input_name, input_value => $input_value };
+}
+$template->param ( LIMIT_INPUTS => \@limit_inputs );
 
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total; # the total results for the whole set

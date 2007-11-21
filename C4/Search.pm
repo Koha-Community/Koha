@@ -702,7 +702,7 @@ sub buildQuery {
     }
 
 # FIXME: this is bound to be broken now
-    if ( $query =~ /(\(|\)|:|=)/ ) {    # sorry, too complex, assume CCL
+    if ( $query =~ /(\(|\))/ ) {    # sorry, too complex, assume CCL
         return ( undef, $query, $query_cgi, $query_search_desc, $limit, $limit_cgi, $limit_desc, 'ccl' );
     }
 
@@ -719,7 +719,13 @@ sub buildQuery {
 
             # COMBINE OPERANDS, INDEXES AND OPERATORS
             if ( $operands[$i] ) {
+
+				$weight_fields = 0 if $operands[$i] =~ /(:|=)/;
                 my $operand = $operands[$i];
+
+				my $sanatized_operand = $operands[$i];
+				$sanatized_operand =~ s/://g;
+
                 my $index   = $indexes[$i];
 
                 # if there's no index, don't use one, it will throw a CCL error
@@ -788,7 +794,7 @@ sub buildQuery {
                         $query .= " $operand";
 						$query_cgi .="&op=$operators[$i-1]";
 						$query_cgi .="&idx=$index" if $index;
-						$query_cgi .="&q=$operands[$i]" if $operand;
+						$query_cgi .="&q=$sanatized_operand" if $sanatized_operand;
 						$query_search_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                     }
 
@@ -798,7 +804,7 @@ sub buildQuery {
                         $query .= "$index_plus " unless $indexes_set;
                         $query .= "$operand";
 						$query_cgi .="&op=and&idx=$index" if $index;
-						$query_cgi .="&q=$operands[$i]" if $operand;
+						$query_cgi .="&q=$sanatized_operand" if $sanatized_operand;
                         $query_search_desc .= " and $index_plus $operands[$i]";
                     }
                 }
@@ -809,7 +815,7 @@ sub buildQuery {
 					$query .= $operand;
 					$query_search_desc .= " $index_plus $operands[$i]";
 					$query_cgi.="&idx=$index" if $index;
-					$query_cgi.="&q=$operands[$i]" if $operand;
+					$query_cgi.="&q=$sanatized_operand" if $sanatized_operand;
 
                     $previous_operand = 1;
                 }
