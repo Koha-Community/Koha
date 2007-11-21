@@ -341,6 +341,7 @@ my @sort_by;
 foreach my $sort (@sort_by) {
 	$template->param($sort => 1);
 }
+$template->param('sort_by' => $sort_by[0]);
 
 # Use the servers defined, or just search our local catalog(default)
 my @servers;
