@@ -8,28 +8,32 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 <!-- TMPL_IF Name="viewshelf" -->
-<h3><a href="/cgi-bin/koha/opac-shelves.pl">Virtual Shelves</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <!-- TMPL_IF NAME="itemsloop" --><em><!-- TMPL_VAR Name="shelfname" --></em><!-- TMPL_ELSE -->The Virtual Shelf <em><!-- TMPL_VAR Name="shelfname" --></em> is empty<!-- /TMPL_IF --></h3>
-<form class="inline" action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform">
+<h3><a href="/cgi-bin/koha/opac-shelves.pl">Virtual Shelves</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR Name="shelfname" --></em></h3>
+<!-- TMPL_IF NAME="itemsloop" -->
+<form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform">
     <table>
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
             <tr>
-                <th>
-                    <a style="color:white;" href="/cgi-bin/koha/opac-shelves.pl" onclick="CheckAll(); return false;">Check All</a>
-                </th>
+                <!-- TMPL_IF name="manageshelf" --><th>
+                    <a href="/cgi-bin/koha/opac-shelves.pl" onclick="CheckAll(); return false;"><img src="<!-- TMPL_VAR NAME="themelang" -->/../images/checkall.gif" alt="Check All" border="0" /></a>
+                </th><!-- /TMPL_IF -->
                 <th>&nbsp;</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Call No.</th>
             </tr>
         <!-- TMPL_LOOP Name="itemsloop" -->
-            <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
-                    <td>
+            <!-- TMPL_IF name="color" -->
+			<tr class="highlight">
+			<!-- TMPL_ELSE -->
+			<tr><!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="manageshelf" --><td>
                         <input type="checkbox" name="MOD-<!-- TMPL_VAR Name="biblionumber" -->" />
-                        <input type="hidden" name="ModBiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-                    </td>
+                        <input type="hidden" name="ModBiblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+                    </td><!-- /TMPL_IF -->
                     <td>
-                        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+                        <img src="<!-- TMPL_VAR NAME="themelang" -->/../itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
                     </td>
                     <td>
                          <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
@@ -55,24 +59,14 @@
         <!-- /TMPL_LOOP -->
     </table>
     <!-- TMPL_ELSE -->
-    <tr><td colspan="5">This Virtual Shelf is empty.</td></tr>
+    <div class="message">This Virtual Shelf is empty.</div>
     <!-- /TMPL_IF -->
   </table>
-  <!-- TMPL_IF name="manageshelf" --><!-- TMPL_IF NAME="itemsloop" --><a href="/cgi-bin/koha/opac-shelves.pl" onclick="CheckAll(); return false;"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/checkall.gif" height="18" width="18" alt="Check All" title="Check All" border="0" /></a><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
+    <!-- /TMPL_IF -->
+  <!-- TMPL_IF name="manageshelf" --><!-- TMPL_IF NAME="itemsloop" --><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR Name="shelfnumber" -->" />
   <input type="hidden" name="modifyshelfcontents" value="1" />
-  <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete('Are you sure you want to remove these items from the list?')" /><!-- /TMPL_IF --><!-- /TMPL_IF --></form><!-- TMPL_IF name="manageshelf" --> <form class="inline" method="get" action="/cgi-bin/koha/opac-shelves.pl"><input type="hidden" name="op" value="modif" /><input type="hidden" value="<!-- TMPL_VAR NAME="shelfnumber" -->" name="shelf" /><input type="submit" value="Rename this Shelf" class="icon edit" /></form> <!-- TMPL_UNLESS NAME="itemsloop" --><form class="inline" method="get" action="/cgi-bin/koha/opac-shelves.pl"><input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="shelves" value="1" /><input type="submit" class="icon delete" value="Delete this Virtual Shelf" onclick="return confirmDelete('Are you sure you want to delete this Virtual Shelf?')" /></form><!-- /TMPL_UNLESS -->
-<br /><br /><!-- TMPL_IF name="manageshelf" -->
-<form action="/cgi-bin/koha/opac-shelves.pl" method="post">
-  <table>
-    <tr><th colspan="2">Add an Item to this Virtual Shelf by Barcode</th></tr>
-    <tr>
-      <td><label for="addbarcode">Barcode:</label></td>
-      <td><input name="addbarcode" type="text" id="addbarcode" size="14" maxlength="14" /><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="modifyshelfcontents" value="1" /><input type="submit" value="Save" class="submit" /></td>
-    </tr>
-  </table>
-</form><!-- /TMPL_IF -->
+  <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete('Are you sure you want to remove these items from the list?')" /><!-- /TMPL_IF --><!-- /TMPL_IF --></form><!-- TMPL_IF name="manageshelf" --><!-- TMPL_UNLESS NAME="itemsloop" --><form method="get" action="/cgi-bin/koha/opac-shelves.pl"><input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="hidden" name="shelves" value="1" /><input type="submit" class="icon delete" value="Delete this Virtual Shelf" onclick="return confirmDelete('Are you sure you want to delete this Virtual Shelf?')" /></form><!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
-<form class="inline" method="get" action="opac-shelves.pl"><input type="submit" class="icon back" value="Back to Virtual Shelves" /></form> <form class="inline" action="opac-shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Add or Remove Virtual Shelves" class="icon add" /></form>
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF Name="shelves" -->
     <!-- TMPL_IF Name="status1" -->
@@ -83,7 +77,6 @@
         <p class="error"><!-- TMPL_VAR Name="string" --></p>
       <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-<div id="center">
 <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
     <input type="hidden" name="shelves" value="1">
     <div class="form"><table>
@@ -92,8 +85,7 @@
 </table></div>
 
                 <p><input type="hidden" name="category" value="1" /><input type="submit" value="Add New Shelf" class="icon add"></p>
-          </form>
-        </div>    
+          </form>    
     
     <div id="right"><!-- TMPL_IF NAME="shelveslooppriv" -->
     <form method="post" action="/cgi-bin/koha/opac-shelves.pl" name="mainform">
@@ -111,7 +103,7 @@
           </table><p><sup>*</sup>All items must be removed from Virtual Shelves prior to deletion.</p>
     <input type="submit" value="Delete Selected Lists" onclick="return confirmDelete('Are you sure you want to delete this list?')" class="icon delete" /> </form>
     <!-- /TMPL_IF -->
-    <p><form class="inline" action="opac-shelves.pl" method="get"><input type="submit" class="icon back" value="Back to Virtual Shelves" /></form></p>
+    <p><form action="opac-shelves.pl" method="get"><input type="submit" class="icon back" value="Back to Virtual Shelves" /></form></p>
 </div>
   <!-- TMPL_ELSE -->
   <!-- TMPL_IF name="edit" -->
@@ -127,50 +119,59 @@
     </form>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_UNLESS NAME="viewshelf" -->
 <h2>Virtual Shelves</h2>
 
 <ul class="link-tabs">
 <!-- TMPL_IF name="showprivateshelves" -->
-<li id="privateshelves_tab" class="on">
-<!-- TMPL_ELSE --> 
-<li id="privateshelves_tab" class="off">
-<!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves" onclick="changeView('privateshelves'); return false;">Your Virtual Shelves</a> </li>
-<!-- TMPL_IF name="showpublicshelves" --> 
-<li id="publicshelves_tab" class="on">
-<!-- TMPL_ELSE --> 
-<li id="publicshelves_tab" class="off">
+<li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your Virtual Shelves</a>	</li>
+<!-- TMPL_ELSE -->
+<li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">Your Virtual Shelves</a>	</li>
 <!-- /TMPL_IF -->
-<a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves" onclick="changeView('publicshelves'); return false;">Public Virtual Shelves</a></li>
-  
+<!-- TMPL_IF name="showpublicshelves" -->
+<li id="publicshelves_tab" class="on"><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public Virtual Shelves</a></li>
+<!-- TMPL_ELSE -->
+<li id="publicshelves_tab" class="off"><a href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">Public Virtual Shelves</a></li>
+<!-- /TMPL_IF -->
 </ul>
+
 <!-- TMPL_IF name="showprivateshelves" -->
-<div id="privateshelves" style="display:block;">
-<!-- TMPL_ELSE --> 
-<div id="privateshelves" style="display:none;">
+<div id="privateshelves" class="tab-container" style="display:block;">
+<!-- TMPL_ELSE -->
+<div id="privateshelves" class="tab-container" style="display:none;">
 <!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="loggedinusername" -->
-<table>
+<!-- TMPL_IF NAME="shelveslooppriv" --><table>
 <tr><th>List Name</th><th>Contents</th><th>&nbsp;</th></tr>
 <!-- TMPL_IF NAME="shelveslooppriv" --><!-- TMPL_LOOP Name="shelveslooppriv" -->
-<!-- TMPL_IF name="color" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF --><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td><td><!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Rename</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr><!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="4">Click below to create a new Virtual Shelf!</td></tr><!-- /TMPL_IF --></table>
-<p><form action="opac-shelves.pl" method="get"><input type="hidden" value="1" name="shelves" /><input type="submit" value="Add or Remove Virtual Shelves" class="icon add" /></form></p>
+<!-- TMPL_IF name="color" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF --><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td><td><!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Rename</a> <a class="delete" href="opac-shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr><!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="4">Click below to create a new Virtual Shelf!</td></tr><!-- /TMPL_IF --></table>
+<!-- TMPL_ELSE -->No private shelves.<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
   <p><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create your own private Virtual Shelf</p>
 <!-- /TMPL_IF -->
-
 </div>
 
-<!-- TMPL_IF name="showpublicshelves" --><div id="publicshelves" style="display:block;"> 
+<!-- TMPL_IF name="showpublicshelves" -->
+<div id="publicshelves" class="tab-container" style="display:block;">
 <!-- TMPL_ELSE -->
-<div id="publicshelves" style="display:none;">
-<!-- /TMPL_IF --><table>
+<div id="publicshelves" class="tab-container" style="display:none;">
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="shelvesloop" -->
+<table>
 <tr><th>List Name</th><th>Contents</th></tr>
 <!-- TMPL_LOOP Name="shelvesloop" -->
 <!-- TMPL_IF name="color" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF --><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td></tr>
       <!-- /TMPL_LOOP -->
-    </table></div>
+    </table>
+	<!-- TMPL_ELSE -->
+	No public shelves.
+	<!-- /TMPL_IF --></div>
 
   <!-- /TMPL_IF -->
+  <!-- /TMPL_UNLESS -->
+  
 <!-- /TMPL_IF -->
 
 </div>

@@ -195,6 +195,7 @@
             <th>Location</th>
             <th>Status</th>
             <th>Date Due</th>
+			<th>Last Seen</th>
             <th>Volume</th>
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -223,6 +224,7 @@
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="datedue" --></td>
+			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
             <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
             <!-- TMPL_IF NAME="type" -->
             <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>

@@ -121,6 +121,12 @@ fieldset.action {
 	width : auto;
 }
 
+form {
+	display : inline;
+	margin : 0;
+	padding : 0;
+}
+
 h1 {
 	font-size : 138.5%;
 }
@@ -231,8 +237,12 @@ li {
 	list-style : disc;
 }
 
+p.availability {
+	font-size : 87%;
+}
+
 .available {
-	font-size : 0.75em;
+	color : #006600;
 }
 
 .inwait {
@@ -270,10 +280,6 @@ a .term {
 
 .transfered {
 	background-color : #F9FF9A;
-}
-
-.unavailable {
-	background-color : #FFED3D;
 }
 
 /* action buttons */
@@ -688,6 +694,10 @@ p.searchresults {
 	padding : 3px 3px 5px 5px;
 }
 
+.searchresults table {
+	margin : 0;
+}
+
 .searchresults td, .searchresults th, .searchresults table {
 	border: 0;
 }
@@ -696,16 +706,12 @@ p.searchresults {
 	border-bottom : 1px solid #CCCCCC;
 }
 
+.searchresults tr:first-child {
+	border : 0;
+}
+
 .searchresults table {
 	border-top : 0px solid #CCCCCC;
-}
-
-p.availability {
-	color:#666666;
-}
-
-.available {
-	font-size: 90%;
 }
 
 .searchresults a.reserve, .searchresults a.reserve:visited {
@@ -730,4 +736,178 @@ a.reserve {
 }
 .unavailable {
 	color: #990033;
+}
+
+#corner {
+	position: absolute;
+	top: .5em;
+	right: .2em;
+}
+
+#corner a.cart {
+	background-image : url(/opac-tmpl/prog/images/cart-small.gif);
+	background-position: left;
+	background-repeat : no-repeat;
+	padding: 0 15px;
+	text-decoration: none;
+}
+
+.pages {
+	line-height : 1.8em;
+	text-align: center;
+}
+a:link.current {
+	background-color: transparent;
+	color: #3366CC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+a:visited.current {
+	background-color: transparent;
+	color: #3366CC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:hover.current {
+	background-color: #CCFF00;
+	color: #CC3333;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:active.current {
+	background-color: #99CC00;
+	color: #FFFF99;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+.current {
+	background-color: #FFFFFF;
+	color: #3366CC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:link.nav {
+	background-color: #EFF1DC;
+	border: 1px solid #CCCC99;
+	color: #3366CC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:visited.nav {
+	background-color: #EFF1DC;
+	border: 1px solid #CCCC99;
+	color: #3366CC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:hover.nav {
+	background-color: #FFFFCC;
+	border: 1px solid #CCCC99;
+	color: #CC3333;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+a:active.nav {
+	background-color: #FFFFCC;
+	border: 1px solid #CCCC99;
+	color: #D25500;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+	text-decoration: none;
+}
+
+input.icon {
+	background-position: left;
+	background-repeat: no-repeat;
+	font-size : 96%;
+	font-weight: bold;
+	padding: 2px 2px 2px 22px;
+	background-color: #6699CC;
+	border: 1px outset #666666;
+	color: #FFFFCC;
+}
+
+input.shelf, a.shelf {
+	background-image: url(/opac-tmpl/prog/images/addtobasket.gif);
+}
+
+input.clearall, a.clearall {
+	background-image: url(/opac-tmpl/prog/images/clearbasket.gif);
+}
+
+/* Tabs */
+ul.link-tabs {
+	list-style-type: none;
+	margin: 9px 0 -2px 5px;
+	padding: 0;
+}
+
+ul.link-tabs li {
+	display: inline;
+	padding: 0px;
+}
+
+ul.link-tabs li a {
+	font-weight: bold;
+	padding: 2px 4px 2px 4px;
+	text-decoration: none;
+	border-top: 1px solid #DDDDDD;
+	border-left : 1px solid #DDDDDD;
+	border-right : 1px solid #666666;
+}
+
+ul.link-tabs li#power_formButton a, ul.link-tabs li#proximity_formButton a {
+	padding: 2px 4px 3px 4px;
+}
+
+ul.link-tabs li.off a {
+	background-color: #EEEEEB;
+	border-bottom: 1px solid #DDDDDD;
+}
+
+ul.link-tabs li.off a:hover {
+	padding: 2px 3px 2px 4px;
+	background-color: #FFFFEC;
+	border-top: 1px solid #BEBF84;
+	border-left : 1px solid #BEBF84;
+	border-right : 2px solid #333333;
+}
+
+ul.link-tabs li.on a {
+	background-color: #FFFFFF;
+	border-bottom: 1px solid #FFFFFF;
+}
+
+ul.link-tabs li a.debit {
+	background-color : #FFFF99;
+	color : #990033;
+}
+
+div.tab-container {
+	border : 1px solid #DDDDDD;	
+	margin-top : 4px;
+	padding : .7em;
+	width : 90%;
+}
+
+div.message {
+	border : 1px solid #8ebaff;
+	padding : .3em;
+	margin : .3em;
+	width : 50%;
 }

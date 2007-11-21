@@ -101,6 +101,14 @@ if ( $query->param('modifyshelfcontents') ) {
     }
 }
 
+	# set the default tab, etc.
+	my $shelf_type = $query->param('display');
+	if ((!$shelf_type) || ($shelf_type eq 'privateshelves'))  {
+		$template->param(showprivateshelves => 1);
+	} elsif ($shelf_type eq 'publicshelves') {
+		$template->param(showpublicshelves => 1);
+	}
+
 # getting the Shelves list
 my $shelflist = GetShelves( $loggedinuser, 2 );
 $template->param( { loggedinuser => $loggedinuser } );
@@ -199,27 +207,41 @@ SWITCH: {
   GetShelves( $loggedinuser, 2 )
   ;    # rebuild shelflist in case a shelf has been added
 
-my $color = '';
+my $color='';
 my @shelvesloop;
-foreach my $element ( sort keys %$shelflist ) {
-    my %line;
-    ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
-    $line{'toggle'}    = $color;
-        $line{'shelf'}     = $element;
-        $line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
-        $line{ "category" . $shelflist->{$element}->{'category'} } = 1;
-        $line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
-        $line{'canmanage'}      =
-          ShelfPossibleAction( $loggedinuser, $element, 'manage' );
-        $line{'firstname'} = $shelflist->{$element}->{'firstname'}
-          unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $line{'surname'} = $shelflist->{$element}->{'surname'}
-          unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        push( @shelvesloop, \%line );
-    }
+my @shelveslooppriv;
+foreach my $element (sort keys %$shelflist) {
+		my %line;
+		my %linepriv;
+		($color eq 0) ? ($color=1) : ($color=0);
+		if ($shelflist->{$element}->{'category'} eq 2) {
+		$line{'color'}= $color;
+		$line{'shelf'}=$element;
+		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+		$line{"category".$shelflist->{$element}->{'category'}} = 1;
+		$line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
+		$line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
+		$line{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		$line{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		
+		push (@shelvesloop, \%line);
+		} elsif ($shelflist->{$element}->{'category'} eq 1) {
+		$linepriv{'color'}= $color;
+                $linepriv{'shelf'}=$element;
+                $linepriv{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+                $linepriv{"category".$shelflist->{$element}->{'category'}} = 1;
+                $linepriv{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
+                $linepriv{'shelfbookcount'}=$shelflist->{$element}->{'count'};
+                $linepriv{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
+                $linepriv{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+                $linepriv{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+		push (@shelveslooppriv, \%linepriv);
+		}
+}
 
 $template->param(
+	shelveslooppriv => \@shelveslooppriv,
     shelvesloop             => \@shelvesloop,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
 );
