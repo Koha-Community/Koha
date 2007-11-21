@@ -35,7 +35,7 @@
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your book bag");
 	<!-- TMPL_IF NAME="AmazonContent" --> $(document).ready(function() {
- 	verify_images();
+ 	//verify_images();
  });
  <!-- /TMPL_IF -->
 </script>
