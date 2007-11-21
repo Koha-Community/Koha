@@ -735,6 +735,7 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
         IndependantBranches     => C4::Context->preference("IndependantBranches"),
+		AutoLocation       => C4::Context->preference("AutoLocation"),
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 

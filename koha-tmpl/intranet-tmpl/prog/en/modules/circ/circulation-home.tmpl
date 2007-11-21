@@ -20,9 +20,7 @@
 		<li><a href="/cgi-bin/koha/circ/circulation.pl">Check Out</a></li>
 		<li><a href="/cgi-bin/koha/circ/returns.pl">Check In</a></li>
 		<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
-	<!-- TMPL_UNLESS NAME="AutoLocation" -->
-	    <li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>
-	<!-- /TMPL_UNLESS -->
+	<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE --><li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	</ul>
 	</div>
 

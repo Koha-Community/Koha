@@ -40,7 +40,7 @@ function confirm_reregistration() {
 	
 		var moremenu = [
 			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
-			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"},
+			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permission" -->disabled: true, <!-- /TMPL_UNLESS -->},
 			{ text: "Delete", onclick: { fn: confirm_deletion } },
 		]
 
@@ -61,7 +61,7 @@ function confirm_reregistration() {
 	    });
 	
 	    new YAHOO.widget.Button("checkout");
-	    new YAHOO.widget.Button("addchild");
+	    <!-- TMPL_IF name="adultborrower" -->new YAHOO.widget.Button("addchild");<!-- /TMPL_IF -->
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
 	    new YAHOO.widget.Button("changepassword");

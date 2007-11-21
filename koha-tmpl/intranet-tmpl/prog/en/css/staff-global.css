@@ -260,7 +260,11 @@ legend {
 	border-bottom : 1px solid #E8E8E8;
 	clear : both;
 	font-size : 90%;
-	padding :.2em .5em .4em .5em;
+	padding :.2em .5em .4em 10px;
+}
+
+#header+#breadcrumbs {
+	margin-top : 1em;
 }
 
 #commonsearch {
@@ -996,8 +1000,11 @@ div.first fieldset {
  }
  
 .required {
-    background-color:red;
-    color:white;
+    color : #C00;
+}
+
+span.required {
+	font-style : italic;
 }
 
 .term {
@@ -1014,7 +1021,7 @@ div#menu {
 div#menu li a {
 	text-decoration: none;
 	display: block;
-	background-color: #EEE;
+	background : #EEE url(../../img/side-tab-gradient.gif) repeat-y top right;
 	border: 1px solid #000;
 	font-size: 111%;
 	margin: .5em 0;
@@ -1023,7 +1030,7 @@ div#menu li a {
 }
 
 div#menu li a:hover {
-	background-color: #F0F0CC;
+	background : #E8F0F6 url(../../img/side-tab-gradient-hover.gif) repeat-y top right;
 }
 
 div#menu li.active a:hover {
@@ -1037,6 +1044,7 @@ div#menu li.active a:hover {
 
 #menu ul li.active a {
 	background-color: #FFF;
+	background-image : none;
 	border-right: 0;
 	font-weight: bold;
 }

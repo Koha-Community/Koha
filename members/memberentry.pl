@@ -454,12 +454,10 @@ if ($data{'dateenrolled'} eq ''){
   $data{'dateenrolled'}=$today;
 }
 
-$data{'surname'}=uc($data{'surname'});
-$data{'firstname'}=ucfirst(lc $data{'firstname'});
+$data{'surname'}=uc($data{'surname'}) if C4::Context->preference('uppercasesurnames');
 $data{'dateenrolled'}=format_date($data{'dateenrolled'});
 $data{'dateexpiry'}=format_date($data{'dateexpiry'});
-$data{'contactname'}=uc($data{'contactname'});
-$data{'contactfirstname'}= ucfirst( lc $data{'contactfirstname'});
+$data{'contactname'}=uc($data{'contactname'}) if C4::Context->preference('uppercasesurnames');
 $data{'dateofbirth'} = format_date($data{'dateofbirth'});
 
 $template->param( "showguarantor"  => 1) if ($category_type!~/A|I/);# associate with step to know where u are

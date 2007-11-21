@@ -160,6 +160,7 @@ if ($subscriptionsnumber) {
 $template->param (
     ISBD                => $res,
     biblionumber        => $biblionumber,
+	isbdview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

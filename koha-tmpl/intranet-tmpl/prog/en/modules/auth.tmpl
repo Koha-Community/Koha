@@ -42,15 +42,15 @@
 <p><label>Password:<br />
 <input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" /></label>
 </p>
-<!-- TMPL_UNLESS name="IndependantBranches" -->
-    <p><label for="branch">Library:<br />
+
+<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE --><p><label for="branch">Library:<br />
     <select name="branch" id="branch" class="input">
     <!-- TMPL_LOOP NAME="branchloop" -->
     <option value="<!-- TMPL_VAR NAME='branchcode' -->"><!-- TMPL_VAR NAME='branchname' --></option>
     <!-- /TMPL_LOOP -->
     </select></label>
-    </p>
-<!-- /TMPL_UNLESS -->
+    </p><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
 <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
 
 <p class="submit"><input id="submit" type="submit" value="Login &raquo;" tabindex="4" /></p>

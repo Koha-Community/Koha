@@ -146,8 +146,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_UNLESS NAME="noissues" -->
 <div class="yui-u first"><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
-    <label for="barcode">Enter item barcode: </label>
-	<div class="hint">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</div>
+    <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
+	<div class="hint">Enter item barcode:</div>
 	<input type="text" name="barcode" id="barcode" class="focus" size="14" />
     
         <!-- RESULT OF ISSUING REQUEST -->

@@ -30,7 +30,7 @@
             <!-- /TMPL_IF -->
             ]
             <!-- TMPL_IF name="volume" -->, <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
-            <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
             <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
             / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
         </p>
@@ -48,18 +48,15 @@
 				</ul>
             </li>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="illus" -->
-            <li><strong>Illustrator:</strong> <!-- TMPL_VAR name="illus" --></li>
-        <!-- /TMPL_IF -->
 		<!-- TMPL_IF name="publishercode" -->
     <li><strong>Published by:</strong>
         <a href="/cgi-bin/koha/opac-search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode"-->">
             <!-- TMPL_VAR NAME="publishercode" --> 
-        </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+        </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionstatement" --><!-- TMPL_VAR NAME="editionstatement" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionresponsability" --><!-- TMPL_VAR NAME="editionresponsability" --><!-- /TMPL_IF -->
     </li>
     <!-- /TMPL_IF -->
         <li><strong>Description:</strong>
-                <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" -->
+                <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --><!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
         </li>
 		</ul>
@@ -108,9 +105,6 @@
             <!-- TMPL_IF name="notes" -->
                 <li><strong>Notes:</strong> <!-- TMPL_VAR NAME="notes" --></li>
             <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="unititle" -->
-            <li><strong>Alternate title:</strong> <!-- TMPL_VAR NAME="unititle" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="classification" -->
             <li><strong>Classification:</strong> <!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></li>

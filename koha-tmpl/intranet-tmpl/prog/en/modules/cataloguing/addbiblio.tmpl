@@ -42,7 +42,7 @@ function Dopop(link,i) {
 function PopupZ3950() {
     var strQuery = AreZ3950MandoriesOk();
     if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes');
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     } else {
         var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");    
         alert(strAlert);
@@ -427,12 +427,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 </script>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
 
 <div id="bd">
         <div id="yui-main">
         <div class="yui-g">
+
+
 
 <h1><!-- TMPL_IF NAME="biblionumtagfield" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
 

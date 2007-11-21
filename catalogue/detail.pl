@@ -98,6 +98,7 @@ foreach ( keys %{$dat} ) {
 $template->param(
     ITEM_RESULTS        => \@items,
     biblionumber        => $biblionumber,
+	detailview => 1,
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},

@@ -309,6 +309,7 @@ $template->param (
     biblionumber            => $biblionumber,
     popup                   => $popup,
     hide_marc               => C4::Context->preference('hide_marc'),
+	marcview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

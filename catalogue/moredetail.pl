@@ -96,6 +96,7 @@ foreach my $item (@$items){
 $template->param(count => $data->{'count'});
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => $items);
+$template->param(moredetailview => 1);
 $template->param(loggedinuser => $loggedinuser);
 $template->param(biblionumber => $biblionumber);
 
