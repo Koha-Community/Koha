@@ -27,7 +27,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 # set the version for version checking
 $VERSION = 3.00;
-$DEBUG=0;
+$DEBUG=1;
 
 =head1 NAME
 
@@ -675,34 +675,35 @@ sub buildQuery {
     my @sort_by   = @$sort_by   if $sort_by;
 
     my $stemming      = C4::Context->preference("QueryStemming")     || 0;
-
-    # only turn on field weighting in simple searches
-    my $weight_fields;
-   # if (@operands==1) {
-        $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
-    #}
+    my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
 
-    my $human_search_desc;      # a human-readable query
-    my $machine_search_desc;    #a machine-readable query
-
     my $query = $operands[0];
+	my $query_cgi;
+	my $query_search_desc;
+
+	my $limit;
+	my $limit_cgi;
+	my $limit_desc;
+
 # STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
 # pass it off to zebra directly)
 
 # check if this is a known query language query, if it is, return immediately,
 # the user is responsible for constructing valid syntax:
     if ( $query =~ /^ccl=/ ) {
-        return ( undef, $', $', $', 'ccl' );
+        return ( undef, $', $', $', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', $', 'cql' );
+        return ( undef, $', $', $', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
-        return ( undef, $', $', $', 'pqf' );
+        return ( undef, $', $', $', '', '', '', 'pqf' );
     }
+
+# FIXME: this is bound to be broken now
     if ( $query =~ /(\(|\)|:|=)/ ) {    # sorry, too complex, assume CCL
-        return ( undef, $query, $query, $query, 'ccl' );
+        return ( undef, $query, $query_cgi, $query_search_desc, $limit, $limit_cgi, $limit_desc, 'ccl' );
     }
 
 # form-based queries are limited to non-nested at a specific depth, so we can easily
@@ -782,10 +783,11 @@ sub buildQuery {
 
                     # user-specified operator
                     if ( $operators[$i-1] ) {
-                        $human_search_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                         $query .= " $operators[$i-1] ";
                         $query .= " $index_plus " unless $indexes_set;
                         $query .= " $operand";
+						$query_cgi .="";
+						$query_search_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                     }
 
                     # the default operator is and
@@ -793,129 +795,67 @@ sub buildQuery {
                         $query .= " and ";
                         $query .= "$index_plus " unless $indexes_set;
                         $query .= "$operand";
-                        $human_search_desc .= " and $index_plus $operands[$i]";
+						$query_cgi .="";
+                        $query_search_desc .= " and $index_plus $operands[$i]";
                     }
                 }
 
-                # There's no previous operand - FIXME: completely ignoring our $query, no field weighting, no stemming
-                # FIXME: also, doesn't preserve original order
                 else { 
-                    # if there are terms to fit with truncation
-#                    if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
- #                       # add the non-truncated ones first
-  #                      $query.= "$index_plus @$nontruncated " if (scalar(@$nontruncated)>0);
-   #                     if (scalar(@$righttruncated)>0){
-    #                        $query .= "and $index_plus_comma"."rtrn:@$righttruncated ";
-     #                   }            
-      #                  if (scalar(@$lefttruncated)>0){
-       #                     $query .= "and $index_plus_comma"."ltrn:@$lefttruncated ";
-        #                }            
-         #               if (scalar(@$rightlefttruncated)>0){
-          #                  $query .= "and $index_plus_comma"."rltrn:@$rightlefttruncated ";
-           #             }
-            #            $human_search_desc .= $query;
-             #       } else {
-                        # field-weighted queries already have indexes set
-                        $query.=" $index_plus " unless $indexes_set;
-                        $query             .= $operand;
-                        $human_search_desc .= " $index_plus $operands[$i]";
-              #      }            
+					# field-weighted queries already have indexes set
+					$query .=" $index_plus " unless $indexes_set;
+					$query .= $operand;
+					$query_search_desc .= " $index_plus $operands[$i]";
+					$query_cgi.="";
+
                     $previous_operand = 1;
                 }
             }    #/if $operands
         }    # /for
     }
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
+
     # add limits
-    my $limit_query;
-    my $limit_search_desc;
-    foreach my $limit (@limits) {
-
-        # FIXME: not quite right yet ... will work on this soon -- JF
-        my $type = $1 if $limit =~ m/([^:]+):([^:]*)/;
-        if ( $limit =~ /available/ ) {
-            $limit_query .= " (($query and datedue=0000-00-00) or ($query and datedue=0000-00-00 not lost=1) or ($query and datedue=0000-00-00 not lost=2))";
-            #$limit_search_desc.=" and available";
+    foreach my $this_limit (@limits) {
+        if ( $this_limit =~ /available/ ) {
+			# FIXME: switch to zebra search for null values
+            $limit .= " (($query and datedue=0000-00-00) or ($query and datedue=0000-00-00 not lost=1) or ($query and datedue=0000-00-00 not lost=2))";
+			$limit_cgi .= "&limit=available";
+			$limit_desc .="";
         }
-        elsif ( ($limit_query) && ( index( $limit_query, $type, 0 ) > 0 ) ) {
-            if ( $limit_query !~ /\(/ ) {
-                $limit_query =
-                    substr( $limit_query, 0, index( $limit_query, $type, 0 ) )
-                  . "("
-                  . substr( $limit_query, index( $limit_query, $type, 0 ) )
-                  . " or $limit )"
-                  if $limit;
-                $limit_search_desc =
-                  substr( $limit_search_desc, 0,
-                    index( $limit_search_desc, $type, 0 ) )
-                  . "("
-                  . substr( $limit_search_desc,
-                    index( $limit_search_desc, $type, 0 ) )
-                  . " or $limit )"
-                  if $limit;
-            }
-            else {
-                chop $limit_query;
-                chop $limit_search_desc;
-                $limit_query       .= " or $limit )" if $limit;
-                $limit_search_desc .= " or $limit )" if $limit;
-            }
+		# these are treated as OR
+        elsif ( $this_limit =~ /mc/ ) {
+            $limit .= " or $this_limit";
+			$limit_cgi .="&limit=$this_limit";
+            $limit_desc .= " or $this_limit";
         }
-        elsif ( ($limit_query) && ( $limit =~ /mc/ ) ) {
-            $limit_query       .= " or $limit" if $limit;
-            $limit_search_desc .= " or $limit" if $limit;
-        }
-
-        # these are treated as AND
-        elsif ($limit_query) {
-           if ($limit =~ /branch/){
-                $limit_query       .= " ) and ( $limit" if $limit;
-            $limit_search_desc .= " ) and ( $limit" if $limit;
-        }else{
-            $limit_query       .= " or $limit" if $limit;
-                    $limit_search_desc .= " or $limit" if $limit;
-        }
-        }
-
-        # otherwise, there is nothing but the limit
-        else {
-            $limit_query       .= "$limit" if $limit;
-            $limit_search_desc .= "$limit" if $limit;
-        }
+		else {
+			$limit .= " and $this_limit";
+			$limit_cgi .="&limit=$this_limit";
+			$limit_desc .=" and $this_limit";
+		}
     }
 
-    # if there's also a query, we need to AND the limits to it
-    if ( ($limit_query) && ($query) ) {
-        $limit_query       = " and (" . $limit_query . ")";
-        $limit_search_desc = " and ($limit_search_desc)" if $limit_search_desc;
+	# normalize the strings
+	for ($query, $query_search_desc, $limit, $limit_desc) {
+		$_ =~ s/  / /g;    # remove extra spaces
+    	$_ =~ s/^ //g;     # remove any beginning spaces
+		$_ =~ s/ $//g;     # remove any beginning spaces
+    	$_ =~ s/:/=/g;     # causes probs for server
+    	$_ =~ s/==/=/g;    # remove double == from query
 
-    }
-    #warn "LIMIT: $limit_query";
-    $query             .= $limit_query;
-    $human_search_desc .= $limit_search_desc;
+	}
 
-    # now normalize the strings
-    $query =~ s/  / /g;    # remove extra spaces
-    $query =~ s/^ //g;     # remove any beginning spaces
-    $query =~ s/:/=/g;     # causes probs for server
-    $query =~ s/==/=/g;    # remove double == from query
+	# append the limit to the query
+	$query .= $limit;
 
-    my $federated_query = $human_search_desc;
-    $federated_query =~ s/  / /g;
-    $federated_query =~ s/^ //g;
-    $federated_query =~ s/:/=/g;
-    my $federated_query_opensearch = $federated_query;
+    warn "QUERY:".$query if $DEBUG;
+	warn "QUERY CGI:".$query_cgi if $DEBUG;
+    warn "QUERY DESC:".$query_search_desc if $DEBUG;
+    warn "LIMIT:".$limit if $DEBUG;
+    warn "LIMIT CGI:".$limit_cgi if $DEBUG;
+    warn "LIMIT DESC:".$limit_desc if $DEBUG;
 
-#     my $federated_query_RPN = new ZOOM::Query::CCL2RPN( $query , C4::Context->ZConn('biblioserver'));
-
-    $human_search_desc =~ s/  / /g;
-    $human_search_desc =~ s/^ //g;
-    my $koha_query = $query;
-
-    warn "QUERY:".$koha_query if $DEBUG;
-    warn "SEARCHDESC:".$human_search_desc if $DEBUG;
-    warn "FEDERATED QUERY:".$federated_query if $DEBUG;
-    return ( undef, $human_search_desc, $koha_query, $federated_query );
+	return ( undef, $query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc );
 }
 
 # IMO this subroutine is pretty messy still -- it's responsible for

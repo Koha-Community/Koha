@@ -392,14 +392,12 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my $error; # used for error handling
-my $search_desc; # the query expressed in terms that humans understand
-my $koha_query; # the query expressed in terms that zoom understands with field weighting and stemming
-my $federated_query;
-my $query_type; # usually not needed, but can be used to trigger ccl, cql, or pqf queries if set
+my ( $error,$query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type);
+
 my @results;
+
 ## I. BUILD THE QUERY
-($error,$search_desc,$koha_query,$federated_query,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+( $error,$query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total; # the total results for the whole set
@@ -409,11 +407,11 @@ my $results_hashref;
 
 if (C4::Context->preference('NoZebra')) {
     eval {
-        ($error, $results_hashref, $facets) = NZgetRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = NZgetRecords($query,$query_cgi,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 } else {
     eval {
-        ($error, $results_hashref, $facets) = getRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = getRecords($query,$query_cgi,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
 if ($@ || $error) {
@@ -455,11 +453,12 @@ for (my $i=0;$i<=@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults( $search_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
+        my @newresults = searchResults( $query_search_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
-            $template->param(searchdesc => ($query_type?"$query_type=":"")."$search_desc" );
+			$template->param(limit_cgi => $limit_cgi);
+            $template->param(searchdesc => ($query_type?"$query_type=":"")."$query_search_desc" );
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
 
@@ -478,7 +477,7 @@ for (my $i=0;$i<=@servers;$i++) {
 #             $template->param(PAGE_NUMBERS => \@page_numbers,
 #                             previous_page_offset => $previous_page_offset,
 #                             next_page_offset => $next_page_offset) unless $pages < 2;
-      my $link="/cgi-bin/koha/catalogue/search.pl?q=$search_desc&";
+      my $link="/cgi-bin/koha/catalogue/search.pl?q=$query_search_desc&";
       foreach my $sort (@sort_by){      
         $link.="&sort_by=".$sort."&";
       }        
@@ -521,7 +520,7 @@ for (my $i=0;$i<=@servers;$i++) {
 $template->param(
             #classlist => $classlist,
             total => $total,
-            searchdesc => ($query_type?"$query_type=":"")."$search_desc",
+            searchdesc => ($query_type?"$query_type=":"")."$query_search_desc",
             opacfacets => 1,
             facets_loop => $facets,
             scan_use => $scan,
@@ -531,7 +530,7 @@ $template->param(
 #  and in the meantime, save the current query for statistical purposes, etc.
 my $koha_spsuggest; # a flag to tell if we've got suggestions coming from Koha
 my @koha_spsuggest; # place we store the suggestions to be returned to the template as LOOP
-my $phrases = $search_desc;
+my $phrases = $query_search_desc;
 my $ipaddress;
 
 if ( C4::Context->preference("kohaspsuggest") ) {
