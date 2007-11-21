@@ -10,8 +10,6 @@
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name="opaccolorstylesheet" -->
         <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
-    <!-- TMPL_ELSE -->
-        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/opac.css" />
     <!-- /TMPL_IF -->
     <style type="text/css">
         @import url(<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);

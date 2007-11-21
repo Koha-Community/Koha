@@ -17,14 +17,14 @@
     <p>Fill this form to suggest the library a new acquisition. You will be emailed when the library processes your purchase suggestion</p>
     <p>No fields are mandatory. Enter whatever information you have. The "Notes" field can be used to provide any additional information.</p>
     <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-    <table>
-    <tr><th scope="row"><label for="">Summary</label></th><td><input type="text" id="title" name="title" size="50" maxlentgh="80" /></td></tr>
-    <tr><th scope="row"><label for="">Author</label></th><td><input type="text" id="author" name="author" size="50" maxlength="80" /></td></tr>
-    <tr><th scope="row"><label for="">Copyright date</label></th><td><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></td></tr>
-    <tr><th scope="row"><label for="">Publisher</label></th><td><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></td></tr>
-    <tr><th scope="row"><label for="">Notes</label></th><td><textarea name="note" id="note" rows="5" cols="40"></textarea></td></tr>
-    </table>
-        <p><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /></p>
+   <fieldset class="rows"> <ol>
+    <li><label for="title">Summary:</label><input type="text" id="title" name="title" size="50" maxlentgh="80" /></li>
+    <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" /></li>
+    <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></li>
+    <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></li>
+    <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
+    </ol></fieldset>
+        <fieldset class="action"><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>
     </form>
 
 <!-- /TMPL_IF -->
@@ -32,8 +32,34 @@
 <!-- TMPL_IF name="op_else" -->
     <h1>Purchase Suggestions</h1>
     <!-- TMPL_IF NAME="suggestions_loop" -->
+            <form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
     <table>
         <tr>
+                <th>
+                    Search for:
+                </th>
+                <td>
+                    <input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
+                </td>
+                <th>
+                Suggested by:
+                </th>
+                <td>
+                    <select name="suggestedbyme">
+                        <option value="0">Anyone</option>
+                        <option value="1">Me</option>
+                    </select>
+                </td>
+                <th>
+                    <input type="submit" value="Set Filter" />
+                </th>
+        </tr>
+		</table>
+            </form>
+        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirm" />
+			<table>
+			<tr>
             <th>&nbsp;</th>
             <th>Summary</th>
             <th>Status</th>
@@ -41,33 +67,6 @@
             <th>Managed by</th>
             <th>Note</th>
         </tr>
-        <tr>
-            <form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
-                <th>
-                    Filter by:
-                </th>
-                <td>
-                    <input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
-                </td>
-                <td>
-                &nbsp;
-                </td>
-                <td>
-                    <select name="suggestedbyme">
-                        <option value="0">Anyone</option>
-                        <option value="1">Me</option>
-                    </select>
-                </td>
-                <td>
-                    &nbsp;
-                </td>
-                <td>
-                    <input type="submit" value="Set Filter" />
-                </td>
-            </form>
-        </tr>
-        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-            <input type="hidden" name="op" value="delete_confirm" />
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                 <td>
@@ -104,13 +103,11 @@
                 <input type="submit" value="Delete Checked Items" />
             </td>
         </tr>
-        </form>
     </table>
-    <!-- TMPL_ELSE --><div class="content-block">There are no pending purchase suggestions</div><!-- /TMPL_IF -->
-    <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
-        <input type="hidden" name="op" value="add" />
-        <input type="submit" value="Enter a new purchase suggestion" />
-    </form>
+        </form>
+    <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p><!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="loggedinusername" --><a href="/cgi-bin/koha/opac-suggestions.pl?op=add">Add a purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a href="/cgi-bin/koha/opac-suggestions.pl?op=add">Add a purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 </div>

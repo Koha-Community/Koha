@@ -10,7 +10,6 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-ge">
     <div class="yui-u first">
-	<!-- YOUR DATA GOES HERE -->
 	<!-- TMPL_IF name="koha_news_count" -->
 <div id="news">
     <table>
@@ -95,26 +94,22 @@
 
 	    </div>
     <div class="yui-u">
-	<!-- YOUR DATA GOES HERE -->
-	Right column.
 	
 	<!-- TMPL_IF NAME="opacuserlogin" -->
 <div id="login">
-    <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="/cgi-bin/koha/opac-user.pl"><b>User Info</b></a>
-        <p>Logged in as: <b> <!-- TMPL_VAR NAME="loggedinusername" --> </b></p>
-        <p><a href="/cgi-bin/koha/opac-logout.pl?logout=Log Out">Log Out</a></p>
-    <!-- TMPL_ELSE -->
-        <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
-            <p>Login:</p>
-            <input type="text" id="userid" size="10" name="userid" />
-            <p>Pass:</p>
-            <input type="password" id="password" size="10" name="password" />
-            <p>
-                <input type="submit" value="Log In" class="submit" />
-            </p>
-       </form>
-    <!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS NAME="loggedinusername" -->
+	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+	<fieldset class="brief">
+		<legend>Log in to Your Account:</legend>
+		<ol>
+		<li><label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" /></li>
+		<li><label for="password">Password:</label><input type="password" id="password" size="10" name="password" /></li>
+		</ol></fieldset>
+	 <fieldset class="action">
+	 <input type="submit" value="Log In" class="submit" />
+	 </fieldset>
+	 </form>
+    <!-- /TMPL_UNLESS -->
 </div>
 <!-- /TMPL_IF -->
 	    </div>
