@@ -525,7 +525,7 @@ $template->param(
             searchdesc => ($query_type?"$query_type=":"")."$query_search_desc",
             opacfacets => 1,
             facets_loop => $facets,
-            scan_use => $scan,
+            scan => $scan,
             search_error => $error,
 );
 ## Now let's find out if we have any supplemental data to show the user

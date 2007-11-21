@@ -409,7 +409,6 @@ sub getRecords {
                     ## This is just an index scan
                     if ($scan) {
                         my ( $term, $occ ) = $results[ $i - 1 ]->term($j);
-
                  # here we create a minimal MARC record and hand it off to the
                  # template just like a normal result ... perhaps not ideal, but
                  # it works for now
@@ -417,7 +416,7 @@ sub getRecords {
                         $tmprecord->encoding('UTF-8');
                         my $tmptitle;
 
-          # srote the minimal record in author/title (depending on MARC flavour)
+          		# srote the minimal record in author/title (depending on MARC flavour)
                         if ( C4::Context->preference("marcflavour") eq
                             "UNIMARC" )
                         {
@@ -816,6 +815,7 @@ sub buildQuery {
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
 
     # add limits
+	my $group_OR_limits;
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
 			# FIXME: switch to zebra search for null values
@@ -825,17 +825,20 @@ sub buildQuery {
         }
 		# these are treated as OR
         elsif ( $this_limit =~ /mc/ ) {
-            $limit .= " or $this_limit";
+            $group_OR_limits .= " or " if $group_OR_limits;
+			$group_OR_limits .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
             $limit_desc .= " or $this_limit";
         }
 		else {
-			$limit .= " and $this_limit";
+			$limit .= " and " if $limit || $query;
+			$limit .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
 			$limit_desc .=" and $this_limit";
 		}
     }
-
+	$limit.=" and " if ($query && $limit);
+	$limit.="($group_OR_limits)" if $group_OR_limits;
 	# normalize the strings
 	for ($query, $query_search_desc, $limit, $limit_desc) {
 		$_ =~ s/  / /g;    # remove extra spaces
