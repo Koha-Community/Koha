@@ -461,6 +461,7 @@ for (my $i=0;$i<=@servers;$i++) {
         if ($hits) {
             $template->param(total => $hits);
 			$template->param(limit_cgi => $limit_cgi);
+			$template->param(query_cgi => $query_cgi);
             $template->param(searchdesc => ($query_type?"$query_type=":"")."$query_search_desc" );
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);

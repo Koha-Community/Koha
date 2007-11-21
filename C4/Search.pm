@@ -786,7 +786,9 @@ sub buildQuery {
                         $query .= " $operators[$i-1] ";
                         $query .= " $index_plus " unless $indexes_set;
                         $query .= " $operand";
-						$query_cgi .="";
+						$query_cgi .="&op=$operators[$i-1]";
+						$query_cgi .="&idx=$index" if $index;
+						$query_cgi .="&q=$operands[$i]" if $operand;
 						$query_search_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                     }
 
@@ -795,7 +797,8 @@ sub buildQuery {
                         $query .= " and ";
                         $query .= "$index_plus " unless $indexes_set;
                         $query .= "$operand";
-						$query_cgi .="";
+						$query_cgi .="&op=and&idx=$index" if $index;
+						$query_cgi .="&q=$operands[$i]" if $operand;
                         $query_search_desc .= " and $index_plus $operands[$i]";
                     }
                 }
@@ -805,7 +808,8 @@ sub buildQuery {
 					$query .=" $index_plus " unless $indexes_set;
 					$query .= $operand;
 					$query_search_desc .= " $index_plus $operands[$i]";
-					$query_cgi.="";
+					$query_cgi.="&idx=$index" if $index;
+					$query_cgi.="&q=$operands[$i]" if $operand;
 
                     $previous_operand = 1;
                 }
