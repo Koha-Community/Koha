@@ -252,7 +252,7 @@ sub SimpleSearch {
 # performs the search
 sub getRecords {
     my (
-        $koha_query,     $federated_query,  $sort_by_ref,
+        $koha_query,     $simple_query,  $sort_by_ref,
         $servers_ref,    $results_per_page, $offset,
         $expanded_facet, $branches,         $query_type,
         $scan
@@ -284,8 +284,10 @@ sub getRecords {
             $query_to_use = $koha_query;
         }
         else {
-            $query_to_use = $federated_query;
+            $query_to_use = $simple_query;
         }
+
+		$query_to_use = $simple_query if $scan;
 
         # check if we've got a query_type defined
         eval {
@@ -318,15 +320,13 @@ sub getRecords {
             }
             else {
                 if ($scan) {
-
-                    #                 warn "preparing to scan";
+                                     warn "preparing to scan:$query_to_use";
                     $results[$i] =
                       $zconns[$i]->scan(
                         new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] )
                       );
                 }
                 else {
-
                     #             warn "LAST : $query_to_use";
                     $results[$i] =
                       $zconns[$i]->search(
@@ -679,6 +679,7 @@ sub buildQuery {
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
 
     my $query = $operands[0];
+	my $simple_query = $operands[0];
 	my $query_cgi;
 	my $query_search_desc;
 
@@ -855,7 +856,7 @@ sub buildQuery {
     warn "LIMIT CGI:".$limit_cgi if $DEBUG;
     warn "LIMIT DESC:".$limit_desc if $DEBUG;
 
-	return ( undef, $query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc );
+	return ( undef, $query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc );
 }
 
 # IMO this subroutine is pretty messy still -- it's responsible for
@@ -1105,7 +1106,7 @@ sub searchResults {
 
 sub NZgetRecords {
     my (
-        $koha_query,     $federated_query,  $sort_by_ref,
+        $koha_query,     $simple_query,  $sort_by_ref,
         $servers_ref,    $results_per_page, $offset,
         $expanded_facet, $branches,         $query_type,
         $scan

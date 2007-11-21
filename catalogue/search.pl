@@ -381,6 +381,8 @@ foreach my $limit(@limits) {
     }
 }
 $template->param(available => $available);
+
+# append year limits if they exist
 push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limit-yr'};
 
 # Params that can only have one value
@@ -392,12 +394,12 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my ( $error,$query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type);
+my ( $error,$query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+( $error,$query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total; # the total results for the whole set
@@ -407,11 +409,11 @@ my $results_hashref;
 
 if (C4::Context->preference('NoZebra')) {
     eval {
-        ($error, $results_hashref, $facets) = NZgetRecords($query,$query_cgi,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 } else {
     eval {
-        ($error, $results_hashref, $facets) = getRecords($query,$query_cgi,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
 if ($@ || $error) {
