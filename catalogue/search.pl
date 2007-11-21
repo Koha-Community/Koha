@@ -388,8 +388,9 @@ push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limi
 # Params that can only have one value
 my $scan = $params->{'scan'};
 my $results_per_page = $params->{'count'} || 20;
+my $offset = $params->{'offset'} || 0;
 my $page = $cgi->param('page') || 1;
-my $offset = ($page-1)*$results_per_page;
+#my $offset = ($page-1)*$results_per_page;
 my $hits;
 my $expanded_facet = $params->{'expand'};
 
@@ -463,34 +464,50 @@ for (my $i=0;$i<=@servers;$i++) {
             $template->param(searchdesc => ($query_type?"$query_type=":"")."$query_search_desc" );
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
-
-#             my @page_numbers;
-#             my $pages = ceil($hits / $results_per_page);
-#             my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
-#             my $next_page_offset = $offset + $results_per_page;
-#             for (my $j=1; $j<=$pages;$j++) {
-#                 my $this_offset = (($j*$results_per_page)-$results_per_page);
-#                 my $this_page_number = $j;
-#                 my $highlight = 1 if ($this_page_number == $current_page_number);
-#                 if ($this_page_number <= $pages) {
-#                 push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
-#                 }
-#             }
-#             $template->param(PAGE_NUMBERS => \@page_numbers,
-#                             previous_page_offset => $previous_page_offset,
-#                             next_page_offset => $next_page_offset) unless $pages < 2;
-      my $link="/cgi-bin/koha/catalogue/search.pl?q=$query_search_desc&";
-      foreach my $sort (@sort_by){      
-        $link.="&sort_by=".$sort."&";
-      }        
-			$template->param(
-				pagination_bar => pagination_bar(
-             		$link,
-             		getnbpages($hits, $results_per_page),
-             		$page,
-             		'page'
-				),
-			);
+			## Build the page numbers on the bottom of the page
+			my @page_numbers;
+			# total number of pages there will be
+			my $pages = ceil($hits / $results_per_page);
+			# default page number
+			my $current_page_number = 1;
+			$current_page_number = ($offset / $results_per_page + 1) if $offset;
+			my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
+			my $next_page_offset = $offset + $results_per_page;
+			# If we're within the first 10 pages, keep it simple
+			#warn "current page:".$current_page_number;
+			if ($current_page_number < 10) {
+				# just show the first 10 pages
+				# Loop through the pages
+				my $pages_to_show = 10;
+				$pages_to_show = $pages if $pages<10;
+				for ($i=1; $i<=$pages_to_show;$i++) {
+					# the offset for this page
+					my $this_offset = (($i*$results_per_page)-$results_per_page);
+					# the page number for this page
+					my $this_page_number = $i;
+					# it should only be highlighted if it's the current page
+					my $highlight = 1 if ($this_page_number == $current_page_number);
+					# put it in the array
+					push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+                                
+				}
+                        
+			}
+			# now, show twenty pages, with the current one smack in the middle
+			else {
+				for ($i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
+                    my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
+                    my $this_page_number = $i-9;
+                    my $highlight = 1 if ($this_page_number == $current_page_number);
+					if ($this_page_number <= $pages) {
+                    	push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+					}
+                }
+                        
+			}
+			$template->param(	PAGE_NUMBERS => \@page_numbers,
+								previous_page_offset => $previous_page_offset) unless $pages < 2;
+			$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
          }
     } # end of the if local
     else {
