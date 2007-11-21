@@ -580,7 +580,7 @@ sub getFacets {
                 subfield    => 'a',
             },
             {
-                link_value  => 'homebranch',
+                link_value  => 'branch',
                 label_value => 'Libraries',
                 tags        => [ '995', ],
                 subfield    => 'b',
@@ -628,7 +628,7 @@ sub getFacets {
                 subfield    => 'a',
             },
             {
-                link_value  => 'homebranch',
+                link_value  => 'branch',
                 label_value => 'Libraries',
                 tags        => [ '952', ],
                 subfield    => 'b',
