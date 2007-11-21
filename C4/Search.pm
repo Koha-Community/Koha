@@ -857,6 +857,8 @@ sub buildQuery {
     	$_ =~ s/==/=/g;    # remove double == from query
 
 	}
+		
+	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
 	$query .= $limit;
