@@ -270,6 +270,7 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
   $template->param(
             KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
+			AnonSuggestions =>  "" . C4::Context->preference("AnonSuggestions"),
             suggestion             => "" . C4::Context->preference("suggestion"),
             virtualshelves         => "" . C4::Context->preference("virtualshelves"),
             OpacNav                => "" . C4::Context->preference("OpacNav"),

@@ -47,7 +47,7 @@
     </p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="MARCAUTHORS" -->
-    <p><span class="label">Additional Author:</span>
+    <p><span class="label">Authors:</span>
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
         <a href="/cgi-bin/koha/opac-search.pl?q=au,wrdl:<!-- TMPL_VAR NAME="value" -->">
             <!-- TMPL_VAR NAME="value" -->
@@ -92,7 +92,7 @@
     <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="MARCSUBJCTS" -->
-            <p><strong>Subject(s):</strong> <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+            <p><span class="label">Subject(s):</span> <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
                             <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
                                 <!-- TMPL_VAR NAME="separator" --><a title="$<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" -->su:<!-- TMPL_VAR NAME="link" --> <!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a>
                             <!-- /TMPL_LOOP --> |  <!-- /TMPL_LOOP --></p>

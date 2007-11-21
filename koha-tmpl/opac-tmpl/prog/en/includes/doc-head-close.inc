@@ -34,6 +34,10 @@
     var MSG_NRECORDS_IN_BASKET = _("already in the bag");
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your book bag");
+	<!-- TMPL_IF NAME="AmazonContent" --> $(document).ready(function() {
+ 	//verify_images();
+ });
+ <!-- /TMPL_IF -->
 </script>
 <!-- TMPL_IF NAME="opacuserjs" -->
 <script language="JavaScript" type="text/javascript">

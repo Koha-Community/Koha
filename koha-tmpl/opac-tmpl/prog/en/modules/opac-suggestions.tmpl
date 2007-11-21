@@ -60,24 +60,33 @@
             <input type="hidden" name="op" value="delete_confirm" />
 			<table>
 			<tr>
-            <th>&nbsp;</th>
+            <!-- TMPL_IF NAME="loggedinusername" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <th>Summary</th>
-            <th>Status</th>
+            <th>Note</th>
             <th>Suggested by</th>
             <th>Managed by</th>
-            <th>Note</th>
+            <th>Status</th>
         </tr>
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-                <td>
+<!-- TMPL_IF NAME="loggedinusername" --><td>
                     <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
-                </td>
+                </td><!-- /TMPL_IF -->
                 <td>
-                    <p><!-- TMPL_VAR NAME="title" --></p>
+                    <p><strong><!-- TMPL_VAR NAME="title" --></strong></p>
                     <p><!-- TMPL_IF name="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="copyrightdate" --> - <!-- TMPL_VAR NAME="copyrightdate" -->,<!-- /TMPL_IF --> 
                         <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
                     </p>
+                </td>
+                <td>
+                    <!-- TMPL_VAR name="note" -->
+                </td>
+                <td>
+                    <!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                </td>
+                <td>
+					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
                 </td>
                 <td>
                     <!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF -->
@@ -87,22 +96,13 @@
                     <!-- TMPL_IF name="AVAILABLE" -->Available in the library<!-- /TMPL_IF -->
                     <!-- TMPL_IF name="reason" -->(<!-- TMPL_VAR name="reason" -->)<!-- /TMPL_IF -->
                 </td>
-                <td>
-                    <!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
-                </td>
-                <td>
-					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
-                </td>
-                <td>
-                    <!-- TMPL_VAR name="note" -->
-                </td>
             </tr>
         <!-- /TMPL_LOOP -->
-        <tr>
+        <!-- TMPL_IF NAME="loggedinusername" --><tr>
             <td colspan="9">
                 <input type="submit" value="Delete Checked Items" />
             </td>
-        </tr>
+        </tr><!-- /TMPL_IF -->
     </table>
         </form>
     <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p><!-- /TMPL_IF -->
