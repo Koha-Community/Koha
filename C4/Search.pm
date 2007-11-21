@@ -823,6 +823,7 @@ sub buildQuery {
 			$limit_cgi .= "&limit=available";
 			$limit_desc .="";
         }
+
 		# these are treated as OR
         elsif ( $this_limit =~ /mc/ ) {
             $group_OR_limits .= " or " if $group_OR_limits;
@@ -830,6 +831,8 @@ sub buildQuery {
 			$limit_cgi .="&limit=$this_limit";
             $limit_desc .= " or $this_limit";
         }
+
+		# regular old limits
 		else {
 			$limit .= " and " if $limit || $query;
 			$limit .= "$this_limit";
@@ -837,8 +840,10 @@ sub buildQuery {
 			$limit_desc .=" and $this_limit";
 		}
     }
-	$limit.=" and " if ($query && $limit);
-	$limit.="($group_OR_limits)" if $group_OR_limits;
+	if ($group_OR_limits) {
+		$limit.=" and " if ($query || $limit );
+		$limit.="($group_OR_limits)";
+	}
 	# normalize the strings
 	for ($query, $query_search_desc, $limit, $limit_desc) {
 		$_ =~ s/  / /g;    # remove extra spaces
