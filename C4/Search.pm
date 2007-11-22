@@ -320,7 +320,7 @@ sub getRecords {
             }
             else {
                 if ($scan) {
-                                     warn "preparing to scan:$query_to_use";
+                     #               warn "preparing to scan:$query_to_use";
                     $results[$i] =
                       $zconns[$i]->scan(
                         new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] )
@@ -1120,15 +1120,9 @@ sub searchResults {
   NZgetRecords has the same API as zera getRecords, even if some parameters are not managed
 
 =cut
-
 sub NZgetRecords {
-    my (
-        $koha_query,     $simple_query,  $sort_by_ref,
-        $servers_ref,    $results_per_page, $offset,
-        $expanded_facet, $branches,         $query_type,
-        $scan
-    ) = @_;
-    my $result = NZanalyse($koha_query);
+    my ($query,$simple_query,$sort_by_ref,$servers_ref,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan) = @_;
+    my $result = NZanalyse($query);
     return (undef,NZorder($result,@$sort_by_ref[0],$results_per_page,$offset),undef);
 }
 
@@ -1146,12 +1140,13 @@ sub NZanalyse {
     # $server contains biblioserver or authorities, depending on what we search on.
     #warn "querying : $string on $server";
     $server='biblioserver' unless $server;
+
     # if we have a ", replace the content to discard temporarily any and/or/not inside
     my $commacontent;
     if ($string =~/"/) {
         $string =~ s/"(.*?)"/__X__/;
         $commacontent = $1;
-#         print "commacontent : $commacontent\n";
+		warn "commacontent : $commacontent" if $DEBUG;
     }
     # split the query string in 3 parts : X AND Y means : $left="X", $operand="AND" and $right="Y"
     # then, call again NZanalyse with $left and $right
@@ -1159,13 +1154,13 @@ sub NZanalyse {
     $string =~ /(.*)( and | or | not | AND | OR | NOT )(.*)/;
     my $left = $1;
     my $right = $3;
-    my $operand = lc($2);
+    my $operand = lc($2); # FIXME: and/or/not are operators, not operands
     # it's not a leaf, we have a and/or/not
     if ($operand) {
         # reintroduce comma content if needed
         $right =~ s/__X__/"$commacontent"/ if $commacontent;
         $left =~ s/__X__/"$commacontent"/ if $commacontent;
-#         warn "node : $left / $operand / $right\n";
+        warn "node : $left / $operand / $right\n" if $DEBUG;
         my $leftresult = NZanalyse($left,$server);
         my $rightresult = NZanalyse($right,$server);
         # OK, we have the results for right and left part of the query
@@ -1206,7 +1201,7 @@ sub NZanalyse {
     } else {
         $string =~  s/__X__/"$commacontent"/ if $commacontent;
         $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
-#         warn "leaf : $string\n";
+         warn "leaf : $string\n" if $DEBUG;
         # parse the string in in operator/operand/value again
         $string =~ /(.*)(>=|<=)(.*)/;
         my $left = $1;
@@ -1253,10 +1248,10 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-#                         warn "===== $cleaned =====";
+                         warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-#                             warn "INCLUDING $entry";
+                             warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
@@ -1271,7 +1266,7 @@ sub NZanalyse {
             # split each word, query the DB and build the biblionumbers result
             foreach (split / /,$string) {
                 next if C4::Context->stopwords->{uc($_)}; # skip if stopword
-                #warn "search on all indexes on $_";
+                warn "search on all indexes on $_" if $DEBUG;
                 my $biblionumbers;
                 next unless $_;
                 $sth->execute($server, $_);
@@ -1280,7 +1275,7 @@ sub NZanalyse {
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-#                 warn "RES for $_ = $biblionumbers";
+                 warn "RES for $_ = $biblionumbers" if $DEBUG;
                     my @leftresult = split /;/, $biblionumbers;
                     my $temp;
                     foreach my $entry (@leftresult) { # $_ contains biblionumber,title-weight
@@ -1288,20 +1283,20 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-#                         warn "===== $cleaned =====";
+                         warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-#                             warn "INCLUDING $entry";
+                             warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
                 } else {
-#                 warn "NEW RES for $_ = $biblionumbers";
+                 warn "NEW RES for $_ = $biblionumbers" if $DEBUG;
                     $results = $biblionumbers;
                 }
             }
         }
-#         warn "return : $results for LEAF : $string";
+         warn "return : $results for LEAF : $string" if $DEBUG;
         return $results;
     }
 }

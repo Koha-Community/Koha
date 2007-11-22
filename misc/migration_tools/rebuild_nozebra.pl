@@ -58,7 +58,8 @@ if  (!%index || $sysprefs ) {
         'host-item' => '995a,995c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
     } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
-		$dbh->do("UPDATE systempreferences SET value=\"'title' => '245a,245b',
+		$dbh->do("UPDATE systempreferences SET value=\"
+		'title' => '245a,245b',
 		'author' => '100a',
 		'isbn' => '020a',
 		'issn' => '022a',
