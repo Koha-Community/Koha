@@ -558,6 +558,7 @@ sub getRecords {
 # STOPWORDS
 sub _remove_stopwords {
     my ($operand,$index) = @_;
+	my @stopwords_removed;
     # phrase and exact-qualified indexes shoudln't have stopwords removed
     if ($index!~m/phr|ext/){
     # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
@@ -565,13 +566,16 @@ sub _remove_stopwords {
     #       otherwise, a french word like "leçon" woudl be split into "le" "çon", le 
     #       is an empty word, we get "çon" and wouldn't find anything...
         foreach (keys %{C4::Context->stopwords}) {
-            next if ($_ =~/(and|or|not)/); # don't remove operators 
-            $operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /i;
-            $operand=~ s/^$_\P{IsAlpha}/ /i;
-            $operand=~ s/\P{IsAlpha}$_$/ /i;
+            next if ($_ =~/(and|or|not)/); # don't remove operators
+			if ($operand =~ /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$)/) {
+            	$operand=~ s/\P{IsAlpha}$_\P{IsAlpha}/ /gi;
+            	$operand=~ s/^$_\P{IsAlpha}/ /gi;
+            	$operand=~ s/\P{IsAlpha}$_$/ /gi;
+				push @stopwords_removed, $_;
+			}
         }
     }
-    return $operand;
+    return ($operand, \@stopwords_removed);
 }
 
 # TRUNCATION
@@ -681,11 +685,13 @@ sub buildQuery {
 	my $simple_query = $operands[0];
 	my $query_cgi;
 	my $query_desc;
+	my $query_type;
 
 	my $limit;
 	my $limit_cgi;
 	my $limit_desc;
 
+	my $stopwords_removed;
 # STEP I: determine if this is a form-based / simple query or if it's nested
 
 # check if this is a known query language query, if it is, return immediately,
@@ -728,9 +734,9 @@ sub buildQuery {
                 my $index_plus_comma="$index," if $index;
 
                 # Remove Stopwords  
-                $operand = _remove_stopwords($operand,$index);
+                ($operand, $stopwords_removed) = _remove_stopwords($operand,$index);
                 warn "OPERAND w/out STOPWORDS: >$operand<" if $DEBUG;
-
+				warn "REMOVED STOPWORDS: @$stopwords_removed" if $DEBUG;
                 my $indexes_set;
 
                 # Detect Truncation
@@ -873,7 +879,7 @@ sub buildQuery {
     warn "LIMIT CGI:".$limit_cgi if $DEBUG;
     warn "LIMIT DESC:".$limit_desc if $DEBUG;
 
-	return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc );
+	return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type );
 }
 
 # IMO this subroutine is pretty messy still -- it's responsible for

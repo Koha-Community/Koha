@@ -29,6 +29,7 @@
     <h3>
         <!-- TMPL_VAR NAME="total" --> results found for '<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->'
     </h3>
+	<!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF NAME="searchdesc" -->
             <h3>No results found</h3>

@@ -395,12 +395,12 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
+my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
 
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
@@ -491,6 +491,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			if ($query_desc || $limit_desc) {
             	$template->param(searchdesc => 1);
 			}
+			$template->param(stopwords_removed => "@$stopwords_removed");
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
 			## Build the page numbers on the bottom of the page
