@@ -680,14 +680,13 @@ sub buildQuery {
     my $query = $operands[0];
 	my $simple_query = $operands[0];
 	my $query_cgi;
-	my $query_search_desc;
+	my $query_desc;
 
 	my $limit;
 	my $limit_cgi;
 	my $limit_desc;
 
-# STEP I: determine if this is a form-based / simple query or if it's complex (if complex,
-# pass it off to zebra directly)
+# STEP I: determine if this is a form-based / simple query or if it's nested
 
 # check if this is a known query language query, if it is, return immediately,
 # the user is responsible for constructing valid syntax:
@@ -701,9 +700,9 @@ sub buildQuery {
         return ( undef, $', $', $', '', '', '', 'pqf' );
     }
 
-# FIXME: this is bound to be broken now
-    if ( $query =~ /(\(|\))/ ) {    # sorry, too complex, assume CCL
-        return ( undef, $query, $query_cgi, $query_search_desc, $limit, $limit_cgi, $limit_desc, 'ccl' );
+	# pass nested queries directly
+    if ( $query =~ /(\(|\))/ ) {
+        return ( undef, $query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, 'ccl' );
     }
 
 # form-based queries are limited to non-nested at a specific depth, so we can easily
@@ -739,8 +738,8 @@ sub buildQuery {
                 my $truncated_operand;
                 ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr) = _detect_truncation($operand,$index);
                 warn "TRUNCATION: NON:>@$nontruncated< RIGHT:>@$righttruncated< LEFT:>@$lefttruncated< RIGHTLEFT:>@$rightlefttruncated< REGEX:>@$regexpr<" if $DEBUG;
+
                 # Apply Truncation
-                # Problem is when build_weights gets ahold if this is wraps in quotes which breaks the truncation :/
                 if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
                     $indexes_set = 1;
                     undef $weight_fields;
@@ -791,7 +790,7 @@ sub buildQuery {
 						$query_cgi .="&op=$operators[$i-1]";
 						$query_cgi .="&idx=$index" if $index;
 						$query_cgi .="&q=$operands[$i]" if $operands[$i];
-						$query_search_desc .=" $operators[$i-1] $index_plus $operands[$i]";
+						$query_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                     }
 
                     # the default operator is and
@@ -801,15 +800,16 @@ sub buildQuery {
                         $query .= "$operand";
 						$query_cgi .="&op=and&idx=$index" if $index;
 						$query_cgi .="&q=$operands[$i]" if $operands[$i];
-                        $query_search_desc .= " and $index_plus $operands[$i]";
+                        $query_desc .= " and $index_plus $operands[$i]";
                     }
                 }
 
+				# there isn't a pervious operand, don't need an operator
                 else { 
 					# field-weighted queries already have indexes set
 					$query .=" $index_plus " unless $indexes_set;
 					$query .= $operand;
-					$query_search_desc .= " $index_plus $operands[$i]";
+					$query_desc .= " $index_plus $operands[$i]";
 					$query_cgi.="&idx=$index" if $index;
 					$query_cgi.="&q=$operands[$i]" if $operands[$i];
 
@@ -852,10 +852,10 @@ sub buildQuery {
 		$limit.="($group_OR_limits)";
 	}
 	# normalize the strings
-	for ($query, $query_search_desc, $limit, $limit_desc) {
+	for ($query, $query_desc, $limit, $limit_desc) {
 		$_ =~ s/  / /g;    # remove extra spaces
     	$_ =~ s/^ //g;     # remove any beginning spaces
-		$_ =~ s/ $//g;     # remove any beginning spaces
+		$_ =~ s/ $//g;     # remove any ending spaces
     	$_ =~ s/:/=/g;     # causes probs for server
     	$_ =~ s/==/=/g;    # remove double == from query
 
@@ -868,12 +868,12 @@ sub buildQuery {
 
     warn "QUERY:".$query if $DEBUG;
 	warn "QUERY CGI:".$query_cgi if $DEBUG;
-    warn "QUERY DESC:".$query_search_desc if $DEBUG;
+    warn "QUERY DESC:".$query_desc if $DEBUG;
     warn "LIMIT:".$limit if $DEBUG;
     warn "LIMIT CGI:".$limit_cgi if $DEBUG;
     warn "LIMIT DESC:".$limit_desc if $DEBUG;
 
-	return ( undef, $query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc );
+	return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc );
 }
 
 # IMO this subroutine is pretty messy still -- it's responsible for
@@ -1232,7 +1232,7 @@ sub NZanalyse {
                 my ($biblionumbers,$value);
                 next unless $_;
                 warn "EXECUTE : $server, $left, $_";
-                $sth->execute($server, $left, $_);
+                $sth->execute($server, $left, $_) or warn "execute failed: $!";
                 while (my ($line,$value) = $sth->fetchrow) {
                     # if we are dealing with a numeric value, use only numeric results (in case of >=, <=, > or <)
                     # otherwise, fill the result
