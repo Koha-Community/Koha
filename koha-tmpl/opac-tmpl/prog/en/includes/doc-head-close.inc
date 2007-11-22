@@ -1,20 +1,9 @@
 </title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<!-- TMPL_IF name="RSS" -->
-    <link rel="alternate" type="application/rss+xml" title="Koha - RSS" href="<!-- TMPL_VAR name="site_url"-->/opac-rss.pl?q=<!-- TMPL_VAR name="searchdesc"-->" />
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="opacstylesheet" -->
-        <style type="text/css"> 
-            @import url(<!-- TMPL_VAR NAME="opacstylesheet" -->);
-        </style>
-<!-- TMPL_ELSE -->
-    <!-- TMPL_IF name="opaccolorstylesheet" -->
-        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
-    <!-- /TMPL_IF -->
-    <style type="text/css">
-        @import url(<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->);
-    </style>
-<!-- /TMPL_IF -->
+<!-- TMPL_IF name="RSS" --><link rel="alternate" type="application/rss+xml" title="Koha - RSS" href="<!-- TMPL_VAR name="site_url"-->/opac-rss.pl?q=<!-- TMPL_VAR name="searchdesc"-->" /><!-- /TMPL_IF -->
+<!-- TMPL_IF name="opacstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="opacstylesheet" -->" /><!-- TMPL_ELSE -->
+<!-- TMPL_IF name="opaccolorstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" /><!-- /TMPL_IF -->
+<!-- TMPL_IF name="opaclayoutstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->" /><!-- TMPL_ELSE --><link rel="stylesheet" type="text/css" href="/opac-tmpl/prog/en/css/opac.css" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs.css" />
    <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
         <!--[if lte IE 7]>
