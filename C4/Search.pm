@@ -833,9 +833,10 @@ sub buildQuery {
 		# these are treated as OR
         elsif ( $this_limit =~ /mc/ ) {
             $group_OR_limits .= " or " if $group_OR_limits;
+			$limit_desc .=" or " if $group_OR_limits;
 			$group_OR_limits .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
-            $limit_desc .= " or $this_limit";
+			$limit_desc .= "$this_limit";
         }
 
 		# regular old limits

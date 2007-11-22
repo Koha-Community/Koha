@@ -395,12 +395,12 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my ( $error,$query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type);
+my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_search_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
@@ -480,13 +480,17 @@ for (my $i=0;$i<=@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults( $query_search_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
+        my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
 			$template->param(limit_cgi => $limit_cgi);
 			$template->param(query_cgi => $query_cgi);
-            $template->param(searchdesc => ($query_type?"$query_type=":"")."$query_search_desc" );
+			$template->param(query_desc => $query_desc);
+			$template->param(limit_desc => $limit_desc);
+			if ($query_desc || $limit_desc) {
+            	$template->param(searchdesc => 1);
+			}
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
 			## Build the page numbers on the bottom of the page
@@ -564,17 +568,21 @@ for (my $i=0;$i<=@servers;$i++) {
 $template->param(
             #classlist => $classlist,
             total => $total,
-            searchdesc => ($query_type?"$query_type=":"")."$query_search_desc",
             opacfacets => 1,
             facets_loop => $facets,
             scan => $scan,
             search_error => $error,
 );
+
+if ($query_desc || $limit_desc) {
+	$template->param(searchdesc => 1);
+}
+
 ## Now let's find out if we have any supplemental data to show the user
 #  and in the meantime, save the current query for statistical purposes, etc.
 my $koha_spsuggest; # a flag to tell if we've got suggestions coming from Koha
 my @koha_spsuggest; # place we store the suggestions to be returned to the template as LOOP
-my $phrases = $query_search_desc;
+my $phrases = $query_desc;
 my $ipaddress;
 
 if ( C4::Context->preference("kohaspsuggest") ) {
