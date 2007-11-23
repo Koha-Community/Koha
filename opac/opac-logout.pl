@@ -17,6 +17,7 @@
 
 use CGI;
 use C4::Context;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use HTML::Template;
 use CGI::Session;
@@ -60,17 +61,8 @@ foreach (keys %$sessions) {
 }
 
 my $dbh = C4::Context->dbh;
-
 # Check that this is the ip that created the session before deleting it
-
-    if ($storage_method eq 'mysql'){
-        $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-    }
-    else {
-      # catch all defaults to tmp should work on all systems
-      $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});      
-    }
-
+my $session = get_session($sessionID);
 $session->flush;
 $session->delete;
 my $sth=$dbh->prepare("delete from sessions where sessionID=?");

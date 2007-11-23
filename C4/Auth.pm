@@ -89,6 +89,7 @@ C4::Auth - Authenticates Koha users
 );
 @EXPORT_OK = qw(
   &check_api_auth
+  &get_session
 );
 
 =item get_template_and_user
@@ -412,18 +413,7 @@ sub checkauth {
         $loggedin = 1;
     }
     elsif ( $sessionID = $query->cookie("CGISESSID")) {
-		my $storage_method = C4::Context->preference('SessionStorage');
-		my $session;
-		if ($storage_method eq 'mysql'){
-		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-		}
-		elsif ($storage_method eq 'Pg') {
-			$session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
-		}
-		else {
-			# catch all defaults to tmp should work on all systems
-			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
-		}
+        my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session){
             C4::Context::set_userenv(
@@ -504,18 +494,7 @@ sub checkauth {
         }
     }
     unless ($userid) {
-		my $storage_method = C4::Context->preference('SessionStorage');
-		my $session;
-		if ($storage_method eq 'mysql'){
-		    $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-		}
-		elsif ($storage_method eq 'Pg') {
-			$session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
-		}
-		else {
-			# catch all defaults to tmp should work on all systems
-			$session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});			
-		}
+		my $session = get_session("");
 
         my $sessionID;
 		if ($session) {
@@ -828,18 +807,7 @@ sub check_api_auth {
         $sessionID = $query->cookie("CGISESSID");
     }
     if ($sessionID) {
-        my $storage_method = C4::Context->preference('SessionStorage');
-        my $session;
-        if ($storage_method eq 'mysql'){
-            $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-        }
-        elsif ($storage_method eq 'Pg') {
-            $session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
-        }
-        else {
-            # catch all defaults to tmp should work on all systems
-            $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
-        }
+        my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session) {
             C4::Context::set_userenv(
@@ -894,16 +862,7 @@ sub check_api_auth {
         }
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
         if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
-            my $storage_method = C4::Context->preference('SessionStorage');
-            my $session;
-            if ($storage_method eq 'mysql'){
-                $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
-            } elsif ($storage_method eq 'Pg') {
-                $session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
-            } else {
-                # catch all defaults to tmp should work on all systems
-                $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
-            }
+            my $session = get_session("");
             return ("failed", undef, undef) unless $session;
 
             my $sessionID = $session->id;
@@ -1002,6 +961,39 @@ sub check_api_auth {
             return ("failed", undef, undef);
         }
     } 
+}
+
+=item get_session
+
+  use CGI::Session;
+  my $session = get_session($sessionID);
+
+Given a session ID, retrieve the CGI::Session object used to store
+the session's state.  The session object can be used to store 
+data that needs to be accessed by different scripts during a
+user's session.
+
+If the C<$sessionID> parameter is an empty string, a new session
+will be created.
+
+=cut
+
+sub get_session {
+    my $sessionID = shift;
+    my $storage_method = C4::Context->preference('SessionStorage');
+    my $dbh = C4::Context->dbh;
+    my $session;
+    if ($storage_method eq 'mysql'){
+        $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+    }
+    elsif ($storage_method eq 'Pg') {
+        $session = new CGI::Session("driver:PostgreSQL", $sessionID, {Handle=>$dbh});
+    }
+    else {
+        # catch all defaults to tmp should work on all systems
+        $session = new CGI::Session("driver:File", $sessionID, {Directory=>'/tmp'});
+    }
+    return $session;
 }
 
 sub checkpw {

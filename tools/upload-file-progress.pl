@@ -24,6 +24,7 @@ use IO::File;
 use CGI;
 use CGI::Session;
 use C4::Context;
+use C4::Auth qw/get_session/;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
 use Digest::MD5;
@@ -31,9 +32,7 @@ use Digest::MD5;
 my %cookies = fetch CGI::Cookie;
 my $sessionID = $cookies{'CGISESSID'}->value;
 
-my $dbh = C4::Context->dbh;
-# FIXME get correct session -- not just mysql
-my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+my $session = get_session($sessionID);
 
 # FIXME - add authentication based on cookie
 

@@ -26,7 +26,7 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Print;
-use C4::Auth;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Date;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
@@ -59,7 +59,7 @@ if ($branch){
     # update our session so the userenv is updated
     my $dbh=C4::Context->dbh;
     my $sessionID = $query->cookie("CGISESSID") ;
-    my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+    my $session = get_session($sessionID);
     $session->param('branch',$branch);
     my $branchname = GetBranchName($branch);
     $session->param('branchname',$branchname);
@@ -70,7 +70,7 @@ if ($printer){
     # update our session so the userenv is updated
 	my $dbh=C4::Context->dbh;
 	my $sessionID = $query->cookie("CGISESSID") ;
-	my $session = new CGI::Session("driver:MySQL", $sessionID, {Handle=>$dbh});
+	my $session = get_session($sessionID);
 	$session->param('branchprinter',$printer);
 
 }
