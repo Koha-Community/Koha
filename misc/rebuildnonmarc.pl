@@ -84,4 +84,3 @@ sub localNEWmodbiblio {
     C4::Biblio::_koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
 }
-
