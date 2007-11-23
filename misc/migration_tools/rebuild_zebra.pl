@@ -177,44 +177,44 @@ if ($authorities) {
     # the record model, depending on marc flavour
     unless (-f "$authorityserverdir/tab/record.abs") {
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/misc/zebra/record_authorities_unimarc.abs $authorityserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/authorities/etc/record_unimarc.abs $authorityserverdir/tab/record.abs");
             print "Info: copied record.abs for UNIMARC\n";
         } else {
-            system("cp -f $kohadir/misc/zebra/record_authorities_usmarc.abs $authorityserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/authorities/etc/record.abs $authorityserverdir/tab/record.abs");
             print "Info: copied record.abs for USMARC\n";
         }
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $authorityserverdir/tab/word-phrase-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/word-phrase-utf.chr");
         print "Info: copied word-phase-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/auth1.att") {
-        system("cp -f $kohadir/misc/zebra/bib1_authorities.att $authorityserverdir/tab/auth1.att");
+        system("cp -f $kohadir/etc/zebradb/authorities/etc/bib1.att $authorityserverdir/tab/auth1.att");
         print "Info: copied auth1.att\n";
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/default.idx") {
-        system("cp -f $kohadir/misc/zebra/default.idx $authorityserverdir/tab/default.idx");
+        system("cp -f $kohadir/etc/zebradb/etc/default.idx $authorityserverdir/tab/default.idx");
         print "Info: copied default.idx\n";
         $created_dir_or_file++;
     }
     
     unless (-f "$authorityserverdir/etc/ccl.properties") {
-#         system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
-        system("cp -f $kohadir/misc/zebra/ccl.properties $authorityserverdir/etc/ccl.properties");
+#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/ccl.properties $authorityserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/etc/pqf.properties") {
-#         system("cp -f $kohadir/misc/zebra/pqf.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
-        system("cp -f $kohadir/misc/zebra/pqf.properties $authorityserverdir/etc/pqf.properties");
+#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/pqf.properties $authorityserverdir/etc/pqf.properties");
         print "Info: copied pqf.properties\n";
         $created_dir_or_file++;
     }
@@ -388,43 +388,43 @@ if ($biblios) {
     # the record model, depending on marc flavour
     unless (-f "$biblioserverdir/tab/record.abs") {
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/misc/zebra/record_biblios_unimarc.abs $biblioserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/biblios/etc/record_unimarc.abs $biblioserverdir/tab/record.abs");
             print "Info: copied record.abs for UNIMARC\n";
         } else {
-            system("cp -f $kohadir/misc/zebra/record_biblios_usmarc.abs $biblioserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/biblios/etc/record.abs $biblioserverdir/tab/record.abs");
             print "Info: copied record.abs for USMARC\n";
         }
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/misc/zebra/sort-string-utf_french.chr $biblioserverdir/tab/word-phrase-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/word-phrase-utf.chr");
         print "Info: copied word-phase-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/bib1.att") {
-        system("cp -f $kohadir/misc/zebra/bib1_biblios.att $biblioserverdir/tab/bib1.att");
+        system("cp -f $kohadir/etc/zebradb/biblios/etc/bib1.att $biblioserverdir/tab/bib1.att");
         print "Info: copied bib1.att\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/default.idx") {
-        system("cp -f $kohadir/misc/zebra/default.idx $biblioserverdir/tab/default.idx");
+        system("cp -f $kohadir/etc/zebradb/etc/default.idx $biblioserverdir/tab/default.idx");
         print "Info: copied default.idx\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/etc/ccl.properties") {
-#         system("cp -f $kohadir/misc/zebra/ccl.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
-        system("cp -f $kohadir/misc/zebra/ccl.properties $biblioserverdir/etc/ccl.properties");
+#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/ccl.properties $biblioserverdir/etc/ccl.properties");
         print "Info: copied ccl.properties\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/etc/pqf.properties") {
-#         system("cp -f $kohadir/misc/zebra/pqf.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
-        system("cp -f $kohadir/misc/zebra/pqf.properties $biblioserverdir/etc/pqf.properties");
+#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/pqf.properties $biblioserverdir/etc/pqf.properties");
         print "Info: copied pqf.properties\n";
         $created_dir_or_file++;
     }
