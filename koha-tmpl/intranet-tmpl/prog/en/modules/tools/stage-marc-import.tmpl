@@ -1,6 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC Records For Import</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="file-upload.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+
+function CheckForm(f) {
+    if (f.uploadedfileid.value == '') {
+        alert('Please upload a file first.');
+    } else {
+        f.submit();
+    }
+}
+
+//]]!>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -41,14 +55,20 @@
 	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalogue.</li>
 	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
 </ul>
-<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <fieldset class="rows">
 <legend>Stage records into the reservoir</legend><ol>
 	<li>
-		<label for="uploadmarc">Select the file to stage: </label>
-		<input type="file" id="uploadmarc" name="uploadmarc" /><br />
-		
+        <div id="fileuploadform">
+        <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+		<label for="fileToUpload">Select the file to stage: </label>
+		<input type="file" id="fileToUpload" name="fileToUpload" /><br />
+        <button clase="input" onclick="return ajaxFileUpload();">Upload file</button>
+		</form>
+        <div id="fileuploadstatus" style="display:none">Upload progress: <span id="fileuploadprogress">0<span>%</div>
+        </div>
 	</li>
+    <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+        <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
 	<li>
 		<label for="comments">Notes about this file: </label>
 		<input type="text" id="comments" name="comments" />
@@ -85,7 +105,7 @@
       </li>
     </ol>
   </fieldset>
-  <fieldset class="action"><input type="submit" value="Stage for import" /></fieldset>
+  <fieldset class="action"><input type="button" id="mainformsubmit" onclick="CheckForm(this.form);" value="Stage for import" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
