@@ -1,0 +1,351 @@
+# indexing rules. It
+# results in a server which provides a passable Bath level 0 and 1 service
+############################################################################
+# IMPORTANT : this file MUST be renamed record.abs : this name is "hardcoded" in zebra
+# the default record.abs is designed for MARC21.
+############################################################################
+# NOTE: This is designed to be used with the grs.marcxml input filter
+# for ISO2709 (ANSI Z39.2) or grs.xml for MARCXML-formatted records. It
+# won't work for the old grs.marc input filter, which yields a different
+# internal structure.
+
+encoding utf-8
+name marc21
+attset bib1.att
+attset gils.att
+esetname F @
+esetname B @
+
+marc usmarc.mar
+systag sysno rank
+xpath disable
+
+all any
+melm 001        Local-number,Local-number:n
+# Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
+melm 090$9      Local-number,Local-number:n
+
+melm 010$a    Standard-Number,ISBN:w
+# wrong ISBN
+melm 010$z    Standard-Number,ISBN:w
+melm 011$a    Standard-Number,ISSN:w
+# cancelled ISSN
+melm 011$y    Standard-Number,ISSN:w
+# wrong ISSN
+melm 011$z    ISSN:w
+
+melm 200$b      Material-type,Koha-ItemType
+
+
+#melm 100$9   Cross-Reference !:w
+#melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),Date-of-publication:n:range(data,9,4),Date-of-publication:n:range(data,13,4),Date-of-publication:s:range(data,9,4),Date-of-publication:s:range(data,13,4),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2)
+melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),audience:s:range(data,17,1),audience:s:range(data,18,1),audience:s:range(data,19,1),Modified-code:n:range(data,21,1),Language:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
+melm 101     Language
+melm 102$a     Country-heading
+
+#Field 105 Description
+#Illustration codes 4
+#Form of contents codes 4
+#Conference or meeting code 1
+#Festschrift indicator 1
+#Index indicator 1
+#Literature code 1
+#Biography code   1
+melm 105$a     Illustration-code:w:range(data,0,4),Content-type:w:range(data,4,1),Content-type:w:range(data,5,1),Content-type:w:range(data,6,1),Content-type:w:range(data,7,1),Conference-code:w:range(data,8,1),Festschrift-indicator:w:range(data,9,1),Index-indicator:w:range(data,10,1),Literature-Code:w:range(data,11,1),Biography-Code:w:range(data,12,1)
+
+melm 106$a     Material-type
+
+#Field 110 Description
+#Name of Data Element                  Number of characters                 Character Positions
+#Type of serial designator              1                                   0
+#Frequency of issue                     1                                   1
+#Regularity                             1                                   2
+#Type of material code                  1                                   3
+#Nature of contents code                3                                   4-6
+#Conference publication indicator       1                                   7
+#Title page availability codes          1                                   8
+#Index availability code                1                                   9
+#Cumulative index availability code   1                                   10
+melm 110$a     Type-Of-Serial:w:range(data,0,1),Frequency-code:w:range(data,1,1),Regularity-code:w:range(data,2,1),Content-type:w:range(data,3,1),Content-type:w:range(data,4,3),Conference-publication-Code:w:range(data,7,1),Title-Page-availability-Code:w:range(data,8,1),Index-availability-Code:w:range(data,9,1),Cumulative-Index-availability-Code:w:range(data,10,1)
+
+melm 115$a     Video-mt:w:range(data,0,1)
+
+melm 116$a     Graphics-type:w:range(data,0,1),Graphics-support:w:range(data,1,1),Graphics-support:w:range(data,2,1),
+
+
+melm 680$b		LC-call-number:s
+melm 680		LC-call-number
+#melm 001		Identifier-standard:w
+
+melm 200$b      Material-type
+#melm 200$b      Koha-Itemtype
+
+#melm 100$9		Cross-Reference	!:w
+
+melm 101$a		Code-Language:w
+
+############ AUTHORS ##################
+# main Author
+melm 200$f		Author:w,Author:p,Author:s
+# other Authors
+melm 200$g		Author:w,Author:p
+# physical Author
+melm 700$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 700$a    Author,Author-name-personal,Author:p,Author-name-personal:p                                                  melm 700    Author,Author-name-personal,Author:p,Author-name-personal:p                                                    
+melm 701$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 701    Author,Author-name-personal,Author:p,Author-name-personal:p
+melm 702$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 702    Author,Author-name-personal,Author:p,Author-name-personal:p
+# collective Author
+melm 710$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 710    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
+melm 711$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 711    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
+
+melm 712$9        Koha-Auth-Number,Koha-Auth-Number:n
+melm 712    Author,Author-name-corporate,Author-name-conference,Corporate-name,Conference-name,Author:p,Author-name-corporate:p,Author-name-conference:p,Corporate-name:p,Conference-name:p
+
+
+
+############## TITLE ##################
+# main Title
+melm 200$a		Title:w,Title:p,Title:s
+# Title 2
+melm 200$c		Title:w,Title:p
+# // Title
+melm 200$d		Title:w,Title:p
+# subTitle
+melm 200$e		Title:w,Title:p
+
+melm 205    Title,Title:p
+
+melm 208    Serials,Serials:p
+melm 207    Printed-Music,Printed-Music:p
+
+
+
+melm 210$a    Place-Publication,Place-Publication:p
+melm 210$c    Publisher,Publisher:p
+melm 210$d    Date-of-Publication:y,Date:y,Date-of-Publication:s,Date:s
+
+melm 215        Physical-detail
+
+#Series
+melm 225$a      Title-series,Title-series:p
+melm 225$d      Title-series,Title-series:p
+#SubTitle
+melm 225$e      Title-series,Title-series:p 
+#Authors
+melm 225$f      Author,Author:p,Author-Title-series,Author-Title-series:p
+#Part-Title
+melm 225$h      Title-series,Title-series:p 
+#Part Number
+melm 225$i      Title-series,Title-series:p 
+#Volume
+melm 225$v      Title-series,Title-series:p 
+melm 225$x      ISSN
+
+melm 230$a      Electronic-Ressource
+
+########## NOTES #################
+melm 300$a    Note,Note:p
+melm 301$a    Note,Note:p
+melm 302$a    Note,Note:p
+melm 303$a    Note,Note:p
+melm 304$a    Note,Note:p
+melm 305$a    Note,Note:p
+melm 306$a    Note,Note:p
+melm 307$a    Note,Note:p
+melm 308      Note,Note:p
+melm 308$a    Note,Note:p
+melm 310$a    Note,Note:p
+melm 311$a    Note,Note:p
+melm 312$a    Note,Note:p
+melm 313$a    Note,Note:p
+melm 314$a    Note,Note:p
+melm 315$a    Note,Note:p
+melm 316$a    Note,Note:p
+melm 317$a    Note,Note:p
+melm 318$a    Note,Note:p
+melm 320$a    Note,Note:p
+melm 321$a    Note,Note:p
+melm 322$a    Note,Note:p
+melm 323$a    Note,Note:p
+melm 324$a    Note,Note:p
+melm 325$a    Note,Note:p
+melm 326$a    Note,Note:p
+melm 327$a    Note,Note:p
+melm 328      Note,Thesis-Note:w,Note:p
+melm 328$a    Note,Note:p
+melm 330$a    Abstract,Note:w,Abstract:p,Note:p
+melm 332$a    Note,Note:p
+melm 333$a    Note,Note:p
+melm 336$a    Note,Note:p
+melm 337$a    Note,Note:p
+melm 345$a    Note,Note:p
+
+
+############## 4XX - LINKING ##################
+# Authorities Title,Title:p
+melm 400$t    Title,Title:p
+melm 401$t    Title,Title:p
+melm 403$t    Title,Title:p,Title-Uniform,Title-Uniform:p
+melm 410$t    Title,Title:p
+melm 412$t    Title,Title:p
+melm 413$t    Title,Title:p
+melm 414$t    Title,Title:p
+melm 415$t    Title,Title:p
+melm 416$t    Title,Title:p
+melm 417$t    Title,Title:p
+melm 418$t    Title,Title:p
+melm 419$t    Title,Title:p
+melm 420$t    Title,Title:p
+melm 430$t    Title,Title:p
+melm 431$t    Title,Title:p
+melm 432$t    Title,Title:p
+melm 440$t    Title,Title:p
+melm 441$t    Title,Title:p
+melm 445$t    Title,Title:p
+melm 400$d    Date-of-Publication:n
+melm 401$d    Date-of-Publication:n
+melm 403$d    Date-of-Publication:n
+melm 410$d    Date-of-Publication:n
+melm 412$d    Date-of-Publication:n
+melm 413$d    Date-of-Publication:n
+melm 414$d    Date-of-Publication:n
+melm 415$d    Date-of-Publication:n
+melm 416$d    Date-of-Publication:n
+melm 417$d    Date-of-Publication:n
+melm 418$d    Date-of-Publication:n
+melm 419$d    Date-of-Publication:n
+melm 420$d    Date-of-Publication:n
+melm 430$d    Date-of-Publication:n
+melm 431$d    Date-of-Publication:n
+melm 432$d    Date-of-Publication:n
+melm 440$d    Date-of-Publication:n
+melm 441$d    Date-of-Publication:n
+melm 445$d    Date-of-Publication:n
+melm 400    Link
+melm 401    Link
+melm 403    Link
+melm 410    Link
+melm 412    Link
+melm 413    Link
+melm 414    Link
+melm 415    Link
+melm 416    Link
+melm 417    Link
+melm 418    Link
+melm 419    Link
+melm 420    Link
+melm 430    Link
+melm 431    Link
+melm 432    Link
+melm 440    Link
+melm 441    Link
+melm 445    Link
+
+# Authorities Title
+melm 500$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 501$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 503$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 510$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 512$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 513$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 514$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 515$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 516$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 517$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 518$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 519$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 520$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 530$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 531$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 532$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 540$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 541$9    Koha-Auth-Number,Koha-Auth-Number:n
+melm 545$9    Koha-Auth-Number,Koha-Auth-Number:n
+
+melm 500		Title,Title:p
+melm 501		Title,Title:p
+melm 503		Title,Title:p
+melm 510		Title,Title:p
+melm 512		Title,Title:p
+melm 513		Title,Title:p
+melm 514		Title,Title:p
+melm 515		Title,Title:p
+melm 516		Title,Title:p
+melm 517		Title,Title:p
+melm 518		Title,Title:p
+melm 519		Title,Title:p
+melm 520		Title,Title:p
+melm 530		Title,Title:p
+melm 531		Title,Title:p
+melm 532		Title,Title:p
+melm 540		Title,Title:p
+melm 541		Title,Title:p
+melm 545		Title,Title:p
+
+########### SUBJECTS (6xx) ##################
+melm 600$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 601$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 602$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 603$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 604$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 605$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 606$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 607$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 610$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 630$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 631$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 632$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 633$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 634$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 635$9      Koha-Auth-Number,Koha-Auth-Number:n
+melm 636$9      Koha-Auth-Number,Koha-Auth-Number:n
+
+melm 600$a		author,Personal-name,author:p,Personal-name:p
+melm 600		subject-heading,subject-heading:p
+melm 602$a    Personal-name,Personal-name:p
+melm 602    subject-heading,subject-heading:p
+melm 601$a		author,Corporate-name,Conference-name,author:p,Corporate-name:p,Conference-name:p
+melm 601		subject-heading,subject-heading:p
+melm 604$a		author
+melm 604$t		title
+melm 610$t		title
+melm 605$a		title
+melm 606		subject-heading,subject-heading:p
+melm 607    	subject-heading,subject-heading:p
+melm 630		subject-heading,subject-heading:p
+melm 631		subject-heading,subject-heading:p
+melm 632		subject-heading,subject-heading:p
+melm 633		subject-heading,subject-heading:p
+melm 634		subject-heading,subject-heading:p
+melm 635		subject-heading,subject-heading:p
+melm 636		subject-heading,subject-heading:p
+melm 610		subject-heading
+melm 640        subject-heading,subject-heading:p
+melm 641        subject-heading,subject-heading:p
+melm 642        subject-heading,subject-heading:p
+melm 643        subject-heading,subject-heading:p
+melm 644        subject-heading,subject-heading:p
+melm 645        subject-heading,subject-heading:p
+melm 646        subject-heading,subject-heading:p
+
+######################
+
+melm 676$a		Dewey-classification:w,Dewey-classification:s
+
+#############"# item information (based on 995) ###############
+melm 995$a		homebranch,Host-item
+melm 995$b		homebranch,Host-item
+melm 995$c		holdingbranch,Record-Source
+melm 995$d		holdingbranch,Record-Source
+melm 995$e      location
+melm 995$f		barcode
+melm 995$j		LC-card-number:s
+melm 995$k      Call-Number,Local-Classification,lcn,Call-Number:p,Local-Classification:p,lcn:p
+melm 995$s      popularity:n,popularity:s
+melm 995$n      onloan:d,onloan:n,onloan:s
+melm 995$u      Note, Note:p
+melm  995       item   # just to index every subfield
