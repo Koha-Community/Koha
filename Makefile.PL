@@ -96,6 +96,7 @@ WriteMakefile(
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
     PREREQ_PM => {
+'Biblio::EndnoteStyle' => 0.05,
 'CGI' => 3.15,
 'CGI::Carp' => 1.29,
 'CGI::Session' => '4.10',

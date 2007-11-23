@@ -56,7 +56,9 @@ $template->param(
     zebraVersion  => $zebraVersion,
 );
 my @component_names =
-    qw/CGI
+    qw/
+Biblio::EndnoteStyle
+CGI
 CGI::Carp
 CGI::Session
 Class::Factory::Util
