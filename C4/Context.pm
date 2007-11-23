@@ -583,7 +583,7 @@ sub _new_dbh
 
     my $db_name   = $context->config("database");
     my $db_host   = $context->config("hostname");
-    my $db_port   = $context->config("port");
+    my $db_port   = $context->config("port") or "";
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
     my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
