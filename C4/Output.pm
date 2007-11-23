@@ -143,7 +143,7 @@ sub themelanguage {
         foreach my $la (@languages) {
             for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
                 $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-                if ( -e "$htdocs/$th/$la/".($section eq 'intranet'?"modules":"")."/$tmpl" ) {
+                if ( -e "$htdocs/$th/$la/modules/$tmpl" ) {
                     $theme = $th;
                     $lang  = $la;
                     last THEME;
