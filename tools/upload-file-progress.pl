@@ -24,10 +24,10 @@ use IO::File;
 use CGI;
 use CGI::Session;
 use C4::Context;
-use C4::Auth qw/get_session check_cookie_auth/;
+use C4::Auth qw/check_cookie_auth/;
+use C4::UploadedFile;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
-use Digest::MD5;
 
 my %cookies = fetch CGI::Cookie;
 my %cookies = fetch CGI::Cookie;
@@ -39,23 +39,7 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
-my $session = get_session($sessionID);
-
-my $query = CGI->new;
-my $fileid = $session->param('current_upload');
-
-my $reported_progress = 0;
-if (defined $fileid and $fileid ne "") {
-    my $progress = $session->param("$fileid.uploadprogress");
-    if (defined $progress) {
-        if ($progress eq "done") {
-            $reported_progress = 100;
-        } else {
-            $reported_progress = $progress;
-        }
-    }
-}
-
+my $reported_progress = C4::UploadedFile->upload_progress($sessionID);
 
 my $reply = CGI->new("");
 print $reply->header(-type => 'text/html');

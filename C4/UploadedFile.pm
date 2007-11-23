@@ -1,0 +1,317 @@
+package C4::UploadedFile;
+
+# Copyright (C) 2007 LibLime
+# Galen Charlton <galen.charlton@liblime.com>
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use strict;
+use C4::Context;
+use C4::Auth qw/get_session/;
+use IO::File;
+
+use vars qw($VERSION);
+
+# set the version for version checking
+$VERSION = 3.00;
+
+=head1 NAME
+
+C4::UploadedFile - manage files uploaded by the user
+for later processing.
+
+=head1 SYNOPSIS
+
+=over 4
+
+# create and store data
+my $uploaded_file = C4::UploadedFile->new($sessionID);
+my $fileID = $uploaded_file->id();
+$uploaded_file->name('c:\temp\file.mrc');
+$uploaded_file->max_size(1024);
+while ($have_more_data) {
+    $uploaded_file->stash($data, $bytes_read);
+}
+$uploaded_file->done();
+
+# check status of current file upload
+my $progress = C4::UploadedFile->upload_progress($sessionID);
+
+# get file handle for reading uploaded file
+my $uploaded_file = C4::UploadedFile->fetch($fileID);
+my $fh = $uploaded_file->fh();
+
+=back
+
+Stores files uploaded by the user from their web browser.  The
+uploaded files are temporary and at present are not guaranteed
+to survive beyond the life of the user's session.
+
+This module allows for tracking the progress of the file
+currently being uploaded.
+
+TODO: implement secure persistant storage of uploaded files.
+
+=cut
+
+=head1 METHODS
+
+=cut
+
+=head2 new
+
+=over 4
+
+my $uploaded_file = C4::UploadedFile->new($sessionID);
+
+=back
+
+Creates a new object to represent the uploaded file.  Requires
+the current session ID.
+
+=cut
+
+sub new {
+    my $class = shift;
+    my $sessionID = shift;
+
+    my $self = {};
+
+    $self->{'sessionID'} = $sessionID;
+    $self->{'fileID'} = Digest::MD5::md5_hex(Digest::MD5::md5_hex(time().{}.rand().{}.$$));
+    # FIXME - make staging area configurable
+    my $TEMPROOT = "/tmp";
+    my $OUTPUTDIR = "$TEMPROOT/$sessionID";
+    mkdir $OUTPUTDIR;
+    my $tmp_file_name = "$OUTPUTDIR/$self->{'fileID'}";
+    my $fh = new IO::File $tmp_file_name, "w";
+    unless (defined $fh) {
+        return undef;
+    }
+    $fh->binmode(); # Windows compatibility
+    $self->{'fh'} = $fh;
+    $self->{'tmp_file_name'} = $tmp_file_name;
+    my $session = get_session($sessionID);
+    $session->param("$self->{'fileID'}.uploaded_tmpfile", $tmp_file_name);
+    $session->param('current_upload', $self->{'fileID'});
+    $session->flush();
+    $self->{'session'} = $session;
+    $self->{'name'} = '';
+    $self->{'max_size'} = 0;
+    $self->{'progress'} = 0;
+
+    bless $self, $class;
+
+    return $self;
+
+}
+
+=head2 id
+
+=over 4
+
+my $fileID = $uploaded_file->id();
+
+=back
+
+=cut
+
+sub id {
+    my $self = shift;
+    return $self->{'fileID'};
+}
+
+=head2 name
+
+=over 4
+
+my $name = $uploaded_file->name();
+$uploaded_file->name($name);
+
+=back
+
+Accessor method for the name by which the file is to be known.
+
+=cut
+
+sub name {
+    my $self = shift;
+    if (@_) {
+        $self->{'name'} = shift;
+        $self->{'session'}->param("$self->{'fileID'}.uploaded_filename", $self->{'name'});
+        $self->{'session'}->flush();
+    } else {
+        return $self->{'name'};
+    }
+}
+
+=head2 max_size
+
+=over 4
+
+my $max_size = $uploaded_file->max_size();
+$uploaded_file->max_size($max_size);
+
+=back
+
+Accessor method for the maximum size of the uploaded file.
+
+=cut
+
+sub max_size {
+    my $self = shift;
+    @_ ? $self->{'max_size'} = shift : $self->{'max_size'};
+}
+
+=head2 stash
+
+=over 4
+
+$uploaded_file->stash($dataref, $bytes_read);
+
+=back
+
+Write C<$dataref> to the temporary file.  C<$bytes_read> represents
+the number of bytes (out of C<$max_size>) transmitted so far.
+
+=cut
+
+sub stash {
+    my $self = shift;
+    my $dataref = shift;
+    my $bytes_read = shift;
+
+    my $fh = $self->{'fh'};
+    print $fh $$dataref;
+
+    my $percentage = int(($bytes_read / $self->{'max_size'}) * 100);
+    if ($percentage > $self->{'progress'}) {
+        $self->{'progress'} = $percentage;
+        $self->{'session'}->param("$self->{'fileID'}.uploadprogress", $self->{'progress'});
+        $self->{'session'}->flush();
+    }
+}
+
+=head2 done
+
+=over 4
+
+$uploaded_file->done();
+
+=back
+
+Indicates that all of the bytes have been uploaded.
+
+=cut
+
+sub done {
+    my $self = shift;
+    $self->{'session'}->param("$self->{'fileID'}.uploadprogress", 'done');
+    $self->{'session'}->flush();
+    $self->{'fh'}->close();
+}
+
+=head2 upload_progress
+
+=over 4
+
+my $upload_progress = C4::UploadFile->upload_progress($sessionID);
+
+=back
+
+Returns (as an integer from 0 to 100) the percentage
+progress of the current file upload.
+
+=cut
+
+sub upload_progress {
+    my ($class, $sessionID) = shift;
+
+    my $session = get_session($sessionID);
+
+    my $fileID = $session->param('current_upload');
+
+    my $reported_progress = 0;
+    if (defined $fileID and $fileID ne "") {
+        my $progress = $session->param("$fileID.uploadprogress");
+        if (defined $progress) {
+            if ($progress eq "done") {
+                $reported_progress = 100;
+            } else {
+                $reported_progress = $progress;
+            }
+        }
+    }
+    return $reported_progress;
+}
+
+=head2 fetch
+
+=over 4
+
+    my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
+
+=back
+
+Retrieves an uploaded file object from the current session.
+
+=cut
+
+sub fetch {
+    my $class = shift;
+    my $sessionID = shift;
+    my $fileID = shift;
+
+    my $self = {};
+
+    $self->{'sessionID'} = $sessionID;
+    $self->{'fileID'} = $fileID;
+    my $session = get_session($sessionID);
+    $self->{'session'} = $session;
+    $self->{'tmp_file_name'} = $session->param("$self->{'fileID'}.uploaded_tmpfile");
+    $self->{'name'} = $session->param("$self->{'fileID'}.uploaded_filename");
+    my $fh = new IO::File $self->{'tmp_file_name'}, "r";
+    $self->{'fh'} = $fh;
+
+    bless $self, $class;
+
+    return $self;
+}
+
+=head2 fh
+
+=over
+
+my $fh = $uploaded_file->fh();
+
+=back
+
+Returns an IO::File handle to read the uploaded file.
+
+=cut
+
+sub fh {
+    my $self = shift;
+    return $self->{'fh'};
+}
+
+=head1 AUTHOR
+
+Koha Development Team <info@koha.org>
+
+Galen Charlton <galen.charlton@liblime.com>
+
+=cut

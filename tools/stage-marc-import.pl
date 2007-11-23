@@ -28,6 +28,7 @@ use strict;
 
 # standard or CPAN modules used
 use CGI;
+use CGI::Cookie;
 use MARC::File::USMARC;
 
 # Koha modules used
@@ -38,27 +39,12 @@ use C4::Output;
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
-
-#------------------
-# Constants
-
-my $includes = C4::Context->config('includes') ||
-	"/usr/local/www/hdl/htdocs/includes";
-
-# HTML colors for alternating lines
-my $lc1='#dddddd';
-my $lc2='#ddaaaa';
-
-#-------------
-#-------------
-# Initialize
-
-my $userid=$ENV{'REMOTE_USER'};
+use C4::UploadedFile;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
-my $uploadmarc=$input->param('uploadmarc');
+my $fileID=$input->param('uploadedfileid');
 my $matcher_id = $input->param('matcher');
 my $parse_items = $input->param('parse_items');
 my $comments = $input->param('comments');
@@ -73,15 +59,19 @@ my ($template, $loggedinuser, $cookie)
 					});
 
 $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
-						uploadmarc => $uploadmarc);
-my $filename = $uploadmarc;
-if ($uploadmarc && length($uploadmarc)>0) {
+						uploadmarc => $fileID);
+
+if ($fileID) {
+    my %cookies = parse CGI::Cookie($cookie);
+    my $uploaded_file = C4::UploadedFile->fetch($cookies{'CGISESSID'}->value, $fileID);
+    my $fh = $uploaded_file->fh();
 	my $marcrecord='';
-	while (<$uploadmarc>) {
+	while (<$fh>) {
 		$marcrecord.=$_;
 	}
 
     # FIXME branch code
+    my $filename = $uploaded_file->name();
     my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
                                                                                    $comments, '', $parse_items, 0);
     my $num_with_matches = 0;

@@ -24,20 +24,10 @@ use IO::File;
 use CGI;
 use CGI::Session;
 use C4::Context;
-use C4::Auth qw/get_session check_cookie_auth/;
+use C4::Auth qw/check_cookie_auth/;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
-use Digest::MD5;
-
-my %cookies = fetch CGI::Cookie;
-my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => 1 });
-if ($auth_status ne "ok") {
-    $auth_status = 'denied' if $auth_status eq 'failed';
-    send_reply($auth_status, "", "");
-    exit 0;
-}
-
-my $session = get_session($sessionID);
+use C4::UploadedFile;
 
 # upload-file.pl must authenticate the user
 # before processing the POST request,
@@ -45,68 +35,49 @@ my $session = get_session($sessionID);
 # not authorized.  Consequently, unlike
 # most of the other CGI scripts, upload-file.pl
 # requires that the session cookie already
-# have been created., $fileid, $tmp_file_name
+# have been created.
 
-my $fileid = Digest::MD5::md5_hex(Digest::MD5::md5_hex(time().{}.rand().{}.$$));
-
-# FIXME - make staging area configurable
-my $TEMPROOT = "/tmp";
-my $OUTPUTDIR = "$TEMPROOT/$sessionID"; 
-mkdir $OUTPUTDIR;
-my $tmp_file_name = "$OUTPUTDIR/$fileid";
-
-my $fh = new IO::File $tmp_file_name, "w";
-unless (defined $fh) {
-    # FIXME - failed to create file for some reason
-    send_reply('failed', '', '');
+my %cookies = fetch CGI::Cookie;
+my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => 1 });
+if ($auth_status ne "ok") {
+    $auth_status = 'denied' if $auth_status eq 'failed';
+    send_reply($auth_status, "");
     exit 0;
 }
-$fh->binmode(); # for Windows compatibility
-$session->param("$fileid.uploaded_tmpfile", $tmp_file_name);
-$session->param('current_upload', $fileid);
-$session->flush();
 
-my $progress = 0;
+my $uploaded_file = C4::UploadedFile->new($sessionID);
+unless (defined $uploaded_file) {
+    # FIXME - failed to create file for some reason
+    send_reply('failed', '');
+    exit 0;
+}
+$uploaded_file->max_size($ENV{'CONTENT_LENGTH'}); # may not be the file size, exactly
+
 my $first_chunk = 1;
-my $max_size = $ENV{'CONTENT_LENGTH'}; # may not be the file size, exactly
 
 my $query;
-$|++;
-$query = new CGI \&upload_hook, $session;
-clean_up();
-send_reply('done', $fileid, $tmp_file_name);
+$query = new CGI \&upload_hook;
+$uploaded_file->done();
+send_reply('done', $uploaded_file->id());
 
 # FIXME - if possible, trap signal caused by user cancelling upload
 # FIXME - something is wrong during cleanup: \t(in cleanup) Can't call method "commit" on unblessed reference at /usr/local/share/perl/5.8.8/CGI/Session/Driver/DBI.pm line 130 during global destruction.
 exit 0;
 
-sub clean_up {
-    $session->param("$fileid.uploadprogress", 'done');
-    $session->flush();
-}
-
 sub upload_hook {
     my ($file_name, $buffer, $bytes_read, $session) = @_;
-    print $fh $buffer;
-    # stash received file name
+    $uploaded_file->stash(\$buffer, $bytes_read);
     if ($first_chunk) {
-        $session->param("$fileid.uploaded_filename", $file_name);
-        $session->flush();
+        $uploaded_file->name($file_name);
         $first_chunk = 0;
-    }
-    my $percentage = int(($bytes_read / $max_size) * 100);
-    if ($percentage > $progress) {
-        $progress = $percentage;
-        $session->param("$fileid.uploadprogress", $progress);
-        $session->flush();
     }
 }
 
 sub send_reply {
-    my ($upload_status, $fileid, $tmp_file_name) = @_;
+    my ($upload_status, $fileid) = @_;
 
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
     # response will be sent back as JSON
-    print "{ status: '$upload_status', fileid: '$fileid', tmp_file_name: '$tmp_file_name' }";
+    print "{ status: '$upload_status', fileid: '$fileid' }";
 }
