@@ -199,20 +199,21 @@
     <!-- TMPL_VAR NAME="searchfield" -->
     <table width="80%">
     <tr>
-        <th>Variable</th>
+        <th>Preference</th>
+        <th>Explanation</th>
         <th>Value</th>
-        <th colspan="3" width="30%">Explanation</th>
+        <th>Edit</th>
+        <th>Delete</th>
     </tr>
     <!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
-        <td><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></td>
 
+        <td><strong><!-- TMPL_VAR NAME="variable" --></strong></td><td> <!-- TMPL_VAR NAME="explanation" --></td>
         <td><!-- TMPL_IF NAME="yesno" -->
 		<!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
 		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
 
-        <td width="20%"><!-- TMPL_VAR NAME="explanation" --></td>
-        <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
+        <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit </a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
     </tr>
     <!-- /TMPL_LOOP -->

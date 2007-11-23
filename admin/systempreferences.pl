@@ -100,7 +100,8 @@ my %tabsysprefs;
     $tabsysprefs{ReceiveBackIssues}="Catalogue";
     $tabsysprefs{DefaultClassificationSource}="Catalogue";
     $tabsysprefs{RoutingSerials}="Catalogue";
-    
+    $tabsysprefs{'item-level_itypes'}="Catalogue";
+
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
     $tabsysprefs{maxreserves}="Circulation";
@@ -126,6 +127,8 @@ my %tabsysprefs;
     $tabsysprefs{intranetcolorstylesheet}="Intranet";
     $tabsysprefs{intranetuserjs}="Intranet";
 	$tabsysprefs{yuipath}="Intranet";
+	$tabsysprefs{IntranetmainUserblock}="Intranet";
+	
 # Members
     $tabsysprefs{automembernum}="Members";
     $tabsysprefs{checkdigit}="Members";
@@ -149,10 +152,14 @@ my %tabsysprefs;
 	$tabsysprefs{XISBNDailyLimit}="FRBR";
 	$tabsysprefs{PINESISBN}="FRBR";
     $tabsysprefs{ThingISBN}="FRBR";
+    $tabsysprefs{OPACFRBRizeEditions}="FRBR";
+    $tabsysprefs{XISBNAmazonSimilarItems}="FRBR";
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";
+    $tabsysprefs{AmazonSimilarItems}="OPAC";
     $tabsysprefs{AmazonContent}="OPAC";
+    $tabsysprefs{OPACAmazonContent}="OPAC";
     $tabsysprefs{AmazonDevKey}="OPAC";
     $tabsysprefs{BiblioDefaultView}="OPAC";
     $tabsysprefs{LibraryName}="OPAC";
@@ -168,6 +175,8 @@ my %tabsysprefs;
     $tabsysprefs{opacuserjs}="OPAC";
     $tabsysprefs{SubscriptionHistory}="OPAC";
     $tabsysprefs{opacheader}="OPAC";
+    $tabsysprefs{OPACAmazonSimilarItems}="OPAC";
+    $tabsysprefs{OPACXISBNAmazonSimilarItems}="OPAC";
     
 # OPACFeatures
 	$tabsysprefs{SearchMyLibraryFirst}="OPACFeatures";
