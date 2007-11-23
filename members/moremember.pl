@@ -96,7 +96,7 @@ my $category_type = $borrowercategory->{'category_type'};
 $template->param( $data->{'categorycode'} => 1 ); 
 
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $tempdate = C4::Dates->new($data->{$_})->output('iso')
+		my $tempdate = C4::Dates->new($data->{$_},'iso')->output
 			or warn ("Invalid $_ = " . $data->{$_});
 		$data->{$_} = $tempdate || '';
 }

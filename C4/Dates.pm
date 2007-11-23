@@ -98,7 +98,7 @@ sub init ($;$$) {
 }
 sub output ($;$) {
 	my $self = shift;
-	my $newformat = (@_) ? _recognize_format(shift) : $self->{'dateformat'} ;
+	my $newformat = (@_) ? _recognize_format(shift) : $prefformat;
 	return (eval {POSIX::strftime($posix_map{$newformat}, @self::dmy_array)} || undef);
 }
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
