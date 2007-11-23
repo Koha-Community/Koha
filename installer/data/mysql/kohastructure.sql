@@ -50,7 +50,9 @@ CREATE TABLE `accountoffsets` (
   `accountno` smallint(6) NOT NULL default 0,
   `offsetaccount` smallint(6) NOT NULL default 0,
   `offsetamount` decimal(28,6) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  CONSTRAINT `accountoffsets_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
