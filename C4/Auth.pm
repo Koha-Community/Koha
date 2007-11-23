@@ -90,6 +90,7 @@ C4::Auth - Authenticates Koha users
 @EXPORT_OK = qw(
   &check_api_auth
   &get_session
+  &check_cookie_auth
 );
 
 =item get_template_and_user
@@ -961,6 +962,115 @@ sub check_api_auth {
             return ("failed", undef, undef);
         }
     } 
+}
+
+=item check_cookie_auth
+
+  ($status, $sessionId) = check_api_auth($cookie, $userflags);
+
+Given a CGISESSID cookie set during a previous login to Koha, determine
+if the user has the privileges specified by C<$userflags>.
+
+C<check_cookie_auth> is meant for authenticating special services
+such as tools/upload-file.pl that are invoked by other pages that
+have been authenticated in the usual way.
+
+Possible return values in C<$status> are:
+
+=over 4
+
+=item "ok" -- user authenticated; C<$sessionID> have valid values.
+
+=item "failed" -- credentials are not correct; C<$sessionid> are undef
+
+=item "maintenance" -- DB is in maintenance mode; no login possible at the moment
+
+=item "expired -- session cookie has expired; API user should resubmit userid and password
+
+=back
+
+=cut
+
+sub check_cookie_auth {
+    my $cookie = shift;
+    my $flagsrequired = shift;
+
+    my $dbh     = C4::Context->dbh;
+    my $timeout = C4::Context->preference('timeout');
+    $timeout = 600 unless $timeout;
+
+    unless (C4::Context->preference('Version')) {
+        # database has not been installed yet
+        return ("maintenance", undef);
+    }
+    my $kohaversion=C4::Context::KOHAVERSION;
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    if (C4::Context->preference('Version') < $kohaversion) {
+        # database in need of version update; assume that
+        # no API should be called while databsae is in
+        # this condition.
+        return ("maintenance", undef);
+    }
+
+    # FIXME -- most of what follows is a copy-and-paste
+    # of code from checkauth.  There is an obvious need
+    # for refactoring to separate the various parts of
+    # the authentication code, but as of 2007-11-23 this
+    # is deferred so as to not introduce bugs into the
+    # regular authentication code for Koha 3.0.
+
+    # see if we have a valid session cookie already
+    # however, if a userid parameter is present (i.e., from
+    # a form submission, assume that any current cookie
+    # is to be ignored
+    unless (defined $cookie and $cookie) {
+        return ("failed", undef);
+    }
+    my $sessionID = $cookie;
+    my $session = get_session($sessionID);
+    C4::Context->_new_userenv($sessionID);
+    if ($session) {
+        C4::Context::set_userenv(
+            $session->param('number'),       $session->param('id'),
+            $session->param('cardnumber'),   $session->param('firstname'),
+            $session->param('surname'),      $session->param('branch'),
+            $session->param('branchname'),   $session->param('flags'),
+            $session->param('emailaddress'), $session->param('branchprinter')
+        );
+
+        my $ip = $session->param('ip');
+        my $lasttime = $session->param('lasttime');
+        my $userid = $session->param('id');
+        if ( $lasttime < time() - $timeout ) {
+            # time out
+            $session->delete();
+            C4::Context->_unset_userenv($sessionID);
+            $userid    = undef;
+            $sessionID = undef;
+            return ("expired", undef);
+        } elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+            # IP address changed
+            $session->delete();
+            C4::Context->_unset_userenv($sessionID);
+            $userid    = undef;
+            $sessionID = undef;
+            return ("expired", undef);
+        } else {
+            $session->param('lasttime',time());
+            my $flags = haspermission( $dbh, $userid, $flagsrequired );
+            if ($flags) {
+                return ("ok", $sessionID);
+            } else {
+                $session->delete();
+                C4::Context->_unset_userenv($sessionID);
+                $userid    = undef;
+                $sessionID = undef;
+                return ("failed", undef);
+            }
+        }
+    } else {
+        return ("expired", undef);
+    }
 }
 
 =item get_session

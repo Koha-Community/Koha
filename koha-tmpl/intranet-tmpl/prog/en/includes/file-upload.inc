@@ -24,7 +24,21 @@
                 fileElementId:'fileToUpload',
                 dataType: 'json',
                 success: function (data, status) {
-                    $("#uploadedfileid").val(data.fileid);
+                    if (data.status == 'denied') {
+                        $("#fileuploadstatus").hide();
+                        $("#fileuploadfailed").show();
+                        $("#fileuploadfailed").text("Upload failed -- no permission to upload files");
+                    } else if (data.status == 'failed') {
+                        $("#fileuploadstatus").hide();
+                        $("#fileuploadfailed").show();
+                        $("#fileuploadfailed").text("Upload failed -- unable to store file on server");
+                    } else if (data.status == 'maintenance') {
+                        $("#fileuploadstatus").hide();
+                        $("#fileuploadfailed").show();
+                        $("#fileuploadfailed").text("Upload failed -- database in maintenance state");
+                    } else {
+                         $("#uploadedfileid").val(data.fileid);
+                    }
                 },
                 error: function (data, status, e) {
                     alert(e);

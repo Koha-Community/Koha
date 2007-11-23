@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright (C) 2007 LibLime
 #
@@ -24,13 +24,18 @@ use IO::File;
 use CGI;
 use CGI::Session;
 use C4::Context;
-use C4::Auth qw/get_session/;
+use C4::Auth qw/get_session check_cookie_auth/;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
 use Digest::MD5;
 
 my %cookies = fetch CGI::Cookie;
-my $sessionID = $cookies{'CGISESSID'}->value;
+my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => 1 });
+if ($auth_status ne "ok") {
+    $auth_status = 'denied' if $auth_status eq 'failed';
+    send_reply($auth_status, "", "");
+    exit 0;
+}
 
 my $session = get_session($sessionID);
 
@@ -41,8 +46,6 @@ my $session = get_session($sessionID);
 # most of the other CGI scripts, upload-file.pl
 # requires that the session cookie already
 # have been created., $fileid, $tmp_file_name
-
-# FIXME - add authentication based on cookie
 
 my $fileid = Digest::MD5::md5_hex(Digest::MD5::md5_hex(time().{}.rand().{}.$$));
 
