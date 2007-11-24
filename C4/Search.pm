@@ -880,7 +880,7 @@ sub buildQuery {
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
-	$query .= $limit;
+	$query .= " ".$limit;
 
     warn "QUERY:".$query if $DEBUG;
 	warn "QUERY CGI:".$query_cgi if $DEBUG;
