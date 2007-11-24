@@ -91,15 +91,16 @@
 <!-- TMPL_ELSE -->
 
     <div class="searchresults">
-<form action="/cgi-bin/koha/opac-search.pl" method="post" name="bookbag_form" id="bookbag_form">
-    
-    <!-- TMPL_IF NAME="query_cgi" -->
-    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="query_cgi" escape="html" --><!-- TMPL_VAR NAME="limit_cgi" escape="html" -->" />
-    <!-- /TMPL_IF -->
-    
-        
+	<form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
+		<!-- TMPL_IF NAME="searchdesc" -->
+		<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
+		<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+		<!-- /TMPL_LOOP -->
+		<!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
+		<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+		<!-- /TMPL_LOOP -->
+		<!-- /TMPL_IF -->
 
-		
         <!-- TABLE RESULTS START -->
         <table>
 		<tr><td colspan="3"><p class="searchresults">
