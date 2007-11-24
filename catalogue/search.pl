@@ -491,7 +491,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			if ($query_desc || $limit_desc) {
             	$template->param(searchdesc => 1);
 			}
-			$template->param(stopwords_removed => "@$stopwords_removed");
+			$template->param(stopwords_removed => "@$stopwords_removed") if $stopwords_removed;
             $template->param(results_per_page =>  $results_per_page);
             $template->param(SEARCH_RESULTS => \@newresults);
 			## Build the page numbers on the bottom of the page

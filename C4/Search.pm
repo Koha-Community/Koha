@@ -559,12 +559,12 @@ sub getRecords {
 sub _remove_stopwords {
     my ($operand,$index) = @_;
 	my @stopwords_removed;
-    # phrase and exact-qualified indexes shoudln't have stopwords removed
+    # phrase and exact-qualified indexes shouldn't have stopwords removed
     if ($index!~m/phr|ext/){
     # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
     #       we use IsAlpha unicode definition, to deal correctly with diacritics.
-    #       otherwise, a french word like "leçon" woudl be split into "le" "çon", le 
-    #       is an empty word, we get "çon" and wouldn't find anything...
+    #       otherwise, a French word like "leçon" woudl be split into "le" "çon", le 
+    #       is an empty word, we'd get "çon" and wouldn't find anything...
         foreach (keys %{C4::Context->stopwords}) {
             next if ($_ =~/(and|or|not)/); # don't remove operators
 			if ($operand =~ /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$)/) {
@@ -677,9 +677,11 @@ sub buildQuery {
     my @limits    = @$limits    if $limits;
     my @sort_by   = @$sort_by   if $sort_by;
 
-    my $stemming      = C4::Context->preference("QueryStemming")     || 0;
-    my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
-    my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
+    my $stemming      = C4::Context->preference("QueryStemming")     		|| 0;
+	my $auto_truncation = C4::Context->preference("QueryAutoTruncate") 		|| 0;
+    my $weight_fields = C4::Context->preference("QueryWeightFields") 		|| 0;
+    my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") 				|| 0;
+	my $remove_stopwords = C4::Context->preference("QueryRemoveStopwords") 	|| 0;
 
     my $query = $operands[0];
 	my $simple_query = $operands[0];
@@ -692,23 +694,22 @@ sub buildQuery {
 	my $limit_desc;
 
 	my $stopwords_removed;
-# STEP I: determine if this is a form-based / simple query or if it's nested
 
-# check if this is a known query language query, if it is, return immediately,
-# the user is responsible for constructing valid syntax:
+	# for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
+	# DIAGNOSTIC ONLY!!
     if ( $query =~ /^ccl=/ ) {
-        return ( undef, $', $', $', '', '', '', 'ccl' );
+        return ( undef, $', $', $', $', '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', $', '', '', '', 'cql' );
+        return ( undef, $', $', $', $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
-        return ( undef, $', $', $', '', '', '', 'pqf' );
+        return ( undef, $', $', $', $', '', '', '', '', 'pqf' );
     }
 
 	# pass nested queries directly
     if ( $query =~ /(\(|\))/ ) {
-        return ( undef, $query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, 'ccl' );
+        return ( undef, $query, $simple_query, $query_cgi, $query, $limit, $limit_cgi, $limit_desc, $stopwords_removed, 'ccl' );
     }
 
 # form-based queries are limited to non-nested at a specific depth, so we can easily
@@ -725,19 +726,27 @@ sub buildQuery {
             # COMBINE OPERANDS, INDEXES AND OPERATORS
             if ( $operands[$i] ) {
 
-				$weight_fields = 0 if $operands[$i] =~ /(:|=)/;
+				# a flag to determine whether or not to add the index to the query
+				my $indexes_set;
+				# if the user is sophisticated enough to specify an index, turn off some defaults
+				if ($operands[$i] =~ /(:|=)/) {
+					$weight_fields = 0;
+					$stemming = 0;
+					$remove_stopwords = 0;
+				}
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
 
-                # if there's no index, don't use one, it will throw a CCL error
+				# some helpful index modifs
                 my $index_plus = "$index:" if $index;
                 my $index_plus_comma="$index," if $index;
 
-                # Remove Stopwords  
+                # Remove Stopwords
+				if ($remove_stopwords) {
                 ($operand, $stopwords_removed) = _remove_stopwords($operand,$index);
-                warn "OPERAND w/out STOPWORDS: >$operand<" if $DEBUG;
-				warn "REMOVED STOPWORDS: @$stopwords_removed" if $DEBUG;
-                my $indexes_set;
+                	warn "OPERAND w/out STOPWORDS: >$operand<" if $DEBUG;
+					warn "REMOVED STOPWORDS: @$stopwords_removed" if ($stopwords_removed && $DEBUG);
+				}
 
                 # Detect Truncation
                 my ($nontruncated,$righttruncated,$lefttruncated,$rightlefttruncated,$regexpr);
@@ -747,6 +756,7 @@ sub buildQuery {
 
                 # Apply Truncation
                 if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
+					# don't field weight or add the index to the query, we do it here
                     $indexes_set = 1;
                     undef $weight_fields;
                     my $previous_truncation_operand;
@@ -1135,7 +1145,7 @@ sub NZgetRecords {
 =head2 NZanalyse
 
   NZanalyse : get a CQL string as parameter, and returns a list of biblionumber;title,biblionumber;title,...
-  the list is builded from inverted index in nozebra SQL table
+  the list is built from an inverted index in the nozebra SQL table
   note that title is here only for convenience : the sorting will be very fast when requested on title
   if the sorting is requested on something else, we will have to reread all results, and that may be longer.
 
