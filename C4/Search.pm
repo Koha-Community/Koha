@@ -968,6 +968,7 @@ sub searchResults {
         my $marcrecord;
         $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
+		$oldbiblio->{result_number} = $i+1;
         # add image url if there is one
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {
             $oldbiblio->{imageurl} =
