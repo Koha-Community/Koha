@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <!-- TMPL_VAR NAME="LibraryNameTitle" --> &rsaquo; 
 <!-- TMPL_IF NAME="searchdesc" -->
-    Results of Search for '<!-- TMPL_VAR NAME="searchdesc" -->'
+    Results of Search for '<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->'
 <!-- TMPL_ELSE -->
     You did not specify any search criteria
 <!-- /TMPL_IF -->
@@ -13,28 +13,8 @@
 
 <div id="doc3" class="yui-t1">
    <div id="bd">
-   
-<!-- <!-- TMPL_IF NAME="total" -->
-<div id="breadcrumbs" class="yui-g">
-<p><strong>&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</strong> returned <!-- TMPL_VAR NAME="total" --> results.</p>
-</div>
-<!-- TMPL_ELSE -->
-<div id="breadcrumbs" class="yui-g">
-<!-- TMPL_IF NAME="searchdesc" -->
-<h3>No Result found !</h3>
-<p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
-</p>
-<!-- TMPL_ELSE -->
-<h3> No result found !</h3>
-<p>
-    You did not specify any search criteria.
-</p>
-</div>
-<!-- /TMPL_IF -->
-<!-- /TMPL_IF --> -->
 
-<div id="yui-main">
+	<div id="yui-main">
 
 	<div class="yui-b">
   <!-- TMPL_IF NAME="koha_spsuggest" -->
@@ -63,7 +43,7 @@
         <table>
             <tr>
                 <td>
-                    Scan Index for: <input type="text" name="qf" id="scan-index" size="35" value="" />
+                    Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="" />
                 </td>
             </tr>
             <tr>
@@ -71,7 +51,7 @@
                     <label for="scan-index">Indexed in:</label>
                     <select name="idx" id="scan-index">
                         <option value="">Any Word</option>
-                        <option value="any/phr:">Any Phrase</option>
+                        <option value="kw,phr:">Any Phrase</option>
                         <option value="ti:">Title</option>
                         <option value="ti,phr:">Title Phrase</option>
                         <option value="au,phr:">Author</option>
@@ -113,8 +93,8 @@
     <div class="searchresults">
 <form action="/cgi-bin/koha/opac-search.pl" method="post" name="bookbag_form" id="bookbag_form">
     
-    <!-- TMPL_IF NAME="searchdesc" -->
-    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" escape="html" -->" />
+    <!-- TMPL_IF NAME="query_cgi" -->
+    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="query_cgi" escape="html" --><!-- TMPL_VAR NAME="limit_cgi" escape="html" -->" />
     <!-- /TMPL_IF -->
     
         
@@ -178,7 +158,6 @@
                                     </a>
                                 <!-- /TMPL_IF --></p> 
 			</td>
-                    <!-- /TMPL_IF -->
 					<td width="20%">
                         <!-- TMPL_IF NAME="items_loop" -->
                         <span class="available">
@@ -210,41 +189,11 @@
     </form>
         </div>
     <!-- /TMPL_IF -->
-    
-    <!-- TMPL_IF NAME="PAGE_NUMBERS" -->
-    <div class="pages">
-        <!-- Row of numbers corresponding to search result pages -->
-        <!-- TMPL_IF NAME="previous_page_offset" -->
-        <a class="nav" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="previous_page_offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit" -->&amp;limit=<!-- TMPL_VAR NAME="limit" --><!-- /TMPL_IF -->">
-            &lt;&lt; Previous
-        </a>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_LOOP NAME="PAGE_NUMBERS" -->
-        <!-- TMPL_IF NAME="highlight" --><span class="current"><!-- TMPL_VAR NAME="pg" --></span>
-        <!-- TMPL_ELSE -->
-        <a class="nav" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit" -->&amp;limit=<!-- TMPL_VAR NAME="limit" --><!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="pg" --></a>
-        <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-        <!-- TMPL_IF NAME="next_page_offset" --><a class="nav" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;offset=<!-- TMPL_VAR NAME="next_page_offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit" -->&amp;limit=<!-- TMPL_VAR NAME="limit" --><!-- /TMPL_IF -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
-    </div>
-    <!-- /TMPL_IF -->
-    
-    <!-- TMPL_IF NAME="outer_sup_results_loop" -->
-    <h3><!-- TMPL_LOOP NAME="outer_sup_results_loop" --></h3>
-    <!-- TMPL_IF NAME="inner_sup_results_loop" -->
-    <!-- TMPL_VAR NAME="servername" -->
-    <!-- TMPL_LOOP NAME="inner_sup_results_loop" -->
-    <div><a href="<!-- TMPL_VAR NAME="link" -->"><!-- TMPL_VAR NAME="title" --></a></div>
-    <!-- /TMPL_LOOP -->
-    <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-    <!-- /TMPL_IF -->
-    
+	<!-- TMPL_INCLUDE NAME="page-numbers.inc" -->
+
     <!-- TMPL_ELSE -->
-    
-    
     <!-- /TMPL_IF -->
-	
+
 	<!-- TMPL_IF name="suggestion" -->
 <!-- TMPL_IF NAME="AnonSuggestions" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- TMPL_ELSE --><!-- TMPL_IF NAME="loggedinusername" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
@@ -252,7 +201,6 @@
 </div>
 </div>
 <div class="yui-b">
- <!-- ######### -->
         <!-- FACETS START -->
         <!-- TMPL_IF NAME="opacfacets" -->
             <!-- TMPL_IF NAME="facets_loop" -->
@@ -264,14 +212,14 @@
                             <ul>
                                 <!-- TMPL_LOOP NAME="facets" -->
                                 <li>
-                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
+                                    <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" --> and <!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->">
                                         <!-- TMPL_VAR NAME="facet_label_value" -->
                                     </a> (<!-- TMPL_VAR NAME="facet_count" -->)
                                 </li>
                                 <!-- /TMPL_LOOP -->
                                 <!-- TMPL_IF NAME="expandable" -->
                                 <li class="showmore">
-                                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="searchdesc" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
+                                    <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">
                                         Show More
                                     </a>
                                 </li>
@@ -284,8 +232,6 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <!-- FACETS END -->
-        
-        <!-- ######### -->
 </div>
 </div>
 

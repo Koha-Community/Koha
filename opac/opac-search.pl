@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-
 # Script to perform searching
 # For documentation try 'perldoc /path/to/search'
 #
@@ -24,14 +23,14 @@
 
 =head1 NAME
 
-search - a search script for finding records in a Koha system (Version 2.4)
+search - a search script for finding records in a Koha system (Version 3.0)
 
 =head1 OVERVIEW
 
-This script contains a demonstration of a new search API for Koha 2.4. It is
-designed to be simple to use and configure, yet capable of performing feats
-like stemming, field weighting, relevance ranking, support for multiple 
-query language formats (CCL, CQL, PQF), full or nearly full support for the
+This script contains a new search API for Koha 3.0. It is designed to be 
+simple to use and configure, yet capable of performing feats like stemming,
+field weighting, relevance ranking, support for multiple  query language
+formats (CCL, CQL, PQF), full or nearly full support for the
 bib1 attribute set, extended attribute sets defined in Zebra profiles, access
 to the full range of Z39.50 query options, federated searches on Z39.50
 targets, etc.
@@ -69,9 +68,13 @@ etc. These are not stored in the template for two reasons:
 
 =over
 
-=item 1. Efficiency - we have more control over objects inside the script, and it's possible to not duplicate things like indexes (if the search indexes were stored in the template they would need to be repeated)
+=item 1. Efficiency - we have more control over objects inside the script, 
+and it's possible to not duplicate things like indexes (if the search indexes 
+were stored in the template they would need to be repeated)
 
-=item 2. Customization - if these elements were moved to the sql database it would allow a simple librarian to determine which fields to display on the page without editing any html (also how the fields should behave when being searched).
+=item 2. Customization - if these elements were moved to the sql database it 
+would allow a simple librarian to determine which fields to display on the page 
+without editing any html (also how the fields should behave when being searched).
 
 =back
 
@@ -104,34 +107,46 @@ There are several types of queries needed in the process of search and retrieve:
 
 =item 1 Koha query - the query that is passed to Zebra
 
-This is the most complex query that needs to be built.The original design goal was to use a custom CCL2PQF query parser to translate an incoming CCL query into a multi-leaf query to pass to Zebra. It needs to be multi-leaf to allow field weighting, koha-specific relevance ranking, and stemming. When I have a chance I'll try to flesh out this section to better explain.
+This is the most complex query that needs to be built. The original design goal 
+was to use a custom CCL2PQF query parser to translate an incoming CCL query into
+a multi-leaf query to pass to Zebra. It needs to be multi-leaf to allow field 
+weighting, koha-specific relevance ranking, and stemming. When I have a chance 
+I'll try to flesh out this section to better explain.
 
-This query incorporates query profiles that aren't compatible with non-Zebra Z39.50 targets to acomplish the field weighting and relevance ranking.
+This query incorporates query profiles that aren't compatible with non-Zebra 
+Z39.50 targets to acomplish the field weighting and relevance ranking.
 
 =item 2 Federated query - the query that is passed to other Z39.50 targets
 
-This query is just the user's query expressed in CCL CQL, or PQF for passing to a non-zebra Z39.50 target (one that doesn't support the extended profile that Zebra does).
+This query is just the user's query expressed in CCL CQL, or PQF for passing to a 
+non-zebra Z39.50 target (one that doesn't support the extended profile that Zebra does).
 
-=item 3 Search description - passed to the template / saved for future refinements of the query (by user)
+=item 3 Search description - passed to the template / saved for future refinements of 
+the query (by user)
 
-This is a simple string that completely expresses the query in a way that can be parsed by Koha for future refinements of the query or as a part of a history feature. It differs from the human search description in several ways:
+This is a simple string that completely expresses the query in a way that can be parsed 
+by Koha for future refinements of the query or as a part of a history feature. It differs
+from the human search description:
 
 1. it does not contain commas or = signs
-2. 
 
 =item 4 Human search description - what the user sees in the search_desc area
 
-This is a simple string nearly identical to the Search description, but more human readable. It will contain = signs or commas, etc.
+This is a simple string nearly identical to the Search description, but more human 
+readable. It will contain = signs or commas, etc.
 
 =back
 
 =head3 2. Perform the Search
 
-This section takes the query strings and performs searches on the named servers, including the Koha Zebra server, stores the results in a deeply nested object, builds 'faceted results', and returns these objects.
+This section takes the query strings and performs searches on the named servers, including
+the Koha Zebra server, stores the results in a deeply nested object, builds 'faceted results',
+and returns these objects.
 
 =head3 3. Build HTML
 
-The final major section of this script takes the objects collected thusfar and builds the HTML for output to the template and user.
+The final major section of this script takes the objects collected thusfar and builds the
+HTML for output to the template and user.
 
 =head3 Additional Notes
 
@@ -139,12 +154,10 @@ Not yet completed...
 
 =cut
 
-use strict;    # always use
-
-#use warnings;        # use only for development
+use strict;            # always use
 
 ## STEP 1. Load things that are used in both search page and
-# results page and decide which template to load, operations
+# results page and decide which template to load, operations 
 # to perform, etc.
 ## load Koha modules
 use C4::Context;
@@ -153,37 +166,37 @@ use C4::Auth;
 use C4::Search;
 use C4::Languages; # getAllLanguages
 use C4::Koha;
-use C4::Branch; # GetBranches
 use POSIX qw(ceil floor);
-
+use C4::Branch; # GetBranches
 # create a new CGI object
 # not sure undef_params option is working, need to test
 use CGI qw('-no_undef_params');
 my $cgi = new CGI;
 
-my ( $template, $borrowernumber, $cookie );
+my ($template,$borrowernumber,$cookie);
 
 # decide which template to use
 my $template_name;
+my $template_type;
 my @params = $cgi->param("limit");
-if ( ( @params > 1 ) || ( $cgi->param("q") ) ) {
-
+if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'opac-results.tmpl';
 }
 else {
-
     $template_name = 'opac-advsearch.tmpl';
+	$template_type = 'advsearch';
 }
-
 # load the template
-( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => $template_name,
-        query           => $cgi,
-        type            => "opac",
-        authnotrequired => 1,
+($template, $borrowernumber, $cookie) = get_template_and_user({
+    template_name => $template_name,
+    query => $cgi,
+    type => "opac",
+    authnotrequired => 1,
     }
 );
+if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+	$template->param('UNIMARC' => 1);
+}
 
 =head1 BUGS and FIXMEs
 
@@ -194,10 +207,7 @@ query parser.
 =cut
 
 ## URI Re-Writing
-# FIXME: URI re-writing should be tested more carefully and may better
-# handled by mod_rewrite or something else. The code below almost works,
-# but doesn't quite handle limits correctly when they are the only
-# param passed -- I'll work on this soon -- JF
+# Deprecated, but preserved because it's interesting :-)
 #my $rewrite_flag;
 #my $uri = $cgi->url(-base => 1);
 #my $relative_url = $cgi->url(-relative=>1);
@@ -205,7 +215,7 @@ query parser.
 #warn "URI:$uri";
 #my @cgi_params_list = $cgi->param();
 #my $url_params = $cgi->Vars;
-
+#
 #for my $each_param_set (@cgi_params_list) {
 #    $uri.= join "",  map "\&$each_param_set=".$_, split("\0",$url_params->{$each_param_set}) if $url_params->{$each_param_set};
 #}
@@ -220,113 +230,95 @@ query parser.
 # load the branches
 my $branches = GetBranches();
 my @branch_loop;
-for my $branch_hash (sort keys %$branches ) {
-    my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
-    push @branch_loop,
-      {
-        value      => "homebranch:$branch_hash",
-        branchname => $branches->{$branch_hash}->{'branchname'},
-        selected => $selected
-      };
+#push @branch_loop, {value => "", branchname => "All Branches", };
+for my $branch_hash (sort keys %$branches) {
+    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
-$template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
 
-# load the itemtypes (Called Collection Codes in the template -- used for circ rules )
+my $categories = GetBranchCategories(undef,'searchdomain');
+
+$template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
+
+# load the itemtypes
 my $itemtypes = GetItemTypes;
 my @itemtypesloop;
-my $selected = 1;
+my $selected=1;
 my $cnt;
 my $imgdir = getitemtypeimagesrc();
 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-    my %row = (
-        number   => $cnt++,
-        imageurl => $itemtypes->{$thisitemtype}->{'imageurl'}?$imgdir . "/" . $itemtypes->{$thisitemtype}->{'imageurl'}:'',
-        code     => $thisitemtype,
-        selected => $selected,
-        description => $itemtypes->{$thisitemtype}->{'description'},
-        count5      => $cnt % 4,
-    );
-    $selected = 0 if ($selected);
+    my %row =(  number=>$cnt++,
+                imageurl=> $itemtypes->{$thisitemtype}->{'imageurl'}?($imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'}):"",
+                code => $thisitemtype,
+                selected => $selected,
+                description => $itemtypes->{$thisitemtype}->{'description'},
+                count5 => $cnt % 4,
+            );
+    $selected = 0 if ($selected) ;
     push @itemtypesloop, \%row;
 }
-$template->param( itemtypeloop => \@itemtypesloop );
+$template->param(itemtypeloop => \@itemtypesloop);
 
 # # load the itypes (Called item types in the template -- just authorized values for searching)
 # my ($itypecount,@itype_loop) = GetCcodes();
 # $template->param(itypeloop=>\@itype_loop,);
 
 # load the languages ( for switching from one template to another )
-# my @languages_options = displayLanguages($cgi);
-# my $languages_count = @languages_options;
-# if($languages_count > 1){
-#         $template->param(languages => \@languages_options);
-# }
+$template->param(languages_loop => getTranslatedLanguages('intranet','prog'));
 
 # The following should only be loaded if we're bringing up the advanced search template
-if ( $template_name eq "opac-advsearch.tmpl" ) {
-
+if ( $template_type eq 'advsearch' ) {
     # load the servers (used for searching -- to do federated searching, etc.)
-    my $primary_servers_loop;    # = displayPrimaryServers();
-    $template->param( outer_servers_loop => $primary_servers_loop, );
-
-    my $secondary_servers_loop;    # = displaySecondaryServers();
-    $template->param( outer_sup_servers_loop => $secondary_servers_loop, );
-
+    my $primary_servers_loop;# = displayPrimaryServers();
+    $template->param(outer_servers_loop =>  $primary_servers_loop,);
+    
+    my $secondary_servers_loop;# = displaySecondaryServers();
+    $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
+    
     # determine what to display next to the search boxes (ie, boolean option
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
-    # FIXME: this stuff should be cleaned up a bit and the html should be turned
-    # into flags for the template -- I'll work on that soon -- JF
     my @search_boxes_array;
-    my $search_boxes_count = 1;    # should be a syspref
-    for ( my $i = 0 ; $i <= $search_boxes_count ; $i++ ) {
-        if ( $i == 0 ) {
+    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") | 3; # FIXME: should be a syspref
+    for (my $i=1;$i<=$search_boxes_count;$i++) {
+		# if it's the first one, don't display boolean option, but show scan indexes
+        if ($i==1) {
             push @search_boxes_array,
-              {
-                search_boxes_label => "<span class=\"labels\">Search for:</span>",
-                scan_index         => 1,
-              };
+                {
+                scan_index => 1,
+                };
+        
+        }
+		# if it's the last one, show the 'add field' box
+        elsif ($i==$search_boxes_count) {
+            push @search_boxes_array,
+                {
+				boolean => 1,
+                add_field => 1,
+				};
+        }
+		else {
+			push @search_boxes_array,
+				{
+				boolean => 1,
+				};
+		}
 
-        }
-        elsif ( $i == $search_boxes_count ) {
-            push @search_boxes_array,
-              {
-                left_content =>
-" <select name='op'><option value='and' selected='selected'>and</option><option value='or'>or</option><option value='not'>not</option></select>",
-                add_field => "1"
-              };
-        }
-        else {
-            push @search_boxes_array,
-              {
-                left_content =>
-" <select name='op'><option value='and' selected='selected'>and</option><option value='or'>or</option><option value='not'>not</option></select>",
-              };
-        }
     }
-    $template->param(
-        uc( C4::Context->preference("marcflavour") ) => 1,
-        search_boxes_loop                            => \@search_boxes_array
-    );
+    $template->param(uc(C4::Context->preference("marcflavour")) => 1,
+                      search_boxes_loop => \@search_boxes_array);
 
     # load the language limits (for search)
     my $languages_limit_loop = getAllLanguages();
-    $template->param( search_languages_loop => $languages_limit_loop, );
+    $template->param(search_languages_loop => $languages_limit_loop,);
 
-    my $expanded_options;
-    if ( C4::Context->preference("expandedSearchOption") ) {
-        $expanded_options = C4::Context->preference("expandedSearchOption");
-    }
-    else {
-        $expanded_options = $cgi->param('expanded_options');
-    }
-
-    $template->param( expanded_options => $expanded_options );
-
-    # load the sort_by options for the template
-    my $sort_by      = $cgi->param('sort_by');
-    $template->param( $sort_by => 1);
-    $sort_by=$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
+	# use the global setting by default
+	if ( C4::Context->preference("expandedSearchOption") == 1) {
+		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
+	}
+	# but let the user override it
+   	if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
+    	$template->param( expanded_options => $cgi->param('expanded_options'));
+	}
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -342,256 +334,293 @@ my $params = $cgi->Vars;
 
 # Params that can have more than one value
 # sort by is used to sort the query
+# in theory can have more than one but generally there's just one
 my @sort_by;
-@sort_by = split( "\0", $params->{'sort_by'} ) if $params->{'sort_by'};
+@sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
+foreach my $sort (@sort_by) {
+	$template->param($sort => 1);
+}
+$template->param('sort_by' => $sort_by[0]);
 
-# load the sort_by options for the template
-my $sort_by      = $params->{'sort_by'};
-$sort_by=~$1.($2 eq "lt"?'d':'a') if ($sort_by=~/1=(\d+) \&([a-z]+)\;/);
-$template->param( $sort_by => 1);
-
-#
 # Use the servers defined, or just search our local catalog(default)
 my @servers;
-@servers = split( "\0", $params->{'server'} ) if $params->{'server'};
+@servers = split("\0",$params->{'server'}) if $params->{'server'};
 unless (@servers) {
-
     #FIXME: this should be handled using Context.pm
     @servers = ("biblioserver");
-
     # @servers = C4::Context->config("biblioserver");
 }
 
 # operators include boolean and proximity operators and are used
 # to evaluate multiple operands
 my @operators;
-@operators = split( "\0", $params->{'op'} ) if $params->{'op'};
+@operators = split("\0",$params->{'op'}) if $params->{'op'};
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
-# can be simple or complex
+# can be single or multiple parameters separated by comma: kw,right-Truncation 
 my @indexes;
-@indexes = split( "\0", $params->{'idx'} ) if $params->{'idx'};
+@indexes = split("\0",$params->{'idx'});
 
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
-@operands = split( "\0", $params->{'q'} ) if $params->{'q'};
+@operands = split("\0",$params->{'q'}) if $params->{'q'};
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits;
-@limits = split( "\0", $params->{'limit'} ) if $params->{'limit'};
+@limits = split("\0",$params->{'limit'}) if $params->{'limit'};
+
+if($params->{'multibranchlimit'}) {
+push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+}
 
 my $available;
-foreach my $limit (@limits) {
-    if ( $limit =~ /available/ ) {
+foreach my $limit(@limits) {
+    if ($limit =~/available/) {
         $available = 1;
     }
 }
-$template->param( available => $available );
-push @limits, map "yr:" . $_, split( "\0", $params->{'limit-yr'} )
-  if $params->{'limit-yr'};
+$template->param(available => $available);
+
+# append year limits if they exist
+push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limit-yr'};
 
 # Params that can only have one value
-my $query            = $params->{'q'};
-my $scan             = $params->{'scan'};
+my $scan = $params->{'scan'};
 my $results_per_page = $params->{'count'} || 20;
-my $offset           = $params->{'offset'} || 0;
+my $offset = $params->{'offset'} || 0;
+my $page = $cgi->param('page') || 1;
+#my $offset = ($page-1)*$results_per_page;
 my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my $error;          # used for error handling
-my $search_desc;    # the query expressed in terms that humans understand
-my $koha_query; # the query expressed in terms that zoom understands with field weighting and stemming
-my $federated_query;
-my $query_type; # usually not needed, but can be used to trigger ccl, cql, or pqf queries if set
+my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
+
 my @results;
 
 ## I. BUILD THE QUERY
-( $error, $search_desc, $koha_query, $federated_query, $query_type ) =
-  buildQuery( \@operators, \@operands, \@indexes, \@limits );
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
-# warn "query : $koha_query";
+## parse the query_cgi string and put it into a form suitable for <input>s
+my @query_inputs;
+for my $this_cgi ( split('&',$query_cgi) ) {
+	next unless $this_cgi;
+	$this_cgi =~ m/(.*=)(.*)/;
+	my $input_name = $1;
+	my $input_value = $2;
+	$input_name =~ s/=$//;
+	push @query_inputs, { input_name => $input_name, input_value => $input_value };
+}
+$template->param ( QUERY_INPUTS => \@query_inputs );
+
+## parse the limit_cgi string and put it into a form suitable for <input>s
+my @limit_inputs;
+for my $this_cgi ( split('&',$limit_cgi) ) {
+	next unless $this_cgi;
+    $this_cgi =~ m/(.*=)(.*)/;
+    my $input_name = $1;
+    my $input_value = $2;
+    $input_name =~ s/=$//;
+    push @limit_inputs, { input_name => $input_name, input_value => $input_value };
+}
+$template->param ( LIMIT_INPUTS => \@limit_inputs );
+
 ## II. DO THE SEARCH AND GET THE RESULTS
-my $total;    # the total results for the whole set
+my $total; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my @results_array;
 my $results_hashref;
 
 if (C4::Context->preference('NoZebra')) {
     eval {
-        ($error, $results_hashref, $facets) = NZgetRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 } else {
     eval {
-        ($error, $results_hashref, $facets) = getRecords($koha_query,$federated_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
-if ( $@ || $error ) {
-    $template->param( query_error => $error . $@ );
+if ($@ || $error) {
+    $template->param(query_error => $error.$@);
 
-    #     warn "error: ".$error.$@;
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
 
+# FIXME: This belongs in tools/ not in the primary search results page
+my $op=$cgi->param("operation");
+if ($op eq "bulkedit"){
+	my ($countchanged,$listunchanged)=
+	ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
+                      $params->{"tagsubfield"},
+                      $params->{"inputvalue"},
+                      $params->{"targetvalue"},
+                      $params->{"test"}
+                      );
+	$template->param(bulkeditresults=>1,
+                      tagsubfield=>$params->{"tagsubfield"},
+                      inputvalue=>$params->{"inputvalue"},
+                      targetvalue=>$params->{"targetvalue"},
+                      countchanged=>$countchanged,
+                      countunchanged=>scalar(@$listunchanged),
+                      listunchanged=>$listunchanged);
+
+	if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
+	#Edit Catalogue Permissions
+  		$template->param(bulkedit => 1);
+  		$template->param(tagsubfields=>GetManagedTagSubfields());
+	}
+}
 # At this point, each server has given us a result set
 # now we build that set for template display
 my @sup_results_array;
-for ( my $i = 0 ; $i <= @servers ; $i++ ) {
+for (my $i=0;$i<=@servers;$i++) {
     my $server = $servers[$i];
-    if ( $server =~ /biblioserver/ ) {  # this is the local bibliographic server
+    if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
-        my @newresults =
-          searchResults( $search_desc, $hits, $results_per_page, $offset,
-            @{ $results_hashref->{$server}->{"RECORDS"} } );
+        my $page = $cgi->param('page') || 0;
+        my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
-            $template->param( total            => $hits );
-            $template->param( searchdesc       => $search_desc );
-            $template->param( results_per_page => $results_per_page );
-            $template->param( SEARCH_RESULTS   => \@newresults );
-
-            my @page_numbers;
-            my $pages               = ceil( $hits / $results_per_page );
-            my $current_page_number = 1;
-            $current_page_number = ( $offset / $results_per_page + 1 )
-              if $offset;
-            my $previous_page_offset = $offset - $results_per_page
-              unless ( $offset - $results_per_page < 0 );
-            my $next_page_offset = $offset + $results_per_page;
-            for ( $i = 1 ; $i <= $pages ; $i++ ) {
-                my $this_offset =
-                  ( ( $i * $results_per_page ) - $results_per_page );
-                my $this_page_number = $i;
-                my $highlight        = 1
-                  if ( $this_page_number == $current_page_number );
-                if ($this_page_number <= $pages) {
-                push @page_numbers,
-                  {
-                    offset    => $this_offset,
-                    pg        => $this_page_number,
-                    highlight => $highlight,
-                    sort_by   => join " ",
-                    @sort_by
-                  };
+            $template->param(total => $hits);
+			$template->param(limit_cgi => $limit_cgi);
+			$template->param(query_cgi => $query_cgi);
+			$template->param(query_desc => $query_desc);
+			$template->param(limit_desc => $limit_desc);
+			if ($query_desc || $limit_desc) {
+            	$template->param(searchdesc => 1);
+			}
+			$template->param(stopwords_removed => "@$stopwords_removed") if $stopwords_removed;
+            $template->param(results_per_page =>  $results_per_page);
+            $template->param(SEARCH_RESULTS => \@newresults);
+			## Build the page numbers on the bottom of the page
+			my @page_numbers;
+			# total number of pages there will be
+			my $pages = ceil($hits / $results_per_page);
+			# default page number
+			my $current_page_number = 1;
+			$current_page_number = ($offset / $results_per_page + 1) if $offset;
+			my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
+			my $next_page_offset = $offset + $results_per_page;
+			# If we're within the first 10 pages, keep it simple
+			#warn "current page:".$current_page_number;
+			if ($current_page_number < 10) {
+				# just show the first 10 pages
+				# Loop through the pages
+				my $pages_to_show = 10;
+				$pages_to_show = $pages if $pages<10;
+				for ($i=1; $i<=$pages_to_show;$i++) {
+					# the offset for this page
+					my $this_offset = (($i*$results_per_page)-$results_per_page);
+					# the page number for this page
+					my $this_page_number = $i;
+					# it should only be highlighted if it's the current page
+					my $highlight = 1 if ($this_page_number == $current_page_number);
+					# put it in the array
+					push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+                                
+				}
+                        
+			}
+			# now, show twenty pages, with the current one smack in the middle
+			else {
+				for ($i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
+                    my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
+                    my $this_page_number = $i-9;
+                    my $highlight = 1 if ($this_page_number == $current_page_number);
+					if ($this_page_number <= $pages) {
+                    	push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+					}
                 }
-            }
-            $template->param(
-                PAGE_NUMBERS         => \@page_numbers,
-                previous_page_offset => $previous_page_offset,
-                next_page_offset     => $next_page_offset
-            ) unless $pages < 2;
-        }
-    }    # end of the if local
+                        
+			}
+			$template->param(	PAGE_NUMBERS => \@page_numbers,
+								previous_page_offset => $previous_page_offset) unless $pages < 2;
+			$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
+         }
+    } # end of the if local
     else {
-
         # check if it's a z3950 or opensearch source
-        my $zed3950 = 0;    # FIXME :: Hardcoded value.
+        my $zed3950 = 0;  # FIXME :: Hardcoded value.
         if ($zed3950) {
             my @inner_sup_results_array;
-            for my $sup_record ( @{ $results_hashref->{$server}->{"RECORDS"} } )
-            {
-                my $marc_record_object =
-                  MARC::Record->new_from_usmarc($sup_record);
-                my $control_number =
-                  $marc_record_object->field('010')->subfield('a')
-                  if $marc_record_object->field('010');
+            for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
+                my $marc_record_object = MARC::Record->new_from_usmarc($sup_record);
+                my $control_number = $marc_record_object->field('010')->subfield('a') if $marc_record_object->field('010');
                 $control_number =~ s/^ //g;
-                my $link =
-                    "http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?SAB1="
-                  . $control_number
-                  . "&BOOL1=all+of+these&FLD1=LC+Control+Number+LCCN+%28K010%29+%28K010%29&GRP1=AND+with+next+set&SAB2=&BOOL2=all+of+these&FLD2=Keyword+Anywhere+%28GKEY%29+%28GKEY%29&PID=6211&SEQ=20060816121838&CNT=25&HIST=1";
+                my $link = "http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?SAB1=".$control_number."&BOOL1=all+of+these&FLD1=LC+Control+Number+LCCN+%28K010%29+%28K010%29&GRP1=AND+with+next+set&SAB2=&BOOL2=all+of+these&FLD2=Keyword+Anywhere+%28GKEY%29+%28GKEY%29&PID=6211&SEQ=20060816121838&CNT=25&HIST=1";
                 my $title = $marc_record_object->title();
-                push @inner_sup_results_array,
-                  {
+                push @inner_sup_results_array, {
                     'title' => $title,
-                    'link'  => $link,
-                  };
+                    'link' => $link,
+                };
             }
             my $servername = $server;
-            push @sup_results_array,
-              {
-                servername             => $servername,
-                inner_sup_results_loop => \@inner_sup_results_array
-              };
-            $template->param( outer_sup_results_loop => \@sup_results_array );
+            push @sup_results_array, { servername => $servername, inner_sup_results_loop => \@inner_sup_results_array};
+            $template->param(outer_sup_results_loop => \@sup_results_array);
         }
     }
 
-}    #/end of the for loop
-
+} #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
-# adding the $RequestOnOpac param
-my $RequestOnOpac;
-if (C4::Context->preference("RequestOnOpac")) {
-	$RequestOnOpac = 1;
-}
-# get site URL (for RSS link)
-$cgi->url() =~ /(.*)\/(.*)/;
-my $site_url = $1;
+
 
 $template->param(
-
-    #classlist => $classlist,
-    total                => $total,
-    searchdesc           => $search_desc,
-    opacfacets           => 1,
-    facets_loop          => $facets,
-    "BiblioDefaultView" . C4::Context->preference("BiblioDefaultView") => 1,
-    scan_use     => $scan,
-    search_error => $error,
-    RequestOnOpac	 => $RequestOnOpac,
-    RSS=> 1,
-    site_url => $site_url,
+            #classlist => $classlist,
+            total => $total,
+            opacfacets => 1,
+            facets_loop => $facets,
+            scan => $scan,
+            search_error => $error,
 );
+
+if ($query_desc || $limit_desc) {
+	$template->param(searchdesc => 1);
+}
+
 ## Now let's find out if we have any supplemental data to show the user
 #  and in the meantime, save the current query for statistical purposes, etc.
-my $koha_spsuggest;   # a flag to tell if we've got suggestions coming from Koha
-my @koha_spsuggest
-  ;    # place we store the suggestions to be returned to the template as LOOP
-my $phrases = $search_desc;
+my $koha_spsuggest; # a flag to tell if we've got suggestions coming from Koha
+my @koha_spsuggest; # place we store the suggestions to be returned to the template as LOOP
+my $phrases = $query_desc;
 my $ipaddress;
 
 if ( C4::Context->preference("kohaspsuggest") ) {
-	my ($suggest_host, $suggest_dbname, $suggest_user, $suggest_pwd) = split(':', C4::Context->preference("kohaspsuggest"));
-    eval {
-        my $koha_spsuggest_dbh;
-
-        # FIXME: this needs to be moved to Context.pm
+		my ($suggest_host, $suggest_dbname, $suggest_user, $suggest_pwd) = split(':', C4::Context->preference("kohaspsuggest"));
         eval {
-			$koha_spsuggest_dbh=DBI->connect("DBI:mysql:$suggest_dbname:$suggest_host","$suggest_user","$suggest_pwd");
-        };
-        if ($@) {
-            warn "can't connect to spsuggest db";
-        }
-        else {
-            my $koha_spsuggest_insert =
-"INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip) VALUES(?,?,?)";
-            my $koha_spsuggest_query =
-"SELECT display FROM distincts WHERE strcmp(soundex(suggestion), soundex(?)) = 0 order by soundex(suggestion) limit 0,5";
-            my $koha_spsuggest_sth =
-              $koha_spsuggest_dbh->prepare($koha_spsuggest_query);
-            $koha_spsuggest_sth->execute($phrases);
-            while ( my $spsuggestion = $koha_spsuggest_sth->fetchrow_array ) {
-                $spsuggestion =~ s/(:|\/)//g;
-                my %line;
-                $line{spsuggestion} = $spsuggestion;
-                push @koha_spsuggest, \%line;
-                $koha_spsuggest = 1;
+            my $koha_spsuggest_dbh;
+            # FIXME: this needs to be moved to Context.pm
+            eval {
+                $koha_spsuggest_dbh=DBI->connect("DBI:mysql:$suggest_dbname:$suggest_host","$suggest_user","$suggest_pwd");
+            };
+            if ($@) { 
+                warn "can't connect to spsuggest db";
             }
+            else {
+                my $koha_spsuggest_insert = "INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip) VALUES(?,?,?)";
+                my $koha_spsuggest_query = "SELECT display FROM distincts WHERE strcmp(soundex(suggestion), soundex(?)) = 0 order by soundex(suggestion) limit 0,5";
+                my $koha_spsuggest_sth = $koha_spsuggest_dbh->prepare($koha_spsuggest_query);
+                $koha_spsuggest_sth->execute($phrases);
+                while (my $spsuggestion = $koha_spsuggest_sth->fetchrow_array) {
+                    $spsuggestion =~ s/(:|\/)//g;
+                    my %line;
+                    $line{spsuggestion} = $spsuggestion;
+                    push @koha_spsuggest,\%line;
+                    $koha_spsuggest = 1;
+                }
 
-            # Now save the current query
-            $koha_spsuggest_sth =
-              $koha_spsuggest_dbh->prepare($koha_spsuggest_insert);
+                # Now save the current query
+                $koha_spsuggest_sth=$koha_spsuggest_dbh->prepare($koha_spsuggest_insert);
+                #$koha_spsuggest_sth->execute($phrases,$results_per_page,$ipaddress);
+                $koha_spsuggest_sth->finish;
 
-           #$koha_spsuggest_sth->execute($phrases,$results_per_page,$ipaddress);
-            $koha_spsuggest_sth->finish;
-            $template->param( koha_spsuggest => $koha_spsuggest ) unless $hits;
-            $template->param( SPELL_SUGGEST => \@koha_spsuggest, );
-        }
+                $template->param( koha_spsuggest => $koha_spsuggest ) unless $hits;
+                $template->param( SPELL_SUGGEST => \@koha_spsuggest,
+                );
+            }
     };
     if ($@) {
-        warn "Kohaspsuggest failure:" . $@;
+            warn "Kohaspsuggest failure:".$@;
     }
 }
 
