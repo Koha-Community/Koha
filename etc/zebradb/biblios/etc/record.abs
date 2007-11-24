@@ -227,11 +227,11 @@ melm 840		Title,Title-series
 
 ###############################
 # Koha Local-Use Biblio Indexes
-melm 999$c		Local-Number !:w,!:p,!:s
-melm 999$d		biblioitemnumber:n,!:s
-melm 942$0		totalissues:n,!:s
+melm 999$c		Local-Number:n,Local-Number:w,Local-Number:s
+melm 999$d		biblioitemnumber:n,biblioitemnumber:w,biblioitemnumber:s
+melm 942$0		totalissues:n,totalissues:s
 melm 942$2		cn-bib-source
-melm 942$6		cn-bib-sort:n,!:s
+melm 942$6		cn-bib-sort:n,cn-bib-sort:s
 melm 942$c		itemtype:w
 
 # need to check bib1
@@ -241,16 +241,16 @@ melm 942$k		cn-prefix
 melm 942$m		cn-suffix
 
 # Items Indexes
-melm 952$0		withdrawn:n,!:w
-melm 952$1		lost:n,!:w
+melm 952$0		withdrawn:n,withdrawn:w
+melm 952$1		lost,lost:n
 melm 952$2		classification-source
 melm 952$3		materials-specified	
-melm 952$4		damaged:n,!:w
-melm 952$5		restricted:n,!:w
-melm 952$6		cn-sort:n,!:s
-melm 952$7		notforloan:n,!:w
+melm 952$4		damaged:n,damaged:w
+melm 952$5		restricted:n,restricted:w
+melm 952$6		cn-sort:n,cn-sort:s
+melm 952$7		notforloan:n,notforloan:w
 melm 952$8		ccode
-melm 952$9		itemnumber:n,!:s
+melm 952$9		itemnumber:n,itemnumber:s
 melm 952$a		homebranch
 melm 952$b		holdingbranch
 melm 952$c		location
@@ -262,18 +262,18 @@ melm 952$f		coded-location-qualifier
 melm 952$g		price
 #melm 952$h		
 #melm 952$i		
-melm 952$j		stack:n,!:w
+melm 952$j		stack:n,stack:w
 #melm 952$k		
-melm 952$l		issues:n,!:w,!:s
-melm 952$m		renewals:n,!:w
-melm 952$n		reserves:n,!:w
+melm 952$l		issues:n,issues:w,issues:s
+melm 952$m		renewals:n,renewals:w
+melm 952$n		reserves:n,reserves:w
 melm 952$o		Local-classification:w,Local-classification:p,Local-classification:s
-melm 952$p		barcode,!:n
-melm 952$q		onloan:n,!:w
+melm 952$p		barcode,barcode:n
+melm 952$q		onloan:n,onloan:w
 melm 952$r		datelastseen
 melm 952$s		datelastborrowed
 melm 952$t		copynumber
-melm 952$u		uri:u,!:w
+melm 952$u		uri:u,url:w
 melm 952$v		replacementprice
 melm 952$w		replacementpricedate
 #melm 952$x

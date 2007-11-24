@@ -838,10 +838,11 @@ sub buildQuery {
 
     # add limits
 	my $group_OR_limits;
+	my $availability_limit;
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
-			# FIXME: switch to zebra search for null values
-            $limit .= " (($query and datedue=0000-00-00) or ($query and datedue=0000-00-00 not lost=1) or ($query and datedue=0000-00-00 not lost=2))";
+			# available is defined as (items.notloan is NULL) and (items.itemlost > 0 or NULL) (last clause handles NULL values for lost in zebra)
+			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
 			$limit_cgi .= "&limit=available";
 			$limit_desc .="";
         }
@@ -866,6 +867,10 @@ sub buildQuery {
 	if ($group_OR_limits) {
 		$limit.=" and " if ($query || $limit );
 		$limit.="($group_OR_limits)";
+	}
+	if ($availability_limit) {
+		$limit.=" not " if ($query || $limit );
+		$limit.="$availability_limit";
 	}
 	# normalize the strings
 	for ($query, $query_desc, $limit, $limit_desc) {
