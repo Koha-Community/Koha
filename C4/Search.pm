@@ -877,11 +877,11 @@ sub buildQuery {
 		$_ =~ s/  / /g;    # remove extra spaces
     	$_ =~ s/^ //g;     # remove any beginning spaces
 		$_ =~ s/ $//g;     # remove any ending spaces
-    	$_ =~ s/:/=/g;     # causes probs for server
     	$_ =~ s/==/=/g;    # remove double == from query
 
 	}
-		
+	$query =~ s/:/=/g;
+	$limit =~ s/:/=/g;
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query

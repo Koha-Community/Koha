@@ -361,9 +361,18 @@ my @operators;
 my @indexes;
 @indexes = split("\0",$params->{'idx'});
 
+# if a simple index (only one)  display the index used in the top search box
+if (@indexes[0] && !@indexes[1]) {
+	$template->param(@indexes[0] => 1);
+}
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
 @operands = split("\0",$params->{'q'}) if $params->{'q'};
+
+# if a simple search, display the value in the search box
+if (@operands[0] && !@operands[1]) {
+    $template->param(ms_value => @operands[0]);
+}
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits;

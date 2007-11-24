@@ -10,18 +10,18 @@
 
 <div id="opac-main-search">
    
-    <form name="searchform" method="post" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+    <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
-        <option selected="selected" value="">Library Catalog</option>
-        <option value="ti">Title</option>
-        <option value="au">Author</option>
-        <option value="su">Subject</option>
-		<option value="isbn">ISBN</option>
-        <option value="se">Series</option>
-        <option value="callnum">Call Number</option>
+        <option <!-- TMPL_IF NAME="kw" -->selected="selected"<!-- /TMPL_IF --> value="">Library Catalog</option>
+        <option <!-- TMPL_IF NAME="ti" -->selected="selected"<!-- /TMPL_IF --> value="ti">Title</option>
+        <option <!-- TMPL_IF NAME="au" -->selected="selected"<!-- /TMPL_IF --> value="au">Author</option>
+        <option <!-- TMPL_IF NAME="su" -->selected="selected"<!-- /TMPL_IF --> value="su">Subject</option>
+		<option <!-- TMPL_IF NAME="isbn" -->selected="selected"<!-- /TMPL_IF --> value="isbn">ISBN</option>
+        <option <!-- TMPL_IF NAME="se" -->selected="selected"<!-- /TMPL_IF --> value="se">Series</option>
+        <option <!-- TMPL_IF NAME="callnum" -->selected="selected"<!-- /TMPL_IF --> value="callnum">Call Number</option>
 </select>
-        <input type="text" name="q" style="width: 30%;" />
+        <input type="text" name="q" <!-- TMPL_IF NAME="ms_value" -->value="<!-- TMPL_VAR NAME="ms_value" -->" <!-- /TMPL_IF --> style="width: 30%;" />
         <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
             <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -36,6 +36,7 @@
 	</ul></div><!-- /TMPL_IF --></div>
 
 	<div id="breadcrumbs" class="yui-g">
+
 <!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results. <!-- TMPL_IF NAME="available" -->Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi_not_availablity" -->">Show all items</a><!-- TMPL_ELSE -->Limit to <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;limit=available">currently available items.</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
 
 <a href="/cgi-bin/koha/opensearch?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&count=10&amp;startPage=1"><img title="RSS Feed for search <!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->" alt="RSS Feed for search <!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->" src="<!-- TMPL_VAR NAME="themelang" -->/../images/feed-icon-16x16.png" border="0" /></a>
@@ -43,7 +44,7 @@
 <!-- TMPL_IF NAME="searchdesc" -->
 <strong>No Result found !</strong>
 <p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="searchdesc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
+    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
 </p>
 <!-- TMPL_ELSE -->
 <strong> No result found !</strong>
