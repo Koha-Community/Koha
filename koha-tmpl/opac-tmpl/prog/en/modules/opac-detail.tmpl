@@ -234,7 +234,7 @@
     </table>
 </div>
 <!-- TMPL_ELSE -->
-<p>we don't have any physical item for this document</p>
+<p>No physical items for this record</p>
 <!-- /TMPL_IF -->
 
 <div id="descriptions" class="tabs-container">
@@ -252,11 +252,11 @@
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions" class="tabs-container">
     <h2>This is a serial subscription</h2>
-    <p> (We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p>
+    <p> (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p>
     <!-- TMPL_LOOP Name="subscriptions" -->
     <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
     <!--TMPL_IF NAME="latestserials"-->
-    <p> The three latest issues related to this subscription:</p>
+    <p> The three latest issues for this subscription:</p>
     <table>
         <tr>
             <th>Issue #</th>
