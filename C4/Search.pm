@@ -287,8 +287,8 @@ sub getRecords {
             $query_to_use = $simple_query;
         }
 
-		$query_to_use = $simple_query if $scan;
-
+		#$query_to_use = $simple_query if $scan;
+		#warn $simple_query if ($scan && $DEBUG);
         # check if we've got a query_type defined
         eval {
             if ($query_type)
@@ -672,7 +672,7 @@ sub _build_weighted_query {
 
 # build the query itself
 sub buildQuery {
-    my ( $operators, $operands, $indexes, $limits, $sort_by ) = @_;
+    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan) = @_;
 
     my @operators = @$operators if $operators;
     my @indexes   = @$indexes   if $indexes;
@@ -732,7 +732,7 @@ sub buildQuery {
 				# a flag to determine whether or not to add the index to the query
 				my $indexes_set;
 				# if the user is sophisticated enough to specify an index, turn off some defaults
-				if ($operands[$i] =~ /(:|=)/) {
+				if ($operands[$i] =~ /(:|=)/ || $scan) {
 					$weight_fields = 0;
 					$stemming = 0;
 					$remove_stopwords = 0;
@@ -876,6 +876,8 @@ sub buildQuery {
 		$limit.="$availability_limit";
 	}
 	# normalize the strings
+	$query =~ s/:/=/g;
+	$limit =~ s/:/=/g;
 	for ($query, $query_desc, $limit, $limit_desc) {
 		$_ =~ s/  / /g;    # remove extra spaces
     	$_ =~ s/^ //g;     # remove any beginning spaces
@@ -883,8 +885,6 @@ sub buildQuery {
     	$_ =~ s/==/=/g;    # remove double == from query
 
 	}
-	$query =~ s/:/=/g;
-	$limit =~ s/:/=/g;
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
