@@ -432,6 +432,17 @@ for my $this_cgi ( split('&',$limit_cgi) ) {
     $input_name =~ s/=$//;
     push @limit_inputs, { input_name => $input_name, input_value => $input_value };
 }
+
+# add OPAC 'hidelostitems'
+# not items with 
+if (C4::Context->preference('hidelostitems')) {
+	$query ="($query) not ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches=''))";
+	warn "Q".$query;
+}
+# add OPAC suppression - requires at least one item indexed with Suppress
+if (C4::Context->preference('OpacSuppression')) {
+    $query = "($query) not Suppress=1";
+}
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 
 ## II. DO THE SEARCH AND GET THE RESULTS
