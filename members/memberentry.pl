@@ -460,8 +460,8 @@ $data{'dateexpiry'}=format_date($data{'dateexpiry'});
 $data{'contactname'}=uc($data{'contactname'}) if C4::Context->preference('uppercasesurnames');
 $data{'dateofbirth'} = format_date($data{'dateofbirth'});
 
-$template->param( "showguarantor"  => 1) if ($category_type!~/A|I/);# associate with step to know where u are
-$template->param( "showguarantor"  => 0) if ($category_type=~/A|I/);# associate with step to know where u are
+$template->param( "showguarantor"  => 1) if ($category_type!~/A|I|S/);# associate with step to know where u are
+$template->param( "showguarantor"  => 0) if ($category_type=~/A|I|S/);# associate with step to know where u are
   warn "$step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;# associate with step to know where u are

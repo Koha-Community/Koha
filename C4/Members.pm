@@ -641,7 +641,7 @@ sub ModMember {
 # so when we update information for an adult we should check for guarantees and update the relevant part
 # of their records, ie addresses and phone numbers
     my $borrowercategory= GetBorrowercategory( $data{'category_type'} );
-    if ( $borrowercategory->{'category_type'} eq 'A' ) {
+    if ( $borrowercategory->{'category_type'} eq ('A' || 'S') ) {
         # is adult check guarantees;
         UpdateGuarantees(%data);
 
