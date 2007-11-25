@@ -140,7 +140,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'BKS', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'BKS', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'BKS', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -4057,7 +4058,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'CF', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'CF', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'CF', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -7975,7 +7977,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'SR', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SR', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SR', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -11892,7 +11895,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'VR', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'VR', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'VR', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -15808,7 +15812,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'AR', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'AR', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'AR', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -19723,7 +19728,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'KT', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'KT', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'KT', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -23639,7 +23645,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'IR', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'IR', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'IR', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
@@ -27553,7 +27560,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, 'SER', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, 'SER', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, 'SER', '', '', NULL),
-		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SER', '', '', NULL);
+		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, 'SER', '', '', NULL),
+		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
 
 
 -- ******************************************************
