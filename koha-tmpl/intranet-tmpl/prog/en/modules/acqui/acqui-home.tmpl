@@ -16,14 +16,18 @@
 
 <!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
 
+<h1>Acquisitions</h1>
 <div class="yui-g">
 <div class="yui-u first">
-<h1>Acquisitions</h1>
 <div id="acqui_acqui_home_order">
     <fieldset>
         <legend>Start, receive, or modify any order</legend>
     <!-- TMPL_IF name="nobudget" -->
+		<!-- TMPL_IF NAME="CAN_user_parameters" -->
         <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in Administration</span>
+		<!-- TMPL_ELSE -->
+		<span class="problem">Your administrator must define a budget in Administration</span>
+		<!-- /TMPL_IF -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
             <p><label for="supplierpage">Supplier </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
@@ -35,6 +39,7 @@
             <input type="submit" value="Search" />
             </p>
         </form>
+		
     <!-- /TMPL_IF -->
     </fieldset>
 </div>
