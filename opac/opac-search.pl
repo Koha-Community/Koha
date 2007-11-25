@@ -395,7 +395,8 @@ push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limi
 
 # Params that can only have one value
 my $scan = $params->{'scan'};
-my $results_per_page = $params->{'count'} || 20;
+my $count = C4::Context->preference('OPACnumSearchResults') || 20;
+my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
