@@ -651,6 +651,9 @@ sub _build_weighted_query {
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
     }
+	elsif ( $index eq 'bc' ) {
+		$weighted_query .= "bc=\"$operand\"";
+	}
     # if the index already has more than one qualifier, just wrap the operand 
     # in quotes and pass it back
     elsif ($index =~ ',') {
