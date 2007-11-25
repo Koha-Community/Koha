@@ -328,6 +328,8 @@ sub output_html_with_http_headers ($$$) {
         -type    => 'text/html',
         -charset => 'UTF-8',
         -cookie  => $cookie,
+		-Pragma => 'no-cache',
+		-'Cache-Control' => 'no-cache',
     ), $html;
 }
 
