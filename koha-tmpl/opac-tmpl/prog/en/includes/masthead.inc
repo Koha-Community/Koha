@@ -13,13 +13,13 @@
     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
-        <option <!-- TMPL_IF NAME="kw" -->selected="selected"<!-- /TMPL_IF --> value="">Library Catalog</option>
-        <option <!-- TMPL_IF NAME="ti" -->selected="selected"<!-- /TMPL_IF --> value="ti">Title</option>
-        <option <!-- TMPL_IF NAME="au" -->selected="selected"<!-- /TMPL_IF --> value="au">Author</option>
-        <option <!-- TMPL_IF NAME="su" -->selected="selected"<!-- /TMPL_IF --> value="su">Subject</option>
-		<option <!-- TMPL_IF NAME="isbn" -->selected="selected"<!-- /TMPL_IF --> value="isbn">ISBN</option>
-        <option <!-- TMPL_IF NAME="se" -->selected="selected"<!-- /TMPL_IF --> value="se">Series</option>
-        <option <!-- TMPL_IF NAME="callnum" -->selected="selected"<!-- /TMPL_IF --> value="callnum">Call Number</option>
+        <option <!-- TMPL_IF NAME="ms_kw" -->selected="selected"<!-- /TMPL_IF --> value="">Library Catalog</option>
+        <option <!-- TMPL_IF NAME="ms_ti" -->selected="selected"<!-- /TMPL_IF --> value="ti">Title</option>
+        <option <!-- TMPL_IF NAME="ms_au" -->selected="selected"<!-- /TMPL_IF --> value="au">Author</option>
+        <option <!-- TMPL_IF NAME="ms_su" -->selected="selected"<!-- /TMPL_IF --> value="su">Subject</option>
+		<option <!-- TMPL_IF NAME="ms_isbn" -->selected="selected"<!-- /TMPL_IF --> value="isbn">ISBN</option>
+        <option <!-- TMPL_IF NAME="ms_se" -->selected="selected"<!-- /TMPL_IF --> value="se">Series</option>
+        <option <!-- TMPL_IF NAME="ms_callnum" -->selected="selected"<!-- /TMPL_IF --> value="callnum">Call Number</option>
 </select>
         <input type="text" name="q" <!-- TMPL_IF NAME="ms_value" -->value="<!-- TMPL_VAR NAME="ms_value" -->" <!-- /TMPL_IF --> style="width: 30%;" />
         <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->

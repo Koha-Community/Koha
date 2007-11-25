@@ -34,7 +34,7 @@
         <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
     <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
-    <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au,wrdl:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a></h2><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a></h2><!-- /TMPL_IF -->
     <!-- TMPL_IF name="subtitles" -->
     <p><span class="label">Subtitle(s):</span>
         <!-- TMPL_LOOP name="subtitles" -->
@@ -49,7 +49,7 @@
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <p><span class="label">Authors:</span>
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-        <a href="/cgi-bin/koha/opac-search.pl?q=au,wrdl:<!-- TMPL_VAR NAME="value" -->">
+        <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="value" -->">
             <!-- TMPL_VAR NAME="value" -->
         </a>|
         <!-- /TMPL_LOOP -->
@@ -60,7 +60,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="publishercode" -->
     <p><span class="label">Published by :</span>
-        <a href="/cgi-bin/koha/opac-search.pl?q=pb,wrdl:<!-- TMPL_VAR NAME="publishercode"-->">
+        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
             <!-- TMPL_VAR NAME="publishercode" --> 
         </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
     </p>
