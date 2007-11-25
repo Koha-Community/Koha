@@ -111,7 +111,25 @@
 		</li>
 		<li><label for="checked">Checked (searched by default): </label>	<input type="text" size="1" name="checked" id="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </li>
 		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
-		</li>	<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	<select name="syntax" id="syntax">		<option value="USMARC">USMARC</option>		<option value="UNIMARC">UNIMARC</option>	</select>
+		</li>	<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
+                <select name="syntax">
+                <option value="UNIMARC">UNIMARC</option>
+                <option value="INTERMARC">INTERMARC</option>
+                <option value="CCF">CCF</option>
+                <option selected="selected" value="USMARC">USMARC</option>
+                <option value="UKMARC">UKMARC</option>
+                <option value="NORMARC">NORMARC</option>
+                <option value="LIBRISMARC">LIBRISMARC</option>
+                <option value="DANMARC">DANMARC</option>
+                <option value="FINMARC">FINMARC</option>
+                <option value="CANMARC">CANMARC</option>
+                <option value="SBN">SBN</option>
+                <option value="PICAMARC">PICAMARC</option>
+                <option value="AUSMARC">AUSMARC</option>
+                <option value="IBERMARC">IBERMARC</option>
+                <option value="CATMARC">CATMARC</option>
+                <option value="MALMARC">MALMARC</option>
+                </select>
 		</li></ol>
         </fieldset>
 		
