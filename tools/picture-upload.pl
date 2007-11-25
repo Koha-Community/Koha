@@ -22,6 +22,13 @@ my ($template, $loggedinuser, $cookie)
 					debug => 0,
 					});
 
+unless (-d $destdir) {
+	$errors{'NODIR'} = 1;
+	warn "patronimages directory not present";
+}
+if ( %errors ) {
+    $template->param( ERRORS => [ \%errors ] );
+}
 my $uploadfilename = $input->param( 'uploadfile' );
 my $uploadfile = $input->upload( 'uploadfile' );
 my ( $total, $handled, @counts );

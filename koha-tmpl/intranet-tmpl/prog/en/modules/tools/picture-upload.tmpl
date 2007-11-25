@@ -31,9 +31,12 @@
     <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 
-    <!-- TMPL_IF name="errors" -->
-        <!-- TMPL_LOOP name="errors" -->
+    <!-- TMPL_IF name="ERRORS" -->
+        <!-- TMPL_LOOP name="ERRORS" -->
         <ul class="error">
+		<!-- TMPL_IF NAME="NODIR" -->
+			<li>The patronimages/ directory isn't present on your server, please ask your systems administrator to create it</li>
+		<!-- /TMPL_IF -->
         <!-- TMPL_IF name="NOTZIP" -->
             <li>The upload file does not appear to be a zip file.  The extention is not '.zip'.</li>
         <!-- /TMPL_IF -->
