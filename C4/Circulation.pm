@@ -77,6 +77,7 @@ push @EXPORT, qw(
   &CanBookBeRenewed
   &AddIssue
   &AddRenewal
+  &GetRenewCount
   &GetItemIssue
   &GetItemIssues
   &GetBorrowerIssues
@@ -1662,6 +1663,35 @@ sub AddRenewal {
     UpdateStats( C4::Context->userenv->{'branchcode'}, 'renew', $charge, '', $itemnumber );
 }
 
+sub GetRenewCount {
+    # check renewal status
+    my ($bornum,$itemno)=@_;
+    my $dbh = C4::Context->dbh;
+    my $renewcount = 0;
+        my $renewsallowed = 0;
+        my $renewsleft = 0;
+    # Look in the issues table for this item, lent to this borrower,
+    # and not yet returned.
+
+    # FIXME - I think this function could be redone to use only one SQL call.
+    my $sth = $dbh->prepare("select * from issues
+                                where (borrowernumber = ?)
+                                and (itemnumber = ?)
+                                and returndate is null");
+    $sth->execute($bornum,$itemno);
+        my $data = $sth->fetchrow_hashref;
+        $renewcount = $data->{'renewals'} if $data->{'renewals'};
+    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
+        where (items.itemnumber = ?)
+                and (items.biblioitemnumber = biblioitems.biblioitemnumber)
+        and (biblioitems.itemtype = itemtypes.itemtype)");
+    $sth2->execute($itemno);
+        my $data2 = $sth2->fetchrow_hashref();
+        $renewsallowed = $data2->{'renewalsallowed'};
+        $renewsleft = $renewsallowed - $renewcount;
+        warn "Renewcount:$renewcount RenewsAll:$renewsallowed RenewLeft:$renewsleft";
+        return ($renewcount,$renewsallowed,$renewsleft);
+}
 =head2 GetIssuingCharges
 
 ($charge, $item_type) = &GetIssuingCharges($itemnumber, $borrowernumber);
