@@ -60,7 +60,7 @@ else {
             template_name   => "opac-suggestions.tmpl",
             query           => $input,
             type            => "opac",
-            authnotrequired => 1,
+            authnotrequired => 0,
         }
     );
 }
