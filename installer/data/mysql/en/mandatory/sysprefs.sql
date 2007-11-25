@@ -18,15 +18,12 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowerMandatoryField','zipcode|surname','Choose the mandatory fields for a patron\'s account',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('borrowerRelationship','father|mother','Define valid relationships between a guarantor & a guarantee (separated by | or ,)','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersLog','1','If ON, log edit/create/delete actions on patron data',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles','Mr|Mrs|Miss|Ms','Define appropriate Titles for patrons',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CataloguingLog','1','If ON, log edit/create/delete actions on bibliographic data',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('checkdigit','none','If ON, enable checks on patron cardnumber: none or \"Katipo\" style checks','none|katipo','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter',';','Define the default separator character for exporting reports',';|tabulation|,|/|\\|#','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Disable_Dictionary','1','If ON, disable Authority Searching and OPAC Dictionary','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption','0','If ON, set advanced search to be expanded by default',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FinesLog','1','If ON, log fines',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist','0','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hidelostitems','0','If ON, disables display of\"lost\" items in OPAC.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hide_marc','0','If ON, disables display of MARC fields, subfield codes & indicators (still shows data)',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IndependantBranches','1','If ON, increases security between libraries',NULL,'YesNo');
@@ -51,6 +48,8 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog','1','If ON, log all notices sent',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Define library name as shown on main opac page','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marc','1','Turn on MARC support',NULL,'YesNo');
+
+-- this is selected by the web installer now
 -- INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','MARC21','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode','OSt','Define MARC Organization Code - http://www.loc.gov/marc/organizations/orgshome.htm','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine','9999','Maximum fine a patron can have for a single late return','','Integer');
@@ -68,8 +67,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccolorstylesheet','colors.css','Define the color stylesheet to use in the OPAC','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccredits','','Define HTML Credits at the bottom of the OPAC page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','Add HTML to be included as a custom header in the OPAC','30|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the preferred order for translations. The specified language will be tried first.',NULL,'Languages');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguagesdisplay','0','If ON, enables display of Change Language feature on OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclargeimage','','Define a URL to an image to display instead of the Koha logo on OPAC',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclayoutstylesheet','opac.css','Enter the name of the layout CSS stylesheet to use in the OPAC','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacMaintenance','0','If ON, enables maintenance warning in OPAC','','YesNo');
@@ -101,7 +98,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TemplateEncoding','utf-8','Globally define the default character encoding','iso-8859-1|utf-8','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('timeout','12000000','Inactivity timeout for cookies authentication (in seconds)',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransfersMaxDaysWarning','3','Define the days before a transfer is suspected of having a problem',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('useDaysMode','Calendar','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Calendar|Days','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('useDaysMode','Calendar','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Calendar|Days|Datedue','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('virtualshelves','1','If ON, enables virtual shelves management','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950AuthorAuthFields','701,702,700','Define the MARC biblio fields for Personal Name Authorities to fill biblio.author',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('z3950NormalizeAuthor','0','If ON, Personal Name Authorities will replace authors in biblio.author','','YesNo');
@@ -128,3 +125,39 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('PINESISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('ThingISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo');
 
+-- I18N/L10N
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the preferred order for translations. The specified language will be tried first.',NULL,'Languages');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguagesdisplay','0','If ON, enables display of Change Language feature on OPAC','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles','Mr|Mrs|Miss|Ms','Define appropriate Titles for patrons',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist','0','Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','','free');
+-- need AddressType to distinguish between US and other, telephone numbers, maori stuff, sex, nationality, etc.
+-- LDAP ? required fields?
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WebBasedSelfCheck',0,'If ON, enables the web-based self-check system',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACnumSearchResults',20,'Specify the maximum number of results to display on a page of results',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxItemsInSearchResults',20,'Specify the maximum number of items to display for each result on a page of results',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField','relevance','Specify the default field used for sorting','relevance|title|author','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortOrder','dsc','Specify the default sort order','asc|dsc','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortField','relevance','Specify the default field used for sorting','relevance|title|author','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACdefaultSortOrder','dsc','Specify the default sort order','asc|dsc','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('staffClientBaseURL','','Specify the base URL of the staff client',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('minPasswordLength',3,'Specify the minimum length of a patron/staff password',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noItemTypeImages',0,'If ON, disables item-type images',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noOPACHolds',0,'If ON, disables holds globally',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailLibrarianWhenHoldIsPlaced',0,'If ON, emails the librarian whenever a hold is placed',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('holdCancelLength','','Specify how many days before a hold is canceled',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('libraryAddress','','The address to use for printing receipts, overdues, etc. if different than physical address',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choose the fines mode, test or production','test|production','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('globalDueDate','','If set, allows a global static due date for all checkouts',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','If set, allows specification of a item barcode input filter','cuecat','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('singleBranchMode',0,'Operate in Single-branch mode, hide branch selection in the OPAC',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('URLLinkText','','Text to display as the link anchor in the OPAC',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noOPACUserLogin',0,'If ON, disables the OPAC User Login',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACSubscriptionDisplay','economical','Specify how to display subscription information in the OPAC','economical|off|full','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplayExtendedSubInfo',1,'If ON, extended subscription information is displayed in the OPAC',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACViewOthersSuggestions',0,'If ON, allows all suggestions to be displayed in the OPAC',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACURLOpenInNewWindow',0,'If ON, URLs in the OPAC open in a new window',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hideBiblioNumber',0,'If ON, hides the biblionumber in the detail page on the OPAC',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACUserCSS',0,'Add CSS to be included in the OPAC',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailPurchaseSuggestions',0,'If ON, patron suggestions are emailed rather than managed in Acquisitions',NULL,'YesNo');
