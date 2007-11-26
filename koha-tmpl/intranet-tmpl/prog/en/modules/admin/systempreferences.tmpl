@@ -61,7 +61,7 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<!-- TMPL_INCLUDE NAME="sysprefs-admin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></div>
@@ -162,17 +162,6 @@
         </form>
     <!-- /TMPL_IF -->
    
-
-
-
-
-
-
-
-
-
-
- 
     <!-- TMPL_IF NAME="else" -->
 	
 	<div id="toolbar">
@@ -189,15 +178,6 @@
 	</script>
 	<ul class="toolbar">
 	<li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
-
-<li>
-<form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
-     Search for Sys-Pref <input type=text name=searchfield value="">
-                <input type="hidden" value="all" name="tab"/>
-                <input type=submit name=submit value="submit">
-                </form>
-</li>
-
 </ul></div>
 	
     <h1>System preferences admin</h1>
