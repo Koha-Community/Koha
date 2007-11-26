@@ -161,7 +161,18 @@
         <input type="submit" value="Back to System Preferences" />
         </form>
     <!-- /TMPL_IF -->
-    
+   
+
+
+
+
+
+
+
+
+
+
+ 
     <!-- TMPL_IF NAME="else" -->
 	
 	<div id="toolbar">
@@ -178,6 +189,15 @@
 	</script>
 	<ul class="toolbar">
 	<li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
+
+<li>
+<form action=/cgi-bin/koha/admin/systempreferences.pl method=post>
+     Search for Sys-Pref <input type=text name=searchfield value="">
+                <input type="hidden" value="all" name="tab"/>
+                <input type=submit name=submit value="submit">
+                </form>
+</li>
+
 </ul></div>
 	
     <h1>System preferences admin</h1>
