@@ -184,12 +184,12 @@ function confirm_deletion() {
                 <!-- TMPL_VAR NAME="specialty" --></p>
             <p><strong>List Prices are: </strong><!--TMPL_VAR Name="listprice"--></p>
             <p><strong>Invoice Prices are: </strong><!--TMPL_VAR Name="invoiceprice"--></p>
-            <p><strong>GST Registered: </strong>
+            <!-- TMPL_IF NAME="GST" --><p><strong>GST Registered: </strong>
                     <!-- TMPL_IF name="gstreg" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p>
             <p><strong>List Item Price Includes GST: </strong>
                     <!-- TMPL_IF name="listincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p>
             <p><strong>Invoice Item Price Includes GST: </strong>
-                    <!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p>
+                    <!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
             <p><strong>Discount: </strong>
                 <!-- TMPL_VAR NAME="discount" --> %</p>
             <!-- TMPL_IF NAME="notes" --><p><strong>Notes: </strong>

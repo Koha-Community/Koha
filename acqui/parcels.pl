@@ -162,6 +162,7 @@ $template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$da
 $template->param(
         name => $booksellers[0]->{'name'},
         supplierid => $supplierid,
+	    GST => C4::Context->preference("gist"),
         );
 
 output_html_with_http_headers $input, $cookie, $template->output;
