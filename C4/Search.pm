@@ -1105,8 +1105,9 @@ sub searchResults {
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
         $norequests = 1 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
-
+		my $itemscount;
         for my $key ( sort keys %$items ) {
+			$itemscount++;
             my $this_item = {
                 branchname     => $branches{$items->{$key}->{branchcode}},
                 branchcode     => $items->{$key}->{branchcode},
@@ -1118,7 +1119,9 @@ sub searchResults {
                 wthdrawn      => $items->{$key}->{wthdrawn},
                 lost         => $items->{$key}->{itemlost},
             };
-            push @items_loop, $this_item;
+			# only show the number specified by the user
+			my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
+            push @items_loop, $this_item unless $itemscount > $maxitems;;
         }
         $oldbiblio->{norequests}    = $norequests;
         $oldbiblio->{items_count}    = $items_count;
