@@ -263,6 +263,7 @@ sub get_template_and_user {
             IndependantBranches     => C4::Context->preference("IndependantBranches"),
 			CircAutocompl => C4::Context->preference("CircAutocompl"),
 			yuipath => C4::Context->preference("yuipath"),
+			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
         );
     }
     else {
@@ -306,7 +307,7 @@ sub get_template_and_user {
             patronimages           => C4::Context->preference("patronimages"),
             mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
+			OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
         );
     }
     return ( $template, $borrowernumber, $cookie );

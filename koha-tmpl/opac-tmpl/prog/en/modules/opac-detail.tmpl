@@ -179,7 +179,7 @@
     </li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
 
-	<!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
 	
  	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 
@@ -241,6 +241,7 @@
 </div>
 
 <div id="descriptions" class="tabs-container">
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="item_description" --><strong>Description (from Amazon.com):</strong><ul><li><!-- TMPL_VAR NAME="item_description" --></li></ul><!-- /TMPL_IF --><!-- /TMPL_IF -->
  <!-- TMPL_IF name="MARCNOTES" -->
         <!-- TMPL_LOOP NAME="MARCNOTES" -->
         <p><!-- TMPL_VAR NAME="marcnote" --></p>
@@ -330,20 +331,20 @@
 	</div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="FRBRizeEditions" --><div id="editions" class="tabs-container">
+<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><div id="editions" class="tabs-container">
 
 <h2>Other Editions of this Work</h2>
 <!-- TMPL_IF NAME="XISBNS" -->
 <ul>
 <!-- TMPL_LOOP NAME="XISBNS" -->
-<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
+<li><!-- <img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /> -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --></li>
+<!-- <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" /> -->
 
-	<!-- TMPL_LOOP NAME=items -->
-	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
+	<!-- <!-- TMPL_LOOP NAME=items -->
+	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" alt="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 	barcode:<!-- TMPL_VAR NAME="barcode" -->
-	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP --> -->
 <!-- /TMPL_LOOP -->
 </ul>
 <!-- TMPL_ELSE -->
