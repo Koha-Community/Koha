@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC Records For Import</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="file-upload.inc" -->
+<!-- TMPL_INCLUDE NAME="background-job.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 
@@ -9,8 +10,9 @@ function CheckForm(f) {
     if (f.uploadedfileid.value == '') {
         alert('Please upload a file first.');
     } else {
-        f.submit();
+        return submitBackgroundJob(f);
     }
+    return false;
 }
 
 //]]!>
@@ -68,8 +70,12 @@ function CheckForm(f) {
         <div id="fileuploadfailed" style="display:none"></div>
         </div>
 	</li>
+</ol></fieldset>
     <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+<fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+        <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+        <input type="hidden" name="completedJobID" id="completedJobID" value="" />
 	<li>
 		<label for="comments">Notes about this file: </label>
 		<input type="text" id="comments" name="comments" />
@@ -106,7 +112,9 @@ function CheckForm(f) {
       </li>
     </ol>
   </fieldset>
-  <fieldset class="action"><input type="button" id="mainformsubmit" onclick="CheckForm(this.form);" value="Stage for import" /></fieldset>
+  <fieldset class="action"><input type="button" id="mainformsubmit" onclick="return CheckForm(this.form);" value="Stage for import" /></fieldset>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobfailed" style="display:none"></div>
 </form>
 <!-- /TMPL_IF -->
 

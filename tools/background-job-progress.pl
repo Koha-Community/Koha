@@ -25,10 +25,11 @@ use CGI;
 use CGI::Session;
 use C4::Context;
 use C4::Auth qw/check_cookie_auth/;
-use C4::UploadedFile;
+use C4::BackgroundJob;
 use CGI::Cookie; # need to check cookies before
                  # having CGI parse the POST request
 
+my $input = new CGI;
 my %cookies = fetch CGI::Cookie;
 my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => 1 });
 if ($auth_status ne "ok") {
@@ -38,9 +39,18 @@ if ($auth_status ne "ok") {
     exit 0;
 }
 
-my $reported_progress = C4::UploadedFile->upload_progress($sessionID);
+my $jobID = $input->param('jobID');
+my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
+my $reported_progress = 0;
+my $job_size = 100;
+my $job_status = 'running';
+if (defined $job) {
+    $reported_progress = $job->progress();
+    $job_size = $job->size();
+    $job_status = $job->status();
+}
 
 my $reply = CGI->new("");
 print $reply->header(-type => 'text/html');
 # response will be sent back as JSON
-print "{ progress: $reported_progress }";
+print "{ progress: $reported_progress, job_size: $job_size, job_status: '$job_status' }";

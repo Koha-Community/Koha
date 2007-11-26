@@ -105,19 +105,7 @@ sub _serialize {
 
     my $prefix = "job_" . $self->{'jobID'};
     my $session = get_session($self->{'sessionID'});
-    $session->param("$prefix.name", $self->{'name'});
-    $session->param("$prefix.invoker", $self->{'invoker'});
-    $session->param("$prefix.size", $self->{'size'});
-    $session->param("$prefix.progress", $self->{'size'});
-    $session->param("$prefix.status", $self->{'size'});
-    if (exists $self->{'results'}) {
-        my @keys = ();
-        foreach my $key (keys %{ $self->{'results'} }) {
-            $session->param("$prefix.results.$key", $self->{'results'}->{$key});
-            push @keys, $key;
-        }
-        $session->param("$prefix.results_keys", join("\t", @keys));
-    }
+    $session->param($prefix, $self);
     $session->flush();
 }
 
@@ -135,7 +123,7 @@ Read-only accessor for job ID.
 
 sub id {
     my $self = shift;
-    return $self->{'id'};
+    return $self->{'jobID'};
 }
 
 =head2 name
@@ -264,8 +252,8 @@ the results of the job.
 sub finish {
     my $self = shift;
     my $results_hashref = shift;
-    my $self->{'status'} = 'completed';
-    my $self->{'results'} = $results_hashref;
+    $self->{'status'} = 'completed';
+    $self->{'results'} = $results_hashref;
     $self->_serialize();
 }
 
@@ -309,24 +297,10 @@ sub fetch {
 
     my $session = get_session($sessionID);
     my $prefix = "job_$jobID";
-    unless (defined $session->param("$prefix.name")) {
+    unless (defined $session->param($prefix)) {
         return undef;
     }
-    my $self = {};
-    
-    $self->{'name'} = $session->param("$prefix.name");
-    $self->{'status'} = $session->param("$prefix.status");
-    $self->{'invoker'} = $session->param("$prefix.invoker");
-    $self->{'size'} = $session->param("$prefix.size");
-    $self->{'progress'} = $session->param("$prefix.progress");
-    if (defined(my $keys = $session->param("$prefix.results_keys"))) {
-        my @keys = split /\t/, $keys;
-        $self->{'results'} = {};
-        foreach my $key (@keys) {
-            $self->{'results'}->{$key} = $session->param("$prefix.results.$key");
-        }
-    }
-
+    my $self = $session->param($prefix);
     bless $self, $class;
     return $self;
 }

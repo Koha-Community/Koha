@@ -13,7 +13,7 @@
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
+# Foundation; either version 2 of the License, or (at your op) any later
 # version.
 #
 # Koha is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -46,6 +46,8 @@ my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $fileID=$input->param('uploadedfileid');
+my $runinbackground = $input->param('runinbackground');
+my $completedJobID = $input->param('completedJobID');
 my $matcher_id = $input->param('matcher');
 my $parse_items = $input->param('parse_items');
 my $comments = $input->param('comments');
@@ -62,35 +64,81 @@ my ($template, $loggedinuser, $cookie)
 $template->param(SCRIPT_NAME => $ENV{'SCRIPT_NAME'},
 						uploadmarc => $fileID);
 
-if ($fileID) {
-    my %cookies = parse CGI::Cookie($cookie);
-    my $uploaded_file = C4::UploadedFile->fetch($cookies{'CGISESSID'}->value, $fileID);
+my %cookies = parse CGI::Cookie($cookie);
+my $sessionID = $cookies{'CGISESSID'}->value;
+if ($completedJobID) {
+    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
+    my $results = $job->results();
+    $template->param(map { $_ => $results->{$_} } keys %{ $results });
+} elsif ($fileID) {
+    my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
     my $fh = $uploaded_file->fh();
 	my $marcrecord='';
 	while (<$fh>) {
 		$marcrecord.=$_;
 	}
 
-    my $job_size = scalar($marcrecord =~ /\035/g);
-    # if we're matching, job size is doubled
-    $job_size *= 2 if ($matcher_id ne "");
+    my $filename = $uploaded_file->name();
+    my $job = undef;
+    my $staging_callback = sub { };
+    my $matching_callback = sub { };
+    warn "$matcher_id is the matcher";
+    if ($runinbackground) {
+        my $job_size = () = $marcrecord =~ /\035/g;
+        # if we're matching, job size is doubled
+        $job_size *= 2 if ($matcher_id ne "");
+        $job = C4::BackgroundJob->new($sessionID, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
+        my $jobID = $job->id();
+
+        # fork off
+        if (my $pid = fork) {
+            # parent
+            # return job ID as JSON
+            
+            # prevent parent exiting from
+            # destroying the kid's database handle
+            # FIXME: according to DBI doc, this may not work for Oracle
+            $dbh->{InactiveDestroy}  = 1;
+
+            my $reply = CGI->new("");
+            print $reply->header(-type => 'text/html');
+            print "{ jobID: '$jobID' }";
+            exit 0;
+        } elsif (defined $pid) {
+            # child
+            # close STDOUT to signal to Apache that
+            # we're now running in the background
+            close STDOUT;
+            close STDERR;
+        } else {
+            # fork failed, so exit immediately
+            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+            exit 0;
+        }
+
+        # if we get here, we're a child that has detached
+        # itself from Apache
+        $staging_callback = staging_progress_callback($job);
+        $matching_callback = matching_progress_callback($job);
+
+    }
 
     # FIXME branch code
-    my $filename = $uploaded_file->name();
-    my $job = C4::BackgroundJob->new($cookies{'CGISESSID'}->value, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
     my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
                                                                                    $comments, '', $parse_items, 0,
-                                                                                   100, staging_progress_callback($job));
+                                                                                   50, staging_progress_callback($job));
     my $num_with_matches = 0;
     my $checked_matches = 0;
     my $matcher_failed = 0;
     my $matcher_code = "";
     if ($matcher_id ne "") {
+        warn "we must match $matcher_id";
         my $matcher = C4::Matcher->fetch($matcher_id);
         if (defined $matcher) {
+            warn "failed to retrieve";
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, matching_progress_callback($job));
+            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 50, matching_progress_callback($job));
             SetImportBatchMatcher($batch_id, $matcher_id);
         } else {
             $matcher_failed = 1;
@@ -108,18 +156,20 @@ if ($fileID) {
         matcher_code => $matcher_code,
         import_batch_id => $batch_id
     };
-    $job->finish($results);
-
-	$template->param(staged => $num_valid,
- 	                 matched => $num_with_matches,
-                     num_items => $num_items,
-                     import_errors => scalar(@import_errors),
-                     total => $num_valid + scalar(@import_errors),
-                     checked_matches => $checked_matches,
-                     matcher_failed => $matcher_failed,
-                     matcher_code => $matcher_code,
-                     import_batch_id => $batch_id
-                    );
+    if ($runinbackground) {
+        $job->finish($results);
+    } else {
+	    $template->param(staged => $num_valid,
+ 	                     matched => $num_with_matches,
+                         num_items => $num_items,
+                         import_errors => scalar(@import_errors),
+                         total => $num_valid + scalar(@import_errors),
+                         checked_matches => $checked_matches,
+                         matcher_failed => $matcher_failed,
+                         matcher_code => $matcher_code,
+                         import_batch_id => $batch_id
+                        );
+    }
 
 } else {
     # initial form
@@ -135,14 +185,15 @@ sub staging_progress_callback {
     my $job = shift;
     return sub {
         my $progress = shift;
-        $job->progress($job->progress() + $progress);
+        $job->progress($progress);
     }
 }
 
 sub matching_progress_callback {
     my $job = shift;
+    my $start_progress = $job->progress();
     return sub {
         my $progress = shift;
-        $job->progress($job->progress() + $progress);
+        $job->progress($start_progress + $progress);
     }
 }
