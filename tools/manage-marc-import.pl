@@ -21,6 +21,7 @@ use strict;
 
 # standard or CPAN modules used
 use CGI;
+use CGI::Cookie;
 use MARC::File::USMARC;
 
 # Koha modules used
@@ -31,11 +32,14 @@ use C4::Output;
 use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
+use C4::BackgroundJob;
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
 my $input = new CGI;
 my $op = $input->param('op');
+my $completedJobID = $input->param('completedJobID');
+my $runinbackground = $input->param('runinbackground');
 my $import_batch_id = $input->param('import_batch_id');
 
 # record list displays
@@ -51,6 +55,10 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
+my %cookies = parse CGI::Cookie($cookie);
+my $sessionID = $cookies{'CGISESSID'}->value;
+my $dbh = C4::Context->dbh;
+
 if ($op) {
     $template->param(script_name => $script_name, $op => 1);
 } else {
@@ -65,10 +73,18 @@ if ($op eq "") {
         import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
     }
 } elsif ($op eq "commit-batch") {
-    commit_batch($template, $import_batch_id);
+    if ($completedJobID) {
+        add_saved_job_results_to_template($template, $completedJobID);
+    } else {
+        commit_batch($template, $import_batch_id);
+    }
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 } elsif ($op eq "revert-batch") {
-    revert_batch($template, $import_batch_id);
+    if ($completedJobID) {
+        add_saved_job_results_to_template($template, $completedJobID);
+    } else {
+        revert_batch($template, $import_batch_id);
+    }
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 } elsif ($op eq "clean-batch") {
     ;
@@ -134,23 +150,111 @@ sub import_batches_list {
 
 sub commit_batch {
     my ($template, $import_batch_id) = @_;
-    my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($import_batch_id);
-    $template->param(did_commit => 1);
-    $template->param(num_added => $num_added);
-    $template->param(num_updated => $num_updated);
-    $template->param(num_items_added => $num_items_added);
-    $template->param(num_ignored => $num_ignored);
+
+    my $job = undef;
+    my $callback = sub {};
+    if ($runinbackground) {
+        $job = put_in_background($import_batch_id);
+        $callback = progress_callback($job);
+    }
+    my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($import_batch_id, 50, $callback);
+
+    my $results = {
+        did_commit => 1,
+        num_added => $num_added,
+        num_updated => $num_updated,
+        num_items_added => $num_items_added,
+        num_ignored => $num_ignored
+    };
+    if ($runinbackground) {
+        $job->finish($results);
+    } else {
+        add_results_to_template($template, $results);
+    }
 }
 
 sub revert_batch {
     my ($template, $import_batch_id) = @_;
-    my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = BatchRevertBibRecords($import_batch_id);
-    $template->param(did_revert => 1);
-    $template->param(num_deleted => $num_deleted);
-    $template->param(num_items_deleted => $num_items_deleted);
-    $template->param(num_errors => $num_errors);
-    $template->param(num_reverted => $num_reverted);
-    $template->param(num_ignored => $num_ignored);
+
+    my $job = undef;
+    my $callback = sub {};
+    if ($runinbackground) {
+        $job = put_in_background($import_batch_id);
+        $callback = progress_callback($job);
+    }
+    my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = 
+        BatchRevertBibRecords($import_batch_id, 50, $callback);
+
+    my $results = {
+        did_revert => 1,
+        num_deleted => $num_deleted,
+        num_items_deleted => $num_items_deleted,
+        num_errors => $num_errors,
+        num_reverted => $num_reverted,
+        num_ignored => $num_ignored,
+    };
+    if ($runinbackground) {
+        $job->finish($results);
+    } else {
+        add_results_to_template($template, $results);
+    }
+}
+
+sub put_in_background {
+    my $import_batch_id = shift;
+
+    my $batch = GetImportBatch($import_batch_id);
+    my $job = C4::BackgroundJob->new($sessionID, $batch->{'file_name'}, $ENV{'SCRIPT_NAME'}, $batch->{'num_biblios'});
+    my $jobID = $job->id();
+
+    # fork off
+    if (my $pid = fork) {
+        # parent
+        # return job ID as JSON
+
+        # prevent parent exiting from
+        # destroying the kid's database handle
+        # FIXME: according to DBI doc, this may not work for Oracle
+        $dbh->{InactiveDestroy}  = 1;
+
+        my $reply = CGI->new("");
+        print $reply->header(-type => 'text/html');
+        print "{ jobID: '$jobID' }";
+        exit 0;
+    } elsif (defined $pid) {
+        # child
+        # close STDOUT to signal to Apache that
+        # we're now running in the background
+        close STDOUT;
+        close STDERR;
+    } else {
+        # fork failed, so exit immediately
+        warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+        exit 0;
+    }
+    return $job;
+}
+
+sub progress_callback {
+    my $job = shift;
+    return sub {
+        my $progress = shift;
+        $job->progress($progress);
+    }
+}
+
+sub add_results_to_template {
+    my $template = shift;
+    my $results = shift;
+    $template->param(map { $_ => $results->{$_} } keys %{ $results });
+}
+
+sub add_saved_job_results_to_template {
+    my $template = shift;
+    my $completedJobID = shift;
+    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
+    my $results = $job->results();
+    add_results_to_template($template, $results);
 }
 
 sub import_biblios_list {

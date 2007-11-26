@@ -5,6 +5,7 @@
 <!-- /TMPL_IF -->
 </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="background-job.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -71,16 +72,24 @@
   <!-- TMPL_IF name="can_commit" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="commit-batch" />
+    <input type="hidden" name="runinbackground" value="" />
+    <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-    <input type="submit" class="button" value="Complete import" />
+    <input type="submit" class="button" name="mainformsubmit" value="Complete import" onclick="return submitBackgroundJob(this.form);" />
   </form>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobfailed" style="display:none"></div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="can_revert" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="revert-batch" />
+    <input type="hidden" name="runinbackground" value="" />
+    <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-    <input type="submit" class="button" value="Undo import" />
+    <input type="submit" class="button" name="mainformsubmit" value="Undo import" onclick="return submitBackgroundJob(this.form);" />
   </form>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobfailed" style="display:none"></div>
   <!-- /TMPL_IF -->
 </p>
   <!-- TMPL_IF name="did_commit" -->
