@@ -50,6 +50,8 @@ use C4::ClassSource;
 use C4::Output;
 use C4::Context;
 
+# use Smart::Comments;
+
 
 # FIXME, shouldnt we store this stuff in the systempreferences table? 
 
@@ -216,7 +218,23 @@ sub StringSearch  {
     my $count=@data;
     my @results;
     my $cnt=0;
-    if ($type){
+
+    # used for doing a plain-old sys-pref search
+    if ($type eq 'all' ){
+        my $sth=$dbh->prepare("SELECT * FROM systempreferences 
+                WHERE variable LIKE ? OR explanation LIKE ? 
+                ORDER BY VARIABLE");
+        $sth->execute("%$searchstring%", "%$searchstring%");
+        while (my $data=$sth->fetchrow_hashref){
+            $data->{value} =~ s/</&lt;/g;
+            $data->{value} =~ s/>/&gt;/g;
+            $data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
+            push(@results,$data);
+            $cnt++;
+        }
+        $sth->finish;
+
+    }  elsif ($type){
         foreach my $syspref (sort keys %tabsysprefs){
             if ($tabsysprefs{$syspref} eq $type){
                 my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
@@ -473,12 +491,12 @@ if ($op eq 'add_form') {
     my $sth=$dbh->prepare("delete from systempreferences where variable=?");
     $sth->execute($searchfield);
     $sth->finish;
+
                                                     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
     #Adding tab management for system preferences
     my $tab=$input->param('tab');
-    
     my ($count,$results)=StringSearch($searchfield,$tab);
     my $toggle=0;
     my @loop_data = ();
