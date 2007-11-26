@@ -9,10 +9,10 @@
 //<![CDATA[
 	 $(document).ready(function() {
  		$('#patronlists').tabs();
+		verify_patron_images();
 	 });
 //]]>
-</script>
-<script type="text/JavaScript" language="JavaScript">
+
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_patron_images() {
     for (var i = 0; i < document.images.length; i++) {
@@ -29,7 +29,7 @@ function verify_patron_images() {
 </script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
-<body onload="verify_patron_images();">
+<body>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
@@ -163,7 +163,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <fieldset id="circ_circulation_issue">
     <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
 	<div class="hint">Enter item barcode:</div>
-	<!-- TMPL_IF NAME="patronimages" --><img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="" border="0" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+	
 	<input type="text" name="barcode" id="barcode" class="focus" size="14" />
 
         <!-- RESULT OF ISSUING REQUEST -->

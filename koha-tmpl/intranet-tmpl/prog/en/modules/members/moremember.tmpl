@@ -61,7 +61,7 @@ function verify_patron_images() {
 
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
-<!-- TMPL_IF NAME="patronimages" --><img src="/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.<!-- TMPL_VAR NAME="patronimages" -->" alt="" border="0" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="patronimages" --><img src="/intranet-tmpl/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.jpg" alt="" border="0"  style="float: right; margin: 1em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 <h3>
     <!-- TMPL_UNLESS NAME="I" -->
    <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" --> <!-- TMPL_VAR NAME="othernames" --> <!-- /TMPL_IF -->  <p><!-- TMPL_VAR NAME="streetnumber" -->
@@ -113,28 +113,6 @@ function verify_patron_images() {
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
 </div>
 
-<div id="patron-alternate-address" style="padding : .5em;">
-    <h3>Alternate Address</h3>
-    <!-- TMPL_UNLESS NAME="I"-->
-      <!-- TMPL_UNLESS NAME="C"-->
-  <p><!-- TMPL_VAR NAME="B_address" --><br />
-      <!-- TMPL_VAR NAME="B_city" --><br />
-      <!-- TMPL_VAR NAME="B_zipcode" --></p>
-  <!-- /TMPL_UNLESS -->
-    <!-- /TMPL_UNLESS -->
- 
-     <!-- TMPL_IF NAME="C" -->
-    <p><strong>Name: </strong><!-- TMPL_VAR NAME="contactname" --></p>
-    <p><strong>Firstname: </strong><!-- TMPL_VAR NAME="firstname" --></p>    
-    <p><strong>Phone: </strong><!-- TMPL_VAR NAME="phone" --></p>
-    <p><strong>Email: </strong><!-- TMPL_VAR NAME="email" --></p>
-    <p><strong>Relationship: </strong><!-- TMPL_VAR NAME="relationship" --></p>
-   <!-- /TMPL_IF -->
-       
-    <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
-</div>
-
-
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details" style="padding : .5em;">
@@ -167,6 +145,28 @@ function verify_patron_images() {
 	</ul>
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
  </div>
+ 
+ <div id="patron-alternate-address" style="padding : .5em;">
+    <h3>Alternate Address</h3>
+    <!-- TMPL_UNLESS NAME="I"-->
+      <!-- TMPL_UNLESS NAME="C"-->
+  <p><!-- TMPL_VAR NAME="B_address" --><br />
+      <!-- TMPL_VAR NAME="B_city" --><br />
+      <!-- TMPL_VAR NAME="B_zipcode" --></p>
+  <!-- /TMPL_UNLESS -->
+    <!-- /TMPL_UNLESS -->
+ 
+     <!-- TMPL_IF NAME="C" -->
+    <p><strong>Name: </strong><!-- TMPL_VAR NAME="contactname" --></p>
+    <p><strong>Firstname: </strong><!-- TMPL_VAR NAME="firstname" --></p>    
+    <p><strong>Phone: </strong><!-- TMPL_VAR NAME="phone" --></p>
+    <p><strong>Email: </strong><!-- TMPL_VAR NAME="email" --></p>
+    <p><strong>Relationship: </strong><!-- TMPL_VAR NAME="relationship" --></p>
+   <!-- /TMPL_IF -->
+       
+    <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
+</div>
+ 
 </div>
 </div>
 <div id="patrons-fines-and-charges" class="yui-g">
@@ -185,6 +185,7 @@ function verify_patron_images() {
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table>
         <tr>
+			<th scope="col"></th>
             <th scope="col">Title</th>
             <th scope="col">Barcode</th>
             <th scope="col">Date due</th>
@@ -205,14 +206,16 @@ function verify_patron_images() {
         <tr>
             <!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
+		  <td>
+                <!-- TMPL_IF NAME="itemtype_image" -->
+                <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
+				<!-- TMPL_ELSE -->&nbsp;
+                <!-- /TMPL_IF --></td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->            </td>
             <td><!-- TMPL_VAR NAME="barcode" --></td>
             <td><!-- TMPL_VAR NAME="date_due" --></td>
             <td>
                 <!-- TMPL_VAR NAME="itemtype_description" -->
-                <!-- TMPL_IF NAME="itemtype_image" -->
-                <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
-                <!-- /TMPL_IF -->
             </td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
@@ -235,15 +238,15 @@ function verify_patron_images() {
         </tr>
         <!-- /tmpl_loop -->
         <tr>
-            <td colspan="5">Total replacement cost:</td>
+            <td colspan="6">Total replacement cost:</td>
             <td><!-- TMPL_VAR NAME="totalprice" --></td>
             <td colspan="2">&nbsp;</td>
         </tr>
         </table>
-        <div>
+        <fieldset class="action">
         <input type="submit" name="renew_checked" value="Renew checked items" />
         <input type="submit" name="renew_all" value="Renew all" />
-        </div>
+        </fieldset>
     </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
 	</div>
 	
@@ -302,7 +305,7 @@ function verify_patron_images() {
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
-			<p><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></p>
+			<fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
 	</form>
 	<!-- TMPL_ELSE -->
 	<p>Patron has nothing on hold.</p>
