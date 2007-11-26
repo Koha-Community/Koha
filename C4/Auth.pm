@@ -380,8 +380,11 @@ sub checkauth {
 
     my $dbh     = C4::Context->dbh;
     my $timeout = C4::Context->preference('timeout');
-    $timeout = 600 unless $timeout;
-
+	# days
+ 	if ($timeout =~ /(\d*)[dD]/) {
+		$timeout = $1 * 86400;
+    };
+	$timeout = 600 unless $timeout;
 
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
