@@ -40,6 +40,7 @@ use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
 use C4::UploadedFile;
+use C4::BackgroundJob;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -70,10 +71,16 @@ if ($fileID) {
 		$marcrecord.=$_;
 	}
 
+    my $job_size = scalar($marcrecord =~ /\035/g);
+    # if we're matching, job size is doubled
+    $job_size *= 2 if ($matcher_id ne "");
+
     # FIXME branch code
     my $filename = $uploaded_file->name();
+    my $job = C4::BackgroundJob->new($cookies{'CGISESSID'}->value, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
     my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
-                                                                                   $comments, '', $parse_items, 0);
+                                                                                   $comments, '', $parse_items, 0,
+                                                                                   100, staging_progress_callback($job));
     my $num_with_matches = 0;
     my $checked_matches = 0;
     my $matcher_failed = 0;
@@ -83,12 +90,25 @@ if ($fileID) {
         if (defined $matcher) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher);
+            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, matching_progress_callback($job));
             SetImportBatchMatcher($batch_id, $matcher_id);
         } else {
             $matcher_failed = 1;
         }
     }
+
+    my $results = {
+	    staged => $num_valid,
+ 	    matched => $num_with_matches,
+        num_items => $num_items,
+        import_errors => scalar(@import_errors),
+        total => $num_valid + scalar(@import_errors),
+        checked_matches => $checked_matches,
+        matcher_failed => $matcher_failed,
+        matcher_code => $matcher_code,
+        import_batch_id => $batch_id
+    };
+    $job->finish($results);
 
 	$template->param(staged => $num_valid,
  	                 matched => $num_with_matches,
@@ -109,3 +129,20 @@ if ($fileID) {
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
+exit 0;
+
+sub staging_progress_callback {
+    my $job = shift;
+    return sub {
+        my $progress = shift;
+        $job->progress($job->progress() + $progress);
+    }
+}
+
+sub matching_progress_callback {
+    my $job = shift;
+    return sub {
+        my $progress = shift;
+        $job->progress($job->progress() + $progress);
+    }
+}
