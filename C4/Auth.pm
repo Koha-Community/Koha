@@ -306,6 +306,7 @@ sub get_template_and_user {
             patronimages           => C4::Context->preference("patronimages"),
             mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
         );
     }
     return ( $template, $borrowernumber, $cookie );

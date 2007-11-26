@@ -134,14 +134,26 @@
         <th>Fines</th>
         </tr>
         <!-- TMPL_LOOP NAME="ISSUES" -->
-            <!-- TMPL_IF NAME="overdue" -->
+		<!-- TMPL_IF NAME="toggle" -->
+            
+			<!-- TMPL_IF NAME="overdue" -->
                 <tr class="overdue">
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
+			
+			<!-- TMPL_ELSE -->
+			
+		<!-- TMPL_IF NAME="overdue" -->
+                <tr class="highlight overdue">
+            <!-- TMPL_ELSE -->
+                <tr class="highlight">
+            <!-- /TMPL_IF -->
+			
+			<!-- /TMPL_IF -->
                 <td>
                     <!-- TMPL_IF name="imageurl" -->
-                        <img src="<!-- TMPL_VAR name="imageurl" --><!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
+                        <img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_VAR name="description" -->
                     <!-- /TMPL_IF -->
@@ -201,7 +213,7 @@
 <!-- TMPL_LOOP NAME="OVERDUES" -->
 <tr>
 <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="ccode" -->.gif" alt="<!-- TMPL_VAR NAME="ccode" -->" title="<!-- TMPL_VAR NAME="ccode" -->" /></td>
-<td><!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
+<td><!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>

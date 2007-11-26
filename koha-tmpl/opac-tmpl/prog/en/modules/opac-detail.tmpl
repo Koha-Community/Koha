@@ -178,6 +178,9 @@
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
+	
  	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="ISBD" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></li><!-- /TMPL_IF -->
@@ -187,8 +190,8 @@
         </a></li>
 </ul>
 
-<!-- TMPL_IF name="count" -->
 <div id="holdings" class="tabs-container">
+<!-- TMPL_IF name="count" -->
     <table>
         <tr>
             <th>Item type</th>
@@ -232,10 +235,10 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-</div>
 <!-- TMPL_ELSE -->
 <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
+</div>
 
 <div id="descriptions" class="tabs-container">
  <!-- TMPL_IF name="MARCNOTES" -->
@@ -326,6 +329,27 @@
     <!-- /TMPL_IF -->
 	</div>
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="FRBRizeEditions" --><div id="editions" class="tabs-container">
+
+<h2>Other Editions of this Work</h2>
+<!-- TMPL_IF NAME="XISBNS" -->
+<ul>
+<!-- TMPL_LOOP NAME="XISBNS" -->
+<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
+
+	<!-- TMPL_LOOP NAME=items -->
+	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
+	barcode:<!-- TMPL_VAR NAME="barcode" -->
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
+</ul>
+<!-- TMPL_ELSE -->
+<p>No other editions found.</p>
+<!-- /TMPL_IF -->
+</div><!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="AmazonContent" -->
