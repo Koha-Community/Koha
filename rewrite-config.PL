@@ -65,13 +65,13 @@ $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
 # This is set here to rescue systems with broken DNS
 $myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
-$prefix = $ENV{'PREFIX'} || "/usr";
+$prefix = $ENV{'PREFIX'} || "/usr/local";
 
 # These are our configuration guesses
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
-  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/local/lib/perl/%vd",$^V))."/koha",
+  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl/%vd",$^V))."/koha",
   # Corrected to match Debian Perl req's.... -fbcit
   "__CGI_DIR__" => $prefix."/lib/cgi-bin/koha",
   "__LOG_DIR__" => "/var/log",
