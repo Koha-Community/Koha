@@ -104,19 +104,33 @@ sub new {
     $fh->binmode(); # Windows compatibility
     $self->{'fh'} = $fh;
     $self->{'tmp_file_name'} = $tmp_file_name;
-    my $session = get_session($sessionID);
-    $session->param("$self->{'fileID'}.uploaded_tmpfile", $tmp_file_name);
-    $session->param('current_upload', $self->{'fileID'});
-    $session->flush();
-    $self->{'session'} = $session;
-    $self->{'name'} = '';
     $self->{'max_size'} = 0;
     $self->{'progress'} = 0;
+    $self->{'name'} = '';
 
     bless $self, $class;
+    $self->_serialize();
+
+    my $session = get_session($sessionID);
+    $session->param('current_upload', $self->{'fileID'});
+    $session->flush();
 
     return $self;
 
+}
+
+sub _serialize {
+    my $self = shift;
+
+    my $prefix = "upload_" . $self->{'fileID'};
+    my $session = get_session($self->{'sessionID'});
+
+    # temporarily take file handle out of structure
+    my $fh = $self->{'fh'};
+    delete $self->{'fh'};
+    $session->param($prefix, $self);
+    $session->flush();
+    $self->{'fh'} =$fh;
 }
 
 =head2 id
@@ -151,8 +165,7 @@ sub name {
     my $self = shift;
     if (@_) {
         $self->{'name'} = shift;
-        $self->{'session'}->param("$self->{'fileID'}.uploaded_filename", $self->{'name'});
-        $self->{'session'}->flush();
+        $self->_serialize();
     } else {
         return $self->{'name'};
     }
@@ -200,8 +213,7 @@ sub stash {
     my $percentage = int(($bytes_read / $self->{'max_size'}) * 100);
     if ($percentage > $self->{'progress'}) {
         $self->{'progress'} = $percentage;
-        $self->{'session'}->param("$self->{'fileID'}.uploadprogress", $self->{'progress'});
-        $self->{'session'}->flush();
+        $self->_serialize();
     }
 }
 
@@ -219,9 +231,9 @@ Indicates that all of the bytes have been uploaded.
 
 sub done {
     my $self = shift;
-    $self->{'session'}->param("$self->{'fileID'}.uploadprogress", 'done');
-    $self->{'session'}->flush();
+    $self->{'progress'} = 'done';
     $self->{'fh'}->close();
+    $self->_serialize();
 }
 
 =head2 upload_progress
@@ -246,7 +258,8 @@ sub upload_progress {
 
     my $reported_progress = 0;
     if (defined $fileID and $fileID ne "") {
-        my $progress = $session->param("$fileID.uploadprogress");
+        my $file = C4::UploadedFile->fetch($sessionID, $fileID);
+        my $progress = $file->{'progress'};
         if (defined $progress) {
             if ($progress eq "done") {
                 $reported_progress = 100;
@@ -275,19 +288,13 @@ sub fetch {
     my $sessionID = shift;
     my $fileID = shift;
 
-    my $self = {};
-
-    $self->{'sessionID'} = $sessionID;
-    $self->{'fileID'} = $fileID;
     my $session = get_session($sessionID);
-    $self->{'session'} = $session;
-    $self->{'tmp_file_name'} = $session->param("$self->{'fileID'}.uploaded_tmpfile");
-    $self->{'name'} = $session->param("$self->{'fileID'}.uploaded_filename");
+    my $prefix = "upload_$fileID";
+    my $self = $session->param($prefix);
     my $fh = new IO::File $self->{'tmp_file_name'}, "r";
     $self->{'fh'} = $fh;
 
     bless $self, $class;
-
     return $self;
 }
 
