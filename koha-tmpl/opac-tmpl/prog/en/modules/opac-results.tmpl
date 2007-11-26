@@ -118,8 +118,7 @@
                 <tr>
             <!-- /TMPL_IF -->
                     <td><!-- TMPL_IF NAME="AmazonContent" -->
-                        <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                            <img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" />
+                        <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
                         </a>
                         <!-- TMPL_ELSE -->
                         <!-- TMPL_IF name="imageurl" -->
@@ -139,7 +138,7 @@
 						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF --></p>
 				<p class="availability">
 <!-- TMPL_IF NAME="items_loop" -->
-<span class="available"><strong><!-- TMPL_IF NAME="items_count" --><!-- TMPL_VAR NAME="items_count" --><!-- /TMPL_IF --> copies available at:</strong> <!-- TMPL_LOOP NAME="items_loop" --><!-- <!-- TMPL_VAR NAME="branchcode" --> --><!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->(<!-- TMPL_VAR NAME="count" -->),<!-- /TMPL_LOOP --></span>
+<span class="available"><strong><!-- TMPL_IF NAME="items_count" --><!-- TMPL_VAR NAME="items_count" --><!-- /TMPL_IF --> copies available at:</strong> <!-- TMPL_LOOP NAME="items_loop" --><!-- <!-- TMPL_VAR NAME="branchcode" --> --><!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->(<!-- TMPL_VAR NAME="count" -->), <!-- /TMPL_LOOP --></span>
 <!-- TMPL_ELSE -->
 <span class="unavailable">No copies available: </span>
 <!-- /TMPL_IF -->

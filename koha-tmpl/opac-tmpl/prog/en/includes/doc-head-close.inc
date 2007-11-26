@@ -15,6 +15,7 @@
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
 <script type="text/javascript" language="javascript" src="../..<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
 <script type="text/javascript" language="javascript">
+	//<![CDATA[
     function _(s) { return s } // dummy function for gettext
     var MSG_BASKET_EMPTY = _("You book bag is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your book bag");
@@ -23,10 +24,10 @@
     var MSG_NRECORDS_IN_BASKET = _("already in the bag");
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your book bag");
-	<!-- TMPL_IF NAME="AmazonContent" --> $(document).ready(function() {
- 	//verify_images();
- });
- <!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="AmazonContent" -->$(document).ready(function() {
+		 	verify_images();
+		 });<!-- /TMPL_IF -->
+	//]]>
 </script>
 <!-- TMPL_IF NAME="opacuserjs" -->
 <script language="JavaScript" type="text/javascript">
