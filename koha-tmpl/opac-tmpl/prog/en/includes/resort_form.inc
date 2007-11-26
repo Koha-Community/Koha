@@ -1,4 +1,4 @@
-<option value="">Relevance</option>
+<option value="relevance">Relevance</option>
 <optgroup label="Popularity">
 <option value="popularity_dsc" <!-- TMPL_IF NAME="popularity_dsc" -->selected="selected" <!-- /TMPL_IF -->>Popularity (Most to Least)</option>
 <option value="popularity_asc" <!-- TMPL_IF NAME="popularity_asc" -->selected="selected" <!-- /TMPL_IF -->>Popularity (Least to Most)</option>

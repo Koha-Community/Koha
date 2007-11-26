@@ -337,7 +337,8 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
 my @sort_by;
-my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Context->preference('defaultSortOrder');
+my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Context->preference('defaultSortOrder') 
+	if (C4::Context->preference('defaultSortField') && C4::Context->preference('defaultSortOrder'));
 
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 $sort_by[0] = $default_sort_by unless $sort_by[0];
