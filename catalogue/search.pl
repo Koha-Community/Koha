@@ -337,7 +337,10 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
 my @sort_by;
+my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Context->preference('defaultSortOrder');
+
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
+$sort_by[0] = $default_sort_by unless $sort_by[0];
 foreach my $sort (@sort_by) {
 	$template->param($sort => 1);
 }
