@@ -117,7 +117,7 @@ sub FindDuplicate {
         # remove valid operators
         $result->{title} =~ s/(and|or|not)//g;
         $query = "ti,ext=$result->{title}";
-        $query .= " and mt=$result->{itemtype}" if ($result->{itemtype});    
+        $query .= " and itemtype=$result->{itemtype}" if ($result->{itemtype});    
         if ($result->{author}){
           $result->{author} =~ s /\\//g;
           $result->{author} =~ s /\"//g;
