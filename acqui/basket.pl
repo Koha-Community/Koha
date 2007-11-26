@@ -106,6 +106,9 @@ if ( C4::Context->preference("IndependantBranches") ) {
 # if new basket, pre-fill infos
 $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
 $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
+warn $loggedinuser;
+warn $basket->{creationdate};
+warn $basket->{authorisedby} ;
 
 my ( $count, @results );
 @results  = GetOrders( $basketno, $order );

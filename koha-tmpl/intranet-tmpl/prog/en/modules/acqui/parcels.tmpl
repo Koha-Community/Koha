@@ -103,14 +103,16 @@
     <fieldset class="rows">
     <legend>Receive a new Parcel</legend>
        <ol> <li>
-            <label for="invoice">Parcel Code:</label>
+            <label for="invoice">Supplier Invoice / Parcel Code</label>
             <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
             <input type="text" size="20" id="invoice" name="invoice" />
         </li>
+		<!-- TMPL_IF NAME="gst" -->
         <li>
             <label for="gst">GST:</label>
             <input type="text" size="20" id="gst" name="gst" />
         </li>
+		<!-- /TMPL_IF -->
         <li>
             <label for="freight">Freight:</label>
             <input type="text" size="20" id="freight" name="freight" />

@@ -78,7 +78,7 @@ my $code=$input->param('code');
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
                  query => $input,
-                 type => "intranet",
+				 type => "intranet",
                  authnotrequired => 0,
                  flagsrequired => {acquisition => 1},
                  debug => 1,

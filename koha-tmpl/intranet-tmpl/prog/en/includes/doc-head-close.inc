@@ -38,7 +38,6 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="lib" -->"></script>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
-
 <!-- TMPL_IF NAME="js_module" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/modules/<!-- TMPL_VAR NAME="js_module" -->"></script>
 <!-- /TMPL_IF -->

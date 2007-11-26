@@ -94,15 +94,16 @@ sub GetBasket {
     my $dbh        = C4::Context->dbh;
     my $query = "
         SELECT  aqbasket.*,
-                borrowers.firstname+' '+borrowers.surname AS authorisedbyname,
-                borrowers.branchcode AS branch
+                concat( b.firstname,' ',b.surname) AS authorisedbyname,
+                b.branchcode AS branch
         FROM    aqbasket
-        LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
+        LEFT JOIN borrowers b ON aqbasket.authorisedby=b.borrowernumber
         WHERE basketno=?
     ";
     my $sth=$dbh->prepare($query);
     $sth->execute($basketno);
-    return ( $sth->fetchrow_hashref );
+    my $basket = $sth->fetchrow_hashref;
+	return ( $basket );
 }
 
 #------------------------------------------------------------#
