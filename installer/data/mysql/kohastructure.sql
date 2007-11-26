@@ -51,8 +51,7 @@ CREATE TABLE `accountoffsets` (
   `offsetaccount` smallint(6) NOT NULL default 0,
   `offsetamount` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  CONSTRAINT `accountoffsets_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-
+  CONSTRAINT `accountoffsets_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1217,7 +1216,7 @@ CREATE TABLE `matchpoints` (
   `score` int(11) NOT NULL default 0,
   PRIMARY KEY (`matchpoint_id`),
   CONSTRAINT `matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
-             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -1236,7 +1235,7 @@ CREATE TABLE `matchpoint_components` (
   PRIMARY KEY (`matchpoint_component_id`),
   KEY `by_sequence` (`matchpoint_id`, `sequence`),
   CONSTRAINT `matchpoint_components_ifbk_1` FOREIGN KEY (`matchpoint_id`)
-             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1249,7 +1248,7 @@ CREATE TABLE `matchpoint_component_norms` (
   `norm_routine` varchar(50) NOT NULL default '',
   KEY `matchpoint_component_norms` (`matchpoint_component_id`, `sequence`),
   CONSTRAINT `matchpoint_component_norms_ifbk_1` FOREIGN KEY (`matchpoint_component_id`)
-             REFERENCES `matchpoint_components` (`matchpoint_component_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  REFERENCES `matchpoint_components` (`matchpoint_component_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1260,9 +1259,9 @@ CREATE TABLE `matcher_matchpoints` (
   `matcher_id` int(11) NOT NULL,
   `matchpoint_id` int(11) NOT NULL,
   CONSTRAINT `matcher_matchpoints_ifbk_1` FOREIGN KEY (`matcher_id`)
-             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchpoints_ifbk_2` FOREIGN KEY (`matchpoint_id`)
-             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1276,11 +1275,11 @@ CREATE TABLE `matchchecks` (
   `target_matchpoint_id` int(11) NOT NULL,
   PRIMARY KEY (`matchcheck_id`),
   CONSTRAINT `matcher_matchchecks_ifbk_1` FOREIGN KEY (`matcher_id`)
-             REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  REFERENCES `marc_matchers` (`matcher_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchchecks_ifbk_2` FOREIGN KEY (`source_matchpoint_id`)
-             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `matcher_matchchecks_ifbk_3` FOREIGN KEY (`target_matchpoint_id`)
-             REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  REFERENCES `matchpoints` (`matchpoint_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1579,7 +1578,7 @@ CREATE TABLE `statistics` (
 --
 
 DROP TABLE IF EXISTS `stopwords`;
-CREATE TABLE `stopwords` (
+  CREATE TABLE `stopwords` (
   `word` varchar(255) default NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
