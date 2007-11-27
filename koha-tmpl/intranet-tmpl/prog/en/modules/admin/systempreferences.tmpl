@@ -1,7 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;
-<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF name="add_form" --> System Preferences &rsaquo; <!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" --> System Preferences &rsaquo; Data Added<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="">System Preferences &rsaquo; <!-- TMPL_VAR NAME="searchfield" --> &rsaquo; Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> System Preferences &rsaquo; Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->System Preferences<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -71,16 +70,14 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="sysprefs-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" -->Data Added<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" -->Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" -->Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Preferences<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" --> <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Data Added<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&searchfield=<!-- TMPL_VAR NAME="searchfield" -->"><!-- TMPL_VAR NAME="searchfield" --></a> &rsaquo; Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->System Preferences<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
-
 
 <!-- TMPL_IF NAME="add_form" -->
     
