@@ -303,23 +303,22 @@
 <div id="comments" class="tabs-container">
 <!-- TMPL_IF NAME="reviews" -->
         <!--TMPL_LOOP NAME="reviews"-->
-        <p>
-            <b>
+            <h5>
                 Review by
                 <!--TMPL_VAR NAME="title"-->
                 <!--TMPL_VAR NAME="firstname"-->
                 <!--TMPL_VAR NAME="surname"-->
-            </b> (<small>
+            </h5>
+			<small>
                 <!--TMPL_VAR NAME="datereviewed"-->
-            </small>)
-        </p>
+            </small>
         <p>
           <!--TMPL_VAR NAME="review"-->
         </p>
         <!--/TMPL_LOOP-->
     <!-- TMPL_ELSE  -->
         <p>There are no comments for this item.</p>
-    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="loggedinusername" -->
        <p> <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
@@ -360,7 +359,7 @@
         
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <!-- TMPL_IF NAME="isbn" -->
-        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&store=books">Add your own review</a></h4>
+        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a></h4>
     <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP --><br/>
 
@@ -389,6 +388,29 @@
     <!-- /TMPL_IF -->
 </div> <!-- itemReviews -->
 <!-- /TMPL_IF-->
+</div>
+<div>
+	[Similar products:<!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
+	<ul>                               
+<!-- TMPL_LOOP NAME="product" -->                                               
+<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR                         
+NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />           
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR           
+NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!--             
+TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate"             
+--></li>                                                                        
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"           
+-->.01._THUMBZZZ_PU_PU-5_.jpg" />                                               
+                                                                                
+    <!-- TMPL_LOOP NAME=items -->                                               
+    <!-- TMPL_IF NAME="itype" --><img                                           
+src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif"            
+title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->                      
+    barcode:<!-- TMPL_VAR NAME="barcode" -->                                    
+    <!-- /TMPL_LOOP -->                                                         
+<!-- /TMPL_LOOP -->	
+</ul>
+<!-- /TMPL_LOOP -->]
 </div>
 </div>
 </div>
