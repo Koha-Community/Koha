@@ -67,7 +67,7 @@ function verify_patron_images() {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RENEW_ISSUE" -->
-    <li>Item is currently issued to this patron.  Renew?</li>
+    <li>Item is currently checked out to this patron.  Renew?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVE_WAITING" -->
@@ -79,7 +79,7 @@ function verify_patron_images() {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-    <li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) issued to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Return and issue?</li>
+    <li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="TOO_MANY" -->
@@ -159,7 +159,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="borrowernumber" -->
 <div class="yui-g">
 <!-- TMPL_UNLESS NAME="noissues" -->
-<div class="yui-u first"><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
+<!-- TMPL_IF NAME="flagged" -->
+<div class="yui-u first">
+<!-- TMPL_ELSE -->
+<div><!-- /TMPL_IF --><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
     <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
 	<div class="hint">Enter item barcode:</div>
@@ -256,7 +259,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                 <!-- /TMPL_IF -->
 
       <fieldset class="action">
-      <input type="submit" value="Issue" />
+      <input type="submit" value="Check Out" />
       </fieldset>
 </p>
 </fieldset> 
@@ -314,15 +317,15 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			            </ul>
 			    <!-- /TMPL_LOOP -->
 			</div>
-			<!-- /TMPL_IF --><!-- /If WaitingReserveLoop -->
-
-    <!-- /TMPL_IF --> <!-- /If flagged -->
+			<!-- /If WaitingReserveLoop --><!-- /TMPL_IF -->
 	<!-- TMPL_IF name="notes" -->
 			<div id="circnotes" class="circmessage">
 			<h4>Notes:</h4>
             <p><!-- TMPL_VAR name="notesmsg" --></p>
 			</div>
-    <!-- /TMPL_IF --> <!-- /If notes -->
+    <!-- /If notes --><!-- /TMPL_IF --> 
+     <!-- /If flagged --><!-- /TMPL_IF -->
+
 
 </div>
 </div>
@@ -401,8 +404,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<td>Renewal Failed</td>
 		<!-- /TMPL_IF -->
     </tr>
-    <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
-    <!-- /TMPL_IF --> <!-- /if todayissues -->
+    <!-- /loop todayissues --><!-- /TMPL_LOOP --> 
+    <!-- /if todayissues --><!-- /TMPL_IF --> 
 <!-- TMPL_IF NAME="previssues" -->
     <tr>
         <th colspan="7"><a name="previous" id="previous">Previous checkouts</a></th>
@@ -442,8 +445,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<!-- /TMPL_IF -->
 
     </tr>
-    <!-- /TMPL_LOOP --> <!-- /loop previssues -->
-<!-- /TMPL_IF --> <!--/if previssues -->
+    <!-- /loop previssues --><!-- /TMPL_LOOP --> 
+<!--/if previssues --><!-- /TMPL_IF --> 
     </table>
 	<!--TMPL_IF NAME="issuecount"-->
     <div id="action">
