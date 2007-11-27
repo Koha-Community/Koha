@@ -1729,23 +1729,49 @@ Returns MARC::Record of the item passed in parameter.
 
 sub GetMarcItem {
     my ( $biblionumber, $itemnumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $newrecord = MARC::Record->new();
-    my $marcflavour = C4::Context->preference('marcflavour');
-    
-    my $marcxml = GetXmlBiblio($biblionumber);
-    my $record = MARC::Record->new();
-    $record = MARC::Record::new_from_xml( $marcxml, "utf8", $marcflavour );
-    # now, find where the itemnumber is stored & extract only the item
-    my ( $itemnumberfield, $itemnumbersubfield ) =
-      GetMarcFromKohaField( 'items.itemnumber', '' );
-    my @fields = $record->field($itemnumberfield);
-    foreach my $field (@fields) {
-        if ( $field->subfield($itemnumbersubfield) eq $itemnumber ) {
-            $newrecord->insert_fields_ordered($field);
-        }
-    }
-    return $newrecord;
+
+    # GetMarcItem has been revised so that it does the following:
+    #  1. Gets the item information from the items table.
+    #  2. Converts it to a MARC field for storage in the bib record.
+    #
+    # The previous behavior was:
+    #  1. Get the bib record.
+    #  2. Return the MARC tag corresponding to the item record.
+    #
+    # The difference is that one treats the items row as authoritative,
+    # while the other treats the MARC representation as authoritative
+    # under certain circumstances.
+    #
+    # FIXME - a big one
+    #
+    # As of 2007-11-27, this change hopefully does not introduce
+    # any bugs.  However, it does mean that for code that uses
+    # ModItemInMarconefield to update one subfield (corresponding to
+    # an items column) is now less efficient.
+    #
+    # The API needs to be shifted to the following:
+    #  1. User updates items record.
+    #  2. Linked bib is sent for indexing.
+    # 
+    # The missing step 1.5 is updating the item tag in the bib MARC record
+    # so that the indexes are updated.  Depending on performance considerations,
+    # this may ultimately mean of of the following:
+    #  a. MARC field for item is updated right away.
+    #  b. MARC field for item is updated only as part of indexing.
+    #  c. MARC field for item is never actually stored in bib record; instead
+    #     it is generated only when needed for indexing, item export, and
+    #     (maybe) OPAC display.
+    #
+
+    my $itemrecord = GetItem($itemnumber);
+
+    # Tack on 'items.' prefix to column names so that TransformKohaToMarc will work.
+    # Also, don't emit a subfield if the underlying field is blank.
+    my $mungeditem = { map {  $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  } keys %{ $itemrecord } };
+
+    my $itemmarc = TransformKohaToMarc($mungeditem);
+    return $itemmarc;
+
 }
 
 
