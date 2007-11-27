@@ -134,14 +134,13 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
 			if (C4::Context->preference("AmazonSimilarItems") ) {
 				my $xbiblios;
 				my @xisbns;
-
 				if (C4::Context->preference("XISBNAmazonSimilarItems") ) {
-					my $xbiblio = get_biblio_from_xisbn($product);
-					push @xisbns, $xbiblio;
-					$xbiblios = \@xisbns;
+					$xbiblios = get_xisbns($product);
 				}
 				else {
-					$xbiblios = get_xisbns($product);
+					my $xbiblio = get_biblio_from_xisbn($product);
+                    push @xisbns, $xbiblio ;
+                    $xbiblios = \@xisbns;
 				}
             	push @products, +{ product => $xbiblios };
 			}
@@ -157,7 +156,7 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
                 comment => $reviews->{Comment},
               };
         }
-    }
+    } use Data::Dumper; warn Dumper(@products);
     $template->param( SIMILAR_PRODUCTS => \@products );
     $template->param( AMAZONREVIEWS    => \@reviews );
 }
