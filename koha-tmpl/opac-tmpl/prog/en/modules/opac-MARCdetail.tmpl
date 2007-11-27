@@ -20,105 +20,105 @@
 	<li><a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to My Book Bag</a></li>
 </ul>
 </div>
+</div>
 
-<h1>MARC View</h1>
-
-    <table style="border:0px;">
+    <div class="yui-g" style="margin-top : 1em;"><table id="marc">
+	<caption>MARC View</caption>
         <!-- TMPL_LOOP name="0XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;">&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
         <!-- TMPL_LOOP name="1XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td  style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td  style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td  ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td  ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="2XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="3XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="4XX" -->
-        <tr><td colspan="3" style="border:0px;" ><!-- TMPL_VAR name="tag" --></td></tr>
+        <tr><th colspan="2" ><!-- TMPL_VAR name="tag" --></td></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="5XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="6XX" -->
-        <tr><td colspan="3" style="border:0px;"><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;">&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="7XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="8XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="9XX" -->
-        <tr><td colspan="3" style="border:0px;" ><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td style="border:0px;" >&nbsp;</td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td style="border:0px;" ><!-- TMPL_VAR name="marc_value" --></td>
+                <tr>
+                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td ><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -140,9 +140,8 @@
                 <!-- /TMPL_LOOP -->
         </table><!-- TMPL_ELSE -->
         <p>No copies available.</p>
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></div>
 
-</div>
 </div>
 </div>
 <div class="yui-b">
