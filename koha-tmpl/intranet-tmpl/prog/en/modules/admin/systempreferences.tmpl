@@ -5,6 +5,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
+<!-- TMPL_IF NAME="add_form" -->
+	$(document).ready(function() {
+		$('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
+ 		$('.variabletype').click(function() {
+			$('#preftype').attr("value",$(this).attr("id"));
+		});
+	});
+<!-- /TMPL_IF -->
         //
         function isNotNull(f,noalert) {
             if (f.value.length ==0) {
@@ -118,7 +126,7 @@
 		<div class="hint">Note: you should have no reasons to modify the following default values</div>
 		<ol>
         <li><label for="preftype">Variable type:</label>
-		<div class="hint"> (Choice, YesNo, Integer, Textarea, Float, Themes, Languages, or ClassSources)</div>
+		<div class="hint"> (<span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
 		<input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40" /></li>
         <li><label for="prefoptions">Variable options:</label>
 		<div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
