@@ -38,14 +38,18 @@ my $damaged=$cgi->param('damaged');
 my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
 # get the rest of this item's information
-my $item_data_sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
-$item_data_sth->execute($itemnumber);
-my $item_data_hashref = $item_data_sth->fetchrow_hashref();
+my $item_data_hashref = GetItem($itemnumber, undef);
 
-# superimpose the new on the old
-$item_data_hashref->{'itemlost'} = $itemlost if $itemlost;
-$item_data_hashref->{'wthdrawn'} = $wthdrawn if $wthdrawn;
-$item_data_hashref->{'damaged'} = $damaged if $damaged;
+# modify bib MARC
+if ($itemlost ne $item_data_hashref->{'itemlost'}) {
+    ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemlost', $itemlost);
+}
+if ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
+    ModItemInMarconefield($biblionumber, $itemnumber, 'items.wthdrawn', $wthdrawn);
+}
+if ($damaged ne $item_data_hashref->{'damaged'}) {
+    ModItemInMarconefield($biblionumber, $itemnumber, 'items.damaged', $damaged);
+}
 
 # check reservations
 my ($status, $reserve) = CheckReserves($itemnumber, $item_data_hashref->{'barcode'});

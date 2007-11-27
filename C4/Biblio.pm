@@ -472,7 +472,8 @@ sub ModItemInMarconefield {
             $tag->update( $tagsubfield => $newvalue );
             $record->delete_field($tag);
             $record->insert_fields_ordered($tag);
-            &ModItemInMarc( $record, $biblionumber, $itemnumber, 0 );
+            my $frameworkcode = GetFrameworkCode( $biblionumber );
+            &ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode );
         }
     }
 }
@@ -481,7 +482,7 @@ sub ModItemInMarconefield {
 
 =over
 
-&ModItemInMarc( $record, $biblionumber, $itemnumber )
+&ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode )
 
 =back
 
