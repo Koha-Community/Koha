@@ -465,7 +465,14 @@ sub ModItemInMarconefield {
 
     my $record = GetMarcItem( $biblionumber, $itemnumber );
     my ($tagfield, $tagsubfield) = GetMarcFromKohaField( $itemfield,'');
-    if ($tagfield && $tagsubfield) {
+    # FIXME - the condition is done this way because GetMarcFromKohaField
+    # returns (0, 0) if it can't field a MARC tag for the kohafield.  However,
+    # some fields like items.wthdrawn are mapped to subfield $0, making the
+    # customary test of "if ($tagfield && $tagsubfield)" incorrect.
+    # GetMarcFromKohaField should probably be returning (undef, undef), making
+    # the correct test "if (defined $tagfield && defined $tagsubfield)", but
+    # this would be a large change and consequently deferred for after 3.0.
+    if (not(int($tagfield) == 0 && int($tagsubfield) == 0)) { 
         my $tag = $record->field($tagfield);
         if ($tag) {
 #             my $tagsubs = $record->field($tagfield)->subfield($tagsubfield);
