@@ -23,7 +23,7 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK
 
 -- withdrawn status of an item, linked to items.wthdrawn
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','0','');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Restricted Access');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Withdrawn');
 
 -- loanability status of an item, linked to items.notforloan
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_LOAN','-1','Ordered');
