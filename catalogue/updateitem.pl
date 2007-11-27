@@ -41,13 +41,13 @@ my $dbh = C4::Context->dbh;
 my $item_data_hashref = GetItem($itemnumber, undef);
 
 # modify bib MARC
-if ($itemlost ne $item_data_hashref->{'itemlost'}) {
+if ((not defined($item_data_hashref->{'itemlost'})) or ($itemlost ne $item_data_hashref->{'itemlost'})) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemlost', $itemlost);
 }
-if ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
+if ((not defined($item_data_hashref->{'wthdrawn'})) or ($wthdrawn ne $item_data_hashref->{'wthdrawn'})) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.wthdrawn', $wthdrawn);
 }
-if ($damaged ne $item_data_hashref->{'damaged'}) {
+if ((not defined($item_data_hashref->{'damaged'})) or ($damaged ne $item_data_hashref->{'damaged'})) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.damaged', $damaged);
 }
 
