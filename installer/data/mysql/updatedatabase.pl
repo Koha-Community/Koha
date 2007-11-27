@@ -744,7 +744,12 @@ $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,ty
     SetVersion ($DBversion);
 }
 
-
+$DBversion = "3.00.00.032";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE `marc_subfield_structure` SET `kohafield` = 'items.wthdrawn' WHERE `kohafield` = 'items.withdrawn'");
+    print "Upgrade to $DBversion done (fixed MARC framework references to items.withdrawn)\n";
+    SetVersion ($DBversion);
+}
 
 
 =item DropAllForeignKeys($table)

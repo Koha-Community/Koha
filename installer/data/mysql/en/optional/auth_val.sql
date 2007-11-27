@@ -21,7 +21,7 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','1','Special Collection');
 
--- withdrawn status of an item, linked to items.withdrawn
+-- withdrawn status of an item, linked to items.wthdrawn
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('WITHDRAWN','1','Restricted Access');
 
