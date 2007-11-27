@@ -1,6 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalogue &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+ 		$('#bibliodetails').tabs();
+	 });
+//]]>
+</script>
 </head>
 
 <body>
@@ -93,19 +99,7 @@
         <!-- TMPL_IF name="copyrightdate" -->
             <li><strong>Copyright:</strong> <!-- TMPL_VAR NAME="copyrightdate" --></li>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="MARCNOTES" -->
-            <li><strong>Notes:</strong>
-            <ul>
-                <!-- TMPL_LOOP NAME="MARCNOTES" -->
-                    <li>- <!-- TMPL_VAR NAME="marcnote" --></li>
-                <!-- /TMPL_LOOP -->
-            </ul>
-			</li>
-        <!-- TMPL_ELSE -->
-            <!-- TMPL_IF name="notes" -->
-                <li><strong>Notes:</strong> <!-- TMPL_VAR NAME="notes" --></li>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
+     
         <!-- TMPL_IF name="classification" -->
             <li><strong>Classification:</strong> <!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></li>
         <!-- /TMPL_IF -->
@@ -124,9 +118,17 @@
 
 </div>
 
-<div class="yui-g" style="margin-top : 1em;">
+<div id="bibliodetails" class="toptabs">
+
+<ul>   
+<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings</a></li>
+<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Description</a></li>
+<!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonSimilarItems " --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
+ </ul>
+
+<div id="holdings">
 <!-- TMPL_IF name="count" -->
-    <div id="catalogue_detail_items">
         <table>
             <tr>
                 <th>Item type</th>
@@ -181,28 +183,41 @@
                 </tr>
             <!-- /TMPL_LOOP -->
         </table>
-    </div>
 <!-- TMPL_ELSE -->
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
+    </div>
+	
+<div id="description">
+	<!-- TMPL_IF name="MARCNOTES" -->
+	<!-- TMPL_LOOP NAME="MARCNOTES" -->
+    	<p><!-- TMPL_VAR NAME="marcnote" --></p>
+                <!-- /TMPL_LOOP -->
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_IF name="notes" -->
+                <p><!-- TMPL_VAR NAME="notes" --></p>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+</div>
 
-<!-- TMPL_IF NAME="XISBNS" -->
-<h2>Editions</h2>
+<!-- TMPL_IF NAME="FRBRizeEditions" -->
+<div id="editions"><h2>Editions</h2>
 <ul>
 <!-- TMPL_LOOP NAME="XISBNS" -->
 <li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
-
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" />
 	<!-- TMPL_LOOP NAME=items -->
 	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 	barcode:<!-- TMPL_VAR NAME="barcode" -->
 	<!-- /TMPL_LOOP -->
 
 <!-- /TMPL_LOOP -->
-</ul>
+</ul></div>
 <!-- /TMPL_IF -->
-<h2>Related Items</h2>
+
+<!-- TMPL_IF NAME="AmazonSimilarItems " -->
+<div id="related"><h2>Related Items</h2>
 <ul>
 <!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="product" -->
@@ -223,8 +238,9 @@ title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
    <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
-</ul>
-</div>
+</ul></div><!-- /TMPL_IF -->
+
+</div><!-- /bibliodetails -->
 
 <div class="yui-g" id="export" style="margin-top: 1em;">
 <form method="get" action="/cgi-bin/koha/catalogue/export.pl">

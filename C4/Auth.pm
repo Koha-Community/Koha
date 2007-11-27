@@ -264,6 +264,7 @@ sub get_template_and_user {
 			CircAutocompl => C4::Context->preference("CircAutocompl"),
 			yuipath => C4::Context->preference("yuipath"),
 			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
+			AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
         );
     }
     else {
