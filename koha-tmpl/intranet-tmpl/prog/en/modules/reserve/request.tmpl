@@ -106,7 +106,7 @@ if (alreadyreserved > "0"){
     <!-- TMPL_IF NAME="messageborrower" -->                                    
       <div class="problem">No patron with this name, Please, try another </div>    
     <!-- /TMPL_IF -->
-    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post" onsubmit="request.pl" name="getborrower">
+    <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
 			<fieldset class="brief">
 		        <label for="patron">Patron: </label>
