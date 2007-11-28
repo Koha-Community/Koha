@@ -109,6 +109,7 @@
 <!-- LANGUAGE LIMIT -->
 		<p><label for="language-limit">Language: </label>                                        
 		<select name="limit">
+		<option value="">No Limit</option>
 		<!-- TMPL_LOOP NAME="search_languages_loop" -->
 		<option value="ln:<!-- TMPL_VAR NAME="language_code" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="language_name" --> <!-- TMPL_IF NAME="language_locale_name" -->(<!-- TMPL_VAR NAME="language_locale_name" -->)<!-- /TMPL_IF --></option>
 		<!-- /TMPL_LOOP -->

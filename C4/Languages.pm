@@ -162,12 +162,6 @@ Returns a reference to an array of hashes:
 sub getAllLanguages {
     my $languages_loop = [
         {
-            language_code          => "",
-            language_name => "No Limit",
-            language_locale_name   => "",
-            selected       => "selected",
-        },
-        {
             language_code          => "ara",
             language_name =>
               "&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;",
