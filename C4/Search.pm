@@ -1012,6 +1012,8 @@ sub searchResults {
             $oldbiblio->{summary} = $summary;
         }
         # add spans to search term in results for search term highlighting
+        # save a native author, for the <a href=search.lq=<!--tmpl_var name="author"-->> link
+        $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
         foreach my $term ( keys %$span_terms_hashref ) {
             my $old_term = $term;
             if ( length($term) > 3 ) {
