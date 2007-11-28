@@ -87,7 +87,6 @@ if ( $query->param('modifyshelfcontents') ) {
     my $barcode     = $query->param('addbarcode');
     my ($item) = GetItem( 0, $barcode );
 	my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
-
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
         AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
@@ -158,6 +157,8 @@ SWITCH: {
                     }
                 );
             }
+            print $query->redirect("/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=$shelfnumber");
+            exit;
         }
         my @paramsloop;
         foreach ( $query->param() ) {
@@ -169,10 +170,12 @@ SWITCH: {
                     $line{'status'} = $status;
                     $line{'count'}  = $count;
                 }
+                print $query->redirect("/cgi-bin/koha/virtualshelves/shelves.pl");
+                exit;
             }
 
             #if the shelf is not deleted, %line points on null
-            push( @paramsloop, \%line );
+#             push( @paramsloop, \%line );
         }
         $template->param( paramsloop => \@paramsloop );
         my ($shelflist) = GetShelves( $loggedinuser, 2 );
