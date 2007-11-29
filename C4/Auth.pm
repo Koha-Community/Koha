@@ -95,16 +95,16 @@ C4::Auth - Authenticates Koha users
 
 =item get_template_and_user
 
-  my ($template, $borrowernumber, $cookie)
-    = get_template_and_user(
-        {
-           template_name   => "opac-main.tmpl",
-           query           => $query,
-     type            => "opac",
-     authnotrequired => 1,
-     flagsrequired   => {borrow => 1},
-  }
-    );
+	my ($template, $borrowernumber, $cookie)
+		= get_template_and_user(
+		  {
+			template_name   => "opac-main.tmpl",
+			query           => $query,
+			type            => "opac",
+			authnotrequired => 1,
+			flagsrequired   => {borrow => 1},
+		  }
+		);
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
     to C<&checkauth> (in this module) to perform authentification.
@@ -159,6 +159,8 @@ sub get_template_and_user {
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
 
+		my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
+							editcatalogue updatecharge management tools editauthorities serials reports);
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
@@ -376,6 +378,54 @@ has authenticated.
 
 =cut
 
+sub _version_check ($$) {
+    my $type = shift;
+    my $query = shift;
+	my $version;
+    # If Version syspref is unavailable, it means Koha is beeing installed,
+    # and so we must redirect to OPAC maintenance page or to the WebInstaller
+    #warn "about to check version";
+    unless ($version = C4::Context->preference('Version')) {	# assignment, not comparison
+      if ($type ne 'opac') {
+        warn "Install required, redirecting to Installer";
+        print $query->redirect("/cgi-bin/koha/installer/install.pl");
+      } 
+      else {
+        warn "OPAC Install required, redirecting to maintenance";
+        print $query->redirect("/cgi-bin/koha/maintenance.pl");
+      }
+      exit;
+    }
+
+	# check that database and koha version are the same
+	# there is no DB version, it's a fresh install,
+	# go to web installer
+	# there is a DB version, compare it to the code version
+	my $kohaversion=C4::Context::KOHAVERSION;
+	# remove the 3 last . to have a Perl number
+	$kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+	# warn "kohaversion : $kohaversion";
+	if ($version < $kohaversion){
+		my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is "
+			. C4::Context->config("kohaversion");
+		if ($type ne 'opac'){
+			warn sprintf($warning, 'Installer');
+			print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+		} else {
+			warn sprintf("OPAC: " . $warning, 'maintenance');
+			print $query->redirect("/cgi-bin/koha/maintenance.pl");
+		}       
+		exit;
+	}
+}
+
+sub _session_log {
+	(@_) or return 0;
+	open L, ">>/tmp/sessionlog";
+	printf L join("\n",@_);
+	close L;
+}
+
 sub checkauth {
     my $query = shift;
   # warn "Checking Auth";
@@ -393,22 +443,7 @@ sub checkauth {
     };
 	$timeout = 600 unless $timeout;
 
-    # If Version syspref is unavailable, it means Koha is beeing installed,
-    # and so we must redirect to OPAC maintenance page or to the WebInstaller
-    #warn "about to check version";
-    unless (C4::Context->preference('Version')) {
-      if ($type ne 'opac') {
-        warn "Install required, redirecting to Installer";
-        print $query->redirect("/cgi-bin/koha/installer/install.pl");
-      } 
-      else {
-        warn "OPAC Install required, redirecting to maintenance";
-        print $query->redirect("/cgi-bin/koha/maintenance.pl");
-      }
-      exit;
-    }
-
-
+	_version_check($type,$query);
     # state variables
     my $loggedin = 0;
     my %info;
@@ -423,7 +458,7 @@ sub checkauth {
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID")) {
+    elsif ( $sessionID = $query->cookie("CGISESSID")) {		# assignment, not comparison (?)
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session){
@@ -440,26 +475,19 @@ sub checkauth {
         my $ip;
         my $lasttime;
         if ($session) {
-          $ip = $session->param('ip');
-          $lasttime = $session->param('lasttime');
-                $userid = $session->param('id');
+			$ip = $session->param('ip');
+			$lasttime = $session->param('lasttime');
+			$userid = $session->param('id');
         }
-        
     
         if ($logout) {
-
             # voluntary logout the user
-
             $session->flush;      
 			$session->delete();
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
-            open L, ">>/tmp/sessionlog";
-            my $time = localtime( time() );
-            printf L "%20s from %16s logged out at %30s (manually).\n", $userid,
-              $ip, $time;
-            close L;
+            _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,localtime);
         }
         if ($userid) {
             if ( $lasttime < time() - $timeout ) {
@@ -469,27 +497,18 @@ sub checkauth {
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
-                open L, ">>/tmp/sessionlog";
-                my $time = localtime( time() );
-                printf L "%20s from %16s logged out at %30s (inactivity).\n",
-                  $userid, $ip, $time;
-                close L;
+            	_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
             }
             elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
                 # Different ip than originally logged in from
                 $info{'oldip'}        = $ip;
                 $info{'newip'}        = $ENV{'REMOTE_ADDR'};
                 $info{'different_ip'} = 1;
-        $session->delete();
+				$session->delete();
                 C4::Context->_unset_userenv($sessionID);
                 $sessionID = undef;
                 $userid    = undef;
-                open L, ">>/tmp/sessionlog";
-                my $time = localtime( time() );
-                printf L
-"%20s from logged out at %30s (ip changed from %16s to %16s).\n",
-                  $userid, $time, $ip, $info{'newip'};
-                close L;
+            	_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
             }
             else {
                 $cookie = $query->cookie( CGISESSID => $session->id );
@@ -506,7 +525,6 @@ sub checkauth {
     }
     unless ($userid) {
 		my $session = get_session("");
-
         my $sessionID;
 		if ($session) {
 			$sessionID = $session->id;
@@ -517,11 +535,7 @@ sub checkauth {
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
         if ($return) {
-            open L, ">>/tmp/sessionlog";
-            my $time = localtime( time() );
-            printf L "%20s from %16s logged in  at %30s.\n", $userid,
-              $ENV{'REMOTE_ADDR'}, $time;
-            close L;
+            _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
             $cookie = $query->cookie(CGISESSID => $sessionID);
             if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
                 $loggedin = 1;
@@ -532,51 +546,46 @@ sub checkauth {
             }
             if ( $return == 1 ) {
                 my (
-                    $borrowernumber, $firstname,  $surname,
-                    $userflags,      $branchcode, $branchname,
-                    $branchprinter,  $emailaddress
+                   $borrowernumber, $firstname, $surname, $userflags,
+                   $branchcode, $branchname, $branchprinter, $emailaddress
                 );
-                my $sth =
-                  $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
-                  );
+				my $select = "
+				SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
+						branches.branchname    as branchname, 
+						branches.branchprinter as branchprinter, 
+						email 
+				FROM borrowers 
+				LEFT JOIN branches on borrowers.branchcode=branches.branchcode
+				";
+                my $sth = $dbh->prepare("$select where userid=?");
                 $sth->execute($userid);
-                (
-                    $borrowernumber, $firstname,  $surname,
-                    $userflags,      $branchcode, $branchname,
-                    $branchprinter,  $emailaddress
-                  )
-                  = $sth->fetchrow
-                  if ( $sth->rows );
+				($sth->rows) and (
+					$borrowernumber, $firstname, $surname, $userflags,
+					$branchcode, $branchname, $branchprinter, $emailaddress
+				) = $sth->fetchrow;
 
 #         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                 unless ( $sth->rows ) {
-                    my $sth =
-                      $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
-                      );
-                    $sth->execute($cardnumber);
-                    (
-                        $borrowernumber, $firstname,  $surname,
-                        $userflags,      $branchcode, $branchname,
-                        $branchprinter,  $emailaddress
-                      )
-                      = $sth->fetchrow
-                      if ( $sth->rows );
+                    my $sth = $dbh->prepare("$select where cardnumber=?");
+					$sth->execute($cardnumber);
+					($sth->rows) and (
+						$borrowernumber, $firstname, $surname, $userflags,
+						$branchcode, $branchname, $branchprinter, $emailaddress
+					) = $sth->fetchrow;
 
 #           warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
-                        (
-                            $borrowernumber, $firstname, $surname, $userflags,
-                            $branchcode, $branchname, $branchprinter, $emailaddress
-                          )
-                          = $sth->fetchrow
-                          if ( $sth->rows );
+						($sth->rows) and (
+							$borrowernumber, $firstname, $surname, $userflags,
+							$branchcode, $branchname, $branchprinter, $emailaddress
+						) = $sth->fetchrow;
                     }
                 }
 
-# launch a sequence to check if we have a ip for the branch, if we have one we replace the branchcode of the userenv by the branch bound in the ip.
+# launch a sequence to check if we have a ip for the branch, i
+# if we have one we replace the branchcode of the userenv by the branch bound in the ip.
+
                 my $ip       = $ENV{'REMOTE_ADDR'};
                 # if they specify at login, use that
                 if ($query->param('branch')) {
@@ -612,29 +621,28 @@ sub checkauth {
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
-                        $session->param('number',0);
-                        $session->param('id',C4::Context->config('user'));
-                        $session->param('cardnumber',C4::Context->config('user'));
-                        $session->param('firstname',C4::Context->config('user'));
-                        $session->param('surname',C4::Context->config('user'));
-                        $session->param('branch','NO_LIBRARY_SET');
-                        $session->param('branchname','NO_LIBRARY_SET');
-                        $session->param('flags',1);
-                        $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-                        $session->param('ip',$session->remote_addr());
-                        $session->param('lasttime',time());
-                }
-                if ($session){
-                    C4::Context::set_userenv(
-                        $session->param('number'),       $session->param('id'),
-                        $session->param('cardnumber'),   $session->param('firstname'),
-                        $session->param('surname'),      $session->param('branch'),
-                        $session->param('branchname'),   $session->param('flags'),
-                        $session->param('emailaddress'), $session->param('branchprinter')
-                    );
-                }
+				$session->param('number',0);
+				$session->param('id',C4::Context->config('user'));
+				$session->param('cardnumber',C4::Context->config('user'));
+				$session->param('firstname',C4::Context->config('user'));
+				$session->param('surname',C4::Context->config('user'));
+				$session->param('branch','NO_LIBRARY_SET');
+				$session->param('branchname','NO_LIBRARY_SET');
+				$session->param('flags',1);
+				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+				$session->param('ip',$session->remote_addr());
+				$session->param('lasttime',time());
+			}
+			if ($session) {
+				C4::Context::set_userenv(
+				$session->param('number'),       $session->param('id'),
+				$session->param('cardnumber'),   $session->param('firstname'),
+				$session->param('surname'),      $session->param('branch'),
+				$session->param('branchname'),   $session->param('flags'),
+				$session->param('emailaddress'), $session->param('branchprinter')
+				);
+			}
         }
-
         else {
             if ($userid) {
                 $info{'invalid_username_or_password'} = 1;
@@ -649,11 +657,9 @@ sub checkauth {
     {
         # successful login
         unless ($cookie) {
-            $cookie = $query->cookie( CGISESSID => ''
-            );
+            $cookie = $query->cookie( CGISESSID => '' );
         }
-    return ( $userid, $cookie, $sessionID, $flags );
-
+    	return ( $userid, $cookie, $sessionID, $flags );
     }
 
 #
@@ -676,31 +682,7 @@ sub checkauth {
                 push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
     }
 
-    # check that database and koha version are the same
-    # there is no DB version, it's a fresh install,
-    # go to web installer
-    # there is a DB version, compare it to the code version
-    my $kohaversion=C4::Context::KOHAVERSION;
-    # remove the 3 last . to have a Perl number
-    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-#     warn "kohaversion : $kohaversion";
-    if (C4::Context->preference('Version') < $kohaversion){
-      if ($type ne 'opac'){
-      warn "Database update needed, redirecting to Installer. Database is ".C4::Context->preference('Version')." and Koha is : ".C4::Context->config("kohaversion");
-        print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
-      } else {
-      warn "OPAC :Database update needed, redirecting to maintenance. Database is ".C4::Context->preference('Version')." and Koha is : ".C4::Context->config("kohaversion");
-        print $query->redirect("/cgi-bin/koha/maintenance.pl");
-      }       
-      exit;
-    }
-    my $template_name;
-    if ( $type eq 'opac' ) {
-        $template_name = "opac-auth.tmpl";
-    }
-    else {
-        $template_name = "auth.tmpl";
-    }
+    my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
     $template->param(
