@@ -602,8 +602,8 @@ Modify borrower's data
 sub ModMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} ) if ($data{'dateofbirth'} );
-    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'} ) if ($data{'dateexpiry'} );
+    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth' } ) if ($data{'dateofbirth' } );
+    $data{'dateexpiry'}   = format_date_in_iso( $data{ 'dateexpiry' } ) if ($data{ 'dateexpiry' } );
     $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} ) if ($data{'dateenrolled'} );
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
@@ -673,103 +673,58 @@ sub AddMember {
     $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
     $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
     $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
+	# This query should be rewritten to use "?" at execute.
     my $query =
-        "insert into borrowers set cardnumber="
-      . $dbh->quote( $data{'cardnumber'} )
-      . ",surname="
-      . $dbh->quote( $data{'surname'} )
-      . ",firstname="
-      . $dbh->quote( $data{'firstname'} )
-      . ",title="
-      . $dbh->quote( $data{'title'} )
-      . ",othernames="
-      . $dbh->quote( $data{'othernames'} )
-      . ",initials="
-      . $dbh->quote( $data{'initials'} )
-      . ",streetnumber="
-      . $dbh->quote( $data{'streetnumber'} )
-      . ",streettype="
-      . $dbh->quote( $data{'streettype'} )
-      . ",address="
-      . $dbh->quote( $data{'address'} )
-      . ",address2="
-      . $dbh->quote( $data{'address2'} )
-      . ",zipcode="
-      . $dbh->quote( $data{'zipcode'} )
-      . ",city="
-      . $dbh->quote( $data{'city'} )
-      . ",phone="
-      . $dbh->quote( $data{'phone'} )
-      . ",email="
-      . $dbh->quote( $data{'email'} )
-      . ",mobile="
-      . $dbh->quote( $data{'mobile'} )
-      . ",phonepro="
-      . $dbh->quote( $data{'phonepro'} )
-      . ",opacnote="
-      . $dbh->quote( $data{'opacnote'} )
-      . ",guarantorid="
-      . $dbh->quote( $data{'guarantorid'} )
-      . ",dateofbirth="
-      . $dbh->quote( $data{'dateofbirth'} )
-      . ",branchcode="
-      . $dbh->quote( $data{'branchcode'} )
-      . ",categorycode="
-      . $dbh->quote( $data{'categorycode'} )
-      . ",dateenrolled="
-      . $dbh->quote( $data{'dateenrolled'} )
-      . ",contactname="
-      . $dbh->quote( $data{'contactname'} )
-      . ",borrowernotes="
-      . $dbh->quote( $data{'borrowernotes'} )
-      . ",dateexpiry="
-      . $dbh->quote( $data{'dateexpiry'} )
-      . ",contactnote="
-      . $dbh->quote( $data{'contactnote'} )
-      . ",B_address="
-      . $dbh->quote( $data{'B_address'} )
-      . ",B_zipcode="
-      . $dbh->quote( $data{'B_zipcode'} )
-      . ",B_city="
-      . $dbh->quote( $data{'B_city'} )
-      . ",B_phone="
-      . $dbh->quote( $data{'B_phone'} )
-      . ",B_email="
-      . $dbh->quote( $data{'B_email'} )
-      . ",password="
-      . $dbh->quote( $data{'password'} )
-      . ",userid="
-      . $dbh->quote( $data{'userid'} )
-      . ",sort1="
-      . $dbh->quote( $data{'sort1'} )
-      . ",sort2="
-      . $dbh->quote( $data{'sort2'} )
-      . ",contacttitle="
-      . $dbh->quote( $data{'contacttitle'} )
-      . ",emailpro="
-      . $dbh->quote( $data{'emailpro'} )
-      . ",contactfirstname="
-      . $dbh->quote( $data{'contactfirstname'} ) . ",sex="
-      . $dbh->quote( $data{'sex'} ) . ",fax="
-      . $dbh->quote( $data{'fax'} )
-      . ",relationship="
-      . $dbh->quote( $data{'relationship'} )
-      . ",B_streetnumber="
-      . $dbh->quote( $data{'B_streetnumber'} )
-      . ",B_streettype="
-      . $dbh->quote( $data{'B_streettype'} )
-      . ",gonenoaddress="
-      . $dbh->quote( $data{'gonenoaddress'} )
-      . ",lost="
-      . $dbh->quote( $data{'lost'} )
-      . ",debarred="
-      . $dbh->quote( $data{'debarred'} )
-      . ",ethnicity="
-      . $dbh->quote( $data{'ethnicity'} )
-      . ",ethnotes="
-      . $dbh->quote( $data{'ethnotes'} );
-
+        "insert into borrowers set cardnumber=" . $dbh->quote( $data{'cardnumber'} )
+      . ",surname=" 	. $dbh->quote( $data{'surname'} )
+      . ",firstname=" 	. $dbh->quote( $data{'firstname'} )
+      . ",title=" 		. $dbh->quote( $data{'title'} )
+      . ",othernames=" 	. $dbh->quote( $data{'othernames'} )
+      . ",initials=" 	. $dbh->quote( $data{'initials'} )
+      . ",streetnumber=". $dbh->quote( $data{'streetnumber'} )
+      . ",streettype=" 	. $dbh->quote( $data{'streettype'} )
+      . ",address=" 	. $dbh->quote( $data{'address'} )
+      . ",address2=" 	. $dbh->quote( $data{'address2'} )
+      . ",zipcode=" 	. $dbh->quote( $data{'zipcode'} )
+      . ",city=" 		. $dbh->quote( $data{'city'} )
+      . ",phone=" 		. $dbh->quote( $data{'phone'} )
+      . ",email=" 		. $dbh->quote( $data{'email'} )
+      . ",mobile=" 		. $dbh->quote( $data{'mobile'} )
+      . ",phonepro=" 	. $dbh->quote( $data{'phonepro'} )
+      . ",opacnote=" 	. $dbh->quote( $data{'opacnote'} )
+      . ",guarantorid=" . $dbh->quote( $data{'guarantorid'} )
+      . ",dateofbirth=" . $dbh->quote( $data{'dateofbirth'} )
+      . ",branchcode=" 	. $dbh->quote( $data{'branchcode'} )
+      . ",categorycode=" . $dbh->quote( $data{'categorycode'} )
+      . ",dateenrolled=" . $dbh->quote( $data{'dateenrolled'} )
+      . ",contactname=" . $dbh->quote( $data{'contactname'} )
+      . ",borrowernotes=" . $dbh->quote( $data{'borrowernotes'} )
+      . ",dateexpiry=" 	. $dbh->quote( $data{'dateexpiry'} )
+      . ",contactnote=" . $dbh->quote( $data{'contactnote'} )
+      . ",B_address=" 	. $dbh->quote( $data{'B_address'} )
+      . ",B_zipcode=" 	. $dbh->quote( $data{'B_zipcode'} )
+      . ",B_city=" 		. $dbh->quote( $data{'B_city'} )
+      . ",B_phone=" 	. $dbh->quote( $data{'B_phone'} )
+      . ",B_email=" 	. $dbh->quote( $data{'B_email'} )
+      . ",password=" 	. $dbh->quote( $data{'password'} )
+      . ",userid=" 		. $dbh->quote( $data{'userid'} )
+      . ",sort1=" 		. $dbh->quote( $data{'sort1'} )
+      . ",sort2=" 		. $dbh->quote( $data{'sort2'} )
+      . ",contacttitle=" . $dbh->quote( $data{'contacttitle'} )
+      . ",emailpro=" 	. $dbh->quote( $data{'emailpro'} )
+      . ",contactfirstname=" . $dbh->quote( $data{'contactfirstname'} )
+	  . ",sex=" 		. $dbh->quote( $data{'sex'} )
+	  . ",fax=" 		. $dbh->quote( $data{'fax'} )
+      . ",relationship=" . $dbh->quote( $data{'relationship'} )
+      . ",B_streetnumber=" . $dbh->quote( $data{'B_streetnumber'} )
+      . ",B_streettype=" . $dbh->quote( $data{'B_streettype'} )
+      . ",gonenoaddress=" . $dbh->quote( $data{'gonenoaddress'} )
+      . ",lost=" 		. $dbh->quote( $data{'lost'} )
+      . ",debarred=" 	. $dbh->quote( $data{'debarred'} )
+      . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
+      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} );
     my $sth = $dbh->prepare($query);
+	print "Executing SQL: $query";
     $sth->execute;
     $sth->finish;
     $data{'borrowernumber'} = $dbh->{'mysql_insertid'};

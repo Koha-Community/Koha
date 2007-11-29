@@ -5,11 +5,11 @@ use strict;
 use warnings;
 
 use Test::More;
-use vars qw(%cases $dbh $config $ldap);
+use vars qw(%cases $dbh $config $context $ldap);
 
 BEGIN {
 	%cases = (
-		# users from example3.ldif
+		# users from t/LDAP/example3.ldif
 		sss => 'password1',
 		jts => 'password1',
 		rch => 'password2',
@@ -27,11 +27,11 @@ sub do_checkauth (;$$) {
 	return ($ret = checkauth($dbh,$user,$pass), sprintf("(%s,%s) returns '%s'",$user,$pass,$ret));
 }
 
-ok($dbh    = C4::Context->dbh(), 		"Getting dbh from C4::Context");
-ok($config = C4::Context->config(), 	"Getting config (hashref) from C4::Context");
-ok($ldap   = $config->{ldap}, 			"Getting LDAP info from config");
+ok($context= C4::Context->new(), 	"Getting new C4::Context object");
+ok($dbh    = C4::Context->dbh(), 	"Getting dbh from C4::Context");
+ok($dbh    = $context->dbh(), 		"Getting dbh from \$context object");
 
-diag("The basis of Authenticaiton is that we don't auth everybody.");
+diag("The basis of Authentication is that we don't auth everybody.");
 diag("Let's make sure we reject on bad calls.");
 my $ret;
 ok(!($ret = checkauth($dbh)),       "should reject (  no  arguments) returns '$ret'");

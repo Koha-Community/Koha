@@ -21,18 +21,17 @@ use strict;
 use Digest::MD5 qw(md5_base64);
 
 use C4::Context;
-use C4::Members qw(AddMember );
-
+use C4::Members qw(AddMember changepassword);
+use C4::Utils qw( :all );
 use Net::LDAP;
 use Net::LDAP::Filter;
-# use Net::LDAP qw(:all);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;
 	$VERSION = 3.01;	# set the version for version checking
-	our $debug = $ENV{DEBUG} || 0;
+	$debug = $ENV{DEBUG} || 0;
 	@ISA    = qw(Exporter C4::Auth);
 	@EXPORT = qw( checkauth );
 }
@@ -128,37 +127,27 @@ C4::Auth - Authenticates Koha users
 # ~ then gets the LDAP entry
 # ~ and calls the memberadd if necessary
 
-use vars qw(%mapping @ldaphosts $base $ldapname $ldappassword);
-
-%mapping = (
-	firstname     => 'givenName',
-	surname       => 'sn',
-	address       => 'postalAddress',
-	city		  => 'l',
-	zipcode       => 'postalCode',
-	branchcode    => 'branch',
-	emailaddress  => 'mail',
-	categorycode  => 'employeeType',
-	phone         => 'telephoneNumber',
-);
-
-my $prefhost;
-if ($prefhost = C4::Context->preference('ldapserver')) {	# assignment, not comparison
-	warn "Using preference from ldapserver: $prefhost";
-	(@ldaphosts) = split /\|/,$prefhost;	# Potentially multiple LDAP hosts!
-	$base = C4::Context->preference('ldapinfos') || '';		# probably will fail w/o base
-} else {
-	(@ldaphosts) = (qw(localhost));			# Potentially multiple LDAP hosts!
-	$base = "dc=metavore,dc=com";			# But only 1 base.
+sub ldapserver_error ($) {
+	return sprintf('No ldapserver "%s" defined in KOHA_CONF: ' . $ENV{KOHA_CONF}, shift);
 }
 
-$ldapname     = "cn=Manager,$base";		# Your LDAP user.  				EDIT THIS LINE.
-$ldappassword = 'metavore';				# Your LDAP user's password.  	EDIT THIS LINE.
+use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
+my $context = C4::Context->new() 	or die 'C4::Context->new failed';
+my $ldap = $context->{server}->{ldapserver} 	or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
+my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
+my $base      = $ldap->{base}		or die ldapserver_error('base');
+$ldapname     = $ldap->{user}		or die ldapserver_error('user');
+$ldappassword = $ldap->{pass}		or die ldapserver_error('pass');
+our %mapping  = %{$ldap->{mapping}}	or die ldapserver_error('mapping');
+my @mapkeys = keys %mapping;
+print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
+@mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
+print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
 
 my %config = (
 	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
-	replicate => 1,		#    add from LDAP to Koha database for new user
-	   update => 1,		# update from LDAP to Koha database for existing user
+	replicate => $ldap->{replicate} || 1,		#    add from LDAP to Koha database for new user
+	   update => $ldap->{update}    || 1,		# update from LDAP to Koha database for existing user
 );
 
 sub description ($) {
@@ -175,7 +164,7 @@ sub checkauth {
     {
         return 2;	# Koha superuser account
     }
-    my $db = Net::LDAP->new(\@ldaphosts);
+    my $db = Net::LDAP->new([$prefhost]);
 	#$debug and $db->debug(5);
 	my $filter = Net::LDAP::Filter->new("uid=$userid") or die "Failed to create new Net::LDAP::Filter";
     my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
@@ -211,34 +200,55 @@ sub checkauth {
 	if (exists_local($userid)) {
 		($config{update}   ) and &update_local($userid,$password,%borrower);
 	} else {
-		($config{replicate}) and AddMember(%borrower);
+		($config{replicate}) and warn "Replicating!!" and AddMember(%borrower);
 	}
 	return 1;
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
 # Returns borrower hash.
-# Edit %mapping so $memberhash{'xxx'} fits your ldap structure.
+# Edit KOHA_CONF so $memberhash{'xxx'} fits your ldap structure.
 # Ensure that mandatory fields are correctly filled!
 #
 sub ldap_entry_2_hash ($$) {
 	my $userldapentry = shift;
 	my %borrower = ( cardnumber => shift );
 	my %memberhash;
-	my $x = $userldapentry->{asn}{attributes} or return undef;
-	my $key;
-	foreach my $k (@$x) {
-		foreach my $k2 ( keys %$k ) {
-			if ($k2 eq 'type') {
-				$key = $$k{$k2};
-			} else {
-				$memberhash{$key} .= map {$_ . " "} @$k{$k2};
-			}
-		}
+	print "keys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n";
+	print $userldapentry->dump();
+	foreach (keys %$userldapentry) {
+		print "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
+		hashdump("LDAP key: ",$userldapentry->{$_});
 	}
-	foreach my $key (%mapping) {
-		my $data = $memberhash{$mapping{$key}}; 
-		defined $data or $data = ' ';
+	warn "->{asn}->{attributes} : " . $userldapentry->{asn}->{attributes} ;
+	my $x = $userldapentry->{asn}->{attributes} or return undef;
+	my $key;
+
+# asn   (HASH)
+# LDAP key: ->{attributes} = ARRAY w/ 17 members.
+# LDAP key: ->{attributes}->{HASH(0x9234290)} = HASH w/ 2 keys.
+# LDAP key: ->{attributes}->{HASH(0x9234290)}->{type} = cn
+# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals} = ARRAY w/ 3 members.
+# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{           sss} = sss
+# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{   Steve Smith} = Steve Smith
+# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{Steve S. Smith} = Steve S. Smith
+#					$x				$anon
+# LDAP key: ->{attributes}->{HASH(0x9234490)} = HASH w/ 2 keys.
+# LDAP key: ->{attributes}->{HASH(0x9234490)}->{type} = o
+# LDAP key: ->{attributes}->{HASH(0x9234490)}->{vals} = ARRAY w/ 1 members.
+# LDAP key: ->{attributes}->{HASH(0x9234490)}->{vals}->{metavore} = metavore
+#                        $x=([ cn=>['sss','Steve Smith','Steve S. Smith'], sss, o=>['metavore'], ])
+# . . . . .
+
+	foreach my $anon (@$x) {
+		$key = $anon->{type} or next;
+		$memberhash{$key} = join " ", @{$anon->{vals}};
+	}
+	foreach my $key (keys %mapping) {
+		my  $data = $memberhash{$mapping{$key}->{is}}; 
+		unless (defined $data) { 
+			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
+		}
 		$borrower{$key} = ($data ne '') ? $data : ' ' ;
 	}
 	$borrower{initials} = $memberhash{initials} || 
@@ -262,15 +272,15 @@ sub update_local($$%) {
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare("
 UPDATE	borrowers 
-SET 	firstname=?,surname=?,initials=?,streetaddress=?,city=?,phone=?, categorycode=?,branchcode=?,emailaddress=?,sort1=?
+SET 	firstname=?,surname=?,initials=?,address=?,city=?,phone=?, categorycode=?,branchcode=?,email=?,sort1=?
 WHERE 	cardnumber=?
 	");
 	$sth->execute(
 		$borrower{firstname},    $borrower{surname},
-		$borrower{initials},     $borrower{streetaddress},
+		$borrower{initials},     $borrower{address},
 		$borrower{city},         $borrower{phone},
 		$borrower{categorycode}, $borrower{branchcode},
-		$borrower{emailaddress}, $borrower{sort1},
+		$borrower{email}, 		 $borrower{sort1},
 		$userid
 	);
 
