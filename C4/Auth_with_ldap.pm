@@ -33,8 +33,192 @@ BEGIN {
 	$VERSION = 3.01;	# set the version for version checking
 	$debug = $ENV{DEBUG} || 0;
 	@ISA    = qw(Exporter C4::Auth);
-	@EXPORT = qw( checkauth );
+	@EXPORT = qw( checkpw );
 }
+
+# Redefine checkpw:
+# connect to LDAP (named or anonymous)
+# ~ retrieves $userid from "uid"
+# ~ then compares $password with userPassword 
+# ~ then gets the LDAP entry
+# ~ and calls the memberadd if necessary
+
+sub ldapserver_error ($) {
+	return sprintf('No ldapserver "%s" defined in KOHA_CONF: ' . $ENV{KOHA_CONF}, shift);
+}
+
+use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
+my $context = C4::Context->new() 	or die 'C4::Context->new failed';
+my $ldap = $context->{server}->{ldapserver} 	or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
+my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
+my $base      = $ldap->{base}		or die ldapserver_error('base');
+$ldapname     = $ldap->{user}		or die ldapserver_error('user');
+$ldappassword = $ldap->{pass}		or die ldapserver_error('pass');
+our %mapping  = %{$ldap->{mapping}}	or die ldapserver_error('mapping');
+my @mapkeys = keys %mapping;
+$debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
+@mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
+$debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
+
+my %config = (
+	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
+	replicate => $ldap->{replicate} || 1,		#    add from LDAP to Koha database for new user
+	   update => $ldap->{update}    || 1,		# update from LDAP to Koha database for existing user
+);
+
+sub description ($) {
+	my $result = shift or return undef;
+	return "LDAP error #" . $result->code
+			. ": " . $result->error_name . "\n"
+			. "# " . $result->error_text . "\n";
+}
+
+sub checkpw {
+    my ($dbh, $userid, $password) = @_;
+    if (   $userid   eq C4::Context->config('user')
+        && $password eq C4::Context->config('pass') )
+    {
+        return 2;	# Koha superuser account
+    }
+    my $db = Net::LDAP->new([$prefhost]);
+	#$debug and $db->debug(5);
+	my $filter = Net::LDAP::Filter->new("uid=$userid") or die "Failed to create new Net::LDAP::Filter";
+    my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
+    if ($res->code) {		# connection refused
+        warn "LDAP bind failed as $ldapname: " . description($res);
+        return 0;
+    }
+	my $search = $db->search(
+		  base => $base,
+	 	filter => $filter,
+		# attrs => ['*'],
+	) or die "LDAP search failed to return object.";
+	my $count = $search->count;
+	if ($search->code > 0) {
+		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count) . description($search);
+		return 0;
+	}
+	if ($count != 1) {
+		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count);
+		return 0;
+	}
+
+	my $userldapentry = $search->shift_entry;
+	my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
+	if ($cmpmesg->code != 6) {
+		warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
+		return 0;
+	}
+	unless ($config{update} or $config{replicate}) {
+		return 1;
+	}
+	my %borrower = ldap_entry_2_hash($userldapentry,$userid);
+	$debug and print "checkpw received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
+	my ($borrowernumber,$cardnumber,$userid,$savedpw) = exists_local($userid);
+	if ($borrowernumber) {
+		($config{update}   ) and my $c2 = &update_local($userid,$password,$borrowernumber,\%borrower) || '';
+		($cardnumber eq $c2) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
+	} else {
+		($config{replicate}) and $borrowernumber = AddMember(%borrower);
+	}
+	return(1, $cardnumber);
+}
+
+# Pass LDAP entry object and local cardnumber (userid).
+# Returns borrower hash.
+# Edit KOHA_CONF so $memberhash{'xxx'} fits your ldap structure.
+# Ensure that mandatory fields are correctly filled!
+#
+sub ldap_entry_2_hash ($$) {
+	my $userldapentry = shift;
+	my %borrower = ( cardnumber => shift );
+	my %memberhash;
+	if ($debug) {
+		print "keys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
+		foreach (keys %$userldapentry) {
+			print "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
+			hashdump("LDAP key: ",$userldapentry->{$_});
+		}
+	}
+	my $x = $userldapentry->{attrs} or return undef;
+	my $key;
+	foreach (keys %$x) {
+		$memberhash{$_} = join ' ', @{$x->{$_}};	
+		$debug and print sprintf("building \$memberhash{%s} = ", $_), join ' ', @{$x->{$_}}, "\n";
+	}
+	$debug and print "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
+					"Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
+	foreach my $key (keys %mapping) {
+		my  $data = $memberhash{$mapping{$key}->{is}}; 
+		$debug and printf "mapping %20s ==> %-20s ($data)\n", $key, $mapping{$key}->{is};
+		unless (defined $data) { 
+			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
+		}
+		$borrower{$key} = ($data ne '') ? $data : ' ' ;
+	}
+	$borrower{initials} = $memberhash{initials} || 
+		( substr($borrower{'firstname'},0,1)
+  		. substr($borrower{ 'surname' },0,1)
+  		. " ");
+	return %borrower;
+}
+
+sub exists_local($) {
+	my $arg = shift;
+	my $dbh = C4::Context->dbh;
+	my $select = "SELECT borrowernumber,cardnumber,userid,password from borrowers ";
+
+	my $sth = $dbh->prepare("$select WHERE userid=?");	# was cardnumber=?
+	$sth->execute($arg);
+	$debug and printf "Userid '$arg' exists_local? %s\n", $sth->rows;
+	($sth->rows == 1) and return $sth->fetchrow;
+
+	$sth = $dbh->prepare("$select WHERE cardnumber=?");
+	$sth->execute($arg);
+	$debug and printf "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
+	($sth->rows == 1) and return $sth->fetchrow;
+	return 0;
+}
+
+sub update_local($$$$) {
+	my   $userid   = shift             or return undef;
+	my   $digest   = md5_base64(shift) or return undef;
+	my $borrowerid = shift             or return undef;
+	my $borrower   = shift             or return undef;
+	my $dbh = C4::Context->dbh;
+	my $query = "UPDATE  borrowers\nSET     " . 
+		join(',', map {"$_=?"} keys %$borrower) .				# don't need to sort: keys order is deterministic
+		"\nWHERE   borrowernumber=? "; 
+	my $sth = $dbh->prepare($query);
+	if ($debug) {
+		print STDERR $query, "\n",
+			join "\n", map {"$_ = " . $borrower->{$_}} 
+			keys %$borrower;
+		print STDERR "\nuserid = $userid\n";
+	}
+	$sth->execute(
+		(map {$borrower->{$_}} keys %$borrower), $borrowerid		# relies on deterministic keys order to match above
+	);
+
+	# MODIFY PASSWORD/LOGIN
+	# search borrowerid
+	$debug and print "changing local password for borrowernumber=$borrowerid to '$digest'\n";
+	changepassword($userid, $borrowerid, $digest);
+
+	# Confirm changes
+	$sth = $dbh->prepare("SELECT password,cardnumber FROM borrowers WHERE borrowernumber=? ");
+	$sth->execute($borrowerid);
+	if ($sth->rows) {
+		my ($md5password, $cardnum) = $sth->fetchrow;
+        ($digest eq $md5password) and return $cardnum;
+		warn "Password mismatch after update to cardnumber=$cardnum (borrowernumber=$borrowerid)";
+		return undef;
+	}
+	die "Unexpected error after password update to userid/borrowernumber: $userid / $borrowerid.";
+}
+
+1;
+__END__
 
 =head1 NAME
 
@@ -44,20 +228,19 @@ C4::Auth - Authenticates Koha users
 
   use C4::Auth_with_ldap;
 
-=head1 LDAP specific
+=head1 LDAP Configuration
 
     This module is specific to LDAP authentification. It requires Net::LDAP package and one or more
 	working LDAP servers.
 	To use it :
-	   * Modify ldapserver and ldapinfos via web "Preferences".
-	   * Modify the values (right side) of %mapping pairs, to match your LDAP fields.
-	   * Modify $ldapname and $ldappassword, if required.
+	   * Modify ldapserver element in KOHA_CONF
+	   * Establish field mapping in <mapping> element.
 
 	It is assumed your user records are stored according to the inetOrgPerson schema, RFC#2798.
-	Thus the username must match the "uid" field, and the password must match the "userPassword" field.
+	Thus the username must match the "uid" field, and the password must match the "userpassword" field.
 
-	Make sure that the required fields are populated in your LDAP database.  What are they?  Well, in
-	mysql you can check the database table "borrowers" like this:
+	Make sure that the required fields are populated in your LDAP database (and mapped in KOHA_CONF).  
+	What are the required fields?  Well, in mysql you can check the database table "borrowers" like this:
 
 	mysql> show COLUMNS from borrowers;
 		+------------------+--------------+------+-----+---------+----------------+
@@ -108,7 +291,7 @@ C4::Auth - Authenticates Koha users
 		| sex              | varchar(1)   | YES  |     | NULL    |                | 
 		| password         | varchar(30)  | YES  |     | NULL    |                | 
 		| flags            | int(11)      | YES  |     | NULL    |                | 
-		| userid           | varchar(30)  | YES  | MUL | NULL    |                | 
+		| userid           | varchar(30)  | YES  | MUL | NULL    |                |  # UNIQUE in next release.
 		| opacnote         | mediumtext   | YES  |     | NULL    |                | 
 		| contactnote      | varchar(255) | YES  |     | NULL    |                | 
 		| sort1            | varchar(80)  | YES  |     | NULL    |                | 
@@ -116,215 +299,64 @@ C4::Auth - Authenticates Koha users
 		+------------------+--------------+------+-----+---------+----------------+
 		50 rows in set (0.01 sec)
 	
-		Then %mappings establishes the relationship between mysql field and LDAP attribute.
+		Where Null="NO", the field is required.
 
 =cut
 
-# Redefine checkauth:
-# connect to LDAP (named or anonymous)
-# ~ retrieves $userid from "uid"
-# ~ then compares $password with userPassword 
-# ~ then gets the LDAP entry
-# ~ and calls the memberadd if necessary
+=head1 KOHA_CONF and field mapping
 
-sub ldapserver_error ($) {
-	return sprintf('No ldapserver "%s" defined in KOHA_CONF: ' . $ENV{KOHA_CONF}, shift);
-}
+Example XML stanza for LDAP conifugration in KOHA_CONF:
 
-use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
-my $context = C4::Context->new() 	or die 'C4::Context->new failed';
-my $ldap = $context->{server}->{ldapserver} 	or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
-my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
-my $base      = $ldap->{base}		or die ldapserver_error('base');
-$ldapname     = $ldap->{user}		or die ldapserver_error('user');
-$ldappassword = $ldap->{pass}		or die ldapserver_error('pass');
-our %mapping  = %{$ldap->{mapping}}	or die ldapserver_error('mapping');
-my @mapkeys = keys %mapping;
-print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
-@mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
-print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (populated): ", join ' ', @mapkeys, "\n";
+	<!-- LDAP SERVER (optional) -->
+	<server id="ldapserver"  listenref="ldapserver">
+		<hostname>localhost</hostname>
+		<base>dc=metavore,dc=com</base>
+		<user>cn=Manager,dc=metavore,dc=com</user>             <!-- DN, if not anonymous -->
+		<pass>metavore</pass>      <!-- password, if not anonymous -->
+		<replicate>1</replicate>   <!-- add new users from LDAP to Koha database -->
+		<update>1</update>         <!-- update existing users in Koha database -->
+		<mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
+		<firstname    is="givenname"      ></firstname>
+		<surname      is="sn"             ></surname>
+		<address      is="postaladdress"  ></address>
+		<city         is="l"              >Athens, OH</city>
+		<zipcode      is="postalcode"     ></zipcode>
+		<branchcode   is="branch"         >MAIN</branchcode>
+		<userid       is="uid"            ></userid>
+		<password     is="userpassword"   ></password>
+		<email        is="mail"           ></email>
+		<categorycode is="employeetype"   >PT</categorycode>
+		<phone        is="telephonenumber"></phone>
+		</mapping>
+	</server>
 
-my %config = (
-	anonymous => ($ldapname and $ldappassword) ? 0 : 1,
-	replicate => $ldap->{replicate} || 1,		#    add from LDAP to Koha database for new user
-	   update => $ldap->{update}    || 1,		# update from LDAP to Koha database for existing user
-);
+The <mapping> subelements establishe the relationship between mysql fields and LDAP attributes. The element name
+is the column in mysql, with the "is" characteristic set to the LDAP attribute name.  Optionally, any content
+between the element tags is taken as the default value.  In this example, the default categorycode is "PT" (for
+patron).  
 
-sub description ($) {
-	my $result = shift or return undef;
-	return "LDAP error #" . $result->code
-			. ": " . $result->error_name . "\n"
-			. "# " . $result->error_text . "\n";
-}
+=cut
 
-sub checkauth {
-    my ($dbh, $userid, $password) = @_;
-    if (   $userid   eq C4::Context->config('user')
-        && $password eq C4::Context->config('pass') )
-    {
-        return 2;	# Koha superuser account
-    }
-    my $db = Net::LDAP->new([$prefhost]);
-	#$debug and $db->debug(5);
-	my $filter = Net::LDAP::Filter->new("uid=$userid") or die "Failed to create new Net::LDAP::Filter";
-    my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
-    if ($res->code) {		# connection refused
-        warn "LDAP bind failed as $ldapname: " . description($res);
-        return 0;
-    }
-	my $search = $db->search(
-		  base => $base,
-	 	filter => $filter,
-		# attrs => ['*'],
-	) or die "LDAP search failed to return object.";
-	my $count = $search->count;
-	if ($search->code > 0) {
-		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count) . description($search);
-		return 0;
-	}
-	if ($count != 1) {
-		warn sprintf("LDAP Auth rejected : %s gets %d hits\n", $filter->as_string, $count);
-		return 0;
-	}
-
-	my $userldapentry = $search->shift_entry;
-	my $cmpmesg = $db->compare( $userldapentry, attr=>'userPassword', value => $password );
-	if($cmpmesg->code != 6) {
-		warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
-		return 0;
-	}
-	unless($config{update} or $config{replicate}) {
-		return 1;
-	}
-	my %borrower = ldap_entry_2_hash($userldapentry,$userid);
-	if (exists_local($userid)) {
-		($config{update}   ) and &update_local($userid,$password,%borrower);
-	} else {
-		($config{replicate}) and warn "Replicating!!" and AddMember(%borrower);
-	}
-	return 1;
-}
-
-# Pass LDAP entry object and local cardnumber (userid).
-# Returns borrower hash.
-# Edit KOHA_CONF so $memberhash{'xxx'} fits your ldap structure.
-# Ensure that mandatory fields are correctly filled!
+# ========================================
+# Using attrs instead of {asn}->attributes
+# ========================================
 #
-sub ldap_entry_2_hash ($$) {
-	my $userldapentry = shift;
-	my %borrower = ( cardnumber => shift );
-	my %memberhash;
-	print "keys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n";
-	print $userldapentry->dump();
-	foreach (keys %$userldapentry) {
-		print "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
-		hashdump("LDAP key: ",$userldapentry->{$_});
-	}
-	warn "->{asn}->{attributes} : " . $userldapentry->{asn}->{attributes} ;
-	my $x = $userldapentry->{asn}->{attributes} or return undef;
-	my $key;
-
-# asn   (HASH)
-# LDAP key: ->{attributes} = ARRAY w/ 17 members.
-# LDAP key: ->{attributes}->{HASH(0x9234290)} = HASH w/ 2 keys.
-# LDAP key: ->{attributes}->{HASH(0x9234290)}->{type} = cn
-# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals} = ARRAY w/ 3 members.
-# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{           sss} = sss
-# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{   Steve Smith} = Steve Smith
-# LDAP key: ->{attributes}->{HASH(0x9234290)}->{vals}->{Steve S. Smith} = Steve S. Smith
-#					$x				$anon
-# LDAP key: ->{attributes}->{HASH(0x9234490)} = HASH w/ 2 keys.
-# LDAP key: ->{attributes}->{HASH(0x9234490)}->{type} = o
-# LDAP key: ->{attributes}->{HASH(0x9234490)}->{vals} = ARRAY w/ 1 members.
-# LDAP key: ->{attributes}->{HASH(0x9234490)}->{vals}->{metavore} = metavore
-#                        $x=([ cn=>['sss','Steve Smith','Steve S. Smith'], sss, o=>['metavore'], ])
-# . . . . .
-
-	foreach my $anon (@$x) {
-		$key = $anon->{type} or next;
-		$memberhash{$key} = join " ", @{$anon->{vals}};
-	}
-	foreach my $key (keys %mapping) {
-		my  $data = $memberhash{$mapping{$key}->{is}}; 
-		unless (defined $data) { 
-			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
-		}
-		$borrower{$key} = ($data ne '') ? $data : ' ' ;
-	}
-	$borrower{initials} = $memberhash{initials} || 
-		( substr($borrower{'firstname'},0,1)
-  		. substr($borrower{ 'surname' },0,1)
-  		. "  ");
-	return %borrower;
-}
-
-sub exists_local($) {
-	my $sth = C4::Context->dbh->prepare("SELECT password from borrowers WHERE cardnumber=?");
-	$sth->execute(shift);
-	return ($sth->rows) ? 1 : 0 ;
-}
-
-sub update_local($$%) {
-	# warn "MODIFY borrower";
-	my   $userid = shift or return undef;
-	my   $digest = md5_base64(shift) or return undef;
-	my %borrower = shift or return undef;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("
-UPDATE	borrowers 
-SET 	firstname=?,surname=?,initials=?,address=?,city=?,phone=?, categorycode=?,branchcode=?,email=?,sort1=?
-WHERE 	cardnumber=?
-	");
-	$sth->execute(
-		$borrower{firstname},    $borrower{surname},
-		$borrower{initials},     $borrower{address},
-		$borrower{city},         $borrower{phone},
-		$borrower{categorycode}, $borrower{branchcode},
-		$borrower{email}, 		 $borrower{sort1},
-		$userid
-	);
-
-	# MODIFY PASSWORD/LOGIN
-	# search borrowerid
-	$sth = $dbh->prepare("SELECT borrowernumber from borrowers WHERE cardnumber=? ");
-	$sth->execute($userid);
-	my ($borrowerid) = $sth->fetchrow;
-	# warn "change local password for $borrowerid setting $password";
-	changepassword($userid, $borrowerid, $digest);
-
-	# Confirm changes
-	my $cardnumber;
-	$sth = $dbh->prepare("SELECT password,cardnumber from borrowers WHERE userid=? ");
-	$cardnumber = confirmer($sth,$userid,$digest) and return $cardnumber;
-    $sth = $dbh->prepare("SELECT password,cardnumber from borrowers WHERE cardnumber=? ");
-	$cardnumber = confirmer($sth,$userid,$digest) and return $cardnumber;
-	die "Unexpected error after password update to $userid / $cardnumber.";
-}
-
-sub confirmer($$$) {
-	my    $sth = shift or return undef;
-	my $userid = shift or return undef;
-	my $digest = shift or return undef;
-	$sth->execute($userid);
-	if ($sth->rows) {
-		my ($md5password, $othernum) = $sth->fetchrow;
-        ($digest eq $md5password) and return $othernum;
-		warn "Password mismatch after update to userid=$userid";
-		return undef;
-    }
-	warn "Could not recover record after updating password for userid=$userid";
-	return 0;
-}
-1;
-__END__
-
-=back
+# 	LDAP key: ->{             cn} = ARRAY w/ 3 members.
+# 	LDAP key: ->{             cn}->{           sss} = sss
+# 	LDAP key: ->{             cn}->{   Steve Smith} = Steve Smith
+# 	LDAP key: ->{             cn}->{Steve S. Smith} = Steve S. Smith
+#
+# 	LDAP key: ->{      givenname} = ARRAY w/ 1 members.
+# 	LDAP key: ->{      givenname}->{Steve} = Steve
+#
 
 =head1 SEE ALSO
 
 CGI(3)
 
 Net::LDAP()
+
+XML::Simple()
 
 Digest::MD5(3)
 
