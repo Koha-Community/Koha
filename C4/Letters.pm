@@ -192,8 +192,7 @@ sub getalert {
     while ( my $line = $sth->fetchrow_hashref ) {
         push @result, $line;
     }
-    return \@result if $#result >= 0;    # return only if there is one result.
-    return;
+    return \@result;
 }
 
 =head2 findrelatedto
