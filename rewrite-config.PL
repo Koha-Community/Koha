@@ -72,7 +72,6 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
   "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl/%vd",$^V))."/koha",
-  # Corrected to match Debian Perl req's.... -fbcit
   "__CGI_DIR__" => $prefix."/lib/cgi-bin/koha",
   "__LOG_DIR__" => "/var/log",
   "__DB_TYPE__" => "mysql",
