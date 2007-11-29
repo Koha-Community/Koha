@@ -837,31 +837,31 @@ AddIssue does the following things :
 sub AddIssue {
     my ( $borrower, $barcode, $date, $cancelreserve ) = @_;
     my $dbh = C4::Context->dbh;
-my $barcodecheck=CheckValidBarcode($barcode);
-if ($borrower and $barcode and $barcodecheck ne '0'){
+	my $barcodecheck=CheckValidBarcode($barcode);
+	if ($borrower and $barcode and $barcodecheck ne '0'){
 #   my ($borrower, $flags) = &GetMemberDetails($borrowernumber, 0);
-    # find which item we issue
-    my $item = GetItem('', $barcode);
-	
-	my $datedue;
-    
-    # get actual issuing if there is one
-    my $actualissue = GetItemIssue( $item->{itemnumber});
-    
-    # get biblioinformation for this item
-    my $biblio = GetBiblioFromItemNumber($item->{itemnumber});
+		# find which item we issue
+		my $item = GetItem('', $barcode);
+		my $datedue; 
+		
+		# get actual issuing if there is one
+		my $actualissue = GetItemIssue( $item->{itemnumber});
+		
+		# get biblioinformation for this item
+		my $biblio = GetBiblioFromItemNumber($item->{itemnumber});
+		
+		#
+		# check if we just renew the issue.
+		#
+		if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
+			AddRenewal(
+				$borrower->{'borrowernumber'},
+				$item->{'itemnumber'}
+			);
 
-    #
-    # check if we just renew the issue.
-    #
-    if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
-        AddRenewal(
-            $borrower->{'borrowernumber'},
-            $item->{'itemnumber'}
-        );
-
-    }
-    else {# it's NOT a renewal
+		}
+		else {
+        # it's NOT a renewal
         if ( $actualissue->{borrowernumber}) {
             # This book is currently on loan, but not to the person
             # who wants to borrow it now. mark it returned before issuing to the new borrower
@@ -972,14 +972,18 @@ if ($borrower and $barcode and $barcodecheck ne '0'){
         $item->{'issues'}++;
         $sth =
           $dbh->prepare(
-            "UPDATE items SET issues=?, holdingbranch=?, itemlost=0, datelastborrowed  = now() WHERE itemnumber=?");
+            "UPDATE items SET issues=?, holdingbranch=?, itemlost=0, datelastborrowed  = now(), onloan = ? WHERE itemnumber=?");
         $sth->execute(
             $item->{'issues'},
             C4::Context->userenv->{'branch'},
+			$dateduef->output('iso'),
             $item->{'itemnumber'}
         );
         $sth->finish;
         &ModDateLastSeen( $item->{'itemnumber'} );
+        my $record = GetMarcItem( $item->{'biblionumber'}, $item->{'itemnumber'} );
+        my $frameworkcode = GetFrameworkCode( $item->{'biblionumber'} );                                                                                         
+        ModItemInMarc( $record, $item->{'biblionumber'}, $item->{'itemnumber'}, $frameworkcode );
         # If it costs to borrow this book, charge it to the patron's account.
         my ( $charge, $itemtype ) = GetIssuingCharges(
             $item->{'itemnumber'},
@@ -1174,13 +1178,20 @@ sub AddReturn {
     # continue to deal with returns cases, but not only if we have an issue
     
     # the holdingbranch is updated if the document is returned in an other location .
-    if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} )
-            {
-                    UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
-    #         	reload iteminformation holdingbranch with the userenv value
-                    $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
-            }
+    if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
+		UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
+		#         	reload iteminformation holdingbranch with the userenv value
+		$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+	}
         ModDateLastSeen( $iteminformation->{'itemnumber'} );
+		if ($iteminformation->{borrowernumber}){
+			my $sth = $dbh->prepare("UPDATE items SET onloan = NULL where itemnumber = ?");
+			$sth->execute($iteminformation->{'itemnumber'});
+			$sth->finish();
+			my $record = GetMarcItem( $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'} );
+			my $frameworkcode = GetFrameworkCode( $iteminformation->{'biblionumber'} );
+			ModItemInMarc( $record, $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
+		}
         ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
         
         # fix up the accounts.....
@@ -1640,7 +1651,7 @@ sub AddRenewal {
     );
     $sth->execute( $datedue->output('iso'), $renews, $borrowernumber, $itemnumber );
     $sth->finish;
-
+    
     # Log the renewal
 
     # Charge a new rental fee, if applicable?
