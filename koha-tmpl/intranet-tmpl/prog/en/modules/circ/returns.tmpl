@@ -14,12 +14,9 @@
    <div id="bd">
 	<div id="yui-main">
 
-<h1>Check In</h1>
-
 <div class="yui-g">
 <!-- case of a mistake in transfer loop -->
-<!-- TMPL_IF Name="WrongTransfer" --><div class="message">  <h3 class="problem">Please Transfer <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
-<br />
+<!-- TMPL_IF Name="WrongTransfer" --><div class="message"><!-- WrongTransfer --><h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
 <!-- TMPL_IF Name="wborcnum"--><h5>Hold for:</h5> 
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"></a> (<!-- TMPL_VAR Name="wborcnum" -->)</li>
         <li><!-- TMPL_VAR Name="wborsurname" -->, <!-- TMPL_VAR Name="wborfirstname" --> </li>
@@ -29,20 +26,22 @@
         <!-- TMPL_IF NAME="wborphone" --><li><!-- TMPL_VAR Name="wborphone" --></li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="wboremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="wboremail" -->"><!-- TMPL_VAR NAME="wboremail" --></a></li><!-- /TMPL_IF -->
         </ul>
-    <!-- /TMPL_IF -->
   
     <form method="post" action="returns.pl">
             <input type="hidden" name="WT-itemNumber" value="<!-- TMPL_VAR Name="WrongTransferItem" -->" />
             <input type="hidden" name="WT-waitingAt" value="<!-- TMPL_VAR Name="TransferWaitingAt" -->" />
             <input type="hidden" name="WT-From" value="<!-- TMPL_VAR Name="wtransfertFrom" -->" />
         <input type="submit" class="approve" value="Confirm" />
-    </form></div>
+    </form>
+    <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF Name="found" -->
+<!-- found -->
 <div class="message">
 <!-- case of a reservation found, and display info -->
     <!-- TMPL_IF Name="waiting" -->
+	<!-- waiting -->
         <h3>Hold Found (item is already waiting) </h3>
 		<h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
         <h5>Hold for:</h5>
@@ -69,6 +68,7 @@
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="diffbranch" -->
+		<!-- diffbranch -->
         <h2>Hold needing transfer found</h2>
         <h3><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
                 <h4>Hold for: </h4>
@@ -98,19 +98,11 @@
 
     <!-- case of a return of item, but with no reservation after, if the item must be  returned to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
-	  <h2>Please transfer <em><!-- TMPL_VAR NAME="title" --></em> to <!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="homebranch" --></h2>
-            <form method="post" action="returns.pl">
-                <!-- TMPL_LOOP Name="inputloop" -->
-                    <input type="hidden" name="ri-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="barcode" -->" />
-                    <input type="hidden" name="dd-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="duedate" -->" />
-                    <input type="hidden" name="bn-<!-- TMPL_VAR NAME="counter" -->" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-                <!-- /TMPL_LOOP -->
-                <input type="hidden" name="barcode" value="0" />
-                <input type="submit" class="approve" value="OK" />
-            </form>
-    <!-- /TMPL_IF -->
+	<!-- transfer -->
+	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3><!-- /TMPL_IF -->
     
     <!-- TMPL_IF Name="diffbranch" -->
+	<!-- diffbranch -->
         <h3>Item Consigned:</h3>
         <table>
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
@@ -134,6 +126,7 @@
     
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
+	<!--  reserved  -->
 	  <h3>Hold Found:</h3>
        <h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
         <h5>Hold for:</h5>
@@ -196,7 +189,7 @@
 <!-- /TMPL_IF -->
 
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
-            <fieldset>
+            <fieldset><legend>Check In</legend>
             <label for="barcode">Enter item barcode: </label><input name="barcode" id="barcode" size="14" maxlength="14" class="focus" /> <input type="submit" value="Submit" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
