@@ -75,6 +75,7 @@ sub get_xisbns {
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
         $thing_response = _get_url($url,'thingisbn');
+		undef $thing_response if $thing_response == 1;
     }
 
     # XISBN

@@ -1,5 +1,5 @@
 <div id="masthead">
-<h1 id="libraryname"><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1>
+<h1 id="libraryname"><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
 </div>
 
 <div id="members">
