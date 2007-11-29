@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use HTML::Template;
+use HTML::Template::Pro;
 use strict;
 require Exporter;
 use C4::Record;

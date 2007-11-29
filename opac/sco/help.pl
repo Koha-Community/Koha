@@ -5,7 +5,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Output;
-use HTML::Template;
+use HTML::Template::Pro;
 
 # begin code modifed by dan
 my $query = new CGI;

@@ -19,7 +19,7 @@ use CGI;
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
-use HTML::Template;
+use HTML::Template::Pro;
 use CGI::Session;
 
 my $query=new CGI;

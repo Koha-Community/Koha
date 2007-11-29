@@ -22,7 +22,7 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
-use HTML::Template;
+use HTML::Template::Pro;
 use C4::Context;
 use C4::Search;
 use C4::Auth;

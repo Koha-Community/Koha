@@ -87,10 +87,10 @@ if ( $step && $step == 1 ) {
     unless ( eval { require DBD::mysql } ) {
         push @missing, { name => "DBD::mysql" };
     }
-    unless ( eval { require HTML::Template } ) {
+    unless ( eval { require HTML::Template::Pro } ) {
         push @missing, { name => "HTML::Template::Pro" };
     }
-    unless ( eval { require HTML::Template } ) {
+    unless ( eval { require Date::Calc } ) {
         push @missing, { name => "Date::Calc" };
     }
     unless ( eval { require Digest::MD5 } ) {

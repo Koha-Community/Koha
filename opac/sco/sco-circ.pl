@@ -36,7 +36,7 @@ use DBI;
 use C4::Auth;
 use C4::Output;
 use C4::Koha;
-use HTML::Template;
+use HTML::Template::Pro;
 use C4::Date;
 
 my $query=new CGI;

@@ -5,7 +5,7 @@ use CGI;
 use C4::Auth;
 use C4::Labels;
 use C4::Output;
-use HTML::Template;
+use HTML::Template::Pro;
 use POSIX;
 
 #use Data::Dumper;
