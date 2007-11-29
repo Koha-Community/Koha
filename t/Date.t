@@ -1,3 +1,6 @@
+print "WARNING: This module (C4::Date) is obsolete.  
+Developers should use C4::Dates instead!\n";
+
 BEGIN { $| = 1; print "1..4\n"; }
 END {print "not ok 1\n" unless $loaded;}
 use C4::Date;

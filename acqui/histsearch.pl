@@ -53,7 +53,7 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
-use C4::Date;
+use C4::Dates qw(format_date_in_iso);
 
 my $input          = new CGI;
 my $title          = $input->param('title');
@@ -88,7 +88,7 @@ $template->param(
     name                    => $name,
     from_placed_on          => $from_placed_on,
     to_placed_on            => $to_placed_on,
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
