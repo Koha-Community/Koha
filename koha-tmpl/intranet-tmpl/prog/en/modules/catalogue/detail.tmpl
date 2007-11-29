@@ -216,21 +216,17 @@
 </ul></div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="AmazonSimilarItems " -->
+<!-- TMPL_IF NAME="AmazonSimilarItems" -->
 <div id="related"><h2>Related Items</h2>
 <ul>
 <!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="product" -->
-<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR
-NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR
-NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!--
-TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate"
---></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"
--->.01._THUMBZZZ_PU_PU-5_.jpg" />
+NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
+<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
 
-   <!-- TMPL_LOOP NAME=items -->
+   <!-- TMPL_LOOP NAME="items" -->
    <!-- TMPL_IF NAME="itype" --><img
 src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif"
 title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
