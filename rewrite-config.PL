@@ -71,7 +71,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
-  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl/%vd",$^V))."/koha",
+  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl5/site_perl/%vd",$^V))."/koha",
   "__CGI_DIR__" => $prefix."/lib/cgi-bin/koha",
   "__LOG_DIR__" => "/var/log",
   "__DB_TYPE__" => "mysql",
