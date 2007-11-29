@@ -94,7 +94,7 @@ my $category_type = $borrowercategory->{'category_type'};
 $template->param( $data->{'categorycode'} => 1 ); 
 
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $tempdate = C4::Dates->new($data->{$_},'iso')->output
+		my $tempdate = C4::Dates->new($data->{$_},'iso')->output('syspref')
 			or warn ("Invalid $_ = " . $data->{$_});
 		$data->{$_} = $tempdate || '';
 }
@@ -188,7 +188,7 @@ my $totalprice = 0;
 my $toggle     = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $datedue = $issue->[$i]{'date_due'};
-    $issue->[$i]{'date_due'} = C4::Dates->new($issue->[$i]{'date_due'},'iso')->output(C4::Context->preference('dateformat'));
+    $issue->[$i]{'date_due'} = C4::Dates->new($issue->[$i]{'date_due'},'iso')->output('syspref');
     my %row = %{ $issue->[$i] };
     $totalprice += $issue->[$i]{'replacementprice'};
     $row{'replacementprice'} = $issue->[$i]{'replacementprice'};
@@ -233,7 +233,7 @@ if ($borrowernumber) {
 		foreach (qw(waiting transfered nottransfered)) {
 				$getreserv{$_} = 0;
 		}
-        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output(C4::Context->preference('dateformat'));
+        $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output('syspref');
 		foreach (qw(biblionumber title author barcodereserv itemcallnumber )) {
 				$getreserv{$_} = $getiteminfo->{$_};
 		}
@@ -249,7 +249,7 @@ if ($borrowernumber) {
         if ($transfertwhen) {
             $getreserv{color}      = 'transfered';
             $getreserv{transfered} = 1;
-            $getreserv{datesent}   = C4::Dates->new($transfertwhen, 'iso')->output() or die "Cannot get new($transfertwhen, 'iso') from C4::Dates";
+            $getreserv{datesent}   = C4::Dates->new($transfertwhen, 'iso')->output('syspref') or die "Cannot get new($transfertwhen, 'iso') from C4::Dates";
             $getreserv{frombranch} = GetBranchName($transfertfrom);
         }
 
