@@ -82,7 +82,6 @@ if ($completedJobID) {
     my $job = undef;
     my $staging_callback = sub { };
     my $matching_callback = sub { };
-    warn "$matcher_id is the matcher";
     if ($runinbackground) {
         my $job_size = () = $marcrecord =~ /\035/g;
         # if we're matching, job size is doubled
@@ -132,10 +131,8 @@ if ($completedJobID) {
     my $matcher_failed = 0;
     my $matcher_code = "";
     if ($matcher_id ne "") {
-        warn "we must match $matcher_id";
         my $matcher = C4::Matcher->fetch($matcher_id);
         if (defined $matcher) {
-            warn "failed to retrieve";
             $checked_matches = 1;
             $matcher_code = $matcher->code();
             $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 50, matching_progress_callback($job));
