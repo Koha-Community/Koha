@@ -110,7 +110,7 @@ sub today ($;$) {		# NOTE: sets date value to today (and returns it in the reque
 sub _recognize_format($) {
 	my $incoming = shift;
 	($incoming eq 'syspref') and return $prefformat;
-	(scalar grep (/^$incoming$/, keys %format_map) == 1) or croak "The format you asked for ('$incoming') in unrecognized.";
+	(scalar grep (/^$incoming$/, keys %format_map) == 1) or croak "The format you asked for ('$incoming') is unrecognized.";
 	return $incoming;
 }
 sub DHTMLcalendar ($;$) {	# interface to posix_map
@@ -222,12 +222,12 @@ psuedo-format argument "syspref".
 For example, to print an ISO date (from the database) in the <systempreference> format:
 
 		my $date = C4::Dates->new($date_from_database,"iso");
-		my $datestring_for_display = $date->display("syspref");
+		my $datestring_for_display = $date->output("syspref");
 		print $datestring_for_display;
 
 Or even:
 
-		print C4::Dates->new($date_from_database,"iso")->display("syspref");
+		print C4::Dates->new($date_from_database,"iso")->output("syspref");
 
 If you just want to know what the <systempreferece> is, you can use:
 
