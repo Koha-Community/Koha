@@ -440,7 +440,7 @@ for my $this_cgi ( split('&',$limit_cgi) ) {
 
 # add OPAC 'hidelostitems'
 # not items with 
-if (C4::Context->preference('hidelostitems')) {
+if (C4::Context->preference('hidelostitems') == 1) {
 	$query ="($query) not ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches=''))";
 	warn "Q".$query;
 }
