@@ -442,7 +442,7 @@ sub BatchCommitBibRecords {
     SetImportBatchStatus('importing');
     my $overlay_action = GetImportBatchOverlayAction($batch_id);
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT import_record_id, status, overlay_status, marc
+    my $sth = $dbh->prepare("SELECT import_record_id, status, overlay_status, marc, encoding
                              FROM import_records
                              JOIN import_biblios USING (import_record_id)
                              WHERE import_batch_id = ?");
@@ -471,9 +471,18 @@ sub BatchCommitBibRecords {
             my $biblionumber = GetBestRecordMatch($rowref->{'import_record_id'});
             my ($count, $oldbiblio) = GetBiblio($biblionumber);
             my $oldxml = GetXmlBiblio($biblionumber);
+
+            # remove item fields so that they don't get
+            # added again if record is reverted
+            my $old_marc = MARC::Record->new_from_xml($oldxml, 'UTF-8', $rowref->{'encoding'});
+            my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+            foreach my $item_field ($old_marc->field($item_tag)) {
+                $old_marc->delete_field($item_field);
+            }
+
             ModBiblio($marc_record, $biblionumber, $oldbiblio->{'frameworkcode'});
             my $sth = $dbh->prepare_cached("UPDATE import_records SET marcxml_old = ? WHERE import_record_id = ?");
-            $sth->execute($oldxml, $rowref->{'import_record_id'});
+            $sth->execute($old_marc->as_xml(), $rowref->{'import_record_id'});
             $sth->finish();
             my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth2->execute($biblionumber, $rowref->{'import_record_id'});
@@ -1043,7 +1052,7 @@ sub SetImportRecordMatches {
 
 sub _create_import_record {
     my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $z3950random) = @_;
-    
+
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO import_records (import_batch_id, record_sequence, marc, marcxml, 
                                                          record_type, encoding, z3950random)
