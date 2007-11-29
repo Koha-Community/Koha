@@ -141,6 +141,7 @@ $context = undef;        # Initially, no context is set
 
 =item KOHAVERSION
     returns the kohaversion stored in kohaversion.pl file
+
 =cut
 
 sub KOHAVERSION {
@@ -358,50 +359,29 @@ C<C4::Config-E<gt>new> will not return it.
 
 =cut
 
-#'
-sub config
-{
-    my $self = shift;
-    my $var = shift;        # The config variable to return
-
-    return undef if !defined($context->{"config"});
-            # Presumably $self->{config} might be
-            # undefined if the config file given to &new
-            # didn't exist, and the caller didn't bother
-            # to check the return value.
+sub _common_config ($$) {
+	my $var = shift;
+	my $term = shift;
+    return undef if !defined($context->{$term});
+       # Presumably $self->{$term} might be
+       # undefined if the config file given to &new
+       # didn't exist, and the caller didn't bother
+       # to check the return value.
 
     # Return the value of the requested config variable
-    return $context->{"config"}->{$var};
+    return $context->{$term}->{$var};
 }
 
-sub zebraconfig
-{
-    my $self = shift;
-    my $var = shift;        # The config variable to return
-
-    return undef if !defined($context->{"server"});
-            # Presumably $self->{config} might be
-            # undefined if the config file given to &new
-            # didn't exist, and the caller didn't bother
-            # to check the return value.
-
-    # Return the value of the requested config variable
-    return $context->{"server"}->{$var};
+sub config {
+	return _common_config($_[1],'config');
 }
-sub ModZebrations
-{
-    my $self = shift;
-    my $var = shift;        # The config variable to return
-
-    return undef if !defined($context->{"serverinfo"});
-            # Presumably $self->{config} might be
-            # undefined if the config file given to &new
-            # didn't exist, and the caller didn't bother
-            # to check the return value.
-
-    # Return the value of the requested config variable
-    return $context->{"serverinfo"}->{$var};
+sub zebraconfig {
+	return _common_config($_[1],'server');
 }
+sub ModZebrations {
+	return _common_config($_[1],'serverinfo');
+}
+
 =item preference
 
   $sys_preference = C4::Context->preference("some_variable");
@@ -942,6 +922,8 @@ Specifies the configuration file to read.
 =back
 
 =head1 SEE ALSO
+
+XML::Simple
 
 =head1 AUTHORS
 
