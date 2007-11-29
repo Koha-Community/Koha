@@ -1,6 +1,7 @@
-<div id="masthead">
-<h1 id="libraryname"><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
-</div>
+<div class="yui-g"><div id="corner"><!-- TMPL_IF NAME="opacbookbag" --><a class="cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="opaclanguagesdisplay" --><div id="languages">
+	<ul>
+		<!-- TMPL_LOOP NAME="languages" --><li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="language" -->"><!-- TMPL_VAR NAME="label" --></a> </li><!-- /TMPL_LOOP -->
+	</ul></div><!-- /TMPL_IF --></div></div>
 
 <div id="members">
 	<ul>
@@ -8,8 +9,15 @@
 	</ul>	
 </div>
 
-<div id="opac-main-search">
-   
+<div id="opac-main-search" class="yui-g">
+
+   <div id="masthead">
+   <h1 id="libraryname"><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
+   </div>
+
+<div id="fluid">
+<div id="fluid-offset">
+<div id="fluid-content-1">
     <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
@@ -28,12 +36,12 @@
         <input type="submit" value="Search" class="submit" />
     </form>
      <a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a>
+
+</div>
+</div>
 </div>
 
-<div id="corner"><!-- TMPL_IF NAME="opacbookbag" --><a class="cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="opaclanguagesdisplay" --><div id="languages">
-	<ul>
-		<!-- TMPL_LOOP NAME="languages" --><li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="language" -->"><!-- TMPL_VAR NAME="label" --></a> </li><!-- /TMPL_LOOP -->
-	</ul></div><!-- /TMPL_IF --></div>
+</div>
 
 	<div id="breadcrumbs" class="yui-g">
 

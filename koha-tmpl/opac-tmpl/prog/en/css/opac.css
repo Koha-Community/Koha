@@ -1,4 +1,4 @@
-@import url("/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css");
+@import url("../../en/lib/yui/reset-fonts-grids.css");
 
 a {
 	font-weight : bold;
@@ -349,7 +349,7 @@ a .term {
 }
 
 #members {
-	font-size : .8em;
+	font-size : .75em;
 	font-weight : bold;
 	padding : 4px 0 4px 0;
 	background-image : url(../../images/member-menu-background.gif);
@@ -365,7 +365,7 @@ a .term {
 }
 
 #members a.card {
-	background-image : url(../images/card.gif);
+	background-image : url(../../images/card.gif);
 	background-position : left;
 	background-repeat : no-repeat;
 	display : block;
@@ -379,13 +379,13 @@ a .term {
 }
 
 #members a.logout:link, #members a.logout:visited, #members a.logout:hover, #members a.logout:active {
-	background-image : url(../images/member-menu-background-logout.gif);
+	background-image : url(../../images/member-menu-background-logout.gif);
 	background-repeat : repeat-x;
 	color : #000000;
 }
 
 #members a:hover.logout {
-	background-image : url(../images/member-menu-background-logout-hover.gif);
+	background-image : url(../../images/member-menu-background-logout-hover.gif);
 	background-repeat : repeat-x;
 	color : #000000;
 }
@@ -403,7 +403,7 @@ a .term {
 }
 
 #members ul li a:link, #members ul li a:visited, #members span.members {
-	background-image : url(../images/member-menu-background-link.gif);
+	background-image : url(../../images/member-menu-background-link.gif);
 	background-repeat : repeat-x;
 	border-left : 1px solid #9999CC;
 	color : #006699;
@@ -417,7 +417,7 @@ a .term {
 }
 
 #members ul li a:hover, #members ul li a:active {
-	background-image : url(../images/member-menu-background-hover.gif);
+	background-image : url(../../images/member-menu-background-hover.gif);
 	background-repeat : repeat-x;
 }
 
@@ -429,12 +429,12 @@ a .term {
 }
 
 #opac-main-search {
-	background-image : url( /opac-tmpl/prog/images/menu-background.gif);
+	background-image : url( ../../images/menu-background.gif);
 	background-repeat : repeat-x;
 	background-color : #6699CC;
 	border-top : 1px solid #335599;
 	border-bottom : 1px solid #335599;
-	padding : 15px 0 15px 10px;
+	padding : .7em 0 .4em .5em;
 	color : #FFFFCC;
 	font-size : 108%;
 	line-height : 116%;
@@ -712,7 +712,7 @@ p.searchresults {
 }
 
 input.reserve, a.reserve {
-	background-image:url(/opac-tmpl/prog/images/placereserve.gif);
+	background-image:url(../../images/placereserve.gif);
 }
 
 a.reserve {
@@ -724,13 +724,12 @@ a.reserve {
 }
 
 #corner {
-	position: absolute;
-	top: .5em;
-	right: .2em;
+	float : right;
+	line-height : 2em;
 }
 
 #corner a.cart {
-	background-image : url(/opac-tmpl/prog/images/cart-small.gif);
+	background-image : url(../../images/cart-small.gif);
 	background-position: left;
 	background-repeat : no-repeat;
 	padding: 0 15px;
@@ -828,11 +827,11 @@ input.icon {
 }
 
 input.shelf, a.shelf {
-	background-image: url(/opac-tmpl/prog/images/addtobasket.gif);
+	background-image: url(../../images/addtobasket.gif);
 }
 
 input.clearall, a.clearall {
-	background-image: url(/opac-tmpl/prog/images/clearbasket.gif);
+	background-image: url(../../images/clearbasket.gif);
 }
 
 /* Tabs */
@@ -921,17 +920,16 @@ td.overdue {
 	font-size:0.8em;
 	padding:0.5em;
 }
-/*
+
 h1#libraryname {
-	border:0pt none;
+	border: 0;
 	margin:0;
 	padding:0;
-	width:240px;
+	width:120px;
 }
 h1#libraryname {
-	background:transparent url(http://www.myacpl.org/themes/npl/logo.png) no-repeat scroll 0%;
+	background:transparent url(../../images/koha-logo.gif) no-repeat scroll 0%;
 	border: 0;
-	margin:0.75em .3em 0.75em .7em;
 	padding:0;
 }
 
@@ -942,10 +940,10 @@ h1#libraryname a {
 	height:0px !important;
 	margin:0;
 	overflow:hidden;
-	padding:60px 0 0;
+	padding:40px 0 0;
 	text-decoration:none;
-	width:240px;
-}*/
+	width:120px;
+}
 
 table#marc, table#marc td, table#marc th {
 	border : 0;
@@ -957,4 +955,25 @@ table#marc th {
 
 table#marc td:first-child {
 	text-indent : 2em;
+}
+#masthead {
+float: left;
+width: 120px;
+}
+
+#fluid {
+float: right;
+width: 100%;
+margin-left: -120px;
+}
+
+#fluid-offset {
+margin-left: 119px;
+margin-top : .4em;
+}
+
+#fluid-content-1 {
+margin : .3em -1px 0 2%;
+display: inline /* fix IE6 */;
+line-height : 40px;
 }
