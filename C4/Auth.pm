@@ -1211,9 +1211,9 @@ sub haspermission {
     }
     return $flags if $flags->{superlibrarian};
     foreach ( keys %$flagsrequired ) {
-        return $flags if $flags->{$_};
+        return 0 unless( $flags->{$_} );
     }
-    return 0;
+    return $flags;
 }
 
 sub getborrowernumber {
