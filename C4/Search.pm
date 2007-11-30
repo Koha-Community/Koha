@@ -1181,10 +1181,13 @@ sub NZanalyse {
     # split the query string in 3 parts : X AND Y means : $left="X", $operand="AND" and $right="Y"
     # then, call again NZanalyse with $left and $right
     # (recursive until we find a leaf (=> something without and/or/not)
+    # delete repeated operator... Would then go in infinite loop
+    while ($string =~s/( and| or| not| AND| OR| NOT)\1/$1/g){
+    }
     #process parenthesis before.   
     if ($string =~ /^\s*\((.*)\)(( and | or | not | AND | OR | NOT )(.*))?/){
       my $left = $1;
-      warn "left :".$left;   
+#       warn "left :".$left;   
       my $right = $4;
       my $operator = lc($3); # FIXME: and/or/not are operators, not operands
       my $leftresult = NZanalyse($left,$server);
@@ -1227,7 +1230,7 @@ sub NZanalyse {
         }
       }   
     }  
-    warn "string :".$string;
+    warn "string :".$string if $DEBUG;
     $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
     my $left = $1;   
     my $right = $3;
@@ -1292,12 +1295,12 @@ sub NZanalyse {
         }
         my $results;
         # automatic replace for short operators
-        $left='title' if $left =~ '^ti';
-        $left='author' if $left =~ '^au';
-        $left='publisher' if $left =~ '^pb';
-        $left='subject' if $left =~ '^su';
-        $left='koha-Auth-Number' if $left =~ '^an';
-        $left='keyword' if $left =~ '^kw';
+        $left='title' if $left =~ '^ti$';
+        $left='author' if $left =~ '^au$';
+        $left='publisher' if $left =~ '^pb$';
+        $left='subject' if $left =~ '^su$';
+        $left='koha-Auth-Number' if $left =~ '^an$';
+        $left='keyword' if $left =~ '^kw$';
         if ($operator) {
             #do a specific search
             my $dbh = C4::Context->dbh;
