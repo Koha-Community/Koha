@@ -6,6 +6,18 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+ 		$("#guarantordelete").click(function() {
+			$("#guarantorid").attr("value","");
+			$("#contactname").attr("value","");
+			$("#contactfirstname").attr("value","");
+			$("#guarantorsearch").attr("value","Find guarantor");
+		});
+	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -181,20 +193,19 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" checked="checked" />
 		<!-- /TMPL_IF -->
        	</li>
-		</ol>
     <!--/TMPL_IF-->
-<!--TMPL_IF EXPR="showguarantor"-->  <p>
-  <input name="guarantordelete" type="button" value="Delete Guarantor" onclick="document.form.guarantorid.value='';document.form.guarantorinfo.value='',document.form.guarantorsearch.value='Find guarantor';" />
+<!--TMPL_IF EXPR="showguarantor"-->  <li><label for="">Guarantor: </label>
+  
+  <input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" disabled="disabled" readonly="readonly" />
+  <input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" disabled="disabled" readonly="readonly" />
   <!-- TMPL_IF NAME="guarantorid"-->  
-    
-    <input name="guarantorsearch" type="button" value="Modify Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
+    <input id="guarantorsearch" type="button" value="Modify Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
   <!-- TMPL_ELSE -->
-    <input name="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
-  <!-- /TMPL_IF -->
-  <input name="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" readonly="readonly" />
-  <input name="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->"  readonly="readonly" />
-  </p>       
-<!--/TMPL_IF-->       
+    <input id="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
+  <!-- /TMPL_IF --> <input id="guarantordelete" type="button" value="Delete Guarantor" />
+  </li>       
+<!--/TMPL_IF-->  
+		</ol>
 	</fieldset>
 <fieldset class="rows">
     <legend>Main address</legend><ol>
