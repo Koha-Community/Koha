@@ -438,6 +438,9 @@ my @results_array;
 my $results_hashref;
 
 if (C4::Context->preference('NoZebra')) {
+    $query=~s/yr(:|=)\s*([\d]{1,4})-([\d]{1,4})/(yr>=$2 and yr<=$3)/g;
+    $simple_query=~s/yr\s*(:|=)([\d]{1,4})-([\d]{1,4})/(yr>=$2 and yr<=$3)/g;
+    warn $query; 
     eval {
         ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
