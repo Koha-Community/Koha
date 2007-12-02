@@ -361,6 +361,8 @@ if ($op eq 'add_form') {
         $data=$sth->fetchrow_hashref;
         $sth->finish;
         $template->param(modify => 1);
+        # save tab to return to if user cancels edit
+        $template->param(return_tab => $tabsysprefs{$searchfield});
     }
 
     my @options;

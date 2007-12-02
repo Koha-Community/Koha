@@ -116,7 +116,13 @@
                     <input type="radio" name="value" id="value-no" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value-no" value="0" /><!-- /TMPL_IF --> <label for="value-no" class="yesno">OFF</label><!-- /TMPL_IF -->
                 </li>
         </ol></fieldset>
-        <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" value="Save" /> 
+          <!-- TMPL_IF name="return_tab" -->
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=<!-- TMPL_VAR name="return_tab" -->">Cancel</a>
+          <!-- TMPL_ELSE -->
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a>
+          <!-- /TMPL_IF -->
+        </fieldset>
         
         <fieldset class="brief">
 		<legend>Koha internal</legend>
