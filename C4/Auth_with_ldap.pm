@@ -32,11 +32,11 @@ BEGIN {
 	require Exporter;
 	$VERSION = 3.01;	# set the version for version checking
 	$debug = $ENV{DEBUG} || 0;
-	@ISA    = qw(Exporter C4::Auth);
-	@EXPORT = qw( checkpw );
+	@ISA    = qw(Exporter);
+	@EXPORT = qw( checkpw_ldap );
 }
 
-# Redefine checkpw:
+# Redefine checkpw_ldap:
 # connect to LDAP (named or anonymous)
 # ~ retrieves $userid from "uid"
 # ~ then compares $password with userPassword 
@@ -73,13 +73,8 @@ sub description ($) {
 			. "# " . $result->error_text . "\n";
 }
 
-sub checkpw {
+sub checkpw_ldap {
     my ($dbh, $userid, $password) = @_;
-    if (   $userid   eq C4::Context->config('user')
-        && $password eq C4::Context->config('pass') )
-    {
-        return 2;	# Koha superuser account
-    }
     my $db = Net::LDAP->new([$prefhost]);
 	#$debug and $db->debug(5);
 	my $filter = Net::LDAP::Filter->new("uid=$userid") or die "Failed to create new Net::LDAP::Filter";
@@ -113,8 +108,9 @@ sub checkpw {
 		return 1;
 	}
 	my %borrower = ldap_entry_2_hash($userldapentry,$userid);
-	$debug and print "checkpw received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
-	my ($borrowernumber,$cardnumber,$userid,$savedpw) = exists_local($userid);
+	$debug and print "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
+	my ($borrowernumber,$cardnumber,$savedpw);
+	($borrowernumber,$cardnumber,$userid,$savedpw) = exists_local($userid);
 	if ($borrowernumber) {
 		($config{update}   ) and my $c2 = &update_local($userid,$password,$borrowernumber,\%borrower) || '';
 		($cardnumber eq $c2) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
@@ -133,8 +129,9 @@ sub ldap_entry_2_hash ($$) {
 	my $userldapentry = shift;
 	my %borrower = ( cardnumber => shift );
 	my %memberhash;
+	$userldapentry->exists('uid');	# This is bad, but required!  By side-effect, this initializes the attrs hash. 
 	if ($debug) {
-		print "keys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
+		print "\nkeys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
 		foreach (keys %$userldapentry) {
 			print "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
 			hashdump("LDAP key: ",$userldapentry->{$_});
@@ -144,13 +141,13 @@ sub ldap_entry_2_hash ($$) {
 	my $key;
 	foreach (keys %$x) {
 		$memberhash{$_} = join ' ', @{$x->{$_}};	
-		$debug and print sprintf("building \$memberhash{%s} = ", $_), join ' ', @{$x->{$_}}, "\n";
+		$debug and print sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
 	}
 	$debug and print "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
 					"Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
 	foreach my $key (keys %mapping) {
 		my  $data = $memberhash{$mapping{$key}->{is}}; 
-		$debug and printf "mapping %20s ==> %-20s ($data)\n", $key, $mapping{$key}->{is};
+		$debug and printf "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
 		unless (defined $data) { 
 			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
 		}
@@ -166,7 +163,7 @@ sub ldap_entry_2_hash ($$) {
 sub exists_local($) {
 	my $arg = shift;
 	my $dbh = C4::Context->dbh;
-	my $select = "SELECT borrowernumber,cardnumber,userid,password from borrowers ";
+	my $select = "SELECT borrowernumber,cardnumber,userid,password FROM borrowers ";
 
 	my $sth = $dbh->prepare("$select WHERE userid=?");	# was cardnumber=?
 	$sth->execute($arg);
@@ -185,19 +182,19 @@ sub update_local($$$$) {
 	my   $digest   = md5_base64(shift) or return undef;
 	my $borrowerid = shift             or return undef;
 	my $borrower   = shift             or return undef;
+	my @keys = keys %$borrower;
 	my $dbh = C4::Context->dbh;
 	my $query = "UPDATE  borrowers\nSET     " . 
-		join(',', map {"$_=?"} keys %$borrower) .				# don't need to sort: keys order is deterministic
+		join(',', map {"$_=?"} @keys) .
 		"\nWHERE   borrowernumber=? "; 
 	my $sth = $dbh->prepare($query);
 	if ($debug) {
 		print STDERR $query, "\n",
-			join "\n", map {"$_ = " . $borrower->{$_}} 
-			keys %$borrower;
+			join "\n", map {"$_ = '" . $borrower->{$_} . "'"} @keys;
 		print STDERR "\nuserid = $userid\n";
 	}
 	$sth->execute(
-		(map {$borrower->{$_}} keys %$borrower), $borrowerid		# relies on deterministic keys order to match above
+		((map {$borrower->{$_}} @keys), $borrowerid)
 	);
 
 	# MODIFY PASSWORD/LOGIN

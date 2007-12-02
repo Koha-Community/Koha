@@ -17,14 +17,14 @@ BEGIN {
 	);
 	plan tests => 7 + scalar(keys %cases);
 	use_ok('C4::Context');
-	use_ok('C4::Auth_with_ldap', qw(checkpw));
+	use_ok('C4::Auth_with_ldap', qw(checkpw_ldap));
 }
 
-sub do_checkpw (;$$) { 
+sub do_checkpw_ldap (;$$) { 
 	my ($user,$pass) = (shift,shift);
 	diag "($user,$pass)";
 	my $ret;
-	return ($ret = checkpw($dbh,$user,$pass), sprintf("(%s,%s) returns '%s'",$user,$pass,$ret));
+	return ($ret = checkpw_ldap($dbh,$user,$pass), sprintf("(%s,%s) returns '%s'",$user,$pass,$ret));
 }
 
 ok($context= C4::Context->new(), 	"Getting new C4::Context object");
@@ -34,12 +34,12 @@ ok($dbh    = $context->dbh(), 		"Getting dbh from \$context object");
 diag("The basis of Authentication is that we don't auth everybody.");
 diag("Let's make sure we reject on bad calls.");
 my $ret;
-ok(!($ret = checkpw($dbh)),       "should reject (  no  arguments) returns '$ret'");
-ok(!($ret = checkpw($dbh,'','')), "should reject (empty arguments) returns '$ret'");
+ok(!($ret = checkpw_ldap($dbh)),       "should reject (  no  arguments) returns '$ret'");
+ok(!($ret = checkpw_ldap($dbh,'','')), "should reject (empty arguments) returns '$ret'");
 print "\n";
 diag("Now let's check " . scalar(keys %cases) . " test cases: ");
 foreach (sort keys %cases) {
-	ok do_checkpw($_, $cases{$_});
+	ok do_checkpw_ldap($_, $cases{$_});
 }
 
 1;
