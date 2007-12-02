@@ -566,7 +566,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			<label for="userid">
 			<!-- /TMPL_IF-->
 			OPAC Login: </label>
-			<input type="text" id="userid" name="userid" size="20"  value="<!-- TMPL_VAR NAME="userid" -->" />
+			<input type="text" id="userid" name="userid" size="20" <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="userid" -->" />
 	  <!-- TMPL_IF NAME="mandatoryuserid" --><span class="required">Required</span><!-- /TMPL_IF -->
 		</li>
 		<li>
@@ -577,12 +577,12 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			<!-- /TMPL_IF-->
 			Password: </label>
 			<!--TMPL_IF NAME="opadd"-->
-				<input type="text" id="password" name="password" size="20"  value="<!-- TMPL_VAR NAME="password" -->" />
+				<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="password" -->" />
 			<!--TMPL_ELSE-->
 				<!--TMPL_IF NAME="password"-->
-					<input type="text" id="password" name="password" size="20"  value="****" />
+					<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="****" />
 				<!--TMPL_ELSE-->
-					<input type="text" id="password" name="password" size="20"  value="" />
+					<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="" />
 				<!--/TMPL_IF-->
 			<!--/TMPL_IF-->
 	  <!-- TMPL_IF NAME="mandatorypassword" --><span class="required">Required</span><!-- /TMPL_IF -->

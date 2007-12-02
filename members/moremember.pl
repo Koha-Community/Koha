@@ -51,6 +51,7 @@ my $dbh = C4::Context->dbh;
 my $input = new CGI;
 my $print = $input->param('print');
 my @failedrenews = $input->param('failedrenew');
+my $error = $input->param('error');
 my @renew_failed;
 for (@failedrenews) { $renew_failed[$_] = 1; }
 
@@ -309,7 +310,8 @@ $template->param(
     totaldue         => sprintf( "%.2f", $total ),
     issueloop        => \@issuedata,
     unvalidlibrarian => $unvalidlibrarian,
-    
+   	error	         => $error,
+	$error			=> 1,
     # 		 reserveloop     => \@reservedata,
 );
 

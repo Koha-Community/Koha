@@ -17,23 +17,22 @@ use C4::Output;
 
 my $input = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrowers}=1;
-$flagsrequired->{permissions}=1;
-
+my $flagsrequired = { permissions => 1 };
+my $member=$input->param('member');
+my $bor = GetMemberDetails( $member,'');
+if(( $bor->{'category_type'} eq 'S' ) || ($bor->{'authflags'}->{'catalogue'} )) {
+	$flagsrequired->{'staffaccess'} = 1;
+}
 my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "members/member-flags.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {permissions => 1},
+				flagsrequired => $flagsrequired,
 				debug => 1,
 				});
 
 
-
-
-my $member=$input->param('member');
 my %member2;
 $member2{'borrowernumber'}=$member;
 
@@ -51,7 +50,6 @@ if ($input->param('newflags')) {
     print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 } else {
 #     my ($bor,$flags,$accessflags)=GetMemberDetails($member,'');
-    my $bor = GetMemberDetails( $member,'');
     my $flags = $bor->{'flags'};
     my $accessflags = $bor->{'authflags'};
     my $dbh=C4::Context->dbh();

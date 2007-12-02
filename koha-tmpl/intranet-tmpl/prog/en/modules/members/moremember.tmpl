@@ -29,12 +29,19 @@ function verify_patron_images() {
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-toolbar.inc" -->
-
+<!-- TMPL_IF NAME="error" -->
+<div class="error">
+<!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
+Userid / Password update failed:
+Insufficient user permissions.
+Other fields updated.
+<!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
 <div class="yui-g">
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron does not exist.
 <!-- TMPL_ELSE -->
-
 <!-- TMPL_IF NAME="reregistration" --><div class="message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 

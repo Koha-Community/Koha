@@ -123,7 +123,8 @@
 	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
 						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Select a Category type</option><!-- TMPL_ELSE --><option value="">Select a Category type</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adult</option><!-- TMPL_ELSE --><option value="A">Adult</option><!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="type_C" --><option value="C" selected="selected">Children</option><!-- TMPL_ELSE --><option value="C">Children</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_C" --><option value="C" selected="selected">Child</option><!-- TMPL_ELSE --><option value="C">Child</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_S" --><option value="S" selected="selected">Staff</option><!-- TMPL_ELSE --><option value="S">Staff</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Organisation</option><!-- TMPL_ELSE --><option value="I">Organisation</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professional</option><!-- TMPL_ELSE --><option value="P">Professional</option><!-- /TMPL_IF -->
 					</select>
@@ -230,6 +231,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
                             <!-- TMPL_IF NAME="type_C" -->Child<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="type_P" -->Prof.<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="type_I" -->Org.<!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="type_S" -->Staff<!-- /TMPL_IF -->
                         </td>
                         <td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>

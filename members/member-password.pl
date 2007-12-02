@@ -30,43 +30,42 @@ my ($template, $loggedinuser, $cookie)
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+
+#my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 my $member=$input->param('member');
 my $cardnumber = $input->param('cardnumber');
 my $destination = $input->param('destination');
 
-my %member2;
-$member2{'borrowernumber'}=$member;
-# my $issues=GetBorrowerIssues(\%member2);
-# my $i=0;
-# foreach (sort keys %$issues) {
-#     $i++;
-# }
-
+my $errormsg;
 my ($bor,$flags)=GetMemberDetails( $member,'');
+if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' || $bor->{'authflags'}->{'catalogue'}) ) {
+	my $luser = GetMemberDetails($loggedinuser);
+	$errormsg = 'NOPERMISSION' unless($luser->{'authflags'}->{'staffaccess'} );
+}
 my $newpassword = $input->param('newpassword');
+my $minpw = C4::Context->preference('minPasswordLength');
+$errormsg = 'SHORTPASSWORD' if( $newpassword && $minpw & (length($newpassword) < $minpw ) );
 
-if ( $newpassword ) {
+if ( $newpassword  && ! $errormsg ) {
     my $digest=md5_base64($input->param('newpassword'));
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
-    warn $destination;
     if (changepassword($uid,$member,$digest)) {
-	$template->param(newpassword => $newpassword);
-	if ($destination eq 'circ') {
-	    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");		
-	} 
-	else {
-	    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
-	}
-    } 
-    else {
-        $template->param(othernames => $bor->{'othernames'},
+		$template->param(newpassword => $newpassword);
+		if ($destination eq 'circ') {
+		    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");		
+		} else {
+		    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+		}
+    } else {
+			$errormsg = 'BADUSERID';
+    	    $template->param(othernames => $bor->{'othernames'},
 						surname     => $bor->{'surname'},
 						firstname   => $bor->{'firstname'},
 						userid      => $bor->{'userid'},
-						defaultnewpassword => $newpassword );
+						defaultnewpassword => $newpassword 
+						);
     }
 } else {
     my $userid = $bor->{'userid'};
@@ -100,6 +99,9 @@ if ( $newpassword ) {
 
 }
 
-$template->param( member => $member);
+$template->param( member => $member,
+					errormsg => $errormsg,
+					$errormsg => 1 ,
+					minPasswordLength => $minpw );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -352,6 +352,7 @@ sub GetMemberDetails {
     my $borrower = $sth->fetchrow_hashref;
     my ($amount) = GetMemberAccountRecords( $borrowernumber);
     $borrower->{'amountoutstanding'} = $amount;
+	# FIXME - patronflags calls GetMemberAccountRecords... just have patronflags return $amount
     my $flags = patronflags( $borrower);
     my $accessflagshash;
 
@@ -409,7 +410,7 @@ sub GetMemberDetails {
         {itemlist}    ref-to-array: list of available items
 
 =cut
-
+# FIXME rename this function.
 sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;

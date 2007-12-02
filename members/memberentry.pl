@@ -73,7 +73,8 @@ my $default_city;
 my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
 my $borrower_data;
-
+my $noUpdateLogin;
+my $userenv = C4::Context->userenv;
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
@@ -109,6 +110,10 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
     $newdata{'dateexpiry'}=format_date_in_iso($newdata{'dateexpiry'}) if ($newdata{dateexpiry});  
     $newdata{'dateofbirth'}=format_date_in_iso($newdata{'dateofbirth'}) if ($newdata{dateofbirth});  
+  # check permission to modify login info.
+    if ($borrower_data && ($borrower_data->{'category_type'} eq 'S') && (! C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1}))) {
+		$noUpdateLogin =1;
+	}
 }
 
 #############test for member being unique #############
@@ -165,11 +170,10 @@ if ($op eq 'save' || $op eq 'insert'){
       $nok = 1;
     }
   }
-  
+    
   if (C4::Context->preference("IndependantBranches")) {
-    my $userenv = C4::Context->userenv;
     if ($userenv && $userenv->{flags} != 1){
-      warn "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
+      #warn "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
         $nok=1;
@@ -195,7 +199,6 @@ if ($op eq 'modify' || $op eq 'insert'){
   }
 }
 
-                              
 
 if ($op eq 'insert'){
   # Check if the userid is unique
@@ -218,7 +221,11 @@ if ($op eq 'insert'){
 if ($op eq 'save'){
 	# test to know if another user have the same password and same login                                
 	unless ($nok){
-	    &ModMember(%newdata);    
+	    if($noUpdateLogin) {
+			delete $newdata{'password'};
+			delete $newdata{'userid'};
+		}
+		&ModMember(%newdata);    
 	    if ($destination eq "circ")	{
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
 	    }
@@ -453,7 +460,6 @@ if ($data{'dateenrolled'} eq ''){
   my $today= sprintf('%04d-%02d-%02d', Today());
   $data{'dateenrolled'}=$today;
 }
-
 $data{'surname'}=uc($data{'surname'}) if C4::Context->preference('uppercasesurnames');
 $data{'dateenrolled'}=format_date($data{'dateenrolled'});
 $data{'dateexpiry'}=format_date($data{'dateexpiry'});
@@ -494,8 +500,9 @@ $template->param(
   CGIbranch => $CGIbranch,
   memberofinstution => $member_of_institution,
   CGIorganisations => $CGIorganisations,
-  
+  noUpdateLogin =>  $noUpdateLogin
   );
+  
 output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:
