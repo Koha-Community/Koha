@@ -14,3 +14,4 @@ INSERT INTO `userflags` VALUES(13,'tools','Use tools (export, import, barcodes)'
 INSERT INTO `userflags` VALUES(14,'editauthorities','allow to edit authorities',0);
 INSERT INTO `userflags` VALUES(15,'serials','allow to manage serials subscriptions',0);
 INSERT INTO `userflags` VALUES(16,'reports','allow to access to the reports module',0);
+INSERT INTO `userflags` VALUES(17,'staffaccess','Modify login / permissions for staff users',0);
