@@ -1671,7 +1671,7 @@ sub AddRenewal {
             'Rent', $charge, $itemnumber );
         $sth->finish;
     }
-    UpdateStats( C4::Context->userenv->{'branchcode'}, 'renew', $charge, '', $itemnumber );
+    UpdateStats( $branch, 'renew', $charge, '', $itemnumber );
 }
 
 sub GetRenewCount {
