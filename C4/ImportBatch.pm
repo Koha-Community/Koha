@@ -412,7 +412,7 @@ sub BatchFindBibDuplicates {
 
 =over 4
 
-my ($num_added, $num_updated, $num_items_added, $num_ignored) = 
+my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
     BatchCommitBibRecords($batch_id, $progress_interval, $progress_callback);
 
 =back
@@ -436,6 +436,7 @@ sub BatchCommitBibRecords {
     my $num_added = 0;
     my $num_updated = 0;
     my $num_items_added = 0;
+    my $num_items_errored = 0;
     my $num_ignored = 0;
     # commit (i.e., save, all records in the batch)
     # FIXME biblio only at the moment
@@ -464,7 +465,9 @@ sub BatchCommitBibRecords {
             my $sth = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth->execute($biblionumber, $rowref->{'import_record_id'});
             $sth->finish();
-            $num_items_added += BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
+            my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
+            $num_items_added += $bib_items_added;
+            $num_items_errored += $bib_items_errored;
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         } else {
             $num_updated++;
@@ -487,21 +490,23 @@ sub BatchCommitBibRecords {
             my $sth2 = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth2->execute($biblionumber, $rowref->{'import_record_id'});
             $sth2->finish();
-            $num_items_added += BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
+            my ($bib_items_added, $bib_items_errored) = BatchCommitItems($rowref->{'import_record_id'}, $biblionumber);
+            $num_items_added += $bib_items_added;
+            $num_items_errored += $bib_items_errored;
             SetImportRecordOverlayStatus($rowref->{'import_record_id'}, 'match_applied');
             SetImportRecordStatus($rowref->{'import_record_id'}, 'imported');
         }
     }
     $sth->finish();
     SetImportBatchStatus($batch_id, 'imported');
-    return ($num_added, $num_updated, $num_items_added, $num_ignored);
+    return ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored);
 }
 
 =head2 BatchCommitItems
 
 =over 4
 
-$num_items_added = BatchCommitItems($import_record_id, $biblionumber);
+($num_items_added, $num_items_errored) = BatchCommitItems($import_record_id, $biblionumber);
 
 =back
 
@@ -513,6 +518,7 @@ sub BatchCommitItems {
     my $dbh = C4::Context->dbh;
 
     my $num_items_added = 0;
+    my $num_items_errored = 0;
     my $sth = $dbh->prepare("SELECT import_items_id, import_items.marcxml, encoding
                              FROM import_items
                              JOIN import_records USING (import_record_id)
@@ -522,17 +528,29 @@ sub BatchCommitItems {
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
         my $item_marc = MARC::Record->new_from_xml($row->{'marcxml'}, 'UTF-8', $row->{'encoding'});
-        my ($item_biblionumber, $biblionumber, $itemnumber) = AddItem($item_marc, $biblionumber);
-        my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
-        $updsth->bind_param(1, 'imported');
-        $updsth->bind_param(2, $itemnumber);
-        $updsth->bind_param(3, $row->{'import_items_id'});
-        $updsth->execute();
-        $updsth->finish();
-        $num_items_added++;
+        # FIXME - duplicate barcode check needs to become part of AddItem()
+        my $item = TransformMarcToKoha($dbh, $item_marc);
+        my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
+        if ($duplicate_barcode) {
+            my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, import_error = ? WHERE import_items_id = ?");
+            $updsth->bind_param(1, 'error');
+            $updsth->bind_param(2, 'duplicate item barcode');
+            $updsth->bind_param(3, $row->{'import_items_id'});
+            $updsth->execute();
+            $num_items_errored++;
+        } else {
+            my ($item_biblionumber, $biblioitemnumber, $itemnumber) = AddItem($item_marc, $biblionumber);
+            my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
+            $updsth->bind_param(1, 'imported');
+            $updsth->bind_param(2, $itemnumber);
+            $updsth->bind_param(3, $row->{'import_items_id'});
+            $updsth->execute();
+            $updsth->finish();
+            $num_items_added++;
+        }
     }
     $sth->finish();
-    return $num_items_added;
+    return ($num_items_added, $num_items_errored);
 }
 
 =head2 BatchRevertBibRecords

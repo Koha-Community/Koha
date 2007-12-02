@@ -304,8 +304,15 @@ while ( my $record = $batch->next() ) {
         } else {
             warn "ADDED biblio NB $bibid in DB\n" if $verbose;
             for ( my $it = 0 ; $it <= $#items ; $it++ ) {
-                eval { AddItem( $items[$it], $bibid, $oldbibitemnum ); };
-                warn "ERROR: Adding item $it, rec $i failed\n" if ($@);
+                # FIXME - duplicate barcode check needs to become part of AddItem()
+                my $itemhash = TransformMarcToKoha($dbh, $items[$it]);
+                my $duplicate_barcode = exists($itemhash->{'barcode'}) && GetItemnumberFromBarcode($itemhash->{'barcode'});
+                if ($duplicate_barcode) {
+                    warn "ERROR: cannot add item $itemhash->{'barcode'} for biblio $bibid: duplicate barcode\n" if $verbose;
+                } else {
+                    eval { AddItem( $items[$it], $bibid, $oldbibitemnum ); };
+                    warn "ERROR: Adding item $it, rec $i failed\n" if ($@);
+                }
             }       
         }       
     }      

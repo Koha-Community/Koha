@@ -157,13 +157,15 @@ sub commit_batch {
         $job = put_in_background($import_batch_id);
         $callback = progress_callback($job);
     }
-    my ($num_added, $num_updated, $num_items_added, $num_ignored) = BatchCommitBibRecords($import_batch_id, 50, $callback);
+    my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
+        BatchCommitBibRecords($import_batch_id, 50, $callback);
 
     my $results = {
         did_commit => 1,
         num_added => $num_added,
         num_updated => $num_updated,
         num_items_added => $num_items_added,
+        num_items_errored => $num_items_errored,
         num_ignored => $num_ignored
     };
     if ($runinbackground) {
