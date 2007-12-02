@@ -236,6 +236,9 @@ sub get_template_and_user {
         if ( $flags && $flags->{reports} == 1 ) {
             $template->param( CAN_user_reports => 1 );
         }
+        if ( $flags && $flags->{staffaccess} == 1 ) {
+            $template->param( CAN_user_staffaccess => 1 );
+        }
     }
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
@@ -1169,15 +1172,22 @@ sub checkpw {
     return 0;
 }
 
+=item getuserflags
+
+ $authflags = getuserflags($flags,$dbh);
+Translates integer flags into permissions strings hash.
+
+C<$flags> is the integer userflags value ( borrowers.userflags )
+C<$authflags> is a hashref of permissions
+
+=cut
+
 sub getuserflags {
-    my $cardnumber = shift;
-    my $dbh        = shift;
+    my $flags	= shift;
+    my $dbh     = shift;
     my $userflags;
-    my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE cardnumber=?");
-    $sth->execute($cardnumber);
-    my ($flags) = $sth->fetchrow;
-    $flags = 0 unless $flags;
-    $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
+	$flags = 0 unless $flags;
+    my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
 
     while ( my ( $bit, $flag, $defaulton ) = $sth->fetchrow ) {
@@ -1191,21 +1201,33 @@ sub getuserflags {
     return $userflags;
 }
 
+=item haspermission 
+
+  $flags = ($dbh,$member,$flagsrequired);
+
+C<$member> may be either userid or overloaded with $borrower hashref from GetMemberDetails.
+C<$flags> is a hashref of required flags lik C<$borrower-&lt;{authflags}> 
+
+Returns member's flags or 0 if a permission is not met.
+
+=cut
+
 sub haspermission {
     my ( $dbh, $userid, $flagsrequired ) = @_;
-    my $sth = $dbh->prepare("SELECT cardnumber FROM borrowers WHERE userid=?");
-    $sth->execute($userid);
-    my ($cardnumber) = $sth->fetchrow;
-    ($cardnumber) || ( $cardnumber = $userid );
-    my $flags = getuserflags( $cardnumber, $dbh );
-    my $configfile;
-    if ( $userid eq C4::Context->config('user') ) {
-
+	my ($flags,$intflags);
+	if(ref($userid)) {
+		$intflags = $userid->{'flags'};  
+	} else {
+	    my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
+	    $sth->execute($userid);
+	    my ($intflags) = $sth->fetchrow;
+	    $flags = getuserflags( $intflags, $dbh );
+	}
+	if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
     }
     if ( $userid eq 'demo' && C4::Context->config('demo') ) {
-
         # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }
@@ -1214,7 +1236,9 @@ sub haspermission {
         return 0 unless( $flags->{$_} );
     }
     return $flags;
+	#FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
 }
+
 
 sub getborrowernumber {
     my ($userid) = @_;
