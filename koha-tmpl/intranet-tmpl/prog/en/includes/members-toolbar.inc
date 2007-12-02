@@ -40,8 +40,8 @@ function confirm_reregistration() {
 	
 		var moremenu = [
 			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
-			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permission" -->disabled: true, <!-- /TMPL_UNLESS -->},
-			{ text: "Delete", onclick: { fn: confirm_deletion } },
+			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS--><!-- TMPL_ELSE --> disabled: true, <!-- /TMPL_IF-->},
+			{ text: "Delete", <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --> onclick: { fn: confirm_deletion } },
 		]
 
 	    new YAHOO.widget.Button({
@@ -64,11 +64,12 @@ function confirm_reregistration() {
 	    <!-- TMPL_IF name="adultborrower" -->new YAHOO.widget.Button("addchild");<!-- /TMPL_IF -->
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
-	    new YAHOO.widget.Button("changepassword");
-	    new YAHOO.widget.Button("printslilp");
+	<!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --> new YAHOO.widget.Button("changepassword");  <!-- /TMPL_IF-->
+		<!-- TMPL_ELSE--> new YAHOO.widget.Button("changepassword"); <!-- /TMPL_IF --> 
+	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");		 
-		new YAHOO.widget.Button("patronflags");
+	<!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" -->	new YAHOO.widget.Button("patronflags");<!-- /TMPL_IF--><!-- TMPL_ELSE--> new YAHOO.widget.Button("patronflags");<!-- /TMPL_IF --> <!-- /TMPL_IF -->
 		new YAHOO.widget.Button("deletepatron");
 	}
 
@@ -91,8 +92,10 @@ function confirm_reregistration() {
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 <!--	<li><a id="addnote" href="/cgi-bin/koha/members/addnotes.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Add Note</a></li> -->
-	<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li>
+	<!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --><li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li> <!-- /TMPL_IF--><!-- /TMPL_IF--> 
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
-	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
+	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li>
+	<!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li> <!-- /TMPL_IF--><!-- TMPL_ELSE--><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --> <!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li> <!-- /TMPL_IF--><!-- TMPL_ELSE--> <li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li> <!-- /TMPL_IF--> 
 </ul></div>

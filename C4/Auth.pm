@@ -178,6 +178,7 @@ sub get_template_and_user {
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
+            $template->param( CAN_user_staffaccess 		=> 1 );
         }
 
         if ( $flags && $flags->{circulate} == 1 ) {

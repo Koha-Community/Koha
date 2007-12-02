@@ -312,7 +312,8 @@ $template->param(
     unvalidlibrarian => $unvalidlibrarian,
    	error	         => $error,
 	$error			=> 1,
-    # 		 reserveloop     => \@reservedata,
+    StaffMember		=> ($category_type eq 'S'),
+	# 		 reserveloop     => \@reservedata,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
