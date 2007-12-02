@@ -420,6 +420,7 @@ sub patronflags {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge");
         $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
+		$flaginfo{'amount'} = sprintf "%.02f",$amount;
         if ( $amount > $noissuescharge ) {
             $flaginfo{'noissues'} = 1;
         }

@@ -46,7 +46,8 @@ my %member2;
 $member2{'borrowernumber'}=$member;
 my ($countissues,$issues)=GetPendingIssues($member);
 
-my ($bor,$flags)=GetMemberDetails($member,'');
+my ($bor)=GetMemberDetails($member,'');
+my $flags=$bor->{flags};
 if (C4::Context->preference("IndependantBranches")) {
 	my $userenv = C4::Context->userenv;
 	unless ($userenv->{flags} == 1){
@@ -78,7 +79,7 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
 		$template->param(ItemsOnIssues => $countissues);
 	}
 	if ($flags->{'CHARGES'} ne '') {
-		$template->param(charges => $flags->{'CHARGES'}->{'message'});
+		$template->param(charges => $flags->{'CHARGES'}->{'amount'});
 	}
 	if ($data ne '') {
 		$template->param(guarantees => 1);
@@ -86,8 +87,8 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-	MoveMemberToDeleted($member);
-	DelMember($member);
+#	MoveMemberToDeleted($member);
+#	DelMember($member);
 	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
