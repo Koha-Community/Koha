@@ -116,8 +116,11 @@ Other fields updated.
      <!-- /TMPL_IF  -->
   
     
-  
+            <!-- TMPL_IF name="guarantorborrowernumber" -->
+			<a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
+			<!-- TMPL_ELSE -->
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
+			<!-- /TMPL_IF -->
 </div>
 
 </div>
