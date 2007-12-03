@@ -83,13 +83,10 @@ if ( not defined $data ) {
 }
 
 # re-reregistration function to automatic calcul of date expiry
-(
-#     $data->{'dateexpiry'} = GetMembeReregistration(
- $data->{'dateexpiry'} = ExtendMemberSubscriptionTo(
-        $data->{'categorycode'},
-        $borrowernumber, $data->{'dateenrolled'}
-    )
-) if ( $reregistration eq 'y' );
+if ( $reregistration eq 'y' ) {
+	$data->{'dateexpiry'} = ExtendMemberSubscriptionTo( $borrowernumber );
+}
+
 my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
 my $category_type = $borrowercategory->{'category_type'};
 
