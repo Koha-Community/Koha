@@ -1,6 +1,5 @@
 
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1><!-- Begin Checkin Resident Search Box -->
-
 <!-- TMPL_IF NAME="CircAutocompl" --><!-- TMPL_IF NAME="CAN_user_circulate" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {

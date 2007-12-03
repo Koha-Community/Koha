@@ -1,3 +1,5 @@
+
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1>
 <!-- Begin Acquisitions Resident Search Box -->
 <div id="header_search">
 <div id="supplier_search" class="residentsearch">

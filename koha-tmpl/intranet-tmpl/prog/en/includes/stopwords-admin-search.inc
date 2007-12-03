@@ -1,5 +1,6 @@
-<!-- Begin Stopwords Resident Search Box -->
-<!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1><!-- Begin Stopwords Resident Search Box -->
+<!-- TMPL_IF NAME="CAN_user_circulate" --><!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
@@ -41,7 +42,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
 });     //]]>
-</script><!-- /TMPL_IF -->
+</script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="stopword_search" class="residentsearch">
 	<p class="tip">Stop word search:</p>
@@ -50,7 +51,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         <input type="submit" name="ok" value="Search" />
     </form>
 	</div>
-	<div id="circ_search" class="residentsearch">
+<!-- TMPL_IF NAME="CAN_user_circulate" -->
+<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
     <!-- TMPL_IF NAME="CircAutocompl" -->
@@ -70,7 +72,9 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input value="Submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
-	</div>	
+</div>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
 	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
@@ -78,10 +82,11 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 				<input type="submit" value="Submit"  class="form-submit" />
 		</form>
 	</div>
+	<!-- /TMPL_IF -->
 			<ul>
 			<li><a href="/cgi-bin/koha/admin/roadtype.pl#stopword_search">Search Stop Words</a></li>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
+			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
 <!-- End Stopwords Resident Search Box -->

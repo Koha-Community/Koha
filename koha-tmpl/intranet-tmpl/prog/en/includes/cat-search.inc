@@ -1,5 +1,6 @@
-<!-- Begin Catalogue Resident Search Box -->
-<!-- TMPL_IF NAME="CircAutocompl" --><!-- TMPL_IF NAME="CAN_user_circulate" --><script type="text/javascript">
+
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1><!-- Begin Catalogue Resident Search Box -->
+<!-- TMPL_IF NAME="CAN_user_circulate" --><!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {

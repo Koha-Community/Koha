@@ -1,5 +1,6 @@
-<!-- Begin Patrons Admin Resident Search Box -->
-<!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1><!-- Begin Patrons Admin Resident Search Box -->
+<!-- TMPL_IF NAME="CAN_user_circulate" --><!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
@@ -42,7 +43,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 }
 });    
 //]]>
-</script><!-- /TMPL_IF -->
+</script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
 	<div id="patron_category_search" class="residentsearch">
 	<p class="tip">Search by Patron Category Name:</p>
@@ -51,6 +52,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 		<input type="submit" name="search" value="Search" />
 	</form>	
 	</div>
+	<!-- TMPL_IF NAME="CAN_user_circulate" -->
 	<div id="circ_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
@@ -71,18 +73,19 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input value="Submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
-	</div>	
+	</div>	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
 	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
 				<input type="submit" value="Submit"  class="form-submit" />
 		</form>
-	</div>
+	</div><!-- /TMPL_IF -->
 			<ul>
 			<li><a href="/cgi-bin/koha/admin/categorie.pl#patron_category_search">Search Patron Categories</a></li>
-			<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>
-			<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>
+			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
 <!-- End Patrons Admin Resident Search Box -->
