@@ -87,8 +87,8 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-#	MoveMemberToDeleted($member);
-#	DelMember($member);
+	MoveMemberToDeleted($member);
+	DelMember($member);
 	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
