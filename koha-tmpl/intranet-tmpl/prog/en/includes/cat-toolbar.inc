@@ -1,6 +1,7 @@
 <div id="toolbar">
 	
 	<script type="text/javascript">
+	//<![CDATA[
 	
 	function addToShelf() {	window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
@@ -15,7 +16,7 @@ function confirm_deletion() {
 		    } else{
 		    is_confirmed= confirm(_('Are you sure you want to delete this record? '));
 	}
-   
+
      if (is_confirmed) {
         if (count>0){
 	// 	window.location="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
@@ -23,12 +24,9 @@ function confirm_deletion() {
 			window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
 		}
 	} else {
-// FIXME -- THIS doesn't work.  addbiblio is still the target url after this fcn call !	
-	 	window.location="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
 		return false;
 	}
 }
-	//<![CDATA[
 
 	// prepare DOM for YUI Toolbar
 
@@ -51,7 +49,7 @@ function confirm_deletion() {
 	        { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=" },
 	        { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
 	        { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=duplicate" },
-			{ text: "Delete Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->",<!-- TMPL_IF NAME="count" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
+			{ text: "Delete Record", <!-- TMPL_IF NAME="count" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
 	    ];
 		
 		var savemenu = [

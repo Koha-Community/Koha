@@ -4,11 +4,14 @@
 
 function confirm_deletion() {
     var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
-    var borrowernumbervalue=document.form.borrowernumber.value; 
-   
+    var borrowernumbervalue = $("#borrowernumber").attr("value"); 
     if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
-    }
+		alert("Deleteing borrower "+borrowernumbervalue);
+		return false;
+		window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
+    } else {
+		return false;
+	}
 }
 
 function confirm_reregistration() {
@@ -94,5 +97,5 @@ function confirm_reregistration() {
 	<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->&destination=circ">Change Password</a></li>
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
-	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
+	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Delete</a></li>
 </ul></div>

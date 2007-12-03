@@ -249,7 +249,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
           <label for="stickyduedate">Remember for Session:</label>
           <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" <!-- TMPL_IF NAME="stickyduedate" --> checked="1" <!-- /TMPL_IF -->  />
           <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
-          <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+          <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
           <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
           <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
           <input type="hidden" name="print" value="maybe" />

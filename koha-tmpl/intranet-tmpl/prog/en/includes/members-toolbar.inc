@@ -4,11 +4,12 @@
 
 function confirm_deletion() {
     var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
-    var borrowernumbervalue=document.form.borrowernumber.value; 
-   
+    var borrowernumbervalue = $("#borrowernumber").attr("value"); 
     if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
-    }
+		window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
+    } else {
+		return false;
+	}
 }
 
 function confirm_reregistration() {
