@@ -150,7 +150,7 @@ sub get_template_and_user {
             $template->param( CAN_user_reserveforothers => 1 );
             $template->param( CAN_user_borrow           => 1 );
             $template->param( CAN_user_editcatalogue    => 1 );
-            $template->param( CAN_user_updatecharge     => 1 );
+            $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );
             $template->param( CAN_user_management       => 1 );
             $template->param( CAN_user_tools            => 1 );
