@@ -42,7 +42,7 @@ function Dopop(link,i) {
 function PopupZ3950() {
     var strQuery = AreZ3950MandoriesOk();
     if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=640,height=400,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     } else {
         var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");    
         alert(strAlert);
