@@ -74,7 +74,7 @@
 <!--/TMPL_IF-->
 <!-- /TMPL_LOOP  -->
 </table>
-<input type="submit" name="submit"  value="Make Payment" class="submit" /></form><!-- TMPL_ELSE --><p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> has no outstanding fines.</p><!-- /TMPL_IF -->
+<fieldset class="action"><input type="submit" name="submit"  value="Make Payment" class="submit" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Cancel</a></fieldset></form><!-- TMPL_ELSE --><p><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> has no outstanding fines.</p><!-- /TMPL_IF -->
 </div></div>
 
 </div>

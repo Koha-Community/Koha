@@ -46,10 +46,8 @@
 	<li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
 	<li><label for="amount">Amount: </label><input type="text" name="amount" id="amount" /></li>
 	</ol></fieldset>
-<input type="submit" name="add" value="Save" />
+<fieldset class="action"><input type="submit" name="add" value="Save" /> <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Cancel</a></fieldset>
 </form>
-
-<form action="/cgi-bin/koha/members/boraccount.pl" method="get"><input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" /><input type="submit" value="Cancel" /></form>
 
 <!-- /TMPL_IF -->
 </div></div>
