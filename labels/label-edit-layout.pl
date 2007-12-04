@@ -29,19 +29,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $layout = get_layout($layout_id);
- my @barcode_types = get_barcode_types($layout_id);
-my @printingtypes       = get_printingtypes($layout_id);
+my $layout        = get_layout($layout_id);
+my @barcode_types = get_barcode_types($layout_id);
+my @printingtypes = get_printingtypes($layout_id);
 ### @printingtypes 
 ### $layout
 
-my $layoutname =  $layout->{'layoutname'};
-my $layout_id =  $layout->{'id'};
-my $guidebox =  $layout->{'guidebox'};
-my $startlabel  =  $layout->{'startlabel'};
+   $layout_id  = $layout->{'id'};	# has it changed since we set it above?  --joe
+my $layoutname = $layout->{'layoutname'};
+my $guidebox   = $layout->{'guidebox'};
+my $startlabel = $layout->{'startlabel'};
 
 my @title          = build_text_dropbox( $layout->{'title'} );
-my @subtitle          = build_text_dropbox( $layout->{'subtitle'} );
+my @subtitle       = build_text_dropbox( $layout->{'subtitle'} );
 my @author         = build_text_dropbox( $layout->{'author'} );
 my @barcode        = build_text_dropbox( $layout->{'barcode'} );
 my @isbn           = build_text_dropbox( $layout->{'isbn'} );
@@ -52,21 +52,18 @@ my @class          = build_text_dropbox( $layout->{'class'} );
 my @subclass       = build_text_dropbox( $layout->{'subclass'} );
 my @itemcallnumber = build_text_dropbox( $layout->{'itemcallnumber'} );
 
-
 ### @subclass 
 
 $template->param(
-    barcode_types => \@barcode_types,
-    printingtypes => \@printingtypes,
-
-    layoutname => $layoutname,
-    layout_id => $layout_id,
-
-guidebox => $guidebox,
-startlabel => $startlabel,
+	barcode_types => \@barcode_types,
+	printingtypes => \@printingtypes,
+	layoutname    => $layoutname,
+	layout_id     => $layout_id,
+	guidebox      => $guidebox,
+	startlabel    => $startlabel,
 
     tx_title          => \@title,
-    tx_subtitle          => \@subtitle,
+    tx_subtitle       => \@subtitle,
     tx_author         => \@author,
     tx_isbn           => \@isbn,
     tx_issn           => \@issn,

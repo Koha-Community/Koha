@@ -75,29 +75,24 @@ if ( $op eq "do_search" ) {
       #  $resultsperpage, $orderby );
 
 #use Data::Dumper;
-my $searchquery=$marclist[0];
-my ($error, $marcresults) = SimpleSearch($searchquery);
+	my $searchquery=$marclist[0];
+	my ($error, $marcresults) = SimpleSearch($searchquery);
+	my $hits = scalar @$marcresults;
+	my @results;
 
-my $hits = scalar @$marcresults;
-my @results;
-my $results;
-
-
-for(my $i=0;$i<$hits;$i++) {
-    my %resultsloop;
-    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
-    #build the hash for the template.
-    %resultsloop=%$biblio;
-    $resultsloop{highlight}       = ($i % 2)?(1):(0);
-#warn $resultsloop{biblionumber};
-
-    push @results, \%resultsloop;
-}
+	for(my $i=0;$i<$hits;$i++) {
+		my %resultsloop;
+		my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
+		my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
+		#build the hash for the template.
+		%resultsloop=%$biblio;
+		$resultsloop{highlight}       = ($i % 2)?(1):(0);
+		#warn $resultsloop{biblionumber};
+		push @results, \%resultsloop;
+	}
     my @results2;
     my $i;
     for ( $i = 0 ; $i <= ( $hits - 1 ) ; $i++ ) {
-
         my $itemnums = get_itemnumbers_of($results[$i]->{'biblionumber'});
 
         my $iii = $itemnums->{$results[$i]->{'biblionumber'} } ;
@@ -178,8 +173,7 @@ for(my $i=0;$i<$hits;$i++) {
     # items attached to the bibs not thew bibs themselves
 
    # my @results2;
-    my $i;
-    for ( $i = 0 ; $i <= ( $total - 1 ) ; $i++ )
+    for (my $i = 0 ; $i <= ( $total - 1 ) ; $i++ )
     {    #total-1 coz the array starts at 0
             #warn $i;
             #warn Dumper $results->[$i]{'bibid'};
@@ -188,7 +182,6 @@ for(my $i=0;$i<$hits;$i++) {
           &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
 
         foreach my $item (@item_results) {
-
             #warn Dumper $item;
             push @results2, $item;
         }

@@ -14,16 +14,12 @@ use POSIX;
 my $dbh            = C4::Context->dbh;
 my $query          = new CGI;
 my $op             = $query->param('op');
-my $layout_id =    $query->param('layout_id');
-my $layoutname =    $query->param('layoutname');
+my $layout_id      = $query->param('layout_id');
+my $layoutname     = $query->param('layoutname');
 my $barcodetype    = $query->param('barcodetype');
-
-
-my $bcn          = $query->param('tx_barcode');
-my $author          = $query->param('tx_author');
-
+my $bcn            = $query->param('tx_barcode');
 my $title          = $query->param('tx_title');
-my $subtitle          = $query->param('tx_subtitle');
+my $subtitle       = $query->param('tx_subtitle');
 my $isbn           = $query->param('tx_isbn');
 my $issn           = $query->param('tx_issn');
 my $itemtype       = $query->param('tx_itemtype');

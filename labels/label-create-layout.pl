@@ -28,17 +28,11 @@ my $op =  $query->param('op');
 
 my $active_template = GetActiveLabelTemplate();
 my @label_templates = GetAllLabelTemplates();
-my @printingtypes       = get_printingtypes();
+my @printingtypes = get_printingtypes();
 my @layouts       = get_layouts();
 my @barcode_types = get_barcode_types();
 my @batches = get_batches();
 
-if ($op = 'add_layout') {
-}
-
-
-
- 
 ###  $data
 
 $template->param( guidebox => 1 ) if ( $data->{'guidebox'} );
@@ -47,33 +41,31 @@ $template->param( "$data->{'barcodetype'}_checked" => 1 );
 $template->param( "startrow" . $data->{'startrow'} . "_checked" => 1 );
 
 $template->param(
+	op => $op,
+	active_template => $data->{'active_template'},
+	label_templates => \@label_templates,
+	barcode_types   => \@barcode_types,
+	printingtypes   => \@printingtypes,
+	layout_loop     => \@layouts,
+	batches         => \@batches,
 
-    op => $op,
-    active_template => $data->{'active_template'},
-    label_templates => \@label_templates,
-    barcode_types   => \@barcode_types,
-    printingtypes    => \@printingtypes,
-layout_loop => \@layouts,
+	id                => $data->{'id'},
+	barcodetype       => $data->{'barcodetype'},
+	papertype         => $data->{'papertype'},
+	tx_author         => $data->{'author'},
+	tx_barcode        => $data->{'barcode'},
+	tx_title          => $data->{'title'},
+	tx_subtitle       => $data->{'subtitle'},
+	tx_isbn           => $data->{'isbn'},
+	tx_issn           => $data->{'issn'},
+	tx_itemtype       => $data->{'itemtype'},
+	tx_dewey          => $data->{'dewey'},
+	tx_class          => $data->{'class'},
+	tx_subclass       => $data->{'subclass'},
+	tx_itemcallnumber => $data->{'itemcallnumber'},
+	startlabel        => $data->{'startlabel'},
 
-batches => \@batches,
-     id             => $data->{'id'},
-    barcodetype    => $data->{'barcodetype'},
-      papertype => $data->{'papertype'},
-
-    tx_author         => $data->{'author'},
-    tx_barcode        => $data->{'barcode'},
-   tx_title          => $data->{'title'},
-   tx_subtitle          => $data->{'subtitle'},
-    tx_isbn           => $data->{'isbn'},
-    tx_issn           => $data->{'issn'},
-    tx_itemtype            => $data->{'itemtype'},
-    tx_dewey          => $data->{'dewey'},
-    tx_class          => $data->{'class'},
-    tx_subclass       => $data->{'subclass'},
-    tx_itemcallnumber => $data->{'itemcallnumber'},
-
-    startlabel     => $data->{'startlabel'},
-    fontsize       => $active_template->{'fontsize'},
+	fontsize => $active_template->{'fontsize'},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
