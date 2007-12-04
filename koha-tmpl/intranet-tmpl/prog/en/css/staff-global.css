@@ -852,8 +852,12 @@ tr.highlight td {
 	background-color : #F6F6F6;
 }
 
-tr.highlight th {
+tr.highlight th[scope=row] {
 	background-color : #DDDDDD;
+}
+
+tr.confirm td, tr.confirm.highlight td {
+	background-color : #ffbfbf;
 }
 
 #circ_circulation_issue label {
@@ -875,10 +879,15 @@ span.expired {
 	font-style : italic;
 }
 
+div.subfield_line {
+	padding-bottom : .3em;
+}
+
 div.subfield_line label {
-    font-size:75%;
+    font-size:89%;
     float: left;
-    width: 200px;
+	 padding-right : .4em;
+    width: 210px;
     text-align: left;
     clear:left;
 }
