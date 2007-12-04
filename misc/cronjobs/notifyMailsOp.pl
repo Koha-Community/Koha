@@ -1,6 +1,6 @@
 use strict;
 use C4::Context;
-use C4::Date;
+use C4::Dates;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
 use C4::Circulation;

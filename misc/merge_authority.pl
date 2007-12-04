@@ -106,7 +106,7 @@ while (my ($bibid,$tag,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder) = 
         &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,$subfield->[0],$subfieldorder,$subfield->[1]);
     }
     &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,'9',$subfieldorder,$mergeto);
-    my $biblio = GetMarcBiblio($bibid);
+    $biblio = GetMarcBiblio($bibid);
     print "AFTER : ".$biblio->as_formatted."\n" if $verbose;
     $nbdone++;
 #     &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfieldcode,$subfieldorder);
