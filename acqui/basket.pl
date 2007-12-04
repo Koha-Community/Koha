@@ -31,7 +31,7 @@ use CGI;
 use C4::Acquisition;
 use C4::Bookfund;
 use C4::Bookseller;
-use C4::Date;
+use C4::Dates;
 
 =head1 NAME
 

@@ -63,7 +63,7 @@ use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
 use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
-use C4::Date;
+use C4::Dates;
 use C4::Bookseller;
 use C4::Members;
 use C4::Branch;    # GetBranches
