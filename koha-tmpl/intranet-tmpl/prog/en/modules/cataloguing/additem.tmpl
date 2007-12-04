@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloging &rsaquo; Items for Bibliographic Record <!-- TMPL_VAR name="biblionumber" --></title>
+<title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->) &rsaquo; Items</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -45,10 +45,15 @@ function Dopop(link,i) {
     defaultvalue=document.forms[0].field_value[i].value;
     newin=window.open(link+"&result="+defaultvalue,"value builder",'width=500,height=400,toolbar=false,scrollbars=yes');
 }
+
 function confirm_deletion(biblionumber,itemnumber) {
+	var original = $("#row"+itemnumber).attr("class");
+	$("#row"+itemnumber).attr("class","confirm");
     var is_confirmed = confirm(_('Are you sure you want to delete this item?'));
     if (is_confirmed) {
     window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
+	} else {
+	$("#row"+itemnumber).attr("class","");
     }
 }
 
@@ -124,13 +129,23 @@ function CreateKey(){
     return parseInt(Math.random() * 100000);
 }
 
+	 $(document).ready(function() {
+    $("#cataloguing_additem_itemlist  tr").hover(
+      function () {
+        $(this).attr("class","highlight");
+      }, 
+      function () {
+        $(this).attr("class","");
+      }
+    );
+	 });
 
 //]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</a>  &rsaquo; Items</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -141,9 +156,11 @@ function CreateKey(){
 
 <h1>Items for <!-- TMPL_VAR name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 
+<!-- TMPL_IF NAME="barcode_not_unique" --><div class="error">Error saving item: Barcode must be unique.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="book_on_loan" --><div class="error">Cannot Delete: item is checked out.</div><!-- /TMPL_IF -->
+
 <div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->
-        <h2>Existing items</h2>
         <table>
             <tr>
                 <!-- TMPL_LOOP NAME="item_header_loop" -->
@@ -154,10 +171,10 @@ function CreateKey(){
                 <th colspan="2">&nbsp;</th>
             </tr>
                 <!-- TMPL_LOOP NAME="item_loop" -->
-                <tr>
+                <tr id="row<!-- TMPL_VAR NAME="itemnumber" -->">
                     <!-- TMPL_VAR NAME="item_value" -->
                     <!-- TMPL_IF Name="nomod"--> <td colspan="2">&nbsp;</td><!--TMPL_ELSE--><td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
-                    <td><a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->)">Delete</a></td><!--/TMPL_IF-->
+                    <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->" onclick="confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->); return false;">Delete</a></td><!--/TMPL_IF-->
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>
@@ -174,7 +191,7 @@ function CreateKey(){
         <h2>Edit Item</h2>
     <!-- /TMPL_IF -->	
         <!-- TMPL_LOOP NAME="item" -->
-               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+               <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
    
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
@@ -190,9 +207,6 @@ function CreateKey(){
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-    <!-- TMPL_IF name="barcode_not_unique" -->
-        ERROR : Barcode already exists !
-    <!-- /TMPL_IF -->
     <!-- TMPL_IF name="opisadd" -->
     <input type="button" value="Add item"  onclick="Check(this.form)" accesskey="w" />
     <!-- TMPL_ELSE -->
@@ -202,12 +216,12 @@ function CreateKey(){
     <input type="button" value="Save Changes" onclick="Check(this.form)" accesskey="w" />
     <!-- /TMPL_IF -->
 
+</div>
     </form>
 </div>
 </div>
-</div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="additem-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

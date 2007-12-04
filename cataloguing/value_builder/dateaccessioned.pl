@@ -66,6 +66,7 @@ sub plugin_javascript {
 //<![CDATA[
 function Blur$function_name(index) {
 }
+
 function Focus$function_name(subfield_managed) {
 	for (i=0 ; i<document.f.field_value.length ; i++) {
                 if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
