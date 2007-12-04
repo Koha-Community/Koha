@@ -24,7 +24,7 @@ use C4::Output;
 use CGI;
 use C4::Branch; # GetBranches
 use C4::Auth;
-use C4::Date;
+use C4::Dates;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Members;

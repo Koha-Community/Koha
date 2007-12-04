@@ -35,7 +35,7 @@ my $query   = $input->param('query');
 print $input->header(-type => 'text/plain', -charset => 'ISO-8859-1');
 
 my $dbh = C4::Context->dbh;
-my $query = "SELECT surname, firstname, cardnumber, address, city, zipcode ".
+$query = "SELECT surname, firstname, cardnumber, address, city, zipcode ".
             "FROM borrowers " .
             "WHERE surname LIKE '". $query . "%' " .
             "OR firstname LIKE '" . $query . "%' " .

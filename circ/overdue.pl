@@ -24,21 +24,19 @@ use C4::Output;
 use CGI;
 use C4::Auth;
 use C4::Branch;
-use C4::Date;
+use C4::Dates;
 
 my $input = new CGI;
-my $type  = $input->param('type');
+my $type    = $input->param('type');
+my $theme   = $input->param('theme');    # only used if allowthemeoverride is set
+my $order   = $input->param('order');
+my $showall = $input->param('showall');
 
-my $theme = $input->param('theme');    # only used if allowthemeoverride is set
-my $order=$input->param('order');
-my $bornamefilter=$input->param('borname');
-my $borcatfilter=$input->param('borcat');
-my $itemtypefilter=$input->param('itemtype');
-my $borflagsfilter=$input->param('borflags') || " ";
-my $branchfilter=$input->param('branch');
-my $showall=$input->param('showall');
-my $theme = $input->param('theme'); # only used if allowthemeoverride is set
-
+my  $bornamefilter = $input->param('borname');
+my   $borcatfilter = $input->param('borcat');
+my $itemtypefilter = $input->param('itemtype');
+my $borflagsfilter = $input->param('borflags') || " ";
+my   $branchfilter = $input->param('branch');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

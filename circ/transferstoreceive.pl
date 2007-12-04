@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Output;
 use C4::Branch;
 use C4::Auth;
-use C4::Date;
+use C4::Dates;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;
@@ -41,7 +41,7 @@ my $input = new CGI;
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 my $itemnumber = $input->param('itemnumber');
-my $todaysdate = join "-", &Today;
+
 
 # if we have a resturn of the form to delete the transfer, we launch the subrroutine
 if ($itemnumber) {
@@ -93,15 +93,11 @@ foreach my $br ( keys %$branches ) {
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
             my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
 
-            $getransf{'title'}        = $gettitle->{'title'};
             $getransf{'datetransfer'} = format_date( $num->{'datesent'} );
-            $getransf{'biblionumber'} = $gettitle->{'biblionumber'};
-            $getransf{'itemnumber'}   = $gettitle->{'itemnumber'};
-            $getransf{'barcode'}      = $gettitle->{'barcode'};
-            $getransf{'itemtype'}       = $itemtypeinfo->{'description'};
-            $getransf{'homebranch'}     = $gettitle->{'homebranch'};
-            $getransf{'holdingbranch'}  = $gettitle->{'holdingbranch'};
-            $getransf{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
+            $getransf{'itemtype'} = $itemtypeinfo->{'description'};
+			foreach (qw(title biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
+            	$getransf{$_} = $gettitle->{$_};
+			}
 
             # 				we check if we have a reserv for this transfer
             my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'} );
@@ -128,7 +124,7 @@ foreach my $br ( keys %$branches ) {
 
 $template->param(
     branchesloop => \@branchesloop,
-    show_date    => format_date($todaysdate),
+    show_date    => format_date(join("-", &Today)),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -27,7 +27,7 @@ use CGI;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Date;
+use C4::Dates;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
@@ -141,7 +141,7 @@ if($duedatespec) {
 #        ($year, $month, $day) = ($duedatespec) ? split /-/, $duedatespec : (0,0,0);
 #}
 
-my @datearr = localtime( time() );
+my @datearr = localtime();
 
 # FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
 my $todaysdate =

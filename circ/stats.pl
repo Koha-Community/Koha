@@ -78,8 +78,8 @@ warn "d : $date // d2 : $date2";
 my @payments = TotalPaid( $date, $date2 );
 my $count    = @payments;
 my $total    = 0;
+my $totalw   = 0;
 my $oldtime;
-my $totalw = 0;
 my @loop;
 my %row;
 my $i = 0;
@@ -136,11 +136,7 @@ while ( $i < $count ) {
             }
         }
     }
-    my $hour = substr( $payments[$i]{'timestamp'}, 8,  2 );
-    my $min  = substr( $payments[$i]{'timestamp'}, 10, 2 );
-    my $sec  = substr( $payments[$i]{'timestamp'}, 12, 2 );
-    my $time = "$hour:$min:$sec";
-    my $time2 = "$payments[$i]{'date'}";
+    my $time2 = $payments[$i]{'date'};
     my $branch = Getpaidbranch( $time2, $payments[$i]{'borrowernumber'} );
     my $borrowernumber = $payments[$i]{'borrowernumber'};
     my $oldtime        = $payments[$i]{'timestamp'};
@@ -150,12 +146,8 @@ while ( $i < $count ) {
         && $oldtype == $payments[$i]{'accounttype'}
         && $oldtime eq $payments[$i]{'timestamp'} )
     {
-        my $hour = substr( $payments[$i]{'timestamp'}, 8,  2 );
-        my $min  = substr( $payments[$i]{'timestamp'}, 10, 2 );
-        my $sec  = substr( $payments[$i]{'timestamp'}, 12, 2 );
-        my $time = "$hour:$min:$sec";
-        my $time2 = "$payments[$i]{'date'}";
-        my $branch = Getpaidbranch( $time2, $payments[$i]{'borrowernumber'} );
+        my $xtime2 = $payments[$i]{'date'};
+        my $branch = Getpaidbranch( $xtime2, $payments[$i]{'borrowernumber'} );
         if ( $payments[$i]{'accounttype'} eq 'W' ) {
             $totalw += $payments[$i]{'amount'};
         }
