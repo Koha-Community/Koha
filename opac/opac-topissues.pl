@@ -94,8 +94,8 @@ $template->param(do_it => 1,
                 results_loop => \@results,
                 );
 
-# load the branches
-my $branches = GetBranches();
+# load the branches		## again??
+$branches = GetBranches();
 my @branch_loop;
 for my $branch_hash (sort keys %$branches ) {
     my $selected=(C4::Context->userenv && ($branch_hash eq C4::Context->userenv->{branch})) if (C4::Context->preference('SearchMyLibraryFirst'));
@@ -109,7 +109,7 @@ for my $branch_hash (sort keys %$branches ) {
 $template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
 
 #doctype
-my $itemtypes = GetItemTypes;
+$itemtypes = GetItemTypes;
 my @itemtypeloop;
 foreach my $thisitemtype (keys %$itemtypes) {
         my %row =(value => $thisitemtype,

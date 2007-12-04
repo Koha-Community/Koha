@@ -18,7 +18,7 @@ use C4::Search;
 use C4::Output;
 use C4::Members;
 use HTML::Template::Pro;
-use C4::Date;
+use C4::Dates;
 use C4::Biblio;
 
 my $query = new CGI;

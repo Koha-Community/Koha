@@ -362,20 +362,19 @@ my @operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes;
-@indexes = split("\0",$params->{'idx'});
+my @indexes = split("\0",$params->{'idx'});
 
 # if a simple index (only one)  display the index used in the top search box
-if (@indexes[0] && !@indexes[1]) {
-	$template->param("ms_".@indexes[0] => 1);
+if ($indexes[0] && !$indexes[1]) {
+	$template->param("ms_".$indexes[0] => 1);
 }
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
 @operands = split("\0",$params->{'q'}) if $params->{'q'};
 
 # if a simple search, display the value in the search box
-if (@operands[0] && !@operands[1]) {
-    $template->param(ms_value => @operands[0]);
+if ($operands[0] && !$operands[1]) {
+    $template->param(ms_value => $operands[0]);
 }
 
 # limits are use to limit to results to a pre-defined category such as branch or language
@@ -408,35 +407,31 @@ my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
-my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
+my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type);
 
 my @results;
 
 ## I. BUILD THE QUERY
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
 
-## parse the query_cgi string and put it into a form suitable for <input>s
-my @query_inputs;
-for my $this_cgi ( split('&',$query_cgi) ) {
-	next unless $this_cgi;
-	$this_cgi =~ m/(.*=)(.*)/;
-	my $input_name = $1;
-	my $input_value = $2;
-	$input_name =~ s/=$//;
-	push @query_inputs, { input_name => $input_name, input_value => $input_value };
+sub _input_cgi_parse ($) { 
+	my @elements;
+	for my $this_cgi ( split('&',shift) ) {
+		next unless $this_cgi;
+		$this_cgi =~ /(.*)=(.*)/;
+		my $input_name = $1;
+		my $input_value = $2;
+		push @elements, { input_name => $input_name, input_value => $input_value };
+	}
+	return @elements;
 }
+
+## parse the query_cgi string and put it into a form suitable for <input>s
+my @query_inputs = _input_cgi_parse($query_cgi);
 $template->param ( QUERY_INPUTS => \@query_inputs );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
-my @limit_inputs;
-for my $this_cgi ( split('&',$limit_cgi) ) {
-	next unless $this_cgi;
-    $this_cgi =~ m/(.*=)(.*)/;
-    my $input_name = $1;
-    my $input_value = $2;
-    $input_name =~ s/=$//;
-    push @limit_inputs, { input_name => $input_name, input_value => $input_value };
-}
+my @limit_inputs = _input_cgi_parse($query_cgi);
 
 # add OPAC 'hidelostitems'
 # not items with 
@@ -467,7 +462,6 @@ if (C4::Context->preference('NoZebra')) {
 }
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
-
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }

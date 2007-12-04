@@ -26,7 +26,6 @@ my $query=new CGI;
 
 my $sessionID=$query->cookie('sessionID');
 
-
 if ($ENV{'REMOTE_USER'}) {
     print $query->header();
     print startpage();
@@ -53,23 +52,26 @@ while (my ($sid, $u, $lasttime) = split(/:/, <S>)) {
     $sessions->{$sid}->{'userid'}=$u;
     $sessions->{$sid}->{'lasttime'}=$lasttime;
 }
+close S;
 open (S, ">/tmp/sessions");
 foreach (keys %$sessions) {
-    my $userid=$sessions->{$_}->{'userid'};
+    my   $userid=$sessions->{$_}->{'userid'};
     my $lasttime=$sessions->{$_}->{'lasttime'};
     print S "$_:$userid:$lasttime\n";
 }
+close S;
 
 my $dbh = C4::Context->dbh;
 # Check that this is the ip that created the session before deleting it
+# This script and function are apparently unfinished.  --atz (Dec 4 2007)
 my $session = get_session($sessionID);
 $session->flush;
 $session->delete;
 my $sth=$dbh->prepare("delete from sessions where sessionID=?");
 $sth->execute($sessionID);
 open L, ">>/tmp/sessionlog";
-my $time=localtime(time());
-printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, $time;
+printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, localtime;	
+							# where is $ip is coming from??
 close L;
 
 my $cookie=$query->cookie(-name => 'sessionID',
@@ -77,10 +79,6 @@ my $cookie=$query->cookie(-name => 'sessionID',
         -expires => '+1y');
 
 # Should redirect to opac home page after logging out
-
 print $query->redirect("/cgi-bin/koha/opac-main.pl");
-
 exit;
-# 
-
 

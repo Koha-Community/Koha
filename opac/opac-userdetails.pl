@@ -25,7 +25,7 @@ use C4::Koha;
 use C4::Circulation;
 
 use C4::Output;
-use C4::Date;
+use C4::Dates;
 use C4::Members;
 
 my $query = new CGI;

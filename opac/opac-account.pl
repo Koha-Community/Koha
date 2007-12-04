@@ -24,7 +24,7 @@ use C4::Members;
 use C4::Circulation;
 use C4::Auth;
 use C4::Output;
-use C4::Date;
+use C4::Dates;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -40,7 +40,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 # get borrower information ....
 my $borr = GetMemberDetails( $borrowernumber );
-
 my @bordat;
 $bordat[0] = $borr;
 
@@ -63,7 +62,7 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
     if (   $accts->[$i]{'accounttype'} ne 'F'
         && $accts->[$i]{'accounttype'} ne 'FU' )
     {
-        $accts->[$i]{'print_title'};
+        $accts->[$i]{'print_title'};	# FIXME: Useless use of hash element in void context
     }
 }
 

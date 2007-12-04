@@ -37,7 +37,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Koha;
 use HTML::Template::Pro;
-use C4::Date;
+use C4::Dates;
 
 my $query=new CGI;
 

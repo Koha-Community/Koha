@@ -27,7 +27,7 @@ use C4::Reserves;
 use C4::Members;
 use C4::Output;
 use C4::Biblio;
-use C4::Date;
+use C4::Dates;
 use C4::Letters;
 use C4::Branch; # GetBranches
 

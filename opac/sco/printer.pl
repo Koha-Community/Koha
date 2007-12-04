@@ -34,7 +34,7 @@ use C4::Authsco;
 use C4::Output;
 use C4::Koha;
 use HTML::Template::Pro;
-use C4::Date;
+use C4::Dates;
 
 my $query=new CGI;
 #my ($loggedinuser, $sessioncookie, $sessionID) = checkauth
@@ -70,7 +70,7 @@ my $printer = getprinter($query, $printers);
 my $branchcookie;
 my $printercookie;
 if ($query->param('setcookies')) {
-	$branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
+	$branchcookie  = $query->cookie(-name=>'branch',  -value=>"$branch",  -expires=>'+1y');
 	$printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
 }
 
@@ -90,9 +90,6 @@ my $todaysdate = (1900+$datearr[5]).sprintf ("%0.2d", ($datearr[4]+1)).sprintf (
 #$bordat[0] = $borr;
 
 #$template->param(BORROWER_INFO => \@bordat);
-
-
-
 
 ######################End code modified by christina Lee############################
 
@@ -148,12 +145,10 @@ if (my $qnumber = $query->param('questionnumber')) {
 }
 
 
-
 my ($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer);
 #Begin code edited by Christina Lee
 #my $barc = 123456789;
 my $barc = cuecatbarcodedecode($barcode);
-
 
 (my $year, my $month, my $day) = set_duedate($barc);
 #End code edited by Christina Lee
@@ -161,14 +156,12 @@ my $barc = cuecatbarcodedecode($barcode);
 # if the barcode is set
 if ($barcode) {
 	$barcode = cuecatbarcodedecode($barcode);
-
-
  
 #note: edit code here --Christina Lee
 	my ($datedue, $invalidduedate) = fixdate($year, $month, $day);
 	unless ($invalidduedate) {
 		$env{'datedue'}=$datedue;
-		my @time=localtime(time);
+		my @time=localtime();
 		my $date= (1900+$time[5])."-".($time[4]+1)."-".$time[3];
 		($iteminformation, $duedate, $rejected, $question, $questionnumber, $defaultanswer, $message)
 					= issuebook(\%env, $borr, $barcode, \%responses, $date);
@@ -217,7 +210,7 @@ for (my $i=1; $i<32; $i++) {
 foreach (('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')) {
     my $selected='';
     if (($query->param('stickyduedate')) && ($month==$counter)) {
-	$selected='selected';
+		$selected='selected';
     }
     $monthoptions.="<option value=$counter $selected>$_";
     $counter++;
@@ -225,7 +218,7 @@ foreach (('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 
 for (my $i=$datearr[5]+1900; $i<$datearr[5]+1905; $i++) {
     my $selected='';
     if (($query->param('stickyduedate')) && ($year==$i)) {
-	$selected='selected';
+		$selected='selected';
     }
     $yearoptions.="<option value=$i $selected>$i";
 }
@@ -263,8 +256,7 @@ if ($borr) {
 	my $pcolor = '';
 	my $od = '';
 	foreach my $book (sort {$b->{'timestamp'} <=> $a->{'timestamp'}} @todaysissues){        
-		 my $dd = $book->{'date_due'};
-		
+		my $dd = $book->{'date_due'};
 		my $datedue = $book->{'date_due'};
 		$dd=format_date($dd);
 		$datedue=~s/-//g;
@@ -272,13 +264,13 @@ if ($borr) {
 			$od = 'true';
 			$dd="$dd\n";
 		}
-		($tcolor eq $linecolor1) ? ($tcolor=$linecolor2) : ($tcolor=$linecolor1);
+		$tcolor = ($tcolor eq $linecolor1) ? $linecolor2 : $linecolor1;
 		$book->{'od'}=$od;
 		$book->{'dd'}=$dd;
 		$book->{'tcolor'}=$tcolor;
 	        if ($book->{'author'} eq ''){
 		    $book->{'author'}=' ';
-		}    
+		}
 		push @realtodayissues,$book;
 	}
     
@@ -292,27 +284,25 @@ if ($borr) {
     # template
 
     foreach my $book (sort {$a->{'date_due'} cmp $b->{'date_due'}} @previousissues){
-	 my $dd = $book->{'date_due'};
-	
-
-	my $datedue = $book->{'date_due'};
-	$dd=format_date($dd);
-	my $pcolor = '';
-	my $od = '';
-	$datedue=~s/-//g;
-	if ($datedue < $todaysdate) {
-		$od = 'true';
-	    $dd="$dd\n";
+		my $dd = $book->{'date_due'};
+		my $datedue = $book->{'date_due'};
+		$dd=format_date($dd);
+		my $pcolor = '';
+		my $od = '';
+		$datedue=~s/-//g;
+		if ($datedue < $todaysdate) {
+			$od = 'true';
+		    $dd="$dd\n";
+		}
+		$pcolor = ($pcolor eq $linecolor1) ? $linecolor2 : $linecolor1;
+		$book->{'dd'}=$dd; 
+		$book->{'od'}=$od;
+		$book->{'tcolor'}=$pcolor;
+		if ($book->{'author'} eq ''){
+		    $book->{'author'}=' ';
+		}    
+		push @realprevissues,$book
 	}
-	($pcolor eq $linecolor1) ? ($pcolor=$linecolor2) : ($pcolor=$linecolor1); 
-	$book->{'dd'}=$dd; 
-	$book->{'od'}=$od;
-	$book->{'tcolor'}=$pcolor;
-	if ($book->{'author'} eq ''){
-	    $book->{'author'}=' ';
-	}    
-	push @realprevissues,$book
-   }
 }
 
 my @values;
@@ -371,11 +361,10 @@ $template->param(
 		todayissues => \@realtodayissues,
 		previssues => \@realprevissues,
 		responseloop => \@responsearray,
-		 month=>$month,
-		 day=>$day,
-		 year=>$year
-		 
-	);
+		month=>$month,
+		day=>$day,
+		year=>$year
+);
 
 if ($branchcookie) {
     $cookie=[$cookie, $branchcookie, $printercookie];
@@ -392,19 +381,18 @@ sub cuecatbarcodedecode {
     my @fields = split(/\./,$barcode);
     my @results = map(decode($_), @fields[1..$#fields]);
     if ($#results == 2){
-  	return $results[2];
+  		return $results[2];
     } else {
-	return $barcode;
+		return $barcode;
     }
 }
 
 sub fixdate {
     my ($year, $month, $day) = @_;
-    my $invalidduedate;
-    my $date;
     if (($year eq 0) && ($month eq 0) && ($year eq 0)) {
-	$env{'datedue'}='';
-    } else {
+		$env{'datedue'}='';
+		return(undef,undef);
+    } 
 	
 # FIXME - Can we set two flags here, one that says 'invalidduedate', so that 
 # the template can check for it, and then one for a particular message?
@@ -412,20 +400,21 @@ sub fixdate {
 # Invalid Due Date Specified. Book was not issued.  Never that many days
 # in February! </TMPL_IF> </TMPL_IF>
 
+    my ($date);
+	my ($invalidduedate) = "Invalid Due Date Specified. Book was not issued. ";
 	if (($year eq 0) || ($month eq 0) || ($year eq 0)) {
-	    $invalidduedate="Invalid Due Date Specified. Book was not issued.<p>\n";
+	    $invalidduedate .= "<p>\n";
 	} else {
 	    if (($day>30) && (($month==4) || ($month==6) || ($month==9) || ($month==11))) {
-		$invalidduedate = "Invalid Due Date Specified. Book was not issued. Only 30 days in $month month.<p>\n";
+			$invalidduedate .= "Only 30 days in $month month.<p>\n";
 	    } elsif (($day > 29) && ($month == 2)) {
-		$invalidduedate="Invalid Due Date Specified. Book was not issued.  Never that many days in February!<p>\n";
+			$invalidduedate .= "Never that many days in February!<p>\n";
 	    } elsif (($month == 2) && ($day > 28) && (($year%4) && ((!($year%100) || ($year%400))))) {
-		$invalidduedate="Invalid Due Date Specified. Book was not issued.  $year is not a leap year.<p>\n";
+			$invalidduedate .= "$year is not a leap year.<p>\n";
 	    } else {
-		$date="$year-$month-$day";
+			$date="$year-$month-$day";
 	    }
 	}
-    }
     return ($date, $invalidduedate);
 }
 
@@ -447,65 +436,50 @@ sub patrontable {
 		$template->param(
 			noissues => 'true',
 			color => $color,
-			 );
-		if ($flag eq 'GNA'){
+		);
+		if ($flag eq 'GNA'    ){ $template->param(    gna => 'true'); }
+		if ($flag eq 'LOST'   ){ $template->param(   lost => 'true'); }
+		if ($flag eq 'DBARRED'){ $template->param(dbarred => 'true'); }
+		if ($flag eq 'CHARGES'){
 			$template->param(
-				gna => 'true'
-				);
-			}
-		if ($flag eq 'LOST'){
-			$template->param(
-				lost => 'true'
+				charges => 'true',
+				chargesmsg => $flags->{'CHARGES'}->{'message'}
 			);
-			}
-		if ($flag eq 'DBARRED'){
-			$template->param(
-				dbarred => 'true'
-			);
-			}
+		}
+	} else {
 		if ($flag eq 'CHARGES') {
 			$template->param(
 				charges => 'true',
 				chargesmsg => $flags->{'CHARGES'}->{'message'}
-				 );
-		}
-	} else {
-		 if ($flag eq 'CHARGES') {
-			$template->param(
-				charges => 'true',
-				chargesmsg => $flags->{'CHARGES'}->{'message'}
 			 );
 		}
-	    	if ($flag eq 'WAITING') {
+	    if ($flag eq 'WAITING') {
 			my $items=$flags->{$flag}->{'itemlist'};
 		        my @itemswaiting;
 			foreach my $item (@$items) {
-			my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
-			$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
-			push @itemswaiting, $iteminformation;
+				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
+				$iteminformation->{'branchname'} = $branches->{$iteminformation->{'holdingbranch'}}->{'branchname'};
+				push @itemswaiting, $iteminformation;
 			}
 			$template->param(
 				waiting => 'true',
 				waitingmsg => $flags->{'WAITING'}->{'message'},
 				itemswaiting => \@itemswaiting,
-				 );
+			 );
 		}
 		if ($flag eq 'ODUES') {
 			$template->param(
 				odues => 'true',
 				oduesmsg => $flags->{'ODUES'}->{'message'}
-				 );
+			 );
 
 			my $items=$flags->{$flag}->{'itemlist'};
-			my $currentcolor=$color;
-			{
-			my $color=$currentcolor;
-			    my @itemswaiting;
+			my $lcolor=$color;
+			my @itemswaiting;
 			foreach my $item (@$items) {
-				($color eq $linecolor1) ? ($color=$linecolor2) : ($color=$linecolor1);
+				$lcolor = ($lcolor eq $linecolor1) ? $linecolor2 : $linecolor1;
 				my ($iteminformation) = getiteminformation(\%env, $item->{'itemnumber'}, 0);
 				push @itemswaiting, $iteminformation;
-			}
 			}
 			if ($query->param('module') ne 'returns'){
 				$template->param( nonreturns => 'true' );
@@ -515,7 +489,7 @@ sub patrontable {
 			$template->param(
 				notes => 'true',
 				notesmsg => $flags->{'NOTES'}->{'message'}
-				 );
+			);
 		}
 	}
     }
@@ -531,59 +505,47 @@ sub printslip {
     my ($borrowerissues) = currentissues($env, $borrower);
     $env->{'nottodaysissues'}=1;
     $env->{'todaysissues'}=0;
-    my ($borroweriss2)=currentissues($env, $borrower);
+    my ($borroweriss2) = currentissues($env, $borrower);
     $env->{'nottodaysissues'}=0;
     my $i=0;
     my @issues;
     foreach (sort {$a <=> $b} keys %$borrowerissues) {
-	$issues[$i]=$borrowerissues->{$_};
-	my $dd=$issues[$i]->{'date_due'};
-	#convert to nz style dates
-	#this should be set with some kinda config variable
-	my @tempdate=split(/-/,$dd);
-	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
-	$i++;
+		$issues[$i]=$borrowerissues->{$_};
+		$issues[$i]->{'date_due'} = C4::Dates->new($issues[$i]->{'date_due'},'iso')->output;
+		# convert to syspref style date
+		$i++;
     }
     foreach (sort {$a <=> $b} keys %$borroweriss2) {
-	$issues[$i]=$borroweriss2->{$_};
-	my $dd=$issues[$i]->{'date_due'};
-	#convert to nz style dates
-	#this should be set with some kinda config variable
-	my @tempdate=split(/-/,$dd);
-	$issues[$i]->{'date_due'}="$tempdate[2]/$tempdate[1]/$tempdate[0]";
-	$i++;
-    }
+		$issues[$i]=$borroweriss2->{$_};
+		$issues[$i]->{'date_due'} = C4::Dates->new($issues[$i]->{'date_due'},'iso')->output;
+		# convert to syspref style date
+		$i++;
+	}
     remoteprint($env,\@issues,$borrower);
 }
 
 # Begin code added by Christina Lee
 sub set_duedate
 {
-  my $loanlength;
+	my $loanlength;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare ("select loanlength from biblioitems, biblio,itemtypes, items where barcode = ? and biblio.biblionumber = biblioitems.biblionumber and biblioitems.biblionumber = items.biblionumber and biblioitems.itemtype=itemtypes.itemtype;"); 
+	$sth->execute($barc);
+	while (my @val = $sth->fetchrow_array()) {
+		$loanlength = @val[0];
+	}
+	my ($s, $min, $hr, $mday, $mo, $year, $wday, $yday) = localtime(time + $loanlength * 86400);
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare ("select loanlength from biblioitems, biblio,itemtypes, items where barcode = ? and biblio.biblionumber = biblioitems.biblionumber and biblioitems.biblionumber = items.biblionumber and biblioitems.itemtype=itemtypes.itemtype;"); 
-  $sth->execute($barc);
-  while (my @val = $sth->fetchrow_array())
-  {
-    $loanlength = @val[0];
-  }
-  (my $s, my $min, my $hr, my $mday, my $mo, my $year, my $wday, my $yday) = localtime(time + $loanlength * 86400);
-
-  #adjust month and date for output
-  $year = $year - 100;
-  $mo = $mo + 1;
-
-  return ($year, $mo, $mday);
+	#adjust month and date for output
+	$year -= 100;
+	$mo++;
+	return ($year, $mo, $mday);
 }
 
-sub get_due_date
-{
- my $duedate;
-
- my $dbh = C4::Context->dbh;
-
-
+sub get_due_date {
+	# This function is clearly unfinished. Don't rely on it yet.
+	my $duedate;
+	my $dbh = C4::Context->dbh;
 }
 
 # End code added by Christina Lee
