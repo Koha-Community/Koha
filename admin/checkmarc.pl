@@ -72,7 +72,7 @@ $sth->execute;
 my $field;
 ($res,$res2,$field) = $sth->fetchrow;
 my $tagfield = $res;
-my $tab = $res2;
+$tab = $res2;
 my $subtotal=0;
 #warn "TAGF : $tagfield";
 while (($res,$res2,$field) = $sth->fetchrow) {

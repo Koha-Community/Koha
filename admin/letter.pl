@@ -39,7 +39,7 @@
 
 use strict;
 use CGI;
-use C4::Date;
+use C4::Dates;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
@@ -56,10 +56,9 @@ sub StringSearch  {
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
+		push(@results,$data);
+		$cnt++;
 	}
-	#  $sth->execute;
 	$sth->finish;
 	return ($cnt,\@results);
 }
@@ -85,11 +84,9 @@ my ($template, $borrowernumber, $cookie)
 			     });
 
 if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+	$template->param(script_name => $script_name, $op  => 1); # we show only the TMPL_VAR names $op
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+	$template->param(script_name => $script_name, else => 1); # we show only the TMPL_VAR names $op
 }
 
 $template->param(action => $script_name);
@@ -106,49 +103,33 @@ if ($op eq 'add_form') {
 	}
 	# build field list
 	my @SQLfieldname;
-	my %line = ('value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname');
-	push @SQLfieldname, \%line;
-	my %line = ('value' => "LibrarianSurname", 'text' => 'LibrarianSurname');
-	push @SQLfieldname, \%line;
-	my %line = ('value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress');
-	push @SQLfieldname, \%line;
-	my $sth2=$dbh->prepare("SHOW COLUMNS from branches");
-	$sth2->execute;
-	my %line = ('value' => "", 'text' => '---BRANCHES---');
-	push @SQLfieldname, \%line;
-	while ((my $field) = $sth2->fetchrow_array) {
-		my %line = ('value' => "branches.".$field, 'text' => "branches.".$field);
+	foreach(qw(LibrarianFirstname LibrarianSurname LibrarianEmailaddress)) {
+		my %line = ('value' => $_, 'text' => $_);
 		push @SQLfieldname, \%line;
 	}
-	my $sth2=$dbh->prepare("SHOW COLUMNS from biblio");
-	$sth2->execute;
-	my %line = ('value' => "", 'text' => '---BIBLIO---');
 
-	push @SQLfieldname, \%line;
-	while ((my $field) = $sth2->fetchrow_array) {
-		# note : %line is redefined, otherwise \%line contains the same value for every entry of the list
-		my %line = ('value' => "biblio.".$field, 'text' => "biblio.".$field);
+	foreach(qw(branches biblio biblioitems)) {
+		my $sth2=$dbh->prepare("SHOW COLUMNS from $_");
+		$sth2->execute;
+		my %line = ('value' => "", 'text' => '---' . uc($_) . '---');
 		push @SQLfieldname, \%line;
+		while ((my $field) = $sth2->fetchrow_array) {
+			%line = ('value' => "$_.".$field, 'text' => "$_.".$field);
+			push @SQLfieldname, \%line;
+		}
 	}
-	my $sth2=$dbh->prepare("SHOW COLUMNS from biblioitems");
-	$sth2->execute;
-	my %line = ('value' => "", 'text' => '---BIBLIOITEMS---');
+
+	my %line = ('value' => "",              'text' => '---ITEMS---');
 	push @SQLfieldname, \%line;
-	while ((my $field) = $sth2->fetchrow_array) {
-		my %line = ('value' => "biblioitems.".$field, 'text' => "biblioitems.".$field);
-		push @SQLfieldname, \%line;
-	}
-	my %line = ('value' => "", 'text' => '---ITEMS---');
-	push @SQLfieldname, \%line;
-	my %line = ('value' => "items.content", 'text' => 'items.content');
+	%line = ('value' => "items.content", 'text' => 'items.content');
 	push @SQLfieldname, \%line;
 	
 	my $sth2=$dbh->prepare("SHOW COLUMNS from borrowers");
 	$sth2->execute;
-	my %line = ('value' => "", 'text' => '---BORROWERS---');
+	%line = ('value' => "",              'text' => '---BORROWERS---');
 	push @SQLfieldname, \%line;
 	while ((my $field) = $sth2->fetchrow_array) {
-		my %line = ('value' => "borrowers.".$field, 'text' => "borrowers.".$field);
+		%line = ('value' => "borrowers.".$field, 'text' => "borrowers.".$field);
 		push @SQLfieldname, \%line;
 	}
 	if ($code) {
@@ -157,7 +138,8 @@ if ($op eq 'add_form') {
 	} else {
 	    $template->param(adding => 1);
 	}
-	$template->param(name => $letter->{name},title => $letter->{title},
+	$template->param(name => $letter->{name},
+					title => $letter->{title},
 					content => $letter->{content},
 					$letter->{module} => 1,
 					SQLfieldname => \@SQLfieldname,);
@@ -167,11 +149,10 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("replace letter (module,code,name,title,content) values (?,?,?,?,?)");
-	$sth->execute($input->param('module'),$input->param('code'),$input->param('name'),$input->param('title'),$input->param('content'));
+	$sth->execute(map {$input->param('module')} qw(code name title content));
 	$sth->finish;
-	 print $input->redirect("letter.pl");
-	 exit;
-# END $OP eq ADD_VALIDATE
+	print $input->redirect("letter.pl");
+	exit;
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
@@ -180,11 +161,10 @@ if ($op eq 'add_form') {
 	$sth->execute($code);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
-	$template->param(module => $data->{module});
 	$template->param(code => $code);
-	$template->param(name => $data->{'name'});
-	$template->param(content => $data->{'content'});
-													# END $OP eq DELETE_CONFIRM
+	foreach(qw(module name content)) {
+		$template->param($_ => $data->{$_});
+	}
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
@@ -194,30 +174,25 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("delete from letter where module=? and code=?");
 	$sth->execute($module,$code);
 	$sth->finish;
-	 print $input->redirect("letter.pl");
-	 return;
-													# END $OP eq DELETE_CONFIRMED
+	print $input->redirect("letter.pl");
+	return;
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	if  ($searchfield ne '') {
-	        $template->param(search => 1);
+		$template->param(search => 1);
 		$template->param(searchfield => $searchfield);
 	}
 	my ($count,$results)=StringSearch($searchfield,'web');
 	my $toggle="white";
 	my @loop_data =();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 'white'){
-	    		$toggle="#ffffcc";
-	  	} else {
-	    		$toggle="white";
-	  	}
-	   my %row_data;
-	   $row_data{toggle} = $toggle;
-	   $row_data{module} = $results->[$i]{'module'};
-	   $row_data{code} = $results->[$i]{'code'};
-	   $row_data{name} = $results->[$i]{'name'};
-	   push(@loop_data, \%row_data);
+		$toggle = ($toggle eq 'white') ? "#ffffcc" : "white" ;
+		my %row_data;
+		$row_data{toggle} = $toggle;
+		foreach (qw(module code name)) {
+			$row_data{$_} = $results->[$i]{$_};
+		}
+		push(@loop_data, \%row_data);
 	}
 	$template->param(letter => \@loop_data);
 } #---- END $OP eq DEFAULT

@@ -42,7 +42,7 @@ use CGI;
 use C4::Branch; # GetBranches
 use List::Util qw/min/;
 
-use C4::Date;
+use C4::Dates;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Context;
@@ -51,9 +51,9 @@ use C4::Koha;
 
 my $input = new CGI;
 my $script_name="/cgi-bin/koha/admin/aqbudget.pl";
-my $bookfundid=$input->param('bookfundid');
-my $aqbudgetid=$input->param('aqbudgetid');
-my $branchcodeid=$input->param('branchcode');
+my $bookfundid   = $input->param('bookfundid');
+my $aqbudgetid   = $input->param('aqbudgetid');
+my $branchcodeid = $input->param('branchcode');
 my $pagesize = 20;
 my $op = $input->param('op');
 
@@ -70,7 +70,7 @@ my ($template, $borrowernumber, $cookie)
 
 $template->param(
     action => $script_name,
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     script_name => $script_name,
     $op || 'else' => 1,
 );
@@ -166,10 +166,10 @@ SELECT branchcode,
     $sth->finish;
 
     $template->param(
-        dateformat => display_date_format(),
+        dateformat => C4::Dates->new()->visual(),
         aqbudgetid => $dataaqbudget->{'aqbudgetid'},
         startdate => format_date($dataaqbudget->{'startdate'}),
-        enddate => format_date($dataaqbudget->{'enddate'}),
+          enddate => format_date($dataaqbudget->{'enddate'}),
         budgetamount => $dataaqbudget->{'budgetamount'},
         branches => \@branches,
     );
@@ -341,7 +341,7 @@ SELECT aqbudgetid,
        budgetamount,
        branchcode
   FROM aqbudget
-  WHERE 1 = 1';
+  WHERE 1 = 1';			# What's the point?
 
     my @bindings;
 

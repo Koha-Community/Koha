@@ -59,7 +59,7 @@ use C4::Koha;
 use C4::Context;
 use C4::Bookfund;
 use C4::Output;
-use C4::Date;
+use C4::Dates;
 
 # use Smart::Comments;
 
@@ -169,14 +169,13 @@ elsif ($op eq 'add_validate') {
 elsif ($op eq 'mod_validate') {
 ### mod ddddddddddddddddd
 
-	my $bookfundid = uc $input->param('bookfundid');
-        my $bookfundname = $input->param('bookfundname');
-        my $branchcode = $input->param('branchcode') || undef;
-        my $current_branch = $input->param('current_branch') || undef;
+	my $bookfundid  = uc $input->param('bookfundid');
+	my $bookfundname   = $input->param('bookfundname');
+	my $branchcode     = $input->param('branchcode'    ) || undef;
+	my $current_branch = $input->param('current_branch') || undef;
+	warn "$bookfundid, $bookfundname, $branchcode";
 
-warn "$bookfundid, $bookfundname, $branchcode";
-
-    my $number = Countbookfund($bookfundid,$branchcodeid);
+	my $number = Countbookfund($bookfundid,$branchcodeid);
 ### $number
 
 
@@ -187,10 +186,6 @@ warn "$bookfundid, $bookfundname, $branchcode";
    $input->redirect('aqbookfund.pl');
 # END $OP eq ADD_VALIDATE
 }
-
-
-
-
 
 #-----############# DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
@@ -224,17 +219,15 @@ else { # DEFAULT
             code => $branchcode,
             name => $branches->{$branchcode}->{branchname},
         };
-
         if (defined $input->param('filter_branchcode')
             and $input->param('filter_branchcode') eq $branchcode) {
             $row->{selected} = 1;
         }
-
         push @branchloop, $row;
     }
 
     my @bookfundids_loop;
-    my $sth = GetBookFundsId();
+    $sth = GetBookFundsId();
 
     while (my $row = $sth->fetchrow_hashref) {
         if (defined $input->param('filter_bookfundid') and $input->param('filter_bookfundid') eq $row->{bookfundid}){
@@ -259,7 +252,7 @@ else { # DEFAULT
 
     # does the book funds have budgets?
     my @loop_id;
-    my $sth = GetBookFundsId();
+    $sth = GetBookFundsId();
     while (my $row = $sth->fetchrow){
         push @loop_id, $row;
     }
