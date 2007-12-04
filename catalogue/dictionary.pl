@@ -110,7 +110,7 @@ if ($op eq "do_search") {
 
 	$sth=$dbh->prepare($strsth);
 	$sth->execute($value);
-	my $total;
+	$total=0;
 	my @catresults;
 	my $javalue;
 	while (my ($value,$ctresults)=$sth->fetchrow) {
@@ -127,7 +127,7 @@ if ($op eq "do_search") {
 	}
 	
 
-	my $strsth="Select distinct authtypecode from marc_subfield_structure where (";
+	$strsth="Select distinct authtypecode from marc_subfield_structure where (";
 	foreach my $listtags (@tags){
 		my @taglist=split /,/,$listtags;
 		foreach my $curtag (@taglist){
@@ -137,9 +137,9 @@ if ($op eq "do_search") {
 	}
 	
 	$strsth=~s/ OR$/)/;
-	my $strsth = $strsth." and authtypecode is not NULL";
+	$strsth .= " and authtypecode is not NULL";
 # 	warn $strsth;
-	my $sth=$dbh->prepare($strsth);
+	$sth=$dbh->prepare($strsth);
 	$sth->execute;
 	
 	#

@@ -29,7 +29,8 @@ my $plugin_name="cataloguing/value_builder/".$input->param("plugin_name");
 # opening plugin. Just check wether we are on a developper computer on a production one
 # (the cgidir differs)
 my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
+my $vbdir = "$cgidir/cataloguing/value_builder";
+unless (-r $vbdir and -d $vbdir) {
 	$cgidir = C4::Context->intranetdir;
 }
 do $cgidir."/".$plugin_name;
