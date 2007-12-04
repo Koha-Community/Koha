@@ -32,7 +32,7 @@ use C4::Context;
 use C4::Output;
 use C4::Members;
 use C4::Koha;
-use C4::Date;
+use C4::Dates;
 use C4::Input;
 use C4::Log;
 use C4::Branch; # GetBranches
@@ -108,8 +108,8 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
     $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
-    $newdata{'dateexpiry'}=format_date_in_iso($newdata{'dateexpiry'}) if ($newdata{dateexpiry});  
-    $newdata{'dateofbirth'}=format_date_in_iso($newdata{'dateofbirth'}) if ($newdata{dateofbirth});  
+    $newdata{'dateexpiry'}  =format_date_in_iso($newdata{'dateexpiry'}  ) if ($newdata{dateexpiry});  
+    $newdata{'dateofbirth'} =format_date_in_iso($newdata{'dateofbirth'} ) if ($newdata{dateofbirth});  
   # check permission to modify login info.
     if ($borrower_data && ($borrower_data->{'category_type'} eq 'S') && (! C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1}))) {
 		$noUpdateLogin =1;
@@ -190,15 +190,10 @@ if ($op eq 'save' || $op eq 'insert'){
 
 if ($op eq 'modify' || $op eq 'insert'){
   unless ($newdata{'dateexpiry'}){
-    if ($newdata{'dateenrolled'}){
-      $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$newdata{'dateenrolled'});
-    } else {  
-      my $today= sprintf('%04d-%02d-%02d', Today());
-      $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$today) ;
-    }  
+	my $arg2 = $newdata{'dateenrolled'} || sprintf('%04d-%02d-%02d', Today());
+    $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
   }
 }
-
 
 if ($op eq 'insert'){
   # Check if the userid is unique
@@ -228,8 +223,7 @@ if ($op eq 'save'){
 		&ModMember(%newdata);    
 	    if ($destination eq "circ")	{
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
-	    }
-	    else {
+	    } else {
 		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 	    }
 	}
@@ -311,7 +305,8 @@ if ($select_city eq '' ){
 my $selectcity=&getidcity($data{'city'});
 $default_city=$selectcity;
 }
-my($cityid,$name_city)=GetCities();
+my($cityid);
+($cityid,$name_city)=GetCities();
 $template->param( city_cgipopup => 1) if ($cityid );
 my $citypopup = CGI::popup_menu(-name=>'select_city',
         -id => 'select_city',
@@ -327,8 +322,8 @@ my($roadtypeid,$road_type)=GetRoadTypes();
 my $roadpopup = CGI::popup_menu(-name=>'streettype',
         -id => 'streettype',
         -values=>$roadtypeid,
-          -labels=>$road_type,
-          -override => 1,
+        -labels=>$road_type,
+        -override => 1,
         -default=>$default_roadtype
         );  
 
@@ -336,10 +331,10 @@ my $default_borrowertitle;
 $default_borrowertitle=$data{'title'} ;
 my($borrowertitle)=GetTitles();
 my $borrotitlepopup = CGI::popup_menu(-name=>'title',
-              -id => 'btitle',
-              -values=>$borrowertitle,
-              -override => 1,
-              -default=>$default_borrowertitle
+        -id => 'btitle',
+        -values=>$borrowertitle,
+        -override => 1,
+        -default=>$default_borrowertitle
         );    
 
 
@@ -426,7 +421,6 @@ if (C4::Context->preference("memberofinstitution")){
         -size     => 5,
         -multiple => 'true'
 
-        
     );
 }
 
@@ -436,10 +430,8 @@ if (C4::Context->preference("memberofinstitution")){
 my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data{'sort1'});
 if ($CGIsort1) {
   $template->param(CGIsort1 => $CGIsort1);
-  $template->param( sort1 => $data{'sort1'});
-} else {
-  $template->param( sort1 => $data{'sort1'});
 }
+$template->param( sort1 => $data{'sort1'});
 
 my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data{'sort2'});
 if ($CGIsort2) {
@@ -460,14 +452,15 @@ if ($data{'dateenrolled'} eq ''){
   my $today= sprintf('%04d-%02d-%02d', Today());
   $data{'dateenrolled'}=$today;
 }
-$data{'surname'}=uc($data{'surname'}) if C4::Context->preference('uppercasesurnames');
-$data{'dateenrolled'}=format_date($data{'dateenrolled'});
-$data{'dateexpiry'}=format_date($data{'dateexpiry'});
-$data{'contactname'}=uc($data{'contactname'}) if C4::Context->preference('uppercasesurnames');
-$data{'dateofbirth'} = format_date($data{'dateofbirth'});
+if (C4::Context->preference('uppercasesurnames')) {
+	$data{'surname'}    =uc($data{'surname'}    );
+	$data{'contactname'}=uc($data{'contactname'});
+}
+$data{'dateenrolled'} = format_date($data{'dateenrolled'});
+$data{'dateexpiry'}   = format_date($data{'dateexpiry'});
+$data{'dateofbirth'}  = format_date($data{'dateofbirth'});
 
-$template->param( "showguarantor"  => 1) if ($category_type!~/A|I|S/);# associate with step to know where u are
-$template->param( "showguarantor"  => 0) if ($category_type=~/A|I|S/);# associate with step to know where u are
+$template->param( "showguarantor"  => ($category_type=~/A|I|S/) ? 0 : 1); # associate with step to know where you are
   warn "$step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;# associate with step to know where u are
@@ -475,7 +468,7 @@ $template->param( "step"  => $step) if $step;# associate with step to know where
 $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   category_type => $category_type,#to know the category type of the borrower
-  DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+  DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
   select_city => $select_city,
   "$category_type"  => 1,# associate with step to know where u are
   destination   => $destination,#to know wher u come from and wher u must go in redirect
@@ -493,7 +486,7 @@ $template->param(
   borrotitlepopup => $borrotitlepopup,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
-  dateformat      => display_date_format(),
+  dateformat      => C4::Dates->new()->visual(),
   check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 

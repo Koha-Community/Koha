@@ -37,7 +37,6 @@ my $borrowernumber = $input->param('borrowernumber');
 my $photo = $input->param('photo');
 
 my $template_name;
-my $upload_dir= 
 my $htdocs = C4::Context->config('intrahtdocs');
 my $upload_dir = $htdocs."/borrowerimages";
 if($photo eq  ""){
