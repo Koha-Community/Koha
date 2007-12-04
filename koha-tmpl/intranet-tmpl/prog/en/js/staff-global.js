@@ -10,6 +10,9 @@ function _(s) { return s } // dummy function for gettext
 	        $('#header_search').find('div:visible').find('input').eq(0).focus();
 	    }	
 	});
+	$(".close").click(function(){
+		window.close();
+	});
  });
  
 

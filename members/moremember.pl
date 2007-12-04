@@ -299,6 +299,7 @@ my $branch=C4::Context->userenv->{'branch'};
 $template->param($data);
 
 $template->param(
+	detailview => 1,
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
     reregistration   => $reregistration,

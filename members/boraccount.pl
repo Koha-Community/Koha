@@ -103,6 +103,7 @@ $template->param(
 			    branchcode => $data->{'branchcode'},
 	            total           => sprintf("%.2f",$total),
                 totalcredit => $totalcredit,
+				finesview => 1,
                 accounts        => \@accountrows );
 
 output_html_with_http_headers $input, $cookie, $template->output;
