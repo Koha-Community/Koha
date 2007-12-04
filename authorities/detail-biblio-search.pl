@@ -77,8 +77,7 @@ my $tag;
 # loop through each tab 0 through 9
 # for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
 # loop through each tag
-	my @fields = $record->fields();
-	my @loop_data =();
+my @fields = $record->fields();
 	foreach my $field (@fields) {
 			my @subfields_data;
 		# if tag <10, there's no subfield, use the "@" trick
