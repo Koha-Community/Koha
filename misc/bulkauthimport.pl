@@ -34,7 +34,7 @@ parameters :
 \tn : the number of the record to import. If missing, all the file is imported
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
 \tc : the char encoding. At the moment, only MARC21 and UNIMARC supported. MARC21 by default.
-\d : delete EVERYTHING related to biblio in koha-DB before import  :tables :
+\td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \t\tbiblioitems, \t\tsubjects,\titems
 \tmarc_biblio,
 \t\tmarc_subfield_table, \tmarc_word, \t\tmarc_blob_subfield
