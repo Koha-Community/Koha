@@ -63,8 +63,8 @@ sub plugin_javascript {
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned");
 	my $res  = "
 <script type=\"text/javascript\">
+//<![CDATA[
 function Blur$function_name(index) {
-
 }
 function Focus$function_name(subfield_managed) {
 	for (i=0 ; i<document.f.field_value.length ; i++) {
@@ -79,6 +79,7 @@ return 0;
 
 function Clic$function_name(subfield_managed) {
 }
+//]]>
 </script>
 ";
 	return ($function_name,$res);
