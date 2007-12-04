@@ -28,7 +28,8 @@ use Date::Calc qw (Parse_Date);
 
 use C4::Auth;
 use C4::Koha;
-use C4::Circulation::Circ2;
+use C4::Circulation;
+use C4::Members;
 use C4::Date;
 
 my $query = new CGI;
@@ -44,16 +45,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = getpatroninformation( undef, $borrowernumber );
+my ( $borr, $flags ) =  GetMemberDetails( $borrowernumber );
 
 # Create Calendar
 my $calendar = Data::ICal->new();
 
 # get issued items ....
-my $issues = getissues($borr);
+my ($countissues,$issues) = GetPendingIssues($borrowernumber);
 
-foreach my $key ( keys %$issues ) {
-    my $issue  = $issues->{$key};
+foreach my $issue ( @$issues ) {
     my $vevent = Data::ICal::Entry::Event->new();
     my ($year,$month,$day)=Parse_Date($issue->{'date_due'});
     ($year,$month,$day)=split /-|\/|\.|:/,$issue->{'date_due'} unless ($year && $month);
