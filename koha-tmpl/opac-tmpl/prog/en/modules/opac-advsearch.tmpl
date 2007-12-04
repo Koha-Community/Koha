@@ -4,28 +4,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE name="masthead.inc" -->
-
-<div id="doc3" class="yui-t1">
+<!-- TMPL_INCLUDE name="masthead-basic.inc" -->
+<div id="doc3" class="yui-t7">
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
 <form action="/cgi-bin/koha/opac-search.pl" method="get">
+	<div class="yui-gc">
+<div class="yui-u first">
     <!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
-        <div id="expanded_options">
         <!-- TMPL_IF NAME="outer_servers_loop" -->
             <!-- DATABASES -->
             
             <fieldset>
                     <legend>Select local databases:</legend>
-                        <p>
-                            <!-- TMPL_LOOP NAME="outer_servers_loop" -->
+                        <!-- TMPL_LOOP NAME="outer_servers_loop" -->
                             <!-- TMPL_LOOP NAME="inner_servers_loop" -->
-                            <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->"/><label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
+
+<!-- TMPL_IF NAME="checked" --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" checked="<!-- TMPL_VAR NAME="checked" -->" value="<!-- TMPL_VAR NAME="value" -->" /><!-- TMPL_ELSE --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->"  value="<!-- TMPL_VAR NAME="value" -->" /><!-- /TMPL_IF -->
+<label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
                             <!-- /TMPL_LOOP -->
                             <!-- /TMPL_LOOP -->
-                        </p>
             </fieldset>
             <!-- /DATABASES -->
         <!-- /TMPL_IF -->
@@ -34,13 +31,14 @@
             <!-- REMOTE DATABASES -->
             <fieldset>
                 <legend>Select remote databases:</legend>
-                    <p>
-                            <!-- TMPL_LOOP NAME="outer_sup_servers_loop" -->
+                    <!-- TMPL_LOOP NAME="outer_sup_servers_loop" -->
                             <!-- TMPL_LOOP NAME="inner_sup_servers_loop" -->
-                            <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" <!-- TMPL_IF NAME="checked" -->checked="<!-- TMPL_VAR NAME="checked" -->"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="value" -->"/><label for="<!-- TMPL_VAR NAME="id" -->"><img alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->"/><!-- TMPL_VAR NAME="label" --></label>
+
+<!-- TMPL_IF NAME="checked" --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" checked="<!-- TMPL_VAR NAME="checked" -->" value="<!-- TMPL_VAR NAME="value" -->" /><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+<!-- /TMPL_IF -->
+<label for="<!-- TMPL_VAR NAME="id" -->"><img alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /><!-- TMPL_VAR NAME="label" --></label>
                             <!-- /TMPL_LOOP -->
                             <!-- /TMPL_LOOP -->
-                </p>
                 </fieldset>
             <!-- /REMOTE DATABASES -->
         <!-- /TMPL_IF -->
@@ -53,54 +51,142 @@
     
         <!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="search_boxes_label" -->
-                <p style="text-indent: 4.5em;">
+                <!-- p tag was here -->
             <!-- TMPL_ELSE -->
-                <p>
+                 <!-- p tag was here -->
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
-            <p>
+             <!-- p tag was here -->
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
-            <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
-            <option value="au,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
-            <!-- TMPL_IF NAME="expanded_options" -->
-                <option value="au,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
-                <option value="cpn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
-                <option value="cfn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
-                <option value="cpn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name Phrase</option>
-                <option value="cfn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
-                <option value="pn,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
-                <option value="pn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
-            <!-- /TMPL_IF -->
-            <option value="ln" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Language</option>
-            <!-- TMPL_IF NAME="expanded_options" -->
-                <option value="nt" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Notes/Comments</option>
-            <!-- /TMPL_IF -->
-            <option value="pb,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher</option>
-            <option value="pl,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publisher Location</option>
-            <!-- TMPL_IF NAME="expanded_options" -->
-                <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
-                <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
-                <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-                <option value="lcn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
-            <!-- /TMPL_IF -->
-            <option value="su,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
-            <!-- TMPL_IF NAME="expanded_options" -->
-                <option value="su,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
-            <!-- /TMPL_IF -->
-            <option value="ti,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
-            <!-- TMPL_IF NAME="expanded_options" -->
-                <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-            <!-- /TMPL_IF -->
-                <option value="se,wrdl" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
+		<!-- TMPL_IF NAME="selected" -->
+            <option value="kw" selected="selected">Keyword</option>
+			<!-- TMPL_ELSE -->
+            <option value="kw">Keyword</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="selected" -->
+            <option value="au,wrdl" selected="selected">Author</option>
+			<!-- TMPL_ELSE -->
+            <option value="au,wrdl">Author</option>
+			<!-- /TMPL_IF -->
+			
+<!-- TMPL_IF NAME="expanded_options" -->
+			
+			<!-- TMPL_IF NAME="selected" -->
+                <option value="au,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+<!-- TMPL_ELSE -->
+                <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" -->
+                <option value="cpn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+<!-- TMPL_ELSE -->
+                <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" -->
+                <option value="cfn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+<!-- TMPL_ELSE -->
+                <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+<!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF NAME="selected" -->
+                    <option value="cpn,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name Phrase</option>
+<!-- TMPL_ELSE -->
+                    <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option><!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF NAME="selected" -->
+                    <option value="pn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
+<!-- TMPL_ELSE -->	
+                    <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option><!-- /TMPL_IF -->
+				
+ <!-- TMPL_IF NAME="selected" -->				
+                    <option value="pn,phr"selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>		
+<!-- TMPL_ELSE -->		
+                    <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
+<!-- /TMPL_IF -->
+
+ <!-- /TMPL_IF -->
+ 
+ <!-- TMPL_IF NAME="selected" -->
+            <option value="ln" selected="selected">Language</option>
+			<!-- TMPL_ELSE -->
+            <option value="ln">Language</option><!-- /TMPL_IF -->
+
+
+                <!-- TMPL_IF NAME="expanded_options" -->
+                <!-- TMPL_IF NAME="selected" --><option value="nt" selected="selected">Notes/Comments</option><!-- TMPL_ELSE -->
+                <option value="nt">Notes/Comments</option><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="selected" -->
+            <option value="pb,wrdl" selected="selected">Publisher</option>
+			<!-- TMPL_ELSE -->
+            <option value="pb,wrdl">Publisher</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" -->
+                <option value="pl,wrdl" selected="selected">Publisher Location</option>
+<!-- TMPL_ELSE -->
+                <option value="pl,wrdl">Publisher Location</option><!-- /TMPL_IF -->
+                
+
+
+                <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_IF NAME="selected" -->
+                <option value="sn" selected="selected">Standard Number</option>
+				<!-- TMPL_ELSE -->
+                <option value="sn">Standard Number</option><!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF NAME="selected" -->
+                    <option value="nb" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
+					<!-- TMPL_ELSE -->
+                    <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option><!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF NAME="selected" -->
+                    <option value="ns" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
+					<!-- TMPL_ELSE -->
+                    <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option><!-- /TMPL_IF -->
+				
+				<!-- TMPL_IF NAME="selected" -->
+                    <option value="lcn" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+					<!-- TMPL_ELSE -->
+                    <option value="lcn">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option><!-- /TMPL_IF -->
+
+
+                <!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="selected" -->
+            <option value="su,wrdl" selected="selected">Subject</option>
+			<!-- TMPL_ELSE -->
+            <option value="su,wrdl">Subject</option><!-- /TMPL_IF -->
+
+
+                <!-- TMPL_IF NAME="expanded_options" -->
+				<!-- TMPL_IF NAME="selected" -->
+                <option value="su,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
+<!-- TMPL_ELSE -->
+                <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option><!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="selected" -->
+            <option value="ti,wrdl" selected="selected">Title</option>
+			<!-- TMPL_ELSE -->
+            <option value="ti,wrdl">Title</option><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="expanded_options" -->
+				<!-- TMPL_IF NAME="selected" -->
+                <option value="ti,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
+<!-- TMPL_ELSE -->
+                <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option><!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="selected" -->
+                <option value="se,wrdl" selected="selected">Series Title</option>
+<!-- TMPL_ELSE -->
+                <option value="se,wrdl">Series Title</option><!-- /TMPL_IF -->
         </select>
-        <input type="text" size="30" name="q" title="Enter search terms" value=""/>
+        <input type="text" size="30" name="q" title="Enter search terms" value="" />
         <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="scan_index" --><input type='checkbox' name='scan' id='scan' value='1'/> Scan Indexes<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
+
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
     <div id="advsearch-itemtype">
@@ -108,12 +194,11 @@
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
-        <td><p>
-        <input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mc:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
-        <!--TMPL_VAR Name="description" --></p></td>
-        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
+        <td><input type="checkbox" id="mt-<!--TMPL_VAR Name="number" -->" name="limit" value="mt:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
+        <!--TMPL_VAR Name="description" --></td>
+        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- TMPL_ELSE --><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
-      </tr>
+      
     </table>
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->
@@ -124,334 +209,322 @@
             <table class="itemtypes">
                 <tr>
                     <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t"/><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
-                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
-                    <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i"/><label for="mc-sr" title="Spoken, Books on CD and Cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books on Tape" />Books on Tape</label></td>
+                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings" /><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
+                    <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i" /><label for="mc-sr" title="Spoken, Books on CD and Cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books on Tape" />Books on Tape</label></td>
                 </tr>
                 <tr>
-                    <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c"/><label for="mc-cf" title="Computer files, Data, Software"><img border="0" src="/intranet-tmpl/prog/en/images/CD-ROM software.gif" alt="Computer Files" />Computer Files</label></td>
-                    <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH"/><label for="mc-lh" title="Local History Materials"><img border="0" src="/intranet-tmpl/prog/en/images/Local history.gif" alt="Local History Materials" />Local History Materials</label></td>
-                    <td><input type="checkbox" id="mc-map" name="limit" value="mc:a"/><label for="mc-map" title="Maps, Globes"><img border="0" src="/intranet-tmpl/prog/en/images/PF.gif " alt="Maps" />Maps</label></td>
+                    <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c" /><label for="mc-cf" title="Computer files, Data, Software"><img border="0" src="/intranet-tmpl/prog/en/images/CD-ROM software.gif" alt="Computer Files" />Computer Files</label></td>
+                    <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH" /><label for="mc-lh" title="Local History Materials"><img border="0" src="/intranet-tmpl/prog/en/images/Local history.gif" alt="Local History Materials" />Local History Materials</label></td>
+                    <td><input type="checkbox" id="mc-map" name="limit" value="mc:a" /><label for="mc-map" title="Maps, Globes"><img border="0" src="/intranet-tmpl/prog/en/images/PF.gif " alt="Maps" />Maps</label></td>
                 </tr>
                 <tr>
-                    <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j"/><label for="mc-mus" title="Music"><img border="0" src="/intranet-tmpl/prog/en/images/CDM.gif" alt="Music" />Music</label></td>
-                    <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o"/><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/en/images/KIT.gif" alt="Kits" />Kits</label></td>
-                    <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF"/><label for="mc-ref" title="Reference"><img border="0" src="/intranet-tmpl/prog/en/images/REF.gif" alt="Reference" />Reference</label></td>
-                    
-                </tr>
+                    <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j" /><label for="mc-mus" title="Music"><img border="0" src="/intranet-tmpl/prog/en/images/CDM.gif" alt="Music" />Music</label></td>
+                    <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o" /><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/en/images/KIT.gif" alt="Kits" />Kits</label></td>
+                    <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF" /><label for="mc-ref" title="Reference"><img border="0" src="/intranet-tmpl/prog/en/images/REF.gif" alt="Reference" />Reference</label></td></tr>
                 
                 </table>
         </fieldset>
-        <!-- /TYPE LIMITS -->
-        <div id="sidebar">
+        <!-- /BASIC LIMITS -->
+
         <!-- SUBTYPE LIMITS -->
             <fieldset>
-            <legend>Subtype limits</legend><p>
-            
-            <select name="limit" class="subtype">
+            <legend>Subtype limits</legend><select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Any Audience</option>
-                <option value="aud:a" >Easy</option>
-                <option value="aud:c" >Juvenile</option>
-                <option value="aud:d" >Young Adult</option>
-                <option value="aud:e" >Adult</option>
-            </select>
+                    <option value="aud:a">Easy</option>
+                    <option value="aud:c">Juvenile</option>
+                    <option value="aud:d">Young Adult</option>
+                    <option value="aud:e">Adult</option>
+                </select>
             
             <select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Any Content</option>
-                <option value="fic:1" >Fiction</option>
-                <option value="fic:0" >Non Fiction</option>
-                <option value="bio:b" >Biography</option>
-                <option value="mus:j" >Musical recording</option>
-                <option value="mus:i" >Non-musical recording</option>
-            </select>
+                    <option value="fic:1">Fiction</option>
+                    <option value="fic:0">Non Fiction</option>
+                    <option value="bio:b">Biography</option>
+                    <option value="mus:j">Musical recording</option>
+                    <option value="mus:i">Non-musical recording</option>
+                </select>
     
             
             <select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Any Format</option>
-                <option value="l-format:ta" >Regular print</option>
-                <option value="l-format:tb" >Large print</option>
-                <option value="l-format:fk" >Braille</option>
-                <option value="" >-----------</option>
-                <option value="l-format:sd" >CD audio</option>
-                <option value="l-format:ss" >Cassette recording</option>
-                <option value="l-format:vf" >VHS tape / Videocassette</option>
-                <option value="l-format:vd" >DVD video / Videodisc</option>
-                <option value="l-format:co" >CD Software</option>
-                <option value="l-format:cr" >Website</option>
-            </select>
+                    <option value="l-format:ta">Regular print</option>
+                    <option value="l-format:tb">Large print</option>
+                    <option value="l-format:fk">Braille</option>
+                    <option value="">-----------</option>
+                    <option value="l-format:sd">CD audio</option>
+                    <option value="l-format:ss">Cassette recording</option>
+                    <option value="l-format:vf">VHS tape / Videocassette</option>
+                    <option value="l-format:vd">DVD video / Videodisc</option>
+                    <option value="l-format:co">CD Software</option>
+                    <option value="l-format:cr">Website</option>
+                </select>
             
             <select name="limit" class="subtype">
-                <option value="" >Additional Content Types</option>
-                <option value="ctype:a" >Abstracts/summaries</option>
-                <option value="ctype:b" >Bibliographies</option>
-                <option value="ctype:c" >Catalogs</option>
-                <option value="ctype:d" >Dictionaries</option>
-                <option value="ctype:e" >Encyclopedias </option>
-                <option value="ctype:f" >Handbooks</option>
-                <option value="ctype:g" >Legal articles</option>
-                <option value="ctype:i" >Indexes</option>
-                <option value="ctype:j" >Patent document</option>
-                <option value="ctype:k" >Discographies</option>
-                <option value="ctype:l" >Legislation</option>
-                <option value="ctype:m" >Theses</option>
-                <option value="ctype:n" >Surveys</option>
-                <option value="ctype:o" >Reviews</option>
-                <option value="ctype:p" >Programmed texts</option>
-                <option value="ctype:q" >Filmographies</option>
-                <option value="ctype:r" >Directories</option>
-                <option value="ctype:s" >Statistics</option>
-                <option value="ctype:t" >Technical reports</option>
-                <option value="ctype:v" >Legal cases and case notes</option>
-                <option value="ctype:w" >Law reports and digests</option>
-                <option value="ctype:z" >Treaties </option>
-            </select>
-        </p>
+                <option value="">Additional Content Types</option>
+                    <option value="ctype:a">Abstracts/summaries</option>
+                    <option value="ctype:b">Bibliographies</option>
+                    <option value="ctype:c">Catalogs</option>
+                    <option value="ctype:d">Dictionaries</option>
+                    <option value="ctype:e">Encyclopedias </option>
+                    <option value="ctype:f">Handbooks</option>
+                    <option value="ctype:g">Legal articles</option>
+                    <option value="ctype:i">Indexes</option>
+                    <option value="ctype:j">Patent document</option>
+                    <option value="ctype:k">Discographies</option>
+                    <option value="ctype:l">Legislation</option>
+                    <option value="ctype:m">Theses</option>
+                    <option value="ctype:n">Surveys</option>
+                    <option value="ctype:o">Reviews</option>
+                    <option value="ctype:p">Programmed texts</option>
+                    <option value="ctype:q">Filmographies</option>
+                    <option value="ctype:r">Directories</option>
+                    <option value="ctype:s">Statistics</option>
+                    <option value="ctype:t">Technical reports</option>
+                    <option value="ctype:v">Legal cases and case notes</option>
+                    <option value="ctype:w">Law reports and digests</option>
+                    <option value="ctype:z">Treaties </option>
+                </select>
     
     </fieldset>
     <!--/TMPL_IF -->
     <!--TMPL_IF Name="UNIMARC" -->
-        <div id="sidebar">
         <!-- SUBTYPE LIMITS -->
             <fieldset>
             <legend>Champs Cod&eacute;s</legend>
-            <p>
             <label>Public</label>
             <select name="limit" class="subtype">
-                <option value="" SELECTED="selected" class="menuheader">Tout public</option>
-                <option value="aud:a">Jeunesse en g&eacute;n&eacute;ral</option>
-                <option value="aud:b">Pr&eacute;-scolaire</option>
-                <option value="aud:c">scolaire</option>
-                <option value="aud:d">enfant</option>
-                <option value="aud:e">jeune adulte</option>
-                <option value="aud:k">adulte, haut niveau</option>
-                <option value="aud:m">fiction ou vulg adulte</option>
-                <option value="aud:u">inconnu</option>
-            </select>
-            </p>
-            <p>
+                <option value="" selected="selected" class="menuheader">Tout public</option>
+                    <option value="aud:a">Jeunesse en g&eacute;n&eacute;ral</option>
+                    <option value="aud:b">Pr&eacute;-scolaire</option>
+                    <option value="aud:c">scolaire</option>
+                    <option value="aud:d">enfant</option>
+                    <option value="aud:e">jeune adulte</option>
+                    <option value="aud:k">adulte, haut niveau</option>
+                    <option value="aud:m">fiction ou vulg adulte</option>
+                    <option value="aud:u">inconnu</option>
+                </select>
             <label>Format</label>
             <select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Tout format</option>
-                    <option value="Material-type:r">Impression normale</option>
-                    <option value="Material-type:d">Impression en gros caractere</option>
-                    <option value="Material-type:e">Journal</option>
-                    <option value="Material-type:f">Caractere braille et moon</option>
-                    <option value="Material-type:g">Micro-impression</option>
-                    <option value="Material-type:h">Manuscrit</option>
-                    <option value="Material-type:i">Multimedia</option>
-                    <option value="Material-type:j">Impression en reduction</option>
-                    <option value="Material-type:z">Autres formes de presentation</option>
-            </select>
-            </p>
-            <p>
+                        <option value="Material-type:r">Impression normale</option>
+                        <option value="Material-type:d">Impression en gros caractere</option>
+                        <option value="Material-type:e">Journal</option>
+                        <option value="Material-type:f">Caractere braille et moon</option>
+                        <option value="Material-type:g">Micro-impression</option>
+                        <option value="Material-type:h">Manuscrit</option>
+                        <option value="Material-type:i">Multimedia</option>
+                        <option value="Material-type:j">Impression en reduction</option>
+                        <option value="Material-type:z">Autres formes de presentation</option>
+                </select>
             <label>Forme</label>
             <select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Toute forme</option>
-                <option value="Literature-Code:a">fiction, roman</option>
-                <option value="Literature-Code:b">Theatre, piece televisee</option>
-                <option value="Literature-Code:c">Essais</option>
-                <option value="Literature-Code:d">Humour, satire</option>
-                <option value="Literature-Code:e">Lettres</option>
-                <option value="Literature-Code:f">Nouvelles</option>
-                <option value="Literature-Code:g">Poesie</option>
-                <option value="Literature-Code:h">Discours, art oratoire</option>
-                <option value="Literature-Code:y">Il ne s'agit pas d'un texte litteraire</option>
-                <option value="Literature-Code:z">formes vari&eacute;es ou autres formes litteraires</option>
-            </select>
-            </p>
-            <p>
+                    <option value="Literature-Code:a">fiction, roman</option>
+                    <option value="Literature-Code:b">Theatre, piece televisee</option>
+                    <option value="Literature-Code:c">Essais</option>
+                    <option value="Literature-Code:d">Humour, satire</option>
+                    <option value="Literature-Code:e">Lettres</option>
+                    <option value="Literature-Code:f">Nouvelles</option>
+                    <option value="Literature-Code:g">Poesie</option>
+                    <option value="Literature-Code:h">Discours, art oratoire</option>
+                    <option value="Literature-Code:y">Il ne s'agit pas d'un texte litteraire</option>
+                    <option value="Literature-Code:z">formes vari&eacute;es ou autres formes litteraires</option>
+                </select>
             <label>Biographie</label>
             <select name="limit" class="subtype" size="1">
                 <option value="">Tout type de biographie</option>
-                <option value="Biography-code:y">C'est pas une biographie</option>
-                <option value="Biography-code:a">autobiographie (y compris correspondance...)</option>
-                <option value="Biography-code:b">Biographie individuelle</option>
-                <option value="Biography-code:c">Biographie collective</option>
-                <option value="Biography-code:d">Contient des informations biographiques</option>
-            </select>
-            </p>
-            <p>
+                    <option value="Biography-code:y">C'est pas une biographie</option>
+                    <option value="Biography-code:a">autobiographie (y compris correspondance...)</option>
+                    <option value="Biography-code:b">Biographie individuelle</option>
+                    <option value="Biography-code:c">Biographie collective</option>
+                    <option value="Biography-code:d">Contient des informations biographiques</option>
+                </select>
             <label>Illustration</label>
             <select name="limit" class="subtype" size="1">
                 <option value="">Tout type d'illustration</option>
-                <option value="Illustration-Code:a">Illustrations</option>
-                <option value="Illustration-Code:b">Cartes</option>
-                <option value="Illustration-Code:c">Portraits</option>
-                <option value="Illustration-Code:d">cartes marines</option>
-                <option value="Illustration-Code:e">plans</option>
-                <option value="Illustration-Code:f">Planches</option>
-                <option value="Illustration-Code:g">Musique imprimee</option>
-                <option value="Illustration-Code:h">fac-similes</option>
-                <option value="Illustration-Code:i">armoiries</option>
-                <option value="Illustration-Code:j">Tables Genealogique</option>
-                <option value="Illustration-Code:k">Formulaires</option>
-                <option value="Illustration-Code:l">Specimens</option>
-                <option value="Illustration-Code:m">Enregistrement sonore</option>
-                <option value="Illustration-Code:n">Transparents</option>
-                <option value="Illustration-Code:o">Enluminures</option>
-                <option value="Illustration-Code:y">Sans illustrations</option>
-            </select>
-            </p>
-            <p>
+                    <option value="Illustration-Code:a">Illustrations</option>
+                    <option value="Illustration-Code:b">Cartes</option>
+                    <option value="Illustration-Code:c">Portraits</option>
+                    <option value="Illustration-Code:d">cartes marines</option>
+                    <option value="Illustration-Code:e">plans</option>
+                    <option value="Illustration-Code:f">Planches</option>
+                    <option value="Illustration-Code:g">Musique imprimee</option>
+                    <option value="Illustration-Code:h">fac-similes</option>
+                    <option value="Illustration-Code:i">armoiries</option>
+                    <option value="Illustration-Code:j">Tables Genealogique</option>
+                    <option value="Illustration-Code:k">Formulaires</option>
+                    <option value="Illustration-Code:l">Specimens</option>
+                    <option value="Illustration-Code:m">Enregistrement sonore</option>
+                    <option value="Illustration-Code:n">Transparents</option>
+                    <option value="Illustration-Code:o">Enluminures</option>
+                    <option value="Illustration-Code:y">Sans illustrations</option>
+                </select>
+            
             <label>Contenu</label>
             <select name="limit" class="subtype">
-                <option value="" >Tout type de contenu</option>
-                <option value="ctype:a" >Bibliographie</option>
-                <option value="ctype:b" >Catalogue</option>
-                <option value="ctype:c" >index</option>
-                <option value="ctype:d" >resume</option>
-                <option value="ctype:e" >Dictionnaire</option>
-                <option value="ctype:f" >encyclopedie</option>
-                <option value="ctype:g" >Repertoire</option>
-                <option value="ctype:h" >Description projet</option>
-                <option value="ctype:i" >statistiques</option>
-                <option value="ctype:j" >Manuels d'enseignement programme</option>
-                <option value="ctype:k" >Brevet</option>
-                <option value="ctype:l" >norme</option>
-                <option value="ctype:m" >Memoire ou these</option>
-                <option value="ctype:n" >Lois et decrets</option>
-                <option value="ctype:o" >Table numerique</option>
-                <option value="ctype:p" >Rapport technique</option>
-                <option value="ctype:q" >Sujet d'examen</option>
-                <option value="ctype:r" >Synthese bibliographique</option>
-                <option value="ctype:s" >Traite</option>
-                <option value="ctype:t" >Bande dessinee</option>
-                <option value="ctype:z" >Autres</option>
-            </select>
-            </p>
-            <p>
+                <option value="">Tout type de contenu</option>
+                    <option value="ctype:a">Bibliographie</option>
+                    <option value="ctype:b">Catalogue</option>
+                    <option value="ctype:c">index</option>
+                    <option value="ctype:d">resume</option>
+                    <option value="ctype:e">Dictionnaire</option>
+                    <option value="ctype:f">encyclopedie</option>
+                    <option value="ctype:g">Repertoire</option>
+                    <option value="ctype:h">Description projet</option>
+                    <option value="ctype:i">statistiques</option>
+                    <option value="ctype:j">Manuels d'enseignement programme</option>
+                    <option value="ctype:k">Brevet</option>
+                    <option value="ctype:l">norme</option>
+                    <option value="ctype:m">Memoire ou these</option>
+                    <option value="ctype:n">Lois et decrets</option>
+                    <option value="ctype:o">Table numerique</option>
+                    <option value="ctype:p">Rapport technique</option>
+                    <option value="ctype:q">Sujet d'examen</option>
+                    <option value="ctype:r">Synthese bibliographique</option>
+                    <option value="ctype:s">Traite</option>
+                    <option value="ctype:t">Bande dessinee</option>
+                    <option value="ctype:z">Autres</option>
+                </select>
+            
+            
             <label>Type vid&eacute;o</label>
             <select name="limit" class="subtype">
                 <option value="">Tout type video</option>
-                <option value="Video-mt:a">Film</option>
-                <option value="Video-mt:b">Document &agrave; projeter</option>
-                <option value="Video-mt:c">Enregistrement video</option>
-            </select>
-            </p>
+                    <option value="Video-mt:a">Film</option>
+                    <option value="Video-mt:b">Document &agrave; projeter</option>
+                    <option value="Video-mt:c">Enregistrement video</option>
+                </select>
+            
             </fieldset>
             <fieldset>
-            <legend>P&eacute;riodique</legend><p>
-            <p>
+            <legend>P&eacute;riodique</legend>
+            
             <label>Type periodique</label>
             <select name="limit" class="subtype">
             <option value="">Tout type de periodique</option>
-            <option value="Type-Of-Serial:a">Periodique</option>
-                <option value="Type-Of-Serial:b">Collection des monographies</option>
-                <option value="Type-Of-Serial:c">Journal</option>
-                <option value="Type-Of-Serial:z">autres</option>
-            </select>
-            </p>
-            <p>
+                <option value="Type-Of-Serial:a">Periodique</option>
+                    <option value="Type-Of-Serial:b">Collection des monographies</option>
+                    <option value="Type-Of-Serial:c">Journal</option>
+                    <option value="Type-Of-Serial:z">autres</option>
+                </select>
+            
+            
             <label>P&eacute;riodicit&eacute;</label>
             <select name="limit" class="subtype">
                 <option value="">Toute P&eacute;riodicit&eacute;</option>
-                    <option value="Frequency-code:a">Quotidien</option>
-                    <option value="Frequency-code:b">Bihebdomadaire</option>
-                    <option value="Frequency-code:c">Hebdomadaire</option>
-                    <option value="Frequency-code:d">Toutes les deux semaines</option>
-                    <option value="Frequency-code:e">Deux fois par mois</option>
-                    <option value="Frequency-code:f">Mensuel</option>
-                    <option value="Frequency-code:g">Bimestriel</option>
-                    <option value="Frequency-code:h">Trimestriel</option>
-                    <option value="Frequency-code:i">Trois fois par an</option>
-                    <option value="Frequency-code:j">Semestriel</option>
-                    <option value="Frequency-code:k">Annuel</option>
-                    <option value="Frequency-code:l">Bisanuel</option>
-                    <option value="Frequency-code:m">Triennal</option>
-                    <option value="Frequency-code:n">Trois fois par semaine</option>
-                    <option value="Frequency-code:o">Trois fois par mois</option>
-                    <option value="Frequency-code:u">Inconnue</option>
-                    <option value="Frequency-code:y">Sans periodicite</option>
-                    <option value="Frequency-code:i">Autre</option>
-            </select>
-            </p>
-            <p>
+                        <option value="Frequency-code:a">Quotidien</option>
+                        <option value="Frequency-code:b">Bihebdomadaire</option>
+                        <option value="Frequency-code:c">Hebdomadaire</option>
+                        <option value="Frequency-code:d">Toutes les deux semaines</option>
+                        <option value="Frequency-code:e">Deux fois par mois</option>
+                        <option value="Frequency-code:f">Mensuel</option>
+                        <option value="Frequency-code:g">Bimestriel</option>
+                        <option value="Frequency-code:h">Trimestriel</option>
+                        <option value="Frequency-code:i">Trois fois par an</option>
+                        <option value="Frequency-code:j">Semestriel</option>
+                        <option value="Frequency-code:k">Annuel</option>
+                        <option value="Frequency-code:l">Bisanuel</option>
+                        <option value="Frequency-code:m">Triennal</option>
+                        <option value="Frequency-code:n">Trois fois par semaine</option>
+                        <option value="Frequency-code:o">Trois fois par mois</option>
+                        <option value="Frequency-code:u">Inconnue</option>
+                        <option value="Frequency-code:y">Sans periodicite</option>
+                        <option value="Frequency-code:i">Autre</option>
+                </select>
+            
+            
             <label>Toute R&eacute;gularit&eacute;</label>
             <select name="limit" class="subtype">
                 <option value="">R&eacute;gularit&eacute;</option>
-                    <option value="Regularity-code:u">Inconnu</option>
-                    <option value="Regularity-code:a">Regulier</option>
-                    <option value="Regularity-code:b">Normalement irregulier</option>
-                    <option value="Regularity-code:y">Irregulier</option>
-            </select>
-            </p>
+                        <option value="Regularity-code:u">Inconnu</option>
+                        <option value="Regularity-code:a">Regulier</option>
+                        <option value="Regularity-code:b">Normalement irregulier</option>
+                        <option value="Regularity-code:y">Irregulier</option>
+                </select>
+            
     
             </fieldset>
             <fieldset>
-            <legend>Document pictural</legend><p>
+            <legend>Document pictural</legend>
             <select name="limit" class="subtype">
                     <option value="">Tout type</option>
-                    <option value="Graphics-type:a">Collage</option>
-                    <option value="Graphics-type:b">Dessin</option>
-                    <option value="Graphics-type:c">Peinture</option>
-                    <option value="Graphics-type:d">Reproduction photomecanique</option>
-                    <option value="Graphics-type:e">Negatif photo</option>
-                    <option value="Graphics-type:f">Tirage photographique</option>
-                    <option value="Graphics-type:h">Image</option>
-                    <option value="Graphics-type:i">Gravure</option>
-                    <option value="Graphics-type:k">Dessin technique</option>
-                    <option value="Graphics-type:z">Autres types de documents graphique non projetable</option>
-            </select>
+                        <option value="Graphics-type:a">Collage</option>
+                        <option value="Graphics-type:b">Dessin</option>
+                        <option value="Graphics-type:c">Peinture</option>
+                        <option value="Graphics-type:d">Reproduction photomecanique</option>
+                        <option value="Graphics-type:e">Negatif photo</option>
+                        <option value="Graphics-type:f">Tirage photographique</option>
+                        <option value="Graphics-type:h">Image</option>
+                        <option value="Graphics-type:i">Gravure</option>
+                        <option value="Graphics-type:k">Dessin technique</option>
+                        <option value="Graphics-type:z">Autres types de documents graphique non projetable</option>
+                </select>
             <select name="limit" class="subtype">
                 <option value="">tout support</option>
-                <option value="Graphics-support:a">Toile</option>
-                <option value="Graphics-support:b">Carte bristol</option>
-                <option value="Graphics-support:c">Carton / carte a dessin</option>
-                <option value="Graphics-support:d">Verre</option>
-                <option value="Graphics-support:j">Platre</option>
-                <option value="Graphics-support:k">Isorel</option>
-                <option value="Graphics-support:l">Porcelaine</option>
-                <option value="Graphics-support:m">Pierre</option>
-                <option value="Graphics-support:n">Bois</option>
-                <option value="Graphics-support:u">Inconnu</option>
-                <option value="Graphics-support:v">Support composite</option>
-                <option value="Graphics-support:e">Synthetique (plastique, vinyle...)</option>
-                <option value="Graphics-support:f">Peau</option>
-                <option value="Graphics-support:g">Textile</option>
-                <option value="Graphics-support:h">Metal</option>
-                <option value="Graphics-support:i">Papier</option>
-                <option value="Graphics-support:z">Autres</option>
-            </select>
-            </p>
+                    <option value="Graphics-support:a">Toile</option>
+                    <option value="Graphics-support:b">Carte bristol</option>
+                    <option value="Graphics-support:c">Carton / carte a dessin</option>
+                    <option value="Graphics-support:d">Verre</option>
+                    <option value="Graphics-support:j">Platre</option>
+                    <option value="Graphics-support:k">Isorel</option>
+                    <option value="Graphics-support:l">Porcelaine</option>
+                    <option value="Graphics-support:m">Pierre</option>
+                    <option value="Graphics-support:n">Bois</option>
+                    <option value="Graphics-support:u">Inconnu</option>
+                    <option value="Graphics-support:v">Support composite</option>
+                    <option value="Graphics-support:e">Synthetique (plastique, vinyle...)</option>
+                    <option value="Graphics-support:f">Peau</option>
+                    <option value="Graphics-support:g">Textile</option>
+                    <option value="Graphics-support:h">Metal</option>
+                    <option value="Graphics-support:i">Papier</option>
+                    <option value="Graphics-support:z">Autres</option>
+                </select>
+            
     </fieldset>
-    </div>
     <!--/TMPL_IF-->
 <!--/TMPL_IF-->
+</div>
+        <div class="yui-u">
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Location and availability: </legend>
-        <p>
-        <label>Branch</label><select name="limit" id="branchloop">
+        
+        <select name="limit" id="branchloop">
         <option value="">All branches</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <!--TMPL_IF Name="selected"-->
-        <option value="<!-- TMPL_VAR NAME='value' -->" selected><!-- TMPL_VAR NAME='branchname' --></option>
+        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
         <!--TMPL_ELSE-->    
-        <option value="<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
+        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
         <!--/TMPL_IF-->    
         <!-- /TMPL_LOOP -->
         </select>
-        </p>
-        <p>
-        <label for="available-items">Only items currently available</label><input type="checkbox" id="available-items" name="limit" value="datedue:0000-00-00"/></p>
+        
+        
+        <label for="available-items">Only items currently available</label><input type="checkbox" id="available-items" name="limit" value="datedue:0000-00-00" />
     </fieldset>
 <!-- /AVAILABILITY LIMITS -->
 
 <!-- RANK LIMITS -->
     <fieldset><legend>Sort by: </legend>
-        <p><select id="sort_by" name="sort_by">
+        <select id="sort_by" name="sort_by">
 <!--TMPL_INCLUDE NAME="resort_form.inc" -->
-</select></p></fieldset>
+</select></fieldset>
 <!-- RANK LIMITS -->
-<!-- SEARCH BUTTONS -->
-<p>
-    <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="OK"/>
+</div>
+</div>
+
+<div class="yui-g" style="text-align: center;"><!-- SEARCH BUTTONS -->
+
+    <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="OK" />
     <!-- TMPL_IF NAME="expanded_options" -->
         <a href="/cgi-bin/koha/opac-search.pl">[Fewer Options]</a>
     <!-- TMPL_ELSE -->
         <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1">[More options]</a>
     <!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New Search]</a>
-</p>
-<!-- /SEARCH BUTTONS -->
+
+<!-- /SEARCH BUTTONS --></div>
 </form>
 
 <script type="text/JavaScript" language="JavaScript">
@@ -468,12 +541,7 @@
         }
 </script>
 
-</div>
-</div>
-</div>
-<div class="yui-b">
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
+
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
