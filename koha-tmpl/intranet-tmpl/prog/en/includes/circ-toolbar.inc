@@ -14,7 +14,7 @@ function confirm_deletion() {
 
 function confirm_reregistration() {
     var is_confirmed = window.confirm('Are you sure you want to renew this patron\'s registration?');
-    var borrowernumbervalue1=document.form.borrowernumber.value;
+    var borrowernumbervalue1 = $("#borrowernumber").attr("value");
     if (is_confirmed) {
     window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber='+borrowernumbervalue1+'';
     }
