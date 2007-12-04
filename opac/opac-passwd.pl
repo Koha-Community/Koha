@@ -26,7 +26,7 @@ use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
 use Digest::MD5 qw(md5_base64);
 use C4::Circulation;
-
+use C4::Members;
 use C4::Output;
 
 my $query = new CGI;
@@ -44,16 +44,16 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my $sth =
-  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
-
+my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
+my $minpasslen = C4::Context->preference("minPasswordLength");
 if (   $query->param('Oldkey')
     && $query->param('Newkey')
     && $query->param('Confirm') )
 {
     if ( goodkey( $dbh, $borrowernumber, $query->param('Oldkey') ) ) {
         if ( $query->param('Newkey') eq $query->param('Confirm')
-            && length( $query->param('Confirm') ) > 5 )
+            && length( $query->param('Confirm') ) >= $minpasslen )
         {    # Record password
             my $clave = md5_base64( $query->param('Newkey') );
             $sth->execute( $clave, $borrowernumber );
@@ -65,7 +65,7 @@ if (   $query->param('Oldkey')
             $template->param( 'Error_messages' => '1' );
             $template->param( 'PassMismatch'   => '1' );
         }
-        elsif ( length( $query->param('Confirm') ) <= 5 ) {
+        elsif ( length( $query->param('Confirm') ) < $minpasslen ) {
             $template->param( 'Ask_data'       => '1' );
             $template->param( 'Error_messages' => '1' );
             $template->param( 'ShortPass'      => '1' );
@@ -85,6 +85,11 @@ else {
     # Called Empty, Ask for data.
     $template->param( 'Ask_data' => '1' );
 }
+
+$template->param(firstname => $borr->{'firstname'},
+							surname => $borr->{'surname'},
+							minpasslen => $minpasslen,
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
