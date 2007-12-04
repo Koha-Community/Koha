@@ -655,6 +655,7 @@ $template->param(
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
+	circview => 1,
 	
 );
 
