@@ -28,9 +28,12 @@ use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
 
-our ($VERSION,@ISA,@EXPORT,@EXPORT_OK);
+our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
-$VERSION = 3.00;
+BEGIN {
+	$VERSION = 3.01;
+	$debug = $ENV{DEBUG} || 0;
+}
 
 =head1 NAME
 
@@ -151,40 +154,35 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl and circ/circulation.pl
 sub SearchMember {
-    my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = "";
-    my $count;
-    my @data;
-    my @bind = ();
+	my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
+	my $dbh   = C4::Context->dbh;
+	my $query = "";
+	my $count;
+	my @data;
+	my @bind = ();
 	
 	# this is used by circulation everytime a new borrowers cardnumber is scanned
 	# so we can check an exact match first, if that works return, otherwise do the rest
-    $query = "SELECT * FROM borrowers
-                    LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-		              WHERE cardnumber = ?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($searchstring);
-    my $data = $sth->fetchall_arrayref({});
-    if (@$data){
+	$query = "SELECT * FROM borrowers
+		LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
+		";
+	my $sth = $dbh->prepare("$query WHERE cardnumber = ?");
+	$sth->execute($searchstring);
+	my $data = $sth->fetchall_arrayref({});
+	if (@$data){
 		return ( scalar(@$data), $data );
 	}
     $sth->finish;
-		
+
     if ( $type eq "simple" )    # simple search for one letter only
     {
-        $query =  "SELECT *
-             FROM borrowers
-             LEFT JOIN categories ON borrowers.categorycode=categories.categorycode ".
-                    ($category_type?" AND category_type = ".$dbh->quote($category_type):""); 
-
-        $query .=
-         " WHERE (surname LIKE ? OR cardnumber like ?) ";
+        $query .= ($category_type ? " AND category_type = ".$dbh->quote($category_type) : ""); 
+        $query .= " WHERE (surname LIKE ? OR cardnumber like ?) ";
         if (C4::Context->preference("IndependantBranches") && !$showallbranches){
           if (C4::Context->userenv && C4::Context->userenv->{flags}!=1 && C4::Context->userenv->{'branch'}){
             $query.=" AND borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'}) unless (C4::Context->userenv->{'branch'} eq "insecure");
-          }      
-        }     
+          }
+        }
         $query.=" ORDER BY $orderby";
         @bind = ("$searchstring%","$searchstring");
     }
@@ -192,46 +190,44 @@ sub SearchMember {
     {
         @data  = split( ' ', $searchstring );
         $count = @data;
-        $query = "SELECT * FROM borrowers
-                    LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-		              WHERE ";
+        $query .= " WHERE ";
         if (C4::Context->preference("IndependantBranches") && !$showallbranches){
           if (C4::Context->userenv && C4::Context->userenv->{flags}!=1 && C4::Context->userenv->{'branch'}){
             $query.=" borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'})." AND " unless (C4::Context->userenv->{'branch'} eq "insecure");
           }      
-        }     
-        $query.="((surname LIKE ? OR surname LIKE ?
-		              OR firstname  LIKE ? OR firstname LIKE ?
-		              OR othernames LIKE ? OR othernames LIKE ?)
-		".
-                  ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
-        @bind = (
-            "$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
-            "$data[0]%", "% $data[0]%"
-        );
-        for ( my $i = 1 ; $i < $count ; $i++ ) {
-            $query = $query . " AND (" . " surname LIKE ? OR surname LIKE ?
-                        OR firstname  LIKE ? OR firstname LIKE ?
-		        OR othernames LIKE ? OR othernames LIKE ?)";
-            push( @bind,
-                "$data[$i]%",   "% $data[$i]%", "$data[$i]%",
-                "% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
+		}     
+ 		$query.="((surname LIKE ? OR surname LIKE ?
+				OR firstname  LIKE ? OR firstname LIKE ?
+				OR othernames LIKE ? OR othernames LIKE ?)
+		" .
+		($category_type?" AND category_type = ".$dbh->quote($category_type):"");
+		@bind = (
+			"$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
+			"$data[0]%", "% $data[0]%"
+		);
+		for ( my $i = 1 ; $i < $count ; $i++ ) {
+			$query = $query . " AND (" . " surname LIKE ? OR surname LIKE ?
+				OR firstname  LIKE ? OR firstname LIKE ?
+				OR othernames LIKE ? OR othernames LIKE ?)";
+			push( @bind,
+				"$data[$i]%",   "% $data[$i]%", "$data[$i]%",
+				"% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
 
-            # FIXME - .= <<EOT;
-        }
-        $query = $query . ") OR cardnumber LIKE ?
+			# FIXME - .= <<EOT;
+		}
+		$query = $query . ") OR cardnumber LIKE ?
 		order by $orderby";
-        push( @bind, $searchstring );
+		push( @bind, $searchstring );
 
-        # FIXME - .= <<EOT;
+		# FIXME - .= <<EOT;
     }
 
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
 
-#     warn "Q $orderby : $query";
+	$debug and print STDERR "Q $orderby : $query\n";
     $sth->execute(@bind);
     my @results;
-    my $data = $sth->fetchall_arrayref({});
+    $data = $sth->fetchall_arrayref({});
 
     $sth->finish;
     return ( scalar(@$data), $data );
@@ -506,40 +502,30 @@ sub GetMember {
     my ( $information, $type ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
-    if ($type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber'){
-      $information = uc $information;
-      $sth =
-          $dbh->prepare(
-"Select borrowers.*,categories.category_type,categories.description  from borrowers left join categories on borrowers.categorycode=categories.categorycode where $type=?"
-          );
-        $sth->execute($information);
-    }
-    else {
-        $sth =
-          $dbh->prepare(
-"Select borrowers.*,categories.category_type, categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode where borrowernumber=?"
-          );
-        $sth->execute($information);
-    }
+	my $select = "
+SELECT borrowers.*, categories.category_type, categories.description
+FROM borrowers 
+LEFT JOIN categories on borrowers.categorycode=categories.categorycode 
+";
+	if ($type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber'){
+		$information = uc $information;
+		$sth = $dbh->prepare("$select WHERE $type=?");
+    } else {
+		$sth = $dbh->prepare("$select WHERE borrowernumber=?");
+	}
+    $sth->execute($information);
     my $data = $sth->fetchrow_hashref;
-
     $sth->finish;
-    if ($data) {
-        return ($data);
+    ($data) and return ($data);
+
+    if ($type eq 'cardnumber' || $type eq 'firstname') {    # otherwise, try with firstname
+		$sth = $dbh->prepare("$select WHERE firstname like ?");
+		$sth->execute($information);
+		$data = $sth->fetchrow_hashref;
+		$sth->finish;
+		return ($data);
     }
-    elsif ($type eq 'cardnumber' ||$type eq 'firstname') {    # try with firstname
-        my $sth =
-              $dbh->prepare(
-"Select borrowers.*,categories.category_type,categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode  where firstname like ?"
-            );
-            $sth->execute($information);
-            my $data = $sth->fetchrow_hashref;
-            $sth->finish;
-            return ($data);
-    }
-    else {
-        return undef;        
-    }
+	return undef;        
 }
 
 =item GetMemberIssuesAndFines
@@ -564,7 +550,7 @@ sub GetMemberIssuesAndFines {
       "Select count(*) from issues where borrowernumber='$borrowernumber' and
     returndate is NULL";
 
-    # print $query;
+    $debug and print $query, "\n";
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my $data = $sth->fetchrow_hashref;
@@ -611,33 +597,24 @@ sub ModMember {
     while (my ($field)=$qborrower->fetchrow){
       $hashborrowerfields{$field}=1;
     }  
-    my $query;
+    my $query = "UPDATE borrowers SET \n";
     my $sth;
     my @parameters;  
     
-    # test to know if u must update or not the borrower password
+    # test to know if you must update or not the borrower password
     if ( $data{'password'} eq '****' ) {
         delete $data{'password'};
-        foreach (keys %data)
-        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $_ ne "flags"  and $hashborrowerfields{$_}) } ;
-        $query = "UPDATE borrowers SET ".join (",",@parameters)
-    ." WHERE borrowernumber=$data{'borrowernumber'}";
-#         warn "$query";
-        $sth = $dbh->prepare($query);
-        $sth->execute;
-    }
-    else {
-        $data{'password'} = md5_base64( $data{'password'} )   if ( $data{'password'} ne '' );
+    } else {
+        $data{'password'} = md5_base64( $data{'password'} )  if ($data{'password'} ne "");
         delete $data{'password'} if ($data{password} eq "");
-        foreach (keys %data)
-        {push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne "borrowernumber" and $_ ne "flags" and $hashborrowerfields{$_})} ;
-        
-        $query = "UPDATE borrowers SET ".join (",",@parameters)." WHERE borrowernumber=$data{'borrowernumber'}";
-#         warn "$query";
-        $sth = $dbh->prepare($query);
-        $sth->execute;
     }
-    $sth->finish;
+	foreach (keys %data)
+	{ push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}); }
+    $query .= join (',',@parameters) . "\n WHERE borrowernumber=? \n";
+	$debug and print STDERR "$query (executed w/ arg: $data{'borrowernumber'})";
+	$sth = $dbh->prepare($query);
+	$sth->execute($data{'borrowernumber'});
+	$sth->finish;
 
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
@@ -646,7 +623,6 @@ sub ModMember {
     if ( $borrowercategory->{'category_type'} eq ('A' || 'S') ) {
         # is adult check guarantees;
         UpdateGuarantees(%data);
-
     }
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","MODIFY",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
@@ -724,7 +700,7 @@ sub AddMember {
       . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
       . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} );
     my $sth = $dbh->prepare($query);
-	print "Executing SQL: $query";
+	print "Executing SQL: $query\n";
     $sth->execute;
     $sth->finish;
     $data{'borrowernumber'} = $dbh->{'mysql_insertid'};
