@@ -86,6 +86,10 @@ for (my $i=0;$i<$numaccts;$i++){
     push(@accountrows, \%row);
 }
 
+my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+
 $template->param(
 				finesview => 1,
                 firstname => $data->{'firstname'},

@@ -620,6 +620,10 @@ if ( C4::Context->preference("memberofinstitution") ) {
 
 $amountold = $temp[1];
 
+my $borrowercategory = GetBorrowercategory( $borrower->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+
 $template->param(
     issued_itemtypes_count_loop => $issued_itemtypes_loop,
     findborrower                => $findborrower,
@@ -651,6 +655,7 @@ $template->param(
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
+	
 );
 
 # set return date if stickyduedate

@@ -68,6 +68,10 @@ if ($input->param('newflags')) {
 	push @loop, \%row;
     }
 
+	my $borrowercategory = GetBorrowercategory( $bor->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+	
     $template->param(borrowernumber => $member,
 		    borrowernumber => $bor->{'borrowernumber'},
     		cardnumber => $bor->{'cardnumber'},

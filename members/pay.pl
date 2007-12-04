@@ -128,6 +128,11 @@ if ( $check == 0 ) {
             'total'    => $totalnotify
           };
     }
+	
+my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+	
     $template->param(
         allfile        => \@allfile,
         firstname      => $data->{'firstname'},

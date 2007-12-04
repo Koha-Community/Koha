@@ -76,6 +76,10 @@ for (my $i=0;$i<$count;$i++){
 	push(@loop_reading,\%line);
 }
 
+	my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
+	my $category_type = $borrowercategory->{'category_type'};
+	( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+
 $template->param(
 						biblionumber => $data->{'biblionumber'},
 						title => $data->{'title'},

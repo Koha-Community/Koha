@@ -76,6 +76,11 @@ if ( $newpassword  && ! $errormsg ) {
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
     }
+	
+	my $borrowercategory = GetBorrowercategory( $bor->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+	
     $template->param( othernames => $bor->{'othernames'},
 	    surname     => $bor->{'surname'},
 	    firstname   => $bor->{'firstname'},

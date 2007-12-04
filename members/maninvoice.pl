@@ -65,6 +65,7 @@ if ($add){
 		exit;
 	}
 } else {
+
 	my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "members/maninvoice.tmpl",
 					query => $input,
@@ -73,6 +74,11 @@ if ($add){
 					flagsrequired => {borrowers => 1},
 					debug => 1,
 					});
+
+my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
+my $category_type = $borrowercategory->{'category_type'};
+( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+
 	$template->param(
                     borrowernumber => $borrowernumber,
                     firstname => $data->{'firstname'},
