@@ -62,12 +62,10 @@ sub plugin_javascript {
 	# find the tag/subfield mapped to items.dateaccessioned
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned");
 	my $res  = "
-<script type=\"text/javascript\">>
-//<![CDATA[
+<script type=\"text/javascript\">
 function Blur$function_name(index) {
-//need this?
-}
 
+}
 function Focus$function_name(subfield_managed) {
 	for (i=0 ; i<document.f.field_value.length ; i++) {
                 if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
@@ -81,7 +79,6 @@ return 0;
 
 function Clic$function_name(subfield_managed) {
 }
-//]]>
 </script>
 ";
 	return ($function_name,$res);
