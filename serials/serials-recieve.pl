@@ -65,7 +65,7 @@ op can be :
 use strict;
 use CGI;
 use C4::Auth;
-use C4::Date;
+use C4::Dates;
 use C4::Biblio;
 use C4::Koha;
 use C4::Output;
@@ -195,8 +195,8 @@ my $sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
 $sth->execute($subscriptionid);
 my $solhistory = $sth->fetchrow_hashref;
 
-my $subs = &GetSubscription($subscriptionid);
-my ($totalissues,@serialslist) = GetSerials($subscriptionid);
+$subs = &GetSubscription($subscriptionid);
+($totalissues,@serialslist) = GetSerials($subscriptionid);
 
 if (C4::Context->preference("serialsadditems")){
     my $fwk=GetFrameworkCode($subscription->{biblionumber});
@@ -216,13 +216,13 @@ if (C4::Context->preference("serialsadditems")){
     }
     my $itemstatushash = GetItemStatus($fwk);
     my @itemstatusloop;
-        my $itemstatusloopcount=0;    
+	my $itemstatusloopcount=0;    
     foreach my $thisitemstatus (keys %$itemstatushash) {
         my %row =(itemval => $thisitemstatus,
                     itemlib => $itemstatushash->{$thisitemstatus},
                 );
 #		warn "".$row{'itemval'}.", ". $row{"itemlib"};
-                $itemstatusloopcount++;
+		$itemstatusloopcount++;
         push @itemstatusloop, \%row;
     }
     my $itemlocationhash = GetItemLocation($fwk);
@@ -234,29 +234,26 @@ if (C4::Context->preference("serialsadditems")){
         push @itemlocationloop, \%row;
     }
 
-        my $choice = 0;
-        if($itemstatusloopcount == 1){ $choice = 1;}   
-        foreach my $data (@serialslist){
-            if (scalar(@itemstatusloop)){$data->{"itemstatusloop"}=\@itemstatusloop;}
-            else { $data->{"itemstatusloop"}=[];}
-            if (scalar(@itemlocationloop)){$data->{"itemlocationloop"}=\@itemlocationloop;}
-            else {$data->{"itemlocationloop"}=[];}
-            $data->{"branchloop"}=\@branchloop ;
-    }
+	my $choice = ($itemstatusloopcount == 1) ? 1 : 0;
+	foreach my $data (@serialslist){
+		$data->{"itemstatusloop"}   = (scalar(@itemstatusloop  )) ? \@itemstatusloop   : [];
+		$data->{"itemlocationloop"} = (scalar(@itemlocationloop)) ? \@itemlocationloop : [];
+		$data->{"branchloop"} = \@branchloop ;
+	}
 # warn "Choice: $choice";
     $template->param(choice => $choice);    
     $template->param(serialadditems =>C4::Context->preference("serialsadditems"),
                     branchloop => \@branchloop,
                     ) ;
-    $template->param(itemstatus=>1,itemstatusloop=>\@itemstatusloop) if (scalar(@itemstatusloop));
-    $template->param(itemlocation=>1,itemlocationloop=>\@itemlocationloop) if (scalar(@itemlocationloop));
-}else{
+	$template->param(  itemstatus=>1,  itemstatusloop=>\@itemstatusloop  ) if (scalar(@itemstatusloop  ));
+	$template->param(itemlocation=>1,itemlocationloop=>\@itemlocationloop) if (scalar(@itemlocationloop));
+} else {
     $template->param(branchloop=>[],itemstatusloop=>[],itemlocationloop=>[]) ;
 }
 
-my $sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
+$sth= C4::Serials::GetSubscriptionHistoryFromSubscriptionId();
 $sth->execute($subscriptionid);
-my $solhistory = $sth->fetchrow_hashref;
+$solhistory = $sth->fetchrow_hashref;
 
 $template->param(
             user => $auser,

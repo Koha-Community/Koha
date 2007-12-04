@@ -48,7 +48,7 @@ use C4::Auth;
 use C4::Serials; # GetExpirationDate
 use C4::Output;
 use C4::Context;
-use C4::Date;
+use C4::Dates;
 use Date::Calc qw/Today Date_to_Days/;
 
 my $query = new CGI;
@@ -67,10 +67,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 my $title = $query->param('title');
 my $issn  = $query->param('issn');
 my $date  = format_date_in_iso($query->param('date'));
-my $today = join "-",&Today;
 
 if ($date) {
-
     my @subscriptions = GetSubscriptions( $title, $issn );
     my @subscriptions_loop;
 
@@ -79,9 +77,9 @@ if ($date) {
         my $expirationdate = GetExpirationDate($subscriptionid);
 
         $subscription->{expirationdate} = $expirationdate;
-        next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in good format.
+        next if $expirationdate !~ /\d{4}-\d{2}-\d{2}/; # next if not in ISO format.
         if ( Date_to_Days(split "-",$expirationdate) < Date_to_Days(split "-",$date) &&
-        Date_to_Days(split "-",$expirationdate) > Date_to_Days(split "-",$today) ) {
+			 Date_to_Days(split "-",$expirationdate) > Date_to_Days(&Today) ) {
             $subscription->{expirationdate}=format_date($subscription->{expirationdate});
             push @subscriptions_loop,$subscription;
         }
@@ -97,6 +95,6 @@ if ($date) {
     );
 }
 $template->param (
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $query, $cookie, $template->output;

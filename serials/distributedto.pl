@@ -48,7 +48,7 @@ to know what subscription this scrpit have to distribute.
 
 use strict;
 use CGI;
-use C4::Date;
+use C4::Dates;
 use C4::Auth;
 use C4::Context;
 use C4::Output;

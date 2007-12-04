@@ -72,7 +72,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
 #currencies
 my @rates = GetCurrencies();
-my $count = scalar @rates;
+$count = scalar @rates;
 
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {

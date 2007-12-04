@@ -20,7 +20,7 @@ use CGI;
 use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days);
 use C4::Koha;
 use C4::Auth;
-use C4::Date;
+use C4::Dates;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
@@ -53,7 +53,7 @@ my ($template, $loggedinuser, $cookie)
 my $weekarrayjs='';
 my $count = 0;
 my ($year, $month, $day) = Today;
-my $firstday = Day_of_Year($year,$month,$day);
+my $firstday   =  Day_of_Year($year,$month,$day);
 my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
 my $weekno = $wkno;
 for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
@@ -101,7 +101,7 @@ foreach my $thisbranch (keys %$branches) {
     push @branchloop, \%row;
 }
 $template->param(branchloop => \@branchloop,
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 if ($op eq 'mod'||$op eq 'dup') {
@@ -114,10 +114,9 @@ if ($op eq 'mod'||$op eq 'dup') {
       warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }  
-    $subs->{'startdate'}=format_date($subs->{'startdate'});
-    $subs->{'firstacquidate'}=format_date($subs->{'firstacquidate'});
-    $subs->{'histstartdate'}=format_date($subs->{'histstartdate'});
-    $subs->{'enddate'}=format_date($subs->{enddate});
+	for (qw(startdate firstacquidate histstartdate enddate)) {
+    	$subs->{$_} = format_date($subs->{$_});
+	}
     $subs->{'letter'}='' unless($subs->{'letter'});
 
     if($subs->{numberlength} > 0){

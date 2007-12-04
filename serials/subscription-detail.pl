@@ -19,7 +19,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Koha;
-use C4::Date;
+use C4::Dates;
 use C4::Serials;
 use C4::Output;
 use C4::Context;
@@ -31,27 +31,19 @@ my $op = $query->param('op');
 my $dbh = C4::Context->dbh;
 my $sth;
 # my $id;
-my ($template, $loggedinuser, $cookie, $subs);
-my ($subscriptionid,$auser,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
-    $firstacquidate, $dow, $irregularity, $sublength, $subtype, $numberpattern, $numberlength, $weeklength, $monthlength,
-    $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
-    $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
-    $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-    $numberingmethod, $status, $biblionumber, $bibliotitle, $callnumber, $notes, $hemisphere,$letter,$manualhistory,$histstartdate,$enddate,$missinglist,$recievedlist,$opacnote,$librariannote);
-
-$subscriptionid = $query->param('subscriptionid');
+my ($template, $loggedinuser, $cookie, $hemisphere);
+my $subscriptionid = $query->param('subscriptionid');
 my $subs = &GetSubscription($subscriptionid);
 $subs->{enddate} = GetExpirationDate($subscriptionid);
 
 if ($op eq 'del') {
-    if ($subs->{'cannotedit'}){
-      warn "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
-      print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-    }  
-    &DelSubscription($subscriptionid);
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
-    exit;
-
+	if ($subs->{'cannotedit'}){
+		warn "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+	}  
+	&DelSubscription($subscriptionid);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
+	exit;
 }
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
@@ -67,7 +59,8 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
                 debug => 1,
                 });
 
-my ($user, $cookie, $sessionID, $flags)
+my ($user, $sessionID, $flags);
+($user, $cookie, $sessionID, $flags)
     = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 my $weekarrayjs='';
@@ -89,11 +82,11 @@ chop($weekarrayjs);
 
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
-$subs->{startdate}=format_date($subs->{startdate});
-$subs->{firstacquidate}=format_date($subs->{firstacquidate});
-$subs->{histstartdate}=format_date($subs->{histstartdate});
-$subs->{enddate}=format_date($subs->{enddate});
-$subs->{abouttoexpire}=abouttoexpire($subs->{subscriptionid});
+$subs->{startdate}      = format_date($subs->{startdate});
+$subs->{firstacquidate} = format_date($subs->{firstacquidate});
+$subs->{histstartdate}  = format_date($subs->{histstartdate});
+$subs->{enddate}        = format_date($subs->{enddate});
+$subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 # Done in Serials.pm
 # $subs->{'donotedit'}=(C4::Context->preference('IndependantBranches') && 
 #         C4::Context->userenv && 
