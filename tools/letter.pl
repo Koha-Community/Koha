@@ -38,7 +38,7 @@
 
 use strict;
 use CGI;
-use C4::Date;
+use C4::Dates;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
@@ -60,8 +60,6 @@ sub StringSearch {
         push( @results, $data );
         $cnt++;
     }
-
-    #  $sth->execute;
     $sth->finish;
     return ( $cnt, \@results );
 }
@@ -110,8 +108,7 @@ if ( $op eq 'add_form' ) {
     #---- if primkey exists, it's a modify action, so read values to modify...
     my $letter;
     if ($code) {
-        my $sth =
-          $dbh->prepare("select * from letter where module=? and code=?");
+        my $sth = $dbh->prepare("select * from letter where module=? and code=?");
         $sth->execute( $module, $code );
         $letter = $sth->fetchrow_hashref;
         $sth->finish;
@@ -121,39 +118,39 @@ if ( $op eq 'add_form' ) {
     my @SQLfieldname;
     my %line = ( 'value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname' );
     push @SQLfieldname, \%line;
-    my %line = ( 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' );
+    %line = ( 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' );
     push @SQLfieldname, \%line;
-    my %line = ( 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' );
+    %line = ( 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' );
     push @SQLfieldname, \%line;
     my $sth2 = $dbh->prepare("SHOW COLUMNS from branches");
     $sth2->execute;
-    my %line = ( 'value' => "", 'text' => '---BRANCHES---' );
+    %line = ( 'value' => "", 'text' => '---BRANCHES---' );
     push @SQLfieldname, \%line;
 
     while ( ( my $field ) = $sth2->fetchrow_array ) {
-        my %line = ( 'value' => "branches." . $field, 'text' => "branches." . $field );
+        %line = ( 'value' => "branches." . $field, 'text' => "branches." . $field );
         push @SQLfieldname, \%line;
     }
 
     # add acquisition specific tables
     if ( index( $module, "acquisition" ) > 0 ) {
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
+        %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
             );
             push @SQLfieldname, \%line;
         }
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from aqorders");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from aqorders");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---ORDERS---' );
+        %line = ( 'value' => "", 'text' => '---ORDERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "aqorders." . $field,
                 'text'  => "aqorders." . $field
             );
@@ -163,49 +160,47 @@ if ( $op eq 'add_form' ) {
         # add issues specific tables
     }
     elsif ( index( $module, "issues" ) > 0 ) {
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
+        %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
             );
             push @SQLfieldname, \%line;
         }
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from serial");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from serial");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---SERIALS---' );
+        %line = ( 'value' => "", 'text' => '---SERIALS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = ( 'value' => "serial." . $field, 'text' => "serial." . $field );
+            %line = ( 'value' => "serial." . $field, 'text' => "serial." . $field );
             push @SQLfieldname, \%line;
         }
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from subscription");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from subscription");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---SUBSCRIPTION---' );
+        %line = ( 'value' => "", 'text' => '---SUBSCRIPTION---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "subscription." . $field,
                 'text'  => "subscription." . $field
             );
             push @SQLfieldname, \%line;
         }
-        my %line = ( 'value' => "", 'text' => '---Biblio---' );
+        %line = ('value' => "",             'text' => '---Biblio---' );
         push @SQLfieldname, \%line;
-        my %line = ('value' => "biblio.title",'text'  => "Title");
-        push @SQLfieldname, \%line;
-        my %line = ('value' => "biblio.author",'text'  => "Author");
-        push @SQLfieldname, \%line;
-        my %line = ('value' => "biblio.serial",'text'  => "Serial");
-        push @SQLfieldname, \%line;
+		foreach(qw(title author serial)) {
+        	%line = ('value' => "biblio.$_", 'text' => ucfirst($_));
+        	push @SQLfieldname, \%line;
+		}
     }
     else {
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BIBLIO---' );
+        %line = ( 'value' => "", 'text' => '---BIBLIO---' );
 
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
@@ -214,28 +209,28 @@ if ( $op eq 'add_form' ) {
             my %line = ( 'value' => "biblio." . $field, 'text' => "biblio." . $field );
             push @SQLfieldname, \%line;
         }
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BIBLIOITEMS---' );
+        %line = ( 'value' => "", 'text' => '---BIBLIOITEMS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "biblioitems." . $field,
                 'text'  => "biblioitems." . $field
             );
             push @SQLfieldname, \%line;
         }
-        my %line = ( 'value' => "", 'text' => '---ITEMS---' );
+        %line = ( 'value' => "", 'text' => '---ITEMS---' );
         push @SQLfieldname, \%line;
-        my %line = ( 'value' => "items.content", 'text' => 'items.content' );
+        %line = ( 'value' => "items.content", 'text' => 'items.content' );
         push @SQLfieldname, \%line;
 
-        my $sth2 = $dbh->prepare("SHOW COLUMNS from borrowers");
+        $sth2 = $dbh->prepare("SHOW COLUMNS from borrowers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BORROWERS---' );
+        %line = ( 'value' => "", 'text' => '---BORROWERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            %line = (
                 'value' => "borrowers." . $field,
                 'text'  => "borrowers." . $field
             );
@@ -256,8 +251,6 @@ if ( $op eq 'add_form' ) {
         ( $module ? $module : $letter->{module} ) => 1,
         SQLfieldname => \@SQLfieldname,
     );
-
-    # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
     # called by add_form, used to insert/modify data in DB
 }
@@ -274,8 +267,6 @@ elsif ( $op eq 'add_validate' ) {
     $sth->finish;
     print $input->redirect("letter.pl");
     exit;
-
-    # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
     # called by default form, used to confirm deletion of data in DB
 }
@@ -285,12 +276,10 @@ elsif ( $op eq 'delete_confirm' ) {
     $sth->execute($code);
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
-    $template->param( module  => $data->{module} );
-    $template->param( code    => $code );
-    $template->param( name    => $data->{'name'} );
-    $template->param( content => $data->{'content'} );
-
-    # END $OP eq DELETE_CONFIRM
+    $template->param( code => $code );
+	foreach (qw(module name content)) {
+    	$template->param( $_ => $data->{$_} );
+	}
 ################## DELETE_CONFIRMED ##################################
   # called by delete_confirm, used to effectively confirm deletion of data in DB
 }
@@ -303,8 +292,6 @@ elsif ( $op eq 'delete_confirmed' ) {
     $sth->finish;
     print $input->redirect("/cgi-bin/koha/tools/letter.pl");
     return;
-
-    # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
@@ -321,17 +308,12 @@ else {    # DEFAULT
         $i++
       )
     {
-        if ( $toggle ) {
-            $toggle = 0;
-        }
-        else {
-            $toggle = 1;
-        }
+		$toggle = ($toggle) ? 0 : 1;
         my %row_data;
         $row_data{toggle} = $toggle;
-        $row_data{module} = $results->[$i]{'module'};
-        $row_data{code}   = $results->[$i]{'code'};
-        $row_data{name}   = $results->[$i]{'name'};
+		foreach (qw(module code name)) {
+        	$row_data{$_} = $results->[$i]{$_};
+		}
         push( @loop_data, \%row_data );
     }
     $template->param( letter => \@loop_data );

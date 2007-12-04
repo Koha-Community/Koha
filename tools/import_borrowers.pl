@@ -36,7 +36,7 @@
 use strict;
 use C4::Auth;
 use C4::Output;
-use C4::Date;
+use C4::Dates;
 use C4::Context;
 use C4::Members;
 
@@ -83,38 +83,31 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     my $overwritten = 0;
     my $invalid     = 0;
     while ( my $borrowerline = <$uploadborrowers> ) {
-
         my $status  = $csv->parse($borrowerline);
         my @columns = $csv->fields();
         my %borrower;
         if ( @columns == @columnkeys ) {
-
             @borrower{@columnkeys} = @columns;
             if ( my $member =
                 GetMember( $borrower{'cardnumber'}, 'cardnumber' ) )
             {
-
                 # borrower exists
                 if ($overwrite_cardnumber) {
                     $borrower{'borrowernumber'} = $member->{'borrowernumber'};
                     ModMember(%borrower);
                     $overwritten++;
-                }
-                else {
+                } else {
                     $alreadyindb++;
                 }
             }
             else {
-                my $borrowernumber = AddMember(%borrower);
-                if ($borrowernumber) {
+                if (AddMember(%borrower)) {
                     $imported++;
-                }
-                else {
-                    $invalid;
+                } else {
+                    $invalid++;		# was just "$invalid", I assume incrementing was the point --atz
                 }
             }
-        }
-        else {
+        } else {
             $invalid++;
         }
     }

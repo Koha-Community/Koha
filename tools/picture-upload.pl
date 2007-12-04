@@ -39,8 +39,8 @@ if ( $uploadfile ) {
     my ( @directories, %errors );
 
     $errors{'NOTZIP'} = 1 unless ( $uploadfilename =~ /\.zip$/i );
-    $errors{'NOWRITETEMP'} = 1 unless ( -w "$dirname" );
-    $errors{'NOWRITEDEST'} = 1 unless ( -w "$destdir" );
+    $errors{'NOWRITETEMP'} = 1 unless ( -w $dirname );
+    $errors{'NOWRITEDEST'} = 1 unless ( -w $destdir );
     $errors{'EMPTYUPLOAD'} = 1 unless ( length( $uploadfile ) > 0 );
 
     if ( %errors ) {
@@ -52,13 +52,13 @@ if ( $uploadfile ) {
 
 	close $tfh;
 
-	`unzip $tempfile -d $dirname`;
+	system("unzip $tempfile -d $dirname");
 
 	push @directories, "$dirname";
 	foreach $recursive_dir ( @directories ) {
 	    opendir $dir, $recursive_dir;
 	    while ( my $entry = readdir $dir ) {
-		push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
+			push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
 	    }
 	    closedir $dir;
 	}
@@ -79,42 +79,36 @@ if ( $uploadfile ) {
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
-
 sub handle_dir {
     my ( $dir ) = @_;
     my ( %count );
     $count{filenames} = ();
 
-    return 0 unless ( -r "$dir/IDLINK.TXT" or -r "$dir/DATALINK.TXT" );
-
     my $file = ( -r "$dir/IDLINK.TXT" ) ? "$dir/IDLINK.TXT" : "$dir/DATALINK.TXT";
+    unless (open (FILE, $file)) { 
+		print "Openning $dir/$file failed!\n";
+		return 0;
+	};
 
-    open $fh, $file or { print "Openning $dir/$filename failed!\n" and return 0 };
+    while (my $line = <FILE>) {
+		chomp $line;
+		my ( $filename, $cardnumber );
+		my $delim = ($line =~ /\t/) ? "\t" : ",";
+		($cardnumber, $filename) = split $delim, $line;
+		$cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
+		$filename   =~ s/[\"\r\n]//g;
 
-    while (my $line = <$fh>) {
-	chomp $line;
-
-	my ( $filename, $cardnumber );
-
-	my $delim = ($line =~ /\t/) ? "\t" : ",";
-
-	($cardnumber, $filename) = split $delim, $line;
-	$cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
-	$filename =~ s/[\"\r\n]//g;
-
-	if ($cardnumber && $filename) {
-	    my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
-	    if ( $result ) {
-		$count{count}++;
-		push @{ $count{filenames} }, { source => $filename, dest => $cardnumber .".jpg" };
-	    }
-	}
+		if ($cardnumber && $filename) {
+	    	my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
+			if ( $result ) {
+				$count{count}++;
+				push @{ $count{filenames} }, { source => $filename, dest => $cardnumber .".jpg" };
+			}
+		}
     }
     $count{source} = $dir;
     $count{dest} = $destdir;
     push @counts, \%count;
-
-    close $fh;
-
+    close FILE;
     return 1;
 }

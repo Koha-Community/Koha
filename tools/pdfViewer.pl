@@ -33,8 +33,9 @@ my $tmpFileName = $cgi->param('tmpFileName');
 print "Content-Disposition: attachment; filename = $filename\n\n";
 print $cgi->header(-type => 'application/pdf'),
       $cgi->start_html(-title=>"Codify to PDF");
-open fh, "<$tmpFileName";
-while (<fh>) {
- print;
+open FH, "<$tmpFileName";
+while (<FH>) {
+	print;
 }
+close FH;
 print $cgi->end_html();

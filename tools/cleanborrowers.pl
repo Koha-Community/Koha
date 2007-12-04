@@ -36,10 +36,8 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
-use C4::Date;
-
-
-use C4::Members;               # GetBorrowersWhoHavexxxBorrowed.
+use C4::Dates;
+use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
 use Date::Calc qw/Date_to_Days Today/;
 
@@ -158,7 +156,7 @@ $template->param(
     step1       => '1',
     filterdate1 => $filterdate1,
     filterdate2 => $filterdate2,
-    DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 #writing the template
