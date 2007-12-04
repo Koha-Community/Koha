@@ -43,13 +43,10 @@ my @layouts       = get_layouts();
 my @barcode_types = get_barcode_types();
 my @batches = get_batches();
 
-if ($op = 'delete_layout') {
-delete_layout($layout_id);
+if ($op eq 'delete_layout') {	# had been assignment! serious error!
+	delete_layout($layout_id);
 }
 
-
-
- 
 ###  $data
 
 $template->param( guidebox => 1 ) if ( $data->{'guidebox'} );
