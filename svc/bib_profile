@@ -70,6 +70,7 @@ sub _get_mandatory_subfields {
                                     FROM marc_subfield_structure 
                                     WHERE frameworkcode = '' 
                                     AND tagsubfield <> '\@' 
+                                    AND kohafield <> 'biblioitems.itemtype'
                                     AND mandatory = 1");
     $sth->execute();
     my @subfields = ();
