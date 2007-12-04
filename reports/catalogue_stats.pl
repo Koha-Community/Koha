@@ -332,8 +332,8 @@ sub calculate {
  	$linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
- 	@linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
- 	@linefilter[0] = @$filters[11] if ($line =~ /items.location/ ) ;
+ 	$linefilter[0] = @$filters[10] if ($line =~ /items.homebranch/ ) ;
+ 	$linefilter[0] = @$filters[11] if ($line =~ /items.location/ ) ;
 # 
  	my @colfilter ;
  	$colfilter[0] = @$filters[0] if ($column =~ /dewey/ )  ;
@@ -346,8 +346,8 @@ sub calculate {
  	$colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
- 	@colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
- 	@colfilter[0] = @$filters[11] if ($column =~ /items.location/ ) ;
+ 	$colfilter[0] = @$filters[10] if ($column =~ /items.homebranch/ ) ;
+ 	$colfilter[0] = @$filters[11] if ($column =~ /items.location/ ) ;
 
 # 1st, loop rows.
 	my $linefield;

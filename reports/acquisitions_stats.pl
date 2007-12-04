@@ -28,7 +28,7 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
-use C4::Date;
+use C4::Dates;
 
 =head1 NAME
 
@@ -69,19 +69,15 @@ my ($template, $borrowernumber, $cookie)
 				debug => 1,
 				});
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 		);
 if ($do_it) {
-
-    #warn
-"line=$line, col=$column, pod=$podsp, rod=$rodsp, aod=$aodsp, calc=$calc, filters=@filters\n";
-
+    # warn "line=$line, col=$column, pod=$podsp, rod=$rodsp, aod=$aodsp, calc=$calc, filters=@filters\n";
     my $results =
       calculate( $line, $column, $podsp, $rodsp, $aodsp, $calc, \@filters );
     if ( $output eq "screen" ) {
         $template->param( mainloop => $results );
         output_html_with_http_headers $input, $cookie, $template->output;
-        exit(1);
     }
     else {
         print $input->header(
@@ -114,8 +110,8 @@ if ($do_it) {
             print $sep. $col->{totalcol};
         }
         print $sep. @$results[0]->{total};
-        exit(1);
     }
+    exit(1);
 }
 else {
     my $dbh = C4::Context->dbh;
@@ -123,9 +119,7 @@ else {
     my %labels;
     my %select;
     my $req;
-    $req =
-      $dbh->prepare(
-        "SELECT distinctrow id,name FROM aqbooksellers ORDER BY name");
+    $req = $dbh->prepare("SELECT distinctrow id,name FROM aqbooksellers ORDER BY name");
     $req->execute;
     my @select;
     push @select, "";
@@ -236,7 +230,6 @@ else {
 
     my @mime = ( C4::Context->preference("MIME") );
     foreach my $mime (@mime) {
-
         #               warn "".$mime;
     }
 

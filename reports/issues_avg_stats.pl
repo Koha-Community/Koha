@@ -26,7 +26,7 @@ use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
-use C4::Date;
+use C4::Dates;
 use Date::Calc qw(Delta_Days);
 
 =head1 NAME
@@ -66,7 +66,7 @@ my ($template, $borrowernumber, $cookie)
                 debug => 1,
                     });
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
 if ($do_it) {
 # Displaying results
@@ -530,10 +530,9 @@ sub calculate {
         $row = "zzEMPTY" if ($row eq undef);
         # fill returndate to avoid an error with date calc (needed for all non returned issues)
         $returndate= join '-',Date::Calc::Today if $returndate eq '0000-00-00';
-        my $result =Delta_Days(split(/-/,$issuedate),split (/-/,$returndate)) ;
     #  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,
     #  and seconds between the two
-        $loanlength = $result;
+        $loanlength = Delta_Days(split(/-/,$issuedate),split (/-/,$returndate)) ;
     #		warn "512 Same row and col DateCalc returns :$loanlength with return ". $returndate ."issue ". $issuedate ."weight : ". $weight;
     #		warn "513 row :".$row." column :".$col;
         $table{$row}->{$col}+=$weight*$loanlength;

@@ -26,7 +26,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Output;
 use C4::Circulation;
-use C4::Date;
+use C4::Dates;
 use Date::Manip;
 
 =head1 NAME
@@ -66,7 +66,7 @@ my ($template, $borrowernumber, $cookie)
                             debug => 1,
                             });
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                 );
 if ($do_it) {
 # Displaying results

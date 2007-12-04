@@ -42,7 +42,7 @@ $template->param(do_it => $do_it,
 		report_name => $report_name,
 		);
 my $cgidir = C4::Context->config('intranetdir')."/cgi-bin/reports/";
-unless (opendir(DIR, "$cgidir")) {
+unless (-r $cgidir and -d $cgidir) {
 	$cgidir = C4::Context->intranetdir."/reports/";
 } 
 my $plugin = $cgidir.$report_name.".plugin";

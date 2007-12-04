@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -24,6 +23,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Branch; # GetBranches
 use C4::Koha;
+use C4::Dates;
 use C4::Acquisition;
 use C4::Output;
 use C4::Circulation;
@@ -236,7 +236,7 @@ foreach my $thisbranch (sort keys %$branches) {
 					CGIsepChoice => $CGIsepChoice,
 					CGIBranch => $CGIBranch,
 #					CGIBranch => \@branchloop
-                        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+                        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                     );
 
 }

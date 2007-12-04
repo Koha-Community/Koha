@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -26,7 +25,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Members;
-use C4::Date;
+use C4::Dates;
 
 =head1 NAME
 
@@ -48,7 +47,6 @@ my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
 my $del = $input->param("sep");
-#warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                 query => $input,
@@ -58,7 +56,7 @@ my ($template, $borrowernumber, $cookie)
                 debug => 1,
                 });
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         );
 if ($do_it) {
 # Displaying results
@@ -151,8 +149,6 @@ output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 
-
-
 sub calculate {
     my ($line, $column, $filters) = @_;
     my @mainloop;
@@ -207,8 +203,6 @@ sub calculate {
         my $sth2 = $dbh->prepare( $strsth2 );
         $sth2->execute;
 
-        
-    
         while (my ($celvalue) = $sth2->fetchrow) {
             my %cell;
     #		my %ft;
@@ -278,20 +272,20 @@ sub calculate {
     $dbcalc->execute;
 # 	warn "filling table";
     my $previous_col;
-    my $i=1;
+    $i=1;
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $col )=@data;
         $col = "zzEMPTY" if ($col eq undef);
         $i=1 if (($previous_col) and not($col eq $previous_col));
         $table[$i]->{$col}=$row;
-#		warn " ".$i." ".$col. " ".$row;
+#		warn " $i $col $row";
         $i++;
         $previous_col=$col;
     }
     
     push @loopcol,{coltitle => "Global"} if not($column);
     
-    my $max =(($line)?$line:@table -1);
+    $max =(($line)?$line:@table -1);
     for ($i=1; $i<=$max;$i++) {
         my @loopcell;
         #@loopcol ensures the order for columns is common with column titles

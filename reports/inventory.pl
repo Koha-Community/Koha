@@ -23,8 +23,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Biblio;
-use C4::Date;
-
+use C4::Dates;
 
 # Fixed variables
 my $linecolor1='#ffffcc';
@@ -32,7 +31,6 @@ my $linecolor2='white';
 my $backgroundimage="/images/background-mem.gif";
 my $script_name="/cgi-bin/koha/admin/branches.pl";
 my $pagepagesize=20;
-
 
 #######################################################################################
 # Main loop....
@@ -65,14 +63,13 @@ $template->param(minlocation => $minlocation,
 				);
 if ($uploadbarcodes && length($uploadbarcodes)>0){
 	my $dbh=C4::Context->dbh;
-	my $date=format_date($input->param('setdate'));
-	$date = format_date("today") unless $date;
+	my $date = format_date($input->param('setdate')) || C4::Dates->new()->output();
 # 	warn "$date";
 	my $strsth="update items set (datelastseen = $date) where items.barcode =?";
 	my $qupdate = $dbh->prepare($strsth);
-	my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
+	$strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
 	my $qonloan = $dbh->prepare($strsth);
-	my $strsth="select * from items where items.barcode =? and issues.wthdrawn=1";
+	$strsth="select * from items where items.barcode =? and issues.wthdrawn=1";
 	my $qwthdrawn = $dbh->prepare($strsth);
 	my @errorloop;
 	my $count=0;

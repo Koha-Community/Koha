@@ -25,7 +25,7 @@
 
 use strict;
 use C4::Stats;
-use C4::Date;
+use C4::Dates;
 use CGI;
 use C4::Output;
 use C4::Branch; # GetBranches

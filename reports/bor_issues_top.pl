@@ -27,7 +27,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Circulation;
 use C4::Members;
-use C4::Date;
+use C4::Dates qw(format_date_in_iso);
 
 =head1 NAME
 
@@ -40,19 +40,18 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input = new CGI;
-my $do_it=$input->param('do_it');
 my $fullreportname = "reports/bor_issues_top.tmpl";
-my $limit = $input->param("Limit");
-my $column = $input->param("Criteria");
+my $do_it   = $input->param('do_it');
+my $limit   = $input->param("Limit");
+my $column  = $input->param("Criteria");
 my @filters = $input->param("Filter");
-$filters[0]=format_date_in_iso($filters[0]);
-$filters[1]=format_date_in_iso($filters[1]);
-$filters[2]=format_date_in_iso($filters[2]);
-$filters[3]=format_date_in_iso($filters[3]);
-my $output = $input->param("output");
+for (0..3) {
+	$filters[$_]=format_date_in_iso($filters[$_]);
+}
+my $output   = $input->param("output");
 my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
-my $del = $input->param("sep");
+my $mime     = $input->param("MIME");
+my $del      = $input->param("sep");
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
@@ -63,7 +62,7 @@ my ($template, $borrowernumber, $cookie)
                 debug => 1,
                 });
 $template->param(do_it => $do_it,
-        DHTMLcalendar_dateformat => get_date_format_string_for_DHTMLcalendar(),
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         );
 if ($do_it) {
 # Displaying results
@@ -200,6 +199,18 @@ sub calculate {
 # Checking filters
 #
     my @loopfilter;
+	my @cellmap = (
+		"Issue From",
+		"Issue To",
+		"Return From",
+		"Return To",
+		"Branch",
+		"Doc Type",
+		"Bor Cat",
+		"Day",
+		"Month",
+		"Year"
+	);
     for (my $i=0;$i<=6;$i++) {
         my %cell;
         if ( @$filters[$i] ) {
@@ -212,16 +223,8 @@ sub calculate {
             } else {
                 $cell{filter} .= format_date(@$filters[$i]);
             }
-            $cell{crit} .="Issue From" if ($i==0);
-            $cell{crit} .="Issue To" if ($i==1);
-            $cell{crit} .="Return From" if ($i==2);
-            $cell{crit} .="Return To" if ($i==3);
-            $cell{crit} .="Branch" if ($i==4);
-            $cell{crit} .="Doc Type" if ($i==5);
-            $cell{crit} .="Bor Cat" if ($i==6);
-            $cell{crit} .="Day" if ($i==7);
-            $cell{crit} .="Month" if ($i==8);
-            $cell{crit} .="Year" if ($i==9);
+			defined ($cellmap[$i]) and
+				$cell{crit} .= $cellmap[$i];
             push @loopfilter, \%cell;
         }
     }
@@ -380,15 +383,11 @@ sub calculate {
             my $value;
             my $count=0;
             my $link;
-            if (@loopcol){
-                $value =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'name'};
-                $count =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'count'};
-                $link =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'link'};
-            } else {
-                $value =$table[$i]->{"zzEMPTY"}->{'name'};
-                $count =$table[$i]->{"zzEMPTY"}->{'count'};
-                $link =$table[$i]->{"zzEMPTY"}->{'link'};
-            }
+			my $key = ((!(@loopcol)) or ($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global")) 
+					? "zzEMPTY" : $col->{coltitle};
+			$value =$table[$i]->{$key}->{'name'};
+			$count =$table[$i]->{$key}->{'count'};
+			$link  =$table[$i]->{$key}->{'link'};
 #			warn " ".$i ." value:$value count:$count reference:$link";
             push @loopcell, {value => $value, count =>$count, reference => $link} ;
         }
@@ -399,7 +398,6 @@ sub calculate {
         $hilighted = -$hilighted;
     }
 # 	
-            
 
     # the header of the table
     $globalline{loopfilter}=\@loopfilter;

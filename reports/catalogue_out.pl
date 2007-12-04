@@ -271,20 +271,17 @@ sub calculate {
 	$strcalc .= " AND biblioitems.itemtype like '" . @$filters[1] ."'" if ( @$filters[1] );
 	
 	$strcalc .= " group by items.itemnumber";
-	$strcalc .= ", $colfield" if ($column);
+	$strcalc .= ", $colfield"          if ($column);
 	$strcalc .= " order by $colfield " if ($colfield);
-	my $max;
-	if (@loopcol) {
-		$max = $line*@loopcol;
-	} else { $max=$line;}
-	$strcalc .= " LIMIT 0,$max" if ($line);
+	my $max = (@loopcol) ? $line*@loopcol : $line ;
+	$strcalc .= " LIMIT 0,$max"        if ($line);
 	warn "SQL :". $strcalc;
 	
 	my $dbcalc = $dbh->prepare($strcalc);
 	$dbcalc->execute;
 # 	warn "filling table";
 	my $previous_col;
-	my $i=1;
+	$i=1;
 	while (my  @data = $dbcalc->fetchrow) {
 		my ($barcode,$title,$bibnum,$author, $col )=@data;
 		$col = "zzEMPTY" if ($col eq undef);
@@ -300,7 +297,7 @@ sub calculate {
 	
 	push @loopcol,{coltitle => "Global"} if not($column);
 	
-	my $max =(($line)?$line:@table);
+	$max =(($line)?$line:@table);
  	for ($i=1; $i<$max;$i++) {
  		my @loopcell;
  		#@loopcol ensures the order for columns is common with column titles
