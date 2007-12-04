@@ -198,7 +198,7 @@ SWITCH: {
     }
 }
 
-my $shelflist = GetShelves( $loggedinuser, 2 );
+$shelflist = GetShelves( $loggedinuser, 2 );
 my $color = '';
 my @shelvesloop;
 my $numberCanManage = 0;
@@ -224,7 +224,6 @@ foreach my $element ( sort keys %$shelflist ) {
 
 $template->param(
     shelvesloop     => \@shelvesloop,
-
     numberCanManage => $numberCanManage,
 );
 
