@@ -20,7 +20,7 @@ my $input = new CGI;
 my $flagsrequired = { permissions => 1 };
 my $member=$input->param('member');
 my $bor = GetMemberDetails( $member,'');
-if(( $bor->{'category_type'} eq 'S' ) || ($bor->{'authflags'}->{'catalogue'} )) {
+if( $bor->{'category_type'} eq 'S' )  {
 	$flagsrequired->{'staffaccess'} = 1;
 }
 my ($template, $loggedinuser, $cookie)

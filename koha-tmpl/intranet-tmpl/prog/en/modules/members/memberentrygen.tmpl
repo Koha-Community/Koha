@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Patrons &rsaquo; 
-<!-- TMPL_IF NAME="opadd" -->	Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF -->
+<!-- TMPL_IF NAME="opadd" -->	Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff <!--/TMPL_IF -->
+patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff<!--/TMPL_IF -->
 patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
@@ -459,7 +459,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
           <label for="categorycode">Category: </label>
           <!-- TMPL_VAR NAME="catcodepopup" -->
       <!-- TMPL_ELSE -->
-          <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF-->.</span>
+          <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF--><!--TMPL_IF Name="S"-->a Staff Member<!--/TMPL_IF-->.</span>
               <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
       <!-- /TMPL_IF -->
     </li>

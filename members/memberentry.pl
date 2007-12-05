@@ -73,7 +73,7 @@ my $default_city;
 my $check_categorytype=$input->param('check_categorytype');
 # NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
 my $borrower_data;
-my $noUpdateLogin;
+my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
@@ -111,8 +111,8 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     $newdata{'dateexpiry'}  =format_date_in_iso($newdata{'dateexpiry'}  ) if ($newdata{dateexpiry});  
     $newdata{'dateofbirth'} =format_date_in_iso($newdata{'dateofbirth'} ) if ($newdata{dateofbirth});  
   # check permission to modify login info.
-    if ($borrower_data && ($borrower_data->{'category_type'} eq 'S') && (! C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1}))) {
-		$noUpdateLogin =1;
+    if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
+		$NoUpdateLogin =1;
 	}
 }
 
@@ -216,7 +216,7 @@ if ($op eq 'insert'){
 if ($op eq 'save'){
 	# test to know if another user have the same password and same login                                
 	unless ($nok){
-	    if($noUpdateLogin) {
+	    if($NoUpdateLogin) {
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
@@ -493,7 +493,7 @@ $template->param(
   CGIbranch => $CGIbranch,
   memberofinstution => $member_of_institution,
   CGIorganisations => $CGIorganisations,
-  noUpdateLogin =>  $noUpdateLogin
+  NoUpdateLogin =>  $NoUpdateLogin
   );
   
 output_html_with_http_headers $input, $cookie, $template->output;
