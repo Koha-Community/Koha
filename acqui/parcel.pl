@@ -60,7 +60,7 @@ use C4::Bookseller;
 use C4::Biblio;
 use CGI;
 use C4::Output;
-use C4::Dates;
+use C4::Dates qw/format_date format_date_in_iso/;
 
 use strict;
 
