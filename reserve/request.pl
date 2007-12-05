@@ -36,7 +36,7 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Koha;
 use C4::Circulation;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Members;
 
 my $dbh = C4::Context->dbh;

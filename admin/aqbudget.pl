@@ -41,8 +41,7 @@ use strict;
 use CGI;
 use C4::Branch; # GetBranches
 use List::Util qw/min/;
-
-use C4::Dates;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Context;
