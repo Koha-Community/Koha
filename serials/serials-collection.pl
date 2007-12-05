@@ -22,7 +22,7 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Koha;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Serials;
 use C4::Letters;
 use C4::Output;

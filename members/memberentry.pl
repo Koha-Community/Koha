@@ -32,7 +32,7 @@ use C4::Context;
 use C4::Output;
 use C4::Members;
 use C4::Koha;
-use C4::Dates;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Input;
 use C4::Log;
 use C4::Branch; # GetBranches

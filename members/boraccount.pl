@@ -25,7 +25,7 @@
 use strict;
 use C4::Auth;
 use C4::Output;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use CGI;
 use C4::Members;
 

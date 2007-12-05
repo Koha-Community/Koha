@@ -20,7 +20,7 @@ use CGI;
 use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days);
 use C4::Koha;
 use C4::Auth;
-use C4::Dates;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Acquisition;
 use C4::Output;
 use C4::Context;
