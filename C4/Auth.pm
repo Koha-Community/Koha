@@ -709,6 +709,7 @@ sub checkauth {
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
         IndependantBranches     => C4::Context->preference("IndependantBranches"),
 		AutoLocation       => C4::Context->preference("AutoLocation"),
+		yuipath            => C4::Context->preference("yuipath"),
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
