@@ -52,11 +52,11 @@
 		<label>Biographie</label>
         <select name="limit" class="subtype" size="1">
             <option value="">Tout type de biographie</option>
-            <option value="Biography-code:y">C'est pas une biographie</option>
+            <option value="Biography:y">C'est pas une biographie</option>
             <option value="Biography-code:a">autobiographie (y compris correspondance...)</option>
-            <option value="Biography-code:b">Biographie individuelle</option>
-            <option value="Biography-code:c">Biographie collective</option>
-            <option value="Biography-code:d">Contient des informations biographiques</option>
+            <option value="Biography:b">Biographie individuelle</option>
+            <option value="Biography:c">Biographie collective</option>
+            <option value="Biography:d">Contient des informations biographiques</option>
 		</select>
         </p>
         <p>
