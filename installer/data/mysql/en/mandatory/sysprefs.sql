@@ -9,6 +9,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonDevKey','','See: aws-portal.amazon.com/gp/aws/developer/registration/index.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag','','See: associates.amazon.com/gp/flex/associates/apply-login.html','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions','0','Set to anonymous borrowernumber to enable Anonymous suggestions',NULL,'free');
+
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('authoritysep','--','Used to separate a list of authorities in a display. Usually --','10','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoBarcode','OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002','incremental|annual|OFF','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoLocation','0','If ON, IP authentication is enabled, blocking access to the staff client from unauthorized IP addresses',NULL,'YesNo');
@@ -116,14 +117,14 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryFuzzy','1','If ON, enables fuzzy option for searches',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryWeightFields','1','If ON, enables field weighting',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('canreservefromotherbranches','1','','With Independent branches on, can a user from one library reserve an item from another library','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('FRBRizeEditions',0,'','If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACFRBRizeEditions',0,'','If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('XISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OCLCAffiliateID','','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('XISBNDailyLimit',499,'','The xISBN Web service is free for non-commercial use when usage does not exceed 500 requests per day','free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('PINESISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('ThingISBN',0,'','Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('canreservefromotherbranches','1','With Independent branches on, can a user from one library reserve an item from another library','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('FRBRizeEditions',0,'If ON, Koha will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFRBRizeEditions',0,'If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OCLCAffiliateID','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBNDailyLimit',499,'The xISBN Web service is free for non-commercial use when usage does not exceed 500 requests per day','','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('PINESISBN',0,'Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ThingISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','','YesNo');
 
 -- I18N/L10N
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
