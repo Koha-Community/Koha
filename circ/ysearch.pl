@@ -31,8 +31,7 @@ use C4::Context;
 my $input   = new CGI;
 my $query   = $input->param('query');
 
-# FIXME: charset should be UTF-8 but borrowers table is still ISO-8859-1
-print $input->header(-type => 'text/plain', -charset => 'ISO-8859-1');
+print $input->header(-type => 'text/plain', -charset => 'UTF-8');
 
 my $dbh = C4::Context->dbh;
 $query = "SELECT surname, firstname, cardnumber, address, city, zipcode ".
