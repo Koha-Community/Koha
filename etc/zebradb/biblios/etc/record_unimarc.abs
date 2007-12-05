@@ -25,14 +25,14 @@ melm 001        Local-number,Local-number:n
 # Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
 melm 090$9      Local-number,Local-number:n
 
-melm 010$a    Standard-Number,ISBN:w
+melm 010$a    ISBN:w
 # wrong ISBN
-melm 010$z    Standard-Number,ISBN:w
-melm 011$a    Standard-Number,ISSN:w
+melm 010$z    ISBN:w,Identifier-standard:w
+melm 011$a    ISSN:w,Identifier-standard:w
 # cancelled ISSN
-melm 011$y    Standard-Number,ISSN:w
+melm 011$y    ISSN:w,Identifier-standard:w
 # wrong ISSN
-melm 011$z    ISSN:w
+melm 011$z    ISSN:w,Identifier-standard:w
 
 melm 200$b      itype:w
 
@@ -223,25 +223,6 @@ melm 432$d    pubdate:n
 melm 440$d    pubdate:n
 melm 441$d    pubdate:n
 melm 445$d    pubdate:n
-melm 400    Link
-melm 401    Link
-melm 403    Link
-melm 410    Link
-melm 412    Link
-melm 413    Link
-melm 414    Link
-melm 415    Link
-melm 416    Link
-melm 417    Link
-melm 418    Link
-melm 419    Link
-melm 420    Link
-melm 430    Link
-melm 431    Link
-melm 432    Link
-melm 440    Link
-melm 441    Link
-melm 445    Link
 
 # Authorities Title
 melm 500$9    Koha-Auth-Number,Koha-Auth-Number:n
