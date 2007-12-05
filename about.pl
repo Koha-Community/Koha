@@ -63,6 +63,7 @@ CGI::Carp
 CGI::Session
 Class::Factory::Util
 Class::Accessor
+Compress::Zlib
 DBD::mysql
 DBI
 Data::Dumper
