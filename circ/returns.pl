@@ -31,7 +31,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Circulation;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Print;
 use C4::Reserves;
 use C4::Biblio;

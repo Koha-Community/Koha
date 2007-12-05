@@ -24,7 +24,7 @@ use C4::Context;
 use C4::Output;
 use C4::Branch;
 use C4::Auth;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Members;

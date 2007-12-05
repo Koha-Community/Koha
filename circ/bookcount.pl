@@ -30,7 +30,7 @@ use C4::Koha;
 use C4::Auth;
 use C4::Branch; # GetBranches
 use C4::Biblio; # GetBiblioItemData
-use C4::Dates;
+use C4::Dates qw/format_date/;
 
 my $input        = new CGI;
 my $itm          = $input->param('itm');
