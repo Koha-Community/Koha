@@ -26,7 +26,7 @@ use C4::Biblio;             # to use &GetBiblioItemData &GetItemsByBiblioitemnum
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
 use C4::Auth;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
 
 my $query=new CGI;
