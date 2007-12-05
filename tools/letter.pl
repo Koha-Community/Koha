@@ -118,17 +118,17 @@ if ( $op eq 'add_form' ) {
     my @SQLfieldname;
     my %line = ( 'value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname' );
     push @SQLfieldname, \%line;
-    %line = ( 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' );
+    my %line = ( 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' );
     push @SQLfieldname, \%line;
-    %line = ( 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' );
+    my %line = ( 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' );
     push @SQLfieldname, \%line;
     my $sth2 = $dbh->prepare("SHOW COLUMNS from branches");
     $sth2->execute;
-    %line = ( 'value' => "", 'text' => '---BRANCHES---' );
+    my %line = ( 'value' => "", 'text' => '---BRANCHES---' );
     push @SQLfieldname, \%line;
 
     while ( ( my $field ) = $sth2->fetchrow_array ) {
-        %line = ( 'value' => "branches." . $field, 'text' => "branches." . $field );
+        my %line = ( 'value' => "branches." . $field, 'text' => "branches." . $field );
         push @SQLfieldname, \%line;
     }
 
@@ -136,10 +136,10 @@ if ( $op eq 'add_form' ) {
     if ( index( $module, "acquisition" ) > 0 ) {
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
+        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
             );
@@ -147,10 +147,10 @@ if ( $op eq 'add_form' ) {
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqorders");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---ORDERS---' );
+        my %line = ( 'value' => "", 'text' => '---ORDERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "aqorders." . $field,
                 'text'  => "aqorders." . $field
             );
@@ -162,10 +162,10 @@ if ( $op eq 'add_form' ) {
     elsif ( index( $module, "issues" ) > 0 ) {
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
+        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
             );
@@ -173,34 +173,34 @@ if ( $op eq 'add_form' ) {
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from serial");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---SERIALS---' );
+        my %line = ( 'value' => "", 'text' => '---SERIALS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = ( 'value' => "serial." . $field, 'text' => "serial." . $field );
+            my %line = ( 'value' => "serial." . $field, 'text' => "serial." . $field );
             push @SQLfieldname, \%line;
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from subscription");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---SUBSCRIPTION---' );
+        my %line = ( 'value' => "", 'text' => '---SUBSCRIPTION---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "subscription." . $field,
                 'text'  => "subscription." . $field
             );
             push @SQLfieldname, \%line;
         }
-        %line = ('value' => "",             'text' => '---Biblio---' );
+        my %line = ('value' => "",             'text' => '---Biblio---' );
         push @SQLfieldname, \%line;
 		foreach(qw(title author serial)) {
-        	%line = ('value' => "biblio.$_", 'text' => ucfirst($_));
+        	my %line = ('value' => "biblio.$_", 'text' => ucfirst($_));
         	push @SQLfieldname, \%line;
 		}
     }
     else {
         $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---BIBLIO---' );
+        my %line = ( 'value' => "", 'text' => '---BIBLIO---' );
 
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
@@ -211,26 +211,26 @@ if ( $op eq 'add_form' ) {
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---BIBLIOITEMS---' );
+        my %line = ( 'value' => "", 'text' => '---BIBLIOITEMS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "biblioitems." . $field,
                 'text'  => "biblioitems." . $field
             );
             push @SQLfieldname, \%line;
         }
-        %line = ( 'value' => "", 'text' => '---ITEMS---' );
+        my %line = ( 'value' => "", 'text' => '---ITEMS---' );
         push @SQLfieldname, \%line;
-        %line = ( 'value' => "items.content", 'text' => 'items.content' );
+        my %line = ( 'value' => "items.content", 'text' => 'items.content' );
         push @SQLfieldname, \%line;
 
         $sth2 = $dbh->prepare("SHOW COLUMNS from borrowers");
         $sth2->execute;
-        %line = ( 'value' => "", 'text' => '---BORROWERS---' );
+        my %line = ( 'value' => "", 'text' => '---BORROWERS---' );
         push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            %line = (
+            my %line = (
                 'value' => "borrowers." . $field,
                 'text'  => "borrowers." . $field
             );
