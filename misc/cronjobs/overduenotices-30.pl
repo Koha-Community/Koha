@@ -31,7 +31,7 @@
 
 use strict;
 use C4::Context;
-use C4::Dates;
+use C4::Dates qw/format_date/;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
 
