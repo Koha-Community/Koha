@@ -25,7 +25,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Members;
-use C4::Dates;
+use C4::Dates qw/format_date_in_iso/;
 
 =head1 NAME
 

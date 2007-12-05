@@ -27,7 +27,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Circulation;
 use C4::Members;
-use C4::Dates qw(format_date_in_iso);
+use C4::Dates qw(format_date format_date_in_iso);
 
 =head1 NAME
 
