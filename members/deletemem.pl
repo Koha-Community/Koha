@@ -36,9 +36,6 @@ my $input = new CGI;
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-if( $bor->{'category_type'} eq 'S' )  {
-    $flagsrequired->{'staffaccess'} = 1;
-}  
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 
@@ -51,12 +48,18 @@ my ($countissues,$issues)=GetPendingIssues($member);
 
 my ($bor)=GetMemberDetails($member,'');
 my $flags=$bor->{flags};
+
+my $userenv = C4::Context->userenv;
+if(C4::Auth::haspermission(undef,$userenv->{'id'},{'staffaccess'=>1})) {
+  print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
+	exit 1;
+}
+
 if (C4::Context->preference("IndependantBranches")) {
-	my $userenv = C4::Context->userenv;
 	unless ($userenv->{flags} == 1){
 		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
 #			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
-			print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+			print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
 			exit 1;
 		}
 	}

@@ -1198,6 +1198,7 @@ Returns member's flags or 0 if a permission is not met.
 sub haspermission {
     my ( $dbh, $userid, $flagsrequired ) = @_;
 	my ($flags,$intflags);
+	$dbh=C4::Context->dbh unless($dbh);
 	if(ref($userid)) {
 		$intflags = $userid->{'flags'};  
 	} else {
