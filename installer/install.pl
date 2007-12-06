@@ -301,7 +301,7 @@ elsif ( $step && $step == 3 ) {
         my @fnames = sort {
             my @aa = split /\/|\\/, ($a);
             my @bb = split /\/|\\/, ($b);
-            $aa[-1] lt $bb[-1]
+            $aa[-1] cmp $bb[-1]
         } $query->param('framework');
 	if ( $info{dbms} eq 'mysql' ) { $dbh->do('SET FOREIGN_KEY_CHECKS=0'); }
 	elsif ( $info{dbms} eq 'Pg' ) { $dbh->do('SET CONSTRAINTS ALL DEFERRED;'); }
