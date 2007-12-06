@@ -3084,8 +3084,10 @@ sub ModZebra {
         }
         if ($op eq 'specialUpdate') {
             # OK, we have to add or update the record
-            # 1st delete (virtually, in indexes) ...
-            %result = _DelBiblioNoZebra($biblionumber,$record,$server);
+            # 1st delete (virtually, in indexes), if record actually exists
+            if ($record) { 
+                %result = _DelBiblioNoZebra($biblionumber,$record,$server);
+            }
             # ... add the record
             %result=_AddBiblioNoZebra($biblionumber,$newRecord, $server, %result);
         } else {
