@@ -404,9 +404,6 @@ WriteMakefile(
     INSTALLMAN1DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man1'),
     INSTALLMAN3DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man3'),
 
-	# disable tests
-	'test' => {TESTS => 't/dummy.t'},
-
 #   CONFIGURE => sub {
 #     # Ask for options with prompt($question,$default) calls here?
 #     return { macro => { 'export TEST' => '755' } }
@@ -835,6 +832,14 @@ sub get_target_directories {
 }
 
 package MY;
+
+sub test {
+    my $self = shift;
+    my $test = $self->SUPER::test(@_);
+    $test =~ s!\$\(INST_LIB\)!blib/PERL_MODULE_DIR!g;
+    return $test;
+}
+
 sub install {
     my $self = shift;
     my $install = ""; 
