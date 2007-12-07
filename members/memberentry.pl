@@ -37,6 +37,12 @@ use C4::Input;
 use C4::Log;
 use C4::Branch; # GetBranches
 
+use vars qw($debug);
+
+BEGIN {
+	$debug = $ENV{DEBUG} || 0;
+}
+	
 my $input = new CGI;
 my %data;
 
@@ -86,11 +92,9 @@ $template->param( "mandatory$_" => 1);
 }
 $template->param("add"=>1) if ($op eq 'add');
 $template->param("checked" => 1) if ($nodouble eq 1);
-my $categorycode=$input->param('categorycode');
-($borrower_data=GetMember($borrowernumber,'borrowernumber')) if ($op eq 'modify' or $op eq 'save');
-$categorycode=$borrower_data->{'categorycode'} unless $categorycode;
-my $category_type;
-$category_type = $input->param('category_type');
+($borrower_data = GetMember($borrowernumber,'borrowernumber')) if ($op eq 'modify' or $op eq 'save');
+my $categorycode = $input->param('categorycode') || $borrower_data->{'categorycode'};
+my $category_type = $input->param('category_type');
 unless ($category_type or !($categorycode)){
   my $borrowercategory= GetBorrowercategory($categorycode);
   $category_type = $borrowercategory->{'category_type'};
@@ -173,7 +177,7 @@ if ($op eq 'save' || $op eq 'insert'){
     
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} != 1){
-      #warn "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
+      $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
         $nok=1;
@@ -461,7 +465,7 @@ $data{'dateexpiry'}   = format_date($data{'dateexpiry'});
 $data{'dateofbirth'}  = format_date($data{'dateofbirth'});
 
 $template->param( "showguarantor"  => ($category_type=~/A|I|S/) ? 0 : 1); # associate with step to know where you are
-  warn "$step";
+$debug and warn "memberentry step: $step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;# associate with step to know where u are
 $template->param( "step"  => $step) if $step;# associate with step to know where u are
