@@ -31,6 +31,12 @@ use C4::Bookfund;
 use C4::Bookseller;
 use C4::Dates qw/format_date/;
 
+use vars qw($debug);
+
+BEGIN {
+	$debug = $ENV{DEBUG} || 1;
+}
+
 =head1 NAME
 
 basket.pl
@@ -104,9 +110,10 @@ if ( C4::Context->preference("IndependantBranches") ) {
 # if new basket, pre-fill infos
 $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
 $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
-warn $loggedinuser;
-warn $basket->{creationdate};
-warn $basket->{authorisedby} ;
+$debug and warn 
+	sprintf "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
+		$basket->{creationdate}, $basket->{authorisedby} ;
+
 
 my ( $count, @results );
 @results  = GetOrders( $basketno, $order );
