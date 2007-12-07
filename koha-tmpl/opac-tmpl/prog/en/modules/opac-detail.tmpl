@@ -92,10 +92,14 @@
     <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="MARCSUBJCTS" -->
-            <p><span class="label">Subject(s):</span> <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-                            <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
-                                <!-- TMPL_VAR NAME="separator" --><a title="$<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" --><!-- TMPL_VAR name="limit" -->:<!-- TMPL_VAR NAME="link" --> <!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a>
-                            <!-- /TMPL_LOOP --> |  <!-- /TMPL_LOOP --></p>
+            <p><span class="label">Subject(s):</span> 
+                <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
+                    <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
+                        <!-- TMPL_VAR NAME="separator" --><a title="$<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" --><!-- TMPL_VAR name="limit" -->:<!-- TMPL_VAR NAME="link" --> <!-- /TMPL_LOOP -->">
+                            <!-- TMPL_VAR NAME="value" -->
+                        </a>
+                    <!-- /TMPL_LOOP --> |
+                <!-- /TMPL_LOOP --></p>
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name="subjects" --><p><strong>Subject(s):</strong> <!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a> | <!-- /TMPL_LOOP --></p><!-- /TMPL_IF --></p>
 <!-- /TMPL_IF -->
