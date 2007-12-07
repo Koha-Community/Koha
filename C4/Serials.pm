@@ -19,7 +19,7 @@ package C4::Serials;    #assumes C4/Serials.pm
 
 
 use strict;
-use C4::Date;
+use C4::Dates qw(format_date format_date_in_iso);
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
 use C4::Suggestions;
@@ -33,10 +33,7 @@ require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
-};
+$VERSION = 3.00;	# set version for version checking
 
 =head1 NAME
 

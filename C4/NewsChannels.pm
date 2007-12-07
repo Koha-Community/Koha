@@ -20,14 +20,13 @@ package C4::NewsChannels;
 use strict;
 
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(format_date);
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = do { my @v = '$Revision$' =~ /\d+/g;
-    shift(@v) . "." . join( "_", map { sprintf "%03d", $_ } @v );
-};
+BEGIN { 
+		$VERSION = 3.00;	# set the version for version checking
+}
 
 =head1 NAME
 
@@ -50,7 +49,7 @@ This module provides the functions needed to admin the news channels and its cat
   &news_channels &get_new_channel &del_channels &add_channel &update_channel
   &news_channels_categories &get_new_channel_category &del_channels_categories
   &add_channel_category &update_channel_category &news_channels_by_category
-&add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
+  &add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
   &add_opac_electronic &upd_opac_electronic &del_opac_electronic &get_opac_electronic &get_opac_electronics
 );
 
@@ -337,7 +336,7 @@ sub GetNewsToDisplay {
       )
       AND   lang = ?
       ORDER BY number
-    ";
+    ";				# expirationdate field is NOT in ISO format?
     my $sth = $dbh->prepare($query);
     $sth->execute($lang);
     my @results;
