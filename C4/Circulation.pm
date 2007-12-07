@@ -26,7 +26,7 @@ use C4::Reserves;
 use C4::Koha;
 use C4::Biblio;
 use C4::Members;
-use C4::Date;
+# use C4::Date;	# apparently no dependency.
 use Date::Calc qw(
   Today
   Today_and_Now
