@@ -95,19 +95,19 @@ Unable to delete member: insufficient privileges.
     <p><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
     <!-- /TMPL_UNLESS -->
     <p><strong>Initials: </strong><!-- TMPL_VAR NAME="initials" --></p>
-    <p><strong>Date of birth:</strong><!-- TMPL_VAR NAME="dateofbirth" --></p>
-    <p><strong>Sex:</strong><!-- TMPL_VAR NAME="sex" --></p><!-- /TMPL_UNLESS -->
+    <p><strong>Date of birth: </strong><!-- TMPL_VAR NAME="dateofbirth" --></p>
+    <p><strong>Sex: </strong><!-- TMPL_VAR NAME="sex" --></p><!-- /TMPL_UNLESS -->
     <!-- TMPL_IF NAME="printethnicityline" -->
-    <p><strong>Ethnicity:</strong><!-- TMPL_VAR NAME="ethnicity" --></p>
+    <p><strong>Ethnicity: </strong><!-- TMPL_VAR NAME="ethnicity" --></p>
     <p><strong>Ethnicity notes: </strong><!-- TMPL_VAR NAME="ethnotes" --></p>
     <!-- /TMPL_IF -->
    <!-- TMPL_IF name="isguarantee" -->
             <!-- TMPL_IF NAME="guaranteeloop" -->
-                <p><strong>Guarantees:</strong><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
+                <p><strong>Guarantees: </strong><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="guarantorborrowernumber" -->
-                <p><strong>Guarantor:</strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></p>
+                <p><strong>Guarantor: </strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></p>
             <!-- /TMPL_IF -->
      <!-- /TMPL_IF  -->
   
@@ -139,7 +139,7 @@ Unable to delete member: insufficient privileges.
     <li><strong>Registration branch: </strong><!-- TMPL_VAR NAME="branchname" --></li>
 
     <!-- TMPL_IF NAME="sort1" --><li><strong>Sort field 1: </strong><!-- TMPL_VAR NAME="sort1" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="sort2" --><li><strong>Sort field 2:</strong><!-- TMPL_VAR NAME="sort2" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="sort2" --><li><strong>Sort field 2: </strong><!-- TMPL_VAR NAME="sort2" --></li><!-- /TMPL_IF -->
     <li><strong>OPAC login: </strong><!-- TMPL_VAR name="userid" --></li>
     <!-- TMPL_IF NAME="password" -->
   <li><strong>OPAC password: </strong>*******</li>
@@ -147,7 +147,7 @@ Unable to delete member: insufficient privileges.
   <li><strong>OPAC password: </strong><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
    <!--/TMPL_IF --> 
   <!-- TMPL_IF NAME="borrowernotes" --><li><strong>Circulation notes: </strong><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="opacnote" --><li><strong>Message to Patron:</strong><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacnote" --><li><strong>Message to Patron: </strong><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
 	</ul>
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
  </div>
