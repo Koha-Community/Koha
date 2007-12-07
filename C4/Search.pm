@@ -21,13 +21,15 @@ use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField
 use C4::Koha;      # getFacets
 use Lingua::Stem;
-use C4::Date;
+use C4::Dates qw(format_date);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 # set the version for version checking
-$VERSION = 3.00;
-$DEBUG=1;
+BEGIN {
+	$VERSION = 3.01;
+	$DEBUG = ($ENV{DEBUG}) ? 1 : 0;
+}
 
 =head1 NAME
 
