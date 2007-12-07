@@ -4,30 +4,30 @@
 <!-- scheme: tcp, ssl, unix, http, sru -->
 <!-- can run all servers on tcp, but the unix socket is faster -->
 
-<listen id="biblioserver" >unix:__BASE_DIR__/tmp/bibliosocket</listen>
-<listen id="authorityserver" >unix:__BASE_DIR__/tmp/authoritysocket</listen>
+<listen id="biblioserver" >unix:__ZEBRA_RUN_DIR__/bibliosocket</listen>
+<listen id="authorityserver" >unix:__ZEBRA_RUN_DIR__/authoritysocket</listen>
 <!-- public server runs on tcp -->
 <!-- <listen id="publicserver" >tcp:@:9999</listen> -->
 
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver"> 
-    <directory>__BASE_DIR__/zebradb/biblios</directory>
-    <config>__PREFIX__/share/koha/etc/zebradb/zebra-biblios.cfg</config>
-    <cql2rpn>__PREFIX__/share/koha/etc/zebradb/pqf.properties</cql2rpn>
+    <directory>__ZEBRA_DATA_DIR__/biblios</directory>
+    <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
+    <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
 </server>
 <serverinfo id="biblioserver">
-        <ccl2rpn>__PREFIX__/share/koha/etc/zebradb/ccl.properties</ccl2rpn>
+        <ccl2rpn>__ZEBRA_CONF_DIR__/ccl.properties</ccl2rpn>
         <user>__ZEBRA_USER__</user>    
         <password>__ZEBRA_PASS__</password>
 </serverinfo>
 
 <!-- AUTHORITY RECORDS -->
 <server id="authorityserver"  listenref="authorityserver" >
-    <directory>__BASE_DIR__/zebradb/authorities</directory>
-    <config>__PREFIX__/share/koha/etc/zebradb/zebra-authorities.cfg</config>
+    <directory>__ZEBRA_DATA_DIR__/authorities</directory>
+    <config>__ZEBRA_CONF_DIR__/zebra-authorities.cfg</config>
 </server>
 <serverinfo id="authorityserver">
-    <ccl2rpn>__PREFIX__/share/koha/etc/zebradb/ccl.properties</ccl2rpn>
+    <ccl2rpn>__ZEBRA_CONF_DIR__/ccl.properties</ccl2rpn>
     <user>__ZEBRA_USER__</user>
     <password>__ZEBRA_PASS__</password>
 </serverinfo>
@@ -46,10 +46,10 @@
  <biblioservershadow>1</biblioservershadow>
  <authorityserver>authorities</authorityserver>
  <authorityservershadow>1</authorityservershadow>
- <intranetdir>__CGI_DIR__</intranetdir>
- <opacdir>__CGI_DIR__/opac</opacdir>
- <opachtdocs>__BASE_DIR__/templates/koha-tmpl/opac-tmpl</opachtdocs>
- <intrahtdocs>__BASE_DIR__/templates/koha-tmpl/intranet-tmpl</intrahtdocs>
- <includes>__BASE_DIR__/templates/koha-tmpl/intranet-tmpl/default/en/includes/</includes>
+ <intranetdir>__INTRANET_CGI_DIR__</intranetdir>
+ <opacdir>__OPAC_CGI_DIR__/opac</opacdir>
+ <opachtdocs>__OPAC_TMPL_DIR__</opachtdocs>
+ <intrahtdocs>__INTRANET_TMPL_DIR__</intrahtdocs>
+ <includes>__INTRANET_TMPL_DIR__/default/en/includes/</includes>
 </config>
 </yazgfs>

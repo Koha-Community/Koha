@@ -19,10 +19,13 @@
 # See http://www.koha.org/wiki/?page=KohaInstaller
 #
 
+use strict;
+use warnings;
 use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
 
+my $DEBUG = 0;
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
 
 # Hash up directory structure & files beginning with the directory we were called from (should be the base of koha)...
@@ -121,7 +124,7 @@ current organization of the source tree, but (FIXME) it
 would be better to reorganize the source tree to better
 match the installation system, to allow adding new directories
 without having to adjust Makefile.PL each time.  The idea
-is to make the C<%target_map> hash as minimal as possible.
+is to make the C<$target_map> hash as minimal as possible.
 
 =back
 
@@ -168,6 +171,43 @@ Directory for Koha configuration files.
 
 Directory for Zebra configuration files.
 
+=item ZEBRA_LOCK_DIR
+
+Directory for Zebra's lock files.
+
+=item ZEBRA_DATA_DIR
+
+Directory for Zebra's data files.
+
+=item ZEBRA_RUN_DIR
+
+Directory for Zebra's UNIX-domain sockets.
+
+=item EXAMPLE_DIR
+
+Directory for example configuration files.  This directory
+exists primarily to make it easier to change the
+MARC format or language of the active Zebra
+indexes.
+
+=item SCRIPT_DIR
+
+Directory for command-line scripts and daemons.
+
+=item MAN_DIR
+
+Directory for man pages created from POD -- will mostly
+contain information of interest to Koha developers.
+
+=item DOC_DIR
+
+Directory for Koha documentation accessed from the 
+command-line, e.g., READMEs.
+
+=item LOG_DIR
+
+Directory for Apache and Zebra logs produced by Koha.
+
 =item NONE
 
 This is a dummy target used to explicitly state
@@ -180,49 +220,59 @@ production installation.
 
 =cut
 
-my %target_map = (
-  'about.pl'                  => 'INTRANET_CGI_DIR',
-  'acqui'                     => 'INTRANET_CGI_DIR',
-  'admin'                     => 'INTRANET_CGI_DIR',
-  'authorities'               => 'INTRANET_CGI_DIR',
-  'C4'                        => 'PERL_MODULE_DIR',
-  'catalogue'                 => 'INTRANET_CGI_DIR',
-  'cataloguing'               => 'INTRANET_CGI_DIR',
-  'changelanguage.pl'         => [ 'INTRANET_CGI_DIR', 'OPAC_CGI_DIR' ],
-  'check_sysprefs.pl'         => 'NONE',
-  'circ'                      => 'INTRANET_CGI_DIR',
-  'edithelp.pl'               => 'INTRANET_CGI_DIR',
-  'etc'                       => 'KOHA_CONF_DIR',
-  'etc/zebradb'               => 'ZEBRA_CONF_DIR',
-  'installer-CPAN.pl'         => 'NONE',
-  'installer'                 => 'INTRANET_CGI_DIR',
-  'koha-tmpl'                 => 'NONE',
-  'koha-tmpl/intranet-tmpl'   => 'INTRANET_TMPL_DIR',
-  'koha-tmpl/opac-tmpl'       => 'OPAC_TMPL_DIR',
-  'koha-version.pl'           => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
-  'labels'                    => 'INTRANET_CGI_DIR',
-  'mainpage.pl'               => 'INTRANET_CGI_DIR',
-  'Makefile.PL'               => 'NONE',
-  'MANIFEST.SKIP'             => 'NONE',
-  'members'                   => 'INTRANET_CGI_DIR',
-  'misc'                      => 'NONE', # FIXME deal with a little later
-  'opac'                      => 'OPAC_CGI_DIR',
-  'README.txt'                => 'NONE',
-  'reports'                   => 'INTRANET_CGI_DIR',
-  'reserve'                   => 'INTRANET_CGI_DIR',
-  'reviews'                   => 'INTRANET_CGI_DIR',
-  'rewrite-config.PL'         => 'NONE',
-  'reviews'                   => 'INTRANET_CGI_DIR',
-  'rss'                       => 'NONE', # FIXME deal with a little later
-  'serials'                   => 'INTRANET_CGI_DIR',
-  'sms'                       => 'INTRANET_CGI_DIR',
-  'suggestion'                => 'INTRANET_CGI_DIR',
-  'svc'                       => 'INTRANET_CGI_DIR',
-  't'                         => 'NONE',
-  'tmp'                       => 'NONE', # FIXME deal with later
-  'tools'                     => 'INTRANET_CGI_DIR',
-  'virtualshelves'            => 'INTRANET_CGI_DIR',
-);
+my $target_map = {
+  './about.pl'                  => 'INTRANET_CGI_DIR',
+  './acqui'                     => 'INTRANET_CGI_DIR',
+  './admin'                     => 'INTRANET_CGI_DIR',
+  './authorities'               => 'INTRANET_CGI_DIR',
+  './C4'                        => 'PERL_MODULE_DIR',
+  './C4/SIP/t'                  => 'NONE',
+  './C4/SIP/koha_test'          => 'NONE',
+  './C4/tests'                  => 'NONE',
+  './catalogue'                 => 'INTRANET_CGI_DIR',
+  './cataloguing'               => 'INTRANET_CGI_DIR',
+  './changelanguage.pl'         => [ 'INTRANET_CGI_DIR', 'OPAC_CGI_DIR' ],
+  './check_sysprefs.pl'         => 'NONE',
+  './circ'                      => 'INTRANET_CGI_DIR',
+  './edithelp.pl'               => 'INTRANET_CGI_DIR',
+  './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
+  './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
+  './installer-CPAN.pl'         => 'NONE',
+  './installer'                 => 'INTRANET_CGI_DIR',
+  './koha-tmpl'                 => 'NONE',
+  './koha-tmpl/intranet-tmpl'   => {target => 'INTRANET_TMPL_DIR', trimdir => -1},
+  './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -11},
+  './koha-version.pl'           => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
+  './labels'                    => 'INTRANET_CGI_DIR',
+  './mainpage.pl'               => 'INTRANET_CGI_DIR',
+  './Makefile.PL'               => 'NONE',
+  './MANIFEST.SKIP'             => 'NONE',
+  './members'                   => 'INTRANET_CGI_DIR',
+  './misc'                      => { target => 'SCRIPT_DIR', trimdir => -1 }, 
+  './misc/info'                 => { target => 'DOC_DIR', trimdir => 2 },
+  './misc/release notes'        => { target => 'DOC_DIR', trimdir => 2 },
+  './misc/translator'           => { target => 'EXAMPLE_DIR', trimdir => 2 }, 
+  './misc/installer_devel_notes' => 'NONE',
+  './opac'                      => 'OPAC_CGI_DIR',
+  './README.txt'                => 'NONE',
+  './reports'                   => 'INTRANET_CGI_DIR',
+  './reserve'                   => 'INTRANET_CGI_DIR',
+  './reviews'                   => 'INTRANET_CGI_DIR',
+  './rewrite-config.PL'         => 'NONE',
+  './reviews'                   => 'INTRANET_CGI_DIR',
+  './rss'                       => 'NONE', # FIXME deal with a little later
+  './serials'                   => 'INTRANET_CGI_DIR',
+  './sms'                       => 'INTRANET_CGI_DIR',
+  './suggestion'                => 'INTRANET_CGI_DIR',
+  './svc'                       => 'INTRANET_CGI_DIR',
+  './t'                         => 'NONE',
+  './tmp'                       => 'NONE', # FIXME deal with later
+  './tools'                     => 'INTRANET_CGI_DIR',
+  './virtualshelves'            => 'INTRANET_CGI_DIR',
+  # ignore files and directories created by the install itself
+  './pm_to_blib'                => 'NONE',
+  './blib'                      => 'NONE',
+};
 
 =head1 CONFIGURATION OPTIONS
 
@@ -281,6 +331,8 @@ my %valid_config_values = (
 
 my %config = get_configuration(\%config_defaults, \%valid_config_values);
 my %target_directories = get_target_directories(\%config);
+my $file_map = {};
+get_file_map($target_map, $dirtree, $file_map);
 
 WriteMakefile(
     NAME => 'koha',
@@ -346,8 +398,11 @@ WriteMakefile(
         },
 
 	# File tree mapping
-#	PM => map_tree(),
-	PM => unhashdir($dirtree),
+	PM => $file_map,
+
+    # Man pages generated from POD
+    INSTALLMAN1DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man1'),
+    INSTALLMAN3DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man3'),
 
 	# disable tests
 	'test' => {TESTS => 't/dummy.t'},
@@ -359,11 +414,11 @@ WriteMakefile(
 
    PL_FILES => { # generator => target(s)
       'rewrite-config.PL' => [
-         '$(PREFIX)/share/koha/etc/koha-conf.xml',
-         '$(PREFIX)/share/koha/etc/koha-httpd.conf',
-         '$(PREFIX)/share/koha/etc/zebradb/etc/passwd',
-         '$(PREFIX)/share/koha/etc/zebradb/zebra-biblios.cfg',
-         '$(PREFIX)/share/koha/etc/zebradb/zebra-authorities.cfg'
+         'blib/KOHA_CONF_DIR/koha-conf.xml',
+         'blib/KOHA_CONF_DIR/koha-httpd.conf',
+         'blib/ZEBRA_CONF_DIR/etc/passwd',
+         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
+         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
          ]
    }
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
@@ -403,6 +458,122 @@ sub hashdir{
     return $tree;
 }
 
+=head2 get_file_map 
+
+This function combines the target_map and file hash to
+map each source file to its destination relative to
+the set of installation targets.
+
+Output will be a hash mapping from each source file
+to its destination value, like this:
+
+'mainpage.pl' => '$(INTRANET_CGI_DIR)/mainpage.pl'
+
+=cut
+
+sub get_file_map {
+    my $target_map = shift;
+    my $dirtree = shift;
+    my $file_map = shift;
+    my $curr_path = @_ ? shift : ['.'];
+
+    # Traverse the directory tree.
+    # For each file or directory, identify the
+    # most specific match in the target_map
+    foreach my $dir (sort keys %{ $dirtree }) {
+        if ($dir eq '.') {
+            # deal with files in directory
+            foreach my $file (sort @{ $dirtree->{$dir} }) {
+                my $targetdir = undef;
+                my $matchlevel = undef;
+                # first, see if there is a match on this specific
+                # file in the target map
+                my $filepath = join("/", @$curr_path, $file);
+                if (exists $target_map->{$filepath}) {
+                    $targetdir = $target_map->{$filepath};
+                    $matchlevel = scalar(@$curr_path) + 1;
+                } else {
+                    # no match on the specific file; look for
+                    # a directory match
+                    for (my $i = scalar(@$curr_path) - 1; $i >= 0; $i--)  {
+                        my $dirpath = join("/", @$curr_path[0..$i]);
+                        if (exists $target_map->{$dirpath}) {
+                            $targetdir = $target_map->{$dirpath};
+                            $matchlevel = $i + 1;
+                            last;
+                        }
+                    }
+                }
+                if (defined $targetdir) {
+                     _add_to_file_map($file_map, $targetdir, $curr_path, $file, $matchlevel);
+                } else {
+                    my $path = join("/", @$curr_path);
+                    print "failed to map: $path/$file\n" if $DEBUG;
+                }
+            }
+        } else {
+            # dealing with subdirectory
+            push @$curr_path, $dir;
+            get_file_map($target_map, $dirtree->{$dir}, $file_map, $curr_path);
+            pop @$curr_path;
+        }
+    }
+}
+
+sub _add_to_file_map {
+    my $file_map = shift;
+    my $targetdir = shift;
+    my $curr_path = shift;
+    my $file = shift;
+    my $matchlevel = shift;
+    my $dest_path = @_ ? shift : $curr_path;
+
+    # The target can be one of the following:
+    # 1. scalar representing target symbol
+    # 2. hash ref containing target and trimdir keys
+    # 3. array ref containing list of #1 and #2
+    #
+    # Consequently, this routine traverses this structure,
+    # calling itself recursively, until it deals with
+    # all of the scalar target symbols.
+    if (ref $targetdir eq 'ARRAY') {
+        foreach my $subtarget (sort @$targetdir) {
+            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel);
+        }
+    } elsif (ref $targetdir eq 'HASH') {
+        my $subtarget = $targetdir->{target};
+        if (exists $targetdir->{trimdir}) {
+            # if we get here, we've specified that
+            # rather than installing the file to
+            # $(TARGET)/matching/dirs/subdirs/file,
+            # we want to install it to
+            # $(TARGET)/subdirs/file
+            #
+            # Note that this the only place where
+            # $matchlevel is used.
+            my @new_dest_path = @$dest_path;
+            if ($targetdir->{trimdir} == -1)  {
+                splice @new_dest_path, 0, $matchlevel;
+            } else {
+                splice @new_dest_path, 0, $targetdir->{trimdir};
+            }
+            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel, \@new_dest_path);
+        } else {
+            # actually getting here means that the
+            # target was unnecessarily listed
+            # as a hash, but we'll forgive that
+            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel);
+        }
+    } elsif ($targetdir ne 'NONE' and $targetdir ne '') {
+        my $source = File::Spec->catfile(@$curr_path, $file);
+        return if $source =~ / /; #FIXME
+        #my $destination = File::Spec->catfile("\$($targetdir)", @$dest_path, $file);
+        my $destination = File::Spec->catfile('blib', $targetdir, @$dest_path, $file);
+        #print "$source => $destination\n"; # DEBUG
+        $file_map->{$source} = $destination;
+    }
+}
+
 =head2 unhashdir
 
 This function unhashes the hash of hashes generated by hashdir().
@@ -423,7 +594,7 @@ sub unhashdir{
 			$dirlevel = $toplevel;
 		}
 		elsif ( $k1 eq '.' ) {
-			foreach $file ( @{$dirhash->{ $k1 }} ) {
+			foreach my $file ( @{$dirhash->{ $k1 }} ) {
 #				TODO: There are some hacks here that may be able to be improved... -fbcit
 				if ( $file =~ /^./ ) { next; } # skip hidden files and directories.
 
@@ -515,6 +686,7 @@ component of the directory path, which will be used
 as the package name in the FHS layout.);
     }
     $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
+    $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
 
     $msg = q(
 Koha can use the Zebra search engine for high-performance
@@ -599,7 +771,6 @@ sub get_target_directories {
 
     my %dirmap = ();
     if ($mode eq 'single') {
-        # mode is standard, i.e., 'fhs'
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'templates');
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'www');
@@ -616,6 +787,7 @@ sub get_target_directories {
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
+        $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } elsif ($mode eq 'dev') {
         my $curdir = File::Spec->rel2abs(File::Spec->curdir());
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir($curdir);
@@ -634,6 +806,7 @@ sub get_target_directories {
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
+        $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'run', 'zebradb');
     } else {
         # mode is standard, i.e., 'fhs'
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
@@ -652,6 +825,7 @@ sub get_target_directories {
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'var', 'lock', $package, 'zebradb');
         $dirmap{'LOG_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'log', $package);
         $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'lib', $package, 'zebradb');
+        $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'run', $package, 'zebradb');
     }
 
     foreach my $key (sort keys %dirmap) {
@@ -660,11 +834,42 @@ sub get_target_directories {
     return %dirmap;
 }
 
-#package MY;
-#sub install {
-    #warn "\n\n\noverride\n\n\n";
-    #return "";
-#}
+package MY;
+sub install {
+    my $self = shift;
+    my $install = ""; 
+    # NOTE: we're *not* doing this: my $install = $self->SUPER::install(@_);
+    # This means that we're completely overriding EU::MM's default
+    # installation and uninstallation targets.
+    foreach my $key (sort keys %target_directories) {
+        $install .= qq(
+KOHA_INST_$key = blib/$key
+KOHA_DEST_$key = $target_directories{$key}
+);
+    }
+
+    $install .= qq(
+install :: all install_koha
+\t\$(NOECHO) \$(NOOP)
+);
+    $install .= "install_koha ::\n";      
+    $install .= "\t\$(NOECHO) umask 022; \$(MOD_INSTALL) \\\n";
+    foreach my $key (sort keys %target_directories) {
+        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n";
+    }
+    $install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
+    $install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
+    return $install;
+}
+
+sub postamble {
+    # put directory mappings into Makefile
+    # so that Make will export as environment
+    # variables -- this is for the use of
+    # rewrite-confg.PL
+    my $env = join("\n", map { "export __${_}__ = $target_directories{$_}" } keys %target_directories); 
+    return "$env\n";
+}
 
 __END__
 
@@ -678,4 +883,6 @@ ExtUtils::MakeMaker(3)
 MJ Ray mjr at phonecoop.coop
 
 =cut
-
+FIXME: deal with files that have spaces in names
+FIXME: Zebra lang/MARC mapping
+FIXME: deal with .htaccess
