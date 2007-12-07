@@ -21,6 +21,7 @@
 
 use ExtUtils::MakeMaker;
 use POSIX;
+use File::Spec;
 
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
 
@@ -52,7 +53,7 @@ Makefile.PL - Koha packager and installer
 
 =head1 DESCRIPTION
 
-This is a Packager and installer that uses
+This is a packager and installer that uses
 ExtUtils::MakeMaker, which is fairly common
 on perl systems.
 As well as building tar or zip files
@@ -92,21 +93,196 @@ to generate initial configuration files in future.
 
 =cut
 
-my $marc_value;
-my $lang_value;
+=head2 target_map
 
+This is a hash mapping directories and files in the
+source tree to installation target directories.  The rules
+for this mapping are:
 
-while ($marc_value ne 'marc21' && $marc_value ne 'unimarc'){
-   my $message= "Chose your flavour of MARC, unimarc or marc21 [marc21]";
-   $marc_value=prompt($message) || 'marc21';
-}
-while ($lang_value ne 'en' && $lang_value ne 'fr'){
-   my $message= "Choose your language, en or fr [en]";
-   $lang_value=prompt($message) || 'en';
-}
+=over 4
+
+=item If a directory or file is specified, it and its
+contents will be copied to the installation target directory.
+
+=item If a subdirectory of a mapped directory is specified,
+its target overrides the parent's target for that subdirectory.
+
+=item The value of each map entry may either be a scalar containing 
+one target or a reference to an array of targets, in which case
+the directory or file is copied to each target.
+
+=item Any files at the top level of the source tree that are
+not included in the map will not be installed.
+
+=item Any directories at the top level of the source tree
+that are not included in the map will be installed in
+INTRANET_CGI_DIR.  This is a sensible default given the
+current organization of the source tree, but (FIXME) it
+would be better to reorganize the source tree to better
+match the installation system, to allow adding new directories
+without having to adjust Makefile.PL each time.  The idea
+is to make the C<%target_map> hash as minimal as possible.
+
+=back
+
+The permitted installation targets are:
+
+=over 4
+
+=item INTRANET_CGI_DIR 
+
+CGI scripts for intranet (staff) interface.
+
+=item INTRANET_TMPL_DIR
+
+HTML templates for the intranet interface.
+
+=item INTRANET_WWW_DIR
+
+HTML files, images, etc. for DocumentRoot for the intranet interface.
+
+=item OPAC_CGI_DIR
+
+CGI scripts for OPAC (public) interface.
+
+=item OPAC_TMPL_DIR
+
+HTML templates for the OPAC interface.
+
+=item OPAC_WWW_DIR
+
+HTML files, images, etc. for DocumentRoot for the OPAC interface.
+
+=item PERL_MODULE_DIR
+
+Perl modules (at present just the C4 modules) that are intimately
+tied to Koha.  Depending on the installation options, these
+may or may not be installed one of the standard directories
+in Perl's default @LIB.
+
+=item KOHA_CONF_DIR
+
+Directory for Koha configuration files.
+
+=item ZEBRA_CONF_DIR
+
+Directory for Zebra configuration files.
+
+=item NONE
+
+This is a dummy target used to explicitly state
+that a given file or directory is not to be installed.
+This is used either for parts of the installer itself
+or for development tools that are not applicable to a
+production installation.
+
+=back
+
+=cut
+
+my %target_map = (
+  'about.pl'                  => 'INTRANET_CGI_DIR',
+  'acqui'                     => 'INTRANET_CGI_DIR',
+  'admin'                     => 'INTRANET_CGI_DIR',
+  'authorities'               => 'INTRANET_CGI_DIR',
+  'C4'                        => 'PERL_MODULE_DIR',
+  'catalogue'                 => 'INTRANET_CGI_DIR',
+  'cataloguing'               => 'INTRANET_CGI_DIR',
+  'changelanguage.pl'         => [ 'INTRANET_CGI_DIR', 'OPAC_CGI_DIR' ],
+  'check_sysprefs.pl'         => 'NONE',
+  'circ'                      => 'INTRANET_CGI_DIR',
+  'edithelp.pl'               => 'INTRANET_CGI_DIR',
+  'etc'                       => 'KOHA_CONF_DIR',
+  'etc/zebradb'               => 'ZEBRA_CONF_DIR',
+  'installer-CPAN.pl'         => 'NONE',
+  'installer'                 => 'INTRANET_CGI_DIR',
+  'koha-tmpl'                 => 'NONE',
+  'koha-tmpl/intranet-tmpl'   => 'INTRANET_TMPL_DIR',
+  'koha-tmpl/opac-tmpl'       => 'OPAC_TMPL_DIR',
+  'koha-version.pl'           => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
+  'labels'                    => 'INTRANET_CGI_DIR',
+  'mainpage.pl'               => 'INTRANET_CGI_DIR',
+  'Makefile.PL'               => 'NONE',
+  'MANIFEST.SKIP'             => 'NONE',
+  'members'                   => 'INTRANET_CGI_DIR',
+  'misc'                      => 'NONE', # FIXME deal with a little later
+  'opac'                      => 'OPAC_CGI_DIR',
+  'README.txt'                => 'NONE',
+  'reports'                   => 'INTRANET_CGI_DIR',
+  'reserve'                   => 'INTRANET_CGI_DIR',
+  'reviews'                   => 'INTRANET_CGI_DIR',
+  'rewrite-config.PL'         => 'NONE',
+  'reviews'                   => 'INTRANET_CGI_DIR',
+  'rss'                       => 'NONE', # FIXME deal with a little later
+  'serials'                   => 'INTRANET_CGI_DIR',
+  'sms'                       => 'INTRANET_CGI_DIR',
+  'suggestion'                => 'INTRANET_CGI_DIR',
+  'svc'                       => 'INTRANET_CGI_DIR',
+  't'                         => 'NONE',
+  'tmp'                       => 'NONE', # FIXME deal with later
+  'tools'                     => 'INTRANET_CGI_DIR',
+  'virtualshelves'            => 'INTRANET_CGI_DIR',
+);
+
+=head1 CONFIGURATION OPTIONS
+
+The following configuration options are used by the installer.
+
+=over 4
+
+=item INSTALL_MODE
+
+Specifies whether installation will be FHS-compliant (default,
+assumes user has root), put everything under
+a single directory (for users installing on a web host
+that allows CGI scripts and a MySQL database but not root 
+access), or development (for a developer who wants to run
+Koha from a git clone with no fuss).
+
+=item INSTALL_BASE
+
+Directory under which most components will go.  Default
+value will vary depending on INSTALL_MODE.
+
+=item INSTALL_ZEBRA
+
+Whether to install Zebra configuration files and data
+directories.
+
+=item ZEBRA_MARC_FORMAT
+
+Specifies format of MARC records to be indexed by Zebra.
+
+=item ZEBRA_LANGUAGE
+
+Specifies primary language of records that will be 
+indexed by Zebra.
+
+=back
+
+=cut
+
+# default configuration options
+my %config_defaults = (
+  'INSTALL_MODE'      => 'standard',
+  'INSTALL_BASE'      => '/usr/share/koha',
+  'INSTALL_ZEBRA'     => 'yes',
+  'ZEBRA_MARC_FORMAT' => 'marc21',
+  'ZEBRA_LANGUAGE'    => 'en',
+);
+
+# valid values for certain configuration options
+my %valid_config_values = (
+  'INSTALL_MODE'  => { 'standard' => 1, 'single' => 1, 'dev' => 1 },
+  'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
+  'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
+  'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
+);
+
+my %config = get_configuration(\%config_defaults, \%valid_config_values);
+my %target_directories = get_target_directories(\%config);
 
 WriteMakefile(
-
     NAME => 'koha',
     #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
     VERSION_FROM => 'C4/Context.pm',
@@ -271,6 +447,224 @@ sub unhashdir{
 	}
 	return \%result;
 }
+
+=head2 get_configuration_options
+
+This prompts the user for various configuration options.
+
+=cut
+
+sub get_configuration {
+  my $defaults = shift;
+  my $valid_values = shift;
+  my %config = ();
+
+  my $msg = q(
+By default, Koha can be installed in one of three ways:
+
+standard: Install files in conformance with the Filesystem
+          Hierarchy Standard (FHS).  This is the default mode
+          and should be used when installing a production
+          Koha system.  On Unix systems, root access is 
+          needed to complete a standard installation.
+
+single:   Install files under a single directory.  This option
+          is useful for installing Koha without root access, e.g.,
+          on a web host that allows CGI scripts and MySQL databases
+          but requires the user to keep all files under the user's
+          HOME directory.
+
+dev:      Create a set of symbolic links and configuration files to
+          allow Koha to run directly from the source distribution.
+          This mode is useful for developers who want to run
+          Koha from a git clone.
+
+Please choose the installation mode);
+    $msg .= _add_valid_values_disp('INSTALL_MODE', $valid_values);
+    $config{'INSTALL_MODE'} = _get_value('INSTALL_MODE', $msg, $defaults->{'INSTALL_MODE'}, $valid_values);
+
+    # set message and default value for INSTALL_BASE
+    # depending on value of INSTALL_MODE
+    my $install_base_default = $defaults->{'INSTALL_BASE'};
+    if ($config{'INSTALL_MODE'} eq 'dev') {
+        $msg = q(
+Please specify the directory in which to install Koha's
+active configuration files and (if applicable) the
+Zebra database.  Koha's CGI scripts and templates will
+be run from the current directory.);
+        # FIXME - home directory portability consideration apply
+        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "/usr/share/koha-dev";
+    } elsif ($config{'INSTALL_MODE'} eq 'single') {
+        $msg = "\nPlease specify the directory in which to install Koha";
+        # FIXME -- we're assuming under a 'single' mode install
+        # that user will likely want to install under the home
+        # directory.  This is OK in and of itself, but we should
+        # use File::HomeDir to locate the home directory portably.  
+        # This is deferred for now because File::HomeDir is not yet
+        # core.
+        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha" : "/usr/share/koha";
+    } else {
+        # must be standard
+        $msg = q(
+Please specify the directory under which most Koha files 
+will be installed.
+
+Note that if you are planning in installing more than 
+one instance of Koha, you may want to modify the last
+component of the directory path, which will be used
+as the package name in the FHS layout.);
+    }
+    $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
+
+    $msg = q(
+Koha can use the Zebra search engine for high-performance
+searching of bibliographic and authority records.  If you
+have installed the Zebra software and would like to use it,
+please answer 'yes' to the following question.  Otherwise, 
+Koha will default to using its internal search engine.
+
+Please specify whether to install the Zebra configuration files);
+    $msg .= _add_valid_values_disp('INSTALL_ZEBRA', $valid_values);
+    $config{'INSTALL_ZEBRA'} = _get_value('INSTALL_ZEBRA', $msg, $defaults->{'INSTALL_ZEBRA'}, $valid_values);
+
+    if ($config{'INSTALL_ZEBRA'} eq 'yes') {
+        $msg = q(
+Since you've chosen to use Zebra with Koha,
+you must specify the primary MARC format of the
+records to be indexed by Zebra.
+
+Koha provides Zebra configuration files for MARC 21
+and UNIMARC.
+
+Please specify the MARC format);
+        $msg .= _add_valid_values_disp('ZEBRA_MARC_FORMAT', $valid_values);
+        $config{'ZEBRA_MARC_FORMAT'} = _get_value('ZEBRA_MARC_FORMAT', $msg, $defaults->{'ZEBRA_MARC_FORMAT'}, $valid_values);
+        $msg = q(
+Koha supplies Zebra configuration files tuned for
+searching either English (en) or French (fr) MARC
+records.
+
+Please specify the primary language of the MARC records);
+        $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
+        $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values);
+    }
+    return %config;
+}
+
+sub _add_valid_values_disp {
+    my $key = shift;
+    my $valid_values = shift;
+   
+    my $disp = "";
+    if (exists $valid_values->{$key}) {
+        $disp = " (" . join(", ", sort keys %{ $valid_values->{$key} }) . ")";
+    }
+    return $disp;
+}
+
+sub _get_value {
+    my $key = shift;
+    my $msg = shift;
+    my $default = shift;
+    my $valid_values = shift;
+
+    my $val = prompt($msg, $default);
+    while (exists $valid_values->{$key} and not exists $valid_values->{$key}->{$val}) {
+        my $retry_msg = "Value '$val' is not a valid option.\n";
+        $retry_msg .= "Please enter a value";
+        $retry_msg .= _add_valid_values_disp($key, $valid_values);
+        $val = prompt($retry_msg, $default);
+    }
+    return $val;
+}
+
+=head2 get_target_directories 
+
+Creates a hash mapping from symbols for installation target
+directories to actual directory paths.
+
+=cut
+
+sub get_target_directories {
+    my $config = shift;
+
+    my $base = $config->{'INSTALL_BASE'};
+    my $mode = $config->{'INSTALL_MODE'};
+
+    # get last component of install base directory
+    # to treat as package name
+    my ($volume, $directories, $file) = File::Spec->splitpath($base, 1);
+    my @basedir = File::Spec->splitdir($directories);
+    my $package = pop @basedir;
+
+    my %dirmap = ();
+    if ($mode eq 'single') {
+        # mode is standard, i.e., 'fhs'
+        $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
+        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'templates');
+        $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'www');
+        $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'cgi-bin');
+        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'templates');
+        $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'www');
+        $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
+        $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
+        $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
+        $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
+        $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
+        $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
+        $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
+    } elsif ($mode eq 'dev') {
+        my $curdir = File::Spec->rel2abs(File::Spec->curdir());
+        $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir($curdir);
+        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
+        $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
+        $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir($curdir, 'opac');
+        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
+        $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
+        $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir($curdir);
+        $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
+        $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
+        $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
+        $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
+        $dirmap{'LOG_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'log');
+        $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(@basedir, $package, 'var', 'lib', 'zebradb');
+    } else {
+        # mode is standard, i.e., 'fhs'
+        $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
+        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'templates');
+        $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'www');
+        $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'cgi-bin');
+        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'templates');
+        $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'www');
+        $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
+        $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
+        $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
+        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
+        $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
+        $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'var', 'lock', $package, 'zebradb');
+        $dirmap{'LOG_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'log', $package);
+        $dirmap{'ZEBRA_DATA_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'lib', $package, 'zebradb');
+    }
+
+    foreach my $key (sort keys %dirmap) {
+        print sprintf("%-25.25s%s\n", $key, $dirmap{$key});
+    }
+    return %dirmap;
+}
+
+#package MY;
+#sub install {
+    #warn "\n\n\noverride\n\n\n";
+    #return "";
+#}
 
 __END__
 
