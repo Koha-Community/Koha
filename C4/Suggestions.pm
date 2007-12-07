@@ -22,12 +22,12 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Output;
-use C4::Date;
+use C4::Dates qw(format_date);
 use Mail::Sendmail;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 3.00;
+$VERSION = 3.01;
 
 =head1 NAME
 

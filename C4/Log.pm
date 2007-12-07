@@ -22,7 +22,7 @@ package C4::Log; #assumes C4/Log
 
 use strict;
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(format_date);
 
 require Exporter;
 
