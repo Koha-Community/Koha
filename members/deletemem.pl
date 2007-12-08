@@ -36,9 +36,6 @@ my $input = new CGI;
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-if( $bor->{'category_type'} eq 'S' )  {
-    $flagsrequired->{'staffaccess'} = 1;
-}  
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
 
