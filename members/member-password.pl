@@ -19,7 +19,7 @@ my $input = new CGI;
 my $theme = $input->param('theme') || "default";
 			# only used if allowthemeoverride is set
 
-my ($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie, $staffflags)
     = get_template_and_user({template_name => "members/member-password.tmpl",
 			     query => $input,
 			     type => "intranet",
@@ -36,12 +36,11 @@ $flagsrequired->{borrowers}=1;
 my $member=$input->param('member');
 my $cardnumber = $input->param('cardnumber');
 my $destination = $input->param('destination');
-
 my $errormsg;
-my ($bor,$flags)=GetMemberDetails( $member,'');
-if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' || $bor->{'authflags'}->{'catalogue'}) ) {
-	my $luser = GetMemberDetails($loggedinuser);
-	$errormsg = 'NOPERMISSION' unless($luser->{'authflags'}->{'staffaccess'} );
+my ($bor)=GetMember($member);
+if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
+	$errormsg = 'NOPERMISSION' unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
+	# need superlibrarian for koha.xml fakeuser.
 }
 my $newpassword = $input->param('newpassword');
 my $minpw = C4::Context->preference('minPasswordLength');

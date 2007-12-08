@@ -317,7 +317,7 @@ sub get_template_and_user {
 			OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
         );
     }
-    return ( $template, $borrowernumber, $cookie );
+    return ( $template, $borrowernumber, $cookie, $flags);
 }
 
 =item checkauth
