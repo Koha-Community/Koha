@@ -9,8 +9,10 @@
 //<![CDATA[
 	 $(document).ready(function() {
  		$('#patronlists').tabs();
-		verify_patron_images();
 	 });
+<!-- TMPL_IF NAME="patronimages " -->$(window).load(function() {
+		verify_patron_images();
+	 });<!-- /TMPL_IF -->
 //]]>
 </script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
