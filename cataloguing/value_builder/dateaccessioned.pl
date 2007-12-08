@@ -65,6 +65,7 @@ sub plugin_javascript {
 <script type=\"text/javascript\">
 //<![CDATA[
 function Blur$function_name(index) {
+//need this?
 }
 
 function Focus$function_name(subfield_managed) {
