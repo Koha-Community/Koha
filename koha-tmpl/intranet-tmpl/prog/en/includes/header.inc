@@ -18,5 +18,17 @@
 	<li><a href="/cgi-bin/koha/about.pl">About Koha</a></li></ul></li>
 </ul>
 </div>
-	
-<div id="login"><!-- TMPL_IF NAME="AutoLocation" --><strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong><!-- TMPL_ELSE --><strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong> (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set</a>)<!-- /TMPL_IF --><!-- /TMPL_IF --> | <!-- TMPL_IF NAME="loggedinusername" --><span class="loggedinusername"><!-- TMPL_VAR NAME="loggedinusername" --></span> (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>) | <!-- TMPL_ELSE -->You are not logged in | <!-- /TMPL_IF --><a href="/cgi-bin/koha/help.pl" id="helper" onclick="window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); return false;">[ ? ]</a></div></div>
+<div id="login">
+  <!-- TMPL_IF NAME="AutoLocation" --><strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong>
+  <!-- TMPL_ELSE -->
+       <strong><!-- TMPL_VAR NAME="LoginBranchname" --></strong>
+       <!-- TMPL_IF NAME="IndependantBranches" -->
+          <!-- TMPL_IF NAME="CAN_user_management" --> (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set</a>)<!-- /TMPL_IF -->
+           <!-- TMPL_ELSE -->
+             (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set</a>)
+           <!-- /TMPL_IF -->
+         | <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="loggedinusername" --><span class="loggedinusername"><!-- TMPL_VAR NAME="loggedinusername" --></span> (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>) |
+  <!-- TMPL_ELSE -->You are not logged in |
+  <!-- /TMPL_IF -->
+  <a href="/cgi-bin/koha/help.pl" id="helper" onclick="window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); return false;">[ ? ]</a></div></div>	
