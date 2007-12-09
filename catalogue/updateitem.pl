@@ -32,6 +32,7 @@ my $biblionumber=$cgi->param('biblionumber');
 my $itemnumber=$cgi->param('itemnumber');
 my $biblioitemnumber=$cgi->param('biblioitemnumber');
 my $itemlost=$cgi->param('itemlost');
+my $itemnotes=$cgi->param('itemnotes');
 my $wthdrawn=$cgi->param('wthdrawn');
 my $damaged=$cgi->param('damaged');
 
@@ -39,32 +40,48 @@ my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
 # get the rest of this item's information
 my $item_data_hashref = GetItem($itemnumber, undef);
-
-# modify bib MARC
-if ((not defined($item_data_hashref->{'itemlost'})) or ($itemlost ne $item_data_hashref->{'itemlost'})) {
+my $newitemdata;
+# modify MARC item if input differs from items table.
+if ( $itemnotes ne $item_data_hashref->{'itemnotes'}) {
+    ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemnotes', $itemnotes);
+	$newitemdata->{'itemnotes'} = $itemnotes;
+} elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemlost', $itemlost);
-}
-if ((not defined($item_data_hashref->{'wthdrawn'})) or ($wthdrawn ne $item_data_hashref->{'wthdrawn'})) {
+	$newitemdata->{'itemlost'} = $itemlost;
+} elsif ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.wthdrawn', $wthdrawn);
-}
-if ((not defined($item_data_hashref->{'damaged'})) or ($damaged ne $item_data_hashref->{'damaged'})) {
+	$newitemdata->{'wthdrawn'} = $wthdrawn;
+} elsif ($damaged ne $item_data_hashref->{'damaged'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.damaged', $damaged);
+	$newitemdata->{'damaged'} = $damaged;
+} else {
+	#nothings changed, so do nothing.
+	print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
 }
 
-# check reservations
-my ($status, $reserve) = CheckReserves($itemnumber, $item_data_hashref->{'barcode'});
-if ($reserve){
-	#print $cgi->header;
-	warn "Reservation found on item $itemnumber";
+# FIXME: eventually we'll use Biblio.pm, but it's currently too buggy  (is this current ??)
+#ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
+	$newitemdata->{'itemnumber'} = $itemnumber;
+	&C4::Biblio::_koha_modify_item($dbh,$newitemdata);
+#$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=? WHERE itemnumber=?");
+#$sth->execute($wthdrawn,$itemlost,$damaged,$itemnumber);
+
+# check reservations (why ?)
+#my ($status, $reserve) = CheckReserves($itemnumber, $item_data_hashref->{'barcode'});
+#if ($reserve){
+##	#print $cgi->header;
+#	warn "Reservation found on item $itemnumber";
 	#exit;
-}
-# check issues
-my $sth=$dbh->prepare("SELECT * FROM issues WHERE (itemnumber=? AND returndate IS NULL)");
-$sth->execute($itemnumber);
-my $issues=$sth->fetchrow_hashref();
+#}
+# check issues iff itemlost.
+ # FIXME : is there documentation or enforcement that itemlost value must be '1'?  if no replacement price, then borrower just doesn't get charged?
+if ($itemlost==1) {
+	my $sth=$dbh->prepare("SELECT * FROM issues WHERE (itemnumber=? AND returndate IS NULL)");
+	$sth->execute($itemnumber);
+	my $issues=$sth->fetchrow_hashref();
 
-# if a borrower lost the item, add a replacement cost to the their record
-if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
+	# if a borrower lost the item, add a replacement cost to the their record
+	if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
 
 		# first make sure the borrower hasn't already been charged for this item
 		my $sth1=$dbh->prepare("SELECT * from accountlines
@@ -84,13 +101,10 @@ if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
 			"Lost Item $item_data_hashref->{'title'} $item_data_hashref->{'barcode'}",
 			$item_data_hashref->{'replacementprice'},$itemnumber);
 			$sth2->finish;
+		# FIXME: Log this ?
 		}
+	}
+	$sth->finish;
 }
-$sth->finish;
-
-# FIXME: eventually we'll use Biblio.pm, but it's currently too buggy
-#ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
-$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=? WHERE itemnumber=?");
-$sth->execute($wthdrawn,$itemlost,$damaged,$itemnumber);
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");

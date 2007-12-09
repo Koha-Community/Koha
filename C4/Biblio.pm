@@ -3905,8 +3905,9 @@ sub _koha_modify_item {
 	my $error;
 
 	# calculate items.cn_sort
-    $item->{'cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
-
+    if($item->{'itemcallnumber'}) {
+		$item->{'cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
+	}
     my $query = "UPDATE items SET ";
 	my @bind;
 	for my $key ( keys %$item ) {
@@ -3915,7 +3916,7 @@ sub _koha_modify_item {
     }
 	$query =~ s/,$//;
     $query .= " WHERE itemnumber=?";
-    push @bind, $item->{'itemnumber'};
+	push @bind, $item->{'itemnumber'};
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     if ( $dbh->errstr ) {

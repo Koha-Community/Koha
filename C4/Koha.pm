@@ -68,6 +68,7 @@ $VERSION = 3.00;
   &GetAuthorisedValues
   &FixEncoding
   &GetKohaAuthorisedValues
+  &GetAuthValCode
   &GetManagedTagSubfields
 
   $DEBUG
@@ -787,6 +788,22 @@ sub displaySecondaryServers {
     return;    #$secondary_servers_loop;
 }
 
+=head2 GetAuthValCode
+
+$authvalcode = GetAuthValCode($kohafield,$frameworkcode);
+
+=cut
+
+sub GetAuthValCode {
+	my ($kohafield,$fwcode) = @_;
+	my $dbh = C4::Context->dbh;
+	$fwcode='' unless $fwcode;
+	my $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield=? and frameworkcode=?');
+	$sth->execute($kohafield,$fwcode);
+	my ($authvalcode) = $sth->fetchrow_array;
+	return $authvalcode;
+}
+
 =head2 GetAuthorisedValues
 
 $authvalues = GetAuthorisedValues($category);
@@ -879,18 +896,17 @@ sub FixEncoding {
 =cut
 
 sub GetKohaAuthorisedValues {
-  my ($kohafield) = @_;
+  my ($kohafield,$fwcode) = @_;
+  $fwcode='' unless $fwcode;
   my %values;
   my $dbh = C4::Context->dbh;
-  my $sthnflstatus = $dbh->prepare('select authorised_value from marc_subfield_structure where kohafield=?');
-  $sthnflstatus->execute($kohafield);
-  my $authorised_valuecode = $sthnflstatus->fetchrow;
-  if ($authorised_valuecode) {  
-    $sthnflstatus = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
-    $sthnflstatus->execute($authorised_valuecode);
-    while ( my ($val, $lib) = $sthnflstatus->fetchrow_array ) { 
-      $values{$val}= $lib;
-    }
+  my $avcode = GetAuthValCode($kohafield,$fwcode);
+  if ($avcode) {  
+    my $sth = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
+    $sth->execute($avcode);
+	while ( my ($val, $lib) = $sth->fetchrow_array ) { 
+   		$values{$val}= $lib;
+   	}
   }
   return \%values;
 }

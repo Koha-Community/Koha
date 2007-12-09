@@ -65,20 +65,22 @@ my $dewey = $data->{'dewey'};
 # $data->{'dewey'}=$dewey;
 
 my @results;
-
+my $fw = GetFrameworkCode($biblionumber);
 my $items= GetItemsByBiblioitemnumber($bi);
 my $count=@$items;
 $data->{'count'}=$count;
 
 my $ordernum = GetOrderNumber($biblionumber,$bi);
 my $order = GetOrder($ordernum);
-
+my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
+my $itemtypes = GetItemTypes;
 $results[0]=$data;
-
 foreach my $item (@$items){
-	$item->{itemlostloop}= GetAuthorisedValues('LOST',$item->{itemlost});
-	$item->{itemdamagedloop}= GetAuthorisedValues('DAMAGED',$item->{damaged});
-    $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
+	$item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost});
+	$item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged});
+	$item->{'collection'} = $ccodes->{$item->{ccode}};
+	$item->{'itype'} = $itemtypes->{$item->{'itype'}}->{'description'}; 
+	$item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
