@@ -9,26 +9,21 @@
 <div id="custom-doc" class="yui-t7">
 
 <!-- TMPL_IF NAME="multiple"-->
-    <h1>Add these <!-- TMPL_VAR NAME="total"--> biblios to a shelf</h1>
-        <!-- TMPL_LOOP NAME="biblios"-->
-            <b><!-- TMPL_VAR NAME="title"--></b> 
-            <!-- TMPL_IF NAME="author"-->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF -->
-            <br /><br />
-        <!-- /TMPL_LOOP -->
+    <h1>Add <!-- TMPL_VAR NAME="total"--> items to a book list:</h1>
 <!-- TMPL_ELSE -->
-<h1>Add 
-    <i><!-- TMPL_VAR NAME="title" --></i>
-    <!-- TMPL_IF NAME="author" -->
-        by <!-- TMPL_VAR NAME="author" -->
-    <!-- /TMPL_IF --> to a Virtual Shelf
-</h1>
+	<h1>Add to a book list:</h1>
 <!-- /TMPL_IF -->
-
+     <ul> <!-- TMPL_LOOP NAME="biblios"-->
+           <li> <span class="title"><!-- TMPL_VAR NAME="title"--></span> 
+            <!-- TMPL_IF NAME="author"--><span class="author"> <!-- TMPL_VAR NAME="author"--> </span><!-- /TMPL_IF -->
+            </li>
+        <!-- /TMPL_LOOP -->
+</ul>
 <!-- TMPL_IF NAME="CGIvirtualshelves"-->
 <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
     <fieldset class="rows"><legend>Select an Existing List</legend>
 <ol><li>    <label for="shelfnumber">Add to list:</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" --></li></ol>
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+ <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
     <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
     <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
 </form>
@@ -48,7 +43,7 @@
                 <option value="1">Private</option>
                 <option value="2">Public</option>
             </select></li></ol></fieldset>
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+ <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
     <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
 </form>
 

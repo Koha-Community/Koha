@@ -31,7 +31,7 @@ use C4::Auth;
 use C4::Output;
 
 my $query        = new CGI;
-my $biblionumber = $query->param('biblionumber');
+my @biblionumber = $query->param('biblionumber');
 my $shelfnumber  = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category     = $query->param('category');
@@ -45,23 +45,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$shelfnumber = AddShelf( '', $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
+$shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
 
-# to know if we had to add more than one biblio.
+# multiple bibs might come in as '/' delimited string (from where, i don't see), or  as array.
+
 my $multiple = 0;
-$multiple = 1 if $biblionumber =~ /^(\d*\/)*$/;
-
-
-if ($shelfnumber) {
-
-    if ($multiple){
-        foreach (split /\//,$biblionumber){
-            &AddToShelfFromBiblio($_,$shelfnumber);
+my @bibs;
+if (scalar(@biblionumber) == 1) {
+	@biblionumber =  (split /\//,$biblionumber[0]);
+}
+if ($shelfnumber && ($shelfnumber != -1)) {
+        for my $bib (@biblionumber){
+            &AddToShelfFromBiblio($bib,$shelfnumber);
         }
-    }
-    else {
-        &AddToShelfFromBiblio( $biblionumber, $shelfnumber );
-    }
     print $query->header;
     print "<html><body onload=\"window.close();\"></body></html>";
     exit;
@@ -87,27 +83,20 @@ else {
         );
     }
 
-    if ( $multiple ) {
         my @biblios;
-        foreach (split /\//,$biblionumber){
-            my $data = GetBiblioData($_);
-            push @biblios,$data;
-        }
+        for my $bib (@biblionumber) {
+			my $data = GetBiblioData( $bib );
+			push(@biblios, 
+            	{ biblionumber => $bib,
+            	title        => $data->{'title'},
+            	author       => $data->{'author'},
+        	} );
+    	}
         $template->param (
-            multiple => 1,
-            biblionumber => $biblionumber,
+            multiple => (scalar(@biblios) > 1),
             total    => scalar @biblios,
             biblios  => \@biblios,
         );
-    }
-    else { # just one to add.
-        my $data = GetBiblioData( $biblionumber );
-        $template->param (
-            biblionumber => $biblionumber,
-            title        => $data->{'title'},
-            author       => $data->{'author'},
-        );
-    }
 
     $template->param (
         CGIvirtualshelves       => $CGIvirtualshelves,

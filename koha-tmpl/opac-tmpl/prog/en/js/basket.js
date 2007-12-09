@@ -159,11 +159,6 @@ function addMultiple(){
     }
 }
 
-function addSelToShelf() {
-    var items = document.getElementById('records').value;
-    document.location = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
-}
-
 function addSelRecords(valSel) { // function for adding a selection of biblios to the basket
                                                 // from the results list
     var arrayRecords = valSel.split("/");
@@ -370,4 +365,23 @@ function openBiblio(dest,biblionumber) {
     openerURL=dest+"?biblionumber="+biblionumber;
     opener.document.location = openerURL;
     opener.focus();
+}
+
+function addSelToShelf() {
+    var items = document.getElementById('records').value;
+    document.location = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
+}
+
+///  vShelfAdd()  builds url string for multiple-biblio adds.
+
+function vShelfAdd() {
+        bibs= new Array;
+        if(document.bookbag_form.biblionumber.length > 0) {
+                for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
+                        if (document.bookbag_form.biblionumber[i].checked) {
+                                bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
+                        }
+                }
+        return bibs.join("&");
+        }
 }

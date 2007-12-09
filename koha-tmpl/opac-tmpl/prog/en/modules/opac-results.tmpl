@@ -108,6 +108,7 @@
         
         <!-- TMPL_IF name="opacbookbag" --><a href="#" onclick="SelectAll()"><img src="/opac-tmpl/prog/images/checkall.gif" alt="Check All" border="0" /></a>
             <input type="button" class="icon shelf" value="Add checked items to book bag" onclick="addMultiple(); return false;" /> 
+		<!-- TMPL_IF NAME="virtualshelves" --><input type="button" class="icon shelf" value="Add Checked Items to Virtual Shelf" onclick="<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());} <!-- TMPL_ELSE --> alert('You must be logged in to create or add to Virtual Shelves'); <!-- /TMPL_IF -->  return false;" /><!-- /TMPL_IF -->
             <input type="reset" value="Clear All" class="icon shelf" />
         <!-- /TMPL_IF --></p></td></tr>
             <!-- Actual Search Results -->
