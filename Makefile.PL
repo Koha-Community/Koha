@@ -232,6 +232,16 @@ my $target_map = {
   './edithelp.pl'               => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
+  './etc/zebradb/authorities/lock' => { target => 'ZEBRA_LOCK_DIR', trimdir => 3 },
+  './etc/zebradb/authorities/key'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/authorities/register'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/authorities/shadow'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/authorities/tmp'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/biblios/lock' => { target => 'ZEBRA_LOCK_DIR', trimdir => 3 },
+  './etc/zebradb/biblios/key'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/biblios/register'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/biblios/shadow'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
+  './etc/zebradb/biblios/tmp'  => { target => 'ZEBRA_DATA_DIR', trimdir => 3 },
   './help.pl'                   => 'NONE', # FIXME
   './installer-CPAN.pl'         => 'NONE',
   './installer'                 => 'INTRANET_CGI_DIR',
@@ -915,6 +925,7 @@ sub postamble {
     # variables -- this is for the use of
     # rewrite-confg.PL
     my $env = join("\n", map { "export __${_}__ = $target_directories{$_}" } keys %target_directories); 
+    $env .= "\n\n";
     $env .= join("\n", map { "export __${_}__ = $config{$_}" } keys %config);
     return "$env\n";
 }
