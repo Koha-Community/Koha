@@ -302,7 +302,7 @@ C4::Auth - Authenticates Koha users
 
 =head1 KOHA_CONF and field mapping
 
-Example XML stanza for LDAP conifugration in KOHA_CONF:
+Example XML stanza for LDAP configuration in KOHA_CONF:
 
 	<!-- LDAP SERVER (optional) -->
 	<server id="ldapserver"  listenref="ldapserver">
@@ -327,7 +327,7 @@ Example XML stanza for LDAP conifugration in KOHA_CONF:
 		</mapping>
 	</server>
 
-The <mapping> subelements establishe the relationship between mysql fields and LDAP attributes. The element name
+The <mapping> subelements establish the relationship between mysql fields and LDAP attributes. The element name
 is the column in mysql, with the "is" characteristic set to the LDAP attribute name.  Optionally, any content
 between the element tags is taken as the default value.  In this example, the default categorycode is "PT" (for
 patron).  
