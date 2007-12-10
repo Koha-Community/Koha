@@ -2,7 +2,6 @@
 <!-- TMPL_IF NAME="TemplateEncoding" --><meta http-equiv="Content-Type" content="text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->" /><!-- TMPL_ELSE --><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><!-- /TMPL_IF -->
 <meta http-equiv="Content-Language" content="en-us" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang">/includes/favicon.ico" type="image/x-icon" />
-<!-- TMPL_IF NAME="searchdesc" --><!-- TMPL_IF name="total" --><link rel="alternate" type="application/rss+xml" title="RSS" href="http://a9.com/-/opensearch/search/B0007WF826/<!-- TMPL_VAR NAME="searchdesc" -->?count=10&amp;startPage=1" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="opacstylesheet" --><style type="text/css">
     @import url(<!-- TMPL_VAR NAME='themelang' -->/css/<!-- TMPL_VAR NAME="opacstylesheet" -->);
 </style><!-- TMPL_ELSE --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
