@@ -40,7 +40,7 @@ $info{'dbms'} =
     ? C4::Context->config("db_scheme")
     : "mysql" );
 $info{'hostname'} = C4::Context->config("hostname");
-$info{'port'} = C4::Context->config("port");
+$info{'port'}     = C4::Context->config("port");
 $info{'user'}     = C4::Context->config("user");
 $info{'password'} = C4::Context->config("pass");
 my $dbh = DBI->connect(
@@ -140,7 +140,7 @@ if ( $step && $step == 1 ) {
             push @missing, { name => "PDF::Report", usagebarcode => 1 };
         }
     }
-    unless ( eval { require Net::LDAP } ) {
+    unless ( eval { require Algorithm::CheckDigits } ) {
         if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
             push @missing, { name => "Algorithm::CheckDigits", usagebarcode => 1 };
         }
