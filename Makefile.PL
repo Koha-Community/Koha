@@ -82,11 +82,6 @@ Hash of perl modules and versions required.
 
 Hash of file mappings
 
-=head2 CONFIGURE
-
-Maybe use prompt() here in future to get configuration values 
-interactively at installation time.
-
 =head2 PL_FILES
 
 This is a hash of PL scripts to run after installation and
@@ -111,8 +106,8 @@ contents will be copied to the installation target directory.
 its target overrides the parent's target for that subdirectory.
 
 =item The value of each map entry may either be a scalar containing 
-one target or a reference to an array of targets, in which case
-the directory or file is copied to each target.
+one target or a reference to a hash containing 'target' and 'trimdir'
+keys.
 
 =item Any files at the top level of the source tree that are
 not included in the map will not be installed.
@@ -231,18 +226,19 @@ my $target_map = {
   './C4/tests'                  => 'NONE',
   './catalogue'                 => 'INTRANET_CGI_DIR',
   './cataloguing'               => 'INTRANET_CGI_DIR',
-  './changelanguage.pl'         => [ 'INTRANET_CGI_DIR', 'OPAC_CGI_DIR' ],
+  './changelanguage.pl'         => 'INTRANET_CGI_DIR',
   './check_sysprefs.pl'         => 'NONE',
   './circ'                      => 'INTRANET_CGI_DIR',
   './edithelp.pl'               => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
+  './help.pl'                   => 'NONE', # FIXME
   './installer-CPAN.pl'         => 'NONE',
   './installer'                 => 'INTRANET_CGI_DIR',
-  './koha-tmpl'                 => 'NONE',
+  './koha-tmpl/errors'          => {target => 'INTRANET_CGI_DIR', trimdir => 2},
   './koha-tmpl/intranet-tmpl'   => {target => 'INTRANET_TMPL_DIR', trimdir => -1},
-  './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -11},
-  './koha-version.pl'           => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
+  './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -1},
+  './kohaversion.pl'            => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
   './labels'                    => 'INTRANET_CGI_DIR',
   './mainpage.pl'               => 'INTRANET_CGI_DIR',
   './Makefile.PL'               => 'NONE',
@@ -528,16 +524,11 @@ sub _add_to_file_map {
     # The target can be one of the following:
     # 1. scalar representing target symbol
     # 2. hash ref containing target and trimdir keys
-    # 3. array ref containing list of #1 and #2
     #
     # Consequently, this routine traverses this structure,
     # calling itself recursively, until it deals with
     # all of the scalar target symbols.
-    if (ref $targetdir eq 'ARRAY') {
-        foreach my $subtarget (sort @$targetdir) {
-            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel);
-        }
-    } elsif (ref $targetdir eq 'HASH') {
+    if (ref $targetdir eq 'HASH') {
         my $subtarget = $targetdir->{target};
         if (exists $targetdir->{trimdir}) {
             # if we get here, we've specified that
@@ -572,7 +563,7 @@ sub _add_to_file_map {
         # spaces and shell metacharacters from all file names
         $source =~ s/ /\\ /g;
         $destination =~ s/ /\\ /g;
-        
+       
         $file_map->{$source} = $destination;
     }
 }
@@ -730,10 +721,10 @@ sub get_target_directories {
     my %dirmap = ();
     if ($mode eq 'single') {
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
-        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'templates');
+        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs', 'intranet-tmpl');
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs');
         $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'cgi-bin');
-        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'templates');
+        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs', 'opac-tmpl');
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs');
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
@@ -768,10 +759,10 @@ sub get_target_directories {
     } else {
         # mode is standard, i.e., 'fhs'
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
-        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'templates');
+        $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs', 'intranet-tmpl');
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs');
         $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'cgi-bin');
-        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'templates');
+        $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs', 'opac-tmpl');
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir(@basedir, $package, 'opac', 'htdocs');
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
