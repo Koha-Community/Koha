@@ -47,7 +47,6 @@
 
 <!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results. <!-- TMPL_IF NAME="available" -->Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi_not_availablity" -->">Show all items</a><!-- TMPL_ELSE -->Limit to <a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;limit=available">currently available items.</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
 
-<a href="/cgi-bin/koha/opensearch?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&count=10&amp;startPage=1"><img title="RSS Feed for search <!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->" alt="RSS Feed for search <!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->" src="<!-- TMPL_VAR NAME="themelang" -->/../images/feed-icon-16x16.png" border="0" /></a>
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="searchdesc" -->
 <strong>No Result found !</strong>
