@@ -21,7 +21,7 @@ package C4::Members;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(format_date_in_iso);
 use Digest::MD5 qw(md5_base64);
 use Date::Calc qw/Today Add_Delta_YM/;
 use C4::Log; # logaction
@@ -699,12 +699,13 @@ sub AddMember {
       . ",lost=" 		. $dbh->quote( $data{'lost'} )
       . ",debarred=" 	. $dbh->quote( $data{'debarred'} )
       . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
-      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} );
+      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} ) ;
+	$debug and print STDERR "AddMember SQL: ($query)\n";
     my $sth = $dbh->prepare($query);
-# 	print "Executing SQL: $query\n";
+	# 	print "Executing SQL: $query\n";
     $sth->execute;
     $sth->finish;
-    $data{'borrowernumber'} = $dbh->{'mysql_insertid'};
+    # $data{'borrowernumber'} = $dbh->{'mysql_insertid'}; 	# unneeded w/ autoincrement ?
     
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","CREATE",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
@@ -1230,21 +1231,24 @@ sub getidcity {
 =head2 GetExpiryDate 
 
   $expirydate = GetExpiryDate($categorycode, $dateenrolled);
-process expiry date given a date and a categorycode
+
+Calculate expiry date given a categorycode and starting date.  Date argument must be in ISO format.
+Return date is also in ISO format.
 
 =cut
+
 sub GetExpiryDate {
     my ( $categorycode, $dateenrolled ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "select enrolmentperiod from categories where categorycode=?");
-    $sth->execute($categorycode);
-    my ($enrolmentperiod) = $sth->fetchrow;
-    $enrolmentperiod = 12 unless ($enrolmentperiod);
-    my @date=split /-/,format_date_in_iso($dateenrolled);
-    @date=Add_Delta_YM($date[0],$date[1],$date[2],0,$enrolmentperiod);
-    return sprintf("%04d-%02d-%02d",$date[0],$date[1],$date[2]);
+    my $enrolmentperiod = 12;	# reasonable default
+    if ($categorycode) {
+    	my $dbh = C4::Context->dbh;
+    	my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+    	$sth->execute($categorycode);
+    	$enrolmentperiod = $sth->fetchrow;
+	}
+	# die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
+    my @date = split /-/,$dateenrolled;
+    return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolmentperiod));
 }
 
 =head2 checkuserpassword (OUEST-PROVENCE)
@@ -1587,9 +1591,11 @@ sub DelMember {
 
 =head2 ExtendMemberSubscriptionTo (OUEST-PROVENCE)
 
-$date= ExtendMemberSubscriptionTo($borrowerid, $date);
-Extending the subscription to a given date or to the expiry date calculated on local date.
-returns date 
+	$date = ExtendMemberSubscriptionTo($borrowerid, $date);
+
+Extending the subscription to a given date or to the expiry date calculated on ISO date.
+Returns ISO date.
+
 =cut
 
 sub ExtendMemberSubscriptionTo {
@@ -1597,7 +1603,8 @@ sub ExtendMemberSubscriptionTo {
     my $dbh = C4::Context->dbh;
     my $borrower = GetMember($borrowerid,'borrowernumber');
     unless ($date){
-      $date=POSIX::strftime("%Y-%m-%d",localtime(time));
+      $date=POSIX::strftime("%Y-%m-%d",localtime());
+      my $borrower = GetMember($borrowerid,'borrowernumber');
       $date = GetExpiryDate( $borrower->{'categorycode'}, $date );
     }
     my $sth = $dbh->do(<<EOF);
@@ -1624,7 +1631,6 @@ EOF
 Looks up the different road type . Returns two
 elements: a reference-to-array, which lists the id_roadtype
 codes, and a reference-to-hash, which maps the road type of the road .
-
 
 =cut
 
