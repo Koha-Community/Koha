@@ -33,13 +33,20 @@ use C4::Koha;
 use C4::Branch; # GetBranches
 
 # use utf8;
-# use Net::LDAP;
-# use Net::LDAP qw(:all);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	$VERSION = 3.01;        # set version for version checking
+	$debug = $ENV{DEBUG} || 0 ;
+	@ISA   = qw(Exporter);
+	@EXPORT    = qw(&checkauth &get_template_and_user);
+	@EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw);
+	$ldap = C4::Context->config('useldapserver') || 0;
+	if ($ldap) {
+		require C4::Auth_with_ldap;             # no import
+		import  C4::Auth_with_ldap qw(checkpw_ldap);
+	}
+}
 
 =head1 NAME
 
@@ -79,19 +86,6 @@ C4::Auth - Authenticates Koha users
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &checkauth
-  &get_template_and_user
-);
-@EXPORT_OK = qw(
-  &check_api_auth
-  &get_session
-  &check_cookie_auth
-);
 
 =item get_template_and_user
 
@@ -404,7 +398,7 @@ sub _version_check ($$) {
 	my $kohaversion=C4::Context::KOHAVERSION;
 	# remove the 3 last . to have a Perl number
 	$kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-	# warn "kohaversion : $kohaversion";
+	$debug and print STDERR "kohaversion : $kohaversion\n";
 	if ($version < $kohaversion){
 		my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is "
 			. C4::Context->config("kohaversion");
@@ -438,7 +432,7 @@ sub checkauth {
     my $dbh     = C4::Context->dbh;
     my $timeout = C4::Context->preference('timeout');
 	# days
- 	if ($timeout =~ /(\d*)[dD]/) {
+ 	if ($timeout =~ /(\d+)[dD]/) {
 		$timeout = $1 * 86400;
     };
 	$timeout = 600 unless $timeout;
@@ -469,8 +463,7 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
-#             warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
-#                 ".$session->param('surname').",      ".$session->param('branch');
+			$debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
         }
         my $ip;
         my $lasttime;
@@ -564,7 +557,7 @@ sub checkauth {
 					$branchcode, $branchname, $branchprinter, $emailaddress
 				) = $sth->fetchrow;
 
-#         warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+				$debug and print STDERR "AUTH_1: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
                 unless ( $sth->rows ) {
                     my $sth = $dbh->prepare("$select where cardnumber=?");
 					$sth->execute($cardnumber);
@@ -573,7 +566,7 @@ sub checkauth {
 						$branchcode, $branchname, $branchprinter, $emailaddress
 					) = $sth->fetchrow;
 
-#           warn "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress";
+					$debug and print STDERR "AUTH_2: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
 						($sth->rows) and (
@@ -616,8 +609,7 @@ sub checkauth {
                 $session->param('emailaddress',$emailaddress);
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
-#            warn       "".$session->param('cardnumber').",   ".$session->param('firstname').",
-#                 ".$session->param('surname').",      ".$session->param('branch');
+				$debug and printf STDERR "AUTH_3: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
@@ -1102,6 +1094,11 @@ sub get_session {
 sub checkpw {
 
     my ( $dbh, $userid, $password ) = @_;
+	if ($ldap) {
+		$debug and print "## checkpw - checking LDAP\n";
+		my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
+		($retval) and return ($retval,$retcard);
+	}
 
     # INTERNAL AUTH
     my $sth =
