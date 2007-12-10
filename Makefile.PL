@@ -563,10 +563,16 @@ sub _add_to_file_map {
         }
     } elsif ($targetdir ne 'NONE' and $targetdir ne '') {
         my $source = File::Spec->catfile(@$curr_path, $file);
-        return if $source =~ / /; #FIXME
-        #my $destination = File::Spec->catfile("\$($targetdir)", @$dest_path, $file);
         my $destination = File::Spec->catfile('blib', $targetdir, @$dest_path, $file);
         #print "$source => $destination\n"; # DEBUG
+        # quote spaces in file names
+        # FIXME: this is of questionable portability and
+        # probably depends on user's make recognizing this
+        # quoting syntax -- probably better to remove
+        # spaces and shell metacharacters from all file names
+        $source =~ s/ /\\ /g;
+        $destination =~ s/ /\\ /g;
+        
         $file_map->{$source} = $destination;
     }
 }
@@ -888,6 +894,5 @@ ExtUtils::MakeMaker(3)
 MJ Ray mjr at phonecoop.coop
 
 =cut
-FIXME: deal with files that have spaces in names
 FIXME: Zebra lang/MARC mapping
 FIXME: deal with .htaccess
