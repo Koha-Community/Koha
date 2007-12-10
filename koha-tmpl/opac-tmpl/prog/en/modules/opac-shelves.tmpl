@@ -21,6 +21,7 @@
                 <th>&nbsp;</th>
                 <th>Title</th>
                 <th>Author</th>
+                <th>Copyright</th>
                 <th>Call No.</th>
             </tr>
         <!-- TMPL_LOOP Name="itemsloop" -->
@@ -54,6 +55,7 @@
                         </a>
                     </td>
                     <td><!-- TMPL_VAR Name="author" --></td>
+                    <td><!-- TMPL_VAR Name="copyrightdate" --></td>
                     <td><!-- TMPL_VAR NAME="classification" --></td>
         </tr>
         <!-- /TMPL_LOOP -->
@@ -111,8 +113,14 @@
       <input type="hidden" name="op" value="modifsave">
       <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
       <div class="form"><table>
-      <caption>Rename Virtual Shelf <em><!-- TMPL_VAR name="shelfname"--></em></caption>
+      <caption>Edit Book List <em><!-- TMPL_VAR name="shelfname"--></em></caption>
       <tr><th><label for="shelfname">List Name: </label></th><td><input type="text" id="shelfname" name="shelfname" size="60" value="<!-- TMPL_VAR name="shelfname"-->" /></td></tr>
+		<tr><th><label for="sortfield" >Select sort field for this book list: </label></th>
+		<td><select name="sortfield">
+			<option value="title" <!-- TMPL_IF NAME="sort_title" -->selected="1"<!-- /TMPL_IF -->>title</option>
+			<option value="author" <!-- TMPL_IF NAME="sort_author" -->selected="1"<!-- /TMPL_IF -->>author</option>
+			<option value="copyrightdate" <!-- TMPL_IF NAME="sort_copyrightdate" -->selected="1"<!-- /TMPL_IF -->>copyrightdate</option>
+ 		</select></td></tr>
       </table>
       <p><input type="hidden" name="category" value="1" /><input type="submit" value="Save Changes" class="submit"></p></div>
 
@@ -143,9 +151,15 @@
 
 <!-- TMPL_IF NAME="loggedinusername" -->
 <!-- TMPL_IF NAME="shelveslooppriv" --><table>
-<tr><th>List Name</th><th>Contents</th><th>&nbsp;</th></tr>
+<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>&nbsp;</th></tr>
 <!-- TMPL_IF NAME="shelveslooppriv" --><!-- TMPL_LOOP Name="shelveslooppriv" -->
-<!-- TMPL_IF name="color" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF --><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td><td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td><td><!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Rename</a> <a class="delete" href="opac-shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr><!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="4">Click below to create a new Virtual Shelf!</td></tr><!-- /TMPL_IF --></table>
+<!-- TMPL_IF name="color" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
+<td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR Name="shelf" -->"><!-- TMPL_VAR Name="shelfname" --></a></td>
+<td><!-- TMPL_VAR Name="shelfbookcount" --> item(s)</td>
+<td><!-- TMPL_VAR Name="sortfield" --></td>
+<td><!-- TMPL_IF name="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a> <a class="delete" href="opac-shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE --><tr><td colspan="4">Click below to create a new Virtual Shelf!</td></tr><!-- /TMPL_IF --></table>
 <!-- TMPL_ELSE -->No private shelves.<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
   <p><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create your own private Virtual Shelf</p>

@@ -1755,6 +1755,7 @@ CREATE TABLE `virtualshelves` (
   `shelfname` varchar(255) default NULL,
   `owner` varchar(80) default NULL,
   `category` varchar(1) default NULL,
+  `sortfield` varchar(16) default NULL,
   PRIMARY KEY  (`shelfnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

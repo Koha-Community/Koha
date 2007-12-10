@@ -99,7 +99,7 @@ sub GetShelves {
     my ( $owner, $mincategory ) = @_;
 
     my $query = qq(
-        SELECT virtualshelves.shelfnumber, virtualshelves.shelfname,owner,surname,firstname,virtualshelves.category,
+        SELECT virtualshelves.shelfnumber, virtualshelves.shelfname,owner,surname,firstname,virtualshelves.category,virtualshelves.sortfield,
                count(virtualshelfcontents.biblionumber) as count
         FROM   virtualshelves
             LEFT JOIN   virtualshelfcontents ON virtualshelves.shelfnumber = virtualshelfcontents.shelfnumber
@@ -114,13 +114,14 @@ sub GetShelves {
     while (
         my (
             $shelfnumber, $shelfname, $owner, $surname,
-            $firstname,   $category,  $count
+            $firstname,   $category,  $sortfield, $count
         )
         = $sth->fetchrow
       )
     {
         $shelflist{$shelfnumber}->{'shelfname'} = $shelfname;
         $shelflist{$shelfnumber}->{'count'}     = $count;
+        $shelflist{$shelfnumber}->{'sortfield'}     = $sortfield;
         $shelflist{$shelfnumber}->{'category'}  = $category;
         $shelflist{$shelfnumber}->{'owner'}     = $owner;
         $shelflist{$shelfnumber}->{'surname'}     = $surname;
@@ -129,7 +130,7 @@ sub GetShelves {
     return ( \%shelflist );
 }
 
-=item GetShef
+=item GetShelf
 
   (shelfnumber,shelfname,owner,category) = &GetShelf($shelfnumber);
 
@@ -143,7 +144,7 @@ Returns the database's information on 'virtualshelves' table.
 sub GetShelf {
     my ($shelfnumber) = @_;
     my $query = qq(
-        SELECT shelfnumber,shelfname,owner,category
+        SELECT shelfnumber,shelfname,owner,category,sortfield
         FROM   virtualshelves
         WHERE  shelfnumber=?
     );
@@ -157,7 +158,8 @@ sub GetShelf {
   $itemlist = &GetShelfContents($shelfnumber);
 
 Looks up information about the contents of virtual virtualshelves number
-C<$shelfnumber>.
+C<$shelfnumber>.  Sorted by a field in the biblio table.  copyrightdate 
+gives a desc sort.
 
 Returns a reference-to-array, whose elements are references-to-hash,
 as returned by C<C4::Biblio::GetBiblioFromItemNumber>.
@@ -166,28 +168,30 @@ as returned by C<C4::Biblio::GetBiblioFromItemNumber>.
 
 #'
 sub GetShelfContents {
-    my ( $shelfnumber ) = @_;
-    my @itemlist;
+    my ( $shelfnumber ,$sortfield) = @_;
+    my $dbh=C4::Context->dbh();
+	if(!$sortfield) {
+		my $sthsort = $dbh->prepare('select sortfield from virtualshelves where shelfnumber=?');
+		$sthsort->execute($shelfnumber);
+		($sortfield) = $sthsort->fetchrow_array;
+	}
+	my @itemlist;
     my $query =
-       " SELECT biblionumber
-         FROM   virtualshelfcontents
-         WHERE  shelfnumber=?
-         ORDER BY biblionumber
-       ";
+       " SELECT vc.biblionumber,vc.shelfnumber,biblio.*
+         FROM   virtualshelfcontents vc LEFT JOIN biblio on vc.biblionumber=biblio.biblionumber
+         WHERE  vc.shelfnumber=? ";
+    my @bind = ($shelfnumber);
+	if($sortfield) {
+		#$sortfield = $dbh->quote($sortfield);
+		$query .= " ORDER BY `$sortfield`";
+		$query .= "DESC" if($sortfield eq 'copyrightdate');
+	}
     my $sth = $dbh->prepare($query);
-    $sth->execute($shelfnumber);
-    my $sth2 = $dbh->prepare("
-        SELECT biblio.*,biblioitems.* FROM biblio
-            LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber
-        WHERE biblio.biblionumber=?"
-    );
-    while ( my ($biblionumber) = $sth->fetchrow ) {
-        $sth2->execute($biblionumber);
-        my $item = $sth2->fetchrow_hashref;
-        $item->{'biblionumber'}=$biblionumber;
+    $sth->execute(@bind);
+    while ( my $item = $sth->fetchrow_hashref ) {
         push( @itemlist, $item );
     }
-    return ( \@itemlist );
+   return ( \@itemlist );
 }
 
 =item AddShelf
@@ -302,14 +306,14 @@ Modify the value into virtualshelves table with values given on input arg.
 =cut
 
 sub ModShelf {
-    my ( $shelfnumber, $shelfname, $owner, $category ) = @_;
+    my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) = @_;
     my $query = qq(
         UPDATE virtualshelves
-        SET    shelfname=?,owner=?,category=?
+        SET    shelfname=?,owner=?,category=?,sortfield=?
         WHERE  shelfnumber=?
     );
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $shelfname, $owner, $category, $shelfnumber );
+	my $sth = $dbh->prepare($query);
+    $sth->execute( $shelfname, $owner, $category, $sortfield, $shelfnumber );
 }
 
 =item DelShelf

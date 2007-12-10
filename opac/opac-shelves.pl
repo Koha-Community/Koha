@@ -118,18 +118,19 @@ SWITCH: {
     if ( $op && ( $op eq 'modifsave' ) ) {
         ModShelf(
             $query->param('shelfnumber'), $query->param('shelfname'),
-            $loggedinuser,                $query->param('category')
+            $loggedinuser,                $query->param('category'), $query->param('sortfield')
         );
         last SWITCH;
     }
     if ( $op && ( $op eq 'modif' ) ) {
-        my ( $shelfnumber, $shelfname, $owner, $category ) =
+        my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) =
           GetShelf( $query->param('shelf') );
         $template->param(
             edit                => 1,
             shelfnumber         => $shelfnumber,
             shelfname           => $shelfname,
-            "category$category" => 1
+            "category$category" => 1,
+			"sort_$sortfield"	=> 1,
         );
 
         #         editshelf($query->param('shelf'));
@@ -140,7 +141,7 @@ SWITCH: {
         my $shelfnumber = $query->param('viewshelf');
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
-            $template->param(
+			$template->param(
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
                 viewshelf   => $query->param('viewshelf'),
@@ -203,14 +204,13 @@ SWITCH: {
     }
 }
 
-($shelflist) =
-  GetShelves( $loggedinuser, 2 )
-  ;    # rebuild shelflist in case a shelf has been added
+# rebuild shelflist in case a shelf has been added
+($shelflist) = GetShelves( $loggedinuser, 2 ) ;    
 
 my $color='';
 my @shelvesloop;
 my @shelveslooppriv;
-foreach my $element (sort keys %$shelflist) {
+foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
 		my %line;
 		my %linepriv;
 		($color eq 0) ? ($color=1) : ($color=0);
@@ -218,6 +218,7 @@ foreach my $element (sort keys %$shelflist) {
 		$line{'color'}= $color;
 		$line{'shelf'}=$element;
 		$line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+		$line{'sortfield'}=$shelflist->{$element}->{'sortfield'};
 		$line{"category".$shelflist->{$element}->{'category'}} = 1;
 		$line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
 		$line{'shelfbookcount'}=$shelflist->{$element}->{'count'};
@@ -230,6 +231,7 @@ foreach my $element (sort keys %$shelflist) {
 		$linepriv{'color'}= $color;
                 $linepriv{'shelf'}=$element;
                 $linepriv{'shelfname'}=$shelflist->{$element}->{'shelfname'};
+				$linepriv{'sortfield'}=$shelflist->{$element}->{'sortfield'};
                 $linepriv{"category".$shelflist->{$element}->{'category'}} = 1;
                 $linepriv{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
                 $linepriv{'shelfbookcount'}=$shelflist->{$element}->{'count'};
