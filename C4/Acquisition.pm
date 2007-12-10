@@ -21,7 +21,7 @@ package C4::Acquisition;
 use strict;
 require Exporter;
 use C4::Context;
-use C4::Date;
+use C4::Dates qw(format_date);
 use MARC::Record;
 use C4::Suggestions;
 use Time::localtime;
@@ -29,7 +29,7 @@ use Time::localtime;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 3.00;
+$VERSION = 3.01;
 
 # used in receiveorder subroutine
 # to provide library specific handling
