@@ -314,9 +314,10 @@ my($cityid);
 $template->param( city_cgipopup => 1) if ($cityid );
 my $citypopup = CGI::popup_menu(-name=>'select_city',
         -id => 'select_city',
-        -values=>$cityid,
+        -values=>$name_city,
         -labels=>$name_city,
-        -default=>$default_city
+        -default=>$default_city,
+        -onChange => "javascript:changecity()",
         );  
   
 my $default_roadtype;

@@ -16,6 +16,12 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 			$("#guarantorsearch").attr("value","Find guarantor");
 		});
 	 });
+	 function changecity() {
+	   var myRegEx=new RegExp(/(.*)\|(.*)/);
+        document.form.select_city.value.match(myRegEx);
+        document.form.zipcode.value=RegExp.$1;
+        document.form.city.value=RegExp.$2;
+	 }
 //]]>
 </script>
 </head>
@@ -106,17 +112,18 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 	<fieldset class="rows" id="memberentry_identity">
 		<legend><!--TMPL_IF Name="I"-->Organisation <!--TMPL_ELSE-->Patron <!--/TMPL_IF-->identity</legend>
 		<ol>
-		<li>
-		<!-- TMPL_IF NAME="mandatorytitle" -->
-			<label for="btitle" class="required">
-		<!-- TMPL_ELSE -->
-			<label for="btitle">
-		<!-- /TMPL_IF-->
-		Title: </label>
-		<!-- TMPL_VAR NAME="borrotitlepopup" -->
-	  <!-- TMPL_IF NAME="mandatorytitle" --><span class="required">Required</span><!-- /TMPL_IF -->
-		</li>
-
+		<!-- TMPL_UNLESS name="I" -->
+            <li>
+            <!-- TMPL_IF NAME="mandatorytitle" -->
+                <label for="btitle" class="required">
+            <!-- TMPL_ELSE -->
+                <label for="btitle">
+            <!-- /TMPL_IF-->
+            Title: </label>
+            <!-- TMPL_VAR NAME="borrotitlepopup" -->
+            <!-- TMPL_IF NAME="mandatorytitle" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
+        <!-- /TMPL_IF -->
 		<li>
 		<!-- TMPL_IF NAME="mandatorysurname" -->
 		<label for="surname" class="required">
@@ -131,46 +138,48 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="mandatorysurname" --><span class="required">Required</span><!-- /TMPL_IF -->
 		</li>
-		<li>
-		<!-- TMPL_IF NAME="mandatoryfirstname" -->
-		<label for="firstname" class="required">
-		<!-- TMPL_ELSE -->
-		<label for="firstname">
-		<!-- /TMPL_IF-->
-		Firstname: </label>
-		<input type="text" id="firstname" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->" />
-		<!-- TMPL_IF NAME="mandatoryfirstname" --><span class="required">Required</span><!-- /TMPL_IF -->
-		</li>
-		<li>
-			<!-- TMPL_IF NAME="mandatorydateofbirth" -->
-			<label for="dateofbirth" class="required">
-			<!-- TMPL_ELSE -->	
-			<label for="dateofbirth">
-			<!-- /TMPL_IF-->
-			Date of birth: </label>
-			<input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
-            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
-      <script language="JavaScript" type="text/javascript">
-        Calendar.setup(
-          {
-            inputField : "dateofbirth",
-            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-            button : "dateofbirth_button"
-          }
-        );
-      </script>
-	  <!-- TMPL_IF NAME="mandatorydateofbirth" --><span class="required">Required</span><!-- /TMPL_IF -->
-		</li>
-		<li>
-			<!-- TMPL_IF NAME="mandatoryinitials" -->
-				<label for="initials" class="required">
-			<!-- TMPL_ELSE -->
-				<label for="initials">
-			<!-- /TMPL_IF-->
-			Initials: </label>
-			<input type="text" id="initials" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->" />	
-			<!-- TMPL_IF NAME="mandatoryinitials" --><span class="required">Required</span><!-- /TMPL_IF -->
-		</li>
+		<!-- TMPL_UNLESS name="I" -->
+            <li>
+                <!-- TMPL_IF NAME="mandatoryfirstname" -->
+                <label for="firstname" class="required">
+                <!-- TMPL_ELSE -->
+                <label for="firstname">
+                <!-- /TMPL_IF-->
+                Firstname: </label>
+                <input type="text" id="firstname" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->" />
+                <!-- TMPL_IF NAME="mandatoryfirstname" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
+            <li>
+                <!-- TMPL_IF NAME="mandatorydateofbirth" -->
+                <label for="dateofbirth" class="required">
+                <!-- TMPL_ELSE -->	
+                <label for="dateofbirth">
+                <!-- /TMPL_IF-->
+                Date of birth: </label>
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
+        <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+                inputField : "dateofbirth",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "dateofbirth_button"
+            }
+            );
+        </script>
+        <!-- TMPL_IF NAME="mandatorydateofbirth" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
+            <li>
+                <!-- TMPL_IF NAME="mandatoryinitials" -->
+                    <label for="initials" class="required">
+                <!-- TMPL_ELSE -->
+                    <label for="initials">
+                <!-- /TMPL_IF-->
+                Initials: </label>
+                <input type="text" id="initials" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->" />	
+                <!-- TMPL_IF NAME="mandatoryinitials" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
+        <!-- /TMPL_IF -->
 		<li>
 			<!-- TMPL_IF NAME="mandatoryothernames" -->
 			<label for="othernames" class="required">
@@ -195,15 +204,23 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
        	</li>
     <!--/TMPL_IF-->
 <!--TMPL_IF EXPR="showguarantor"-->  <li><label for="">Guarantor: </label>
-  
-  <input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" disabled="disabled" readonly="readonly" />
-  <input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" disabled="disabled" readonly="readonly" />
+  <select name="relationship" id="relationship" >
+    <!-- TMPL_LOOP name="relshiploop" -->
+        <!-- TMPL_IF name="selected" -->
+            <option value="<!-- TMPL_VAR name="relationship" -->" selected="selected" ><!-- TMPL_VAR name="relationship" --></option>
+        <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+    </select>
+  <input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+  <input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
   <!-- TMPL_IF NAME="guarantorid"-->  
     <input id="guarantorsearch" type="button" value="Modify Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
   <!-- TMPL_ELSE -->
     <input id="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
   <!-- /TMPL_IF --> <input id="guarantordelete" type="button" value="Delete Guarantor" />
-  </li>       
+  </li>
 <!--/TMPL_IF-->  
 		</ol>
 	</fieldset>
@@ -251,18 +268,6 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
       <input type="text" id="address2" name="address2" size="35" value="<!-- TMPL_VAR NAME="address2" -->" />
 	  <!-- TMPL_IF NAME="mandatoryaddress2" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>  
-	<!-- TMPL_IF NAME="city_cgipopup" --> 
-    <li>
-      <!-- TMPL_IF NAME="mandatoryselect_city" -->
-        <label for="select_city" class="required">
-      <!-- TMPL_ELSE -->
-        <label for="select_city">
-      <!-- /TMPL_IF-->
-      Select a city: </label>
-      <!-- TMPL_VAR NAME="citypopup" -->
-	  <!-- TMPL_IF NAME="mandatoryselect_city" --><span class="required">Required</span><!-- /TMPL_IF -->
-    </li>
-    <!-- /TMPL_IF-->
     <li>
       <!-- TMPL_IF NAME="mandatorycity" -->
         <label for="city" class="required">
@@ -270,7 +275,9 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
         <label for="city">
       <!-- /TMPL_IF-->
       City: </label>
-      <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
+        
+        <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
+        or choose <!-- TMPL_VAR NAME="citypopup" -->
 	  <!-- TMPL_IF NAME="mandatorycity" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
     <li> 
@@ -299,16 +306,6 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
         E-mail (home): </label>
         <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
 		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
-		<li>
-        <!-- TMPL_IF NAME="mandatoryB_phone" -->
-          <label for="B_phone" class="required">
-        <!--TMPL_ELSE-->
-          <label for="B_phone">
-        <!-- /TMPL_IF-->
-        Phone (mobile): </label>  
-        <input type="text" id="B_phone" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />
-		<!-- TMPL_IF NAME="mandatoryB_phone" --><span class="required">Required</span><!-- /TMPL_IF -->
-      </li>
 <!--/TMPL_IF-->
       <li>
       <!-- TMPL_IF NAME="mandatoryphone" --> 
@@ -410,6 +407,26 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 				<input type="text" id="B_zipcode" name="B_zipcode" maxlength="5" size="5" value="<!-- TMPL_VAR NAME="B_zipcode" -->" />
 	  <!-- TMPL_IF NAME="mandatoryB_zipcode" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
+            <li>
+                <!-- TMPL_IF NAME="mandatoryB_phone" -->
+                <label for="B_phone" class="required">
+                <!--TMPL_ELSE-->
+                <label for="B_phone">
+                <!-- /TMPL_IF-->
+                Phone: </label>  
+                <input type="text" id="B_phone" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />
+                <!-- TMPL_IF NAME="mandatoryB_phone" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
+            <li>
+                <!-- TMPL_IF NAME="mandatorycontacnote" -->
+                <label for="contacnote" class="required">
+                <!--TMPL_ELSE-->
+                <label for="contacnote">
+                <!-- /TMPL_IF-->
+                Contact note: </label>
+                <textarea id="contactnote" name="contactnote" cols="40" rows="2"><!-- TMPL_VAR NAME="contactnote" --></textarea>
+        <!-- TMPL_IF NAME="mandatorycontacnote" --><span class="required">Required</span><!-- /TMPL_IF -->
+            </li>
 			</ol>
 		</fieldset>
   <!-- TMPL_IF NAME="I" -->

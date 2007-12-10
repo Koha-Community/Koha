@@ -1461,7 +1461,7 @@ sub GetCities {
 
     #my ($type_city) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT cityid,city_name 
+    my $query = qq|SELECT cityid,city_zipcode,city_name 
 		FROM cities 
 		ORDER BY city_name|;
     my $sth = $dbh->prepare($query);
@@ -1470,13 +1470,12 @@ sub GetCities {
     $sth->execute();
     my %city;
     my @id;
-
     #    insert empty value to create a empty choice in cgi popup
-
+    push @id, " ";
+    $city{""} = "";
     while ( my $data = $sth->fetchrow_hashref ) {
-
-        push @id, $data->{'cityid'};
-        $city{ $data->{'cityid'} } = $data->{'city_name'};
+        push @id, $data->{'city_zipcode'}."|".$data->{'city_name'};
+        $city{ $data->{'city_zipcode'}."|".$data->{'city_name'} } = $data->{'city_name'};
     }
 
 #test to know if the table contain some records if no the function return nothing
