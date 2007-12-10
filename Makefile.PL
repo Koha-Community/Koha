@@ -312,14 +312,22 @@ indexed by Zebra.
 my %config_defaults = (
   'INSTALL_MODE'      => 'standard',
   'INSTALL_BASE'      => '/usr/share/koha',
+  'DB_TYPE'           => 'mysql',
+  'DB_HOST'           => 'localhost',
+  'DB_NAME'           => 'koha',    
+  'DB_USER'           => 'kohaadmin',
+  'DB_PASS'           => 'katikoan',
   'INSTALL_ZEBRA'     => 'yes',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
+  'ZEBRA_USER'        => 'kohauser',
+  'ZEBRA_PASS'        => 'zebrastripes',
 );
 
 # valid values for certain configuration options
 my %valid_config_values = (
   'INSTALL_MODE'  => { 'standard' => 1, 'single' => 1, 'dev' => 1 },
+  'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
   'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
@@ -327,6 +335,7 @@ my %valid_config_values = (
 
 my %config = get_configuration(\%config_defaults, \%valid_config_values);
 my %target_directories = get_target_directories(\%config);
+display_configuration(\%config, \%target_directories);
 my $file_map = {};
 get_file_map($target_map, $dirtree, $file_map);
 
@@ -638,6 +647,47 @@ as the package name in the FHS layout.);
     $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
 
     $msg = q(
+Please specify which database engine you will use
+to store data in Koha.  The choices are MySQL and
+PostgreSQL; please note that at the moment
+PostgreSQL support is highly experimental.
+
+DBMS to use);
+    $msg .= _add_valid_values_disp('DB_TYPE', $valid_values);
+    $config{'DB_TYPE'} = _get_value('DB_TYPE', $msg, $defaults->{'DB_TYPE'}, $valid_values);
+
+    $msg = q(
+Please specify the name or address of your 
+database server.  Note that the database 
+does not have to exist at this point, it
+can be created after running 'make install'
+and before you try using Koha for the first time.
+
+Database server);
+    $config{'DB_HOST'} = _get_value('DB_HOST', $msg, $defaults->{'DB_HOST'}, $valid_values);
+
+    $msg = q(
+Please specify the port used to connect to the
+DMBS);
+    my $db_port_default = $config{'DB_TYPE'} eq 'mysql' ? '3306' : '5432';
+    $config{'DB_PORT'} = _get_value('DB_PORT', $msg, $db_port_default, $valid_values);
+
+    $msg = q(
+Please specify the name of the database to be
+used by Koha);
+    $config{'DB_NAME'} = _get_value('DB_NAME', $msg, $defaults->{'DB_NAME'}, $valid_values);
+
+    $msg = q(
+Please specify the user that owns the database to be
+used by Koha);
+    $config{'DB_USER'} = _get_value('DB_USER', $msg, $defaults->{'DB_USER'}, $valid_values);
+
+    $msg = q(
+Please specify the password of the user that owns the 
+database to be used by Koha);
+    $config{'DB_PASS'} = _get_value('DB_PASS', $msg, $defaults->{'DB_PASS'}, $valid_values);
+
+    $msg = q(
 Koha can use the Zebra search engine for high-performance
 searching of bibliographic and authority records.  If you
 have installed the Zebra software and would like to use it,
@@ -668,6 +718,15 @@ records.
 Please specify the primary language of the MARC records);
         $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
         $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values);
+
+        $msg = q(
+Please specify Zebra database user);
+        $config{'ZEBRA_USER'} = _get_value('ZEBRA_USER', $msg, $defaults->{'ZEBRA_USER'}, $valid_values);
+
+        $msg = q(
+Please specify the Zebra database password);
+        $config{'ZEBRA_PASS'} = _get_value('ZEBRA_PASS', $msg, $defaults->{'ZEBRA_PASS'}, $valid_values);
+
     }
     return %config;
 }
@@ -777,10 +836,41 @@ sub get_target_directories {
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'run', $package, 'zebradb');
     }
 
-    foreach my $key (sort keys %dirmap) {
-        print sprintf("%-25.25s%s\n", $key, $dirmap{$key});
-    }
+    _get_argv_overrides(\%dirmap);
+
     return %dirmap;
+}
+
+sub _get_argv_overrides {
+    my $dirmap = shift;
+    
+    my @new_argv = ();
+    for (my $i = 0; $i <= $#ARGV; $i++) {
+        if ($ARGV[$i] =~ /^([^=]+)=([^=]+)$/ and exists $dirmap->{$1}) {
+            $dirmap->{$1} = $2;
+        } else {
+            push @new_argv, $ARGV[$i];
+        }
+    }
+    @ARGV = @new_argv;
+}
+
+sub display_configuration {
+    my $config = shift;
+    my $dirmap = shift;
+    print "\n\nKoha will be installed with the following configuration parameters:\n\n";
+    foreach my $key (sort keys %$config) {
+        print sprintf("%-25.25s%s\n", $key, $config->{$key});
+    }
+
+    print "\nand in the following directories:\n\n";
+    foreach my $key (sort keys %$dirmap) {
+        print sprintf("%-25.25s%s\n", $key, $dirmap->{$key});
+    }
+    print "\n\nTo change any configuration setting, please run\n";
+    print "perl Makefile.PL again.  To override one of the target\n";
+    print "directories, you can do so on the command line like this:\n";
+    print "\nperl Makefile.PL PERL_MODULE_DIR=/usr/share/perl/5.8\n\n";
 }
 
 package MY;
@@ -825,6 +915,7 @@ sub postamble {
     # variables -- this is for the use of
     # rewrite-confg.PL
     my $env = join("\n", map { "export __${_}__ = $target_directories{$_}" } keys %target_directories); 
+    $env .= join("\n", map { "export __${_}__ = $config{$_}" } keys %config);
     return "$env\n";
 }
 
