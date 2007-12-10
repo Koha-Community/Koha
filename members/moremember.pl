@@ -46,6 +46,12 @@ use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
 
+use vars qw($debug);
+
+BEGIN {
+	$debug = $ENV{DEBUG} || 0;
+}
+
 my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
@@ -94,8 +100,14 @@ my $category_type = $borrowercategory->{'category_type'};
 $template->param( $data->{'categorycode'} => 1 ); 
 
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $tempdate = C4::Dates->new($data->{$_},'iso')->output('syspref')
-			or warn ("Invalid $_ = " . $data->{$_});
+		my $userdate = $data->{$_};
+		unless ($userdate) {
+			$debug and warn sprintf "Empty \$data{%12s}", $_;
+			$data->{$_} = '';
+			next;
+		}
+		my $tempdate = C4::Dates->new($userdate,'iso')->output('syspref')
+			or warn ("Invalid $_ = '$userdate'");
 		$data->{$_} = $tempdate || '';
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
