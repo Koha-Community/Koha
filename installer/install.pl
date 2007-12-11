@@ -283,6 +283,7 @@ elsif ( $step && $step == 3 ) {
     elsif ( $op && $op eq 'Nozebra' ) {
         if ($query->param('Nozebra')) {
             $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
+            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
         } else {
             $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
         }
