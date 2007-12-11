@@ -102,6 +102,7 @@ Test
 Test::Harness
 Test::More
 Text::CSV
+Text::CSV_XS
 Text::Wrap
 Time::HiRes
 Time::localtime
