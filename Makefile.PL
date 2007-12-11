@@ -334,6 +334,8 @@ my %config_defaults = (
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_USER'        => 'kohauser',
   'ZEBRA_PASS'        => 'zebrastripes',
+  'KOHA_USER'         => 'koha',
+  'KOHA_GROUP'        => 'koha',
 );
 
 # valid values for certain configuration options
@@ -672,6 +674,36 @@ Base installation directory);
     $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
     $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
 
+    if ($config{'INSTALL_MODE'} eq "standard") {
+        $msg = q(
+Since you are using the 'standard' install
+mode, you should run 'make install' as root.
+However, it is recommended that a non-root
+user (on Unix and Linux platforms) have 
+ownership of Koha's files, including the
+Zebra indexes if applicable.
+
+Please specify a user account.  This
+user account does not need to exist
+right now, but it needs to exist
+before you run 'make install'.  Please
+note that for security reasons, this
+user should not be the same as the user
+account Apache runs under.
+
+User account);
+        $config{'KOHA_USER'} = _get_value('KOHA_USER', $msg, $defaults->{'KOHA_USER'}, $valid_values);
+
+        $msg = q(
+Please specify the group that should own
+Koha's files.  As above, this group need
+not exist right now, but should be created
+before you run 'make install'.
+
+Group);
+        $config{'KOHA_GROUP'} = _get_value('KOHA_GROUP', $msg, $defaults->{'KOHA_GROUP'}, $valid_values);
+    }
+
     $msg = q(
 Please specify which database engine you will use
 to store data in Koha.  The choices are MySQL and
@@ -926,7 +958,7 @@ KOHA_DEST_$key = $target_directories{$key}
     }
 
     $install .= qq(
-install :: all install_koha
+install :: all install_koha set_koha_ownership
 \t\$(NOECHO) \$(NOOP)
 );
     $install .= "install_koha ::\n";      
@@ -936,6 +968,18 @@ install :: all install_koha
     }
     $install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
     $install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
+
+    $install .= "\n";
+    $install .= "set_koha_ownership ::\n";
+    if ($config{'INSTALL_MODE'} eq 'standard' and $config{'KOHA_USER'} ne "root") {
+        foreach my $key (sort keys %target_directories) {
+            $install .= "\t\$(NOECHO); chown -R $config{'KOHA_USER'}:$config{'KOHA_GROUP'} \$(KOHA_DEST_$key) \\\n";
+        }
+        $install .= "\t\$(NOECHO) \$(NOOP)\n\n";
+    } else {
+        $install .= "\t\t\$(NOECHO) \$(NOOP)\n\n";
+    }
+
     return $install;
 }
 
@@ -962,5 +1006,4 @@ ExtUtils::MakeMaker(3)
 MJ Ray mjr at phonecoop.coop
 
 =cut
-FIXME: Zebra lang/MARC mapping
 FIXME: deal with .htaccess
