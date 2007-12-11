@@ -698,6 +698,12 @@ sub buildQuery {
 	my $auto_truncation = C4::Context->preference("QueryAutoTruncate") 		|| 0;
     my $weight_fields = C4::Context->preference("QueryWeightFields") 		|| 0;
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") 				|| 0;
+    # no stemming/weight/fuzzy in NoZebra
+    if (C4::Context->preference("NoZebra")) {
+        $stemming =0;
+        $weight_fields=0;
+        $fuzzy_enabled=0;
+    }
 	my $remove_stopwords = C4::Context->preference("QueryRemoveStopwords") 	|| 0;
 
     my $query = $operands[0];
