@@ -48,9 +48,9 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
-my $bi=$query->param('bi');
-$bi = $biblionumber unless $bi;
-my $data=GetBiblioItemData($bi);
+# my $bi=$query->param('bi');
+# $bi = $biblionumber unless $bi;
+my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
 
 # FIXME Dewey is a string, not a number, & we should use a function
@@ -66,18 +66,18 @@ my $dewey = $data->{'dewey'};
 
 my @results;
 my $fw = GetFrameworkCode($biblionumber);
-my $items= GetItemsByBiblioitemnumber($bi);
-my $count=@$items;
+my @items= GetItemsInfo($biblionumber);
+my $count=@items;
 $data->{'count'}=$count;
 
-my $ordernum = GetOrderNumber($biblionumber,$bi);
+my $ordernum = GetOrderNumber($biblionumber);
 my $order = GetOrder($ordernum);
 my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $itemtypes = GetItemTypes;
 $results[0]=$data;
-foreach my $item (@$items){
-	$item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost});
-	$item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged});
+foreach my $item (@items){
+	$item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
+	$item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
 	$item->{'collection'} = $ccodes->{$item->{ccode}};
 	$item->{'itype'} = $itemtypes->{$item->{'itype'}}->{'description'}; 
 	$item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
@@ -97,7 +97,7 @@ foreach my $item (@$items){
 
 $template->param(count => $data->{'count'});
 $template->param(BIBITEM_DATA => \@results);
-$template->param(ITEM_DATA => $items);
+$template->param(ITEM_DATA => \@items);
 $template->param(moredetailview => 1);
 $template->param(loggedinuser => $loggedinuser);
 $template->param(biblionumber => $biblionumber);
