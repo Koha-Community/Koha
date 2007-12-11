@@ -259,7 +259,7 @@ my $target_map = {
   './rss'                       => 'NONE', # FIXME deal with a little later
   './serials'                   => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
-  './skel/var/log/koha'         => { target => 'KOHA_LOG_DIR', trimdir => -1 },
+  './skel/var/log/koha'         => { target => 'LOG_DIR', trimdir => -1 },
   './skel/var/run/koha/zebradb' => { target => 'ZEBRA_RUN_DIR', trimdir => -1 },
   './skel/var/lock/koha/zebradb/authorities' => { target => 'ZEBRA_LOCK_DIR', trimdir => 6 },
   './skel/var/lib/koha/zebradb/authorities/key'  => { target => 'ZEBRA_DATA_DIR', trimdir => 6 },
