@@ -171,11 +171,24 @@ sub default_form {
 	# build categories list
 	my $sth = $dbh->prepare("select distinct category from authorised_values");
 	$sth->execute;
+	# the list
 	my @category_list;
+	# a hash, to check that some hardcoded categories exist.
+	my %categories;
 	while ( my ($category) = $sth->fetchrow_array) {
 		push(@category_list,$category);
+		$categories{$category} = 1;
 	}
 	# push koha system categories
+	push @category_list, 'Asort1' unless $categories{'Asort1'};
+	push @category_list, 'Asort2' unless $categories{'Asort2'};
+	push @category_list, 'Bsort1' unless $categories{'Bsort1'};
+	push @category_list, 'Bsort2' unless $categories{'Bsort2'};
+	push @category_list, 'SUGGEST' unless $categories{'SUGGEST'};
+	push @category_list, 'DAMAGED' unless $categories{'DAMAGED'};
+	push @category_list, 'LOST' unless $categories{'LOST'};
+	#reorder the list
+	@category_list = sort {$a cmp $b} @category_list;
 	my $tab_list = CGI::scrolling_list(-name=>'searchfield',
 	        -id=>'searchfield',
 			-values=> \@category_list,

@@ -111,6 +111,27 @@ the subfield is not entered through a free field, but though a list of authorize
 </div>
 <!-- /TMPL_IF -->
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
+<!-- TMPL_IF EXPR="category eq 'Bsort1'" -->
+    <p>Bsort1 is an authorised value attached to patrons, that can be used for stats purposes</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'Bsort2'" -->
+    <p>Bsort2 is an authorised value attached to patrons, that can be used for stats purposes</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'Asort1'" -->
+    <p>Asort1 is an authorised value attached to acquisitions, that can be used for stats purposes</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'Asort2'" -->
+    <p>Asort2 is an authorised value attached to acquisitions, that can be used for stats purposes</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'SUGGEST'" -->
+    <p>The list of patron suggestion reject or accept reasons</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'DAMAGED'" -->
+    <p>The list of status to describe a damaged item</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="category eq 'LOST'" -->
+    <p>The list of status to describe a lost item</p>
+<!-- /TMPL_IF -->
 <table>
 <tr>
 	<th>Category</th>
