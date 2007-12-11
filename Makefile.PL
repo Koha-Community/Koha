@@ -349,7 +349,22 @@ my %config = get_configuration(\%config_defaults, \%valid_config_values);
 my %target_directories = get_target_directories(\%config);
 display_configuration(\%config, \%target_directories);
 my $file_map = {};
-get_file_map($target_map, $dirtree, $file_map);
+get_file_map($target_map, $dirtree, $file_map, $config{'INSTALL_ZEBRA'} eq "yes" ? 1: 0);
+
+my $pl_files = {
+      'rewrite-config.PL' => [
+         'blib/KOHA_CONF_DIR/koha-conf.xml',
+         'blib/KOHA_CONF_DIR/koha-httpd.conf',
+         ]
+};
+
+if ($config{'INSTALL_ZEBRA'} eq "yes") {
+    push @{ $pl_files->{'rewrite-config.PL'} }, (
+         'blib/ZEBRA_CONF_DIR/etc/passwd',
+         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
+         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
+    );
+}
 
 WriteMakefile(
     NAME => 'koha',
@@ -426,15 +441,8 @@ WriteMakefile(
 #     return { macro => { 'export TEST' => '755' } }
 #     },
 
-   PL_FILES => { # generator => target(s)
-      'rewrite-config.PL' => [
-         'blib/KOHA_CONF_DIR/koha-conf.xml',
-         'blib/KOHA_CONF_DIR/koha-httpd.conf',
-         'blib/ZEBRA_CONF_DIR/etc/passwd',
-         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
-         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
-         ]
-   }
+   PL_FILES => $pl_files,
+
 #     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
 #     'misc/koha.conf.PL' => '$(INST_LIBDIR)/../etc/koha.conf',
 #     'misc/apache-koha.conf.PL' => '$(INST_LIBDIR)/../etc/apache-koha.conf',
@@ -489,6 +497,7 @@ sub get_file_map {
     my $target_map = shift;
     my $dirtree = shift;
     my $file_map = shift;
+    my $install_zebra = shift;
     my $curr_path = @_ ? shift : ['.'];
 
     # Traverse the directory tree.
@@ -519,7 +528,7 @@ sub get_file_map {
                     }
                 }
                 if (defined $targetdir) {
-                     _add_to_file_map($file_map, $targetdir, $curr_path, $file, $matchlevel);
+                     _add_to_file_map($file_map, $targetdir, $curr_path, $file, $matchlevel, $install_zebra);
                 } else {
                     my $path = join("/", @$curr_path);
                     print "failed to map: $path/$file\n" if $DEBUG;
@@ -528,7 +537,7 @@ sub get_file_map {
         } else {
             # dealing with subdirectory
             push @$curr_path, $dir;
-            get_file_map($target_map, $dirtree->{$dir}, $file_map, $curr_path);
+            get_file_map($target_map, $dirtree->{$dir}, $file_map, $install_zebra, $curr_path);
             pop @$curr_path;
         }
     }
@@ -540,6 +549,7 @@ sub _add_to_file_map {
     my $curr_path = shift;
     my $file = shift;
     my $matchlevel = shift;
+    my $install_zebra = shift;
     my $dest_path = @_ ? shift : $curr_path;
 
     # The target can be one of the following:
@@ -566,12 +576,12 @@ sub _add_to_file_map {
             } else {
                 splice @new_dest_path, 0, $targetdir->{trimdir};
             }
-            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel, \@new_dest_path);
+            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel, $install_zebra, \@new_dest_path);
         } else {
             # actually getting here means that the
             # target was unnecessarily listed
             # as a hash, but we'll forgive that
-            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel);
+            _add_to_file_map($file_map, $subtarget, $curr_path, $file, $matchlevel, $install_zebra);
         }
     } elsif ($targetdir ne 'NONE' and $targetdir ne '') {
         my $source = File::Spec->catfile(@$curr_path, $file);
@@ -584,8 +594,8 @@ sub _add_to_file_map {
         # spaces and shell metacharacters from all file names
         $source =~ s/ /\\ /g;
         $destination =~ s/ /\\ /g;
-       
-        $file_map->{$source} = $destination;
+      
+        $file_map->{$source} = $destination unless (!$install_zebra and $targetdir =~ /ZEBRA/);
     }
 }
 
@@ -705,6 +715,10 @@ searching of bibliographic and authority records.  If you
 have installed the Zebra software and would like to use it,
 please answer 'yes' to the following question.  Otherwise, 
 Koha will default to using its internal search engine.
+
+Please note that if you choose *NOT* to install Zebra,
+koha-conf.xml will still contain some references to Zebra
+settings.  Those references will be ignored by Koha.
 
 Please specify whether to install the Zebra configuration files);
     $msg .= _add_valid_values_disp('INSTALL_ZEBRA', $valid_values);
@@ -904,7 +918,7 @@ sub install {
         $install .= qq(
 KOHA_INST_$key = blib/$key
 KOHA_DEST_$key = $target_directories{$key}
-);
+) unless $config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/;
     }
 
     $install .= qq(
@@ -914,7 +928,7 @@ install :: all install_koha
     $install .= "install_koha ::\n";      
     $install .= "\t\$(NOECHO) umask 022; \$(MOD_INSTALL) \\\n";
     foreach my $key (sort keys %target_directories) {
-        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n";
+        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" unless $config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/;
     }
     $install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
     $install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
