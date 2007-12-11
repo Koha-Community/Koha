@@ -164,13 +164,13 @@ function confirmDelete(s,n){
     <!-- TMPL_IF NAME="shelves" -->
 <div class="yui-ge">
 	<div class="yui-u first">
-		<!-- TMPL_IF NAME="already" --><p class="error">A virtual shelf with that name already exists!</p><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="already" --><div class="dialog alert">A virtual shelf with that name already exists!</div><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="status1" -->
-            <p class="error"><!-- TMPL_VAR NAME="string1" --></p>
+            <div class="dialog alert"><!-- TMPL_VAR NAME="string1" --></div>
         <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="paramsloop" -->
             <!-- TMPL_IF NAME="status" -->
-                <p class="error"><!-- TMPL_VAR NAME="string" --></p>
+                <div class="dialog alert"><!-- TMPL_VAR NAME="string" --></div>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl">
@@ -185,7 +185,7 @@ function confirmDelete(s,n){
                                     <option value="2">Public</option>
 									<option value="3">Free</option></select></li></ol></fieldset>
  
-		<p><input type="submit" value="Save" /></p>
+	 <fieldset class="action"><input type="submit" value="Save" /><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a></fieldset>
 		</form>
                      
 
@@ -203,7 +203,7 @@ function confirmDelete(s,n){
     <!-- TMPL_IF name="edit" -->
 	<div class="yui-ge">
 	<div class="yui-u first">
-	<!-- TMPL_IF NAME="already" --><p class="error">A virtual shelf with that name already exists!</p><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="already" --><div class="dialog alert">A virtual shelf with that name already exists!</div><!-- /TMPL_IF -->
         <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl">
             <input type="hidden" name="op" value="modifsave" />
             <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" />
@@ -228,7 +228,7 @@ function confirmDelete(s,n){
                     <!-- /TMPL_IF -->
                 </select></li>
             </ol></fieldset>
-            <p><input type="submit" value="Save changes" /></p>
+            <fieldset class="action"><input type="submit" value="Save changes" /><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a></fieldset>
 			
         </form>
 		</div>

@@ -35,7 +35,7 @@
                 <input type="submit" value="Select" />
             </form>
             <!--TMPL_IF Name="ERROR"-->
-            <div class="error">
+            <div class="dialog alert">
                 <h3>Data error</h3>
                 <p>The following fields have a forbidden value. Correct them and press OK again :</p>
                 <ul>
@@ -69,7 +69,7 @@
                             <!-- TMPL_ELSE -->
                                 <tr>
                             <!-- /TMPL_IF -->
-                            <th><!-- TMPL_VAR NAME="line" --></th>
+                            <th scope="row"><!-- TMPL_VAR NAME="line" --></th>
 <td>
                                 <input name="delay1-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay1" -->" />
                             </td>

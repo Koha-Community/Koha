@@ -108,14 +108,14 @@ function Check(f) {
     </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="delete_confirm" -->
-<h3>Delete ramework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
+<!-- TMPL_IF NAME="delete_confirm" --><div class="dialog alert">
+<h3>Delete framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
     <!-- TMPL_IF NAME="total" -->
-        <div class="error">This framework is used <!-- TMPL_VAR NAME="total" --> times</div>
+        <strong>This framework is used <!-- TMPL_VAR NAME="total" --> times</strong>.
     <!-- /TMPL_IF -->
-        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="Yes, Delete this Framework!" />
+        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" class="approve" value="Yes, Delete this Framework!" />
         </form>
-        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete!" /></form>
+        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="deny" value="No, Do not Delete!" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->

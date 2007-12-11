@@ -220,32 +220,39 @@ Item Types Administration
 	  </ol>
     </fieldset>
 
-    <p id="action">
+    <fieldset class="action">
       <input type="button" value="Save Changes" onclick="Check(this.form)" />
-    </p>
+	  <a href="/cgi-bin/koha/admin/itemtypes.pl" class="cancel">Cancel</a>
+    </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-<!-- TMPL_IF name="total" --><div class="error">This record is used <!-- TMPL_VAR name="total" --> times. Deletion is not possible.<!-- /TMPL_IF -->
-<div class="table details">	<table>
-	<caption><!-- TMPL_IF name="total" -->Cannot Delete Item Type<!-- TMPL_ELSE -->Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?<!-- /TMPL_IF --></caption>
+<!-- TMPL_IF name="total" --><div class="dialog message">
+<h3>Cannot Delete Item Type</h3>
+<p><strong>This record is used <!-- TMPL_VAR name="total" --> times</strong>. Deletion is not possible.</p>
+<!-- TMPL_ELSE --><div class="dialog alert">
+<h3>Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?</h3>
+<!-- /TMPL_IF -->
+<table>
 		<tr>
-			<th>Item type</th>
+			<th scope="row">Item type</th>
 			<td><!-- TMPL_VAR name="itemtype" --></td>
 		</tr>
 
-	<tr><th>Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
-	<tr><th>Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
-	<tr><th>Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
-<!-- Hide from NPL  --><tr><th>Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr><!-- Hide from NPL --></table>
+	<tr><th scope="row">Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
+	<tr><th scope="row">Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
+	<tr><th scope="row">Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
+<tr><th scope="row">Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr></table>
 		<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_IF name="total" -->
-		</form><form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="OK" /></form>
+		</form>
+		
+		<form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" class="approve" value="OK" /></form>
 	<!-- TMPL_ELSE -->
-		<input type="submit" value="Delete this Item Type" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
+		<input type="submit" class="approve" value="Delete this Item Type" /></form> <form action="<!-- TMPL_VAR name="script_name" -->" method="post"><input type="submit" class="deny" value="Do Not Delete" /></form>
 	<!-- /TMPL_IF -->
-
+</div>
 	
 <!-- /TMPL_IF -->
 

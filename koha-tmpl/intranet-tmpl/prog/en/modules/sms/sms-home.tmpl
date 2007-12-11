@@ -1,12 +1,12 @@
 ﻿<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; SMS Administration</title>
+<title>Koha &rsaquo; Tools &rsaquo; Send SMS Message</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; SMS Administration</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Send SMS Message</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -14,7 +14,7 @@
        <div id="yui-main">
 	       <div class="yui-b">
 
-<!--TMPL_IF NAME="error"--><div class="error"><!--TMPL_VAR NAME="error"--> </div><!--/TMPL_IF-->
+<!--TMPL_IF NAME="error"--><div class="dialog alert"><!--TMPL_VAR NAME="error"--> </div><!--/TMPL_IF-->
 <form action="/cgi-bin/koha/sms/sms.pl" method="post">
 <fieldset class="rows">
 <legend>SMS Messaging</legend>
@@ -23,10 +23,8 @@
 	<li><label for="phone">Phone:</label><input type="text" name="phone" id="phone" value="<!--TMPL_VAR NAME="phone"-->"/> (e.g., 5338644143)</li>
 </ol>
 </fieldset>
-<fieldset class="action"><input type="submit" value="Send SMS"></fieldset>
+<fieldset class="action"><input type="submit" value="Send SMS"><a class="cancel" href="/cgi-bin/koha/sms/sms.pl">Cancel</a></fieldset>
 </form>
-
-<div class="message">Enter a message. The message will be sent to the user.</div>
 
 </div>
 </div>

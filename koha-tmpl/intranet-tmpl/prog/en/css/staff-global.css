@@ -457,13 +457,6 @@ ul.toolbar li {
 	list-style : none;
 }
 
-div.message {
-   border : 1px solid #6699CC;
-	width : 75%;
-	margin : 1em auto;
-	padding : .5em;
-}
-
 div.patroninfo {
 	margin-top : -.5em;
 }
@@ -810,35 +803,35 @@ fieldset.rows .inputnote {
 }
 #addbiblio a, #addchild a, #newentry a {
 	padding-left : 34px;
-	background-image: url("/intranet-tmpl/prog/img/toolbar-new.gif");
+	background-image: url("../../img/toolbar-new.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
 #deletebiblio button, #deletebiblio a, #deletepatron a {
 	padding-left : 34px;
-	background-image: url("/intranet-tmpl/prog/img/toolbar-delete.gif");
+	background-image: url("../../img/toolbar-delete.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
 #printbiblio button, #printbiblio a {
 	padding-left : 34px;
-	background-image: url("/intranet-tmpl/prog/img/toolbar-print.gif");
+	background-image: url("../../img/toolbar-print.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
 #addtoshelf button, #addtoshelf a {
 	padding-left : 34px;
-	background-image: url("/intranet-tmpl/prog/img/toolbar-add-to-shelf.gif");
+	background-image: url("../../img/toolbar-add-to-shelf.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
 #placehold a {
 	padding-left : 34px;
-	background-image: url("/intranet-tmpl/prog/img/toolbar-hold.gif");
+	background-image: url("../../img/toolbar-hold.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
@@ -951,7 +944,6 @@ div.circmessage:first-child {
 }
 
 div.circmessage {
-	border: 1px solid #CCC;
 	padding: .4em;
 	margin-bottom : .3em;
 }
@@ -965,55 +957,60 @@ div.first fieldset {
 	margin-right : 0;
 }
 
+#circ_needsconfirmation {
+	margin : auto;
+}
+
 .dialog {
-  width: 50%;
-  float:left;
-  background: url(../../img/dropshadow-alpha.png) no-repeat bottom right !important;
-  background: url(../../img/dropshadow.gif) no-repeat bottom right;
-  margin: 10px 0 0 10px !important;
-  margin: 10px 0 0 5px;
-  }
-
-.dialog div {
-  background: none !important;
-  background: url(../../img/dropshadow-mask.gif) no-repeat left top;
-  padding: 0 !important;
-  padding: 0 6px 6px 0;
-  }
-
-.dialog div.confirm {
-  background-color: #ffc;
- // background : url(../../img/dialog-bg.gif) repeat-x left 0 !important;
-  font: 1em sans-serif;
   border: 1px solid #bcbcbc;
-  padding: 4px !important;
-  margin: -6px 6px 6px -6px !important;
-  margin: 0;
+	padding : .5em;
+	margin : 1em auto;
+  width: 65%;
   }
   
-  .dialog div.confirm h2, .dialog div.confirm h3, .dialog div.confirm h4 {
+.dialog  h2, .dialog h3, .dialog h4 {
   	margin : auto;
 	text-align : center;
   }
   
- div.confirm input {
+.dialog input {
  	background-color : #FFF;
  	border : 1px solid #bcbcbc;
 	margin : .4em;
 	padding : .4em .4em .4em 25px;
  }
  
- div.confirm input.approve {
+.dialog input.approve {
  	background : #FFF url(../../img/approve.gif) no-repeat 4px center;
  }
 
- div.confirm input.deny {
+.dialog input.deny {
  	background : #FFF url(../../img/deny.gif) no-repeat 4px center;
  }
  
- div.confirm input:hover {
+.dialog input:hover {
  	background-color : #ffc;
  }
+ 
+div.alert {
+  background : #FFC url(../../img/alert-bg.gif) repeat-x left 0;
+  text-align : center;
+}
+
+div.alert strong {
+	color : #900;
+}
+
+div.message {
+	background : white url("../../img/message-bg.gif") repeat-x left 0;
+   border : 1px solid #bcbcbc;
+	width : 55%;
+}
+
+div.message input.approve {
+	display : block;
+	margin: auto;
+}
  
  div.results {
  	padding : .7em 0;

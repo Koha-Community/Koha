@@ -98,16 +98,16 @@
     </form>
 	</div>
 	</div>
-    <!--TMPL_IF Name="Number" --><p><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></p><!-- /TMPL_IF-->
-    <!--TMPL_IF Name="errorfile" --><p class="error"><!--TMPL_VAR Name="errorfile"--> can't be opened</p><!-- /TMPL_IF-->
+    <!--TMPL_IF Name="Number" --><div class="dialog message"><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></div><!-- /TMPL_IF-->
+    <!--TMPL_IF Name="errorfile" --><div class="dialog alert"><!--TMPL_VAR Name="errorfile"--> can't be opened</div><!-- /TMPL_IF-->
     <!--TMPL_LOOP Name="errorloop"-->
-        <p class="error">
+        <div class="dialog alert">
             <!--TMPL_VAR Name="barcode"-->
             <!--TMPL_IF Name="ERR_BARCODE"-->: barcode not found<!--/TMPL_IF-->
             <!--TMPL_IF Name="ERR_WTHDRAWN"-->: item withdrawn<!--/TMPL_IF-->
             <!--TMPL_IF Name="ERR_ONLOAN_RET"-->: item was on loan. It was returned before marked as seen<!--/TMPL_IF-->
             <!--TMPL_IF Name="ERR_ONLOAN_NOT_RET"-->: item was on loan. couldn't be returned.<!--/TMPL_IF-->
-        </p>
+        </div>
     <!-- /TMPL_LOOP-->
     <!-- TMPL_IF NAME="loop" -->
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">

@@ -149,9 +149,10 @@
     	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<fieldset><legend>    	
 	<!-- TMPL_IF NAME="totalgtzero" -->
-	Cagegory <!-- TMPL_VAR NAME="categorycode" --> is in use.  Deletion not possible!<!-- TMPL_ELSE -->
+	Category <!-- TMPL_VAR NAME="categorycode" --> is in use.  Deletion not possible!<!-- TMPL_ELSE -->
 Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></legend>
-<!-- TMPL_IF NAME="totalgtzero" --><div class="error">This category is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</div><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="totalgtzero" --><div class="dialog alert"><strong>This category is used <!-- TMPL_VAR NAME="total" --> times</strong>. Deletion not possible</div><!-- /TMPL_IF -->
 	<table>
 	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" --></td></tr>
