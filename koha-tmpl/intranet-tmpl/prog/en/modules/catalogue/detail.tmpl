@@ -53,8 +53,8 @@ function verify_images() {
             <!-- TMPL_ELSE -->
                 <!-- TMPL_VAR NAME="itemtype" -->
             <!-- /TMPL_IF -->
-            ]
-            <!-- TMPL_IF name="volume" -->, <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
+            ] :
+            <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
             <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
             <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
             / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
@@ -81,7 +81,7 @@ function verify_images() {
     </li>
     <!-- /TMPL_IF -->
         <li><strong>Description:</strong>
-                <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --><!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --> <!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
         </li>
 		</ul>
