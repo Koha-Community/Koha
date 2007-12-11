@@ -102,6 +102,8 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__ZEBRA_LOCK_DIR__' => "$prefix/var/lock/zebradb",
   '__ZEBRA_DATA_DIR__' => "$prefix/var/lib/zebradb",
   '__ZEBRA_RUN_DIR__' => "$prefix/var/run/zebradb",
+  '__ZEBRA_MARC_FORMAT__' => 'marc21',
+  '__ZEBRA_LANGUAGE__' => 'en',
 );
 
 # Override configuration from the environment
