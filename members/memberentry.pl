@@ -211,9 +211,9 @@ if ($op eq 'insert'){
     if ($destination eq "circ")	{
 	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
     } else {
-	if ($loginexist == 0) {
-	    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-	}
+        if ($loginexist == 0) {
+            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+        }
     }
   }
 }

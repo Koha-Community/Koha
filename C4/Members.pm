@@ -27,6 +27,7 @@ use Date::Calc qw/Today Add_Delta_YM/;
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
+use C4::Accounts;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -700,14 +701,22 @@ sub AddMember {
       . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
       . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} );
     my $sth = $dbh->prepare($query);
-	print "Executing SQL: $query\n";
+# 	print "Executing SQL: $query\n";
     $sth->execute;
     $sth->finish;
     $data{'borrowernumber'} = $dbh->{'mysql_insertid'};
     
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","CREATE",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
-        
+    
+    # check for enrollment fee & add it if needed
+    $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
+    $sth->execute($data{'categorycode'});
+    my ($enrolmentfee) = $sth->fetchrow;
+    if ($enrolmentfee) {
+        # insert fee in patron debts
+        manualinvoice($data{'borrowernumber'}, '', '', 'A', $enrolmentfee);
+    }
     return $data{'borrowernumber'};
 }
 
