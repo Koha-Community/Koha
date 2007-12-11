@@ -1595,9 +1595,9 @@ returns date
 sub ExtendMemberSubscriptionTo {
     my ( $borrowerid,$date) = @_;
     my $dbh = C4::Context->dbh;
+    my $borrower = GetMember($borrowerid,'borrowernumber');
     unless ($date){
       $date=POSIX::strftime("%Y-%m-%d",localtime(time));
-      my $borrower = GetMember($borrowerid,'borrowernumber');
       $date = GetExpiryDate( $borrower->{'categorycode'}, $date );
     }
     my $sth = $dbh->do(<<EOF);
@@ -1605,6 +1605,14 @@ UPDATE borrowers
 SET  dateexpiry='$date' 
 WHERE borrowernumber='$borrowerid'
 EOF
+    # add enrolmentfee if needed
+    $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
+    $sth->execute($borrower->{'categorycode'});
+    my ($enrolmentfee) = $sth->fetchrow;
+    if ($enrolmentfee) {
+        # insert fee in patron debts
+        manualinvoice($borrower->{'borrowernumber'}, '', '', 'A', $enrolmentfee);
+    }
     return $date if ($sth);
     return 0;
 }
