@@ -51,7 +51,7 @@ my $totalcount2 = 0;
 my @loop2;
 my ($count2, @missingissues);
 for (my $k=0;$k<@serialid;$k++){
-    ($count2, @missingissues) = GetMissingIssues($supplierid, $serialid[$k]);
+    ($count2, @missingissues) = GetLateOrMissingIssues($supplierid, $serialid[$k]);
 
     for (my $j=0;$j<@missingissues;$j++){
 	my @rows2 = ($missingissues[$j]->{'name'},          # lets build up a row

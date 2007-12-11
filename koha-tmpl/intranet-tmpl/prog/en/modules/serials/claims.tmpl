@@ -70,6 +70,7 @@
                     <th>Issue number</th>
                     <th>Status <a href="javascript:Setorder('status');">sort</a></th>
                     <th>Since <a href="javascript:Setorder('planneddate');">sort</a></th>
+                    <th></th>
                 <th>Began Claim</th>
                 </tr>
                 <!-- TMPL_LOOP name="missingissues" -->
@@ -100,6 +101,9 @@
                         </td>
                         <td>
                         <!-- TMPL_VAR name="claimdate" -->
+                        </td>
+                        <td>
+                            <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=<!-- TMPL_VAR name="supplieri" -->&serialid=<!-- TMPL_VAR name="serialid" -->&op=claims">Export item data</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
