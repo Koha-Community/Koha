@@ -630,7 +630,7 @@ dev:      Create a set of symbolic links and configuration files to
           This mode is useful for developers who want to run
           Koha from a git clone.
 
-Please choose the installation mode);
+Installation mode);
     $msg .= _add_valid_values_disp('INSTALL_MODE', $valid_values);
     $config{'INSTALL_MODE'} = _get_value('INSTALL_MODE', $msg, $defaults->{'INSTALL_MODE'}, $valid_values);
 
@@ -642,7 +642,9 @@ Please choose the installation mode);
 Please specify the directory in which to install Koha's
 active configuration files and (if applicable) the
 Zebra database.  Koha's CGI scripts and templates will
-be run from the current directory.);
+be run from the current directory.
+
+Configuration directory:);
         # FIXME - home directory portability consideration apply
         $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "/usr/share/koha-dev";
     } elsif ($config{'INSTALL_MODE'} eq 'single') {
@@ -663,7 +665,9 @@ will be installed.
 Note that if you are planning in installing more than 
 one instance of Koha, you may want to modify the last
 component of the directory path, which will be used
-as the package name in the FHS layout.);
+as the package name in the FHS layout.
+
+Base installation directory);
     }
     $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
     $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
@@ -720,7 +724,7 @@ Please note that if you choose *NOT* to install Zebra,
 koha-conf.xml will still contain some references to Zebra
 settings.  Those references will be ignored by Koha.
 
-Please specify whether to install the Zebra configuration files);
+Install the Zebra configuration files?);
     $msg .= _add_valid_values_disp('INSTALL_ZEBRA', $valid_values);
     $config{'INSTALL_ZEBRA'} = _get_value('INSTALL_ZEBRA', $msg, $defaults->{'INSTALL_ZEBRA'}, $valid_values);
 
@@ -733,7 +737,7 @@ records to be indexed by Zebra.
 Koha provides Zebra configuration files for MARC 21
 and UNIMARC.
 
-Please specify the MARC format);
+MARC format for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_MARC_FORMAT', $valid_values);
         $config{'ZEBRA_MARC_FORMAT'} = _get_value('ZEBRA_MARC_FORMAT', $msg, $defaults->{'ZEBRA_MARC_FORMAT'}, $valid_values);
         $msg = q(
@@ -741,7 +745,7 @@ Koha supplies Zebra configuration files tuned for
 searching either English (en) or French (fr) MARC
 records.
 
-Please specify the primary language of the MARC records);
+Primary language for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
         $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values);
 
