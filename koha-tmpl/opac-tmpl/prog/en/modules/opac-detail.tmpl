@@ -35,17 +35,20 @@
 <!-- /TMPL_IF -->
     <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
     <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a></h2><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="subtitles" -->
-    <p><span class="label">Subtitle(s):</span>
-        <!-- TMPL_LOOP name="subtitles" -->
-        <!-- TMPL_VAR NAME="subtitle" --> ;
-        <!-- /TMPL_LOOP -->
-        
-        <!-- TMPL_IF name="seriestitle" --><!-- TMPL_VAR name="seriestitle" --><!--/TMPL_IF-->
-        <!-- TMPL_IF name="volume" -->vol. <!-- TMPL_VAR name="volume" --> <!-- TMPL_VAR name="volumedate" --><!-- /TMPL_IF -->
-        <!-- TMPL_VAR name="volumedesc" -->
+    <p>
+        [
+        <!-- TMPL_IF name="description" -->
+            <!-- TMPL_VAR name="description" -->
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_VAR NAME="itemtype" -->
+        <!-- /TMPL_IF -->
+        ] :
+        <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
+        / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
     </p>
-    <!-- /TMPL_IF -->
+
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <p><span class="label">Authors:</span>
         <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
