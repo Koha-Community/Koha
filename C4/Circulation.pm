@@ -26,7 +26,7 @@ use C4::Reserves;
 use C4::Koha;
 use C4::Biblio;
 use C4::Members;
-# use C4::Date;	# apparently no dependency.
+use C4::Dates;
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -1624,10 +1624,13 @@ sub AddRenewal {
         );
 		#FIXME --  choose issuer or borrower branch.
 		#FIXME -- where's the calendar ?
-        my ( $due_year, $due_month, $due_day ) =
-          Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
-        $datedue = C4::Dates->new( "$due_year-$due_month-$due_day",'iso');
-	$datedue=CheckValidDatedue($datedue,$itemnumber,$branch);
+		#FIXME -- $debug-ify the (0)
+        my @darray = Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
+        $datedue = C4::Dates->new( sprintf("%04d-%02d-%02d",@darray[0..2]), 'iso');
+		(0) and print STDERR  "C4::Dates->new->output = " . C4::Dates->new()->output()
+		 		. "\ndatedue->output = " . $datedue->output()
+		 		. "\n(Y,M,D) = " . join ',', @darray;
+		$datedue=CheckValidDatedue($datedue,$itemnumber,$branch);
     }
 
     # Find the issues record for this book
@@ -1946,6 +1949,7 @@ my @datedue=split('-',$date_due->output('iso'));
 my $years=$datedue[0];
 my $month=$datedue[1];
 my $day=$datedue[2];
+# die "Item# $itemnumber ($branchcode) due: " . ${date_due}->output() . "\n(Y,M,D) = ($years,$month,$day)":
 my $dow;
 for (my $i=0;$i<2;$i++){
 	$dow=Day_of_Week($years,$month,$day);
@@ -1958,7 +1962,7 @@ for (my $i=0;$i<2;$i++){
 		(($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
 		}
 	}
-my $newdatedue=C4::Dates->new( $years."-".$month."-".$day,'iso');
+	my $newdatedue=C4::Dates->new(sprintf("%04d-%02d-%02d",$years,$month,$day),'iso');
 return $newdatedue;
 }
 =head2 CheckRepeatableHolidays
