@@ -2,7 +2,6 @@
 <div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h5>
 <ul>
 <!-- TMPL_IF NAME="patronimages" --><li><img src="/intranet-tmpl/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.jpg" alt="" border="0"   style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li><!-- /TMPL_IF -->
-     <!-- TMPL_IF NAME="userid" --> <li> <!-- TMPL_VAR NAME="userid" -->  </li><!--/TMPL_IF-->
 	        <li><!-- TMPL_IF NAME="address"-->
             <!-- TMPL_VAR NAME="address" -->
         <!-- TMPL_ELSE -->
@@ -20,10 +19,10 @@
         <span class="problem">No phone stored.</span>    
     <!-- /TMPL_IF --></li>
 	    <!-- TMPL_IF NAME="email" -->
-   <li> <a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li>
+   <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="email" -->" title="<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li>
     <!-- /TMPL_IF -->
 		    <!-- TMPL_IF NAME="emailpro" -->
-   <li> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
+   <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
     <!-- /TMPL_IF -->
     <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
 </ul></div>

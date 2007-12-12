@@ -155,8 +155,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
 	<div class="hint">Enter item barcode:</div>
 	
-	<input type="text" name="barcode" id="barcode" class="focus" size="14" />
-
+	<input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> <input type="submit" value="Check Out" />
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
         <ul>
@@ -205,8 +204,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /TMPL_IF -->
 
     <!--/TMPL_IF --> <!-- /impossible -->
-    <p class="date-select">
-        <label for "duedatespec">Specify Due Date:</label> <input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />                                                        
+    <div class="date-select">
+        <div class="hint">Specify Due Date:</div><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />                                                        
 		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" valign="top" />
              <script language="JavaScript" type="text/javascript">
                    function validate1(date) {
@@ -235,7 +234,11 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                  </script>
 
           <label for="stickyduedate">Remember for Session:</label>
-          <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" <!-- TMPL_IF NAME="stickyduedate" --> checked="1" <!-- /TMPL_IF -->  />
+<!-- TMPL_IF NAME="stickyduedate" -->
+<input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="1" />
+<!-- TMPL_ELSE -->
+<input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
+<!-- /TMPL_IF -->
           <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
           <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
           <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
@@ -245,11 +248,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <input type="hidden" name="charges" value="yes" />
                         <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
                 <!-- /TMPL_IF -->
-
-      <fieldset class="action">
-      <input type="submit" value="Check Out" />
-      </fieldset>
-</p>
+</div>
 </fieldset> 
 </form></div><!-- /TMPL_UNLESS --><!-- /unless noissues -->
 

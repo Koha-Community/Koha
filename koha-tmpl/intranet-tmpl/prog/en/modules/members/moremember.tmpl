@@ -3,6 +3,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_IF NAME="patronimages" --><script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+$(document).ready(function() {
+	$('#finesholdsissues').tabs();
+ });
 		 $(window).load(function() {
 			verify_patron_images();
 		 });
@@ -64,10 +67,11 @@ Unable to delete member: insufficient privileges.
 
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
-<!-- TMPL_IF NAME="patronimages" --><img src="/intranet-tmpl/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.jpg" alt="" border="0"  style="float: right; margin: 1em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 <h3>
     <!-- TMPL_UNLESS NAME="I" -->
-   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" --> <!-- TMPL_VAR NAME="othernames" --> <!-- /TMPL_IF -->  <p><!-- TMPL_VAR NAME="streetnumber" -->
+   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->&ldquo;<!-- TMPL_VAR NAME="othernames" -->&rdquo;<!-- /TMPL_IF -->
+
+<p class="address"><!-- TMPL_VAR NAME="streetnumber" -->
         <!--TMPL_IF NAME="roaddetails"-->
          <!-- TMPL_VAR NAME="roaddetails" -->,
         <!-- /TMPL_IF -->
@@ -76,41 +80,45 @@ Unable to delete member: insufficient privileges.
     	<!-- TMPL_IF NAME="city" --><!-- TMPL_VAR NAME="city" --><!-- /TMPL_IF -->
     	<!-- TMPL_IF NAME="zipcode" --><!-- TMPL_VAR NAME="zipcode" --><!-- /TMPL_IF --></p>
 		    
-	<p><!-- TMPL_UNLESS NAME="I"-->
-			<!-- TMPL_IF NAME="phone" --><strong>Home: </strong><!-- TMPL_VAR NAME="phone" --><br /><!-- /TMPL_IF -->
-		    <!-- TMPL_IF NAME="mobile" --><strong>Mobile:  </strong><!-- TMPL_VAR NAME="mobile" --><br /><!-- /TMPL_IF -->
-		    <!-- TMPL_IF NAME="phonepro" --><strong>Work: </strong><!-- TMPL_VAR NAME="phonepro" --><br /><!-- /TMPL_IF -->
+	<div class="rows">
+		<ol>
+		<!-- TMPL_UNLESS NAME="I"-->
+			<!-- TMPL_IF NAME="phone" --><li><span class="label">Home: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
+		    <!-- TMPL_IF NAME="mobile" --><li><span class="label">Mobile:  </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
+		    <!-- TMPL_IF NAME="phonepro" --><li><span class="label">Work: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
 		<!-- /TMPL_UNLESS -->
-		   <!-- TMPL_IF NAME="I" -->
-  <!-- TMPL_IF NAME="phonepro" --><strong>Organisation phone: </strong><!-- TMPL_VAR NAME="phonepro" --><br /><!-- /TMPL_IF -->
-  <!-- TMPL_IF NAME="emailpro" --><strong>Organisation email: </strong><!-- TMPL_VAR NAME="emailpro" --><br /><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="I" -->
+			<!-- TMPL_IF NAME="phonepro" --><li><span class="label">Organisation phone: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="emailpro" --><li><span class="label">Organisation email: </span><!-- TMPL_VAR NAME="emailpro" --></li><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="P"-->
-   <!-- TMPL_IF NAME="phone" --> <strong>Professional phone: </strong><!-- TMPL_VAR NAME="phone" --><br /><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="mobile" --><strong>Professionnal mobile: </strong><!-- TMPL_VAR NAME="mobile" --><br /><!-- /TMPL_IF -->
+   <!-- TMPL_IF NAME="phone" --><li><span class="label">Professional phone: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="mobile" --><li><span class="label">Professionnal mobile: </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->   	
-	<!-- TMPL_IF NAME="fax" --><strong>Fax: </strong><!-- TMPL_VAR NAME="fax" --><br><!-- /TMPL_IF -->
-</p>    <!-- TMPL_UNLESS NAME="I"-->
-    <p><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a><!--TMPL_IF Name="emailpro"-->, <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a><!--/TMPL_IF--></p>
+	<!-- TMPL_IF NAME="fax" --><li><span class="label">Fax: </span><!-- TMPL_VAR NAME="fax" --></li><!-- /TMPL_IF -->
+  <!-- TMPL_UNLESS NAME="I"-->
+	<!--TMPL_IF Name="email"--><li><span class="label">Email (home):</span><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li><!-- /TMPL_IF -->
+	<!--TMPL_IF Name="emailpro"--><span class="label">Email (work): </span><a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li><!--/TMPL_IF-->
     <!-- /TMPL_UNLESS -->
-    <p><strong>Initials: </strong><!-- TMPL_VAR NAME="initials" --></p>
-    <p><strong>Date of birth: </strong><!-- TMPL_VAR NAME="dateofbirth" --></p>
-    <p><strong>Sex: </strong><!-- TMPL_VAR NAME="sex" --></p><!-- /TMPL_UNLESS -->
+    <li><span class="label">Initials: </span><!-- TMPL_VAR NAME="initials" --></li>
+    <li><span class="label">Date of birth:</span><!-- TMPL_VAR NAME="dateofbirth" --></li>
+    <li><span class="label">Sex:</span><!-- TMPL_VAR NAME="sex" --></li><!-- /TMPL_UNLESS -->
     <!-- TMPL_IF NAME="printethnicityline" -->
-    <p><strong>Ethnicity: </strong><!-- TMPL_VAR NAME="ethnicity" --></p>
-    <p><strong>Ethnicity notes: </strong><!-- TMPL_VAR NAME="ethnotes" --></p>
+    <li><span class="label">Ethnicity:</span><!-- TMPL_VAR NAME="ethnicity" --></li>
+    <li><span class="label">Ethnicity notes: </span><!-- TMPL_VAR NAME="ethnotes" --></li>
     <!-- /TMPL_IF -->
    <!-- TMPL_IF name="isguarantee" -->
             <!-- TMPL_IF NAME="guaranteeloop" -->
-                <p><strong>Guarantees: </strong><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></p>
+                <li><span class="label">Guarantees:</span><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></li>
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="guarantorborrowernumber" -->
-                <p><strong>Guarantor: </strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></p>
+                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></li>
             <!-- /TMPL_IF -->
      <!-- /TMPL_IF  -->
-  
+</ol>
+</div>
     
             <!-- TMPL_IF name="guarantorborrowernumber" -->
 			<a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
@@ -123,32 +131,34 @@ Unable to delete member: insufficient privileges.
  <div class="yui-u"> 
  <div id="patron-library-details" style="padding : .5em;">
  <h3>Library use</h3>
- <ul>
-    <li><strong>Patron number: </strong><!-- TMPL_VAR NAME="borrowernumber" --></li>
-    <li><strong>Category: </strong><!-- TMPL_VAR NAME="description" --> (<!-- TMPL_VAR NAME="categorycode" -->)</li>
-    <li><strong>Registration date: </strong><!-- TMPL_VAR NAME="dateenrolled" --></li>
+<div class="rows"> 
+<ol>
+    <li><span class="label">Patron number: </span><!-- TMPL_VAR NAME="borrowernumber" --></li>
+    <li><span class="label">Category: </span><!-- TMPL_VAR NAME="description" --> (<!-- TMPL_VAR NAME="categorycode" -->)</li>
+    <li><span class="label">Registration date: </span><!-- TMPL_VAR NAME="dateenrolled" --></li>
     
-    <li><strong>Expiration date: </strong>
+    <li><span class="label">Expiration date: </span>
     <!-- TMPL_IF NAME="reregistration" -->
-            <strong class="reregistrinfo"><!-- TMPL_VAR NAME="dateexpiry" --></strong>
+            <strong class="reregistrinfo"><!-- TMPL_VAR NAME="dateexpiry" --></span>
     <!--TMPL_ELSE-->
             <!-- TMPL_VAR NAME="dateexpiry" -->
     <!-- /TMPL_IF -->
     </li>
     
-    <li><strong>Registration branch: </strong><!-- TMPL_VAR NAME="branchname" --></li>
+    <li><span class="label">Registration branch: </span><!-- TMPL_VAR NAME="branchname" --></li>
 
-    <!-- TMPL_IF NAME="sort1" --><li><strong>Sort field 1: </strong><!-- TMPL_VAR NAME="sort1" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="sort2" --><li><strong>Sort field 2: </strong><!-- TMPL_VAR NAME="sort2" --></li><!-- /TMPL_IF -->
-    <li><strong>OPAC login: </strong><!-- TMPL_VAR name="userid" --></li>
+    <!-- TMPL_IF NAME="sort1" --><li><span class="label">Sort field 1: </span><!-- TMPL_VAR NAME="sort1" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="sort2" --><li><span class="label">Sort field 2:</span><!-- TMPL_VAR NAME="sort2" --></li><!-- /TMPL_IF -->
+    <li><span class="label">OPAC login: </span><!-- TMPL_VAR name="userid" --></li>
     <!-- TMPL_IF NAME="password" -->
-  <li><strong>OPAC password: </strong>*******</li>
+  <li><span class="label">OPAC password: </span>*******</li>
    <!--TMPL_ELSE -->
-  <li><strong>OPAC password: </strong><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
+  <li><span class="label">OPAC password: </span><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
    <!--/TMPL_IF --> 
-  <!-- TMPL_IF NAME="borrowernotes" --><li><strong>Circulation notes: </strong><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="opacnote" --><li><strong>Message to Patron: </strong><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
-	</ul>
+  <!-- TMPL_IF NAME="borrowernotes" --><li><span class="label">Circulation notes: </span><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacnote" --><li><span class="label">Message to Patron:</span><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
+	</ol>
+	</div>
             <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
  </div>
  
@@ -175,7 +185,15 @@ Unable to delete member: insufficient privileges.
  
 </div>
 </div>
-<div id="patrons-fines-and-charges" class="yui-g">
+
+<div id="finesholdsissues" class="toptabs">
+	<ul>
+		<li><a href="#finesandcharges">Fines &amp; Charges</a></li>
+		<li><a href="#checkedout">Checked Out</a></li>
+		<li><a href="#onhold">On Hold</a></li>
+	</ul>
+	
+<div id="finesandcharges">
     <h2>Fines and Charges</h2>
     <!-- TMPL_IF EXPR="totaldue eq 0.00" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
@@ -184,7 +202,7 @@ Unable to delete member: insufficient privileges.
     <!-- /TMPL_IF -->
 </div>
 
-<div id="patrons-items-on-loan" class="yui-g">
+<div id="checkedout">
     <h2>Items on loan</h2>
     <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
         <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -256,7 +274,7 @@ Unable to delete member: insufficient privileges.
     </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
 	</div>
 	
-<div id="patrons-items-reserved" class="yui-g">
+<div id="onhold">
 	<h2>Patron current holds</h2>
 <!-- TMPL_IF NAME="reservloop" -->
 <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
@@ -317,13 +335,14 @@ Unable to delete member: insufficient privileges.
 	<p>Patron has nothing on hold.</p>
 	<!-- /TMPL_IF -->
 	</div>
-
+</div>
 <!-- /TMPL_IF --> <!-- unknowuser -->
+
 
 </div>
 </div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

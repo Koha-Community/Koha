@@ -471,7 +471,7 @@ div.patroninfo {
 div.patroninfo h5 {
 	border-right :  1px solid #000;
 	margin-bottom : 0;
-	padding-left : .5em;
+	padding-left : -.5em;
 	padding-top : .3em;
 	padding-bottom : .5em;
 }
@@ -480,7 +480,7 @@ div.patroninfo ul {
 	border-right : 1px solid #000;
 	border-bottom : 0;
 	border-top : 0;
-	padding-bottom : .5em;
+	padding : 0 0 .5em 0;
 }
 
 div.patroninfo ul li, div.patronviews ul li {
@@ -638,6 +638,42 @@ fieldset.action {
 	margin : 0;
 	padding : 1em 0 .3em 0;
 	width : auto;
+}
+
+div.rows {
+float : left;
+clear : left;
+margin: 0 0 0 0;  
+padding: 0;
+width: 100%; 
+}
+
+
+div.rows span.label {  
+	float: left;  
+	font-weight : bold;
+	width: 7em;  
+	margin-right: 1em;  
+	text-align: left;
+}
+
+div.rows ol {  
+padding: .5em 1em 0 0;  
+list-style-type: none;
+}
+
+div.rows ol li li {
+	border-bottom: 0;
+}
+
+div.rows li {
+border-bottom :  1px solid #EEE;
+float : left;
+clear : left;
+padding-bottom: .1em;
+padding-top: .1em;
+list-style-type: none;
+width: 100%; 
 }
 
 a.cancel {
@@ -1108,4 +1144,32 @@ h1#logo a {
 
 .patroninfo+#menu {
 	margin-right : 0;
+}
+
+.barcode {
+	font-size :  200%;
+}
+
+#libraryuse table, #libraryuse td, #libraryuse th, #patrondetails table, #patrondetails td, #patrondetails th {
+	border: 0;
+}
+
+#libraryuse th[scope=row], #patrondetails th[scope=row] {
+	background-color: transparent;
+}
+
+.email {
+font-size :  87%;
+width : 15em;
+margin: 0;
+padding: 0;
+overflow :  hidden;
+}
+
+.address {
+	font-size: 110%;
+}
+
+#circ_circulation_issue .date-select label {
+	font-weight: normal;
 }
