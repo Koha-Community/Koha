@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #
 # This file reads a SIPServer xml-format configuration file and dumps it
 # to stdout.  Just to see what the structures look like.
