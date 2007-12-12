@@ -132,7 +132,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'BKS', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'BKS', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'BKS', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'BKS', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'BKS', '', '', NULL),
@@ -164,7 +164,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'BKS', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'BKS', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'BKS', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'BKS', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'BKS', '', '', NULL),
@@ -4050,7 +4050,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'CF', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'CF', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'CF', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'CF', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'CF', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'CF', '', '', NULL),
@@ -4082,7 +4082,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'CF', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'CF', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'CF', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'CF', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'CF', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'CF', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'CF', '', '', NULL),
@@ -7969,7 +7969,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'SR', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'SR', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'SR', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'SR', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'SR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'SR', '', '', NULL),
@@ -8001,7 +8001,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'SR', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'SR', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'SR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'SR', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'SR', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'SR', '', '', NULL),
@@ -11887,7 +11887,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'VR', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'VR', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'VR', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'VR', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'VR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'VR', '', '', NULL),
@@ -11919,7 +11919,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'VR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'VR', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'VR', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'VR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'VR', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'VR', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'VR', '', '', NULL),
@@ -15804,7 +15804,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'AR', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'AR', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'AR', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'AR', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'AR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'AR', '', '', NULL),
@@ -15836,7 +15836,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'AR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'AR', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'AR', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'AR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'AR', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'AR', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'AR', '', '', NULL),
@@ -19720,7 +19720,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'KT', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'KT', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'KT', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'KT', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'KT', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'KT', '', '', NULL),
@@ -19752,7 +19752,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'KT', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'KT', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'KT', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'KT', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'KT', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'KT', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'KT', '', '', NULL),
@@ -23637,7 +23637,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'IR', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'IR', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'IR', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'IR', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'IR', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'IR', '', '', NULL),
@@ -23669,7 +23669,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'IR', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'IR', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'IR', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'IR', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'IR', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'IR', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'IR', '', '', NULL),
@@ -27552,7 +27552,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('942', '0', 'Koha issues (borrowed), all copies', 'Koha issues (borrowed), all copies', 0, 0, 'biblioitems.totalissues', 9, '', '', '', NULL, -5, 'SER', '', '', NULL),
-		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, '', '', '', NULL, 0, 'SER', '', '', NULL),
+		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, 'SER', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, 'SER', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, 'SER', '', '', NULL),
 		('942', 'c', 'Item type', 'Item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, 'SER', '', '', NULL),
@@ -27584,7 +27584,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('952', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WITHDRAWN', '', '', 0, 0, 'SER', '', '', NULL),
 		('952', '1', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, 'SER', '', '', NULL),
-		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, '', '', '', NULL, 0, 'SER', '', '', NULL),
+		('952', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'items.cn_source', 10, 'cn_source', '', '', NULL, 0, 'SER', '', '', NULL),
 		('952', '3', 'Materials specified (bound volume or other part)', 'Materials specified (bound volume or other part)', 0, 0, 'items.materials', 10, '', '', '', NULL, -1, 'SER', '', '', NULL),
 		('952', '4', 'Damaged status', 'Damaged status', 0, 0, 'items.damaged', 10, 'DAMAGED', '', '', NULL, 0, 'SER', '', '', NULL),
 		('952', '5', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, 'SER', '', '', NULL),

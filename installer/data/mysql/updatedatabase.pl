@@ -765,6 +765,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.035";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE marc_subfield_structure
+              SET authorised_value = 'cn_source'
+              WHERE kohafield IN ('items.cn_source', 'biblioitems.cn_source')
+              AND (authorised_value is NULL OR authorised_value = '')");
+    print "Upgrade to $DBversion done (MARC frameworks: make classification source a drop-down)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
