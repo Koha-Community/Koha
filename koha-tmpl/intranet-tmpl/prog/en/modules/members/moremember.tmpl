@@ -64,12 +64,12 @@ Unable to delete member: insufficient privileges.
 
 <!-- /TMPL_IF -->
 
-
+<h3><!-- TMPL_UNLESS NAME="I" -->
+   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3>
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
-<h3>
-    <!-- TMPL_UNLESS NAME="I" -->
-   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->&ldquo;<!-- TMPL_VAR NAME="othernames" -->&rdquo;<!-- /TMPL_IF -->
+
+     <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->&ldquo;<!-- TMPL_VAR NAME="othernames" -->&rdquo;<!-- /TMPL_IF -->
 
 <p class="address"><!-- TMPL_VAR NAME="streetnumber" -->
         <!--TMPL_IF NAME="roaddetails"-->
@@ -119,17 +119,17 @@ Unable to delete member: insufficient privileges.
      <!-- /TMPL_IF  -->
 </ol>
 </div>
-    
-            <!-- TMPL_IF name="guarantorborrowernumber" -->
-			<a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
+</div>    
+          <div class="action">  <!-- TMPL_IF name="guarantorborrowernumber" -->
+			<a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
 			<!-- TMPL_ELSE -->
-            <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
-			<!-- /TMPL_IF -->
-</div>
+            <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
+			<!-- /TMPL_IF --></div>
+
 
 </div>
  <div class="yui-u"> 
- <div id="patron-library-details" style="padding : .5em;">
+ <div id="patron-library-details">
  <h3>Library use</h3>
 <div class="rows"> 
 <ol>
@@ -159,10 +159,10 @@ Unable to delete member: insufficient privileges.
     <!-- TMPL_IF NAME="opacnote" --><li><span class="label">Message to Patron:</span><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
 	</ol>
 	</div>
-            <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a>
  </div>
+            <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a></div>
  
- <div id="patron-alternate-address" style="padding : .5em;">
+ <div id="patron-alternate-address" style="padding-top: 1em;">
     <h3>Alternate Address</h3>
     <!-- TMPL_UNLESS NAME="I"-->
       <!-- TMPL_UNLESS NAME="C"-->
@@ -171,17 +171,15 @@ Unable to delete member: insufficient privileges.
       <!-- TMPL_VAR NAME="B_zipcode" --></p>
   <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
- 
+ <!-- TMPL_IF NAME="C" -->C!<!-- TMPL_ELSE -->Not C.<!-- /TMPL_IF -->
      <!-- TMPL_IF NAME="C" -->
-    <p><strong>Name: </strong><!-- TMPL_VAR NAME="contactname" --></p>
-    <p><strong>Firstname: </strong><!-- TMPL_VAR NAME="firstname" --></p>    
-    <p><strong>Phone: </strong><!-- TMPL_VAR NAME="phone" --></p>
-    <p><strong>Email: </strong><!-- TMPL_VAR NAME="email" --></p>
-    <p><strong>Relationship: </strong><!-- TMPL_VAR NAME="relationship" --></p>
+   <div class="rows"> <ol><li><span class="label">Name: </span><!-- TMPL_VAR NAME="contactname" --></li>
+    <li><span class="label">Firstname: </span><!-- TMPL_VAR NAME="firstname" --></li>    
+    <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="phone" --></li>
+    <li><span class="label">Email: </span><!-- TMPL_VAR NAME="email" --></li>
+    <li><span class="label">Relationship: </span><!-- TMPL_VAR NAME="relationship" --></li></ol></div>
    <!-- /TMPL_IF -->
-       
-    <a class="member-edit" href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a>
-</div>
+</div><div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a></div>
  
 </div>
 </div>

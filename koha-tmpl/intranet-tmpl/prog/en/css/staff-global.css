@@ -631,7 +631,7 @@ fieldset.rows label.yesno {
 	width : auto;
 }
 
-fieldset.action {
+fieldset.action, div.action {
 	clear : both;
 	float : none;
 	border : none;
@@ -652,7 +652,7 @@ width: 100%;
 div.rows span.label {  
 	float: left;  
 	font-weight : bold;
-	width: 7em;  
+	width: 9em;  
 	margin-right: 1em;  
 	text-align: left;
 }
@@ -670,7 +670,7 @@ div.rows li {
 border-bottom :  1px solid #EEE;
 float : left;
 clear : left;
-padding-bottom: .1em;
+padding-bottom: .2em;
 padding-top: .1em;
 list-style-type: none;
 width: 100%; 
@@ -1150,14 +1150,6 @@ h1#logo a {
 	font-size :  200%;
 }
 
-#libraryuse table, #libraryuse td, #libraryuse th, #patrondetails table, #patrondetails td, #patrondetails th {
-	border: 0;
-}
-
-#libraryuse th[scope=row], #patrondetails th[scope=row] {
-	background-color: transparent;
-}
-
 .email {
 font-size :  87%;
 width : 15em;
@@ -1173,3 +1165,15 @@ overflow :  hidden;
 #circ_circulation_issue .date-select label {
 	font-weight: normal;
 }
+
+.clearfix:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
