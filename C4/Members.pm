@@ -705,7 +705,8 @@ sub AddMember {
 	# 	print "Executing SQL: $query\n";
     $sth->execute;
     $sth->finish;
-    # $data{'borrowernumber'} = $dbh->{'mysql_insertid'}; 	# unneeded w/ autoincrement ?
+    $data{'borrowernumber'} = $dbh->{'mysql_insertid'}; 	# unneeded w/ autoincrement ?  
+	# mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","CREATE",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
