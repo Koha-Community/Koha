@@ -30,7 +30,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;
-	$VERSION = 3.01;	# set the version for version checking
+	$VERSION = 3.02;	# set the version for version checking
 	$debug = $ENV{DEBUG} || 0;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw( checkpw_ldap );
@@ -38,7 +38,7 @@ BEGIN {
 
 # Redefine checkpw_ldap:
 # connect to LDAP (named or anonymous)
-# ~ retrieves $userid from "uid"
+# ~ retrieves $userid from KOHA_CONF mapping
 # ~ then compares $password with userPassword 
 # ~ then gets the LDAP entry
 # ~ and calls the memberadd if necessary
@@ -77,7 +77,8 @@ sub checkpw_ldap {
     my ($dbh, $userid, $password) = @_;
     my $db = Net::LDAP->new([$prefhost]);
 	#$debug and $db->debug(5);
-	my $filter = Net::LDAP::Filter->new("uid=$userid") or die "Failed to create new Net::LDAP::Filter";
+	my $uid_field = $mapping{userid}->{is} or die ldapserver_error("mapping for 'userid'");
+	my $filter = Net::LDAP::Filter->new("$uid_field=$userid") or die "Failed to create new Net::LDAP::Filter";
     my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
     if ($res->code) {		# connection refused
         warn "LDAP bind failed as $ldapname: " . description($res);
