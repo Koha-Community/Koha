@@ -797,7 +797,7 @@ sub userenv
     if ($context->{"dbh"} && $context->preference('insecure')) {
         my %insecure;
         $insecure{flags} = '16382';
-        $insecure{branchname} ='Insecure',
+        $insecure{branchname} ='Insecure';
         $insecure{number} ='0';
         $insecure{cardnumber} ='0';
         $insecure{id} = 'insecure';
