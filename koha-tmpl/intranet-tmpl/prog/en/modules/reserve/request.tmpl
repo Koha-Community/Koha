@@ -340,7 +340,7 @@ if (alreadyreserved > "0"){
         </td>
         <td>
     <!-- TMPL_IF Name="wait" -->
-          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->&amp;type='intra'" onclick="openWindow(this, 'Item', 480, 640); return false;">
+          <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->">
                 <!-- TMPL_IF NAME="barcodenumber" -->
                     <!-- TMPL_VAR NAME="barcodenumber" -->
                     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
