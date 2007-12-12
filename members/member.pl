@@ -31,6 +31,9 @@ use C4::Members;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
+my $startfrom = $input->param('startfrom')||1;
+my $resultsperpage = $input->param('resultsperpage')||10;
+
 my ($template, $loggedinuser, $cookie);
 if($quicksearch){
     ($template, $loggedinuser, $cookie)
@@ -80,7 +83,8 @@ else
 
 my @resultsdata;
 my $toggle = 0;
-for (my $i=0; $i < $count; $i++){
+my $to=($count>($startfrom*$resultsperpage)?$startfrom*$resultsperpage:$count);
+for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
   #find out stats
   my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
 
@@ -110,6 +114,28 @@ for (my $i=0; $i < $count; $i++){
   if ( $toggle ) { $toggle = 0; } else {$toggle = 1; }
   push(@resultsdata, \%row);
 }
+my $base_url =
+    'member.pl?&amp;'
+  . join(
+    '&amp;',
+    map { $_->{term} . '=' . $_->{val} } (
+        { term => 'member', val => $member},
+        { term => 'orderby', val => $orderby },
+        { term => 'resultsperpage', val => $resultsperpage },
+        { term => 'type',           val => 'intranet' },
+    )
+  );
+
+$template->param(
+    paginationbar => pagination_bar(
+        $base_url,  int( $count / $resultsperpage ) + 1,
+        $startfrom, 'startfrom'
+    ),
+    startfrom => $startfrom,
+    from      => ($startfrom-1)*$resultsperpage+1,  
+    to        => $to,
+    multipage => ($count != $to || $startfrom!=1),
+);
 
 $template->param( 
         searching       => "1",

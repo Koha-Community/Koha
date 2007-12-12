@@ -50,8 +50,10 @@
 
 <!-- TMPL_IF NAME="resultsloop" -->
     <h3>Results for Search: <span class="ex"><!-- TMPL_VAR NAME="member" --></span></h3>
-	<div class="results"><!-- TMPL_VAR Name ="numresults" --> patrons found</div>
+	<div class="results"><!-- TMPL_VAR Name ="numresults" --> patrons found<br/>
+  Page : <!-- TMPL_VAR Name ="startfrom" --> Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --></div>
 <div class="searchresults">
+<p align="center"><!--TMPL_IF Name="multipage"--><!--TMPL_VAR Name="paginationbar" --><!--/TMPL_IF--></p>
     <table>
     <tr>
     <th><a href="member.pl?member=<!--TMPL_VAR Name="member" -->&amp;orderby=cardnumber">Card</a></th>
