@@ -48,15 +48,16 @@ must also add plpgsql to the koha database.
 
 Default installation instructions:
 
-0. export DB_PASS=thePasswordYouChose
 1. perl Makefile.PL
+  (you will be prompted to answer a number of questions)
 2. make
-3. sudo make install
-4. ln -s /usr/share/koha/etc/koha-httpd.conf /etc/apache2/sites-available/koha
-5. a2enmod rewrite
-6. a2ensite koha && /etc/init.d/apache2 reload
-7. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
-8. Browse to http://servername:8080/ and answer the questions
+3.(optional) make test 
+4. sudo make install
+5. ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
+6. a2enmod rewrite
+7. a2ensite koha && /etc/init.d/apache2 reload
+8. zebrasrv -c /usr/share/koha/etc/koha-conf.xml
+9. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
 replace steps 1-3 with "perl install-CPAN.pl" but this is non-standard and
@@ -64,11 +65,8 @@ may not be safe.  Nevertheless, it's pretty cool when it works.
 
 The defaults will install Koha to places that follow relevant standards,
 such as the File Hierarchy Standard.  If you want to install Koha to a
-different directory like /opt/koha, then replace step 1 with:
-1a. export PREFIX=/opt/koha
-1b. export CGI_DIR=/opt/koha/cgi
-1c. export LOG_DIR=/opt/koha/log
-1d. perl Makefile.PL PREFIX=/opt/koha
+different directory like /opt/koha, then replace step 1 with (for example):
+1. perl Makefile.PL INTRANET_CGI_DIR=/www/cgi-bin
 
 You can change most of the defaults in a similar way, such as DB_HOST.
 For full instructions on how to override the default settings, run
