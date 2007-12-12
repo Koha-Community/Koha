@@ -221,6 +221,7 @@ else {
                     $row_data{toggle}       = $toggle;
                     $row_data{server}       = $serverhost[$k];
                     $row_data{isbn}         = $oldbiblio->{isbn};
+                    $row_data{lccn}         = $oldbiblio->{lccn};
                     $row_data{title}        = $oldbiblio->{title};
                     $row_data{author}       = $oldbiblio->{author};
                     $row_data{breedingid}   = $breedingid;
