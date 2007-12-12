@@ -3906,7 +3906,18 @@ sub _koha_modify_item {
 
 	# calculate items.cn_sort
     if($item->{'itemcallnumber'}) {
-		$item->{'cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
+        # This works, even when user is setting the call number blank (in which case
+        # how would we get here to calculate new (blank) of items.cn_sort?).
+        # 
+        # Why?  Because at present the only way to update itemcallnumber is via
+        # additem.pl; since it uses a MARC data-entry form, TransformMarcToKoha
+        # already has created $item->{'items.cn_sort'} and set it to undef because the 
+        # subfield for items.cn_sort in the framework is specified as ignored, meaning
+        # that it is not supplied or passed to the form.  Thus, if the user has
+        # blanked itemcallnumber, there is already a undef value for $item->{'items.cn_sort'}.
+        #
+        # This is subtle; it is also fragile.
+		$item->{'items.cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
 	}
     my $query = "UPDATE items SET ";
 	my @bind;
