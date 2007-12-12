@@ -19,6 +19,7 @@
     <!-- TMPL_IF NAME="author"--><p><strong>Author:</strong> <!-- TMPL_VAR NAME="author"--></p><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="isbn"--><p><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn"--></p><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="issn"--><p><strong>ISSN:</strong> <!-- TMPL_VAR NAME="issn"--></p><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="lccn"--><p><strong>LCCN:</strong> <!-- TMPL_VAR NAME="lccn"--></p><!-- /TMPL_IF -->
     
 <!-- TMPL_IF name="opsearch" -->
     
@@ -30,6 +31,7 @@
     <input type="hidden" name="author" value="<!-- TMPL_VAR NAME="author" -->" />
     <input type="hidden" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" />
     <input type="hidden" name="issn" value="<!-- TMPL_VAR NAME="issn" -->" />
+    <input type="hidden" name="lccn" value="<!-- TMPL_VAR NAME="lccn" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <ol>
@@ -53,6 +55,7 @@
         <th>Title</th>
         <th>Author</th>
         <th>ISBN</th>
+        <th>LCCN</th>
         <th>&nbsp;</th>
     </tr>
     <!-- TMPL_IF name="breeding_loop" -->
@@ -64,6 +67,7 @@
             <td><!-- TMPL_VAR NAME="title" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
+            <td><!-- TMPL_VAR NAME="lccn" --></td>
             <td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->

@@ -264,12 +264,14 @@ sub GetMandatoryFieldZ3950($){
     my @title  = GetMarcFromKohaField('biblio.title',$frameworkcode);
     my @author = GetMarcFromKohaField('biblio.author',$frameworkcode);
     my @issn   = GetMarcFromKohaField('biblioitems.issn',$frameworkcode);
+    my @lccn   = GetMarcFromKohaField('biblioitems.lccn',$frameworkcode);
     
     return {
         $isbn[0].$isbn[1]     => 'isbn',
         $title[0].$title[1]   => 'title',
         $author[0].$author[1] => 'author',
         $issn[0].$issn[1]     => 'issn',
+        $lccn[0].$lccn[1]     => 'lccn',
     };
 }
 

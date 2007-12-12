@@ -39,6 +39,7 @@ my $title         = $input->param('title');
 my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');
 my $issn          = $input->param('issn');
+my $lccn          = $input->param('lccn');
 my $random        = $input->param('random');
 my $op            = $input->param('op');
 my $noconnection;
@@ -88,6 +89,7 @@ if ( $op ne "do_search" ) {
     $template->param(
         isbn         => $isbn,
         issn         => $issn,
+        lccn         => $lccn,
         title        => $title,
         author       => $author,
         serverloop   => $serverloop,
@@ -106,6 +108,10 @@ else {
         $attr = '1=7';
         $term = $isbn if ($isbn);
         $term = $issn if ($issn);
+    }
+    elsif ($lccn) {
+        $attr = '1=9';
+        $term = $lccn;
     }
     elsif ($title) {
         $attr = '1=4 ';

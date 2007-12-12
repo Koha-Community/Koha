@@ -44,13 +44,13 @@ function PopupZ3950() {
     if(strQuery){
         window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     } else {
-        var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n");    
+        var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n LCCN\n");    
         alert(strAlert);
     }
 }
 
 /**
- * check if mandatory subfields are writed
+ * check if mandatory subfields are written
  */
 function AreMandatoriesNotOk(){
     var mandatories = new Array();
@@ -114,7 +114,7 @@ function AreZ3950MandoriesOk(){
             strQuery += "&"+mandatories_label[i]+"="+field_value;
         }
     }
-    if(error < 4){
+    if(error < 5){
         return strQuery;
     } else {
         return false;
