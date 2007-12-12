@@ -178,12 +178,10 @@ Directory for Zebra's data files.
 
 Directory for Zebra's UNIX-domain sockets.
 
-=item EXAMPLE_DIR
+=item MISC_DIR
 
-Directory for example configuration files.  This directory
-exists primarily to make it easier to change the
-MARC format or language of the active Zebra
-indexes.
+Directory for for miscellaenous scripts, among other
+things the translation toolkit and RSS feed tools.
 
 =item SCRIPT_DIR
 
@@ -232,13 +230,13 @@ my $target_map = {
   './edithelp.pl'               => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
-  './help.pl'                   => 'NONE', # FIXME
+  './help.pl'                   => 'INTRANET_CGI_DIR', 
   './installer-CPAN.pl'         => 'NONE',
   './installer'                 => 'INTRANET_CGI_DIR',
   './koha-tmpl/errors'          => {target => 'INTRANET_CGI_DIR', trimdir => 2},
   './koha-tmpl/intranet-tmpl'   => {target => 'INTRANET_TMPL_DIR', trimdir => -1},
   './koha-tmpl/opac-tmpl'       => {target => 'OPAC_TMPL_DIR', trimdir => -1},
-  './kohaversion.pl'            => 'INTRANET_CGI_DIR', # FIXME this may need to be in OPAC_CGI_DIR as well, with an update to C4::Context
+  './kohaversion.pl'            => 'INTRANET_CGI_DIR', 
   './labels'                    => 'INTRANET_CGI_DIR',
   './mainpage.pl'               => 'INTRANET_CGI_DIR',
   './Makefile.PL'               => 'NONE',
@@ -247,7 +245,7 @@ my $target_map = {
   './misc'                      => { target => 'SCRIPT_DIR', trimdir => -1 }, 
   './misc/info'                 => { target => 'DOC_DIR', trimdir => 2 },
   './misc/release notes'        => { target => 'DOC_DIR', trimdir => 2 },
-  './misc/translator'           => { target => 'EXAMPLE_DIR', trimdir => 2 }, 
+  './misc/translator'           => { target => 'MISC_DIR', trimdir => 2 }, 
   './misc/installer_devel_notes' => 'NONE',
   './opac'                      => 'OPAC_CGI_DIR',
   './README.txt'                => 'NONE',
@@ -256,7 +254,7 @@ my $target_map = {
   './reviews'                   => 'INTRANET_CGI_DIR',
   './rewrite-config.PL'         => 'NONE',
   './reviews'                   => 'INTRANET_CGI_DIR',
-  './rss'                       => 'NONE', # FIXME deal with a little later
+  './rss'                       => 'MISC_DIR', 
   './serials'                   => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
   './skel/var/log/koha'         => { target => 'LOG_DIR', trimdir => -1 },
@@ -275,7 +273,9 @@ my $target_map = {
   './suggestion'                => 'INTRANET_CGI_DIR',
   './svc'                       => 'INTRANET_CGI_DIR',
   './t'                         => 'NONE',
-  './tmp'                       => 'NONE', # FIXME deal with later
+  './tmp'                       => 'NONE', # FIXME need to determine whether 
+                                           # Koha generates any persistent temp files
+                                           # that should go in /var/tmp/koha
   './tools'                     => 'INTRANET_CGI_DIR',
   './virtualshelves'            => 'INTRANET_CGI_DIR',
   # ignore files and directories created by the install itself
@@ -303,6 +303,30 @@ Koha from a git clone with no fuss).
 Directory under which most components will go.  Default
 value will vary depending on INSTALL_MODE.
 
+=item DB_TYPE
+
+Type of DBMS (e.g., mysql or Pg).
+
+=item DB_HOST
+
+Name of DBMS server.
+
+=item DB_PORT
+
+Port that DBMS server is listening on.
+
+=item DB_NAME
+
+Name of the DBMS database for Koha.
+
+=item DB_USER
+
+Name of DBMS user account for Koha's database.
+
+=item DB_PASS
+
+Pasword of DMBS user account for Koha's database.
+
 =item INSTALL_ZEBRA
 
 Whether to install Zebra configuration files and data
@@ -316,6 +340,22 @@ Specifies format of MARC records to be indexed by Zebra.
 
 Specifies primary language of records that will be 
 indexed by Zebra.
+
+=item ZEBRA_USER
+
+Internal Zebra user account for the index.
+
+=item ZEBRA_PASS
+
+Internal Zebra user account's password.
+
+=item KOHA_USER
+
+System user account that will own Koha's files.
+
+=item KOHA_GROUP
+
+System group that will own Koha's files.
 
 =back
 
@@ -349,8 +389,8 @@ my %valid_config_values = (
 );
 
 my %config = get_configuration(\%config_defaults, \%valid_config_values);
-my %target_directories = get_target_directories(\%config);
-display_configuration(\%config, \%target_directories);
+my ($target_directories, $skip_directories) = get_target_directories(\%config);
+display_configuration(\%config, $target_directories);
 my $file_map = {};
 get_file_map($target_map, $dirtree, $file_map, $config{'INSTALL_ZEBRA'} eq "yes" ? 1: 0);
 
@@ -372,7 +412,7 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
 WriteMakefile(
     NAME => 'koha',
     #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
-    VERSION_FROM => 'C4/Context.pm',
+    VERSION_FROM => 'kohaversion.pl',
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
@@ -407,6 +447,7 @@ WriteMakefile(
 'MIME::Base64' => 3.07,
 'MIME::QuotedPrint' => 3.07,
 'Mail::Sendmail' => 0.79,
+'Net::Z3950::ZOOM' => 1.16,
 'PDF::API2' => 2.000,
 'PDF::API2::Page' => 2.000,
 'PDF::API2::Util' => 2.000,
@@ -429,35 +470,17 @@ WriteMakefile(
 'XML::SAX::ParserFactory' => 1.01,
 'XML::Simple' => 2.14,
 'XML::RSS' => 1.31,
-'ZOOM' => 1.16,
         },
 
 	# File tree mapping
 	PM => $file_map,
 
     # Man pages generated from POD
-    INSTALLMAN1DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man1'),
-    INSTALLMAN3DIR => File::Spec->catdir($target_directories{'MAN_DIR'}, 'man3'),
-
-#   CONFIGURE => sub {
-#     # Ask for options with prompt($question,$default) calls here?
-#     return { macro => { 'export TEST' => '755' } }
-#     },
+    INSTALLMAN1DIR => File::Spec->catdir($target_directories->{'MAN_DIR'}, 'man1'),
+    INSTALLMAN3DIR => File::Spec->catdir($target_directories->{'MAN_DIR'}, 'man3'),
 
    PL_FILES => $pl_files,
 
-#     'opac/getfromintranet.PL' => ['$(INST_LIBDIR)/opac/cgi-bin/detail.pl','$(INST_LIBDIR)/opac/cgi-bin/moredetail.pl','$(INST_LIBDIR)/opac/cgi-bin/search.pl','$(INST_LIBDIR)/opac/cgi-bin/subjectsearch.pl','$(INST_LIBDIR)/opac/cgi-bin/logout.pl'],
-#     'misc/koha.conf.PL' => '$(INST_LIBDIR)/../etc/koha.conf',
-#     'misc/apache-koha.conf.PL' => '$(INST_LIBDIR)/../etc/apache-koha.conf',
-#     'misc/koha.sql.PL' => '$(INST_LIBDIR)/intranet/scripts/koha.sql',
-#     'z3950/z3950-daemon-options.PL' => '$(INST_LIBDIR)/intranet/scripts/z3950daemon/z3950-daemon-options',
-#     # fake target to check permissions
-#     'misc/chmod.PL' => '$(INST_LIBDIR)/fake-target'
-#     }
-   # need to set ownerships
-   # need to load koha.sql
-   # need to link koha-httpd.conf
-   # need to start z3950-daemon
 );
 
 =head1 FUNCTIONS
@@ -826,6 +849,10 @@ sub _get_value {
 Creates a hash mapping from symbols for installation target
 directories to actual directory paths.
 
+Also returns a hash indicating targets for which 
+files need not be copied -- this is used for the 'dev'
+mode installation, where some files are installed in place.
+
 =cut
 
 sub get_target_directories {
@@ -841,6 +868,7 @@ sub get_target_directories {
     my $package = pop @basedir;
 
     my %dirmap = ();
+    my %skipdirs = ();
     if ($mode eq 'single') {
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'cgi-bin');
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir(@basedir, $package, 'intranet', 'htdocs', 'intranet-tmpl');
@@ -851,7 +879,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
-        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
@@ -862,16 +890,24 @@ sub get_target_directories {
     } elsif ($mode eq 'dev') {
         my $curdir = File::Spec->rel2abs(File::Spec->curdir());
         $dirmap{'INTRANET_CGI_DIR'} = File::Spec->catdir($curdir);
+        $skipdirs{'INTRANET_CGI_DIR'} = 1;
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
+        $skipdirs{'INTRANET_TMPL_DIR'} = 1;
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
+        $skipdirs{'INTRANET_WWW_DIR'} = 1;
         $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir($curdir, 'opac');
+        $skipdirs{'OPAC_CGI_DIR'} = 1;
         $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
+        $skipdirs{'OPAC_TMPL_DIR'} = 1;
         $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
+        $skipdirs{'OPAC_WWW_DIR'} = 1;
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir($curdir);
+        $skipdirs{'PERL_MODULE_DIR'} = 1;
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
-        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $skipdirs{'SCRIPT_DIR'} = 1;
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
@@ -889,7 +925,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
-        $dirmap{'EXAMPLE_DIR'} = File::Spec->catdir(@basedir, $package, 'example');
+        $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
@@ -901,7 +937,7 @@ sub get_target_directories {
 
     _get_argv_overrides(\%dirmap);
 
-    return %dirmap;
+    return \%dirmap, \%skipdirs;
 }
 
 sub _get_argv_overrides {
@@ -951,21 +987,22 @@ sub install {
     # NOTE: we're *not* doing this: my $install = $self->SUPER::install(@_);
     # This means that we're completely overriding EU::MM's default
     # installation and uninstallation targets.
-    foreach my $key (sort keys %target_directories) {
+    foreach my $key (sort keys %$target_directories) {
         $install .= qq(
 KOHA_INST_$key = blib/$key
-KOHA_DEST_$key = $target_directories{$key}
-) unless $config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/;
+KOHA_DEST_$key = $target_directories->{$key}
+) unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
     }
 
     $install .= qq(
-install :: all install_koha set_koha_ownership
+install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_env_vars
 \t\$(NOECHO) \$(NOOP)
 );
     $install .= "install_koha ::\n";      
     $install .= "\t\$(NOECHO) umask 022; \$(MOD_INSTALL) \\\n";
-    foreach my $key (sort keys %target_directories) {
-        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" unless $config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/;
+    foreach my $key (sort keys %$target_directories) {
+        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" 
+            unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
     }
     $install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
     $install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
@@ -973,12 +1010,37 @@ install :: all install_koha set_koha_ownership
     $install .= "\n";
     $install .= "set_koha_ownership ::\n";
     if ($config{'INSTALL_MODE'} eq 'standard' and $config{'KOHA_USER'} ne "root") {
-        foreach my $key (sort keys %target_directories) {
-            $install .= "\tchown -R $config{'KOHA_USER'}:$config{'KOHA_GROUP'} \$(KOHA_DEST_$key)\n";
+        foreach my $key (sort keys %$target_directories) {
+            $install .= "\t\$(NOECHO) chown -R $config{'KOHA_USER'}:$config{'KOHA_GROUP'} \$(KOHA_DEST_$key)\n"
+                unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
         }
     } else {
         $install .= "\t\t\$(NOECHO) \$(NOOP)\n\n";
     }
+
+    $install .= "\n";
+    $install .= "set_koha_permissions ::\n";
+    # This is necessary because EU::MM installs files
+    # as either 0444 or 0555, and we want the owner
+    # of Koha's files to have write permission by default.
+    foreach my $key (sort keys %$target_directories) {
+        $install .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_$key)\n"
+            unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+    }
+    $install .= "\n";
+
+    $install .= "warn_koha_env_vars ::\n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) Koha\\'s files have now been installed. \n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) In order to use Koha\\'s command-line batch jobs,\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) you should set the following environment variables:\n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) export KOHA_CONF=\$(KOHA_DEST_KOHA_CONF_DIR)/koha-conf.xml\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) export PERL5LIB=$target_directories->{'PERL_MODULE_DIR'}\n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) For other post-installation tasks, please consult the README.\n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
 
     return $install;
 }
@@ -988,7 +1050,7 @@ sub postamble {
     # so that Make will export as environment
     # variables -- this is for the use of
     # rewrite-confg.PL
-    my $env = join("\n", map { "export __${_}__ = $target_directories{$_}" } keys %target_directories); 
+    my $env = join("\n", map { "export __${_}__ = $target_directories->{$_}" } keys %$target_directories); 
     $env .= "\n\n";
     $env .= join("\n", map { "export __${_}__ = $config{$_}" } keys %config);
     return "$env\n";
@@ -1004,6 +1066,7 @@ ExtUtils::MakeMaker(3)
 =head1 AUTHORS
 
 MJ Ray mjr at phonecoop.coop
+Galen Charlton galen.charlton at liblime.com
 
 =cut
 FIXME: deal with .htaccess
