@@ -40,7 +40,8 @@ and some webserver (preferably Apache) before installing Koha.
  
 MySQL 5: Create a database called 'koha,' owned by 'kohaadmin'
 user, with a password set. Note: kohaadmin must have at least the
-following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP.
+following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
+ALTER, and LOCK TABLES.
 
 PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin' 
 user, with a password set. Note: kohaadmin must be a superuser. You
