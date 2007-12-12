@@ -1,6 +1,5 @@
 <!-- AJAX file upload stuff -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ajaxfileupload.js"></script>
-<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/ajaxfileupload.js"></script>
 <script type="text/javascript">
     //<![CDATA
     function updateProgress() {
