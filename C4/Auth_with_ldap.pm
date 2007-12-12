@@ -234,10 +234,10 @@ C4::Auth - Authenticates Koha users
 	   * Modify ldapserver element in KOHA_CONF
 	   * Establish field mapping in <mapping> element.
 
-	It is assumed your user records are stored according to the inetOrgPerson schema, RFC#2798.
-	Thus the username must match the "uid" field, and the password must match the "userpassword" field.
+	For example, if your user records are stored according to the inetOrgPerson schema, RFC#2798,
+	the username would match the "uid" field, and the password should match the "userpassword" field.
 
-	Make sure that the required fields are populated in your LDAP database (and mapped in KOHA_CONF).  
+	Make sure that ALL required fields are populated by your LDAP database (and mapped in KOHA_CONF).  
 	What are the required fields?  Well, in mysql you can check the database table "borrowers" like this:
 
 	mysql> show COLUMNS from borrowers;

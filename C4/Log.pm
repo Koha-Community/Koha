@@ -54,7 +54,7 @@ The functions in this module perform various functions in order to log all the o
 
 =item logaction
 
-  &logaction($usernumber, $modulename, $actionname, $infos);
+  &logaction($usernumber, $modulename, $actionname, $objectnumber, $infos);
 
 Adds a record into action_logs table to report the different changes upon the database
 
