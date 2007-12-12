@@ -2,9 +2,28 @@
 <title>Koha &rsaquo; Catalogue &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+// http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
+function verify_images() {
+	$("img").each(function(i){
+	       if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+            w = this.width;
+            h = this.height;
+            if ((w == 1) || (h == 1)) {
+				$("#bookcoverimg").remove();
+				$(".yui-gb").attr("class","yui-g");
+            } else if ((this.complete != null) && (!this.complete)) {
+				$("#bookcoverimg").remove();
+				$(".yui-gb").attr("class","yui-g");
+            }
+        }
+		});
+		}
 	 $(document).ready(function() {
  		$('#bibliodetails').tabs();
 	 });
+	 <!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
+		verify_images();
+	 });<!-- /TMPL_IF -->
 //]]>
 </script>
 </head>
@@ -23,7 +42,7 @@
 	<div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
-    <div class="yui-gb">
+    <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
 	<div id="catalogue_detail_biblio" class="yui-u first">
 		
     <h3><!-- TMPL_VAR NAME="title" --></h3>	
@@ -38,7 +57,11 @@
             <!-- TMPL_IF name="volume" -->, <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
             <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
             <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
-            / <!-- TMPL_IF NAME="author" -->By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF -->
+            / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
+        </p>
+		
+		
+		
 		<ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
             <li><strong>Additional Authors:</strong><ul>
@@ -47,7 +70,7 @@
                     <!-- TMPL_VAR NAME="value" -->
                 </a></li>
                 <!-- /TMPL_LOOP -->
-		</ul>
+				</ul>
             </li>
         <!-- /TMPL_IF -->
 		<!-- TMPL_IF name="publishercode" -->
@@ -64,11 +87,11 @@
 		</ul>
 		</div>
 		
-<div class="yui-u"><!-- TMPL_IF NAME="AmazonContent" -->
-		<!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" /></a>
+<!-- TMPL_IF NAME="AmazonContent" --><div class="yui-u" id="bookcoverimg">
+		<!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a>
 <!-- TMPL_ELSE -->
-	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0"/>
-<!-- /TMPL_IF --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></div>
+	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0" />
+<!-- /TMPL_IF --></div><!-- /TMPL_IF -->
 		
 		<div class="yui-u" style="margin-top: 1em;">
 		<ul>

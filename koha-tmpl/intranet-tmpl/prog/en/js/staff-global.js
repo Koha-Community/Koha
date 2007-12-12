@@ -29,4 +29,3 @@ function verify_patron_images() {
         }
     }
 }
-
