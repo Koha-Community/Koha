@@ -893,13 +893,13 @@ sub get_target_directories {
         $skipdirs{'INTRANET_CGI_DIR'} = 1;
         $dirmap{'INTRANET_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
         $skipdirs{'INTRANET_TMPL_DIR'} = 1;
-        $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'intranet-tmpl');
+        $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl');
         $skipdirs{'INTRANET_WWW_DIR'} = 1;
         $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir($curdir, 'opac');
         $skipdirs{'OPAC_CGI_DIR'} = 1;
         $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
         $skipdirs{'OPAC_TMPL_DIR'} = 1;
-        $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
+        $dirmap{'OPAC_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl');
         $skipdirs{'OPAC_WWW_DIR'} = 1;
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir($curdir);
         $skipdirs{'PERL_MODULE_DIR'} = 1;
