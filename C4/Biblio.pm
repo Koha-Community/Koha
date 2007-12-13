@@ -1680,34 +1680,41 @@ sub GetXmlBiblio {
 =over 4
 
 my $subfieldvalue =get_authorised_value_desc(
-    $tag, $subf[$i][0],$subf[$i][1], '', $taglib);
+    $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category);
 Retrieve the complete description for a given authorised value.
+
+Now takes $category and $value pair too.
+my $auth_value_desc =GetAuthorisedValueDesc(
+    '','', 'DVD' ,'','','CCODE');
 
 =back
 
 =cut
 
 sub GetAuthorisedValueDesc {
-    my ( $tag, $subfield, $value, $framework, $tagslib ) = @_;
+    my ( $tag, $subfield, $value, $framework, $tagslib, $category ) = @_;
     my $dbh = C4::Context->dbh;
-    
-    #---- branch
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-        return C4::Branch::GetBranchName($value);
+
+    if (!$category) {
+#---- branch
+        if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+            return C4::Branch::GetBranchName($value);
+        }
+
+#---- itemtypes
+        if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
+            return getitemtypeinfo($value)->{description};
+        }
+
+#---- "true" authorized value
+        $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'}
     }
 
-    #---- itemtypes
-    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
-        return getitemtypeinfo($value)->{description};
-    }
-
-    #---- "true" authorized value
-    my $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
     if ( $category ne "" ) {
         my $sth =
-          $dbh->prepare(
-            "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
-          );
+            $dbh->prepare(
+                    "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
+                    );
         $sth->execute( $category, $value );
         my $data = $sth->fetchrow_hashref;
         return $data->{'lib'};
