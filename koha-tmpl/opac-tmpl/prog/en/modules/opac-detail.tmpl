@@ -202,6 +202,7 @@
     <table>
         <tr>
             <th>Item type</th>
+            <th>Collection</th>
             <th>Location</th>
             <th>Status</th>
             <th>Date Due</th>
@@ -211,6 +212,7 @@
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
         <tr>
             <td><!-- TMPL_VAR NAME="description" --></td>
+            <td><!-- TMPL_VAR NAME="ccode" --></td>
             <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
