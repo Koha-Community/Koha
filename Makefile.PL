@@ -820,6 +820,8 @@ Please specify the Zebra database password);
         $config{'ZEBRA_PASS'} = _get_value('ZEBRA_PASS', $msg, $defaults->{'ZEBRA_PASS'}, $valid_values);
 
     }
+
+    print "\n\n";
     return %config;
 }
 
@@ -839,6 +841,12 @@ sub _get_value {
     my $msg = shift;
     my $default = shift;
     my $valid_values = shift;
+
+    # override default value from environment
+    if (exists $ENV{$key}) {
+        $default = $ENV{$key};
+        $msg .= " (default from environment)";
+    }
 
     my $val = prompt($msg, $default);
     while (exists $valid_values->{$key} and not exists $valid_values->{$key}->{$val}) {
@@ -941,9 +949,21 @@ sub get_target_directories {
         $dirmap{'ZEBRA_RUN_DIR'} =  File::Spec->catdir(File::Spec->rootdir(), 'var', 'run', $package, 'zebradb');
     }
 
+    _get_env_overrides(\%dirmap);
     _get_argv_overrides(\%dirmap);
 
     return \%dirmap, \%skipdirs;
+}
+
+sub _get_env_overrides {
+    my $dirmap = shift;
+
+    foreach my $key (keys %$dirmap) {
+        if (exists $ENV{$key}) {
+            $dirmap->{$key} = $ENV{$key};
+            print "Setting $key from environment\n";
+        }
+    }
 }
 
 sub _get_argv_overrides {
@@ -976,6 +996,13 @@ sub display_configuration {
     print "perl Makefile.PL again.  To override one of the target\n";
     print "directories, you can do so on the command line like this:\n";
     print "\nperl Makefile.PL PERL_MODULE_DIR=/usr/share/perl/5.8\n\n";
+    print "You can also set different default values for parameters\n";
+    print "or override directory locations by using environment variables.\n";
+    print "\nFor example:\n\n";
+    print "export DB_USER=my_koha\n";
+    print "perl Makefile.PL\n";
+    print "\nor\n\n";
+    print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
 }
 
 package MY;
