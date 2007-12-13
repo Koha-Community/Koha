@@ -418,7 +418,7 @@ if ($config{'INSTALL_MODE'} ne "dev") {
 WriteMakefile(
     NAME => 'koha',
     #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
-    VERSION_FROM => 'C4/Context.pm',
+    VERSION_FROM => 'kohaversion.pl',
     ABSTRACT => 'Award-winning integrated library system (ILS) and Web OPAC',
     AUTHOR => 'Koha Developers <koha-devel@nongnu.org>',
     NO_META => 1,
