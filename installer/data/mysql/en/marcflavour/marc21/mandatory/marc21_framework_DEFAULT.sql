@@ -134,7 +134,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 1, 0, 'items.paidfor', 10, '', '', '', NULL, 7, '', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, '', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, '', '', '', NULL);
 
 
