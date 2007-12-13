@@ -1081,7 +1081,7 @@ sub searchResults {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
             $sth_issue->execute($item->{itemnumber});
-            $item->{due_date} = format_date($sth_issue->fetchrow);
+            $item->{due_date} = format_date($sth_issue->fetchrow) if $sth_issue->fetchrow;
             $item->{onloan} = 1 if $item->{due_date};
             # at least one item can be reserved : suppose no
             $norequests = 1;
