@@ -292,10 +292,18 @@ sub SearchAuthorities {
             my $sth = $dbh->prepare($query_auth_tag);
             $sth->execute($authtypecode);
             my $auth_tag_to_report = $sth->fetchrow;
+            my $reported_tag;
+            my $mainentry = $authrecord->field($auth_tag_to_report);
+            if ($mainentry) {
+                foreach ($mainentry->subfields()) {
+                    $reported_tag .='$'.$_->[0].$_->[1];
+                }
+            }
             my %newline;
             $newline{summary} = $summary;
             $newline{authid} = $authid;
             $newline{even} = $counter % 2;
+            $newline{reported_tag} = $reported_tag;
             $counter++;
             push @finalresult, \%newline;
             }## while counter
