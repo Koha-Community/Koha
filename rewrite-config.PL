@@ -115,7 +115,7 @@ foreach $key (keys %configuration) {
 
 $fname = $ARGV[0];
 $file = read_file($fname);
-$file =~ s/__.*?__/$configuration{$&}/seg;
+$file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
 chmod 0644, $fname;
 open(OUTPUT,">$fname") || die "Can't open $fname for write: $!";
 print OUTPUT $file;
