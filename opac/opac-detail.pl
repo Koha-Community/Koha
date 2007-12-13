@@ -22,6 +22,7 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
+use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
@@ -30,7 +31,6 @@ use C4::Amazon;
 use C4::Review;
 use C4::Serials;
 use C4::Members;
-
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -86,7 +86,10 @@ foreach my $itm (@items) {
           || (not $itm->{'itemlost'} )
          || (not $itm->{'itemnotforloan'} )
          || ($itm->{'itemnumber'} ) );
-     $itm->{ $itm->{'publictype'} } = 1;
+        $itm->{ $itm->{'publictype'} } = 1;
+
+        #get collection code description, too
+        $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
 }
 
 $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
