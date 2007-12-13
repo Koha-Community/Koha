@@ -1314,6 +1314,8 @@ sub NZanalyse {
             $right = $3;
         }
         my $results;
+	# strip adv, zebra keywords, currently not handled in nozebra: wrdl, ext, phr...
+        $left =~ s/[ ,].*$//;
         # automatic replace for short operators
         $left='title' if $left =~ '^ti$';
         $left='author' if $left =~ '^au$';
