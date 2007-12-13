@@ -158,7 +158,7 @@ this function performs a simple search on the catalog using zoom.
 =item C<input arg:>
 
     * $query could be a simple keyword or a complete CCL query wich is depending on your ccl file.
-    * @servers is optionnal. default one is read on koha.xml
+    * @servers is optionnal. default one is read on koha-conf.xml
 
 =item C<Output arg:>
     * $error is a string which containt the description error if there is one. Else it's empty.

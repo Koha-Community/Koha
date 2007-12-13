@@ -40,7 +40,7 @@ my $errormsg;
 my ($bor)=GetMember($member);
 if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
 	$errormsg = 'NOPERMISSION' unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
-	# need superlibrarian for koha.xml fakeuser.
+	# need superlibrarian for koha-conf.xml fakeuser.
 }
 my $newpassword = $input->param('newpassword');
 my $minpw = C4::Context->preference('minPasswordLength');

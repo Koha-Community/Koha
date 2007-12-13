@@ -403,9 +403,15 @@ my $pl_files = {
 
 if ($config{'INSTALL_ZEBRA'} eq "yes") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
-         'blib/ZEBRA_CONF_DIR/etc/passwd',
-         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
-         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
+        'blib/ZEBRA_CONF_DIR/etc/passwd',
+        'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
+        'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
+    );
+}
+
+if ($config{'INSTALL_MODE'} ne "dev") {
+    push @{ $pl_files->{'rewrite-config.PL'} }, (
+        'blib/PERL_MODULE_DIR/C4/Context.pm'
     );
 }
 
