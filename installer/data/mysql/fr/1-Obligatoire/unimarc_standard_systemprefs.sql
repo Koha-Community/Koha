@@ -63,7 +63,20 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NotifyBorrowerDeparture', '0', 'Ce paramètre permet d''être prévenu N jours avant l''expiration de la carte d''un adhérent, à la banque de prêt.', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('DebugLevel', '2', 'Définit le niveau d''affichage des erreurs en cas de problème : 0= aucun affichage, 1= un peu, 2=tout (peut être risqué pour la sécurité)', '0|1|2', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoZebra','1','If ON, Zebra indexing is turned off, simpler setup, but slower searches','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoZebraIndexes', '0', 'Entrez un tableau pour les index NoZebra. Saisir ''indexname'' => ''100a,245a,500*'',''index2'' => ''...''', '', 'Free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoZebraIndexes', "'title' => '200a,200c,200d,200e,225a,225d,225e,225f,225h,225i,225v,500*,501*,503*,510*,512*,513*,514*,515*,516*,517*,518*,519*,520*,530*,531*,532*,540*,541*,545*,604t,610t,605a',
+        'author' =>'200f,600a,601a,604a,700a,700b,700c,700d,700a,701b,701c,701d,702a,702b,702c,702d,710a,710b,710c,710d,711a,711b,711c,711d,712a,712b,712c,712d',
+        'isbn' => '010a',
+        'issn' => '011a',
+        'biblionumber' =>'0909',
+        'itemtype' => '200b',
+        'language' => '101a',
+        'publisher' => '210c',
+        'date' => '210d',
+        'note' => '300a,301a,302a,303a,304a,305a,306az,307a,308a,309a,310a,311a,312a,313a,314a,315a,316a,317a,318a,319a,320a,321a,322a,323a,324a,325a,326a,327a,328a,330a,332a,333a,336a,337a,345a',
+        'Koha-Auth-Number' => '6009,6019,6029,6039,6049,6059,6069,6109,7009,7019,7029,7109,7119,7129',
+        'subject' => '600*,601*,606*,610*',
+        'dewey' => '676a',
+        'host-item' => '995a,995c'", 'Entrez un tableau pour les index NoZebra. Saisir ''indexname'' => ''100a,245a,500*'',''index2'' => ''...''', '', 'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacAuthorities', '1', 'Active ou non la recherche des autorités à l''OPAC', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacbookbag', '1', 'Si ce paramètre est activé, les adhérents peuvent créer des paniers à l''OPAC', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacBrowser', '1', 'Active ou non le feuilletage du catalogue à l''OPAC (nécessite de lancer misc/cronjobs/build_browser_and_cloud.pl sur le serveur)', '', 'YesNo');

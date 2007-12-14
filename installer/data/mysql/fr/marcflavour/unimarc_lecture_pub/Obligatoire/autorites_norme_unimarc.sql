@@ -23,6 +23,8 @@
 -- Contenu de la table `auth_types`
 -- 
 
+set NAMES 'utf8';
+
 INSERT INTO `auth_types` (`authtypecode`, `authtypetext`, `auth_tag_to_report`, `summary`) VALUES ('CO', 'Auteur (collectif/collectivité)', '210', '[210a ][ (210c)][. 210b][ -- 210d][ ; 210e][ ; 210f]');
 INSERT INTO `auth_types` (`authtypecode`, `authtypetext`, `auth_tag_to_report`, `summary`) VALUES ('NP', 'Auteur', '200', '[200a][, 200b][ 200d][ ; 200c][ (200f)]');
 INSERT INTO `auth_types` (`authtypecode`, `authtypetext`, `auth_tag_to_report`, `summary`) VALUES ('SAUT', 'Sujet (auteur)', '200', '[200a][, 200b][(200g)][ 200d][ ; 200c][ (200f)][ -- 200x][ -- 200z][ -- 200y]');

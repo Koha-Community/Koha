@@ -2,6 +2,8 @@
 -- Contenu de la table `marc_tag_structure`
 -- 
 
+set NAMES 'utf8';
+
 INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('000', 'Label', '', 0, 1, '', '');
 INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('001', 'Numéro de notice', 'Numéro de notice', 0, 0, '', '');
 INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('005', 'Numéro d''identification de la version', '', 0, 0, '', '');
