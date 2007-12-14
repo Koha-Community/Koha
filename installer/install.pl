@@ -281,10 +281,13 @@ elsif ( $step && $step == 3 ) {
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'Nozebra' ) {
-        if ($query->param('Nozebra')) {
+    warn "OP : $op";
+        if ($query->param('NoZebra')) {
+        warn "HERE";
             $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
             $dbh->do("UPDATE systempreferences SET value=0 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
         } else {
+        warn "WRONG";
             $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
         }
         $template->param( "$op" => 1 );
@@ -446,7 +449,7 @@ elsif ( $step && $step == 3 ) {
             my @frameworklist;
             map {
                 my $name = substr( $_, 0, -4 );
-                open FILE, "< $dir/$requirelevel/$name.txt";
+                open FILE, "<:utf8","$dir/$requirelevel/$name.txt";
                 my $lines = <FILE>;
                 $lines =~ s/\n|\r/<br \/>/g;
                 use utf8;
@@ -493,7 +496,7 @@ elsif ( $step && $step == 3 ) {
             my @frameworklist;
             map {
                 my $name = substr( $_, 0, -4 );
-                open FILE, "< $dir/$requirelevel/$name.txt";
+                open FILE, "<:utf8","$dir/$requirelevel/$name.txt";
                 my $lines = <FILE>;
                 $lines =~ s/\n|\r/<br \/>/g;
                 use utf8;
