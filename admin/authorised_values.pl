@@ -117,12 +117,22 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 
     if (_already_exists($input->param('category'), $input->param('authorised_value'))) {
+     if ($id){
+      my $sth=$dbh->prepare("UPDATE authorised_values SET category=?,authorised_value=?,lib=? where id=?");
+      my $lib = $input->param('lib');
+      undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
+  
+      $sth->execute($input->param('category'), $input->param('authorised_value'), $lib,$input->param('id'));          
+      print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
+      exit;
+     } else {       
         $template->param(duplicate_category => $input->param('category'),
                          duplicate_value =>  $input->param('authorised_value'),
                          else => 1);
         default_form();
+     }           
     } else {
-	    my $sth=$dbh->prepare("replace authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+	    my $sth=$dbh->prepare("INSERT INTO authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
 	    my $lib = $input->param('lib');
 	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
 	
