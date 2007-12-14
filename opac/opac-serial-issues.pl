@@ -42,6 +42,7 @@ my ( $template, $loggedinuser, $cookie );
 my $biblionumber = $query->param('biblionumber');
 if ( $selectview eq "full" ) {
     my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
+    my $subscriptioninformation=PrepareSerialsData($subscriptions);
 
     my $title   = $subscriptions->[0]{bibliotitle};
     my $yearmin = $subscriptions->[0]{year};
@@ -62,7 +63,7 @@ if ( $selectview eq "full" ) {
 
     $template->param(
         biblionumber   => $query->param('biblionumber'),
-        years          => $subscriptions,
+        years          => $subscriptioninformation,
         yearmin        => $yearmin,
         yearmax        => $yearmax,
         bibliotitle    => $title,

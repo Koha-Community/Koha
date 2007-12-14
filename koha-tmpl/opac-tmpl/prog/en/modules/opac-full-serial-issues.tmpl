@@ -24,7 +24,8 @@
     </div>
 
     <!-- TMPL_LOOP NAME="years" -->
-    <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" <!--TMPL_IF Name="first" -->style="visibility:visible"<!--/TMPL_IF -->>
+  <!--TMPL_IF Name="first" -->  
+    <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" style="display:block"><!--TMPL_ELSE --><div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" style="display:none"><!--/TMPL_IF -->
         <table width="400px">
             <tr>
                 <th>Date
@@ -64,9 +65,9 @@ function showlayer(numlayer)
     for (i=0; i<yeardata.length; i++ ) {
         ong=yeardata[i].getAttribute('id');
         if (numlayer==ong) {
-            yeardata[i].style.visibility="visible";
+            yeardata[i].style.display="block";
         } else {
-            yeardata[i].style.visibility="hidden";
+            yeardata[i].style.display="none";
         }
     }
 }
