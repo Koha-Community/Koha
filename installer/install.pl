@@ -188,7 +188,7 @@ elsif ( $step && $step == 2 ) {
                 my $grantaccess;
                 while ( my ($line) = $rq->fetchrow ) {
                     my $dbname = $info{dbname};
-                    if ( $line =~ m/$dbname/ || index( $line, '*.*' ) > 0 ) {
+                    if ( $line =~ m/^GRANT (.*?) ON `$dbname`\.\*/ || index( $line, '*.*' ) > 0 ) {
                         $grantaccess = 1
                           if (
                             index( $line, 'ALL PRIVILEGES' ) > 0
