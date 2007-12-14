@@ -374,7 +374,7 @@ function searchauthority() {
 </script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority (<!-- TMPL_VAR name="authtypetext" -->)<!-- /TMPL_IF -->  </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority <!-- TMPL_VAR name="authtypetext" --><!-- /TMPL_IF -->  </div>
 
 <div id="doc" class="yui-t7">
 
@@ -383,9 +383,9 @@ function searchauthority() {
         <div class="yui-g">
 
 <!-- TMPL_IF name="authid" -->
-<h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<h1>Modify authority #<!-- TMPL_VAR NAME="authid" --> <!-- TMPL_VAR name="authtypetext" --></h1>
 <!-- TMPL_ELSE -->
-<h1>Adding authority (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<h1>Adding authority <!-- TMPL_VAR name="authtypetext" --></h1>
 <!-- /TMPL_IF -->  
 <form method="post" name="f" action="/cgi-bin/koha/authorities/authorities.pl">
     <input type="hidden" name="op" value="add" />
