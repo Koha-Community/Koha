@@ -58,20 +58,23 @@ if  (!%index || $sysprefs ) {
         'host-item' => '995a,995c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
     } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
-		$dbh->do("UPDATE systempreferences SET value=\"
-		'title' => '245a,245b',
-		'author' => '100a',
-		'isbn' => '020a',
-		'issn' => '022a',
-		'biblionumber => '999c',
-		'itemtype' => '942c',
-		'publisher' => '260b',
-		'date' => '260c',
-		'note' => '500a',
-		'subject' => '600a, 650a',
-		'dewey' => '082',
-		'bc' => '952p',
-        'host-item' => '952a,952c',\" where variable='NoZebraIndexes'");
+        $dbh->do("UPDATE systempreferences SET value=\"'title' => '130a,210a,222a,240a,243a,245a,245b,246a,246b,247a,247b,250a,250b,440a,830a',
+'author' => '100a,100b,100c,100d,110a,111a,111b,111c,111d,245c,700a,710a,711a,800a,810a,811a',
+'isbn' => '020a',
+'issn' => '022a',
+'lccn' => '010a',
+'biblionumber => '999c',
+'itemtype' => '942c',
+'publisher' => '260b',
+'date' => '260c',
+'note' => '500a, 501a,504a,505a,508a,511a,518a,520a,521a,522a,524a,526a,530a,533a,538a,541a,546a,555a,556a,562a,563a,583a,585a,582a',
+'subject' => '600*,610*,611*,630*,650*,651*,653*,654*,655*,662*,690*',
+'dewey' => '082',
+'bc' => '952p',
+'callnum' => '952o',
+'an' => '6009,6109,6119',
+'host-item' => '952a,952c',\" where variable='NoZebraIndexes'");
+
         %index = GetNoZebraIndexes();
     }
 }
