@@ -52,7 +52,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog', '0', 'Activer ce paramètre pour enregistrer les actions sur les notifications par mail', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName', 'Ma bibliothèque', 'Ce paramètre définit le nom de la bibliothèque, qui apparaît sur chaque page de l''OPAC', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marc', '1', 'Ce paramètre active le support du MARC. Dans Koha 3.0, doit être à 1.', '', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour', 'UNIMARC', 'Ce paramètre définit votre déclinaison MARC. Normalement, UNIMARC', 'MARC21|UNIMARC', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode', '0', 'Ce paramètre définit votre code organisme MARC. Utilisé en MARC21. Voir  - http://www.loc.gov/marc/organizations/orgshome.htm', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine','9999','Amende maximum qu''un ahdérent peut avoir pour un retour en retard','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding', '5', 'Ce paramètre définit le montant maximal des dettes au dela duquel le lecteur ne peut plus faire de réservation', '', 'Integer');
