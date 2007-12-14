@@ -649,6 +649,16 @@ sub build_tabs ($$$$$) {
     $template->param( BIG_LOOP => \@BIG_LOOP );
 }
 
+#
+# sub that tries to find authorities linked to the biblio
+# the sub :
+#   - search in the authority DB for the same authid (in $9 of the biblio)
+#   - search in the authority DB for the same 001 (in $3 of the biblio in UNIMARC)
+#   - search in the authority DB for the same values (exactly) (in all subfields of the biblio)
+# if the authority is found, the biblio is modified accordingly to be connected to the authority.
+# if the authority is not found, it's added, and the biblio is then modified to be connected to the authority.
+#
+
 sub BiblioAddAuthorities{
   my ( $record, $frameworkcode ) = @_;
   my $dbh=C4::Context->dbh;
@@ -669,15 +679,14 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
-      map {$query.= " and he,ext=".$_->[1] if ($_->[0]=~/[A-z]/)}  $field->subfields();
-      warn $query;   
+      map {$query.= ' and he,ext="'.$_->[1].'"' if ($_->[0]=~/[A-z]/)}  $field->subfields();
       my ($error,$results)=SimpleSearch($query,"authorityserver");
     # there is only 1 result 
-      if (scalar(@$results)==1) {
+      if ($results && scalar(@$results)==1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
-      }elsif (scalar(@$results)>1) {
+      } elsif (scalar(@$results)>1) {
    #More than One result 
    #This can comes out of a lack of a subfield.
 #         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
@@ -692,6 +701,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
          my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));
          map { $authfield->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $field->subfields();
          $marcrecordauth->insert_fields_ordered($authfield);
+#          warn "AUTH RECORD ADDED : ".$marcrecordauth->as_formatted;
          my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
          $countcreated++;
          $field->add_subfields('9'=>$authid);
