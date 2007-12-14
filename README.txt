@@ -57,7 +57,7 @@ Default installation instructions:
 5. ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
 6. a2enmod rewrite
 7. a2ensite koha && /etc/init.d/apache2 reload
-8. zebrasrv -f /usr/share/koha/etc/koha-conf.xml
+8. zebrasrv -f /etc/koha/koha-conf.xml
 9. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
