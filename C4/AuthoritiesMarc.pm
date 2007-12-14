@@ -509,6 +509,18 @@ sub AddAuthority {
         $record->delete_field($record->field('001'));
         $record->insert_fields_ordered(MARC::Field->new('001',$authid));
     }
+    if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
+        $record->leader("     nx  j22             ");
+        my $date=POSIX::strftime("%Y%m%d",localtime);    
+        if ($record->field('100')){
+            $record->field('100')->update('a'=>$date."afrey50      ba0");
+        } else {      
+            $record->append_fields(
+            MARC::Field->new('100',' ',' '
+                ,'a'=>$date."afrey50      ba0")
+            );
+        }      
+    }    
     $record->add_fields('152','','','b'=>$authtypecode) unless $record->field('152');
 #     warn $record->as_formatted;
     $dbh->do("lock tables auth_header WRITE");
