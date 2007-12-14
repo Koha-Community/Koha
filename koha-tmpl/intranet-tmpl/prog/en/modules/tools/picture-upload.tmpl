@@ -13,10 +13,9 @@
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
+<h1>Upload Patron Images</h1>
 <div class="yui-g">
 <div class="yui-u first">
-<h1>Upload Patron Images</h1>
-
 <!-- TMPL_IF name="total" -->
 	<ul class="data">
 		<li>Unpacking completed</li>
@@ -32,10 +31,10 @@
 <!-- TMPL_ELSE -->
 
     <!-- TMPL_IF name="ERRORS" -->
+        <div class="dialog alert"><ul>
         <!-- TMPL_LOOP name="ERRORS" -->
-        <ul class="error">
 		<!-- TMPL_IF NAME="NODIR" -->
-			<li>The patronimages/ directory isn't present on your server, please ask your systems administrator to create it</li>
+			<li>The <span class="ex">patronimages/</span> directory isn't present on your server, please ask your systems administrator to create it</li>
 		<!-- /TMPL_IF -->
         <!-- TMPL_IF name="NOTZIP" -->
             <li>The upload file does not appear to be a zip file.  The extention is not '.zip'.</li>
@@ -44,34 +43,37 @@
             <li>This script is not able to create/write to the necessary temporary directory.</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="NOWRITEDEST" -->
-            <li>This script is not able to write to the patronpictures holding directory.</li>
+            <li>This script is not able to write to the patron image storage directory.</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="EMPTYUPLOAD" -->
             <li>The upload file appears to be empty.</li>
         <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
+		</ul></div>
     <!-- /TMPL_IF -->
-    <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+	
+	<form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+	<fieldset class="brief">
+	    <ol>
+        <li>
+            <label for="uploadfile">Select the .zip file to unpack: </label><input type="file" id="uploadfile" name="uploadfile" />
+        </li>
+    	</ol>
+	</fieldset>
+    <fieldset class="action"><input type="submit" value="Unpack" class="submit" /> <a href="/cgi-bin/koha/tools/picture-upload.pl" class="cancel">Cancel</a></fieldset>
+    </form>
+	
+</div>	
+<div class="yui-u">
     <ul>
         <li>Select a file to upload to the server. Each .jpg file contained therein will be copied to the appropriate place on the server for patron pictures.</li>
         <li>You can include multiple pictures in a .zip file.</li>
-        <li>There should be a DATALINK.TXT or IDLINK.TXT file for each group of pictures that has the cardnumber of the patron and the file containing that patrons picture.  One patron per line seperated by either ,'s or tabs.  Quotes around the fields are ignored.</li>
+        <li>There should be a DATALINK.TXT or IDLINK.TXT file for each group of pictures that has the cardnumber of the patron and the file containing that patrons picture.  One patron per line seperated by either commas or tabs.  Quotes around the fields are ignored.</li>
     </ul>
-    <table>
-        <tr>
-            <th><label for="uploadfile">Select the .zip file to unpack: </label></th>
-            <td>
-                <input type="file" id="uploadfile" name="uploadfile" /><br />
-            </td>
-        </tr>
-    </table>
-        <input type="submit" value="Unpack" class="submit" />
-    </form>
-    
+</div>
+</div>
 <!-- /TMPL_IF -->
 
-</div>
-</div>
 </div>
 </div>
 <div class="yui-b">
