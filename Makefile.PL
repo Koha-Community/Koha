@@ -850,7 +850,10 @@ sub _get_value {
     }
 
     my $val = prompt($msg, $default);
-    while (exists $valid_values->{$key} and not exists $valid_values->{$key}->{$val}) {
+
+    while (exists $valid_values->{$key} and 
+           $val ne $default and
+           not exists $valid_values->{$key}->{$val}) {
         my $retry_msg = "Value '$val' is not a valid option.\n";
         $retry_msg .= "Please enter a value";
         $retry_msg .= _add_valid_values_disp($key, $valid_values);
