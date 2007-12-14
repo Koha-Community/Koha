@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# $Id$
 
 # Copyright 2006 SAN OUEST PROVENCE et Paul POULAIN
 #
@@ -47,8 +46,6 @@ my $input = new CGI;
 my %data;
 
 my $dbh = C4::Context->dbh;
-
-
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/memberentrygen.tmpl",
