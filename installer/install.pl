@@ -403,10 +403,14 @@ elsif ( $step && $step == 3 ) {
         my $langchoice = $query->param('fwklanguage');
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $marcflavour = $query->param('marcflavour');
-        if ($marcflavour){    
+        if ($marcflavour){
+            # we can have some variants of marc flavour, by having different directories, like : unimarc_small and unimarc_full, for small and complete unimarc frameworks.
+            # marc_cleaned finds the marcflavour, without the variant.
+            my $marc_cleaned = 'MARC21';
+            $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/;
           my $request =
             $dbh->prepare(
-              "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marcflavour','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
+              "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
             );     
           $request->execute;
         };    
