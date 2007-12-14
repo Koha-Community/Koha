@@ -3,6 +3,12 @@
 # daemon to watch the zebraqueue and update zebra as needed
 
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 use POE qw(Wheel::SocketFactory Wheel::ReadWrite Filter::Stream Driver::SysRW);
 use Unix::Syslog qw(:macros);
 

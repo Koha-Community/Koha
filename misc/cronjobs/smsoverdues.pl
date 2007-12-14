@@ -27,6 +27,13 @@
 
 # $Id: sendoverdues.pl,v 1.1.2.1 2007/03/26 22:38:09 tgarip1957 Exp $
 
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
+
 use C4::Context;
 use C4::Search;
 use C4::Circulation;

@@ -12,9 +12,13 @@
 #    1.0.0  2004/04/01:  original version
 #-----------------------------------
 
-use lib '/usr/local/koha/intranet/modules/';
-
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
 use C4::Context;
 
 my $dbh = C4::Context->dbh;

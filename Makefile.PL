@@ -411,7 +411,8 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
 
 if ($config{'INSTALL_MODE'} ne "dev") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
-        'blib/PERL_MODULE_DIR/C4/Context.pm'
+        'blib/PERL_MODULE_DIR/C4/Context.pm',
+        'blib/SCRIPT_DIR/kohalib.pl'
     );
 }
 

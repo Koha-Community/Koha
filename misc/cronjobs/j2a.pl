@@ -1,6 +1,13 @@
 #!/usr/bin/perl 
 #run nightly -- changes J to A on someone's 18th birthday
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
+
 use C4::Context;
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst)
                                             = localtime(time);

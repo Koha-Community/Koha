@@ -3,6 +3,12 @@
 
 
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 
 # Koha modules used
 use C4::Context;

@@ -4,6 +4,12 @@
 #
 
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 require Exporter;
 
 use C4::Auth;

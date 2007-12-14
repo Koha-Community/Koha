@@ -26,12 +26,18 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 
+use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 use C4::Context;
 use C4::Circulation;
 use C4::Overdues;
 use Date::Manip qw/Date_DaysSince1BC/;
 use C4::Biblio;
-use strict;
 
 open (FILE,'>/tmp/fines') || die;
 # FIXME

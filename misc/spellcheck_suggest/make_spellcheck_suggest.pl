@@ -16,8 +16,6 @@
 
 ## CONFIGURABLE VARIABLES ####################
 ##
- # Change this to where your Koha modules are (C4 directory)
-use lib '/usr/local/koha/intranet/modules/';
  # These are the tags that have meaningful data
  # for the databases I've worked with (MARC21 only)
  # you may need to change them depending on your data
@@ -71,6 +69,12 @@ my @tags=(
 );
 ## Leave this next bit alone
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
 use C4::Context;
 ##
  # SUGGEST DATABASE INFO
