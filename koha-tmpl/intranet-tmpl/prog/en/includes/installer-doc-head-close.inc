@@ -27,11 +27,11 @@ h1 {
         vertical-align:middle;
 }
 
-h2 { font-size: 16px; }
+h2 { font-size: 1.75em; }
 
 h3 {
         color: #006;
-        font-size: 18px;
+        font-size: 1.5em;
         font-weight: lighter;
 }
 
