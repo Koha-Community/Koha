@@ -447,7 +447,7 @@ WriteMakefile(
 'List::Util' => 1.18,
 'Locale::Language' => 2.07,
 'MARC::Charset' => 0.98,
-'MARC::Crosswalk::DublinCore' => 0.03,
+'MARC::Crosswalk::DublinCore' => 0.02,
 'MARC::File::XML' => 0.88,
 'MARC::Record' => 2.00,
 'MIME::Base64' => 3.07,
