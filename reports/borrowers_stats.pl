@@ -227,7 +227,6 @@ foreach my $thisbranch (sort keys %$branches) {
 
 	$template->param(		CGICatCode => $CGICatCode,
 					CGIZipCode => $CGIZipCode,
-#					CGIBranch => $CGIBranch,
 					CGISort1 => $CGIsort1,
 					hassort1 => $hassort1,
 					CGISort2 => $CGIsort2,
@@ -235,8 +234,7 @@ foreach my $thisbranch (sort keys %$branches) {
 					CGIextChoice => $CGIextChoice,
 					CGIsepChoice => $CGIsepChoice,
 					CGIBranch => $CGIBranch,
-#					CGIBranch => \@branchloop
-                        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+					DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                     );
 
 }
