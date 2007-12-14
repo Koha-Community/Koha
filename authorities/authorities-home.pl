@@ -61,13 +61,13 @@ if ( $op eq "do_search" ) {
     my @value     = $query->param('value');
 
     my $startfrom      = $query->param('startfrom')      || 1;
-    my $resultsperpage = $query->param('resultsperpage') || 19;
+    my $resultsperpage = $query->param('resultsperpage') || 20;
 
     my ( $results, $total ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
         ( $startfrom - 1 ) * $resultsperpage,
         $resultsperpage, $authtypecode, $orderby );
-
+#     use Data::Dumper; warn Data::Dumper::Dumper(@$results);
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/searchresultlist.tmpl",
@@ -86,11 +86,13 @@ if ( $op eq "do_search" ) {
     # next/previous would not work anymore
     my @marclist_ini = $query->param('marclist');
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
-        push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
-        push @field_data, { term => "and_or",    val => $and_or[$i] };
-        push @field_data, { term => "excluding", val => $excluding[$i] };
-        push @field_data, { term => "operator",  val => $operator[$i] };
-        push @field_data, { term => "value",     val => $value[$i] };
+        if ($value[$i]){   
+          push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
+          push @field_data, { term => "and_or",    val => $and_or[$i] };
+          push @field_data, { term => "excluding", val => $excluding[$i] };
+          push @field_data, { term => "operator",  val => $operator[$i] };
+          push @field_data, { term => "value",     val => $value[$i] };
+        }    
     }
 
     # construction of the url of each page

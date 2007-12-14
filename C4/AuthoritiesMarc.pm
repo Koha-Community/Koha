@@ -146,30 +146,31 @@ sub SearchAuthorities {
                 $result{$title.$authid}=$authid;
             }
             # sort the hash and return the same structure as GetRecords (Zebra querying)
-            my @finalresult = ();
+            my @listresult = ();
             my $numbers=0;
             if ($sortby eq 'HeadingDsc') { # sort by mainmainentry desc
                 foreach my $key (sort {$b cmp $a} (keys %result)) {
-                    push @finalresult, $result{$key};
+                    push @listresult, $result{$key};
 #                     warn "push..."$#finalresult;
                     $numbers++;
                 }
             } else { # sort by mainmainentry ASC
                 foreach my $key (sort (keys %result)) {
-                    push @finalresult, $result{$key};
+                    push @listresult, $result{$key};
 #                     warn "push..."$#finalresult;
                     $numbers++;
                 }
             }
             # limit the $results_per_page to result size if it's more
-            $length = $numbers-1 if $numbers < $length;
+            $length = $numbers-1-$offset if $numbers < ($offset+$length);
             # for the requested page, replace authid by the complete record
             # speed improvement : avoid reading too much things
-            for (my $counter=$offset;$counter<=$offset+$length;$counter++) {
+            my @finalresult;      
+            for (my $counter=$offset;$counter<=$offset+$length-1;$counter++) {
 #                 $finalresult[$counter] = GetAuthority($finalresult[$counter])->as_usmarc;
                 my $separator=C4::Context->preference('authoritysep');
-                my $authrecord = MARC::File::USMARC::decode(GetAuthority($finalresult[$counter])->as_usmarc);
-                my $authid=$authrecord->field('001')->data(); 
+                my $authrecord =GetAuthority($listresult[$counter]);
+                my $authid=$listresult[$counter]; 
                 my $summary=BuildSummary($authrecord,$authid,$authtypecode);
                 my $query_auth_tag = "SELECT auth_tag_to_report FROM auth_types WHERE authtypecode=?";
                 my $sth = $dbh->prepare($query_auth_tag);
@@ -180,7 +181,7 @@ sub SearchAuthorities {
                 $newline{summary} = $summary;
                 $newline{authid} = $authid;
                 $newline{even} = $counter % 2;
-                $finalresult[$counter]= \%newline;
+                push @finalresult, \%newline;
             }
             return (\@finalresult, $numbers);
         } else {
