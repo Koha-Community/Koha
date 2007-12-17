@@ -1,0 +1,62 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Choose Adult category</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+<div id="bd">
+
+<!--TMPL_IF NAME="CONFIRM" -->
+<script language="javascript" type="text/javascript">
+confirm_updatechild(<!-- TMPL_VAR NAME="borrowernumber" -->);
+</script>
+<!-- /TMPL_IF  -->
+
+<!--TMPL_IF NAME="SUCCESS" -->
+<script language="javascript" type="text/javascript">
+//    window.close();
+self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->';
+</script>
+
+<!-- /TMPL_IF  -->
+
+
+<!--TMPL_IF NAME="MULTI" -->
+
+<h1> Choose Adult category </h1>
+
+<!--TMPL_IF NAME="CAT_LOOP" -->
+<form method="post" action="update-child.pl">
+<table>
+<tr>
+<th> </th>
+<th>CODE</th>
+<th>DESC</th>
+</tr>
+<!-- TMPL_LOOP NAME="CAT_LOOP" -->
+<tr>
+<td>
+<input type="radio" id="catcode" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
+<td><!-- TMPL_VAR NAME="catcode" --></td>
+<td><b><!-- TMPL_VAR NAME="catdesc" --></b></td> 
+</tr>
+<!-- /TMPL_LOOP -->
+</table>
+<input type="hidden" name="op" value="update" />
+<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+<input type="hidden" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
+<input type="hidden" name="cattype" value="<!-- TMPL_VAR NAME="cattype" -->" />
+<input class="submit" type="submit" value="Submit"/>
+<script language="javascript" type="text/javascript">
+</script>
+
+<!--/TMPL_IF-->
+</form>
+
+
+
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
