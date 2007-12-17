@@ -662,6 +662,8 @@ sub _build_weighted_query {
        #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
         $weighted_query .= " or wrd,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
         $weighted_query .= " or wrd,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
+		$weighted_query .= " or wrd,r9=\"$operand\"";
+
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
     }
@@ -759,10 +761,15 @@ sub buildQuery {
 				}
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
-
+				$DEBUG=1;
 				# some helpful index modifs
-                my $index_plus = "$index:" if $index;
-                my $index_plus_comma="$index," if $index;
+
+				my $wrdl;
+				unless (!$index || $index =~ /(phr|ext)/) {
+					$wrdl = ",wrdl";
+				}
+                my $index_plus = $index.$wrdl.":" if $index;
+                my $index_plus_comma=$index.$wrdl."," if $index;
 
                 # Remove Stopwords
 				if ($remove_stopwords) {
