@@ -558,6 +558,10 @@ for (my $i=0;$i<=@servers;$i++) {
 								previous_page_offset => $previous_page_offset) unless $pages < 2;
 			$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
 		}
+		# no hits
+		else {
+			$template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
+		}
     } # end of the if local
     else {
         # check if it's a z3950 or opensearch source
