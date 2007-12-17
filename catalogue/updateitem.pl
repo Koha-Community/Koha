@@ -62,17 +62,12 @@ if ( $itemnotes ne $item_data_hashref->{'itemnotes'}) {
 # FIXME: eventually we'll use Biblio.pm, but it's currently too buggy  (is this current ??)
 #ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
 	$newitemdata->{'itemnumber'} = $itemnumber;
-	&C4::Biblio::_koha_modify_item($dbh,$newitemdata);
-#$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=? WHERE itemnumber=?");
-#$sth->execute($wthdrawn,$itemlost,$damaged,$itemnumber);
+#	&C4::Biblio::_koha_modify_item($dbh,$newitemdata);
 
-# check reservations (why ?)
-#my ($status, $reserve) = CheckReserves($itemnumber, $item_data_hashref->{'barcode'});
-#if ($reserve){
-##	#print $cgi->header;
-#	warn "Reservation found on item $itemnumber";
-	#exit;
-#}
+	$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
+	$sth->execute($wthdrawn,$itemlost,$damaged,$itemnotes,$itemnumber);
+	&ModZebra($biblionumber,"specialUpdate","biblioserver");
+	
 # check issues iff itemlost.
  # FIXME : is there documentation or enforcement that itemlost value must be '1'?  if no replacement price, then borrower just doesn't get charged?
 if ($itemlost==1) {
