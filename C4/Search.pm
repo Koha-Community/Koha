@@ -899,14 +899,14 @@ sub buildQuery {
 			$limit_desc .=" or " if $group_OR_limits;
 			$group_OR_limits .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
-			$limit_desc .= "$this_limit";
+			$limit_desc .= " $this_limit";
         }
 		# regular old limits
 		else {
 			$limit .= " and " if $limit || $query;
 			$limit .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
-			$limit_desc .=" and $this_limit";
+			$limit_desc .=" $this_limit";
 		}
     }
 	if ($group_OR_limits) {
