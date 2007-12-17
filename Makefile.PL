@@ -24,6 +24,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
+use Cwd;
 
 my $DEBUG = 0;
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
@@ -363,8 +364,6 @@ System group that will own Koha's files.
 
 # default configuration options
 my %config_defaults = (
-  'INSTALL_MODE'      => 'standard',
-  'INSTALL_BASE'      => '/usr/share/koha',
   'DB_TYPE'           => 'mysql',
   'DB_HOST'           => 'localhost',
   'DB_NAME'           => 'koha',    
@@ -378,6 +377,30 @@ my %config_defaults = (
   'KOHA_USER'         => 'koha',
   'KOHA_GROUP'        => 'koha',
 );
+
+# set some default configuratio options based on OS
+# more conditions need to be added for other OS's
+# this should probably also incorporate usage of Win32::GetOSName() and/or Win32::GetOSVersion()
+# to allow for more granular decisions based on which Win32 platform
+
+warn "Your platform appears to be $^O.\n" if $DEBUG;
+
+if ( $^O eq 'MSWin32' ) {
+	# Most Unix2Win32 ports seem to poke everything into the Program Files directory
+	# this could be changed to put some files (ie. libraries) into system32, etc.
+	$config_defaults{'INSTALL_MODE'} = 'single';
+	$config_defaults{'INSTALL_BASE'} = 'c:/progra~1/koha';	# Use 8.3 names to be safe...
+}
+elsif ( $^O eq 'cygwin' ) {
+	# Most Unix2Win32 ports seem to poke everything into the Program Files directory
+	# this could be changed to put some files (ie. libraries) into system32, etc.
+	$config_defaults{'INSTALL_MODE'} = 'single';
+	$config_defaults{'INSTALL_BASE'} = 'c:/progra~1/koha';	# Use 8.3 names to be safe...
+}
+else {
+	$config_defaults{'INSTALL_MODE'} = 'standard';
+	$config_defaults{'INSTALL_BASE'} = '/usr/share/koha';
+}
 
 # valid values for certain configuration options
 my %valid_config_values = (
@@ -688,7 +711,7 @@ be run from the current directory.
 
 Configuration directory:);
         # FIXME - home directory portability consideration apply
-        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "/usr/share/koha-dev";
+        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "$defaults->{'INSTALL_BASE'}-dev";
     } elsif ($config{'INSTALL_MODE'} eq 'single') {
         $msg = "\nPlease specify the directory in which to install Koha";
         # FIXME -- we're assuming under a 'single' mode install
@@ -697,7 +720,8 @@ Configuration directory:);
         # use File::HomeDir to locate the home directory portably.  
         # This is deferred for now because File::HomeDir is not yet
         # core.
-        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha" : "/usr/share/koha";
+		# --we must also keep this portable to the major OS's -fbcit
+        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha" : $defaults->{'INSTALL_BASE'};
     } else {
         # must be standard
         $msg = q(
@@ -712,8 +736,9 @@ as the package name in the FHS layout.
 Base installation directory);
     }
     $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
-    $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
 
+    $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
+	print "INSTALL_BASE=$config{'INSTALL_BASE'}\r\n" if $DEBUG;
     if ($config{'INSTALL_MODE'} eq "standard") {
         $msg = q(
 Since you are using the 'standard' install
@@ -891,8 +916,15 @@ sub get_target_directories {
     # get last component of install base directory
     # to treat as package name
     my ($volume, $directories, $file) = File::Spec->splitpath($base, 1);
+
     my @basedir = File::Spec->splitdir($directories);
+
+	# for Win32 we need to prepend the volume to the directory path
+	if ( $^O eq 'MSWin32' ) { shift @basedir; unshift @basedir, $volume; }
+	elsif ( $^O eq 'cygwin' ) { shift @basedir; unshift @basedir, 'c:'; }   # in a cygwin environment, $volume is returned empty
+
     my $package = pop @basedir;
+
 
     my %dirmap = ();
     my %skipdirs = ();
@@ -1018,7 +1050,69 @@ sub display_configuration {
     print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
 }
 
+=head2 fixshebang
+
+This sub will recurse through a given directory and its subdirectories checking for the existence of a shebang
+line in .pl files and replacing it with the correct line for the current OS if needed. It should be called
+in a manner similar to 'fixshebang (getcwd())' but may be supplied with any directory in absolute path form.
+
+=cut
+
+sub fixshebang{
+	# NOTE: this might be dressed up a bit with File::Spec since we're using it here already.
+	my $dir = shift;
+    opendir my $dh, $dir or die $!;
+    while( my $file = readdir($dh) ) {
+		print "Reading $dir contents.\r\n" if $DEBUG;
+		print "Current item = $file\r\n" if $DEBUG;
+		# this may be used to exclude any desired files from the scan
+		if ( $file =~ /shebang|wixgen/ ) { next; }
+		# handle files... other extensions could be substituted/added if needed
+		if ( $file =~ /\.pl$/ ) {
+			my $pathfile =$dir . '/' . $file;
+			print "Found a perl script named $pathfile\r\n" if $DEBUG;
+			open FH, '+<', "$pathfile";
+			my @file = <FH>;
+			seek( FH, 0, 0 );
+			truncate( FH, 0 );
+			my $line = shift @file;
+			print "Found shebang line: $line\r\n" if $DEBUG;
+			# FIXME: these conditionals need to be modified to select shebang line based on OS ($^O)
+			if ( $line =~ /#!c:\\strawberry-perl\\perl\\bin\\perl -w/ ) {
+				# FIXME: This can probably be done with less of a hack. -fbcit
+				print FH $line;
+				print FH @file;
+				close (FH);
+				next;
+			}
+			elsif ( $line =~ /#!\/usr\/bin\/perl/ ) {
+				print "Re-writing shebang line for $pathfile\r\n";
+				print FH "#!c:\\strawberry-perl\\perl\\bin\\perl -w\n";
+				print FH @file;
+				close(FH);
+			}
+			else {
+				# FIXME: This can probably be done with less of a hack. -fbcit
+				print FH $line;
+				print FH @file;
+				close (FH);
+				next;
+			}
+		}
+		# handle directories
+		elsif ( -d ($dir . '/' . $file) && $file !~ /^\.{1,2}/ ) {
+			my $pathfile = $dir . '/' . $file;
+			print "Found a subdir named $pathfile\r\n" if $DEBUG;
+			&fixshebang ($pathfile);
+#			closedir $dh;	# I'm not really sure if this is necessary
+		}
+	}
+	closedir $dh;
+}
+
 package MY;
+
+# This will have to be reworked in order to accommodate Win32...
 
 sub test {
     my $self = shift;
@@ -1033,47 +1127,73 @@ sub install {
     # NOTE: we're *not* doing this: my $install = $self->SUPER::install(@_);
     # This means that we're completely overriding EU::MM's default
     # installation and uninstallation targets.
-    foreach my $key (sort keys %$target_directories) {
-        $install .= qq(
+
+# If installation is on Win32, we need to do permissions different from *nix
+    if ( $^O =~ /linux|cygwin/ ) { # this value needs to be verified for each platform and modified accordingly
+	    foreach my $key (sort keys %$target_directories) {
+		    $install .= qq(
 KOHA_INST_$key = blib/$key
 KOHA_DEST_$key = $target_directories->{$key}
-) unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
-    }
-
-    $install .= qq(
+)			unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+		}
+		$install .= qq(
 install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_env_vars
 \t\$(NOECHO) \$(NOOP)
 );
-    $install .= "install_koha ::\n";      
-    $install .= "\t\$(NOECHO) umask 022; \$(MOD_INSTALL) \\\n";
-    foreach my $key (sort keys %$target_directories) {
-        $install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" 
-            unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
-    }
-    $install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
-    $install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
+			$install .= "install_koha ::\n";      
+			$install .= "\t\$(NOECHO) umask 022; \$(MOD_INSTALL) \\\n";
+			foreach my $key (sort keys %$target_directories) {
+				$install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" 
+					unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+			}
+			$install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
+			$install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
 
-    $install .= "\n";
-    $install .= "set_koha_ownership ::\n";
-    if ($config{'INSTALL_MODE'} eq 'standard' and $config{'KOHA_USER'} ne "root") {
-        foreach my $key (sort keys %$target_directories) {
-            $install .= "\t\$(NOECHO) chown -R $config{'KOHA_USER'}:$config{'KOHA_GROUP'} \$(KOHA_DEST_$key)\n"
-                unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
-        }
-    } else {
-        $install .= "\t\t\$(NOECHO) \$(NOOP)\n\n";
-    }
+			$install .= "\n";
+			$install .= "set_koha_ownership ::\n";
+			if ($config{'INSTALL_MODE'} eq 'standard' and $config{'KOHA_USER'} ne "root") {
+				foreach my $key (sort keys %$target_directories) {
+					$install .= "\t\$(NOECHO) chown -R $config{'KOHA_USER'}:$config{'KOHA_GROUP'} \$(KOHA_DEST_$key)\n"
+						unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+				}
+			} else {
+				$install .= "\t\t\$(NOECHO) \$(NOOP)\n\n";
+			}
 
-    $install .= "\n";
-    $install .= "set_koha_permissions ::\n";
-    # This is necessary because EU::MM installs files
-    # as either 0444 or 0555, and we want the owner
-    # of Koha's files to have write permission by default.
-    foreach my $key (sort keys %$target_directories) {
-        $install .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_$key)\n"
-            unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
-    }
-    $install .= "\n";
+			$install .= "\n";
+			$install .= "set_koha_permissions ::\n";
+			# This is necessary because EU::MM installs files
+			# as either 0444 or 0555, and we want the owner
+			# of Koha's files to have write permission by default.
+			foreach my $key (sort keys %$target_directories) {
+				$install .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_$key)\n"
+					unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+			}
+	}
+	elsif ($^O eq 'MSWin32' ) {	# On Win32, the install probably needs to be done under the user account koha will be running as...
+								# We can attempt some creative things with command line utils such as CACLS which allows permission
+								# management from Win32 cmd.exe, but permissions really only apply to NTFS.
+	    foreach my $key (sort keys %$target_directories) {
+		    $install .= qq(
+KOHA_INST_$key = blib/$key
+KOHA_DEST_$key = $target_directories->{$key}
+)			unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+		}
+		$install .= qq(
+install :: all install_koha warn_koha_env_vars
+\t\$(NOECHO) \$(NOOP)
+);
+		$install .= "install_koha ::\n";
+		$install .= "\t\$(MOD_INSTALL) \\\n";
+		foreach my $key (sort keys %$target_directories) {
+			$install .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" 
+				unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
+		}
+	}
+	$install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
+	$install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
+
+	$install .= "\n";
 
     $install .= "warn_koha_env_vars ::\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
@@ -1084,6 +1204,9 @@ install :: all install_koha set_koha_ownership set_koha_permissions warn_koha_en
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) export KOHA_CONF=\$(KOHA_DEST_KOHA_CONF_DIR)/koha-conf.xml\n";
     $install .= "\t\$(NOECHO) \$(ECHO) export PERL5LIB=$target_directories->{'PERL_MODULE_DIR'}\n";
+    $install .= "\t\$(NOECHO) \$(ECHO)\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) If installing on a Win32 platform, be sure to use:\n";
+    $install .= "\t\$(NOECHO) \$(ECHO) 'dmake -x MAXLINELENGTH=300000'\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) For other post-installation tasks, please consult the README.\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
@@ -1096,15 +1219,26 @@ sub postamble {
     # so that Make will export as environment
     # variables -- this is for the use of
     # rewrite-confg.PL
-    my $env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories); 
-    $env .= "\n\n";
 
     # quote '$' in the two password parameters
     my %config = %config;
     $config{'DB_PASS'} =~ s/\$/\$\$/g;
     $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
-    $env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
-    return "$env\n";
+
+	# Hereagain, we must alter syntax per platform...
+	if ( $^O =~ /linux|cygwin/ ) {
+		my $env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories); 
+		$env .= "\n\n";
+		$env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
+		return "$env\n";
+	}
+	elsif ( $^O eq 'MSWin32' ) {
+		# NOTE: it is imperative that there be no whitespaces in ENV=value...
+		my $env = join("\n", map { "__${_}__=$target_directories->{$_}" } keys %$target_directories); 
+		$env .= "\n\n";
+		$env .= join("\n", map { "__${_}__=$config{$_}" } keys %config);
+		return "$env\n";
+	}
 }
 
 __END__
