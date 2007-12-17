@@ -46,6 +46,8 @@ use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
 
+#use Smart::Comments;
+
 use vars qw($debug);
 
 BEGIN {
@@ -96,6 +98,8 @@ if ( $reregistration eq 'y' ) {
 my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
 my $category_type = $borrowercategory->{'category_type'};
 
+### $category_type
+
 # in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
 $template->param( $data->{'categorycode'} => 1 ); 
 
@@ -121,10 +125,16 @@ $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
 $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
+
     my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
-	foreach (qw(address city B_address B_city phone mobilezipcode)) {
-    	$data->{$_} = $data2->{$_};
-	}
+    foreach (qw(address city B_address B_city phone mobilezipcode)) {
+        $data->{$_} = $data2->{$_};
+    }
+    my  ( $catcodes, $labels ) = 
+        GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+    my $cnt = scalar(@$catcodes);
+    $template->param( 'CATCODE_MULTI' => 1)    if  $cnt > 1;
+    $template->param( 'IS_CHILD' => 1 );
 }
 
 if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
