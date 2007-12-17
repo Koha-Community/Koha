@@ -131,10 +131,11 @@ my $print          = $query->param('print');
 #
 
 my ($datedue,$invalidduedate);
-if($duedatespec) {
-	$datedue=  C4::Dates->new($duedatespec );
+if ($duedatespec) {
+	$datedue =  C4::Dates->new($duedatespec,'iso' );
 	$invalidduedate=1 unless $datedue;
 }
+
 #if (defined($year)) {
 #        $duedatespec = "$year-$month-$day";
 #} else {
@@ -196,7 +197,6 @@ if ($findborrower) {
 # get the borrower information.....
 my $borrower;
 my @lines;
-warn $borrowernumber;
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
@@ -275,10 +275,8 @@ if ($barcode) {
             $noquestion = 0;
         }
         $template->param(
-			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	
-            day   => $day,
-            month => $month,
-            year  => $year
+			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	             
+			 duedatespec => $duedatespec,
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
             AddIssue( $borrower, $barcode, $datedue );

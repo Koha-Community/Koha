@@ -856,7 +856,9 @@ sub AddIssue {
 		if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
 			AddRenewal(
 				$borrower->{'borrowernumber'},
-				$item->{'itemnumber'}
+				$item->{'itemnumber'},
+				C4::Context->userenv->{'branch'},
+				$date
 			);
 
 		}
