@@ -111,7 +111,7 @@ sub GetBranches {
     while ( my $branch = $sth->fetchrow_hashref ) {
         my $nsth =
           $dbh->prepare(
-            "SELECT category_id FROM branchrelations WHERE branchcode = ?");
+            "SELECT categorycode FROM branchrelations WHERE branchcode = ?");
         $nsth->execute( $branch->{'branchcode'} );
         while ( my ($cat) = $nsth->fetchrow_array ) {
 
