@@ -660,9 +660,9 @@ sub _build_weighted_query {
         $weighted_query .= " or ti,phr,r3=\"$operand\"";            # phrase title
        #$weighted_query .= " or any,ext,r4=$operand";               # exact any
        #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
-        $weighted_query .= " or wrd,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
-        $weighted_query .= " or wrd,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
-		$weighted_query .= " or wrd,r9=\"$operand\"";
+        $weighted_query .= " or wrdl,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
+        $weighted_query .= " or wrdl,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
+		$weighted_query .= " or wrdl,r9=\"$operand\"";
 
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
@@ -680,7 +680,7 @@ sub _build_weighted_query {
        $weighted_query .= " $index,ext,r1=\"$operand\"";            # exact index
        #$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
        $weighted_query .= " or $index,phr,r3=\"$operand\"";         # phrase index
-       $weighted_query .= " or $index,rt,wrd,r3=\"$operand\"";      # word list index
+       $weighted_query .= " or $index,rt,wrdl,r3=\"$operand\"";      # word list index
     }
     $weighted_query .= "))";    # close rank specification
     return $weighted_query;
@@ -753,7 +753,8 @@ sub buildQuery {
 
 				# a flag to determine whether or not to add the index to the query
 				my $indexes_set;
-				# if the user is sophisticated enough to specify an index, turn off some defaults
+
+				# if the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
 				if ($operands[$i] =~ /(:|=)/ || $scan) {
 					$weight_fields = 0;
 					$stemming = 0;
@@ -761,15 +762,30 @@ sub buildQuery {
 				}
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
-				$DEBUG=1;
-				# some helpful index modifs
 
-				my $wrdl;
-				unless (!$index || $index =~ /(phr|ext)/) {
-					$wrdl = ",wrdl";
+				# add some attributes for certain index types
+				# Date of Publication
+				if ($index eq 'yr') {
+					$index .=",st-numeric";
+					$indexes_set++;
+					($stemming,$auto_truncation,$weight_fields, $fuzzy_enabled, $remove_stopwords) = (0,0,0,0,0);
 				}
-                my $index_plus = $index.$wrdl.":" if $index;
-                my $index_plus_comma=$index.$wrdl."," if $index;
+				# Date of Acquisition
+				elsif ($index eq 'acqdate') {
+					$index.=",st-date-normalized";
+					$indexes_set++;
+					($stemming,$auto_truncation,$weight_fields, $fuzzy_enabled, $remove_stopwords) = (0,0,0,0,0);
+
+				}
+
+				# set default structure attribute (word list)
+				my $struct_attr;
+				unless (!$index || $index =~ /(st-|phr|ext|wrdl)/) {
+					$struct_attr = ",wrdl";
+				}
+				# some helpful index modifs
+                my $index_plus = $index.$struct_attr.":" if $index;
+                my $index_plus_comma=$index.$struct_attr."," if $index;
 
                 # Remove Stopwords
 				if ($remove_stopwords) {
@@ -885,7 +901,6 @@ sub buildQuery {
 			$limit_cgi .="&limit=$this_limit";
 			$limit_desc .= "$this_limit";
         }
-
 		# regular old limits
 		else {
 			$limit .= " and " if $limit || $query;

@@ -387,7 +387,18 @@ foreach my $limit(@limits) {
 $template->param(available => $available);
 
 # append year limits if they exist
-push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limit-yr'};
+if ($params->{'limit-yr'}) {
+	if ($params->{'limit-yr'} =~ /\d{4}-\d{4}/) {
+		my ($yr1,$yr2) = split(/-/, $params->{'limit-yr'});
+		push @limits, "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
+	}
+	elsif ($params->{'limit-yr'} =~ /\d{4}/) {
+		push @limits, "yr,st-numeric=$params->{'limit-yr'}";
+	}
+	else {
+		#FIXME: Should return a error to the user, incorect date format specified
+	}
+}
 
 # Params that can only have one value
 my $scan = $params->{'scan'};
@@ -546,7 +557,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			$template->param(	PAGE_NUMBERS => \@page_numbers,
 								previous_page_offset => $previous_page_offset) unless $pages < 2;
 			$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
-         }
+		}
     } # end of the if local
     else {
         # check if it's a z3950 or opensearch source
