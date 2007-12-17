@@ -48,7 +48,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from categories where (description like ?) order by category_type,description");
+	my $sth=$dbh->prepare("Select * from categories where (description like ?) order by category_type,description,categorycode");
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){

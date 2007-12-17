@@ -62,6 +62,7 @@ else
 }
 //end function
 //function test if date enrooled < date expiry
+// WARNING: format-specific test.
 function check_manip_date(status) {
 if (status=='verify'){
 // this part of function('verify') is used to check if dateenrolled<date expiry

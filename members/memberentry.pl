@@ -108,9 +108,9 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $newdata{$key} = $input->param($key) if (defined $input->param($key));
         $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
-    $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
-    $newdata{'dateexpiry'}  =format_date_in_iso($newdata{'dateexpiry'}  ) if ($newdata{dateexpiry});  
-    $newdata{'dateofbirth'} =format_date_in_iso($newdata{'dateofbirth'} ) if ($newdata{dateofbirth});  
+#    $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
+#    $newdata{'dateexpiry'}  =format_date_in_iso($newdata{'dateexpiry'}  ) if ($newdata{dateexpiry});  
+#    $newdata{'dateofbirth'} =format_date_in_iso($newdata{'dateofbirth'} ) if ($newdata{dateofbirth});  
   # check permission to modify login info.
     if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
 		$NoUpdateLogin =1;
@@ -171,6 +171,7 @@ if ($op eq 'save' || $op eq 'insert'){
       $nok = 1;
     }
   }
+warn $newdata{'dateofbirth'};
     
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} != 1){
@@ -221,6 +222,7 @@ if ($op eq 'save'){
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
+warn $newdata{'dateofbirth'};
 		&ModMember(%newdata);    
 	    if ($destination eq "circ")	{
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
@@ -489,6 +491,7 @@ $template->param(
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
   dateformat      => C4::Dates->new()->visual(),
+  C4::Context->preference('dateformat') => 1,
   check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 

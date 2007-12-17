@@ -156,7 +156,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
                 <label for="dateofbirth">
                 <!-- /TMPL_IF-->
                 Date of birth: </label>
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateofbirth);"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
         <script language="JavaScript" type="text/javascript">
             Calendar.setup(
@@ -194,13 +194,9 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
         <input type="hidden" name="sex" value="N" />
     <!--TMPL_ELSE-->
 		<li class="radio">  
-		<!-- TMPL_IF NAME="female" -->
-				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" checked="checked" />
-				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
-		<!-- TMPL_ELSE -->
-				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
-				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" checked="checked" />
-		<!-- /TMPL_IF -->
+				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F"  <!-- TMPL_IF NAME="female" --> checked="checked" <!-- /TMPL_IF --> />
+				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" <!-- TMPL_IF NAME="male" --> checked="checked" <!-- /TMPL_IF --> />
+				<label for="sex-male">? </label><input type="radio" name="sex" id="sex-male" value="" <!-- TMPL_IF NAME="none" --> checked="checked" <!-- /TMPL_IF --> />
        	</li>
     <!--/TMPL_IF-->
 <!--TMPL_IF EXPR="showguarantor"-->  <li><label for="">Guarantor: </label>
@@ -519,7 +515,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			<label for="dateenrolled">
 			<!-- /TMPL_IF-->
 			Registration date: </label>
-			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
+			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');"<!-- /TMPL_IF--> value="<!-- TMPL_VAR NAME="dateenrolled" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateenrolled_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
@@ -539,7 +535,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 			<label for="dateexpiry">
 			<!-- /TMPL_IF-->
 			Expiry date: </label>
-			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
+			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');"<!-- /TMPL_IF--> value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
