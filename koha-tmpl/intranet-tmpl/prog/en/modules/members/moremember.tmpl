@@ -192,7 +192,7 @@ Unable to delete member: insufficient privileges.
 	
 <div id="finesandcharges">
     <h2>Fines and Charges</h2>
-    <!-- TMPL_IF EXPR="totaldue eq 0.00" -->
+    <!-- TMPL_IF EXPR="totaldue ne '0.00'" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
     <!-- TMPL_ELSE -->
         <p>No outstanding charges</p>
