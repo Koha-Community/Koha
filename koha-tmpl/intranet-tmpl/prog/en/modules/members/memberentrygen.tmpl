@@ -46,13 +46,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		Add<!--TMPL_IF Name="I"--> organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> professional <!--/TMPL_IF --><!--TMPL_IF Name="S"-->staff <!--/TMPL_IF -->
-patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
+		<!--TMPL_IF Name="I"--> Add organisation patron <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Add adult patron <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Add child patron <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Add professional patron <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Add staff patron <!--/TMPL_IF -->
+<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- TMPL_ELSE -->
 	<h1 >
-		Modify<!--TMPL_IF Name="I"--> organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> professional <!--/TMPL_IF --><!--TMPL_IF Name="S"-->staff <!--/TMPL_IF -->
-patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
+		<!--TMPL_IF Name="I"--> Modify organisation patron <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Modify adult patron <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Modify child patron <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Modify professional patron <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Modify staff patron <!--/TMPL_IF -->
+<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- /TMPL_IF -->
   
@@ -311,6 +311,15 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
     <legend>Contact</legend><ol>       
 <!--TMPL_IF Name="C"-->
       <h2>Patron</h2>
+      <li> 
+        <!-- TMPL_IF NAME="mandatoryB_email" -->
+          <label for="B_email" class="required">
+        <!--TMPL_ELSE-->
+          <label for="B_email">
+        <!-- /TMPL_IF-->
+        E-mail (home): </label>
+        <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
+		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
 <!--/TMPL_IF-->
       <li>
       <!-- TMPL_IF NAME="mandatoryphone" --> 
