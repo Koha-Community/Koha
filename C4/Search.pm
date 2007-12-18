@@ -885,7 +885,7 @@ sub buildQuery {
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
 			# available is defined as (items.notloan is NULL) and (items.itemlost > 0 or NULL) (last clause handles NULL values for lost in zebra)
-			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric ge 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
 			$limit_cgi .= "&limit=available";
 			$limit_desc .="";
         }
