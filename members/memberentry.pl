@@ -325,7 +325,6 @@ my $citypopup = CGI::popup_menu(-name=>'select_city',
         -values=>$name_city,
         -labels=>$name_city,
         -default=>$default_city,
-        -onChange => "javascript:changecity()",
         );  
   
 my $default_roadtype;
