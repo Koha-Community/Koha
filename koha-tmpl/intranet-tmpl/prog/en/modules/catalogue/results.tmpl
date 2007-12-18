@@ -53,7 +53,7 @@ $(window).load(function() {
         </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="total" -->
-<div id="searchheader">	<form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
+<div id="searchheader">	<form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="sortbyform" id="sortbyform">
                 <!-- TMPL_IF NAME="searchdesc" -->
 					<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
 					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
@@ -66,7 +66,7 @@ $(window).load(function() {
                 <!-- /TMPL_IF -->
  				<!-- RE-SORT START -->
                     <label for="sort_by">Sort By: </label>
-                    <select id="sort_by" name="sort_by">
+                    <select id="sort_by" name="sort_by" onchange="document.sortbyform.submit();">
 					<!-- TMPL_INCLUDE NAME="resort_form.inc" -->
 					</select>
 					<input type="submit" value="Go" />
