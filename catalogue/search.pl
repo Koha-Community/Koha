@@ -387,7 +387,21 @@ foreach my $limit(@limits) {
 $template->param(available => $available);
 
 # append year limits if they exist
-push @limits, map "yr:".$_, split("\0",$params->{'limit-yr'}) if $params->{'limit-yr'};
+my $limit_yr;
+my $limit_yr_value;
+if ($params->{'limit-yr'}) {
+	if ($params->{'limit-yr'} =~ /\d{4}-\d{4}/) {
+		my ($yr1,$yr2) = split(/-/, $params->{'limit-yr'});
+		$limit_yr = "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
+		$limit_yr_value = "$yr1-$yr2";
+	}
+	elsif ($params->{'limit-yr'} =~ /\d{4}/) {
+		$limit_yr = "yr,st-numeric=$params->{'limit-yr'}";
+		$limit_yr_value = $params->{'limit-yr'};
+	}
+	push @limits,$limit_yr;
+	#FIXME: Should return a error to the user, incorect date format specified
+}
 
 # Params that can only have one value
 my $scan = $params->{'scan'};
@@ -423,6 +437,11 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 my @limit_inputs;
 for my $this_cgi ( split('&',$limit_cgi) ) {
 	next unless $this_cgi;
+	# handle special case limit-yr
+	if ($this_cgi =~ /yr,st-numeric/) {
+		push @limit_inputs, { input_name => 'limit-yr', input_value => $limit_yr_value };	
+		next;
+	}
     $this_cgi =~ m/(.*=)(.*)/;
     my $input_name = $1;
     my $input_value = $2;
@@ -492,6 +511,9 @@ for (my $i=0;$i<=@servers;$i++) {
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
+			my $limit_cgi_not_availablity = $limit_cgi;
+            $limit_cgi_not_availablity =~ s/&limit=available//g;
+            $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
 			$template->param(limit_cgi => $limit_cgi);
 			$template->param(query_cgi => $query_cgi);
 			$template->param(query_desc => $query_desc);
@@ -546,7 +568,11 @@ for (my $i=0;$i<=@servers;$i++) {
 			$template->param(	PAGE_NUMBERS => \@page_numbers,
 								previous_page_offset => $previous_page_offset) unless $pages < 2;
 			$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
-         }
+		}
+		# no hits
+		else {
+			$template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
+		}
     } # end of the if local
     else {
         # check if it's a z3950 or opensearch source

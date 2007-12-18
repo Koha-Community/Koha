@@ -16,7 +16,7 @@ esetname B @
 marc usmarc.mar
 systag sysno rank
 xpath enable
-
+# Some notes:
 # pl = Published Place
 # ta = Target Audience 002/22
 # ff8-23
@@ -27,6 +27,13 @@ xpath enable
 # ctype = Content type: review, catalog, encyclopedia, dictionary
 # pubdate Publication Date
 # rtype =  Record type (leader 06)
+#
+# Date indexing in Koha 3.0 for MARC21:
+# Index                   Expected format         Notes
+# date-entered-on-file    [yymmdd]        (008/0-5, indexed in word and sort indexes)
+# copydate                [yyyy]          (260$c, indexed in word and sort indexes)
+# acqdate                 [yyyy-mm-dd]    (952$d, indexed in date,word,sort indexes)
+# pubdate                 [yyyy]          (008/7-10, indexed in year,word,num,sort indexes)
 
 all any
 # melm 000 		rtype:n:range(data,06,1),Bib-level:w:range(data,07,01)
@@ -34,10 +41,10 @@ xelm /record/leader llength:w:range(data,0,5),rtype:w:range(data,6,1),Bib-level:
 # example: xelm /record/leader l1:w:range(data,0,5),l2:w:range(data,10,2)
 
 melm 001		Control-number
-melm 005		Date,Date/time-last-modified
+melm 005		Date/time-last-modified
 melm 007		Microform-generation:n:range(data,11,1),Material-type,ff7-00:w:range(data,0,1),ff7-01:w:range(data,1,1),ff7-02:w:range(data,2,1),ff7-01-02:w:range(data,0,2)
 
-melm 008		ln:n:range(data,35,3),ctype:w:range(data,24,4),Date:n:range(data,0,5),Date:s:range(data,0,5),Date:n:range(data,7,4),Date:s:range(data,7,4),Date:n:range(data,11,4),Date:s:range(data,11,4),pubdate:n:range(data,7,4),pubdate:s:range(data,7,4),dateaddeddb:n:range(data,0,5),dateaddeddb:s:range(data,0,5),pl:w:range(data,15,3),ta:w:range(data,22,1),ff8-23:w:range(data,23,1),ff8-29:w:range(data,29,1),lf:w:range(data,33,1),bio:w:range(data,34,1),Record-source:w:range(data,39,0)
+melm 008		date-entered-on-file:n:range(data,0,5),date-entered-on-file:s:range(data,0,5),pubdate:w:range(data,7,4),pubdate:n:range(data,7,4),pubdate:y:range(data,7,4),pubdate:s:range(data,7,4),pl:w:range(data,15,3),ta:w:range(data,22,1),ff8-23:w:range(data,23,1),ff8-29:w:range(data,29,1),lf:w:range(data,33,1),bio:w:range(data,34,1),ln:n:range(data,35,3),ctype:w:range(data,24,4),Record-source:w:range(data,39,0)
 
 melm 010		LC-card-number,Identifier-standard
 melm 011		LC-card-number,Identifier-standard
@@ -54,7 +61,7 @@ melm 025		Identifier-standard
 melm 027		Report-number,Identifier-standard
 melm 028		Number-music-publisher,Identifier-standard
 melm 030		CODEN,Identifier-standard
-melm 033		Date
+#melm 033		Date
 melm 034        Map-scale
 #melm 035		Local-number,Identifier-standard
 melm 037		Identifier-standard,Stock-number
@@ -107,8 +114,7 @@ melm 246		Title,Title:p,Title-abbreviated,Title-expanded,Title-former
 melm 247		Title,Title:p,Title-former,Title-other-variant,Related-periodical
 melm 260$a		pl:w,pl:p
 melm 260$b		Publisher:w,Publisher:p
-melm 260$c		Date,Date:s,Date:y
-#,pubdate,pubdate:s
+melm 260$c		copydate,copydate:s
 melm 260		pl
 melm 300		Extent:w,Extent:p
 melm 400$a		Name-and-title

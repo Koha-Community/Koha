@@ -41,7 +41,7 @@ Unable to delete member: insufficient privileges.
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron does not exist.
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="reregistration" --><div class="message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="reregistration" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
 <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -119,7 +119,6 @@ Unable to delete member: insufficient privileges.
      <!-- /TMPL_IF  -->
 </ol>
 </div>
-</div>    
           <div class="action">  <!-- TMPL_IF name="guarantorborrowernumber" -->
 			<a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
 			<!-- TMPL_ELSE -->
@@ -127,6 +126,7 @@ Unable to delete member: insufficient privileges.
 			<!-- /TMPL_IF --></div>
 
 
+</div>    
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details">
@@ -171,7 +171,6 @@ Unable to delete member: insufficient privileges.
       <!-- TMPL_VAR NAME="B_zipcode" --></p>
   <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
- <!-- TMPL_IF NAME="C" -->C!<!-- TMPL_ELSE -->Not C.<!-- /TMPL_IF -->
      <!-- TMPL_IF NAME="C" -->
    <div class="rows"> <ol><li><span class="label">Name: </span><!-- TMPL_VAR NAME="contactname" --></li>
     <li><span class="label">Firstname: </span><!-- TMPL_VAR NAME="firstname" --></li>    
@@ -193,7 +192,7 @@ Unable to delete member: insufficient privileges.
 	
 <div id="finesandcharges">
     <h2>Fines and Charges</h2>
-    <!-- TMPL_IF EXPR="totaldue eq 0.00" -->
+    <!-- TMPL_IF EXPR="totaldue ne '0.00'" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
     <!-- TMPL_ELSE -->
         <p>No outstanding charges</p>

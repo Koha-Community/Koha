@@ -1612,12 +1612,13 @@ sub AddRenewal {
 
     my ( $borrowernumber, $itemnumber, $branch ,$datedue ) = @_;
     my $dbh = C4::Context->dbh;
-
+	
+	my $biblio = GetBiblioFromItemNumber($itemnumber);
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
     unless ( $datedue ) {
 
-        my $biblio = GetBiblioFromItemNumber($itemnumber);
+
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
@@ -1656,8 +1657,15 @@ sub AddRenewal {
     );
     $sth->execute( $datedue->output('iso'), $renews, $borrowernumber, $itemnumber );
     $sth->finish;
-    
-    # Log the renewal
+
+    # Update the renewal count on the item, and tell zebra to reindex
+    $renews = $biblio->{'renewals'} + 1;
+    $sth = $dbh->prepare("UPDATE items SET renewals = ? WHERE itemnumber = ?");
+    $sth->execute($renews,$itemnumber);
+    $sth->finish();
+    my $record = GetMarcItem( $biblio->{'biblionumber'}, $itemnumber );
+    my $frameworkcode = GetFrameworkCode( $biblio->{'biblionumber'} );
+    ModItemInMarc( $record, $biblio->{'biblionumber'}, $itemnumber, $frameworkcode );
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -1676,6 +1684,7 @@ sub AddRenewal {
             'Rent', $charge, $itemnumber );
         $sth->finish;
     }
+    # Log the renewal
     UpdateStats( $branch, 'renew', $charge, '', $itemnumber );
 }
 

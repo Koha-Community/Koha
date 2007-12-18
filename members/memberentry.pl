@@ -108,9 +108,18 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $newdata{$key} = $input->param($key) if (defined $input->param($key));
         $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
-#    $newdata{'dateenrolled'}=format_date_in_iso($newdata{'dateenrolled'}) if ($newdata{dateenrolled});  
-#    $newdata{'dateexpiry'}  =format_date_in_iso($newdata{'dateexpiry'}  ) if ($newdata{dateexpiry});  
-#    $newdata{'dateofbirth'} =format_date_in_iso($newdata{'dateofbirth'} ) if ($newdata{dateofbirth});  
+	my $dateobject = C4::Dates->new();
+	my $regexp = $dateobject->regexp();		# same format for all 3 dates
+	foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+		my $userdate = $newdata{$_} or next;
+		if ($userdate =~ /$regexp/) {
+			$newdata{$_} = format_date_in_iso($userdate);
+		} else {
+			$template->param( "ERROR_$_" => $userdate );
+			push(@errors,"ERROR_$_");
+			$nok++;
+		}
+	}
   # check permission to modify login info.
     if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
 		$NoUpdateLogin =1;
@@ -171,7 +180,7 @@ if ($op eq 'save' || $op eq 'insert'){
       $nok = 1;
     }
   }
-warn $newdata{'dateofbirth'};
+	$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
     
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} != 1){
@@ -207,7 +216,7 @@ if ($op eq 'insert'){
       add_member_orgs($borrowernumber,\@orgs);
     }
     if ($destination eq "circ")	{
-	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
+		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
     } else {
         if ($loginexist == 0) {
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
@@ -222,7 +231,7 @@ if ($op eq 'save'){
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-warn $newdata{'dateofbirth'};
+		$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
 		&ModMember(%newdata);    
 	    if ($destination eq "circ")	{
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
@@ -316,7 +325,6 @@ my $citypopup = CGI::popup_menu(-name=>'select_city',
         -values=>$name_city,
         -labels=>$name_city,
         -default=>$default_city,
-        -onChange => "javascript:changecity()",
         );  
   
 my $default_roadtype;

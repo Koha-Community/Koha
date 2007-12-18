@@ -43,9 +43,9 @@
 <!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
-
+<!-- TMPL_IF NAME="dateexpiry" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
-<div class="yui-g" style="text-align: center">
+<div class="yui-g">
 
 <div id="circ_needsconfirmation" class="dialog alert">
 <h3>Please Confirm Checkout</h3>
@@ -268,7 +268,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<ul>
 		
 			<!--TMPL_IF Name="warndeparture"-->
-			<li><span class="circ-hlt">Expiration:</span> Patron card has expired or will expire soon.</li>
+			<li><span class="circ-hlt">Expiration:</span> Patron card has expired or will expire soon.
+			Patron Expires on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?modify=edit&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit Details</a>
+			
+			</li>
 			<!--/TMPL_IF-->
 
             <!-- TMPL_IF NAME="gna" -->
@@ -280,7 +283,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			<!-- /TMPL_IF -->
 			
             <!-- TMPL_IF NAME="dbarred" --><li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setdebar.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a></li><!-- /TMPL_IF -->
+               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a>
+</li><!-- /TMPL_IF -->
 
         	<!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" --><span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a><!-- /TMPL_IF --></li>
             <!-- /TMPL_IF -->

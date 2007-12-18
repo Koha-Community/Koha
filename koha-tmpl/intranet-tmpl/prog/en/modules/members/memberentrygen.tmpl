@@ -15,13 +15,13 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 			$("#contactfirstname").attr("value","");
 			$("#guarantorsearch").attr("value","Find guarantor");
 		});
+			$("#select_city").change(function(){
+				var myRegEx=new RegExp(/(.*)\|(.*)/);
+		        document.form.select_city.value.match(myRegEx);
+		        document.form.zipcode.value=RegExp.$1;
+		        document.form.city.value=RegExp.$2;					
+		});
 	 });
-	 function changecity() {
-	   var myRegEx=new RegExp(/(.*)\|(.*)/);
-        document.form.select_city.value.match(myRegEx);
-        document.form.zipcode.value=RegExp.$1;
-        document.form.city.value=RegExp.$2;
-	 }
 //]]>
 </script>
 </head>
@@ -123,7 +123,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
             <!-- TMPL_VAR NAME="borrotitlepopup" -->
             <!-- TMPL_IF NAME="mandatorytitle" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
-        <!-- /TMPL_IF -->
+        <!-- /TMPL_UNLESS -->
 		<li>
 		<!-- TMPL_IF NAME="mandatorysurname" -->
 		<label for="surname" class="required">
@@ -179,7 +179,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
                 <input type="text" id="initials" name="initials" size="20"  value="<!-- TMPL_VAR NAME="initials" -->" />	
                 <!-- TMPL_IF NAME="mandatoryinitials" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
-        <!-- /TMPL_IF -->
+        <!-- /TMPL_UNLESS -->
 		<li>
 			<!-- TMPL_IF NAME="mandatoryothernames" -->
 			<label for="othernames" class="required">
@@ -270,10 +270,10 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
       <!--TMPL_ELSE-->
         <label for="city">
       <!-- /TMPL_IF-->
-      City: </label>
+      City, State: </label>
         
         <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
-        or choose <!-- TMPL_VAR NAME="citypopup" -->
+        <!-- TMPL_IF NAME="city_cgipopup" -->or <strong>choose</strong> <!-- TMPL_VAR NAME="citypopup" --><!-- /TMPL_IF -->
 	  <!-- TMPL_IF NAME="mandatorycity" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
     <li> 
@@ -293,15 +293,6 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
     <legend>Contact</legend><ol>       
 <!--TMPL_IF Name="C"-->
       <h2>Patron</h2>
-      <li> 
-        <!-- TMPL_IF NAME="mandatoryB_email" -->
-          <label for="B_email" class="required">
-        <!--TMPL_ELSE-->
-          <label for="B_email">
-        <!-- /TMPL_IF-->
-        E-mail (home): </label>
-        <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
-		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
 <!--/TMPL_IF-->
       <li>
       <!-- TMPL_IF NAME="mandatoryphone" --> 
@@ -413,6 +404,15 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
                 <input type="text" id="B_phone" name="B_phone" value="<!-- TMPL_VAR NAME="B_phone" -->" />
                 <!-- TMPL_IF NAME="mandatoryB_phone" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
+			<li> 
+        <!-- TMPL_IF NAME="mandatoryB_email" -->
+          <label for="B_email" class="required">
+        <!--TMPL_ELSE-->
+          <label for="B_email">
+        <!-- /TMPL_IF-->
+        E-mail: </label>
+        <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
+		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
             <li>
                 <!-- TMPL_IF NAME="mandatorycontacnote" -->
                 <label for="contacnote" class="required">
@@ -630,7 +630,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		<!-- /TMPL_UNLESS -->	
 <!-- /TMPL_IF -->
     <fieldset class="action">
-        <input type="button" name="save" onclick="return check_form_borrowers();" value="Save" />
+        <input type="submit" name="save" onclick="return check_form_borrowers();" value="Save" />
       <!-- TMPL_IF NAME="opadd" -->
        <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
 	   <!-- TMPL_ELSE -->

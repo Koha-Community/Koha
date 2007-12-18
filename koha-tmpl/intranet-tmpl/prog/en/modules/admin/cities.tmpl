@@ -94,46 +94,43 @@
 
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->
-<h3>Confirm Deletion of City</h3>
+		<!-- TMPL_IF NAME="totalgtzero" -->
+<div class="dialog message">
+		<h3>Cannot Delete City "<!-- TMPL_VAR NAME="city_name" -->"</h3>
+		<p>This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</p>
+		<!-- TMPL_ELSE -->
+<div class="dialog alert">
+<h3>Delete City "<!-- TMPL_VAR NAME="city_name" -->?"</h3>
+<!-- /TMPL_IF -->
 	<table>
 		<tr>
-			<td>
-				<b>City id</b>
-			</td>
+			<th>City id
+			</th>
 			<td>
 				<!-- TMPL_VAR NAME="cityid" -->
 			</td>
 		</tr>
 		        
 		<tr>
-			<td>City name</td>
+			<th>City name</th>
 			<td><!-- TMPL_VAR NAME="city_name" --></td>
 		</tr>
 		<tr>
-			<td>City zipcode</td>
+			<th>City zipcode</th>
 			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
 		</tr>
-		<!-- TMPL_IF NAME="totalgtzero" -->
-		<tr>
-			<td colspan="2" align="center" class="problem">This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</td>
-		</tr>
-	<tr>
-			<td colspan="2">
-				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-				<input type="submit" value="OK" />
-				</form>
-			</td>
-		</tr>
-		<!-- TMPL_ELSE -->
-		<tr>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" /><input type="submit" value="YES" /></form></td>
-			<td><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="NO" /></form></td>
-		</tr>
-		<!-- /TMPL_IF -->
 </table>
+		<!-- TMPL_IF NAME="totalgtzero" -->
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+				<input type="submit" class="approv" value="OK" />
+				</form>
+		<!-- TMPL_ELSE -->
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="hidden" name="op" value="delete_confirmed" />
+			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" /><input type="submit" class="approve" value="Yes, Delete" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" class="deny" value="No, do not Delete" /></form>
+		<!-- /TMPL_IF -->
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->

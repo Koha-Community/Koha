@@ -229,11 +229,12 @@
 
 <!-- TMPL_IF name="delete_confirm" -->
 
+<div class="dialog alert">
+<h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></h3>
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
   <input type="hidden" name="op" value="delete_confirmed" />
   <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
   <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" -->" />
-	<fieldset><legend>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></legend>
 	<table>
 		  <tr>
     <th scope="row">Fund: </th><td>
@@ -251,17 +252,17 @@
     <th scope="row">Group: </th><td>
     <!-- TMPL_VAR name="bookfundgroup" --></td></tr>
   	</table>
-   <fieldset class="action"> <input type="submit" value="Yes, Delete this Fund" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbookfund.pl">Cancel</a></fieldset>
-  </fieldset>
-</form>
+   <input type="submit" class="approve" value="Yes, Delete this Fund" /></form>
+   <form action="/cgi-bin/koha/admin/aqbookfund.pl" method="get"><input type="submit" class="deny" value="No, Do not Delete" /></form>
+   </div>
 
 <!-- /TMPL_IF --> <!-- delete_confirm -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-<h3>Data Deleted</h3>
+<div class="dialog message"><h3>Data Deleted</h3>
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
-  <input type="submit" value="OK" />
-</form>
+  <input type="submit" class="approve" value="OK" />
+</form></div>
 <!-- /TMPL_IF --> <!-- delete_confirmed -->
 
 </div>
