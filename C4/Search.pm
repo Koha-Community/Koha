@@ -429,8 +429,8 @@ sub getRecords {
                         my $tmprecord = MARC::Record->new();
                         $tmprecord->encoding('UTF-8');
                         my $tmptitle;
-
-          		# srote the minimal record in author/title (depending on MARC flavour)
+						my $tmpauthor;
+          		# the minimal record in author/title (depending on MARC flavour)
                         if ( C4::Context->preference("marcflavour") eq
                             "UNIMARC" )
                         {
@@ -441,15 +441,12 @@ sub getRecords {
                             );
                         }
                         else {
-                            $tmptitle = MARC::Field->new(
-                                '245', ' ', ' ',
-                                a => $term,
-                                b => $occ
-                            );
+                            $tmptitle = MARC::Field->new('245', ' ', ' ',a => $term,);
+							$tmpauthor = MARC::Field->new('100', ' ', ' ',a => $occ,);
                         }
                         $tmprecord->append_fields($tmptitle);
-                        $results_hash->{'RECORDS'}[$j] =
-                          $tmprecord->as_usmarc();
+						$tmprecord->append_fields($tmpauthor);
+                        $results_hash->{'RECORDS'}[$j] = $tmprecord->as_usmarc();
                     }
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
