@@ -1168,17 +1168,17 @@ sub postamble {
     $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
 
 	# Hereagain, we must alter syntax per platform...
-	if ( $^O =~ /linux|cygwin/ ) {
-		my $env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories); 
-		$env .= "\n\n";
-		$env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
-		return "$env\n";
-	}
-	elsif ( $^O eq 'MSWin32' ) {
+	if ( $^O eq 'MSWin32' ) {
 		# NOTE: it is imperative that there be no whitespaces in ENV=value...
 		my $env = join("\n", map { "__${_}__=$target_directories->{$_}" } keys %$target_directories); 
 		$env .= "\n\n";
 		$env .= join("\n", map { "__${_}__=$config{$_}" } keys %config);
+		return "$env\n";
+	}
+    else {
+		my $env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories); 
+		$env .= "\n\n";
+		$env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
 		return "$env\n";
 	}
 }
