@@ -20,7 +20,7 @@ use ExtUtils::MakeMaker::Config;
 use Tie::File;
 
 my $basedir = (shift);
-my $DEBUG = 1;
+my $DEBUG = 0;
 
 $DEBUG = 1 if $basedir eq 'test';
 
@@ -72,7 +72,7 @@ sub fixshebang{
 			my $pathfile =$dir . '/' . $file;
 			warn "Found a perl script named $pathfile\n" if $DEBUG;
             tie @filearray, 'Tie::File', $pathfile or die $!;
-            print "First line of $file is $filearray[0]\n\n";
+            warn "First line of $file is $filearray[0]\n\n" if $DEBUG;
 			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang/ ) ) {
 				warn "\n\tRe-writing shebang line for $pathfile\n" if $DEBUG;
                 warn "\tOriginal shebang line: $filearray[0]\n" if $DEBUG;
