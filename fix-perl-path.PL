@@ -20,7 +20,7 @@ use ExtUtils::MakeMaker::Config;
 use Tie::File;
 
 my $basedir = (shift);
-my $DEBUG = 1;
+my $DEBUG = exists $ENV{'DEBUG'} ? $ENV{'DEBUG'} : 0;
 
 $DEBUG = 1 if $basedir eq 'test';
 
