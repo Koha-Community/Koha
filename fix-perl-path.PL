@@ -71,6 +71,16 @@ sub fixshebang{
             my @filearray;
 			my $pathfile =$dir . '/' . $file;
 			warn "Found a perl script named $pathfile\n" if $DEBUG;
+
+            # At this point, file is in 'blib' and by default
+            # has mode a-w.  Therefore, must change permission
+            # to make it writable.
+            my $old_perm;
+            if ($^O ne 'MSWin32') {
+                $old_perm = (stat $pathfile)[2] & 07777;
+                my $new_perm = $old_perm | 0200;
+                chmod $new_perm, $pathfile;
+            }
             tie @filearray, 'Tie::File', $pathfile or die $!;
             warn "First line of $file is $filearray[0]\n\n" if $DEBUG;
 			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang|"$shebang -w"/ ) ) {
@@ -78,19 +88,17 @@ sub fixshebang{
                 warn "\tOriginal shebang line: $filearray[0]\n" if $DEBUG;
                 $filearray[0] =~ /-w$/ ? $filearray[0] = "$shebang -w" : $filearray[0] = $shebang;
                 warn "\tNew shebang line is: $filearray[0]\n\n" if $DEBUG;
-                untie @filearray;
-                next;
 			}
             elsif ( $filearray[0] =~ /$shebang|"$shebang -w"/ ) {
                 warn "\n\tShebang line is correct.\n\n" if $DEBUG;
-                untie @filearray;
-                next;
             }
 			else {
                 warn "\n\tNo shebang line found in $pathfile\n\n" if $DEBUG;
-                untie @filearray;
-				next;
 			}
+            untie @filearray;
+            if ($^O ne 'MSWin32') {
+                chmod $old_perm, $pathfile;
+            }
 		}
 		# handle directories
 		elsif ( -d ($dir . '/' . $file) && $file !~ /^\.{1,2}/ ) {
