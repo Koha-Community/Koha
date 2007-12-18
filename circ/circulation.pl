@@ -120,6 +120,7 @@ my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
 my $print          = $query->param('print');
+my $newexpiry = $query->param('dateexpiry');
 
 #set up cookie.....
 # my $branchcookie;
@@ -632,6 +633,7 @@ $template->param(
     printername                 => $printer,
     firstname                   => $borrower->{'firstname'},
     surname                     => $borrower->{'surname'},
+	dateexpiry => format_date($newexpiry),
     expiry                      =>
       $borrower->{'dateexpiry'},    #format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},

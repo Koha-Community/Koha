@@ -41,7 +41,7 @@ Unable to delete member: insufficient privileges.
 <!-- TMPL_IF NAME="unknowuser" -->
     This patron does not exist.
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="reregistration" --><div class="message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="reregistration" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <form action="" name="form">
 <input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
 <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
