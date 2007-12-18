@@ -18,16 +18,16 @@
 	function yuiToolbar() {
 
 		var newmenu = [
-			{ text: "Adult Patron",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A" },
-			{ text: "Child Patron",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C" },
-			{ text: "Professional Patron",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
-			{ text: "Organisation",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
-			{ text: "Staff",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
+			{ text: _("Adult Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A" },
+			{ text: _("Child Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C" },
+			{ text: _("Professional Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
+			{ text: _("Organisation"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
+			{ text: _("Staff"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
 		] 
 	
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "New",
+	        label: _("New"),
 	        name: "newmenubutton",
 	        menu: newmenu,
 	        container: "newmenuc"
