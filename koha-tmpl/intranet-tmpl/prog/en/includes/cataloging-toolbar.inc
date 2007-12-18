@@ -21,7 +21,7 @@
 	
 		var newmenu = [
 			{ text: _("Default Framework"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=" },
-			<!-- TMPL_LOOP NAME="frameworkcodeloop" -->{ text: _("<!-- TMPL_VAR name="frameworktext" --> Framework"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=<!-- TMPL_VAR name="value" -->"},
+			<!-- TMPL_LOOP NAME="frameworkcodeloop" -->{ text: "<!-- TMPL_VAR name="frameworktext" -->", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=<!-- TMPL_VAR name="value" -->"},
 <!-- /TMPL_LOOP -->
 		]
 
