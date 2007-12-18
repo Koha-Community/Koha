@@ -387,17 +387,20 @@ foreach my $limit(@limits) {
 $template->param(available => $available);
 
 # append year limits if they exist
+my $limit_yr;
+my $limit_yr_value;
 if ($params->{'limit-yr'}) {
 	if ($params->{'limit-yr'} =~ /\d{4}-\d{4}/) {
 		my ($yr1,$yr2) = split(/-/, $params->{'limit-yr'});
-		push @limits, "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
+		$limit_yr = "yr,st-numeric,ge=$yr1 and yr,st-numeric,le=$yr2";
+		$limit_yr_value = "$yr1-$yr2";
 	}
 	elsif ($params->{'limit-yr'} =~ /\d{4}/) {
-		push @limits, "yr,st-numeric=$params->{'limit-yr'}";
+		$limit_yr = "yr,st-numeric=$params->{'limit-yr'}";
+		$limit_yr_value = $params->{'limit-yr'};
 	}
-	else {
-		#FIXME: Should return a error to the user, incorect date format specified
-	}
+	push @limits,$limit_yr;
+	#FIXME: Should return a error to the user, incorect date format specified
 }
 
 # Params that can only have one value
@@ -434,6 +437,11 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 my @limit_inputs;
 for my $this_cgi ( split('&',$limit_cgi) ) {
 	next unless $this_cgi;
+	# handle special case limit-yr
+	if ($this_cgi =~ /yr,st-numeric/) {
+		push @limit_inputs, { input_name => 'limit-yr', input_value => $limit_yr_value };	
+		next;
+	}
     $this_cgi =~ m/(.*=)(.*)/;
     my $input_name = $1;
     my $input_value = $2;
