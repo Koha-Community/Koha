@@ -90,7 +90,6 @@ function confirmDelete(s,n){
                 </th>
                 <th>&nbsp;</th>
                 <th>Title</th>
-                <th>Author</th>
                 <th>Call No.</th>
 				<th>&nbsp;</th>
             </tr>
@@ -106,7 +105,7 @@ function confirmDelete(s,n){
                     <td>
                         <img src="<!-- TMPL_VAR NAME="themelang" -->/../img/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
                     </td>
-                    <td>
+                    <td> <p>
                 <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
                             <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                                 <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
@@ -122,8 +121,8 @@ function confirmDelete(s,n){
                                 </a>
                             <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
-                    </td>
-                    <td><!-- TMPL_VAR NAME="author" --></td>
+                    </p>
+                    <p><!-- TMPL_VAR NAME="author" --></p></td>
                     <td><!-- TMPL_VAR NAME="classification" --></td>
 					<td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></td>
         </tr>
