@@ -1058,7 +1058,7 @@ sub searchResults {
 			my $match;
 			my $field = $highlight_field->as_string();
 			for my $term ( keys %$span_terms_hashref ) {
-				if (($field =~ /$term/) && (length($term) > 3)) {
+				if (($field =~ /$term/i) && (length($term) > 3)) {
 					$field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
 					$match++;
 				}
