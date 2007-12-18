@@ -1096,9 +1096,14 @@ sub postamble {
     # so that Make will export as environment
     # variables -- this is for the use of
     # rewrite-confg.PL
-    my $env = join("\n", map { "export __${_}__ = $target_directories->{$_}" } keys %$target_directories); 
+    my $env = join("\n", map { "export __${_}__ := $target_directories->{$_}" } keys %$target_directories); 
     $env .= "\n\n";
-    $env .= join("\n", map { "export __${_}__ = $config{$_}" } keys %config);
+
+    # quote '$' in the two password parameters
+    my %config = %config;
+    $config{'DB_PASS'} =~ s/\$/\$\$/g;
+    $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
+    $env .= join("\n", map { "export __${_}__ := $config{$_}" } keys %config);
     return "$env\n";
 }
 
