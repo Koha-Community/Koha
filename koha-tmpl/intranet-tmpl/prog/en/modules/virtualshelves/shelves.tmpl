@@ -160,7 +160,8 @@ function confirmDelete(s,n){
 </form>
 </div>
 <!-- /TMPL_IF -->
-<!-- TMPL_ELSE -->
+<!-- /TMPL_IF -->
+
     <!-- TMPL_IF NAME="shelves" -->
 <div class="yui-ge">
 	<div class="yui-u first">
@@ -198,8 +199,8 @@ function confirmDelete(s,n){
         </ul></div>
 	</div>
 </div>
-        
-    <!-- TMPL_ELSE -->
+<!-- /TMPL_IF -->
+   
     <!-- TMPL_IF name="edit" -->
 	<div class="yui-ge">
 	<div class="yui-u first">
@@ -221,6 +222,7 @@ function confirmDelete(s,n){
                         <option value="2" selected="selected">Public</option>
                     <!-- TMPL_ELSE -->
                         <option value="2">Public</option>
+                    <!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="category3" -->
 						<option value="3" selected="selected">Open</option>
 					<!-- TMPL_ELSE -->
@@ -239,7 +241,11 @@ function confirmDelete(s,n){
             </ul></div>
 	</div>
 
-<!-- /TMPL_IF --><!-- TMPL_ELSE -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="viewshelf" --><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="shelves" --><!-- TMPL_ELSE -->
+<!-- TMPL_IF name="edit" --><!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="shelvesloop" -->
 <h3>Virtual shelves</h3>
 
@@ -259,7 +265,7 @@ function confirmDelete(s,n){
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->
-
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
