@@ -91,21 +91,19 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-	<h3>Confirm Deletion of Road Type</h3>
-	<ul>
-		<li>
-			<strong>Road type id : </strong>
-			<!-- TMPL_VAR NAME="roadtypeid" --></td>
-		</li>
-		<li>
-			<strong>Road type: </strong>
-			<!-- TMPL_VAR NAME="road_type" -->
-		</li>
+	<div class="dialog alert"><h3>Delete Road Type "<!-- TMPL_VAR NAME="road_type" -->?"</h3>
+<table>	<tr>
+		<th>Road type id : </th>
+			<td><!-- TMPL_VAR NAME="roadtypeid" --></td>
+		</tr>
+	<tr>	<th>Road type: </th>
+		<td><!-- TMPL_VAR NAME="road_type" -->
+		</td>
 
-	</ul><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+	</tr></table><form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" /><input type="submit" value="Yes, Delete" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" value="No, Do Not Delete" /></form>
+			<input type="hidden" name="roadtypeid" value="<!-- TMPL_VAR NAME="roadtypeid" -->" /><input type="submit" class="approve" value="Yes, Delete" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+			<input type="submit" class="deny" value="No, Do Not Delete" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
