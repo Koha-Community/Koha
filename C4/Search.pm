@@ -1351,7 +1351,7 @@ sub NZanalyse {
         $left='subject' if $left =~ '^su$';
         $left='koha-Auth-Number' if $left =~ '^an$';
         $left='keyword' if $left =~ '^kw$';
-        if ($operator) {
+        if ($operator && $left  ne 'keyword' ) {
             #do a specific search
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
@@ -1392,7 +1392,7 @@ sub NZanalyse {
                 }
             }
         } else {
-            #do a complete search (all indexes)
+            #do a complete search (all indexes), if index='kw' do complete search too.
             my $dbh = C4::Context->dbh;
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND value LIKE ?");
             # split each word, query the DB and build the biblionumbers result
