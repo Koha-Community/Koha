@@ -49,20 +49,20 @@ function update_child() {
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: "Print Page", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
-	        { text: "Print Slip", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
+	        { text: _("Print Page"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
+	        { text: _("Print Slip"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
 	    ];
 	
 		var moremenu = [
-			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
-			{ text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permission" -->disabled: true, <!-- /TMPL_UNLESS -->},
-			{ text: "Delete", onclick: { fn: confirm_deletion } },
-			{ text: "Update Child to Adult Patron" , onclick: { fn: update_child }, <!-- TMPL_UNLESS NAME="is_child" -->disabled: true, <!-- /TMPL_UNLESS -->},
+			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
+			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permission" -->disabled: true, <!-- /TMPL_UNLESS -->},
+			{ text: _("Delete"), onclick: { fn: confirm_deletion } },
+			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }, <!-- TMPL_UNLESS NAME="is_child" -->disabled: true, <!-- /TMPL_UNLESS -->},
 		]
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "Print",
+	        label: _("Print"),
 	        name: "printmenubutton",
 	        menu: printmenu,
 	        container: "printmenuc"
@@ -70,7 +70,7 @@ function update_child() {
 	
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "More",
+	        label: _("More"),
 	        name: "moremenubutton",
 	        menu: moremenu,
 	        container: "moremenuc"
