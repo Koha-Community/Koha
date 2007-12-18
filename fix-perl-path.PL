@@ -1,4 +1,4 @@
-#!c:\strawberry-perl\perl\bin\perl
+#!/usr/bin/perl
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -25,7 +25,7 @@ my $DEBUG = 1;
 $DEBUG = 1 if $basedir eq 'test';
 
 my $bindir = $Config{installbin};
-$bindir =~ s!\\!/!g;	# make all directory separators uniform...
+$bindir =~ s!\\!/!g;	# make all directory separators uniform since Win32 does not care and *nix does...
 my $shebang = "#!$bindir\/perl -w";
 
 warn "Perl binary located in $bindir on this system.\n" if $DEBUG;
@@ -60,7 +60,6 @@ in a manner similar to 'fixshebang (foodir)' but may be supplied with any direct
 =cut
 
 sub fixshebang{
-	# NOTE: this might be dressed up a bit with File::Spec since we're using it here already.
 	my $dir = shift;
     opendir my $dh, $dir or die $!;
 	warn "Reading $dir contents.\n" if $DEBUG;
@@ -105,5 +104,4 @@ sub fixshebang{
 }
 
 fixshebang ($basedir);
-
 
