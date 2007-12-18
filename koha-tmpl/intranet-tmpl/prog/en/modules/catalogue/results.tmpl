@@ -53,7 +53,7 @@ $(window).load(function() {
         </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="total" -->
-<div id="searchheader">	<form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="sortbyform" id="sortbyform">
+<div id="searchheader">	<form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
                 <!-- TMPL_IF NAME="searchdesc" -->
 					<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
 					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
@@ -66,7 +66,7 @@ $(window).load(function() {
                 <!-- /TMPL_IF -->
  				<!-- RE-SORT START -->
                     <label for="sort_by">Sort By: </label>
-                    <select id="sort_by" name="sort_by" onchange="document.sortbyform.submit();">
+                    <select id="sort_by" name="sort_by">
 					<!-- TMPL_INCLUDE NAME="resort_form.inc" -->
 					</select>
 					<input type="submit" value="Go" />
@@ -277,7 +277,7 @@ $(window).load(function() {
                                     <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" />
 									<!-- /TMPL_IF -->                                
                                         <!-- TMPL_IF NAME="author" -->
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
                                         <!-- TMPL_ELSE -->
                                             &nbsp;
                                         <!-- /TMPL_IF -->
