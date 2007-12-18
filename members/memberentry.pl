@@ -171,7 +171,7 @@ if ($op eq 'save' || $op eq 'insert'){
       $nok = 1;
     }
   }
-warn $newdata{'dateofbirth'};
+	$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
     
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} != 1){
@@ -222,7 +222,7 @@ if ($op eq 'save'){
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-warn $newdata{'dateofbirth'};
+		$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
 		&ModMember(%newdata);    
 	    if ($destination eq "circ")	{
 		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
