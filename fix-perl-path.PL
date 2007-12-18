@@ -20,13 +20,13 @@ use ExtUtils::MakeMaker::Config;
 use Tie::File;
 
 my $basedir = (shift);
-my $DEBUG = 0;
+my $DEBUG = 1;
 
 $DEBUG = 1 if $basedir eq 'test';
 
 my $bindir = $Config{installbin};
 $bindir =~ s!\\!/!g;	# make all directory separators uniform since Win32 does not care and *nix does...
-my $shebang = "#!$bindir\/perl -w";
+my $shebang = "#!$bindir\/perl";
 
 warn "Perl binary located in $bindir on this system.\n" if $DEBUG;
 warn "The shebang line for this sytems should be $shebang\n\n" if $DEBUG;
@@ -65,7 +65,7 @@ sub fixshebang{
 	warn "Reading $dir contents.\n" if $DEBUG;
     while( my $file = readdir($dh) ) {
 		# this may be used to exclude any desired files from the scan
-		if ( $file =~ /shebang|wixgen/ ) { next; }
+        # if ( $file =~ /foo/ ) { next; }
 		# handle files... other extensions could be substituted/added if needed
 		if ( $file =~ /\.pl$/ ) {
             my @filearray;
@@ -73,15 +73,15 @@ sub fixshebang{
 			warn "Found a perl script named $pathfile\n" if $DEBUG;
             tie @filearray, 'Tie::File', $pathfile or die $!;
             warn "First line of $file is $filearray[0]\n\n" if $DEBUG;
-			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang/ ) ) {
+			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang|"$shebang -w"/ ) ) {
 				warn "\n\tRe-writing shebang line for $pathfile\n" if $DEBUG;
                 warn "\tOriginal shebang line: $filearray[0]\n" if $DEBUG;
-                $filearray[0] = $shebang;
+                $filearray[0] =~ /-w$/ ? $filearray[0] = "$shebang -w" : $filearray[0] = $shebang;
                 warn "\tNew shebang line is: $filearray[0]\n\n" if $DEBUG;
                 untie @filearray;
                 next;
 			}
-            elsif ( $filearray[0] =~ /$shebang/ ) {
+            elsif ( $filearray[0] =~ /$shebang|"$shebang -w"/ ) {
                 warn "\n\tShebang line is correct.\n\n" if $DEBUG;
                 untie @filearray;
                 next;
@@ -97,7 +97,6 @@ sub fixshebang{
 			my $dirpath = $dir . '/' . $file;
 			warn "Found a subdir named $dirpath\n" if $DEBUG;
 			fixshebang ($dirpath);
-#			closedir $dh;	# I'm not really sure if this is necessary
 		}
 	}
 	closedir $dh;
