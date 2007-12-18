@@ -141,14 +141,14 @@ else {    # DEFAULT
     my $sth2 = $dbh->prepare("SHOW COLUMNS from $tablename");
     $sth2->execute;
 
-    my $toggle    = "white";
+    my $toggle    = 1;
     my @loop_data = ();
     while ( ( my $field ) = $sth2->fetchrow_array ) {
-        if ( $toggle eq 'white' ) {
-            $toggle = "#ffffcc";
+        if ( $toggle eq 1 ) {
+            $toggle = 0;
         }
         else {
-            $toggle = "white";
+            $toggle = 1;
         }
         my %row_data;    # get a fresh hash for the row data
         $row_data{tagfield} = $fields{ $tablename . "." . $field }->{tagfield};
@@ -159,7 +159,7 @@ else {    # DEFAULT
         $row_data{kohafield} = $field;
         $row_data{edit}      =
 "$script_name?op=add_form&amp;tablename=$tablename&amp;kohafield=$field";
-        $row_data{bgcolor} = $toggle;
+        $row_data{toggle} = $toggle;
         push( @loop_data, \%row_data );
     }
     $template->param(
