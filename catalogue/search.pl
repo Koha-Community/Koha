@@ -511,6 +511,9 @@ for (my $i=0;$i<=@servers;$i++) {
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);
+			my $limit_cgi_not_availablity = $limit_cgi;
+            $limit_cgi_not_availablity =~ s/&limit=available//g;
+            $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
 			$template->param(limit_cgi => $limit_cgi);
 			$template->param(query_cgi => $query_cgi);
 			$template->param(query_desc => $query_desc);
