@@ -159,9 +159,9 @@ function verify_images() {
                     <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF name="datedue" -->
 		            <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-			      On issue to a borrower from another branch
+			      Checked out to a borrower from another branch
 			    <!-- TMPL_ELSE -->
-                              On issue to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+                              Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
 			    <!-- /TMPL_IF -->
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_IF name="bi_notforloan" -->
