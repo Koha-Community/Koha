@@ -1052,19 +1052,28 @@ sub searchResults {
         }
         # add spans to search term in results for search term highlighting
         # save a native author, for the <a href=search.lq=<!--tmpl_var name="author"-->> link
+		my $searchhighlightblob;
+		for my $highlight_field ($marcrecord->fields) {
+			next if $highlight_field->tag() =~ /(^00)/; # skip fixed fields
+			my $match;
+			my $field = $highlight_field->as_string();
+			for my $term ( keys %$span_terms_hashref ) {
+				if (($field =~ /$term/) && (length($term) > 3)) {
+					$field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+					$match++;
+				}
+			}
+			$searchhighlightblob .= $field." ... " if $match;
+		}
+		$oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
+
         $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
-        foreach my $term ( keys %$span_terms_hashref ) {
+        for my $term ( keys %$span_terms_hashref ) {
             my $old_term = $term;
             if ( length($term) > 3 ) {
-                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\])//g;
-                $term =~ s/\\//g;
-                $term =~ s/\*//g;
-
-                #FIXME: is there a better way to do this?
+                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
                 $oldbiblio->{'title'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'subtitle'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-
+                $oldbiblio->{'subtitle'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'author'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'publishercode'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'place'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
