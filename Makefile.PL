@@ -24,7 +24,6 @@ use warnings;
 use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
-use Cwd;
 
 my $DEBUG = 0;
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
@@ -420,8 +419,11 @@ get_file_map($target_map, $dirtree, $file_map, $config{'INSTALL_ZEBRA'} eq "yes"
 my $pl_files = {
       'rewrite-config.PL' => [
          'blib/KOHA_CONF_DIR/koha-conf.xml',
-         'blib/KOHA_CONF_DIR/koha-httpd.conf',
-         ]
+         'blib/KOHA_CONF_DIR/koha-httpd.conf'
+         ],
+	  'fix-perl-path.PL' => [	# this script ensures the correct shebang line for the platform installed on...
+		 'blib'
+		 ]
 };
 
 if ($config{'INSTALL_ZEBRA'} eq "yes") {
@@ -518,7 +520,7 @@ WriteMakefile(
     INSTALLMAN1DIR => File::Spec->catdir($target_directories->{'MAN_DIR'}, 'man1'),
     INSTALLMAN3DIR => File::Spec->catdir($target_directories->{'MAN_DIR'}, 'man3'),
 
-   PL_FILES => $pl_files,
+    PL_FILES => $pl_files,
 
 );
 
@@ -1050,66 +1052,6 @@ sub display_configuration {
     print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
 }
 
-=head2 fixshebang
-
-This sub will recurse through a given directory and its subdirectories checking for the existence of a shebang
-line in .pl files and replacing it with the correct line for the current OS if needed. It should be called
-in a manner similar to 'fixshebang (getcwd())' but may be supplied with any directory in absolute path form.
-
-=cut
-
-sub fixshebang{
-	# NOTE: this might be dressed up a bit with File::Spec since we're using it here already.
-	my $dir = shift;
-    opendir my $dh, $dir or die $!;
-    while( my $file = readdir($dh) ) {
-		print "Reading $dir contents.\r\n" if $DEBUG;
-		print "Current item = $file\r\n" if $DEBUG;
-		# this may be used to exclude any desired files from the scan
-		if ( $file =~ /shebang|wixgen/ ) { next; }
-		# handle files... other extensions could be substituted/added if needed
-		if ( $file =~ /\.pl$/ ) {
-			my $pathfile =$dir . '/' . $file;
-			print "Found a perl script named $pathfile\r\n" if $DEBUG;
-			open FH, '+<', "$pathfile";
-			my @file = <FH>;
-			seek( FH, 0, 0 );
-			truncate( FH, 0 );
-			my $line = shift @file;
-			print "Found shebang line: $line\r\n" if $DEBUG;
-			# FIXME: these conditionals need to be modified to select shebang line based on OS ($^O)
-			if ( $line =~ /#!c:\\strawberry-perl\\perl\\bin\\perl -w/ ) {
-				# FIXME: This can probably be done with less of a hack. -fbcit
-				print FH $line;
-				print FH @file;
-				close (FH);
-				next;
-			}
-			elsif ( $line =~ /#!\/usr\/bin\/perl/ ) {
-				print "Re-writing shebang line for $pathfile\r\n";
-				print FH "#!c:\\strawberry-perl\\perl\\bin\\perl -w\n";
-				print FH @file;
-				close(FH);
-			}
-			else {
-				# FIXME: This can probably be done with less of a hack. -fbcit
-				print FH $line;
-				print FH @file;
-				close (FH);
-				next;
-			}
-		}
-		# handle directories
-		elsif ( -d ($dir . '/' . $file) && $file !~ /^\.{1,2}/ ) {
-			my $pathfile = $dir . '/' . $file;
-			print "Found a subdir named $pathfile\r\n" if $DEBUG;
-			&fixshebang ($pathfile);
-#			closedir $dh;	# I'm not really sure if this is necessary
-		}
-	}
-	closedir $dh;
-}
-
 package MY;
 
 # This will have to be reworked in order to accommodate Win32...
@@ -1240,6 +1182,7 @@ sub postamble {
 		return "$env\n";
 	}
 }
+
 
 __END__
 
