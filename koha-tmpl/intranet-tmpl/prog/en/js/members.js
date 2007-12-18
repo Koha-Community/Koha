@@ -19,19 +19,19 @@ if (d!="") {
       if ( ((isNaN(dd))||(dd<1)||(dd>31)) && (ok==1) ) {
         msg = _("day not correct."); 
 	    alert(msg); ok=0; field.focus();
-	    return;
+	    return false;
       }
       // checking months
       if ( ((isNaN(mm))||(mm<1)||(mm>12)) && (ok==1) ) {
         msg = _("month not correct.");
 	    alert(msg); ok=0; field.focus();
-	    return;
+	    return false;
       }
       // checking years
       if ( ((isNaN(yyyy))||(yyyy<amin)||(yyyy>amax)) && (ok==1) ) {
         msg = _("years not correct."); 
 	    alert(msg); ok=0; field.focus();
-	    return;
+	    return false;
       }
    }
 }
