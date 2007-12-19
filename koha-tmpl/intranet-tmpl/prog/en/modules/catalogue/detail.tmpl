@@ -61,17 +61,16 @@ function verify_images() {
 		<ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
             <li><strong>Additional Authors:</strong><ul>
-                <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-                <li><a href="/cgi-bin/koha/catalogue/search.pl?q=Koha-Auth-Number:<!-- TMPL_VAR NAME="link" -->">
-                    <!-- TMPL_VAR NAME="value" -->
-                </a></li>
+			<!-- TMPL_LOOP NAME="MARCAUTHORS" -->
+                <li><!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR name='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
                 <!-- /TMPL_LOOP -->
+
 		</ul>
             </li>
         <!-- /TMPL_IF -->
 		<!-- TMPL_IF name="publishercode" -->
     <li><strong>Published by:</strong>
-        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
+        <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
             <!-- TMPL_VAR NAME="publishercode" --> 
         </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionstatement" --><!-- TMPL_VAR NAME="editionstatement" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionresponsability" --><!-- TMPL_VAR NAME="editionresponsability" --><!-- /TMPL_IF -->
     </li>
@@ -160,9 +159,9 @@ function verify_images() {
                     <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF name="datedue" -->
 		            <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-			      On issue to a borrower from another branch
+			      Checked out to a borrower from another branch
 			    <!-- TMPL_ELSE -->
-                              On issue to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+                              Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
 			    <!-- /TMPL_IF -->
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_IF name="bi_notforloan" -->

@@ -1879,12 +1879,8 @@ sub GetMarcSubjects {
             }
 			my $separator = C4::Context->preference("authoritysep") unless $counter==0;
 			# ignore $9
-			push @subfields_loop, {code => $code, value => $value, link_loop => \@link_loop, separator => $separator} unless ($subject_subfield->[0] == 9 );
-			# this needs to be added back in in a way that the template can expose it properly
-			#if ( $code == 9 ) {
-            #    $link = "an:".$subject_subfield->[1];
-            #    $flag = 1;
-            #}
+			my @this_link_loop = @link_loop;
+			push @subfields_loop, {code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($subject_subfield->[0] == 9 );
 			$counter++;
 		}
                 
@@ -1926,25 +1922,37 @@ sub GetMarcAuthors {
 
     foreach my $field ( $record->fields ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
-        my %hash;
+		my @subfields_loop;
+        my @link_loop;
         my @subfields = $field->subfields();
         my $count_auth = 0;
+		# if there is an authority link, build the link with Koha-Auth-Number: subfield9
+		my $subfield9 = $field->subfield('9');
         for my $authors_subfield (@subfields) {
-			#unimarc-specific line
-            next if ($marcflavour eq 'UNIMARC' and (($authors_subfield->[0] eq '3') or ($authors_subfield->[0] eq '5')));
+			# don't load unimarc subfields 3, 5
+            next if ($marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~ (3|5) ) );
             my $subfieldcode = $authors_subfield->[0];
-            my $value;
-            # deal with UNIMARC author responsibility
-			if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] eq '4')) {
-            	$value = "(".GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ).")";
-            } else {
-                $value        = $authors_subfield->[1];
-            }
-            $hash{tag}       = $field->tag;
-            $hash{value}    .= $value . " " if ($subfieldcode != 9) ;
-            $hash{link}     .= $value if ($subfieldcode eq 9);
+            my $value = $authors_subfield->[1];
+			my $linkvalue = $value;
+			$linkvalue =~ s/(\(|\))//g;
+			my $operator = " and " unless $count_auth==0;
+			# if we have an authority link, use that as the link, otherwise use standard searching
+			if ($subfield9) {
+				@link_loop = ({'limit' => 'Koha-Auth-Number' ,link => "$subfield9" });
+			}
+			else {
+				# reset $linkvalue if UNIMARC author responsibility
+				if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] eq '4')) {
+            		$linkvalue = "(".GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ).")";
+            	}
+				push @link_loop, {'limit' => 'au', link => $linkvalue, operator => $operator };
+			}
+			my @this_link_loop = @link_loop;
+			my $separator = C4::Context->preference("authoritysep") unless $count_auth==0;
+			push @subfields_loop, {code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($authors_subfield->[0] == 9 );
+			$count_auth++;
         }
-        push @marcauthors, \%hash;
+        push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
     }
     return \@marcauthors;
 }
