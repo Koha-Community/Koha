@@ -27,6 +27,12 @@ use C4::Dates;
 use C4::Output;
 use C4::Log;
 
+use vars qw($debug);
+
+BEGIN {
+	$debug = $ENV{DEBUG} || 0;
+}
+
 =head1 viewlog.pl
 
 plugin that shows a stats on borrowers
@@ -34,6 +40,7 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input    = new CGI;
+$debug or $debug = $input->param('debug') || 0;
 my $do_it    = $input->param('do_it');
 my $module   = $input->param("module");
 my $user     = $input->param("user");
@@ -56,6 +63,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { tools => 1 },
         debug           => 1,
     }
+);
+
+$template->param(
+	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+	              dateformat => C4::Dates->new()->format(),
+				       debug => $debug,
 );
 
 if ($do_it) {
@@ -119,7 +132,6 @@ if ($do_it) {
         total        => 0,
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice,
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
