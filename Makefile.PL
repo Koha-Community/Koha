@@ -956,7 +956,7 @@ sub get_target_directories {
         $skipdirs{'INTRANET_TMPL_DIR'} = 1;
         $dirmap{'INTRANET_WWW_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl');
         $skipdirs{'INTRANET_WWW_DIR'} = 1;
-        $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir($curdir, 'opac');
+        $dirmap{'OPAC_CGI_DIR'} = File::Spec->catdir($curdir);
         $skipdirs{'OPAC_CGI_DIR'} = 1;
         $dirmap{'OPAC_TMPL_DIR'} = File::Spec->catdir($curdir, 'koha-tmpl', 'opac-tmpl');
         $skipdirs{'OPAC_TMPL_DIR'} = 1;
