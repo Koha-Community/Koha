@@ -162,7 +162,7 @@ sub SearchAuthorities {
                 }
             }
             # limit the $results_per_page to result size if it's more
-            $length = $numbers-1-$offset if $numbers < ($offset+$length);
+            $length = $numbers-$offset if $numbers < ($offset+$length);
             # for the requested page, replace authid by the complete record
             # speed improvement : avoid reading too much things
             my @finalresult;      
