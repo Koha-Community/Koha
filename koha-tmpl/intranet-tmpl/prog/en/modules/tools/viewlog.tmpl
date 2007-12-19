@@ -23,67 +23,68 @@
     <legend>Additional parameters</legend>
         <p>
         <label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
-							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
-								<script type="text/javascript">
-									function validate1(date) {
-										var day = date.getDate();
-										var month = date.getMonth() + 1;
-										var year = date.getFullYear();
-										var weekDay = date.getDay();
-										var dayMonth = month + '-' + day;
-										var dateString = year + '-' + month + '-' + day;
-										var dateTo = document.getElementById('to').value.split("-");
-										var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-										if (date > limitDate) {
-											return true;
-										} else {
-											return false;
-										}
-									}
-					
-									Calendar.setup(
-										{
-											inputField : "from",
-											ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-											button : "openCalendarFrom",
-											disableFunc : validate1,
-											dateStatusFunc : validate1
-										}
-									);
-								</script>
-					<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
-						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
-					<script type="text/javascript">
-						function validate2(date) {
-							var day = date.getDate();
-							var month = date.getMonth() + 1;
-							var year = date.getFullYear();
-							var weekDay = date.getDay();
-							var dayMonth = month + '-' + day;
-							var dateString = year + '-' + month + '-' + day;
-							var dateFrom = document.getElementById('from').value.split("-");
-							var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-							if (limitDate > date) {
-								return true;
-							} else {
-								return false;
-							}
-						}
-						Calendar.setup(
-		    			{
-							inputField : "to",
-							ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-							button : "openCalendarTo",
-							disableFunc : validate2,
-							dateStatusFunc : validate2
-						}
-					);
+		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
+		<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
+		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
+			<script type="text/javascript">
+				// function submit_check (from_id,to_id) {
+				//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
+				//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
+				//	var today = new Date();
+				// 	if (dateFrom < dateTo) { 
+				//		alert("The starting date cannot be after the ending date.");
+				//		document.getElementById(to_id).select();
+				//		return false;
+				//	}
+				// 	if (dateFrom > today) { 
+				//		alert("The starting date cannot be in the future.");
+				//		document.getElementById(from_id).select();
+				//		return false;
+				//	}
+				// }
+
+				function get_limit (date,did) {
+					var dvalue = document.getElementById(did).value;
+					if (dvalue == "") { return false; }
+					var limitDate = Date_from_syspref(dvalue);
+					if (debug && debug > 5) {
+						var month = date.getMonth() + 1;
+						var dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
+						alert("comparing to " + did + " date:\n" 
+								+ (limitDate > date) + "\n    date: " + date 
+								+ "\nincoming:\n" + dateString + "\nlimitdate: " + limitDate
+						);
+					}
+					return limitDate;
+				}
+
+				function validatefrom(date) {return (get_limit(date,'to'  ) < date);}  // true or false
+				function validateto  (date) {return (get_limit(date,'from') > date);}  // true or false
+
+				Calendar.setup(
+				{
+					inputField : "from",
+					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+					button : "openCalendarFrom",
+					disableFunc : validatefrom,
+					dateStatusFunc : validatefrom
+				}
+				);
+				Calendar.setup(
+		   		{
+					inputField : "to",
+					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+					button : "openCalendarTo",
+					disableFunc : validateto,
+					dateStatusFunc : validateto
+				}
+				);
 		    </script>
 		</p>
 
-		<p><b>Export into</b></p>
+		<p><b>Export</b></p>
         <p><input id="screen" type="radio" checked="checked" name="output" value="screen" />
-        <label for="screen" >To screen into the browser</label></p>
+        <label for="screen" >To screen in the browser</label></p>
 		<p>
 		<input id="file" type="radio" name="output" value="file" />
 		 <label for="file">To file</label>
