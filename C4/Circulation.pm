@@ -961,8 +961,8 @@ sub AddIssue {
 			$dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
 		
 		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
-        	if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef gt $borrower->{dateexpiry} ) {
-        	    $dateduef = $borrower->{dateexpiry};
+        	if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef->output('iso') gt $borrower->{dateexpiry} ) {
+        	    $dateduef = C4::Dates->new($borrower->{dateexpiry},'iso');
         	}
         };
 		$sth->execute(

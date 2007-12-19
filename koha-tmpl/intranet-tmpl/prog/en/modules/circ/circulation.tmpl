@@ -267,12 +267,19 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<h3><!-- TMPL_IF NAME="noissues" -->Cannot Check Out!<!-- TMPL_ELSE -->Attention:<!-- /TMPL_IF --></h3>
 		<ul>
 		
-			<!--TMPL_IF Name="warndeparture"-->
-			<li><span class="circ-hlt">Expiration:</span> Patron card has expired or will expire soon.
-			Patron Expires on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?modify=edit&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit Details</a>
+			<!-- TMPL_IF NAME = "warndeparture" -->
+			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
+			Patron's card expires on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?modify=edit&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit Details</a>
 			
 			</li>
-			<!--/TMPL_IF-->
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF NAME = "expired" -->
+			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
+			Patron's card expired on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?modify=edit&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Edit Details</a>
+			
+			</li>
+			<!-- /TMPL_IF -->
 
             <!-- TMPL_IF NAME="gna" -->
 			<li class="blocker"><span class="circ-hlt">Address:</span> Patron's address in doubt</li>
