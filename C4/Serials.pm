@@ -2308,7 +2308,7 @@ sub abouttoexpire {
       if ( $per == 10 ) { $x = 365; }
       if ( $per == 11 ) { $x = 730; }
       my @datebeforeend=Add_Delta_Days(  $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2],
-                    - (3 * $x)) if (@endofsubscriptiondate);
+                    - (3 * $x)) if (@endofsubscriptiondate && $endofsubscriptiondate[0]*$endofsubscriptiondate[1]*$endofsubscriptiondate[2]);
               # warn "DATE BEFORE END: $datebeforeend";
       return 1 if ( @res && 
                     (@datebeforeend && 
@@ -2592,65 +2592,78 @@ sub GetNextDate(@) {
       return 0;
     }  
     if ( $subscription->{periodicity} == 1 ) {
-        my $dayofweek = Day_of_Week( $year,$month, $day );
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            $dayofweek = 0 if ( $dayofweek == 7 ); 
-            if ( in_array( ($dayofweek + 1), @irreg ) ) {
-                ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 1 );
-                $dayofweek++;
-            }
-        }
-        @resultdate = Add_Delta_Days($year,$month, $day , 1 );
+        my $dayofweek = eval{Day_of_Week( $year,$month, $day )};
+        if ($@){warn "year month day : $year $month $day $subscription->{subscriptionid} : $@";}
+        else {    
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              $dayofweek = 0 if ( $dayofweek == 7 ); 
+              if ( in_array( ($dayofweek + 1), @irreg ) ) {
+                  ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 1 );
+                  $dayofweek++;
+              }
+          }
+          @resultdate = Add_Delta_Days($year,$month, $day , 1 );
+        }    
     }
     if ( $subscription->{periodicity} == 2 ) {
-        my ($wkno,$year) = Week_of_Year( $year,$month, $day );
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            if ( $irreg[$i] == (($wkno!=51)?($wkno +1) % 52 :52)) {
-                ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 7 );
-                $wkno=(($wkno!=51)?($wkno +1) % 52 :52);
-            }
-        }
-        @resultdate = Add_Delta_Days( $year,$month, $day, 7);
+        my ($wkno,$year) = eval {Week_of_Year( $year,$month, $day )};
+        if ($@){warn "year month day : $year $month $day $subscription->{subscriptionid} : $@";}
+        else {    
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              if ( $irreg[$i] == (($wkno!=51)?($wkno +1) % 52 :52)) {
+                  ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 7 );
+                  $wkno=(($wkno!=51)?($wkno +1) % 52 :52);
+              }
+          }
+          @resultdate = Add_Delta_Days( $year,$month, $day, 7);
+        }        
     }
-    if ( $subscription->{periodicity} == 3 ) {
-        my ($wkno,$year) = Week_of_Year( $year,$month, $day );
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            if ( $irreg[$i] == (($wkno!=50)?($wkno +2) % 52 :52)) {
-            ### BUGFIX was previously +1 ^
-                ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 14 );
-                $wkno=(($wkno!=50)?($wkno +2) % 52 :52);
-            }
-        }
-        @resultdate = Add_Delta_Days($year,$month, $day , 14 );
+    if ( $subscription->{periodicity} == 3 ) {        
+        my ($wkno,$year) = eval {Week_of_Year( $year,$month, $day )};
+        if ($@){warn "year month day : $year $month $day $subscription->{subscriptionid} : $@";}
+        else {    
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              if ( $irreg[$i] == (($wkno!=50)?($wkno +2) % 52 :52)) {
+              ### BUGFIX was previously +1 ^
+                  ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 14 );
+                  $wkno=(($wkno!=50)?($wkno +2) % 52 :52);
+              }
+          }
+          @resultdate = Add_Delta_Days($year,$month, $day , 14 );
+        }        
     }
     if ( $subscription->{periodicity} == 4 ) {
-        my ($wkno,$year) = Week_of_Year( $year,$month, $day );
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            if ( $irreg[$i] == (($wkno!=49)?($wkno +3) % 52 :52)) {
-                ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 21 );
-                $wkno=(($wkno!=49)?($wkno +3) % 52 :52);
-            }
-        }
-        @resultdate = Add_Delta_Days($year,$month, $day , 21 );
+        my ($wkno,$year) = eval {Week_of_Year( $year,$month, $day )};
+        if ($@){warn "année mois jour : $year $month $day $subscription->{subscriptionid} : $@";}
+        else {    
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              if ( $irreg[$i] == (($wkno!=49)?($wkno +3) % 52 :52)) {
+                  ($year,$month,$day) = Add_Delta_Days($year,$month, $day , 21 );
+                  $wkno=(($wkno!=49)?($wkno +3) % 52 :52);
+              }
+          }
+          @resultdate = Add_Delta_Days($year,$month, $day , 21 );
+        }        
     }
     my $tmpmonth=$month;
+    if ($year && $month && $day){
     if ( $subscription->{periodicity} == 5 ) {
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            if ( $irreg[$i] == (($tmpmonth!=11)?($tmpmonth +1) % 12 :12)) {
-                ($year,$month,$day) = Add_Delta_YMD($year,$month, $day ,0,1,0 );
-                $tmpmonth=(($tmpmonth!=11)?($tmpmonth +1) % 12 :12);
-            }
-        }
-        @resultdate = Add_Delta_YMD($year,$month, $day ,0,1,0 );
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              if ( $irreg[$i] == (($tmpmonth!=11)?($tmpmonth +1) % 12 :12)) {
+                  ($year,$month,$day) = Add_Delta_YMD($year,$month, $day ,0,1,0 );
+                  $tmpmonth=(($tmpmonth!=11)?($tmpmonth +1) % 12 :12);
+              }
+          }        
+          @resultdate = Add_Delta_YMD($year,$month, $day ,0,1,0 );
     }
     if ( $subscription->{periodicity} == 6 ) {
-        for ( my $i = 0 ; $i < @irreg ; $i++ ) {
-            if ( $irreg[$i] == (($tmpmonth!=10)?($tmpmonth +2) % 12 :12)) {
-                ($year,$month,$day) = Add_Delta_YMD($year,$month, $day ,0,2,0 );
-                $tmpmonth=(($tmpmonth!=10)?($tmpmonth + 2) % 12 :12);
-            }
-        }
-        @resultdate = Add_Delta_YMD($year,$month, $day, 0, 2,0 );
+          for ( my $i = 0 ; $i < @irreg ; $i++ ) {
+              if ( $irreg[$i] == (($tmpmonth!=10)?($tmpmonth +2) % 12 :12)) {
+                  ($year,$month,$day) = Add_Delta_YMD($year,$month, $day ,0,2,0 );
+                  $tmpmonth=(($tmpmonth!=10)?($tmpmonth + 2) % 12 :12);
+              }
+          }
+          @resultdate = Add_Delta_YMD($year,$month, $day, 0, 2,0 );
     }
     if ( $subscription->{periodicity} == 7 ) {
         for ( my $i = 0 ; $i < @irreg ; $i++ ) {
@@ -2686,7 +2699,9 @@ sub GetNextDate(@) {
     if ( $subscription->{periodicity} == 11 ) {
         @resultdate = Add_Delta_YM($year,$month, $day, 2, 0 );
     }
+    }  
     my $resultdate=sprintf("%04d-%02d-%02d",$resultdate[0],$resultdate[1],$resultdate[2]);
+      
 #     warn "dateNEXTSEQ : ".$resultdate;
     return "$resultdate";
 }
