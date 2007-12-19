@@ -44,7 +44,7 @@ guesses worked out by the script.
 The following configuration keywords are available:
 
 PREFIX,
-BASE_DIR, CGI_DIR, LOG_DIR,
+BASE_DIR, CGI_DIR, LOG_DIR, INSTALL_BASE,
 DB_TYPE, DB_HOST, DB_PORT, DB_NAME, DB_PASS, DB_USER, WEBMASTER_EMAIL, WEBSERVER_DOMAIN,
 WEBSERVER_HOST, WEBSERVER_IP, WEBSERVER_PORT, WEBSERVER_PORT_LIBRARIAN, ZEBRA_PASS, ZEBRA_USER
 
@@ -65,15 +65,12 @@ $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
 # This is set here to rescue systems with broken DNS
 $myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
-$prefix = $ENV{'PREFIX'} || "/usr/local";
+$prefix = $ENV{'INSTALL_BASE'} || "/usr";
 
 # These are our configuration guesses
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
-  "__BASE_DIR__" => ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl/%vd",$^V))."/koha",
-  # Corrected to match Debian Perl req's.... -fbcit
-  "__CGI_DIR__" => $prefix."/lib/cgi-bin/koha",
   "__LOG_DIR__" => "/var/log",
   "__DB_TYPE__" => "mysql",
   "__DB_NAME__" => "koha",
@@ -81,7 +78,6 @@ $prefix = $ENV{'PREFIX'} || "/usr/local";
   "__DB_PORT__" => "3306",
   "__DB_USER__" => "kohaadmin",
   "__DB_PASS__" => "katikoan",
-  "__PREFIX__" => $prefix,
   "__WEBMASTER_EMAIL__" => 'webmaster@'.$mydomain,
   "__WEBSERVER_DOMAIN__" => $mydomain,
   "__WEBSERVER_HOST__" => $myhost,
@@ -90,7 +86,24 @@ $prefix = $ENV{'PREFIX'} || "/usr/local";
   "__WEBSERVER_PORT_LIBRARIAN__" => "8080",
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
-  "__MARCFLAVOUR__" => "marc21",
+  '__INTRANET_CGI_DIR__' => "$prefix/intranet/cgi-bin",
+  '__INTRANET_TMPL_DIR__' => "$prefix/intranet/templates",
+  '__INTRANET_WWW_DIR__' => "$prefix/intranet/www",
+  '__OPAC_CGI_DIR__' => "$prefix/opac/cgi-bin",
+  '__OPAC_TMPL_DIR__' => "$prefix/opac/templates",
+  '__OPAC_WWW_DIR__' => "$prefix/opac/www",
+  '__PERL_MODULE_DIR__' =>  ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl5/site_perl/%vd",$^V))."/koha",
+  '__KOHA_CONF_DIR__' => "$prefix/etc/koha",
+  '__ZEBRA_CONF_DIR__' => "$prefix/etc/koha/zebradb",
+  '__MISC_DIR__' => "$prefix/misc",
+  '__SCRIPT_DIR__' => "$prefix/bin",
+  '__MAN_DIR__' => "$prefix/man",
+  '__DOC_DIR__' => "$prefix/doc",
+  '__ZEBRA_LOCK_DIR__' => "$prefix/var/lock/zebradb",
+  '__ZEBRA_DATA_DIR__' => "$prefix/var/lib/zebradb",
+  '__ZEBRA_RUN_DIR__' => "$prefix/var/run/zebradb",
+  '__ZEBRA_MARC_FORMAT__' => 'marc21',
+  '__ZEBRA_LANGUAGE__' => 'en',
 );
 
 # Override configuration from the environment
@@ -102,7 +115,7 @@ foreach $key (keys %configuration) {
 
 $fname = $ARGV[0];
 $file = read_file($fname);
-$file =~ s/__.*?__/$configuration{$&}/seg;
+$file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
 chmod 0644, $fname;
 open(OUTPUT,">$fname") || die "Can't open $fname for write: $!";
 print OUTPUT $file;

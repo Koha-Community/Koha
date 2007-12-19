@@ -3,6 +3,12 @@
 #  Written by TG on 01/10/2005
 #  Revised by Joshua Ferraro on 03/31/2006
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../../kohalib.pl" };
+}
 
 # Koha modules used
 

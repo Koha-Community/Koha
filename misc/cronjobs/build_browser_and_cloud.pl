@@ -2,6 +2,12 @@
 # small script that builds the tag cloud
 
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
 
 use C4::Koha;
 use C4::Context;
@@ -34,7 +40,7 @@ if ($version || (!$confirm)) {
     -t TTT to define the MARC fields/subfield to use to fill the tag cloud. If not defined, the cloud table won't be filled.
      
      example :
-     export PERL5LIB=/path/to/koha;export KOHA_CONF=/etc/koha.xml;./build_browser_and_cloud.pl -b -f 676a -t 606 -c
+     export PERL5LIB=/path/to/koha;export KOHA_CONF=/etc/koha/koha-conf.xml;./build_browser_and_cloud.pl -b -f 676a -t 606 -c
 EOF
 ;
 exit;

@@ -71,7 +71,7 @@ C4::Context - Maintain and manipulate the context of a Koha script
 
   use C4::Context;
 
-  use C4::Context("/path/to/koha.xml");
+  use C4::Context("/path/to/koha-conf.xml");
 
   $config_value = C4::Context->config("config_variable");
 
@@ -86,7 +86,7 @@ C4::Context - Maintain and manipulate the context of a Koha script
 =head1 DESCRIPTION
 
 When a Koha script runs, it makes use of a certain number of things:
-configuration settings in F</etc/koha.xml>, a connection to the Koha
+configuration settings in F</etc/koha/koha-conf.xml>, a connection to the Koha
 databases, and so forth. These things make up the I<context> in which
 the script runs.
 
@@ -107,7 +107,7 @@ different contexts to search both databases. Such scripts should use
 the C<&set_context> and C<&restore_context> functions, below.
 
 By default, C4::Context reads the configuration from
-F</etc/koha.xml>. This may be overridden by setting the C<$KOHA_CONF>
+F</etc/koha/koha-conf.xml>. This may be overridden by setting the C<$KOHA_CONF>
 environment variable to the pathname of a configuration file to use.
 
 =head1 METHODS
@@ -123,7 +123,7 @@ environment variable to the pathname of a configuration file to use.
 # config
 #    A reference-to-hash whose keys and values are the
 #    configuration variables and values specified in the config
-#    file (/etc/koha.xml).
+#    file (/etc/koha/koha-conf.xml).
 # dbh
 #    A handle to the appropriate database for this context.
 # dbh_stack
@@ -132,8 +132,30 @@ environment variable to the pathname of a configuration file to use.
 # Zconn
 #     A connection object for the Zebra server
 
-use constant CONFIG_FNAME => "/etc/koha.xml";
+# Koha's main configuration file koha-conf.xml
+# is searched for according to this priority list:
+#
+# 1. Path supplied via use C4::Context '/path/to/koha-conf.xml'
+# 2. Path supplied in KOHA_CONF environment variable.
+# 3. Path supplied in INSTALLED_CONFIG_FNAME, as long
+#    as value has changed from its default of 
+#    '__KOHA_CONF_DIR__/koha-conf.xml', as happens
+#    when Koha is installed in 'standard' or 'single'
+#    mode.
+# 4. Path supplied in CONFIG_FNAME.
+#
+# The first entry that refers to a readable file is used.
+
+use constant CONFIG_FNAME => "/etc/koha/koha-conf.xml";
                 # Default config file, if none is specified
+                
+my $INSTALLED_CONFIG_FNAME = '__KOHA_CONF_DIR__/koha-conf.xml';
+                # path to config file set by installer
+                # __KOHA_CONF_DIR__ is set by rewrite-confg.PL
+                # when Koha is installed in 'standard' or 'single'
+                # mode.  If Koha was installed in 'dev' mode, 
+                # __KOHA_CONF_DIR__ is *not* rewritten; instead
+                # developers should set the KOHA_CONF environment variable 
 
 $context = undef;        # Initially, no context is set
 @context_stack = ();        # Initially, no saved contexts
@@ -167,7 +189,7 @@ Reads the specified Koha config file.
 
 Returns an object containing the configuration variables. The object's
 structure is a bit complex to the uninitiated ... take a look at the
-koha.xml file as well as the XML::Simple documentation for details. Or,
+koha-conf.xml file as well as the XML::Simple documentation for details. Or,
 here are a few examples that may give you what you need:
 
 The simple elements nested within the <config> element:
@@ -223,11 +245,11 @@ sub import {
 =item new
 
   $context = new C4::Context;
-  $context = new C4::Context("/path/to/koha.xml");
+  $context = new C4::Context("/path/to/koha-conf.xml");
 
 Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
-environment variable, or F</etc/koha.xml>.
+environment variable, or F</etc/koha/koha-conf.xml>.
 
 C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
@@ -250,7 +272,18 @@ sub new {
     {
         # If the $KOHA_CONF environment variable is set, use
         # that. Otherwise, use the built-in default.
-        $conf_fname = $ENV{"KOHA_CONF"} || CONFIG_FNAME;
+        if (exists $ENV{"KOHA_CONF"} and $ENV{'KOHA_CONF'} and -e  $ENV{"KOHA_CONF"} and -s  $ENV{"KOHA_CONF"}) {
+            $conf_fname = $ENV{"KOHA_CONF"};
+        } elsif ($INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -e $INSTALLED_CONFIG_FNAME and -s $INSTALLED_CONFIG_FNAME) {
+            # NOTE: be careful -- don't change __KOHA_CONF_DIR in the above
+            # regex to anything else -- don't want installer to rewrite it
+            $conf_fname = $INSTALLED_CONFIG_FNAME;
+        } elsif (-e CONFIG_FNAME and -s CONFIG_FNAME) {
+            $conf_fname = CONFIG_FNAME;
+        } else {
+            warn "unable to locate Koha configuration file koha-conf.xml";
+            return undef;
+        }
     }
         # Load the desired config file.
     $self = read_config_file($conf_fname);
@@ -447,7 +480,7 @@ creates one and connects.
 
 C<$self> 
 
-C<$server> one of the servers defined in the koha.xml file
+C<$server> one of the servers defined in the koha-conf.xml file
 
 C<$async> whether this is a asynchronous connection
 
@@ -478,7 +511,7 @@ $context->{"Zconn"} = &_new_Zconn($server,$async);
 
 Internal function. Creates a new database connection from the data given in the current context and returns it.
 
-C<$server> one of the servers defined in the koha.xml file
+C<$server> one of the servers defined in the koha-conf.xml file
 
 C<$async> whether this is a asynchronous connection
 

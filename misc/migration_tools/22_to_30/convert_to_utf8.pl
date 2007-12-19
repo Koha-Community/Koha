@@ -2,8 +2,14 @@
 
 # small script to convert mysql tables to utf-8
 
-use C4::Context;
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../../kohalib.pl" };
+}
+use C4::Context;
 
 my $dbh=C4::Context->dbh();
 

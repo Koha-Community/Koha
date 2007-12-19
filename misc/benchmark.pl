@@ -1,8 +1,14 @@
 #!/usr/bin/perl
 
+use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 use HTTPD::Bench::ApacheBench;
 use C4::Context;
-use strict;
 
 # 1st, find some maximal values
 my $dbh=C4::Context->dbh();

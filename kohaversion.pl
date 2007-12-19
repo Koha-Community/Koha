@@ -7,8 +7,14 @@
 #        used by developers when the database changes. updatedatabase take care of the changes itself
 #        and is automatically called by Auth.pm when needed.
 
+use strict;
+
 sub kohaversion {
-    return "3.00.00.035";
+    our $VERSION = "3.00.00.035";
+    # version needs to be set this way
+    # so that it can be picked up by Makefile.PL
+    # during install
+    return $VERSION;
 }
 
 1;

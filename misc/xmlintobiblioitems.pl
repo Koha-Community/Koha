@@ -2,6 +2,12 @@
 # script that correct the marcxml  from in biblioitems 
 #  Written by TG on 10/04/2006
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/kohalib.pl" };
+}
 
 # Koha modules used
 

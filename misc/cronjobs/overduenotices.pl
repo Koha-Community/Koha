@@ -35,6 +35,12 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+BEGIN {
+    # find Koha's Perl modules
+    # test carefully before changing this
+    use FindBin;
+    eval { require "$FindBin::Bin/../kohalib.pl" };
+}
 use C4::Context;
 use C4::Dates;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
