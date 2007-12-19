@@ -43,6 +43,7 @@ BEGIN {
 }
 	
 my $input = new CGI;
+($debug) or $debug = $input->param('debug') || 0;
 my %data;
 
 my $dbh = C4::Context->dbh;
@@ -53,7 +54,7 @@ my ($template, $loggedinuser, $cookie)
            type => "intranet",
            authnotrequired => 0,
            flagsrequired => {borrowers => 1},
-           debug => 1,
+           debug => ($debug) ? 1 : 0,
            });
 my $guarantorid=$input->param('guarantorid');
 my $borrowernumber=$input->param('borrowernumber');
@@ -142,10 +143,12 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
   my $guarantordata=GetMember($guarantorid);
   $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
   if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
-    $data{'contactfirstname'}=$guarantordata->{'firstname'}; 
-    $data{'contactname'}=$guarantordata->{'surname'};
-    $data{'contacttitle'}=$guarantordata->{'title'};  
-    map {$data{$_}=$guarantordata->{$_}}('streetnumber','address','streettype','address2','zipcode','city','phone','phonepro','mobile','fax','email','emailpro');
+    $data{'contactfirstname'}= $guarantordata->{'firstname'}; 
+    $data{'contactname'}     = $guarantordata->{'surname'};
+    $data{'contacttitle'}    = $guarantordata->{'title'};  
+	foreach (qw(streetnumber address streettype address2 zipcode city phonephonepro mobile fax email emailpro)) {
+		$data{$_} = $guarantordata->{$_};
+	}
   }
 }
 
@@ -159,8 +162,8 @@ if ( $guarantorid eq ''){
 }
 #builds default userid
 if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
-  my $onefirstnameletter=substr($data{'firstname'},0,1);
-  my $fivesurnameletter=substr($data{'surname'},0,9);
+  my $onefirstnameletter = substr($data{'firstname'},0,1);
+  my  $fivesurnameletter = substr($data{'surname'},0,9);
   $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
 }
   
@@ -170,8 +173,7 @@ if ($op eq 'save' || $op eq 'insert'){
     push @errors, 'ERROR_cardnumber';
     $nok = 1;
   } 
-  my $dateofbirthmandatory=0;
-  map {$dateofbirthmandatory=1 if $_ eq "dateofbirth"} @field_check;
+  my $dateofbirthmandatory = (scalar grep {$_ eq "dateofbirth"} @field_check) ? 1 : 0;
   if ($newdata{dateofbirth} && $dateofbirthmandatory) {
     my $age = GetAge($newdata{dateofbirth});
     my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
@@ -216,8 +218,8 @@ if ($op eq 'insert'){
       add_member_orgs($borrowernumber,\@orgs);
     }
     if ($destination eq "circ")	{
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
     } else {
+		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
         if ($loginexist == 0) {
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
         }
@@ -314,8 +316,7 @@ if(scalar(@$categories)){
 $select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
 ($default_city=$select_city) if ($step eq 0);
 if ($select_city eq '' ){
-my $selectcity=&getidcity($data{'city'});
-$default_city=$selectcity;
+	$default_city = &getidcity($data{'city'});
 }
 my($cityid);
 ($cityid,$name_city)=GetCities();
@@ -348,7 +349,6 @@ my $borrotitlepopup = CGI::popup_menu(-name=>'title',
         -override => 1,
         -default=>$default_borrowertitle
         );    
-
 
 my @relationships = split /,|\|/,C4::Context->preference('BorrowerRelationship');
 my @relshipdata;
@@ -451,7 +451,8 @@ if ($CGIsort2) {
 } else {
   $template->param( sort2 => $data{'sort2'});
 }
-if ($nok) {
+
+if ($nok or scalar(@errors)) {
     foreach my $error (@errors) {
         $template->param( $error => 1);
     }
@@ -461,7 +462,7 @@ if ($nok) {
   #Formatting data for display    
   
 if ($data{'dateenrolled'} eq ''){
-  my $today= sprintf('%04d-%02d-%02d', Today());
+  my $today = sprintf('%04d-%02d-%02d', Today());
   $data{'dateenrolled'}=$today;
 }
 if (C4::Context->preference('uppercasesurnames')) {
