@@ -210,11 +210,11 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
         }
         if ( $#subfields_data == 0 ) {
             $subfields_data[0]->{marc_lib}      = '';
-            $subfields_data[0]->{marc_subfield} = '';
+#            $subfields_data[0]->{marc_subfield} = '';
         }
-        if ( $#subfields_data >= 0 ) {
+        if ( $#subfields_data >= 0) {
             my %tag_data;
-            if ( $fields[$x_i]->tag() eq $fields[ $x_i - 1 ]->tag() ) {
+            if ( $fields[$x_i]->tag() eq $fields[ $x_i - 1 ]->tag() && (C4::Context->preference('LabelMARCView') eq 'economical')) {
                 $tag_data{tag} = "";
             }
             else {
