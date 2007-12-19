@@ -1165,7 +1165,9 @@ sub postamble {
     # quote '$' in the two password parameters
     my %config = %config;
     $config{'DB_PASS'} =~ s/\$/\$\$/g;
-    $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
+    if ($config{'INSTALL_ZEBRA'} eq "yes") {
+        $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
+    }
 
 	# Hereagain, we must alter syntax per platform...
 	if ( $^O eq 'MSWin32' ) {
