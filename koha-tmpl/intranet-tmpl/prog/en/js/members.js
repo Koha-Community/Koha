@@ -83,17 +83,15 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 
 
 // function to test all fields in forms and nav in different forms(1 ,2 or 3)
- function check_form_borrowers(nav){
-var statut=0;
+function check_form_borrowers(nav){
+	var statut=0;
 	if (document.form.check_member.value == 1 )
 	{
- 	
-		if (document.form_double.answernodouble)	{
+		if (document.form_double.answernodouble) {
 			if( (!(document.form_double.answernodouble.checked))){
 				document.form.nodouble.value=0;
-			}
-			else {
-			document.form.nodouble.value=1;
+			} else {
+				document.form.nodouble.value=1;
 			}
  		}
  	} 
@@ -105,53 +103,46 @@ var statut=0;
 	    var champ_verif = document.form.BorrowerMandatoryField.value.split ('|');
 	    var message ="The following fields are mandatory :\n";
 	    var message_champ="";
-			for (var i=0; i<champ_verif.length; i++) {
-					if (document.getElementsByName(""+champ_verif[i]+"")[0]) {
-					  var val_champ=eval("document.form."+champ_verif[i]+".value");
-					  var ref_champ=eval("document.form."+champ_verif[i]);
-						//check if it's a select
-						if (ref_champ.type=='select-one'){
-							if (ref_champ.options[0].selected ){
-								// action if field is empty
-								message_champ+=champ_verif[i]+"\n";
-								//test to konw if you must show a message with error
-								statut=1;
-							}
-						}else {
-							if ( val_champ == '' ) {
-								// action if the field is not empty
-								message_champ+=champ_verif[i]+"\n";
-								statut=1;
-							}	
-				    }
-			   }
-		  }
+		for (var i=0; i<champ_verif.length; i++) {
+			if (document.getElementsByName(""+champ_verif[i]+"")[0]) {
+				var val_champ=eval("document.form."+champ_verif[i]+".value");
+				var ref_champ=eval("document.form."+champ_verif[i]);
+				//check if it's a select
+				if (ref_champ.type=='select-one'){
+					if (ref_champ.options[0].selected ){
+						// action if field is empty
+						message_champ+=champ_verif[i]+"\n";
+						//test to konw if you must show a message with error
+						statut=1;
+					}
+				} else {
+					if ( val_champ == '' ) {
+						// action if the field is not empty
+						message_champ+=champ_verif[i]+"\n";
+						statut=1;
+					}	
+			    }
+			}
+		}
 	}
-//patrons form to test if you chcked no to the quetsion of double 
- 	if (statut!=1 && document.form.check_member.value > 0 )
-	{
-		
-  		
-			if (!(document.form_double.answernodouble.checked)){
-					
-				message ="";
-					message_champ+=("Please confirm suspicious duplicate patron !!! ");
-					statut=1;
-					document.form.nodouble.value=0;
-			}
-			else {
+	//patrons form to test if you chcked no to the quetsion of double 
+ 	if (statut!=1 && document.form.check_member.value > 0 ) {
+		if (!(document.form_double.answernodouble.checked)){
+			message ="";
+			message_champ+=("Please confirm suspicious duplicate patron !!! ");
+			statut=1;
+			document.form.nodouble.value=0;
+		} else {
 			document.form.nodouble.value=1;
-			}
+		}
  	}
 		
 	if (statut==1){
-			//alert if at least 1 error
-				alert(message+"\n"+message_champ);
-				return false;
-	}
-	else 
-	{
-			document.form.submit();
+		//alert if at least 1 error
+		alert(message+"\n"+message_champ);
+		return false;
+	} else {
+		document.form.submit();
 	}
 }
 
