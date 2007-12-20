@@ -37,7 +37,13 @@ while (my ($bibid,$biblionumber) = $sth->fetchrow) {
     my $record = LocalMARCgetbiblio($dbh,$bibid);
     #Force UTF-8 in record leader
     $record->encoding('UTF-8');
-    $sth_update->execute($record->as_usmarc(),$record->as_xml_record(),$biblionumber);
+    my $marcflavour;
+    if (C4::Context->preference("marcflavour")=~/unimarc/i){
+      $marcflavour="UNIMARC";
+    } else {
+     $marcflavour="USMARC";
+    }
+    $sth_update->execute($record->as_usmarc(),$record->as_xml_record($marcflavour),$biblionumber);
     $totaldone++;
     print ".";
     print "\r$totaldone / $totaltodo" unless ($totaldone % 100);
@@ -141,5 +147,24 @@ sub LocalMARCgetbiblio {
             $record->add_fields($field);
         }
     }
+    if (C4::Context->preference('marcflavour')=~/unimarc/i){
+      $record->leader('     nac  22     1u 4500');
+      $update=1;
+      my $string;
+      if ($record->field(100)) {
+        $string = substr($record->subfield(100,"a")."                                   ",0,35);
+        my $f100 = $record->field(100);
+        $record->delete_field($f100);
+      } else {
+        $string = POSIX::strftime("%Y%m%d", localtime);
+        $string=~s/\-//g;
+        $string = sprintf("%-*s",35, $string);
+      }
+      substr($string,22,6,"frey50");
+      unless ($record->subfield(100,"a")){
+        $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>"$string"));
+      }
+    }
+
     return $record;
 }
