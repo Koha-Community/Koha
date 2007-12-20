@@ -1186,16 +1186,16 @@ sub AddReturn {
 		$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
 	}
         ModDateLastSeen( $iteminformation->{'itemnumber'} );
+		my $sth = $dbh->prepare("UPDATE items SET onloan = NULL where itemnumber = ?");
+		$sth->execute($iteminformation->{'itemnumber'});
+		$sth->finish();
+		my $record = GetMarcItem( $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'} );
+		my $frameworkcode = GetFrameworkCode( $iteminformation->{'biblionumber'} );
+		ModItemInMarc( $record, $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
+		
 		if ($iteminformation->{borrowernumber}){
-			my $sth = $dbh->prepare("UPDATE items SET onloan = NULL where itemnumber = ?");
-			$sth->execute($iteminformation->{'itemnumber'});
-			$sth->finish();
-			my $record = GetMarcItem( $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'} );
-			my $frameworkcode = GetFrameworkCode( $iteminformation->{'biblionumber'} );
-			ModItemInMarc( $record, $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
-		}
-        ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
-        
+			($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+ 		}       
         # fix up the accounts.....
         if ( $iteminformation->{'itemlost'} ) {
             $messages->{'WasLost'} = 1;
