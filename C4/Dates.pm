@@ -29,8 +29,6 @@ $VERSION = 0.03;
 my $prefformat = C4::Context->preference('dateformat');
 my $debug = $ENV{'DEBUG'} || 0;
 
-our @dmy_array = ();
-
 our %format_map = ( 
 	  iso  => 'yyyy-mm-dd',
 	metric => 'dd/mm/yyyy',
@@ -74,7 +72,8 @@ sub dmy_map ($$) {
 		my $aref = eval $xsub;
 		return  @{$aref}; 
 	}
-	$debug and carp "Illegal Date '$val' does not match $dformat format: $re\n";
+	# $debug and 
+	carp "Illegal Date '$val' does not match '$dformat' format: " . $self->visual() . "\n";
 	return 0;
 }
 
@@ -91,15 +90,14 @@ sub init ($;$$) {
 	$self->{'dateformat'} = $dformat = (scalar(@_) >= 2) ? $_[1] : $prefformat;
 	($format_map{$dformat}) or croak 
 		"Invalid date format '$dformat' from " . ((scalar(@_) >= 2) ? 'argument' : 'system preferences');
-	# scalar(@self::dmy_array) and croak "\$self is " . ref($self) . "\n\@self::dmy_array already populated: @self::dmy_array";
-	@self::dmy_array = ((@_) ? $self->dmy_map(shift) : localtime);
-	$debug and print STDERR "(during init) \@self::dmy_array = (@self::dmy_array)\n";  #debug
+	$self->{'dmy_arrayref'} = [((@_) ? $self->dmy_map(shift) : localtime )] ;
+	$debug and print STDERR "(during init) \@\$self->{'dmy_arrayref'}: " . join(' ',@{$self->{'dmy_arrayref'}}) . "\n";
 	return $self;
 }
 sub output ($;$) {
 	my $self = shift;
 	my $newformat = (@_) ? _recognize_format(shift) : $prefformat;
-	return (eval {POSIX::strftime($posix_map{$newformat}, @self::dmy_array)} || undef);
+	return (eval {POSIX::strftime($posix_map{$newformat}, @{$self->{'dmy_arrayref'}})} || undef);
 }
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
 	my $class = shift;
