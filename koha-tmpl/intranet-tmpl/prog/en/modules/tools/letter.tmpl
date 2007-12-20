@@ -276,7 +276,7 @@
 	<!-- /TMPL_IF -->
 	
 	<!-- TMPL_IF NAME="delete_confirm" -->
-	<h3>Delete Notice?</h3>
+	<div class="dialog alert"><h3>Delete Notice?</h3>
 	<table>
 		<tr>
 			<td>
@@ -291,16 +291,17 @@
 			<td><!-- TMPL_VAR NAME="Name" --></td>
 		</tr>
 	</table>
-			<p><form action="<!-- TMPL_VAR NAME="action" -->" method="post"><input type="hidden" name="op" value="delete_confirmed">
+		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed">
 		<input type="hidden" name="code" value="<!-- TMPL_VAR NAME="code" -->" />
 		<input type="hidden" name="module" value="<!-- TMPL_VAR NAME="module" -->" />
-				<input type="submit" value="YES" />
+				<input type="submit" value="Yes, Delete" class="approve" />
 				</form>
 
-				<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
-					<input type="submit" value="NO" />
+				<form action="<!-- TMPL_VAR NAME="action" -->" method="get">
+					<input type="submit" value="No, Do Not Delete" class="deny" />
 				</form>
-			</p>
+		</div>
 
 	<!-- /TMPL_IF -->
 	

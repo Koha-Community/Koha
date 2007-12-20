@@ -74,11 +74,14 @@
 
 
 <!-- TMPL_IF NAME="add_validate" -->
-  <ul id="_informations"><li>Budget Data Recorded, return to <a href="<!-- TMPL_VAR name="script_name" -->">budget list</a></li></ul>
+  <div class="dialog message">
+  <h3>Budget Data Recorded</h3>
+  <form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="submit" class="approve" value="OK" /><form></div>
 <!-- /TMPL_IF --> <!-- add_validate -->
 
 <!-- TMPL_IF name="delete_confirmed" -->
-  <ul id="_informations"><li>Budget deleted, return to <a href="<!-- TMPL_VAR name="script_name" -->">budget list</a></li></ul>
+  <div class="dialog message"><h3>Budget deleted</h3>
+  <form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="submit" class="approve" value="OK" /><form></div>
 <!-- /TMPL_IF --> <!-- delete_confirmed -->
 
 
@@ -327,8 +330,7 @@
 <!-- /TMPL_IF --> <!-- add_form -->
 
 <!-- TMPL_IF name="delete_confirm" -->
-  <fieldset>
-    <legend>Delete Budget?</legend>
+ <div class="dialog alert"> <h3>Delete Budget?</h3>
 
     <table>
       <tr>
@@ -347,15 +349,12 @@
       </tr>
     </table>
 
-  </fieldset>
 <form action="<!-- TMPL_VAR NAME="action" -->" method="post">
-   <fieldset class="action">
-    <input type="hidden" name="op" value="delete_confirmed" />
-    <input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
-      <input type="submit" value="Delete this budget" />
-	<a class="cancel" href="/cgi-bin/koha/admin/aqbudget.pl">Cancel</a>
-   </fieldset>
-	  </form>
+<input type="hidden" name="op" value="delete_confirmed" />
+<input type="hidden" name="aqbudgetid" value="<!-- TMPL_VAR NAME="aqbudgetid" -->" />
+<input type="submit" value="Delete this budget" class="approve" /></form>
+<form action="<!-- TMPL_VAR NAME="action" -->" method="get">
+<input type="submit" class="deny" value="No, Do Not Delete" /></form></div>
 
 <!-- /TMPL_IF -->
 

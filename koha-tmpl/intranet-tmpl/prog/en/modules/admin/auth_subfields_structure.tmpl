@@ -58,27 +58,33 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
+	<div class="dialog alert"><h3>Delete Subfield <span class="ex">'<!-- TMPL_VAR NAME="tagsubfield" -->'?</span></h3>
     <form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
-	<fieldset>
-    <legend>Confirm Deletion of Subfield <em><!-- TMPL_VAR NAME="tagsubfield" -->?</em></legend>
     <table><tr><th scope="row">Subfield:</th> <td><!-- TMPL_VAR NAME="tagsubfield" --></td></tr>
     <tr><th scope="row">Description:</th> <td><!-- TMPL_VAR NAME="liblibrarian" --></td></tr></table>
         <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
         <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-        <fieldset class="action"><input type="submit" class="cancel" value="Yes, Delete this Subfield" /><a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;tagsubfield=<!-- TMPL_VAR NAME="tagsubfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Cancel</a></fieldset>
-		</fieldset>
-    </form>
+        <input type="submit" class="approve" value="Yes, Delete this Subfield" />
+		</form>
+		<form action="<!-- TMPL_VAR NAME="delete_link" -->" method="get">
+		 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+        <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
+        <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="tagsubfield" -->" />
+        <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+        <input type="submit" class="deny" value="No, Do Not Delete" />
+		</form>
+    </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-    <h3>Data deleted</h3>
+   <div class="dialog message"> <h3>Data deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="hidden" name="tagfield" value="<!-- TMPL_VAR NAME="tagfield" -->" />
-        <input type="submit" class="submit" value="OK" />
-    </form>
+        <input type="submit" class="approve" value="OK" />
+    </form></div>
 <!-- /TMPL_IF -->
 
 

@@ -113,26 +113,28 @@ return false;
 
 
 <!-- TMPL_IF NAME="delete_confirm" -->
+		<div class="dialog alert">
+		<h3>Confirm Deletion</h3>
 		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-<fieldset><legend>Confirm Deletion</legend>
 		<table>
 			<tr><th scope="row">Tag: </th><td><!-- TMPL_VAR NAME="searchfield" --> <!-- TMPL_VAR NAME="liblibrarian" --></td></tr>
 		</table>
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
         <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-		<fieldset class="action"><input type="submit" value="YES"> <a class="cancel" href="/cgi-bin/koha/admin/auth_tag_structure.pl">Cancel</a> </fieldset>
-</fieldset></form>
+		<input type="submit" value="Yes, Delete" class="approve"></form>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" class="deny" value="No, Do Not Delete" /></form>
+		</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-    <h3>Data deleted</h3>
+  <div class="dialog message">  <h3>Data deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
     <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR name="authtypecode" -->" />
     <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
     <input type="submit" value="OK" class="submit" />
-    </form>
+    </form></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="authtype_create" -->
 
@@ -210,12 +212,12 @@ return false;
     <!-- /TMPL_LOOP -->
     </table>
 
-        <!-- TMPL_IF NAME="isprevpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Previous Page</a>
+        <div class="pages"><!-- TMPL_IF NAME="isprevpage" -->
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">&lt;&lt; Previous Page</a>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="nextpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page</a>
-        <!-- /TMPL_IF -->
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" --> ">Next Page &gt;&gt;</a>
+        <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
 
 </div>

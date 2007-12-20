@@ -94,28 +94,27 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_validate" -->
-    Data recorded
+   <div class="dialog message"> <h3>Data recorded</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="submit" value="OK" />
-    </form>
+        <input type="submit" value="OK" class="approve" />
+    </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-	<fieldset>
-        <input type="hidden" name="op" value="delete_confirmed" />
+    <div class="dialog alert">
+	<h3>Delete Stop Word <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+       <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-		<legend>Confirm Deletion of Stop word <em><!-- TMPL_VAR NAME="searchfield" --></em></legend>
-        <input type="submit" value="Yes, Delete" /> <a class="cancel" href="/cgi-bin/koha/admin/stopwords.pl">Cancel</a>
-	</fieldset>
-    </form>
+       <input type="submit" value="Yes, Delete" class="approve" /></form>
+	   <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" class="deny" value="No, Do Not Delete" /> </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
-    Data deleted
+   <div class="dialog message"> <h3>Data deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="submit" value="OK" />
-    </form>
+        <input type="submit" value="OK" class="approve" />
+    </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
@@ -150,18 +149,18 @@
                     <th> </th>
             </tr>
             <!-- TMPL_LOOP NAME="loop" -->
-                <tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->">
+               <!-- TMPL_IF NAME="toggle" --> <tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                     <td><!-- TMPL_VAR NAME="word" --></td>
                     <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
                 </tr>
             <!-- /TMPL_LOOP -->
     </table>
-            <!-- TMPL_IF NAME="offsetgtzero" -->
+           <div class="pages"> <!-- TMPL_IF NAME="offsetgtzero" -->
                 <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="ltcount" -->
                 <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>
-            <!-- /TMPL_iF -->
+            <!-- /TMPL_iF --></div>
 <!-- /TMPL_IF -->
 
 </div>

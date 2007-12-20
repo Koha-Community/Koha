@@ -121,23 +121,23 @@
 
 <!-- TMPL_IF NAME="delete_confirm" -->
 
-<h3>Confirm Deletion of Tag <em><!-- TMPL_VAR NAME="searchfield" --></em>?</h3>
+<div class="dialog alert"><h3>Confirm Deletion of Tag <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span>?</h3>
     <p>Tag: <!-- TMPL_VAR NAME="searchfield" --></p>
     <p>Description: <!-- TMPL_VAR NAME="liblibrarian" --></p>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<input type="hidden" name="op" value="delete_confirmed" />
 	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-	<input type="submit" value="Yes, Delete this Tag" /></form>
+	<input type="submit" class="approve" value="Yes, Delete this Tag" /></form>
 	
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do Not Delete" /></form>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 
-    <div class="details"><h3>Tag Deleted</h3>
+    <div class="details"><div class="dialog message"><h3>Tag Deleted</h3>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
-    <input type="submit" value="Return to MARC Frameworks" />
-    </form>
+    <input type="submit" value="OK" class="approve" />
+    </form></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="framework_create" -->
 
