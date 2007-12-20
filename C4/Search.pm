@@ -1292,6 +1292,7 @@ sub NZanalyse {
         # to get a result list
         if ($operator eq ' and ') {
             my @leftresult = split /;/, $leftresult;
+            warn " @leftresult / $rightresult \n" if $DEBUG;
 #             my @rightresult = split /;/,$leftresult;
             my $finalresult;
             # parse the left results, and if the biblionumber exist in the right result, save it in finalresult
@@ -1299,10 +1300,15 @@ sub NZanalyse {
             # example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
             # result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
             foreach (@leftresult) {
-                if ($rightresult =~ "$_;") {
-                    $finalresult .= "$_;$_;";
+                my $value=$_;
+                my $countvalue;        
+                ($value,$countvalue)=($1,$2) if $value=~m/(.*)-(\d+)$/;
+                if ($rightresult =~ /$value-(\d+);/) {
+                    $countvalue=($1>$countvalue?$countvalue:$1);
+                    $finalresult .= "$value-$countvalue;$value-$countvalue;";
                 }
             }
+            warn " $finalresult \n" if $DEBUG;
             return $finalresult;
         } elsif ($operator eq ' or ') {
             # just merge the 2 strings
@@ -1312,7 +1318,9 @@ sub NZanalyse {
 #             my @rightresult = split /;/,$leftresult;
             my $finalresult;
             foreach (@leftresult) {
-                unless ($rightresult =~ "$_;") {
+                my $value=$_;
+                $value=$1 if $value=~m/(.*)-\d+$/;
+                unless ($rightresult =~ "$value-") {
                     $finalresult .= "$_;";
                 }
             }
@@ -1415,7 +1423,7 @@ sub NZanalyse {
                 while (my ($line,$value) = $sth->fetchrow) {
                     # if we are dealing with a numeric value, use only numeric results (in case of >=, <=, > or <)
                     # otherwise, fill the result
-                    $biblionumbers .= $line unless ($right =~ /\d/ && $value =~ /\D/);
+                    $biblionumbers .= $line unless ($right =~ /^\d+$/ && $value =~ /\D/);
                     warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
@@ -1430,7 +1438,7 @@ sub NZanalyse {
                         warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-                              warn "INCLUDING $entry" if $DEBUG;
+                            warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
