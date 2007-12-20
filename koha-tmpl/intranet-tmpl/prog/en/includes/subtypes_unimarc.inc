@@ -1,5 +1,5 @@
-<a href="javascript:var elt=document.getElementsByName('Coded fields');">Coded information filters</a>
-<div id="yui-b" style="display:none;" name="Coded Fields" >
+<a onclick="javascript:if (document.getElementsByName('Coded_Fields')[0].style.display=='none'){document.getElementsByName('Coded_Fields')[0].style.display='block';} else {document.getElementsByName('Coded_Fields')[0].style.display='none';}">Coded information filters</a>
+<div id="yui-b" style="display:none;" name="Coded_Fields" >
 <!-- SUBTYPE LIMITS -->
 		<fieldset>
 		<legend>Coded Fields</legend>
@@ -63,22 +63,22 @@
 		<label>Illustration</label>
         <select name="limit" class="subtype" size="1">
             <option value="">Any</option>
-            <option value="Illustration-Code:a">Illustrations</option>
-            <option value="Illustration-Code:b">Cartes</option>
-            <option value="Illustration-Code:c">Portraits</option>
-            <option value="Illustration-Code:d">cartes marines</option>
+            <option value="Illustration-Code:a">illustrations</option>
+            <option value="Illustration-Code:b">maps</option>
+            <option value="Illustration-Code:c">portraits</option>
+            <option value="Illustration-Code:d">charts</option>
             <option value="Illustration-Code:e">plans</option>
-            <option value="Illustration-Code:f">Planches</option>
-            <option value="Illustration-Code:g">Musique imprimee</option>
-            <option value="Illustration-Code:h">fac-similes</option>
-            <option value="Illustration-Code:i">armoiries</option>
-            <option value="Illustration-Code:j">Tables Genealogique</option>
-            <option value="Illustration-Code:k">Formulaires</option>
-            <option value="Illustration-Code:l">Specimens</option>
-            <option value="Illustration-Code:m">Enregistrement sonore</option>
-            <option value="Illustration-Code:n">Transparents</option>
-            <option value="Illustration-Code:o">Enluminures</option>
-            <option value="Illustration-Code:y">Sans illustrations</option>
+            <option value="Illustration-Code:f">plates</option>
+            <option value="Illustration-Code:g">music</option>
+            <option value="Illustration-Code:h">facsimiles</option>
+            <option value="Illustration-Code:i">coats of arms</option>
+            <option value="Illustration-Code:j">genealogical tables</option>
+            <option value="Illustration-Code:k">forms</option>
+            <option value="Illustration-Code:l">samples</option>
+            <option value="Illustration-Code:m">sound recordings</option>
+            <option value="Illustration-Code:n">transparencies</option>
+            <option value="Illustration-Code:o">illuminations</option>
+            <option value="Illustration-Code:y">no illustrations</option>
         </select>
         </p>
 		<p>
@@ -167,39 +167,39 @@
 
         </fieldset>
 		<fieldset>
-		<legend>Document pictural</legend><p>
+		<legend>Picture</legend><p>
 		<select name="limit" class="subtype">
-				<option value="">Tout type</option>
-				<option value="Graphics-type:a">Collage</option>
-				<option value="Graphics-type:b">Dessin</option>
-				<option value="Graphics-type:c">Peinture</option>
-				<option value="Graphics-type:d">Reproduction photomecanique</option>
-				<option value="Graphics-type:e">Negatif photo</option>
-				<option value="Graphics-type:f">Tirage photographique</option>
-				<option value="Graphics-type:h">Image</option>
-				<option value="Graphics-type:i">Gravure</option>
-				<option value="Graphics-type:k">Dessin technique</option>
-				<option value="Graphics-type:z">Autres types de documents graphique non projetable</option>
+				<option value="">Any</option>
+				<option value="Graphics-type:a">collage</option>
+				<option value="Graphics-type:b">drawing</option>
+				<option value="Graphics-type:c">painting</option>
+				<option value="Graphics-type:d">photomechanical reproduction</option>
+				<option value="Graphics-type:e">photonegative</option>
+				<option value="Graphics-type:f">photoprint</option>
+				<option value="Graphics-type:h">picture</option>
+				<option value="Graphics-type:i">print</option>
+				<option value="Graphics-type:k">technical drawing</option>
+				<option value="Graphics-type:z">other non-projected graphic type</option>
 		</select>
 		<select name="limit" class="subtype">
-            <option value="">tout support</option>
-            <option value="Graphics-support:a">Toile</option>
-            <option value="Graphics-support:b">Carte bristol</option>
-            <option value="Graphics-support:c">Carton / carte a dessin</option>
-            <option value="Graphics-support:d">Verre</option>
-            <option value="Graphics-support:j">Platre</option>
-            <option value="Graphics-support:k">Isorel</option>
-            <option value="Graphics-support:l">Porcelaine</option>
-            <option value="Graphics-support:m">Pierre</option>
-            <option value="Graphics-support:n">Bois</option>
-            <option value="Graphics-support:u">Inconnu</option>
-            <option value="Graphics-support:v">Support composite</option>
-            <option value="Graphics-support:e">Synthetique (plastique, vinyle...)</option>
-            <option value="Graphics-support:f">Peau</option>
-            <option value="Graphics-support:g">Textile</option>
-            <option value="Graphics-support:h">Metal</option>
-            <option value="Graphics-support:i">Papier</option>
-            <option value="Graphics-support:z">Autres</option>
+            <option value="">any</option>
+            <option value="Graphics-support:a">canvas</option>
+            <option value="Graphics-support:b">bristol board</option>
+            <option value="Graphics-support:c">cardboard/illustration board</option>
+            <option value="Graphics-support:d">glass</option>
+            <option value="Graphics-support:j">plaster</option>
+            <option value="Graphics-support:k">hardboard</option>
+            <option value="Graphics-support:l">porcelaine</option>
+            <option value="Graphics-support:m">stone</option>
+            <option value="Graphics-support:n">wood</option>
+            <option value="Graphics-support:u">unknown</option>
+            <option value="Graphics-support:v">mixed collection</option>
+            <option value="Graphics-support:e">synthetics</option>
+            <option value="Graphics-support:f">skin</option>
+            <option value="Graphics-support:g">textile</option>
+            <option value="Graphics-support:h">metal</option>
+            <option value="Graphics-support:i">paper</option>
+            <option value="Graphics-support:z">others</option>
 		</select>
         </p>
 
