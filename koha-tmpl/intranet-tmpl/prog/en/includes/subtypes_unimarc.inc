@@ -1,4 +1,5 @@
-<div id="yui-b">
+<a href="javascript:var elt=document.getElementsByName('Coded fields');">Coded information filters</a>
+<div id="yui-b" style="display:none;" name="Coded Fields" >
 <!-- SUBTYPE LIMITS -->
 		<fieldset>
 		<legend>Coded Fields</legend>
@@ -61,7 +62,7 @@
         <p>
 		<label>Illustration</label>
         <select name="limit" class="subtype" size="1">
-            <option value="">Tout type d'illustration</option>
+            <option value="">Any</option>
             <option value="Illustration-Code:a">Illustrations</option>
             <option value="Illustration-Code:b">Cartes</option>
             <option value="Illustration-Code:c">Portraits</option>
@@ -108,59 +109,59 @@
 		</select>
         </p>
         <p>
-		<label>Type vid&eacute;o</label>
+		<label>Video Types</label>
 		<select name="limit" class="subtype">
-            <option value="">Tout type video</option>
-			<option value="Video-mt:a">Film</option>
-			<option value="Video-mt:b">Document &agrave; projeter</option>
-			<option value="Video-mt:c">Enregistrement video</option>
+            <option value="">Any</option>
+			<option value="Video-mt:a">motion picture</option>
+			<option value="Video-mt:b">visual projection</option>
+			<option value="Video-mt:c">video recording</option>
 		</select>
         </p>
 		</fieldset>
 		<fieldset>
-		<legend>P&eacute;riodique</legend><p>
+		<legend>Serials</legend><p>
 		<p>
-		<label>Type periodique</label>
+		<label>Serial Type</label>
 		<select name="limit" class="subtype">
-           <option value="">Tout type de periodique</option>
-           <option value="Type-Of-Serial:a">Periodique</option>
-			<option value="Type-Of-Serial:b">Collection des monographies</option>
-			<option value="Type-Of-Serial:c">Journal</option>
-			<option value="Type-Of-Serial:z">autres</option>
+           <option value="">Any type</option>
+           <option value="Type-Of-Serial:a">Periodical</option>
+			<option value="Type-Of-Serial:b">Monographical series</option>
+			<option value="Type-Of-Serial:c">Newspaper</option>
+			<option value="Type-Of-Serial:z">Other</option>
 		</select>
 		</p>
 		<p>
-		<label>P&eacute;riodicit&eacute;</label>
+		<label>Periodicity</label>
 		<select name="limit" class="subtype">
-			<option value="">Toute P&eacute;riodicit&eacute;</option>
-				<option value="Frequency-code:a">Quotidien</option>
-				<option value="Frequency-code:b">Bihebdomadaire</option>
-				<option value="Frequency-code:c">Hebdomadaire</option>
-				<option value="Frequency-code:d">Toutes les deux semaines</option>
-				<option value="Frequency-code:e">Deux fois par mois</option>
-				<option value="Frequency-code:f">Mensuel</option>
-				<option value="Frequency-code:g">Bimestriel</option>
-				<option value="Frequency-code:h">Trimestriel</option>
-				<option value="Frequency-code:i">Trois fois par an</option>
-				<option value="Frequency-code:j">Semestriel</option>
-				<option value="Frequency-code:k">Annuel</option>
-				<option value="Frequency-code:l">Bisanuel</option>
-				<option value="Frequency-code:m">Triennal</option>
-				<option value="Frequency-code:n">Trois fois par semaine</option>
-				<option value="Frequency-code:o">Trois fois par mois</option>
-				<option value="Frequency-code:u">Inconnue</option>
-				<option value="Frequency-code:y">Sans periodicite</option>
-				<option value="Frequency-code:i">Autre</option>
+			<option value="">Any</option>
+				<option value="Frequency-code:a">Daily</option>
+				<option value="Frequency-code:b">Semiweekly</option>
+				<option value="Frequency-code:c">Weekly</option>
+				<option value="Frequency-code:d">Biweekly</option>
+				<option value="Frequency-code:e">Semimonthly</option>
+				<option value="Frequency-code:f">Monthly</option>
+				<option value="Frequency-code:g">Bimonthly</option>
+				<option value="Frequency-code:h">Quarterly</option>
+				<option value="Frequency-code:i">Three times a year</option>
+				<option value="Frequency-code:j">Semiannual</option>
+				<option value="Frequency-code:k">Annual</option>
+				<option value="Frequency-code:l">Biannual</option>
+				<option value="Frequency-code:m">Triennial</option>
+				<option value="Frequency-code:n">Three times a week</option>
+				<option value="Frequency-code:o">Three times a month</option>
+				<option value="Frequency-code:u">Unknown</option>
+				<option value="Frequency-code:y">Without periodicity</option>
+				<option value="Frequency-code:i">Other</option>
 		</select>
 		</p>
 		<p>
-		<label>Toute R&eacute;gularit&eacute;</label>
+		<label>Regularity</label>
 		<select name="limit" class="subtype">
-            <option value="">R&eacute;gularit&eacute;</option>
-				<option value="Regularity-code:u">Inconnu</option>
-				<option value="Regularity-code:a">Regulier</option>
-				<option value="Regularity-code:b">Normalement irregulier</option>
-				<option value="Regularity-code:y">Irregulier</option>
+            <option value="">Any regularity</option>
+				<option value="Regularity-code:u">Unknown</option>
+				<option value="Regularity-code:a">Regular</option>
+				<option value="Regularity-code:b">Normalised irregular</option>
+				<option value="Regularity-code:y">irregular</option>
 		</select>
         </p>
 
