@@ -203,8 +203,8 @@ $template->param(result=>\@results);
 sub SimpleSearch {
     my $query   = shift;
     if (C4::Context->preference('NoZebra')) {
-        my $result = NZorder(NZanalyse($query))->{'biblioserver'}->{'RECORDS'};
-        my $search_result = ( $result->{hits} && $result->{hits} > 0 ? $result : [] );
+        my $result = NZorder(NZanalyse($query))->{'biblioserver'};
+        my $search_result = ( $result->{hits} && $result->{hits} > 0 ? $result->{'RECORDS'} : [] );
         return (undef,$search_result);
     } else {
         my @servers = @_;
