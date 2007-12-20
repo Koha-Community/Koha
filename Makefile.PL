@@ -450,6 +450,7 @@ WriteMakefile(
     NO_META => 1,
     PREREQ_PM => {
 'Algorithm::CheckDigits' => 0.48,
+'Algorithm::CheckDigits::M43_001' => 0.48,
 'Biblio::EndnoteStyle' => 0.05,
 'CGI' => 3.15,
 'CGI::Carp' => 1.29,
