@@ -93,7 +93,7 @@ function confirm_deletion() {
 											onclick: {fn: printBiblio }
                                         });
 
-	    var addbiblioButton = new YAHOO.widget.Button("addbiblio");
+	    var newbiblioButton = new YAHOO.widget.Button("newbiblio");
 	    var placeholdButton = new YAHOO.widget.Button("placehold");
 		
 	}
@@ -103,7 +103,7 @@ function confirm_deletion() {
 	
 <ul class="toolbar">
 
-	<li><a id="addbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li>
+	<li><a id="newbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li>
 	
 	<li id="editmenuc"><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=">Edit Record</a></li>
 	<li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Items</a></li>

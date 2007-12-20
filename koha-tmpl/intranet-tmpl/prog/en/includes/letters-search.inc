@@ -49,7 +49,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<p class="tip">Search Existing Notices:</p>
 <form action="/cgi-bin/koha/tools/letter.pl" method="post">
 		<input type="text" name="searchfield" size="40" value="" />
-                <input type="submit" name="Search" value="Search" />
+                <input type="submit" class="submit" name="search" value="Search" />
         </form>	
 	</div>
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -70,7 +70,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <input value="Submit" type="submit" />
+            <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
 	</div>	<!-- /TMPL_IF -->

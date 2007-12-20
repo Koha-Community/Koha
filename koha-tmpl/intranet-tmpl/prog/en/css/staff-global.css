@@ -801,21 +801,77 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#addbiblio a, #addchild a, #newentry a {
+#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newbatch a, #newsubscription a, #newdictionary a, #neworder a {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-new.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
-#deletebiblio button, #deletebiblio a, #deletepatron a {
+#changepassword a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-password.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#manageorders a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-orders.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+
+#savemenuc .first-child {
+	padding-left : 15px;
+	background-image: url("../../img/toolbar-save.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#editpatron a, #editmenuc .first-child, #editshelf a, #edit a, #editsupplier a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-edit.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#duplicate a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-duplicate.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#receive a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-receive.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#renew a {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-renew.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+
+#deletebiblio button, #deletebiblio a, #deletepatron a, #deleteshelf .first-child, #delete a {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-delete.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
 
-#printbiblio button, #printbiblio a {
+#z3950search .first-child {
+	padding-left : 34px;
+	background-image: url("../../img/toolbar-search.gif");
+	background-position : center left;
+	background-repeat : no-repeat;
+}
+#printbiblio button, #printbiblio a, #printmenuc .first-child {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-print.gif");
 	background-position : center left;
@@ -834,6 +890,10 @@ fieldset.rows .inputnote {
 	background-image: url("../../img/toolbar-hold.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
+}
+
+#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #addbiblio .first-child {
+	padding-left : 15px;
 }
 
 div.error {
@@ -1290,4 +1350,21 @@ div.pages a:active {
 
 div.browse {
 	margin : .5em 0;
+}
+
+div#header_search input.submit {
+	font-size : 1em;
+}
+
+input[type=submit], input[type=button], input.submit {
+	border: 1px outset #999999;
+	border-top-color: #666;
+	border-left-color: #666;
+	padding: 0.25em;
+	background : #E8E8E8 url(../../img/button-bg2.gif) top left repeat-x;
+	color: #333333;
+}
+
+input[type=submit]:active, input[type=button]:active, input.submit:active {
+	border : 1px inset #999999;
 }

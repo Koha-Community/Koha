@@ -64,7 +64,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input id="findborrower" name="findborrower" size="40" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <input value="Submit" type="submit" />
+            <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
 </div>  
@@ -74,7 +74,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
         <input name="barcode" id="ret_barcode" size="40" maxlength="14" />
-        <input value="Submit" type="submit" />
+        <input value="Submit" class="submit" type="submit" />
     </form>
 </div>
 <!-- /TMPL_IF -->

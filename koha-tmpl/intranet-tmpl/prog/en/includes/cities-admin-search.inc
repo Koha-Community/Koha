@@ -70,7 +70,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <input value="Submit" type="submit" />
+            <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
 	</div><!-- /TMPL_IF -->
@@ -79,7 +79,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
-				<input type="submit" value="Submit"  class="form-submit" />
+				<input type="submit" value="Submit"  class="submit" />
 		</form>
 	</div><!-- /TMPL_IF -->
 			<ul>

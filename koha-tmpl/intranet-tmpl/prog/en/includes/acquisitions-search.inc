@@ -12,7 +12,7 @@
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
 		<label for="title">Title: </label><input type="text" id="title" name="title" size="15" value="<!-- TMPL_VAR name="title"-->" /> <label for="searchsupplier">Supplier:</label> <input type="text" id="searchsupplier" name="name" size="15" value="<!-- TMPL_VAR name="name" -->" />
-	<input value="Submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced Search</a>
+	<input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced Search</a>
 	</form>
 	</div>	
 			<ul>

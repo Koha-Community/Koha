@@ -75,7 +75,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <input value="Submit" type="submit" />
+            <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
 	</div><!-- /TMPL_IF -->

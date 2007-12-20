@@ -55,7 +55,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit" />
+                <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>
@@ -64,7 +64,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <input value="Submit" type="submit" />
+            <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
 </div>  <!-- /TMPL_IF -->
@@ -73,7 +73,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
         <input name="barcode" id="ret_barcode" size="40" maxlength="14" />
-        <input value="Submit" type="submit" />
+        <input value="Submit" class="submit" type="submit" />
     </form>
 </div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="CAN_user_catalogue" -->
@@ -81,7 +81,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         <input type="text" name="q" id="search-form" size="40" />
-        <input type="submit" class="form-submit" value="Submit"/>
+        <input type="submit" class="submit" value="Submit"/>
     </form>
 </div><!-- /TMPL_IF -->
 
