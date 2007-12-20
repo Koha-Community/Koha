@@ -133,7 +133,7 @@ my $newexpiry = $query->param('dateexpiry');
 
 my ($datedue,$invalidduedate);
 if ($duedatespec) {
-	$datedue =  C4::Dates->new($duedatespec,'iso' );
+	$datedue =  C4::Dates->new($duedatespec);
 	$invalidduedate=1 unless $datedue;
 }
 
