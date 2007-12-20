@@ -1124,53 +1124,38 @@ sub GetBorNotifyAcctRecord {
 
 =head2 checkuniquemember (OUEST-PROVENCE)
 
-  $result = &checkuniquemember($collectivity,$surname,$categorycode,$firstname,$dateofbirth);
+  ($result,$categorycode)  = &checkuniquemember($collectivity,$surname,$firstname,$dateofbirth);
 
 Checks that a member exists or not in the database.
 
-C<&result> is 1 (=exist) or 0 (=does not exist)
+C<&result> is nonzero (=exist) or 0 (=does not exist)
+C<&categorycode> is from categorycode table
 C<&collectivity> is 1 (= we add a collectivity) or 0 (= we add a physical member)
 C<&surname> is the surname
-C<&categorycode> is from categorycode table
 C<&firstname> is the firstname (only if collectivity=0)
-C<&dateofbirth> is the date of birth (only if collectivity=0)
+C<&dateofbirth> is the date of birth in ISO format (only if collectivity=0)
 
 =cut
+
+# FIXME: This function is not legitimate.  Multiple patrons might have the same first/last name and birthdate.
+# This is especially true since first name is not even a required field.
 
 sub checkuniquemember {
     my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
     my $dbh = C4::Context->dbh;
-    my $request;
-    if ($collectivity) {
-
-# 				$request="select count(*) from borrowers where surname=? and categorycode=?";
-        $request =
-          "select borrowernumber,categorycode from borrowers where surname=? ";
-    }
-    else {
-
-# 				$request="select count(*) from borrowers where surname=? and categorycode=? and firstname=? and dateofbirth=?";
-        $request =
-"select borrowernumber,categorycode from borrowers where surname=?  and firstname=? and dateofbirth=?";
-    }
+    my $request = ($collectivity) ?
+		"SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? " :
+		"SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=? and dateofbirth=? ";
     my $sth = $dbh->prepare($request);
     if ($collectivity) {
         $sth->execute( uc($surname) );
-    }
-    else {
+    } else {
         $sth->execute( uc($surname), ucfirst($firstname), $dateofbirth );
     }
     my @data = $sth->fetchrow;
-    if ( $data[0] ) {
-        $sth->finish;
-        return $data[0], $data[1];
-
-        #
-    }
-    else {
-        $sth->finish;
-        return 0;
-    }
+    $sth->finish;
+    ( $data[0] ) and return $data[0], $data[1];
+    return 0;
 }
 
 sub checkcardnumber {
