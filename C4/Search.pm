@@ -881,12 +881,14 @@ sub buildQuery {
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
 
     # add limits
+	$DEBUG=1;
 	my $group_OR_limits;
 	my $availability_limit;
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
 			# available is defined as (items.notloan is NULL) and (items.itemlost > 0 or NULL) (last clause handles NULL values for lost in zebra)
-			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric ge 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+			# all records not indexed in the onloan register and allrecords not indexed in the lost register, or where the value of lost is equal to or less than 0
+			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
 			$limit_cgi .= "&limit=available";
 			$limit_desc .="";
         }
@@ -912,8 +914,8 @@ sub buildQuery {
 		$limit.="($group_OR_limits)";
 	}
 	if ($availability_limit) {
-		$limit.=" not " if ($query || $limit );
-		$limit.="$availability_limit";
+		$limit.=" and " if ($query || $limit );
+		$limit.="($availability_limit)";
 	}
 	# normalize the strings
 	$query =~ s/:/=/g;
@@ -966,6 +968,12 @@ sub searchResults {
     while ( my $bdata = $bsth->fetchrow_hashref ) {
         $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
     }
+	my %locations;
+	my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'SHELF_LOC'");
+	$lsch->execute();
+	while (my $ldata = $lsch->fetchrow_hashref ) {
+		$locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
+	}
 
     #Build itemtype hash
     #find itemtype & itemtype image
@@ -1092,94 +1100,131 @@ sub searchResults {
         }
         $oldbiblio->{'toggle'} = $toggle;
         my @fields = $marcrecord->field($itemtag);
-        my @items_loop;
-        my $items;
+
+# Setting item statuses for display
+        my @available_items_loop;
+		my @onloan_items_loop;
+		my @other_items_loop;
+
+        my $available_items;
+		my $onloan_items;
+		my $other_items;
+
         my $ordered_count     = 0;
+		my $available_count   = 0;
         my $onloan_count      = 0;
+		my $longoverdue_count = 0;
+		my $other_count       = 0;
         my $wthdrawn_count    = 0;
         my $itemlost_count    = 0;
-        my $norequests        = 1;
-
-        #
-        # check the loan status of the item : 
-        # it is not stored in the MARC record, for pref (zebra reindexing)
-        # reason. Thus, we have to get the status from a specific SQL query
-        #
-        my $sth_issue = $dbh->prepare("
-            SELECT date_due,returndate 
-            FROM issues 
-            WHERE itemnumber=? AND returndate IS NULL");
+		my $itembinding_count = 0;
+		my $itemdamaged_count = 0;
+        my $can_place_holds   = 0;
         my $items_count=scalar(@fields);
+		my $items_counter;
+		my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
         foreach my $field (@fields) {
             my $item;
+			$items_counter++;
+
+			# populate the items hash 
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-            $sth_issue->execute($item->{itemnumber});
-            $item->{due_date} = format_date($sth_issue->fetchrow) if $sth_issue->fetchrow;
-            $item->{onloan} = 1 if $item->{due_date};
-            # at least one item can be reserved : suppose no
-            $norequests = 1;
-            if ( $item->{wthdrawn} ) {
-                $wthdrawn_count++;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{wthdrawn}=1;
-            }
-            elsif ( $item->{itemlost} ) {
-                $itemlost_count++;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemlost}=1;
-            }
-            unless ( $item->{notforloan}) {
-                # OK, this one can be issued, so at least one can be reserved
-                $norequests = 0;
-            }
-            if ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
-            {
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{onloancount} = 1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{due_date} = $item->{due_date};
-                $onloan_count++;
-            }
-            if ( $item->{'homebranch'} ) {
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{count}++;
-            }
 
+			# set item's branch name, use homebranch first, fall back to holdingbranch
+            if ($item->{'homebranch'}) {
+                    $item->{'branchname'} = $branches{$item->{homebranch}};
+            }
             # Last resort
-            elsif ( $item->{'holdingbranch'} ) {
-                $items->{ $item->{'holdingbranch'} }->{count}++;
+            elsif ($item->{'holdingbranch'}) {
+					 $item->{'branchname'} = $branches{$item->{holdingbranch}};
             }
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
-        }    # notforloan, item level and biblioitem level
+			# key for items results is built from branchcode . coded location qualifier . itemcallnumber
+			if ($item->{onloan}) {
+				$onloan_count++;
+				$onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{due_date} = format_date($item->{onloan});
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{count}++ if $item->{'homebranch'};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{branchname} = $item->{'branchname'};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{location} =  $locations{$item->{location}};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{itemcallnumber} = $item->{itemcallnumber};
 
-        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
-        $norequests = 1 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
-		my $itemscount;
-        for my $key ( sort keys %$items ) {
-			$itemscount++;
-            my $this_item = {
-                branchname     => $branches{$items->{$key}->{branchcode}},
-                branchcode     => $items->{$key}->{branchcode},
-                count          => $items->{$key}->{count},
-                itemcallnumber => $items->{$key}->{itemcallnumber},
-                location => $items->{$key}->{location},
-                onloancount      => $items->{$key}->{onloancount},
-                due_date         => $items->{$key}->{due_date},
-                wthdrawn      => $items->{$key}->{wthdrawn},
-                lost         => $items->{$key}->{itemlost},
-            };
-			# only show the number specified by the user
-			my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
-            push @items_loop, $this_item unless $itemscount > $maxitems;;
+				# if something's checked out and lost, mark it as 'long overdue'
+				if ( $item->{itemlost} ) {
+					$onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{longoverdue}++;
+                	$longoverdue_count++;
+				}
+				# can place holds as long as this item isn't lost
+				else {
+					$can_place_holds = 1;
+				}
+			}
+
+			# items not on loan, but still unavailable ( lost, withdrawn, damaged )
+			else { 
+            	# item is on order
+            	if ( $item->{notforloan} == -1) {
+               		$ordered_count++;
+            	}
+
+				# item is withdrawn, lost or damaged
+				if ( $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ) {
+                	$wthdrawn_count++ if $item->{wthdrawn};
+                	$itemlost_count++ if $item->{itemlost};
+                	$itemdamaged_count++ if $item->{damaged};
+					$item->{status} = $item->{wthdrawn}."-".$item->{itemlost}."-".$item->{damaged};
+                	$other_count++;
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{wthdrawn} = $item->{wthdrawn};
+					$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{itemlost} = $item->{itemlost};
+					$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{damaged} = $item->{damaged};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{count}++ if $item->{'homebranch'};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{branchname} = $item->{'branchname'};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{location} =  $locations{$item->{location}};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{itemcallnumber} = $item->{itemcallnumber};
+				}
+
+				# item is available
+				else {
+					$can_place_holds = 1;
+					$available_count++;
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{count}++ if $item->{'homebranch'};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{branchname} = $item->{'branchname'};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{location} =  $locations{$item->{location}};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{itemcallnumber} = $item->{itemcallnumber};
+				}
+			}
+        } # notforloan, item level and biblioitem level
+		my ($availableitemscount, $onloanitemscount, $otheritemscount);
+		my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
+        for my $key ( sort keys %$onloan_items ) {
+            $onloanitemscount++;
+			push @onloan_items_loop, $onloan_items->{$key} unless $onloanitemscount > $maxitems;
         }
-        $oldbiblio->{norequests}    = $norequests;
+        for my $key ( sort keys %$other_items ) {
+            $otheritemscount++;
+            push @other_items_loop, $other_items->{$key} unless $otheritemscount > $maxitems;
+        }
+        for my $key ( sort keys %$available_items ) {
+            $availableitemscount++;
+            push @available_items_loop, $available_items->{$key} unless $availableitemscount > $maxitems;
+        }
+		# last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
+        $can_place_holds = 0 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
+        $oldbiblio->{norequests}    = 1 unless $can_place_holds;
+		$oldbiblio->{itemsplural} = 1 if $items_count>1;
         $oldbiblio->{items_count}    = $items_count;
-        $oldbiblio->{items_loop}    = \@items_loop;
+        $oldbiblio->{available_items_loop}    = \@available_items_loop;
+		$oldbiblio->{onloan_items_loop} = \@onloan_items_loop;
+		$oldbiblio->{other_items_loop} = \@other_items_loop;
+		$oldbiblio->{availablecount} = $available_count;
+		$oldbiblio->{availableplural} = 1 if $available_count>1;
         $oldbiblio->{onloancount}   = $onloan_count;
+		$oldbiblio->{onloanplural} = 1 if $onloan_count>1;
+		$oldbiblio->{othercount}   = $other_count;
+		$oldbiblio->{otherplural} = 1 if $other_count>1;
         $oldbiblio->{wthdrawncount} = $wthdrawn_count;
         $oldbiblio->{itemlostcount} = $itemlost_count;
+		$oldbiblio->{damagedcount} = $itemdamaged_count;
         $oldbiblio->{orderedcount}  = $ordered_count;
         $oldbiblio->{isbn}          =~ s/-//g; # deleting - in isbn to enable amazon content 
         push( @newresults, $oldbiblio );

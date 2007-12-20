@@ -64,7 +64,7 @@ if ( $itemnotes ne $item_data_hashref->{'itemnotes'}) {
 	$newitemdata->{'itemnumber'} = $itemnumber;
 #	&C4::Biblio::_koha_modify_item($dbh,$newitemdata);
 
-	$sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
+	my $sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
 	$sth->execute($wthdrawn,$itemlost,$damaged,$itemnotes,$itemnumber);
 	&ModZebra($biblionumber,"specialUpdate","biblioserver");
 	

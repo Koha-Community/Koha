@@ -445,15 +445,16 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 my @limit_inputs = _input_cgi_parse($query_cgi);
 
 # add OPAC 'hidelostitems'
-# not items with 
 if (C4::Context->preference('hidelostitems') == 1) {
-	$query ="($query) not ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches=''))";
-	warn "Q".$query;
+	# either lost ge 0 or no value in the lost register
+	$query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
 }
+
 # add OPAC suppression - requires at least one item indexed with Suppress
 if (C4::Context->preference('OpacSuppression')) {
     $query = "($query) not Suppress=1";
 }
+
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 
 ## II. DO THE SEARCH AND GET THE RESULTS
