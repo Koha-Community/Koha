@@ -26,7 +26,6 @@
     <!-- /TMPL_IF -->
     <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
 </ul></div>
-<!-- TMPL_IF NAME="borrowernumber" -->
 <div id="menu">
 <ul>
 	<!-- TMPL_IF NAME="circview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Check Out</a></li>
