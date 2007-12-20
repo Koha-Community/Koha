@@ -1,62 +1,61 @@
-</div>
-<div id="sidebar">
+<div id="yui-b">
 <!-- SUBTYPE LIMITS -->
 		<fieldset>
-		<legend>Champs Cod&eacute;s</legend>
+		<legend>Coded Fields</legend>
 		<p>
-		<label>Public</label>
+		<label>Audience</label>
 		<select name="limit" class="subtype">
-            <option value="" SELECTED="selected" class="menuheader">Tout public</option>
-			<option value="aud:a">Jeunesse en g&eacute;n&eacute;ral</option>
-			<option value="aud:b">Pr&eacute;-scolaire</option>
-			<option value="aud:c">scolaire</option>
-			<option value="aud:d">enfant</option>
-			<option value="aud:e">jeune adulte</option>
-			<option value="aud:k">adulte, haut niveau</option>
-			<option value="aud:m">fiction ou vulg adulte</option>
-			<option value="aud:u">inconnu</option>
+            <option value="" SELECTED="selected" >Any</option>
+			<option value="aud:a">juvenile, general</option>
+			<option value="aud:b">pre-primary (0-5)</option>
+			<option value="aud:c">Primary (5-8)</option>
+			<option value="aud:d">children (9-14)</option>
+			<option value="aud:e">Young Adult</option>
+			<option value="aud:k">Adult, serious</option>
+			<option value="aud:m">Adult, General</option>
+			<option value="aud:u">Unknown</option>
 		</select>
 		</p>
 		<p>
-		<label>Format</label>
+		<label>Print</label>
         <select name="limit" class="subtype">
-			<option value="" selected="selected" class="menuheader">Tout format</option>
-				<option value="Material-type:r">Impression normale</option>
-				<option value="Material-type:d">Impression en gros caractere</option>
-				<option value="Material-type:e">Journal</option>
-				<option value="Material-type:f">Caractere braille et moon</option>
-				<option value="Material-type:g">Micro-impression</option>
-				<option value="Material-type:h">Manuscrit</option>
-				<option value="Material-type:i">Multimedia</option>
-				<option value="Material-type:j">Impression en reduction</option>
-				<option value="Material-type:z">Autres formes de presentation</option>
+			<option value="" selected="selected" >any</option>
+				<option value="Material-type:r">regular print</option>
+				<option value="Material-type:d">large print</option>
+				<option value="Material-type:e">newspaper format</option>
+				<option value="Material-type:f">Braille or Moon script</option>
+				<option value="Material-type:g">microprint</option>
+				<option value="Material-type:h">hand-written</option>
+				<option value="Material-type:i">multimedia</option>
+				<option value="Material-type:j">mini-print</option>
+				<option value="Material-type:z">other form of textual material</option>
 		</select>
 		</p>
 		<p>
-		<label>Forme</label>
+		<label>Feschrift Ind.</label>
 		<select name="limit" class="subtype">
-			<option value="" selected="selected" class="menuheader">Toute forme</option>
-            <option value="Literature-Code:a">fiction, roman</option>
-            <option value="Literature-Code:b">Theatre, piece televisee</option>
-            <option value="Literature-Code:c">Essais</option>
-            <option value="Literature-Code:d">Humour, satire</option>
-            <option value="Literature-Code:e">Lettres</option>
-            <option value="Literature-Code:f">Nouvelles</option>
-            <option value="Literature-Code:g">Poesie</option>
-            <option value="Literature-Code:h">Discours, art oratoire</option>
-            <option value="Literature-Code:y">Il ne s'agit pas d'un texte litteraire</option>
-            <option value="Literature-Code:z">formes vari&eacute;es ou autres formes litteraires</option>
+			<option value="" selected="selected" >Any</option>
+            <option value="Literature-Code:a">fiction</option>
+            <option value="Literature-Code:b">drama</option>
+            <option value="Literature-Code:c">essays</option>
+            <option value="Literature-Code:d">humour, satire</option>
+            <option value="Literature-Code:e">letters</option>
+            <option value="Literature-Code:f">short stories</option>
+            <option value="Literature-Code:g">poetry</option>
+            <option value="Literature-Code:h">speeches, oratory</option>
+            <option value="Literature-Code:y">not a literary text</option>
+            <option value="Literature-Code:z">multiple/other lit. forms</option>
 		</select>
 		</p>
         <p>
-		<label>Biographie</label>
+		<label>Biography</label>
         <select name="limit" class="subtype" size="1">
-            <option value="">Tout type de biographie</option>
-            <option value="Biography:y">C'est pas une biographie</option>
-            <option value="Biography-code:a">autobiographie (y compris correspondance...)</option>
-            <option value="Biography:b">Biographie individuelle</option>
-            <option value="Biography:c">Biographie collective</option>
-            <option value="Biography:d">Contient des informations biographiques</option>
+            <option value="">Any</option>
+            <option value="Biography-code:y">Not a biography</option>
+            <option value="Biography-code:a">autobiography</option>
+            <option value="Biography-code:b">individual biography</option>
+            <option value="Biography-code:c">collective biography</option>
+            <option value="Biography-code:d">contains biogr. data</option>
 		</select>
         </p>
         <p>
@@ -82,30 +81,30 @@
         </select>
         </p>
 		<p>
-		<label>Contenu</label>
+		<label>Content</label>
 		<select name="limit" class="subtype">
-			<option value="" >Tout type de contenu</option>
-            <option value="ctype:a" >Bibliographie</option>
-            <option value="ctype:b" >Catalogue</option>
+			<option value="" >Any</option>
+            <option value="ctype:a" >bibliography</option>
+            <option value="ctype:b" >catalogue</option>
             <option value="ctype:c" >index</option>
-            <option value="ctype:d" >resume</option>
-            <option value="ctype:e" >Dictionnaire</option>
-            <option value="ctype:f" >encyclopedie</option>
-            <option value="ctype:g" >Repertoire</option>
-            <option value="ctype:h" >Description projet</option>
-            <option value="ctype:i" >statistiques</option>
-            <option value="ctype:j" >Manuels d'enseignement programme</option>
-            <option value="ctype:k" >Brevet</option>
-            <option value="ctype:l" >norme</option>
-            <option value="ctype:m" >Memoire ou these</option>
-            <option value="ctype:n" >Lois et decrets</option>
-            <option value="ctype:o" >Table numerique</option>
-            <option value="ctype:p" >Rapport technique</option>
-            <option value="ctype:q" >Sujet d'examen</option>
-            <option value="ctype:r" >Synthese bibliographique</option>
-            <option value="ctype:s" >Traite</option>
-            <option value="ctype:t" >Bande dessinee</option>
-            <option value="ctype:z" >Autres</option>
+            <option value="ctype:d" >abstract</option>
+            <option value="ctype:e" >dictionary</option>
+            <option value="ctype:f" >encyclopaedia</option>
+            <option value="ctype:g" >directory</option>
+            <option value="ctype:h" >project description</option>
+            <option value="ctype:i" >statistics</option>
+            <option value="ctype:j" >programmed text books</option>
+            <option value="ctype:k" >patent</option>
+            <option value="ctype:l" >standard</option>
+            <option value="ctype:m" >dissertation or thesis</option>
+            <option value="ctype:n" >laws and legislation</option>
+            <option value="ctype:o" >numeric table</option>
+            <option value="ctype:p" >technical report</option>
+            <option value="ctype:q" >examination paper</option>
+            <option value="ctype:r" >literature surveys/reviews</option>
+            <option value="ctype:s" >treaties</option>
+            <option value="ctype:t" >cartoons or comic strips</option>
+            <option value="ctype:z" >other</option>
 		</select>
         </p>
         <p>
@@ -204,3 +203,4 @@
         </p>
 
 </fieldset>
+</div>

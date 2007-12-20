@@ -165,8 +165,43 @@
 <!-- /TMPL_IF -->
 <!-- /TYPE LIMITS -->
 
+<!-- AVAILABILITY LIMITS -->
+    <fieldset><legend>Location and availability: </legend>
+        <p>
+        <label for="available-items">Only items currently available</label><input type="checkbox" id="available-items" name="limit" value="available" /></p>
+        <p>
+        <label>Individual Libraries </label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
+        <option value="">All Libraries</option>
+        <!-- TMPL_LOOP NAME="branchloop" -->
+        <option value="homebranch:<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+    <!-- <input type='hidden' name='limit' value='branch: MAIN' /> -->
+        </p>
+        <!-- TMPL_IF NAME="searchdomainloop" -->
+    <p>OR<p> <!-- should addjs to grey out group pulldown if a library is selected. -->
+    <p>
+        <label>Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
+        <option value=""> -- none -- </option>
+        <!-- TMPL_LOOP NAME="searchdomainloop" -->
+        <option value="<!-- TMPL_VAR NAME='categorycode' -->"><!-- TMPL_VAR NAME='categoryname' --></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        </p>
+    <!-- /TMPL_IF -->
+    </fieldset>
+<!-- /AVAILABILITY LIMITS -->
 
-</div>
+<!-- RANK LIMITS -->
+
+<fieldset><legend>Sort by: </legend>
+    <p><select id="sort_by" name="sort_by">
+  <!-- TMPL_INCLUDE NAME="resort_form.inc" -->
+    </select>
+        </p>
+</fieldset>
+<!-- RANK LIMITS -->
+
 </div>
 <!-- TMPL_IF NAME="UNIMARC" -->
 <!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" -->
@@ -238,42 +273,6 @@
 </fieldset>
 <!-- /TMPL_IF -->
 
-<!-- AVAILABILITY LIMITS -->
-    <fieldset><legend>Location and availability: </legend>
-        <p>
-        <label for="available-items">Only items currently available</label><input type="checkbox" id="available-items" name="limit" value="available" /></p>
-        <p>
-        <label>Individual Libraries </label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
-        <option value="">All Libraries</option>
-        <!-- TMPL_LOOP NAME="branchloop" -->
-        <option value="branch:<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
-        <!-- /TMPL_LOOP -->
-        </select>
-		<!-- <input type='hidden' name='limit' value='branch: MAIN' /> -->
-        </p>
-        <!-- TMPL_IF NAME="searchdomainloop" -->
-		<p>OR<p> <!-- should addjs to grey out group pulldown if a library is selected. -->
-		<p>
-        <label>Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
-        <option value=""> -- none -- </option>
-        <!-- TMPL_LOOP NAME="searchdomainloop" -->
-        <option value="<!-- TMPL_VAR NAME='categorycode' -->"><!-- TMPL_VAR NAME='categoryname' --></option>
-        <!-- /TMPL_LOOP -->
-        </select>
-        </p>
-		<!-- /TMPL_IF -->
-    </fieldset>
-<!-- /AVAILABILITY LIMITS -->
-
-<!-- RANK LIMITS -->
-
-<fieldset><legend>Sort by: </legend>
-    <p><select id="sort_by" name="sort_by">
-	<!-- TMPL_INCLUDE NAME="resort_form.inc" -->
-    </select>
-        </p>
-</fieldset>
-<!-- RANK LIMITS -->
 <!-- SEARCH BUTTONS -->
             <p><input class="submit" type="submit" accesskey="s" value="Search" />
             <!-- TMPL_IF NAME="expanded_options" -->
@@ -285,8 +284,6 @@
             </p>
 <!-- /SEARCH BUTTONS -->
 </form>
-</div>
-</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
