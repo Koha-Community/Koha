@@ -204,7 +204,8 @@ sub SimpleSearch {
     my $query   = shift;
     if (C4::Context->preference('NoZebra')) {
         my $result = NZorder(NZanalyse($query))->{'biblioserver'}->{'RECORDS'};
-        return (undef,$result);
+        my $search_result = ( $result->{hits} && $result->{hits} > 0 ? $result : [] );
+        return (undef,$search_result);
     } else {
         my @servers = @_;
         my @results;
@@ -1428,7 +1429,7 @@ sub NZanalyse {
                 }
             }
         }
-#         warn "return : $results for LEAF : $string" if $DEBUG;
+         warn "return : $results for LEAF : $string" if $DEBUG;
         return $results;
     }
 }
@@ -1444,6 +1445,7 @@ sub NZanalyse {
 
 sub NZorder {
     my ($biblionumbers, $ordering,$results_per_page,$offset) = @_;
+    warn "biblionumbers = $biblionumbers and ordering = $ordering\n" if $DEBUG;
     # order title asc by default
 #     $ordering = '1=36 <i' unless $ordering;
     $results_per_page=20 unless $results_per_page;
