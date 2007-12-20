@@ -32,7 +32,7 @@ use C4::Accounts;
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-	$VERSION = 3.01;
+	$VERSION = 3.02;
 	$debug = $ENV{DEBUG} || 0;
 }
 
@@ -581,7 +581,7 @@ sub GetMemberIssuesAndFines {
 
   &ModMember($borrowernumber);
 
-Modify borrower's data
+Modify borrower's data.  All date fields should ALREADY be in ISO format.
 
 =cut
 
@@ -589,9 +589,18 @@ Modify borrower's data
 sub ModMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth' } ) if ($data{'dateofbirth' } );
-    $data{'dateexpiry'}   = format_date_in_iso( $data{ 'dateexpiry' } ) if ($data{ 'dateexpiry' } );
-    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'} ) if ($data{'dateenrolled'} );
+	my $iso_re = C4::Dates->new()->regexp('iso');
+	foreach (qw(dateofbirth dateexpiry dateenrolled)) {
+		if (my $tempdate = $data{$_}) {									# assignment, not comparison
+			($tempdate =~ /$iso_re/) and next;							# Congatulations, you sent a valid ISO date.
+			warn "ModMember given $_ not in ISO format ($tempdate)";
+			if (my $tempdate2 = format_date_in_iso($tempdate)) { 		# assignment, not comparison
+				$data{$_} = $tempdate2;
+   			} else {
+				warn "ModMember cannot convert '$tempdate' (from syspref)";
+			}
+		}
+	}
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
     my %hashborrowerfields;  

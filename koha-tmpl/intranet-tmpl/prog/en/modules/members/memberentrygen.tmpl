@@ -75,21 +75,38 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
 		</p>
 	<!--/TMPL_IF-->
 		
+	<!-- TMPL_IF Name="debug" -->
+		<div id="debug">
+				<div>Debug is on (level <!-- TMPL_VAR NAME="debug" -->)</div>
+		</div>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF Name="nok" -->
 		<div id="problem">
-			<p>The following fields are wrong. Please fix them</p>
+			<p>The following fields are wrong. Please fix them.</p>
+			<ul>
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
-				<div id="ERROR_login_exist">login/password already exist</div>
+				<li id="ERROR_login_exist">login/password already exists.</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
-				<div id="ERROR_cardnumber">Cardnumber already in use</div>
+				<li id="ERROR_cardnumber">Cardnumber already in use.</li>
 			<!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="ERROR_age_limitations" -->
-              <div id="ERROR_age_limitations">Patron is too young or too old for this category</div>
-      <!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="ERROR_branch" -->
-              <div id="ERROR_branch">branch selected not allowed.</div>
-      <!-- /TMPL_IF -->   
+			<!-- TMPL_IF NAME="ERROR_age_limitations" -->
+				<li id="ERROR_age_limitations">Patron is too young or too old for their category.  
+					Ages allowed are <!-- TMPL_VAR NAME="ERROR_age_limitations"-->.</li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_branch" -->
+				<li id="ERROR_branch">Branch selected not allowed.</li>
+			<!-- /TMPL_IF -->   
+			<!-- TMPL_IF NAME="ERROR_dateofbirth" -->
+				<li id="ERROR_dateofbirth">Date of birth is invalid.</li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_dateenrolled" -->
+				<li id="ERROR_dateenrolled">Date of enrollment is invalid.</li>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_dateexpiry" -->
+				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
+			<!-- /TMPL_IF -->
+			</ul>
 		</div>
 	<!-- /TMPL_IF -->
 	
@@ -152,7 +169,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
             <li>
                 <!-- TMPL_IF NAME="mandatorydateofbirth" -->
                 <label for="dateofbirth" class="required">
-                <!-- TMPL_ELSE -->	
+                <!-- TMPL_ELSE -->
                 <label for="dateofbirth">
                 <!-- /TMPL_IF-->
                 Date of birth: </label>
@@ -168,6 +185,7 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
             );
         </script>
         <!-- TMPL_IF NAME="mandatorydateofbirth" --><span class="required">Required</span><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="ERROR_dateofbirth" --><span class="required">(Error)</span><!-- /TMPL_IF -->
             </li>
             <li>
                 <!-- TMPL_IF NAME="mandatoryinitials" -->
@@ -526,7 +544,8 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
           }
         );
       </script>
-	  <!-- TMPL_IF NAME="mandatorydateenrolled" --><span class="required">Required</span><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="mandatorydateenrolled" --><span class="required">Required</span><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="ERROR_dateenrolled" --><span class="required">(Error)</span><!-- /TMPL_IF -->
 		</li>
 		<li>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
@@ -546,7 +565,8 @@ patron <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
           }
         );
       </script>
-	  <!-- TMPL_IF NAME="mandatorydateexpiry" --><span class="required">Required</span><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="mandatorydateexpiry" --><span class="required">Required</span><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="ERROR_dateexpiry" --><span class="required">(Error)</span><!-- /TMPL_IF -->
 		</li>
 		<li>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->

@@ -57,6 +57,7 @@ BEGIN {
 my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
+$debug or $debug = $input->param('debug') || 0;
 my $print = $input->param('print');
 my @failedrenews = $input->param('failedrenew');
 my $error = $input->param('error');
@@ -103,6 +104,7 @@ my $category_type = $borrowercategory->{'category_type'};
 # in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
 $template->param( $data->{'categorycode'} => 1 ); 
 
+$debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 		my $userdate = $data->{$_};
 		unless ($userdate) {
@@ -110,9 +112,9 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 			$data->{$_} = '';
 			next;
 		}
-		my $tempdate = C4::Dates->new($userdate,'iso')->output('syspref')
-			or warn ("Invalid $_ = '$userdate'");
-		$data->{$_} = $tempdate || '';
+		$userdate = C4::Dates->new($userdate,'iso')->output('syspref');
+		$data->{$_} = $userdate || '';
+		$template->param( $_ => $userdate );
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
@@ -127,7 +129,7 @@ $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
 
     my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
-    foreach (qw(address city B_address B_city phone mobilezipcode)) {
+    foreach (qw(address city B_address B_city phone mobile zipcode)) {
         $data->{$_} = $data2->{$_};
     }
     my  ( $catcodes, $labels ) = 

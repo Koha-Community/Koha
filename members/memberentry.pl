@@ -23,7 +23,7 @@ use strict;
 # external modules
 use Date::Calc qw/Today/;
 use CGI;
-use Digest::MD5 qw(md5_base64);
+# use Digest::MD5 qw(md5_base64);
 
 # internal modules
 use C4::Auth;
@@ -75,18 +75,18 @@ my @errors;
 my $default_city;
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
 my $check_categorytype=$input->param('check_categorytype');
-# NOTE: Alert for ethnicity and ethnotes fields, they are unvalided in all borrowers form
+# NOTE: Alert for ethnicity and ethnotes fields, they are invalid in all borrowers form
 my $borrower_data;
 my $NoUpdateLogin;
 my $userenv = C4::Context->userenv;
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
-#function  to automatic setup the mandatory  fields (visual with css)
+# function to designate mandatory fields (visually with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
-$template->param( "mandatory$_" => 1);    
+	$template->param( "mandatory$_" => 1);    
 }
 $template->param("add"=>1) if ($op eq 'add');
 $template->param("checked" => 1) if ($nodouble eq 1);
@@ -100,9 +100,9 @@ unless ($category_type or !($categorycode)){
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
 # if a add or modify is requested => check validity of data.
-%data= %$borrower_data if ($borrower_data);
+%data = %$borrower_data if ($borrower_data);
 
-my %newdata;
+my %newdata;	# comes from $input->param()
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
@@ -110,15 +110,18 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
 	my $dateobject = C4::Dates->new();
-	my $regexp = $dateobject->regexp();		# same format for all 3 dates
+	my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
+	my $iso     = $dateobject->regexp('iso');	# 
 	foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 		my $userdate = $newdata{$_} or next;
-		if ($userdate =~ /$regexp/) {
-			$newdata{$_} = format_date_in_iso($userdate);
+		if ($userdate =~ /$syspref/) {
+			$newdata{$_} = format_date_in_iso($userdate);	# if they match syspref format, then convert to ISO
+		} elsif ($userdate =~ /$iso/) {
+			warn "Date $_ ($userdate) is already in ISO format";
 		} else {
-			$template->param( "ERROR_$_" => $userdate );
+			($userdate eq '0000-00-00') and warn "Data error: $_ is '0000-00-00'";
+			$template->param( "ERROR_$_" => 1 );	# else ERROR!
 			push(@errors,"ERROR_$_");
-			$nok++;
 		}
 	}
   # check permission to modify login info.
@@ -131,7 +134,13 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
 if ($op eq 'insert'){
         my $category_type_send=$category_type if ($category_type eq 'I'); 
         my $check_category; # recover the category code of the doublon suspect borrowers
-        ($check_member,$check_category)= checkuniquemember($category_type_send,($newdata{'surname'}?$newdata{'surname'}:$data{'surname'}),($newdata{'firstname'}?$newdata{'firstname'}:$data{'firstname'}),($newdata{'dateofbirth'}?$newdata{'dateofbirth'}:$data{'dateofbirth'}));
+			#   ($result,$categorycode) = checkuniquemember($collectivity,$surname,$firstname,$dateofbirth)
+        ($check_member,$check_category) = checkuniquemember(
+			$category_type_send, 
+			($newdata{surname}     ? $newdata{surname}     : $data{surname}    ),
+			($newdata{firstname}   ? $newdata{firstname}   : $data{firstname}  ),
+			($newdata{dateofbirth} ? $newdata{dateofbirth} : $data{dateofbirth})
+		);
           
   #   recover the category type if the borrowers is a doublon 
         my $tmpborrowercategory=GetBorrowercategory($check_category);
@@ -146,7 +155,7 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
     $data{'contactfirstname'}= $guarantordata->{'firstname'}; 
     $data{'contactname'}     = $guarantordata->{'surname'};
     $data{'contacttitle'}    = $guarantordata->{'title'};  
-	foreach (qw(streetnumber address streettype address2 zipcode city phonephonepro mobile fax email emailpro)) {
+	foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro)) {
 		$data{$_} = $guarantordata->{$_};
 	}
   }
@@ -167,36 +176,33 @@ if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
   $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
 }
   
+$debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 my $loginexist=0;
 if ($op eq 'save' || $op eq 'insert'){
   if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
     push @errors, 'ERROR_cardnumber';
-    $nok = 1;
   } 
   my $dateofbirthmandatory = (scalar grep {$_ eq "dateofbirth"} @field_check) ? 1 : 0;
   if ($newdata{dateofbirth} && $dateofbirthmandatory) {
     my $age = GetAge($newdata{dateofbirth});
     my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
-    if (($age > $borrowercategory->{'upperagelimit'}) or ($age < $borrowercategory->{'dateofbirthrequired'})) {
+	my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
+    if (($age > $high) or ($age < $low)) {
       push @errors, 'ERROR_age_limitations';
-      $nok = 1;
+	  $template->param('ERROR_age_limitations' => "$low to $high");
     }
   }
-	$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
-    
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} != 1){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
-        $nok=1;
       }
     }
   }
   # Check if the userid is unique
-  if (($op eq 'insert' || $op eq 'save') && !Check_Userid($newdata{'userid'},$borrowernumber)) {
+  unless (Check_Userid($newdata{'userid'},$borrowernumber)) {
     push @errors, "ERROR_login_exist";
-    $nok=1;
     $loginexist=1; 
   }
 }
@@ -208,50 +214,42 @@ if ($op eq 'modify' || $op eq 'insert'){
   }
 }
 
-if ($op eq 'insert'){
-  # Check if the userid is unique
-  unless ($nok){
-    $borrowernumber = &AddMember(%newdata);
-    if ($data{'organisations'}){            
-      # need to add the members organisations
-      my @orgs=split(/\|/,$data{'organisations'});
-      add_member_orgs($borrowernumber,\@orgs);
-    }
-    if ($destination eq "circ")	{
-    } else {
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
-        if ($loginexist == 0) {
-            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-        }
-    }
-  }
-}
-if ($op eq 'save'){
-	# test to know if another user have the same password and same login                                
-	unless ($nok){
-	    if($NoUpdateLogin) {
+###  Error checks should happen before this line.
+
+$nok = $nok || scalar(@errors);
+if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
+	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
+	if ($op eq 'insert'){
+		# we know it's not a duplicate borrowernumber or there would already be an error
+		$borrowernumber = &AddMember(%newdata);
+		if ($data{'organisations'}){            
+			# need to add the members organisations
+			my @orgs=split(/\|/,$data{'organisations'});
+			add_member_orgs($borrowernumber,\@orgs);
+		}
+	} elsif ($op eq 'save'){ 
+		if ($NoUpdateLogin) {
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-		$debug and warn "dateofbirth: " . $newdata{'dateofbirth'};
-		&ModMember(%newdata);    
-	    if ($destination eq "circ")	{
-		print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}");
-	    } else {
-		print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-	    }
+		&ModMember(%newdata);	# this is the last server-changing line.  the rest is "presentation"
 	}
+	print scalar ($destination eq "circ") ? 
+		$input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}") :
+		$input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber") ;
+	exit;		# You can only send 1 redirect!  After that, content or other headers don't matter.
 }
 
 if ($delete){
 	print $input->redirect("/cgi-bin/koha/deletemem.pl?member=$borrowernumber");
+	exit;		# same as above
 }
 
 if ($nok){
   $op="add" if ($op eq "insert");
   $op="modify" if ($op eq "save");
   %data=%newdata; 
-  $template->param( updtype => ($op eq "insert"?'I':'M'));
+  $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
   unless ($step){  
     $template->param( step_1 => 1,step_2 => 1,step_3 => 1);
   }  
@@ -261,6 +259,7 @@ if (C4::Context->preference("IndependantBranches")) {
   if ($userenv->{flags} != 1 && $data{branchcode}){
     unless ($userenv->{branch} eq $data{'branchcode'}){
       print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+	  exit;
     }
   }
 }
@@ -295,8 +294,8 @@ if ($ethnicitycategoriescount>=0) {
         -labels=>$labels);
   $template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
 }
-  
-  
+
+
 my $action="WHERE category_type=?";
 ($categories,$labels)=GetborCatFromCatType($category_type,$action);
   
@@ -439,22 +438,22 @@ if (C4::Context->preference("memberofinstitution")){
 
 # --------------------------------------------------------------------------------------------------------
 
-my $CGIsort1 = buildCGIsort("Bsort1","sort1",$data{'sort1'});
-if ($CGIsort1) {
-  $template->param(CGIsort1 => $CGIsort1);
+my $CGIsort = buildCGIsort("Bsort1","sort1",$data{'sort1'});
+if ($CGIsort) {
+  $template->param(CGIsort1 => $CGIsort);
 }
-$template->param( sort1 => $data{'sort1'});
+$template->param( sort1 => $data{'sort1'});		# shouldn't this be in an "else" statement like the 2nd one?
 
-my $CGIsort2 = buildCGIsort("Bsort2","sort2",$data{'sort2'});
-if ($CGIsort2) {
-  $template->param(CGIsort2 =>$CGIsort2);
+$CGIsort = buildCGIsort("Bsort2","sort2",$data{'sort2'});
+if ($CGIsort) {
+  $template->param(CGIsort2 => $CGIsort);
 } else {
   $template->param( sort2 => $data{'sort2'});
 }
 
-if ($nok or scalar(@errors)) {
+if ($nok) {
     foreach my $error (@errors) {
-        $template->param( $error => 1);
+        $template->param($error) || $template->param( $error => 1);
     }
     $template->param(nok => 1);
 }
@@ -462,22 +461,24 @@ if ($nok or scalar(@errors)) {
   #Formatting data for display    
   
 if ($data{'dateenrolled'} eq ''){
-  my $today = sprintf('%04d-%02d-%02d', Today());
+  my $today = sprintf('%04d-%02d-%02d', Today());	# ISO format
   $data{'dateenrolled'}=$today;
 }
 if (C4::Context->preference('uppercasesurnames')) {
 	$data{'surname'}    =uc($data{'surname'}    );
 	$data{'contactname'}=uc($data{'contactname'});
 }
-$data{'dateenrolled'} = format_date($data{'dateenrolled'});
-$data{'dateexpiry'}   = format_date($data{'dateexpiry'});
-$data{'dateofbirth'}  = format_date($data{'dateofbirth'});
+foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+	$data{$_} = format_date($data{$_});	# back to syspref for display
+	$template->param( $_ => $data{$_});
+}
 
 $template->param( "showguarantor"  => ($category_type=~/A|I|S/) ? 0 : 1); # associate with step to know where you are
 $debug and warn "memberentry step: $step";
 $template->param(%data);
-$template->param( "step_$step"  => 1) if $step;# associate with step to know where u are
-$template->param( "step"  => $step) if $step;# associate with step to know where u are
+$template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are
+$template->param(  step  => $step   ) if $step;	# associate with step to know where u are
+$template->param( debug  => $debug  ) if $debug;
 $template->param(
   BorrowerMandatoryField => C4::Context->preference("BorrowerMandatoryField"),#field to test with javascript
   category_type => $category_type,#to know the category type of the borrower
