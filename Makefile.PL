@@ -1071,7 +1071,7 @@ sub install {
     # installation and uninstallation targets.
 
 # If installation is on Win32, we need to do permissions different from *nix
-    if ( $^O =~ /linux|cygwin/ ) { # this value needs to be verified for each platform and modified accordingly
+    if ( $^O =~ /darwin|linux|cygwin/ ) { # this value needs to be verified for each platform and modified accordingly
 	    foreach my $key (sort keys %$target_directories) {
 		    $install .= qq(
 KOHA_INST_$key = blib/$key
@@ -1132,9 +1132,6 @@ install :: all install_koha warn_koha_env_vars
 				unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or exists $skip_directories->{$key};
 		}
 	}
-	$install .= "\t\t\$(INST_MAN1DIR) \$(DESTINSTALLMAN1DIR) \\\n";
-	$install .= "\t\t\$(INST_MAN3DIR) \$(DESTINSTALLMAN3DIR)\n";
-
 	$install .= "\n";
 
     $install .= "warn_koha_env_vars ::\n";
