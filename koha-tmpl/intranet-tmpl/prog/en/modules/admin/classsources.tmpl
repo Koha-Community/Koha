@@ -29,11 +29,6 @@
 <script type="text/javascript">
 //<![CDATA[
 
-function DoCancel(f) {
-  f.op.value='';
-  document.Aform.submit();
-}
-
 function CheckSourceForm(f) {
     var ok=1;
     var _alertString="";
@@ -103,13 +98,13 @@ function CheckRuleForm(f) {
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_class_source_form" -->
-  &rsaquo; Confirm deletion of classification source <!-- TMPL_VAR name="class_source" -->
+  &rsaquo; Confirm deletion of classification source <span class="ex">'<!-- TMPL_VAR name="class_source" -->'</span>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_sort_rule_form" -->
-  &rsaquo; Confirm deletion of filing rule <!-- TMPL_VAR name="sort_rule" -->
+  &rsaquo; Confirm deletion of filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_sort_rule_impossible" -->
-  &rsaquo; Cannot delete filing rule <!-- TMPL_VAR name="sort_rule" -->
+  &rsaquo; Cannot delete filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
 <!-- /TMPL_IF -->
 </div>
 
@@ -223,40 +218,34 @@ function CheckRuleForm(f) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_class_source_form" -->
-<h2>Confirm deletion of classification source <!-- TMPL_VAR name="class_source" -->?</h2>
+<div class="dialog alert"><h3>Confirm deletion of classification source <span class="ex">'<!-- TMPL_VAR name="class_source" -->'</span>?</h3>
 <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
   <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
-  <p id="action">
-    <input type="submit" value="Delete classification source" />
-    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
-  </p>
+  <input type="submit" value="Delete classification source" class="approve" /></form>
+  <form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="submit" value="No, Do Not Delete" class="deny" />
 </form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_sort_rule_form" -->
-<h2>Confirm deletion of filing rule <!-- TMPL_VAR name="sort_rule" -->?</h2>
+<div class="dialog alert"><h3>Confirm deletion of filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>?</h3>
 <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
   <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
-  <p id="action">
-    <input type="submit" value="Delete filing rule" />
-    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
-  </p>
+    <input type="submit" value="Delete filing rule" class="approve" />
 </form>
+<form action="<!-- TMPL_VAR name="script_name" -->" method="get">    <input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_sort_rule_impossible" -->
-<h2>Cannot delete filing rule <!-- TMPL_VAR name="sort_rule" --></h2>
+<div class="dialog message"><h3>Cannot delete filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span></h3>
 <p>The filing rule <!-- TMPL_VAR name="sort_rule" --> is used by at least one classification source.  Please
 remove it from all classification source definitions before trying again.
 </p>
-<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
-  <input type="hidden" name="op" value="<!-- TMPL_VAR name="else"-->" />
-  <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
-  <p id="action">
-    <input type="button" value="Go back" onclick="DoCancel(this.form)" />
-  </p>
+<form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+    <input type="button" value="OK" class="approve" /></form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="display_lists" -->

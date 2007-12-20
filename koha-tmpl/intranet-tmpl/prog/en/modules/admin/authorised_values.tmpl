@@ -54,9 +54,8 @@
 
 
 <!-- TMPL_IF name="delete_confirm" -->
-	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
-<fieldset>
-<legend>Confirm Deletion</legend>
+	<div class="dialog alert">
+<h3>Confirm Deletion</h3>
 <table>
 	<tr>
 		<th>Category</th>
@@ -68,9 +67,12 @@
 	<td><!-- TMPL_VAR name="Tvalue" --></td>
 	<td><!-- TMPL_VAR name="Tlib" --></td></tr>
 	</table>
+	<form action="<!-- TMPL_VAR name=" script_name " -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" />
 		<input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
-		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><fieldset class="action"><input type="submit" value="Yes, Delete" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl">Cancel</a></fieldset></fieldset></form>
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR name="searchfield" -->" /><fieldset class="action"><input type="submit" value="Yes, Delete" class="approve" /></form>
+<form action="<!-- TMPL_VAR name=" script_name " -->" method="get"><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="No, Do Not Delete" class="deny" /></form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
@@ -83,6 +85,10 @@
 
 	 $(document).ready(function() {
 	    yuiToolbar();
+		$('#category').find("input:submit").hide();
+		$('#searchfield').change(function() {
+		$('#category').submit();
+		});
 	 });
 
 	// YUI Toolbar Functions
@@ -110,7 +116,7 @@ the subfield is not entered through a free field, but though a list of authorize
 </span>
 </div>
 <!-- /TMPL_IF -->
-<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
 <!-- TMPL_IF EXPR="category eq 'Bsort1'" -->
     <p>Bsort1 is an authorised value attached to patrons, that can be used for stats purposes</p>
 <!-- /TMPL_IF -->

@@ -99,16 +99,16 @@ function Check(f) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<fieldset>
-		<legend>Confirm Deletion of authority structure definition for <!-- TMPL_VAR NAME="authtypetext" --> (<!-- TMPL_VAR NAME="authtypecode" -->)</legend>
+		<div class="dialog alert"><h3>Confirm Deletion of authority structure definition for <span class="ex">'<!-- TMPL_VAR NAME="authtypetext" -->' (<!-- TMPL_VAR NAME="authtypecode" -->)</span></h3>
 	<!-- TMPL_IF NAME="total" -->
 		<p>This record is used <strong><!-- TMPL_VAR NAME="total" --></strong> times</p>
 	<!-- /TMPL_IF -->		
-			<input type="hidden" name="op" value="delete_confirmed" />
+			<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-			<fieldset class="action"><input type="submit" value="Yes, Delete" /> <a class="cancel" href="/cgi-bin/koha/admin/authtypes.pl">Cancel</a></fieldset></fieldset>
+			<fieldset class="action"><input type="submit" class="approve" value="Yes, Delete" />
 		</form>
+		<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" class="deny" value="No, Do Not Delete" /></form>
+		</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->

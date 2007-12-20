@@ -70,7 +70,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<span class="ex"><!-- TMPL_VAR NAME="searchfield" --></span>'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></div>
 
@@ -140,35 +140,34 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-<table><caption>Confirm Deletion of Currency <!-- TMPL_VAR NAME="searchfield" --></caption>
-
+		<!-- TMPL_IF NAME="totalgtzero" -->
+<div class="dialog message">		<h3>Cannot Delete Currencey <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
+						<p>This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span>
+				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+					<input type="submit" value="OK" class="approve" />
+				</form></div>
+		<!-- TMPL_ELSE -->
+<div class="dialog alert">		<h3>Confirm Deletion of Currency <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
+<table>
 		<tr>
 			<th>Currency</th>
 			<td><!-- TMPL_VAR NAME="searchfield" --></td>
 		</tr>
-
-
-        
-        	<tr>
+       	<tr>
 			<th>Rate</th>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
 		</tr>
 		</table>
-		<!-- TMPL_IF NAME="totalgtzero" -->
 
-				<span class="alert">This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span>
-				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-					<input type="submit" value="OK" />
-				</form>
-		<!-- TMPL_ELSE -->
+
      	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 			<input type="hidden" name="op" value="delete_confirmed" />
 			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="submit" value="Delete this Currency" />
+				<input type="submit" class="approve" value="Delete this Currency" />
 				</form>
 				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-					<input type="submit" value="Do Not Delete" />
-				</form>
+					<input type="submit" class="deny" value="No, Do Not Delete" />
+				</form></div>
 		<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 

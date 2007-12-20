@@ -511,15 +511,14 @@ function CheckRuleForm(f) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_matching_rule_form" -->
-<h2>Confirm deletion of record matching rule &quot;<!-- TMPL_VAR name="code" -->&quot; (<!-- TMPL_VAR name="description" -->)?</h2>
+<div class="dialog alert"><h3>Confirm deletion of record matching rule <span class="ex">'<!-- TMPL_VAR name="code" -->' (<!-- TMPL_VAR name="description" -->)</span>?</h3>
 <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
   <input type="hidden" name="matcher_id" value="<!-- TMPL_VAR name="matcher_id" -->" />
-  <p id="action">
-    <input type="submit" value="Delete record matching rule" />
-    <input type="button" value="Cancel" onclick="DoCancel(this.form)" />
-  </p>
-</form>
+    <input type="submit" value="Delete record matching rule" class="approve" /></form>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+    <input type="submit" value="No, Do Not Delete" class="deny" />
+</form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="display_list" -->
@@ -542,15 +541,15 @@ function CheckRuleForm(f) {
 
 <h2>Record Matching Rules</h2>
 <!-- TMPL_IF name="added_matching_rule" -->
-<span class="problem">Added record matching rule &quot;<!-- TMPL_VAR name="added_matching_rule" -->&quot;</span>
+<div class="dialog message">Added record matching rule &quot;<!-- TMPL_VAR name="added_matching_rule" -->&quot;</div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="edited_matching_rule" -->
-<span class="problem">Modified record matching rule &quot;<!-- TMPL_VAR name="edited_matching_rule" -->&quot;</span>
+<div class="dialog message">Modified record matching rule &quot;<!-- TMPL_VAR name="edited_matching_rule" -->&quot;</div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="deleted_matching_rule" -->
-<span class="problem">Deleted record matching rule &quot;<!-- TMPL_VAR name="deleted_matching_rule" -->&quot;</span>
+<div class="dialog message">Deleted record matching rule &quot;<!-- TMPL_VAR name="deleted_matching_rule" -->&quot;</div>
 <!-- /TMPL_IF -->
-<table>
+<!-- TMPL_IF NAME="available_matching_rules" --><table>
   <tr>
     <th>#</th>
     <th>Code</th>
@@ -568,7 +567,7 @@ function CheckRuleForm(f) {
     </td>
   </tr>
   <!-- /TMPL_LOOP -->
-</table>
+</table><!-- TMPL_ELSE --><p>There are no saved matching rules.</p><!-- /TMPL_IF -->
 
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
