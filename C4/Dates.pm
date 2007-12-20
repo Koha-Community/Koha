@@ -20,6 +20,7 @@ use Carp;
 use C4::Context;
 use Exporter;
 use POSIX qw(strftime);
+use Date::Calc qw(check_date check_time);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 $VERSION = 0.03;
@@ -70,11 +71,34 @@ sub dmy_map ($$) {
 	$debug and print STDERR "xsub: $xsub \n";
 	if ($val =~ /$re/) {
 		my $aref = eval $xsub;
+        _check_date_and_time($aref);
 		return  @{$aref}; 
 	}
 	# $debug and 
 	carp "Illegal Date '$val' does not match '$dformat' format: " . $self->visual() . "\n";
 	return 0;
+}
+
+sub _check_date_and_time {
+    my $chron_ref = shift;
+    my ($year, $month, $day) = _chron_to_ymd($chron_ref);
+    unless (check_date($year, $month, $day)) {
+        carp "Illegal date specified (year = $year, month = $month, day = $day)\n";
+    }
+    my ($hour, $minute, $second) = _chron_to_hms($chron_ref);
+    unless (check_time($hour, $minute, $second)) {
+        carp "Illegal time specified (hour = $hour, minute = $minute, second = $second)\n";
+    }
+}
+
+sub _chron_to_ymd {
+    my $chron_ref = shift;
+    return ($chron_ref->[5] + 1900, $chron_ref->[4] + 1, $chron_ref->[3]);
+}
+
+sub _chron_to_hms {
+    my $chron_ref = shift;
+    return ($chron_ref->[2], $chron_ref->[1], $chron_ref->[0]);
 }
 
 sub new {
