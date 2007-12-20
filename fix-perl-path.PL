@@ -74,14 +74,19 @@ sub fixshebang{
 
             # At this point, file is in 'blib' and by default
             # has mode a-w.  Therefore, must change permission
-            # to make it writable.
+            # to make it writable.  Note that stat and chmod
+            # (the Perl functions) should work on Win32
             my $old_perm;
-            if ($^O ne 'MSWin32') {
-                $old_perm = (stat $pathfile)[2] & 07777;
-                my $new_perm = $old_perm | 0200;
-                chmod $new_perm, $pathfile;
-            }
-            tie @filearray, 'Tie::File', $pathfile or die $!;
+            $old_perm = (stat $pathfile)[2] & 07777;
+            my $new_perm = $old_perm | 0200;
+            chmod $new_perm, $pathfile;
+
+            # tie the file -- note that we're explicitly setting the line (record)
+            # separator to hex 0A (the Unix newline) because that's what
+            # the files copied to blib are using, regardless of whether the install
+            # is under a Unix variant or Windows.
+            tie @filearray, 'Tie::File', $pathfile, recsep => "\x0a" or die $!;
+
             warn "First line of $file is $filearray[0]\n\n" if $DEBUG;
 			if ( ( $filearray[0] =~ /#!.*perl/ ) && ( $filearray[0] !~ /$shebang|"$shebang -w"/ ) ) {
 				warn "\n\tRe-writing shebang line for $pathfile\n" if $DEBUG;
@@ -96,9 +101,7 @@ sub fixshebang{
                 warn "\n\tNo shebang line found in $pathfile\n\n" if $DEBUG;
 			}
             untie @filearray;
-            if ($^O ne 'MSWin32') {
-                chmod $old_perm, $pathfile;
-            }
+            chmod $old_perm, $pathfile;
 		}
 		# handle directories
 		elsif ( -d ($dir . '/' . $file) && $file !~ /^\.{1,2}/ ) {
