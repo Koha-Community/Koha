@@ -198,7 +198,7 @@ while (my ($authid) = $sth->fetchrow) {
     
     my %index;
     # for authorities, the "title" is the $a mainentry
-    my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
+    my $authref = C4::AuthoritiesMarc::GetAuthType(C4::AuthoritiesMarc::GetAuthTypeCode($authid));
 
     warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
     my $title = $record->subfield($authref->{auth_tag_to_report},'a');
