@@ -1,6 +1,26 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Authority MARC subfield structure</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#subfieldtabs').tabs();
+	 });
+
+function displayMoreConstraint(numlayer){
+    var thisdiv = document.getElementById(numlayer);
+    if(thisdiv.getAttribute("class") == "content_hidden"){
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_visible");
+    } else {
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_hidden");
+    }
+}
+
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -17,42 +37,61 @@
 <!-- TMPL_IF NAME="add_form" -->
 
     <h1><!-- TMPL_IF NAME="use-heading-flags-p" -->
-    <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints for field <!-- TMPL_VAR name="tagfield" --> authority <!-- TMPL_VAR name="authtypecode" --><!-- /TMPL_IF -->
     <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --></h1>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Cancel</a></fieldset>
+        <div id="subfieldtabs" class="toptabs numbered">
+            <ul>
+                <!-- TMPL_LOOP NAME="loop" -->
+                    <!-- TMPL_IF NAME="tagsubfield" -->
+                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub<!-- TMPL_VAR NAME="tagsubfield" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
+                            <!-- TMPL_VAR NAME="tagsubfield" -->
+                    </a></li>
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF EXPR="tagfield >=10" --><!-- display new only for > 10 fields -->
+                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub<!-- TMPL_VAR NAME="tagsubfield" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a></li>
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF --></li>
+                <!-- /TMPL_LOOP -->
+            </ul>
+
         <!-- TMPL_LOOP NAME="loop" -->
-        <div class="data <!-- TMPL_VAR NAME="toggle" -->">
-            <fieldset class="rows">
-            <legend>Tag <!-- TMPL_VAR NAME="tagfield" --><!-- TMPL_VAR NAME="tagfieldinput" -->, Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- TMPL_VAR NAME="tagsubfieldinput" --></legend>
-			<ol><li><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
-            <li><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</li>
-            <li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
-            <li><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC: </label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></li>
-            <li><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab: </label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield does not display in the record editor)</li>
-            <li><fieldset><legend>Display</legend>
-<ol>
-	<li><label for="ohidden<!-- TMPL_VAR NAME="row" -->">Opac:</label><!-- TMPL_VAR name="ohidden" -->  </li>
-	<li><label for="ihidden<!-- TMPL_VAR NAME="row" -->">Intranet:</label><!-- TMPL_VAR name="ihidden" --> </li>
-	<li><label for="ehidden<!-- TMPL_VAR NAME="row" -->">Editor:</label><!-- TMPL_VAR name="ehidden" --> (see online help)</li>
-</ol></fieldset></li>
-            <li><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL:</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is a URL and can be clicked)</li>
-            <li><fieldset><legend>Help input</legend>	
-            <ol>
-                <li><label for="authorised_value<!-- TMPL_VAR NAME="row" -->">Authorized value:</label> <!-- TMPL_VAR NAME="authorised_value" --></li>
-                <li><label for="frameworkcode<!-- TMPL_VAR NAME="row" -->">Thesaurus:</label> <!-- TMPL_VAR NAME="frameworkcode" --></li>
-                <li><label for="value_builder<!-- TMPL_VAR NAME="row" -->">Plugin:</label> <!-- TMPL_VAR NAME="value_builder" --></li>
-            </ol></fieldset></li> </ol></fieldset>
+        <div id="sub<!-- TMPL_VAR NAME="tagsubfield" -->field">
+			<ol>
+                <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" />
+                <li><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
+                <li><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</li>
+                <li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
+                <li><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC: </label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></li>
+                <li><label for="tab<!-- TMPL_VAR NAME="row" -->">Managed in tab: </label><!-- TMPL_VAR NAME="tab" --> (ignore means that the subfield does not display in the record editor)</li>
+                <li>
+                    <fieldset>
+                        <legend>Display</legend>
+                        <ol>
+                            <li><label for="ohidden<!-- TMPL_VAR NAME="row" -->">Opac:</label><!-- TMPL_VAR name="ohidden" -->  </li>
+                            <li><label for="ihidden<!-- TMPL_VAR NAME="row" -->">Intranet:</label><!-- TMPL_VAR name="ihidden" --> </li>
+                            <li><label for="ehidden<!-- TMPL_VAR NAME="row" -->">Editor:</label><!-- TMPL_VAR name="ehidden" --> (see online help)</li>
+                        </ol>
+                    </fieldset>
+                </li>
+                <li><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL:</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is a URL and can be clicked)</li>
+                <li>
+                    <fieldset><legend>Help input</legend>	
+                        <ol>
+                            <li><label for="authorised_value<!-- TMPL_VAR NAME="row" -->">Authorized value:</label> <!-- TMPL_VAR NAME="authorised_value" --></li>
+                            <li><label for="frameworkcode<!-- TMPL_VAR NAME="row" -->">Thesaurus:</label> <!-- TMPL_VAR NAME="frameworkcode" --></li>
+                            <li><label for="value_builder<!-- TMPL_VAR NAME="row" -->">Plugin:</label> <!-- TMPL_VAR NAME="value_builder" --></li>
+                        </ol>
+                    </fieldset>
+                </li>
+            </ol>
         </div>
         <!-- /TMPL_LOOP -->
-        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Cancel</a></fieldset>
-        <p>Note: in the last column, you can choose:
-            <ul><li>An "authorised value": it refers to a list of authorised values for this subfield. See the corresponding admin table.</li>
-            <li>A "thesaurus category": it refers to a thesaurus category. See the corresponding admin table.</li>
-            <li>A "value builder": values builders are perl programs that help you select the value of the field. They are MARC-flavor dependant and sometimes fill another subfield automatically.</li>
-            </ul>
-        </p>
+        </div>
     </form>
 <!-- /TMPL_IF -->
 
