@@ -1328,19 +1328,19 @@ sub NZanalyse {
     $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
     my $left = $1;   
     my $right = $3;
-    my $operand = lc($2); # FIXME: and/or/not are operators, not operands
+    my $operator = lc($2); # FIXME: and/or/not are operators, not operands
     # it's not a leaf, we have a and/or/not
-    if ($operand) {
+    if ($operator) {
         # reintroduce comma content if needed
         $right =~ s/__X__/"$commacontent"/ if $commacontent;
         $left =~ s/__X__/"$commacontent"/ if $commacontent;
-        warn "node : $left / $operand / $right\n" if $DEBUG;
+        warn "node : $left / $operator / $right\n" if $DEBUG;
         my $leftresult = NZanalyse($left,$server);
         my $rightresult = NZanalyse($right,$server);
         # OK, we have the results for right and left part of the query
         # depending of operand, intersect, union or exclude both lists
         # to get a result list
-        if ($operand eq ' and ') {
+        if ($operator eq ' and ') {
             my @leftresult = split /;/, $leftresult;
 #             my @rightresult = split /;/,$leftresult;
             my $finalresult;
@@ -1354,10 +1354,10 @@ sub NZanalyse {
                 }
             }
             return $finalresult;
-        } elsif ($operand eq ' or ') {
+        } elsif ($operator eq ' or ') {
             # just merge the 2 strings
             return $leftresult.$rightresult;
-        } elsif ($operand eq ' not ') {
+        } elsif ($operator eq ' not ') {
             my @leftresult = split /;/, $leftresult;
 #             my @rightresult = split /;/,$leftresult;
             my $finalresult;
@@ -1369,7 +1369,7 @@ sub NZanalyse {
             return $finalresult;
         } else {
             # this error is impossible, because of the regexp that isolate the operand, but just in case...
-            die "error : operand unknown : $operand for $string";
+            die "error : operand unknown : $operator for $string";
         }
     # it's a leaf, do the real SQL query and return the result
     } else {
@@ -1406,8 +1406,9 @@ sub NZanalyse {
             # split each word, query the DB and build the biblionumbers result
             #sanitizing leftpart      
             $left=~s/^\s+|\s+$//;
-            my ($biblionumbers,$value);
             foreach (split / /,$right) {
+                my $biblionumbers;
+                $_=~s/^\s+|\s+$//;
                 next unless $_;
                 warn "EXECUTE : $server, $left, $_";
                 $sth->execute($server, $left, $_) or warn "execute failed: $!";
@@ -1415,7 +1416,7 @@ sub NZanalyse {
                     # if we are dealing with a numeric value, use only numeric results (in case of >=, <=, > or <)
                     # otherwise, fill the result
                     $biblionumbers .= $line unless ($right =~ /\d/ && $value =~ /\D/);
-#                     warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
+                    warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
@@ -1426,10 +1427,10 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-                         warn "===== $cleaned =====" if $DEBUG;
+                        warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-                             warn "INCLUDING $entry" if $DEBUG;
+                              warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
@@ -1461,10 +1462,10 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-                         warn "===== $cleaned =====" if $DEBUG;
+#                          warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-                             warn "INCLUDING $entry" if $DEBUG;
+#                              warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
