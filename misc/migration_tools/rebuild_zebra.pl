@@ -1,11 +1,14 @@
 #!/usr/bin/perl
 
+use strict;
+
 use C4::Context;
 use Getopt::Long;
+use File::Temp;
+use File::Path;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
 
-use strict;
 # 
 # script that checks zebradir structure & create directories & mandatory files if needed
 #
@@ -22,17 +25,37 @@ my $reset;
 my $biblios;
 my $authorities;
 my $noxml;
-GetOptions(
+my $do_munge;
+my $want_help;
+my $result = GetOptions(
 	'd:s'      => \$directory,
 	'reset'      => \$reset,
 	's'        => \$skip_export,
 	'k'        => \$keep_export,
 	'b'        => \$biblios,
 	'noxml'        => \$noxml,
+    'munge-config' => \$do_munge,
 	'a'        => \$authorities,
-	);
+    'h|help'        => \$want_help,
+);
 
-$directory = "export" unless $directory;
+
+if (not $result or $want_help) {
+    print_usage();
+    exit 0;
+}
+
+if (not $biblios and not $authorities) {
+    my $msg = "Must specify -b or -a to reindex bibs or authorites\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
+my $use_tempdir = 0;
+unless ($directory) {
+    $use_tempdir = 1;
+    $directory = File::Temp->newdir(CLEANUP => ($keep_export ? 0 : 1));
+} 
 
 
 my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
@@ -43,233 +66,20 @@ my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
-print "some informations\n";
-print "=================\n";
-print "Zebra biblio directory =>$biblioserverdir\n";
-print "Zebra authorities directory =>$authorityserverdir\n";
-print "Koha directory =>$kohadir\n";
-print "BIBLIONUMBER in : $biblionumbertagfield\$$biblionumbertagsubfield\n";
+print "Zebra configuration information\n";
+print "================================\n";
+print "Zebra biblio directory      = $biblioserverdir\n";
+print "Zebra authorities directory = $authorityserverdir\n";
+print "Koha directory              = $kohadir\n";
+print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
 print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
-print "=================\n";
-#
-# creating zebra-biblios.cfg depending on system
-#
+print "================================\n";
 
-# getting zebraidx directory
-my $zebraidxdir;
-foreach (qw(/usr/local/bin/zebraidx
-        /opt/bin/zebraidx
-        /usr/bin/zebraidx
-        )) {
-    if ( -f $_ ) {
-        $zebraidxdir=$_;
-    }
+if ($do_munge) {
+    munge_config();
 }
 
-unless ($zebraidxdir) {
-    print qq|
-    ERROR: could not find zebraidx directory
-    ERROR: Either zebra is not installed,
-    ERROR: or it's in a directory I don't checked.
-    ERROR: do a which zebraidx and edit this file to add the result you get
-|;
-    exit;
-}
-$zebraidxdir =~ s/\/bin\/.*//;
-print "Info : zebra is in $zebraidxdir \n";
-
-# getting modules directory
-my $modulesdir;
-foreach (qw(/usr/local/lib/idzebra-2.0/modules/mod-grs-xml.so
-            /usr/local/lib/idzebra/modules/mod-grs-xml.so
-            /usr/lib/idzebra/modules/mod-grs-xml.so
-            /usr/lib/idzebra-2.0/modules/mod-grs-xml.so
-        )) {
-    if ( -f $_ ) {
-        $modulesdir=$_;
-    }
-}
-
-unless ($modulesdir) {
-    print qq|
-    ERROR: could not find mod-grs-xml.so directory
-    ERROR: Either zebra is not properly compiled (libxml2 is not setup and you don t have mod-grs-xml.so,
-    ERROR: or it's in a directory I don't checked.
-    ERROR: find where mod-grs-xml.so is and edit this file to add the result you get
-|;
-    exit;
-}
-$modulesdir =~ s/\/modules\/.*//;
-print "Info: zebra modules dir : $modulesdir\n";
-
-# getting tab directory
-my $tabdir;
-foreach (qw(/usr/local/share/idzebra/tab/explain.att
-            /usr/local/share/idzebra-2.0/tab/explain.att
-            /usr/share/idzebra/tab/explain.att
-            /usr/share/idzebra-2.0/tab/explain.att
-        )) {
-    if ( -f $_ ) {
-        $tabdir=$_;
-    }
-}
-
-unless ($tabdir) {
-    print qq|
-    ERROR: could not find explain.att directory
-    ERROR: Either zebra is not properly compiled,
-    ERROR: or it's in a directory I don't checked.
-    ERROR: find where explain.att is and edit this file to add the result you get
-|;
-    exit;
-}
-$tabdir =~ s/\/tab\/.*//;
-print "Info: tab dir : $tabdir\n";
-
-#
-# AUTHORITIES creating directory structure
-#
-my $created_dir_or_file = 0;
 if ($authorities) {
-    print "====================\n";
-    print "checking directories & files for authorities\n";
-    print "====================\n";
-    unless (-d "$authorityserverdir") {
-        system("mkdir -p $authorityserverdir");
-        print "Info: created $authorityserverdir\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$authorityserverdir/lock") {
-        mkdir "$authorityserverdir/lock";
-        print "Info: created $authorityserverdir/lock\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$authorityserverdir/register") {
-        mkdir "$authorityserverdir/register";
-        print "Info: created $authorityserverdir/register\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$authorityserverdir/shadow") {
-        mkdir "$authorityserverdir/shadow";
-        print "Info: created $authorityserverdir/shadow\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$authorityserverdir/tab") {
-        mkdir "$authorityserverdir/tab";
-        print "Info: created $authorityserverdir/tab\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$authorityserverdir/key") {
-        mkdir "$authorityserverdir/key";
-        print "Info: created $authorityserverdir/key\n";
-        $created_dir_or_file++;
-    }
-    
-    unless (-d "$authorityserverdir/etc") {
-        mkdir "$authorityserverdir/etc";
-        print "Info: created $authorityserverdir/etc\n";
-        $created_dir_or_file++;
-    }
-    
-    #
-    # AUTHORITIES : copying mandatory files
-    #
-    # the record model, depending on marc flavour
-    unless (-f "$authorityserverdir/tab/record.abs") {
-        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/etc/zebradb/authorities/etc/record_unimarc.abs $authorityserverdir/tab/record.abs");
-            print "Info: copied record.abs for UNIMARC\n";
-        } else {
-            system("cp -f $kohadir/etc/zebradb/authorities/etc/record.abs $authorityserverdir/tab/record.abs");
-            print "Info: copied record.abs for USMARC\n";
-        }
-        $created_dir_or_file++;
-    }
-    unless (-f "$authorityserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
-        print "Info: copied sort-string-utf.chr\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$authorityserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/word-phrase-utf.chr");
-        print "Info: copied word-phase-utf.chr\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$authorityserverdir/tab/auth1.att") {
-        system("cp -f $kohadir/etc/zebradb/authorities/etc/bib1.att $authorityserverdir/tab/auth1.att");
-        print "Info: copied auth1.att\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$authorityserverdir/tab/default.idx") {
-        system("cp -f $kohadir/etc/zebradb/etc/default.idx $authorityserverdir/tab/default.idx");
-        print "Info: copied default.idx\n";
-        $created_dir_or_file++;
-    }
-    
-    unless (-f "$authorityserverdir/etc/ccl.properties") {
-#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
-        system("cp -f $kohadir/etc/zebradb/ccl.properties $authorityserverdir/etc/ccl.properties");
-        print "Info: copied ccl.properties\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$authorityserverdir/etc/pqf.properties") {
-#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
-        system("cp -f $kohadir/etc/zebradb/pqf.properties $authorityserverdir/etc/pqf.properties");
-        print "Info: copied pqf.properties\n";
-        $created_dir_or_file++;
-    }
-    
-    #
-    # AUTHORITIES : copying mandatory files
-    #
-    unless (-f C4::Context->zebraconfig('authorityserver')->{config}) {
-    open ZD,">:utf8 ",C4::Context->zebraconfig('authorityserver')->{config};
-    print ZD "
-# generated by KOHA/misc/migration_tools/rebuild_zebra.pl 
-profilePath:\${srcdir:-.}:$authorityserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
-
-encoding: UTF-8
-# Files that describe the attribute sets supported.
-attset: auth1.att
-attset: explain.att
-attset: gils.att
-
-modulePath:$modulesdir/modules/
-# Specify record type
-iso2709.recordType:grs.marcxml.record
-recordType:grs.xml
-recordId: (auth1,Local-Number)
-storeKeys:1
-storeData:1
-
-
-# Lock File Area
-lockDir: $authorityserverdir/lock
-perm.anonymous:r
-perm.kohaadmin:rw
-register: $authorityserverdir/register:4G
-shadow: $authorityserverdir/shadow:4G
-
-# Temp File area for result sets
-setTmpDir: $authorityserverdir/tmp
-
-# Temp File area for index program
-keyTmpDir: $authorityserverdir/key
-
-# Approx. Memory usage during indexing
-memMax: 40M
-rank:rank-1
-    ";
-        print "Info: creating zebra-authorities.cfg\n";
-        $created_dir_or_file++;
-    }
-    
-    if ($created_dir_or_file) {
-        print "Info: created : $created_dir_or_file directories & files\n";
-    } else {
-        print "Info: file & directories OK\n";
-    }
-    
     #
     # exporting authorities
     #
@@ -339,147 +149,6 @@ rank:rank-1
 #################################################################################################################
 
 if ($biblios) {
-    print "====================\n";
-    print "checking directories & files for biblios\n";
-    print "====================\n";
-    
-    #
-    # BIBLIOS : creating directory structure
-    #
-    unless (-d "$biblioserverdir") {
-        system("mkdir -p $biblioserverdir");
-        print "Info: created $biblioserverdir\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/lock") {
-        mkdir "$biblioserverdir/lock";
-        print "Info: created $biblioserverdir/lock\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/register") {
-        mkdir "$biblioserverdir/register";
-        print "Info: created $biblioserverdir/register\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/shadow") {
-        mkdir "$biblioserverdir/shadow";
-        print "Info: created $biblioserverdir/shadow\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/tab") {
-        mkdir "$biblioserverdir/tab";
-        print "Info: created $biblioserverdir/tab\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/key") {
-        mkdir "$biblioserverdir/key";
-        print "Info: created $biblioserverdir/key\n";
-        $created_dir_or_file++;
-    }
-    unless (-d "$biblioserverdir/etc") {
-        mkdir "$biblioserverdir/etc";
-        print "Info: created $biblioserverdir/etc\n";
-        $created_dir_or_file++;
-    }
-    
-    #
-    # BIBLIOS : copying mandatory files
-    #
-    # the record model, depending on marc flavour
-    unless (-f "$biblioserverdir/tab/record.abs") {
-        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/etc/zebradb/biblios/etc/record_unimarc.abs $biblioserverdir/tab/record.abs");
-            print "Info: copied record.abs for UNIMARC\n";
-        } else {
-            system("cp -f $kohadir/etc/zebradb/biblios/etc/record.abs $biblioserverdir/tab/record.abs");
-            print "Info: copied record.abs for USMARC\n";
-        }
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
-        print "Info: copied sort-string-utf.chr\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/word-phrase-utf.chr");
-        print "Info: copied word-phase-utf.chr\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/tab/bib1.att") {
-        system("cp -f $kohadir/etc/zebradb/biblios/etc/bib1.att $biblioserverdir/tab/bib1.att");
-        print "Info: copied bib1.att\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/tab/default.idx") {
-        system("cp -f $kohadir/etc/zebradb/etc/default.idx $biblioserverdir/tab/default.idx");
-        print "Info: copied default.idx\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/etc/ccl.properties") {
-#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
-        system("cp -f $kohadir/etc/zebradb/ccl.properties $biblioserverdir/etc/ccl.properties");
-        print "Info: copied ccl.properties\n";
-        $created_dir_or_file++;
-    }
-    unless (-f "$biblioserverdir/etc/pqf.properties") {
-#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
-        system("cp -f $kohadir/etc/zebradb/pqf.properties $biblioserverdir/etc/pqf.properties");
-        print "Info: copied pqf.properties\n";
-        $created_dir_or_file++;
-    }
-    
-    #
-    # BIBLIOS : copying mandatory files
-    #
-    unless (-f C4::Context->zebraconfig('biblioserver')->{config}) {
-    open ZD,">:utf8 ",C4::Context->zebraconfig('biblioserver')->{config};
-    print ZD "
-# generated by KOHA/misc/migrtion_tools/rebuild_zebra.pl 
-profilePath:\${srcdir:-.}:$biblioserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
-
-encoding: UTF-8
-# Files that describe the attribute sets supported.
-attset:bib1.att
-attset:explain.att
-attset:gils.att
-
-modulePath:$modulesdir/modules/
-# Specify record type
-iso2709.recordType:grs.marcxml.record
-recordType:grs.xml
-recordId: (bib1,Local-Number)
-storeKeys:1
-storeData:1
-
-
-# Lock File Area
-lockDir: $biblioserverdir/lock
-perm.anonymous:r
-perm.kohaadmin:rw
-register: $biblioserverdir/register:4G
-shadow: $biblioserverdir/shadow:4G
-
-# Temp File area for result sets
-setTmpDir: $biblioserverdir/tmp
-
-# Temp File area for index program
-keyTmpDir: $biblioserverdir/key
-
-# Approx. Memory usage during indexing
-memMax: 40M
-rank:rank-1
-    ";
-        print "Info: creating zebra-biblios.cfg\n";
-        $created_dir_or_file++;
-    }
-    
-    if ($created_dir_or_file) {
-        print "Info: created : $created_dir_or_file directories & files\n";
-    } else {
-        print "Info: file & directories OK\n";
-    }
-    
     # die;
     #
     # exporting biblios
@@ -714,8 +383,427 @@ print "====================\n";
 print "CLEANING\n";
 print "====================\n";
 if ($keep_export) {
-    print "NOTHING cleaned : the $directory has been kept. You can re-run this script with the -s parameter if you just want to rebuild zebra after changing the record.abs or another zebra config file\n";
+    print "NOTHING cleaned : the export $directory has been kept.\n";
+    print "You can re-run this script with the -s ";
+    if ($use_tempdir) {
+        print " and -d $directory parameters";
+    } else {
+        print "parameter";
+    }
+    print "\n";
+    print "if you just want to rebuild zebra after changing the record.abs\n";
+    print "or another zebra config file\n";
 } else {
-    system("rm -rf $directory");
-    print "directory $directory deleted\n";
+    unless ($use_tempdir) {
+        # if we're using a temporary directory
+        # created by File::Temp, it will be removed
+        # automatically.
+        rmtree($directory, 0, 1);
+        print "directory $directory deleted\n";
+    }
+}
+
+sub print_usage {
+    print <<_USAGE_;
+$0: reindex MARC bibs and/or authorities in Zebra.
+
+Use this batch job to reindex all biblio or authority
+records in your Koha database.  This job is useful
+only if you are using Zebra; if you are using the 'NoZebra'
+mode, this job should not be used.
+
+Parameters:
+    -b                      index bibliographic records
+    -a                      index authority records
+    -r                      clear Zebra index before
+                            adding records to index
+
+    -d                      Temporary directory for indexing.
+                            If not specified, one is automatically
+                            created.  The export directory
+                            is automatically deleted unless
+                            you supply the -k switch.
+    -k                      Do not delete export directory.
+    -s                      Skip export.  Used if you have
+                            already exported the records 
+                            in a previous run.
+
+    -noxml                  index from ISO MARC blob
+                            instead of MARC XML.  This
+                            option is recommended only
+                            for advanced user.
+    -munge-config           Deprecated option to try
+                            to fix Zebra config files.
+    --help or -h            show this message.
+_USAGE_
+}
+
+# FIXME: the following routines are deprecated and 
+# will be removed once it is determined whether
+# a script to fix Zebra configuration files is 
+# actually needed.
+sub munge_config {
+#
+# creating zebra-biblios.cfg depending on system
+#
+
+# getting zebraidx directory
+my $zebraidxdir;
+foreach (qw(/usr/local/bin/zebraidx
+        /opt/bin/zebraidx
+        /usr/bin/zebraidx
+        )) {
+    if ( -f $_ ) {
+        $zebraidxdir=$_;
+    }
+}
+
+unless ($zebraidxdir) {
+    print qq|
+    ERROR: could not find zebraidx directory
+    ERROR: Either zebra is not installed,
+    ERROR: or it's in a directory I don't checked.
+    ERROR: do a which zebraidx and edit this file to add the result you get
+|;
+    exit;
+}
+$zebraidxdir =~ s/\/bin\/.*//;
+print "Info : zebra is in $zebraidxdir \n";
+
+# getting modules directory
+my $modulesdir;
+foreach (qw(/usr/local/lib/idzebra-2.0/modules/mod-grs-xml.so
+            /usr/local/lib/idzebra/modules/mod-grs-xml.so
+            /usr/lib/idzebra/modules/mod-grs-xml.so
+            /usr/lib/idzebra-2.0/modules/mod-grs-xml.so
+        )) {
+    if ( -f $_ ) {
+        $modulesdir=$_;
+    }
+}
+
+unless ($modulesdir) {
+    print qq|
+    ERROR: could not find mod-grs-xml.so directory
+    ERROR: Either zebra is not properly compiled (libxml2 is not setup and you don t have mod-grs-xml.so,
+    ERROR: or it's in a directory I don't checked.
+    ERROR: find where mod-grs-xml.so is and edit this file to add the result you get
+|;
+    exit;
+}
+$modulesdir =~ s/\/modules\/.*//;
+print "Info: zebra modules dir : $modulesdir\n";
+
+# getting tab directory
+my $tabdir;
+foreach (qw(/usr/local/share/idzebra/tab/explain.att
+            /usr/local/share/idzebra-2.0/tab/explain.att
+            /usr/share/idzebra/tab/explain.att
+            /usr/share/idzebra-2.0/tab/explain.att
+        )) {
+    if ( -f $_ ) {
+        $tabdir=$_;
+    }
+}
+
+unless ($tabdir) {
+    print qq|
+    ERROR: could not find explain.att directory
+    ERROR: Either zebra is not properly compiled,
+    ERROR: or it's in a directory I don't checked.
+    ERROR: find where explain.att is and edit this file to add the result you get
+|;
+    exit;
+}
+$tabdir =~ s/\/tab\/.*//;
+print "Info: tab dir : $tabdir\n";
+
+#
+# AUTHORITIES creating directory structure
+#
+my $created_dir_or_file = 0;
+if ($authorities) {
+    print "====================\n";
+    print "checking directories & files for authorities\n";
+    print "====================\n";
+    unless (-d "$authorityserverdir") {
+        system("mkdir -p $authorityserverdir");
+        print "Info: created $authorityserverdir\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$authorityserverdir/lock") {
+        mkdir "$authorityserverdir/lock";
+        print "Info: created $authorityserverdir/lock\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$authorityserverdir/register") {
+        mkdir "$authorityserverdir/register";
+        print "Info: created $authorityserverdir/register\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$authorityserverdir/shadow") {
+        mkdir "$authorityserverdir/shadow";
+        print "Info: created $authorityserverdir/shadow\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$authorityserverdir/tab") {
+        mkdir "$authorityserverdir/tab";
+        print "Info: created $authorityserverdir/tab\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$authorityserverdir/key") {
+        mkdir "$authorityserverdir/key";
+        print "Info: created $authorityserverdir/key\n";
+        $created_dir_or_file++;
+    }
+    
+    unless (-d "$authorityserverdir/etc") {
+        mkdir "$authorityserverdir/etc";
+        print "Info: created $authorityserverdir/etc\n";
+        $created_dir_or_file++;
+    }
+    
+    #
+    # AUTHORITIES : copying mandatory files
+    #
+    # the record model, depending on marc flavour
+    unless (-f "$authorityserverdir/tab/record.abs") {
+        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+            system("cp -f $kohadir/etc/zebradb/authorities/etc/record_unimarc.abs $authorityserverdir/tab/record.abs");
+            print "Info: copied record.abs for UNIMARC\n";
+        } else {
+            system("cp -f $kohadir/etc/zebradb/authorities/etc/record.abs $authorityserverdir/tab/record.abs");
+            print "Info: copied record.abs for USMARC\n";
+        }
+        $created_dir_or_file++;
+    }
+    unless (-f "$authorityserverdir/tab/sort-string-utf.chr") {
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
+        print "Info: copied sort-string-utf.chr\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$authorityserverdir/tab/word-phrase-utf.chr") {
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/word-phrase-utf.chr");
+        print "Info: copied word-phase-utf.chr\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$authorityserverdir/tab/auth1.att") {
+        system("cp -f $kohadir/etc/zebradb/authorities/etc/bib1.att $authorityserverdir/tab/auth1.att");
+        print "Info: copied auth1.att\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$authorityserverdir/tab/default.idx") {
+        system("cp -f $kohadir/etc/zebradb/etc/default.idx $authorityserverdir/tab/default.idx");
+        print "Info: copied default.idx\n";
+        $created_dir_or_file++;
+    }
+    
+    unless (-f "$authorityserverdir/etc/ccl.properties") {
+#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/ccl.properties $authorityserverdir/etc/ccl.properties");
+        print "Info: copied ccl.properties\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$authorityserverdir/etc/pqf.properties") {
+#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('authorityserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/pqf.properties $authorityserverdir/etc/pqf.properties");
+        print "Info: copied pqf.properties\n";
+        $created_dir_or_file++;
+    }
+    
+    #
+    # AUTHORITIES : copying mandatory files
+    #
+    unless (-f C4::Context->zebraconfig('authorityserver')->{config}) {
+    open ZD,">:utf8 ",C4::Context->zebraconfig('authorityserver')->{config};
+    print ZD "
+# generated by KOHA/misc/migration_tools/rebuild_zebra.pl 
+profilePath:\${srcdir:-.}:$authorityserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
+
+encoding: UTF-8
+# Files that describe the attribute sets supported.
+attset: auth1.att
+attset: explain.att
+attset: gils.att
+
+modulePath:$modulesdir/modules/
+# Specify record type
+iso2709.recordType:grs.marcxml.record
+recordType:grs.xml
+recordId: (auth1,Local-Number)
+storeKeys:1
+storeData:1
+
+
+# Lock File Area
+lockDir: $authorityserverdir/lock
+perm.anonymous:r
+perm.kohaadmin:rw
+register: $authorityserverdir/register:4G
+shadow: $authorityserverdir/shadow:4G
+
+# Temp File area for result sets
+setTmpDir: $authorityserverdir/tmp
+
+# Temp File area for index program
+keyTmpDir: $authorityserverdir/key
+
+# Approx. Memory usage during indexing
+memMax: 40M
+rank:rank-1
+    ";
+        print "Info: creating zebra-authorities.cfg\n";
+        $created_dir_or_file++;
+    }
+    
+    if ($created_dir_or_file) {
+        print "Info: created : $created_dir_or_file directories & files\n";
+    } else {
+        print "Info: file & directories OK\n";
+    }
+    
+}
+if ($biblios) {
+    print "====================\n";
+    print "checking directories & files for biblios\n";
+    print "====================\n";
+    
+    #
+    # BIBLIOS : creating directory structure
+    #
+    unless (-d "$biblioserverdir") {
+        system("mkdir -p $biblioserverdir");
+        print "Info: created $biblioserverdir\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/lock") {
+        mkdir "$biblioserverdir/lock";
+        print "Info: created $biblioserverdir/lock\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/register") {
+        mkdir "$biblioserverdir/register";
+        print "Info: created $biblioserverdir/register\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/shadow") {
+        mkdir "$biblioserverdir/shadow";
+        print "Info: created $biblioserverdir/shadow\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/tab") {
+        mkdir "$biblioserverdir/tab";
+        print "Info: created $biblioserverdir/tab\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/key") {
+        mkdir "$biblioserverdir/key";
+        print "Info: created $biblioserverdir/key\n";
+        $created_dir_or_file++;
+    }
+    unless (-d "$biblioserverdir/etc") {
+        mkdir "$biblioserverdir/etc";
+        print "Info: created $biblioserverdir/etc\n";
+        $created_dir_or_file++;
+    }
+    
+    #
+    # BIBLIOS : copying mandatory files
+    #
+    # the record model, depending on marc flavour
+    unless (-f "$biblioserverdir/tab/record.abs") {
+        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+            system("cp -f $kohadir/etc/zebradb/biblios/etc/record_unimarc.abs $biblioserverdir/tab/record.abs");
+            print "Info: copied record.abs for UNIMARC\n";
+        } else {
+            system("cp -f $kohadir/etc/zebradb/biblios/etc/record.abs $biblioserverdir/tab/record.abs");
+            print "Info: copied record.abs for USMARC\n";
+        }
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/tab/sort-string-utf.chr") {
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
+        print "Info: copied sort-string-utf.chr\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/tab/word-phrase-utf.chr") {
+        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/word-phrase-utf.chr");
+        print "Info: copied word-phase-utf.chr\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/tab/bib1.att") {
+        system("cp -f $kohadir/etc/zebradb/biblios/etc/bib1.att $biblioserverdir/tab/bib1.att");
+        print "Info: copied bib1.att\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/tab/default.idx") {
+        system("cp -f $kohadir/etc/zebradb/etc/default.idx $biblioserverdir/tab/default.idx");
+        print "Info: copied default.idx\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/etc/ccl.properties") {
+#         system("cp -f $kohadir/etc/zebradb/ccl.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/ccl.properties $biblioserverdir/etc/ccl.properties");
+        print "Info: copied ccl.properties\n";
+        $created_dir_or_file++;
+    }
+    unless (-f "$biblioserverdir/etc/pqf.properties") {
+#         system("cp -f $kohadir/etc/zebradb/pqf.properties ".C4::Context->zebraconfig('biblioserver')->{ccl2rpn});
+        system("cp -f $kohadir/etc/zebradb/pqf.properties $biblioserverdir/etc/pqf.properties");
+        print "Info: copied pqf.properties\n";
+        $created_dir_or_file++;
+    }
+    
+    #
+    # BIBLIOS : copying mandatory files
+    #
+    unless (-f C4::Context->zebraconfig('biblioserver')->{config}) {
+    open ZD,">:utf8 ",C4::Context->zebraconfig('biblioserver')->{config};
+    print ZD "
+# generated by KOHA/misc/migrtion_tools/rebuild_zebra.pl 
+profilePath:\${srcdir:-.}:$biblioserverdir/tab/:$tabdir/tab/:\${srcdir:-.}/tab/
+
+encoding: UTF-8
+# Files that describe the attribute sets supported.
+attset:bib1.att
+attset:explain.att
+attset:gils.att
+
+modulePath:$modulesdir/modules/
+# Specify record type
+iso2709.recordType:grs.marcxml.record
+recordType:grs.xml
+recordId: (bib1,Local-Number)
+storeKeys:1
+storeData:1
+
+
+# Lock File Area
+lockDir: $biblioserverdir/lock
+perm.anonymous:r
+perm.kohaadmin:rw
+register: $biblioserverdir/register:4G
+shadow: $biblioserverdir/shadow:4G
+
+# Temp File area for result sets
+setTmpDir: $biblioserverdir/tmp
+
+# Temp File area for index program
+keyTmpDir: $biblioserverdir/key
+
+# Approx. Memory usage during indexing
+memMax: 40M
+rank:rank-1
+    ";
+        print "Info: creating zebra-biblios.cfg\n";
+        $created_dir_or_file++;
+    }
+    
+    if ($created_dir_or_file) {
+        print "Info: created : $created_dir_or_file directories & files\n";
+    } else {
+        print "Info: file & directories OK\n";
+    }
+    
+}
 }
