@@ -1,6 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Issuing Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+	$('#selectlibrary').find("input:submit").hide();
+	$('#branch').change(function() {
+		$('#selectlibrary').submit();
+	});
+});
+//]]>
+</script>
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -28,7 +40,7 @@
             <li>If a rule is filled for a given branch, it is used, otherwise, it's the rule of the "default" branch</li>
 		</ul>
     </div>
-        <form method="post" action="/cgi-bin/koha/admin/issuingrules.pl">
+        <form method="post" id="selectlibrary" action="/cgi-bin/koha/admin/issuingrules.pl">
         <label for="branch">Select a library :</label>
             <select id="branch" name="branch">
                 <option value="">Default</option>
