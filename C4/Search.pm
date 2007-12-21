@@ -934,12 +934,7 @@ sub buildQuery {
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
-	if ($query) {
-		$query .=" ".$limit;
-	}
-	else {
-		$query = $limit;
-	}
+	$query .=" ".$limit;
 
     warn "query=$query and limit=$limit" if $DEBUG;
 
@@ -1397,7 +1392,7 @@ sub NZanalyse {
     # it's a leaf, do the real SQL query and return the result
     } else {
         $string =~  s/__X__/"$commacontent"/ if $commacontent;
-        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\///g; # we must not introduce spaces in place of these chars
+        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
         warn "leaf:$string" if $DEBUG;
         # parse the string in in operator/operand/value again
         $string =~ /(.*)(>=|<=)(.*)/;
@@ -1422,7 +1417,6 @@ sub NZanalyse {
         $left='subject' if $left =~ '^su$';
         $left='koha-Auth-Number' if $left =~ '^an$';
         $left='keyword' if $left =~ '^kw$';
-        $left='itemtype' if $left =~ '^mc$'; # we must allow for limit operators since buildQuery will append $limit to $query
         if ($operator && $left  ne 'keyword' ) {
             #do a specific search
             my $dbh = C4::Context->dbh;
