@@ -486,7 +486,7 @@ WriteMakefile(
 'MIME::QuotedPrint' => 3.07,
 'Mail::Sendmail' => 0.79,
 'Net::LDAP' => 0.34,
-'Net::LDAP::Filter' => 0.34,
+'Net::LDAP::Filter' => 0.15,
 'Net::Z3950::ZOOM' => 1.16,
 'PDF::API2' => 2.000,
 'PDF::API2::Page' => 2.000,
