@@ -656,9 +656,12 @@ sub AddMember {
     my $dbh = C4::Context->dbh;
     $data{'userid'} = '' unless $data{'password'};
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
-    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
-    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
-    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
+	
+	# WE SHOULD NEVER PASS THIS SUBROUTINE ANYTHING OTHER THAN ISO DATES
+	# IF YOU UNCOMMENT THESE LINES YOU BETTER HAVE A DARN COMPELLING REASON
+#    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
+#    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
+#    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
 	# This query should be rewritten to use "?" at execute.
     my $query =
         "insert into borrowers set cardnumber=" . $dbh->quote( $data{'cardnumber'} )
