@@ -688,6 +688,10 @@ sub _build_weighted_query {
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan) = @_;
 
+    warn "---------" if $DEBUG;
+    warn "Enter buildQuery" if $DEBUG;
+    warn "---------" if $DEBUG;
+
     my @operators = @$operators if $operators;
     my @indexes   = @$indexes   if $indexes;
     my @operands  = @$operands  if $operands;
@@ -930,7 +934,8 @@ sub buildQuery {
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
-	$query .= " ".$limit;
+	$query ? $query .= " ".$limit : $query = $limit;
+    warn "query=$query and limit=$limit" if $DEBUG;
 
     warn "QUERY:".$query if $DEBUG;
 	warn "QUERY CGI:".$query_cgi if $DEBUG;
@@ -938,7 +943,9 @@ sub buildQuery {
     warn "LIMIT:".$limit if $DEBUG;
     warn "LIMIT CGI:".$limit_cgi if $DEBUG;
     warn "LIMIT DESC:".$limit_desc if $DEBUG;
-
+    warn "---------" if $DEBUG;
+    warn "Leave buildQuery" if $DEBUG;
+    warn "---------" if $DEBUG;
 	return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type );
 }
 
@@ -1246,7 +1253,9 @@ sub searchResults {
 =cut
 sub NZgetRecords {
     my ($query,$simple_query,$sort_by_ref,$servers_ref,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan) = @_;
+    warn "query =$query" if $DEBUG;
     my $result = NZanalyse($query);
+    warn "results =$result" if $DEBUG;
     return (undef,NZorder($result,@$sort_by_ref[0],$results_per_page,$offset),undef);
 }
 
@@ -1261,6 +1270,10 @@ sub NZgetRecords {
 
 sub NZanalyse {
     my ($string,$server) = @_;
+    warn "---------" if $DEBUG;
+    warn "Enter NZanalyse" if $DEBUG;
+    warn "---------" if $DEBUG;
+
     # $server contains biblioserver or authorities, depending on what we search on.
     #warn "querying : $string on $server";
     $server='biblioserver' unless $server;
@@ -1281,9 +1294,9 @@ sub NZanalyse {
     #process parenthesis before.   
     if ($string =~ /^\s*\((.*)\)(( and | or | not | AND | OR | NOT )(.*))?/){
       my $left = $1;
-#       warn "left :".$left;   
       my $right = $4;
       my $operator = lc($3); # FIXME: and/or/not are operators, not operands
+      warn "dealing w/parenthesis before recursive sub call. left :$left operator:$operator right:$right" if $DEBUG;   
       my $leftresult = NZanalyse($left,$server);
       if ($operator) {
         my $rightresult = NZanalyse($right,$server);
@@ -1321,7 +1334,6 @@ sub NZanalyse {
                 my $value=$_;
                 $value=$1 if $value=~m/(.*)-\d+$/;
                 unless ($rightresult =~ "$value-") {
-                    $finalresult .= "$_;";
                 }
             }
             return $finalresult;
@@ -1337,6 +1349,7 @@ sub NZanalyse {
     my $left = $1;   
     my $right = $3;
     my $operator = lc($2); # FIXME: and/or/not are operators, not operands
+    warn "dealing w/parenthesis. left :$left operator:$operator right:$right" if $DEBUG;   
     # it's not a leaf, we have a and/or/not
     if ($operator) {
         # reintroduce comma content if needed
@@ -1382,18 +1395,20 @@ sub NZanalyse {
     # it's a leaf, do the real SQL query and return the result
     } else {
         $string =~  s/__X__/"$commacontent"/ if $commacontent;
-        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
-        warn "leaf : $string\n" if $DEBUG;
+        $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\///g; # we must not introduce spaces in place of these chars
+        warn "leaf:$string" if $DEBUG;
         # parse the string in in operator/operand/value again
         $string =~ /(.*)(>=|<=)(.*)/;
         my $left = $1;
         my $operator = $2;
         my $right = $3;
+        warn "handling leaf... left:$left operator:$operator right:$right" if $DEBUG;   
         unless ($operator) {
             $string =~ /(.*)(>|<|=)(.*)/;
             $left = $1;
             $operator = $2;
             $right = $3;
+        warn "handling unless (operator)... left:$left operator:$operator right:$right" if $DEBUG;   
         }
         my $results;
 	# strip adv, zebra keywords, currently not handled in nozebra: wrdl, ext, phr...
@@ -1405,6 +1420,7 @@ sub NZanalyse {
         $left='subject' if $left =~ '^su$';
         $left='koha-Auth-Number' if $left =~ '^an$';
         $left='keyword' if $left =~ '^kw$';
+        $left='itemtype' if $left =~ '^mc$'; # we must allow for limit operators since buildQuery will append $limit to $query
         if ($operator && $left  ne 'keyword' ) {
             #do a specific search
             my $dbh = C4::Context->dbh;
@@ -1486,6 +1502,9 @@ sub NZanalyse {
          warn "return : $results for LEAF : $string" if $DEBUG;
         return $results;
     }
+    warn "---------" if $DEBUG;
+    warn "Leave NZanalyse" if $DEBUG;
+    warn "---------" if $DEBUG;
 }
 
 =head2 NZorder
