@@ -36,7 +36,7 @@
 use strict;
 use C4::Auth;
 use C4::Output;
-use C4::Dates;
+use C4::Dates qw(format_date_in_iso);
 use C4::Context;
 use C4::Members;
 
@@ -88,6 +88,10 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         my %borrower;
         if ( @columns == @columnkeys ) {
             @borrower{@columnkeys} = @columns;
+			foreach (qw(dateofbirth dateenrolled dateexpiry)) {
+				my $tempdate = $borrower{$_} or next;
+				$borrower{$_} = format_date_in_iso($tempdate) || '';
+			}
             if ( my $member =
                 GetMember( $borrower{'cardnumber'}, 'cardnumber' ) )
             {
