@@ -934,7 +934,13 @@ sub buildQuery {
 	$query_cgi =~ s/^&//;
 
 	# append the limit to the query
-	$query ? $query .= " ".$limit : $query = $limit;
+	if ($query) {
+		$query .=" ".$limit;
+	}
+	else {
+		$query = $limit;
+	}
+
     warn "query=$query and limit=$limit" if $DEBUG;
 
     warn "QUERY:".$query if $DEBUG;
@@ -953,7 +959,6 @@ sub buildQuery {
 # building the HTML output for the template
 sub searchResults {
     my ( $searchdesc, $hits, $results_per_page, $offset, @marcresults ) = @_;
-
     my $dbh = C4::Context->dbh;
     my $toggle;
     my $even = 1;
@@ -964,7 +969,7 @@ sub searchResults {
         $span_terms_hashref->{$span_term}++;
     }
 
-    #Build brancnames hash
+    #Build branchnames hash
     #find branchname
     #get branch information.....
     my %branches;
@@ -997,15 +1002,12 @@ sub searchResults {
     }
 
     #search item field code
-    my $sth =
-      $dbh->prepare(
-"select tagfield from marc_subfield_structure where kohafield like 'items.itemnumber'"
-      );
+    my $sth = $dbh->prepare("SELECT tagfield FROM marc_subfield_structure WHERE kohafield LIKE 'items.itemnumber'");
     $sth->execute;
     my ($itemtag) = $sth->fetchrow;
 
     ## find column names of items related to MARC
-    my $sth2 = $dbh->prepare("SHOW COLUMNS from items");
+    my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
     $sth2->execute;
     my %subfieldstosearch;
     while ( ( my $column ) = $sth2->fetchrow ) {
