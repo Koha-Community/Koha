@@ -1,0 +1,200 @@
+=============================
+Installation Guide for Installing Koha on Debian Etch with MySQL 5
+=============================
+
+Copyright (C) 2007, LibLime
+
+Maintainer: Joshua Ferraro (jmf AT liblime DOT com)
+Feedback/bug reports: jmf@liblime.com
+This document last modified: 22 December 2007
+
+Installation Instructions
+=============================
+
+All commands can be performed as a system user with sudo privileges,
+or by running the command directly as root.
+
+Your locale should be set to UTF-8, as should Apache and MySQL.
+This step is VERY IMPORTANT for a UNICODE compliant system. Please 
+read over the following document carefully:
+
+http://wiki.koha.org/doku.php?id=encodingscratchpad
+
+1. Prepare System and Install Dependencies
+
+1.1 Install Debian Etch via Businesscard CD
+
+See http://www.debian.org/devel/debian-installer/
+
+1.2 Set up apt sources for Git, Yaz and Zebra packages
+
+Edit your /etc/apt/sources.list file and add the following:
+
+    # Index Data
+    deb http://ftp.indexdata.dk/debian etch main
+    deb-src http://ftp.indexdata.dk/debian etch main
+
+    # Backports
+    deb http://www.backports.org/debian etch-backports main contrib non-free
+
+Backports packages are signed with a key you can install as follows:
+
+    $ sudo apt-get install debian-backports-keyring
+
+The Index Data packages are signed with a key you can install as follows:
+
+    $ wget http://ftp.indexdata.dk/debian/indexdata.asc
+    $ sudo apt-key add indexdata.asc
+
+Run the following command to update your system:
+
+    $ sudo apt-get update
+    $ sudo apt-get -t etch-backports install git-core git-email
+    $ sudo apt-get install yaz idzebra-2.0 idzebra-2.0-doc
+
+1.3 Download Koha via Git
+
+    $ git clone git://git.koha.org/pub/scm/koha.git kohaclone
+    $ cd kohaclone
+    $ git checkout -b myinstall origin
+
+Note: for more information about Git, please see the Koha Git Usage Guide:
+
+	http://wiki.koha.org/doku.php?id=en:development:git_usage
+
+1.4 Install additional Debian dependencies
+
+Using the debian.packages file included in the Koha source tree,
+run the following:
+
+    $ sudo dpkg --set-selections < install_misc/debian.packages
+
+Now start dselect:
+
+    $ sudo dselect
+
+Choose [I]nstall and accept packages to be installed (hit return)
+
+(may take a while)
+
+Choose [C]onfigure, [R]emove and [Q]uit until dselect has completed.
+
+1.5 Install Perl dependencies that aren't packaged into Debian Etch
+sources
+
+Run the following command:
+
+    $ sudo cpan MARC::Record Class::Accessor MARC::Charset MARC::File::XML Net::Z3950::ZOOM HTML::Template::Pro MARC::Crosswalk::DublinCore PDF::Reuse PDF::Reuse::Barcode Data::ICal GD::Barcode::UPCE XML::RSS Algorithm::CheckDigits::M43_001 Biblio::EndnoteStyle POE Schedule::At
+
+Note: you may need to run CPAN initialization if you've not run cpan
+before:
+
+    /etc/perl/CPAN/Config.pm initialized.
+    
+    CPAN is the world-wide archive of perl resources. It consists of about
+    100 sites that all replicate the same contents all around the globe.
+    Many countries have at least one CPAN site already. The resources
+    found on CPAN are easily accessible with the CPAN.pm module. If you
+    want to use CPAN.pm, you have to configure it properly.
+    
+    If you do not want to enter a dialog now, you can answer 'no' to this
+    question and I'll try to autoconfigure. (Note: you can revisit this
+    dialog anytime later by typing 'o conf init' at the cpan prompt.)
+    
+    Are you ready for manual configuration? [yes]
+
+When the configuration is completed CPAN will install the Perl modules.
+
+2. Configuration of dependencies
+
+2.1 Update root MySQL password (if dselect didn't do it for you already)
+
+    $ sudo mysqladmin password <password>
+
+2.2 Create the Koha database
+
+    $ mysqladmin -uroot -p<password> create database <kohadatabasename>
+    $ mysql -uroot -p<password>
+
+    Create the database and user with associated privileges:
+    
+    Welcome to the MySQL monitor.  Commands end with ; or \g.
+    Your MySQL connection id is 22
+    Server version: 5.0.32-Debian_7etch3-log Debian etch distribution
+    
+    Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+    
+    mysql> create database <kohadatabasename>;
+    Query OK, 1 row affected (0.00 sec)
+
+    mysql> grant all on <kohadatabasename>.* to <kohadatabaseuser> identified by '<kohadatabaseuserpassword>';
+    Query OK, 0 rows affected (0.00 sec)
+
+    mysql> flush privileges;
+    Query OK, 0 rows affected (0.00 sec)
+
+    mysql> quit
+
+3. Run the Koha installer
+
+    $ perl Makefile.PL
+    ( answer questions )
+    $ make
+    $ make test
+    $ sudo make install
+
+4. Configure and start Apache
+    $ sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
+    (note that the path to koha-httpd.conf may be different depending on your
+    installation choices)
+
+    $ sudo a2enmod rewrite
+    $ sudo a2ensite koha && /etc/init.d/apache2 reload
+
+5. start Zebra, reload Apache2 config
+
+    $ sudo su <zebrauser>
+    $ zebrasrv -f /etc/koha/koha-conf.xml
+    (note that the path to koha-conf.xml may be different depending on your
+    installation choices)
+
+Note: it's recommended that you daemonize the Zebra process and add it to your
+startup profile. For a non-production test/development installation, running 
+Zebra from the command line can be useful.
+
+6. Run the Web Installer, populate the database, initial configuration of settings
+
+    Point your browser to http://<servername>:8080/
+
+    It should redirect you to the Web installer where you can continue the setup.
+
+Uninstall Instructions
+=============================
+1) Stop Zebra
+2) Remove install folder for Koha
+3) Remove /etc/apache2/sites-available/koha
+4) Restart Apache2
+
+Tested on the following operating environments
+==============================================
+- Debian Etch 4.0
+
+Installer Bug reports
+=====================
+Please send any installer bug reports to jmf@liblime.com
+
+Other Notes
+=====================
+This file is part of Koha
+
+Koha is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+You should have received a copy of the GNU General Public License along with
+Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
