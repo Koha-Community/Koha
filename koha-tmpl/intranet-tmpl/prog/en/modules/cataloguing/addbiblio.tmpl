@@ -447,10 +447,10 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                         <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
                         <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
                             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
-                            <input type="submit" class="approve" value="Yes: Edit existing items" />
+                            <input type="submit" class="edit" value="Yes: Edit existing items" />
                         </form>
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
-                            <input type="submit" class="deny" onclick="confirmnotdup(); return false;" value="No: Save as New Record" />
+                            <input type="submit" class="save" onclick="confirmnotdup(); return false;" value="No: Save as New Record" />
                         </form>
                     </div>
         <!-- /TMPL_IF -->
