@@ -214,7 +214,7 @@ if ($op eq 'add_form') {
 					-multiple=>0,
 					);
 		$row_data{authorised_value}  = CGI::scrolling_list(-name=>'authorised_value',
-					-id=>'authorised_value',
+					-id=>"authorised_value$i",
 					-values=> \@authorised_values,
 					-default=>$data->{'authorised_value'},
 					-size=>1,
@@ -222,7 +222,7 @@ if ($op eq 'add_form') {
 					-multiple=>0,
 					);
 		$row_data{frameworkcode}  = CGI::scrolling_list(-name=>'frameworkcode',
-					-id=>'frameworkcode',
+					-id=>"frameworkcode$i",
 					-values=> \@authtypes,
 					-default=>$data->{'frameworkcode'},
 					-size=>1,
@@ -230,7 +230,7 @@ if ($op eq 'add_form') {
 					-multiple=>0,
 					);
 		$row_data{value_builder}  = CGI::scrolling_list(-name=>'value_builder',
-					-id=>'value_builder',
+					-id=>"value_builder$i",
 					-values=> \@value_builder,
 					-default=>$data->{'value_builder'},
 					-size=>1,
