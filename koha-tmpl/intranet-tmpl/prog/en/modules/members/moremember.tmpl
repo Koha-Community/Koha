@@ -68,10 +68,10 @@ Unable to delete member: insufficient privileges.
    <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3>
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
-<!-- TMPL_IF NAME="patronimages" --><img src="/intranet-tmpl/patronimages/<!-- TMPL_VAR NAME="cardnumber" -->.jpg" alt="" border="0"  style="float: right; margin: 1em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-<h3>
-    <!-- TMPL_UNLESS NAME="I" -->
-   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3> <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" --> <!-- TMPL_VAR NAME="othernames" --> <!-- /TMPL_IF -->  <!-- TMPL_VAR NAME="cardnumber" --> <p><!-- TMPL_VAR NAME="streetnumber" -->
+
+     <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->&ldquo;<!-- TMPL_VAR NAME="othernames" -->&rdquo;<!-- /TMPL_IF -->
+
+<p class="address"><!-- TMPL_VAR NAME="streetnumber" -->
         <!--TMPL_IF NAME="roaddetails"-->
          <!-- TMPL_VAR NAME="roaddetails" -->,
         <!-- /TMPL_IF -->
