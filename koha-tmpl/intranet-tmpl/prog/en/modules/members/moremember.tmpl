@@ -6,14 +6,14 @@
 $(document).ready(function() {
 	$('#finesholdsissues').tabs();
  });
-		 $(window).load(function() {
+<!-- TMPL_IF NAME="patronimages" -->$(window).load(function() {
 			verify_patron_images();
-		 });
+		 });<!-- /TMPL_IF -->
 //]]>
 </script><!-- /TMPL_IF -->
 
 </head>
-<body onload="verify_patron_images();">
+<body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="patron-search.inc" -->
 
@@ -26,20 +26,22 @@ $(document).ready(function() {
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-toolbar.inc" -->
 <!-- TMPL_IF NAME="error" -->
-<div class="error">
+<div class="dialog alert">
 <!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
-Userid / Password update failed:
-Insufficient user permissions.
-Other fields updated.
+<h3>Userid / Password update failed</h3>
+<strong>Insufficient user permissions.</strong>
+<p>Other fields updated.</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="CANT_DELETE" -->
-Unable to delete member: insufficient privileges.
+<p><strong>Unable to delete member:</strong> insufficient privileges.</p>
 <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
 <div class="yui-g">
 <!-- TMPL_IF NAME="unknowuser" -->
-    This patron does not exist.
+   <div class="dialog message">
+   	 This patron does not exist.
+   </div>
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="reregistration" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <form action="" name="form">
@@ -65,7 +67,7 @@ Unable to delete member: insufficient privileges.
 <!-- /TMPL_IF -->
 
 <h3><!-- TMPL_UNLESS NAME="I" -->
-   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --></h3>
+   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
  <div class="yui-u first">
 <div id="patron-information" style="padding : .5em;">
 
