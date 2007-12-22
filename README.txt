@@ -1,26 +1,10 @@
-Koha - award-winning GPL Integrated Library System
+Koha - award-winning open-source Integrated Library System
 
-Koha aims to be a full-featured Integrated Library System. Developed
-initially in New Zealand by Katipo Communications Ltd and first deployed
-in January of 2000 for Horowhenua Library Trust, it is currently
-maintained by a team of software providers and library technology staff
-from around the globe.
-
-
-STRUCTURE
-=========
-
-Koha 3.0 has been restructured from Koha 2.2 to use Zebra,
-a high-performance, general-purpose structured text indexing and
-retrieval engine.  Zebra speaks Z39.50, building on one of Koha's most
-useful features.
-
-General library data is held in MySQL, and Koha 3.0 supports MySQL 5,
-using foreign keys and other recent features.
-
-Apache 2 is the recommended web server and VirtualHost configuration
-files are generated for it.
-
+Koha is the first open-source Integrated Library System. Developed initially in
+New Zealand by Katipo Communications, Ltd and first deployed in January of 2000
+for the Horowhenua Library Trust, it is currently maintained by a team of
+software providers and library technology staff from around the globe. Learn
+more about the Koha project at http://koha.org.
 
 INSTALLATION
 ============
@@ -31,12 +15,9 @@ how to customise CPAN-installed modules, the same things should work
 for you with Koha.  If not, don't worry.  If you want to customise the
 installation more than described below, run "man ExtUtils::MakeMaker"
 
-Koha 3.0 introduces multi-dbms support. With this release you may elect
-to install over MySQL 5 or PostgreSQL 8.2.5. Further databases will
-be added over time.
-
 You need to have a server running MySQL 5 or PostgreSQL 8.2.5, Zebra
-and some webserver (preferably Apache) before installing Koha.
+2.0.22 or greater and a webserver (preferably Apache2) before installing
+Koha.
  
 MySQL 5: Create a database called 'koha,' owned by 'kohaadmin'
 user, with a password set. Note: kohaadmin must have at least the
@@ -54,10 +35,14 @@ Default installation instructions:
 2. make
 3.(optional) make test 
 4. sudo make install
-5. ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
-6. a2enmod rewrite
-7. a2ensite koha && /etc/init.d/apache2 reload
-8. zebrasrv -f /etc/koha/koha-conf.xml
+5. sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
+  (note that the path to koha-httpd.conf may be different depending on your
+  installation choices)
+6. sudo a2enmod rewrite
+7. sudo a2ensite koha && /etc/init.d/apache2 reload
+8. sudo zebrasrv -f /etc/koha/koha-conf.xml
+  (note that you will want to run Zebra in daemon mode for a production
+  system)
 9. Browse to http://servername:8080/ and answer the questions
 
 OR if you want to install all dependencies from CPAN and are root, you can
@@ -67,11 +52,13 @@ may not be safe.  Nevertheless, it's pretty cool when it works.
 The defaults will install Koha to places that follow relevant standards,
 such as the File Hierarchy Standard.  If you want to install Koha to a
 different directory like /opt/koha, then replace step 1 with (for example):
+
 1. perl Makefile.PL INTRANET_CGI_DIR=/www/cgi-bin
 
 You can change most of the defaults in a similar way, such as DB_HOST.
 For full instructions on how to override the default settings, run
-perldoc rewrite-config.PL
+
+$ perldoc rewrite-config.PL
 
 
 IF YOU HAVE PROBLEMS
