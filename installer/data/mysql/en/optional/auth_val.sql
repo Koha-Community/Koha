@@ -4,6 +4,7 @@ INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('LOST
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOST','1','Lost');
 INSERT INTO `authorised_values`  (category, authorised_value, lib ) VALUES ('LOST','3','Lost and Paid For');
 INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','4','Missing in Inventory');
+INSERT INTO `authorised_values`  (category, authorised_value, lib )VALUES ('LOST','5','Missing in Holdqueuey');
 
 -- damaged status of an item
 INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('DAMAGED','0','');
