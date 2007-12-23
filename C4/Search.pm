@@ -402,6 +402,7 @@ sub getRecords {
     while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
         my $ev = $zconns[ $i - 1 ]->last_event();
         if ( $ev == ZOOM::Event::ZEND ) {
+	    next unless  $results[ $i - 1 ];
             my $size = $results[ $i - 1 ]->size();
             if ( $size > 0 ) {
                 my $results_hash;
@@ -660,8 +661,8 @@ sub _build_weighted_query {
         $weighted_query .= " or ti,phr,r3=\"$operand\"";            # phrase title
        #$weighted_query .= " or any,ext,r4=$operand";               # exact any
        #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
-        $weighted_query .= " or wrd,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
-        $weighted_query .= " or wrd,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
+        $weighted_query .= " or wrdl,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
+        $weighted_query .= " or wrdl,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
     }
@@ -890,10 +891,10 @@ sub buildQuery {
 	if ($group_OR_limits) {
 		$limit.=" and " if ($query || $limit );
 		$limit.="($group_OR_limits)";
-	}
+	} 
 	if ($availability_limit) {
-		$limit.=" not " if ($query || $limit );
-		$limit.="$availability_limit";
+		$limit.=" and " if ($query || $limit );
+		$limit.="($availability_limit)";
 	}
 	# normalize the strings
 	$query =~ s/:/=/g;

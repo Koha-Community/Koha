@@ -5,7 +5,7 @@ Installation Guide for Installing Koha on Debian Etch with MySQL 5
 Copyright (C) 2007, LibLime
 
 Maintainer: Joshua Ferraro (jmf AT liblime DOT com)
-Feedback/bug reports: jmf@liblime.com
+Feedback/bug reports: jmf AT liblime DOT com
 This document last modified: 22 December 2007
 
 Installation Instructions
@@ -151,16 +151,41 @@ When the configuration is completed CPAN will install the Perl modules.
     $ sudo a2enmod rewrite
     $ sudo a2ensite koha && /etc/init.d/apache2 reload
 
-5. start Zebra, reload Apache2 config
-
-    $ sudo su <zebrauser>
-    $ zebrasrv -f /etc/koha/koha-conf.xml
-    (note that the path to koha-conf.xml may be different depending on your
-    installation choices)
+5. Configure and start Zebra
 
 Note: it's recommended that you daemonize the Zebra process and add it to your
 startup profile. For a non-production test/development installation, running 
-Zebra from the command line can be useful.
+Zebra from the command line can be useful. Pick from the two available options
+below, or roll your own :-)
+
+Note: it's also recommended that you create a Koha system user, which you will
+have specified during the install process. Alternatively, Zebra can be
+configured to run as the root user.
+
+Option 1: run the Zebra processes from the command line:
+
+    Zebra Server:
+    $ sudo ${KOHA_USER} zebrasrv -f /etc/koha/koha-conf.xml
+    (note that the path to koha-conf.xml may be different depending on your
+    installation choices)
+
+    Zebraqueue Daemon:
+    $ sudo ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
+
+Option 2: run the Zebra processes as daemons, and add to startup process:
+
+    Zebra Server:
+    $ sudo ln -s misc/bin/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
+    $ update-rc.d koha-zebra-daemon defaults
+    ( Note: see man chkconfig(8) on other distros )
+    $ misc/bin/koha-zebra-ctl.sh start
+
+    Zebraqueue Daemon:
+    $ sudo ln -s misc/bin/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
+    $ update-rc.d koha-zebraqueue-daemon defaults 
+    ( Note: see man chkconfig(8) on other distros )
+
+    $ misc/bin/koha-zebraqueue-ctl.sh start
 
 6. Run the Web Installer, populate the database, initial configuration of settings
 
@@ -181,7 +206,7 @@ Tested on the following operating environments
 
 Installer Bug reports
 =====================
-Please send any installer bug reports to jmf@liblime.com
+Please send any installer bug reports to jmf AT liblime DOT com
 
 Other Notes
 =====================

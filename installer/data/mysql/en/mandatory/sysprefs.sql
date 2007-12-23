@@ -110,7 +110,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use database or a temporary file for storing session data','mysql|Pg|tmp','Choice');  
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('CircAutocompl','1','If ON, autocompletion is enabled for the Circulation input',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingSerials','1','If ON, serials routing is enabled',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SearchMyLibraryFirst','1','If ON, OPAC searches return results limited by the user\'s library by default if they are logged in',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SearchMyLibraryFirst','0','If ON, OPAC searches return results limited by the user\'s library by default if they are logged in',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('dontmerge','1','If ON, modifying an authority record will not update all associated bibliographic records immediately, ask your system administrator to enable the merge_authotities.pl cron job',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BiblioAddsAuthorities','0','If ON, adding a new biblio will check for an existing authority record and create one on the fly if one doesn\'t exist',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('QueryStemming','1','If ON, enables query stemming',NULL,'YesNo');
