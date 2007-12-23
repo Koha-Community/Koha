@@ -12,9 +12,9 @@ Installation Instructions
 =============================
 
 All commands can be performed as a system user with sudo privileges,
-or by running the command directly as root.
+as indicated or by running the command directly as root.
 
-Your locale should be set to UTF-8, as should Apache and MySQL.
+Your locale should be set to UTF-8, as should Apache2 and MySQL 5.
 This step is VERY IMPORTANT for a UNICODE compliant system. Please 
 read over the following document carefully:
 
@@ -149,7 +149,8 @@ When the configuration is completed CPAN will install the Perl modules.
     installation choices)
 
     $ sudo a2enmod rewrite
-    $ sudo a2ensite koha && /etc/init.d/apache2 reload
+    $ sudo a2ensite koha
+    $ sudo apache2ctl restart
 
 5. Configure and start Zebra
 
@@ -179,16 +180,17 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     Zebra Server:
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
-    $ update-rc.d koha-zebra-daemon defaults
+    $ sudo update-rc.d koha-zebra-daemon defaults
     ( Note: see man chkconfig(8) on other distros )
-    $ ${SCRIPT_DIR}/koha-zebra-ctl.sh start
+    
+    $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
 
     Zebraqueue Daemon:
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
-    $ update-rc.d koha-zebraqueue-daemon defaults 
+    $ sudo update-rc.d koha-zebraqueue-daemon defaults 
     ( Note: see man chkconfig(8) on other distros )
 
-    $ ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh start
+    $ sudo ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh start
 
     Note: you can use the following commands to remove the zebra daemons from startup:
     $ sudo update-rc.d koha-zebra-daemon remove
