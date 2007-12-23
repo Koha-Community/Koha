@@ -960,7 +960,7 @@ sub searchResults {
     my @newresults;
     my $span_terms_hashref;
     for my $span_term ( split( / /, $searchdesc ) ) {
-        $span_term =~ s/(.*=|\)|\(|\+|\.)//g;
+        $span_term =~ s/(.*=|\)|\(|\+|\.|\*)//g;
         $span_terms_hashref->{$span_term}++;
     }
 
