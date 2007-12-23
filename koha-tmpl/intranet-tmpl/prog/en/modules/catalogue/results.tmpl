@@ -5,8 +5,8 @@
 //<![CDATA[
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
-	$("img").each(function(i){
-	       if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+    $("img").each(function(i){
+           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
@@ -15,19 +15,19 @@ function verify_images() {
                 this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
             }
         }
-		});
-		}
+        });
+        }
 $(document).ready(function() {
-	$('#sortbyform').find("input:submit").hide();
-	$('#sort_by').change(function() {
-		$('#sortbyform').submit();
-	});
+    $('#sortbyform').find("input:submit").hide();
+    $('#sort_by').change(function() {
+        $('#sortbyform').submit();
+    });
 });
 $(window).load(function() {
-		verify_images();
-	 });
-	 //]]>
-	 </script><!-- /TMPL_IF -->
+        verify_images();
+     });
+     //]]>
+     </script><!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -38,8 +38,8 @@ $(window).load(function() {
 <div id="doc3" class="yui-t1">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
     <!-- TMPL_IF NAME="koha_spsuggest" -->
         <div style="font-size: 12px;">Did you mean: 
@@ -53,29 +53,29 @@ $(window).load(function() {
         </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="total" -->
-<div id="searchheader">	<form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
+<div id="searchheader"> <form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
                 <!-- TMPL_IF NAME="searchdesc" -->
-					<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
-					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
-					<!-- /TMPL_LOOP -->
-					<!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
-					<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                    <!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
+                    <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                    <!-- /TMPL_LOOP -->
+                    <!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
+                    <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
                     <!-- /TMPL_LOOP -->
 
 
                 <!-- /TMPL_IF -->
- 				<!-- RE-SORT START -->
+                <!-- RE-SORT START -->
                     <label for="sort_by">Sort By: </label>
                     <select id="sort_by" name="sort_by">
-					<!-- TMPL_INCLUDE NAME="resort_form.inc" -->
-					</select>
-					<input type="submit" value="Go" />
+                    <!-- TMPL_INCLUDE NAME="resort_form.inc" -->
+                    </select>
+                    <input type="submit" value="Go" />
                     <!-- RESORT END -->
-				</form>
+                </form>
     <h3>
         <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.
     </h3></div>
-	<!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF NAME="searchdesc" -->
             <h3>No results found</h3>
@@ -140,11 +140,11 @@ $(window).load(function() {
                     <th>Count</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-				<!-- TMPL_IF name="even" -->
+                <!-- TMPL_IF name="even" -->
                     <tr class="highlight">
-				<!-- TMPL_ELSE -->
-					<tr>
-				<!-- /TMPL_IF -->
+                <!-- TMPL_ELSE -->
+                    <tr>
+                <!-- /TMPL_IF -->
                         <td>
                             <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
@@ -229,14 +229,14 @@ $(window).load(function() {
             <!-- ######### -->
 
             <div id="searchresults">
-					
+                    
                     <!-- TABLE RESULTS START -->
 
                 <table>
                     <tr>
                         <!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
                         <th>Results</th>
-						<th>Location</th>
+                        <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
                         <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
@@ -275,7 +275,7 @@ $(window).load(function() {
                                 <!-- TMPL_ELSE -->
                                     <p> <!-- TMPL_IF name="imageurl" -->
                                     <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="img" />
-									<!-- /TMPL_IF -->                                
+                                    <!-- /TMPL_IF -->                                
                                         <!-- TMPL_IF NAME="author" -->
                                             <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
                                         <!-- TMPL_ELSE -->
@@ -287,40 +287,40 @@ $(window).load(function() {
                                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
-										<!-- TMPL_VAR name="description" -->
+                                        <!-- TMPL_VAR name="description" -->
                                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
-										<!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->
                                     </p>
-									<p><!-- TMPL_VAR NAME="searchhighlightblob" --></p>
+                                    <p><!-- TMPL_VAR NAME="searchhighlightblob" --></p>
                                 <!-- /TMPL_IF -->
-								  <!-- TMPL_IF NAME="norequests" -->
+                                  <!-- TMPL_IF NAME="norequests" -->
                                         No holds allowed
                                     <!-- TMPL_ELSE -->
                                         <a class="reserve" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
                                     <!-- /TMPL_IF -->
                                 </td>
 
-								<td style="white-space : nowrap"><div class="availability">
-									<!-- TMPL_IF NAME="items_count" --><div><!-- TMPL_VAR NAME="items_count" -->
-									<!-- TMPL_IF NAME="itemsplural" -->items<!-- TMPL_ELSE -->item<!-- /TMPL_IF --></div>
+                                <td style="white-space : nowrap"><div class="availability">
+                                    <!-- TMPL_IF NAME="items_count" --><div><!-- TMPL_VAR NAME="items_count" -->
+                                    <!-- TMPL_IF NAME="itemsplural" -->items<!-- TMPL_ELSE -->item<!-- /TMPL_IF --></div>
 
-									<!-- TMPL_IF NAME="available_items_loop" -->
-									<!-- TMPL_IF NAME="availablecount" --><!-- TMPL_VAR NAME="availablecount" --><!-- /TMPL_IF --> available:
-									<ul>
-									<!-- TMPL_LOOP NAME="available_items_loop" -->
-										<li>
-										<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
-										(<!-- TMPL_VAR NAME="count" -->)</li>
-									<!-- /TMPL_LOOP --></ul>
-									<!-- TMPL_ELSE -->
-									<span class="unavailable">No items available</span>
-									<!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="available_items_loop" -->
+                                    <!-- TMPL_IF NAME="availablecount" --><!-- TMPL_VAR NAME="availablecount" --><!-- /TMPL_IF --> available:
+                                    <ul>
+                                    <!-- TMPL_LOOP NAME="available_items_loop" -->
+                                        <li>
+                                        <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
+                                        (<!-- TMPL_VAR NAME="count" -->)</li>
+                                    <!-- /TMPL_LOOP --></ul>
+                                    <!-- TMPL_ELSE -->
+                                    <span class="unavailable">No items available</span>
+                                    <!-- /TMPL_IF -->
 
                                    <!-- TMPL_IF NAME="onloan_items_loop" -->
                                    <!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:
-									<ul>
+                                    <ul>
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
                                         <li>
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
@@ -328,33 +328,33 @@ $(window).load(function() {
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                                         (<!-- TMPL_VAR NAME="count" --><!-- TMPL_IF NAME="longoverdue" -->, <!-- TMPL_VAR NAME="longoverdue" --> long overdue<!-- /TMPL_IF -->) date due: <!-- TMPL_VAR NAME="due_date" --></li>
                                     <!-- /TMPL_LOOP --></ul>
-									<!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
 
-									<!-- TMPL_IF NAME="other_items_loop" -->
+                                    <!-- TMPL_IF NAME="other_items_loop" -->
                                     <!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:
-									<ul>
+                                    <ul>
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
                                         <li>
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="wthdrawn" -->(Withdrawn)<!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="itemlost" -->(Lost)<!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="damaged" -->(Damaged)<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="wthdrawn" -->(Withdrawn)<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="itemlost" -->(Lost)<!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="damaged" -->(Damaged)<!-- /TMPL_IF -->
                                         (<!-- TMPL_VAR NAME="count" -->)</li>
                                     <!-- /TMPL_LOOP --></ul>
                                     <!-- /TMPL_IF -->
-									<!-- TMPL_ELSE -->
-									<span class="unavailable">No items</span>
-									<!-- /TMPL_IF --> <!-- /items count -->
-                					</div></td>
+                                    <!-- TMPL_ELSE -->
+                                    <span class="unavailable">No items</span>
+                                    <!-- /TMPL_IF --> <!-- /items count -->
+                                    </div></td>
 
                             </tr>
                         <!-- /TMPL_LOOP -->
                 </table>
                 </div>
         <!-- /TMPL_IF -->
-		<!-- TMPL_INCLUDE NAME="page-numbers.inc" --> 
+        <!-- TMPL_INCLUDE NAME="page-numbers.inc" --> 
         <!-- TMPL_IF NAME="outer_sup_results_loop" -->
             <h3><!-- TMPL_LOOP NAME="outer_sup_results_loop" --></h3>
                 <!-- TMPL_IF NAME="inner_sup_results_loop" -->
