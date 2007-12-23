@@ -265,7 +265,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 #
 # reserve found and item arrived at the expected branch
 #
-if ( $messages->{'ResFound'} and not $messages->{'WrongTransfer'}) {
+if ( $messages->{'ResFound'}) {
     my $reserve        = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
