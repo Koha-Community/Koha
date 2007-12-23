@@ -1137,6 +1137,7 @@ sub AddReturn {
     
     # get information on item
     my $iteminformation = GetItemIssue( GetItemnumberFromBarcode($barcode));
+    my $biblio = GetBiblioFromItemNumber($iteminformation->{'itemnumber'});
     unless ($iteminformation->{'itemnumber'} ) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
@@ -1189,9 +1190,9 @@ sub AddReturn {
 		my $sth = $dbh->prepare("UPDATE items SET onloan = NULL where itemnumber = ?");
 		$sth->execute($iteminformation->{'itemnumber'});
 		$sth->finish();
-		my $record = GetMarcItem( $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'} );
-		my $frameworkcode = GetFrameworkCode( $iteminformation->{'biblionumber'} );
-		ModItemInMarc( $record, $iteminformation->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
+		my $record = GetMarcItem( $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'} );
+		my $frameworkcode = GetFrameworkCode( $biblio->{'biblionumber'} );
+		ModItemInMarc( $record, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
 		
 		if ($iteminformation->{borrowernumber}){
 			($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
