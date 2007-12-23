@@ -125,7 +125,7 @@
 
     <div id="opac-user-checkouts"><!-- TMPL_IF NAME="issues_count" -->
         <table>
-		<caption>Issues (<!-- TMPL_VAR NAME="issues_count" --> total)</caption>
+		<caption><!-- TMPL_VAR NAME="issues_count" --> Items</caption>
         <!-- ISSUES TABLE ROWS --><tr>
         <th colspan="2">Title</th>
         <th>Call No.</th>
@@ -193,7 +193,6 @@
 		</form>
     <!-- TMPL_ELSE -->
         <table>
-            <caption>Issues</caption>
             <tr><td>You have nothing checked out</td></tr>
         </table>
     <!-- /TMPL_IF --></div>
@@ -261,13 +260,13 @@ No renewals left
                     <!-- TMPL_IF Name="wait" -->
                         <!-- TMPL_IF NAME="atdestination" -->
                             <!-- TMPL_IF name="found" -->
-                            Document waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b>
+                            Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b>
                             <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                         <!-- TMPL_ELSE -->
-                            Waiting to be pulled
+                            Item waiting to be pulled
                         <!-- /TMPL_IF -->
                         <!-- TMPL_ELSE -->
-                        Document being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+                            Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                         <!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
                         Not ready
@@ -276,7 +275,7 @@ No renewals left
             </tr>
             <!-- /TMPL_LOOP -->
         </table>
-        <p>If you no longer want a reserve, please send us an e-mail, or go to the circulation desk at your library to get it removed.</p></div>
+	</div>
     <!-- /TMPL_IF -->
 	</div><!-- /opac-user views -->
 	
