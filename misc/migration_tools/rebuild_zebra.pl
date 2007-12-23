@@ -4,7 +4,7 @@ use strict;
 
 use C4::Context;
 use Getopt::Long;
-use File::Temp;
+use File::Temp qw/ tempdir /;
 use File::Path;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
@@ -54,7 +54,7 @@ if (not $biblios and not $authorities) {
 my $use_tempdir = 0;
 unless ($directory) {
     $use_tempdir = 1;
-    $directory = File::Temp->newdir(CLEANUP => ($keep_export ? 0 : 1));
+    $directory = tempdir(CLEANUP => ($keep_export ? 0 : 1));
 } 
 
 
