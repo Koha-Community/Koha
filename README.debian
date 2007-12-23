@@ -190,6 +190,9 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     $ ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh start
 
+    Note: you can use the following commands to remove the zebra daemons from startup:
+    $ sudo update-rc.d koha-zebra-daemon remove
+    $ sudo update-rc.d koha-zebraqueue-daemon remove
 
 6. Run the Web Installer, populate the database, initial configuration of settings
 
