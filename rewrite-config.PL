@@ -84,6 +84,8 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__WEBSERVER_IP__" => $myip,
   "__WEBSERVER_PORT__" => "80",
   "__WEBSERVER_PORT_LIBRARIAN__" => "8080",
+  "__KOHA_USER__" => "koha",
+  "__KOHA_GROUP__" => "koha",
   "__ZEBRA_PASS__" => "zebrastripes",
   "__ZEBRA_USER__" => "kohauser",
   '__INTRANET_CGI_DIR__' => "$prefix/intranet/cgi-bin",
@@ -116,10 +118,21 @@ foreach $key (keys %configuration) {
 $fname = $ARGV[0];
 $file = read_file($fname);
 $file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
-chmod 0644, $fname;
+
+# At this point, file is in 'blib' and by default
+# has mode a-w.  Therefore, must change permission
+# to make it writable.  Note that stat and chmod
+# (the Perl functions) should work on Win32
+my $old_perm;
+$old_perm = (stat $fname)[2] & 07777;
+my $new_perm = $old_perm | 0200;
+chmod $new_perm, $fname;
+
 open(OUTPUT,">$fname") || die "Can't open $fname for write: $!";
 print OUTPUT $file;
 close(OUTPUT);
+
+chmod $old_perm, $fname;
 
 # Idea taken from perlfaq5
 sub read_file($) {

@@ -243,6 +243,7 @@ my $target_map = {
   './MANIFEST.SKIP'             => 'NONE',
   './members'                   => 'INTRANET_CGI_DIR',
   './misc'                      => { target => 'SCRIPT_DIR', trimdir => -1 }, 
+  './misc/bin'                  => { target => 'SCRIPT_DIR', trimdir => -1 }, 
   './misc/info'                 => { target => 'DOC_DIR', trimdir => 2 },
   './misc/release notes'        => { target => 'DOC_DIR', trimdir => 2 },
   './misc/translator'           => { target => 'MISC_DIR', trimdir => 2 }, 
@@ -432,6 +433,12 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
     );
+    if ($config{'INSTALL_MODE'} ne 'dev') {
+        push @{ $pl_files->{'rewrite-config.PL'} }, (
+            'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
+            'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
+        );
+    }
 }
 
 if ($config{'INSTALL_MODE'} ne "dev") {
