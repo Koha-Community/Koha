@@ -8,7 +8,6 @@ KOHA_CONF=__KOHA_CONF_DIR__/koha-conf.xml
 ERRLOG=$LOGDIR/koha-zebraqueue.err
 STDOUT=$LOGDIR/koha-zebraqueue.log
 OUTPUT=$LOGDIR/koha-zebraqueue-output.log
-KOHA_CONF=/home/jmf/koha-dev/etc/koha-conf.xml
 export KOHA_CONF
 export PERL5LIB
 ZEBRAQUEUE=__PERL_MODULE_DIR__/misc/bin/zebraqueue_daemon.pl
