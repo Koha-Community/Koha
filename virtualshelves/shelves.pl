@@ -86,7 +86,7 @@ if ( $query->param('modifyshelfcontents') ) {
     my $shelfnumber = $query->param('viewshelf');
     my $barcode     = $query->param('addbarcode');
     my ($item) = GetItem( 0, $barcode );
-	my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
+    my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
         AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
@@ -107,21 +107,20 @@ SWITCH: {
     if ( $op && ( $op eq 'modifsave' ) ) {
         ModShelf(
             $query->param('shelfnumber'), $query->param('shelfname'),
-            $loggedinuser,                $query->param('category')
+            $loggedinuser,                $query->param('category'), $query->param('sortfield')
         );
         last SWITCH;
     }
     if ( $op && ( $op eq 'modif' ) ) {
-        my ( $shelfnumber, $shelfname, $owner, $category ) =
+        my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) =
           GetShelf( $query->param('shelf') );
         $template->param(
             edit                => 1,
             shelfnumber         => $shelfnumber,
             shelfname           => $shelfname,
-            "category$category" => 1
+            "category$category" => 1,
+        "sort_$sortfield"   => 1,
         );
-
-        #         editshelf($query->param('shelf'));
         last SWITCH;
     }
     if ( $query->param('viewshelf') ) {
@@ -134,8 +133,7 @@ SWITCH: {
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
                 viewshelf   => $query->param('viewshelf'),
-                manageshelf =>
-                  &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
+                manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
                 itemsloop => $items,
             );
         }
@@ -175,7 +173,7 @@ SWITCH: {
             }
 
             #if the shelf is not deleted, %line points on null
-#             push( @paramsloop, \%line );
+            # push( @paramsloop, \%line );
         }
         $template->param( paramsloop => \@paramsloop );
         my ($shelflist) = GetShelves( $loggedinuser, 2 );
@@ -198,6 +196,7 @@ SWITCH: {
     }
 }
 
+# rebuild shelflist in case a shelf has been added
 $shelflist = GetShelves( $loggedinuser, 2 );
 my $color = '';
 my @shelvesloop;
@@ -209,15 +208,13 @@ foreach my $element ( sort keys %$shelflist ) {
     $line{'toggle'}    = $color;
     $line{'shelf'}     = $element;
     $line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
+    $line{'sortfield'}=$shelflist->{$element}->{'sortfield'};
     $line{"viewcategory$shelflist->{$element}->{'category'}"} = 1;
     $line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
     $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
-    $line{'canmanage'} =
-      ShelfPossibleAction( $loggedinuser, $element, 'manage' );
-    $line{'firstname'} = $shelflist->{$element}->{'firstname'}
-      unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-    $line{'surname'} = $shelflist->{$element}->{'surname'}
-      unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+    $line{'canmanage'} = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
+    $line{'firstname'} = $shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
+    $line{'surname'} = $shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
     $numberCanManage++ if $line{'canmanage'};
     push( @shelvesloop, \%line );
 }
@@ -280,46 +277,3 @@ sub shelves {
         shelves     => 1,
     );
 }
-
-#
-# Revision 1.13  2007/04/24 13:54:29  hdl
-# functions that were in C4::Interface::CGI::Output are now in C4::Output.
-# So this implies quite a change for files.
-# Sorry about conflicts which will be caused.
-# directory Interface::CGI should now be dropped.
-# I noticed that many scripts (reports ones, but also some circ/stats.pl or opac-topissues) still use Date::Manip.
-#
-# Revision 1.12  2007/04/04 16:46:22  tipaul
-# HUGE COMMIT : code cleaning circulation.
-#
-# some stuff to do, i'll write a mail on koha-devel NOW !
-#
-# Revision 1.11  2007/03/09 14:32:26  tipaul
-# rel_3_0 moved to HEAD
-#
-# Revision 1.9.2.9  2007/02/05 15:54:30  toins
-# don't display "remove selected shelves" if the user logged has no shelf.
-#
-# Revision 1.9.2.8  2006/12/15 17:36:57  toins
-# - some change on the html param.
-# - Writing directly the code of a sub called only once.
-# - adding syspref: BiblioDefaultView.
-#
-# Revision 1.9.2.7  2006/12/14 17:22:55  toins
-# virtualshelves work perfectly with mod_perl and are cleaned.
-#
-# Revision 1.9.2.6  2006/12/13 10:06:05  toins
-# fix a mod_perl specific bug.
-#
-# Revision 1.9.2.5  2006/12/11 17:10:06  toins
-# fixing some bugs on virtualshelves.
-#
-# Revision 1.9.2.4  2006/11/30 18:23:51  toins
-# theses scripts don't need to use C4::Search.
-#
-# Revision 1.9.2.3  2006/10/30 09:50:45  tipaul
-# better perl writting
-#
-# Revision 1.9.2.2  2006/10/17 07:59:35  toins
-# ccode added.
-#

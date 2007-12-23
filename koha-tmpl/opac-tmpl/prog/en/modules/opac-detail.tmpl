@@ -28,9 +28,9 @@
     <!-- TMPL_IF NAME="AmazonContent" -->
        <div id="bookcover"> <!-- TMPL_IF NAME="isbn" -->
         <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link">
-            <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Book Cover Image" />
+            <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" />
         </a><!-- TMPL_ELSE -->
-        <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Book Cover Image" />
+        <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Cover Image" />
         <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
     <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
@@ -160,7 +160,7 @@
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="loggedinusername" -->
         <li><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Add to My Book List
+            Add to My List
         </a></li>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

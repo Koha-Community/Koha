@@ -1,3 +1,3 @@
 <ul>
-	<li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Virtual Shelves</a></li>
+	<li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
 </ul>

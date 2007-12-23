@@ -7,7 +7,7 @@
 	<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_VAR name="IntranetNav" -->
 	<li class="more"><a href="/cgi-bin/koha/mainpage.pl">More</a><ul>
-	<li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Virtual Shelves</a></li>
+	<li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
 	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
 	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
 	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>

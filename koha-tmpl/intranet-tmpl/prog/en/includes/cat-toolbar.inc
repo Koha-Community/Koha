@@ -80,7 +80,7 @@ function confirm_deletion() {
 		var addtoshelfButton = new YAHOO.widget.Button({
                                             id: "addtoshelf", 
                                             type: "button", 
-                                            label: "Add to Shelf", 
+                                            label: "Add to List", 
                                             container: "addtoshelfc",
 											onclick: {fn: addToShelf }
                                         });

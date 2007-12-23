@@ -39,7 +39,7 @@
                         <input type="submit" value=" OK " class="submit" />
                         </form>
                      </li>
-                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Virtual Shelves</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
                 </ul></li>
                 
                 <!-- /TMPL_IF -->

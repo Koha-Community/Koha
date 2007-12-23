@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Add to My Virtual Shelf
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Add to Your List
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <style type="text/css">
    #custom-doc { width:34.62em;*width:33.78em;min-width:450px; margin:auto; margin-top: .4em;text-align:left; } 
@@ -9,9 +9,9 @@
 <div id="custom-doc" class="yui-t7">
 
 <!-- TMPL_IF NAME="multiple"-->
-    <h1>Add <!-- TMPL_VAR NAME="total"--> items to a book list:</h1>
+    <h1>Add <!-- TMPL_VAR NAME="total"--> items to a list:</h1>
 <!-- TMPL_ELSE -->
-	<h1>Add to a book list:</h1>
+	<h1>Add to a list:</h1>
 <!-- /TMPL_IF -->
      <ul> <!-- TMPL_LOOP NAME="biblios"-->
            <li> <span class="title"><!-- TMPL_VAR NAME="title"--></span> 
@@ -21,7 +21,7 @@
 </ul>
 <!-- TMPL_IF NAME="CGIvirtualshelves"-->
 <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
-    <fieldset class="rows"><legend>Select an Existing List</legend>
+    <fieldset class="rows"><legend>Select a List</legend>
 <ol><li>    <label for="shelfnumber">Add to list:</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" --></li></ol>
  <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
     <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>

@@ -177,8 +177,15 @@ Option 1: run the Zebra processes from the command line:
     (note that the path to koha-conf.xml may be different depending on your
     installation choices)
 
+    Note: the user you run Zebra as will be the only user with write permission
+    on the Zebra index; in development mode, you may wish to use your system
+    user.
+
     Zebraqueue Daemon:
     $ sudo -u ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
+
+    Note: if you are running in this mode, you may wish to defer starting the
+    zebraqueue until you've run the web installer (see below).
 
 Option 2: run the Zebra processes as daemons, and add to startup process:
 
@@ -218,7 +225,17 @@ Uninstall Instructions
    $ sudo rm /etc/init.d/koha-zebra-daemon
    $ sudo rm /etc/init.d/koha-zebraqueue-daemon
 
-2. Remove Koha Install Directories
+2) Remove Koha Database
+
+   # MySQL
+   $ mysql -u<kohauser> -p<kohapassword>
+   > drop database koha;
+
+   # Zebra Indexes
+   $ zebraidx -c <prefix>/etc/zebradb/zebra-biblios.cfg -g iso2709 -d biblios init
+   $ zebraidx -c <prefix>/etc/zebradb/zebra-authorities.cfg -g iso2709 -d authorities init
+
+3) Remove Koha Install Directories
 
 Tested on the following operating environments
 ==============================================

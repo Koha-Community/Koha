@@ -54,7 +54,7 @@ a.catalogue:hover {
 <div id="submenu">
 	<span class="koha">options &gt;&gt;&nbsp;&nbsp;</span>
 	<a href="/cgi-bin/koha/catalogue/search.pl" class="submenu2">search</a>
-	<a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="submenu">Virtual shelves</a>
+	<a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="submenu">Lists</a>
 	<a href="/cgi-bin/koha/cataloguing/addbiblio.pl" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
 </div>
