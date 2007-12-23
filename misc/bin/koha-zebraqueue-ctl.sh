@@ -10,7 +10,7 @@ STDOUT=$LOGDIR/koha-zebraqueue.log
 OUTPUT=$LOGDIR/koha-zebraqueue-output.log
 export KOHA_CONF
 export PERL5LIB
-ZEBRAQUEUE=__PERL_MODULE_DIR__/misc/bin/zebraqueue_daemon.pl
+ZEBRAQUEUE=__SCRIPT_DIR__/zebraqueue_daemon.pl
 
 test -f $ZEBRAQUEUE || exit 0
 
