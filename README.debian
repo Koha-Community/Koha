@@ -148,6 +148,13 @@ When the configuration is completed CPAN will install the Perl modules.
     (note that the path to koha-httpd.conf may be different depending on your
     installation choices)
 
+Add the following lines to /etc/apache2/ports.conf:
+
+    Listen 80
+    Listen 8080
+
+Run the following commands:
+
     $ sudo a2enmod rewrite
     $ sudo a2ensite koha
     $ sudo apache2ctl restart
