@@ -166,12 +166,12 @@ configured to run as the root user.
 Option 1: run the Zebra processes from the command line:
 
     Zebra Server:
-    $ sudo ${KOHA_USER} zebrasrv -f /etc/koha/koha-conf.xml
+    $ sudo -u ${KOHA_USER} zebrasrv -f /etc/koha/koha-conf.xml
     (note that the path to koha-conf.xml may be different depending on your
     installation choices)
 
     Zebraqueue Daemon:
-    $ sudo ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
+    $ sudo -u ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
 
 Option 2: run the Zebra processes as daemons, and add to startup process:
 
@@ -180,6 +180,7 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     Zebra Server:
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
+    (Note: ${SCRIPT_DIR} is /usr/share/koha/bin/ by default in a standard install)
     $ sudo update-rc.d koha-zebra-daemon defaults
     ( Note: see man chkconfig(8) on other distros )
     
@@ -192,10 +193,6 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     $ sudo ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh start
 
-    Note: you can use the following commands to remove the zebra daemons from startup:
-    $ sudo update-rc.d koha-zebra-daemon remove
-    $ sudo update-rc.d koha-zebraqueue-daemon remove
-
 6. Run the Web Installer, populate the database, initial configuration of settings
 
     Point your browser to http://<servername>:8080/
@@ -204,10 +201,17 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
 Uninstall Instructions
 =============================
-1) Stop Zebra
-2) Remove install folder for Koha
-3) Remove /etc/apache2/sites-available/koha
-4) Restart Apache2
+1) Stop Services:
+   $ sudo a2dissite koha
+   $ sudo rm /etc/apache2/sites-available/koha
+   $ sudo apache2ctl restart
+
+   $ sudo update-rc.d koha-zebra-daemon remove
+   $ sudo update-rc.d koha-zebraqueue-daemon remove
+   $ sudo rm /etc/init.d/koha-zebra-daemon
+   $ sudo rm /etc/init.d/koha-zebraqueue-daemon
+
+2. Remove Koha Install Directories
 
 Tested on the following operating environments
 ==============================================
