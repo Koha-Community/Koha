@@ -178,7 +178,7 @@ function confirmDelete(s,n){
         <fieldset class="rows">
         <legend>Create a new List</legend>
         <ol>
-        <li><label for="addshelf">Shelf name: </label> <input id="addshelf" type="text" name="addshelf" size="25" /></li>
+        <li><label for="addshelf">Name: </label> <input id="addshelf" type="text" name="addshelf" size="25" /></li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR name="loggedinuser" -->" /><!-- TMPL_VAR name="loggedinusername" --></li>
         <li><label for="category">Category: </label><select name="category" id="category">
                                     <option value="1">Private</option>
@@ -209,7 +209,7 @@ function confirmDelete(s,n){
             <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" />
 <fieldset class="rows"><legend>Edit List <i><!-- TMPL_VAR name="shelfname"--></i></legend>
             <ol>
-            <li><label for="shelfname">Shelf name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></li>
+            <li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></li>
             <li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></li>
             <li><label for="category">Category: </label><select id="category" name="category">
                     <!-- TMPL_IF name="category1" -->
@@ -249,7 +249,7 @@ function confirmDelete(s,n){
 <h3>Lists</h3>
 
 <table>
-<tr><th>Shelf name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
+<tr><th>Name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
 
 <!-- TMPL_LOOP NAME="shelvesloop" -->
 <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>

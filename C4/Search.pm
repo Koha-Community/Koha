@@ -158,7 +158,7 @@ this function performs a simple search on the catalog using zoom.
 =item C<input arg:>
 
     * $query could be a simple keyword or a complete CCL query wich is depending on your ccl file.
-    * @servers is optionnal. default one is read on koha.xml
+    * @servers is optionnal. default one is read on koha-conf.xml
 
 =item C<Output arg:>
     * $error is a string which containt the description error if there is one. Else it's empty.
@@ -203,8 +203,9 @@ $template->param(result=>\@results);
 sub SimpleSearch {
     my $query   = shift;
     if (C4::Context->preference('NoZebra')) {
-        my $result = NZorder(NZanalyse($query))->{'biblioserver'}->{'RECORDS'};
-        return (undef,$result);
+        my $result = NZorder(NZanalyse($query))->{'biblioserver'};
+        my $search_result = ( $result->{hits} && $result->{hits} > 0 ? $result->{'RECORDS'} : [] );
+        return (undef,$search_result);
     } else {
         my @servers = @_;
         my @results;
@@ -430,8 +431,8 @@ sub getRecords {
                         my $tmprecord = MARC::Record->new();
                         $tmprecord->encoding('UTF-8');
                         my $tmptitle;
-
-          		# srote the minimal record in author/title (depending on MARC flavour)
+						my $tmpauthor;
+          		# the minimal record in author/title (depending on MARC flavour)
                         if ( C4::Context->preference("marcflavour") eq
                             "UNIMARC" )
                         {
@@ -442,15 +443,12 @@ sub getRecords {
                             );
                         }
                         else {
-                            $tmptitle = MARC::Field->new(
-                                '245', ' ', ' ',
-                                a => $term,
-                                b => $occ
-                            );
+                            $tmptitle = MARC::Field->new('245', ' ', ' ',a => $term,);
+							$tmpauthor = MARC::Field->new('100', ' ', ' ',a => $occ,);
                         }
                         $tmprecord->append_fields($tmptitle);
-                        $results_hash->{'RECORDS'}[$j] =
-                          $tmprecord->as_usmarc();
+						$tmprecord->append_fields($tmpauthor);
+                        $results_hash->{'RECORDS'}[$j] = $tmprecord->as_usmarc();
                     }
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
@@ -663,6 +661,7 @@ sub _build_weighted_query {
        #$weighted_query .=" or kw,wrdl,r5=\"$operand\"";            # word list any
         $weighted_query .= " or wrdl,fuzzy,r8=\"$operand\"" if $fuzzy_enabled; # add fuzzy, word list
         $weighted_query .= " or wrdl,right-Truncation,r9=\"$stemmed_operand\"" if ($stemming and $stemmed_operand); # add stemming, right truncation
+	$weighted_query .= " or wrdl,r9=\"$operand\"";
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
     }
@@ -679,7 +678,7 @@ sub _build_weighted_query {
        $weighted_query .= " $index,ext,r1=\"$operand\"";            # exact index
        #$weighted_query .= " or (title-sort-az=0 or $index,startswithnt,st-word,r3=$operand #)";
        $weighted_query .= " or $index,phr,r3=\"$operand\"";         # phrase index
-       $weighted_query .= " or $index,rt,wrd,r3=\"$operand\"";      # word list index
+       $weighted_query .= " or $index,rt,wrdl,r3=\"$operand\"";      # word list index
     }
     $weighted_query .= "))";    # close rank specification
     return $weighted_query;
@@ -688,6 +687,10 @@ sub _build_weighted_query {
 # build the query itself
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan) = @_;
+
+    warn "---------" if $DEBUG;
+    warn "Enter buildQuery" if $DEBUG;
+    warn "---------" if $DEBUG;
 
     my @operators = @$operators if $operators;
     my @indexes   = @$indexes   if $indexes;
@@ -752,7 +755,8 @@ sub buildQuery {
 
 				# a flag to determine whether or not to add the index to the query
 				my $indexes_set;
-				# if the user is sophisticated enough to specify an index, turn off some defaults
+
+				# if the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
 				if ($operands[$i] =~ /(:|=)/ || $scan) {
 					$weight_fields = 0;
 					$stemming = 0;
@@ -761,9 +765,29 @@ sub buildQuery {
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
 
+				# add some attributes for certain index types
+				# Date of Publication
+				if ($index eq 'yr') {
+					$index .=",st-numeric";
+					$indexes_set++;
+					($stemming,$auto_truncation,$weight_fields, $fuzzy_enabled, $remove_stopwords) = (0,0,0,0,0);
+				}
+				# Date of Acquisition
+				elsif ($index eq 'acqdate') {
+					$index.=",st-date-normalized";
+					$indexes_set++;
+					($stemming,$auto_truncation,$weight_fields, $fuzzy_enabled, $remove_stopwords) = (0,0,0,0,0);
+
+				}
+
+				# set default structure attribute (word list)
+				my $struct_attr;
+				unless (!$index || $index =~ /(st-|phr|ext|wrdl)/) {
+					$struct_attr = ",wrdl";
+				}
 				# some helpful index modifs
-                my $index_plus = "$index:" if $index;
-                my $index_plus_comma="$index," if $index;
+                my $index_plus = $index.$struct_attr.":" if $index;
+                my $index_plus_comma=$index.$struct_attr."," if $index;
 
                 # Remove Stopwords
 				if ($remove_stopwords) {
@@ -861,12 +885,14 @@ sub buildQuery {
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
 
     # add limits
+	$DEBUG=1;
 	my $group_OR_limits;
 	my $availability_limit;
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
 			# available is defined as (items.notloan is NULL) and (items.itemlost > 0 or NULL) (last clause handles NULL values for lost in zebra)
-			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric gt 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+			# all records not indexed in the onloan register and allrecords not indexed in the lost register, or where the value of lost is equal to or less than 0
+			$availability_limit .="( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
 			$limit_cgi .= "&limit=available";
 			$limit_desc .="";
         }
@@ -877,15 +903,14 @@ sub buildQuery {
 			$limit_desc .=" or " if $group_OR_limits;
 			$group_OR_limits .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
-			$limit_desc .= "$this_limit";
+			$limit_desc .= " $this_limit";
         }
-
 		# regular old limits
 		else {
 			$limit .= " and " if $limit || $query;
 			$limit .= "$this_limit";
 			$limit_cgi .="&limit=$this_limit";
-			$limit_desc .=" and $this_limit";
+			$limit_desc .=" $this_limit";
 		}
     }
 	if ($group_OR_limits) {
@@ -919,7 +944,9 @@ sub buildQuery {
     warn "LIMIT:".$limit if $DEBUG;
     warn "LIMIT CGI:".$limit_cgi if $DEBUG;
     warn "LIMIT DESC:".$limit_desc if $DEBUG;
-
+    warn "---------" if $DEBUG;
+    warn "Leave buildQuery" if $DEBUG;
+    warn "---------" if $DEBUG;
 	return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type );
 }
 
@@ -948,6 +975,12 @@ sub searchResults {
     while ( my $bdata = $bsth->fetchrow_hashref ) {
         $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
     }
+	my %locations;
+	my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'SHELF_LOC'");
+	$lsch->execute();
+	while (my $ldata = $lsch->fetchrow_hashref ) {
+		$locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
+	}
 
     #Build itemtype hash
     #find itemtype & itemtype image
@@ -1032,19 +1065,28 @@ sub searchResults {
         }
         # add spans to search term in results for search term highlighting
         # save a native author, for the <a href=search.lq=<!--tmpl_var name="author"-->> link
+		my $searchhighlightblob;
+		for my $highlight_field ($marcrecord->fields) {
+			next if $highlight_field->tag() =~ /(^00)/; # skip fixed fields
+			my $match;
+			my $field = $highlight_field->as_string();
+			for my $term ( keys %$span_terms_hashref ) {
+				if (($field =~ /$term/i) && (length($term) > 3)) {
+					$field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+					$match++;
+				}
+			}
+			$searchhighlightblob .= $field." ... " if $match;
+		}
+		$oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
+
         $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
-        foreach my $term ( keys %$span_terms_hashref ) {
+        for my $term ( keys %$span_terms_hashref ) {
             my $old_term = $term;
             if ( length($term) > 3 ) {
-                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\])//g;
-                $term =~ s/\\//g;
-                $term =~ s/\*//g;
-
-                #FIXME: is there a better way to do this?
+                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
                 $oldbiblio->{'title'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'subtitle'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-
+                $oldbiblio->{'subtitle'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'author'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'publishercode'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                 $oldbiblio->{'place'} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
@@ -1062,94 +1104,131 @@ sub searchResults {
         }
         $oldbiblio->{'toggle'} = $toggle;
         my @fields = $marcrecord->field($itemtag);
-        my @items_loop;
-        my $items;
+
+# Setting item statuses for display
+        my @available_items_loop;
+		my @onloan_items_loop;
+		my @other_items_loop;
+
+        my $available_items;
+		my $onloan_items;
+		my $other_items;
+
         my $ordered_count     = 0;
+		my $available_count   = 0;
         my $onloan_count      = 0;
+		my $longoverdue_count = 0;
+		my $other_count       = 0;
         my $wthdrawn_count    = 0;
         my $itemlost_count    = 0;
-        my $norequests        = 1;
-
-        #
-        # check the loan status of the item : 
-        # it is not stored in the MARC record, for pref (zebra reindexing)
-        # reason. Thus, we have to get the status from a specific SQL query
-        #
-        my $sth_issue = $dbh->prepare("
-            SELECT date_due,returndate 
-            FROM issues 
-            WHERE itemnumber=? AND returndate IS NULL");
+		my $itembinding_count = 0;
+		my $itemdamaged_count = 0;
+        my $can_place_holds   = 0;
         my $items_count=scalar(@fields);
+		my $items_counter;
+		my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
         foreach my $field (@fields) {
             my $item;
+			$items_counter++;
+
+			# populate the items hash 
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-            $sth_issue->execute($item->{itemnumber});
-            $item->{due_date} = format_date($sth_issue->fetchrow) if $sth_issue->fetchrow;
-            $item->{onloan} = 1 if $item->{due_date};
-            # at least one item can be reserved : suppose no
-            $norequests = 1;
-            if ( $item->{wthdrawn} ) {
-                $wthdrawn_count++;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{wthdrawn}=1;
-            }
-            elsif ( $item->{itemlost} ) {
-                $itemlost_count++;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemlost}=1;
-            }
-            unless ( $item->{notforloan}) {
-                # OK, this one can be issued, so at least one can be reserved
-                $norequests = 0;
-            }
-            if ( ( $item->{onloan} ) && ( $item->{onloan} != '0000-00-00' ) )
-            {
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{unavailable}=1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{onloancount} = 1;
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{due_date} = $item->{due_date};
-                $onloan_count++;
-            }
-            if ( $item->{'homebranch'} ) {
-                $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{count}++;
-            }
 
+			# set item's branch name, use homebranch first, fall back to holdingbranch
+            if ($item->{'homebranch'}) {
+                    $item->{'branchname'} = $branches{$item->{homebranch}};
+            }
             # Last resort
-            elsif ( $item->{'holdingbranch'} ) {
-                $items->{ $item->{'holdingbranch'} }->{count}++;
+            elsif ($item->{'holdingbranch'}) {
+					 $item->{'branchname'} = $branches{$item->{holdingbranch}};
             }
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{itemcallnumber} =                $item->{itemcallnumber};
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{location} =                $item->{location};
-            $items->{ $item->{'homebranch'}.'--'.$item->{'itemcallnumber'} }->{branchcode} =               $item->{homebranch};
-        }    # notforloan, item level and biblioitem level
+			# key for items results is built from branchcode . coded location qualifier . itemcallnumber
+			if ($item->{onloan}) {
+				$onloan_count++;
+				$onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{due_date} = format_date($item->{onloan});
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{count}++ if $item->{'homebranch'};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{branchname} = $item->{'branchname'};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{location} =  $locations{$item->{location}};
+                $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{itemcallnumber} = $item->{itemcallnumber};
 
-        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
-        $norequests = 1 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
-		my $itemscount;
-        for my $key ( sort keys %$items ) {
-			$itemscount++;
-            my $this_item = {
-                branchname     => $branches{$items->{$key}->{branchcode}},
-                branchcode     => $items->{$key}->{branchcode},
-                count          => $items->{$key}->{count},
-                itemcallnumber => $items->{$key}->{itemcallnumber},
-                location => $items->{$key}->{location},
-                onloancount      => $items->{$key}->{onloancount},
-                due_date         => $items->{$key}->{due_date},
-                wthdrawn      => $items->{$key}->{wthdrawn},
-                lost         => $items->{$key}->{itemlost},
-            };
-			# only show the number specified by the user
-			my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
-            push @items_loop, $this_item unless $itemscount > $maxitems;;
+				# if something's checked out and lost, mark it as 'long overdue'
+				if ( $item->{itemlost} ) {
+					$onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{longoverdue}++;
+                	$longoverdue_count++;
+				}
+				# can place holds as long as this item isn't lost
+				else {
+					$can_place_holds = 1;
+				}
+			}
+
+			# items not on loan, but still unavailable ( lost, withdrawn, damaged )
+			else { 
+            	# item is on order
+            	if ( $item->{notforloan} == -1) {
+               		$ordered_count++;
+            	}
+
+				# item is withdrawn, lost or damaged
+				if ( $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ) {
+                	$wthdrawn_count++ if $item->{wthdrawn};
+                	$itemlost_count++ if $item->{itemlost};
+                	$itemdamaged_count++ if $item->{damaged};
+					$item->{status} = $item->{wthdrawn}."-".$item->{itemlost}."-".$item->{damaged};
+                	$other_count++;
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{wthdrawn} = $item->{wthdrawn};
+					$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{itemlost} = $item->{itemlost};
+					$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{damaged} = $item->{damaged};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{count}++ if $item->{'homebranch'};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{branchname} = $item->{'branchname'};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{location} =  $locations{$item->{location}};
+                	$other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{itemcallnumber} = $item->{itemcallnumber};
+				}
+
+				# item is available
+				else {
+					$can_place_holds = 1;
+					$available_count++;
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{count}++ if $item->{'homebranch'};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{branchname} = $item->{'branchname'};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{location} =  $locations{$item->{location}};
+					$available_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'} }->{itemcallnumber} = $item->{itemcallnumber};
+				}
+			}
+        } # notforloan, item level and biblioitem level
+		my ($availableitemscount, $onloanitemscount, $otheritemscount);
+		my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
+        for my $key ( sort keys %$onloan_items ) {
+            $onloanitemscount++;
+			push @onloan_items_loop, $onloan_items->{$key} unless $onloanitemscount > $maxitems;
         }
-        $oldbiblio->{norequests}    = $norequests;
+        for my $key ( sort keys %$other_items ) {
+            $otheritemscount++;
+            push @other_items_loop, $other_items->{$key} unless $otheritemscount > $maxitems;
+        }
+        for my $key ( sort keys %$available_items ) {
+            $availableitemscount++;
+            push @available_items_loop, $available_items->{$key} unless $availableitemscount > $maxitems;
+        }
+		# last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
+        $can_place_holds = 0 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
+        $oldbiblio->{norequests}    = 1 unless $can_place_holds;
+		$oldbiblio->{itemsplural} = 1 if $items_count>1;
         $oldbiblio->{items_count}    = $items_count;
-        $oldbiblio->{items_loop}    = \@items_loop;
+        $oldbiblio->{available_items_loop}    = \@available_items_loop;
+		$oldbiblio->{onloan_items_loop} = \@onloan_items_loop;
+		$oldbiblio->{other_items_loop} = \@other_items_loop;
+		$oldbiblio->{availablecount} = $available_count;
+		$oldbiblio->{availableplural} = 1 if $available_count>1;
         $oldbiblio->{onloancount}   = $onloan_count;
+		$oldbiblio->{onloanplural} = 1 if $onloan_count>1;
+		$oldbiblio->{othercount}   = $other_count;
+		$oldbiblio->{otherplural} = 1 if $other_count>1;
         $oldbiblio->{wthdrawncount} = $wthdrawn_count;
         $oldbiblio->{itemlostcount} = $itemlost_count;
+		$oldbiblio->{damagedcount} = $itemdamaged_count;
         $oldbiblio->{orderedcount}  = $ordered_count;
         $oldbiblio->{isbn}          =~ s/-//g; # deleting - in isbn to enable amazon content 
         push( @newresults, $oldbiblio );
@@ -1171,7 +1250,9 @@ sub searchResults {
 =cut
 sub NZgetRecords {
     my ($query,$simple_query,$sort_by_ref,$servers_ref,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan) = @_;
+    warn "query =$query" if $DEBUG;
     my $result = NZanalyse($query);
+    warn "results =$result" if $DEBUG;
     return (undef,NZorder($result,@$sort_by_ref[0],$results_per_page,$offset),undef);
 }
 
@@ -1186,6 +1267,10 @@ sub NZgetRecords {
 
 sub NZanalyse {
     my ($string,$server) = @_;
+    warn "---------" if $DEBUG;
+    warn "Enter NZanalyse" if $DEBUG;
+    warn "---------" if $DEBUG;
+
     # $server contains biblioserver or authorities, depending on what we search on.
     #warn "querying : $string on $server";
     $server='biblioserver' unless $server;
@@ -1206,11 +1291,69 @@ sub NZanalyse {
     #process parenthesis before.   
     if ($string =~ /^\s*\((.*)\)(( and | or | not | AND | OR | NOT )(.*))?/){
       my $left = $1;
-#       warn "left :".$left;   
       my $right = $4;
       my $operator = lc($3); # FIXME: and/or/not are operators, not operands
+      warn "dealing w/parenthesis before recursive sub call. left :$left operator:$operator right:$right" if $DEBUG;   
       my $leftresult = NZanalyse($left,$server);
       if ($operator) {
+        my $rightresult = NZanalyse($right,$server);
+        # OK, we have the results for right and left part of the query
+        # depending of operand, intersect, union or exclude both lists
+        # to get a result list
+        if ($operator eq ' and ') {
+            my @leftresult = split /;/, $leftresult;
+            warn " @leftresult / $rightresult \n" if $DEBUG;
+#             my @rightresult = split /;/,$leftresult;
+            my $finalresult;
+            # parse the left results, and if the biblionumber exist in the right result, save it in finalresult
+            # the result is stored twice, to have the same weight for AND than OR.
+            # example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
+            # result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
+            foreach (@leftresult) {
+                my $value=$_;
+                my $countvalue;        
+                ($value,$countvalue)=($1,$2) if $value=~m/(.*)-(\d+)$/;
+                if ($rightresult =~ /$value-(\d+);/) {
+                    $countvalue=($1>$countvalue?$countvalue:$1);
+                    $finalresult .= "$value-$countvalue;$value-$countvalue;";
+                }
+            }
+            warn " $finalresult \n" if $DEBUG;
+            return $finalresult;
+        } elsif ($operator eq ' or ') {
+            # just merge the 2 strings
+            return $leftresult.$rightresult;
+        } elsif ($operator eq ' not ') {
+            my @leftresult = split /;/, $leftresult;
+#             my @rightresult = split /;/,$leftresult;
+            my $finalresult;
+            foreach (@leftresult) {
+                my $value=$_;
+                $value=$1 if $value=~m/(.*)-\d+$/;
+                unless ($rightresult =~ "$value-") {
+                }
+            }
+            return $finalresult;
+        } else {
+            # this error is impossible, because of the regexp that isolate the operand, but just in case...
+            return $leftresult;
+            exit;        
+        }
+      }   
+    }  
+    warn "string :".$string if $DEBUG;
+    $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
+    my $left = $1;   
+    my $right = $3;
+    my $operator = lc($2); # FIXME: and/or/not are operators, not operands
+    warn "dealing w/parenthesis. left :$left operator:$operator right:$right" if $DEBUG;   
+    # it's not a leaf, we have a and/or/not
+    if ($operator) {
+        # reintroduce comma content if needed
+        $right =~ s/__X__/"$commacontent"/ if $commacontent;
+        $left =~ s/__X__/"$commacontent"/ if $commacontent;
+        warn "node : $left / $operator / $right\n" if $DEBUG;
+        my $leftresult = NZanalyse($left,$server);
         my $rightresult = NZanalyse($right,$server);
         # OK, we have the results for right and left part of the query
         # depending of operand, intersect, union or exclude both lists
@@ -1244,57 +1387,7 @@ sub NZanalyse {
             return $finalresult;
         } else {
             # this error is impossible, because of the regexp that isolate the operand, but just in case...
-            return $leftresult;
-            exit;        
-        }
-      }   
-    }  
-    warn "string :".$string if $DEBUG;
-    $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
-    my $left = $1;   
-    my $right = $3;
-    my $operand = lc($2); # FIXME: and/or/not are operators, not operands
-    # it's not a leaf, we have a and/or/not
-    if ($operand) {
-        # reintroduce comma content if needed
-        $right =~ s/__X__/"$commacontent"/ if $commacontent;
-        $left =~ s/__X__/"$commacontent"/ if $commacontent;
-        warn "node : $left / $operand / $right\n" if $DEBUG;
-        my $leftresult = NZanalyse($left,$server);
-        my $rightresult = NZanalyse($right,$server);
-        # OK, we have the results for right and left part of the query
-        # depending of operand, intersect, union or exclude both lists
-        # to get a result list
-        if ($operand eq ' and ') {
-            my @leftresult = split /;/, $leftresult;
-#             my @rightresult = split /;/,$leftresult;
-            my $finalresult;
-            # parse the left results, and if the biblionumber exist in the right result, save it in finalresult
-            # the result is stored twice, to have the same weight for AND than OR.
-            # example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
-            # result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
-            foreach (@leftresult) {
-                if ($rightresult =~ "$_;") {
-                    $finalresult .= "$_;$_;";
-                }
-            }
-            return $finalresult;
-        } elsif ($operand eq ' or ') {
-            # just merge the 2 strings
-            return $leftresult.$rightresult;
-        } elsif ($operand eq ' not ') {
-            my @leftresult = split /;/, $leftresult;
-#             my @rightresult = split /;/,$leftresult;
-            my $finalresult;
-            foreach (@leftresult) {
-                unless ($rightresult =~ "$_;") {
-                    $finalresult .= "$_;";
-                }
-            }
-            return $finalresult;
-        } else {
-            # this error is impossible, because of the regexp that isolate the operand, but just in case...
-            die "error : operand unknown : $operand for $string";
+            die "error : operand unknown : $operator for $string";
         }
     # it's a leaf, do the real SQL query and return the result
     } else {
@@ -1306,13 +1399,17 @@ sub NZanalyse {
         my $left = $1;
         my $operator = $2;
         my $right = $3;
+        warn "handling leaf... left:$left operator:$operator right:$right" if $DEBUG;   
         unless ($operator) {
             $string =~ /(.*)(>|<|=)(.*)/;
             $left = $1;
             $operator = $2;
             $right = $3;
+        warn "handling unless (operator)... left:$left operator:$operator right:$right" if $DEBUG;   
         }
         my $results;
+	# strip adv, zebra keywords, currently not handled in nozebra: wrdl, ext, phr...
+        $left =~ s/[ ,].*$//;
         # automatic replace for short operators
         $left='title' if $left =~ '^ti$';
         $left='author' if $left =~ '^au$';
@@ -1321,7 +1418,7 @@ sub NZanalyse {
         $left='koha-Auth-Number' if $left =~ '^an$';
         $left='keyword' if $left =~ '^kw$';
         if ($operator && $left  ne 'keyword' ) {
-            # do a specific search
+            #do a specific search
             my $dbh = C4::Context->dbh;
             $operator='LIKE' if $operator eq '=' and $right=~ /%/;
             my $sth = $dbh->prepare("SELECT biblionumbers,value FROM nozebra WHERE server=? AND indexname=? AND value $operator ?");
@@ -1329,16 +1426,17 @@ sub NZanalyse {
             # split each word, query the DB and build the biblionumbers result
             #sanitizing leftpart      
             $left=~s/^\s+|\s+$//;
-            my ($biblionumbers,$value);
             foreach (split / /,$right) {
+                my $biblionumbers;
+                $_=~s/^\s+|\s+$//;
                 next unless $_;
                 warn "EXECUTE : $server, $left, $_";
                 $sth->execute($server, $left, $_) or warn "execute failed: $!";
                 while (my ($line,$value) = $sth->fetchrow) {
                     # if we are dealing with a numeric value, use only numeric results (in case of >=, <=, > or <)
                     # otherwise, fill the result
-                    $biblionumbers .= $line unless ($right =~ /\d/ && $value =~ /\D/);
-#                     warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
+                    $biblionumbers .= $line unless ($right =~ /^\d+$/ && $value =~ /\D/);
+                    warn "result : $value ". ($right =~ /\d/) . "==".(!$value =~ /\d/) ;#= $line";
                 }
                 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
@@ -1349,10 +1447,10 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-                         warn "===== $cleaned =====" if $DEBUG;
+                        warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-                             warn "INCLUDING $entry" if $DEBUG;
+                            warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
@@ -1361,7 +1459,7 @@ sub NZanalyse {
                 }
             }
         } else {
-            #do a complete search (all indexes)
+            #do a complete search (all indexes), if index='kw' do complete search too.
             my $dbh = C4::Context->dbh;
             my $sth = $dbh->prepare("SELECT biblionumbers FROM nozebra WHERE server=? AND value LIKE ?");
             # split each word, query the DB and build the biblionumbers result
@@ -1384,10 +1482,10 @@ sub NZanalyse {
                         my $cleaned = $entry;
                         $cleaned =~ s/-\d*$//;
                         # if the entry already in the hash, take it & increase weight
-                         warn "===== $cleaned =====" if $DEBUG;
+#                          warn "===== $cleaned =====" if $DEBUG;
                         if ($results =~ "$cleaned") {
                             $temp .= "$entry;$entry;";
-                             warn "INCLUDING $entry" if $DEBUG;
+#                              warn "INCLUDING $entry" if $DEBUG;
                         }
                     }
                     $results = $temp;
@@ -1397,9 +1495,12 @@ sub NZanalyse {
                 }
             }
         }
-#         warn "return : $results for LEAF : $string" if $DEBUG;
+         warn "return : $results for LEAF : $string" if $DEBUG;
         return $results;
     }
+    warn "---------" if $DEBUG;
+    warn "Leave NZanalyse" if $DEBUG;
+    warn "---------" if $DEBUG;
 }
 
 =head2 NZorder
@@ -1413,6 +1514,7 @@ sub NZanalyse {
 
 sub NZorder {
     my ($biblionumbers, $ordering,$results_per_page,$offset) = @_;
+    warn "biblionumbers = $biblionumbers and ordering = $ordering\n" if $DEBUG;
     # order title asc by default
 #     $ordering = '1=36 <i' unless $ordering;
     $results_per_page=20 unless $results_per_page;
