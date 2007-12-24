@@ -20,9 +20,14 @@ use strict;
 require Exporter;
 use CGI;
 use C4::Auth;
+use C4::Date qw/format_date/;
+use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::Branch;
+use C4::Reserves;
+use C4::Members;
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
 use C4::Amazon;
@@ -39,13 +44,27 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber');
+my $fw = GetFrameworkCode($biblionumber);
+
+# Get Branches, Itemtypes and Locations
+my $branches = GetBranches();
+my $itemtypes = GetItemTypes();
+
+my %locations;
+# FIXME: move this to a pm, check waiting status for holds
+my $dbh = C4::Context->dbh;
+my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'SHELF_LOC'");
+$lsch->execute();
+while (my $ldata = $lsch->fetchrow_hashref ) {
+    $locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
+}
 
 # change back when ive fixed request.pl
 my @items = &GetItemsInfo( $biblionumber, 'intra' );
 my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) { 
-	print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
+    print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
 }
 
 #coping with subscriptions
@@ -63,15 +82,49 @@ foreach my $subscription (@subscriptions) {
       GetLatestSerials( $subscription->{subscriptionid}, 3 );
     push @subs, \%cell;
 }
-
+$dat->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $dat->{itemtype} }{imageurl};
 $dat->{'count'} = @items;
-
+my @itemloop;
 my $norequests = 1;
-foreach my $itm (@items) {
-    $norequests = 0
-      unless ( ( $itm->{'notforloan'} > 0 )
-        || ( $itm->{'itemnotforloan'} > 0 ) );
-    $itm->{ $itm->{'publictype'} } = 1;
+foreach my $item (@items) {
+
+    # can place holds defaults to yes
+    $norequests = 0 unless ( ( $item->{'notforloan'} > 0 ) || ( $item->{'itemnotforloan'} > 0 ) );
+
+    # format some item fields for display
+    $item->{ $item->{'publictype'} } = 1;
+    $item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
+    $item->{datedue} = format_date($item->{datedue});
+    $item->{datelastseen} = format_date($item->{datelastseen});
+    $item->{onloan} = format_date($item->{onloan});
+    $item->{locationname} = $locations{$item->{location}};
+    # item damaged, lost, withdrawn loops
+    $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
+    if ($item->{damaged}) {
+        $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
+    }
+
+    # checking for holds
+    my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
+    my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+
+    if ( defined $reservedate ) {
+        $item->{backgroundcolor} = 'reserved';
+        $item->{reservedate}     = format_date($reservedate);
+        $item->{ReservedForBorrowernumber}     = $reservedfor;
+        $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
+        $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
+        $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
+    }
+
+    # FIXME: move this to a pm, check waiting status for holds
+    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
+    $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
+    while (my $wait_hashref = $sth2->fetchrow_hashref) {
+        $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
+    }
+
+    push @itemloop, $item;
 }
 
 $template->param( norequests => $norequests );
@@ -96,9 +149,9 @@ foreach ( keys %{$dat} ) {
 }
 
 $template->param(
-    ITEM_RESULTS        => \@items,
+    itemloop        => \@itemloop,
     biblionumber        => $biblionumber,
-	detailview => 1,
+    detailview => 1,
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},
@@ -109,13 +162,13 @@ my $xisbn=$dat->{'isbn'};
 $xisbn =~ s/(p|-| |:)//g;
 $template->param(amazonisbn => $xisbn);
 if (C4::Context->preference("FRBRizeEditions")==1) {
-	eval {
-		$template->param(
-			xisbn => $xisbn,
-			XISBNS => get_xisbns($xisbn)
-		);
-	};
-	if ($@) { warn "XISBN Failed $@"; }
+    eval {
+        $template->param(
+            xisbn => $xisbn,
+            XISBNS => get_xisbns($xisbn)
+        );
+    };
+    if ($@) { warn "XISBN Failed $@"; }
 }
 if ( C4::Context->preference("AmazonContent") == 1 ) {
     my $amazon_details = &get_amazon_details( $xisbn );
@@ -129,21 +182,19 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
     my @products;
     my @reviews;
     for my $details ( @{ $amazon_details->{Details} } ) {
+
         next unless $details->{SimilarProducts};
         for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
-			if (C4::Context->preference("AmazonSimilarItems") ) {
-				my $xbiblios;
-				my @xisbns;
-				if (C4::Context->preference("XISBNAmazonSimilarItems") ) {
-					$xbiblios = get_xisbns($product);
-				}
-				else {
-					my $xbiblio = get_biblio_from_xisbn($product);
-                    push @xisbns, $xbiblio ;
-                    $xbiblios = \@xisbns;
-				}
-            	push @products, +{ product => $xbiblios };
-			}
+            if (C4::Context->preference("AmazonSimilarItems") ) {
+                my @xisbns;
+                if (C4::Context->preference("XISBNAmazonSimilarItems") ) {
+                    @xisbns = @{get_xisbns($product)};
+                }
+                else {
+                    push @xisbns, get_biblio_from_xisbn($product);
+                }
+                push @products, +{ product => \@xisbns };
+            }
         }
         next unless $details->{Reviews};
         for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
@@ -156,7 +207,7 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
                 comment => $reviews->{Comment},
               };
         }
-    } use Data::Dumper; warn Dumper(@products);
+    }
     $template->param( SIMILAR_PRODUCTS => \@products );
     $template->param( AMAZONREVIEWS    => \@reviews );
 }

@@ -63,7 +63,7 @@
             </li>
             <li><ul>
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
-            <li><span class="label">Circulation Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
+            <li><span class="label">Circulation Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="onloan" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
             <li><span class="label">Lost Status:</span>
                 <form action="updateitem.pl" method="post">
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
@@ -129,7 +129,6 @@
 
                 <li><span class="label">Last seen:</span> <!-- TMPL_VAR NAME="datelastseen" -->&nbsp;</li>
                 <li><span class="label">Last borrowed:</span> <!-- TMPL_VAR NAME="datelastborrowed" -->&nbsp;</li>
-                <!-- TMPL_IF NAME="issue" --><li><span class="label">Date Due:</span> <!-- TMPL_VAR NAME="date_due" -->&nbsp;</li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="card0" --><li><span class="label">Last Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower0" -->"><!-- TMPL_VAR NAME="card0" --></a>&nbsp;</li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="card1" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower1" -->"><!-- TMPL_VAR NAME="card1" --></a>&nbsp;</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="card2" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower2" -->"><!-- TMPL_VAR NAME="card2" --></a>&nbsp;</li><!-- /TMPL_IF -->

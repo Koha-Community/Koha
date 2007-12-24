@@ -4,26 +4,26 @@
 //<![CDATA[
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
-	$("img").each(function(i){
-	       if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+    $("img").each(function(i){
+           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
-				$("#bookcoverimg").remove();
-				$(".yui-gb").attr("class","yui-g");
+                $("#bookcoverimg").remove();
+                $(".yui-gb").attr("class","yui-g");
             } else if ((this.complete != null) && (!this.complete)) {
-				$("#bookcoverimg").remove();
-				$(".yui-gb").attr("class","yui-g");
+                $("#bookcoverimg").remove();
+                $(".yui-gb").attr("class","yui-g");
             }
         }
-		});
-		}
-	 $(document).ready(function() {
- 		$('#bibliodetails').tabs();
-	 });
-	 <!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
-		verify_images();
-	 });<!-- /TMPL_IF -->
+        });
+        }
+     $(document).ready(function() {
+        $('#bibliodetails').tabs();
+     });
+     <!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
+        verify_images();
+     });<!-- /TMPL_IF -->
 //]]>
 </script>
 </head>
@@ -38,37 +38,31 @@ function verify_images() {
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
     <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
-	<div id="catalogue_detail_biblio" class="yui-u first">
-		
-    <h3><!-- TMPL_VAR NAME="title" --></h3>	
+    <div id="catalogue_detail_biblio" class="yui-u first">
+        
+    <h3><!-- TMPL_VAR NAME="title" --></h3> 
         <p>
-            [
-            <!-- TMPL_IF name="description" -->
-                <!-- TMPL_VAR name="description" -->
-            <!-- TMPL_ELSE -->
-                <!-- TMPL_VAR NAME="itemtype" -->
-            <!-- /TMPL_IF -->
-            ] :
+            <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
             <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
-            <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
-            / <!-- TMPL_IF NAME="author" -->By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF -->
-		<ul>
+            <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" -->/<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="author" -->By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF -->
+        <ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
             <li><strong>Additional Authors:</strong><ul>
-			<!-- TMPL_LOOP NAME="MARCAUTHORS" -->
+            <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                 <li><!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR name='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
                 <!-- /TMPL_LOOP -->
 
-		</ul>
+        </ul>
             </li>
         <!-- /TMPL_IF -->
-		<!-- TMPL_IF name="publishercode" -->
+        <!-- TMPL_IF name="publishercode" -->
     <li><strong>Published by:</strong>
         <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode"-->">
             <!-- TMPL_VAR NAME="publishercode" --> 
@@ -79,17 +73,17 @@ function verify_images() {
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --> <!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
         </li>
-		</ul>
-		</div>
-		
+        </ul>
+        </div>
+        
 <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-u" id="bookcoverimg">
-		<!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a>
+        <!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a>
 <!-- TMPL_ELSE -->
-	<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0" />
+    <img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0" />
 <!-- /TMPL_IF --></div><!-- /TMPL_IF -->
-		
-		<div class="yui-u" style="margin-top: 1em;">
-		<ul>
+        
+        <div class="yui-u" style="margin-top: 1em;">
+        <ul>
         <!-- TMPL_IF name="isbn" -->
             <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li>
         <!-- /TMPL_IF -->
@@ -105,9 +99,9 @@ function verify_images() {
             <li><strong>Subjects:</strong> 
             <ul>
                 <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
- 				<li><!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR name='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
+                <li><!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR name='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
                 <!-- /TMPL_LOOP -->
-				</ul>
+                </ul>
             </li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="copyrightdate" -->
@@ -127,7 +121,7 @@ function verify_images() {
                 <!-- /TMPL_LOOP -->
             </li>
         <!-- /TMPL_IF -->
-		</ul>
+        </ul>
 </div>
 
 </div>
@@ -138,62 +132,104 @@ function verify_images() {
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings</a></li>
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Description</a></li>
 <!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="AmazonSimilarItems " --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonSimilarItems" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
  </ul>
 
 <div id="holdings">
 <!-- TMPL_IF name="count" -->
         <table>
             <tr>
-                <th>Item type</th>
+                <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
                 <th>Location</th>
+                <th>Collection</th>
+                <th>Call Number</th>
                 <th>Status</th>
                 <th>Date Due</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
                 <th>Volume</th>
             </tr>
-            <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+            <!-- TMPL_LOOP NAME="itemloop" -->
                 <tr>
-                    <td><!-- TMPL_VAR NAME="description" --></td>
-                    <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
-                    <td><!-- TMPL_IF name="datedue" -->
-		            <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-			      Checked out to a borrower from another branch
-			    <!-- TMPL_ELSE -->
-                              Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
-			    <!-- /TMPL_IF -->
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="bi_notforloan" -->
-                                Not For loan (itemtype)
-                            <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF name="notforloan" -->
-                                    <!-- TMPL_VAR name="notforloan" -->
-                                <!-- TMPL_ELSE -->
-                                    <!-- TMPL_IF name="itemlost"-->
-                                        Item lost
-                                    <!-- TMPL_ELSE -->
-                                    <!-- TMPL_IF NAME="wthdrawn" -->Item Cancelled
-				    <!-- TMPL_ELSE -->
-				       <!-- TMPL_IF NAME="count_reserves" -->
-				         <!-- TMPL_VAR NAME="count_reserves" -->
-				       <!-- TMPL_ELSE -->
-				         Available
-				       <!-- /TMPL_IF -->
-				     <!-- /TMPL_IF -->
-                                    <!-- /TMPL_IF -->
-                                <!-- /TMPL_IF -->
-                            <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="item-level_itypes" --><td><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"></td><!-- /TMPL_IF -->
+                    <td><!-- TMPL_VAR NAME="branchname" --></td>
+                    <td><!-- TMPL_VAR name="locationname" --></td>
+                    <td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+                    <td>
+
+                <!-- TMPL_IF name="datedue" -->
+                    <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
+                                        On loan
+                    <!-- TMPL_ELSE -->
+                                        On loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due back on <!-- TMPL_VAR NAME="onloan" -->
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="itemlost" -->
+                    <!-- TMPL_IF NAME="itemlostloop" -->
+                    <!-- TMPL_LOOP NAME="itemlostloop" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                                        <!-- TMPL_VAR NAME="lib" -->
                         <!-- /TMPL_IF -->
-                        </td>
+                    <!-- /TMPL_LOOP -->
+                    <!-- TMPL_ELSE -->
+                                        Unavailable (lost or missing)
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="wthdrawn" -->
+                                        Withdrawn
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="damaged" -->
+                    <!-- TMPL_IF NAME="itemdamagedloop" -->
+                        <!-- TMPL_LOOP NAME="itemdamagedloop" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                                        <!-- TMPL_VAR NAME="lib" -->
+                        <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    <!-- TMPL_ELSE -->
+                                        Damaged
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF Name="notforloan" -->
+                                        Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF Name="transfertwhen" -->
+                                        In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+                                        to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+                <!-- /TMPL_IF -->
+                            
+                <!-- TMPL_IF NAME="reservedate"-->
+                    <!-- TMPL_IF NAME="waitingdate" -->
+                                        Waiting<!-- TMPL_ELSE -->On hold
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="canreservefromotherbranches" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->"><!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" --></a><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="waitingdate" -->
+                                        at<!-- TMPL_ELSE -->expected at
+                    <!-- /TMPL_IF -->   <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
+                                        since
+                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" -->
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+                <!-- TMPL_UNLESS NAME="onloan" --><!-- TMPL_UNLESS NAME="itemlost" --><!-- TMPL_UNLESS NAME="wthdrawn" --><!-- TMPL_UNLESS NAME="damaged" --><!-- TMPL_UNLESS NAME="transfertwhen" --><!-- TMPL_UNLESS NAME="reservedate" -->
+                                        Available
+                <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
+                        
+                    </td>
                     <td><!-- TMPL_VAR NAME="datedue" --></td>
                     <td><!-- TMPL_VAR NAME="datelastseen" --></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
                     <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
-                    <!-- TMPL_IF NAME="type" -->
-                        <td>    <a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a>
-                        </td>
-                    <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="type" -->
+                    <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
+                <!-- /TMPL_IF -->
+
                 </tr>
             <!-- /TMPL_LOOP -->
         </table>
@@ -201,11 +237,11 @@ function verify_images() {
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
     </div>
-	
+    
 <div id="description">
-	<!-- TMPL_IF name="MARCNOTES" -->
-	<!-- TMPL_LOOP NAME="MARCNOTES" -->
-    	<p><!-- TMPL_VAR NAME="marcnote" --></p>
+    <!-- TMPL_IF name="MARCNOTES" -->
+    <!-- TMPL_LOOP NAME="MARCNOTES" -->
+        <p><!-- TMPL_VAR NAME="marcnote" --></p>
                 <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="notes" -->
@@ -221,10 +257,10 @@ function verify_images() {
 <li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
 <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" />
-	<!-- TMPL_LOOP NAME=items -->
-	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
-	barcode:<!-- TMPL_VAR NAME="barcode" -->
-	<!-- /TMPL_LOOP -->
+    <!-- TMPL_LOOP NAME=items -->
+    <!-- <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF --> -->
+    <!-- barcode:<!-- TMPL_VAR NAME="barcode" --> -->
+    <!-- /TMPL_LOOP -->
 
 <!-- /TMPL_LOOP -->
 </ul></div>
@@ -241,14 +277,13 @@ NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAM
 <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
 
    <!-- TMPL_LOOP NAME="items" -->
-   <!-- TMPL_IF NAME="itype" --><img
-src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif"
-title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
-   barcode:<!-- TMPL_VAR NAME="barcode" -->
+   <!-- <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF --> -->
+   <!-- barcode:<!-- TMPL_VAR NAME="barcode" --> -->
    <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
-</ul></div><!-- /TMPL_IF -->
+</ul></div>
+<!-- /TMPL_IF -->
 
 </div><!-- /bibliodetails -->
 
@@ -257,12 +292,12 @@ title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 <table>  <tr>
       <th>Save Record</th>   </tr>
   <tr>     <td> Select Download Format:    <select name="format">
- 		<option value="mods">MODS (XML)</option>
+        <option value="mods">MODS (XML)</option>
         <option value="dc">Dublin Core (XML)</option>
-		<option value="marcxml">MARCXML</option>
+        <option value="marcxml">MARCXML</option>
         <option value="marc8">MARC (non-Unicode/MARC-8)</option>
         <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
-		<input type="submit" name="save" value="Download Record" /></td>
+        <input type="submit" name="save" value="Download Record" /></td>
   </tr>
   <tr><input type="hidden" name="op" value="export" /><input type="hidden" NAME="bib" VALUE="<!-- TMPL_VAR name="biblionumber" -->" />
   </tr></table>
@@ -286,7 +321,7 @@ title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
                     <th>Date</th>
                     <th>Status</th>
                     <th>Note</th>
-				</tr>
+                </tr>
             <!--TMPL_LOOP Name="latestserials"-->
                 <tr>
                     <td><!--TMPL_VAR Name="serialseq"--></td>

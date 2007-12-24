@@ -47,18 +47,18 @@ This module provides facilities for retrieving XISBN, ThingISBN and XISBN conten
 );
 
 sub get_biblio_from_xisbn {
-	my $xisbn = shift;
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute($xisbn);
-	my $xbib_data =  $sth->fetchrow_hashref();
-	my $xbiblio;
-	if ($xbib_data->{biblionumber}) {
-		$xbiblio = GetBiblioData($xbib_data->{biblionumber});
-		$xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
-	}
-	return ($xbiblio);
+    my $xisbn = shift;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($xisbn);
+    my $xbib_data =  $sth->fetchrow_hashref();
+    my $xbiblio;
+    if ($xbib_data->{biblionumber}) {
+        $xbiblio = GetBiblioData($xbib_data->{biblionumber});
+        $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
+    }
+    return ($xbiblio);
 
 }
 =head1 get_xisbns($isbn);
@@ -69,8 +69,8 @@ sub get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn ) = @_;
-
     my ($response,$thing_response,$xisbn_response,$gapines_response);
+
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
@@ -80,54 +80,53 @@ sub get_xisbns {
     # XISBN
     if ( C4::Context->preference('XISBN') ) {
         my $affiliate_id=C4::Context->preference('OCLCAffiliateID');
-		my $limit = C4::Context->preference('XISBNDailyLimit') || 499;
+        my $limit = C4::Context->preference('XISBNDailyLimit') || 499;
         my $reached_limit = _service_throttle('xisbn',$limit);
         my $url = "http://xisbn.worldcat.org/webservices/xid/isbn/".$isbn."?method=getEditions&format=xml&fl=form,year,lang,ed";
-		$url.="&ai=".$affiliate_id if $affiliate_id;
-		unless ($reached_limit) {
-        	$xisbn_response = _get_url($url,'xisbn');
-		}
+        $url.="&ai=".$affiliate_id if $affiliate_id;
+        unless ($reached_limit) {
+            $xisbn_response = _get_url($url,'xisbn');
+        }
     }
 
-    # PINES ISBN
-    if ( C4::Context->preference('PINESISBN') ) {
-        my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
-        $gapines_response = _get_url($url,'thingisbn');
-    }
-	$response->{isbn} = [ @{ $xisbn_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] }, @{ $gapines_response->{isbn} or [] } ];
-	my @xisbns;
-	my $unique_xisbns; # a hashref
-	# loop through each ISBN and scope to the local collection
-	for my $response_data( @{ $response->{ isbn } } ) {
-		next if $unique_xisbns->{ $response_data->{content} };
-		$unique_xisbns->{ $response_data->{content} }++;
-		my $xbiblio= get_biblio_from_xisbn($response_data->{content});
-		push @xisbns, $xbiblio if $xbiblio; #response_data->{xbiblio}; #->{biblionumber}; # if $xbiblionumber;
-        
-	}
-	return \@xisbns;
+    # PINES ISBN (Experimental)
+    #if ( C4::Context->preference('PINESISBN') ) {
+    #    my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
+    #    $gapines_response = _get_url($url,'thingisbn');
+    #}
+    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] }, @{ $gapines_response->{isbn} or [] } ];
+    my @xisbns;
+    my $unique_xisbns; # a hashref
 
+    # loop through each ISBN and scope to the local collection
+    for my $response_data( @{ $response->{ isbn } } ) {
+        next if $unique_xisbns->{ $response_data->{content} };
+        $unique_xisbns->{ $response_data->{content} }++;
+        my $xbiblio= get_biblio_from_xisbn($response_data->{content});
+        push @xisbns, $xbiblio if $xbiblio; #response_data->{xbiblio}; #->{biblionumber}; # if $xbiblionumber;
+    }
+    return \@xisbns;
 }
 
 sub _get_url {
     my ($url,$service_type) = @_;
-	my $ua = LWP::UserAgent->new(
-		timeout => 2
-		);
+    my $ua = LWP::UserAgent->new(
+        timeout => 2
+        );
 
-	my $response = $ua->get($url);
-	if ($response->is_success) {
-    	warn "WARNING could not retrieve $service_type $url" unless $response;
-    	if ($response) {
-        	my $xmlsimple = XML::Simple->new();
-        	my $content = $xmlsimple->XMLin(
+    my $response = $ua->get($url);
+    if ($response->is_success) {
+        warn "WARNING could not retrieve $service_type $url" unless $response;
+        if ($response) {
+            my $xmlsimple = XML::Simple->new();
+            my $content = $xmlsimple->XMLin(
             $response->content,
             ForceArray => [ qw(isbn) ],
             ForceContent => 1,
             );
-			return $content;
-    	}
-	} else {
+            return $content;
+        }
+    } else {
         warn "WARNING: URL Request Failed " . $response->status_line . "\n";
     }
 
@@ -137,7 +136,7 @@ sub _get_url {
 # Throttle services to the specified amount
 sub _service_throttle {
     my ($service_type,$daily_limit) = @_;
-	my $dbh = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT service_count FROM services_throttle WHERE service_type=?");
     $sth->execute($service_type);
     my $count = 1;

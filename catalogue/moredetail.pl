@@ -91,10 +91,10 @@ foreach my $item (@items){
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
     $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
     $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
-    if ($item->{'date_due'} eq ''){
+    if ($item->{'onloan'} eq ''){
         $item->{'issue'}= 0;
     } else {
-        $item->{'date_due'} = format_date($item->{'date_due'});
+        $item->{'onloan'} = format_date($item->{'onloan'});
         $item->{'issue'}= 1;
     }
 }

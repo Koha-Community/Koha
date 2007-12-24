@@ -1385,7 +1385,7 @@ sub FixAccountForLostAndReturned {
 		if ($amountleft > 0){
 			$amountleft*=-1;
 		}
-		my $desc="Book Returned ".$iteminfo->{'barcode'};
+		my $desc="Item Returned ".$iteminfo->{'barcode'};
 		$usth = $dbh->prepare("INSERT INTO accountlines
 			(borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
 			VALUES (?,?,now(),?,?,'CR',?)");
