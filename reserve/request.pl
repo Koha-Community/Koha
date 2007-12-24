@@ -335,8 +335,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
             $item->{available} = 1;
         }
 
-	# FIXME: need to indicate if the item is already waiting and if so, for whom and since when
-	my $dbh2 = C4::Context->dbh;
+	# FIXME: move this to a pm
 	my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
 	$sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
 	while (my $wait_hashref = $sth2->fetchrow_hashref) {

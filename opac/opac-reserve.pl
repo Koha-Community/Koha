@@ -47,6 +47,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # get borrower information ....
 my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
+# get branches and itemtypes
+my $branches = GetBranches();
+my $itemtypes = GetItemTypes();
+
 # get biblionumber.....
 my $biblionumber = $query->param('biblionumber');
 
@@ -70,8 +74,6 @@ $template->param( rank => $rank );
 # pass the pickup branch along....
 my $branch = $query->param('branch');
 $template->param( branch => $branch );
-
-my $branches = GetBranches();
 
 # make sure it's a real branch
 if ( !$branches->{$branch} ) {
@@ -289,25 +291,17 @@ else {
 }
 
 
-my @branchcodes;
 my %itemnumbers_of_biblioitem;
 my @itemnumbers  = @{ get_itemnumbers_of($biblionumber)->{$biblionumber} };
 my $iteminfos_of = GetItemInfosOf(@itemnumbers);
 
 foreach my $itemnumber (@itemnumbers) {
-    push( @branchcodes,
-        $iteminfos_of->{$itemnumber}->{homebranch},
-        $iteminfos_of->{$itemnumber}->{holdingbranch} );
-
     my $biblioitemnumber = $iteminfos_of->{$itemnumber}->{biblioitemnumber};
     push( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} }, $itemnumber );
 }
 
-# @branchcodes = uniq @branchcodes;
-
 my @biblioitemnumbers = keys %itemnumbers_of_biblioitem;
 
-my $branchinfos_of      = get_branchinfos_of(@branchcodes);
 my $notforloan_label_of = get_notforloan_label_of();
 my $biblioiteminfos_of  = GetBiblioItemInfosOf(@biblioitemnumbers);
 
@@ -316,15 +310,13 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     push @itemtypes, $biblioiteminfos_of->{$biblioitemnumber}{itemtype};
 }
 
-my $itemtypeinfos_of = get_itemtypeinfos_of(@itemtypes);
-
 my @bibitemloop;
 
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
 
     $biblioitem->{description} =
-      $itemtypeinfos_of->{ $biblioitem->{itemtype} }{description};
+      $itemtypes->{ $biblioitem->{itemtype} }{description};
 
     foreach
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
@@ -332,13 +324,13 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         my $item = $iteminfos_of->{$itemnumber};
 
         $item->{homebranchname} =
-          $branchinfos_of->{ $item->{homebranch} }{branchname};
+          $branches->{ $item->{homebranch} }{branchname};
 
         # if the holdingbranch is different than the homebranch, we show the
         # holdingbranch of the document too
         if ( $item->{homebranch} ne $item->{holdingbranch} ) {
             $item->{holdingbranchname} =
-              $branchinfos_of->{ $item->{holdingbranch} }{branchname};
+              $branches->{ $item->{holdingbranch} }{branchname};
         }
         
 # 	add information
@@ -391,14 +383,15 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         if ( $transfertwhen ne '' ) {
             $item->{transfertwhen} = format_date($transfertwhen);
             $item->{transfertfrom} =
-              $branchinfos_of->{$transfertfrom}{branchname};
-            $item->{transfertto} = $branchinfos_of->{$transfertto}{branchname};
+              $branches->{$transfertfrom}{branchname};
+            $item->{transfertto} = $branches->{$transfertto}{branchname};
 		$item->{nocancel} = 1;
         }
 
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
 
+	# FIXME: every library will define this differently
         # An item is available only if:
         if (
             not defined $reservedate    # not reserved yet
@@ -409,6 +402,14 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
           )
         {
             $item->{available} = 1;
+        }
+
+	# FIXME: move this to a pm
+        my $dbh = C4::Context->dbh;
+        my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
+        $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
+        while (my $wait_hashref = $sth2->fetchrow_hashref) {
+            $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
 
         push @{ $biblioitem->{itemloop} }, $item;

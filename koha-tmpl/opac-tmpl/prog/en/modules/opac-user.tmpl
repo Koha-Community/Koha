@@ -247,6 +247,7 @@ No renewals left
                 <th>Placed On</th>
                 <th>Pick Up Location</th>
                 <th>Status</th>
+		<th>Modify</th>
             </tr>
             <!-- TMPL_LOOP NAME="RESERVES" -->
             <tr>
@@ -266,12 +267,18 @@ No renewals left
                             Item waiting to be pulled from <b> <!-- TMPL_VAR NAME="wbrname" --></b>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_ELSE -->
-                            Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+                            Item in transit to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                         <!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
                             Item waiting to be pulled
                     <!-- /TMPL_IF -->
                 </td>
+		<td>
+		<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+		<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
+		</td>
+
             </tr>
             <!-- /TMPL_LOOP -->
         </table>

@@ -69,78 +69,8 @@
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
         <h3>Place a hold on <span class="title"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
             <p><strong>For:</strong> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_LOOP --></p>
-            
-        <!-- TMPL_LOOP name="bibitemloop" -->    
-            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
-            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
-            <table>
-            <tr>
-                <th>Barcode</th>
-                <th>Home Library</th>
-                <th>Holding Library</th>
-                <th>Call number</th>
-                <th>Information</th>
-                <th>Cancel a Reserve</th>
-            </tr>
-            <!-- TMPL_LOOP Name="itemloop" -->
-                <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
-                    <td>
-                            <!-- TMPL_VAR NAME="barcode" --> 
-                    </td>
-                    <td>
-                    <!-- TMPL_VAR NAME="homebranch" -->
-                    </td>
-                    <td>
-                    <!-- TMPL_VAR NAME="holdingbranch" -->
-                    </td>
-                    <td>
-                    <!-- TMPL_VAR NAME="itemcallnumber" -->
-                    </td>
-                    <td>
-                <!-- TMPL_IF Name="date_due" -->
-                    <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
-                <!-- /TMPL_IF -->
-            
-                <!-- TMPL_IF NAME="available" -->
-                    <label>Hold this item 
-                        <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-                </label>     
-                
-                <!-- /TMPL_IF -->
-                    
-                <!-- TMPL_IF name="reservedate" -->
-                    Item on hold since <!-- TMPL_VAR NAME="reservedate" -->
-                <!-- /TMPL_IF -->
-            
-                <!-- TMPL_IF Name="message" -->
-                    Cant' be selected (lost or long overdue)
-                <!-- /TMPL_IF -->
-            
-                <!-- TMPL_IF Name="notforloan" -->
-                    This item is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
-                <!-- /TMPL_IF -->
-            
-                <!-- TMPL_IF Name="transfertwhen" -->
-                    Item in transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-                    to <!-- TMPL_VAR NAME="transfertto" -->, on <!-- TMPL_VAR NAME="transfertwhen" -->
-                <!-- /TMPL_IF -->
-                    </td>
-                    <td>
-                    <!-- TMPL_IF NAME="reservedate"-->
-                                Item on hold
-                    <!-- TMPL_ELSE -->
-                            No holds
-                    <!-- /TMPL_IF -->
-                    </td>
-                </tr>
-            <!-- /TMPL_LOOP --> <!-- itemloop -->
-        </table>
-        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;">Hold next available copy </label>
-            <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
-        </p>
-        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
-        <!-- /TMPL_LOOP --> <!-- bibitemloop -->
-        <p>Pick up from:<select name="branch" id="branch">
+            <p><strong>Priority:</strong><!-- TMPL_VAR Name="fixedRank" --> out of ?</p> 
+            <p>Pick up from:<select name="branch" id="branch">
                     <!-- TMPL_LOOP NAME="CGIbranch" -->
                         <!-- TMPL_IF name="selected" -->
                             <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branch" --></option>
@@ -149,10 +79,93 @@
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
             </select>
-        </p>
+            </p>
+            <p> <label for="requestany">Place a hold on the next available copy </label>
+            <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+            </p>
+            <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+            <input type="submit" value="Place Hold" />
+            <input type="hidden" name="all" value="1"/></p>
+            <input type="hidden" name="place_reserve" value="1"/>
+
+        <!-- TMPL_LOOP name="bibitemloop" -->    
+
+            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+            <label for="requestspecific">Place a hold on a specific copy</label>
+            <table id="requestspecific">
+            <tr>
+	            <!-- TMPL_IF NAME="item-level_itypes" -->
+                <th>Hold</th>
+                <th>Item type</th>
+                <!-- /TMPL_IF -->
+                <th>Barcode</th>
+                <th>Home Library</th>
+                <th>Last Location</th>
+                <th>Call number</th>
+                <th>Information</th>
+            </tr>
+        <!-- TMPL_LOOP Name="itemloop" -->
+        <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+            <td>
+            <!-- TMPL_IF NAME="available" -->
+            <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <!-- TMPL_ELSE -->
+            <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <!-- /TMPL_IF -->
+            </td>
+
+            <!-- TMPL_IF NAME="item-level_itypes" -->
+            <td>
+            <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->"/>
+            </td>
+            <!-- /TMPL_IF -->
+
+            <td>
+                    <!-- TMPL_VAR NAME="barcode" -->
+            </td>
+            <td>
+            <!-- TMPL_VAR NAME="homebranchname" -->
+            </td>
+            <td>
+            <!-- TMPL_VAR NAME="holdingbranchname" -->
+            </td>
+            <td>
+            <!-- TMPL_VAR NAME="itemcallnumber" -->
+            </td>
+            <td>
+        <!-- TMPL_IF Name="date_due" -->
+            <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF Name="message" -->
+            Unavailable (lost or missing)
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF Name="notforloan" -->
+            Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF Name="transfertwhen" -->
+            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+        <!-- /TMPL_IF -->
+
+            <!-- TMPL_IF NAME="reservedate"-->
+                    <!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF --> for patron 
+                    <!-- TMPL_IF NAME="waitingdate" -->at<!-- TMPL_ELSE -->expected at<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
+                    since
+                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->.
+            <!-- TMPL_ELSE -->
+                    Not on hold
+            <!-- /TMPL_IF -->
+            </td>
+        </tr>
+        <!-- /TMPL_LOOP --> <!-- itemloop -->
+        </table>
+        <!-- /TMPL_LOOP --> <!-- bibitemloop -->
         <input type="submit" value="Place Hold" />
-        <input type="hidden" name="all" value="1"/></p>
-        <input type="hidden" name="place_reserve" value="1"/>
         </form>
     <!-- end of the first form -->
 <!-- /TMPL_IF -->
