@@ -185,7 +185,7 @@ foreach my $res (@reserves) {
         # get document reserve status
         my $biblioData = GetBiblioData($res->{'biblionumber'});
         $res->{'waiting_title'} = $biblioData->{'title'};
-        if ( ( $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) ) {
+        if ( ( $res->{'found'} eq 'W' ) ) {
             my $item = $res->{'itemnumber'};
             $item = GetBiblioFromItemNumber($item,undef);
             $res->{'wait'}= 1; 
