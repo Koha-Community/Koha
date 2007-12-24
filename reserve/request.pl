@@ -181,7 +181,7 @@ my $alreadyreserved;
 my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
 
 foreach my $res (@$reserves) {
-    if ( ( $res->{found} eq 'W' ) or ( $res->{priority} == 0 ) ) {
+    if ( ( $res->{found} eq 'W' ) ) {
         $count--;
     }
 
