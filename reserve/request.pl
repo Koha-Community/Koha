@@ -373,7 +373,7 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
         push( @branchloop, \%abranch );
     }
 
-    if ( ( $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) ) {
+    if ( ( $res->{'found'} eq 'W' ) ) {
         my $item = $res->{'itemnumber'};
         $item = GetBiblioFromItemNumber($item,undef);
         $reserve{'wait'}= 1; 
