@@ -81,11 +81,8 @@ if (alreadyreserved > "0"){
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" --></div>
 
-<!-- TMPL_IF NAME="cardnumber" -->
-<div id="doc3" class="yui-t2">
- <!-- TMPL_ELSE -->
- <div id="doc" class="yui-t7">
- <!-- /TMPL_IF -->  
+ <div id="doc3" class="yui-t2">
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -370,10 +367,13 @@ if (alreadyreserved > "0"){
 </div>
 </div>
 
-<!-- TMPL_IF NAME="cardnumber"-->
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="hold-menu.inc" -->
-</div>
+<!-- TMPL_IF NAME="cardnumber"-->
+<!-- TMPL_ELSE -->
+<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
 <!-- /TMPL_IF -->
+
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

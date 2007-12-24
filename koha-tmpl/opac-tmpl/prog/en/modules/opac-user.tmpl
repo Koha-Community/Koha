@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE name="doc-head-open.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Library Home for
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
     <!-- TMPL_VAR name="firstname" --><!-- TMPL_VAR name="surname" -->
@@ -6,24 +6,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-	 $(document).ready(function() {
- 		$('#opac-user-views').tabs();
-	 });
+     $(document).ready(function() {
+        $('#opac-user-views').tabs();
+     });
 //]]>
 </script>
 </head>
 <body>
-<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
 
 <div id="doc3" class="yui-t1">
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+    <div id="yui-main">
+    <div class="yui-b"><div class="yui-g">
 
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
         <h2>Hello, <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="hint">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
         
-        <!-- TMPL_IF name="opacnote"-->
+        <!-- TMPL_IF NAME="opacnote"-->
             <h3>Message from the library</h3>
             <p><!-- TMPL_VAR name="opacnote" --></p>
         <!-- /TMPL_IF -->
@@ -40,23 +40,23 @@
             <!-- /TMPL_IF -->
         </ul>
         <!-- /TMPL_IF -->
-		
+        
 <div id="opac-user-views" class="toptabs">
-		<ul>
-			<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
-			<!-- TMPL_IF NAME="overdues_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="amountoverfive" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="amountoverzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="amountlessthanzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="waiting_count" --><!-- TMPL_IF NAME="atdestination" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="reserves_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li><!-- /TMPL_IF -->
-		</ul>
-		
+        <ul>
+            <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
+            <!-- TMPL_IF NAME="overdues_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="amountoverfive" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="amountoverzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="amountlessthanzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="waiting_count" --><!-- TMPL_IF NAME="atdestination" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="reserves_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li><!-- /TMPL_IF -->
+        </ul>
+        
         <!-- FINES BOX -->
         <!-- TMPL_IF NAME="amountoverfive" -->
             <div id="opac-user-fines">
             <table>
-				<caption>Fines and Charges</caption>
+                <caption>Fines and Charges</caption>
                 <tr><th colspan="2">Amount</th></tr>
                 <tr>
                     <td>You currently owe fines and charges amounting to:</td>
@@ -81,14 +81,14 @@
             <tr><td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl"><!-- TMPL_VAR NAME="amountoutstanding" --></a></td></tr>
             </table></div>
         <!-- /TMPL_IF -->
-	
+    
     <!-- /TMPL_LOOP -->
 
     <!-- TMPL_IF NAME="waiting_count" -->
     <!-- TMPL_IF NAME="atdestination" -->
     <div id="opac-user-waiting">
         <table>
-			<caption>Holds Waiting</caption>
+            <caption>Holds Waiting</caption>
             <tr>
                 <th colspan="2">Title</th>
                 <th>Hold date</th>
@@ -112,9 +112,9 @@
                     </td>
                     <td>
                         <!-- TMPL_IF NAME="atdestination" -->
-                        <strong>Waiting</strong> at <!-- TMPL_VAR Name="branch" -->
+                        <strong>Waiting</strong> at <!-- TMPL_VAR NAME="branch" -->
                         <!-- TMPL_ELSE -->
-                        In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR Name="branch" -->
+                        In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR NAME="branch" -->
                         <!-- /TMPL_IF -->
                     </td>
                 </tr>
@@ -125,7 +125,7 @@
 
     <div id="opac-user-checkouts"><!-- TMPL_IF NAME="issues_count" -->
         <table>
-		<caption><!-- TMPL_VAR NAME="issues_count" --> Items</caption>
+        <caption><!-- TMPL_VAR NAME="issues_count" --> Items</caption>
         <!-- ISSUES TABLE ROWS --><tr>
         <th colspan="2">Title</th>
         <th>Call No.</th>
@@ -134,25 +134,25 @@
         <th>Fines</th>
         </tr>
         <!-- TMPL_LOOP NAME="ISSUES" -->
-		<!-- TMPL_IF NAME="toggle" -->
+        <!-- TMPL_IF NAME="toggle" -->
             
-			<!-- TMPL_IF NAME="overdue" -->
+            <!-- TMPL_IF NAME="overdue" -->
                 <tr class="overdue">
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-			
-			<!-- TMPL_ELSE -->
-			
-		<!-- TMPL_IF NAME="overdue" -->
+            
+            <!-- TMPL_ELSE -->
+            
+        <!-- TMPL_IF NAME="overdue" -->
                 <tr class="highlight overdue">
             <!-- TMPL_ELSE -->
                 <tr class="highlight">
             <!-- /TMPL_IF -->
-			
-			<!-- /TMPL_IF -->
+            
+            <!-- /TMPL_IF -->
                 <td>
-                    <!-- TMPL_IF name="imageurl" -->
+                    <!-- TMPL_IF NAME="imageurl" -->
                         <img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_VAR name="description" -->
@@ -183,21 +183,21 @@
             </tr>
         <!-- /TMPL_LOOP -->
         </table>
-		<form action="/cgi-bin/koha/opac-renew.pl" method="post">
-			<input type="hidden" name="from" value="opac_user" />
-			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-			<!-- TMPL_LOOP NAME="ISSUES" -->
-			<input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-			<!-- /TMPL_LOOP -->
-			<input type="submit" value="Renew All" />
-		</form>
+        <form action="/cgi-bin/koha/opac-renew.pl" method="post">
+            <input type="hidden" name="from" value="opac_user" />
+            <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+            <!-- TMPL_LOOP NAME="ISSUES" -->
+            <input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <!-- /TMPL_LOOP -->
+            <input type="submit" value="Renew All" />
+        </form>
     <!-- TMPL_ELSE -->
         <table>
             <tr><td>You have nothing checked out</td></tr>
         </table>
     <!-- /TMPL_IF --></div>
-	
-	
+    
+    
 <!-- TMPL_IF NAME="overdues_count" -->
 <div id="opac-user-overdues"><table>
 <caption>Overdues <span class="count">(<!-- TMPL_VAR NAME="overdues_count" --> total)</span></caption>
@@ -235,12 +235,12 @@ No renewals left
 <!-- /TMPL_LOOP -->
 </table></div>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
-	
+    
 
     <!-- TMPL_IF NAME="reserves_count" -->
         <div id="opac-user-holds">
         <table>
-		<caption>Holds <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> total)</span></caption>
+        <caption>Holds <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> total)</span></caption>
             <!-- RESERVES TABLE ROWS -->
             <tr>
                 <th>Title</th>
@@ -255,36 +255,36 @@ No renewals left
                     <!-- TMPL_VAR NAME="author" -->
                 </td>
                 <td><!-- TMPL_VAR NAME="reservedate" --></td>
-                <td><!-- TMPL_VAR Name="branch" --></td>
+                <td><!-- TMPL_VAR NAME="branch" --></td>
                 <td>
-                    <!-- TMPL_IF Name="wait" -->
+                    <!-- TMPL_IF NAME="wait" -->
                         <!-- TMPL_IF NAME="atdestination" -->
-                            <!-- TMPL_IF name="found" -->
+                            <!-- TMPL_IF NAME="found" -->
                             Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b>
                             <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
-                        <!-- TMPL_ELSE -->
-                            Item waiting to be pulled
+                            <!-- TMPL_ELSE -->
+                            Item waiting to be pulled from <b> <!-- TMPL_VAR NAME="wbrname" --></b>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_ELSE -->
                             Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                         <!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
-                        Not ready
+                            Item waiting to be pulled
                     <!-- /TMPL_IF -->
                 </td>
             </tr>
             <!-- /TMPL_LOOP -->
         </table>
-	</div>
+    </div>
     <!-- /TMPL_IF -->
-	</div><!-- /opac-user views -->
-	
+    </div><!-- /opac-user views -->
+    
 </div>
 </div>
 </div>
 <div class="yui-b">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
+<!-- TMPL_INCLUDE NAME="usermenu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
