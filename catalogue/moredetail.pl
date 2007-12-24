@@ -23,6 +23,7 @@ require Exporter;
 use C4::Koha;
 use CGI;
 use C4::Biblio;             # to use &GetBiblioItemData &GetItemsByBiblioitemnumber
+use C4::Branch;
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
 use C4::Auth;
@@ -74,19 +75,22 @@ my $ordernum = GetOrderNumber($biblionumber);
 my $order = GetOrder($ordernum);
 my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $itemtypes = GetItemTypes;
+
+$data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
 $results[0]=$data;
 foreach my $item (@items){
-	$item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
-	$item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
-	$item->{'collection'} = $ccodes->{$item->{ccode}};
-	$item->{'itype'} = $itemtypes->{$item->{'itype'}}->{'description'}; 
-	$item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
+    $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
+    $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
+    $item->{'collection'} = $ccodes->{$item->{ccode}};
+    $item->{'itype'} = $itemtypes->{$item->{'itype'}}->{'description'}; 
+    $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
     $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
     $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
-
+    $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
+    $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
     if ($item->{'date_due'} eq ''){
         $item->{'issue'}= 0;
     } else {
@@ -94,7 +98,6 @@ foreach my $item (@items){
         $item->{'issue'}= 1;
     }
 }
-
 $template->param(count => $data->{'count'});
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);

@@ -18,6 +18,11 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','4','Media');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','4','New Book Shelf');
 
+-- collection codes for an item
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','REF','Reference');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','NFIC','Non Fiction');
+
 -- location qualification for an item, linked to items.stack
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('STACK','1','Special Collection');

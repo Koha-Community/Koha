@@ -265,6 +265,7 @@ sub get_template_and_user {
 			yuipath => C4::Context->preference("yuipath"),
 			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
 			AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
+			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
         );
     }
     else {
@@ -309,6 +310,7 @@ sub get_template_and_user {
             mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
 			OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
+			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
         );
     }
     return ( $template, $borrowernumber, $cookie, $flags);
