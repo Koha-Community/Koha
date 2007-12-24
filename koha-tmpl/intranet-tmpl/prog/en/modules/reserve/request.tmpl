@@ -107,7 +107,7 @@ if (alreadyreserved > "0"){
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
 			<fieldset class="brief">
 		        <label for="patron">Patron: </label>
-				<div class="hint">(type card number or part of a name)</div>
+				<div class="hint">Enter patron card number or partial name:</div>
                 <input type="text" size="20" id="patron" class="focus" name="findborrower" /> 
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
                 <input type="submit" value="Search" />
@@ -383,11 +383,7 @@ if (alreadyreserved > "0"){
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="hold-menu.inc" -->
-<!-- TMPL_IF NAME="cardnumber"-->
-<!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
-<!-- /TMPL_IF -->
 
 </div>
 </div>
