@@ -35,7 +35,7 @@ if (count_reserv == "0"){
 		msg += ("- Please select an item to place a hold\n");
 }
 if (count_reserv >= "2"){
-		msg += ("- You can select only one type of document\n by item, or by the first item returned\n");
+		msg += ("- You may only place a hold on one item at a time\n");
 }
 
 if (alreadyreserved > "0"){
@@ -178,30 +178,41 @@ if (alreadyreserved > "0"){
             <label for="pickup">Pickup at:</label>
             <!-- TMPL_VAR NAME="CGIbranch" -->
         </li>
-        <!-- TMPL_LOOP name="bibitemloop" -->    
+        <!-- TMPL_LOOP name="bibitemloop" -->
+	<!-- TMPL_UNLESS NAME="item-level_itypes" -->
         <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></li>
+	<!-- /TMPL_UNLESS -->
         <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
 </ol>
     
         <table>
         <tr>
+            <!-- TMPL_IF NAME="item-level_itypes" -->
+            <th>Item type</th>
+            <!-- /TMPL_IF -->
             <th>Barcode</th>
             <th>Home Library</th>
-            <th>Holding Library</th>
+            <th>Last Location</th>
             <th>Call number</th>
             <th>Information</th>
-            <th>Cancel a Reserve</th>
+            <th>Cancel Hold</th>
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+            <!-- TMPL_IF NAME="item-level_itypes" -->
+            <td>
+            <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->"/>
+            </td>
+            <!-- /TMPL_IF -->
+
             <td>
                     <!-- TMPL_VAR NAME="barcode" --> 
             </td>
             <td>
-            <!-- TMPL_VAR NAME="homebranch" -->
+            <!-- TMPL_VAR NAME="homebranchname" -->
             </td>
             <td>
-            <!-- TMPL_VAR NAME="holdingbranch" -->
+            <!-- TMPL_VAR NAME="holdingbranchname" -->
             </td>
             <td>
             <!-- TMPL_VAR NAME="itemcallnumber" -->
@@ -223,7 +234,7 @@ if (alreadyreserved > "0"){
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="message" -->
-            Cant' be selected (lost or long overdue)
+            Item unavailable (lost or missing)
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="notforloan" -->
@@ -241,11 +252,11 @@ if (alreadyreserved > "0"){
                             Can't be cancelled when item is on transfer
                             <!-- TMPL_ELSE -->
                     Item on hold for <!-- TMPL_VAR NAME="ReservedForFirstname" -->
-                            <!-- TMPL_VAR NAME="ReservedForSurname" -->, expected at <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->. <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('You will delete a reserve, are you sure ?')) {return true;} else {return false;}">Cancel hold</a>
+                            <!-- TMPL_VAR NAME="ReservedForSurname" -->, expected at <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->. <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('Are you sure you want to delete this hold?')) {return true;} else {return false;}">Cancel hold</a>
                   
                     <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
-                    No holds
+                    Not on hold
             <!-- /TMPL_IF -->
             </td>
         </tr>

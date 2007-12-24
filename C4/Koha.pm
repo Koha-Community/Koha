@@ -264,6 +264,7 @@ sub get_itemtypeinfos_of {
     my $query = '
 SELECT itemtype,
        description,
+       imageurl,
        notforloan
   FROM itemtypes
   WHERE itemtype IN (' . join( ',', map( { "'" . $_ . "'" } @itemtypes ) ) . ')

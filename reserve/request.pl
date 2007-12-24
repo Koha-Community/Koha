@@ -249,7 +249,8 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
     {
         my $item = $iteminfos_of->{$itemnumber};
-
+	$item->{itypename} = $itemtypeinfos_of->{ $item->{itype} }{description};
+	$item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypeinfos_of->{ $item->{itype} }{imageurl};
         $item->{homebranchname} =
           $branchinfos_of->{ $item->{homebranch} }{branchname};
 
