@@ -266,6 +266,7 @@ sub get_template_and_user {
 			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
 			AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
 			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
+			canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
         );
     }
     else {

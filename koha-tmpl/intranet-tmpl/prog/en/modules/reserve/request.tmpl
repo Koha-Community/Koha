@@ -178,16 +178,31 @@ if (alreadyreserved > "0"){
             <label for="pickup">Pickup at:</label>
             <!-- TMPL_VAR NAME="CGIbranch" -->
         </li>
+
+        <li> <label for="requestany">Place a hold on the next available copy </label>
+               <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+        </li>
+
+        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+        <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
+</ol>
+        <fieldset class="action">
+        <!-- TMPL_IF NAME="cardnumber"-->
+        <input type="submit" value="Place Hold" />
+        <!-- /TMPL_IF -->
+        </fieldset>
         <!-- TMPL_LOOP name="bibitemloop" -->
+<ol>
 	<!-- TMPL_UNLESS NAME="item-level_itypes" -->
         <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></li>
 	<!-- /TMPL_UNLESS -->
         <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
 </ol>
-    
-        <table>
+        <label for="requestspecific">Place a hold on a specific copy</label> 
+        <table id="requestspecific">
         <tr>
             <!-- TMPL_IF NAME="item-level_itypes" -->
+	    <th>Hold</th>
             <th>Item type</th>
             <!-- /TMPL_IF -->
             <th>Barcode</th>
@@ -195,10 +210,17 @@ if (alreadyreserved > "0"){
             <th>Last Location</th>
             <th>Call number</th>
             <th>Information</th>
-            <th>Cancel Hold</th>
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+            <td>
+            <!-- TMPL_IF NAME="available" -->
+            <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <!-- TMPL_ELSE -->
+            <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
+            <!-- /TMPL_IF -->
+            </td>
+
             <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->"/>
@@ -222,38 +244,27 @@ if (alreadyreserved > "0"){
             <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
         <!-- /TMPL_IF -->
     
-        <!-- TMPL_IF NAME="available" -->
-            <label>Hold this item 
-                <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-           </label>     
-           
-        <!-- /TMPL_IF -->
-            
-        <!-- TMPL_IF name="reservedate" -->
-            Item on hold since <!-- TMPL_VAR NAME="reservedate" -->
-        <!-- /TMPL_IF -->
-    
         <!-- TMPL_IF Name="message" -->
-            Item unavailable (lost or missing)
+            Unavailable (lost or missing)
         <!-- /TMPL_IF -->
     
         <!-- TMPL_IF Name="notforloan" -->
-            This item is not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+            Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
         <!-- /TMPL_IF -->
-    
         <!-- TMPL_IF Name="transfertwhen" -->
-            Item in transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to <!-- TMPL_VAR NAME="transfertto" -->, on <!-- TMPL_VAR NAME="transfertwhen" -->
+            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
         <!-- /TMPL_IF -->
-            </td>
-            <td>
+
             <!-- TMPL_IF NAME="reservedate"-->
                     <!-- TMPL_IF NAME="nocancel" -->
-                            Can't be cancelled when item is on transfer
-                            <!-- TMPL_ELSE -->
-                    Item on hold for <!-- TMPL_VAR NAME="ReservedForFirstname" -->
-                            <!-- TMPL_VAR NAME="ReservedForSurname" -->, expected at <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->. <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('Are you sure you want to delete this hold?')) {return true;} else {return false;}">Cancel hold</a>
-                  
+                            Can't be cancelled when item is in transit
+                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="canreservefromotherbranches" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->"><!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="waitingdate" -->at<!-- TMPL_ELSE -->expected at<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
+                    since
+                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->. <a class="info" href="modrequest.pl?CancelBiblioNumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;CancelBorrowerNumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->&amp;CancelItemnumber=<!--  TMPL_VAR NAME="itemnumber"-->"  onclick="if (window.confirm('Are you sure you want to delete this hold?')) {return true;} else {return false;}">Cancel hold</a>
+
                     <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
                     Not on hold
@@ -263,13 +274,6 @@ if (alreadyreserved > "0"){
     <!-- /TMPL_LOOP --> <!-- itemloop -->
         </table>
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
-    
-        <p> <label for="requestany" style="float: none; width: auto; padding-left : 1em;">Hold next available copy </label>
-               <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
-        </p>
-        
-        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
-        <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
     
     <fieldset class="action">
     <!-- TMPL_IF NAME="cardnumber"-->
