@@ -64,6 +64,9 @@ Note: for more information about Git, please see the Koha Git Usage Guide:
 
 1.4 Install additional Debian dependencies
 
+IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT available from the package maintainer.
+            You have been warned!
+
 Using the debian.packages file included in the Koha source tree,
 run the following:
 
@@ -127,7 +130,7 @@ When the configuration is completed CPAN will install the Perl modules.
     mysql> create database <kohadatabasename>;
     Query OK, 1 row affected (0.00 sec)
 
-    mysql> grant all on <kohadatabasename>.* to <kohadatabaseuser> identified by '<kohadatabaseuserpassword>';
+    mysql> grant all on <kohadatabasename>.* to '<kohadatabaseuser>'@'localhost' identified by '<kohadatabaseuserpassword>';
     Query OK, 0 rows affected (0.00 sec)
 
     mysql> flush privileges;
