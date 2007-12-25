@@ -41,7 +41,7 @@ use vars qw($VERSION @ISA @EXPORT);
 # EXPORTED FUNCTIONS.
 
 # to add biblios or items
-push @EXPORT, qw( &AddBiblio &AddItem );
+push @EXPORT, qw( &AddBiblio &AddItem &AddBiblioAndItems );
 
 # to get something
 push @EXPORT, qw(
@@ -225,6 +225,115 @@ sub AddBiblio {
         if C4::Context->preference("CataloguingLog");
 
     return ( $biblionumber, $biblioitemnumber );
+}
+
+=head2 AddBiblioAndItems
+
+=over 4
+
+($biblionumber,$biblioitemnumber, $itemnumber_ref) = AddBiblioAndItems($record, $frameworkcode);
+
+=back
+
+Efficiently add a biblio record and create item records from its
+embedded item fields.  This routine is suitable for batch jobs.
+
+The goal of this API is to have a similar effect to using AddBiblio
+and AddItems in succession, but without inefficient repeated
+parsing of the MARC XML bib record.
+
+=cut
+
+sub AddBiblioAndItems {
+    my ( $record, $frameworkcode ) = @_;
+    my ($biblionumber,$biblioitemnumber,$error);
+    my @itemnumbers = ();
+    my $dbh = C4::Context->dbh;
+
+    # transform the data into koha-table style data
+    # FIXME - this paragraph copied from AddBiblio
+    my $olddata = FasterTransformMarcToKoha( $dbh, $record, $frameworkcode );
+    ($biblionumber,$error) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
+    $olddata->{'biblionumber'} = $biblionumber;
+    ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
+
+    # FIXME - this paragraph copied from AddBiblio
+    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+
+    # now we loop through the item tags and start creating items
+    my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
+    foreach my $item_field ($record->field($itemtag)) {
+        # we take the item field and stick it into a new
+        # MARC record -- this is required so far because (FIXME)
+        # TransformMarcToKoha requires a MARC::Record, not a MARC::Field
+        # and there is no TransformMarcFieldToKoha
+        my $temp_item_marc = MARC::Record->new();
+        $temp_item_marc->append_fields($item_field);
+    
+        # add biblionumber and biblioitemnumber
+        my $item = &FasterTransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
+        $item->{'biblionumber'} = $biblionumber;
+        $item->{'biblioitemnumber'} = $biblioitemnumber;
+
+        # figure out what item type to use -- biblioitem-level or item-level
+        my $itemtype;
+        if (C4::Context->preference('item-level_itypes')) {
+            $itemtype = $item->{'itype'};
+        } else {
+            $itemtype = $olddata->{'itemtype'};
+        }
+
+        # FIXME - notforloan stuff copied from AddItem
+        my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype=?");
+        $sth->execute($itemtype);
+        my $notforloan = $sth->fetchrow;
+        ##Change the notforloan field if $notforloan found
+        if ( $notforloan > 0 ) {
+            $item->{'notforloan'} = $notforloan;
+            &MARCitemchange( $temp_item_marc, "items.notforloan", $notforloan );
+        }
+
+        # FIXME - dateaccessioned stuff copied from AddItem
+        if ( !$item->{'dateaccessioned'} || $item->{'dateaccessioned'} eq '' ) {
+
+            # find today's date
+            my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+                localtime(time);
+            $year += 1900;
+            $mon  += 1;
+            my $date =
+            "$year-" . sprintf( "%0.2d", $mon ) . "-" . sprintf( "%0.2d", $mday );
+            $item->{'dateaccessioned'} = $date;
+            &MARCitemchange( $temp_item_marc, "items.dateaccessioned", $date );
+        }
+
+        my ( $itemnumber, $error ) = &_koha_new_items( $dbh, $item, $item->{barcode} );
+        warn $error if $error;
+        push @itemnumbers, $itemnumber; # FIXME not checking error
+
+        # FIXME - not copied from AddItem
+        # FIXME - AddItems equiv code about passing $sth to TransformKohaToMarcOneField is stupid
+        &MARCitemchange( $temp_item_marc, "items.itemnumber", $itemnumber );
+       
+        &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item")
+        if C4::Context->preference("CataloguingLog"); 
+
+        $item_field->replace_with($temp_item_marc->field($itemtag));
+    }
+
+    # now add the record
+    # FIXME - this paragraph copied from AddBiblio -- however, moved  since
+    # since we need to create the items row and plug in the itemnumbers in the
+    # MARC
+    $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+
+    # FIXME - when using this API, do we log both bib and item add, or just
+    #         bib
+    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio")
+        if C4::Context->preference("CataloguingLog");
+
+    return ( $biblionumber, $biblioitemnumber, \@itemnumbers);
+    
 }
 
 =head2 AddItem
@@ -2504,6 +2613,122 @@ sub TransformMarcToKoha {
     }
 }
 
+
+# cache inverted MARC field map
+our $inverted_field_map;
+
+=head2 FasterTransformMarcToKoha
+
+=over 4
+
+    $result = FasterTransformMarcToKoha( $dbh, $record, $frameworkcode )
+
+=back
+
+Extract data from a MARC bib record into a hashref representing
+Koha biblio, biblioitems, and items fields.  This function will
+replace TransformMarcToKoha once it has been tested.
+
+=cut
+sub FasterTransformMarcToKoha {
+    my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
+
+    my $result;
+
+    unless (defined $inverted_field_map) {
+        $inverted_field_map = _get_inverted_marc_field_map();
+    }
+
+    my %tables = ();
+    if ($limit_table eq 'items') {
+        $tables{'items'} = 1;
+    } else {
+        $tables{'items'} = 1;
+        $tables{'biblio'} = 1;
+        $tables{'biblioitems'} = 1;
+    }
+
+    # traverse through record
+    MARCFIELD: foreach my $field ($record->fields()) {
+        my $tag = $field->tag();
+        next MARCFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag};
+        if ($field->is_control_field()) {
+            my $kohafields = $inverted_field_map->{$frameworkcode}->{$tag}->{list};
+            ENTRY: foreach my $entry (@{ $kohafields }) {
+                my ($subfield, $table, $column) = @{ $entry };
+                next ENTRY unless exists $tables{$table};
+                my $key = _disambiguate($table, $column);
+                if ($result->{$key}) {
+                    unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($field->data() eq "")) {
+                        $result->{$key} .= " | " . $field->data();
+                    }
+                } else {
+                    $result->{$key} = $field->data();
+                }
+            }
+        } else {
+            # deal with subfields
+            MARCSUBFIELD: foreach my $sf ($field->subfields()) {
+                my $code = $sf->[0];
+                next MARCSUBFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code};
+                my $value = $sf->[1];
+                SFENTRY: foreach my $entry (@{ $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code} }) {
+                    my ($table, $column) = @{ $entry };
+                    next SFENTRY unless exists $tables{$table};
+                    my $key = _disambiguate($table, $column);
+                    if ($result->{$key}) {
+                        unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($value eq "")) {
+                            $result->{$key} .= " | " . $value;
+                        }
+                    } else {
+                        $result->{$key} = $value;
+                    }
+                }
+            }
+        }
+    }
+
+    # modify copyrightdate to keep only the 1st year found
+    my $temp = $result->{'copyrightdate'};
+    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+    if ( $1 > 0 ) {
+        $result->{'copyrightdate'} = $1;
+    }
+    else {                      # if no cYYYY, get the 1st date.
+        $temp =~ m/(\d\d\d\d)/;
+        $result->{'copyrightdate'} = $1;
+    }
+
+    # modify publicationyear to keep only the 1st year found
+    $temp = $result->{'publicationyear'};
+    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+    if ( $1 > 0 ) {
+        $result->{'publicationyear'} = $1;
+    }
+    else {                      # if no cYYYY, get the 1st date.
+        $temp =~ m/(\d\d\d\d)/;
+        $result->{'publicationyear'} = $1;
+    }
+    return $result;
+}
+
+sub _get_inverted_marc_field_map {
+    my $relations = C4::Context->marcfromkohafield;
+
+    my $field_map = {};
+    my $relations = C4::Context->marcfromkohafield;
+
+    foreach my $frameworkcode (keys %{ $relations }) {
+        foreach my $kohafield (keys %{ $relations->{$frameworkcode} }) {
+            my $tag = $relations->{$frameworkcode}->{$kohafield}->[0];
+            my $subfield = $relations->{$frameworkcode}->{$kohafield}->[1];
+            my ($table, $column) = split /[.]/, $kohafield, 2;
+            push @{ $field_map->{$frameworkcode}->{$tag}->{list} }, [ $subfield, $table, $column ];
+            push @{ $field_map->{$frameworkcode}->{$tag}->{sfs}->{$subfield} }, [ $table, $column ];
+        }
+    }
+    return $field_map;
+}
 
 =head2 _disambiguate
 

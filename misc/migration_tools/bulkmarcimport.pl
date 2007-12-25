@@ -221,109 +221,34 @@ $commitnum = $commit;
 
 }
 
-#1st of all, find item MARC tag.
-my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
-# $dbh->do("lock tables biblio write, biblioitems write, items write, marc_biblio write, marc_subfield_table write, marc_blob_subfield write, marc_word write, marc_subfield_structure write, stopwords write");
+my $dbh = C4::Context->dbh();
+$dbh->{AutoCommit} = 0;
 while ( my $record = $batch->next() ) {
-# warn "=>".$record->as_formatted;
-# warn "I:".$i;
-# warn "NUM:".$number;
     $i++;
     print ".";
     print "\r$i" unless $i % 100;
-#     if ($i==$number) {
-#         z3950_extended_services('commit',set_service_options('commit'));
-#         print "COMMIT OPERATION SUCCESSFUL\n";
-# 
-#         my $timeneeded = gettimeofday - $starttime;
-#         die "$i MARC records imported in $timeneeded seconds\n";
-#     }
-#     # perform the commit operation ever so often
-#     if ($i==$commit) {
-#         z3950_extended_services('commit',set_service_options('commit'));
-#         $commit+=$commitnum;
-#         print "COMMIT OPERATION SUCCESSFUL\n";
-#     }
-    #now, parse the record, extract the item fields, and store them in somewhere else.
-
-    ## create an empty record object to populate
-    my $newRecord = MARC::Record->new();
-    $newRecord->leader($record->leader());
-
-    # go through each field in the existing record
-    foreach my $oldField ( $record->fields() ) {
-
-    # just reproduce tags < 010 in our new record
-    #
-    # Fields are not necessarily only numeric in the actual world of records
-    # nor in what I would recommend for additonal safe non-interfering local
-    # use fields.  The following regular expression match is much safer than
-    # a numeric evaluation. -- thd
-    if ( $oldField->tag() =~ m/^00/ ) {
-        $newRecord->append_fields( $oldField );
-        next();
-    }
-
-    # store our new subfield data in this list
-    my @newSubfields = ();
-
-    # go through each subfield code/data pair
-    foreach my $pair ( $oldField->subfields() ) {
-        #$pair->[1] =~ s/\<//g;
-        #$pair->[1] =~ s/\>//g;
-        push( @newSubfields, $pair->[0], $pair->[1] ); #char_decode($pair->[1],$char_encoding) );
-    }
-
-    # add the new field to our new record
-    my $newField = MARC::Field->new(
-        $oldField->tag(),
-        $oldField->indicator(1),
-        $oldField->indicator(2),
-        @newSubfields
-    );
-
-    $newRecord->append_fields( $newField );
-
-    }
-
-    warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
-    my @fields = $newRecord->field($tagfield);
-    my @items;
-    my $nbitems=0;
-
-    foreach my $field (@fields) {
-        my $item = MARC::Record->new();
-        $item->append_fields($field);
-        push @items,$item;
-        $newRecord->delete_field($field);
-        $nbitems++;
-    }
-    print "$i : $nbitems items found\n" if $verbose;
-    # now, create biblio and items with Addbiblio call.
 
     unless ($test_parameter) {
-        my ( $bibid, $oldbibitemnum );
-        eval { ( $bibid, $oldbibitemnum ) = AddBiblio( $newRecord, '' ); };
+        # FIXME add back dup barcode check
+        my ( $bibid, $oldbibitemnum, $itemnumbers_ref );
+        eval { ( $bibid, $oldbibitemnum, $itemnumbers_ref ) = AddBiblioAndItems( $record, '' ); };
         warn $@ if $@;
-        if ( $@ ) { 
-            warn "ERROR: Adding biblio $bibid failed\n" if $verbose
-        } else {
-            warn "ADDED biblio NB $bibid in DB\n" if $verbose;
-            for ( my $it = 0 ; $it <= $#items ; $it++ ) {
-                # FIXME - duplicate barcode check needs to become part of AddItem()
-                my $itemhash = TransformMarcToKoha($dbh, $items[$it]);
-                my $duplicate_barcode = exists($itemhash->{'barcode'}) && GetItemnumberFromBarcode($itemhash->{'barcode'});
-                if ($duplicate_barcode) {
-                    warn "ERROR: cannot add item $itemhash->{'barcode'} for biblio $bibid: duplicate barcode\n" if $verbose;
-                } else {
-                    eval { AddItem( $items[$it], $bibid, $oldbibitemnum ); };
-                    warn "ERROR: Adding item $it, rec $i failed\n" if ($@);
-                }
-            }       
-        }       
-    }      
+        if ( $@ ) {
+            warn "ERROR: Adding biblio and or items $bibid failed\n" if $verbose
+        } 
+        $dbh->commit() if (0 == $i % $commitnum);
+    }
+#                # FIXME - duplicate barcode check needs to become part of AddItem()
+#                my $itemhash = TransformMarcToKoha($dbh, $items[$it]);
+#                my $duplicate_barcode = exists($itemhash->{'barcode'}) && GetItemnumberFromBarcode($itemhash->{'barcode'});
+#                if ($duplicate_barcode) {
+#                    warn "ERROR: cannot add item $itemhash->{'barcode'} for biblio $bibid: duplicate barcode\n" if $verbose;
+#                } else {
+#                    eval { AddItem( $items[$it], $bibid, $oldbibitemnum ); };
+#                    warn "ERROR: Adding item $it, rec $i failed\n" if ($@);
     last if $i == $number;
 }
+$dbh->commit();
 
 
 if ($fk_off) {
