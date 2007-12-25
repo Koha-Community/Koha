@@ -83,7 +83,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserlogin','1','Enable or disable display of user login features',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('patronimages','0','Enable patron images for the Staff Client; to enable, specify a file extension (e.g., png)','','Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('printcirculationslips','1','If ON, enable printing circulation receipts','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReadingHistory','1','If ON, enables circulation history','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RequestOnOpac','1','If ON, globally enables patron holds on OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesMaxPickUpDelay','7','Define the Maximum delay to pick up an item on hold','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnBeforeExpiry','0','If ON, checkout will be prevented if returndate is after patron card expiry',NULL,'YesNo');
