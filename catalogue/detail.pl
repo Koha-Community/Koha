@@ -25,6 +25,7 @@ use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::Circulation;
 use C4::Branch;
 use C4::Reserves;
 use C4::Members;
@@ -115,6 +116,15 @@ foreach my $item (@items) {
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
         $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
+    }
+
+	# Check the transit status
+    my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
+    if ( $transfertwhen ne '' ) {
+        $item->{transfertwhen} = format_date($transfertwhen);
+        $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
+        $item->{transfertto} = $branches->{$transfertto}{branchname};
+        $item->{nocancel} = 1;
     }
 
     # FIXME: move this to a pm, check waiting status for holds

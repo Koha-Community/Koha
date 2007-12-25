@@ -466,7 +466,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <table>
         <tr>
             <th>Hold date</th>
-            <th>Status</th>
+            <th>Priority</th>
             <th>Title</th>
             <th>Author</th>
             <th>Call Number</th>
@@ -477,7 +477,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <!-- TMPL_VAR NAME="reservedate" -->
                     </td>
                     <td>
-                        <!-- TMPL_IF name="barcodereserv" --><!-- TMPL_VAR NAME="barcodereserv" -->
+                        <!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" --> targeted
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="waitingposition" -->
                         Hold priority
@@ -489,17 +489,17 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
                         <!-- TMPL_IF name="waiting" -->
                         <br />
-                        <i>This hold is available</i>
+                        <i>Item is waiting</i>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" -->
                         <br />
-                        <i>This hold has been transfered from library
-                        <!-- TMPL_VAR NAME="frombranch" --> on  <!-- TMPL_VAR NAME="datesent" --> </i>
+                        <i>Item in transit from
+                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </i>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="nottransfered" -->
                         <br />
-                        <i>This hold hasn't been transfered yet from library  <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <i>This item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></i>
                         <!-- /TMPL_IF -->
                     </td>
                     <td><!-- TMPL_VAR NAME="author" --></td>

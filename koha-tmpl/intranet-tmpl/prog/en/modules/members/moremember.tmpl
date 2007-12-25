@@ -210,7 +210,7 @@ $(document).ready(function() {
         <tr>
 			<th scope="col"></th>
             <th scope="col">Title</th>
-            <th scope="col">Barcode</th>
+            <th scope="col">Priority</th>
             <th scope="col">Date due</th>
             <th scope="col">Itemtype</th>
             <th scope="col">Charge</th>
@@ -303,19 +303,20 @@ $(document).ready(function() {
 					</td>
 					<td>
 						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
+                        <!-- TMPL_IF name="waiting" -->
+                        <br />
+                        <i>Item is waiting</i>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="transfered" -->
+                        <br />
+                        <i>Item in transit from
+                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </i>
+                        <!-- /TMPL_IF -->
 
-						<!-- TMPL_IF name="waiting" -->
-						<i>This item is available</i>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF name="transfered" -->
-						<i>This item has been transfered from library : 
-						<!-- TMPL_VAR NAME="frombranch" --> the : <!-- TMPL_VAR NAME="datesent" --> </i>
-						<!-- /TMPL_IF -->
-
-						<!-- TMPL_IF name="nottransfered" -->
-						<i>This item hasn't been transfered yet from library : <!-- TMPL_VAR NAME="nottransferedby" --></i>
-						<!-- /TMPL_IF -->
-				
+                        <!-- TMPL_IF name="nottransfered" -->
+                        <br />
+                        <i>This item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <!-- /TMPL_IF -->
 					</td>
 					<td><!-- TMPL_VAR NAME="author" --></td>
 					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>

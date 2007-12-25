@@ -96,7 +96,7 @@ if ($cardnumber) {
     my $count_reserv = 0;
     my $maxreserves;
 
-# 	we check the reserves of the borrower, and if he can reserv a document
+#   we check the reserves of the borrower, and if he can reserv a document
 # FIXME At this time we have a simple count of reservs, but, later, we could improve the infos "title" ...
 
     my $number_reserves =
@@ -129,9 +129,9 @@ if ($cardnumber) {
                 borrowerstreetaddress => $borrowerinfo->{'address'},
                 borrowercity => $borrowerinfo->{'city'},
                 borrowerphone => $borrowerinfo->{'phone'},
-				borrowermobile => $borrowerinfo->{'mobile'},
-				borrowerfax => $borrowerinfo->{'fax'},
-				borrowerphonepro => $borrowerinfo->{'phonepro'},
+                borrowermobile => $borrowerinfo->{'mobile'},
+                borrowerfax => $borrowerinfo->{'fax'},
+                borrowerphonepro => $borrowerinfo->{'phonepro'},
                 borroweremail => $borrowerinfo->{'email'},
                 borroweremailpro => $borrowerinfo->{'emailpro'},
                 borrowercategory => $borrowerinfo->{'category'},
@@ -239,8 +239,8 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
     {
         my $item = $iteminfos_of->{$itemnumber};
-	$item->{itypename} = $itemtypes->{ $item->{itype} }{description};
-	$item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
+    $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
+    $item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
         $item->{homebranchname} =
           $branches->{ $item->{homebranch} }{branchname};
 
@@ -251,9 +251,9 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
               $branches->{ $item->{holdingbranch} }{branchname};
         }
         
-# 	add information
-	$item->{itemcallnumber} = $item->{itemcallnumber};
-	
+#   add information
+    $item->{itemcallnumber} = $item->{itemcallnumber};
+    
         # if the item is currently on loan, we display its return date and
         # change the background color
         my $issues= GetItemIssue($itemnumber);
@@ -294,7 +294,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
             $item->{backgroundcolor} = 'other';
         }
 
-        # Check of the transfered documents
+        # Check the transit status
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers($itemnumber);
 
@@ -303,44 +303,44 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
             $item->{transfertfrom} =
               $branches->{$transfertfrom}{branchname};
             $item->{transfertto} = $branches->{$transfertto}{branchname};
-		$item->{nocancel} = 1;
+        $item->{nocancel} = 1;
         }
 
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
-	
-	# if independent branches is on we need to check if the person can reserve
-	# for branches they arent logged in to
-	if ( C4::Context->preference("IndependantBranches") ) { 
-	    if (! C4::Context->preference("canreservefromotherbranches")){
-		# cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
-		my $userenv = C4::Context->userenv; 
-		if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-		    $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
-		} 
-	    }
-	}
+    
+    # if independent branches is on we need to check if the person can reserve
+    # for branches they arent logged in to
+    if ( C4::Context->preference("IndependantBranches") ) { 
+        if (! C4::Context->preference("canreservefromotherbranches")){
+        # cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
+        my $userenv = C4::Context->userenv; 
+        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+            $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
+        } 
+        }
+    }
 
-	# FIXME: every library will define this differently
+    # FIXME: every library will define this differently
         # An item is available only if:
         if (
             not defined $reservedate    # not reserved yet
             and $issues->{'date_due'} eq ''         # not currently on loan
             and not $item->{itemlost}   # not lost
             and not $item->{notforloan} # not forbidden to loan
-	    and not $item->{cantreserve}
+        and not $item->{cantreserve}
             and $transfertwhen eq ''    # not currently on transfert
           )
         {
             $item->{available} = 1;
         }
 
-	# FIXME: move this to a pm
-	my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
-	$sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
-	while (my $wait_hashref = $sth2->fetchrow_hashref) {
-	    $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
-	}
+    # FIXME: move this to a pm
+    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
+    $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
+    while (my $wait_hashref = $sth2->fetchrow_hashref) {
+        $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
+    }
         push @{ $biblioitem->{itemloop} }, $item;
     }
 
@@ -377,9 +377,9 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
         $reserve{'wait'}= 1; 
         $reserve{'holdingbranch'}=$item->{'holdingbranch'};
         $reserve{'biblionumber'}=$item->{'biblionumber'};
-        $reserve{'barcodenumber'}	= $item->{'barcode'};
+        $reserve{'barcodenumber'}   = $item->{'barcode'};
         $reserve{'wbrcode'} = $res->{'branchcode'};
-        $reserve{'itemnumber'}	= $res->{'itemnumber'};
+        $reserve{'itemnumber'}  = $res->{'itemnumber'};
         $reserve{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
         if($reserve{'holdingbranch'} eq $reserve{'wbrcode'}){
             $reserve{'atdestination'} = 1;
@@ -405,7 +405,7 @@ my $reserveborrowerinfo = GetMemberDetails( $res->{'borrowernumber'}, 0);
     $reserve{'voldesc'}         = $res->{'volumeddesc'};
     $reserve{'ccode'}           = $res->{'ccode'};
     $reserve{'barcode'}         = $res->{'barcode'};
-    $reserve{'priority'}	= $res->{'priority'};
+    $reserve{'priority'}    = $res->{'priority'};
     $reserve{'branchloop'} = \@branchloop;
     $reserve{'optionloop'} = \@optionloop;
 
@@ -422,7 +422,7 @@ foreach my $branchcode ( keys %{$branches} ) {
 }
 my $CGIbranch = CGI::scrolling_list(
     -name     => 'pickup',
-	-id          => 'pickup',
+    -id          => 'pickup',
     -values   => \@values,
     -default  => $default,
     -labels   => \%label_of,
@@ -437,7 +437,7 @@ $template->param(
     CGIbranch   => $CGIbranch,
     reserveloop => \@reserveloop,
     time        => $time,
-    fixedRank	=> $fixedRank,
+    fixedRank   => $fixedRank,
 );
 
 # display infos
