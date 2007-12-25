@@ -230,12 +230,15 @@ while ( my $record = $batch->next() ) {
 
     unless ($test_parameter) {
         # FIXME add back dup barcode check
-        my ( $bibid, $oldbibitemnum, $itemnumbers_ref );
-        eval { ( $bibid, $oldbibitemnum, $itemnumbers_ref ) = AddBiblioAndItems( $record, '' ); };
-        warn $@ if $@;
+        my ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref );
+        eval { ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref ) = AddBiblioAndItems( $record, '' ); };
         if ( $@ ) {
-            warn "ERROR: Adding biblio and or items $bibid failed\n" if $verbose
+            warn "ERROR: Adding biblio and or items $bibid failed: $@\n";
         } 
+        if ($#{ $errors_ref } > -1) { 
+            report_item_errors($bibid, $errors_ref);
+        }
+
         $dbh->commit() if (0 == $i % $commitnum);
     }
     last if $i == $number;
@@ -255,3 +258,18 @@ $dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='Cat
 
 my $timeneeded = gettimeofday - $starttime;
 print "$i MARC records done in $timeneeded seconds\n";
+
+exit 0;
+
+sub report_item_errors {
+    my $bibid = shift;
+    my $errors_ref = shift;
+
+    foreach my $error (@{ $errors_ref }) {
+        my $msg = "Item not added (bib $bibid, item tag #$error->{'item_sequence'}, barcode $error->{'item_barcode'}): ";
+        my $error_code = $error->{'error_code'};
+        $error_code =~ s/_/ /g;
+        $msg .= "$error_code $error->{'error_information'}";
+        print $msg, "\n";
+    }
+}

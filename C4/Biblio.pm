@@ -27,6 +27,7 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
 use C4::Koha;
+use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
@@ -231,7 +232,7 @@ sub AddBiblio {
 
 =over 4
 
-($biblionumber,$biblioitemnumber, $itemnumber_ref) = AddBiblioAndItems($record, $frameworkcode);
+($biblionumber,$biblioitemnumber, $itemnumber_ref, $error_ref) = AddBiblioAndItems($record, $frameworkcode);
 
 =back
 
@@ -246,12 +247,40 @@ One functional difference is that the duplicate item barcode
 check is implemented in this API, instead of relying on
 the caller to do it, like AddItem does.
 
+This function returns the biblionumber and biblioitemnumber of the
+new bib, an arrayref of new itemsnumbers, and an arrayref of item
+errors encountered during the processing.  Each entry in the errors
+list is a hashref containing the following keys:
+
+=over 2
+
+=item item_sequence
+
+Sequence number of original item tag in the MARC record.
+
+=item item_barcode
+
+Item barcode, provide to assist in the construction of
+useful error messages.
+
+=item error_condition
+
+Code representing the error condition.  Can be 'duplicate_barcode',
+'invalid_homebranch', or 'invalid_holdingbranch'.
+
+=item error_information
+
+Additional information appropriate to the error condition.
+
+=back
+
 =cut
 
 sub AddBiblioAndItems {
     my ( $record, $frameworkcode ) = @_;
     my ($biblionumber,$biblioitemnumber,$error);
     my @itemnumbers = ();
+    my @errors = ();
     my $dbh = C4::Context->dbh;
 
     # transform the data into koha-table style data
@@ -267,7 +296,9 @@ sub AddBiblioAndItems {
     # now we loop through the item tags and start creating items
     my @bad_item_fields = ();
     my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
+    my $item_sequence_num = 0;
     ITEMFIELD: foreach my $item_field ($record->field($itemtag)) {
+        $item_sequence_num++;
         # we take the item field and stick it into a new
         # MARC record -- this is required so far because (FIXME)
         # TransformMarcToKoha requires a MARC::Record, not a MARC::Field
@@ -281,11 +312,15 @@ sub AddBiblioAndItems {
         $item->{'biblioitemnumber'} = $biblioitemnumber;
 
         # check for duplicate barcode
+        my %item_errors = CheckItemPreSave($item);
+        if (%item_errors) {
+            push @errors, _repack_item_errors($item_sequence_num, $item, \%item_errors);
+            push @bad_item_fields, $item_field;
+            next ITEMFIELD;
+        }
         my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
         if ($duplicate_barcode) {
             warn "ERROR: cannot add item $item->{'barcode'} for biblio $biblionumber: duplicate barcode\n";
-            push @bad_item_fields, $item_field;
-            next ITEMFIELD;
         }
 
         # figure out what item type to use -- biblioitem-level or item-level
@@ -350,8 +385,27 @@ sub AddBiblioAndItems {
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio")
         if C4::Context->preference("CataloguingLog");
 
-    return ( $biblionumber, $biblioitemnumber, \@itemnumbers);
+    return ( $biblionumber, $biblioitemnumber, \@itemnumbers, \@errors);
     
+}
+
+sub _repack_item_errors {
+    my $item_sequence_num = shift;
+    my $item_ref = shift;
+    my $error_ref = shift;
+
+    my @repacked_errors = ();
+
+    foreach my $error_code (sort keys %{ $error_ref }) {
+        my $repacked_error = {};
+        $repacked_error->{'item_sequence'} = $item_sequence_num;
+        $repacked_error->{'item_barcode'} = exists($item_ref->{'barcode'}) ? $item_ref->{'barcode'} : '';
+        $repacked_error->{'error_code'} = $error_code;
+        $repacked_error->{'error_information'} = $error_ref->{$error_code};
+        push @repacked_errors, $repacked_error;
+    } 
+
+    return @repacked_errors;
 }
 
 =head2 AddItem
@@ -763,6 +817,92 @@ sub DelItem {
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$itemnumber,"item") 
         if C4::Context->preference("CataloguingLog");
+}
+
+=head2 CheckItemPreSave
+
+=over 4
+
+    my $item_ref = TransformMarcToKoha($marc, 'items');
+    # do stuff
+    my %errors = CheckItemPreSave($item_ref);
+    if (exists $errors{'duplicate_barcode'}) {
+        print "item has duplicate barcode: ", $errors{'duplicate_barcode'}, "\n";
+    } elsif (exists $errors{'invalid_homebranch'}) {
+        print "item has invalid home branch: ", $errors{'invalid_homebranch'}, "\n";
+    } elsif (exists $errors{'invalid_holdingbranch'}) {
+        print "item has invalid holding branch: ", $errors{'invalid_holdingbranch'}, "\n";
+    } else {
+        print "item is OK";
+    }
+
+=back
+
+Given a hashref containing item fields, determine if it can be
+inserted or updated in the database.  Specifically, checks for
+database integrity issues, and returns a hash containing any
+of the following keys, if applicable.
+
+=over 2
+
+=item duplicate_barcode
+
+Barcode, if it duplicates one already found in the database.
+
+=item invalid_homebranch
+
+Home branch, if not defined in branches table.
+
+=item invalid_holdingbranch
+
+Holding branch, if not defined in branches table.
+
+=back
+
+This function does NOT implement any policy-related checks,
+e.g., whether current operator is allowed to save an
+item that has a given branch code.
+
+=cut
+
+sub CheckItemPreSave {
+    my $item_ref = shift;
+
+    my %errors = ();
+
+    # check for duplicate barcode
+    if (exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'}) {
+        my $existing_itemnumber = GetItemnumberFromBarcode($item_ref->{'barcode'});
+        if ($existing_itemnumber) {
+            if (!exists $item_ref->{'itemnumber'}                       # new item
+                or $item_ref->{'itemnumber'} != $existing_itemnumber) { # existing item
+                $errors{'duplicate_barcode'} = $item_ref->{'barcode'};
+            }
+        }
+    }
+
+    # check for valid home branch
+    if (exists $item_ref->{'homebranch'} and defined $item_ref->{'homebranch'}) {
+        my $branch_name = GetBranchName($item_ref->{'homebranch'});
+        unless (defined $branch_name) {
+            # relies on fact that branches.branchname is a non-NULL column,
+            # so GetBranchName returns undef only if branch does not exist
+            $errors{'invalid_homebranch'} = $item_ref->{'homebranch'};
+        }
+    }
+
+    # check for valid holding branch
+    if (exists $item_ref->{'holdingbranch'} and defined $item_ref->{'holdingbranch'}) {
+        my $branch_name = GetBranchName($item_ref->{'holdingbranch'});
+        unless (defined $branch_name) {
+            # relies on fact that branches.branchname is a non-NULL column,
+            # so GetBranchName returns undef only if branch does not exist
+            $errors{'invalid_holdingbranch'} = $item_ref->{'holdingbranch'};
+        }
+    }
+
+    return %errors;
+
 }
 
 =head2 GetBiblioData
