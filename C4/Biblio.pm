@@ -285,7 +285,7 @@ sub AddBiblioAndItems {
 
     # transform the data into koha-table style data
     # FIXME - this paragraph copied from AddBiblio
-    my $olddata = FasterTransformMarcToKoha( $dbh, $record, $frameworkcode );
+    my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
     ($biblionumber,$error) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
     ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
@@ -307,7 +307,7 @@ sub AddBiblioAndItems {
         $temp_item_marc->append_fields($item_field);
     
         # add biblionumber and biblioitemnumber
-        my $item = &FasterTransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
+        my $item = TransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
         $item->{'biblionumber'} = $biblionumber;
         $item->{'biblioitemnumber'} = $biblioitemnumber;
 
@@ -2696,6 +2696,9 @@ sub TransformHtmlToMarc {
     return $record;
 }
 
+# cache inverted MARC field map
+our $inverted_field_map;
+
 =head2 TransformMarcToKoha
 
 =over 4
@@ -2704,91 +2707,11 @@ sub TransformHtmlToMarc {
 
 =back
 
-=cut
-
-sub TransformMarcToKoha {
-    my ( $dbh, $record, $frameworkcode, $table ) = @_;
-
-    my $result;
-
-    # sometimes we only want to return the items data
-    if ($table eq 'items') {
-        my $sth = $dbh->prepare("SHOW COLUMNS FROM items");
-        $sth->execute();
-        while ( (my $field) = $sth->fetchrow ) {
-            my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-            my $key = _disambiguate($table, $field);
-            if ($result->{$key}) {
-                $result->{$key} .= " | " . $value;
-            } else {
-                $result->{$key} = $value;
-            }
-        }
-        return $result;
-    } else {
-        my @tables = ('biblio','biblioitems','items');
-        foreach my $table (@tables){
-            my $sth2 = $dbh->prepare("SHOW COLUMNS from $table");
-            $sth2->execute;
-            while (my ($field) = $sth2->fetchrow){
-                # FIXME use of _disambiguate is a temporary hack
-                # $result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-                my $value = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
-                my $key = _disambiguate($table, $field);
-                if ($result->{$key}) {
-                    # FIXME - hack to not bring in duplicates of the same value
-                    unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($value eq "")) {
-                        $result->{$key} .= " | " . $value;
-                    }
-                } else {
-                    $result->{$key} = $value;
-                }
-            }
-            $sth2->finish();
-        }
-        # modify copyrightdate to keep only the 1st year found
-        my $temp = $result->{'copyrightdate'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
-            $result->{'copyrightdate'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'copyrightdate'} = $1;
-        }
-    
-        # modify publicationyear to keep only the 1st year found
-        $temp = $result->{'publicationyear'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
-            $result->{'publicationyear'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
-            $temp =~ m/(\d\d\d\d)/;
-            $result->{'publicationyear'} = $1;
-        }
-        return $result;
-    }
-}
-
-
-# cache inverted MARC field map
-our $inverted_field_map;
-
-=head2 FasterTransformMarcToKoha
-
-=over 4
-
-    $result = FasterTransformMarcToKoha( $dbh, $record, $frameworkcode )
-
-=back
-
 Extract data from a MARC bib record into a hashref representing
-Koha biblio, biblioitems, and items fields.  This function will
-replace TransformMarcToKoha once it has been tested.
+Koha biblio, biblioitems, and items fields. 
 
 =cut
-sub FasterTransformMarcToKoha {
+sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
 
     my $result;
