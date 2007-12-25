@@ -307,8 +307,6 @@ elsif ( $step && $step == 3 ) {
             my @bb = split /\/|\\/, ($b);
             $aa[-1] cmp $bb[-1]
         } $query->param('framework');
-	if ( $info{dbms} eq 'mysql' ) { $dbh->do('SET FOREIGN_KEY_CHECKS=0'); }
-	elsif ( $info{dbms} eq 'Pg' ) { $dbh->do('SET CONSTRAINTS ALL DEFERRED;'); }
         my $request =
           $dbh->prepare(
             "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
@@ -382,8 +380,6 @@ elsif ( $step && $step == 3 ) {
             "list"        => \@list
         );
         $template->param( "$op" => 1 );
-	if ( $info{dbms} eq 'mysql' ) { $dbh->do('SET FOREIGN_KEY_CHECKS=1'); }
-	elsif ( $info{dbms} eq 'Pg' ) { $dbh->do('SET CONSTRAINTS ALL IMMEDIATE;'); }
     }
     elsif ( $op && $op eq 'selectframeworks' ) {
         #
@@ -469,7 +465,7 @@ elsif ( $step && $step == 3 ) {
                   };
             } @listname;
             my @fwks =
-              sort { $a->{'fwkname'} lt $b->{'fwkname'} } @frameworklist;
+              sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
 #             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
             $cell{"frameworks"} = \@fwks;
@@ -516,7 +512,7 @@ elsif ( $step && $step == 3 ) {
                   };
             } @listname;
             my @fwks =
-              sort { $a->{'fwkname'} lt $b->{'fwkname'} } @frameworklist;
+              sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
 
 #             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
             $cell{"frameworks"} = \@fwks;
