@@ -207,7 +207,6 @@ if ($test_parameter) {
 my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
-# die;
 my $starttime = gettimeofday;
 my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
 $batch->warnings_off();
@@ -229,7 +228,6 @@ while ( my $record = $batch->next() ) {
     print "\r$i" unless $i % 100;
 
     unless ($test_parameter) {
-        # FIXME add back dup barcode check
         my ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref );
         eval { ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref ) = AddBiblioAndItems( $record, '' ); };
         if ( $@ ) {
@@ -249,9 +247,6 @@ $dbh->commit();
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 1");
 }
-# final commit of the changes
-#z3950_extended_services('commit',set_service_options('commit'));
-#print "COMMIT OPERATION SUCCESSFUL\n";
 
 # restore CataloguingLog
 $dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
