@@ -242,6 +242,10 @@ The goal of this API is to have a similar effect to using AddBiblio
 and AddItems in succession, but without inefficient repeated
 parsing of the MARC XML bib record.
 
+One functional difference is that the duplicate item barcode 
+check is implemented in this API, instead of relying on
+the caller to do it, like AddItem does.
+
 =cut
 
 sub AddBiblioAndItems {
@@ -261,8 +265,9 @@ sub AddBiblioAndItems {
     _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
     # now we loop through the item tags and start creating items
+    my @bad_item_fields = ();
     my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
-    foreach my $item_field ($record->field($itemtag)) {
+    ITEMFIELD: foreach my $item_field ($record->field($itemtag)) {
         # we take the item field and stick it into a new
         # MARC record -- this is required so far because (FIXME)
         # TransformMarcToKoha requires a MARC::Record, not a MARC::Field
@@ -274,6 +279,14 @@ sub AddBiblioAndItems {
         my $item = &FasterTransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
         $item->{'biblionumber'} = $biblionumber;
         $item->{'biblioitemnumber'} = $biblioitemnumber;
+
+        # check for duplicate barcode
+        my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
+        if ($duplicate_barcode) {
+            warn "ERROR: cannot add item $item->{'barcode'} for biblio $biblionumber: duplicate barcode\n";
+            push @bad_item_fields, $item_field;
+            next ITEMFIELD;
+        }
 
         # figure out what item type to use -- biblioitem-level or item-level
         my $itemtype;
@@ -319,6 +332,11 @@ sub AddBiblioAndItems {
         if C4::Context->preference("CataloguingLog"); 
 
         $item_field->replace_with($temp_item_marc->field($itemtag));
+    }
+
+    # remove any MARC item fields for rejected items
+    foreach my $item_field (@bad_item_fields) {
+        $record->delete_field($item_field);
     }
 
     # now add the record
