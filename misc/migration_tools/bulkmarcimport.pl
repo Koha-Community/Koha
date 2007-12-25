@@ -31,6 +31,7 @@ use MARC::Charset;
 
 use C4::Context;
 use C4::Biblio;
+use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;
 binmode(STDOUT, ":utf8");
@@ -38,7 +39,7 @@ binmode(STDOUT, ":utf8");
 use Getopt::Long;
 
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding, $verbose, $commit,$fk_off);
+my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off);
 
 $|=1;
 
@@ -49,6 +50,7 @@ GetOptions(
     'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
+    's' => \$skip_marc8_conversion,
     'c:s' => \$char_encoding,
     'v:s' => \$verbose,
     'fk' => \$fk_off,
@@ -65,52 +67,34 @@ GetOptions(
 sub fMARC8ToUTF8($$) {
     my ($record) = shift;
     my ($verbose) = shift;
-    if ($verbose) {
-        if ($verbose >= 2) {
-            my $leader = $record->leader();
-            $leader =~ s/ /#/g;
-            print "\n000 " . $leader;
-        }
-    }
+    
     foreach my $field ($record->fields()) {
         if ($field->is_control_field()) {
-            if ($verbose) {
-                if ($verbose >= 2) {
-                    my $fieldName = $field->tag();
-                    my $fieldValue = $field->data();
-                    $fieldValue =~ s/ /#/g;
-                    print "\n" . $fieldName;
-                    print ' ' . $fieldValue;
-                }
-            }
+            ; # do nothing -- control fields should not contain non-ASCII characters
         } else {
             my @subfieldsArray;
             my $fieldName = $field->tag();
             my $indicator1Value = $field->indicator(1);
             my $indicator2Value = $field->indicator(2);
-            if ($verbose) {
-                if ($verbose >= 2) {
-                    $indicator1Value =~ s/ /#/;
-                    $indicator2Value =~ s/ /#/;
-                    print "\n" . $fieldName . ' ' .
-                            $indicator1Value .
-                    $indicator2Value;
-                }
-            }
             foreach my $subfield ($field->subfields()) {
                 my $subfieldName = $subfield->[0];
                 my $subfieldValue = $subfield->[1];
-                $subfieldValue = MARC::Charset::marc8_to_utf8($subfieldValue);
+                my $utf8sf = MARC::Charset::marc8_to_utf8($subfieldValue);
+                unless (defined $utf8sf) {
+                    # For now, we're being very strict about
+                    # error during the MARC8 conversion, so return
+                    # if there's a problem.
+                    return;
+                }
+                $subfieldValue = NFC($utf8sf); # Normalization Form C to assist
+                                               # some browswers (e.g., Firefox on OS X)
+                                               # that have issues with decomposed characters
+                                               # in certain fonts.
     
                 # Alas, MARC::Field::update() does not work correctly.
                 ## push (@subfieldsArray, $subfieldName, $subfieldValue);
     
                 push @subfieldsArray, [$subfieldName, $subfieldValue];
-                if ($verbose) {
-                    if ($verbose >= 2) {
-                        print " \$" . $subfieldName . ' ' . $subfieldValue;
-                    }
-                }
             }
     
             # Alas, MARC::Field::update() does not work correctly.
@@ -153,8 +137,15 @@ sub fMARC8ToUTF8($$) {
             }
         }
     }
+
+    # must set Leader/09 to 'a' to indicate that
+    # record is now in UTF-8
+    my $leader = $record->leader();
+    substr($leader, 9, 1) = 'a';
+    $record->leader($leader);
+
     $record->encoding('UTF-8');
-    return $record;
+    return 1;
 }
 
 
@@ -169,6 +160,8 @@ parameters :
 \tn : the number of records to import. If missing, all the file is imported
 \tcommit : the number of records to wait before performing a 'commit' operation
 \tt : test mode : parses the file, saying what he would do, but doing nothing.
+\ts : skip automatic conversion of MARC-8 to UTF-8.  This option is 
+\t    provided for debugging.
 \tc : the characteristic MARC flavour. At the moment, only MARC21 and UNIMARC 
 \tsupported. MARC21 by default.
 \td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
@@ -222,10 +215,17 @@ $commitnum = $commit;
 
 my $dbh = C4::Context->dbh();
 $dbh->{AutoCommit} = 0;
-while ( my $record = $batch->next() ) {
+RECORD: while ( my $record = $batch->next() ) {
     $i++;
     print ".";
     print "\r$i" unless $i % 100;
+
+    if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
+        unless (fMARC8ToUTF8($record, $verbose)) {
+            warn "ERROR: failed to perform character conversion for record $i\n";
+            next RECORD;            
+        }
+    }
 
     unless ($test_parameter) {
         my ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref );
