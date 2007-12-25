@@ -26,7 +26,7 @@ use C4::Output;
 use CGI;
 use C4::Members;
 
-use C4::Dates;
+use C4::Dates qw/format_date/;
 my $input=new CGI;
 
 

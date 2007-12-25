@@ -36,16 +36,16 @@ use C4::Branch; # GetBranches
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
 
 BEGIN {
-	$VERSION = 3.01;        # set version for version checking
-	$debug = $ENV{DEBUG} || 0 ;
-	@ISA   = qw(Exporter);
-	@EXPORT    = qw(&checkauth &get_template_and_user);
-	@EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw);
-	$ldap = C4::Context->config('useldapserver') || 0;
-	if ($ldap) {
-		require C4::Auth_with_ldap;             # no import
-		import  C4::Auth_with_ldap qw(checkpw_ldap);
-	}
+    $VERSION = 3.01;        # set version for version checking
+    $debug = $ENV{DEBUG} || 0 ;
+    @ISA   = qw(Exporter);
+    @EXPORT    = qw(&checkauth &get_template_and_user);
+    @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw);
+    $ldap = C4::Context->config('useldapserver') || 0;
+    if ($ldap) {
+        require C4::Auth_with_ldap;             # no import
+        import  C4::Auth_with_ldap qw(checkpw_ldap);
+    }
 }
 
 =head1 NAME
@@ -89,16 +89,16 @@ C4::Auth - Authenticates Koha users
 
 =item get_template_and_user
 
-	my ($template, $borrowernumber, $cookie)
-		= get_template_and_user(
-		  {
-			template_name   => "opac-main.tmpl",
-			query           => $query,
-			type            => "opac",
-			authnotrequired => 1,
-			flagsrequired   => {borrow => 1},
-		  }
-		);
+    my ($template, $borrowernumber, $cookie)
+        = get_template_and_user(
+          {
+            template_name   => "opac-main.tmpl",
+            query           => $query,
+            type            => "opac",
+            authnotrequired => 1,
+            flagsrequired   => {borrow => 1},
+          }
+        );
 
     This call passes the C<query>, C<flagsrequired> and C<authnotrequired>
     to C<&checkauth> (in this module) to perform authentification.
@@ -131,18 +131,18 @@ sub get_template_and_user {
     my $insecure = C4::Context->preference('insecure');
     if ($user or $insecure) {
 
-		# load the template variables for stylesheets and JavaScript
-		$template->param( css_libs => $in->{'css_libs'} );
-		$template->param( css_module => $in->{'css_module'} );
-		$template->param( css_page => $in->{'css_page'} );
-		$template->param( css_widgets => $in->{'css_widgets'} );
+        # load the template variables for stylesheets and JavaScript
+        $template->param( css_libs => $in->{'css_libs'} );
+        $template->param( css_module => $in->{'css_module'} );
+        $template->param( css_page => $in->{'css_page'} );
+        $template->param( css_widgets => $in->{'css_widgets'} );
 
         $template->param( js_libs => $in->{'js_libs'} );
         $template->param( js_module => $in->{'js_module'} );
         $template->param( js_page => $in->{'js_page'} );
         $template->param( js_widgets => $in->{'js_widgets'} );
 
-		# user info
+        # user info
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
@@ -153,8 +153,8 @@ sub get_template_and_user {
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
 
-		my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
-							editcatalogue updatecharge management tools editauthorities serials reports);
+        my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
+                            editcatalogue updatecharge management tools editauthorities serials reports);
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
@@ -174,7 +174,7 @@ sub get_template_and_user {
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
-            $template->param( CAN_user_staffaccess 		=> 1 );
+            $template->param( CAN_user_staffaccess      => 1 );
         }
 
         if ( $flags && $flags->{circulate} == 1 ) {
@@ -259,14 +259,15 @@ sub get_template_and_user {
             virtualshelves          => C4::Context->preference("virtualshelves"),
             LibraryName             => C4::Context->preference("LibraryName"),
             KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
-            IntranetmainUserblock 	=> C4::Context->preference("IntranetmainUserblock"),
+            IntranetmainUserblock   => C4::Context->preference("IntranetmainUserblock"),
             IndependantBranches     => C4::Context->preference("IndependantBranches"),
-			CircAutocompl => C4::Context->preference("CircAutocompl"),
-			yuipath => C4::Context->preference("yuipath"),
-			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
-			AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
-			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
-			canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
+            CircAutocompl => C4::Context->preference("CircAutocompl"),
+            yuipath => C4::Context->preference("yuipath"),
+            FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
+            AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
+            'item-level_itypes' => C4::Context->preference('item-level_itypes'),
+            intranetreadinghistory => C4::Context->preference('intranetreadinghistory'),
+            canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
         );
     }
     else {
@@ -276,7 +277,7 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
   $template->param(
             KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
-			AnonSuggestions =>  "" . C4::Context->preference("AnonSuggestions"),
+            AnonSuggestions =>  "" . C4::Context->preference("AnonSuggestions"),
             suggestion             => "" . C4::Context->preference("suggestion"),
             virtualshelves         => "" . C4::Context->preference("virtualshelves"),
             OpacNav                => "" . C4::Context->preference("OpacNav"),
@@ -310,8 +311,8 @@ sub get_template_and_user {
             patronimages           => C4::Context->preference("patronimages"),
             mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-			OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
-			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
+            OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
+            'item-level_itypes' => C4::Context->preference('item-level_itypes'),
         );
     }
     return ( $template, $borrowernumber, $cookie, $flags);
@@ -378,11 +379,11 @@ has authenticated.
 sub _version_check ($$) {
     my $type = shift;
     my $query = shift;
-	my $version;
+    my $version;
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
     #warn "about to check version";
-    unless ($version = C4::Context->preference('Version')) {	# assignment, not comparison
+    unless ($version = C4::Context->preference('Version')) {    # assignment, not comparison
       if ($type ne 'opac') {
         warn "Install required, redirecting to Installer";
         print $query->redirect("/cgi-bin/koha/installer/install.pl");
@@ -394,33 +395,33 @@ sub _version_check ($$) {
       exit;
     }
 
-	# check that database and koha version are the same
-	# there is no DB version, it's a fresh install,
-	# go to web installer
-	# there is a DB version, compare it to the code version
-	my $kohaversion=C4::Context::KOHAVERSION;
-	# remove the 3 last . to have a Perl number
-	$kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-	$debug and print STDERR "kohaversion : $kohaversion\n";
-	if ($version < $kohaversion){
-		my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is "
-			. C4::Context->config("kohaversion");
-		if ($type ne 'opac'){
-			warn sprintf($warning, 'Installer');
-			print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
-		} else {
-			warn sprintf("OPAC: " . $warning, 'maintenance');
-			print $query->redirect("/cgi-bin/koha/maintenance.pl");
-		}       
-		exit;
-	}
+    # check that database and koha version are the same
+    # there is no DB version, it's a fresh install,
+    # go to web installer
+    # there is a DB version, compare it to the code version
+    my $kohaversion=C4::Context::KOHAVERSION;
+    # remove the 3 last . to have a Perl number
+    $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    $debug and print STDERR "kohaversion : $kohaversion\n";
+    if ($version < $kohaversion){
+        my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is "
+            . C4::Context->config("kohaversion");
+        if ($type ne 'opac'){
+            warn sprintf($warning, 'Installer');
+            print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
+        } else {
+            warn sprintf("OPAC: " . $warning, 'maintenance');
+            print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        }       
+        exit;
+    }
 }
 
 sub _session_log {
-	(@_) or return 0;
-	open L, ">>/tmp/sessionlog";
-	printf L join("\n",@_);
-	close L;
+    (@_) or return 0;
+    open L, ">>/tmp/sessionlog";
+    printf L join("\n",@_);
+    close L;
 }
 
 sub checkauth {
@@ -434,13 +435,13 @@ sub checkauth {
 
     my $dbh     = C4::Context->dbh;
     my $timeout = C4::Context->preference('timeout');
-	# days
- 	if ($timeout =~ /(\d+)[dD]/) {
-		$timeout = $1 * 86400;
+    # days
+    if ($timeout =~ /(\d+)[dD]/) {
+        $timeout = $1 * 86400;
     };
-	$timeout = 600 unless $timeout;
+    $timeout = 600 unless $timeout;
 
-	_version_check($type,$query);
+    _version_check($type,$query);
     # state variables
     my $loggedin = 0;
     my %info;
@@ -455,7 +456,7 @@ sub checkauth {
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID")) {		# assignment, not comparison (?)
+    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison (?)
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session){
@@ -466,20 +467,20 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
-			$debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
+            $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
         }
         my $ip;
         my $lasttime;
         if ($session) {
-			$ip = $session->param('ip');
-			$lasttime = $session->param('lasttime');
-			$userid = $session->param('id');
+            $ip = $session->param('ip');
+            $lasttime = $session->param('lasttime');
+            $userid = $session->param('id');
         }
     
         if ($logout) {
             # voluntary logout the user
             $session->flush;      
-			$session->delete();
+            $session->delete();
             C4::Context->_unset_userenv($sessionID);
             $sessionID = undef;
             $userid    = undef;
@@ -493,18 +494,18 @@ sub checkauth {
                 C4::Context->_unset_userenv($sessionID);
                 $userid    = undef;
                 $sessionID = undef;
-            	_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
+                _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
             }
             elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
                 # Different ip than originally logged in from
                 $info{'oldip'}        = $ip;
                 $info{'newip'}        = $ENV{'REMOTE_ADDR'};
                 $info{'different_ip'} = 1;
-				$session->delete();
+                $session->delete();
                 C4::Context->_unset_userenv($sessionID);
                 $sessionID = undef;
                 $userid    = undef;
-            	_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
+                _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
             }
             else {
                 $cookie = $query->cookie( CGISESSID => $session->id );
@@ -520,11 +521,11 @@ sub checkauth {
         }
     }
     unless ($userid) {
-		my $session = get_session("");
+        my $session = get_session("");
         my $sessionID;
-		if ($session) {
-			$sessionID = $session->id;
-		}
+        if ($session) {
+            $sessionID = $session->id;
+        }
         $userid    = $query->param('userid');
         C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
@@ -545,37 +546,37 @@ sub checkauth {
                    $borrowernumber, $firstname, $surname, $userflags,
                    $branchcode, $branchname, $branchprinter, $emailaddress
                 );
-				my $select = "
-				SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
-						branches.branchname    as branchname, 
-						branches.branchprinter as branchprinter, 
-						email 
-				FROM borrowers 
-				LEFT JOIN branches on borrowers.branchcode=branches.branchcode
-				";
+                my $select = "
+                SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
+                        branches.branchname    as branchname, 
+                        branches.branchprinter as branchprinter, 
+                        email 
+                FROM borrowers 
+                LEFT JOIN branches on borrowers.branchcode=branches.branchcode
+                ";
                 my $sth = $dbh->prepare("$select where userid=?");
                 $sth->execute($userid);
-				($sth->rows) and (
-					$borrowernumber, $firstname, $surname, $userflags,
-					$branchcode, $branchname, $branchprinter, $emailaddress
-				) = $sth->fetchrow;
+                ($sth->rows) and (
+                    $borrowernumber, $firstname, $surname, $userflags,
+                    $branchcode, $branchname, $branchprinter, $emailaddress
+                ) = $sth->fetchrow;
 
-				$debug and print STDERR "AUTH_1: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+                $debug and print STDERR "AUTH_1: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
                 unless ( $sth->rows ) {
                     my $sth = $dbh->prepare("$select where cardnumber=?");
-					$sth->execute($cardnumber);
-					($sth->rows) and (
-						$borrowernumber, $firstname, $surname, $userflags,
-						$branchcode, $branchname, $branchprinter, $emailaddress
-					) = $sth->fetchrow;
+                    $sth->execute($cardnumber);
+                    ($sth->rows) and (
+                        $borrowernumber, $firstname, $surname, $userflags,
+                        $branchcode, $branchname, $branchprinter, $emailaddress
+                    ) = $sth->fetchrow;
 
-					$debug and print STDERR "AUTH_2: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+                    $debug and print STDERR "AUTH_2: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
-						($sth->rows) and (
-							$borrowernumber, $firstname, $surname, $userflags,
-							$branchcode, $branchname, $branchprinter, $emailaddress
-						) = $sth->fetchrow;
+                        ($sth->rows) and (
+                            $borrowernumber, $firstname, $surname, $userflags,
+                            $branchcode, $branchname, $branchprinter, $emailaddress
+                        ) = $sth->fetchrow;
                     }
                 }
 
@@ -612,31 +613,31 @@ sub checkauth {
                 $session->param('emailaddress',$emailaddress);
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
-				$debug and printf STDERR "AUTH_3: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
+                $debug and printf STDERR "AUTH_3: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
-				$session->param('number',0);
-				$session->param('id',C4::Context->config('user'));
-				$session->param('cardnumber',C4::Context->config('user'));
-				$session->param('firstname',C4::Context->config('user'));
-				$session->param('surname',C4::Context->config('user'));
-				$session->param('branch','NO_LIBRARY_SET');
-				$session->param('branchname','NO_LIBRARY_SET');
-				$session->param('flags',1);
-				$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-				$session->param('ip',$session->remote_addr());
-				$session->param('lasttime',time());
-			}
-			if ($session) {
-				C4::Context::set_userenv(
-				$session->param('number'),       $session->param('id'),
-				$session->param('cardnumber'),   $session->param('firstname'),
-				$session->param('surname'),      $session->param('branch'),
-				$session->param('branchname'),   $session->param('flags'),
-				$session->param('emailaddress'), $session->param('branchprinter')
-				);
-			}
+                $session->param('number',0);
+                $session->param('id',C4::Context->config('user'));
+                $session->param('cardnumber',C4::Context->config('user'));
+                $session->param('firstname',C4::Context->config('user'));
+                $session->param('surname',C4::Context->config('user'));
+                $session->param('branch','NO_LIBRARY_SET');
+                $session->param('branchname','NO_LIBRARY_SET');
+                $session->param('flags',1);
+                $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+                $session->param('ip',$session->remote_addr());
+                $session->param('lasttime',time());
+            }
+            if ($session) {
+                C4::Context::set_userenv(
+                $session->param('number'),       $session->param('id'),
+                $session->param('cardnumber'),   $session->param('firstname'),
+                $session->param('surname'),      $session->param('branch'),
+                $session->param('branchname'),   $session->param('flags'),
+                $session->param('emailaddress'), $session->param('branchprinter')
+                );
+            }
         }
         else {
             if ($userid) {
@@ -654,7 +655,7 @@ sub checkauth {
         unless ($cookie) {
             $cookie = $query->cookie( CGISESSID => '' );
         }
-    	return ( $userid, $cookie, $sessionID, $flags );
+        return ( $userid, $cookie, $sessionID, $flags );
     }
 
 #
@@ -703,8 +704,8 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
         IndependantBranches     => C4::Context->preference("IndependantBranches"),
-		AutoLocation       => C4::Context->preference("AutoLocation"),
-		yuipath            => C4::Context->preference("yuipath"),
+        AutoLocation       => C4::Context->preference("AutoLocation"),
+        yuipath            => C4::Context->preference("yuipath"),
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
@@ -717,7 +718,7 @@ sub checkauth {
 #    $cookie = $query->cookie(CGISESSID => $session->id
 #   );
     print $query->header(
- 		-type   => 'text/html',
+        -type   => 'text/html',
         -charset => 'utf-8',
         -cookie => $cookie
       ),
@@ -1097,11 +1098,11 @@ sub get_session {
 sub checkpw {
 
     my ( $dbh, $userid, $password ) = @_;
-	if ($ldap) {
-		$debug and print "## checkpw - checking LDAP\n";
-		my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
-		($retval) and return ($retval,$retcard);
-	}
+    if ($ldap) {
+        $debug and print "## checkpw - checking LDAP\n";
+        my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
+        ($retval) and return ($retval,$retcard);
+    }
 
     # INTERNAL AUTH
     my $sth =
@@ -1167,10 +1168,10 @@ C<$authflags> is a hashref of permissions
 =cut
 
 sub getuserflags {
-    my $flags	= shift;
+    my $flags   = shift;
     my $dbh     = shift;
     my $userflags;
-	$flags = 0 unless $flags;
+    $flags = 0 unless $flags;
     my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
 
@@ -1198,17 +1199,17 @@ Returns member's flags or 0 if a permission is not met.
 
 sub haspermission {
     my ( $dbh, $userid, $flagsrequired ) = @_;
-	my ($flags,$intflags);
-	$dbh=C4::Context->dbh unless($dbh);
-	if(ref($userid)) {
-		$intflags = $userid->{'flags'};  
-	} else {
-	    my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
-	    $sth->execute($userid);
-	    my ($intflags) = $sth->fetchrow;
-	    $flags = getuserflags( $intflags, $dbh );
-	}
-	if ( $userid eq C4::Context->config('user') ) {
+    my ($flags,$intflags);
+    $dbh=C4::Context->dbh unless($dbh);
+    if(ref($userid)) {
+        $intflags = $userid->{'flags'};  
+    } else {
+        my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
+        $sth->execute($userid);
+        my ($intflags) = $sth->fetchrow;
+        $flags = getuserflags( $intflags, $dbh );
+    }
+    if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
     }
@@ -1221,7 +1222,7 @@ sub haspermission {
         return 0 unless( $flags->{$_} );
     }
     return $flags;
-	#FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
+    #FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
 }
 
 
