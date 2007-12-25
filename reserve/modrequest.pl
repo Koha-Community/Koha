@@ -26,38 +26,49 @@ use strict;
 use CGI;
 use C4::Output;
 use C4::Reserves;
+use C4::Auth;
 
-my $input = new CGI;
-#print $input->header;
+my $query = new CGI;
+my $query = new CGI;
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   
+        template_name   => "about.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
+        debug           => 1,
+    }
+);
 
-my @rank=$input->param('rank-request');
-my @biblionumber=$input->param('biblionumber');
-my @borrower=$input->param('borrowernumber');
-my @branch=$input->param('pickup');
-my @itemnumber=$input->param('itemnumber');
+my @rank=$query->param('rank-request');
+my @biblionumber=$query->param('biblionumber');
+my @borrower=$query->param('borrowernumber');
+my @branch=$query->param('pickup');
+my @itemnumber=$query->param('itemnumber');
 my $count=@rank;
 
-my $CancelBiblioNumber=$input->param('CancelBiblioNumber');
-my $CancelBorrowerNumber=$input->param('CancelBorrowerNumber');
-my $CancelItemnumber=$input->param('CancelItemnumber');
+my $CancelBiblioNumber=$query->param('CancelBiblioNumber');
+my $CancelBorrowerNumber=$query->param('CancelBorrowerNumber');
+my $CancelItemnumber=$query->param('CancelItemnumber');
 
 # 2 possibilitys : cancel an item reservation, or modify or cancel the queded list
 
 # 1) cancel an item reservation by fonction ModReserveCancelAll (in reserves.pm)
 if ($CancelBorrowerNumber) {
-	ModReserveCancelAll($CancelItemnumber, $CancelBorrowerNumber);
-	$biblionumber[0] = $CancelBiblioNumber,
+    ModReserveCancelAll($CancelItemnumber, $CancelBorrowerNumber);
+    $biblionumber[0] = $CancelBiblioNumber,
 }
 
 # 2) Cancel or modify the queue list of reserves (without item linked)
 else {
-	for (my $i=0;$i<$count;$i++){
-		ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves
-	}
+    for (my $i=0;$i<$count;$i++){
+        ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves
+    }
 }
-my $from=$input->param('from');
+my $from=$query->param('from');
 if ($from eq 'borrower'){
-  print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
+  print $query->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
  } else {
-   print $input->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
+   print $query->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
 }
