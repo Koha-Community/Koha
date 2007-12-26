@@ -147,6 +147,10 @@ href="/cgi-bin/koha/opac-rss.pl?q=<!-- TMPL_VAR name="query_cgi"--><!-- TMPL_VAR
 					<span class="available"><strong>Copies available at:</strong>
 					<!-- TMPL_LOOP NAME="available_items_loop" -->
 					<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="OPACItemsResultsDisplay" -->
+                        <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
 					(<!-- TMPL_VAR NAME="count" -->),
 					<!-- /TMPL_LOOP -->
 					</span>
