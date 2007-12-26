@@ -777,7 +777,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.036";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemsResultsDisplay',"statuses",'statuses : show only the status of items in result list. itemdisplay : show full location of items (branch+location+callnumber) as in staff interface','statuses|itemdetails','Choice');");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemsResultsDisplay','statuses','statuses : show only the status of items in result list. itemdisplay : show full location of items (branch+location+callnumber) as in staff interface','statuses|itemdetails','Choice');");
     print "Upgrade to $DBversion done (OPACItemsResultsDisplay systempreference added)\n";
     SetVersion ($DBversion);
 }
