@@ -478,30 +478,6 @@ if ($@ || $error) {
     exit;
 }
 
-# FIXME: This belongs in tools/ not in the primary search results page
-my $op=$cgi->param("operation");
-if ($op eq "bulkedit"){
-	my ($countchanged,$listunchanged)=
-	ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
-                      $params->{"tagsubfield"},
-                      $params->{"inputvalue"},
-                      $params->{"targetvalue"},
-                      $params->{"test"}
-                      );
-	$template->param(bulkeditresults=>1,
-                      tagsubfield=>$params->{"tagsubfield"},
-                      inputvalue=>$params->{"inputvalue"},
-                      targetvalue=>$params->{"targetvalue"},
-                      countchanged=>$countchanged,
-                      countunchanged=>scalar(@$listunchanged),
-                      listunchanged=>$listunchanged);
-
-	if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
-	#Edit Catalogue Permissions
-  		$template->param(bulkedit => 1);
-  		$template->param(tagsubfields=>GetManagedTagSubfields());
-	}
-}
 # At this point, each server has given us a result set
 # now we build that set for template display
 my @sup_results_array;
