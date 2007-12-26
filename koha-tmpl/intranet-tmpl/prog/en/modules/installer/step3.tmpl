@@ -172,7 +172,7 @@
     <!--/TMPL_LOOP-->
     </ul>
     <!--/TMPL_LOOP-->
-    <h2>Zebra or Nozebra ?</h2>
+    <h2>Choose indexing engine</h2>
     <p>Searching Koha's bibliographic and authorities databases can be acomplished in two ways:
 	Koha can utilize a textual index engine (Zebra) or use its own internal indexing scheme (NoZebra).
 	</p>
@@ -199,14 +199,14 @@
     <h3>Please Choose:</h3>
         <form action="install.pl">
             <input type="hidden" name="step" value="3" />
-            <input type="hidden" name="op" value="Nozebra" />
+            <input type="hidden" name="op" value="SetIndexingEngine" />
             <p><input type="radio" name="NoZebra" value="1" />Nozebra: my catalogue is not that large and I want something simple to setup/maintain</p>
             <p><input type="radio" name="NoZebra" value="0" />Zebra: I have a large catalogue, I understand I must configure Zebra after the installation has completed</p>
             <input type="submit" value="Choose" /></form>
         </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="Nozebra" -->
+<!-- TMPL_IF name="SetIndexingEngine" -->
     <p>Installation complete.<br />
         <p>Click on Finish to complete and load the Koha Staff Interface.
         <form name="finish">

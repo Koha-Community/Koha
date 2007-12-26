@@ -280,14 +280,11 @@ elsif ( $step && $step == 3 ) {
         # The installer will have to relogin since we do not pass cookie to redirection.
         $template->param( "$op" => 1 );
     }
-    elsif ( $op && $op eq 'Nozebra' ) {
-    warn "OP : $op";
+    elsif ( $op && $op eq 'SetIndexingEngine' ) {
         if ($query->param('NoZebra')) {
-        warn "HERE";
             $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
             $dbh->do("UPDATE systempreferences SET value=0 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
         } else {
-        warn "WRONG";
             $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
         }
         $template->param( "$op" => 1 );
@@ -313,6 +310,7 @@ elsif ( $step && $step == 3 ) {
           );
         $request->execute;
         my ($systempreference) = $request->fetchrow;
+        $systempreference = '' unless defined $systempreference; # avoid warning
         foreach my $file (@fnames) {
 
             #      warn $file;
@@ -430,6 +428,7 @@ elsif ( $step && $step == 3 ) {
           );
         $request->execute;
         my ($frameworksloaded) = $request->fetchrow;
+        $frameworksloaded = '' unless defined $frameworksloaded; # avoid warning
         my %frameworksloaded;
         foreach ( split( /\|/, $frameworksloaded ) ) {
             $frameworksloaded{$_} = 1;
@@ -554,7 +553,7 @@ elsif ( $step && $step == 3 ) {
             my %cell=(    
             "label"=> ucfirst($marc),
             "code"=>uc($marc),
-            "checked"=>uc($marc) eq $marcflavour);      
+            "checked"=> defined($marcflavour) ? uc($marc) eq $marcflavour : 0);      
 #             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
             push @flavourlist, \%cell;
         }
