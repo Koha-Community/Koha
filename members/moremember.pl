@@ -335,6 +335,7 @@ $template->param(
    	error	         => $error,
 	$error			=> 1,
     StaffMember		=> ($category_type eq 'S'),
+	is_child        => ($category_type eq 'C'),
 	# 		 reserveloop     => \@reservedata,
 );
 
