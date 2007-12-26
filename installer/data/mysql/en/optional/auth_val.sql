@@ -11,12 +11,12 @@ INSERT INTO `authorised_values`  (category, authorised_value, lib) VALUES ('DAMA
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('DAMAGED','1','Damaged');
 
 -- location qualification for an item, departments are linked by default to items.location
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','0','');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','1','Reference');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','2','Fiction');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','3','Biography');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','4','Media');
-INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('SHELF_LOC','4','New Book Shelf');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','0','');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','1','Reference');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','2','Fiction');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','3','Biography');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','4','Media');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','4','New Book Shelf');
 
 -- collection codes for an item
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');

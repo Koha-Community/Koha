@@ -54,7 +54,7 @@ my $itemtypes = GetItemTypes();
 my %locations;
 # FIXME: move this to a pm, check waiting status for holds
 my $dbh = C4::Context->dbh;
-my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'SHELF_LOC'");
+my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'LOC'");
 $lsch->execute();
 while (my $ldata = $lsch->fetchrow_hashref ) {
     $locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};

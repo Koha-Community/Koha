@@ -976,7 +976,7 @@ sub searchResults {
         $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
     }
     my %locations;
-    my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'SHELF_LOC'");
+    my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'LOC'");
     $lsch->execute();
     while (my $ldata = $lsch->fetchrow_hashref ) {
         $locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
@@ -1138,7 +1138,6 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-
             # set item's branch name, use homebranch first, fall back to holdingbranch
             if ($item->{'homebranch'}) {
                     $item->{'branchname'} = $branches{$item->{homebranch}};
