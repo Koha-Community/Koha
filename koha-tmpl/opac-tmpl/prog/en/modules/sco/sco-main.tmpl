@@ -87,7 +87,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- /TMPL_UNLESS -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<div id="newcheckout" class="sco_entry">
-	<form id='mainform' name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'Ok\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="userid" -->.')){ this.op.value='logout'; this.userid.value=''; } return true;}; " >
+	<form id='mainform' name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="userid" -->.')){ this.op.value='logout'; this.userid.value=''; } return true;}; " >
 	<h4> Check out or return an item: </h4>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
 	<input id="barcode" name="barcode" size="14" maxlength="14" class="unfocus" onfocus="this.className='focus';" onblur="this.className='unfocus';" />
