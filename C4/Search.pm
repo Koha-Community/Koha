@@ -1001,6 +1001,10 @@ sub searchResults {
     $sth->execute;
     my ($itemtag) = $sth->fetchrow;
 
+    # get notforloan authorised value list
+    $sth = $dbh->prepare("SELECT authorised_value FROM `marc_subfield_structure` WHERE kohafield = 'items.notforloan' AND frameworkcode=''");
+    $sth->execute;
+    my ($notforloan_authorised_value) = $sth->fetchrow;
     ## find column names of items related to MARC
     my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
     $sth2->execute;
@@ -1171,15 +1175,18 @@ sub searchResults {
                 }
 
                 # item is withdrawn, lost or damaged
-                if ( $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ) {
+                if ( $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} || $item->{notforloan} ) {
                     $wthdrawn_count++ if $item->{wthdrawn};
                     $itemlost_count++ if $item->{itemlost};
                     $itemdamaged_count++ if $item->{damaged};
-                    $item->{status} = $item->{wthdrawn}."-".$item->{itemlost}."-".$item->{damaged};
+                    $item->{status} = $item->{wthdrawn}."-".$item->{itemlost}."-".$item->{damaged}."-".$item->{notforloan};
                     $other_count++;
+                    
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{wthdrawn} = $item->{wthdrawn};
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{itemlost} = $item->{itemlost};
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{damaged} = $item->{damaged};
+                    $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
+                    
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{count}++ if $item->{'homebranch'};
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{branchname} = $item->{'branchname'};
                     $other_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{status} }->{location} =  $locations{$item->{location}};
