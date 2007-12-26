@@ -601,6 +601,9 @@ sub ModMember {
 			}
 		}
 	}
+	if (!$data{'dateofbirth'}){
+		undef $data{'dateofbirth'};
+	}
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
     my %hashborrowerfields;  
@@ -663,6 +666,9 @@ sub AddMember {
 #    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
 #    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
 	# This query should be rewritten to use "?" at execute.
+	if (!$data{'dateofbirth'}){
+		undef ($data{'dateofbirth'});
+	}
     my $query =
         "insert into borrowers set cardnumber=" . $dbh->quote( $data{'cardnumber'} )
       . ",surname=" 	. $dbh->quote( $data{'surname'} )
@@ -715,7 +721,7 @@ sub AddMember {
 	$debug and print STDERR "AddMember SQL: ($query)\n";
     my $sth = $dbh->prepare($query);
 	# 	print "Executing SQL: $query\n";
-    $sth->execute;
+    $sth->execute();
     $sth->finish;
     $data{'borrowernumber'} = $dbh->{'mysql_insertid'}; 	# unneeded w/ autoincrement ?  
 	# mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
