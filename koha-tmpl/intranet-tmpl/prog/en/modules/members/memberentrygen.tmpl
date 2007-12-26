@@ -496,12 +496,20 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
     </li>
     <li>
     <!-- TMPL_IF NAME="catcodepopup" -->
-          <label for="categorycode">Category: </label>
-          <!-- TMPL_VAR NAME="catcodepopup" -->
-      <!-- TMPL_ELSE -->
-          <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF--><!--TMPL_IF Name="S"-->a Staff Member<!--/TMPL_IF-->.</span>
+        <label for="categorycode">Category: </label>
+        <select id="categorycode" name="categorycode">
+        <!-- TMPL_LOOP NAME="typeloop -->
+        <optgroup label="<!-- TMPL_VAR NAME="typename" -->
+                <!-- TMPL_LOOP NAME="categoryloop" -->
+                <option value="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_IF NAME="categorycodeselected" -->selected <!-- /TMP
+L_IF -->><!-- TMPL_VAR NAME="categoryname" --></option>
+                <!-- /TMPL_LOOP -->
+        </optgroup>
+        <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+        <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF--><!--TMPL_IF Name="S"-->a Staff Member<!--/TMPL_IF-->.</span>
               <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
-      <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
     </li>
     <li>
       <!-- TMPL_IF NAME="mandatorysort1" -->
