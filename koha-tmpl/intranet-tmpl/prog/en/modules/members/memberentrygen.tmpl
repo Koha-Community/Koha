@@ -495,14 +495,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 	  <!-- TMPL_IF NAME="mandatorybranchcode" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
     <li>
-    <!-- TMPL_IF NAME="catcodepopup" -->
+    <!-- TMPL_IF NAME="typeloop" -->
         <label for="categorycode">Category: </label>
         <select id="categorycode" name="categorycode">
-        <!-- TMPL_LOOP NAME="typeloop -->
-        <optgroup label="<!-- TMPL_VAR NAME="typename" -->
+        <!-- TMPL_LOOP NAME="typeloop" -->
+        <optgroup label="<!-- TMPL_IF EXPR="typename eq 'C'" -->Child<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'A'" -->Adult<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'S'" -->Staff<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'I'" -->Organisation<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'P'" -->Professional<!-- /TMPL_IF -->">
                 <!-- TMPL_LOOP NAME="categoryloop" -->
-                <option value="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_IF NAME="categorycodeselected" -->selected <!-- /TMP
-L_IF -->><!-- TMPL_VAR NAME="categoryname" --></option>
+                <option value="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_IF NAME="categorycodeselected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="categoryname" --></option>
                 <!-- /TMPL_LOOP -->
         </optgroup>
         <!-- /TMPL_LOOP -->

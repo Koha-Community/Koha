@@ -295,23 +295,26 @@ if ($ethnicitycategoriescount>=0) {
   $template->param(ethcatpopup => $ethcatpopup); # bad style, has to be fixed
 }
 
+my @typeloop;
+foreach (qw(C A S P I)){
+	my $action="WHERE category_type=?";
+	($categories,$labels)=GetborCatFromCatType($_,$action);
+	my @categoryloop;
+	foreach my $cat (@$categories){
+		push @categoryloop,{'categorycode' => $cat,
+			  'categoryname' => $labels->{$cat},
+			  'categorycodeselected' => ($cat eq $borrower_data->{'categorycode'}),
+		};
+	}
+	my %typehash;
+	$typehash{'typename'}=$_;
+	$typehash{'categoryloop'}=\@categoryloop;
+	push @typeloop,{'typename' => $_,
+	  'categoryloop' => \@categoryloop};
+}  
+$template->param('typeloop' => \@typeloop);
 
-my $action="WHERE category_type=?";
-($categories,$labels)=GetborCatFromCatType($category_type,$action);
-  
-if(scalar(@$categories)){
-      #if you modify the borrowers you must have the right value for his category code
-  my $default_category=$newdata{'categorycode'} if ($op  eq 'modify');
-  my $catcodepopup = CGI::popup_menu(
-      -name=>'categorycode',
-  -id => 'categorycode',
-  -values=>$categories,
-    -labels=>$labels,
-  -default=>$default_category
-  );
-  $template->param(catcodepopup=>$catcodepopup);
-}
-  #test in city
+# test in city
 $select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
 ($default_city=$select_city) if ($step eq 0);
 if ($select_city eq '' ){
