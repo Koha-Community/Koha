@@ -59,7 +59,7 @@ my $printers = GetPrinters();
 
 #my $branch  = C4::Context->userenv?C4::Context->userenv->{'branch'}:"";
 my $printer = C4::Context->userenv?C4::Context->userenv->{'branchprinter'}:"";
-
+my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
 #
 # Some code to handle the error if there is no branch or printer setting.....
 #
@@ -153,6 +153,7 @@ my $returned = 0;
 my $messages;
 my $issueinformation;
 my $barcode = $query->param('barcode');
+my $exemptfine = $query->param('exemptfine');
 
 my $dotransfer = $query->param('dotransfer');
 if ($dotransfer){
@@ -170,7 +171,7 @@ if ($barcode) {
 # save the return
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, C4::Context->userenv->{'branch'} );
+      AddReturn( $barcode, C4::Context->userenv->{'branch'}, $exemptfine );
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($issueinformation->{'itemnumber'});
     $template->param(
@@ -544,6 +545,8 @@ $template->param(
     branchname              => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
     printer                 => $printer,
     errmsgloop              => \@errmsgloop,
+    exemptfine              => $exemptfine,
+	overduecharges          => $overduecharges,
 );
 
 # actually print the page!

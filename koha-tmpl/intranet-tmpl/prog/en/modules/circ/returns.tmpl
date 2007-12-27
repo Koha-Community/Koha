@@ -205,15 +205,24 @@
         <!-- /TMPL_IF -->
     </div>
 <!-- /TMPL_IF -->
-
-    <form method="post" action="/cgi-bin/koha/circ/returns.pl">
+    <div id="exemptfines" class="error" style="display:none;">
+        <p>Fines for returned items are forgiven.</p>
+    </div>
+    <div class="details" >
+    <form method="post" action="/cgi-bin/koha/circ/returns.pl" >
             <fieldset><legend>Check In</legend>
-            <label for="barcode">Enter item barcode: </label><input name="barcode" id="barcode" size="14" maxlength="14" class="focus" /> <input type="submit" value="Submit" />
+            <label for="barcode">Enter item barcode: </label>
+<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" <!-- TMPL_IF NAME="overduecharges" -->onfocus="if(this.form.exemptcheck.checked == true) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus'"  <!-- /TMPL_IF --> />
+            <input type="submit" class="submit" value="Submit" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
                 <input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <!-- /TMPL_LOOP -->
+                <!-- TMPL_IF NAME="overduecharges" --><label for="exemptfine" <!-- TMPL_IF NAME="exemptfine" --> class="error" <!-- /TMPL_IF -->>Forgive Overdue charges on this item</label>
+                <input type="checkbox" id='exemptcheck' name="exemptfine" value="exemptfine" 
+				<!-- TMPL_IF NAME="exemptfine" --> checked <!-- /TMPL_IF --> onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
+<!-- /TMPL_IF -->
             </fieldset>
         </form>
    

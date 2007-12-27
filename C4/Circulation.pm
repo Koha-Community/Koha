@@ -1079,12 +1079,13 @@ warn "in get loan lenght $borrowertype $itemtype $branchcode ";
 =head2 AddReturn
 
 ($doreturn, $messages, $iteminformation, $borrower) =
-    &AddReturn($barcode, $branch);
+    &AddReturn($barcode, $branch, $exemptfine);
 
 Returns a book.
 
 C<$barcode> is the bar code of the book being returned. C<$branch> is
-the code of the branch where the book is being returned.
+the code of the branch where the book is being returned.  C<$exemptfine>
+indicates that overdue charges for the item will not be applied.
 
 C<&AddReturn> returns a list of four items:
 
@@ -1127,7 +1128,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch ) = @_;
+    my ( $barcode, $branch, $exemptfine ) = @_;
     my $dbh      = C4::Context->dbh;
     my $messages;
     my $doreturn = 1;
@@ -1233,7 +1234,7 @@ sub AddReturn {
         }
         # fix up the overdues in accounts...
         FixOverduesOnReturn( $borrower->{'borrowernumber'},
-            $iteminformation->{'itemnumber'} );
+            $iteminformation->{'itemnumber'}, $exemptfine );
     
     # find reserves.....
     #     if we don't have a reserve with the status W, we launch the Checkreserves routine
@@ -1275,7 +1276,7 @@ sub AddReturn {
 
 =head2 FixOverduesOnReturn
 
-    &FixOverduesOnReturn($brn,$itm);
+    &FixOverduesOnReturn($brn,$itm, $exemptfine);
 
 C<$brn> borrowernumber
 
@@ -1286,7 +1287,7 @@ internal function, called only by AddReturn
 =cut
 
 sub FixOverduesOnReturn {
-    my ( $borrowernumber, $item ) = @_;
+    my ( $borrowernumber, $item, $exemptfine ) = @_;
     my $dbh = C4::Context->dbh;
 
     # check for overdue fine
@@ -1297,14 +1298,15 @@ sub FixOverduesOnReturn {
     $sth->execute( $borrowernumber, $item );
 
     # alter fine to show that the book has been returned
-    if ( my $data = $sth->fetchrow_hashref ) {
-        my $usth =
-          $dbh->prepare(
-"UPDATE accountlines SET accounttype='F' WHERE (borrowernumber = ?) AND (itemnumber = ?) AND (accountno = ?)"
-          );
-        $usth->execute( $borrowernumber, $item, $data->{'accountno'} );
+   my $data; 
+	if ($data = $sth->fetchrow_hashref) {
+        my $uquery =($exemptfine)? "update accountlines set accounttype='FFOR', amountoutstanding=0":"update accountlines set accounttype='F' ";
+	 	$uquery .= " where (borrowernumber = ?) and (itemnumber = ?) and (accountno = ?)";
+        my $usth = $dbh->prepare($uquery);
+        $usth->execute($borrowernumber,$item ,$data->{'accountno'});
         $usth->finish();
     }
+
     $sth->finish();
     return;
 }
