@@ -135,7 +135,7 @@ sub checkvalidisbn ($) {	# Obsolete Function!
 
 =item buildCGISort
 
-  $CGIScrollingList = &BuildCGISort($name string, $input_name string);
+  $CGIScrollingList = &buildCGISort($name string, $input_name string);
 
 Returns the scrolling list with name $input_name, built on authorised Values named $name.
 Returns NULL if no authorised values found
