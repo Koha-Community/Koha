@@ -5,12 +5,12 @@
 <script type="text/javascript">
 //<![CDATA[
 <!-- TMPL_IF NAME="add_form" -->
-	$(document).ready(function() {
-		$('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
- 		$('.variabletype').click(function() {
-			$('#preftype').attr("value",$(this).attr("id"));
-		});
-	});
+    $(document).ready(function() {
+        $('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
+        $('.variabletype').click(function() {
+            $('#preftype').attr("value",$(this).attr("id"));
+        });
+    });
 <!-- /TMPL_IF -->
         //
         function isNotNull(f,noalert) {
@@ -76,8 +76,8 @@
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
     
@@ -112,7 +112,7 @@
                 <!-- TMPL_IF NAME="type-yesno" -->
                     <!-- TMPL_IF NAME="value-yes" -->
                     <input type="radio" name="value" id="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF --> <label for="value" class="yesno">ON</label>
-                <!-- TMPL_IF NAME="value-no" -->	
+                <!-- TMPL_IF NAME="value-no" -->    
                     <input type="radio" name="value" id="value-no" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value-no" value="0" /><!-- /TMPL_IF --> <label for="value-no" class="yesno">OFF</label><!-- /TMPL_IF -->
                 </li>
         </ol></fieldset>
@@ -125,17 +125,17 @@
         </fieldset>
         
         <fieldset class="brief">
-		<legend>Koha internal</legend>
-		<div class="hint">Note: you should have no reasons to modify the following default values</div>
-		<ol>
+        <legend>Koha internal</legend>
+        <div class="hint">Note: you should have no reasons to modify the following default values</div>
+        <ol>
         <li><label for="preftype">Variable type:</label>
-		<div class="hint"> (<span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
-		<input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40" /></li>
+        <div class="hint"> (<span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
+        <input type="text" name="preftype" id="preftype" value="<!--TMPL_VAR NAME="preftype" -->" size="40" maxlength="40" /></li>
         <li><label for="prefoptions">Variable options:</label>
-		<div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
-		<input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" /></li>
-		</ol>
-		</fieldset>
+        <div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
+        <input type="text" name="prefoptions" id="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" -->" size="60" maxlength="80" /></li>
+        </ol>
+        </fieldset>
         </form>
     <!-- /TMPL_IF -->
     
@@ -158,8 +158,8 @@
             <td><!-- TMPL_VAR NAME="searchfield" --></td>
         </tr>
         <tr><th>Value: </th><td>
-		<!-- TMPL_VAR NAME="Tvalue" -->
-		</td></tr></table>
+        <!-- TMPL_VAR NAME="Tvalue" -->
+        </td></tr></table>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit"  value="Yes, Delete" /></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
     
@@ -175,38 +175,24 @@
     <!-- /TMPL_IF -->
    
     <!-- TMPL_IF NAME="else" -->
-	
-	<div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newstopword");
-	}	//]]>
-	</script>
-	<ul class="toolbar">
-	<li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
+    
+    <div id="toolbar">
+    <script type="text/javascript">
+    //<![CDATA[
+    // prepare DOM for YUI Toolbar
+     $(document).ready(function() {
+        yuiToolbar();
+     });
+    // YUI Toolbar Functions
+    function yuiToolbar() {
+        new YAHOO.widget.Button("newstopword");
+    }   //]]>
+    </script>
+    <ul class="toolbar">
+    <li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
 </ul></div>
-	
+    
     <h1>System preferences admin</h1>
-    <div id="action">
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Admin">Admin</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Catalogue">Catalogue</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Members">Patrons</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPACFeatures">OPAC Features</a>
-		<a href="/cgi-bin/koha/admin/systempreferences.pl?tab=FRBR">FRBR</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=Intranet">Staff Client</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=LOGFeatures">Logs</a>
-        <a href="/cgi-bin/koha/admin/systempreferences.pl?">Other</a>
-    </div>
     <h2>Editing preferences for <!-- TMPL_VAR name="tab" --> module</h2>
     <!-- TMPL_VAR NAME="searchfield" -->
     <table width="80%">
@@ -222,8 +208,8 @@
 
         <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" --></td>
         <td><!-- TMPL_IF NAME="yesno" -->
-		<!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
-		<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
+        <!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
+        <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
 
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit </a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
@@ -236,7 +222,7 @@
 </div>
 </div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="sysprefs-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

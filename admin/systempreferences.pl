@@ -59,7 +59,15 @@ my %tabsysprefs;
 # Acquisitions
     $tabsysprefs{acquisitions}="Acquisitions";
     $tabsysprefs{gist}="Acquisitions";
+    $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
+
 # Admin
+    $tabsysprefs{singleBranchMode}="Admin";
+    $tabsysprefs{staffClientBaseURL}="Admin";
+    $tabsysprefs{Version}="Admin";
+    $tabsysprefs{OpacMaintenance}="Admin";
+    $tabsysprefs{FrameworksLoaded}="Admin";
+    $tabsysprefs{libraryAddress}="Admin";
     $tabsysprefs{dateformat}="Admin";
     $tabsysprefs{delimiter}="Admin";
     $tabsysprefs{IndependantBranches}="Admin";
@@ -73,36 +81,35 @@ my %tabsysprefs;
     $tabsysprefs{AutoLocation}="Admin";
     $tabsysprefs{DebugLevel}="Admin";
     $tabsysprefs{SessionStorage}="Admin";
+    $tabsysprefs{noItemTypeImages}="Admin";
 
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
     $tabsysprefs{AuthDisplayHierarchy}="Authorities";
     $tabsysprefs{dontmerge}="Authorities";
     $tabsysprefs{BiblioAddsAuthorities}="Authorities";
-# Catalogue
-    $tabsysprefs{advancedMARCEditor}="Catalogue";
-    $tabsysprefs{autoBarcode}="Catalogue";
-    $tabsysprefs{hide_marc}="Catalogue";
-    $tabsysprefs{IntranetBiblioDefaultView} = "Catalogue";
-    $tabsysprefs{ISBD}="Catalogue";
-    $tabsysprefs{itemcallnumber}="Catalogue";
-    $tabsysprefs{LabelMARCView}="Catalogue";
-    $tabsysprefs{marc}="Catalogue";
-    $tabsysprefs{marcflavour}="Catalogue";
-    $tabsysprefs{serialsadditems}="Catalogue";
-    $tabsysprefs{sortbynonfiling}="Catalogue";
-    $tabsysprefs{MARCOrgCode}="Catalogue";
-    $tabsysprefs{z3950AuthorAuthFields}="Catalogue";
-    $tabsysprefs{z3950NormalizeAuthor}="Catalogue";
-    $tabsysprefs{Stemming}="Catalogue";
-    $tabsysprefs{WeightFields}="Catalogue";
-    $tabsysprefs{expandedSearchOption}="Catalogue";
-    $tabsysprefs{NoZebra}="Catalogue";
-    $tabsysprefs{NoZebraIndexes}="Catalogue";
-    $tabsysprefs{ReceiveBackIssues}="Catalogue";
-    $tabsysprefs{DefaultClassificationSource}="Catalogue";
-    $tabsysprefs{RoutingSerials}="Catalogue";
-    $tabsysprefs{'item-level_itypes'}="Catalogue";
+# Cataloguing
+    $tabsysprefs{advancedMARCEditor}="Cataloguing";
+    $tabsysprefs{autoBarcode}="Cataloguing";
+    $tabsysprefs{hide_marc}="Cataloguing";
+    $tabsysprefs{IntranetBiblioDefaultView} = "Cataloguing";
+    $tabsysprefs{ISBD}="Cataloguing";
+    $tabsysprefs{itemcallnumber}="Cataloguing";
+    $tabsysprefs{LabelMARCView}="Cataloguing";
+    $tabsysprefs{marc}="Cataloguing";
+    $tabsysprefs{marcflavour}="Cataloguing";
+    $tabsysprefs{serialsadditems}="Cataloguing";
+    $tabsysprefs{MARCOrgCode}="Cataloguing";
+    $tabsysprefs{z3950AuthorAuthFields}="Cataloguing";
+    $tabsysprefs{z3950NormalizeAuthor}="Cataloguing";
+    $tabsysprefs{Stemming}="Cataloguing";
+    $tabsysprefs{WeightFields}="Cataloguing";
+    $tabsysprefs{NoZebra}="Cataloguing";
+    $tabsysprefs{NoZebraIndexes}="Cataloguing";
+    $tabsysprefs{ReceiveBackIssues}="Cataloguing";
+    $tabsysprefs{DefaultClassificationSource}="Cataloguing";
+    $tabsysprefs{RoutingSerials}="Cataloguing";
+    $tabsysprefs{'item-level_itypes'}="Cataloguing";
 
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -120,42 +127,71 @@ my %tabsysprefs;
     $tabsysprefs{ReservesNeedReturns}="Circulation";
     $tabsysprefs{CircAutocompl}="Circulation";
     $tabsysprefs{canreservefromotherbranches}="Circulation";
+    $tabsysprefs{finesMode}="Circulation";
+    $tabsysprefs{emailLibrarianWhenHoldIsPlaced}="Circulation";
+    $tabsysprefs{globalDueDate}="Circulation";
+    $tabsysprefs{holdCancelLength}="Circulation";
+    $tabsysprefs{itemBarcodeInputFilter}="Circulation";
+    $tabsysprefs{noOPACHolds}="Circulation";
+    $tabsysprefs{WebBasedSelfCheck}="Circulation";
 
-# Intranet
-    $tabsysprefs{TemplateEncoding}="Intranet";
-    $tabsysprefs{template}="Intranet";
-    $tabsysprefs{intranetstylesheet}="Intranet";
-    $tabsysprefs{IntranetNav}="Intranet";
-    $tabsysprefs{intranetcolorstylesheet}="Intranet";
-    $tabsysprefs{intranetuserjs}="Intranet";
-	$tabsysprefs{yuipath}="Intranet";
-	$tabsysprefs{IntranetmainUserblock}="Intranet";
-	
-# Members
-    $tabsysprefs{automembernum}="Members";
-    $tabsysprefs{checkdigit}="Members";
-    $tabsysprefs{intranetreadinghistory}="Members";
-    $tabsysprefs{NotifyBorrowerDeparture}="Members";
-    $tabsysprefs{memberofinstitution}="Members";
-    $tabsysprefs{ReadingHistory}="Members";
-    $tabsysprefs{BorrowerMandatoryField}="Members";
-    $tabsysprefs{borrowerRelationship}="Members";
-    $tabsysprefs{BorrowersTitles}="Members";    
-    $tabsysprefs{patronimages}="Members";
-    $tabsysprefs{MinPasswordLength}="Members";
-    $tabsysprefs{uppercasesurnames}="Members";
-    $tabsysprefs{NoReturnSetLost}="Members";
-    $tabsysprefs{MaxFine}="Members";
-    $tabsysprefs{NotifyBorrowerDeparture}="Members";
-# FRBA
-	$tabsysprefs{FRBRizeEditions}="FRBR";
-	$tabsysprefs{XISBN}="FRBR";
-	$tabsysprefs{OCLCAffiliateID}="FRBR";
-	$tabsysprefs{XISBNDailyLimit}="FRBR";
-	$tabsysprefs{PINESISBN}="FRBR";
+# Staff Client
+    $tabsysprefs{TemplateEncoding}="StaffClient";
+    $tabsysprefs{template}="StaffClient";
+    $tabsysprefs{intranetstylesheet}="StaffClient";
+    $tabsysprefs{IntranetNav}="StaffClient";
+    $tabsysprefs{intranetcolorstylesheet}="StaffClient";
+    $tabsysprefs{intranetuserjs}="StaffClient";
+    $tabsysprefs{yuipath}="StaffClient";
+    $tabsysprefs{IntranetmainUserblock}="StaffClient";
+    
+# Patrons
+    $tabsysprefs{automembernum}="Patrons";
+    $tabsysprefs{checkdigit}="Patrons";
+    $tabsysprefs{intranetreadinghistory}="Patrons";
+    $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
+    $tabsysprefs{memberofinstitution}="Patrons";
+    $tabsysprefs{ReadingHistory}="Patrons";
+    $tabsysprefs{BorrowerMandatoryField}="Patrons";
+    $tabsysprefs{borrowerRelationship}="Patrons";
+    $tabsysprefs{BorrowersTitles}="Patrons";    
+    $tabsysprefs{patronimages}="Patrons";
+    $tabsysprefs{MinPasswordLength}="Patrons";
+    $tabsysprefs{uppercasesurnames}="Patrons";
+    $tabsysprefs{NoReturnSetLost}="Patrons";
+    $tabsysprefs{MaxFine}="Patrons";
+    $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
+
+# FRBR
+    $tabsysprefs{FRBRizeEditions}="FRBR";
+    $tabsysprefs{XISBN}="FRBR";
+    $tabsysprefs{OCLCAffiliateID}="FRBR";
+    $tabsysprefs{XISBNDailyLimit}="FRBR";
+    $tabsysprefs{PINESISBN}="FRBR";
     $tabsysprefs{ThingISBN}="FRBR";
     $tabsysprefs{OPACFRBRizeEditions}="FRBR";
     $tabsysprefs{XISBNAmazonSimilarItems}="FRBR";
+
+# I18N/L10N
+    $tabsysprefs{dateformat}="I18N/L10N";
+    $tabsysprefs{opaclanguages}="I18N/L10N";
+    $tabsysprefs{opacthemes}="I18N/L10N";
+
+# Searching
+    $tabsysprefs{defaultSortField}="Searching";
+    $tabsysprefs{defaultSortOrder}="Searching";
+    $tabsysprefs{maxItemsInSearchResults}="Searching";
+    $tabsysprefs{numSearchResults}="Searching";
+    $tabsysprefs{OPACdefaultSortField}="Searching";
+    $tabsysprefs{OPACdefaultSortOrder}="Searching";
+    $tabsysprefs{OPACItemsResultsDisplay}="Searching";
+    $tabsysprefs{OPACnumSearchResults}="Searching";
+    $tabsysprefs{QueryFuzzy}="Searching";
+    $tabsysprefs{QueryStemming}="Searching";
+    $tabsysprefs{QueryWeightFields}="Searching";
+    $tabsysprefs{expandedSearchOption}="Searching";
+    $tabsysprefs{sortbynonfiling}="Searching";
+
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";
@@ -167,7 +203,6 @@ my %tabsysprefs;
     $tabsysprefs{LibraryName}="OPAC";
     $tabsysprefs{opaccolorstylesheet}="OPAC";
     $tabsysprefs{opaccredits}="OPAC";
-    $tabsysprefs{opaclanguages}="OPAC";
     $tabsysprefs{opaclargeimage}="OPAC";
     $tabsysprefs{opaclayoutstylesheet}="OPAC";
     $tabsysprefs{OpacNav}="OPAC";
@@ -179,9 +214,19 @@ my %tabsysprefs;
     $tabsysprefs{opacheader}="OPAC";
     $tabsysprefs{OPACAmazonSimilarItems}="OPAC";
     $tabsysprefs{OPACXISBNAmazonSimilarItems}="OPAC";
-    
+
+    $tabsysprefs{hideBiblioNumber}="OPAC";
+    $tabsysprefs{noOPACUserLogin}="OPAC";
+    $tabsysprefs{OPACDisplayExtendedSubInfo}="OPAC";
+    $tabsysprefs{OpacMainUserBlock}="OPAC";
+    $tabsysprefs{OPACSubscriptionDisplay}="OPAC";
+    $tabsysprefs{OPACURLOpenInNewWindow}="OPAC";
+    $tabsysprefs{OPACUserCSS}="OPAC";
+    $tabsysprefs{OPACViewOthersSuggestions}="OPAC";
+    $tabsysprefs{URLLinkText}="OPAC";
+
 # OPACFeatures
-	$tabsysprefs{SearchMyLibraryFirst}="OPACFeatures";
+    $tabsysprefs{SearchMyLibraryFirst}="OPACFeatures";
     $tabsysprefs{Disable_Dictionary}="OPACFeatures";
     $tabsysprefs{hidelostitems}="OPACFeatures";
     $tabsysprefs{opacbookbag}="OPACFeatures";
@@ -431,11 +476,11 @@ if ($op eq 'add_form') {
             $currently_selected_languages->{$language}=1;
             $counter++;
         }
-		my $langavail = getTranslatedLanguages();
+        my $langavail = getTranslatedLanguages();
         foreach my $language (@$langavail) {
             my $selected='0';
             next if $currently_selected_languages->{$language->{'language_code'}};
-			#FIXME: could add language_name and language_locale_name for better display
+            #FIXME: could add language_name and language_locale_name for better display
             push @options, { option => $language->{'language_code'}, counter => $counter };
             $counter++;
         }
@@ -499,6 +544,7 @@ if ($op eq 'add_form') {
 } else { # DEFAULT
     #Adding tab management for system preferences
     my $tab=$input->param('tab');
+    $template->param($tab => 1);
     my ($count,$results)=StringSearch($searchfield,$tab);
     my $toggle=0;
     my @loop_data = ();
@@ -511,8 +557,8 @@ if ($op eq 'add_form') {
         my %row_data;  # get a fresh hash for the row data
         $row_data{variable} = $results->[$i]{'variable'};
         $row_data{value} = $results->[$i]{'value'};
-		$row_data{yes} = 1 if ($results->[$i]{'value'} == 1);
-		$row_data{yesno} = 1 if ($results->[$i]{'type'} eq 'YesNo');
+        $row_data{yes} = 1 if ($results->[$i]{'value'} == 1);
+        $row_data{yesno} = 1 if ($results->[$i]{'type'} eq 'YesNo');
         $row_data{explanation} = $results->[$i]{'explanation'};
         $row_data{toggle} = $toggle;
         $row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'variable'};
