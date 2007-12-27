@@ -232,7 +232,7 @@ if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-		&ModMember(%newdata);	# this is the last server-changing line.  the rest is "presentation"
+		&ModMember(%newdata);    
 	}
 	print scalar ($destination eq "circ") ? 
 		$input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}") :
