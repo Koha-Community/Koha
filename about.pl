@@ -43,9 +43,8 @@ my $perlVersion   = $];
 my $mysqlVersion  = `mysql -V`;
 my $apacheVersion = `httpd -v`;
 $apacheVersion = `httpd2 -v` unless $apacheVersion;
+$apacheVersion = (`/usr/sbin/apache2 -V`)[0] unless $apacheVersion;
 my $zebraVersion = `zebraidx -V`;
-
-# $apacheVersion =  (`/usr/sbin/apache2 -V`)[0];
 
 $template->param(
     kohaVersion   => $kohaVersion,
