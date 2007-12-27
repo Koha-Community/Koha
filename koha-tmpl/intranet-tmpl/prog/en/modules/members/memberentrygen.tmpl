@@ -719,7 +719,11 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 			<legend>Patron Account Flags</legend>
 			<ol class="radio">
 			<!-- TMPL_LOOP NAME="flagloop" -->
-				<li><label class="radio" for="yes<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="html" -->: </label>
+				<li><label class="radio" for="yes<!-- TMPL_VAR name="name" -->">
+				<!-- TMPL_IF EXPR="key eq 'gonenoaddress'" -->Gone no Address:<!-- /TMPL_IF -->
+				<!-- TMPL_IF EXPR="key eq 'debarred'" -->Debarred:<!-- /TMPL_IF -->
+				<!-- TMPL_IF EXPR="key eq 'lost'" -->Lost Card:<!-- /TMPL_IF -->
+                </label>
 				
 				<label for="yes<!-- TMPL_VAR NAME="name" -->">Yes </label>
 				<!-- TMPL_IF NAME="yes" -->

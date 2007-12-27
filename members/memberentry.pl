@@ -364,26 +364,27 @@ while (@relationships) {
   }
   push(@relshipdata, \%row);
 }
-my %flags = ( 'gonenoaddress' => ['gonenoaddress', 'Gone no address '],
-        'lost'          => ['lost', 'Lost'],
-        'debarred'      => ['debarred', 'Debarred']);
 
+my %flags = ( 'gonenoaddress' => ['gonenoaddress' ],
+        'lost'          => ['lost'],
+        'debarred'      => ['debarred']);
+
+ 
 my @flagdata;
 foreach (keys(%flags)) {
-my $key = $_;
-my %row =  ('key'   => $key,
-    'name'  => $flags{$key}[0],
-    'html'  => $flags{$key}[1]);
-if ($data{$key}) {
-  $row{'yes'}=' checked';
-  $row{'no'}='';
-} else {
-  $row{'yes'}='';
-  $row{'no'}=' checked';
+	my $key = $_;
+	my %row =  ('key'   => $key,
+		    'name'  => $flags{$key}[0]);
+	if ($data{$key}) {
+		$row{'yes'}=' checked';
+		$row{'no'}='';
+    }
+	else {
+		$row{'yes'}='';
+		$row{'no'}=' checked';
+	}
+	push @flagdata,\%row;
 }
-push(@flagdata, \%row);
-}
-
 
 #get Branches
 my @branches;
