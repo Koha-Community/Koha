@@ -13,7 +13,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('authoritysep','--','Used to separate a list of authorities in a display. Usually --','10','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoBarcode','OFF','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002','incremental|annual|OFF','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoLocation','0','If ON, IP authentication is enabled, blocking access to the staff client from unauthorized IP addresses',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutomaticItemReturn','1','If ON, items attempt to return to their home branch when checked in',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutomaticItemReturn','1','If ON, Koha will automatically set up a transfer of this item to its homebranch',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoMemberNum','1','If ON, patron number is auto-calculated','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BiblioDefaultView','normal','Choose the default detail view in the catalog; choose between normal, marc or isbd','normal|marc|isbd','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowerMandatoryField','zipcode|surname','Choose the mandatory fields for a patron\'s account',NULL,'free');

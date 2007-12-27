@@ -1029,7 +1029,7 @@ sub GetLoanLength {
       $dbh->prepare(
 "select issuelength from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"
       );
-
+warn "in get loan lenght $borrowertype $itemtype $branchcode ";
 # try to find issuelength & return the 1st available.
 # check with borrowertype, itemtype and branchcode, then without one of those parameters
     $sth->execute( $borrowertype, $itemtype, $branchcode );
@@ -1261,11 +1261,13 @@ sub AddReturn {
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
         if ( ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
-                    if (C4::Context->preference("AutomaticItemReturn") == 1) {
-                    ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
-                    $messages->{'WasTransfered'} = 1;
-                    warn "was transfered";
-                    }
+			if (C4::Context->preference("AutomaticItemReturn") == 1) {
+				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
+				$messages->{'WasTransfered'} = 1;
+			}
+			else {
+				$messages->{'NeedsTransfer'} = 1;
+			}
         }
     }
     return ( $doreturn, $messages, $iteminformation, $borrower );

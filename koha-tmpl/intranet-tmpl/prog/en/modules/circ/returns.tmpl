@@ -99,8 +99,26 @@
     <!-- case of a return of item, but with no reservation after, if the item must be  returned to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
 	<!-- transfer -->
-	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3><!-- /TMPL_IF -->
+	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3>
+	<!-- /TMPL_IF -->
     
+    <!-- TMPL_IF Name="needstransfer" -->
+	<!-- transfer -->
+	<h3 class="problem"> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
+    <form method="post" action="returns.pl" name="mainform" id="mainform">              
+	<input type="submit" value="Confirm and transfer" class="submit" />
+	<input type="hidden" name="dotransfer" value="yes">
+	<input type="hidden" name="tobranch" value="<!-- TMPL_VAR NAME="homebranch" -->">
+	<input type="hidden" name="transferitem" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+	<!--TMPL_LOOP Name="inputloop" -->     
+	<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" /> 
+	<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" /> 
+	<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" /> 
+	<!-- /TMPL_LOOP -->                            
+	<input type="hidden" name="barcode" value="0" />    
+	</form>   
+	<!-- /TMPL_IF -->
+    	
     <!-- TMPL_IF Name="diffbranch" -->
 	<!-- diffbranch -->
         <h3>Item Consigned:</h3>

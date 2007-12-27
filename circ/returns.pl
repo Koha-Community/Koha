@@ -100,7 +100,7 @@ foreach ( $query->param ) {
 # Deal with the requests....
 
 if ($query->param('WT-itemNumber')){
-updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
+	updateWrongTransfer ($query->param('WT-itemNumber'),$query->param('WT-waitingAt'),$query->param('WT-From'));
 }
 
 if ( $query->param('resbarcode') ) {
@@ -153,6 +153,14 @@ my $returned = 0;
 my $messages;
 my $issueinformation;
 my $barcode = $query->param('barcode');
+
+my $dotransfer = $query->param('dotransfer');
+if ($dotransfer){
+	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
+	my $transferitem=$query->param('transferitem');
+	my $tobranch=$query->param('tobranch');
+	ModItemTransfer($transferitem, C4::Context->userenv->{'branch'}, $tobranch); 
+}
 
 # actually return book and prepare item table.....
 if ($barcode) {
@@ -227,7 +235,14 @@ if ( $messages->{'WasTransfered'} ) {
         found          => 1,
         transfer       => 1,
     );
+}
 
+if ( $messages->{'NeedsTransfer'} ){
+	$template->param(
+		found          => 1,
+		needstransfer  => 1,
+		itemnumber => $issueinformation->{'itemnumber'}
+	);
 }
 
 # adding a case of wrong transfert, if the document wasn't transfered in the good library (according to branchtransfer (tobranch) BDD)
@@ -387,6 +402,9 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'WrongTransferItem' ) {
         ;    # FIXME... anything to do here?
     }
+	elsif ( $code eq 'NeedsTransfer' ) {
+	}
+		
     else {
         die "Unknown error code $code";    # XXX
     }
