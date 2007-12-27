@@ -736,7 +736,6 @@ $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,ty
 $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplayExtendedSubInfo',1,'If ON, extended subscription information is displayed in the OPAC',NULL,'YesNo')");
 $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACViewOthersSuggestions',0,'If ON, allows all suggestions to be displayed in the OPAC',NULL,'YesNo')");
 $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACURLOpenInNewWindow',0,'If ON, URLs in the OPAC open in a new window',NULL,'YesNo')");
-$dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hideBiblioNumber',0,'If ON, hides the biblionumber in the detail page on the OPAC',NULL,'YesNo')");
 $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACUserCSS',0,'Add CSS to be included in the OPAC',NULL,'free')");
 $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailPurchaseSuggestions',0,'If ON, patron suggestions are emailed rather than managed in Acquisitions',NULL,'YesNo')");
 
@@ -792,6 +791,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE `borrowers` ADD COLUMN `altcontactzipcode` varchar(50)");
 	$dbh->do("ALTER TABLE `borrowers` ADD COLUMN `altcontactphone` varchar(50)");
     print "Upgrade to $DBversion done (Adding Alternative Contact Person information to borrowers table)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.038";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE `systempreferences` set explanation='Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires fines cron script' , options='off|test|production' where variable='finesMode'");
+	$dbh->do('DELETE FROM `systempreferences` WHERE variable='hideBiblioNumber'");
+    print "Upgrade to $DBversion done ('alter finesMode systempreference, remove superfluous syspref.')\n";
     SetVersion ($DBversion);
 }
 
