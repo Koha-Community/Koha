@@ -91,9 +91,11 @@ function Check(f) {
 		<li><label for="authtypetext">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" ESCAPE="HTML" -->" /></li>
 		<li><label for="summary">Summary: </label><textarea id="summary" name="summary" cols="55" rows="7"><!-- TMPL_VAR NAME="summary" --></textarea></li>
 		<li>
-		<p>Enter here the number of the tag that will be reported in the biblio (subfield by subfield). For example, in UNIMARC, enter 200 to report every 200 subfield in the 70x biblio</p>
-		<label for="auth_tag_to_report">Report tag: </label><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" /></li></ol>
-	<input type="hidden" name="op" value="add_validate" /></fieldset>
+		<p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>
+		<label for="auth_tag_to_report">Authority field to copy: </label><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />
+		<input type="hidden" name="op" value="add_validate" />
+	</li></ol>
+	</fieldset>
 	<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form); return false;" /><a class="cancel" href="/cgi-bin/koha/admin/authtypes.pl">Cancel</a></fieldset>
 	</form>
 <!-- /TMPL_IF -->
@@ -136,7 +138,7 @@ function Check(f) {
 		<th>Code</th>
 		<th>Description</th>
 		<th>Summary</th>
-		<th>Tag reported</th>
+		<th>Auth field copied</th>
 		<th>&nbsp;</th>
 		<th>Edit</th>
 		<th>Delete</th>

@@ -85,17 +85,17 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 			<p>The following fields are wrong. Please fix them.</p>
 			<ul>
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
-				<li id="ERROR_login_exist">login/password already exists.</li>
+				<li id="ERROR_login_exist">Login/password already exists.</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_cardnumber" -->
 				<li id="ERROR_cardnumber">Cardnumber already in use.</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_age_limitations" -->
-				<li id="ERROR_age_limitations">Patron is too young or too old for their category.  
+				<li id="ERROR_age_limitations">Patron's age is incorrect for their category.  
 					Ages allowed are <!-- TMPL_VAR NAME="ERROR_age_limitations"-->.</li>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_branch" -->
-				<li id="ERROR_branch">Branch selected not allowed.</li>
+				<li id="ERROR_branch">Library is invalid.</li>
 			<!-- /TMPL_IF -->   
 			<!-- TMPL_IF NAME="ERROR_dateofbirth" -->
 				<li id="ERROR_dateofbirth">Date of birth is invalid.</li>
@@ -568,7 +568,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
       <!--TMPL_ELSE-->
         <label for="branchcode">
       <!-- /TMPL_IF-->
-      Branch: </label>
+      Library: </label>
       <!-- TMPL_VAR NAME="CGIbranch" -->
 	  <!-- TMPL_IF NAME="mandatorybranchcode" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
