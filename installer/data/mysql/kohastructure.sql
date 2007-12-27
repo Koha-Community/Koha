@@ -483,7 +483,7 @@ CREATE TABLE `borrowers` (
   `altcontactaddress2` varchar(255) default NULL,
   `altcontactaddress3` varchar(255) default NULL,
   `altcontactzipcode` varchar(50) default NULL,
-  `althcontactphone` varchar(50) default NULL,
+  `altcontactphone` varchar(50) default NULL,
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
