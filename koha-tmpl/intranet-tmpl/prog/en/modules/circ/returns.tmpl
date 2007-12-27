@@ -15,6 +15,11 @@
 	<div id="yui-main">
 
 <div class="yui-g">
+<!-- TMPL_IF NAME="wrongbranch" -->
+<div class="message"><h3 class="problem">Independent Branches is on, and you
+are trying to return this item to a branch other than its homebranch, NOT RETURNED
+</h3></div>
+<!-- /TMPL_IF -->
 <!-- case of a mistake in transfer loop -->
 <!-- TMPL_IF Name="WrongTransfer" --><div class="message"><!-- WrongTransfer --><h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
 <!-- TMPL_IF Name="wborcnum"--><h5>Hold for:</h5> 

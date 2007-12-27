@@ -1155,7 +1155,13 @@ sub AddReturn {
         if ( $hbr && $branches->{$hbr}->{'PE'} ) {
             $messages->{'IsPermanent'} = $hbr;
         }
-    
+		
+		# if independent branches are on and returning to different branch, refuse the return
+        if ($hbr ne C4::Context->userenv->{'branch'} && C4::Context->preference("IndependantBranches")){
+			$messages->{'Wrongbranch'} = 1;
+			$doreturn=0;
+		}
+			
         # check that the book has been cancelled
         if ( $iteminformation->{'wthdrawn'} ) {
             $messages->{'wthdrawn'} = 1;

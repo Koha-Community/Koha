@@ -246,6 +246,12 @@ if ( $messages->{'NeedsTransfer'} ){
 	);
 }
 
+if ( $messages->{'Wrongbranch'} ){
+	$template->param(
+		wrongbranch => 1,
+	);
+}
+
 # adding a case of wrong transfert, if the document wasn't transfered in the good library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
@@ -404,6 +410,8 @@ foreach my $code ( keys %$messages ) {
         ;    # FIXME... anything to do here?
     }
 	elsif ( $code eq 'NeedsTransfer' ) {
+	}
+	elsif ( $code eq 'Wrongbranch' ) {
 	}
 		
     else {
