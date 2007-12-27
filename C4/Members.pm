@@ -717,7 +717,14 @@ sub AddMember {
       . ",lost=" 		. $dbh->quote( $data{'lost'} )
       . ",debarred=" 	. $dbh->quote( $data{'debarred'} )
       . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
-      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} ) ;
+      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} ) 
+	  . ",altcontactsurname=" 	. $dbh->quote( $data{'altcontactsurname'} ) 
+	  . ",altcontactfirstname=" 	. $dbh->quote( $data{'altcontactfirstname'} ) 
+	  . ",altcontactaddress1=" 	. $dbh->quote( $data{'altcontactaddress1'} ) 
+	  . ",altcontactaddress2=" 	. $dbh->quote( $data{'altcontactaddress2'} ) 
+	  . ",altcontactaddress3=" 	. $dbh->quote( $data{'altcontactaddress3'} ) 
+	  . ",altcontactzipcode=" 	. $dbh->quote( $data{'altcontactzipcode'} ) 
+	  . ",altcontactphone=" 	. $dbh->quote( $data{'altcontactphone'} ) ;
 	$debug and print STDERR "AddMember SQL: ($query)\n";
     my $sth = $dbh->prepare($query);
 	# 	print "Executing SQL: $query\n";
