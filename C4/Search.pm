@@ -41,7 +41,7 @@ see opac/opac-search.pl or catalogue/search.pl for example of usage
 
 =head1 DESCRIPTION
 
-This module provides the searching facilities for the Koha into a zebra catalog.
+This module provides searching functions for Koha's bibliographic databases
 
 =head1 FUNCTIONS
 
@@ -49,9 +49,9 @@ This module provides the searching facilities for the Koha into a zebra catalog.
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-  &SimpleSearch
   &findseealso
   &FindDuplicate
+  &SimpleSearch
   &searchResults
   &getRecords
   &buildQuery
@@ -151,18 +151,18 @@ sub FindDuplicate {
 
 ($error,$results) = SimpleSearch($query,@servers);
 
-this function performs a simple search on the catalog using zoom.
+This function provides a simple search API on the bibliographic catalog
 
 =over 2
 
 =item C<input arg:>
 
-    * $query could be a simple keyword or a complete CCL query wich is depending on your ccl file.
-    * @servers is optionnal. default one is read on koha-conf.xml
+    * $query can be a simple keyword or a complete CCL query configured with your ccl.properties
+    * @servers is optional. Defaults to biblioserver as found in koha-conf.xml
 
 =item C<Output arg:>
-    * $error is a string which containt the description error if there is one. Else it's empty.
-    * \@results is an array of marc record.
+    * $error is a empty unless an error is detected
+    * \@results is an array of records.
 
 =item C<usage in the script:>
 
@@ -212,21 +212,17 @@ sub SimpleSearch {
         my @tmpresults;
         my @zconns;
         return ( "No query entered", undef ) unless $query;
+
+        # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too. 
+        @servers =("biblioserver") unless @servers;
     
-        #@servers = (C4::Context->config("biblioserver")) unless @servers;
-        @servers =
-        ("biblioserver") unless @servers
-        ;    # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
-    
-        # Connect & Search
+        # Initialize & Search Zebra
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
             eval {
                 $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
-                $tmpresults[$i] =
-                $zconns[$i]
-                ->search( new ZOOM::Query::CCL2RPN( $query, $zconns[$i] ) );
+                $tmpresults[$i] = $zconns[$i]->search( new ZOOM::Query::CCL2RPN( $query, $zconns[$i] ) );
         
-                # getting error message if one occured.
+                # error handling
                 my $error =
                   $zconns[$i]->errmsg() . " ("
                 . $zconns[$i]->errcode() . ") "
@@ -264,7 +260,18 @@ sub SimpleSearch {
     }
 }
 
-# performs the search
+=head2 getRecords
+
+($error,$results) = getRecords($query,@servers);
+
+The all singing, all dancing, multi-server, asynchronous, scanning,
+searching, record nabbing, facet-building function
+
+See verbse embedded documentation.
+
+=cut
+
+
 sub getRecords {
     my (
         $koha_query,     $simple_query,  $sort_by_ref,
@@ -272,11 +279,11 @@ sub getRecords {
         $expanded_facet, $branches,         $query_type,
         $scan
     ) = @_;
-#     warn "Query : $koha_query";
+
     my @servers = @$servers_ref;
     my @sort_by = @$sort_by_ref;
 
-    # create the zoom connection and query object
+    # Create the zoom connection and query object
     my $zconn;
     my @zconns;
     my @results;
@@ -287,13 +294,13 @@ sub getRecords {
     my $facets_info    = ();
     my $facets         = getFacets();
 
-    #### INITIALIZE SOME VARS USED CREATE THE FACETED RESULTS
-    my @facets_loop;    # stores the ref to array of hashes for template
+    #### INITIALIZE SOME VARS USED FOR FACETED RESULTS
+    my @facets_loop;    # stores the ref to array of hashes for template facets loop
     for ( my $i = 0 ; $i < @servers ; $i++ ) {
         $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
 
-# perform the search, create the results objects
-# if this is a local search, use the $koha-query, if it's a federated one, use the federated-query
+        # perform the search, create the results objects
+        # if this is a local search, use the $koha-query, if it's a federated one, use the federated-query
         my $query_to_use;
         if ( $servers[$i] =~ /biblioserver/ ) {
             $query_to_use = $koha_query;
@@ -303,50 +310,29 @@ sub getRecords {
         }
 
         #$query_to_use = $simple_query if $scan;
-        #warn $simple_query if ($scan && $DEBUG);
-        # check if we've got a query_type defined
+        warn $simple_query if ($scan and $DEBUG);
+
+        # Check if we've got a query_type defined, if so, use it
         eval {
             if ($query_type)
             {
                 if ( $query_type =~ /^ccl/ ) {
-                    $query_to_use =~
-                      s/\:/\=/g;    # change : to = last minute (FIXME)
-
-                    #                 warn "CCL : $query_to_use";
-                    $results[$i] =
-                      $zconns[$i]->search(
-                        new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] )
-                      );
+                    $query_to_use =~ s/\:/\=/g;    # change : to = last minute (FIXME)
+                    $results[$i] = $zconns[$i]->search( new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] ) );
                 }
                 elsif ( $query_type =~ /^cql/ ) {
-
-                    #                 warn "CQL : $query_to_use";
-                    $results[$i] =
-                      $zconns[$i]->search(
-                        new ZOOM::Query::CQL( $query_to_use, $zconns[$i] ) );
+                    $results[$i] = $zconns[$i]->search( new ZOOM::Query::CQL( $query_to_use, $zconns[$i] ) );
                 }
                 elsif ( $query_type =~ /^pqf/ ) {
-
-                    #                 warn "PQF : $query_to_use";
-                    $results[$i] =
-                      $zconns[$i]->search(
-                        new ZOOM::Query::PQF( $query_to_use, $zconns[$i] ) );
+                    $results[$i] = $zconns[$i]->search( new ZOOM::Query::PQF( $query_to_use, $zconns[$i] ) );
                 }
             }
             else {
                 if ($scan) {
-                     #               warn "preparing to scan:$query_to_use";
-                    $results[$i] =
-                      $zconns[$i]->scan(
-                        new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] )
-                      );
+                    $results[$i] = $zconns[$i]->scan( new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] ) );
                 }
                 else {
-                    #             warn "LAST : $query_to_use";
-                    $results[$i] =
-                      $zconns[$i]->search(
-                        new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] )
-                      );
+                    $results[$i] = $zconns[$i]->search( new ZOOM::Query::CCL2RPN( $query_to_use, $zconns[$i] ));
                 }
             }
         };
@@ -354,7 +340,8 @@ sub getRecords {
             warn "WARNING: query problem with $query_to_use " . $@;
         }
 
-        # concatenate the sort_by limits and pass them to the results object
+        # Concatenate the sort_by limits and pass them to the results object
+        # Note: sort will override rank
         my $sort_by;
         foreach my $sort (@sort_by) {
             if ($sort eq "author_az") {
@@ -400,6 +387,8 @@ sub getRecords {
             }
         }
     }
+
+    # The big moment: asynchronously retrieve results from all servers
     while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
         my $ev = $zconns[ $i - 1 ]->last_event();
         if ( $ev == ZOOM::Event::ZEND ) {
@@ -408,6 +397,7 @@ sub getRecords {
             if ( $size > 0 ) {
                 my $results_hash;
                 #$results_hash->{'server'} = $servers[$i-1];
+
                 # loop through the results
                 $results_hash->{'hits'} = $size;
                 my $times;
@@ -422,17 +412,18 @@ sub getRecords {
                     my $records_hash;
                     my $record;
                     my $facet_record;
+
                     ## This is just an index scan
                     if ($scan) {
                         my ( $term, $occ ) = $results[ $i - 1 ]->term($j);
-                 # here we create a minimal MARC record and hand it off to the
-                 # template just like a normal result ... perhaps not ideal, but
-                 # it works for now
+                    # here we create a minimal MARC record and hand it off to the
+                    # template just like a normal result ... perhaps not ideal, but
+                    # it works for now
                         my $tmprecord = MARC::Record->new();
                         $tmprecord->encoding('UTF-8');
                         my $tmptitle;
                         my $tmpauthor;
-                # the minimal record in author/title (depending on MARC flavour)
+                    # the minimal record in author/title (depending on MARC flavour)
                         if ( C4::Context->preference("marcflavour") eq
                             "UNIMARC" )
                         {
@@ -450,16 +441,17 @@ sub getRecords {
                         $tmprecord->append_fields($tmpauthor);
                         $results_hash->{'RECORDS'}[$j] = $tmprecord->as_usmarc();
                     }
+
+                    # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
-
-                        #warn "RECORD $j:".$record;
+                        # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] =
                           $record;    # making a reference to a hash
                                       # Fill the facets while we're looping
                         $facet_record = MARC::Record->new_from_usmarc($record);
 
-                        #warn $servers[$i-1].$facet_record->title();
+                        # warn $servers[$i-1].$facet_record->title();
                         for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
                             if ( $facets->[$k] ) {
                                 my @fields;
@@ -490,8 +482,9 @@ sub getRecords {
                 $results_hashref->{ $servers[ $i - 1 ] } = $results_hash;
             }
 
-            #print "connection ", $i-1, ": $size hits";
-            #print $results[$i-1]->record(0)->render() if $size > 0;
+            # warn "connection ", $i-1, ": $size hits";
+            # warn $results[$i-1]->record(0)->render() if $size > 0;
+
             # BUILD FACETS
             for my $link_value (
                 sort { $facets_counter->{$b} <=> $facets_counter->{$a} }
@@ -514,22 +507,22 @@ sub getRecords {
                         || ( $facets_info->{$link_value}->{'expanded'} ) )
                     {
 
-                       # sanitize the link value ), ( will cause errors with CCL
+                       # Sanitize the link value ), ( will cause errors with CCL,
                         my $facet_link_value = $one_facet;
                         $facet_link_value =~ s/(\(|\))/ /g;
 
-                        # fix the length that will display in the label
+                        # fix the length that will display in the label,
                         my $facet_label_value = $one_facet;
                         $facet_label_value = substr( $one_facet, 0, 20 ) . "..."
                           unless length($facet_label_value) <= 20;
 
-                       # well, if it's a branch, label by the name, not the code
+                       # if it's a branch, label by the name, not the code,
                         if ( $link_value =~ /branch/ ) {
                             $facet_label_value =
                               $branches->{$one_facet}->{'branchname'};
                         }
 
-                 # but we're down with the whole label being in the link's title
+                        # but we're down with the whole label being in the link's title.
                         my $facet_title_value = $one_facet;
 
                         push @this_facets_array,
@@ -545,6 +538,8 @@ sub getRecords {
                           );
                     }
                 }
+
+                # handle expanded option
                 unless ( $facets_info->{$link_value}->{'expanded'} ) {
                     $expandable = 1
                       if ( ( $number_of_facets > 6 )
@@ -572,12 +567,14 @@ sub getRecords {
 sub _remove_stopwords {
     my ($operand,$index) = @_;
     my @stopwords_removed;
+
     # phrase and exact-qualified indexes shouldn't have stopwords removed
     if ($index!~m/phr|ext/){
+
     # remove stopwords from operand : parse all stopwords & remove them (case insensitive)
     #       we use IsAlpha unicode definition, to deal correctly with diacritics.
-    #       otherwise, a French word like "leçon" woudl be split into "le" "çon", le 
-    #       is an empty word, we'd get "çon" and wouldn't find anything...
+    #       otherwise, a French word like "leçon" woudl be split into "le" "çon", "le"
+    #       is a stopword, we'd get "çon" and wouldn't find anything...
         foreach (keys %{C4::Context->stopwords}) {
             next if ($_ =~/(and|or|not)/); # don't remove operators
             if ($operand =~ /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$)/) {
@@ -617,6 +614,7 @@ sub _detect_truncation {
     return (\@nontruncated,\@righttruncated,\@lefttruncated,\@rightlefttruncated,\@regexpr);
 }
 
+# STEMMING
 sub _build_stemmed_operand {
     my ($operand) = @_;
     my $stemmed_operand;
@@ -629,7 +627,6 @@ sub _build_stemmed_operand {
                 'or'  => 'or',
                 'not' => 'not',
             }
-                    
         );
     my @words = split( / /, $operand );
     my $stems = $stemmer->stem(@words);
@@ -638,13 +635,14 @@ sub _build_stemmed_operand {
             $stemmed_operand .= "?" unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
             $stemmed_operand .= " ";
     }
-    #warn "STEMMED OPERAND: $stemmed_operand";
+    warn "STEMMED OPERAND: $stemmed_operand" if $DEBUG;
     return $stemmed_operand;
 }
 
+# FIELD WEIGHTING
 sub _build_weighted_query {
     # FIELD WEIGHTING - This is largely experimental stuff. What I'm committing works
-    # pretty well but will work much better when we have an actual query parser
+    # pretty well but could work much better if we had a smarter query parser
     my ($operand,$stemmed_operand,$index) = @_;
     my $stemming      = C4::Context->preference("QueryStemming")     || 0;
     my $weight_fields = C4::Context->preference("QueryWeightFields") || 0;
@@ -665,14 +663,19 @@ sub _build_weighted_query {
        # embedded sorting: 0 a-z; 1 z-a
        # $weighted_query .= ") or (sort1,aut=1";
     }
+
+    # Barcode searches should skip this process
     elsif ( $index eq 'bc' ) {
         $weighted_query .= "bc=\"$operand\"";
     }
-    # if the index already has more than one qualifier, just wrap the operand 
-    # in quotes and pass it back
+
+    # if the index already has more than one qualifier, wrap the operand 
+    # in quotes and pass it back (assumption is that the user knows what they
+    # are doing and won't appreciate us mucking up their query
     elsif ($index =~ ',') {
         $weighted_query .=" $index=\"$operand\"";
     }
+
     #TODO: build better cases based on specific search indexes
     else {
        $weighted_query .= " $index,ext,r1=\"$operand\"";            # exact index
@@ -680,11 +683,27 @@ sub _build_weighted_query {
        $weighted_query .= " or $index,phr,r3=\"$operand\"";         # phrase index
        $weighted_query .= " or $index,rt,wrdl,r3=\"$operand\"";      # word list index
     }
+
     $weighted_query .= "))";    # close rank specification
     return $weighted_query;
 }
 
-# build the query itself
+=head2 buildQuery
+
+( $error, $query,
+$simple_query, $query_cgi,
+$query_desc, $limit,
+$limit_cgi, $limit_desc,
+$stopwords_removed, $query_type ) = getRecords ( $operators, $operands, $indexes, $limits, $sort_by, $scan);
+
+Build queries and limits in CCL, CGI, Human,
+handle truncation, stemming, field weighting, stopwords, fuzziness, etc.
+
+See verbose embedded documentation.
+
+
+=cut
+
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan) = @_;
 
@@ -692,6 +711,7 @@ sub buildQuery {
     warn "Enter buildQuery" if $DEBUG;
     warn "---------" if $DEBUG;
 
+    # dereference
     my @operators = @$operators if $operators;
     my @indexes   = @$indexes   if $indexes;
     my @operands  = @$operands  if $operands;
@@ -702,16 +722,19 @@ sub buildQuery {
     my $auto_truncation = C4::Context->preference("QueryAutoTruncate")      || 0;
     my $weight_fields = C4::Context->preference("QueryWeightFields")        || 0;
     my $fuzzy_enabled = C4::Context->preference("QueryFuzzy")               || 0;
+    my $remove_stopwords = C4::Context->preference("QueryRemoveStopwords")  || 0;
+
     # no stemming/weight/fuzzy in NoZebra
     if (C4::Context->preference("NoZebra")) {
         $stemming =0;
         $weight_fields=0;
         $fuzzy_enabled=0;
     }
-    my $remove_stopwords = C4::Context->preference("QueryRemoveStopwords")  || 0;
 
     my $query = $operands[0];
     my $simple_query = $operands[0];
+
+    # initialize the variables we're passing back
     my $query_cgi;
     my $query_desc;
     my $query_type;
@@ -720,7 +743,7 @@ sub buildQuery {
     my $limit_cgi;
     my $limit_desc;
 
-    my $stopwords_removed;
+    my $stopwords_removed; # flag to determine if stopwords have been removed
 
     # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
     # DIAGNOSTIC ONLY!!
@@ -735,28 +758,29 @@ sub buildQuery {
     }
 
     # pass nested queries directly
+    # FIXME: need better handling of some of these variables in this case
     if ( $query =~ /(\(|\))/ ) {
         return ( undef, $query, $simple_query, $query_cgi, $query, $limit, $limit_cgi, $limit_desc, $stopwords_removed, 'ccl' );
     }
 
-# form-based queries are limited to non-nested at a specific depth, so we can easily
-# modify the incoming query operands and indexes to do stemming and field weighting
-# Once we do so, we'll end up with a value in $query, just like if we had an
-# incoming $query from the user
+    # Form-based queries are non-nested and fixed depth, so we can easily modify the incoming
+    # query operands and indexes and add stemming, truncation, field weighting, etc.
+    # Once we do so, we'll end up with a value in $query, just like if we had an
+    # incoming $query from the user
     else {
-        $query = ""; # clear it out so we can populate properly with field-weighted stemmed query
+        $query = ""; # clear it out so we can populate properly with field-weighted, stemmed, etc. query
         my $previous_operand;    # a flag used to keep track if there was a previous query
-                                # if there was, we can apply the current operator
+                                 # if there was, we can apply the current operator
         # for every operand
         for ( my $i = 0 ; $i <= @operands ; $i++ ) {
 
             # COMBINE OPERANDS, INDEXES AND OPERATORS
             if ( $operands[$i] ) {
 
-                # a flag to determine whether or not to add the index to the query
+                # A flag to determine whether or not to add the index to the query
                 my $indexes_set;
 
-                # if the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
+                # If the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
                 if ($operands[$i] =~ /(:|=)/ || $scan) {
                     $weight_fields = 0;
                     $stemming = 0;
@@ -765,7 +789,7 @@ sub buildQuery {
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
 
-                # add some attributes for certain index types
+                # Add index-specific attributes 
                 # Date of Publication
                 if ($index eq 'yr') {
                     $index .=",st-numeric";
@@ -777,15 +801,15 @@ sub buildQuery {
                     $index.=",st-date-normalized";
                     $indexes_set++;
                     ($stemming,$auto_truncation,$weight_fields, $fuzzy_enabled, $remove_stopwords) = (0,0,0,0,0);
-
                 }
 
-                # set default structure attribute (word list)
+                # Set default structure attribute (word list)
                 my $struct_attr;
                 unless (!$index || $index =~ /(st-|phr|ext|wrdl)/) {
                     $struct_attr = ",wrdl";
                 }
-                # some helpful index modifs
+
+                # Some helpful index variants
                 my $index_plus = $index.$struct_attr.":" if $index;
                 my $index_plus_comma=$index.$struct_attr."," if $index;
 
@@ -804,7 +828,7 @@ sub buildQuery {
 
                 # Apply Truncation
                 if (scalar(@$righttruncated)+scalar(@$lefttruncated)+scalar(@$rightlefttruncated)>0){
-                    # don't field weight or add the index to the query, we do it here
+                    # Don't field weight or add the index to the query, we do it here
                     $indexes_set = 1;
                     undef $weight_fields;
                     my $previous_truncation_operand;
@@ -846,7 +870,7 @@ sub buildQuery {
                 # If there's a previous operand, we need to add an operator
                 if ($previous_operand) {
 
-                    # user-specified operator
+                    # User-specified operator
                     if ( $operators[$i-1] ) {
                         $query .= " $operators[$i-1] ";
                         $query .= " $index_plus " unless $indexes_set;
@@ -857,7 +881,7 @@ sub buildQuery {
                         $query_desc .=" $operators[$i-1] $index_plus $operands[$i]";
                     }
 
-                    # the default operator is and
+                    # Default operator is and
                     else {
                         $query .= " and ";
                         $query .= "$index_plus " unless $indexes_set;
@@ -868,15 +892,14 @@ sub buildQuery {
                     }
                 }
 
-                # there isn't a pervious operand, don't need an operator
+                # There isn't a pervious operand, don't need an operator
                 else { 
-                    # field-weighted queries already have indexes set
+                    # Field-weighted queries already have indexes set
                     $query .=" $index_plus " unless $indexes_set;
                     $query .= $operand;
                     $query_desc .= " $index_plus $operands[$i]";
                     $query_cgi.="&idx=$index" if $index;
                     $query_cgi.="&q=$operands[$i]" if $operands[$i];
-
                     $previous_operand = 1;
                 }
             }    #/if $operands
@@ -885,7 +908,6 @@ sub buildQuery {
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
 
     # add limits
-    $DEBUG=1;
     my $group_OR_limits;
     my $availability_limit;
     foreach my $this_limit (@limits) {
@@ -897,7 +919,8 @@ sub buildQuery {
             $limit_desc .="";
         }
 
-        # these are treated as OR
+        # group_OR_limits, prefixed by mc-
+        # OR every member of the group
         elsif ( $this_limit =~ /mc/ ) {
             $group_OR_limits .= " or " if $group_OR_limits;
             $limit_desc .=" or " if $group_OR_limits;
@@ -905,7 +928,8 @@ sub buildQuery {
             $limit_cgi .="&limit=$this_limit";
             $limit_desc .= " $this_limit";
         }
-        # regular old limits
+
+        # Regular old limits
         else {
             $limit .= " and " if $limit || $query;
             $limit .= "$this_limit";
@@ -921,7 +945,8 @@ sub buildQuery {
         $limit.=" and " if ($query || $limit );
         $limit.="($availability_limit)";
     }
-    # normalize the strings
+
+    # Normalize the query and limit strings
     $query =~ s/:/=/g;
     $limit =~ s/:/=/g;
     for ($query, $query_desc, $limit, $limit_desc) {
@@ -931,24 +956,31 @@ sub buildQuery {
         $_ =~ s/==/=/g;    # remove double == from query
 
     }
-    $query_cgi =~ s/^&//;
+    $query_cgi =~ s/^&//; # remove unnecessary & from beginning of the query cgi
 
     # append the limit to the query
     $query .=" ".$limit;
 
-    warn "query=$query and limit=$limit" if $DEBUG;
-
-    warn "QUERY:".$query if $DEBUG;
-    warn "QUERY CGI:".$query_cgi if $DEBUG;
-    warn "QUERY DESC:".$query_desc if $DEBUG;
-    warn "LIMIT:".$limit if $DEBUG;
-    warn "LIMIT CGI:".$limit_cgi if $DEBUG;
-    warn "LIMIT DESC:".$limit_desc if $DEBUG;
-    warn "---------" if $DEBUG;
-    warn "Leave buildQuery" if $DEBUG;
-    warn "---------" if $DEBUG;
+    # Warnings if DEBUG
+    if ($DEBUG) {
+        warn "QUERY:".$query;
+        warn "QUERY CGI:".$query_cgi;
+        warn "QUERY DESC:".$query_desc;
+        warn "LIMIT:".$limit;
+        warn "LIMIT CGI:".$limit_cgi;
+        warn "LIMIT DESC:".$limit_desc;
+        warn "---------";
+        warn "Leave buildQuery";
+        warn "---------";
+    }
     return ( undef, $query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type );
 }
+
+=head2 searchResults
+
+Format results in a form suitable for passing to the template
+
+=cut
 
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
@@ -958,6 +990,8 @@ sub searchResults {
     my $toggle;
     my $even = 1;
     my @newresults;
+
+    # add search-term highlighting via <span>s on the search terms
     my $span_terms_hashref;
     for my $span_term ( split( / /, $searchdesc ) ) {
         $span_term =~ s/(.*=|\)|\(|\+|\.|\*)//g;
@@ -1005,6 +1039,7 @@ sub searchResults {
     $sth = $dbh->prepare("SELECT authorised_value FROM `marc_subfield_structure` WHERE kohafield = 'items.notforloan' AND frameworkcode=''");
     $sth->execute;
     my ($notforloan_authorised_value) = $sth->fetchrow;
+
     ## find column names of items related to MARC
     my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
     $sth2->execute;
@@ -1014,8 +1049,9 @@ sub searchResults {
           &GetMarcFromKohaField( "items." . $column, "" );
         $subfieldstosearch{$column} = $tagsubfield;
     }
-    my $times;
 
+    # handle which records to actually retrieve
+    my $times;
     if ( $hits && $offset + $results_per_page <= $hits ) {
         $times = $offset + $results_per_page;
     }
@@ -1023,12 +1059,14 @@ sub searchResults {
         $times = $hits;
     }
 
+    # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord;
         $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
         $oldbiblio->{result_number} = $i+1;
-        # add image url if there is one
+
+        # add imageurl to itemtype if there is one
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {
             $oldbiblio->{imageurl} =
               $itemtypes{ $oldbiblio->{itemtype} }->{imageurl};
@@ -1043,9 +1081,9 @@ sub searchResults {
             $oldbiblio->{description} =
               $itemtypes{ $oldbiblio->{itemtype} }->{description};
         }
-        #
-        # build summary if there is one (the summary is defined in itemtypes table
-        #
+
+        # Build summary if there is one (the summary is defined in the itemtypes table)
+        # FIXME: is this used anywhere, I think it can be commented out? -- JF
         if ($itemtypes{ $oldbiblio->{itemtype} }->{summary}) {
             my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
             my @fields = $marcrecord->fields();
@@ -1067,9 +1105,11 @@ sub searchResults {
             $summary =~ s/\n/<br>/g;
             $oldbiblio->{summary} = $summary;
         }
-        # add spans to search term in results for search term highlighting
+
+        # Add search-term highlighting to the whole record where they match using <span>s 
         my $searchhighlightblob;
         for my $highlight_field ($marcrecord->fields) {
+            # FIXME: need to skip title, subtitle, author, etc., as they are handled below
             next if $highlight_field->tag() =~ /(^00)/; # skip fixed fields
             my $match;
             my $field = $highlight_field->as_string();
@@ -1079,11 +1119,16 @@ sub searchResults {
                     $match++;
                 }
             }
+            # FIXME: we might want to limit the size of these fields if we
+            # want to get fancy
             $searchhighlightblob .= $field." ... " if $match;
         }
         $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
-    # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
+
+        # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
         $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
+
+        # Add search-term highlighting to the title, subtitle, etc. fields
         for my $term ( keys %$span_terms_hashref ) {
             my $old_term = $term;
             if ( length($term) > 3 ) {
@@ -1099,6 +1144,8 @@ sub searchResults {
             }
         }
 
+        # FIXME:
+        # surely there's a better way to handle this
         if ( $i % 2 ) {
             $toggle = "#ffffcc";
         }
@@ -1106,9 +1153,11 @@ sub searchResults {
             $toggle = "white";
         }
         $oldbiblio->{'toggle'} = $toggle;
+
+        # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
 
-# Setting item statuses for display
+        # Setting item statuses for display
         my @available_items_loop;
         my @onloan_items_loop;
         my @other_items_loop;
@@ -1130,6 +1179,8 @@ sub searchResults {
         my $items_count=scalar(@fields);
         my $items_counter;
         my $maxitems = (C4::Context->preference('maxItemsinSearchResults')) ? C4::Context->preference('maxItemsinSearchResults')- 1 : 1;
+
+        # loop through every item
         foreach my $field (@fields) {
             my $item;
             $items_counter++;
@@ -1146,7 +1197,8 @@ sub searchResults {
             elsif ($item->{'holdingbranch'}) {
                      $item->{'branchname'} = $branches{$item->{holdingbranch}};
             }
-            # key for items results is built from branchcode . coded location qualifier . itemcallnumber
+
+            # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ($item->{onloan}) {
                 $onloan_count++;
                 $onloan_items->{ $item->{'homebranch'}.'--'.$item->{location}.$item->{'itemcallnumber'}.$item->{due_date} }->{due_date} = format_date($item->{onloan});
@@ -1217,6 +1269,7 @@ sub searchResults {
             $availableitemscount++;
             push @available_items_loop, $available_items->{$key} unless $availableitemscount > $maxitems;
         }
+
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
         $can_place_holds = 0 if $itemtypes{$oldbiblio->{itemtype}}->{notforloan};
         $oldbiblio->{norequests}    = 1 unless $can_place_holds;
