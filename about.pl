@@ -112,6 +112,7 @@ XML::LibXSLT
 XML::SAX::ParserFactory
 XML::Simple
 XML::RSS
+YAML::Syck
       /;
 
 my @components = ();

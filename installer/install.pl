@@ -66,6 +66,9 @@ if ( $step && $step == 1 ) {
     unless ( eval { require ZOOM } ) {
         push @missing, { name => "ZOOM" };
     }
+    unless ( eval { require YAML::Syck } ) {
+        push @missing, { name => "YAML::Syck" };
+    }
     unless ( eval { require LWP::Simple } ) {
         push @missing, { name => "LWP::Simple" };
     }

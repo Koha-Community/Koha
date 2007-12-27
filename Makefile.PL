@@ -520,6 +520,7 @@ WriteMakefile(
 'XML::SAX::ParserFactory' => 1.01,
 'XML::Simple' => 2.14,
 'XML::RSS' => 1.31,
+'YAML::Syck' => 1.00,
         },
 
 	# File tree mapping
