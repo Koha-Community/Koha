@@ -1,10 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloguing Authority Report</title>
+<title>Koha &rsaquo; Cataloguing Authority Plugin</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
@@ -12,67 +10,10 @@
 	<div class="yui-b"><div class="yui-g">
 
 <h1>Authority search</h1>
+<!-- TMPL_INCLUDE NAME="auth-finder-search.inc" -->
 
-<form name="f" action="/cgi-bin/koha/authorities/auth_finder.pl" method="post">
-	<input type="hidden" name="op" value="do_search" />
-	<input type="hidden" name="type" value="intranet" />
-	<input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-	<h2>Search on</h2>
-		<p>
-			<label>Authority type</label>
-			<!-- TMPL_VAR NAME="authtypecode" -->
-			<input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-			<input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
-		</p>
-		<p>
-          <label>Main entry ($a only)</label>
-          <input type="hidden" name="marclist" value="mainmainentry" />
-          <input type="hidden" name="and_or" value="and" />
-          <input type="hidden" name="excluding" value="" />
-          <select name="operator">
-            <option value="contains">contains</option>
-            <option value="start">starts by</option>
-            <option value="is">is exactly</option>
-          </select>
-          <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="resultstring" -->" />
-		</p>
-        <p>
-          <label for="value_mainentry">Main entry</label>
-          <input type="hidden" name="marclist" value="mainentry" />
-          <input type="hidden" name="and_or" value="and" />
-          <input type="hidden" name="excluding" value="" />
-          <select name="operator">
-            <option value="contains">contains</option>
-            <option value="start">starts by</option>
-            <option value="is">is exactly</option>
-          </select>
-          <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-        </p>
-        <p>
-          <label for="value_anywhere">Anywhere</label>
-          <input type="hidden" name="marclist" value="" />
-          <input type="hidden" name="and_or" value="and" />
-          <input type="hidden" name="excluding" value="" />
-          <select name="operator">
-            <option value="contains">contains</option>
-            <option value="start">starts by</option>
-            <option value="is">is exactly</option>
-          </select>
-          <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-        </p>
-        <p>
-          Sort by <select name="orderby">
-         <option value="">No order</option>
-	    <option value="HeadingAsc" selected="SELECTED">Heading Ascendant</option>
-	    <option value="HeadingDsc">Heading Descendant</option>
-	  </select>
-			<input type="submit" value="Start search" class="button" />
-		</p>
-</form>
-
+	</div>
+	</div>
+   </div>
 </div>
-</div>
-</div>
-
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

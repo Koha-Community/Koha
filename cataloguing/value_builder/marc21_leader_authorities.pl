@@ -1,3 +1,4 @@
+
 #!/usr/bin/perl
 
 
@@ -44,7 +45,10 @@ my $res="
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-return 1;
+    if(!document.getElementById(\"$field_number\").value){
+        document.getElementById(\"$field_number\").value = '     nam a22     7a 4500';
+    }
+    return 1;
 }
 
 function Blur$function_name(subfield_managed) {
@@ -53,7 +57,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_leader_authorities.pl&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"plugin_launcher.pl?plugin_name=marc21_leader.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -71,14 +75,14 @@ my ($input) = @_;
 	my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_leader_authorities.tmpl",
+    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_leader.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-	$result = "     nam  22     7a  4500" unless $result;
+	$result = "     nam a22     7a 4500" unless $result;
 	my $f5 = substr($result,5,1);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);

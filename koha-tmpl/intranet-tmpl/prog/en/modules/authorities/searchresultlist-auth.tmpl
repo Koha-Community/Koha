@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloguing Authority Selection</title>
+<title>Koha &rsaquo; Cataloguing Authority Plugin</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 
@@ -10,67 +10,16 @@ function jumpfull(page)
 </script>
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
+<div id="doc3" class="yui-t2">
 
-<div id="doc" class="yui-t7">
-   
    <div id="bd">
-	<div id="yui-main"><div class="yui-g">
+           <div id="yui-main">
+	           <div class="yui-b"><div class="yui-g">
 
-    <h1>Authority search results</h1>
-    <form name="f" method="post" action="auth_finder.pl">
-            <input type="hidden" name="op" value="do_search" />
-            <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-            <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
-            <h2>Search on</h2>
-                <p>
-                    <label>Authority type</label>
-                    <!-- TMPL_VAR NAME="authtypecode" -->
-                    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-                </p>
-                <p>
-                    <label>Main entry ($a only)</label>
-                    <input type="hidden" name="marclist" value="mainmainentry" />
-                    <input type="hidden" name="and_or" value="and" />
-                    <input type="hidden" name="excluding" value="" />
-                    <select name="operator">
-                        <option value="contains">contains</option>
-                        <option value="start">starts by</option>
-                        <option value="is">is exactly</option>
-                    </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainmainstring" -->" />
-                </p>
-                <p>
-                    <label>Main entry</label>
-                    <input type="hidden" name="marclist" value="mainentry" />
-                    <input type="hidden" name="and_or" value="and" />
-                    <input type="hidden" name="excluding" value="" />
-                    <select name="operator">
-                        <option value="contains">contains</option>
-                        <option value="start">starts by</option>
-                        <option value="is">is exactly</option>
-                    </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainstring" -->" />
-                </p>
-                <p>
-                    <label>Anywhere</label>
-                    <input type="hidden" name="marclist" value="" />
-                    <input type="hidden" name="and_or" value="and" />
-                    <input type="hidden" name="excluding" value="" />
-                    <select name="operator" >
-                        <option value="contains">contains</option>
-                        <option value="start">starts by</option>
-                        <option value="is">is exactly</option>
-                    </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="anystring" -->" />
-                </p>
-                <p>
-                <input type="submit" value="Start search" class="button" />
-                </p>
-        </form>
-    <div id="resultnumber">
-            <p>
+    	<h1>Authority search results</h1>
+    	<!-- TMPL_INCLUDE NAME="auth-finder-search.inc" -->
+    	<div id="resultnumber">
+            <div>
                 <!-- TMPL_IF name="displayprev" -->
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
@@ -88,14 +37,14 @@ function jumpfull(page)
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
-            </p>
-            <p>
+            </div>
+            <div>
                 <!-- TMPL_IF name="total" -->
                     &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br /><br />
                 <!-- TMPL_ELSE -->
                     &nbsp; No results found<br />
                 <!-- /TMPL_IF -->
-            </p>
+            </div>
         </div>
         <div id="resultlist">
             <table>
@@ -125,7 +74,7 @@ function jumpfull(page)
     
         </div>
         <div id="resultnumber">
-            <p>
+            <div>
                 <!-- TMPL_IF name="displayprev" -->
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranetamp;&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
@@ -143,10 +92,10 @@ function jumpfull(page)
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
-            </p>
+            </div>
         </div>
-
 </div>
 </div>
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

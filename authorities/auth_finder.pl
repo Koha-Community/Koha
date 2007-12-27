@@ -69,7 +69,6 @@ if ( $op eq "do_search" ) {
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
         $startfrom * $resultsperpage,
         $resultsperpage, $authtypecode, $orderby);
-
     # multi page display gestion
     my $displaynext = 0;
     my $displayprev = $startfrom;
