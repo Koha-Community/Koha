@@ -605,8 +605,8 @@ sub _new_dbh
     if ( $db_driver eq 'mysql' ) { 
         # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
         # this is better than modifying my.cnf (and forcing all communications to be in utf8)
-        $dbh->do("set NAMES 'utf8'") if ($dbh);
         $dbh->{'mysql_enable_utf8'}=1; #enable
+        $dbh->do("set NAMES 'utf8'");
     }
     elsif ( $db_driver eq 'Pg' ) {
 	    $dbh->do( "set client_encoding = 'UTF8';" );
