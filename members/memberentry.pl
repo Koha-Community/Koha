@@ -322,9 +322,6 @@ if ($select_city eq '' ){
 }
 my($cityid);
 ($cityid,$name_city)=GetCities();
-if ($cityid) {
-	warn "hey hey waht the?";
-	}
 $template->param( city_cgipopup => 1) if ($cityid );
 my $citypopup = CGI::popup_menu(-name=>'select_city',
         -id => 'select_city',
