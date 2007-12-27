@@ -1505,7 +1505,8 @@ sub GetCities {
 #test to know if the table contain some records if no the function return nothing
     my $id = @id;
     $sth->finish;
-    if ( $id eq 0 ) {
+    if ( $id == 1 ) {
+		# all we have is the one blank row
         return ();
     }
     else {
@@ -1689,8 +1690,14 @@ Looks up the different title . Returns array  with all borrowers title
 sub GetTitles {
     my @borrowerTitle = split /,|\|/,C4::Context->preference('BorrowersTitles');
     unshift( @borrowerTitle, "" );
-    return ( \@borrowerTitle);
-    }
+	my $count=@borrowerTitle;
+	if ($count == 1){
+		return ();
+	}
+	else {
+		return ( \@borrowerTitle);
+	}
+}
 
 
 

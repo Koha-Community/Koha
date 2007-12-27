@@ -130,6 +130,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 		<legend><!--TMPL_IF Name="I"-->Organisation <!--TMPL_ELSE-->Patron <!--/TMPL_IF-->identity</legend>
 		<ol>
 		<!-- TMPL_UNLESS name="I" -->
+		<!-- TMPL_IF NAME="title_cgipopup" -->
             <li>
             <!-- TMPL_IF NAME="mandatorytitle" -->
                 <label for="btitle" class="required">
@@ -140,6 +141,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
             <!-- TMPL_VAR NAME="borrotitlepopup" -->
             <!-- TMPL_IF NAME="mandatorytitle" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
+		<!-- /TMPL_IF -->
         <!-- /TMPL_UNLESS -->
 		<li>
 		<!-- TMPL_IF NAME="mandatorysurname" -->

@@ -322,6 +322,9 @@ if ($select_city eq '' ){
 }
 my($cityid);
 ($cityid,$name_city)=GetCities();
+if ($cityid) {
+	warn "hey hey waht the?";
+	}
 $template->param( city_cgipopup => 1) if ($cityid );
 my $citypopup = CGI::popup_menu(-name=>'select_city',
         -id => 'select_city',
@@ -345,6 +348,7 @@ my $roadpopup = CGI::popup_menu(-name=>'streettype',
 my $default_borrowertitle;
 $default_borrowertitle=$data{'title'} ;
 my($borrowertitle)=GetTitles();
+$template->param( title_cgipopup => 1) if ($borrowertitle);
 my $borrotitlepopup = CGI::popup_menu(-name=>'title',
         -id => 'btitle',
         -values=>$borrowertitle,
