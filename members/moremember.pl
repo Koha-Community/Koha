@@ -88,6 +88,7 @@ my $reregistration = $input->param('reregistration');
 
 if ( not defined $data ) {
     $template->param (unknowuser => 1);
+	output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
