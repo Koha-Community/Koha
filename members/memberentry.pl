@@ -155,7 +155,7 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
     $data{'contactfirstname'}= $guarantordata->{'firstname'}; 
     $data{'contactname'}     = $guarantordata->{'surname'};
     $data{'contacttitle'}    = $guarantordata->{'title'};  
-	foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro)) {
+	  foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro branchcode)) {
 		$data{$_} = $guarantordata->{$_};
 	}
   }
@@ -407,7 +407,7 @@ foreach my $branch (sort keys %$branches) {
 # --------------------------------------------------------------------------------------------------------
   #in modify mod :default value from $CGIbranch comes from borrowers table
   #in add mod: default value come from branches table (ip correspendence)
-$default=$data{'branchcode'}  if ($op eq 'modify');
+$default=$data{'branchcode'}  if ($op eq 'modify' || ($op eq 'add' && $category_type eq 'C'));
 my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -name   => 'branchcode',
             -values => \@select_branch,
