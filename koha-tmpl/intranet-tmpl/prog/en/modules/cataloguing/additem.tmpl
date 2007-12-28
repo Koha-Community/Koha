@@ -33,12 +33,13 @@ function Check(f) {
     }
     var alertString2;
     if (total_errors==0) {
-        document.f.submit();
+        return true;
     } else {
         alertString2  = _("Form not submitted because of the following problem(s)");
         alertString2 += "\n------------------------------------------------------------------------------------\n";
         alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
         alert(alertString2);
+        return false;
     }
 }
 function Dopop(link,i) {
@@ -208,18 +209,13 @@ function CreateKey(){
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
 
-    <script type="text/javascript" >
-    var elmLink = document.getElementById("formsubmit");
-    elmLink.addEventListener("click", Check(this.form), true);
-    </script>
-
     <!-- TMPL_IF name="opisadd" -->
-    <input id="formsubmit" type="submit" value="Add item" />
+    <input type="submit" value="Add item" onclick="return Check(this.form)" />
     <!-- TMPL_ELSE -->
     <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-    <input id="formsubmit" type="submit" value="Save Changes"/> 
+    <input type="submit" value="Save Changes" onclick="return Check(this.form)" /> 
     <!-- /TMPL_IF -->
 
 </div>
