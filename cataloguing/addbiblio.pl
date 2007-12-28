@@ -682,6 +682,10 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
       map {$query.= ' and he,ext="'.$_->[1].'"' if ($_->[0]=~/[A-z]/)}  $field->subfields();
       my ($error,$results)=SimpleSearch($query,"authorityserver");
     # there is only 1 result 
+	  if ( $error ) {
+        warn "BIBLIOADDSAUTHORITIES: $error";
+	    return (0,0) ;
+	  }
       if ($results && scalar(@$results)==1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
