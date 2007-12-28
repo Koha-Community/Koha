@@ -465,7 +465,7 @@ WriteMakefile(
 'CGI::Session' => '4.10',
 'Class::Factory::Util' => 1.6,
 'Class::Accessor' => 0.30,
-'DBD::mysql' => 3.0008,
+'DBD::mysql' => 4.004,
 'DBI' => 1.53,
 'Data::ICal' => 0.13,
 'Data::Dumper' => 2.121_08,
@@ -520,7 +520,7 @@ WriteMakefile(
 'XML::SAX::ParserFactory' => 1.01,
 'XML::Simple' => 2.14,
 'XML::RSS' => 1.31,
-'YAML::Syck' => 1.00,
+'YAML::Syck' => 0.71,
         },
 
 	# File tree mapping
