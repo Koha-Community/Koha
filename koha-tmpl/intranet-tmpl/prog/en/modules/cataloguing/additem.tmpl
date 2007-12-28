@@ -207,13 +207,19 @@ function CreateKey(){
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+
+    <script type="text/javascript" >
+    var elmLink = document.getElementById("formsubmit");
+    elmLink.addEventListener("click", Check(this.form), true);
+    </script>
+
     <!-- TMPL_IF name="opisadd" -->
-    <input type="button" value="Add item"  onclick="Check(this.form)" accesskey="w" />
+    <input id="formsubmit" type="submit" value="Add item" />
     <!-- TMPL_ELSE -->
     <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-    <input type="button" value="Save Changes" onclick="Check(this.form)" accesskey="w" />
+    <input id="formsubmit" type="submit" value="Save Changes"/> 
     <!-- /TMPL_IF -->
 
 </div>

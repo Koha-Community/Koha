@@ -2207,7 +2207,7 @@ sub SetVersion {
       my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
       $finish->execute($kohaversion);
     } else {
-      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Don\'t change this value manually, it\'s maintained by the webinstaller')");
+      my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
       $finish->execute($kohaversion);
     }
 }

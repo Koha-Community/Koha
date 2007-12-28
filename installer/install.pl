@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w # please develop with -w
 
-#use diagnostics;
+use diagnostics;
 
 # use Install;
 use InstallAuth;
@@ -273,7 +273,7 @@ elsif ( $step && $step == 3 ) {
             $finish->execute($kohaversion);
         } else {
             warn "INSERT Version";
-            my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Don\'t change this value manually, it\'s maintained by the webinstaller')");
+            my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
             $finish->execute($kohaversion);
         }
 
