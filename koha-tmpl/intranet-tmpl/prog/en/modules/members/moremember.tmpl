@@ -29,11 +29,12 @@ $(document).ready(function() {
 <div class="dialog alert">
 <!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
 <h3>Userid / Password update failed</h3>
-<strong>Insufficient user permissions.</strong>
+<strong>Insufficient privileges.</strong>
 <p>Other fields updated.</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="CANT_DELETE" -->
-<p><strong>Unable to delete member:</strong> insufficient privileges.</p>
+<h3>Unable to delete patron:</h3>
+<p>Insufficient privileges.</p>
 <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
