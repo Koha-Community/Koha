@@ -21,10 +21,10 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
 </h3></div>
 <!-- /TMPL_IF -->
 <!-- case of a mistake in transfer loop -->
-<!-- TMPL_IF Name="WrongTransfer" --><div class="message"><!-- WrongTransfer --><h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
+<!-- TMPL_IF Name="WrongTransfer" --><div class="dialog message"><!-- WrongTransfer --><h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
 <!-- TMPL_IF Name="wborcnum"--><h5>Hold for:</h5> 
-        <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"></a> (<!-- TMPL_VAR Name="wborcnum" -->)</li>
-        <li><!-- TMPL_VAR Name="wborsurname" -->, <!-- TMPL_VAR Name="wborfirstname" --> </li>
+        <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+            <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
         <li><!-- TMPL_VAR Name="wboraddress" --><!-- TMPL_IF NAME="wboraddress2" --><br />
 		<!-- TMPL_VAR NAME="wboraddress2" --><br /><!-- /TMPL_IF -->
         <!-- TMPL_VAR Name="wborcity" -->  <!-- TMPL_VAR NAME="wborzip" --></li>
@@ -43,10 +43,10 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
 
 <!-- TMPL_IF Name="found" -->
 <!-- found -->
-<div class="dialog message">
 <!-- case of a reservation found, and display info -->
     <!-- TMPL_IF Name="waiting" -->
 	<!-- waiting -->
+<div class="dialog message">
         <h3>Hold Found (item is already waiting) </h3>
 		<h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
         <h5>Hold for:</h5>
@@ -70,11 +70,13 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
                 <input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
                 </form>
+	</div>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF Name="diffbranch" -->
 		<!-- diffbranch -->
-        <h2>Hold needing transfer found</h2>
+        <div class="dialog message">
+		<h2>Hold needing transfer found</h2>
         <h3><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
                 <h4>Hold for: </h4>
                     <ul>
@@ -99,17 +101,18 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
             <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
             <input type="hidden" name="barcode" value="0" />
         </form>
+		</div>
     <!-- /TMPL_IF -->
 
     <!-- case of a return of item, but with no reservation after, if the item must be  returned to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
 	<!-- transfer -->
-	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3>
-	<!-- /TMPL_IF -->
+	<div class="dialog message">
+	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
     
     <!-- TMPL_IF Name="needstransfer" -->
 	<!-- transfer -->
-	<h3 class="problem"> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
+	<div class="dialog message"><h3> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
     <form method="post" action="returns.pl" name="mainform" id="mainform">              
 	<input type="submit" value="Confirm and transfer" class="submit" />
 	<input type="hidden" name="dotransfer" value="yes">
@@ -121,7 +124,7 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
 	<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" /> 
 	<!-- /TMPL_LOOP -->                            
 	<input type="hidden" name="barcode" value="0" />    
-	</form>   
+	</form>   </div>
 	<!-- /TMPL_IF -->
     	
     <!-- TMPL_IF Name="diffbranch" -->
@@ -144,12 +147,14 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
             <!-- /TMPL_LOOP -->
             <input type="hidden" name="barcode" value="0" />
         </form>
+		</div>
     <!-- /TMPL_IF -->
     
     
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
 	<!--  reserved  -->
+	<div class="dialog message">
 	  <h3>Hold Found:</h3>
        <h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
         <h5>Hold for:</h5>
@@ -183,13 +188,13 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
             <input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" />
             <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
         </form>
-	
+	</div>
     <!-- /TMPL_IF -->
 	</div>
 <!-- TMPL_ELSE -->
 
 <!-- TMPL_IF NAME="errmsgloop" -->
-    <div class="message">
+    <div class="dialog message">
         <!-- TMPL_LOOP Name="errmsgloop" -->
                     <!-- TMPL_IF Name="badbarcode" -->
                         <p class="problem">No Item with barcode: <!-- TMPL_VAR Name="msg" --></p>
