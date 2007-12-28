@@ -39,10 +39,9 @@
     <br clear="all" />
     <!-- TMPL_LOOP NAME="ITEM_DATA" -->
     <div class="yui-g">
-        <h2>Barcode <!-- TMPL_VAR NAME="barcode" -->  <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --></h2>
-        <ol class="bibliodetails">
-            <li><span class="listgroup">Item Information</span> <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit Items</a><!-- /TMPL_IF --></li>
-            <li><ul>
+        <h3 style="padding-top: 1em; border-top: 2px solid #CCCCCC;">Barcode <!-- TMPL_VAR NAME="barcode" -->  <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --></h3>
+        <div class="listgroup"><h4>Item Information <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">[Edit Items]</a><!-- /TMPL_IF --></h4>
+            <ol class="bibliodetails">
             <li><span class="label">Home Library:</span> <!-- TMPL_VAR NAME="homebranchname" -->&nbsp;</li>
 	    <!-- TMPL_IF NAME="item-level_itypes" -->
             <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itype" -->&nbsp;</li>
@@ -52,16 +51,15 @@
             <li><span class="label">Item Callnumber:</span> <!-- TMPL_VAR NAME="itemcallnumber" -->&nbsp;</li>
             <!-- TMPL_IF NAME="copyvol" --><li><span class="label">Copy / Vol :</span> <!-- TMPL_VAR NAME="copyvol" -->&nbsp;</li> <!-- /TMPL_IF -->  
             <!-- TMPL_IF NAME="replacementprice" --><li><span class="label">Replacement Price:</span> <!-- TMPL_VAR NAME="replacementprice" -->&nbsp;</li> <!-- /TMPL_IF -->
-            </ul></li>
-            <li><span class="listgroup">Statuses</span> 
-            ( 
+            </ol></div>
+           <div class="listgroup"><h4>Statuses</span> ( 
                 <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="itemlost"-->Lost<!-- /TMPL_IF --> 
                 <!-- TMPL_IF NAME="damaged" -->Damaged<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="wthdrawn" -->Withdrawn<!-- /TMPL_IF -->
-            )
-            </li>
-            <li><ul>
+            )</h4>
+            
+            <ol class="bibliodetails">
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
             <li><span class="label">Circulation Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="onloan" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
             <li><span class="label">Lost Status:</span>
@@ -116,9 +114,9 @@
         <!-- /TMPL_IF -->
                 </form>
             </li>
-            </ul></li>
-            <li> <span class="listgroup">History</span></li>
-            <li><ul>
+            </ol></div>
+            <div class="listgroup"><h4>History</h4>
+            <ol class="bibliodetails">
                 <li><span class="label">
                 <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><a href="/cgi-bin/koha/acqui/orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&amp;catview=yes">Accession Date:</a><!-- TMPL_ELSE -->Accession Date:<!-- /TMPL_IF --></span> <!-- TMPL_VAR NAME="dateaccessioned" --></li>
 
@@ -133,16 +131,12 @@
                 <!-- TMPL_IF NAME="card1" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower1" -->"><!-- TMPL_VAR NAME="card1" --></a>&nbsp;</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="card2" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower2" -->"><!-- TMPL_VAR NAME="card2" --></a>&nbsp;</li><!-- /TMPL_IF -->
                 <li><span class="label">Paid for?:</span> <!-- TMPL_VAR NAME="paidfor" -->&nbsp;</li>
-            </ul></li>
-                <li> <span class="listgroup">Notes</span></li>
-            <li><ul>
-                <li><span class="label">Public Note:</span> 
-                    <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+            <li><span class="label">Public Note:</span>
+              <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                    <textarea name="itemnotes" rows="2" cols="30" value="<!-- TMPL_VAR NAME="itemnotes" -->"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> </form>
+                    <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> 
                 </li>
-            </ul></li>
-        </ol>
+            </ol></form></div>
 </div>
 <!-- /TMPL_LOOP -->
 
