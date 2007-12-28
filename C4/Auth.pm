@@ -261,13 +261,13 @@ sub get_template_and_user {
             KohaAdminEmailAddress   => "" . C4::Context->preference("KohaAdminEmailAddress"),
             IntranetmainUserblock   => C4::Context->preference("IntranetmainUserblock"),
             IndependantBranches     => C4::Context->preference("IndependantBranches"),
-            CircAutocompl => C4::Context->preference("CircAutocompl"),
-            yuipath => C4::Context->preference("yuipath"),
-            FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
-            AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
-            'item-level_itypes' => C4::Context->preference('item-level_itypes'),
-            intranetreadinghistory => C4::Context->preference('intranetreadinghistory'),
-            canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
+			CircAutocompl => C4::Context->preference("CircAutocompl"),
+			yuipath => C4::Context->preference("yuipath"),
+			FRBRizeEditions => C4::Context->preference("FRBRizeEditions"),
+			AmazonSimilarItems => C4::Context->preference("AmazonSimilarItems"),
+			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
+			canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
+			intranetreadinghistory => C4::Context->preference("intranetreadinghistory"),
         );
     }
     else {
