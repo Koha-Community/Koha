@@ -797,7 +797,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.00.00.038";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE `systempreferences` set explanation='Choose the fines mode, \'off\', \'test\' (emails admin report) or \'production\' (accrue overdue fines).  Requires fines cron script' , options='off|test|production' where variable='finesMode'");
-	$dbh->do('DELETE FROM `systempreferences` WHERE variable='hideBiblioNumber'");
+	$dbh->do("DELETE FROM `systempreferences` WHERE variable='hideBiblioNumber");
     print "Upgrade to $DBversion done ('alter finesMode systempreference, remove superfluous syspref.')\n";
     SetVersion ($DBversion);
 }
