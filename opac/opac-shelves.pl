@@ -32,32 +32,31 @@
 
 =item C<modifyshelfcontents>
 
-    if this script has to modify the shelve content.
+    if this script has to modify the shelf content.
 
 =item C<shelfnumber>
 
-    to know on which shelve this script has to work.
+    to know on which shelf this script has to work.
 
 =item C<addbarcode>
 
 =item C<op>
 
-    op can be equals to:
-        * modifsave to save change on the shelves
-        * modif to change the template to allow to modify the shelves.
+    op can equal the following values:
+        * 'modifsave' to save changes on the shelves
+        * 'modif' to change the template to allow modification of the shelves.
 
 =item C<viewshelf>
 
-    to load the template with 'viewshelves param' which allow to read the shelves information.
+    to load the template with 'viewshelves param' which allows reading the shelves information.
 
 =item C<shelves>
 
-    if equals to 1. then call the function shelves which add
-    or delete a shelf.
+    if == 1, then call the function shelves to add or delete a shelf.
 
 =item C<addshelf>
 
-    if the param shelves = 1 then addshelf must be equals to the name of the shelf to add.
+    if the param shelves == 1, then addshelf must be equals to the name of the shelf to add.
 
 =back
 
@@ -72,6 +71,12 @@ use C4::Circulation;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
+
+use vars qw($debug);
+
+BEGIN { 
+	$debug = $ENV{DEBUG} || 0;
+}
 
 my $query = new CGI;
 
@@ -92,20 +97,26 @@ if ( $query->param('modifyshelfcontents') ) {
     if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
         AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
-            if (/REM-(\d*)/) {
-                my $biblionumber = $1;
-                DelFromShelf( $biblionumber, $shelfnumber );
-            }
+            /REM-(\d+)/ or next;
+            DelFromShelf( $1, $shelfnumber );	# $1 is biblionumber
         }
     }
 }
 
+my $showadd = 1;
 # set the default tab, etc.
 my $shelf_type = $query->param('display');
-if ((!$shelf_type) || ($shelf_type eq 'privateshelves'))  {
+if (defined $shelf_type) {
+	if ($shelf_type eq 'privateshelves')  {
+		$template->param(showprivateshelves => 1);
+	} elsif ($shelf_type eq 'publicshelves') {
+		$template->param(showpublicshelves => 1);
+		$showadd = 0;
+	} else {
+		$debug and warn "Invalid 'display' param ($shelf_type)";
+	}
+} else {
     $template->param(showprivateshelves => 1);
-} elsif ($shelf_type eq 'publicshelves') {
-    $template->param(showpublicshelves => 1);
 }
 
 # getting the Shelves list
@@ -114,31 +125,31 @@ $template->param( { loggedinuser => $loggedinuser } );
 my $op = $query->param('op');
 
 SWITCH: {
-    if ( $op && ( $op eq 'modifsave' ) ) {
-        ModShelf(
-            $query->param('shelfnumber'), $query->param('shelfname'),
-            $loggedinuser,                $query->param('category'), $query->param('sortfield')
-        );
-        last SWITCH;
-    }
-    if ( $op && ( $op eq 'modif' ) ) {
-        my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) =
-          GetShelf( $query->param('shelf') );
-        $template->param(
-            edit                => 1,
-            shelfnumber         => $shelfnumber,
-            shelfname           => $shelfname,
-            "category$category" => 1,
-            "sort_$sortfield"   => 1,
-        );
-        last SWITCH;
-    }
-    if ( $query->param('viewshelf') ) {
-
+	if ( $op ) {
+		if ( $op eq 'modifsave' ) {
+			ModShelf(
+				$query->param('shelfnumber'), $query->param('shelfname'),
+				$loggedinuser,                $query->param('category'), $query->param('sortfield')
+			);
+			$shelflist = GetShelves( $loggedinuser, 2 );	# refresh after mods
+		} elsif ( $op eq 'modif' ) {
+			my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelf') );
+			$template->param(
+				edit                => 1,
+				shelfnumber         => $shelfnumber,
+				shelfname           => $shelfname,
+				"category$category" => 1,
+				"sort_$sortfield"   => 1,
+			);
+		}
+		last SWITCH;
+	}
+	if ( $query->param('viewshelf') ) {
         #check that the user can view the shelf
         my $shelfnumber = $query->param('viewshelf');
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
+			$showadd = 1;
             $template->param(
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
@@ -146,7 +157,7 @@ SWITCH: {
                 manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
                 itemsloop   => $items,
             );
-        }
+        } # else {;}  # FIXME - some kind of warning *may* be in order
         last SWITCH;
     }
     if ( $query->param('shelves') ) {
@@ -158,94 +169,68 @@ SWITCH: {
             );
 
             if ( $shelfnumber == -1 ) {    #shelf already exists.
+				$showadd = 1;
                 $template->param(
-                    {
                         shelfnumber => $shelfnumber,
-                        already     => 1
-                    }
+                        already     => $newshelf,
                 );
-            }
-            print $query->redirect("/cgi-bin/koha/opac-shelves.pl?viewshelf=$shelfnumber");
-            exit;
+            } else {
+            	print $query->redirect("/cgi-bin/koha/opac-shelves.pl?viewshelf=$shelfnumber");
+				exit;		# can't redirect AND expect %line to DO anything!
+			}
         }
         my @paramsloop;
         foreach ( $query->param() ) {
-            my %line;
-            if (/DEL-(\d+)/) {
-                my $delshelf = $1;
-                my ( $status, $count ) = DelShelf($delshelf);
-                if ($status) {
-                    $line{'status'} = $status;
-                    $line{'count'}  = $count;
-                }
-                print $query->redirect("/cgi-bin/koha/opac-shelves.pl");
-                exit;
-            }
-
-            #if the shelf is not deleted, %line points on null
-            # push( @paramsloop, \%line );
+			/^DEL-(\d+)/ or next;
+			my %line;
+			( $line{status}, $line{count} ) = DelShelf($1);
+			(defined $shelflist->{$1}) and delete $shelflist->{$1};
+			# print $query->redirect("/cgi-bin/koha/opac-shelves.pl"); exit;
+			# can't redirect and expect %line to DO anything!
+			push( @paramsloop, \%line );
         }
-        $template->param( paramsloop => \@paramsloop );
-        my ($shelflist) = GetShelves( $loggedinuser, 2 );
-        my $color = '';
-        my @shelvesloop;
-        foreach my $element ( sort keys %$shelflist ) {
-            my %line;
-            ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
-            $line{'toggle'}         = $color;
-            $line{'shelf'}          = $element;
-            $line{'shelfname'}      = $shelflist->{$element}->{'shelfname'};
-            $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
-            push( @shelvesloop, \%line );
-        }
-        $template->param(
-            shelvesloop => \@shelvesloop,
-            shelves     => 1,
+		$showadd = 1;
+        $template->param( 
+			paramsloop => \@paramsloop,
+            shelves    => 1,
         );
         last SWITCH;
     }
 }
 
-# rebuild shelflist in case a shelf has been added
-($shelflist) = GetShelves( $loggedinuser, 2 ) ;    
-my $color='';
+# rebuilding shelflist (in case a shelf has been added) is not necessary since add redirects!
+
+$showadd and $template->param(showadd => 1);
+my $color = 0;
 my @shelvesloop;
 my @shelveslooppriv;
 
 foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
-    my %line;
-    my %linepriv;
-    ($color eq 0) ? ($color=1) : ($color=0);
-    if ($shelflist->{$element}->{'category'} eq 2) {
-        $line{'toggle'}= $color;
-        $line{'shelf'}=$element;
-        $line{'shelfname'}=$shelflist->{$element}->{'shelfname'};
-        $line{'sortfield'}=$shelflist->{$element}->{'sortfield'};
-        $line{"category".$shelflist->{$element}->{'category'}} = 1;
-        $line{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $line{'shelfvirtualcount'}=$shelflist->{$element}->{'count'};
-        $line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
-        $line{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $line{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        push (@shelvesloop, \%line);
-    } elsif ($shelflist->{$element}->{'category'} eq 1) {
-        $linepriv{'toggle'}= $color;
-        $linepriv{'shelf'}=$element;
-        $linepriv{'shelfname'}=$shelflist->{$element}->{'shelfname'};
-        $linepriv{'sortfield'}=$shelflist->{$element}->{'sortfield'};
-        $linepriv{"category".$shelflist->{$element}->{'category'}} = 1;
-        $linepriv{'mine'} = 1 if $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $linepriv{'shelfvirtualcount'}=$shelflist->{$element}->{'count'};
-        $linepriv{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
-        $linepriv{'firstname'}=$shelflist->{$element}->{'firstname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        $linepriv{'surname'}=$shelflist->{$element}->{'surname'} unless $shelflist->{$element}->{'owner'} eq $loggedinuser;
-        push (@shelveslooppriv, \%linepriv);
+	my %line;
+	$color = ($color) ? 0 : 1;
+	$line{'toggle'} = $color;
+	$line{'shelf'} = $element;
+	$line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
+	$line{'sortfield'} = $shelflist->{$element}->{'sortfield'};
+	$line{"category".$shelflist->{$element}->{'category'}} = 1;
+	$line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
+	$line{'canmanage'} = ShelfPossibleAction($loggedinuser,$element,'manage');
+	if ($shelflist->{$element}->{'owner'} eq $loggedinuser) {
+		$line{'mine'} = 1;
+	} else {
+		$line{'firstname'} = $shelflist->{$element}->{'firstname'};
+		$line{ 'surname' } = $shelflist->{$element}->{ 'surname' };
+	}
+	if ($shelflist->{$element}->{'category'} eq 2) {
+		push (@shelvesloop,     \%line);
+	} elsif ($shelflist->{$element}->{'category'} eq 1) {
+        push (@shelveslooppriv, \%line);
     }
 }
 
 $template->param(
     shelveslooppriv => \@shelveslooppriv,
-    shelvesloop             => \@shelvesloop,
+    shelvesloop     => \@shelvesloop,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
 );
 

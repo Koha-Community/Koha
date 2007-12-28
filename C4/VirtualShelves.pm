@@ -183,8 +183,8 @@ sub GetShelfContents {
     my @bind = ($shelfnumber);
 	if($sortfield) {
 		#$sortfield = $dbh->quote($sortfield);
-		$query .= " ORDER BY `$sortfield`";
-		$query .= "DESC" if($sortfield eq 'copyrightdate');
+		$query .= " ORDER BY `$sortfield` ";
+		$query .= " DESC " if ($sortfield eq 'copyrightdate');
 	}
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
@@ -216,20 +216,16 @@ sub AddShelf {
     );
     my $sth = $dbh->prepare($query);
     $sth->execute($shelfname,$owner);
-    if ( $sth->rows ) {
-        return (-1);
-    }
-    else {
-        my $query = qq(
-            INSERT INTO virtualshelves
-                (shelfname,owner,category)
-            VALUES (?,?,?)
-        );
-        $sth = $dbh->prepare($query);
-        $sth->execute( $shelfname, $owner, $category );
-        my $shelfnumber = $dbh->{'mysql_insertid'};
-        return ($shelfnumber);
-    }
+    ( $sth->rows ) and return (-1);
+    $query = qq(
+        INSERT INTO virtualshelves
+            (shelfname,owner,category)
+        VALUES (?,?,?)
+    );
+    $sth = $dbh->prepare($query);
+    $sth->execute( $shelfname, $owner, $category );
+    my $shelfnumber = $dbh->{'mysql_insertid'};
+    return ($shelfnumber);
 }
 
 =item AddToShelf
@@ -389,10 +385,10 @@ sub DelFromShelf {
 
 #'
 sub DelShelf {
-    my ( $shelfnumber ) = @_;
-        my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
-        $sth->execute($shelfnumber);
-        return 0;
+	my ( $shelfnumber ) = @_;
+	my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
+	$sth->execute($shelfnumber);
+	return 0;
 }
 
 END { }    # module clean-up code here (global destructor)
