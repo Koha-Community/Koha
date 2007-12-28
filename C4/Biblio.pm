@@ -2770,26 +2770,31 @@ sub TransformMarcToKoha {
     }
 
     # modify copyrightdate to keep only the 1st year found
-    my $temp = $result->{'copyrightdate'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'copyrightdate'} = $1;
-    }
-    else {                      # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'copyrightdate'} = $1;
+    if (exists $result->{'copyrightdate'}) {
+        my $temp = $result->{'copyrightdate'};
+        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+        if ( $1 > 0 ) {
+            $result->{'copyrightdate'} = $1;
+        }
+        else {                      # if no cYYYY, get the 1st date.
+            $temp =~ m/(\d\d\d\d)/;
+            $result->{'copyrightdate'} = $1;
+        }
     }
 
     # modify publicationyear to keep only the 1st year found
-    $temp = $result->{'publicationyear'};
-    $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-    if ( $1 > 0 ) {
-        $result->{'publicationyear'} = $1;
+    if (exists $result->{'publicationyear'}) {
+        my $temp = $result->{'publicationyear'};
+        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
+        if ( $1 > 0 ) {
+            $result->{'publicationyear'} = $1;
+        }
+        else {                      # if no cYYYY, get the 1st date.
+            $temp =~ m/(\d\d\d\d)/;
+            $result->{'publicationyear'} = $1;
+        }
     }
-    else {                      # if no cYYYY, get the 1st date.
-        $temp =~ m/(\d\d\d\d)/;
-        $result->{'publicationyear'} = $1;
-    }
+
     return $result;
 }
 
