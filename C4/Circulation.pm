@@ -646,6 +646,7 @@ sub CanBookBeIssued {
     my %issuingimpossible;    # filled with problems that causes the issue to be IMPOSSIBLE
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
+	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
     my $dbh             = C4::Context->dbh;
 
     #
