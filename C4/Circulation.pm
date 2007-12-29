@@ -40,6 +40,8 @@ use POSIX qw(strftime);
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
 
+use Data::Dumper;
+
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
 
 # set the version for version checking
@@ -376,28 +378,26 @@ sub TooMany {
     my $branch_borrower = $borrower->{'branchcode'};
     my $dbh             = C4::Context->dbh;
 
- my $branch_issuer = C4::Context->userenv->{'branchcode'};
-#TODO : specify issuer or borrower for circrule.
-  my $type = (C4::Context->preference('item-level_itypes')) 
+	my $branch_issuer = C4::Context->userenv->{'branchcode'};
+    # TODO : specify issuer or borrower for circrule.
+	my $type = (C4::Context->preference('item-level_itypes')) 
   			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
   
-  my $sth =
+	my $sth =
       $dbh->prepare(
                 'SELECT * FROM issuingrules 
                         WHERE categorycode = ? 
-                            AND branchcode = ?
-                            AND itemtype = ? '
+                            AND itemtype = ? 
+                            AND branchcode = ?'
       );
 
     my $query2 = "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
                 WHERE i.borrowernumber = ? 
                     AND i.returndate IS NULL 
                     AND i.itemnumber = s2.itemnumber 
-                    AND s1.biblioitemnumber = s2.biblioitemnumber"
-				. (C4::Context->preference('item-level_itypes'))
-				? " AND s2.itype=? "
-                : " AND s1.itemtype= ? ";
+                    AND s1.biblioitemnumber = s2.biblioitemnumber";
+   (C4::Context->preference('item-level_itypes')) ? $query2.=" AND s2.itype=? " : $query2.=" AND s1.itemtype= ? ";
     my $sth2=  $dbh->prepare($query2);
     my $sth3 =
       $dbh->prepare(
@@ -647,6 +647,7 @@ sub CanBookBeIssued {
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
+	$item->{'itemtype'}=$biblioitem->{'itemtype'};
     my $dbh             = C4::Context->dbh;
 
     #
@@ -700,7 +701,6 @@ sub CanBookBeIssued {
     #
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
-    
 	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
     $needsconfirmation{TOO_MANY} = $toomany if $toomany;
 
@@ -1030,7 +1030,7 @@ sub GetLoanLength {
       $dbh->prepare(
 "select issuelength from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"
       );
-warn "in get loan lenght $borrowertype $itemtype $branchcode ";
+# warn "in get loan lenght $borrowertype $itemtype $branchcode ";
 # try to find issuelength & return the 1st available.
 # check with borrowertype, itemtype and branchcode, then without one of those parameters
     $sth->execute( $borrowertype, $itemtype, $branchcode );
