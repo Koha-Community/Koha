@@ -57,7 +57,7 @@ sub plugin_javascript {
             alert('error when getting '+i);
             return;
         }
-    	window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_115a.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 115a\",'width=1200,height=600,toolbar=false,scrollbars=yes');
+    	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115a.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 115a\",'width=1200,height=600,toolbar=false,scrollbars=yes');
     }
 
     </script>

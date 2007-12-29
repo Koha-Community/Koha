@@ -50,7 +50,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.f.field_value[i].value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 328\",'width=700,height=700,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 328\",'width=700,height=700,toolbar=false,scrollbars=yes');
 
 }
 //]]>

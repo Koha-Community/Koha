@@ -116,7 +116,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
     defaultvalue=escape(document.getElementById(\"$field_number\").value);
-    newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 ";
@@ -214,7 +214,7 @@ my ($input) = @_;
         } else {
             $to = (($startfrom+1)*$resultsperpage);
         }
-        my $link="plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=and&operator=contains&".join("&",map {"value=".$_} @value)."&op=do_search&type=intranet&index=$index";
+        my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=and&operator=contains&".join("&",map {"value=".$_} @value)."&op=do_search&type=intranet&index=$index";
         warn "$link ,".getnbpages($total, $resultsperpage);
         $template->param(result => $results) if $results;
         $template->param('index' => $query->param('index'));

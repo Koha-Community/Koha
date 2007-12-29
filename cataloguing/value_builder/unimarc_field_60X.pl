@@ -42,7 +42,7 @@ sub plugin_javascript {
 
             function Clic$function_name(index) {
             	defaultvalue=document.getElementById(\"$field_number\").value;
-            	window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=$field_number&result=\"+defaultvalue,\"unimarc 600\",'width=700,height=300,toolbar=false,scrollbars=yes');
+            	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_60X.pl&index=$field_number&result=\"+defaultvalue,\"unimarc 600\",'width=700,height=300,toolbar=false,scrollbars=yes');
 
             }
         </script>

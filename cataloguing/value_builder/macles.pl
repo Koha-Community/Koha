@@ -56,7 +56,7 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
-	newin=window.open(\"plugin_launcher.pl?plugin_name=macles.pl&index=\"+i,\"MACLES\",',toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=macles.pl&index=\"+i,\"MACLES\",',toolbar=false,scrollbars=yes');
 
 }
 //]]>

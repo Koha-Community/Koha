@@ -51,7 +51,7 @@ function Blur$field_number(subfield_managed) {
 
 function Clic$field_number() {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_115b.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 115b\",'width=1200,height=600,toolbar=false,scrollbars=yes');
+	window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_115b.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 115b\",'width=1200,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>

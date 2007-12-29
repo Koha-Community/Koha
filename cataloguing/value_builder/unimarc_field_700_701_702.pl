@@ -42,7 +42,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(index) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_700_701_702.pl&index=$field_number&result=\"+defaultvalue,\"unimarc 700\",'width=700,height=300,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_700_701_702.pl&index=$field_number&result=\"+defaultvalue,\"unimarc 700\",'width=700,height=300,toolbar=false,scrollbars=yes');
 
 }
 </script>

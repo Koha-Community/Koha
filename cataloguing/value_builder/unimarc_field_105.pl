@@ -51,7 +51,7 @@ sub plugin_javascript {
         
         function Clic$field_number() {
                 defaultvalue=document.getElementById(\"$field_number\").value;
-                window.open(\"plugin_launcher.pl?plugin_name=unimarc_field_105.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 105\",'width=1200,height=400,toolbar=false,scrollbars=yes');
+                window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_105.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 105\",'width=1200,height=400,toolbar=false,scrollbars=yes');
         
         }
     </script>
