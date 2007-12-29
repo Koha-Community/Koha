@@ -494,9 +494,9 @@ my $CGIselectborrower;
 if ($borrowerslist) {
     foreach (
         sort {
-                $a->{'surname'}
-              . $a->{'firstname'} cmp $b->{'surname'}
-              . $b->{'firstname'}
+                lc $a->{'surname'}
+              . lc $a->{'firstname'} cmp lc $b->{'surname'}
+              . lc $b->{'firstname'}
         } @$borrowerslist
       )
     {
