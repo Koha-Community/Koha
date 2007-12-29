@@ -134,7 +134,8 @@ my %tabsysprefs;
     $tabsysprefs{itemBarcodeInputFilter}="Circulation";
     $tabsysprefs{noOPACHolds}="Circulation";
     $tabsysprefs{WebBasedSelfCheck}="Circulation";
-
+    $tabsysprefs{CircControl}="Circulation";
+    $tabsysprefs{finesCalendar}="Circulation";
 # Staff Client
     $tabsysprefs{TemplateEncoding}="StaffClient";
     $tabsysprefs{template}="StaffClient";
