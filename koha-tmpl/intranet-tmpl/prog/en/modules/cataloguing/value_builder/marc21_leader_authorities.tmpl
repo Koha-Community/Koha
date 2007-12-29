@@ -35,10 +35,20 @@
 			<!-- TMPL_ELSE -->
 				<option value="n">n- New</option>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f5p" -->
-				<option value="p" SELECTED>p- Increase in encoding level from prepublication</option>
+			<!-- TMPL_IF name="f5o" -->
+				<option value="o" SELECTED>o- Obsolete</option>
 			<!-- TMPL_ELSE -->
-				<option value="p">p- Increase in encoding level from prepublication</option>
+				<option value="o">o- Obsolete</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5s" -->
+				<option value="s" SELECTED>s- Deleted; heading split into two or more headings</option>
+			<!-- TMPL_ELSE -->
+				<option value="s">s- Deleted; heading split into two or more headings</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f5x" -->
+				<option value="x" SELECTED>x- Deleted; heading replaced by another heading</option>
+			<!-- TMPL_ELSE -->
+				<option value="x">x- Deleted; heading replaced by another heading</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -46,73 +56,8 @@
 	<tr>
 		<td>6- Type of record</td>
 		<td>
-			<select name="f6" size="1">
-			<!-- TMPL_IF name="f6a" -->
-				<option value="a" SELECTED>a- Language material (monography)</option>
-			<!-- TMPL_ELSE -->
-				<option value="a">a- Language material (monography)</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6c" -->
-				<option value="c" SELECTED>c- Notated music</option>
-			<!-- TMPL_ELSE -->
-				<option value="c">c- Notated music</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6d" -->
-				<option value="d" SELECTED>d- Manuscript notated music</option>
-			<!-- TMPL_ELSE -->
-				<option value="d">d- Manuscript notated music</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6e" -->
-				<option value="e" SELECTED>e- Cartographic material</option>
-			<!-- TMPL_ELSE -->
-				<option value="e">e- Cartographic material</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6f" -->
-				<option value="f" SELECTED>f - Manuscript cartographic material</option>
-			<!-- TMPL_ELSE -->
-				<option value="f">f - Manuscript cartographic material</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6g" -->
-				<option value="g" SELECTED>g - Projected medium</option>
-			<!-- TMPL_ELSE -->
-				<option value="g">g - Projected medium</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6i" -->
-				<option value="i" SELECTED>i - Nonmusical sound recording</option>
-			<!-- TMPL_ELSE -->
-				<option value="i">i - Nonmusical sound recording</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6j" -->
-				<option value="j" SELECTED>j - Musical sound recording</option>
-			<!-- TMPL_ELSE -->
-				<option value="j">j - Musical sound recording</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6k" -->
-				<option value="k" SELECTED>k - Two-dimensional nonprojectable graphic</option>
-			<!-- TMPL_ELSE -->
-				<option value="k">k - Two-dimensional nonprojectable graphic</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6m" -->
-				<option value="m" SELECTED>m - Computer file</option>
-			<!-- TMPL_ELSE -->
-				<option value="m">m - Computer file</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6o" -->
-				<option value="o" SELECTED>o - Kit</option>
-			<!-- TMPL_ELSE -->
-				<option value="o">o - Kit</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6r" -->
-				<option value="r" SELECTED>r - Three-dimensional artifact or naturally occurring object</option>
-			<!-- TMPL_ELSE -->
-				<option value="r">r - Three-dimensional artifact or naturally occurring object</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6t" -->
-				<option value="t" SELECTED>t - Manuscript language material</option>
-			<!-- TMPL_ELSE -->
-				<option value="t">t - Manuscript language material</option>
-			<!-- /TMPL_IF -->
-			</select>
+            <input name="f6" value="z" type="hidden" />
+            z- Authority data
 		</td>
 	</tr>
 	<tr>
@@ -141,108 +86,28 @@
 		<td>10-16 indicator/subfields/size</td>
 		<td>(auto-filled)</td>
 	<tr>
-		<td>17- Encoding</td>
+		<td>17- Encoding level</td>
 		<td>
 			<select name="f17" size="1">
-				<!-- TMPL_IF name="f17 " -->
-					<option value=" " SELECTED>full level</option>
+				<!-- TMPL_IF name="f17n" -->
+					<option value="n" SELECTED>n- Complete authority record</option>
 				<!-- TMPL_ELSE -->
-					<option value=" ">Full level</option>
+					<option value="n">n- Complete authority record</option>
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f171" -->
-					<option value="1" SELECTED>1- Full level, material not examined</option>
+				<!-- TMPL_IF name="f17o" -->
+					<option value="o" SELECTED>o- Incomplete authority record</option>
 				<!-- TMPL_ELSE -->
-					<option value="1">1- Full level, material not examined</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f172" -->
-					<option value="2" SELECTED>2 - Less-than-full level, material not examined</option>
-				<!-- TMPL_ELSE -->
-					<option value="2">2 - Less-than-full level, material not examined</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f173" -->
-					<option value="3" SELECTED>3- Abbreviated level</option>
-				<!-- TMPL_ELSE -->
-					<option value="3">3- Abbreviated level</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f174" -->
-					<option value="4" SELECTED>4- Core level</option>
-				<!-- TMPL_ELSE -->
-					<option value="4">4- Core level</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f175" -->
-					<option value="5" SELECTED>5- Partial (preliminary) level</option>
-				<!-- TMPL_ELSE -->
-					<option value="5">5- Partial (preliminary) level</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f177" -->
-					<option value="7" SELECTED>7- Minimal level</option>
-				<!-- TMPL_ELSE -->
-					<option value="7">7- Minimal level</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f178" -->
-					<option value="8" SELECTED>8- Prepublication level</option>
-				<!-- TMPL_ELSE -->
-					<option value="8">8- Prepublication level</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f17u" -->
-					<option value="u" SELECTED>u - Unknown</option>
-				<!-- TMPL_ELSE -->
-					<option value="u">u - Unknown</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f17z" -->
-					<option value="z" SELECTED>z- Not applicable</option>
-				<!-- TMPL_ELSE -->
-					<option value="z">z- Not applicableFull level</option>
+					<option value="o">o- Incomplete authority record</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
 
 	<tr>
-		<td>18 - Descriptive cataloging form</td>
-		<td>
-			<select name="f18" size="1">
-				<!-- TMPL_IF name="f18 " -->
-					<option value=" " SELECTED>Non-ISBD</option>
-				<!-- TMPL_ELSE -->
-					<option value=" ">Non-ISBD</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f18a" -->
-					<option value="a" SELECTED>a- AACR 2</option>
-				<!-- TMPL_ELSE -->
-					<option value="a">a- AACR 2</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f18i" -->
-					<option value="i" SELECTED>i- ISBD</option>
-				<!-- TMPL_ELSE -->
-					<option value="i">i- ISBD</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f18u" -->
-					<option value="u" SELECTED>u- Unknown</option>
-				<!-- TMPL_ELSE -->
-					<option value="u">u- Unknown</option>
-				<!-- /TMPL_IF -->
-			</select>
-		</td>
+		<td>18-19 Undefined</td>
+		<td></td>
 	</tr>
-	
-	<tr>
-		<td>19 - Linked record requirement</td>
-		<td>
-			<select name="f19" size="1">
-				<!-- TMPL_IF name="f19 " -->
-					<option value=" " SELECTED>Related record not required</option>
-				<!-- TMPL_ELSE -->
-					<option value=" ">Related record not required</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f18r" -->
-					<option value="r" SELECTED>r- Related record required</option>
-				<!-- TMPL_ELSE -->
-					<option value="r">r- Related record required</option>
-				<!-- /TMPL_IF -->
-			</select>
-		</td>
-	</tr>
+
 	<tr>
 		<td>20-24 entry map & lengths</td>
 		<td>(auto-filled)</td>
@@ -264,8 +129,7 @@ function report() {
 			document.f_pop.f9.value+ 
 			'22     '+
 			document.f_pop.f17.value+
-			document.f_pop.f18.value+
-			document.f_pop.f19.value+
+			'  '+
 			'4500';
 		self.close();
 		return false;
