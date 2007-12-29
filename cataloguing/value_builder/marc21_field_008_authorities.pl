@@ -1,4 +1,3 @@
-
 #!/usr/bin/perl
 
 
@@ -51,7 +50,9 @@ sub plugin_javascript {
 //<![CDATA[
 
 function Focus$function_name(subfield_managed) {
-    document.getElementById(\"$field_number\").value='$dateentered' + 't        xxu||||| |||| 00| 0 eng d';
+    if (!document.getElementById(\"$field_number\").value) {
+        document.getElementById(\"$field_number\").value='$dateentered' + '|| aca||aabn           | a|a     d';
+    }
     return 1;
 }
 
@@ -61,7 +62,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -79,31 +80,32 @@ sub plugin {
 	my $dbh = C4::Context->dbh;
 
 	my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_008.tmpl",
+    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_008_authorities.tmpl",
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
 			     flagsrequired => {editcatalogue => 1},
 			     debug => 1,
 			     });
-#	$result = "      t        xxu           00  0 eng d" unless $result;
-	$result = "$dateentered"."t        xxu||||| |||| 00| 0 eng d" unless $result;
+	$result = "$dateentered".'|| aca||aabn           | a|a     d' unless $result;
 	my $f1 = substr($result,0,6);
 	my $f6 = substr($result,6,1);
-	my $f710 = substr($result,7,4);
-	my $f1114 = substr($result,11,4);
-	my $f1517 = substr($result,15,3);
-	my $f1821 = substr($result,18,4);
-	my $f22 = substr($result,22,1);
-	my $f23 = substr($result,23,1);
-	my $f2427 = substr($result,24,4);
+	my $f7 = substr($result,7,1);
+	my $f8 = substr($result,8,1);
+	my $f9 = substr($result,9,1);
+	my $f10 = substr($result,10,1);
+	my $f11 = substr($result,11,1);
+	my $f12 = substr($result,12,1);
+	my $f13 = substr($result,13,1);
+	my $f14 = substr($result,14,1);
+	my $f15 = substr($result,15,1);
+	my $f16 = substr($result,16,1);
+	my $f17 = substr($result,17,1);
 	my $f28 = substr($result,28,1);
 	my $f29 = substr($result,29,1);
-	my $f30 = substr($result,30,1);
 	my $f31 = substr($result,31,1);
+	my $f32 = substr($result,32,2);
 	my $f33 = substr($result,33,1);
-	my $f34 = substr($result,34,1);
-	my $f3537 = substr($result,35,3);
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
 
@@ -115,33 +117,42 @@ if ((!$f1) ||($f1 =~ m/ /)){
 							f1 => $f1,
 							f6 => $f6,
 							"f6$f6" => $f6,
-							f710 => $f710,
-							f1114 => $f1114,
-							f1517 => $f1517,
-							f1821 => $f1821,
-							f22 => $f22,
-							"f22$f22" => $f22,
-							f23 => $f23,
-                                                        "f23$f23" => $f23,
-							f2427 => $f2427,
-							"f24$f2427" => $f2427,
-							f28 => $f28,
-                                                        "f28$f28" => $f28,
-							f29 => $f29,
-                                                        "f29$f29" => $f29,
-							f30 => $f30,
-                                                        "f230$f30" => $f30,
-							f31 => $f31,
-                                                        "f31$f31" => $f31,
-							f33 => $f33,
-                                                        "f33$f33" => $f33,
-							f34 => $f34,
-                                                        "f34$f34" => $f34,
-							f3537 => $f3537,
-							f38 => $f38,
-							"f38$f38" => $f38,
-							f39 => $f39,
-							"f39$f39" => $f39,
+                            f7 => $f7,
+                            "f7$f7" => $f7,
+                            f8 => $f8,
+                            "f8$f8" => $f8,
+                            f9 => $f9,
+                            "f9$f9" => $f9,
+                            f10 => $f10,
+                            "f10$f10" => $f10,
+                            f11 => $f11,
+                            "f11$f11" => $f11,
+                            f12 => $f12,
+                            "f12$f12" => $f12,
+                            f13 => $f13,
+                            "f13$f13" => $f13,
+                            f14 => $f14,
+                            "f14$f14" => $f14,
+                            f15 => $f15,
+                            "f15$f15" => $f15,
+                            f16 => $f16,
+                            "f16$f16" => $f16,
+                            f17 => $f17,
+                            "f17$f17" => $f17,
+                            f28 => $f28,
+                            "f28$f28" => $f28,
+                            f29 => $f29,
+                            "f29$f29" => $f29,
+                            f31 => $f31,
+                            "f31$f31" => $f31,
+                            f32 => $f32,
+                            "f32$f32" => $f32,
+                            f33 => $f33,
+                            "f33$f33" => $f33,
+                            f38 => $f38,
+                            "f38$f38" => $f38,
+                            f39 => $f39,
+                            "f39$f39" => $f39,
 					);
         output_html_with_http_headers $input, $cookie, $template->output;
 }

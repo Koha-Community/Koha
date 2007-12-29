@@ -7,601 +7,707 @@
 <input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl">
 <table>
 	<tr>
-		<td>1-5 Date entered on file</td>
-		<td>(auto-filled)</td>
+		<td>00-05- Date entered on file</td>
+		<td><!-- TMPL_VAR name="f1" --></td>
+        <input name="f1" value="<!-- TMPL_VAR name="f1" -->" type="hidden" />
 	</tr>
 	<tr>
-		<!-- 06 Type of date / Publication status -->
-		<td>06- Type of date / Publication Status</td>
+		<td>06- Direct or indirect geographic subdivision</td>
 		<td>
-			<!-- NO DATE; B.C. DATE -->
-
 			<select name="f6" size="1">
-			<!-- TMPL_IF name="f60" -->
-                                <option value=" " SELECTED>#- Blank</option>
-                        <!-- TMPL_ELSE -->
-                                <option value=" ">#- Blank</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>b- B.C. Date</option>
-			<!-- TMPL_ELSE -->
-				<option value="b">b- B.C. Date</option>
-			<!-- /TMPL_IF -->
-
-			<!-- SINGLE DATE -->
-			<!-- TMPL_IF name="f6e" -->
-                                <option value="e" SELECTED>e- Detailed date</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="e">e- Detailed date</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6s" -->
-                                <option value="s" SELECTED>s- Single date</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="s">s- Single date</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- MULTIPLE DATES -->
-			<!-- TMPL_IF name="f6i" -->
-                                <option value="i" SELECTED>i- Inclusive dates of collection</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="i">i- Inclusive dates of collection</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6k" -->
-                                <option value="k" SELECTED>k- Range of years of bulk collection</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="k">k- Range of years of bulk collection</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6m" -->
-                                <option value="m" SELECTED>m- Multiple dates</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="m">m- Multiple dates</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6p" -->
-                                <option value="p" SELECTED>p- Distribution/production date</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="p">p- Distribution/production date</option>
-			<!-- /TMPL_IF -->
-	
-			<!-- TMPL_IF name="f6r" -->
-				<option value="r" SELECTED>r- Reprint/original date</option>
-			<!-- TMPL_ELSE -->
-				<option value="r">r- Reprint/original date</option>
-			<!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f6t" -->
-                                <option value="t" SELECTED>t- Publication date and copyright date</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="t">t- Publication date and copyright date</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- UNKNOWN DATES -->
-			<!-- TMPL_IF name="f6n" -->
-                                <option value="n" SELECTED>n- Dates unknown</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="n">n- Dates unknown</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f6q" -->
-                                <option value="q" SELECTED>q- Questionable date</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="q">q- Questionable date</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="fc" -->
-                                <option value="c" SELECTED>c- Serial item currently published</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="c">c- Serial item currently published</option>
-                        <!-- /TMPL_IF -->
-				
-			<!-- TMPL_IF name="f6d" -->
-                                <option value="d" SELECTED>d- Serial item ceased publication (Dead status)</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="d">d- Serial item ceased publication (Dead status)</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f6u" -->
-                                <option value="u" SELECTED>u- Serial item status unknown</option>
-                        <!-- TMPL_ELSE -->
-                                <option value="u">u- Serial item status unknown</option>
-                        <!-- /TMPL_IF -->
-
-
-	
+            <!-- TMPL_IF name="f6 " -->
+                <option value=" " SELECTED>#- Not subdivided geographically</option>
+            <!-- TMPL_ELSE -->
+                <option value=" ">#- Not subdivided geographically</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f6d" -->
+                <option value="d" SELECTED>d- Subdivided geographically&mdash;direct</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- Subdivided geographically&mdash;direct</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f6i" -->
+                <option value="i" SELECTED>i- Subdivided geographically&mdash;indirect</option>
+            <!-- TMPL_ELSE -->
+                <option value="i">i- Subdivided geographically&mdash;indirect</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f6n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f6|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
-	<tr>
-		<td>7-10 Date1 / Begininning date of publication </td>
-		<td>
-			<input type="text" name="f710" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f710" -->"/>
-		</td>
-	</tr>
-	<tr>
-                <td>11-14 Date2 / ending date of publication </td>
-                <td>
-                        <input type="text" name="f1114" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f1114" -->"/>                </td>
-        </tr>
 
-	<tr>
-                <td>15-17 Place of publication, production, or execution </td>
-                <td>
-                        <input type="text" name="f1517" size="3"  maxlength="3" value="<!-- TMPL_VAR NAME="f1517" -->"/>
-                </td>
-        </tr>
-	 <tr>
-                <td>18-21 Illustrations </td>
-		<td>(auto-filled from 300)<input type="hidden" name="f1821" size="4"  maxlength="4" value="<!-- TMPL_VAR NAME="f1821" -->"/></td>
-        </tr>
-	<tr>
-                <!-- 22 Target Audience -->
-                <td>22- Target Audience</td>
-                <td>                        
-                <select name="f22" size="1">
+    <tr>
+        <td>07- Romanization scheme</td>
+        <td>
+            <select name="f7" size="1">
+            <!-- TMPL_IF name="f7a" -->
+                <option value="a" SELECTED>a- International standard</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- International standard</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7b" -->
+                <option value="b" SELECTED>b- National standard</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- National standard</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7c" -->
+                <option value="c" SELECTED>c- National library association standard</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- National library association standard</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7d" -->
+                <option value="d" SELECTED>d- National library or bibliographic agency standard</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- National library or bibliographic agency standard</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7e" -->
+                <option value="e" SELECTED>e- Local standard</option>
+            <!-- TMPL_ELSE -->
+                <option value="e">e- Local standard</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7f" -->
+                <option value="f" SELECTED>f- Standard of unknown origin</option>
+            <!-- TMPL_ELSE -->
+                <option value="f">f- Standard of unknown origin</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7g" -->
+                <option value="g" SELECTED>g- Conventional romanization or conventional form of name in language of cataloging agency</option>
+            <!-- TMPL_ELSE -->
+                <option value="g">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f7|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>08- Language of catalog</td>
+        <td>
+            <select name="f8" size="1">
+            <!-- TMPL_IF name="f8 " -->
+                <option value=" " SELECTED>#- No information provided</option>
+            <!-- TMPL_ELSE -->
+                <option value=" ">#- No information provided</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f8b" -->
+                <option value="b" SELECTED>b- English and French</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- English and French</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f8e" -->
+                <option value="e" SELECTED>e- English only</option>
+            <!-- TMPL_ELSE -->
+                <option value="e">e- English only</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f8f" -->
+                <option value="f" SELECTED>f- French only</option>
+            <!-- TMPL_ELSE -->
+                <option value="f">f- French only</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f8|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>09- Kind of record</td>
+        <td>
+            <select name="f9" size="1">
+            <!-- TMPL_IF name="f9a" -->
+                <option value="a" SELECTED>a- Established heading</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Established heading</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9b" -->
+                <option value="b" SELECTED>b- Untraced reference</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Untraced reference</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9c" -->
+                <option value="c" SELECTED>c- Traced reference</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Traced reference</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9d" -->
+                <option value="d" SELECTED>d- Subdivision</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- Subdivision</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9e" -->
+                <option value="e" SELECTED>e- Node label</option>
+            <!-- TMPL_ELSE -->
+                <option value="e">e- Node label</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9f" -->
+                <option value="f" SELECTED>f- Established heading and subdivision</option>
+            <!-- TMPL_ELSE -->
+                <option value="f">f- Established heading and subdivision</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f9g" -->
+                <option value="g" SELECTED>g- Reference and subdivision</option>
+            <!-- TMPL_ELSE -->
+                <option value="g">g- Reference and subdivision</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>10- Descriptive cataloging rules</td>
+        <td>
+            <select name="f10" size="1">
+            <!-- TMPL_IF name="f10a" -->
+                <option value="a" SELECTED>a- Earlier rules</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Earlier rules</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10b" -->
+                <option value="b" SELECTED>b- AACR 1</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- AACR 1</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10c" -->
+                <option value="c" SELECTED>c- AACR 2</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- AACR 2</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10d" -->
+                <option value="d" SELECTED>d- AACR 2 compatible heading</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- AACR 2 compatible heading</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10z" -->
+                <option value="z" SELECTED>z- Other</option>
+            <!-- TMPL_ELSE -->
+                <option value="z">z- Other</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f10|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>11- Subject heading system/thesaurus</td>
+        <td>
+            <select name="f11" size="1">
+            <!-- TMPL_IF name="f11a" -->
+                <option value="a" SELECTED>a- Library of Congress Subject Headings</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Library of Congress Subject Headings</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11b" -->
+                <option value="b" SELECTED>b- LC subject headings for children's literature</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- LC subject headings for children's literature</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11c" -->
+                <option value="c" SELECTED>c- Medical Subject Headings</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Medical Subject Headings</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11d" -->
+                <option value="d" SELECTED>d- National Agricultural Library subject authority file</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- National Agricultural Library subject authority file</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11k" -->
+                <option value="k" SELECTED>k- Canadian Subject Headings</option>
+            <!-- TMPL_ELSE -->
+                <option value="k">k- Canadian Subject Headings</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11r" -->
+                <option value="r" SELECTED>r- Art and Architecture Thesaurus</option>
+            <!-- TMPL_ELSE -->
+                <option value="r">r- Art and Architecture Thesaurus</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11s" -->
+                <option value="s" SELECTED>s- Sears List of Subject Headings</option>
+            <!-- TMPL_ELSE -->
+                <option value="s">s- Sears List of Subject Headings</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11v" -->
+                <option value="v" SELECTED>v- Repertoire de vedettes-matiere</option>
+            <!-- TMPL_ELSE -->
+                <option value="v">v- Repertoire de vedettes-matiere</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11z" -->
+                <option value="z" SELECTED>z- Other</option>
+            <!-- TMPL_ELSE -->
+                <option value="z">z- Other</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f11|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>12- Type of series</td>
+        <td>
+            <select name="f12" size="1">
+            <!-- TMPL_IF name="f12a" -->
+                <option value="a" SELECTED>a- Monographic series</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Monographic series</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f12b" -->
+                <option value="b" SELECTED>b- Multipart item</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Multipart item</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f12c" -->
+                <option value="c" SELECTED>c- Series-like phrase</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Series-like phrase</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f12n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f12z" -->
+                <option value="z" SELECTED>z- Other</option>
+            <!-- TMPL_ELSE -->
+                <option value="z">z- Other</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f12|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>13- Numbered or unnumbered series</td>
+        <td>
+            <select name="f13" size="1">
+            <!-- TMPL_IF name="f13a" -->
+                <option value="a" SELECTED>a- Numbered</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Numbered</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f13b" -->
+                <option value="b" SELECTED>b- Unnumbered</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Unnumbered</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f13c" -->
+                <option value="c" SELECTED>c- Numbering varies</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Numbering varies</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f13n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f13|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>14- Heading use--main or added entry</td>
+        <td>
+            <select name="f14" size="1">
+            <!-- TMPL_IF name="f14a" -->
+                <option value="a" SELECTED>a- Appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f14b" -->
+                <option value="b" SELECTED>b- Not appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Not appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f14|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>15- Heading use--subject added entry</td>
+        <td>
+            <select name="f15" size="1">
+            <!-- TMPL_IF name="f15a" -->
+                <option value="a" SELECTED>a- Appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f15b" -->
+                <option value="b" SELECTED>b- Not appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Not appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f15|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>16- Heading use--series added entry</td>
+        <td>
+            <select name="f16" size="1">
+            <!-- TMPL_IF name="f16a" -->
+                <option value="a" SELECTED>a- Appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f16b" -->
+                <option value="b" SELECTED>b- Not appropriate</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Not appropriate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f16|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>17- Type of subject subdivision</td>
+        <td>
+            <select name="f17" size="1">
+            <!-- TMPL_IF name="f17a" -->
+                <option value="a" SELECTED>a- Topical</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Topical</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17b" -->
+                <option value="b" SELECTED>b- Form</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Form</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17c" -->
+                <option value="c" SELECTED>c- Chronological</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Chronological</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17d" -->
+                <option value="d" SELECTED>d- Geographic</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- Geographic</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17e" -->
+                <option value="e" SELECTED>e- Language</option>
+            <!-- TMPL_ELSE -->
+                <option value="e">e- Language</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f17|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
 
-                        <!-- TMPL_IF name="f22|" -->
-                        <option value="|" SELECTED>|- Default</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="|">|- Default</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f220" -->
-                        <option value=" " SELECTED>#- Unknown or not specified</option>
-                        <!-- TMPL_ELSE -->
-                        <option value=" ">#- Unknown or not specified</option>
-                        <!-- /TMPL_IF -->
+    <tr>
+        <td>18-27 Undefined character positions</td>
+        <td></td>
+    </tr>
 
-                        <!-- TMPL_IF name="f22a" -->
-                         <option value="a" SELECTED>a- Preschool</option>
-	                <!-- TMPL_ELSE -->
-			<option value="a">a- Preschool</option>
-                        <!-- /TMPL_IF -->
+    <tr>
+        <td>28- Type of government agency</td>
+        <td>
+            <select name="f28" size="1">
+            <!-- TMPL_IF name="f28 " -->
+                <option value=" " SELECTED>#- Not a government agency</option>
+            <!-- TMPL_ELSE -->
+                <option value=" ">#- Not a government agency</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28a" -->
+                <option value="a" SELECTED>a- Autonomous or semi-autonomous component</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Autonomous or semi-autonomous component</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28c" -->
+                <option value="c" SELECTED>c- Multilocal</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Multilocal</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28f" -->
+                <option value="f" SELECTED>f- Federal/national</option>
+            <!-- TMPL_ELSE -->
+                <option value="f">f- Federal/national</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28i" -->
+                <option value="i" SELECTED>i- International intergovernmental</option>
+            <!-- TMPL_ELSE -->
+                <option value="i">i- International intergovernmental</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28l" -->
+                <option value="l" SELECTED>l- Local</option>
+            <!-- TMPL_ELSE -->
+                <option value="l">l- Local</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28m" -->
+                <option value="m" SELECTED>m- Multistate</option>
+            <!-- TMPL_ELSE -->
+                <option value="m">m- Multistate</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28o" -->
+                <option value="o" SELECTED>o- Government agency&mdash;type undetermined</option>
+            <!-- TMPL_ELSE -->
+                <option value="o">o- Government agency&mdash;type undetermined</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28s" -->
+                <option value="s" SELECTED>s- State, provincial, territorial, dependent, etc.</option>
+            <!-- TMPL_ELSE -->
+                <option value="s">s- State, provincial, territorial, dependent, etc.</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28u" -->
+                <option value="u" SELECTED>u- Unknown if heading is government agency</option>
+            <!-- TMPL_ELSE -->
+                <option value="u">u- Unknown if heading is government agency</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28z" -->
+                <option value="z" SELECTED>z- Other</option>
+            <!-- TMPL_ELSE -->
+                <option value="z">z- Other</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f28|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>29- Reference evaluation</td>
+        <td>
+            <select name="f29" size="1">
+            <!-- TMPL_IF name="f29a" -->
+                <option value="a" SELECTED>a- Tracings are consistent with the heading</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Tracings are consistent with the heading</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f29b" -->
+                <option value="b" SELECTED>b- Tracings are not necessarily consistent with the heading</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Tracings are not necessarily consistent with the heading</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f29n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f29|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
 
-			<!-- TMPL_IF name="f22b" -->
-                         <option value="b" SELECTED>b- Primary</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="b">b- Primary</option>
-                        <!-- /TMPL_IF -->	
+    <tr>
+        <td>30 Undefined character position</td>
+        <td></td>
+    </tr>
 
-			<!-- TMPL_IF name="f22c" -->
-                         <option value="c" SELECTED>c- Elementary and junior high</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="c">c- Elementary and junior high</option>
-                        <!-- /TMPL_IF -->
+    <tr>
+        <td>31- Record update in process</td>
+        <td>
+            <select name="f31" size="1">
+            <!-- TMPL_IF name="f31a" -->
+                <option value="a" SELECTED>a- Record can be used</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Record can be used</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f31b" -->
+                <option value="b" SELECTED>b- Record is being updated</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Record is being updated</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f31|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>32- Undifferentiated personal name</td>
+        <td>
+            <select name="f32" size="1">
+            <!-- TMPL_IF name="f32a" -->
+                <option value="a" SELECTED>a- Differentiated personal name</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Differentiated personal name</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f32b" -->
+                <option value="b" SELECTED>b- Undifferentiated personal name</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Undifferentiated personal name</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f32n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f32|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>33- Level of establishment</td>
+        <td>
+            <select name="f33" size="1">
+            <!-- TMPL_IF name="f33a" -->
+                <option value="a" SELECTED>a- Fully established</option>
+            <!-- TMPL_ELSE -->
+                <option value="a">a- Fully established</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f33b" -->
+                <option value="b" SELECTED>b- Memorandum</option>
+            <!-- TMPL_ELSE -->
+                <option value="b">b- Memorandum</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f33c" -->
+                <option value="c" SELECTED>c- Provisional</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Provisional</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f33d" -->
+                <option value="d" SELECTED>d- Preliminary</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- Preliminary</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f33n" -->
+                <option value="n" SELECTED>n- Not applicable</option>
+            <!-- TMPL_ELSE -->
+                <option value="n">n- Not applicable</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f33|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
 
-			<!-- TMPL_IF name="f22d" -->
-                         <option value="d" SELECTED>d- Secondary (senior high)</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="d">d- Secondary (senior high)</option>
-                        <!-- /TMPL_IF -->
+    <tr>
+        <td>34-37 Undefined character positions</td>
+        <td></td>
+    </tr>
 
-			<!-- TMPL_IF name="f22e" -->
-                         <option value="e" SELECTED>e- Adult</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="e">e- Adult</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f22f" -->
-                         <option value="f" SELECTED>f- Specialized</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="f">f- Specialized</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f22g" -->
-                         <option value="g" SELECTED>g- General</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="g">g- General</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f22j" -->
-                         <option value="j" SELECTED>j- Juvenile</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="j">j- Juvenile</option>
-                        <!-- /TMPL_IF -->
-		</select>
-		</td>
-	<tr>
-	<tr>
-                <!-- 23 Form of an item -->
-                <td>23- Form of an item</td>
-                <td>
-                <select name="f23" size="1">
-
-                        <!-- TMPL_IF name="f230" -->
-                        <option value=" " SELECTED>#- None of the following</option>
-                        <!-- TMPL_ELSE -->
-                        <option value=" ">#- None of the following</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23a" -->
-                        <option value="a" SELECTED>a- Microfilm</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="a">a- Microfilm</option>
-                        <!-- /TMPL_IF -->
-			
-			<!-- TMPL_IF name="f23b" -->
-                        <option value="b" SELECTED>b- Microfiche</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="b">b- Microfiche</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23c" -->
-                        <option value="c" SELECTED>a- Microopaque</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="c">a- Microopaque</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23d" -->
-                        <option value="d" SELECTED>d- Large Print</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="d">d- Large Print</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23f" -->
-                        <option value="f" SELECTED>f- Braille</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="f">f- Braille</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23r" -->
-                        <option value="r" SELECTED>r- Regular print reproduction</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="r">r- Regular print reproduction</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23s" -->
-                        <option value="s" SELECTED>s- Electronic</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="s">s- Electronic</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f23!" -->
-                        <option value="!" SELECTED>!- No attempt to code</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="!">!- No attempt to code</option>
-                        <!-- /TMPL_IF -->
-		</select>
-		</td>
-	</tr>
-	<tr>
-                <td>24-27 Nature of contents </td>
-                <td>(Derived value)
-                        <input type="hidden" name="f2427" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f2427" -->"/>                </td>
-        </tr>
-        <tr>
-                <td>28- Government Publication</td>
-                <td>
-                <select name="f28" size="1">                                    
-                        <!-- TMPL_IF name="f280" -->
-                        <option value=" " SELECTED>#- Not a government publication</option>
-                        <!-- TMPL_ELSE -->
-                        <option value=" ">#- Not a government publication</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28a" -->
-                        <option value="a" SELECTED>a- Autonomous or semi-autonomous component</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="a">a- Autonomous or semi-autonomous component</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f28c" -->
-                        <option value="c" SELECTED>c- Multilocal</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="c">c- Multilocal</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28f" -->
-                        <option value="f" SELECTED>f- Federal/national</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="f">f- Federal/national</option>
-                        <!-- /TMPL_IF -->
-
-
-                        <!-- TMPL_IF name="f28i" -->
-                        <option value="i" SELECTED>i- International intergovernmental</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="i">i- International intergovernmental</option>
-                        <!-- /TMPL_IF -->
-
-
-                        <!-- TMPL_IF name="f28l" -->
-                        <option value="l" SELECTED>l- Local</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="l">l- Local</option>
-                        <!-- /TMPL_IF -->
-
-			
-                        <!-- TMPL_IF name="f28m" -->
-                        <option value="m" SELECTED>m- Multistate</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="m">m- Multistate</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28o" -->
-                        <option value="o" SELECTED>o- Government publication - level undetermined</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="o">o- Government publication - level undetermined</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28s" -->
-                        <option value="s" SELECTED>s- State, provincial,territorial,dependent,etc.</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="s">s- State,provincial,territorial,dependent,etc.</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28u" -->
-                        <option value="u" SELECTED>u- Unknown if item is government publication</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="u">u- Unknown if item is government publication</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f28z" -->
-                        <option value="z" SELECTED>z- Other</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="z">z- Other</option>
-                        <!-- /TMPL_IF -->
-		</select>
-		</td>
-	</tr>
-        <tr>
-                <td>29- Conference publication</td>
-                <td>
-                <select name="f29" size="1">
-                        <!-- TMPL_IF name="f290" -->
-                        <option value="0" SELECTED>0- Not a conference publication</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="0">0- Not a conference publication</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f291" -->
-                        <option value="1" SELECTED>1- Conference publication</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="1">1- Conference publication</option>
-                        <!-- /TMPL_IF -->
-
-		</select>
-		</td>
-	</tr>
-	<tr>
-                <td>30- Festschrift</td>
-                <td>
-                <select name="f30" size="1">
-                        <!-- TMPL_IF name="f300" -->
-                        <option value="0" SELECTED>0- Not a festschrift</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="0">0- Not a festschrift</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f301" -->
-                        <option value="1" SELECTED>1- Festschrift</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="1">1- Festschrift</option>
-                        <!-- /TMPL_IF -->
-                </select>
-                </td>
-        </tr>
-
-        <tr>
-                <td>31- Index</td>
-                <td>
-                <select name="f31" size="1">
-                        <!-- TMPL_IF name="f31|" -->
-                        <option value="|" SELECTED>|- Default</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="|">|- Default</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f310" -->
-                        <option value="0" SELECTED>0- No Index</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="0">0- No Index</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f311" -->
-                        <option value="1" SELECTED>1- Index present</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="1">1- Index present</option>
-                        <!-- /TMPL_IF -->
-                </select>
-                </td>
-        	</tr>
-		<tr><td>32 Undefined</td><td></td>
-		</tr>
-		<tr>
-                <td>33- Literary form</td>
-                <td>
-                <select name="f33" size="1">
-                        <!-- TMPL_IF name="f330" -->
-                        <option value="0" SELECTED>0- Not fiction</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="0">0- Not fiction</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f331" -->
-                        <option value="1" SELECTED>1- Fiction</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="1">1- Fiction</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f33c" -->
-                        <option value="c" SELECTED>c- Comic strips</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="c">c- Comic stripts</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f33d" -->
-                        <option value="d" SELECTED>d- Dramas</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="d">d- Dramas</option>
-                        <!-- /TMPL_IF -->
-
-
-                        <!-- TMPL_IF name="f33e" -->
-                        <option value="e" SELECTED>e- Essays</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="e">e- Essays</option>
-                        <!-- /TMPL_IF -->
-
-			
-                        <!-- TMPL_IF name="f33f" -->
-                        <option value="f" SELECTED>f- Novels</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="f">f- Novels</option>
-                        <!-- /TMPL_IF -->
-
-			
-                        <!-- TMPL_IF name="f33h" -->
-                        <option value="h" SELECTED>h- Humor,satires,etc.</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="h">h- Humor,satires,etc.</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f33i" -->
-                        <option value="i" SELECTED>i- Letters</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="i">i- Letters</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f33j" -->
-                        <option value="j" SELECTED>j- Short stories</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="j">j- Short stories</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f33m" -->
-                        <option value="m" SELECTED>m- Mixed forms</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="m">m- Mixed forms</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f33p" -->
-                        <option value="p" SELECTED>p- Poetry</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="p">p- Poetry</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f33s" -->
-                        <option value="s" SELECTED>s- Speeches</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="s">s- Speeches</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f33u" -->
-                        <option value="u" SELECTED>u- Unknown</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="u">u- Unknown</option>
-                        <!-- /TMPL_IF -->
-
-
-
-                </select>
-                </td>
-        </tr>
-	<tr>
-                <td>34- Biography</td>
-                <td>
-                <select name="f34" size="1">
-                        <!-- TMPL_IF name="f340" -->
-                        <option value=" " SELECTED>#- No biographical material</option>                              <!-- TMPL_ELSE -->
-                        <option value=" ">#- No biographical material</option>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="f34a" -->
-                        <option value="a" SELECTED>a- Autobiography</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="a">a- Autobiography</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f34b" -->
-                        <option value="b" SELECTED>b- Individual biography</option>                              <!-- TMPL_ELSE -->
-                        <option value="b">b- Individual biography</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f34c" -->
-                        <option value="c" SELECTED>c- Collective biography</option>                              <!-- TMPL_ELSE -->
-                        <option value="c">c- Collective biographyl</option>
-                        <!-- /TMPL_IF -->
-			
-                        <!-- TMPL_IF name="f34d" -->
-                        <option value="d" SELECTED>d- Contains bibliographic information</option>                              <!-- TMPL_ELSE -->
-                        <option value="d">d- Contains bibliographic information</option>
-                        <!-- /TMPL_IF -->
-                </select>
-                </td>
-        </tr>
-
-	 <tr>
-
-                <td>35-37 Language see <a href="http://www.itsmarc.com/crs/lang0098.htm">MARC Code List for Languages</a></td>
-                <td>
-                        <input type="text" name="f3537" size="4"  maxlength="4" value="<!-- TMPL_VAR NAME="f3537" -->"/>
-                </td>
-        </tr>
-	<tr>
-                <td>38- Modified Record</td>
-                <td>                
-		<select name="f38" size="1">                        			
-			<!-- TMPL_IF name="f380" -->
-                        <option value=" " SELECTED>#- Not modified</option>
-                        <!-- TMPL_ELSE -->
-                        <option value=" ">#- Not modified</option>
-                        <!-- /TMPL_IF -->
-			
-			<!-- TMPL_IF name="f38s" -->
-                        <option value="s" SELECTED>s- Shortened</option>
-			<!-- TMPL_ELSE -->
-                        <option value="s">s- Shortened</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f38d" -->
-                        <option value="d" SELECTED>d- Dashed-on information omitted</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="d">d- Dashed-on information omitted</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f38x" -->
-                        <option value="x" SELECTED>x- Missing characters</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="x">x- Missing characters</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f38r" -->
-                        <option value="r" SELECTED>r- Completely romanized/printed cards in script</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="r">r- Completely romanized/printed cards in script</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f38o" -->
-                        <option value="o" SELECTED>o- Completely romainzed/printed cards romanized</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="o">o- Completely romanized/printed cards romanized</option>
-                        <!-- /TMPL_IF -->
-		</select>
-
-                </td>
-        </tr>
-<tr>
-                <td>39- Cataloging source</td>
-                <td>
-                <select name="f39" size="1">                                    
-                        <!-- TMPL_IF name="f390" -->
-                        <option value=" " SELECTED>#- National bibliographic agency</option>
-                        <!-- TMPL_ELSE -->
-                        <option value=" ">#- National bibliographic agency</option>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="f39c" -->
-                        <option value="c" SELECTED>c- Cooperative cataloging program</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="c">c- Cooperative cataloging program</option>
-                        <!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f39d" -->
-                        <option value="d" SELECTED>d- Other</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="d">d- Other</option>
-                        <!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="f39u" -->
-                        <option value="u" SELECTED>u- Unknown</option>
-                        <!-- TMPL_ELSE -->
-                        <option value="u">u- Unknown</option>
-                        <!-- /TMPL_IF -->
-		</select>
-                </td>
-        </tr>
-
+    <tr>
+        <td>38- Modified record</td>
+        <td>
+            <select name="f38" size="1">
+            <!-- TMPL_IF name="f38 " -->
+                <option value=" " SELECTED>#- Not modified</option>
+            <!-- TMPL_ELSE -->
+                <option value=" ">#- Not modified</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f38s" -->
+                <option value="s" SELECTED>s- Shortened</option>
+            <!-- TMPL_ELSE -->
+                <option value="s">s- Shortened</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f38x" -->
+                <option value="x" SELECTED>x- Missing characters</option>
+            <!-- TMPL_ELSE -->
+                <option value="x">x- Missing characters</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f38|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td>39- Cataloging source</td>
+        <td>
+            <select name="f39" size="1">
+            <!-- TMPL_IF name="f39 " -->
+                <option value=" " SELECTED>#- National bibliographic agency</option>
+            <!-- TMPL_ELSE -->
+                <option value=" ">#- National bibliographic agency</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f39c" -->
+                <option value="c" SELECTED>c- Cooperative cataloging program</option>
+            <!-- TMPL_ELSE -->
+                <option value="c">c- Cooperative cataloging program</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f39d" -->
+                <option value="d" SELECTED>d- Other</option>
+            <!-- TMPL_ELSE -->
+                <option value="d">d- Other</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f39u" -->
+                <option value="u" SELECTED>u- Unknown</option>
+            <!-- TMPL_ELSE -->
+                <option value="u">u- Unknown</option>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF name="f39|" -->
+                <option value="|" SELECTED>|- No attempt to code</option>
+            <!-- TMPL_ELSE -->
+                <option value="|">|- No attempt to code</option>
+            <!-- /TMPL_IF -->
+            </select>
+        </td>
+    </tr>
 	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
 </table>
 </form>
@@ -611,22 +717,27 @@ function report() {
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
         
             field.value = 
-			'<!-- TMPL_VAR NAME="dateentered" -->'+
+			document.f_pop.f1.value+
 			document.f_pop.f6.value+
-			document.f_pop.f710.value+
-			document.f_pop.f1114.value+
-			document.f_pop.f1517.value+
-			document.f_pop.f1821.value+
-			document.f_pop.f22.value+
-			document.f_pop.f23.value+
-			document.f_pop.f2427.value+
+			document.f_pop.f7.value+
+			document.f_pop.f8.value+
+			document.f_pop.f9.value+
+			document.f_pop.f10.value+
+			document.f_pop.f11.value+
+			document.f_pop.f12.value+
+			document.f_pop.f13.value+
+			document.f_pop.f14.value+
+			document.f_pop.f15.value+
+			document.f_pop.f16.value+
+			document.f_pop.f17.value+
+            '          '+
 			document.f_pop.f28.value+
 			document.f_pop.f29.value+
-			document.f_pop.f30.value+
-			document.f_pop.f31.value+ ' '+
+			' '+
+			document.f_pop.f31.value+
+			document.f_pop.f32.value+
 			document.f_pop.f33.value+
-			document.f_pop.f34.value+
-			document.f_pop.f3537.value+
+            '    '+
 			document.f_pop.f38.value+
 			document.f_pop.f39.value;
 		self.close();
