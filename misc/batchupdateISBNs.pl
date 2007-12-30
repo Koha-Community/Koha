@@ -17,9 +17,9 @@
 
 
 
-=head1 bulkupdate.pl 
+=head1 batchupdateISBNs.pl 
 
-    This script allows you to update your database/records after a bulkmarckimport integration.
+    This script batch updates ISBN fields
 
 =cut
 

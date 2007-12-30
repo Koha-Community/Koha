@@ -1,5 +1,7 @@
 #!/usr/bin/perl
-
+# This is an example script for how to benchmark various 
+# parts of your Koha system. It's useful for measuring the 
+# impact of mod_perl on performance.
 use strict;
 BEGIN {
     # find Koha's Perl modules
@@ -10,7 +12,7 @@ BEGIN {
 use HTTPD::Bench::ApacheBench;
 use C4::Context;
 
-# 1st, find some maximal values
+# 1st, find some max values
 my $dbh=C4::Context->dbh();
 my $sth = $dbh->prepare("select max(borrowernumber) from borrowers");
 $sth->execute;
@@ -24,7 +26,7 @@ $sth = $dbh->prepare("select max(itemnumber) from items");
 $sth->execute;
 my ($itemnumber_max) = $sth->fetchrow;
 
-my $baseurl= "http://i17.bureau.paulpoulain.com/cgi-bin/koha";
+my $baseurl= C4::Context->preference("staffClientBaseURL")."/cgi-bin/koha/";
 my $max_tries = 200;
 my $concurrency = 5;
 
@@ -35,7 +37,7 @@ $|=1;
 my $b = HTTPD::Bench::ApacheBench->new;
 $b->concurrency( $concurrency );
 #
-# mainpage : (very) low mySQL dependancy
+# mainpage : (very) low RDBMS dependency
 #
 my $b0 = HTTPD::Bench::ApacheBench->new;
 $b0->concurrency( $concurrency );
@@ -45,7 +47,7 @@ print "--------------\n";
 print "Koha benchmark\n";
 print "--------------\n";
 print "benchmarking with $max_tries occurences of each operation\n";
-print "mainpage (no mySQL) ";
+print "mainpage (low RDBMS dependency) ";
 for (my $i=1;$i<=$max_tries;$i++) {
     push @mainpage,"$baseurl/mainpage.pl";
 }

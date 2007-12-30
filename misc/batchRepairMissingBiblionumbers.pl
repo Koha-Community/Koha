@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# This script finds and fixes missing 090 fields in Koha for MARC21
+# This script finds and fixes missing biblionumber/biblioitemnumber fields in Koha
 #  Written by TG on 01/10/2005
 #  Revised by Joshua Ferraro on 03/31/2006
 use strict;

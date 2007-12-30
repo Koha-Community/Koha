@@ -24,22 +24,26 @@ GetOptions(
     'n:s' => \$number,
     'v' => \$version,
     'w' => \$nowarning,
-	'c' => \$frameworkcode,
+    'c' => \$frameworkcode,
 );
 
 $frameworkcode="" unless $frameworkcode;
 
 if ($version || ($input_marc_file eq '')) {
-	print <<EOF
-This script compare an iso2709 file and the MARC parameters
-It will show the marc fields/subfields used in Koha, and that are not anywhere in the iso2709 file and which fields/subfields that are used in the iso2709 file and not in Koha.
-to solve this, just modify Koha parameters (change TAB)
+    print <<EOF
+This script compares an iso2709 file and Koha's MARC frameworks
+It will show the marc fields/subfields used in Koha, and that 
+are not in the iso2709 file and which fields/subfields that are
+used in the iso2709 file and not in Koha.
+
 parameters :
 \tv : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
-\tw : warning and strict off. If your dump fail, try -w option. It it works, then, the file is iso2709, but a buggy one !
+\tw : warning and strict off. If your dump fails, try -w option. It it works, then, the file is iso2709, but a buggy one !
 \tc : the frameworkcode. If omitted, set to ""
+
 SAMPLE : ./compare_iso_and_marc_parameters.pl -file /home/paul/koha.dev/local/npl -n 1 
+
 EOF
 ;
 die;
@@ -55,44 +59,44 @@ $sth->execute($frameworkcode);
 my %hash_unused;
 my %hash_used;
 while (my ($tagfield,$tagsubfield,$tab) = $sth->fetchrow) {
-	$hash_unused{"$tagfield$tagsubfield"} = 1 if ($tab eq -1);
-	$hash_used{"$tagfield$tagsubfield"} = 1 if ($tab ne -1);
+    $hash_unused{"$tagfield$tagsubfield"} = 1 if ($tab eq -1);
+    $hash_used{"$tagfield$tagsubfield"} = 1 if ($tab ne -1);
 }
 my $i=0;
 while ( my $record = $batch->next() ) {
-	$i++;
-	foreach my $MARCfield ($record->fields()) {
-	next if $MARCfield->tag()<=010;
-		if ($MARCfield) {
-			foreach my $fields ($MARCfield->subfields()) {
-				if ($fields) {
-					if ($hash_unused{$MARCfield->tag().@$fields[0]}>=1) {
-						$hash_unused{$MARCfield->tag().@$fields[0]}++;
-					}
-					if ($hash_used{$MARCfield->tag().@$fields[0]}>=1) {
-						$hash_used{$MARCfield->tag().@$fields[0]}++;
-					}
-				}
-	# 			foreach my $field (@$fields) {
-	# 				warn "==>".$MARCfield->tag().@$fields[0];
-	# 			}
-			}
-		}
-	}
+    $i++;
+    foreach my $MARCfield ($record->fields()) {
+    next if $MARCfield->tag()<=010;
+        if ($MARCfield) {
+            foreach my $fields ($MARCfield->subfields()) {
+                if ($fields) {
+                    if ($hash_unused{$MARCfield->tag().@$fields[0]}>=1) {
+                        $hash_unused{$MARCfield->tag().@$fields[0]}++;
+                    }
+                    if ($hash_used{$MARCfield->tag().@$fields[0]}>=1) {
+                        $hash_used{$MARCfield->tag().@$fields[0]}++;
+                    }
+                }
+    #           foreach my $field (@$fields) {
+    #               warn "==>".$MARCfield->tag().@$fields[0];
+    #           }
+            }
+        }
+    }
 }
 print "Undeclared tag/subfields that exists in the file\n";
 print "================================================\n";
 foreach my $key (sort keys %hash_unused) {
-	print "$key => ".($hash_unused{$key}-1)."\n" unless ($hash_unused{$key}==1);
+    print "$key => ".($hash_unused{$key}-1)."\n" unless ($hash_unused{$key}==1);
 }
 
 print "Declared tag/subfields unused in the iso2709 file\n";
 print "=================================================\n";
 foreach my $key (sort keys %hash_used) {
-	print "$key => ".($hash_used{$key}-1)."\n" if ($hash_used{$key}==1);
+    print "$key => ".($hash_used{$key}-1)."\n" if ($hash_used{$key}==1);
 }
 
 # foreach my $x (sort keys %resB) {
-# 	print "$x => ".$resB{$x}."\n";
+#   print "$x => ".$resB{$x}."\n";
 # }
 print "\n==================\n$i record parsed\n";

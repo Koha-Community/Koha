@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# script that correct the marcxml  from in biblioitems 
-#  Written by TG on 10/04/2006
+# load records that already have biblionumber set into a koha system
+# Written by TG on 10/04/2006
 use strict;
 BEGIN {
     # find Koha's Perl modules
@@ -28,7 +28,8 @@ GetOptions(
 
 if ($version || ($input_marc_file eq '')) {
 	print <<EOF
-small script to import an iso2709 file into Koha with existing biblionumbers in marc record.
+If your ISO2709 file already has biblionumbers, you can use this script
+to import the MARC into your database.
 parameters :
 \th : this version/help screen
 \tfile /path/to/file/to/dump : the file to dump
