@@ -25,17 +25,19 @@ my $reset;
 my $biblios;
 my $authorities;
 my $noxml;
+my $noshadow;
 my $do_munge;
 my $want_help;
 my $result = GetOptions(
-	'd:s'      => \$directory,
-	'reset'      => \$reset,
-	's'        => \$skip_export,
-	'k'        => \$keep_export,
-	'b'        => \$biblios,
-	'noxml'        => \$noxml,
-    'munge-config' => \$do_munge,
-	'a'        => \$authorities,
+    'd:s'           => \$directory,
+    'reset'         => \$reset,
+    's'             => \$skip_export,
+    'k'             => \$keep_export,
+    'b'             => \$biblios,
+    'noxml'         => \$noxml,
+    'w'             => \$noshadow,
+    'munge-config'  => \$do_munge,
+    'a'             => \$authorities,
     'h|help'        => \$want_help,
 );
 
@@ -51,6 +53,9 @@ if (not $biblios and not $authorities) {
     die $msg;
 }
 
+if ($noshadow) {
+    $noshadow = ' -n ';
+}
 my $use_tempdir = 0;
 unless ($directory) {
     $use_tempdir = 1;
@@ -118,7 +123,7 @@ if ($authorities) {
                 print "  There was some pb getting authority : ".$authid."\n";
             next;
             }
-		
+        
             print ".";
             print "\r$i" unless ($i++ %100);
 #            # remove leader length, that could be wrong, it will be calculated automatically by as_usmarc
@@ -139,8 +144,8 @@ if ($authorities) {
     print "REINDEXING zebra\n";
     print "====================\n";
     system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities init") if ($reset);
-    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities update $directory/authorities");
-    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities commit");
+    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." $noshadow -g iso2709 -d authorities update $directory/authorities");
+    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities commit") unless $noshadow;
 } else {
     print "skipping authorities\n";
 }
@@ -166,7 +171,7 @@ if ($biblios) {
         open(OUT,">:utf8 ","$directory/biblios/export") or die $!;
         my $dbh=C4::Context->dbh;
         my $sth;
-	if ($noxml){
+    if ($noxml){
         $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
         $sth->execute();
         my $i=0;
@@ -363,7 +368,7 @@ if ($biblios) {
             print OUT $record->as_usmarc();
         }
         close(OUT);
-	}
+    }
     }
     
     #
@@ -373,8 +378,8 @@ if ($biblios) {
     print "REINDEXING zebra\n";
     print "====================\n";
     system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios init") if ($reset);
-    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios update $directory/biblios");
-    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit");
+    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." $noshadow -d biblios update $directory/biblios");
+    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit") unless $noshadow;
 } else {
     print "skipping biblios\n";
 }
@@ -414,7 +419,9 @@ mode, this job should not be used.
 
 Parameters:
     -b                      index bibliographic records
+
     -a                      index authority records
+
     -r                      clear Zebra index before
                             adding records to index
 
@@ -423,7 +430,9 @@ Parameters:
                             created.  The export directory
                             is automatically deleted unless
                             you supply the -k switch.
+
     -k                      Do not delete export directory.
+
     -s                      Skip export.  Used if you have
                             already exported the records 
                             in a previous run.
@@ -432,6 +441,9 @@ Parameters:
                             instead of MARC XML.  This
                             option is recommended only
                             for advanced user.
+
+    -w                      skip shadow indexing for this batch
+
     -munge-config           Deprecated option to try
                             to fix Zebra config files.
     --help or -h            show this message.
