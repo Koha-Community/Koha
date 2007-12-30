@@ -439,11 +439,22 @@ if ($borrower) {
             push @previousissues, $it;
         }
     }
-    @todaysissues   = sort { $b->{'timestamp'} <=> $a->{'timestamp'} } @todaysissues;
-    @previousissues = sort { $b->{'date_due' } <=> $a->{'date_due' } } @previousissues;
+	if (C4::Context->preference("todaysIssuesDefaultSortOrder") eq 'asc'){
+		@todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
+	}
+	else {
+		@todaysissues   = sort { $b->{'timestamp'} cmp $a->{'timestamp'} } @todaysissues;
+	}
+	if (C4::Context->preference("previousIssuesDefaultSortOrder") eq 'asc'){
+		@previousissues = sort { $a->{'date_due' } cmp $b->{'date_due' } } @previousissues;
+	}
+	else {
+		@previousissues = sort { $b->{'date_due' } cmp $a->{'date_due' } } @previousissues;
+	}
     my $i = 1;
 	foreach my $book (@todaysissues) {
         $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
+		warn $book->{'timestamp'};
     }
     $i = 1;
 	foreach my $book (@previousissues) {

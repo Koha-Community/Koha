@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-#script to administer the systempref table
-#written 20/02/2002 by paul.poulain@free.fr
+# script to administer the systempref table
+# written 20/02/2002 by paul.poulain@free.fr
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2000-2002 Katipo Communications
@@ -136,6 +136,9 @@ my %tabsysprefs;
     $tabsysprefs{WebBasedSelfCheck}="Circulation";
     $tabsysprefs{CircControl}="Circulation";
     $tabsysprefs{finesCalendar}="Circulation";
+    $tabsysprefs{previousIssuesDefaultSortOrder}="Circulation";
+    $tabsysprefs{todaysIssuesDefaultSortOrder}="Circulation";
+
 # Staff Client
     $tabsysprefs{TemplateEncoding}="StaffClient";
     $tabsysprefs{template}="StaffClient";
@@ -281,7 +284,7 @@ sub StringSearch  {
         $sth->finish;
 
     }  elsif ($type){
-        foreach my $syspref (sort keys %tabsysprefs){
+        foreach my $syspref (sort { lc $a cmp lc $b } keys %tabsysprefs){
             if ($tabsysprefs{$syspref} eq $type){
                 my $sth=$dbh->prepare("Select variable,value,explanation,type,options from systempreferences where (variable like ?) order by variable");
                 $sth->execute($syspref);
