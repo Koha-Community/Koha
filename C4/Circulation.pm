@@ -397,7 +397,11 @@ sub TooMany {
                     AND i.returndate IS NULL 
                     AND i.itemnumber = s2.itemnumber 
                     AND s1.biblioitemnumber = s2.biblioitemnumber";
-   (C4::Context->preference('item-level_itypes')) ? $query2.=" AND s2.itype=? " : $query2.=" AND s1.itemtype= ? ";
+    if (C4::Context->preference('item-level_itypes')){
+	   $query2.=" AND s2.itype=? ";
+    } else { 
+	   $query2.=" AND s1.itemtype= ? ";
+    }
     my $sth2=  $dbh->prepare($query2);
     my $sth3 =
       $dbh->prepare(
@@ -491,19 +495,20 @@ sub TooMany {
         if ( $result->{'maxissueqty'} <= $alreadyissued ) {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / itemtype failed)"  );
         }
-        # now checking for total
-        $sth->execute( '*', '*', '*' );
-        my $result = $sth->fetchrow_hashref;
-        if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, $type );
-            my $alreadyissued = $sth2->fetchrow;
-            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / total failed)"  );
-            }
-        }
-    }
+	}
+    # now checking for total
+    $sth->execute( '*', '*', '*' );
+    my $result = $sth->fetchrow_hashref;
+    if ( $result->{maxissueqty} ne '' ) {
+		warn "checking total";
+		$sth2->execute( $borrower->{'borrowernumber'}, $type );
+		my $alreadyissued = $sth2->fetchrow;
+		if ( $result->{'maxissueqty'} <= $alreadyissued ) {
+			return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / total failed)"  );
+		}
+	}
 
-    #OK, the patron can issue !!!
+    # OK, the patron can issue !!!
     return;
 }
 
