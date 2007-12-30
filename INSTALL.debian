@@ -62,7 +62,7 @@ Run the following command to update your system:
 
 Note: for more information about Git, please see the Koha Git Usage Guide:
 
-	http://wiki.koha.org/doku.php?id=en:development:git_usage
+    http://wiki.koha.org/doku.php?id=en:development:git_usage
 
 1.3.2 Option B: Download Koha from koha.org
 
@@ -146,7 +146,22 @@ When the configuration is completed CPAN will install the Perl modules.
 
     mysql> quit
 
-2.3 Create test database in order to install DBD::mysql
+2.3 Test your SAX Parser and correct where necessary
+
+    You must be sure you're using the XML::LibXML SAX parser, not Expat or PurePerl, both of which have outstanding bugs with pre-composed characters. You can test your SAX parser by running:
+
+    $ misc/sax_parser_print.pl 
+
+    You should see something like::
+
+    XML::LibXML::SAX::Parser=HASH(0x81fe220)
+
+    If you're using PurePerl or Expat, you'll need to edit your
+    ini file, typically located at:
+
+    /etc/perl/XML/SAX/ParserDetails.ini
+
+2.4 Create test database in order to install DBD::mysql
 
 In order to handle UTF-8 correctly, Koha requires at least version 4.004
 of the DBD::mysql Perl module.  However, Debian Etch has a stable package
