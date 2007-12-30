@@ -1,4 +1,5 @@
 INSERT INTO `categories` (`categorycode`, `description`, `enrolmentperiod`, `upperagelimit`, `dateofbirthrequired`, `finetype`, `bulk`, `enrolmentfee`, `overduenoticerequired`, `issuelimit`, `reservefee`, `category_type`) VALUES 
+
 ('PT','Patron',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','A'),
 ('ST','Student',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','A'),
 ('HB','Home Bound',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','A'),

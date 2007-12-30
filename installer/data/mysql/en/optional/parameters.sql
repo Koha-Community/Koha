@@ -1,2 +1,2 @@
-INSERT INTO `currency` (currency, rate) VALUES ('USD', 1.0);
+INSERT INTO `currency` (currency, rate) VALUES ('USD', 1.0), ('GPB', 1.9929), ('CAD', 1.02207), ('EUR', .874003);
 
