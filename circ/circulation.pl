@@ -111,6 +111,10 @@ $printer = C4::Context->userenv->{'branchprinter'};
         }
 
 my $barcode        = $query->param('barcode') || '';
+
+# strip whitespace
+$barcode =~ s/\s*//g;
+
 my $year           = $query->param('year');
 my $month          = $query->param('month');
 my $day            = $query->param('day');

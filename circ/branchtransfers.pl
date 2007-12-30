@@ -105,6 +105,8 @@ my @trsfitemloop;
 my %transfereditems;
 my $transfered;
 my $barcode = $query->param('barcode');
+# strip whitespace
+$barcode =~ s/\s*//g;
 # warn "barcode : $barcode";
 if ($barcode) {
 

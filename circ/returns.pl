@@ -153,6 +153,8 @@ my $returned = 0;
 my $messages;
 my $issueinformation;
 my $barcode = $query->param('barcode');
+# strip whitespace
+$barcode =~ s/\s*//g;
 my $exemptfine = $query->param('exemptfine');
 
 my $dotransfer = $query->param('dotransfer');
