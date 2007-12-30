@@ -135,13 +135,23 @@ if ($op eq "additem") {
     my $sth=$dbh->prepare("select * from issues i where i.returndate is null and i.itemnumber=?");
     $sth->execute($itemnumber);
     my $onloan=$sth->fetchrow;
+	$sth->finish();
     push @errors,"book_on_loan" if ($onloan); ##error book_on_loan added to template as well
     if ($onloan){
-    $nextop="additem";
+		$nextop="additem";
     } else {
-        &DelItem($dbh,$biblionumber,$itemnumber);
-        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
-        #$nextop="additem";
+		# check it doesnt have a waiting reserve
+		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'w' AND cancellationdate IS NULL AND itemnumber = ?");
+		$sth->execute($itemnumber);
+		my $reserve=$sth->fetchrow;
+		if ($reserve){
+			push @errors,"book_reserved";
+			$nextop="additem";
+		}
+		else {
+			&DelItem($dbh,$biblionumber,$itemnumber);
+			print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+		}
     }
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
