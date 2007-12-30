@@ -1343,38 +1343,15 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ( $item->{onloan} ) {
                 $onloan_count++;
-                $onloan_items->{ $item->{'homebranch'} . '--'
-                      . $item->{location}
-                      . $item->{'itemcallnumber'}
-                      . $item->{due_date} }->{due_date} =
-                  format_date( $item->{onloan} );
-                $onloan_items->{ $item->{'homebranch'} . '--'
-                      . $item->{location}
-                      . $item->{'itemcallnumber'}
-                      . $item->{due_date} }->{count}++
-                  if $item->{'homebranch'};
-                $onloan_items->{ $item->{'homebranch'} . '--'
-                      . $item->{location}
-                      . $item->{'itemcallnumber'}
-                      . $item->{due_date} }->{branchname} =
-                  $item->{'branchname'};
-                $onloan_items->{ $item->{'homebranch'} . '--'
-                      . $item->{location}
-                      . $item->{'itemcallnumber'}
-                      . $item->{due_date} }->{location} =
-                  $locations{ $item->{location} };
-                $onloan_items->{ $item->{'homebranch'} . '--'
-                      . $item->{location}
-                      . $item->{'itemcallnumber'}
-                      . $item->{due_date} }->{itemcallnumber} =
-                  $item->{itemcallnumber};
-
+                $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{due_date} = format_date( $item->{onloan} );
+                $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{count}++ if $item->{'homebranch'};
+                $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{branchname} = $item->{'branchname'};
+                $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{location} = $locations{ $item->{location} };
+                $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{itemcallnumber} = $item->{itemcallnumber};
+		$onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
-                    $onloan_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{due_date} }->{longoverdue}++;
+                    $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date} }->{longoverdue}++;
                     $longoverdue_count++;
                 }
 
@@ -1401,75 +1378,29 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     $wthdrawn_count++    if $item->{wthdrawn};
                     $itemlost_count++    if $item->{itemlost};
                     $itemdamaged_count++ if $item->{damaged};
-                    $item->{status} =
-                        $item->{wthdrawn} . "-"
-                      . $item->{itemlost} . "-"
-                      . $item->{damaged} . "-"
-                      . $item->{notforloan};
+                    $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
                     $other_count++;
 
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{wthdrawn} = $item->{wthdrawn};
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{itemlost} = $item->{itemlost};
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{damaged} = $item->{damaged};
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{notforloan} =
-                      GetAuthorisedValueDesc( '', '', $item->{notforloan}, '',
-                        '', $notforloan_authorised_value )
-                      if $notforloan_authorised_value;
-
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{count}++
-                      if $item->{'homebranch'};
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{branchname} =
-                      $item->{'branchname'};
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{location} =
-                      $locations{ $item->{location} };
-                    $other_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'}
-                          . $item->{status} }->{itemcallnumber} =
-                      $item->{itemcallnumber};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{wthdrawn} = $item->{wthdrawn};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{itemlost} = $item->{itemlost};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{damaged} = $item->{damaged};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{notforloan} = GetAuthorisedValueDesc( '', '', $item->{notforloan}, '', '', $notforloan_authorised_value ) if $notforloan_authorised_value;
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{count}++ if $item->{'homebranch'};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{branchname} = $item->{'branchname'};
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{location} = $locations{ $item->{location} };
+                    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{itemcallnumber} = $item->{itemcallnumber};
+		    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
 
                 # item is available
                 else {
                     $can_place_holds = 1;
                     $available_count++;
-                    $available_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'} }->{count}++
-                      if $item->{'homebranch'};
-                    $available_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'} }->{branchname} =
-                      $item->{'branchname'};
-                    $available_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'} }->{location} =
-                      $locations{ $item->{location} };
-                    $available_items->{ $item->{'homebranch'} . '--'
-                          . $item->{location}
-                          . $item->{'itemcallnumber'} }->{itemcallnumber} =
-                      $item->{itemcallnumber};
+                    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{count}++ if $item->{'homebranch'};
+                    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{branchname} = $item->{'branchname'};
+                    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{location} = $locations{ $item->{location} };
+                    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{itemcallnumber} = $item->{itemcallnumber};
+		    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
             }
         }    # notforloan, item level and biblioitem level
