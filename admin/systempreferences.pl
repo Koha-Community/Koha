@@ -68,7 +68,6 @@ my %tabsysprefs;
     $tabsysprefs{OpacMaintenance}="Admin";
     $tabsysprefs{FrameworksLoaded}="Admin";
     $tabsysprefs{libraryAddress}="Admin";
-    $tabsysprefs{dateformat}="Admin";
     $tabsysprefs{delimiter}="Admin";
     $tabsysprefs{IndependantBranches}="Admin";
     $tabsysprefs{HomeOrHoldingBranch}="Admin";
