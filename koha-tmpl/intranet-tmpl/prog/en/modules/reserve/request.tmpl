@@ -306,17 +306,10 @@ if (alreadyreserved > "0"){
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
             <option value="W" selected="selected">Waiting</option>
-    	<!-- TMPL_ELSE -->
-		<!-- TMPL_IF Name="selected" -->
-            <option value="<!-- TMPL_VAR NAME="priority" -->" selected="selected">
-              <!-- TMPL_VAR NAME="priority" -->
-            </option>
-    	<!-- TMPL_ELSE -->
-			<option value="<!-- TMPL_VAR NAME="priority" -->">
-              <!-- TMPL_VAR NAME="priority" -->
-            </option>
-        <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+	<!-- TMPL_LOOP Name="optionloop" -->                 
+	<option value="<!-- TMPL_VAR NAME="num" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="num" --></option> 
+	<!-- /TMPL_LOOP -->  
             <option value="del">del</option>
           </select>
         </td>
@@ -329,12 +322,12 @@ if (alreadyreserved > "0"){
     <!-- TMPL_IF Name="wait" -->
     	<!-- TMPL_IF NAME="atdestination" -->
                 <!-- TMPL_IF name="found" -->
-                Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+                Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
             <!-- TMPL_ELSE -->
                 Waiting to be pulled
             <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
-            Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
+            Item being transfered to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
          <!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
           <select name="pickup">
@@ -373,7 +366,7 @@ if (alreadyreserved > "0"){
       </tr>
   <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
      </table>
-<fieldset class="action"><input type="submit" name="submit" value="Cancel hold(s)" /></fieldset>
+<fieldset class="action"><input type="submit" name="submit" value="Update hold(s)" /></fieldset>
 </fieldset>
 </form>
 <!-- /TMPL_IF -->

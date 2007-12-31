@@ -1037,12 +1037,13 @@ sub _FixPriority {
     # get whats left
 # FIXME adding a new security in returned elements for changing priority,
 # now, we don't care anymore any reservations with itemnumber linked (suppose a waiting reserve)
+	# This is wrong a waiting reserve has W set
+	# The assumption that having an itemnumber set means waiting is wrong and should be corrected any place it occurs
     my $query = qq/
         SELECT borrowernumber, reservedate, constrainttype
         FROM   reserves
         WHERE  biblionumber   = ?
           AND  cancellationdate IS NULL
-          AND  itemnumber IS NULL
           AND  ((found <> 'F' and found <> 'W') or found is NULL)
         ORDER BY priority ASC
     /;
