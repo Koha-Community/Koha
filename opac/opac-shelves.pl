@@ -98,6 +98,7 @@ if ( $query->param('modifyshelfcontents') ) {
         AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
         foreach ( $query->param ) {
             /REM-(\d+)/ or next;
+			$debug and warn "SHELVES: user $loggedinuser removing item $1 from shelf $shelfnumber";
             DelFromShelf( $1, $shelfnumber );	# $1 is biblionumber
         }
     }
@@ -150,6 +151,10 @@ SWITCH: {
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
 			$showadd = 1;
+			my $i = 0;
+			foreach (grep {$i++ % 2} @$items) {		# every other item
+				$_->{toggle} = 1;
+			}
             $template->param(
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
@@ -208,7 +213,7 @@ my @shelveslooppriv;
 foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
 	my %line;
 	$color = ($color) ? 0 : 1;
-	$line{'toggle'} = $color;
+	$color and $line{'toggle'} = $color;
 	$line{'shelf'} = $element;
 	$line{'shelfname'} = $shelflist->{$element}->{'shelfname'};
 	$line{'sortfield'} = $shelflist->{$element}->{'sortfield'};

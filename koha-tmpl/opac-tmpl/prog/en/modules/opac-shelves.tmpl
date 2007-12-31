@@ -157,7 +157,9 @@
         <table>
         <tr><th>List Name</th><th>Contents</th></tr>
             <!-- TMPL_LOOP NAME="shelvesloop" -->
-                <!-- TMPL_IF NAME"toggle" --> <tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF --><td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td><td><!-- TMPL_VAR NAME="shelfvirtualcount" --> item(s)</td></tr>
+                <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
+		<td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
+		<td><!-- TMPL_VAR NAME="shelfvirtualcount" --> item(s)</td></tr>
             <!-- /TMPL_LOOP -->
         </table>
         <!-- TMPL_ELSE -->
