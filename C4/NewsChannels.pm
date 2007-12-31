@@ -326,8 +326,9 @@ sub get_opac_news {
 sub GetNewsToDisplay {
     my $lang = shift;
     my $dbh = C4::Context->dbh;
+    # SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
     my $query = "
-     SELECT *,DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate
+     SELECT *,timestamp AS newdate
      FROM   opac_news
      WHERE   (
         expirationdate > CURRENT_DATE()
@@ -341,6 +342,7 @@ sub GetNewsToDisplay {
     $sth->execute($lang);
     my @results;
     while ( my $row = $sth->fetchrow_hashref ){
+		$row->{newdate} = format_date($row->{newdate});
         push @results, $row;
     }
     return \@results;
