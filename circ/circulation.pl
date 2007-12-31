@@ -458,7 +458,6 @@ if ($borrower) {
     my $i = 1;
 	foreach my $book (@todaysissues) {
         $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
-		warn $book->{'timestamp'};
     }
     $i = 1;
 	foreach my $book (@previousissues) {
@@ -536,7 +535,7 @@ my $flags = $borrower->{'flags'};
 my $flag;
 
 foreach $flag ( sort keys %$flags ) {
-
+    $template->param( flagged=> 1);
     $flags->{$flag}->{'message'} =~ s/\n/<br>/g;
     if ( $flags->{$flag}->{'noissues'} ) {
         $template->param(

@@ -426,7 +426,7 @@ sub patronflags {
     elsif ( $amount < 0 ) {
         my %flaginfo;
         $flaginfo{'message'} = sprintf "Patron has credit of \$%.02f", -$amount;
-        $flags{'CHARGES'} = \%flaginfo;
+        $flags{'CREDITS'} = \%flaginfo;
     }
     if (   $patroninformation->{'gonenoaddress'}
         && $patroninformation->{'gonenoaddress'} == 1 )
