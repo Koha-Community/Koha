@@ -86,7 +86,11 @@ if (alreadyreserved > "0"){
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
+<!-- TMPL_IF NAME="noitems" -->
+<p class="problem">            
+<strong>Sorry, this biblio has no items attached</strong>                            
+</p>       
+<!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="messagetransfert" -->
 		<div>
 				<h2>Hold found for (<!-- TMPL_VAR NAME="nextreservtitle" -->), please transfer</h2>
@@ -371,7 +375,7 @@ if (alreadyreserved > "0"){
 </form>
 <!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
-
+<!-- /TMPL_IF -->
 </div>
 </div>
 

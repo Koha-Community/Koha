@@ -214,7 +214,15 @@ my $fixedRank = $count+1;
 
 my @branchcodes;
 my %itemnumbers_of_biblioitem;
-my @itemnumbers  = @{ get_itemnumbers_of($biblionumber)->{$biblionumber} };
+my @itemnumbers;
+
+if (my $items = get_itemnumbers_of($biblionumber)->{$biblionumber}){
+	@itemnumbers  = @$items;
+}
+else {
+	$template->param('noitems' => 1);
+}
+	
 my $iteminfos_of = GetItemInfosOf(@itemnumbers);
 
 foreach my $itemnumber (@itemnumbers) {
