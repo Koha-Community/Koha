@@ -48,8 +48,8 @@
         <table>
             <tr>
                 <th>Order</th>
-                <th><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">Publisher</a></th>
                 <th>Title</th>
+                <th><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">Publisher</a></th>
                 <th>RRP</th>
                 <th>Est.</th>
                 <th>Qty.</th>
@@ -65,27 +65,18 @@
                 <!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="books_loop" -->
-                <!-- TMPL_IF NAME="highlight" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-                    <td><!-- TMPL_VAR NAME="ordernumber" --></td>
-                    <td><!-- TMPL_VAR NAME="publishercode" --></td>
-                    <!-- TMPL_IF name="closedate" -->
-                        <td><p>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><br />
-                                <!-- TMPL_VAR NAME="author" -->
-                                <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
-                                <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
-                            </p>
-                        </td>
-                    <!-- TMPL_ELSE -->
+                 <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="highlight" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                    <td><!-- TMPL_VAR NAME="ordernumber" -->
+							<!-- TMPL_IF NAME="order_received" --> (rcvd)<!-- /TMPL_IF --></td>
                         <td>
-                            <p>
+                           	<p>
                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
                                 <p><!-- TMPL_VAR NAME="author" -->
                                 <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
                             </p>
                         </td>
-                    <!-- /TMPL_IF -->
+                    <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="rrp" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="quantity" --></td>
@@ -108,30 +99,32 @@
                     <input type="hidden" name="number" value="<!-- TMPL_VAR NAME="count" -->" />
                     <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
                 </td>
-                <th>SubTotal</th>
-                <th><!-- TMPL_VAR NAME="sub_total_est" --></th>
-                <th><!-- TMPL_VAR NAME="sub_total" --></th>
+                <th colspan="3">SubTotal</th>
+              <!--  <th><!-- TMPL_VAR NAME="sub_total_est" --></th> -->
                 <th><!-- TMPL_VAR name="qty_total" --></th>
+                <th><!-- TMPL_VAR NAME="sub_total" --></th>
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_IF name="closedate" -->
-                          <td colspan="2" rowspan="3">&nbsp;</td>
+                          <td colspan="2">&nbsp;</td>
                         <!-- TMPL_ELSE -->
-                          <td colspan="3" rowspan="3">&nbsp;</td>
+                          <td colspan="3">&nbsp;</td>
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 
             </tr>
 <!-- TMPL_IF NAME="GST" -->            <tr>
                 <th>GST</th>
+                <th>&nbsp;</th>
                 <th><!-- TMPL_VAR NAME="gist_est" --></th>
                 <th><!-- TMPL_VAR NAME="gist" --></th>
                 <th>&nbsp;</th>
             </tr><!-- /TMPL_IF -->
             <tr>
                 <th>TOTAL  (<!-- TMPL_VAR NAME="currency" -->)</th>
-                <th><!-- TMPL_VAR NAME="grand_total_est" --></th>
-                <th><!-- TMPL_VAR NAME="grand_total" --></th>
+                <th><!-- TMPL_VAR NAME="grand_total_rrp" --></th>
                 <th>&nbsp;</th>
+                <th><!-- TMPL_VAR name="qty_total" --></th>
+                <th><!-- TMPL_VAR NAME="grand_total" --></th>
             </tr>
         </table>
     <!-- TMPL_ELSE -->

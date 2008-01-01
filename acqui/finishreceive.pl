@@ -34,7 +34,8 @@ my $user=$input->remote_user;
 my $biblionumber = $input->param('biblionumber');
 my $biblioitemnumber=$input->param('biblioitemnumber');
 my $ordnum=$input->param('ordnum');
-my $quantrec=$input->param('quantityrec');
+my $origquantityrec=$input->param('origquantityrec');
+my $quantityrec=$input->param('quantityrec');
 my $quantity=$input->param('quantity');
 my $cost=$input->param('cost');
 my $invoiceno=$input->param('invoice');
@@ -43,33 +44,40 @@ my $replacement=$input->param('rrp');
 my $gst=$input->param('gst');
 my $freight=$input->param('freight');
 my $supplierid = $input->param('supplierid');
-my $branch=$input->param('branch');
-
-# if ($quantrec != 0){
-# 	$cost /= $quantrec;
+my @branch=$input->param('homebranch');
+my @barcode=$input->param('barcode');
+my @ccode=$input->param('ccode');
+my @itemtype=$input->param('itemtype');
+my @location=$input->param('location');
+my $cnt = 0;
+# if ($quantityrec != 0){
+# 	$cost /= $quantityrec;
 # }
 
-if ($quantity != 0) {
+if ($quantityrec > $origquantityrec ) {
     # save the quantity recieved.
-    $datereceived = ModReceiveOrder($biblionumber,$ordnum,$quantrec,$user,$cost,$invoiceno,$datereceived,$freight,$replacement);
+    $datereceived = ModReceiveOrder($biblionumber,$ordnum,$quantityrec,$user,$cost,$invoiceno,$datereceived,$freight,$replacement);
     # create items if the user has entered barcodes
-    my $barcode=$input->param('barcode');
-    my @barcodes=split(/\,| |\|/,$barcode);
+   # my @barcodes=split(/\,| |\|/,$barcode);
     # foreach barcode provided, build the item MARC::Record and create the item
-    foreach my $bc (@barcodes) {
+    foreach my $bc (@barcode) {
         my $itemRecord = TransformKohaToMarc({
                     "items.replacementprice" => $replacement,
                     "items.price"            => $cost,
                     "items.booksellerid"     => $supplierid,
-                    "items.homebranch"       => $branch,
-                    "items.holdingbranch"    => $branch,
-                    "items.barcode"          => $bc,
+                    "items.homebranch"       => $branch[$cnt],
+                    "items.holdingbranch"    => $branch[$cnt],
+                    "items.barcode"          => $barcode[$cnt],
+                    "items.ccode"          => $ccode[$cnt],
+                    "items.itype"          => $itemtype[$cnt],
+                    "items.location"          => $location[$cnt],
                     "items.loan"             => 0, });
-        AddItem($itemRecord,$biblionumber);
+		AddItem($itemRecord,$biblionumber);
     }
-    print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");
-} else {
-    print $input->header;
-    delorder($biblionumber,$ordnum);
-    print $input->redirect("/acquisitions/");
 }
+    print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");
+#} else {
+#    print $input->header;
+#    #delorder($biblionumber,$ordnum);
+#    print $input->redirect("/acquisitions/");
+#}

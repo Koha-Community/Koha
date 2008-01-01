@@ -374,7 +374,7 @@ sub GetOrder {
   &NewOrder($basket, $biblionumber, $title, $quantity, $listprice,
     $booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
     $ecost, $gst, $budget, $unitprice, $subscription,
-    $booksellerinvoicenumber);
+    $booksellerinvoicenumber, $purchaseorder);
 
 Adds a new order to the database. Any argument that isn't described
 below is the new value of the field with the same name in the aqorders
@@ -571,6 +571,9 @@ Updates an order, to reflect the fact that it was received, at least
 in part. All arguments not mentioned below update the fields with the
 same name in the aqorders table of the Koha database.
 
+If a partial order is received, splits the order into two.  The received
+portion must have a booksellerinvoicenumber.  
+
 Updates the order with bibilionumber C<$biblionumber> and ordernumber
 C<$ordernumber>.
 
@@ -584,31 +587,55 @@ Also updates the book fund ID in the aqorderbreakdown table.
 sub ModReceiveOrder {
     my (
         $biblionumber,    $ordnum,  $quantrec, $user, $cost,
-        $invoiceno, $freight, $rrp, $bookfund, $daterecieved
+        $invoiceno, $freight, $rrp, $bookfund, $datereceived
       )
       = @_;
     my $dbh = C4::Context->dbh;
 #     warn "DATE BEFORE : $daterecieved";
-    $daterecieved=POSIX::strftime("%Y-%m-%d",CORE::localtime) unless $daterecieved;
+#    $daterecieved=POSIX::strftime("%Y-%m-%d",CORE::localtime) unless $daterecieved;
 #     warn "DATE REC : $daterecieved";
-    my $query = "
-        UPDATE aqorders
-        SET    quantityreceived=?,datereceived=?,booksellerinvoicenumber=?,
-               unitprice=?,freight=?,rrp=?
-        WHERE biblionumber=? AND ordernumber=?
-    ";
-    my $sth = $dbh->prepare($query);
+	$datereceived = C4::Dates->output('iso') unless $datereceived;
+   
+	my $sth=$dbh->prepare("SELECT * FROM aqorders  LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
+							WHERE biblionumber=? AND aqorders.ordernumber=?");
+    $sth->execute($biblionumber,$ordnum);
+    my $order = $sth->fetchrow_hashref();
+    $sth->finish();
+	
+	if ( $order->{quantity} > $quantrec ) {
+        $sth=$dbh->prepare("update aqorders 
+							set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?, 
+								unitprice=?,freight=?,rrp=?,quantity=?
+                            where biblionumber=? and ordernumber=?");
+        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$quantrec,$biblionumber,$ordnum);
+        $sth->finish;
+        # create a new order for the remaining items, and set its bookfund.
+        my $newOrder = NewOrder($order->{'basketno'},$order->{'biblionumber'},$order->{'title'}, $order->{'quantity'} - $quantrec,    
+                    $order->{'listprice'},$order->{'booksellerid'},$order->{'authorisedby'},$order->{'notes'},   
+                    $order->{'bookfundid'},$order->{'biblioitemnumber'},$order->{'rrp'},$order->{'ecost'},$order->{'gst'},
+                    $order->{'budget'},$order->{'unitcost'},$order->{'sub'},'',$order->{'sort1'},$order->{'sort2'},$order->{'purchaseordernumber'});
+    
+        $sth = $dbh->prepare("select branchcode, bookfundid from aqorderbreakdown where ordernumber=?");
+        $sth->execute($ordnum);
+        my ($branch,$bookfund) = $sth->fetchrow_array;
+        $sth->finish;
+        $sth=$dbh->prepare(" insert into aqorderbreakdown (ordernumber, branchcode, bookfundid) values (?,?,?)"); 
+        $sth->execute($newOrder,$branch,$bookfund);
+    } else {
+        $sth=$dbh->prepare("update aqorders 
+							set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?, 
+								unitprice=?,freight=?,rrp=?
+                            where biblionumber=? and ordernumber=?");
+        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblionumber,$ordnum);
+        $sth->finish;
+    }
     my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
     if ($suggestionid) {
         ModStatus( $suggestionid, 'AVAILABLE', '', $biblionumber );
     }
-    $sth->execute( $quantrec,$daterecieved, $invoiceno, $cost, $freight, $rrp, $biblionumber,
-        $ordnum);
-    $sth->finish;
-
     # Allows libraries to change their bookfund during receiving orders
     # allows them to adjust budgets
-    if ( C4::Context->preferene("LooseBudgets") ) {
+    if ( C4::Context->preference("LooseBudgets") ) {
         my $query = "
             UPDATE aqorderbreakdown
             SET    bookfundid=?
@@ -618,9 +645,8 @@ sub ModReceiveOrder {
         $sth->execute( $bookfund, $ordnum );
         $sth->finish;
     }
-    return $daterecieved;
+    return $datereceived;
 }
-
 #------------------------------------------------------------#
 
 =head3 SearchOrder

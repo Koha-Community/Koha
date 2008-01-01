@@ -131,7 +131,7 @@ my $countpendings = scalar @$pendingorders;
 
 # pending orders totals
 my ($totalPunitprice,$totalPquantity,$totalPecost, $totalPqtyrcvd);
-
+my $ordergrandtotal;
 my @loop_orders = ();
 for (my $i=0;$i<$countpendings;$i++){
     my %line;
@@ -151,11 +151,13 @@ for (my $i=0;$i<$countpendings;$i++){
     $totalPqtyrcvd +=$line{quantityreceived};
     $totalPecost += $line{ecost};
     $line{ecost} = sprintf("%.2f",$line{ecost});
+    $line{ordertotal} = sprintf("%.2f",$line{ecost}*$line{quantity});
     $line{unitprice} = sprintf("%.2f",$line{unitprice});
     $line{invoice} = $invoice;
     $line{gst} = $gst;
     $line{total} = $total;
     $line{supplierid} = $supplierid;
+	$ordergrandtotal += $line{ecost}*$line{quantity};
     push @loop_orders, \%line;
 }
 $freight = $totalfreight unless $freight;
@@ -164,6 +166,7 @@ $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
                 datereceived => $datereceived->output('iso'),
+                invoicedatereceived => $datereceived->output('iso'), 
                 formatteddatereceived => $datereceived->output(),
                 name => $booksellers[0]->{'name'},
                 supplierid => $supplierid,
@@ -178,6 +181,7 @@ $template->param(invoice => $invoice,
                 totalfreight => $totalfreight,
                 totalquantity => $totalquantity,
                 tototal => sprintf($cfstr,$tototal),
+                ordergrandtotal => sprintf($cfstr,$ordergrandtotal),
                 gst => $gst,
                 grandtot => sprintf($cfstr,$tototal+$gst),
                 totalPunitprice => sprintf("%.2f",$totalPunitprice),

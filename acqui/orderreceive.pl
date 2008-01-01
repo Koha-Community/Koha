@@ -36,7 +36,7 @@ It permit to write a new order as 'received'.
 =item supplierid
 to know on what supplier this script has to display receive order.
 
-=item recieve
+=item receive
 
 =item invoice
 the number of this invoice.
@@ -114,7 +114,6 @@ if ( $count == 1 ) {
 
     my $locs = GetKohaAuthorisedValues( 'items.location' );
     foreach my $thisloc (sort keys %$locs) {
-		warn $thisloc;
 		my $row = {
                     value => $thisloc,
                     description => $locs->{$thisloc},
@@ -167,8 +166,7 @@ if ( $count == 1 ) {
     if ( $results[0]->{'unitprice'} == 0 ) {
         $results[0]->{'unitprice'} = '';
     }
-    $results[0]->{'copyrightdate'} =
-      format_date( $results[0]->{'copyrightdate'} );
+#    $results[0]->{'copyrightdate'} = format_date( $results[0]->{'copyrightdate'} );  # this usu fails.
     $template->param(
         branchloop            => \@branchloop,
         count                 => 1,

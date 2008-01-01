@@ -128,6 +128,7 @@ my $toggle = 0;
 
 # my $line_total_est; # total of each line
 my $sub_total_est;      # total of line totals
+my $sub_total_rrp;      # total of line totals
 my $gist_est;           # GST
 my $grand_total_est;    # $subttotal + $gist
 
@@ -136,8 +137,7 @@ my @books_loop;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $rrp = $results[$i]->{'listprice'};
     $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
-
-    $sub_total_est += $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
+    $sub_total_rrp += $results[$i]->{'quantity'} * $results[$i]->{'rrp'};
     $line_total = $results[$i]->{'quantity'} * $results[$i]->{'ecost'};
     $sub_total += $line_total;
     $qty_total += $results[$i]->{'quantity'};
@@ -151,6 +151,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{color} = 'white';
         $toggle = 0;
     }
+	$line{order_received} = ($results[$i]->{'quantity'} eq $results[$i]->{'quantityreceived'});
 	$line{publishercode} 	= $results[$i]->{'publishercode'};
 	$line{basketno}         = $basketno;
     $line{i}                = $i;
@@ -163,8 +164,8 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 my $prefgist = C4::Context->preference("gist");
 $gist            = sprintf( "%.2f", $sub_total * $prefgist );
 $grand_total     = $sub_total + $gist;
-$grand_total_est =
-  $sub_total_est + sprintf( "%.2f", $sub_total_est * $prefgist );
+$grand_total_est =  $sub_total_est + sprintf( "%.2f", $sub_total_est * $prefgist );
+my $grand_total_rrp =  sprintf( "%.2f", $sub_total_rrp );
 $gist_est = sprintf( "%.2f", $sub_total_est * $prefgist );
 $template->param(
     basketno         => $basketno,
@@ -182,12 +183,13 @@ $template->param(
     entrydate        => format_date( $results[0]->{'entrydate'} ),
     books_loop       => \@books_loop,
     count            => $count,
-    sub_total        => $sub_total,
+    sub_total        => sprintf( "%.2f", $sub_total),
     gist             => $gist,
-    grand_total      => $grand_total,
+    grand_total      => sprintf( "%.2f", $grand_total),
     sub_total_est    => $sub_total_est,
     gist_est         => $gist_est,
     grand_total_est  => $grand_total_est,
+    grand_total_rrp  => $grand_total_rrp,
     currency         => $booksellers[0]->{'listprice'},
     qty_total        => $qty_total,
     GST => C4::Context->preference("gist"),

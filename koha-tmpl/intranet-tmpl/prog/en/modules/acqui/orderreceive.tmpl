@@ -1,12 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js"></script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receipt order for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Parcel <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receive items from : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->[<!-- TMPL_VAR NAME="invoice" -->]<!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -14,7 +15,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Receipt order for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->Parcel <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</h1>
+<h1>Receive items from : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->[<!-- TMPL_VAR NAME="invoice" -->] <!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</h1>
 
 <!-- TMPL_IF name="count" -->
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
@@ -23,7 +24,7 @@
     
     <fieldset class="rows">
     <legend>Catalogue Details</legend>
-    <ol><li><span class="label">Title: </span><!-- TMPL_VAR NAME="title" --></li>
+    <ul><li><span class="label">Title: </span><span class="title"><!-- TMPL_VAR NAME="title" --></span></li>
     <li> <span class="label">Author: </span>
         <!-- TMPL_VAR NAME="author" --></li>
     <li><span class="label">Copyright: </span>
@@ -32,11 +33,18 @@
         <!-- TMPL_VAR NAME="isbn" --></li>
     <li> <span class="label">Series: </span>
         <!-- TMPL_VAR NAME="seriestitle" --></li>
-    <li> <label for="volinf">Volume Info (for serials): </label>
+    </ul>
+	</fieldset>
+	<fieldset class="rows">
+	<legend>Item details (n):  (add to catalogue)</legend>
+  <div id="outeritemblock">
+	<div id="itemblock">
+	<ul>
+	<li> <label for="volinf">Volume/Copy (for serials): </label>
         <input type="text" size="20" name="volinf" id="volinf" /></li></ol>
-    <li> <label for="barcode">Item Barcode: </label>
+    <li> <label for="barcode">Item barcode: </label>
         <input type="text" size="20" name="barcode" id="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
-    <li> <label for="homebranch">Home Library: </label>
+    <li> <label for="homebranch">Home library: </label>
             <select name="homebranch" id="homebranch">            <!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
@@ -74,7 +82,11 @@
             <!-- /TMPL_LOOP -->
             </select></li>
    <!-- /TMPL_IF -->
-	
+   </ul>
+<a style="cursor: crosshair; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">+</a>
+ <a style="display:none; cursor: crosshair; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">-</a>
+    </div>
+	</div>
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
@@ -86,12 +98,16 @@
 	</div>
 	<div class="yui-u">
     <fieldset class="rows">
-    <legend>Accounting Details</legend>
-       <ol> <li><label for="quantity">Quantity Ordered: </label><input type="text" size="20" name="quantity" id="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /></li>
-        <li><label for="quantityrec">Quantity Received: </label><input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /></li>
-        <li><label for="rrp">Replacement Cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
-        <li><label for="ecost">Budgeted Cost: </label><input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" /></li>
-        <li><label for="cost">Actual Cost</label>
+    <legend>Accounting details</legend>
+       <ul>
+       <li><label for="quantity">Quantity ordered: </label><span class="label"> <!-- TMPL_VAR NAME="quantity" --> </span></li>
+        <li><label for="quantityrec">Quantity received: </label>
+          <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_IF NAME="quantityreceived" --><!-- TMPL_VAR NAME="quantityreceivedplus1" --><!-- TMPL_ELSE -->1<!-- /TMPL_IF -->" />
+          <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_IF NAME="quantityreceived" --><!-- TMPL_VAR NAME="quantityreceived" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->" />
+		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /> --></li>
+        <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
+        <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" /></li>
+        <li><label for="cost">Actual cost:</label>
         <!-- TMPL_IF name="unitprice"-->
          <input type="text" size="20" name="cost" id="cost" value="<!-- TMPL_VAR NAME="unitprice" -->" />
         <!-- TMPL_ELSE -->

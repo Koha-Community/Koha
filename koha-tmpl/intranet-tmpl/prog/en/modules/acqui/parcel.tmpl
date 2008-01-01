@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_IF name="date" -->
-            Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="datereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
+            Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="formatteddatereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
@@ -9,9 +9,9 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  <!-- TMPL_IF name="date" -->
-            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--><i>[ <!-- TMPL_VAR NAME="invoice" --> ]</i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="datereceived" --></i>
+            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--><i>[ <!-- TMPL_VAR NAME="invoice" --> ]</i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="formatteddatereceived" --></i>
         <!-- TMPL_ELSE -->
-            Orders not yet Received from <!-- TMPL_VAR NAME="name" -->
+            Receive orders from <!-- TMPL_VAR NAME="name" -->
         <!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
@@ -22,15 +22,16 @@
 	
     <h1>
         <!-- TMPL_IF name="datereceived" -->
-            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--> <i> [ <!-- TMPL_VAR NAME="invoice" --> ] </i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="datereceived" --></i>
+            Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--> <i> [ <!-- TMPL_VAR NAME="invoice" --> ] </i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="formatteddatereceived" --></i>
         <!-- TMPL_ELSE -->
-            Orders not yet Received from <!-- TMPL_VAR NAME="name" -->
+            Receive orders from <!-- TMPL_VAR NAME="name" -->
         <!-- /TMPL_IF -->
     </h1>
 <div id="acqui_recieve_summary">
-    <p>Parcel: <!-- TMPL_VAR NAME="invoice" --></p>
+    <p>Invoice / Parcel: <!-- TMPL_VAR NAME="invoice" --></p>
     <p>Received by: <!-- TMPL_VAR NAME="loggedinusername" --></p>
-    <p>On: <!-- TMPL_VAR NAME="datereceived" --></p>
+    <p>On: <!-- TMPL_VAR NAME="formatteddatereceived" --></p>
+	<!-- TODO: Add date picker, change rcv date. -->
 </div>
 <div id="acqui_recieve_recievelist">
     <h2>Items in parcel</h2>
@@ -47,7 +48,7 @@
         </tr>
         <!-- TMPL_LOOP NAME="loop_received" -->
             <tr>
-                <td><a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="quantityreceived" --></a></td>
+                <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a>&nbsp; / &nbsp;<!-- TMPL_VAR NAME="ordernumber" --></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                 <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
@@ -109,9 +110,9 @@
             <th>BASKET</th>
             <th>Summary</th>
 			<th>View Record</th>
-            <th>Qty received / ordered</th>
+            <th>Still on order</th>
+            <th>Unit cost</th>
             <th>Order cost</th>
-            <th>Received cost</th>
             <th>&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_orders" -->
@@ -125,17 +126,17 @@
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-                <td> <!-- TMPL_VAR NAME="quantityreceived" -->	 / <!-- TMPL_VAR NAME="quantity" --></td>
+                <td> <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
-                <td><!-- TMPL_IF EXPR="unitprice ne '0.00'" --><!-- TMPL_VAR NAME="unitprice" --><!-- /TMPL_IF --></td>
-				<td><a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a></td>
+                <td><!-- TMPL_VAR NAME="ordertotal" --></td>
+				<td><a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a></td>
             </tr>
         <!-- /TMPL_LOOP -->
             <tr><td colspan="2">&nbsp;</td>
                 <th>TOTAL</th>
-                <th><!-- TMPL_VAR NAME="totalPqtyrcvd" --> / <!-- TMPL_VAR NAME="totalPquantity" --> </th>
-                <th><!-- TMPL_VAR NAME="totalPecost" --></th>
-                <th><!-- TMPL_VAR NAME="totalPunitprice" --></th>
+                <th> <!-- TMPL_VAR NAME="totalPquantity" --> </th>
+				<td>&nbsp;</td>
+                <th><!-- TMPL_VAR NAME="ordergrandtotal" --></th>
 				<td>&nbsp;</td>
             </tr>
      </table>
