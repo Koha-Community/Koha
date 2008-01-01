@@ -8,6 +8,13 @@ function confirm_deletion() {
         window.location="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&op=delete";
     }
 }
+function check(f) {
+if (f.company.value == "") {
+    alert("You must specify a name for this supplier.");
+    return false;
+}
+    f.submit();
+}
 //]]>
 </script>
 </head>
@@ -30,13 +37,13 @@ function confirm_deletion() {
     <!-- /TMPL_IF -->
 <!-- TMPL_UNLESS NAME="enter" --><!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" --><!-- /TMPL_UNLESS -->
 <!--TMPL_IF Name="enter"-->
-    <form action="updatesupplier.pl" method="post">
+    <form action="updatesupplier.pl" name="updatesupplier" method="post">
 	<div class="yui-g">
 	<div class="yui-u first">
         <input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->" />
         <fieldset class="rows">
             <legend>Company details</legend>
-            <ol><li><label for="company">Company Name</label>
+            <ol><li><label for="company" class="required">Company Name * </label>
                 <input type="text" size="40" id="company" name="company" value="<!-- TMPL_VAR NAME="name" -->" /></li>
             <li><label for="company_postal">Postal Address</label>
                     <textarea id="company_postal" name="company_postal" cols="40" rows="3"><!-- TMPL_VAR NAME="postal" --></textarea></li>
@@ -133,7 +140,7 @@ function confirm_deletion() {
 				<input type="hidden"  name="invoice_gst" value="0" />
 			<!-- /TMPL_UNLESS -->
         </fieldset>
-        <fieldset class="action"><input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="id" -->">Cancel</a></fieldset>
+        <fieldset class="action"><input type="button" value="Save" onclick="check(this.form);" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="id" -->">Cancel</a></fieldset>
 		</div>
     </form>
 <!--TMPL_ELSE-->

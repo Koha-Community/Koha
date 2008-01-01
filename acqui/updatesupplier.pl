@@ -85,11 +85,14 @@ $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
 $data{'invoiceincgst'}=$input->param('invoice_gst');
 $data{'discount'}=$input->param('discount');
-if ($data{'id'}){
-    ModBookseller(\%data);
-} else {
-    $data{id}=AddBookseller(\%data);
-}
-
+if($data{'name'}) {
+	if ($data{'id'}){
+	    ModBookseller(\%data);
+	} else {
+	    $data{id}=AddBookseller(\%data);
+	}
 #redirect to booksellers.pl
 print $input->redirect("booksellers.pl?supplier=".$data{id});
+} else {
+print $input->redirect("supplier.pl?op=enter"); # fail silently.
+}
