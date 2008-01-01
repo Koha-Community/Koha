@@ -83,9 +83,9 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 1},
                  debug => 1,
 });
+my $cfstr = "%.2f";  # currency format string -- could get this from currency table.
 my @parcelitems=GetParcel($supplierid,$invoice,$datereceived->output('iso'));
 my $countlines = scalar @parcelitems;
-
 my $totalprice=0;
 my $totalfreight=0;
 my $totalquantity=0;
@@ -108,10 +108,11 @@ for (my $i=0;$i<$countlines;$i++){
     %line = %{$parcelitems[$i]};
     $line{invoice} = $invoice;
     $line{gst} = $gst;
-    $line{total} = $total;
+    $line{total} = sprintf($cfstr,$total);
     $line{supplierid} = $supplierid;
     push @loop_received, \%line;
     $totalprice+=$parcelitems[$i]->{'unitprice'};
+	$line{unitprice} = sprintf($cfstr,$parcelitems[$i]->{'unitprice'});
 #double FIXME - totalfreight is redefined later.
 
  # FIXME - each order in a  parcel holds the freight for the whole parcel. This means if you receive a parcel with items from multiple budgets, you'll see the freight charge in each budget..
@@ -129,7 +130,7 @@ my $pendingorders = GetPendingOrders($supplierid);
 my $countpendings = scalar @$pendingorders;
 
 # pending orders totals
-my ($totalPunitprice,$totalPquantity,$totalPecost);
+my ($totalPunitprice,$totalPquantity,$totalPecost, $totalPqtyrcvd);
 
 my @loop_orders = ();
 for (my $i=0;$i<$countpendings;$i++){
@@ -142,8 +143,12 @@ for (my $i=0;$i<$countpendings;$i++){
             $toggle=0;
     }
     %line = %{$pendingorders->[$i]};
+	$line{quantity}+=0;
+	$line{quantityreceived}+=0;
+	$line{unitprice}+=0;
     $totalPunitprice += $line{unitprice};
     $totalPquantity +=$line{quantity};
+    $totalPqtyrcvd +=$line{quantityreceived};
     $totalPecost += $line{ecost};
     $line{ecost} = sprintf("%.2f",$line{ecost});
     $line{unitprice} = sprintf("%.2f",$line{unitprice});
@@ -169,14 +174,15 @@ $template->param(invoice => $invoice,
                 loop_received => \@loop_received,
                 countpending => $countpendings,
                 loop_orders => \@loop_orders,
-                totalprice => $totalprice,
+                totalprice => sprintf($cfstr,$totalprice),
                 totalfreight => $totalfreight,
                 totalquantity => $totalquantity,
-                tototal => $tototal,
+                tototal => sprintf($cfstr,$tototal),
                 gst => $gst,
-                grandtot => $tototal+$gst,
+                grandtot => sprintf($cfstr,$tototal+$gst),
                 totalPunitprice => sprintf("%.2f",$totalPunitprice),
                 totalPquantity => $totalPquantity,
+                totalPqtyrcvd => $totalPqtyrcvd,
                 totalPecost => sprintf("%.2f",$totalPecost),
                 );
 output_html_with_http_headers $input, $cookie, $template->output;
