@@ -26,22 +26,60 @@
     <ol><li><span class="label">Title: </span><!-- TMPL_VAR NAME="title" --></li>
     <li> <span class="label">Author: </span>
         <!-- TMPL_VAR NAME="author" --></li>
-    <li><span class="label">Copyright Date: </span>
+    <li><span class="label">Copyright: </span>
         <!-- TMPL_VAR NAME="copyrightdate" --></li>
-    
     <li> <span class="label">ISBN: </span>
         <!-- TMPL_VAR NAME="isbn" --></li>
     <li> <span class="label">Series: </span>
         <!-- TMPL_VAR NAME="seriestitle" --></li>
-    <li> <label for="barcode">Item Barcode: </label>
-        <input type="text" size="20" name="barcode" id="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
     <li> <label for="volinf">Volume Info (for serials): </label>
         <input type="text" size="20" name="volinf" id="volinf" /></li></ol>
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <li> <label for="barcode">Item Barcode: </label>
+        <input type="text" size="20" name="barcode" id="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
+    <li> <label for="homebranch">Home Library: </label>
+            <select name="homebranch" id="homebranch">            <!-- TMPL_LOOP name="branchloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+    <!-- TMPL_IF NAME="locationloop" -->
+		<li> <label for="location">Shelf location: </label>
+            <select name="location" id="location">            <!-- TMPL_LOOP name="locationloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+   <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="itype" -->
+    <li> <label for="itemtype">Item type: </label>
+            <select name="itemtype" id="itemtype">            <!-- TMPL_LOOP name="itemtypeloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+   <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="ccodeloop" -->
+    <li> <label for="ccode">Collection: </label>
+            <select name="ccode" id="ccode">            <!-- TMPL_LOOP name="ccodeloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+   <!-- /TMPL_IF -->
+	
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
     <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-    <input type="hidden" name="daterecieved" value="<!-- TMPL_VAR NAME="daterecieved" -->" />
+    <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived" -->" />
     <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
     <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
     </fieldset>
@@ -83,10 +121,10 @@
         <tr>
             <td><!-- TMPL_VAR NAME="basketno" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
-         <td><a href="orderreceive.pl?daterecieved=<!-- TMPL_VAR NAME="daterecieved" -->&amp;recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+         <td><a href="orderreceive.pl?datereceived=<!-- TMPL_VAR NAME="datereceived" -->&amp;receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblio=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="title" --></a></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="quantity" --></td>
-            <td><!-- TMPL_VAR NAME="quantityrecieved" --></td>
+            <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>

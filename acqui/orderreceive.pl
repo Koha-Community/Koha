@@ -46,7 +46,7 @@ the number of this invoice.
 =item biblio
 The biblionumber of this order.
 
-=item daterecieved
+=item datereceived
 
 =item catview
 
@@ -72,11 +72,11 @@ my $input      = new CGI;
 my $supplierid = $input->param('supplierid');
 my $dbh        = C4::Context->dbh;
 
-my $search       = $input->param('recieve');
+my $search       = $input->param('receive');
 my $invoice      = $input->param('invoice');
 my $freight      = $input->param('freight');
 my $biblionumber       = $input->param('biblionumber');
-my $daterecieved = C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
+my $datereceived = C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
 my $catview      = $input->param('catview');
 my $gst          = $input->param('gst');
 
@@ -101,35 +101,40 @@ $template->param($count);
 
 if ( $count == 1 ) {
 
+    my (@itemtypesloop,@locationloop,@ccodeloop);
     my $itemtypes = GetItemTypes;
-    my @itemtypesloop;
     foreach my $thisitemtype (sort keys %$itemtypes) {
-        my %row = (
+		my %row = (
                     value => $thisitemtype,
                     description => $itemtypes->{$thisitemtype}->{'description'},
+					selected => ($thisitemtype eq $results[0]->{itemtype}),  # ifdef itemtype @ bibliolevel, use it as default for item level. 
                   );
         push @itemtypesloop, \%row;
     }
-    
-    $template->param(itemtypeloop => \@itemtypesloop);
 
-
-    my $locations = GetKohaAuthorisedValues( 'items.location' );
-    if ($locations) {
-        my @location_codes = keys %$locations;
-        my $CGIlocation    = CGI::scrolling_list(
-            -name     => 'location',
-            -id       => 'location',
-            -values   => \@location_codes,
-            -default  => $results[0]->{'itemtype'},
-            -labels   => $locations,
-            -size     => 1,
-            -tabindex => '',
-            -multiple => 0
-        );
-        $template->param( CGIlocation => $CGIlocation );
+    my $locs = GetKohaAuthorisedValues( 'items.location' );
+    foreach my $thisloc (sort keys %$locs) {
+		warn $thisloc;
+		my $row = {
+                    value => $thisloc,
+                    description => $locs->{$thisloc},
+                  };
+        push @locationloop, $row;
     }
-    my $onlymine=C4::Context->preference('IndependantBranches') && 
+    my $ccodes= GetKohaAuthorisedValues( 'items.ccode' );
+	foreach my $thisccode (sort keys %$ccodes) {
+        push @ccodeloop,  {
+                    value => $thisccode,
+                    description => $ccodes->{$thisccode},
+                  };
+    }
+    $template->param(itemtypeloop => \@itemtypesloop ,
+					locationloop => \@locationloop,
+					ccodeloop => \@ccodeloop,
+					itype => C4::Context->preference('item-level_itypes'),
+					);
+    
+	my $onlymine=C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
                 C4::Context->userenv->{flags} !=1  && 
                 C4::Context->userenv->{branch};
@@ -138,7 +143,7 @@ if ( $count == 1 ) {
     foreach my $thisbranch ( sort keys %$branches ) {
         my %row = (
             value      => $thisbranch,
-            branchname => $branches->{$thisbranch}->{'branchname'},
+            description => $branches->{$thisbranch}->{'branchname'},
         );
         push @branchloop, \%row;
     }
@@ -191,7 +196,7 @@ if ( $count == 1 ) {
         ecost                 => $results[0]->{'ecost'},
         unitprice             => $results[0]->{'unitprice'},
         invoice               => $invoice,
-        daterecieved          => $daterecieved->output(),
+        datereceived          => $datereceived->output(),
     );
 }
 else {
@@ -200,7 +205,7 @@ else {
         my %line = %{ $results[$i] };
 
         $line{invoice}      = $invoice;
-        $line{daterecieved} = $daterecieved->output();
+        $line{datereceived} = $datereceived->output();
         $line{freight}      = $freight;
         $line{gst}          = $gst;
         $line{title}        = $results[$i]->{'title'};
@@ -211,7 +216,7 @@ else {
     $template->param(
         loop                    => \@loop,
         date                    => format_date($date),
-        daterecieved            => $daterecieved->output(),
+        datereceived            => $datereceived->output(),
         name                    => $booksellers[0]->{'name'},
         supplierid              => $supplierid,
         invoice                 => $invoice,
