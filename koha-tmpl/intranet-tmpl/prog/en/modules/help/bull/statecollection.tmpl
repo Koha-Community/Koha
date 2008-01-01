@@ -10,7 +10,7 @@
 	<p>The right part deals with issues. When you create a new subscription, the 1st issue is automatically calculated. When you want/need, you can define issues that have a new status:</p>
 	<ul>
 		<li>Arrived : when an book arrives, you can set it's status to "arrived". Then, the issue disappear from this list, and the number of the issue is added to the "arrived list" (on the left box)</li>
-		<li>Late : means that the book is late and should be arrived. A books changed to "late" status stays on the issue list, and the next waited number is generated</li>
+		<li>Late : means that the book is late and should be arrived. A books changed to "late" status stays on the issue list, and the next expected number is generated</li>
 		<li>Missing : means the book will never arrive. The issue disappear from the list, and the number of the issue is added to the "missing list" (on the left box)</li>
 	</ul>
 	<h2>The left part</h2>
@@ -24,7 +24,7 @@
 		<li>opac note : the field that appears in the librarian interface (with some other subscription information like beginning date and end date. This field must be filled manually. Nothing is put here automatically.</li>
 	</ul>
 	<h2>Subscription renewals</h2>
-	<p>Koha calculates automatically the end of the subscription (based on the start date and the number of issues recieved). when a subscription has ended, you can't change the status of the last "waited number" (as it's not waited in fact). To be able to "recieve" this number, you must renew your subscription.</p>
+	<p>Koha calculates automatically the end of the subscription (based on the start date and the number of issues recieved). when a subscription has ended, you can't change the status of the last "expected number" (as it's not expected in fact). To be able to "recieve" this number, you must renew your subscription.</p>
 	<p>Renewing a subscription means that you define some informations for the renewal. When those informations have been filled, a suggestion is automatically created in Koha. This suggestion can be managed by the librarian that orders books, as any other order (= budget and bookseller are defined here).</p>
 	<p><i>Note that the subscription renewal done by the "serials librarian" is supposed to be immediate. We have decided to keep Koha as simple as possible. In fact, the subscription renewal won't be immediate, but we didn't wanted to add too much complexity.</i></p>
 	</p>

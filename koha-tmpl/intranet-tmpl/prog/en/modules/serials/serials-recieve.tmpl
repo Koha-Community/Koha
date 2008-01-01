@@ -63,7 +63,7 @@ function barcode_check(){
     <!-- /TMPL_IF -->
 </div>
 
-<h2>Awaited or late</h2>
+<h2>Expected or late</h2>
 	<form method="post" name="f" action="serials-recieve.pl" onsubmit="return barcode_check()">
 		<input type="hidden" name="op" value="serialchangestatus" />
 		<input type="hidden" name="serial" value="<!-- TMPL_VAR name="serial" -->" />
@@ -111,7 +111,7 @@ function barcode_check(){
 				<input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
 				<select name="status" id="status<!-- TMPL_VAR NAME="num" -->">
 					<!--TMPL_IF name="status1" -->
-						<option value="1" selected="selected">Waited</option>
+						<option value="1" selected="selected">Expected</option>
 					<!-- /TMPL_IF -->
 					<!--TMPL_IF name="status2" -->
 						<option value="2" selected="selected">Arrived</option>
@@ -300,7 +300,7 @@ function barcode_check(){
 	<input type="submit" value="Save changes" accesskey="w" class="button" />
 	<!-- TMPL_IF name="hassubscriptionexpired" -->
 		<h3>Subscription has expired.</h3>
-		<p><b>Waited last issue status can't be changed. <a href="#" onclick="popup()" class="button">Renew</a> your subscription</b></p>
+		<p><b>Expected issue status can't be changed. <a href="#" onclick="popup()" class="button">Renew</a> your subscription</b></p>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF name="abouttoexpire" -->
 		<h3>Note: Subscription is about to expire next issue.</h3>

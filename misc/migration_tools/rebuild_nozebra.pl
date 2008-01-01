@@ -23,14 +23,14 @@ my $biblios;
 my $authorities;
 my $sysprefs;
 GetOptions(
-	'd:s'      => \$directory,
-	'reset'      => \$reset,
-	's'        => \$skip_export,
-	'k'        => \$keep_export,
-	'b'        => \$biblios,
-	'a'        => \$authorities,
-	's'        => \$sysprefs,  # rebuild 'NoZebraIndexes' syspref
-	);
+    'd:s'      => \$directory,
+    'reset'      => \$reset,
+    's'        => \$skip_export,
+    'k'        => \$keep_export,
+    'b'        => \$biblios,
+    'a'        => \$authorities,
+    's'        => \$sysprefs,  # rebuild 'NoZebraIndexes' syspref
+    );
 
 $directory = "export" unless $directory;
 my $dbh=C4::Context->dbh;
@@ -58,7 +58,8 @@ if  (!%index || $sysprefs ) {
         'host-item' => '995a,995c',\" where variable='NoZebraIndexes'");
         %index = GetNoZebraIndexes();
     } elsif (C4::Context->preference('marcflavour') eq 'MARC21') {
-        $dbh->do("UPDATE systempreferences SET value=\"'title' => '130a,210a,222a,240a,243a,245a,245b,246a,246b,247a,247b,250a,250b,440a,830a',
+        $dbh->do("UPDATE systempreferences SET value=\"
+'title' => '130a,210a,222a,240a,243a,245a,245b,246a,246b,247a,247b,250a,250b,440a,830a',
 'author' => '100a,100b,100c,100d,110a,111a,111b,111c,111d,245c,700a,710a,711a,800a,810a,811a',
 'isbn' => '020a',
 'issn' => '022a',
@@ -73,7 +74,8 @@ if  (!%index || $sysprefs ) {
 'bc' => '952p',
 'callnum' => '952o',
 'an' => '6009,6109,6119',
-'host-item' => '952a,952c',\" where variable='NoZebraIndexes'");
+'host-item' => '952a,952c',
+\"WHERE variable='NoZebraIndexes'");
 
         %index = GetNoZebraIndexes();
     }
