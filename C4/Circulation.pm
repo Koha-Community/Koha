@@ -375,11 +375,19 @@ sub TooMany {
     my $biblionumber = shift;
 	my $item		= shift;
     my $cat_borrower    = $borrower->{'categorycode'};
-    my $branch_borrower = $borrower->{'branchcode'};
     my $dbh             = C4::Context->dbh;
-
-	my $branch_issuer = C4::Context->userenv->{'branchcode'};
-    # TODO : specify issuer or borrower for circrule.
+	my $branch;
+	# Get which branchcode we need
+	if (C4::Context->preference('CircControl') eq 'PickupLibary'){
+		$branch = C4::Context->userenv->{'branchcode'}; 
+	}
+	elsif (C4::Context->preference('CircControl') eq 'PatronLibary'){
+        $branch = $borrower->{'branchcode'}; 
+	}
+	else {
+		# items home library
+		$branch = $item->{'homebranch'};
+	}
 	my $type = (C4::Context->preference('item-level_itypes')) 
   			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
@@ -412,9 +420,9 @@ sub TooMany {
     my $alreadyissued;
 
     # check the 3 parameters (branch / itemtype / category code
-    $sth->execute( $cat_borrower, $type, $branch_borrower );
+    $sth->execute( $cat_borrower, $type, $branch );
     my $result = $sth->fetchrow_hashref;
-#     warn "$cat_borrower, $type, $branch_borrower = ".Data::Dumper::Dumper($result);
+#     warn "$cat_borrower, $type, $branch = ".Data::Dumper::Dumper($result);
 
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on everything set";
@@ -424,7 +432,7 @@ sub TooMany {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/itemtype failed)" );
         }
         # now checking for total
-        $sth->execute( $cat_borrower, '', $branch_borrower );
+        $sth->execute( $cat_borrower, '', $branch );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '*' ) {
             $sth2->execute( $borrower->{'borrowernumber'}, $type );
@@ -436,9 +444,9 @@ sub TooMany {
     }
 
     # check the 2 parameters (branch / itemtype / default categorycode
-    $sth->execute( '*', $type, $branch_borrower );
+    $sth->execute( '*', $type, $branch );
     my $result = $sth->fetchrow_hashref;
-#     warn "*, $type, $branch_borrower = ".Data::Dumper::Dumper($result);
+#     warn "*, $type, $branch = ".Data::Dumper::Dumper($result);
 
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on 2 parameters (default categorycode)";
@@ -448,7 +456,7 @@ sub TooMany {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / itemtype failed)"  );
         }
         # now checking for total
-        $sth->execute( '*', '*', $branch_borrower );
+        $sth->execute( '*', '*', $branch );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
             $sth2->execute( $borrower->{'borrowernumber'}, $type );
@@ -861,10 +869,22 @@ sub AddIssue {
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
 	if ($borrower and $barcode and $barcodecheck ne '0'){
-#   my ($borrower, $flags) = &GetMemberDetails($borrowernumber, 0);
 		# find which item we issue
 		my $item = GetItem('', $barcode);
 		my $datedue; 
+		
+		my $branch;
+		# Get which branchcode we need
+		if (C4::Context->preference('CircControl') eq 'PickupLibary'){
+			$branch = C4::Context->userenv->{'branchcode'}; 
+		}
+		elsif (C4::Context->preference('CircControl') eq 'PatronLibary'){
+			$branch = $borrower->{'branchcode'}; 
+		}
+		else {
+			# items home library
+			$branch = $item->{'homebranch'};
+		}
 		
 		# get actual issuing if there is one
 		my $actualissue = GetItemIssue( $item->{itemnumber});
@@ -879,72 +899,70 @@ sub AddIssue {
 			AddRenewal(
 				$borrower->{'borrowernumber'},
 				$item->{'itemnumber'},
-				C4::Context->userenv->{'branch'},
+				$branch,
 				$date
 			);
 
 		}
 		else {
         # it's NOT a renewal
-        if ( $actualissue->{borrowernumber}) {
-            # This book is currently on loan, but not to the person
-            # who wants to borrow it now. mark it returned before issuing to the new borrower
-            AddReturn(
-                $item->{'barcode'},
-                C4::Context->userenv->{'branch'}
-            );
-        }
+			if ( $actualissue->{borrowernumber}) {
+				# This book is currently on loan, but not to the person
+				# who wants to borrow it now. mark it returned before issuing to the new borrower
+				AddReturn(
+					$item->{'barcode'},
+					C4::Context->userenv->{'branch'}
+				);
+			}
 
-        # See if the item is on reserve.
-        my ( $restype, $res ) =
-          C4::Reserves::CheckReserves( $item->{'itemnumber'} );
-        if ($restype) {
-            my $resbor = $res->{'borrowernumber'};
-            if ( $resbor eq $borrower->{'borrowernumber'} ) {
+			# See if the item is on reserve.
+			my ( $restype, $res ) =
+			  C4::Reserves::CheckReserves( $item->{'itemnumber'} );
+			if ($restype) {
+				my $resbor = $res->{'borrowernumber'};
+				if ( $resbor eq $borrower->{'borrowernumber'} ) {
 
-                # The item is reserved by the current patron
-                ModReserveFill($res);
-            }
-            elsif ( $restype eq "Waiting" ) {
+					# The item is reserved by the current patron
+					ModReserveFill($res);
+				}
+				elsif ( $restype eq "Waiting" ) {
 
-                # warn "Waiting";
-                # The item is on reserve and waiting, but has been
-                # reserved by some other patron.
-                my ( $resborrower, $flags ) = GetMemberDetails( $resbor, 0 );
-                my $branches   = GetBranches();
-                my $branchname =
-                  $branches->{ $res->{'branchcode'} }->{'branchname'};
-            }
-            elsif ( $restype eq "Reserved" ) {
+					# warn "Waiting";
+					# The item is on reserve and waiting, but has been
+					# reserved by some other patron.
+					my ( $resborrower, $flags ) = GetMemberDetails( $resbor, 0 );
+					my $branches   = GetBranches();
+					my $branchname =
+					  $branches->{ $res->{'branchcode'} }->{'branchname'};
+				}
+				elsif ( $restype eq "Reserved" ) {
 
-                # warn "Reserved";
-                # The item is reserved by someone else.
-                my ( $resborrower, $flags ) =
-                  GetMemberDetails( $resbor, 0 );
-                my $branches   = GetBranches();
-                my $branchname =
-                  $branches->{ $res->{'branchcode'} }->{'branchname'};
-                if ($cancelreserve) { # cancel reserves on this item
-                    CancelReserve( 0, $res->{'itemnumber'},
-                        $res->{'borrowernumber'} );
-                }
-            }
-            if ($cancelreserve) {
-                CancelReserve( $res->{'biblionumber'}, 0,
+					# warn "Reserved";
+					# The item is reserved by someone else.
+					my ( $resborrower, $flags ) =
+					  GetMemberDetails( $resbor, 0 );
+					my $branches   = GetBranches();
+					my $branchname =  $branches->{ $res->{'branchcode'} }->{'branchname'};
+					if ($cancelreserve) { # cancel reserves on this item
+						CancelReserve( 0, $res->{'itemnumber'},
+							$res->{'borrowernumber'} );
+					}
+				}
+				if ($cancelreserve) {
+					CancelReserve( $res->{'biblionumber'}, 0,
                     $res->{'borrowernumber'} );
-            }
-            else {
-    # set waiting reserve to first in reserve queue as book isn't waiting now
-                ModReserve(
-                    1,
-                    $res->{'biblionumber'},
-                    $res->{'borrowernumber'},
-                    $res->{'branchcode'}
-                );
-            }
-        }
+				}
+				else {
+					# set waiting reserve to first in reserve queue as book isn't waiting now
+					ModReserve(1,
+						$res->{'biblionumber'},
+						$res->{'borrowernumber'},
+						$res->{'branchcode'}
+					);
+				}
+			}
 
-        # Starting process for transfer job (checking transfert and validate it if we have one)
+			# Starting process for transfer job (checking transfert and validate it if we have one)
             my ($datesent) = GetTransfers($item->{'itemnumber'});
             if ($datesent) {
         # 	updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for lisibility of this case (maybe for stats ....)
@@ -975,7 +993,7 @@ sub AddIssue {
         	my $loanlength = GetLoanLength(
         	    $borrower->{'categorycode'},
         	    $itype,
-        	    $borrower->{'branchcode'}
+                $branch
         	);
         	$datedue  = time + ($loanlength) * 86400;
         	my @datearr  = localtime($datedue);
@@ -1033,7 +1051,7 @@ sub AddIssue {
     &logaction(C4::Context->userenv->{'number'},"CIRCULATION","ISSUE",$borrower->{'borrowernumber'},$biblio->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
     return ($datedue);
-  }  
+  }
 }
 
 =head2 GetLoanLength
