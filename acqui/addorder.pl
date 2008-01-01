@@ -165,6 +165,7 @@ my $gst           = $input->param('GST');
 my $budget        = $input->param('budget');
 my $cost          = $input->param('cost');
 my $sub           = $input->param('sub');
+my $purchaseorder = $input->param('purchaseordernumber');
 my $invoice       = $input->param('invoice');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
@@ -210,7 +211,7 @@ if ( $quantity ne '0' ) {
             $biblionumber,  $basketno, $booksellerid, $loggedinuser,
             $notes,   $bookfund, $bibitemnum,   $rrp,
             $ecost,   $gst,      $budget,       $cost,
-            $invoice, $sort1,    $sort2
+            $invoice, $sort1,    $sort2,		$purchaseorder
         );
     }
     else { # else, it's a new line
@@ -219,7 +220,7 @@ if ( $quantity ne '0' ) {
             $listprice, $booksellerid, $loggedinuser, $notes,
             $bookfund,  $bibitemnum,   $rrp,          $ecost,
             $gst,       $budget,       $cost,         $sub,
-            $invoice,   $sort1,        $sort2
+            $invoice,   $sort1,        $sort2,		$purchaseorder
         );
     }
 }

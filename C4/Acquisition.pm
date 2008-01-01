@@ -270,20 +270,20 @@ sub GetOrders {
     my $dbh   = C4::Context->dbh;
     my $query  ="
          SELECT  aqorderbreakdown.*,
-                biblio.*,biblioitems.*,
+                biblio.*,biblioitems.publishercode,
                 aqorders.*,
                 aqbookfund.bookfundname,
                 biblio.title
         FROM    aqorders
             LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
-            LEFT JOIN biblio           ON biblio.biblionumber=aqorders.biblionumber
-            LEFT JOIN biblioitems      ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
             LEFT JOIN aqbookfund       ON aqbookfund.bookfundid=aqorderbreakdown.bookfundid
+            LEFT JOIN biblio           ON biblio.biblionumber=aqorders.biblionumber
+            LEFT JOIN biblioitems      ON biblioitems.biblionumber=biblio.biblionumber
         WHERE   basketno=?
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
     ";
 
-    $orderby = "biblioitems.publishercode" unless $orderby;
+    $orderby = "biblioitems.publishercode,biblio.title" unless $orderby;
     $query .= " ORDER BY $orderby";
     my $sth = $dbh->prepare($query);
     $sth->execute($basketno);
@@ -400,7 +400,7 @@ sub NewOrder {
         $listprice, $booksellerid, $authorisedby, $notes,
         $bookfund,  $bibitemnum,   $rrp,          $ecost,
         $gst,       $budget,       $cost,         $sub,
-        $invoice,   $sort1,        $sort2
+        $invoice,   $sort1,        $sort2,        $purchaseorder
       )
       = @_;
 
@@ -438,15 +438,15 @@ sub NewOrder {
     my $query = "
         INSERT INTO aqorders
            ( biblionumber,title,basketno,quantity,listprice,notes,
-           biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now() )
+           biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate,purchaseordernumber)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now(),? )
     ";
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
         $bibnum, $title,      $basketno, $quantity, $listprice,
         $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
-        $cost,   $sub,        $sort1,    $sort2
+        $cost,   $sub,        $sort1,    $sort2,	$purchaseorder
     );
     $sth->finish;
 
@@ -490,7 +490,7 @@ sub ModOrder {
         $title,      $ordnum,   $quantity, $listprice, $bibnum,
         $basketno,   $supplier, $who,      $notes,     $bookfund,
         $bibitemnum, $rrp,      $ecost,    $gst,       $budget,
-        $cost,       $invoice,  $sort1,    $sort2
+        $cost,       $invoice,  $sort1,    $sort2,     $purchaseorder
       )
       = @_;
     my $dbh = C4::Context->dbh;
@@ -499,14 +499,15 @@ sub ModOrder {
         SET    title=?,
                quantity=?,listprice=?,basketno=?,
                rrp=?,ecost=?,unitprice=?,booksellerinvoicenumber=?,
-               notes=?,sort1=?, sort2=?
+               notes=?,sort1=?, sort2=?, purchaseordernumber=?
         WHERE  ordernumber=? AND biblionumber=?
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $title, $quantity, $listprice, $basketno, $rrp,
         $ecost, $cost,     $invoice,   $notes,    $sort1,
-        $sort2, $ordnum,   $bibnum
+        $sort2, $purchaseorder,
+		$ordnum,   $bibnum
     );
     $sth->finish;
     $query = "
@@ -893,7 +894,7 @@ sub GetParcels {
     my $dbh    = C4::Context->dbh;
     my $strsth ="
         SELECT  aqorders.booksellerinvoicenumber,
-                datereceived,
+                datereceived,purchaseordernumber,
                 count(DISTINCT biblionumber) AS biblio,
                 sum(quantity) AS itemsexpected,
                 sum(quantityreceived) AS itemsreceived

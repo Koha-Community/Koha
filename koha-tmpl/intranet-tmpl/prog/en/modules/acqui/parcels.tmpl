@@ -40,19 +40,10 @@
 <form method="post" action="parcels.pl">
     <table class="small">
         <tr>
-            <th>Line</th>
-            <th>Code</th>
-            <th>Date Received</th>
-            <th>Item Count</th>
-            <th>Biblio count</th>
-            <th>Items expected</th>
-        </tr>
-        <tr>
             <th> <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></th>
-            <th><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" /></th>
+            <th><label for="filter">Invoice / Code:</label><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" /></th>
             <th><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->" /> 
                 <p><label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->" /></th>
-            <th>&nbsp;</th>
             <th><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
                 <option value="aqorders.booksellerinvoicenumber"> Code</option>
                 <option value="datereceived"> Date Received</option>
@@ -67,20 +58,30 @@
                 </select></th>
             <th><input type="submit" class="button" value="Filter" /></th>
         </tr>
+	</table><br />
+    <table class="small">
+        <tr>
+            <th>Line</th>
+            <th>Date Received</th>
+            <th>Invoice /Parcel Code</th>
+            <th>Item Count</th>
+            <th>Biblio count</th>
+            <th>Items expected</th>
+        </tr>
 <!-- Actual Search Results -->
 <!-- TMPL_LOOP NAME="searchresults" -->
     <tr>
         <!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
             <!-- TMPL_VAR NAME="number" -->
         </td>
-        <!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
-            <!--TMPL_IF Name="code"--><!--TMPL_VAR Name="code" --><!--/TMPL_IF-->
-        </td>
         <!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number">
         <!-- /TMPL_IF -->
             <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" ESCAPE="URL" -->&amp;datereceived=<!-- TMPL_VAR NAME="raw_datereceived" ESCAPE="URL" --><!--TMPL_IF Name="code"-->&amp;invoice=<!--TMPL_VAR Name="code" ESCAPE="URL" --><!--/TMPL_IF-->">
                 <!-- TMPL_VAR NAME="datereceived" -->
             </a>
+        </td>
+        <!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number"><!-- /TMPL_IF -->
+            <!--TMPL_IF Name="code"--><!--TMPL_VAR Name="code" --><!--/TMPL_IF-->
         </td>
         <!-- TMPL_IF NAME="hilighted" --><td class="hilighted number"><!-- TMPL_ELSE --><td class="number">
         <!-- /TMPL_IF -->

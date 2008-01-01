@@ -132,7 +132,6 @@ my $gist_est;           # GST
 my $grand_total_est;    # $subttotal + $gist
 
 my $qty_total;
-
 my @books_loop;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $rrp = $results[$i]->{'listprice'};
@@ -152,7 +151,8 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{color} = 'white';
         $toggle = 0;
     }
-    $line{basketno}         = $basketno;
+	$line{publishercode} 	= $results[$i]->{'publishercode'};
+	$line{basketno}         = $basketno;
     $line{i}                = $i;
     $line{rrp}              = sprintf( "%.2f", $line{'rrp'} );
     $line{ecost}            = sprintf( "%.2f", $line{'ecost'} );

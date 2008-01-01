@@ -76,7 +76,7 @@ my $search       = $input->param('recieve');
 my $invoice      = $input->param('invoice');
 my $freight      = $input->param('freight');
 my $biblionumber       = $input->param('biblionumber');
-my $daterecieved = $input->param('daterecieved') || format_date(join "-",Date::Calc::Today());
+my $daterecieved = C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
 my $catview      = $input->param('catview');
 my $gst          = $input->param('gst');
 
@@ -191,7 +191,7 @@ if ( $count == 1 ) {
         ecost                 => $results[0]->{'ecost'},
         unitprice             => $results[0]->{'unitprice'},
         invoice               => $invoice,
-        daterecieved          => $daterecieved,
+        daterecieved          => $daterecieved->output(),
     );
 }
 else {
@@ -200,7 +200,7 @@ else {
         my %line = %{ $results[$i] };
 
         $line{invoice}      = $invoice;
-        $line{daterecieved} = $daterecieved;
+        $line{daterecieved} = $daterecieved->output();
         $line{freight}      = $freight;
         $line{gst}          = $gst;
         $line{title}        = $results[$i]->{'title'};
@@ -211,11 +211,10 @@ else {
     $template->param(
         loop                    => \@loop,
         date                    => format_date($date),
-        daterecieved            => $daterecieved,
+        daterecieved            => $daterecieved->output(),
         name                    => $booksellers[0]->{'name'},
         supplierid              => $supplierid,
         invoice                 => $invoice,
-        daterecieved            => $daterecieved,
     );
 
 }

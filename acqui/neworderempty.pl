@@ -89,6 +89,7 @@ my $count        = scalar @booksellers;
 my $ordnum       = $input->param('ordnum');
 my $biblionumber       = $input->param('biblionumber');
 my $basketno     = $input->param('basketno');
+my $purchaseorder= $input->param('purchaseordernumber');
 my $suggestionid = $input->param('suggestionid');
 # my $donation     = $input->param('donation');
 my $close        = $input->param('close');
@@ -151,22 +152,9 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 my $itemtypes = GetItemTypes;
 
 my @itemtypesloop;
-my %itemtypesloop;
 foreach my $thisitemtype (sort keys %$itemtypes) {
-    push @itemtypesloop, $itemtypes->{$thisitemtype}->{'itemtype'};
-    $itemtypesloop{$itemtypes->{$thisitemtype}->{'itemtype'}} =        $itemtypes->{$thisitemtype}->{'description'};
+    push @itemtypesloop, { itemtype => $itemtypes->{$thisitemtype}->{'itemtype'} , desc =>  $itemtypes->{$thisitemtype}->{'description'} } ;
 }
-
-my $CGIitemtype = CGI::scrolling_list(
-    -name     => 'format',
-	-id          => 'format',
-    -values   => \@itemtypesloop,
-    -default  => $data->{'itemtype'},
-    -labels   => \%itemtypesloop,
-    -size     => 1,
-	-tabindex=>'',
-    -multiple => 0
-);
 
 # build branches list
 my $onlymine=C4::Context->preference('IndependantBranches') && 
@@ -182,7 +170,7 @@ foreach my $thisbranch ( sort keys %$branches ) {
     );
     push @branchloop, \%row;
 }
-$template->param( branchloop => \@branchloop );
+$template->param( branchloop => \@branchloop , itypeloop => \@itemtypesloop );
 
 # build bookfund list
 my $borrower= GetMember($loggedinuser);
@@ -278,6 +266,7 @@ $template->param(
     authorisedbyname => $borrower->{'firstname'} . " " . $borrower->{'surname'},
 	biblioitemnumber => $data->{'biblioitemnumber'},
     itemtype         => $data->{'itemtype'},
+    itemtype_desc         => $itemtypes->{$data->{'itemtype'}}->{description},
     discount         => $booksellers[0]->{'discount'},
     listincgst       => $booksellers[0]->{'listincgst'},
     listprice        => $booksellers[0]->{'listprice'},
@@ -293,7 +282,6 @@ $template->param(
     title            => $data->{'title'},
     author           => $data->{'author'},
     copyrightdate    => $data->{'copyrightdate'},
-    CGIitemtype      => $CGIitemtype,
     CGIbookfund      => $CGIbookfund,
     isbn             => $data->{'isbn'},
     seriestitle      => $data->{'seriestitle'},
@@ -303,6 +291,7 @@ $template->param(
     total            => $data->{ecost}*$data->{quantity},
     invoice          => $data->{'booksellerinvoicenumber'},
     ecost            => $data->{'ecost'},
+    purchaseordernumber            => $data->{'purchaseordernumber'},
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
 #     donation         => $donation

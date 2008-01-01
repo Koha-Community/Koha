@@ -120,17 +120,17 @@ if (quantity ==0) {
             <input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
         <!-- /TMPL_LOOP -->
         <ol><li>
-            <!-- TMPL_IF name="biblio" -->
+            <!-- TMPL_IF name="biblionumber" -->
 			<span class="label">Title</span>
-                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /><!-- TMPL_VAR NAME="title" -->
+                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /> <span class='title'><!-- TMPL_VAR NAME="title" --></span>
             <!-- TMPL_ELSE -->
             <label for="entertitle" class="required">Title: </label>
                 <input type="text" id="entertitle" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <!-- TMPL_IF name="biblio" -->
-			<span class="label">Author: </label>
+            <!-- TMPL_IF name="biblionumber" -->
+			<span class="label">Author: </span>
                 <input type="hidden" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
             <!-- TMPL_ELSE -->
             <label for="author">Author: </label>
@@ -138,8 +138,8 @@ if (quantity ==0) {
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <!-- TMPL_IF name="biblio" -->
-			<span class="label">Publisher: </label>
+            <!-- TMPL_IF name="biblionumber" -->
+			<span class="label">Publisher: </span>
                 <input type="hidden" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
             <!-- TMPL_ELSE -->
             <label for="publishercode"> Publisher: </label>
@@ -147,7 +147,7 @@ if (quantity ==0) {
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <!-- TMPL_IF name="biblio" -->
+            <!-- TMPL_IF name="biblionumber" -->
 			<span class="label">Copyright date: </span>
                 <input type="hidden" size="20" name="copyrightdate" id="copyrightdate" value="<!-- TMPL_VAR NAME="copyrightdate" -->" /><!-- TMPL_VAR NAME="copyrightdate" -->
             <!-- TMPL_ELSE -->
@@ -156,11 +156,20 @@ if (quantity ==0) {
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="format">Format: </label>
-            <!-- TMPL_VAR NAME="CGIitemtype" -->
+            <!-- TMPL_IF name="biblionumber" -->
+			<span class="label">Item type: </span>
+                <input type="hidden" size="20" name="itemtype" id="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_VAR NAME="itemtype_desc" -->
+			<!-- TMPL_ELSE -->
+            <label for="format">Item type: </label>
+            <select name="format" id="format">
+            <!-- TMPL_LOOP name="itypeloop" -->
+				<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="desc" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
+			 <!-- /TMPL_IF -->
         </li>
         <li>
-            <!-- TMPL_IF name="biblio" -->
+            <!-- TMPL_IF name="biblionumber" -->
 			<span class="label">ISBN: </span>
                 <input type="hidden" size="20" name="ISBN" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
             <!-- TMPL_ELSE -->
@@ -169,16 +178,16 @@ if (quantity ==0) {
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <!-- TMPL_IF name="biblio" -->
+            <!-- TMPL_IF name="biblionumber" -->
 			<span class="label">Series: </span>
-                <input type="hidden" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
+                <input type="hidden" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><span class='title'><!-- TMPL_VAR NAME="seriestitle" --></span>
             <!-- TMPL_ELSE -->
             <label for="series">Series: </label>
                 <input type="text" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="branch">Branch: </label>
+            <label for="branch">Library: </label>
             <select name="branch" id="branch">
             <!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -268,8 +277,12 @@ if (quantity ==0) {
 				<!--/TMPL_IF-->
             </li>
             <li>
+                <label for="purchaseordernumber">Purchase order: </label>
+                <input type="text" id="purchaseordernumber" size="20" name="purchaseordernumber"  value="<!-- TMPL_VAR name="purchaseordernumber" -->" /> 
+            </li>
+            <li>
                 <label for="invoice">Invoice number: </label>
-                <input type="text" id="invoice" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /> (usually empty)
+                <input type="text" id="invoice" size="20" name="invoice"  value="<!-- TMPL_VAR name="invoice" -->" /> (Fill when receiving)
             </li>
             <li>
                 <label for="notes">Notes: </label>

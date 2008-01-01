@@ -37,17 +37,18 @@
     <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table>
         <tr>
+            <th>Quantity</th>
             <th>Basket/Order</th>
             <th>Summary</th>
             <th>View Record</th>
-			<th>QTY ordered</th>
-            <th>Est Cost</th>
-            <th>ACTUAL</th>
-            <th>QTY received</th>
+			<th>Qty ordered</th>
+            <th>Est cost</th>
+            <th>Actual cost</th>
             <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_received" -->
             <tr>
+                <td><a href="orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;daterecieved=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="quantityreceived" --></a></td>
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a>&nbsp; / &nbsp;<!-- TMPL_VAR NAME="ordernumber" --></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                 <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
@@ -58,7 +59,6 @@
 				<td><!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="unitprice" --></td>
-                <td><a href="orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;daterecieved=<!-- TMPL_VAR NAME="datereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="quantityreceived" --></a></td>
                 <td><!-- TMPL_VAR NAME="total" --></td>
             </tr>
         <!-- /TMPL_LOOP -->

@@ -72,7 +72,7 @@ my $count = scalar @booksellers;
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
-my $datereceived=format_date_in_iso($input->param('datereceived')) || format_date(join "-",Date::Calc::Today());
+my $datereceived=C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
 my $code=$input->param('code');
 
 my ($template, $loggedinuser, $cookie)
@@ -83,7 +83,7 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 1},
                  debug => 1,
 });
-my @parcelitems=GetParcel($supplierid,$invoice,$datereceived);
+my @parcelitems=GetParcel($supplierid,$invoice,$datereceived->output('iso'));
 my $countlines = scalar @parcelitems;
 
 my $totalprice=0;
@@ -94,8 +94,9 @@ my $tototal;
 my $toggle;
 my @loop_received = ();
 for (my $i=0;$i<$countlines;$i++){
-    $total=($parcelitems[$i]->{'unitprice'} + $parcelitems[$i]->{'freight'}) * $parcelitems[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
-    $parcelitems[$i]->{'unitprice'}+=0;
+    #$total=($parcelitems[$i]->{'unitprice'} + $parcelitems[$i]->{'freight'}) * $parcelitems[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
+    $total=($parcelitems[$i]->{'unitprice'}  ) * $parcelitems[$i]->{'quantityreceived'};   #weird, are the freight fees counted by book? (pierre)
+	$parcelitems[$i]->{'unitprice'}+=0;
     my %line;
     if ($toggle==0){
         $line{color}='#EEEEEE';
@@ -111,10 +112,19 @@ for (my $i=0;$i<$countlines;$i++){
     $line{supplierid} = $supplierid;
     push @loop_received, \%line;
     $totalprice+=$parcelitems[$i]->{'unitprice'};
-    $totalfreight+=$parcelitems[$i]->{'freight'};
+#double FIXME - totalfreight is redefined later.
+
+ # FIXME - each order in a  parcel holds the freight for the whole parcel. This means if you receive a parcel with items from multiple budgets, you'll see the freight charge in each budget..
+     if ( $i > 0 && $totalfreight != $parcelitems[$i]->{'freight'}) {
+               warn "FREIGHT CHARGE MISMATCH!!";
+       }
+       $totalfreight=$parcelitems[$i]->{'freight'};
+    #$totalfreight+=$parcelitems[$i]->{'freight'};
+    $totalfreight=$parcelitems[$i]->{'freight'};
     $totalquantity+=$parcelitems[$i]->{'quantityreceived'};
     $tototal+=$total;
 }
+
 my $pendingorders = GetPendingOrders($supplierid);
 my $countpendings = scalar @$pendingorders;
 
@@ -143,13 +153,13 @@ for (my $i=0;$i<$countpendings;$i++){
     $line{supplierid} = $supplierid;
     push @loop_orders, \%line;
 }
-
+$freight = $totalfreight unless $freight;
 $totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
-                datereceived => $datereceived,
-                formatteddatereceived => format_date($datereceived),
+                datereceived => $datereceived->output('iso'),
+                formatteddatereceived => $datereceived->output(),
                 name => $booksellers[0]->{'name'},
                 supplierid => $supplierid,
                 gst => $gst,
