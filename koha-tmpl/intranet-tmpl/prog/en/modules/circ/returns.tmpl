@@ -108,7 +108,7 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
     <!-- TMPL_IF Name="transfer" -->
 	<!-- transfer -->
 	<div class="dialog message">
-	  <h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
+	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
     
     <!-- TMPL_IF Name="needstransfer" -->
 	<!-- transfer -->
@@ -216,24 +216,41 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
         <!-- /TMPL_IF -->
     </div>
 <!-- /TMPL_IF -->
-    <div id="exemptfines" class="error" style="display:none;">
+
+    <div id="exemptfines" class="dialog message" style="display:none;">
         <p>Fines for returned items are forgiven.</p>
     </div>
-    <div class="details" >
+    <div class="details">
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" >
             <fieldset><legend>Check In</legend>
             <label for="barcode">Enter item barcode: </label>
-<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" <!-- TMPL_IF NAME="overduecharges" -->onfocus="if(this.form.exemptcheck.checked == true) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus'"  <!-- /TMPL_IF --> />
+
+<!-- TMPL_IF NAME="overduecharges" -->
+<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" onfocus="if(this.form.exemptcheck.checked == true) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus';"   />
+<!-- TMPL_ELSE -->
+<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" />
+<!-- /TMPL_IF -->
+
             <input type="submit" class="submit" value="Submit" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
                 <input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <!-- /TMPL_LOOP -->
-                <!-- TMPL_IF NAME="overduecharges" --><label for="exemptfine" <!-- TMPL_IF NAME="exemptfine" --> class="error" <!-- /TMPL_IF -->>Forgive Overdue charges on this item</label>
-                <input type="checkbox" id='exemptcheck' name="exemptfine" value="exemptfine" 
-				<!-- TMPL_IF NAME="exemptfine" --> checked <!-- /TMPL_IF --> onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
-<!-- /TMPL_IF -->
+         <!-- TMPL_IF NAME="overduecharges" -->
+			<!-- TMPL_IF NAME="exemptfine" -->
+				<label for="exemptcheck" class="error" >Forgive Overdue charges on this item</label>
+			<!-- TMPL_ELSE -->
+				<label for="exemptcheck">Forgive Overdue charges on this item</label>
+			<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="exemptfine" -->
+<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" checked="checked" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
+<!-- TMPL_ELSE -->
+				<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
+<!-- /TMPL_IF -->								
+								
+		<!-- /TMPL_IF -->
             </fieldset>
         </form>
    
