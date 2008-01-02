@@ -27,7 +27,7 @@ use C4::Circulation;
 use C4::Output;
 use C4::Reserves;
 use C4::Biblio;
-use C4::Auth;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Branch; # GetBranches
 use C4::Koha;
 
@@ -35,6 +35,17 @@ use C4::Koha;
 #  Getting state
 
 my $query = new CGI;
+
+if (!C4::Context->userenv){
+	my $sessionID = $query->cookie("CGISESSID");
+	my $session = get_session($sessionID);
+	if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+		# no branch set we can't transfer
+		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+		exit;
+	}
+}   
+
 
 #######################################################################################
 # Make the page .....

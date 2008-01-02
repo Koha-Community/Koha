@@ -74,7 +74,15 @@ if ($printer){
 	$session->param('branchprinter',$printer);
 
 }
-
+if (!C4::Context->userenv && !$branch){
+	my $sessionID = $query->cookie("CGISESSID") ;
+	my $session = get_session($sessionID);
+	if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+		# no branch set we can't issue
+		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+		exit;
+	}
+}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
     {

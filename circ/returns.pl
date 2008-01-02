@@ -28,7 +28,7 @@ script to execute returns of books
 use strict;
 use CGI;
 use C4::Context;
-use C4::Auth;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
@@ -40,6 +40,16 @@ use C4::Branch; # GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 
 my $query = new CGI;
+
+if (!C4::Context->userenv){
+	my $sessionID = $query->cookie("CGISESSID");
+	my $session = get_session($sessionID);
+	if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+		# no branch set we can't return
+		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+		exit;
+	}
+} 
 
 #getting the template
 my ( $template, $librarian, $cookie ) = get_template_and_user(
