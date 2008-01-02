@@ -502,7 +502,9 @@ for (my $i=0;$i<=@servers;$i++) {
 			}
 			$template->param(stopwords_removed => "@$stopwords_removed") if $stopwords_removed;
             $template->param(results_per_page =>  $results_per_page);
-            $template->param(SEARCH_RESULTS => \@newresults);
+            $template->param(SEARCH_RESULTS => \@newresults,
+                                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay") eq "itemdetails"?1:0),
+                            );
 			## Build the page numbers on the bottom of the page
 			my @page_numbers;
 			# total number of pages there will be
