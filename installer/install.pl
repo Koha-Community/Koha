@@ -688,6 +688,7 @@ else {
             my ($version) = $rq->fetchrow;
             if ($version) {
                 $query->redirect("install.pl?step=3");
+				exit;
             }
         }
     }
