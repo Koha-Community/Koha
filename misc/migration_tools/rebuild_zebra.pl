@@ -581,21 +581,21 @@ if ($authorities) {
     # the record model, depending on marc flavour
     unless (-f "$authorityserverdir/tab/record.abs") {
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/etc/zebradb/authorities/etc/record_unimarc.abs $authorityserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/marc_defs/unimarc/authorities/record.abs $authorityserverdir/tab/record.abs");
             print "Info: copied record.abs for UNIMARC\n";
         } else {
-            system("cp -f $kohadir/etc/zebradb/authorities/etc/record.abs $authorityserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/marc_defs/marc21/authorities/record.abs $authorityserverdir/tab/record.abs");
             print "Info: copied record.abs for USMARC\n";
         }
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/sort-string-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/lang_defs/fr/sort-string-utf.chr $authorityserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$authorityserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $authorityserverdir/tab/word-phrase-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/lang_defs/fr/sort-string-utf.chr $authorityserverdir/tab/word-phrase-utf.chr");
         print "Info: copied word-phase-utf.chr\n";
         $created_dir_or_file++;
     }
@@ -725,21 +725,21 @@ if ($biblios) {
     # the record model, depending on marc flavour
     unless (-f "$biblioserverdir/tab/record.abs") {
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
-            system("cp -f $kohadir/etc/zebradb/biblios/etc/record_unimarc.abs $biblioserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/marc_defs/unimarc/biblios/record.abs $biblioserverdir/tab/record.abs");
             print "Info: copied record.abs for UNIMARC\n";
         } else {
-            system("cp -f $kohadir/etc/zebradb/biblios/etc/record.abs $biblioserverdir/tab/record.abs");
+            system("cp -f $kohadir/etc/zebradb/marc_defs/marc21/biblios/record.abs $biblioserverdir/tab/record.abs");
             print "Info: copied record.abs for USMARC\n";
         }
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/sort-string-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/sort-string-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/lang_defs/fr/sort-string-utf.chr $biblioserverdir/tab/sort-string-utf.chr");
         print "Info: copied sort-string-utf.chr\n";
         $created_dir_or_file++;
     }
     unless (-f "$biblioserverdir/tab/word-phrase-utf.chr") {
-        system("cp -f $kohadir/etc/zebradb/etc/sort-string-utf_french.chr $biblioserverdir/tab/word-phrase-utf.chr");
+        system("cp -f $kohadir/etc/zebradb/lang_defs/fr/sort-string-utf.chr $biblioserverdir/tab/word-phrase-utf.chr");
         print "Info: copied word-phase-utf.chr\n";
         $created_dir_or_file++;
     }
