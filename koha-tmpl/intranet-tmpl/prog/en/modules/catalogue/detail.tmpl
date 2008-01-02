@@ -141,7 +141,6 @@ function verify_images() {
                 <th>Collection</th>
                 <th>Call Number</th>
                 <th>Status</th>
-                <th>Date Due</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
                 <th>Volume</th>
@@ -156,9 +155,9 @@ function verify_images() {
 
                 <!-- TMPL_IF name="datedue" -->
                     <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-                                        Checked out
+                                        Checked out, due <!-- TMPL_VAR NAME="datedue" -->
                     <!-- TMPL_ELSE -->
-                                        Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due back on <!-- TMPL_VAR NAME="datedue" -->
+                                        Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due <!-- TMPL_VAR NAME="datedue" -->
                     <!-- /TMPL_IF -->
 					<!-- TMPL_ELSE -->
                 <!-- TMPL_IF Name="transfertwhen" -->
@@ -196,7 +195,7 @@ function verify_images() {
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF Name="notforloan" -->
-                                        Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+                                        Not for loan <!-- TMPL_IF Name="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
                             
@@ -219,9 +218,8 @@ function verify_images() {
                 <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
                         
                     </td>
-                    <td><!-- TMPL_VAR NAME="datedue" --></td>
                     <td><!-- TMPL_VAR NAME="datelastseen" --></td>
-                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="barcode">"><!-- TMPL_VAR NAME="barcode" --></a></td>
                     <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
 
                 <!-- TMPL_IF NAME="type" -->
