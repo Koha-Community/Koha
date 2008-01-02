@@ -28,13 +28,13 @@
         <!-- /TMPL_IF -->
     </h1>
 <div id="acqui_recieve_summary">
-    <p>Invoice / Parcel: <!-- TMPL_VAR NAME="invoice" --></p>
+    <p>Invoice number: <!-- TMPL_VAR NAME="invoice" --></p>
     <p>Received by: <!-- TMPL_VAR NAME="loggedinusername" --></p>
     <p>On: <!-- TMPL_VAR NAME="formatteddatereceived" --></p>
 	<!-- TODO: Add date picker, change rcv date. -->
 </div>
 <div id="acqui_recieve_recievelist">
-    <h2>Items in parcel</h2>
+    <h2>Items in shipment</h2>
     <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table>
         <tr>
@@ -73,7 +73,7 @@
             <td colspan="5">
             </td>
             </p>
-			<th colspan="1">Freight</th>
+			<th colspan="1">Shipping</th>
             <td><!-- TMPL_VAR NAME="totalfreight" --></td>
         </tr> <!-- /TMPL_IF -->
           <!-- TMPL_IF NAME="gst" -->
@@ -97,7 +97,7 @@
     </form>
 </div>
 <div id="acqui_recieve_search">
-    <h2>Search orders to add to this parcel</h2>
+    <h2>Search orders to add to this shipment</h2>
     <form action="/cgi-bin/koha/acqui/orderreceive.pl">
         <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
         <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />

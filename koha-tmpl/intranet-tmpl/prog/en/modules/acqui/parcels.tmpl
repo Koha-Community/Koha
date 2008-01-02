@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
@@ -7,7 +7,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receive shipment from vendor <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc" class="yui-t7">
    
@@ -15,9 +15,9 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	
-<h1>Receive parcel from supplier <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 
-<!-- TMPL_IF NAME="count" --><p> <!-- TMPL_VAR NAME="count" --> parcels found</p><!--/TMPL_IF-->
+<!-- TMPL_IF NAME="count" --><p> <!-- TMPL_VAR NAME="count" --> shipments found</p><!--/TMPL_IF-->
 <div id="resultnumber">
 <!-- Row of numbers corresponding to search result pages -->
 <!-- TMPL_IF NAME="displayprev" -->
@@ -64,7 +64,7 @@
         <tr>
             <th>Line</th>
             <th>Date Received</th>
-            <th>Invoice /Parcel Code</th>
+            <th>Invoice Number</th>
             <th>Item Count</th>
             <th>Biblio count</th>
             <th>Items expected</th>
@@ -103,9 +103,9 @@
     <div id="parcels_new_parcel">
         <form method="get" action="parcel.pl">
     <fieldset class="rows">
-    <legend>Receive a new parcel</legend>
+    <legend>Receive a new shipment</legend>
        <ol> <li>
-            <label for="invoice">Supplier Invoice </label>
+            <label for="invoice">Vendor Invoice </label>
             <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
             <input type="hidden" name="op" value="new" />
 			<input type="text" size="20" id="invoice" name="invoice" />
@@ -117,7 +117,7 @@
         </li>
 		<!--/TMPL_IF-->
         <li>
-            <label for="freight">Freight:</label>
+            <label for="freight">Shipping:</label>
             <input type="text" size="20" id="freight" name="freight" />
         </li>
          <li><label for="datereceived">Shipment date: </label>

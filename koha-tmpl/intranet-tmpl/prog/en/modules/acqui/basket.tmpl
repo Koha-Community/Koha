@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_UNLESS name="closedate" -->
 <script type="text/javascript">
@@ -19,7 +19,7 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -27,14 +27,14 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-    <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Shopping Basket <!-- TMPL_VAR NAME="basketno" --> for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+    <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_VAR NAME="basketno" --> for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 
     <!-- TMPL_IF NAME="basketno" --><div id="acqui_basket_summary">
         <h2>Basket Details</h2>
         <p>Basket number:  <!-- TMPL_VAR NAME="basketno" --></p>
         <p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p>
         <p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p>
-        <p>For supplier ID: <!-- TMPL_VAR NAME="booksellerid" --></p>
+        <p>For vendor ID: <!-- TMPL_VAR NAME="booksellerid" --></p>
         <p>Invoice number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
         <!-- TMPL_IF name="closedate" --><p>Closed On:  <!-- TMPL_VAR name="closedate" --></p><!-- /TMPL_IF -->
         <!-- TMPL_UNLESS name="closedate" -->

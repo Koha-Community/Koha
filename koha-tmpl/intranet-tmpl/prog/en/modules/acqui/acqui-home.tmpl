@@ -29,13 +29,13 @@
 		<span class="problem">Your administrator must define a budget in Administration</span>
 		<!-- /TMPL_IF -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplierpage">Supplier </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
+            <p><label for="supplierpage">Vendor </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
     <!-- TMPL_ELSE -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
-            <p><label for="supplierpage">Supplier: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
+            <p><label for="supplierpage">Vendor: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
             </p>
         </form>
@@ -131,10 +131,9 @@
 
 <div id="acqui_acqui_home_hints">
     <h2>Help</h2>
-    <p>To start an acquisition, whether an order, local purchase or donation first search on the supplier, you will be asked to check their details, and enter your name which  will set up a "shopping basket" for you. (Why is this you might ask... well because we want to know that it's really you ordering things - not just your computer).</p>
-    <p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio then add the item.  </p>
-    <p>To start a new shopping basket with a new supplier return to this page and just start a new supplier search.</p>
-    <p>To close off a shopping basket click on "view shopping baskets" or search above, and the click on "confirm basket".</p>
+    <p>To begin an order, local purchase or donation, search for the vendor or benefactor, and then you can create a new Basket.</p>
+    <p>A Basket is a collection of orders.</p>
+    <p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio and then add the item.</p>
 </div>
 
 </div>

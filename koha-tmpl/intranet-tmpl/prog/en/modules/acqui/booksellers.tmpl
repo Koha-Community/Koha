@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Search for supplier <!-- TMPL_VAR name="supplier" --></title>
+<title>Koha &rsaquo; Search for vendor <!-- TMPL_VAR name="supplier" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Search for Supplier <em><!-- TMPL_VAR name="supplier" --></em> </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Search for Vendor <em><!-- TMPL_VAR name="supplier" --></em> </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -16,7 +16,7 @@
 	
 <!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
 	
-<h1>You searched on <b>supplier <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h1>
+<h1>You searched on <b>vendor <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h1>
 <div id="acqui_order_supplierlist">
 	<table>
 	<tr>
@@ -68,7 +68,7 @@
 							</tr>
 						<!-- /TMPL_LOOP -->
 					<!-- TMPL_ELSE -->
-					    <tr><td>No pending basket</td></tr>
+					    <tr><td>No pending baskets</td></tr>
 					<!-- /TMPL_IF -->
 					</table>
 			</td>

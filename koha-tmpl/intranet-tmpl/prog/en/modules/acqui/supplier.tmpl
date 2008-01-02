@@ -1,16 +1,16 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Supplier <!-- TMPL_VAR name="bookselname" --></title>
+<title>Koha &rsaquo; Vendor <!-- TMPL_VAR name="bookselname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 function confirm_deletion() {
-    if (confirm("Confirm deletion of this supplier ?")) {
+    if (confirm("Confirm deletion of this vendor ?")) {
         window.location="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&op=delete";
     }
 }
 function check(f) {
 if (f.company.value == "") {
-    alert("You must specify a name for this supplier.");
+    alert("You must specify a name for this vendor.");
     return false;
 }
     f.submit();
@@ -22,7 +22,7 @@ if (f.company.value == "") {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!--TMPL_IF Name="enter"--><!-- TMPL_IF name="id" --> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Update: <!-- TMPL_VAR NAME="name" --><!-- TMPL_ELSE -->Add supplier<!-- /TMPL_IF --> <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!--TMPL_IF Name="enter"--><!-- TMPL_IF name="id" --> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Update: <!-- TMPL_VAR NAME="name" --><!-- TMPL_ELSE -->Add vendor<!-- /TMPL_IF --> <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
    
@@ -32,7 +32,7 @@ if (f.company.value == "") {
 	    <!-- TMPL_IF name="id" -->
         <h1>Update: <!-- TMPL_VAR NAME="name" --></h1>
     <!-- TMPL_ELSE -->
-        <h1>Add supplier</h1>
+        <h1>Add vendor</h1>
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 <!-- TMPL_UNLESS NAME="enter" --><!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" --><!-- /TMPL_UNLESS -->
@@ -80,7 +80,7 @@ if (f.company.value == "") {
 		<div class="yui-g">
         <fieldset class="rows">
             <legend>Ordering information</legend>
-            <ol class="radio"><li><label for="activestatus" class="radio">Supplier is:</label>
+            <ol class="radio"><li><label for="activestatus" class="radio">Vendor is:</label>
                     <!-- TMPL_IF name="active" -->
                         <label for="activestatus">Active</label> <input type="radio" id="activestatus" name="status" value="1" checked="checked" />
                         <label for="inactivestatus">Inactive</label> <input type="radio" id="inactivestatus" name="status" value="0" />
@@ -181,7 +181,7 @@ if (f.company.value == "") {
 		</div>
         <div id="supplier-ordering-information" class="yui-g">
         <h3>Ordering information</h3>
-            <p><strong>Supplier is: </strong>
+            <p><strong>Vendor is: </strong>
                     <!-- TMPL_IF name="active" -->
                         Active
                     <!-- TMPL_ELSE -->

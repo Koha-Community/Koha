@@ -93,7 +93,7 @@ if (quantity ==0) {
   <ul>  <li>Basket number: <!-- TMPL_VAR NAME="basketno" --></li>
     <li>Managed by: <!-- TMPL_VAR NAME="authorisedbyname" --></li>
     <li>Open on: <!-- TMPL_VAR NAME="creationdate" --></li>
-    <li>For supplier ID: <!-- TMPL_VAR NAME="booksellerid" --></li>
+    <li>For vendor ID: <!-- TMPL_VAR NAME="booksellerid" --></li>
     <li>Invoice number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></li>
     <!-- TMPL_IF name="closedate" --><li>Closed on: <!-- TMPL_VAR name="closedate" --></li><!-- /TMPL_IF --></ul>
 </div>
@@ -222,10 +222,10 @@ if (quantity ==0) {
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Supplier price: </span>
+			<span class="label">Vendor price: </span>
                     <input type="hidden" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
-                <label for="list_price">Supplier price: </label>
+                <label for="list_price">Vendor price: </label>
                     <input type="text" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="update(this.form)" />
                 <!--/TMPL_IF-->
             </li>
