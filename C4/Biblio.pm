@@ -2575,7 +2575,7 @@ sub TransformHtmlToXml {
         }
         $prevtag = @$tags[$i];
     }
-    if (C4::Context->preference('marcflavour') and !$unimarc_and_100_exist) {
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist) {
 #     warn "SETTING 100 for $auth_type";
         use POSIX qw(strftime);
         my $string = strftime( "%Y%m%d", localtime(time) );
