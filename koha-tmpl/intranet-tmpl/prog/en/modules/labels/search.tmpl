@@ -51,8 +51,10 @@
     <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
     <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
-</select></li>
-  <li> <input type="text" size="30" name="q" title="Enter search terms" value="" />  </li></ol>
+</select>
+   <input type="text" size="30" name="q" title="Enter search terms" value="" />
+</li>
+</ol>
 </fieldset>
 
 <!-- TMPL_IF NAME="sort_by_loop" -->
@@ -67,6 +69,7 @@
 </fieldset>
 <!-- /TMPL_IF -->
 
+<fieldset class="rows">
 	<table>
 <!--
 	<tr><th scope="row">
@@ -129,7 +132,9 @@
             </tr>
 
 	</table>
-<p>		<input type="submit" value="Start search" class="submit" /></p>
+	<br />
+</fieldset>
+<p><input style="margin-top:5px;" type="submit" value="Start search" class="submit" /></p>
 </form>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
