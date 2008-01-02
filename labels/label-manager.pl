@@ -64,90 +64,72 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 if ( $op eq 'save_conf' ) {    # this early sub is depreciated, use save_layout()
-   
-   SaveConf(
-        $barcodetype,    $title,  $isbn, 
-        $issn,    $itemtype,         $bcn,            $dcn, 
-       $classif, $subclass,         $itemcallnumber,      $author, 
-        $tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname
-    );
-     print $query->redirect("label-home.pl");
-    exit;
+	SaveConf(
+		$barcodetype,    $title,  $isbn, 
+		$issn,    $itemtype,         $bcn,            $dcn, 
+		$classif, $subclass,         $itemcallnumber,      $author, 
+		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname
+	);
+	print $query->redirect("label-home.pl");
+	exit;
 }
-
-
 elsif  ( $op eq 'save_layout' ) {
-    save_layout(
-        $barcodetype,    $title,  $subtitle, $isbn, 
-        $issn,    $itemtype,         $bcn,            $dcn, 
-       $classif, $subclass,         $itemcallnumber,      $author, 
-        $tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
-        $layout_id
-    );
-
-### $layoutname
-
-     print $query->redirect("label-home.pl");
-    exit;
+	save_layout(
+		$barcodetype,    $title,  $subtitle, $isbn, 
+		$issn,    $itemtype,         $bcn,            $dcn, 
+		$classif, $subclass,         $itemcallnumber,      $author, 
+		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
+		$layout_id
+		);
+	### $layoutname
+	print $query->redirect("label-home.pl");
+	exit;
 }
 elsif  ( $op eq 'add_layout' ) {
-add_layout(
-        $barcodetype,    $title, $subtitle,  $isbn, 
-        $issn,    $itemtype,         $bcn,            $dcn, 
-       $classif, $subclass,         $itemcallnumber,      $author, 
-        $tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
-        $layout_id
-    );
-
-### $layoutname
-
-     print $query->redirect("label-home.pl");
-    exit;
+	add_layout(
+		$barcodetype,    $title, $subtitle,  $isbn, 
+		$issn,    $itemtype,         $bcn,            $dcn, 
+		$classif, $subclass,         $itemcallnumber,      $author, 
+		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
+		$layout_id
+	);
+	### $layoutname
+	print $query->redirect("label-home.pl");
+	exit;
 }
-
-
-
-
-
 elsif ( $op eq 'add' ) {   # add item
-    my $query2 = "INSERT INTO labels ( itemnumber, batch_id ) values ( ?,? )";
-    my $sth2   = $dbh->prepare($query2);
-    for my $inum (@itemnumber) {
+	my $query2 = "INSERT INTO labels ( itemnumber, batch_id ) values ( ?,? )";
+	my $sth2   = $dbh->prepare($query2);
+	for my $inum (@itemnumber) {
 		$sth2->execute($inum, $batch_id);
-    }
+	}
 	$sth2->finish;
 }
 elsif ( $op eq 'deleteall' ) {
-    my $query2 = "DELETE FROM labels";
-    my $sth2   = $dbh->prepare($query2);
-    $sth2->execute();
-    $sth2->finish;
+	my $query2 = "DELETE FROM labels";
+	my $sth2   = $dbh->prepare($query2);
+	$sth2->execute();
+	$sth2->finish;
 }
 elsif ( $op eq 'delete' ) {
-    my $query2 = "DELETE FROM labels where itemnumber = ?";
-    my $sth2   = $dbh->prepare($query2);
-    $sth2->execute($itemnumber);
-    $sth2->finish;
+	my $query2 = "DELETE FROM labels where itemnumber = ?";
+	my $sth2   = $dbh->prepare($query2);
+	$sth2->execute($itemnumber);
+	$sth2->finish;
 }
-
-
 elsif ( $op eq 'delete_batch' ) {
-    delete_batch($batch_id);
-     print $query->redirect("label-manager.pl?batch_id=");
-	 exit;
+	delete_batch($batch_id);
+	print $query->redirect("label-manager.pl?batch_id=");
+	exit;
 }
-
 elsif ( $op eq 'add_batch' ) {
-    $batch_id= add_batch();
-
+	$batch_id= add_batch();
 }
-
 elsif ( $op eq 'set_active_layout' ) {
-    set_active_layout($layout_id);
-     print $query->redirect("label-home.pl");
-    exit;
+	set_active_layout($layout_id);
+	print $query->redirect("label-home.pl");
+	exit;
 }
-
 
 #  first lets do a read of the labels table , to get the a list of the
 # currently entered items to be prinited
