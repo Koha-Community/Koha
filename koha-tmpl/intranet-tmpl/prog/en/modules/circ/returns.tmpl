@@ -113,9 +113,10 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
     <!-- TMPL_IF Name="needstransfer" -->
 	<!-- transfer -->
 	<div class="dialog message"><h3> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
+	<center>Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">              
-	<input type="submit" value="Confirm and transfer" class="submit" />
-	<input type="hidden" name="dotransfer" value="yes">
+	<input type="submit" name="dotransfer" value="Yes" class="submit" />
+	<input type="submit" name="notransfer" value="No" class="submit" />
 	<input type="hidden" name="tobranch" value="<!-- TMPL_VAR NAME="homebranch" -->">
 	<input type="hidden" name="transferitem" value="<!-- TMPL_VAR NAME="itemnumber" -->">
 	<!--TMPL_LOOP Name="inputloop" -->     
@@ -124,7 +125,7 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
 	<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" /> 
 	<!-- /TMPL_LOOP -->                            
 	<input type="hidden" name="barcode" value="0" />    
-	</form>   </div>
+	</form> </center>  </div>
 	<!-- /TMPL_IF -->
     	
     <!-- TMPL_IF Name="diffbranch" -->
