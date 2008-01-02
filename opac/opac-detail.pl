@@ -53,6 +53,7 @@ my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) {
     print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
+	exit;
 }
 
 #coping with subscriptions
@@ -84,7 +85,7 @@ my $norequests = 1;
 foreach my $itm (@items) {
      $norequests = 0 && $norequests
        if ( (not $itm->{'wthdrawn'} )
-          || (not $itm->{'itemlost'} )
+         || (not $itm->{'itemlost'} )
          || (not $itm->{'itemnotforloan'} )
          || ($itm->{'itemnumber'} ) );
         $itm->{ $itm->{'publictype'} } = 1;
@@ -113,7 +114,6 @@ $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
 		MARCURLS	=> $marcurlsarray,
     );
 
-my @results = ( $dat, );
 foreach ( keys %{$dat} ) {
     $template->param( "$_" => $dat->{$_} . "" );
 }
