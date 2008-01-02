@@ -28,7 +28,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 # set the version for version checking
 BEGIN {
     $VERSION = 3.01;
-    $DEBUG = ( $ENV{DEBUG} ) ? 1 : 0;
+    $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 }
 
 =head1 NAME
@@ -1487,9 +1487,9 @@ sub NZgetRecords {
 
 sub NZanalyse {
     my ( $string, $server ) = @_;
-    warn "---------"       if $DEBUG;
-    warn "Enter NZanalyse" if $DEBUG;
-    warn "---------"       if $DEBUG;
+#     warn "---------"       if $DEBUG;
+    warn " NZanalyse" if $DEBUG;
+#     warn "---------"       if $DEBUG;
 
  # $server contains biblioserver or authorities, depending on what we search on.
  #warn "querying : $string on $server";
@@ -1526,29 +1526,7 @@ sub NZanalyse {
             # depending of operand, intersect, union or exclude both lists
             # to get a result list
             if ( $operator eq ' and ' ) {
-                my @leftresult = split /;/, $leftresult;
-                warn " @leftresult / $rightresult \n" if $DEBUG;
-
-                #             my @rightresult = split /;/,$leftresult;
-                my $finalresult;
-
-# parse the left results, and if the biblionumber exist in the right result, save it in finalresult
-# the result is stored twice, to have the same weight for AND than OR.
-# example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
-# result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
-                foreach (@leftresult) {
-                    my $value = $_;
-                    my $countvalue;
-                    ( $value, $countvalue ) = ( $1, $2 )
-                      if $value =~ m/(.*)-(\d+)$/;
-                    if ( $rightresult =~ /$value-(\d+);/ ) {
-                        $countvalue = ( $1 > $countvalue ? $countvalue : $1 );
-                        $finalresult .=
-                          "$value-$countvalue;$value-$countvalue;";
-                    }
-                }
-                warn " $finalresult \n" if $DEBUG;
-                return $finalresult;
+                return NZoperatorAND($leftresult,$rightresult);      
             }
             elsif ( $operator eq ' or ' ) {
 
@@ -1556,32 +1534,20 @@ sub NZanalyse {
                 return $leftresult . $rightresult;
             }
             elsif ( $operator eq ' not ' ) {
-                my @leftresult = split /;/, $leftresult;
-
-                #             my @rightresult = split /;/,$leftresult;
-                my $finalresult;
-                foreach (@leftresult) {
-                    my $value = $_;
-                    $value = $1 if $value =~ m/(.*)-\d+$/;
-                    unless ( $rightresult =~ "$value-" ) {
-                    }
-                }
-                return $finalresult;
+                return NZoperatorNOT($leftresult,$rightresult);      
             }
-            else {
-
+        }      
+        else {
 # this error is impossible, because of the regexp that isolate the operand, but just in case...
-                return $leftresult;
-                exit;
-            }
-        }
+            return $leftresult;
+        } 
     }
     warn "string :" . $string if $DEBUG;
     $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
     my $left     = $1;
     my $right    = $3;
     my $operator = lc($2);    # FIXME: and/or/not are operators, not operands
-    warn "dealing w/parenthesis. left :$left operator:$operator right:$right"
+    warn "no parenthesis. left : $left operator: $operator right: $right"
       if $DEBUG;
 
     # it's not a leaf, we have a and/or/not
@@ -1593,26 +1559,14 @@ sub NZanalyse {
         warn "node : $left / $operator / $right\n" if $DEBUG;
         my $leftresult  = NZanalyse( $left,  $server );
         my $rightresult = NZanalyse( $right, $server );
-
+        warn " leftresult : $leftresult" if $DEBUG;
+        warn " rightresult : $rightresult" if $DEBUG;
         # OK, we have the results for right and left part of the query
         # depending of operand, intersect, union or exclude both lists
         # to get a result list
         if ( $operator eq ' and ' ) {
-            my @leftresult = split /;/, $leftresult;
-
-            #             my @rightresult = split /;/,$leftresult;
-            my $finalresult;
-
-# parse the left results, and if the biblionumber exist in the right result, save it in finalresult
-# the result is stored twice, to have the same weight for AND than OR.
-# example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
-# result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
-            foreach (@leftresult) {
-                if ( $rightresult =~ "$_;" ) {
-                    $finalresult .= "$_;$_;";
-                }
-            }
-            return $finalresult;
+            warn "NZAND";
+            return NZoperatorAND($leftresult,$rightresult);
         }
         elsif ( $operator eq ' or ' ) {
 
@@ -1620,16 +1574,7 @@ sub NZanalyse {
             return $leftresult . $rightresult;
         }
         elsif ( $operator eq ' not ' ) {
-            my @leftresult = split /;/, $leftresult;
-
-            #             my @rightresult = split /;/,$leftresult;
-            my $finalresult;
-            foreach (@leftresult) {
-                unless ( $rightresult =~ "$_;" ) {
-                    $finalresult .= "$_;";
-                }
-            }
-            return $finalresult;
+            return NZoperatorNOT($leftresult,$rightresult);
         }
         else {
 
@@ -1649,21 +1594,21 @@ sub NZanalyse {
         my $left     = $1;
         my $operator = $2;
         my $right    = $3;
-        warn "handling leaf... left:$left operator:$operator right:$right"
-          if $DEBUG;
+#         warn "handling leaf... left:$left operator:$operator right:$right"
+#           if $DEBUG;
         unless ($operator) {
             $string =~ /(.*)(>|<|=)(.*)/;
             $left     = $1;
             $operator = $2;
             $right    = $3;
-            warn
-"handling unless (operator)... left:$left operator:$operator right:$right"
-              if $DEBUG;
+#             warn
+# "handling unless (operator)... left:$left operator:$operator right:$right"
+#               if $DEBUG;
         }
         my $results;
 
 # strip adv, zebra keywords, currently not handled in nozebra: wrdl, ext, phr...
-        $left =~ s/[ ,].*$//;
+        $left =~ s/[, ].*$//;
 
         # automatic replace for short operators
         $left = 'title'            if $left =~ '^ti$';
@@ -1672,6 +1617,7 @@ sub NZanalyse {
         $left = 'subject'          if $left =~ '^su$';
         $left = 'koha-Auth-Number' if $left =~ '^an$';
         $left = 'keyword'          if $left =~ '^kw$';
+        warn "handling leaf... left:$left operator:$operator right:$right";
         if ( $operator && $left ne 'keyword' ) {
 
             #do a specific search
@@ -1701,27 +1647,13 @@ sub NZanalyse {
                       unless ( $right =~ /^\d+$/ && $value =~ /\D/ );
                     warn "result : $value "
                       . ( $right  =~ /\d/ ) . "=="
-                      . ( !$value =~ /\d/ );         #= $line";
+                      . ( $value =~ /\D/?$line:"" );         #= $line";
                 }
 
 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-                    my @leftresult = split /;/, $biblionumbers;
-                    my $temp;
-                    foreach my $entry (@leftresult)
-                    {    # $_ contains biblionumber,title-weight
-                            # remove weight at the end
-                        my $cleaned = $entry;
-                        $cleaned =~ s/-\d*$//;
-
-                   # if the entry already in the hash, take it & increase weight
-                        warn "===== $cleaned =====" if $DEBUG;
-                        if ( $results =~ "$cleaned" ) {
-                            $temp .= "$entry;$entry;";
-                            warn "INCLUDING $entry" if $DEBUG;
-                        }
-                    }
-                    $results = $temp;
+                    warn "NZAND";        
+                    $results = NZoperatorAND($biblionumbers,$results);
                 }
                 else {
                     $results = $biblionumbers;
@@ -1750,24 +1682,7 @@ sub NZanalyse {
 
 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-                    warn "RES for $_ = $biblionumbers" if $DEBUG;
-                    my @leftresult = split /;/, $biblionumbers;
-                    my $temp;
-                    foreach my $entry (@leftresult)
-                    {    # $_ contains biblionumber,title-weight
-                            # remove weight at the end
-                        my $cleaned = $entry;
-                        $cleaned =~ s/-\d*$//;
-
-               # if the entry already in the hash, take it & increase weight
-               #                          warn "===== $cleaned =====" if $DEBUG;
-                        if ( $results =~ "$cleaned" ) {
-                            $temp .= "$entry;$entry;";
-
-               #                              warn "INCLUDING $entry" if $DEBUG;
-                        }
-                    }
-                    $results = $temp;
+                    $results = NZoperatorAND($biblionumbers,$results);
                 }
                 else {
                     warn "NEW RES for $_ = $biblionumbers" if $DEBUG;
@@ -1781,6 +1696,55 @@ sub NZanalyse {
     warn "---------"       if $DEBUG;
     warn "Leave NZanalyse" if $DEBUG;
     warn "---------"       if $DEBUG;
+}
+
+sub NZoperatorAND{
+    my ($rightresult, $leftresult)=@_;
+    
+    my @leftresult = split /;/, $leftresult;
+    warn " @leftresult / $rightresult \n" if $DEBUG;
+    
+    #             my @rightresult = split /;/,$leftresult;
+    my $finalresult;
+
+# parse the left results, and if the biblionumber exist in the right result, save it in finalresult
+# the result is stored twice, to have the same weight for AND than OR.
+# example : TWO : 61,61,64,121 (two is twice in the biblio #61) / TOWER : 61,64,130
+# result : 61,61,61,61,64,64 for two AND tower : 61 has more weight than 64
+    foreach (@leftresult) {
+        my $value = $_;
+        my $countvalue;
+        ( $value, $countvalue ) = ( $1, $2 ) if ($value=~/(.*)-(\d+)$/);
+        if ( $rightresult =~ /$value-(\d+);/ ) {
+            $countvalue = ( $1 > $countvalue ? $countvalue : $1 );
+            $finalresult .=
+                "$value-$countvalue;$value-$countvalue;";
+        }
+    }
+    warn " $finalresult \n" if $DEBUG;
+    return $finalresult;
+}
+      
+sub NZoperatorOR{
+    my ($rightresult, $leftresult)=@_;
+    return $rightresult.$leftresult;
+}
+
+sub NZoperatorNOT{
+    my ($rightresult, $leftresult)=@_;
+    
+    my @leftresult = split /;/, $leftresult;
+
+    #             my @rightresult = split /;/,$leftresult;
+    my $finalresult;
+    foreach (@leftresult) {
+        my $value=$_;
+        $value=$1 if $value=~m/(.*)-\d+$/;
+        unless ($rightresult =~ "$value-") {
+            $finalresult .= "$_;";
+        }
+    }
+    return $finalresult;
 }
 
 =head2 NZorder
