@@ -87,9 +87,9 @@ if (alreadyreserved > "0"){
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- TMPL_IF NAME="noitems" -->
-<p class="problem">            
-<strong>Sorry, this biblio has no items attached</strong>                            
-</p>       
+<div class="dialog error">            
+<strong>Cannot reserve:</strong> this record has no items attached.                            
+</div>
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="messagetransfert" -->
 		<div class="dialog message">
