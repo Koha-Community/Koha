@@ -181,7 +181,7 @@ if ( $count == 1 ) {
         date                  => format_date($date),
         title                 => $results[0]->{'title'},
         author                => $results[0]->{'author'},
-        copyrightdate         => format_date( $results[0]->{'copyrightdate'} ),
+        copyrightdate         => $results[0]->{'copyrightdate'},
         itemtype              => $results[0]->{'itemtype'},
         isbn                  => $results[0]->{'isbn'},
         seriestitle           => $results[0]->{'seriestitle'},
@@ -195,6 +195,7 @@ if ( $count == 1 ) {
         unitprice             => $results[0]->{'unitprice'},
         invoice               => $invoice,
         datereceived          => $datereceived->output(),
+        datereceived_iso          => $datereceived->output('iso'),
     );
 }
 else {

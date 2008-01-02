@@ -595,6 +595,22 @@ sub ModReceiveOrder {
 #    $daterecieved=POSIX::strftime("%Y-%m-%d",CORE::localtime) unless $daterecieved;
 #     warn "DATE REC : $daterecieved";
 	$datereceived = C4::Dates->output('iso') unless $datereceived;
+    my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
+    if ($suggestionid) {
+        ModStatus( $suggestionid, 'AVAILABLE', '', $biblionumber );
+    }
+    # Allows libraries to change their bookfund during receiving orders
+    # allows them to adjust budgets
+    if ( C4::Context->preference("LooseBudgets") && $bookfund ) {
+        my $query = "
+            UPDATE aqorderbreakdown
+            SET    bookfundid=?
+            WHERE  ordernumber=?
+        ";
+        my $sth = $dbh->prepare($query);
+        $sth->execute( $bookfund, $ordnum );
+        $sth->finish;
+    }
    
 	my $sth=$dbh->prepare("SELECT * FROM aqorders  LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
 							WHERE biblionumber=? AND aqorders.ordernumber=?");
@@ -615,34 +631,14 @@ sub ModReceiveOrder {
                     $order->{'bookfundid'},$order->{'biblioitemnumber'},$order->{'rrp'},$order->{'ecost'},$order->{'gst'},
                     $order->{'budget'},$order->{'unitcost'},$order->{'sub'},'',$order->{'sort1'},$order->{'sort2'},$order->{'purchaseordernumber'});
     
-        $sth = $dbh->prepare("select branchcode, bookfundid from aqorderbreakdown where ordernumber=?");
-        $sth->execute($ordnum);
-        my ($branch,$bookfund) = $sth->fetchrow_array;
-        $sth->finish;
         $sth=$dbh->prepare(" insert into aqorderbreakdown (ordernumber, branchcode, bookfundid) values (?,?,?)"); 
-        $sth->execute($newOrder,$branch,$bookfund);
+        $sth->execute($newOrder,$order->{branch},$order->{bookfundid});
     } else {
         $sth=$dbh->prepare("update aqorders 
 							set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?, 
 								unitprice=?,freight=?,rrp=?
                             where biblionumber=? and ordernumber=?");
         $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblionumber,$ordnum);
-        $sth->finish;
-    }
-    my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
-    if ($suggestionid) {
-        ModStatus( $suggestionid, 'AVAILABLE', '', $biblionumber );
-    }
-    # Allows libraries to change their bookfund during receiving orders
-    # allows them to adjust budgets
-    if ( C4::Context->preference("LooseBudgets") ) {
-        my $query = "
-            UPDATE aqorderbreakdown
-            SET    bookfundid=?
-            WHERE  ordernumber=?
-        ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute( $bookfund, $ordnum );
         $sth->finish;
     }
     return $datereceived;

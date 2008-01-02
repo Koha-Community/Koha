@@ -91,7 +91,7 @@
     <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
     <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-    <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived" -->" />
+    <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived_iso" -->" />
     <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
     <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
     </fieldset>
@@ -100,6 +100,7 @@
     <fieldset class="rows">
     <legend>Accounting details</legend>
        <ul>
+       <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
        <li><label for="quantity">Quantity ordered: </label><span class="label"> <!-- TMPL_VAR NAME="quantity" --> </span></li>
         <li><label for="quantityrec">Quantity received: </label>
           <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_IF NAME="quantityreceived" --><!-- TMPL_VAR NAME="quantityreceivedplus1" --><!-- TMPL_ELSE -->1<!-- /TMPL_IF -->" />

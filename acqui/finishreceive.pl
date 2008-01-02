@@ -57,7 +57,7 @@ my $cnt = 0;
 
 if ($quantityrec > $origquantityrec ) {
     # save the quantity recieved.
-    $datereceived = ModReceiveOrder($biblionumber,$ordnum,$quantityrec,$user,$cost,$invoiceno,$datereceived,$freight,$replacement);
+    $datereceived = ModReceiveOrder($biblionumber,$ordnum,$quantityrec,$user,$cost,$invoiceno,$freight,$replacement,undef,$datereceived);
     # create items if the user has entered barcodes
    # my @barcodes=split(/\,| |\|/,$barcode);
     # foreach barcode provided, build the item MARC::Record and create the item
