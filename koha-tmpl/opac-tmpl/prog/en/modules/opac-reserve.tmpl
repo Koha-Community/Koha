@@ -138,6 +138,11 @@
             <td>
         <!-- TMPL_IF Name="date_due" -->
             <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
+			<!-- TMPL_ELSE -->
+        <!-- TMPL_IF Name="transfertwhen" -->
+            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+        <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="message" -->
@@ -146,10 +151,6 @@
 
         <!-- TMPL_IF Name="notforloan" -->
             Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF Name="transfertwhen" -->
-            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
         <!-- /TMPL_IF -->
 
             <!-- TMPL_IF NAME="reservedate"-->

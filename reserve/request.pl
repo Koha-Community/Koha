@@ -66,6 +66,8 @@ $findborrower =~ s|,| |g;
 my $cardnumber = $input->param('cardnumber');
 my $borrowerslist;
 my $messageborrower;
+my $warnings;
+my $messages;
 
 my $date = sprintf( '%04d-%02d-%02d', Today() );
 
@@ -103,6 +105,7 @@ if ($cardnumber) {
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
     if ( $number_reserves > C4::Context->preference('maxreserves') ) {
+		$warnings = 1;
         $maxreserves = 1;
     }
 
@@ -110,15 +113,18 @@ if ($cardnumber) {
     if ($borrowerinfo->{'dateexpiry'} ne '0000-00-00') {
         my $warning = (Date_to_Days(split /-/,$date) > Date_to_Days( split /-/,$borrowerinfo->{'dateexpiry'}));
         if ( $warning > 0 ) {
+			$messages = 1;
             $expiry = 1;
         }
     } else {
+		$messages = 1;
         $expiry = 1;
     }
      
 
     # check if the borrower make the reserv in a different branch
     if ( $borrowerinfo->{'branchcode'} ne C4::Context->userenv->{'branch'} ) {
+		$messages = 1;
         $diffbranch = 1;
     }
 
@@ -138,7 +144,9 @@ if ($cardnumber) {
                 borrowerreservs   => $count_reserv,
                 maxreserves       => $maxreserves,
                 expiry            => $expiry,
-                diffbranch        => $diffbranch
+                diffbranch        => $diffbranch,
+				messages => $messages,
+				warnings => $warnings
     );
 }
 
@@ -190,11 +198,14 @@ foreach my $res (@$reserves) {
     }
 
     if ( $borrowerinfo->{borrowernumber} eq $res->{borrowernumber} ) {
+		$warnings = 1;
         $alreadyreserved = 1;
     }
 }
 
-$template->param( alreadyreserved => $alreadyreserved );
+$template->param( alreadyreserved => $alreadyreserved,
+				messages => $messages,
+				warnings => $warnings );
 
 # FIXME think @optionloop, is maybe obsolete, or  must be switchable by a systeme preference fixed rank or not
 # make priorities options
@@ -458,7 +469,8 @@ $template->param(
     cardnumber        => $cardnumber,
     CGIselectborrower => $CGIselectborrower,
     title             => $dat->{title},
-    author            => $dat->{author}
+    author            => $dat->{author},
+	holdsview => 1
 );
 
 # printout the page

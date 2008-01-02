@@ -92,9 +92,9 @@ if (alreadyreserved > "0"){
 </p>       
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="messagetransfert" -->
-		<div>
+		<div class="dialog message">
 				<h2>Hold found for (<!-- TMPL_VAR NAME="nextreservtitle" -->), please transfer</h2>
-			<p>Hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this item.
+			<p>Hold placed by : <strong> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></strong> at : <strong> <!-- TMPL_VAR NAME="branchname" --> </strong>, Please transfer this item.
 			</p>
 			<form name="cancelReservewithtransfert" action="branchreserves.pl" method="post">
 				<input type="submit" class="button" />
@@ -105,7 +105,7 @@ if (alreadyreserved > "0"){
 
 <!-- TMPL_UNLESS NAME="cardnumber"-->
     <!-- TMPL_IF NAME="messageborrower" -->                                    
-      <div class="problem">No patron with this name, Please, try another </div>    
+      <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>    
     <!-- /TMPL_IF -->
     <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
@@ -123,37 +123,37 @@ if (alreadyreserved > "0"){
         <!-- /TMPL_UNLESS -->
     </form>
 <!-- TMPL_ELSE -->
-  <!-- TMPL_IF NAME="maxreserves" -->
-    <p class="problem">
-      <strong>Too many holds</strong>
-      Currently, this patron has too many holds.
-    </p>
+
+<!-- TMPL_IF NAME="warnings" -->
+    <div class="dialog alert">
+	<h3>Cannot Place Hold</h3>
+	<ul>
+<!-- TMPL_IF NAME="maxreserves" -->
+      <li><strong>Too Many Holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a> has too many holds.</li>
     <!-- /TMPL_IF -->
 
+    <!-- TMPL_IF NAME="alreadyreserved" -->
+     <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a> <strong>already has a hold</strong> on this item </li>
+    <!-- /TMPL_IF -->
+	</ul></div>
+<!-- /TMPL_IF -->	
+
+<!-- TMPL_IF NAME="messages" -->
+    <div class="dialog message"><ul>
     <!-- TMPL_IF NAME="expiry" -->
-    <br />
-    <p class="problem">
-      <strong>Expired account</strong>
-      This patron's account has expired
-    </p>
+      <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a>'s <strong>account has expired</strong></li>
     <!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="diffbranch" -->			
-    <p class="problem">
-      <strong>Warning:</strong> Pickup Library is different than Patron's Home Library
-    </p>
+<!-- TMPL_IF NAME="diffbranch" --><h3>Branch Mismatch</h3>
+      <li> <strong>Pickup library is different</strong> than <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a>'s home library</li>
     <!-- /TMPL_IF -->
-
-    <!-- TMPL_IF NAME="alreadyreserved" -->			
-    <p class="problem">
-      <strong>Warning:</strong>
-      This patron already has a hold on this item
-    </p>
-    <!-- /TMPL_IF -->
+</ul></div>
+<!-- /TMPL_IF -->
 
   <!-- TMPL_IF NAME="messageborrower" -->
-    <p class="problem"><strong>Patron not found:</strong> Name or barcode not found. Please try an other </p>
+   <div class="dialog alert"><h3>Patron not found:</h3> <p>Name or barcode not found. Please try an other </p></div>
   <!-- /TMPL_IF -->
+  
   <fieldset class="rows left">
     <legend>Hold details</legend>
         <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
@@ -202,9 +202,10 @@ if (alreadyreserved > "0"){
 	<!-- /TMPL_UNLESS -->
         <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
 </ol>
-        <label for="requestspecific">Place a hold on a specific copy</label> 
+         
         <table id="requestspecific">
-        <tr>
+        <caption>Place a hold on a specific copy</caption>
+		<tr>
             <!-- TMPL_IF NAME="item-level_itypes" -->
 	    <th>Hold</th>
             <th>Item type</th>
@@ -221,13 +222,13 @@ if (alreadyreserved > "0"){
             <!-- TMPL_IF NAME="available" -->
             <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- TMPL_ELSE -->
-            <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
+            <input disabled="disabled" type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
             <!-- /TMPL_IF -->
             </td>
 
             <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
-            <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->"/>
+            <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
             </td>
             <!-- /TMPL_IF -->
 
@@ -246,6 +247,11 @@ if (alreadyreserved > "0"){
             <td>
         	<!-- TMPL_IF Name="onloan" -->
             <span class="checkedout">Due <!-- TMPL_VAR NAME="onloan" --></span>
+			<!-- TMPL_ELSE -->
+        	<!-- TMPL_IF Name="transfertwhen" -->
+            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+        	<!-- /TMPL_IF -->
         	<!-- /TMPL_IF -->
     
         	<!-- TMPL_IF Name="message" -->
@@ -254,10 +260,6 @@ if (alreadyreserved > "0"){
     
         	<!-- TMPL_IF Name="notforloan" -->
             Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
-        	<!-- /TMPL_IF -->
-        	<!-- TMPL_IF Name="transfertwhen" -->
-            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
         	<!-- /TMPL_IF -->
 
             <!-- TMPL_IF NAME="reservedate"-->
@@ -286,8 +288,8 @@ if (alreadyreserved > "0"){
     </fieldset>
 	</fieldset>
     </form>
-
 <!-- /TMPL_UNLESS -->
+
 <!-- TMPL_UNLESS NAME="cardnumber" -->
 <!-- TMPL_IF name="reserveloop" -->
 <form name="T<!-- TMPL_VAR NAME="time" -->" action="modrequest.pl" method="post">

@@ -77,10 +77,7 @@ function verify_images() {
         </div>
         
 <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-u" id="bookcoverimg">
-        <!-- TMPL_IF name="isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a>
-<!-- TMPL_ELSE -->
-    <img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" border="0" />
-<!-- /TMPL_IF --></div><!-- /TMPL_IF -->
+        <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a></div><!-- /TMPL_IF -->
         
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
@@ -159,10 +156,15 @@ function verify_images() {
 
                 <!-- TMPL_IF name="datedue" -->
                     <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-                                        On loan
+                                        Checked out
                     <!-- TMPL_ELSE -->
-                                        On loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due back on <!-- TMPL_VAR NAME="onloan" -->
+                                        Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due back on <!-- TMPL_VAR NAME="datedue" -->
                     <!-- /TMPL_IF -->
+					<!-- TMPL_ELSE -->
+                <!-- TMPL_IF Name="transfertwhen" -->
+                                        In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+                                        to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+                <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF NAME="itemlost" -->
@@ -197,10 +199,6 @@ function verify_images() {
                                         Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
                 <!-- /TMPL_IF -->
 
-                <!-- TMPL_IF Name="transfertwhen" -->
-                                        In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-                                        to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
-                <!-- /TMPL_IF -->
                             
                 <!-- TMPL_IF NAME="reservedate"-->
                     <!-- TMPL_IF NAME="waitingdate" -->
