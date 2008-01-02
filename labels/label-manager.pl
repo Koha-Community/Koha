@@ -6,8 +6,7 @@ use C4::Auth;
 use C4::Labels;
 use C4::Output;
 use HTML::Template::Pro;
-use POSIX;
-
+#use POSIX qw(ceil);
 #use Data::Dumper;
 #use Smart::Comments;
 
@@ -141,12 +140,10 @@ my @resultsloop = get_label_items($batch_id);
 #warn Dumper(@resultsloop);
 
 my $tmpl =GetActiveLabelTemplate();
-### $tmpl
+
 #calc-ing number of sheets
 #my $number_of_results = scalar @resultsloop;
-#my $sheets_needed = ( ( --$number_of_results + $startrow ) / 8 );
-#$sheets_needed = ceil($sheets_needed);    # rounding up int's
-
+#my $sheets_needed = ceil( ( --$number_of_results + $startrow ) / 8 ); # rounding up
 #my $tot_labels       = ( $sheets_needed * 8 );
 #my $start_results    = ( $number_of_results + $startrow );
 #my $labels_remaining = ( $tot_labels - $start_results );
