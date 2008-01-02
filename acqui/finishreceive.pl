@@ -22,15 +22,17 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use C4::Context;
+use CGI;
+use C4::Auth;
 use C4::Output;
+use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
-use CGI;
 use C4::Search;
 
 my $input=new CGI;
-
+my $flagsrequired = { acquisitions => 1};
+my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 my $user=$input->remote_user;
 my $biblionumber = $input->param('biblionumber');
 my $biblioitemnumber=$input->param('biblioitemnumber');
