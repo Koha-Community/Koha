@@ -72,7 +72,9 @@ my $count = scalar @booksellers;
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
 my $gst=$input->param('gst');
-my $datereceived=C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
+my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
+					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
+$datereceived = C4::Dates->new() unless $datereceived;
 my $code=$input->param('code');
 
 my ($template, $loggedinuser, $cookie)

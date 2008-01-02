@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receive parcel from supplier <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -102,11 +103,12 @@
     <div id="parcels_new_parcel">
         <form method="get" action="parcel.pl">
     <fieldset class="rows">
-    <legend>Receive a new Parcel</legend>
+    <legend>Receive a new parcel</legend>
        <ol> <li>
-            <label for="invoice">Supplier Invoice / Parcel Code</label>
+            <label for="invoice">Supplier Invoice </label>
             <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-            <input type="text" size="20" id="invoice" name="invoice" />
+            <input type="hidden" name="op" value="new" />
+			<input type="text" size="20" id="invoice" name="invoice" />
         </li>
 		<!-- TMPL_IF NAME="gst" -->
         <li>
@@ -117,7 +119,19 @@
         <li>
             <label for="freight">Freight:</label>
             <input type="text" size="20" id="freight" name="freight" />
-        </li></ol>
+        </li>
+         <li><label for="datereceived">Shipment date: </label>
+            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="<!-- TMPL_VAR NAME="datereceived" -->" />
+            <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datereceived_button" alt="Show Calendar" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "datereceived",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "datereceived_button"          }
+        );
+      </script>	</li>
+		</ol>
     </fieldset>
             <fieldset class="action"><input type="submit" class="button" value="Save" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Cancel</a></fieldset>
         </form>

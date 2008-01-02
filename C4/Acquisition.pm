@@ -865,7 +865,7 @@ sub GetParcel {
     }
     $strsth .= " ORDER BY aqbasket.basketno";
     ### parcelinformation : $strsth
-    warn "STH : $strsth";
+ #   warn "STH : $strsth";
     my $sth = $dbh->prepare($strsth);
     $sth->execute($supplierid);
     while ( my $data = $sth->fetchrow_hashref ) {

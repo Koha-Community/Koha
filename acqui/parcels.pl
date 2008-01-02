@@ -160,7 +160,8 @@ $template->param(searchresults=>\@loopres, count=>$count) if ($count);
 $template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$dateto, resultsperpage=>$resultsperpage);
 $template->param(
         name => $booksellers[0]->{'name'},
-        supplierid => $supplierid,
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+		supplierid => $supplierid,
 	    GST => C4::Context->preference("gist"),
         );
 
