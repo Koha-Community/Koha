@@ -74,7 +74,8 @@ for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
             if($wkno > 52){$year++; $wkno=1;}
             if($count>365){$count=$i-365;}
             my ($y,$m,$d) =  Add_Delta_Days($year,1,1, $count - 1);#Date_NthDayOfYear($year,$count);
-            my $output = "$y-$m-$d";
+            # padding Add_Delta_Days;
+            my $output  = sprintf("%04d-%02d-%02d",$y , $m, $d );
             $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
             $wkno++;
     }
