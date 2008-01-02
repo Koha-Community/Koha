@@ -84,7 +84,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 #count of item linked
 my $itemcount = GetItemsCount($biblionumber);
-$template->param( count => $itemcount);
+$template->param( count => $itemcount,
+					bibliotitle => $record->title(), );
 
 #Getting the list of all frameworks
 my $queryfwk =
