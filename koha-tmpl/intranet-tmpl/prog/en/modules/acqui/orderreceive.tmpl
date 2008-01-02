@@ -39,7 +39,7 @@
 	<legend>Item details (n):  (add to catalogue)</legend>
   <div id="outeritemblock">
 	<div id="itemblock">
-	<ul>
+	<ol>
 	<li> <label for="volinf">Volume/Copy (for serials): </label>
         <input type="text" size="20" name="volinf" id="volinf" /></li></ol>
     <li> <label for="barcode">Item barcode: </label>
@@ -64,7 +64,7 @@
    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="itype" -->
     <li> <label for="itemtype">Item type: </label>
-            <select name="itemtype" id="itemtype">            <!-- TMPL_LOOP name="itemtypeloop" -->
+            <select name="itemtype" id="itemtype"><!-- TMPL_LOOP name="itemtypeloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
@@ -82,9 +82,9 @@
             <!-- /TMPL_LOOP -->
             </select></li>
    <!-- /TMPL_IF -->
-   </ul>
-<a style="cursor: crosshair; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">+</a>
- <a style="display:none; cursor: crosshair; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">-</a>
+   </ol>
+<a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">+</a>
+ <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">-</a>
     </div>
 	</div>
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
@@ -99,7 +99,7 @@
 	<div class="yui-u">
     <fieldset class="rows">
     <legend>Accounting details</legend>
-       <ul>
+       <ol>
        <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
        <li><label for="quantity">Quantity ordered: </label><span class="label"> <!-- TMPL_VAR NAME="quantity" --> </span></li>
         <li><label for="quantityrec">Quantity received: </label>

@@ -48,8 +48,8 @@
     <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
             <td>
-                <p><span class='title'><!-- TMPL_VAR NAME="title" --></span>
-                <!-- TMPL_IF name="author" -->  by <span class='author'><!-- TMPL_VAR NAME="author" --></span>,<!-- /TMPL_IF --></p>
+                <p><span class="title"><!-- TMPL_VAR NAME="title" --></span>
+                <!-- TMPL_IF name="author" -->  by <span class="author"><!-- TMPL_VAR NAME="author" --></span>,<!-- /TMPL_IF --></p>
                 <p><!-- TMPL_IF name="isbn" --> <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="notes" --> : <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
@@ -67,7 +67,7 @@
         <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">View MARC</a>
         </td>
             <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="order this one !">
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Order this one">
                 Order
             </a>
             </td>
