@@ -42,6 +42,7 @@ use C4::Output;
 use CGI;
 use C4::Koha;
 use C4::Biblio;
+use C4::Items;
 use C4::Branch;     # GetBranchDetail
 use C4::Serials;    # CountSubscriptionFromBiblionumber
 

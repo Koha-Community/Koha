@@ -26,6 +26,7 @@ use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
 use C4::Amazon;

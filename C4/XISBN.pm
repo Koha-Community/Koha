@@ -20,6 +20,7 @@ package C4::XISBN;
 use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
+use C4::Items;
 
 use LWP::UserAgent;
 use HTTP::Request::Common;

@@ -23,6 +23,7 @@ use C4::Context;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
+use C4::Items;
 use C4::Output;
 use C4::Dates;
 

@@ -31,6 +31,7 @@ use C4::Output;
 use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Koha;
+use C4::Items;
 
 
 my $input = new CGI;
@@ -94,7 +95,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	 # FIXME still need to shift the text to the template so its translateable
 	 if ( $data->[$i]) {
 	     # find if its on issue
-	     my @items = &GetItemsInfo($line{'biblionumber'}, 'intra' );
+	     my @items = GetItemsInfo($line{'biblionumber'}, 'intra' );
 	     my $onissue = 0;
 	     foreach my $item (@items) {
 		 if ( $item->{'datedue'} eq 'Reserved' ) {

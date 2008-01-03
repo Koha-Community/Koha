@@ -22,6 +22,7 @@ use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
 use C4::Biblio;
+use C4::Items;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;

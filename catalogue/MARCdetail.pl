@@ -52,6 +52,7 @@ use CGI;
 use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
+use C4::Items;
 use C4::Acquisition;
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
 

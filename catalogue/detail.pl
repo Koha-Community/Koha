@@ -25,6 +25,7 @@ use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 use C4::Circulation;
 use C4::Branch;
 use C4::Reserves;
