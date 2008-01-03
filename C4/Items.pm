@@ -195,6 +195,17 @@ sub AddItem {
 
 =head2 ModItemFromMarc
 
+=over 4
+
+ModItemFromMarc($item_marc, $biblionumber, $itemnumber);
+
+=back
+
+This function updates an item record based on a supplied
+C<MARC::Record> object containing an embedded item field.
+This API is meant for the use of C<additem.pl>; for 
+other purposes, C<ModItem> should be used.
+
 =cut
 
 sub ModItemFromMarc {
@@ -210,6 +221,24 @@ sub ModItemFromMarc {
 }
 
 =head2 ModItem
+
+=over 4
+
+ModItem({ column => $newvalue }, $biblionumber, $itemnumber);
+
+=back
+
+Change one or more columns in an item record and update
+the MARC representation of the item.
+
+The first argument is a hashref mapping from item column
+names to the new values.  The second and third arguments
+are the biblionumber and itemnumber, respectively.
+
+If one of the changed columns is used to calculate
+the derived value of a column such as C<items.cn_sort>, 
+this routine will perform the necessary calculation
+and set the value.
 
 =cut
 
@@ -230,6 +259,11 @@ sub ModItem {
     _set_derived_columns_for_mod($item);
     _do_column_fixes_for_mod($item);
     # FIXME add checks
+    # duplicate barcode
+    # attempt to change itemnumber
+    # attempt to change biblionumber (if we want
+    # an API to relink an item to a different bib,
+    # it should be a separate function)
 
     # update items table
     _koha_modify_item($dbh, $item);
@@ -244,6 +278,15 @@ sub ModItem {
 }
 
 =head2 ModItemTransfer
+
+=over 4
+
+ModItemTransfer($itenumber, $frombranch, $tobranch);
+
+=back
+
+Marks an item as being transferred from one branch
+to another.
 
 =cut
 
@@ -592,6 +635,8 @@ my ($itemnumber,$error) = _koha_new_item( $dbh, $item, $barcode );
 
 =back
 
+Perform the actual insert into the C<items> table.
+
 =cut
 
 sub _koha_new_item {
@@ -681,6 +726,9 @@ sub _koha_new_item {
 my ($itemnumber,$error) =_koha_modify_item( $dbh, $item, $op );
 
 =back
+
+Perform the actual update of the C<items> row.  Note that this
+routine accepts a hashref specifying the columns to update.
 
 =cut
 
