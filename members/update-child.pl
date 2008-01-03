@@ -33,7 +33,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 
-use Smart::Comments;
+# use Smart::Comments;
 
 my $dbh   = C4::Context->dbh;
 my $input = new CGI;
@@ -52,6 +52,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $catcode        = $input->param('catcode');
 my $cattype        = $input->param('cattype');
+my $catcode_multi = $input->param('catcode_multi');
 my $op             = $input->param('op');
 
 if ( $op eq 'multi' ) {
@@ -82,10 +83,15 @@ elsif ( $op eq 'update' ) {
     $member->{'category_type'} = $borcat->{'category_type'};
     $member->{'description'}   = $borcat->{'description'};
     ModMember(%$member);
-    $template->param(
-        SUCCESS        => 1,
-        borrowernumber => $borrowernumber,
-    );
-    output_html_with_http_headers $input, $cookie, $template->output;
+
+    if (  $catcode_multi ) {
+        $template->param(
+                SUCCESS        => 1,
+                borrowernumber => $borrowernumber,
+                );
+        output_html_with_http_headers $input, $cookie, $template->output;
+    } else {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+    }
 }
 
