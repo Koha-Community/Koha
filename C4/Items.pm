@@ -45,6 +45,7 @@ my $VERSION = 3.00;
     ModItem
     ModDateLastSeen
     ModItemTransfer
+    DelItem
 
     GetItemStatus
     GetItemLocation
@@ -336,6 +337,48 @@ sub ModDateLastSeen {
     
     my $today = C4::Dates->new();    
     ModItem({ itemlost => 0, datelastseen => $today->output("iso") }, undef, $itemnumber);
+}
+
+=head2 DelItem
+
+=over 4
+
+DelItem($biblionumber, $itemnumber);
+
+=back
+
+Exported function (core API) for deleting an item record in Koha.
+
+=cut
+
+sub DelItem {
+    my ( $dbh, $biblionumber, $itemnumber ) = @_;
+    
+    # FIXME check the item has no current issues
+    
+    _koha_delete_item( $dbh, $itemnumber );
+
+    # get the MARC record
+    my $record = GetMarcBiblio($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+
+    # backup the record
+    my $copy2deleted = $dbh->prepare("UPDATE deleteditems SET marc=? WHERE itemnumber=?");
+    $copy2deleted->execute( $record->as_usmarc(), $itemnumber );
+
+    #search item field code
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+    my @fields = $record->field($itemtag);
+
+    # delete the item specified
+    foreach my $field (@fields) {
+        if ( $field->subfield($itemsubfield) eq $itemnumber ) {
+            $record->delete_field($field);
+        }
+    }
+    &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$itemnumber,"item") 
+        if C4::Context->preference("CataloguingLog");
 }
 
 =head1 EXPORTED SPECIAL ACCESSOR FUNCTIONS
@@ -1421,6 +1464,44 @@ sub _koha_modify_item {
     }
     $sth->finish();
     return ($item->{'itemnumber'},$error);
+}
+
+=head2 _koha_delete_item
+
+=over 4
+
+_koha_delete_item( $dbh, $itemnum );
+
+=back
+
+Internal function to delete an item record from the koha tables
+
+=cut
+
+sub _koha_delete_item {
+    my ( $dbh, $itemnum ) = @_;
+
+    # save the deleted item to deleteditems table
+    my $sth = $dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
+    $sth->execute($itemnum);
+    my $data = $sth->fetchrow_hashref();
+    $sth->finish();
+    my $query = "INSERT INTO deleteditems SET ";
+    my @bind  = ();
+    foreach my $key ( keys %$data ) {
+        $query .= "$key = ?,";
+        push( @bind, $data->{$key} );
+    }
+    $query =~ s/\,$//;
+    $sth = $dbh->prepare($query);
+    $sth->execute(@bind);
+    $sth->finish();
+
+    # delete from items table
+    $sth = $dbh->prepare("DELETE FROM items WHERE itemnumber=?");
+    $sth->execute($itemnum);
+    $sth->finish();
+    return undef;
 }
 
 =head2 _marc_from_item_hash
