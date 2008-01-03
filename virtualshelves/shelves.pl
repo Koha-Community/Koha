@@ -67,6 +67,7 @@ use strict;
 use CGI;
 use C4::VirtualShelves;
 use C4::Biblio;
+use C4::Items;
 use C4::Auth;
 use C4::Output;
 

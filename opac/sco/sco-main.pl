@@ -20,6 +20,7 @@ use C4::Members;
 use HTML::Template::Pro;
 use C4::Dates;
 use C4::Biblio;
+use C4::Items;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)

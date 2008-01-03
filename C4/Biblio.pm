@@ -52,7 +52,6 @@ push @EXPORT, qw(
   &GetBiblioItemByBiblioNumber
   &GetBiblioFromItemNumber
   
-  &GetItem
   &GetItemInfosOf
   &GetItemStatus
   &GetItemLocation
@@ -1310,39 +1309,6 @@ sub GetBiblio {
     $sth->finish;
     return ( $count, @results );
 }    # sub GetBiblio
-
-=head2 GetItem
-
-=over 4
-
-$data = &GetItem($itemnumber,$barcode);
-
-return Item information, for a given itemnumber or barcode
-
-=back
-
-=cut
-
-sub GetItem {
-    my ($itemnumber,$barcode) = @_;
-    my $dbh = C4::Context->dbh;
-    if ($itemnumber) {
-        my $sth = $dbh->prepare("
-            SELECT * FROM items 
-            WHERE itemnumber = ?");
-        $sth->execute($itemnumber);
-        my $data = $sth->fetchrow_hashref;
-        return $data;
-    } else {
-        my $sth = $dbh->prepare("
-            SELECT * FROM items 
-            WHERE barcode = ?"
-            );
-        $sth->execute($barcode);
-        my $data = $sth->fetchrow_hashref;
-        return $data;
-    }
-}    # sub GetItem
 
 =head2 get_itemnumbers_of
 

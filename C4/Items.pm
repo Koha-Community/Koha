@@ -36,6 +36,7 @@ my $VERSION = 3.00;
 
 # function exports
 @EXPORT = qw(
+    GetItem
     AddItemFromMarc
     AddItem
     ModItemFromMarc
@@ -84,6 +85,41 @@ The following functions are meant for use by users
 of C<C4::Items>
 
 =cut
+
+=head2 GetItem
+
+=over 4
+
+$item = GetItem($itemnumber,$barcode);
+
+=back
+
+Return item information, for a given itemnumber or barcode.
+The return value is a hashref mapping item column
+names to values.
+
+=cut
+
+sub GetItem {
+    my ($itemnumber,$barcode) = @_;
+    my $dbh = C4::Context->dbh;
+    if ($itemnumber) {
+        my $sth = $dbh->prepare("
+            SELECT * FROM items 
+            WHERE itemnumber = ?");
+        $sth->execute($itemnumber);
+        my $data = $sth->fetchrow_hashref;
+        return $data;
+    } else {
+        my $sth = $dbh->prepare("
+            SELECT * FROM items 
+            WHERE barcode = ?"
+            );
+        $sth->execute($barcode);
+        my $data = $sth->fetchrow_hashref;
+        return $data;
+    }
+}    # sub GetItem
 
 =head2 AddItemFromMarc
 

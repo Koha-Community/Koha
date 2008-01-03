@@ -23,6 +23,7 @@
 
 use strict;
 use C4::Biblio;
+use C4::Items;
 use CGI;
 use C4::Output;
 use C4::Reserves;
