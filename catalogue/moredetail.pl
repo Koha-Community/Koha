@@ -22,7 +22,7 @@ use strict;
 require Exporter;
 use C4::Koha;
 use CGI;
-use C4::Biblio;             # to use &GetBiblioItemData &GetItemsByBiblioitemnumber
+use C4::Biblio;
 use C4::Branch;
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
