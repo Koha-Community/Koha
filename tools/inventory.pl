@@ -100,9 +100,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
     my $dbh=C4::Context->dbh;
     my $date = format_date_in_iso($input->param('setdate')) || C4::Dates->today('iso');
 # 	warn "$date";
-    my $strsth="update items set (datelastseen = $date) where items.barcode =?";
-    my $qupdate = $dbh->prepare($strsth);
-    $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
+    my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
     my $qonloan = $dbh->prepare($strsth);
     $strsth="select * from items where items.barcode =? and issues.wthdrawn=1";
     my $qwthdrawn = $dbh->prepare($strsth);
@@ -114,10 +112,10 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
         if ($qwthdrawn->execute($barcode) &&$qwthdrawn->rows){
             push @errorloop, {'barcode'=>$barcode,'ERR_WTHDRAWN'=>1};
         }else{
-            $qupdate->execute($barcode);
-            $count += $qupdate->rows;
-# 			warn "$count";
-            if ($count){
+            my $item = GetItem('', $barcode);
+            if (defined $item){
+                ModItem({ datelastseen => $date }, undef, $item->{'itemnumber'});
+                $count++;
                 $qonloan->execute($barcode);
                 if ($qonloan->rows){
                     my $data = $qonloan->fetchrow_hashref;
@@ -130,7 +128,6 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
             }
         }
     }
-    $qupdate->finish;
     $qonloan->finish;
     $qwthdrawn->finish;
     $template->param(date=>format_date($date),Number=>$count);
