@@ -41,8 +41,21 @@ The installer comes complete with a Developer's Toolkit target ('dev') that
 can be used to get a development environment linked directly to revision
 control, to support rapid prototyping and an agile development process.
 
-3. Standard APIs - in addition to support for library standards for search
-and retrieval (SRU and Z39.50), Koha has native support for OpenSearch/RSS.
+3. Standard APIs - Koha 3 supports a number of important library search and
+retrieval standards and microformats, such as SRU/W, Z39.50
+(http://www.loc.gov/standards/sru/), UnAPI (http://www.loc.gov/standards/sru/)
+and COinS/OpenURL
+(http://ocoins.info; http://www.niso.org/committees/committee_ax.html).
+
+Also supported is the popular Internet standard: OpenSearch
+(http://opensearch.a9.com/) created by Amazon's A9.
+
+Records are stored internally in an SGML-like format and can be retrieved in
+MARCXML, Dublin Core, MODS, RSS, Atom, RDF-DC, SRW-DC, OAI-DC, and EndNote;
+and the OPAC can be used by citation tools such as Zotero. Creating new 
+export formats is a trivial exercise in writing XSLT; records can be passed
+through XSLT transformations either directly out of the index, or via a
+separate parsing function.
 
 To retrieve and interact with Circulation and Patron data, Koha 3 includes
 support for 3M's Standard Interchange Protocol (SIP2), using the OpenNCIP
@@ -58,11 +71,12 @@ http://wiki.koha.org/doku.php?id=en:development:web_services
 Koha 3 also includes pluggable authentication - easy integration with LDAP and 
 Active Directory via the Auth_with_ldap module.
 
-Amazon.com can be enabled to enrich bibliographic data with jacket covers, 
-professional reviews, ratings and comments from Amazon users, as well as point
-to 'Similar Items' within the catalog. OCLC's xISBN, and LibraryThing's
-ThingISBN can likewise be enabled to provide an 'Editions' tab on item detail
-pages. Service throttling is now available to keep within subscription limits.
+The Amazon.com module can be enabled to enrich bibliographic data with jacket
+covers,  professional reviews, ratings and comments from Amazon users, as well
+as point to 'Similar Items' within the catalog. OCLC's xISBN, and
+LibraryThing's ThingISBN can likewise be enabled to provide an 'Editions' tab
+on item detail pages. New with Koha 3 is service throttling for these services,
+to keep within subscription limits.
 
 4. Cross-platform, multi-RDBMS, Web-server agnostic - Run Koha on the platform
 of your choice: Linux, Windows, Mac OS X, FreeBSD, Solaris. Koha 3 also
@@ -71,7 +85,10 @@ under Apache2, IIS, or the web server of your choosing.
 
 5. Multi-lingual support - Koha was designed from the ground up for multilingual
 libraries. Koha 3 can handle Chinese, Japanese, and even right-to-left languages
-such as Arabic and Hebrew with ease.
+such as Arabic and Hebrew with ease (BiDi).
+
+Koha's indexe engine (Zebra)  can handle record formats containing _any_ UNICODE
+script, and utilize the ICU libraries created and maintained by IBM.
 
 You can translate Koha into your language using the built-in translation tools,
 or by visiting http://translate.koha.org.

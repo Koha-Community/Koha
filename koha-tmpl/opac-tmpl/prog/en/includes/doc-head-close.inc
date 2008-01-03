@@ -36,3 +36,5 @@
 	//]]>
 </script>	
 <!-- /TMPL_IF -->
+<link rel='unapi-server' type='application/xml' title='unAPI' href='/cgi-bin/koha/unapi'></link>
+<link rel="search" type="application/opensearchdescription+xml" title="Koha OpenSearch" href="/cgi-bin/koha/opensearch" />

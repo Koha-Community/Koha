@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+use CGI;
+use strict;
+use warnings;
+use C4::Context;
+use XML::Simple;
+use LWP::Simple;
+
+use LWP::UserAgent;
+use HTTP::Request::Common;
+
+my $cgi = new CGI;
+binmode(STDOUT, "utf8"); #output as utf8
+my $baseurl = C4::Context->preference('OPACBaseURL');
+
+my $id = $cgi->param('id');
+my $format = $cgi->param('format');
+if ($id && $format) {
+    # koha:isbn:0152018484
+    if ($id =~ /isbn/) {
+        $id =~ s/koha:isbn://;
+        my $url = "http://$baseurl:9998/biblios?version=1.1&operation=searchRetrieve&query=$id&startRecord=1&maximumRecords=20&recordSchema=$format";
+        my $content = get($url);
+        print $cgi->header( -type =>'application/xml' );
+        print $content;
+    }
+}
+
+else {
+
+print $cgi->header( -type =>'application/xml' );
+
+print "<?xml version='1.0' encoding='utf-8'  ?>
+<formats>
+<!-- <format name=\"opac\" type=\"text/html\"/> -->
+<!-- <format name=\"html\" type=\"text/html\"/> -->
+<!-- <format name=\"htmlholdings\" type=\"text/html\"/> -->
+<!-- <format name=\"html-full\" type=\"text/html\"/> -->
+<!-- <format name=\"htmlholdings-full\" type=\"text/html\"/> -->
+<!-- <format name=\"atom\" type=\"application/xml\" namespace_uri=\"http://www.w3.org/2005/Atom\" docs=\"http://www.ietf.org/rfc/rfc4287.txt\"/> -->
+<!-- <format name=\"atom-full\" type=\"application/xml\" namespace_uri=\"http://www.w3.org/2005/Atom\" docs=\"http://www.ietf.org/rfc/rfc4287.txt\"/> -->
+<format name=\"marcxml\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/MARC21/slim\" docs=\"http://www.loc.gov/marcxml/\" schema_location=\"http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd\"/>
+<format name=\"marcxml-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/MARC21/slim\" docs=\"http://www.loc.gov/marcxml/\" schema_location=\"http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd\"/>
+<format name=\"mods\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/mods.xsd\"/>
+<format name=\"mods-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/mods.xsd\"/>
+<format name=\"mods3\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/v3\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/v3/mods-3-1.xsd\"/>
+<format name=\"mods3-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/v3\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/v3/mods-3-1.xsd\"/>
+<format name=\"oai_dc\" type=\"application/xml\" namespace_uri=\"http://www.openarchives.org/OAI/2.0/oai_dc/\" schema_location=\"http://www.openarchives.org/OAI/2.0/oai_dc.xsd\"/>
+<format name=\"rdfdc\" type=\"application/xml\" namespace_uri=\"http://purl.org/dc/elements/1.1/\" schema_location=\"http://purl.org/dc/elements/1.1/\"/>
+<format name=\"rss2\" type=\"application/xml\"/>
+<format name=\"rss2-full\" type=\"application/xml\"/>
+<format name=\"srw_dc\" type=\"application/xml\" namespace_uri=\"info:srw/schema/1/dc-schema\" schema_location=\"http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd\"/>
+</formats>
+";
+}
