@@ -47,6 +47,7 @@ use C4::Reserves;
 use C4::Branch; # GetBranchName
 
 #use Smart::Comments;
+#use Data::Dumper;
 
 use vars qw($debug);
 
@@ -124,11 +125,10 @@ for (qw(debarred gonenoaddress lost borrowernotes)) {
 }
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
-
 $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
+my $catcode;
 if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
-
     my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
     foreach (qw(address city B_address B_city phone mobile zipcode)) {
         $data->{$_} = $data2->{$_};
@@ -136,9 +136,12 @@ if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
     my  ( $catcodes, $labels ) = 
         GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
     my $cnt = scalar(@$catcodes);
-    $template->param( 'CATCODE_MULTI' => 1)    if  $cnt > 1;
-    $template->param( 'IS_CHILD' => 1 );
+
+#     $cnt  =  1;
+    $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
+
 
 if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
     $template->param( printethnicityline => 1 );
@@ -239,7 +242,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     push( @issuedata, \%row );
 }
 
-##################################################################################
+### ###############################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
 if ($borrowernumber) {
