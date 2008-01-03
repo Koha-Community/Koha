@@ -247,6 +247,55 @@ sub ModDateLastSeen {
     ModItem({ itemlost => 0, datelastseen => $today->output("iso") }, undef, $itemnumber);
 }
 
+=head1 LIMITED USE FUNCTIONS
+
+The following functions, while part of the public API,
+are not exported.  This is generally because they are
+meant to be used by only one script for a specific
+purpose, and should not be used in any other context
+without careful thought.
+
+=cut
+
+=head2 GetMarcItem
+
+=over 4
+
+Returns MARC::Record of the item passed in parameter.
+This function is meant for use only in C<cataloguing/additem.pl>,
+where it is needed to support that script's MARC-like
+editor.
+
+=back
+
+=cut
+
+sub GetMarcItem {
+    my ( $biblionumber, $itemnumber ) = @_;
+
+    # GetMarcItem has been revised so that it does the following:
+    #  1. Gets the item information from the items table.
+    #  2. Converts it to a MARC field for storage in the bib record.
+    #
+    # The previous behavior was:
+    #  1. Get the bib record.
+    #  2. Return the MARC tag corresponding to the item record.
+    #
+    # The difference is that one treats the items row as authoritative,
+    # while the other treats the MARC representation as authoritative
+    # under certain circumstances.
+
+    my $itemrecord = GetItem($itemnumber);
+
+    # Tack on 'items.' prefix to column names so that TransformKohaToMarc will work.
+    # Also, don't emit a subfield if the underlying field is blank.
+    my $mungeditem = { map {  $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  } keys %{ $itemrecord } };
+
+    my $itemmarc = TransformKohaToMarc($mungeditem);
+    return $itemmarc;
+
+}
+
 =head1 PRIVATE FUNCTIONS AND VARIABLES
 
 The following functions are not meant to be called
