@@ -152,13 +152,15 @@ sub commit_batch {
     my ($template, $import_batch_id) = @_;
 
     my $job = undef;
+    $dbh->{AutoCommit} = 0;
     my $callback = sub {};
     if ($runinbackground) {
         $job = put_in_background($import_batch_id);
-        $callback = progress_callback($job);
+        $callback = progress_callback($job, $dbh);
     }
     my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
         BatchCommitBibRecords($import_batch_id, 50, $callback);
+    $dbh->commit();
 
     my $results = {
         did_commit => 1,
@@ -178,14 +180,16 @@ sub commit_batch {
 sub revert_batch {
     my ($template, $import_batch_id) = @_;
 
+    $dbh->{AutoCommit} = 0;
     my $job = undef;
     my $callback = sub {};
     if ($runinbackground) {
         $job = put_in_background($import_batch_id);
-        $callback = progress_callback($job);
+        $callback = progress_callback($job, $dbh);
     }
     my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = 
         BatchRevertBibRecords($import_batch_id, 50, $callback);
+    $dbh->commit();
 
     my $results = {
         did_revert => 1,
@@ -239,9 +243,11 @@ sub put_in_background {
 
 sub progress_callback {
     my $job = shift;
+    my $dbh = shift;
     return sub {
         my $progress = shift;
         $job->progress($progress);
+        $dbh->commit();
     }
 }
 

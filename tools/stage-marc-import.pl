@@ -44,6 +44,7 @@ use C4::BackgroundJob;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
 
 my $fileID=$input->param('uploadedfileid');
 my $runinbackground = $input->param('runinbackground');
@@ -117,15 +118,16 @@ if ($completedJobID) {
 
         # if we get here, we're a child that has detached
         # itself from Apache
-        $staging_callback = staging_progress_callback($job);
-        $matching_callback = matching_progress_callback($job);
+        $staging_callback = staging_progress_callback($job, $dbh);
+        $matching_callback = matching_progress_callback($job, $dbh);
 
     }
 
     # FIXME branch code
     my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
                                                                                    $comments, '', $parse_items, 0,
-                                                                                   50, staging_progress_callback($job));
+                                                                                   50, staging_progress_callback($job, $dbh));
+    $dbh->commit();
     my $num_with_matches = 0;
     my $checked_matches = 0;
     my $matcher_failed = 0;
@@ -135,8 +137,9 @@ if ($completedJobID) {
         if (defined $matcher) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 50, matching_progress_callback($job));
+            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 50, matching_progress_callback($job, $dbh));
             SetImportBatchMatcher($batch_id, $matcher_id);
+            $dbh->commit();
         } else {
             $matcher_failed = 1;
         }
@@ -180,17 +183,21 @@ exit 0;
 
 sub staging_progress_callback {
     my $job = shift;
+    my $dbh = shift;
     return sub {
         my $progress = shift;
         $job->progress($progress);
+        $dbh->commit();
     }
 }
 
 sub matching_progress_callback {
     my $job = shift;
+    my $dbh = shift;
     my $start_progress = $job->progress();
     return sub {
         my $progress = shift;
         $job->progress($start_progress + $progress);
+        $dbh->commit();
     }
 }
