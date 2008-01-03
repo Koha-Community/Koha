@@ -297,12 +297,14 @@ without careful thought.
 
 =over 4
 
+my $item_marc = GetMarcItem($biblionumber, $itemnumber);
+
+=back
+
 Returns MARC::Record of the item passed in parameter.
 This function is meant for use only in C<cataloguing/additem.pl>,
 where it is needed to support that script's MARC-like
 editor.
-
-=back
 
 =cut
 
@@ -582,8 +584,6 @@ sub _set_defaults_for_add {
     $item->{'wthdrawn'}   = 0 unless exists $item->{'wthdrawn'}   and defined $item->{'wthdrawn'};
 }
 
-=head2 _set_calculated_values
-
 =head2 _koha_new_item
 
 =over 4
@@ -749,7 +749,7 @@ sub _marc_from_item_hash {
 
 =over 4
 
-_add_item_field_to_biblio($record, $biblionumber, $frameworkcode);
+_add_item_field_to_biblio($item_marc, $biblionumber, $frameworkcode);
 
 =back
 
@@ -777,9 +777,14 @@ sub _add_item_field_to_biblio {
 
 =over
 
-&_replace_item_field_in_biblio( $record, $biblionumber, $itemnumber, $frameworkcode )
+&_replace_item_field_in_biblio($item_marc, $biblionumber, $itemnumber, $frameworkcode)
 
 =back
+
+Given a MARC::Record C<$item_marc> containing one tag with the MARC 
+representation of the item, examine the biblio MARC
+for the corresponding tag for that item and 
+replace it with the tag from C<$item_marc>.
 
 =cut
 
@@ -792,10 +797,19 @@ sub _replace_item_field_in_biblio {
     my ($itemtag,$itemsubfield) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
     my $itemField = $ItemRecord->field($itemtag);
     my @items = $completeRecord->field($itemtag);
+    my $found = 0;
     foreach (@items) {
         if ($_->subfield($itemsubfield) eq $itemnumber) {
             $_->replace_with($itemField);
+            $found = 1;
         }
+    }
+  
+    unless ($found) { 
+        # If we haven't found the matching field,
+        # just add it.  However, this means that
+        # there is likely a bug.
+        $completeRecord->append_fields($itemField);
     }
 
     # save the record
