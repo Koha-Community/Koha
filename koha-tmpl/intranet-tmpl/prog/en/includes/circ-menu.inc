@@ -25,6 +25,7 @@
    <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
     <!-- /TMPL_IF -->
     <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
+	<li>Home Library: <!-- TMPL_IF NAME="branchcode" --><!-- TMPL_VAR NAME="branchcode" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
 </ul></div>
 <div id="menu">
 <ul>

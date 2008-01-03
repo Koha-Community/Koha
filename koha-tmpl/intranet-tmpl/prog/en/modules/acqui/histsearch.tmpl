@@ -23,8 +23,8 @@
 					<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="<!-- TMPL_VAR name="title"-->" /></li>
 					<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="<!-- TMPL_VAR name="author" -->" /></li>
 					<li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="<!-- TMPL_VAR name="name" -->" /></li>
-					<li><label for="from">From: </label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
-						<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" />
+					<li><label for="from">From: </label> 
+						<input type="text" readonly="readonly" size="10" id="from" name="fromplacedon" value="<!-- TMPL_VAR name="from_placed_on" -->" /> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
 						<script language="JavaScript" type="text/javascript">
 							function validate1(date) {
 								var day = date.getDate();
@@ -51,8 +51,8 @@
 								}
 							);
 						</script></li>
-						<li><label for="to">To: </label> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
-						<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" />
+						<li><label for="to">To: </label> 
+						<input readonly="readonly" size="10" id="to" name="toplacedon" value="<!-- TMPL_VAR name="to_placed_on" -->" type="text" /> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
 						<script type="text/javascript">
 							function validate2(date) {
 								var day = date.getDate();
