@@ -69,6 +69,7 @@ if ( $op eq 'multi' ) {
     }
     $template->param(
         MULTI          => 1,
+        CATCODE_MULTI          => 1,
         borrowernumber => $borrowernumber,
         CAT_LOOP       => \@rows,
     );
