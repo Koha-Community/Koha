@@ -131,9 +131,9 @@ while (my ($biblionumber) = $sth->fetchrow) {
                         next unless $_; # skip  empty values (multiple spaces)
                         # remove any accented char
                         # if the entry is already here, improve weight
-                        if ($result{$key}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
+                        if ($result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d);/) {
                             my $weight=$1+1;
-                            $result{$key}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
                             $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         # otherwise, create it, with weight=1
                         } else {
@@ -149,10 +149,10 @@ while (my ($biblionumber) = $sth->fetchrow) {
                 foreach (split / /,$line) {
                         next unless $_;
 #                     warn $record->as_formatted."$_ =>".$title;
-                        if ($result{__RAW__}->{"$_"} =~ /$biblionumber,$title\-(\d);/) {
+                        if ($result{__RAW__}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d);/) {
                             my $weight=$1+1;
 #                             $weight++;
-                            $result{__RAW__}->{"$_"} =~ s/$biblionumber,$title\-(\d);//;
+                            $result{__RAW__}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
                             $result{__RAW__}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
                             $result{__RAW__}->{"$_"}.="$biblionumber,$title-1;";
