@@ -192,7 +192,7 @@ sub ModItem {
 
     $item->{'itemnumber'} = $itemnumber;
     _set_derived_columns_for_mod($item);
-    # FIXME add fixes
+    _do_column_fixes_for_mod($item);
     # FIXME add checks
 
     # update items table
@@ -359,6 +359,57 @@ sub _set_derived_columns_for_mod {
     }
 }
 
+=head2 _do_column_fixes_for_mod
+
+=over 4
+
+_do_column_fixes_for_mod($item);
+
+=back
+
+Given an item hashref containing one or more
+columns to modify, fix up certain values.
+Specifically, set to 0 any passed value
+of C<notforloan>, C<damaged>, C<itemlost>, or
+C<wthdrawn> that is either undefined or
+contains the empty string.
+
+=cut
+
+sub _do_column_fixes_for_mod {
+    my $item = shift;
+
+    if (exists $item->{'notforloan'} and
+        (not defined $item->{'notforloan'} or $item->{'notforloan'} eq '')) {
+        $item->{'notforloan'} = 0;
+    }
+    if (exists $item->{'damaged'} and
+        (not defined $item->{'damaged'} or $item->{'damaged'} eq '')) {
+        $item->{'damaged'} = 0;
+    }
+    if (exists $item->{'itemlost'} and
+        (not defined $item->{'itemlost'} or $item->{'itemlost'} eq '')) {
+        $item->{'itemlost'} = 0;
+    }
+    if (exists $item->{'wthdrawn'} and
+        (not defined $item->{'wthdrawn'} or $item->{'wthdrawn'} eq '')) {
+        $item->{'wthdrawn'} = 0;
+    }
+}
+
+=head2 _get_single_item_column
+
+=over 4
+
+_get_single_item_column($column, $itemnumber);
+
+=back
+
+Retrieves the value of a single column from an C<items>
+row specified by C<$itemnumber>.
+
+=cut
+
 sub _get_single_item_column {
     my $column = shift;
     my $itemnumber = shift;
@@ -440,10 +491,10 @@ sub _set_defaults_for_add {
     }
 
     # various item status fields cannot be null
-    $item->{'notforloan'} = 0 unless exists $item->{'notforloan'};
-    $item->{'damaged'}    = 0 unless exists $item->{'damaged'};
-    $item->{'itemlost'}   = 0 unless exists $item->{'itemlost'};
-    $item->{'wthdrawn'}   = 0 unless exists $item->{'wthdrawn'};
+    $item->{'notforloan'} = 0 unless exists $item->{'notforloan'} and defined $item->{'notforloan'};
+    $item->{'damaged'}    = 0 unless exists $item->{'damaged'}    and defined $item->{'damaged'};
+    $item->{'itemlost'}   = 0 unless exists $item->{'itemlost'}   and defined $item->{'itemlost'};
+    $item->{'wthdrawn'}   = 0 unless exists $item->{'wthdrawn'}   and defined $item->{'wthdrawn'};
 }
 
 =head2 _set_calculated_values
