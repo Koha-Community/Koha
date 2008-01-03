@@ -471,8 +471,14 @@ if ($op eq "bulkedit"){
 
     if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
     #Edit Catalogue Permissions
+        my $editable_subfields = GetManagedTagSubfields();
+        # change '--' to '&mdash;' to avoid escaping issues
+        for (my $i = 0; $i <= $#{$editable_subfields}; $i++) {
+            $editable_subfields->[$i]->{subfielddesc} =~ s/--/&mdash;/g;
+            $editable_subfields->[$i]->{tagdesc} =~ s/--/&mdash;/g;
+        }
         $template->param(bulkedit => 1);
-        $template->param(tagsubfields=>GetManagedTagSubfields());
+        $template->param(tagsubfields=>$editable_subfields);
     }
 }
 

@@ -2089,6 +2089,12 @@ sub ModBiblios {
     }
     my ( $bntag,   $bnsubf )   = GetMarcFromKohaField('biblio.biblionumber');
     my ( $itemtag, $itemsubf ) = GetMarcFromKohaField('items.itemnumber');
+    if ($tag eq $itemtag) {
+        # do not allow the embedded item tag to be 
+        # edited from here
+        warn "Attempting to edit item tag via C4::Search::ModBiblios -- not allowed";
+        return (0, []);
+    }
     foreach my $usmarc (@$listbiblios) {
         my $record;
         $record = eval { MARC::Record->new_from_usmarc($usmarc) };
@@ -2096,15 +2102,14 @@ sub ModBiblios {
         if ($@) {
 
             # usmarc is not a valid usmarc May be a biblionumber
-            if ( $tag eq $itemtag ) {
-                my $bib = GetBiblioFromItemNumber($usmarc);
-                $record = GetMarcItem( $bib->{'biblionumber'}, $usmarc );
-                $biblionumber = $bib->{'biblionumber'};
-            }
-            else {
-                $record       = GetMarcBiblio($usmarc);
-                $biblionumber = $usmarc;
-            }
+            # FIXME - sorry, please let's figure out whether
+            #         this function is to be passed a list of
+            #         record numbers or a list of MARC::Record
+            #         objects.  The former is probably better
+            #         because the MARC records supplied by Zebra
+            #         may be not current.
+            $record       = GetMarcBiblio($usmarc);
+            $biblionumber = $usmarc;
         }
         else {
             if ( $bntag >= 010 ) {
