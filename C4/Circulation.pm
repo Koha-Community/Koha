@@ -446,7 +446,7 @@ sub TooMany {
 
     # check the 2 parameters (branch / itemtype / default categorycode
     $sth->execute( '*', $type, $branch );
-    my $result = $sth->fetchrow_hashref;
+    $result = $sth->fetchrow_hashref;
 #     warn "*, $type, $branch = ".Data::Dumper::Dumper($result);
 
     if ( $result->{maxissueqty} ne '' ) {
@@ -470,7 +470,7 @@ sub TooMany {
     
     # check the 1 parameters (default branch / itemtype / categorycode
     $sth->execute( $cat_borrower, $type, '*' );
-    my $result = $sth->fetchrow_hashref;
+    $result = $sth->fetchrow_hashref;
 #     warn "$cat_borrower, $type, * = ".Data::Dumper::Dumper($result);
     
     if ( $result->{maxissueqty} ne '' ) {
@@ -494,7 +494,7 @@ sub TooMany {
 
     # check the 0 parameters (default branch / itemtype / default categorycode
     $sth->execute( '*', $type, '*' );
-    my $result = $sth->fetchrow_hashref;
+    $result = $sth->fetchrow_hashref;
 #     warn "*, $type, * = ".Data::Dumper::Dumper($result);
 
     if ( $result->{maxissueqty} ne '' ) {
@@ -507,7 +507,7 @@ sub TooMany {
 	}
     # now checking for total
     $sth->execute( '*', '*', '*' );
-    my $result = $sth->fetchrow_hashref;
+    $result = $sth->fetchrow_hashref;
     if ( $result->{maxissueqty} ne '' ) {
 		warn "checking total";
 		$sth2->execute( $borrower->{'borrowernumber'}, $type );
