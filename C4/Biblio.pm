@@ -60,7 +60,6 @@ push @EXPORT, qw(
   GetMarcUrls
   &GetUsedMarcStructure
 
-  &GetItemnumberFromBarcode
   &GetXmlBiblio
 
   &GetAuthorisedValueDesc
@@ -292,51 +291,25 @@ sub AddBiblioAndItems {
         $item->{'biblioitemnumber'} = $biblioitemnumber;
 
         # check for duplicate barcode
-        my %item_errors = CheckItemPreSave($item);
+        my %item_errors = C4::Items::CheckItemPreSave($item);
         if (%item_errors) {
             push @errors, _repack_item_errors($item_sequence_num, $item, \%item_errors);
             push @bad_item_fields, $item_field;
             next ITEMFIELD;
         }
-        my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
-        if ($duplicate_barcode) {
-            warn "ERROR: cannot add item $item->{'barcode'} for biblio $biblionumber: duplicate barcode\n";
-        }
 
-        # Make sure item statuses are set to 0 if empty or NULL in both the item and the MARC
-        for ('notforloan', 'damaged','itemlost','wthdrawn') {
-            if (!$item->{$_} or $item->{$_} eq "") {
-                $item->{$_} = 0;
-                &MARCitemchange( $temp_item_marc, "items.$_", 0 );
-            }
-        }
- 
-        # FIXME - dateaccessioned stuff copied from AddItem
-        if ( !$item->{'dateaccessioned'} || $item->{'dateaccessioned'} eq '' ) {
-
-            # find today's date
-            my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
-                localtime(time);
-            $year += 1900;
-            $mon  += 1;
-            my $date =
-            "$year-" . sprintf( "%0.2d", $mon ) . "-" . sprintf( "%0.2d", $mday );
-            $item->{'dateaccessioned'} = $date;
-            &MARCitemchange( $temp_item_marc, "items.dateaccessioned", $date );
-        }
-
-        my ( $itemnumber, $error ) = &_koha_new_items( $dbh, $item, $item->{barcode} );
+        C4::Items::_set_defaults_for_add($item);
+        C4::Items::_set_derived_columns_for_add($item);
+        my ( $itemnumber, $error ) = C4::Items::_koha_new_item( $dbh, $item, $item->{barcode} );
         warn $error if $error;
         push @itemnumbers, $itemnumber; # FIXME not checking error
+        $item->{'itemnumber'} = $itemnumber;
 
-        # FIXME - not copied from AddItem
-        # FIXME - AddItems equiv code about passing $sth to TransformKohaToMarcOneField is stupid
-        &MARCitemchange( $temp_item_marc, "items.itemnumber", $itemnumber );
-       
         &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item")
         if C4::Context->preference("CataloguingLog"); 
 
-        $item_field->replace_with($temp_item_marc->field($itemtag));
+        my $new_item_marc = C4::Items::_marc_from_item_hash($item, $frameworkcode);
+        $item_field->replace_with($new_item_marc->field($itemtag));
     }
 
     # remove any MARC item fields for rejected items
@@ -517,92 +490,6 @@ sub DelBiblio {
     return;
 }
 
-=head2 CheckItemPreSave
-
-=over 4
-
-    my $item_ref = TransformMarcToKoha($marc, 'items');
-    # do stuff
-    my %errors = CheckItemPreSave($item_ref);
-    if (exists $errors{'duplicate_barcode'}) {
-        print "item has duplicate barcode: ", $errors{'duplicate_barcode'}, "\n";
-    } elsif (exists $errors{'invalid_homebranch'}) {
-        print "item has invalid home branch: ", $errors{'invalid_homebranch'}, "\n";
-    } elsif (exists $errors{'invalid_holdingbranch'}) {
-        print "item has invalid holding branch: ", $errors{'invalid_holdingbranch'}, "\n";
-    } else {
-        print "item is OK";
-    }
-
-=back
-
-Given a hashref containing item fields, determine if it can be
-inserted or updated in the database.  Specifically, checks for
-database integrity issues, and returns a hash containing any
-of the following keys, if applicable.
-
-=over 2
-
-=item duplicate_barcode
-
-Barcode, if it duplicates one already found in the database.
-
-=item invalid_homebranch
-
-Home branch, if not defined in branches table.
-
-=item invalid_holdingbranch
-
-Holding branch, if not defined in branches table.
-
-=back
-
-This function does NOT implement any policy-related checks,
-e.g., whether current operator is allowed to save an
-item that has a given branch code.
-
-=cut
-
-sub CheckItemPreSave {
-    my $item_ref = shift;
-
-    my %errors = ();
-
-    # check for duplicate barcode
-    if (exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'}) {
-        my $existing_itemnumber = GetItemnumberFromBarcode($item_ref->{'barcode'});
-        if ($existing_itemnumber) {
-            if (!exists $item_ref->{'itemnumber'}                       # new item
-                or $item_ref->{'itemnumber'} != $existing_itemnumber) { # existing item
-                $errors{'duplicate_barcode'} = $item_ref->{'barcode'};
-            }
-        }
-    }
-
-    # check for valid home branch
-    if (exists $item_ref->{'homebranch'} and defined $item_ref->{'homebranch'}) {
-        my $branch_name = GetBranchName($item_ref->{'homebranch'});
-        unless (defined $branch_name) {
-            # relies on fact that branches.branchname is a non-NULL column,
-            # so GetBranchName returns undef only if branch does not exist
-            $errors{'invalid_homebranch'} = $item_ref->{'homebranch'};
-        }
-    }
-
-    # check for valid holding branch
-    if (exists $item_ref->{'holdingbranch'} and defined $item_ref->{'holdingbranch'}) {
-        my $branch_name = GetBranchName($item_ref->{'holdingbranch'});
-        unless (defined $branch_name) {
-            # relies on fact that branches.branchname is a non-NULL column,
-            # so GetBranchName returns undef only if branch does not exist
-            $errors{'invalid_holdingbranch'} = $item_ref->{'holdingbranch'};
-        }
-    }
-
-    return %errors;
-
-}
-
 =head2 GetBiblioData
 
 =over 4
@@ -682,27 +569,6 @@ sub GetBiblioItemData {
     $sth->finish;
     return ($data);
 }    # sub &GetBiblioItemData
-
-=head2 GetItemnumberFromBarcode
-
-=over 4
-
-$result = GetItemnumberFromBarcode($barcode);
-
-=back
-
-=cut
-
-sub GetItemnumberFromBarcode {
-    my ($barcode) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $rq =
-      $dbh->prepare("SELECT itemnumber FROM items WHERE items.barcode=?");
-    $rq->execute($barcode);
-    my ($result) = $rq->fetchrow;
-    return ($result);
-}
 
 =head2 GetBiblioItemByBiblioNumber
 
@@ -2713,36 +2579,6 @@ sub _AddBiblioNoZebra {
 }
 
 
-=head2 MARCitemchange
-
-=over 4
-
-&MARCitemchange( $record, $itemfield, $newvalue )
-
-Function to update a single value in an item field.
-Used twice, could probably be replaced by something else, but works well...
-
-=back
-
-=back
-
-=cut
-
-sub MARCitemchange {
-    my ( $record, $itemfield, $newvalue ) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    my ( $tagfield, $tagsubfield ) =
-      GetMarcFromKohaField( $itemfield, "" );
-    if ( ($tagfield) && ($tagsubfield) ) {
-        my $tag = $record->field($tagfield);
-        if ($tag) {
-            $tag->update( $tagsubfield => $newvalue );
-            $record->delete_field($tag);
-            $record->insert_fields_ordered($tag);
-        }
-    }
-}
 =head2 _find_value
 
 =over 4
@@ -3146,102 +2982,6 @@ sub _koha_add_biblioitem {
     }
     $sth->finish();
     return ($bibitemnum,$error);
-}
-
-=head2 _koha_new_items
-
-=over 4
-
-my ($itemnumber,$error) = _koha_new_items( $dbh, $item, $barcode );
-
-=back
-
-=cut
-
-sub _koha_new_items {
-    my ( $dbh, $item, $barcode ) = @_;
-    my $error;
-    my ($items_cn_sort) = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
-
-    # if dateaccessioned is provided, use it. Otherwise, set to NOW()
-    if ( $item->{'dateaccessioned'} eq '' || !$item->{'dateaccessioned'} ) {
-        my $today = C4::Dates->new();    
-        $item->{'dateaccessioned'} =  $today->output("iso"); #TODO: check time issues
-    }
-    my $query = 
-           "INSERT INTO items SET
-            biblionumber        = ?,
-            biblioitemnumber    = ?,
-            barcode             = ?,
-            dateaccessioned     = ?,
-            booksellerid        = ?,
-            homebranch          = ?,
-            price               = ?,
-            replacementprice    = ?,
-            replacementpricedate = NOW(),
-            datelastborrowed    = ?,
-            datelastseen        = NOW(),
-            stack               = ?,
-            notforloan          = ?,
-            damaged             = ?,
-            itemlost            = ?,
-            wthdrawn            = ?,
-            itemcallnumber      = ?,
-            restricted          = ?,
-            itemnotes           = ?,
-            holdingbranch       = ?,
-            paidfor             = ?,
-            location            = ?,
-            onloan              = ?,
-            issues              = ?,
-            renewals            = ?,
-            reserves            = ?,
-            cn_source           = ?,
-            cn_sort             = ?,
-            ccode               = ?,
-            itype               = ?,
-            materials           = ?,
-            uri                 = ?
-          ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute(
-            $item->{'biblionumber'},
-            $item->{'biblioitemnumber'},
-            $barcode,
-            $item->{'dateaccessioned'},
-            $item->{'booksellerid'},
-            $item->{'homebranch'},
-            $item->{'price'},
-            $item->{'replacementprice'},
-            $item->{datelastborrowed},
-            $item->{stack},
-            $item->{'notforloan'},
-            $item->{'damaged'},
-            $item->{'itemlost'},
-            $item->{'wthdrawn'},
-            $item->{'itemcallnumber'},
-            $item->{'restricted'},
-            $item->{'itemnotes'},
-            $item->{'holdingbranch'},
-            $item->{'paidfor'},
-            $item->{'location'},
-            $item->{'onloan'},
-            $item->{'issues'},
-            $item->{'renewals'},
-            $item->{'reserves'},
-            $item->{'items.cn_source'},
-            $items_cn_sort,
-            $item->{'ccode'},
-            $item->{'itype'},
-            $item->{'materials'},
-            $item->{'uri'},
-    );
-    my $itemnumber = $dbh->{'mysql_insertid'};
-    if ( defined $sth->errstr ) {
-        $error.="ERROR in _koha_new_items $query".$sth->errstr;
-    }
-    $sth->finish();
-    return ( $itemnumber, $error );
 }
 
 =head2 _koha_delete_biblio

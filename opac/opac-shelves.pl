@@ -71,6 +71,7 @@ use C4::Circulation;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 
 use vars qw($debug);
 

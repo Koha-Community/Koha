@@ -31,6 +31,7 @@ use MARC::Charset;
 
 use C4::Context;
 use C4::Biblio;
+use C4::Items;
 use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;

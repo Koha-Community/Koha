@@ -28,6 +28,8 @@ use C4::Dates qw/format_date format_date_in_iso/;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
+use C4::Branch;
+require C4::Reserves;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -46,6 +48,8 @@ my $VERSION = 3.00;
     ModItemTransfer
     DelItem
 
+    CheckItemPreSave
+
     GetItemStatus
     GetItemLocation
     GetLostItems
@@ -55,6 +59,7 @@ my $VERSION = 3.00;
     GetItemsByBiblioitemnumber
     GetItemsInfo
     get_itemnumbers_of
+    GetItemnumberFromBarcode
 );
 
 =head1 NAME
@@ -378,6 +383,92 @@ sub DelItem {
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$itemnumber,"item") 
         if C4::Context->preference("CataloguingLog");
+}
+
+=head2 CheckItemPreSave
+
+=over 4
+
+    my $item_ref = TransformMarcToKoha($marc, 'items');
+    # do stuff
+    my %errors = CheckItemPreSave($item_ref);
+    if (exists $errors{'duplicate_barcode'}) {
+        print "item has duplicate barcode: ", $errors{'duplicate_barcode'}, "\n";
+    } elsif (exists $errors{'invalid_homebranch'}) {
+        print "item has invalid home branch: ", $errors{'invalid_homebranch'}, "\n";
+    } elsif (exists $errors{'invalid_holdingbranch'}) {
+        print "item has invalid holding branch: ", $errors{'invalid_holdingbranch'}, "\n";
+    } else {
+        print "item is OK";
+    }
+
+=back
+
+Given a hashref containing item fields, determine if it can be
+inserted or updated in the database.  Specifically, checks for
+database integrity issues, and returns a hash containing any
+of the following keys, if applicable.
+
+=over 2
+
+=item duplicate_barcode
+
+Barcode, if it duplicates one already found in the database.
+
+=item invalid_homebranch
+
+Home branch, if not defined in branches table.
+
+=item invalid_holdingbranch
+
+Holding branch, if not defined in branches table.
+
+=back
+
+This function does NOT implement any policy-related checks,
+e.g., whether current operator is allowed to save an
+item that has a given branch code.
+
+=cut
+
+sub CheckItemPreSave {
+    my $item_ref = shift;
+
+    my %errors = ();
+
+    # check for duplicate barcode
+    if (exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'}) {
+        my $existing_itemnumber = GetItemnumberFromBarcode($item_ref->{'barcode'});
+        if ($existing_itemnumber) {
+            if (!exists $item_ref->{'itemnumber'}                       # new item
+                or $item_ref->{'itemnumber'} != $existing_itemnumber) { # existing item
+                $errors{'duplicate_barcode'} = $item_ref->{'barcode'};
+            }
+        }
+    }
+
+    # check for valid home branch
+    if (exists $item_ref->{'homebranch'} and defined $item_ref->{'homebranch'}) {
+        my $branch_name = GetBranchName($item_ref->{'homebranch'});
+        unless (defined $branch_name) {
+            # relies on fact that branches.branchname is a non-NULL column,
+            # so GetBranchName returns undef only if branch does not exist
+            $errors{'invalid_homebranch'} = $item_ref->{'homebranch'};
+        }
+    }
+
+    # check for valid holding branch
+    if (exists $item_ref->{'holdingbranch'} and defined $item_ref->{'holdingbranch'}) {
+        my $branch_name = GetBranchName($item_ref->{'holdingbranch'});
+        unless (defined $branch_name) {
+            # relies on fact that branches.branchname is a non-NULL column,
+            # so GetBranchName returns undef only if branch does not exist
+            $errors{'invalid_holdingbranch'} = $item_ref->{'holdingbranch'};
+        }
+    }
+
+    return %errors;
+
 }
 
 =head1 EXPORTED SPECIAL ACCESSOR FUNCTIONS
@@ -1034,6 +1125,27 @@ sub get_itemnumbers_of {
     }
 
     return \%itemnumbers_of;
+}
+
+=head2 GetItemnumberFromBarcode
+
+=over 4
+
+$result = GetItemnumberFromBarcode($barcode);
+
+=back
+
+=cut
+
+sub GetItemnumberFromBarcode {
+    my ($barcode) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $rq =
+      $dbh->prepare("SELECT itemnumber FROM items WHERE items.barcode=?");
+    $rq->execute($barcode);
+    my ($result) = $rq->fetchrow;
+    return ($result);
 }
 
 =head1 LIMITED USE FUNCTIONS

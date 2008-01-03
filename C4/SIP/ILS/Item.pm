@@ -15,6 +15,7 @@ use Sys::Syslog qw(syslog);
 use ILS::Transaction;
 
 use C4::Biblio;
+use C4::Items;
 use C4::Circulation;
 use C4::Members;
 
