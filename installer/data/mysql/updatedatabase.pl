@@ -821,6 +821,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "3.00.00.041";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # Strictly speaking it is not necessary to explicitly change
+    # NULL values to 0, because the ALTER TABLE statement will do that.
+    # However, setting them first avoids a warning.
+    $dbh->do("UPDATE items SET notforloan = 0 WHERE notforloan IS NULL");
+    $dbh->do("UPDATE items SET damaged = 0 WHERE damaged IS NULL");
+    $dbh->do("UPDATE items SET itemlost = 0 WHERE itemlost IS NULL");
+    $dbh->do("UPDATE items SET wthdrawn = 0 WHERE wthdrawn IS NULL");
+    $dbh->do("ALTER TABLE items
+                MODIFY notforloan tinyint(1) NOT NULL default 0,
+                MODIFY damaged    tinyint(1) NOT NULL default 0,
+                MODIFY itemlost   tinyint(1) NOT NULL default 0,
+                MODIFY wthdrawn   tinyint(1) NOT NULL default 0");
+	print "Upgrade to $DBversion done (disallow NULL in several item status columns)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
@@ -884,4 +902,3 @@ sub SetVersion {
 }
 exit;
 
-# Revision 1.172  2007/07/19 10:21:22  hdl
