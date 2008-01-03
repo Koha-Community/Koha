@@ -458,7 +458,15 @@ sub BatchCommitBibRecords {
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'imported') {
             $num_ignored++;
         }
+
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
+
+        # remove any item tags - rely on BatchCommitItems
+        my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+        foreach my $item_field ($marc_record->field($item_tag)) {
+            $marc_record->delete_field($item_field);
+        }
+
         if ($overlay_action eq 'create_new' or
             ($overlay_action eq 'replace' and $rowref->{'overlay_status'} eq 'no_match')) {
             $num_added++;
@@ -479,7 +487,6 @@ sub BatchCommitBibRecords {
             # remove item fields so that they don't get
             # added again if record is reverted
             my $old_marc = MARC::Record->new_from_xml($oldxml, 'UTF-8', $rowref->{'encoding'});
-            my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
             foreach my $item_field ($old_marc->field($item_tag)) {
                 $old_marc->delete_field($item_field);
             }
