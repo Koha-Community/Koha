@@ -1,20 +1,3 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Online Help &rsaquo; Circulation &rsaquo; Issues</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
-
-
-<h1>Circulation -- Issues</h1>
-
-<p>Before you begin, it is very important that you take note of the branch and printer settings and change them if necessary. This should only have to be done the first time you do circulations from a workstation, after which a browser cookie will remember the correct settings. If you do circulations under the wrong branch settings (for example, your branch setting is "Suburb," but you are actually working at the "Downtown" branch), then Koha will reset the location of all items scanned to the incorrect branch (Suburb) and the statistical reports will credit all circulations to the wrong branch.</p>
-
-<p>Now start by scanning the patron's barcode or type in their name to find their account. Once Koha has found the patron, you will see a new form for scanning or typing the item's identifying number (usually a barcode).</p>
-
-<p>If you wish to have this item and all subsequent items in this transaction to have a date due other than the default date due defined for the item type, use the "Sticky Due Date" to set the date due before scanning the first item.</p>
-
-<p>If the item can be issued without problems, it will be done immediatly and shown (with other patron issues) at bottom.</p>
-
-<p>If the issuing is problematic, then another box will appear and ask for confirmation if possible. If the issuing is really impossible (for example, the barcode does not exist), then you can't confirm the issue. If it is possible but has something that needs confirmation (like item being issued to another patron, or patron having issued too many items), then you must confirm the issuing. If the confirmation means another operation (if item is issued to another patron, then issuing also means make the return), then it's also done</p>
-
+<!-- TMPL_INCLUDE name="help-top.inc" -->
+<h1>Circulation Check Out (Issues)</h1>   <h2>Q: How do I check out an item to a patron?</h2>  <p> A: Start by scanning the patron&rsquo;s barcode or type in their name to find their account. Once Koha has found the patron, you will see a new form for scanning or typing the item&rsquo;s identifying number (usually a barcode). If the item can be issued without problems, it will be done immediately and shown with other patron issues at bottom. </p>  <h2>Q: How do I set up a sticky date?</h2> <p>A: If you wish to have this item and all subsequent items in this transaction to have a date due other than the default date due defined for the item type, use the &ldquo;Sticky Due Date&rdquo; to set the date due before scanning the first item. </p>  <h2>Q: What to do I do if there is a problem with an issue?</h2>  <p>A: If there is a problem with an issue, then a box will appear and ask for confirmation, if possible. Confirming will override the system and issue the item. </p>  <h2>Q: What can I do with impossible issues?</h2>  <p> A:  If the issuing is really impossible (for example, the barcode does not exist), then you can&rsquo;t confirm the issue.    </p>   <h2>Q: What happens if an item is checked out to another borrower?</h2> <p> A: Confirming will checkout the issue and automatically return the item on the other borrower account.   </p>  <h3>INFORMATION: BRANCH AND PRINTER SETTINGS.</h3>  <p>Before you begin, it is very important that you take note of the branch and printer settings and change them if necessary. This should only have to be done the first time you do circulations from a workstation, after which a browser cookie will remember the correct settings. If you do circulations under the wrong branch settings then Koha will reset the location of all items scanned to the incorrect branch and the statistical reports will credit all circulations to the wrong branch. </p>  
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
