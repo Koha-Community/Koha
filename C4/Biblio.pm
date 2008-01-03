@@ -41,7 +41,7 @@ use vars qw($VERSION @ISA @EXPORT);
 # EXPORTED FUNCTIONS.
 
 # to add biblios or items
-push @EXPORT, qw( &AddBiblio &AddItem &AddBiblioAndItems );
+push @EXPORT, qw( &AddBiblio &AddBiblioAndItems );
 
 # to get something
 push @EXPORT, qw(
@@ -86,13 +86,9 @@ push @EXPORT, qw(
 # To modify something
 push @EXPORT, qw(
   &ModBiblio
-  &ModItem
-  &ModItemTransfer
   &ModBiblioframework
   &ModZebra
   &ModItemInMarc
-  &ModItemInMarconefield
-  &ModDateLastSeen
 );
 
 # To delete something
@@ -107,7 +103,6 @@ push @EXPORT, qw(
 # but don't use them unless you're a core developer ;-)
 push @EXPORT, qw(
   &ModBiblioMarc
-  &AddItemInMarc
 );
 
 # Others functions
@@ -397,75 +392,6 @@ sub _repack_item_errors {
     return @repacked_errors;
 }
 
-=head2 AddItem
-
-=over 2
-
-    $biblionumber = AddItem( $record, $biblionumber)
-    Exported function (core API) for adding a new item to Koha
-
-=back
-
-=cut
-
-sub AddItem {
-    my ( $record, $biblionumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    # add item in old-DB
-    my $frameworkcode = GetFrameworkCode( $biblionumber );
-    my $item = &TransformMarcToKoha( $dbh, $record, $frameworkcode );
-
-    # needs old biblionumber and biblioitemnumber
-    $item->{'biblionumber'} = $biblionumber;
-    my $sth =
-      $dbh->prepare(
-        "SELECT biblioitemnumber,itemtype FROM biblioitems WHERE biblionumber=?"
-      );
-    $sth->execute( $item->{'biblionumber'} );
-    my $itemtype;
-    ( $item->{'biblioitemnumber'}, $itemtype ) = $sth->fetchrow;
-    $sth =
-      $dbh->prepare(
-        "SELECT notforloan FROM itemtypes WHERE itemtype=?");
-    $sth->execute( C4::Context->preference('item-level_itypes') ? $item->{'itype'} : $itemtype );
-    my $notforloan = $sth->fetchrow;
-    ##Change the notforloan field if $notforloan found
-    if ( $notforloan > 0 ) {
-        $item->{'notforloan'} = $notforloan;
-        &MARCitemchange( $record, "items.notforloan", $notforloan );
-    }
-    if ( !$item->{'dateaccessioned'} || $item->{'dateaccessioned'} eq '' ) {
-
-        # find today's date
-        my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
-          localtime(time);
-        $year += 1900;
-        $mon  += 1;
-        my $date =
-          "$year-" . sprintf( "%0.2d", $mon ) . "-" . sprintf( "%0.2d", $mday );
-        $item->{'dateaccessioned'} = $date;
-        &MARCitemchange( $record, "items.dateaccessioned", $date );
-    }
-    my ( $itemnumber, $error ) = &_koha_new_items( $dbh, $item, $item->{barcode} );
-    # add itemnumber to MARC::Record before adding the item.
-    $sth = $dbh->prepare(
-"SELECT tagfield,tagsubfield 
-FROM marc_subfield_structure
-WHERE frameworkcode=? 
-    AND kohafield=?"
-      );
-    &TransformKohaToMarcOneField( $sth, $record, "items.itemnumber", $itemnumber,
-        $frameworkcode );
-
-    # add the item
-    &AddItemInMarc( $record, $item->{'biblionumber'},$frameworkcode );
-   
-    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
-        if C4::Context->preference("CataloguingLog");
-    
-    return ($item->{biblionumber}, $item->{biblioitemnumber},$itemnumber);
-}
-
 =head2 ModBiblio
 
     ModBiblio( $record,$biblionumber,$frameworkcode);
@@ -527,76 +453,6 @@ sub ModBiblio {
     return 1;
 }
 
-=head2 ModItem
-
-=over 2
-
-Exported function (core API) for modifying an item in Koha.
-
-=back
-
-=cut
-
-sub ModItem {
-    my ( $record, $biblionumber, $itemnumber, $delete, $new_item_hashref )
-      = @_;
-    
-    #logging
-    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","MODIFY",$itemnumber,$record->as_formatted) 
-        if C4::Context->preference("CataloguingLog");
-      
-    my $dbh = C4::Context->dbh;
-    
-    # if we have a MARC record, we're coming from cataloging and so
-    # we do the whole routine: update the MARC and zebra, then update the koha
-    # tables
-    if ($record) {
-        my $frameworkcode = GetFrameworkCode( $biblionumber );
-        ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode );
-        my $olditem       = TransformMarcToKoha( $dbh, $record, $frameworkcode,'items');
-        $olditem->{'biblionumber'} = $biblionumber;
-        my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
-        $sth->execute($biblionumber);
-        my ($biblioitemnumber) = $sth->fetchrow;
-        $sth->finish(); 
-        $olditem->{'biblioitemnumber'} = $biblioitemnumber;
-        _koha_modify_item( $dbh, $olditem );
-        return $biblionumber;
-    }
-
-    # otherwise, we're just looking to modify something quickly
-    # (like a status) so we just update the koha tables
-    elsif ($new_item_hashref) {
-        _koha_modify_item( $dbh, $new_item_hashref );
-    }
-}
-
-sub ModItemTransfer {
-    my ( $itemnumber, $frombranch, $tobranch ) = @_;
-    
-    my $dbh = C4::Context->dbh;
-    
-    #new entry in branchtransfers....
-    my $sth = $dbh->prepare(
-        "INSERT INTO branchtransfers (itemnumber, frombranch, datesent, tobranch)
-        VALUES (?, ?, NOW(), ?)");
-    $sth->execute($itemnumber, $frombranch, $tobranch);
-    #update holdingbranch in items .....
-     $sth= $dbh->prepare(
-          "UPDATE items SET holdingbranch = ? WHERE items.itemnumber = ?");
-    $sth->execute($tobranch,$itemnumber);
-    &ModDateLastSeen($itemnumber);
-    $sth = $dbh->prepare(
-        "SELECT biblionumber FROM items WHERE itemnumber=?"
-      );
-    $sth->execute($itemnumber);
-    while ( my ( $biblionumber ) = $sth->fetchrow ) {
-        &ModItemInMarconefield( $biblionumber, $itemnumber,
-            'items.holdingbranch', $tobranch );
-    }
-    return;
-}
-
 =head2 ModBiblioframework
 
     ModBiblioframework($biblionumber,$frameworkcode);
@@ -612,46 +468,6 @@ sub ModBiblioframework {
     );
     $sth->execute($frameworkcode, $biblionumber);
     return 1;
-}
-
-=head2 ModItemInMarconefield
-
-=over
-
-modify only 1 field in a MARC item (mainly used for holdingbranch, but could also be used for status modif - moving a book to "lost" on a long overdu for example)
-&ModItemInMarconefield( $biblionumber, $itemnumber, $itemfield, $newvalue )
-
-=back
-
-=cut
-
-sub ModItemInMarconefield {
-    my ( $biblionumber, $itemnumber, $itemfield, $newvalue ) = @_;
-    my $dbh = C4::Context->dbh;
-    if ( !defined $newvalue ) {
-        $newvalue = "";
-    }
-
-    my $record = GetMarcItem( $biblionumber, $itemnumber );
-    my ($tagfield, $tagsubfield) = GetMarcFromKohaField( $itemfield,'');
-    # FIXME - the condition is done this way because GetMarcFromKohaField
-    # returns (0, 0) if it can't field a MARC tag for the kohafield.  However,
-    # some fields like items.wthdrawn are mapped to subfield $0, making the
-    # customary test of "if ($tagfield && $tagsubfield)" incorrect.
-    # GetMarcFromKohaField should probably be returning (undef, undef), making
-    # the correct test "if (defined $tagfield && defined $tagsubfield)", but
-    # this would be a large change and consequently deferred for after 3.0.
-    if (not(int($tagfield) == 0 && int($tagsubfield) == 0)) { 
-        my $tag = $record->field($tagfield);
-        if ($tag) {
-#             my $tagsubs = $record->field($tagfield)->subfield($tagsubfield);
-            $tag->update( $tagsubfield => $newvalue );
-            $record->delete_field($tag);
-            $record->insert_fields_ordered($tag);
-            my $frameworkcode = GetFrameworkCode( $biblionumber );
-            &ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode );
-        }
-    }
 }
 
 =head2 ModItemInMarc
@@ -686,24 +502,6 @@ sub ModItemInMarc {
     ModZebra($biblionumber,"specialUpdate","biblioserver",$completeRecord);
 }
 
-=head2 ModDateLastSeen
-
-&ModDateLastSeen($itemnum)
-Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking
-C<$itemnum> is the item number
-
-=cut
-
-sub ModDateLastSeen {
-    my ($itemnum) = @_;
-    my $dbh       = C4::Context->dbh;
-    my $sth       =
-      $dbh->prepare(
-          "UPDATE items SET itemlost=0,datelastseen  = NOW() WHERE items.itemnumber = ?"
-      );
-    $sth->execute($itemnum);
-    return;
-}
 =head2 DelBiblio
 
 =over
@@ -4212,54 +4010,6 @@ sub _koha_new_items {
     return ( $itemnumber, $error );
 }
 
-=head2 _koha_modify_item
-
-=over 4
-
-my ($itemnumber,$error) =_koha_modify_item( $dbh, $item, $op );
-
-=back
-
-=cut
-
-sub _koha_modify_item {
-    my ( $dbh, $item ) = @_;
-    my $error;
-
-    # calculate items.cn_sort
-    if($item->{'itemcallnumber'}) {
-        # This works, even when user is setting the call number blank (in which case
-        # how would we get here to calculate new (blank) of items.cn_sort?).
-        # 
-        # Why?  Because at present the only way to update itemcallnumber is via
-        # additem.pl; since it uses a MARC data-entry form, TransformMarcToKoha
-        # already has created $item->{'items.cn_sort'} and set it to undef because the 
-        # subfield for items.cn_sort in the framework is specified as ignored, meaning
-        # that it is not supplied or passed to the form.  Thus, if the user has
-        # blanked itemcallnumber, there is already a undef value for $item->{'items.cn_sort'}.
-        #
-        # This is subtle; it is also fragile.
-        $item->{'items.cn_sort'} = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
-    }
-    my $query = "UPDATE items SET ";
-    my @bind;
-    for my $key ( keys %$item ) {
-        $query.="$key=?,";
-        push @bind, $item->{$key};
-    }
-    $query =~ s/,$//;
-    $query .= " WHERE itemnumber=?";
-    push @bind, $item->{'itemnumber'};
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    if ( $dbh->errstr ) {
-        $error.="ERROR in _koha_modify_item $query".$dbh->errstr;
-        warn $error;
-    }
-    $sth->finish();
-    return ($item->{'itemnumber'},$error);
-}
-
 =head2 _koha_delete_biblio
 
 =over 4
@@ -4454,38 +4204,6 @@ sub ModBiblioMarc {
         $biblionumber );
     $sth->finish;
     return $biblionumber;
-}
-
-=head2 AddItemInMarc
-
-=over 4
-
-$newbiblionumber = AddItemInMarc( $record, $biblionumber, $frameworkcode );
-
-Add an item in a MARC record and save the MARC record
-
-Function exported, but should NOT be used, unless you really know what you're doing
-
-=back
-
-=cut
-
-sub AddItemInMarc {
-
-    # pass the MARC::Record to this function, and it will create the records in the marc tables
-    my ( $record, $biblionumber, $frameworkcode ) = @_;
-    my $newrec = &GetMarcBiblio($biblionumber);
-
-    # create it
-    my @fields = $record->fields();
-    foreach my $field (@fields) {
-        $newrec->append_fields($field);
-    }
-
-    # FIXME: should we be making sure the biblionumbers are the same?
-    my $newbiblionumber =
-      &ModBiblioMarc( $newrec, $biblionumber, $frameworkcode );
-    return $newbiblionumber;
 }
 
 =head2 z3950_extended_services

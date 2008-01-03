@@ -28,6 +28,7 @@ use C4::Dates qw/format_date/;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
+use C4::Items;
 
 use Date::Calc qw(
   Today

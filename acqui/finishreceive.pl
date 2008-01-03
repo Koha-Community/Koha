@@ -28,6 +28,7 @@ use C4::Output;
 use C4::Context;
 use C4::Acquisition;
 use C4::Biblio;
+use C4::Items;
 use C4::Search;
 
 my $input=new CGI;
@@ -75,7 +76,7 @@ if ($quantityrec > $origquantityrec ) {
                     "items.itype"          => $itemtype[$cnt],
                     "items.location"          => $location[$cnt],
                     "items.loan"             => 0, });
-		AddItem($itemRecord,$biblionumber);
+        AddItemFromMarc($itemRecord,$biblionumber);
     }
 }
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");

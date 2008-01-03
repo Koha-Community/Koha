@@ -25,6 +25,7 @@ use POSIX qw(strftime);
 use C4::Suggestions;
 use C4::Koha;
 use C4::Biblio;
+use C4::Items;
 use C4::Search;
 use C4::Letters;
 use C4::Log; # logaction
@@ -1695,7 +1696,7 @@ sub ItemizeSerials {
                     $marcrecord->insert_fields_ordered($newField);
                 }
             }
-            AddItem( $marcrecord, $data->{'biblionumber'} );
+            AddItemFromMarc( $marcrecord, $data->{'biblionumber'} );
             return 1;
         }
         return ( 0, @errors );

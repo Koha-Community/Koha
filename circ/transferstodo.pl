@@ -35,6 +35,7 @@ use Date::Calc qw(
 );
 use C4::Koha;
 use C4::Biblio;
+use C4::Items;
 
 my $input = new CGI;
 

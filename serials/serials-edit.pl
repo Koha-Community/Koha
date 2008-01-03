@@ -67,6 +67,7 @@ use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Biblio;
+use C4::Items;
 use C4::Koha;
 use C4::Output;
 use C4::Context;
@@ -241,12 +242,12 @@ if ($op eq 'serialchangestatus') {
             $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
             # if barcode exists, don't create, but report The problem.
             unless ($exists){
-              my ($biblionumber,$bibitemnum,$itemnumber) = AddItem($record,$itemhash{$item}->{'bibnum'});
+              my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
               AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
             }
           } else {
             #modify item
-            my ($oldbiblionumber,$oldbibnum,$itemnumber) = ModItem($record,$itemhash{$item}->{'bibnum'},$item,0);
+            my ($oldbiblionumber,$oldbibnum,$itemnumber) = ModItemFromMarc($record,$itemhash{$item}->{'bibnum'},$item);
           }
         }
       }

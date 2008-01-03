@@ -21,6 +21,7 @@ use strict;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
+use C4::Items;
 require Exporter;
 
 
@@ -528,7 +529,7 @@ sub BatchCommitItems {
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
         my $item_marc = MARC::Record->new_from_xml($row->{'marcxml'}, 'UTF-8', $row->{'encoding'});
-        # FIXME - duplicate barcode check needs to become part of AddItem()
+        # FIXME - duplicate barcode check needs to become part of AddItemFromMarc()
         my $item = TransformMarcToKoha($dbh, $item_marc);
         my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
         if ($duplicate_barcode) {
@@ -539,7 +540,7 @@ sub BatchCommitItems {
             $updsth->execute();
             $num_items_errored++;
         } else {
-            my ($item_biblionumber, $biblioitemnumber, $itemnumber) = AddItem($item_marc, $biblionumber);
+            my ($item_biblionumber, $biblioitemnumber, $itemnumber) = AddItemFromMarc($item_marc, $biblionumber);
             my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
             $updsth->bind_param(1, 'imported');
             $updsth->bind_param(2, $itemnumber);

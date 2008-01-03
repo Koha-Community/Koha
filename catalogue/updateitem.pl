@@ -22,6 +22,7 @@ use warnings;
 use CGI;
 use C4::Context;
 use C4::Biblio;
+use C4::Items;
 use C4::Output;
 use C4::Circulation;
 use C4::Accounts;
@@ -51,32 +52,22 @@ for ($damaged,$itemlost,$wthdrawn) {
 }
 
 # modify MARC item if input differs from items table.
-if ( $itemnotes ne $item_data_hashref->{'itemnotes'}) {
-    ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemnotes', $itemnotes);
-    $item_data_hashref->{'itemnotes'} = $itemnotes;
+my $item_changes = {};
+if (defined $itemnotes and ($itemnotes ne $item_data_hashref->{'itemnotes'})) {
+    $item_changes->{'itemnotes'} = $itemnotes;
 } elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
-    ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemlost', $itemlost);
-    $item_data_hashref->{'itemlost'} = $itemlost;
+    $item_changes->{'itemlost'} = $itemlost;
 } elsif ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
-    ModItemInMarconefield($biblionumber, $itemnumber, 'items.wthdrawn', $wthdrawn);
-    $item_data_hashref->{'wthdrawn'} = $wthdrawn;
+    $item_changes->{'wthdrawn'} = $wthdrawn;
 } elsif ($damaged ne $item_data_hashref->{'damaged'}) {
-    ModItemInMarconefield($biblionumber, $itemnumber, 'items.damaged', $damaged);
-    $item_data_hashref->{'damaged'} = $damaged;
+    $item_changes->{'damaged'} = $damaged;
 } else {
     #nothings changed, so do nothing.
     print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
 }
 
-# FIXME: eventually we'll use Biblio.pm, but it's currently too buggy  (is this current ??)
-# yes as of dec 30 2007, ModItem doesn't update zebra for status changes, it requires
-# a MARC record be passed in
-#ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
-#   &C4::Biblio::_koha_modify_item($dbh,$item_data_hashref);
-    my $sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
-    $sth->execute($wthdrawn,$itemlost,$damaged,$itemnotes,$itemnumber);
-    &ModZebra($biblionumber,"specialUpdate","biblioserver");
-    
+ModItem($item_changes, $biblionumber, $itemnumber);
+
 # check issues iff itemlost.
 # http://wiki.koha.org/doku.php?id=en:development:kohastatuses
 # lost ==1 Lost, lost==2 longoverdue, lost==3 lost and paid for

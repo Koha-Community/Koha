@@ -23,6 +23,7 @@ use strict;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
@@ -115,7 +116,7 @@ if ($op eq "additem") {
     my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
     push @errors,"barcode_not_unique" if($exist_itemnumber);
     # if barcode exists, don't create, but report The problem.
-    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItem($record,$biblionumber) unless ($exist_itemnumber);
+    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
     if ($exist_itemnumber) {
         $nextop = "additem";
         $itemrecord = $record;
@@ -174,7 +175,7 @@ if ($op eq "additem") {
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
     } else {
-        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItem($itemtosave,$biblionumber,$itemnumber,0);
+        my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
     $itemnumber="";
     }
     $nextop="additem";
