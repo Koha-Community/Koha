@@ -88,7 +88,6 @@ push @EXPORT, qw(
   &ModBiblio
   &ModBiblioframework
   &ModZebra
-  &ModItemInMarc
 );
 
 # To delete something
@@ -468,38 +467,6 @@ sub ModBiblioframework {
     );
     $sth->execute($frameworkcode, $biblionumber);
     return 1;
-}
-
-=head2 ModItemInMarc
-
-=over
-
-&ModItemInMarc( $record, $biblionumber, $itemnumber, $frameworkcode )
-
-=back
-
-=cut
-
-sub ModItemInMarc {
-    my ( $ItemRecord, $biblionumber, $itemnumber, $frameworkcode) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    # get complete MARC record & replace the item field by the new one
-    my $completeRecord = GetMarcBiblio($biblionumber);
-    my ($itemtag,$itemsubfield) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-    my $itemField = $ItemRecord->field($itemtag);
-    my @items = $completeRecord->field($itemtag);
-    foreach (@items) {
-        if ($_->subfield($itemsubfield) eq $itemnumber) {
-#             $completeRecord->delete_field($_);
-            $_->replace_with($itemField);
-        }
-    }
-    # save the record
-    my $sth = $dbh->prepare("UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
-    $sth->execute( $completeRecord->as_usmarc(), $completeRecord->as_xml_record(),$biblionumber );
-    $sth->finish;
-    ModZebra($biblionumber,"specialUpdate","biblioserver",$completeRecord);
 }
 
 =head2 DelBiblio

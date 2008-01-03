@@ -201,7 +201,7 @@ sub ModItem {
     # update biblio MARC XML
     my $whole_item = GetItem($itemnumber);
     my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode);
-    ModItemInMarc($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
+    _replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
     
     logaction(C4::Context->userenv->{'number'},"CATALOGUING","MODIFY",$itemnumber,$new_item_marc->as_formatted)
         if C4::Context->preference("CataloguingLog");
@@ -687,4 +687,34 @@ sub _add_item_field_to_biblio {
 
     ModBiblioMarc($biblio_marc, $biblionumber, $frameworkcode);
 }
+
+=head2 _replace_item_field_in_biblio
+
+=over
+
+&_replace_item_field_in_biblio( $record, $biblionumber, $itemnumber, $frameworkcode )
+
+=back
+
+=cut
+
+sub _replace_item_field_in_biblio {
+    my ($ItemRecord, $biblionumber, $itemnumber, $frameworkcode) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    # get complete MARC record & replace the item field by the new one
+    my $completeRecord = GetMarcBiblio($biblionumber);
+    my ($itemtag,$itemsubfield) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+    my $itemField = $ItemRecord->field($itemtag);
+    my @items = $completeRecord->field($itemtag);
+    foreach (@items) {
+        if ($_->subfield($itemsubfield) eq $itemnumber) {
+            $_->replace_with($itemField);
+        }
+    }
+
+    # save the record
+    ModBiblioMarc($completeRecord, $biblionumber, $frameworkcode);
+}
+
 1;

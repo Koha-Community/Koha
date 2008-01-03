@@ -1013,20 +1013,14 @@ sub AddIssue {
         );
         $sth->finish;
         $item->{'issues'}++;
-        $sth =
-          $dbh->prepare(
-            "UPDATE items SET issues=?, holdingbranch=?, itemlost=0, datelastborrowed  = now(), onloan = ? WHERE itemnumber=?");
-        $sth->execute(
-            $item->{'issues'},
-            C4::Context->userenv->{'branch'},
-			$dateduef->output('iso'),
-            $item->{'itemnumber'}
-        );
-        $sth->finish;
-        &ModDateLastSeen( $item->{'itemnumber'} );
-        my $record = GetMarcItem( $item->{'biblionumber'}, $item->{'itemnumber'} );
-        my $frameworkcode = GetFrameworkCode( $item->{'biblionumber'} );                                                                                         
-        ModItemInMarc( $record, $item->{'biblionumber'}, $item->{'itemnumber'}, $frameworkcode );
+        ModItem({ issues           => $item->{'issues'},
+                  holdingbranch    => C4::Context->userenv->{'branch'},
+                  itemlost         => 0,
+                  datelastborrowed => C4::Dates->new()->output('iso'),
+                  onloan           => $dateduef->output('iso'),
+                }, $item->{'biblionumber'}, $item->{'itemnumber'});
+        ModDateLastSeen( $item->{'itemnumber'} );
+        
         # If it costs to borrow this book, charge it to the patron's account.
         my ( $charge, $itemtype ) = GetIssuingCharges(
             $item->{'itemnumber'},
@@ -1235,12 +1229,7 @@ sub AddReturn {
 		$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
 	}
         ModDateLastSeen( $iteminformation->{'itemnumber'} );
-		my $sth = $dbh->prepare("UPDATE items SET onloan = NULL where itemnumber = ?");
-		$sth->execute($iteminformation->{'itemnumber'});
-		$sth->finish();
-		my $record = GetMarcItem( $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'} );
-		my $frameworkcode = GetFrameworkCode( $biblio->{'biblionumber'} );
-		ModItemInMarc( $record, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'}, $frameworkcode );
+        ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
 		
 		if ($iteminformation->{borrowernumber}){
 			($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
@@ -1712,12 +1701,7 @@ sub AddRenewal {
 
     # Update the renewal count on the item, and tell zebra to reindex
     $renews = $biblio->{'renewals'} + 1;
-    $sth = $dbh->prepare("UPDATE items SET renewals = ? WHERE itemnumber = ?");
-    $sth->execute($renews,$itemnumber);
-    $sth->finish();
-    my $record = GetMarcItem( $biblio->{'biblionumber'}, $itemnumber );
-    my $frameworkcode = GetFrameworkCode( $biblio->{'biblionumber'} );
-    ModItemInMarc( $record, $biblio->{'biblionumber'}, $itemnumber, $frameworkcode );
+    ModItem({ renewals => $renews }, $biblio->{'biblionumber'}, $itemnumber);
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
