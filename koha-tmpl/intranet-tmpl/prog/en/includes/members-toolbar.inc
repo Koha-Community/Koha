@@ -14,7 +14,7 @@ function confirm_updatechild() {
     var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult catergory? This cannot be undone.');
    
     if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->';
+            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
     }
 }
 
@@ -27,7 +27,7 @@ function confirm_reregistration() {
 
 function update_child() {
     var borrowernumbervalue=document.form.borrowernumber.value; 
-<!-- TMPL_IF NAME="catcode_multi" -->
+<!-- TMPL_IF NAME="CATCODE_MULTI" -->
  window.open('update-child.pl?op=multi&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
 <!-- TMPL_ELSE -->
  confirm_updatechild();
