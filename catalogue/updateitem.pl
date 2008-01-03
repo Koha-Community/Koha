@@ -53,8 +53,10 @@ for ($damaged,$itemlost,$wthdrawn) {
 
 # modify MARC item if input differs from items table.
 my $item_changes = {};
-if (defined $itemnotes and ($itemnotes ne $item_data_hashref->{'itemnotes'})) {
-    $item_changes->{'itemnotes'} = $itemnotes;
+if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
+    if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
+        $item_changes->{'itemnotes'} = $itemnotes;
+    }
 } elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
     $item_changes->{'itemlost'} = $itemlost;
 } elsif ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
