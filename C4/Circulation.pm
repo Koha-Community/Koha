@@ -1436,9 +1436,7 @@ sub FixAccountForLostAndReturned {
 			VALUES (?,?,?,?)");
 		$usth->execute($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset);
 		$usth->finish;
-		$usth = $dbh->prepare("UPDATE items SET paidfor='' WHERE itemnumber=?");
-		$usth->execute($itm);
-		$usth->finish;
+        ModItem({ paidfor => '' }, undef, $itm);
 	}
 	$sth->finish;
 	return;
@@ -1968,18 +1966,10 @@ Simple methode for updating hodlingbranch in items BDD line
 =cut
 
 sub UpdateHoldingbranch {
-	my ( $branch,$itmenumber ) = @_;
-	my $dbh = C4::Context->dbh;	
-# first step validate the actual line of transfert .
-	my $sth =
-        	$dbh->prepare(
-			"update items set holdingbranch = ? where itemnumber= ?"
-          	);
-        	$sth->execute($branch,$itmenumber);
-        	$sth->finish;
-        
-	
+	my ( $branch,$itemnumber ) = @_;
+    ModItem({ holdingbranch => $branch }, undef, $itemnumber);
 }
+
 =head2 CheckValidDatedue
 
 $newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);

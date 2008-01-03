@@ -39,6 +39,7 @@ use C4::Circulation;
 use C4::Overdues;
 use Date::Manip;
 use C4::Biblio;
+use C4::Items;
 
 open (FILE,'>/tmp/fines') || die;
 # FIXME
@@ -120,9 +121,7 @@ for (my $i=0;$i<scalar(@$data);$i++){
                     $sth->execute($data->[$i]->{'borrowernumber'},$data->[$i]->{'itemnumber'},
                     $accountno,$cost,"Lost item $item->{'title'} $item->{'barcode'} $due",$cost);
                     $sth->finish;
-                    $sth=$dbh->prepare("UPDATE items SET itemlost=2 WHERE itemnumber=?");
-                    $sth->execute($data->[$i]->{'itemnumber'});
-                    $sth->finish;
+                    ModItem({ itemlost => 2 }, undef, $data->[$i]->{'itemnumber'});
                 }
             }
         }

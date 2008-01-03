@@ -23,6 +23,7 @@ require Exporter;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
+use C4::Items;
 
 #use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
@@ -279,9 +280,7 @@ sub returnlost {
       ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
     my $bor =
 "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
-    $sth = $dbh->prepare("UPDATE items SET paidfor=? WHERE itemnumber=?");
-    $sth->execute( "Paid for by $bor $date", $itemnum );
-    $sth->finish;
+    ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
 }
 
 =head2 manualinvoice
