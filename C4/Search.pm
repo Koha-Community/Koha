@@ -1408,7 +1408,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             }
         }    # notforloan, item level and biblioitem level
         my ( $availableitemscount, $onloanitemscount, $otheritemscount );
-        my $maxitems =
+        $maxitems =
           ( C4::Context->preference('maxItemsinSearchResults') )
           ? C4::Context->preference('maxItemsinSearchResults') - 1
           : 1;
