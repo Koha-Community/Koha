@@ -28,7 +28,6 @@ use C4::Dates qw/format_date format_date_in_iso/;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
-use C4::Reserves;
 
 use vars qw($VERSION @ISA @EXPORT);
 
