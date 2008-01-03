@@ -16,12 +16,11 @@
 
 <div class="yui-g">
 <!-- TMPL_IF NAME="wrongbranch" -->
-<div class="message"><h3 class="problem">Independent Branches is on, and you
-are trying to return this item to a branch other than its homebranch, NOT RETURNED
-</h3></div>
+<div class="dialog alert"><h3>Cannot Check In</h3><p>This item must be checked in at its home library. <strong>NOT CHECKED IN</strong></p>
+</div>
 <!-- /TMPL_IF -->
 <!-- case of a mistake in transfer loop -->
-<!-- TMPL_IF Name="WrongTransfer" --><div class="dialog message"><!-- WrongTransfer --><h3 class="problem">Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
+<!-- TMPL_IF Name="WrongTransfer" --><div class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
 <!-- TMPL_IF Name="wborcnum"--><h5>Hold for:</h5> 
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
             <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
@@ -104,7 +103,7 @@ are trying to return this item to a branch other than its homebranch, NOT RETURN
 		</div>
     <!-- /TMPL_IF -->
 
-    <!-- case of a return of item, but with no reservation after, if the item must be  returned to its homebranch -->
+    <!-- case of a return of item, but with no reservation after, if the item must be returned to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
 	<!-- transfer -->
 	<div class="dialog message">
