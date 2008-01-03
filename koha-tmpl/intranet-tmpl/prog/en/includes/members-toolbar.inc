@@ -28,7 +28,7 @@ function confirm_reregistration() {
 function update_child() {
     var borrowernumbervalue=document.form.borrowernumber.value; 
 <!-- TMPL_IF NAME="catcode_multi" -->
- window.open('update-child.pl?op=multi&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no');
+ window.open('update-child.pl?op=multi&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
 <!-- TMPL_ELSE -->
  confirm_updatechild();
 <!-- /TMPL_IF -->
