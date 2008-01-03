@@ -23,6 +23,7 @@ require Exporter;
 use C4::Context;
 use CGI;
 use C4::Biblio;
+use C4::Items;
 use C4::Auth;
 use C4::Output;
 use C4::Dates;
@@ -34,7 +35,7 @@ my $type  = $query->param('type');
 my $biblionumber = $query->param('biblionumber');
 
 # change back when ive fixed request.pl
-my @items      = GetItemInfosOf($biblionumber);
+my @items      = GetItemsInfo($biblionumber);
 my $norequests = 1;
 foreach my $itm (@items) {
     $norequests = 0 unless $itm->{'notforloan'};
