@@ -775,7 +775,7 @@ sub _marc_from_item_hash {
    
     # Tack on 'items.' prefix to column names so lookup from MARC frameworks will work
     # Also, don't emit a subfield if the underlying field is blank.
-    my $mungeditem = { map {  $item->{$_} ne '' ? 
+    my $mungeditem = { map {  (defined($item->{$_}) and $item->{$_} ne '') ? 
                                 (/^items\./ ? ($_ => $item->{$_}) : ("items.$_" => $item->{$_})) 
                                 : ()  } keys %{ $item } }; 
 
