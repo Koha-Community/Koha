@@ -1821,8 +1821,6 @@ sub TransformMarcToKoha {
 }
 
 sub _get_inverted_marc_field_map {
-    my $relations = C4::Context->marcfromkohafield;
-
     my $field_map = {};
     my $relations = C4::Context->marcfromkohafield;
 
