@@ -173,7 +173,7 @@ SELECT branchcode,
         branches => \@branches,
     );
 
-    if (defined $dataaqbookfund->{branchcode}) {
+    if ( $dataaqbookfund->{branchcode}) {
         $template->param(
             disable_branchselection => 1,
             branch => $dataaqbookfund->{branchcode},
