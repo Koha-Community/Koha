@@ -28,7 +28,7 @@ use Algorithm::CheckDigits;
 # use Data::Dumper;
 # use Smart::Comments;
 
-$VERSION = 0.01;
+$VERSION = 0.02;
 
 =head1 NAME
 
@@ -61,13 +61,13 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
   &set_active_layout &by_order
   &build_text_dropbox
   &delete_layout &get_active_layout
-&get_highest_batch
+  &get_highest_batch
+  &deduplicate_batch
 );
 
 =item get_label_options;
 
 	$options = get_label_options()
-
 
 Return a pointer on a hash list containing info from labels_conf table in Koha DB.
 
@@ -564,7 +564,6 @@ sub save_layout {
 
         $options = get_label_items()
 
-
 Returns an array of references-to-hash, whos keys are the field from the biblio, biblioitems, items and labels tables in the Koha database.
 
 =cut
@@ -601,12 +600,12 @@ sub get_label_items {
 		where itemnumber=? and  i.biblioitemnumber=bi.biblioitemnumber and                  
 		bi.biblionumber=b.biblionumber"; 
      
-	 my $sth1 = $dbh->prepare($query1);
+	 	my $sth1 = $dbh->prepare($query1);
         $sth1->execute( $data->{'itemnumber'} );
 
         my $data1 = $sth1->fetchrow_hashref();
-
         $data1->{'labelno'}  = $i1;
+        $data1->{'labelid'}  = $data->{'labelid'};
         $data1->{'batch_id'} = $batch_id;
         $data1->{'summary'} =
           "$data1->{'barcode'}, $data1->{'title'}, $data1->{'isbn'}";
@@ -629,6 +628,42 @@ sub GetItemFields {
 
     );
     return @fields;
+}
+
+sub deduplicate_batch {
+	my $batch_id = shift or return undef;
+	my $query = "
+	SELECT DISTINCT
+			batch_id,itemnumber,
+			count(labelid) as count 
+	FROM     labels 
+	WHERE    batch_id = ?
+	GROUP BY itemnumber,batch_id
+	HAVING   count > 1
+	ORDER BY batch_id,
+			 count DESC  ";
+	my $sth = C4::Context->dbh->prepare($query);
+	$sth->execute($batch_id);
+	$sth->rows or return undef;
+
+	my $del_query = qq(
+	DELETE 
+	FROM     labels 
+	WHERE    batch_id = ?
+	AND      itemnumber = ?
+	ORDER BY timestamp ASC
+	);
+	my $killed = 0;
+	while (my $data = $sth->fetchrow_hashref()) {
+		my $itemnumber = $data->{itemnumber} or next;
+		my $limit      = $data->{count} - 1  or next;
+		my $sth2 = C4::Context->dbh->prepare("$del_query  LIMIT $limit");
+		# die sprintf "$del_query LIMIT %s\n (%s, %s)", $limit, $batch_id, $itemnumber;
+		# $sth2->execute($batch_id, C4::Context->dbh->quote($data->{itemnumber}), $data->{count} - 1)
+		$sth2->execute($batch_id, $itemnumber) and
+			$killed += ($data->{count} - 1);
+	}
+	return $killed;
 }
 
 sub DrawSpineText {
@@ -1220,5 +1255,6 @@ __END__
 =head1 AUTHOR
 
 Mason James <mason@katipo.co.nz>
+
 =cut
 
