@@ -28,6 +28,7 @@ use C4::Search;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 use C4::Acquisition;
 use C4::Search;
 use C4::Dates qw( DHTMLcalendar );
@@ -104,7 +105,7 @@ if ( $op eq "do_search" ) {
 			for my $bibdata (keys %{$results[$i]}) {
 #warn Dumper($bibdata);        
 #warn Dumper($results[$i]->{$bibdata});
-				$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
+				$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata} unless exists $item_results->{$item}{$bibdata};
 			}
             push @results2, $item_results->{$item};
         }
