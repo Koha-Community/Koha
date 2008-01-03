@@ -48,18 +48,17 @@
 	<h1>Items with no checkouts</h1>
 	<form method="post" action="/cgi-bin/koha/reports/catalogue_out.pl">
 	
-	<table>
-		<thead>
-			<tr>
-			<th>Limit to </th>
-			<th>By </th>
-			<th colspan="2">Filters</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<select name="Limit">
+	<fieldset class="rows">
+		<ol>
+			<li><label for="branchFilter">Branch: </label> <input type="text" id="branchFilter" name="Filter" value="" /></li>
+			<li><label for="docFilter">Document type: </label> <input type="text" id="docFilter" name="Filter" value="" /></li>
+		</ol>	
+	</fieldset>
+	
+	<fieldset class="rows">
+	<legend>Limits</legend>
+		<ol>
+		<li><label for="numberlimit">Limit to: </label> <select name="Limit" id="numberlimit">
 						<option value ="" selected="selected">None</option>
 						<option value ="5"> 5</option>
 						<option value ="10">10</option>
@@ -69,41 +68,28 @@
 						<option value ="40">40</option>
 						<option value ="50">50</option>
 						<option value ="100">100</option>
-					</select>
-				</td>
-				<td>
-					<select name="Criteria">
+					</select></li>
+		<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
 						<option value ="" selected="selected">None</option>
 						<option value ="homebranch">Branch</option>
 						<option value ="itemtype">Itemtype</option>
-					</select>
-				</td>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-			<tr class="hilighted">
-				<td colspan="2">&nbsp;</td>
-				<td><label for="branchFilter">Branch</label></td>
-				<td><input type="text" id="branchFilter" name="Filter" value="" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-				<td><label for="docFilter">Document type</label></td>
-				<td><input type="text" id="docFilter" name="Filter" value="" /></td>
-			</tr>
-		</tbody>
-	</table>
+					</select></li>
+		</ol>
+	</fieldset>
 	
-	
-		<h3> Output </h3>
-		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /><label for="outputscreen"> To screen into the browser</label>
-		
-		<input type="radio" name="output" id="outputfile" value="file" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
-		<!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	
-	<p><input type="submit" value="OK" />
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" /></p>
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
 	</form>
 <!-- /TMPL_IF -->
 

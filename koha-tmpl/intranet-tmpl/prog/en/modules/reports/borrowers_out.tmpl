@@ -48,48 +48,11 @@
 <!-- TMPL_ELSE -->
     <h1>Patrons with no Checkouts</h1>
     <form method="post" action="/cgi-bin/koha/reports/borrowers_out.pl">
-    
-    <table>
-        <thead>
-            <tr>
-            <th>Limit to </th>
-            <th>By </th>
-            <th colspan="2">Filters</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <select name="Limit">
-                        <option value ="" selected="selected">None</option>
-                        <option value ="5"> 5</option>
-                        <option value ="10">10</option>
-                        <option value ="15">15</option>
-                        <option value ="20">20</option>
-                        <option value ="25">25</option>
-                        <option value ="40">40</option>
-                        <option value ="50">50</option>
-                        <option value ="100">100</option>
-                    </select>
-                </td>
-                <td>
-                    <select name="Criteria">
-                        <option value ="" selected="selected">None</option>
-                        <option value ="categorycode">Categorycode</option>
-                        <option value ="itemtype">Itemtype</option>
-                    </select>
-                </td>
-				<td colspan="2">&nbsp;</td>
-            </tr>
-            <tr class="hilighted">
-                <td colspan="2">&nbsp;</td>
-                <td><label for="patroncategory">Patron category</label></td>
-                <td><input type="text" name="Filter" id="patroncategory" value="" /></td>
-            </tr>
-            <tr class="hilighted">
-                <td colspan="2">&nbsp;</td>
-                <td><label for="to">Without issues since</label></td>
-                <td><input size="10" id="to" name="Filter" value="" type="text" />
+    <fieldset class="rows">
+		<ol>
+			<li><label for="patroncategory">Patron category: </label> <input type="text" name="Filter" id="patroncategory" value="" />
+</li>
+	<li><label for="to">Without issues since: </label> <input size="10" id="to" name="Filter" value="" type="text" />
                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
                             <script type="text/javascript">
                                 Calendar.setup(
@@ -99,25 +62,46 @@
                                         button : "openCalendarTo",
                                     }
                                 );
-                            </script></td>
-            </tr>
-        </tbody>
-    </table>
-    
-    
-        <h3> Output </h3>
-        <input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
-		
-		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
-        <!-- TMPL_VAR NAME="CGIextChoice" -->
-        <!-- TMPL_VAR NAME="CGIsepChoice" -->
-    
-    
-    <p>
-    <input type="submit" value="OK" />
-    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-    <input type="hidden" name="do_it" value="1" /></p>
-    </form>
+                            </script></li>
+		</ol>
+	</fieldset>
+	
+    <fieldset class="rows">
+	<legend>Limits</legend>
+		<ol>
+			<li><label for="numberlimit">Limit to: </label><select name="Limit" id="numberlimit">
+                        <option value ="" selected="selected">None</option>
+                        <option value ="5"> 5</option>
+                        <option value ="10">10</option>
+                        <option value ="15">15</option>
+                        <option value ="20">20</option>
+                        <option value ="25">25</option>
+                        <option value ="40">40</option>
+                        <option value ="50">50</option>
+                        <option value ="100">100</option>
+                    </select></li>
+			<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
+                        <option value ="" selected="selected">None</option>
+                        <option value ="categorycode">Categorycode</option>
+                        <option value ="itemtype">Itemtype</option>
+                    </select></li>
+		</ol>
+	</fieldset>
+	
+<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
 <!-- /TMPL_IF -->
 
 </div>

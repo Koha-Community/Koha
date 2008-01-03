@@ -3,6 +3,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <script type="text/javascript">
+//<![CDATA[
 var debug    = "<!-- TMPL_VAR Name="debug" -->";
 var dformat  = "<!-- TMPL_VAR Name="dateformat" -->";
 var sentmsg = 0;
@@ -22,4 +23,5 @@ function Date_from_syspref(dstring) {
 		return 0;
 	}
 }
+//]]>
 </script>

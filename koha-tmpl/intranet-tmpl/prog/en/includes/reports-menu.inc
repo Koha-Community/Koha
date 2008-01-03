@@ -9,8 +9,8 @@
 
 	<h5>Top Lists</h5>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons checking out the most</a></li>
-		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Items checked out the most</a></li>
+		<li><a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons with the most checkouts</a></li>
+		<li><a href="/cgi-bin/koha/reports/cat_issues_top.pl">Most-Circulated Items</a></li>
 	</ul>
 	
 	<h5>Inactive</h5>
@@ -22,8 +22,8 @@
 
 	<h5>Other</h5>
 	<ul>
-		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Items lost</a></li>
-		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by itemtype</a></li>
+		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by Item Type</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Checkouts by patron category</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
 	</ul>

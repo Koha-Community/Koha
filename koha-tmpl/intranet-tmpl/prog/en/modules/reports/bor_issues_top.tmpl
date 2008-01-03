@@ -7,7 +7,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Patrons with the most Checkouts</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/bor_issues_top.pl">Patrons with the most checkouts</a> &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Patrons with the most checkouts<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -48,15 +48,15 @@ function Dopop(link) {
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="reference" -->"><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
 							</td>
-							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
@@ -65,50 +65,10 @@ function Dopop(link) {
 		</table>
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-	<h1>Patrons who checked out the most items</h1>
+	<h1>Patrons with the most Checkouts</h1>
 	<form method="post" action="/cgi-bin/koha/reports/bor_issues_top.pl">
-	
-	<table>
-		<thead>
-			<tr>
-			<th>Limit to </th>
-			<th>By </th>
-			<th colspan="2">Filters</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-				<td>
-					<select name="Limit">
-						<option value ="5" selected="selected"> 5</option>
-						<option value ="10">10</option>
-						<option value ="15">15</option>
-						<option value ="20">20</option>
-	<!--					<option value ="25">25</option>
-						<option value ="40">40</option>
-						<option value ="50">50</option>
-						<option value ="100">100</option>-->
-					</select>
-				</td>
-				<td>
-					<select name="Criteria">
-						<option value ="" selected="selected">None</option>
-						<option value ="issuingbranch">Branch</option>
-						<option value ="categorycode">Categorycode</option>
-						<option value ="itemtype">Itemtype</option>
-						<option value ="Day">Day</option>
-						<option value ="Week">Week</option>
-						<option value ="Month">Month</option>
-						<option value ="Year">Year</option>
-					</select>
-				</td>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-			
-			<tr class="hilighted">
-				<td colspan="2">&nbsp;</td>
-				<td>Issue date</td>
-				<td> <label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+	<fieldset class="rows">
+	<ol><li><label for="from">Checkout date from:</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -137,7 +97,7 @@ function Dopop(link) {
 										}
 									);
 								</script>
-					<label for="to">To</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+					<label class="inline" for="to">To: </label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
@@ -165,13 +125,8 @@ function Dopop(link) {
 										dateStatusFunc : validate2
 									}
 								);
-							</script>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-				<td>Returns</td>
-				<td > <label for="fromRO">From</label> <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
+							</script></li>
+				<li> <label for="fromRO">Check-in date from:</label> <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFromRO" style="cursor: pointer;" alt="Show Calendar" />
 								<script language="JavaScript" type="text/javascript">
 									function validate1(date) {
@@ -200,7 +155,7 @@ function Dopop(link) {
 										}
 									);
 								</script>
-					<label for="toRO">To</label> <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
+					<label class="inline" for="toRO">To: </label> <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarToRO" style="cursor: pointer;" alt="Show Calendar" border="0" />
 							<script type="text/javascript">
 								function validate2(date) {
@@ -228,53 +183,74 @@ function Dopop(link) {
 										dateStatusFunc : validate2
 									}
 								);
-							</script>
-				</td>
-			</tr>
-			<tr class="hilighted">
-				<td colspan="2">&nbsp;</td>
-				<td><label for="branch">Branch</label></td>
-				<td><input type="text" name="Filter" id="branch" value="" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-				<td><label for="documenttype">Document Type</label></td>
-				<td><input type="text" name="Filter" id="documenttype" value="" /></td>
-			</tr>
-			<tr class="hilighted">
-				<td colspan="2">&nbsp;</td>
-				<td><label for="patroncategory">Patron Category</label></td>
-				<td><input type="text" name="Filter" id="patroncategory" value="" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-				<td><label for="day">Day</label></td>
-				<td><input type="text" name="Filter" id="day" value="" /></td>
-			</tr>
-			<tr class="hilighted">
-				<td colspan="2">&nbsp;</td>
-				<td><label for="month">Month</label></td>
-				<td><input type="text" name="Filter" id="month" value="" /></td>
-			</tr>
-			<tr>
-				<td colspan="2">&nbsp;</td>
-				<td><label for="year">Year</label></td>
-				<td><input type="text" name="Filter" id="year" value="" /></td>
-			</tr>
-		</tbody>
-	</table>
+							</script></li>
+			<li> 
+				<label for="branch">Branch: </label>
+				<input type="text" name="Filter" id="branch" value="" />
+			</li>
+			<li> 
+				<label for="documenttype">Document Type: </label>
+				<input type="text" name="Filter" id="documenttype" value="" />
+			</li>
+			<li> 
+				<label for="patroncategory">Patron Category: </label>
+				<input type="text" name="Filter" id="patroncategory" value="" />
+			</li>
+			<li> 
+				<label for="day">Day: </label>
+				<input type="text" name="Filter" id="day" value="" />
+			</li>
+			<li> 
+				<label for="month">Month: </label>
+				<input type="text" name="Filter" id="month" value="" />
+			</li>
+			<li> 
+				<label for="year">Year: </label>
+				<input type="text" name="Filter" id="year" value="" />
+			</li>
+							
+							</ol>	
+	</fieldset>
 	
 	
-		<h3> Output </h3>
-		<input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
-		
-		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
-		<!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" -->
+	<fieldset class="rows">
+	<ol>
+		<li><label for="numlimit">Limit to: </label> <select name="Limit" id="numlimit">
+						<option value ="5" selected="selected"> 5</option>
+						<option value ="10">10</option>
+						<option value ="15">15</option>
+						<option value ="20">20</option>
+	<!--					<option value ="25">25</option>
+						<option value ="40">40</option>
+						<option value ="50">50</option>
+						<option value ="100">100</option>-->
+					</select></li>
+		<li><label for="criteria">By: </label> <select name="Criteria" id="criteria">
+						<option value ="" selected="selected">None</option>
+						<option value ="issuingbranch">Branch</option>
+						<option value ="categorycode">Categorycode</option>
+						<option value ="itemtype">Itemtype</option>
+						<option value ="Day">Day</option>
+						<option value ="Week">Week</option>
+						<option value ="Month">Month</option>
+						<option value ="Year">Year</option>
+					</select></li>
+	</ol>
+	</fieldset>
 
-	<p><input type="submit" value="OK" />
+<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	<input type="hidden" name="do_it" value="1" /></p>
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
 	</form>
 <!-- /TMPL_IF -->
 

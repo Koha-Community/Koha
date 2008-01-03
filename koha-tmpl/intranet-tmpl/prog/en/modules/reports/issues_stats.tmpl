@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports &rsaquo; Checkout statistics</title>
+<title>Koha &rsaquo; Reports <!-- TMPL_IF NAME="do_it" -->&rsaquo; Checkout statistics &rsaquo; Results <!-- TMPL_ELSE -->&rsaquo; Checkout statistics<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
@@ -7,7 +7,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Checkout statistics</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/issues_stats.pl">Checkout statistics</a> &rsaquo; Results <!-- TMPL_ELSE -->&rsaquo; Checkout statistics<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -63,9 +63,10 @@
         </table>
     <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
-    <h1>Checkout statistics </h1>
+
     <form method="post" action="/cgi-bin/koha/reports/issues_stats.pl">
-    <table>
+    <fieldset class="rows">
+	<legend>Checkout statistics</legend><table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -81,8 +82,9 @@
                 <td><input type="radio" name="Column" value="datetime" /></td>
                 <td> <label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
                     <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
-                    <script language="JavaScript" type="text/javascript">
-                    function validate1(date) {
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
                         var day = date.getDate();
                         var month = date.getMonth() + 1;
                         var year = date.getFullYear();
@@ -106,11 +108,13 @@
                             dateStatusFunc : validate1
                         }
                     );
-                    </script>
+					//]]>
+					</script>
                     <label for="to">To</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
-                        <script type="text/javascript">
-                            function validate2(date) {
+                          <script type="text/javascript">
+						  //<![CDATA[  
+						  function validate2(date) {
                                 var day = date.getDate();
                                 var month = date.getMonth() + 1;
                                 var year = date.getFullYear();
@@ -135,7 +139,8 @@
                                     dateStatusFunc : validate2
                                 }
                             );
-                        </script>
+							//]]>
+							</script>
                     </td>
                 </tr>
                 <tr class="hilighted"> 
@@ -225,22 +230,25 @@
             </tr>
         <!-- /TMPL_IF -->
         </tbody>
-    </table>
-        <h3> Cell value </h3>
-            <p><input type="radio" name="Cellvalue" value="1" checked="checked" /> Count checkouts </p>
-            <p><input type="radio" name="Cellvalue" value="3" /> Circulation rate </p>
-        <h3> Output </h3>
-        <input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> <label for="outputscreen">To screen into the browser</label>
-		
-		<input type="radio" name="output" value="file" id="outputfile" /> <label for="outputfile">To file</label> <input type="text" name="basename" value="Export" /> into an application  
-        <!-- TMPL_VAR NAME="CGIextChoice" -->
-        <!-- TMPL_VAR NAME="CGIsepChoice" -->
-    
-    <p>
-    <input type="submit" value="OK" />
-    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-    <input type="hidden" name="do_it" value="1" /></p>
-    </form>
+    </table><br /></fieldset>
+
+<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count checkouts</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
+            <li><label for="cellvalue3">Circulation rate</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li></ol></fieldset>
+			
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
 <!-- /TMPL_IF -->
 
 </div>

@@ -38,14 +38,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { reportss => 1 },
+        flagsrequired   => { reports => 1 },
         debug           => 1,
     }
 );
 
 my $params = $query->Vars;
+my $get_items = $params->{'get_items'};
 
-if ( $params->{'get_items'} ) {
+if ( $get_items ) {
     my $orderbyfilter   = $params->{'orderbyfilter'}   || undef;
     my $branchfilter    = $params->{'branchfilter'}    || undef;
     my $barcodefilter   = $params->{'barcodefilter'}   || undef;
@@ -59,7 +60,8 @@ if ( $params->{'get_items'} ) {
     my $items = GetLostItems( \%where, $orderbyfilter );
     $template->param(
         total     => scalar @$items,
-        itemsloop => $items
+        itemsloop => $items,
+		get_items => $get_items
     );
 }
 

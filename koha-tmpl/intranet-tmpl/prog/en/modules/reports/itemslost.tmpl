@@ -6,7 +6,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Lost Items</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a><!-- TMPL_IF NAME="get_items" --> &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a> &rsaquo; Results<!-- TMPL_ELSE --> &rsaquo; Lost Items<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -16,6 +16,8 @@
 
 <h1>Lost Items</h1>
 
+<!-- TMPL_IF NAME="get_items" -->
+
 <div class="results">
     <!-- TMPL_IF NAME="total" -->
         <!-- TMPL_VAR NAME="total" --> lost items found
@@ -24,18 +26,7 @@
     <!-- /TMPL_IF -->
 </div>
 
-<form name="f" action="/cgi-bin/koha/reports/itemslost.pl" method="post">
-    <label for="orderbyfilter">Set result order by</label>
-    <select id="orderbyfilter" name="orderbyfilter">
-        <option value=""> --- </option>
-        <option value="homebranch">Branch</option>
-        <option value="itemtype">Itemtypes</option>
-        <option value="barcode">Barcode</option>
-        <option value="price">price</option>
-    </select>
-    <input type="submit" value="OK" />
-    <input type="hidden" name="get_items" value="1" />
-    <table>
+    <!-- TMPL_IF NAME="itemsloop" --><table>
     <tr>
         <th>Barcode</th>
         <th>Date last seen</th>
@@ -44,31 +35,6 @@
         <th>Itemtype</th>
         <th>Holdingbranch</th>
         <th>Location</th>
-    </tr>
-    <tr>
-        <td><input type="text" name="barcodefilter" size="6" /></td>
-        <td><!-- datelastseen --></td>
-        <td><!-- price --></td>
-        <td><select name="branchfilter">
-                <option value="">All</option>
-            <!-- TMPL_LOOP name="branchloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- TMPL_ELSE -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
-				<!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select></td>
-        <td><select name="itemtypesfilter">
-                <option value="">All</option>
-                <!-- TMPL_LOOP name="itemtypeloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
-				<!-- TMPL_ELSE -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
-				<!-- /TMPL_IF -->
-                <!-- /TMPL_LOOP -->
-            </select></td>
-        <td><!-- holdingbranch --></td>
-        <td><!-- location --></td>
     </tr>
      <!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
@@ -84,7 +50,43 @@
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
+	<!-- /TMPL_IF --> 
+	<!-- TMPL_ELSE -->
+	
+	<form name="f" action="/cgi-bin/koha/reports/itemslost.pl" method="post">
+<fieldset class="rows"><ol>    <li><label for="orderbyfilter">Order by: </label>
+    <select id="orderbyfilter" name="orderbyfilter">
+        <option value=""> --- </option>
+        <option value="homebranch">Branch</option>
+        <option value="itemtype">Itemtypes</option>
+        <option value="barcode">Barcode</option>
+        <option value="price">price</option>
+    </select></li>
+	
+	<li><label for="barcodefilter">Barcode: </label><input type="text" name="barcodefilter" id="barcodefilter" size="6" /></li>
+	<li><label for="branchfilter">Branch: </label><select name="branchfilter" id="branchfilter">
+                <option value="">All</option>
+            <!-- TMPL_LOOP name="branchloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+	<li><label for="itemtypesfilter">Item Type: </label><select name="itemtypesfilter" id="itemtypesfilter">
+                <option value="">All</option>
+                <!-- TMPL_LOOP name="itemtypeloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select></li></ol></fieldset>
+<fieldset class="action">    <input type="submit" value="Submit" />
+    <input type="hidden" name="get_items" value="1" /></fieldset>
 </form>
+	
+	<!-- /TMPL_IF -->
 
 </div>
 </div>
