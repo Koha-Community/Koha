@@ -39,7 +39,10 @@ unless (-r $input_file) {
     die "$0: cannot open input file $input_file: $!\n";
 }
 
+my $dbh = C4::Context->dbh;
+$dbh->{AutoCommit} = 0;
 process_batch($input_file, $match_bibs, $add_items, $batch_comment);
+$dbh->commit();
 
 exit 0;
 
@@ -62,7 +65,7 @@ sub process_batch {
     print "... staging MARC records -- please wait\n";
     my ($batch_id, $num_valid, $num_items, @import_errors) = 
         BatchStageMarcRecords($marc_flavor, $marc_records, $input_file, $batch_comment, '', $add_items, 0,
-                              100, \&print_progress);
+                              100, \&print_progress_and_commit);
     print "... finished staging MARC records\n";
 
     my $num_with_matches = 0;
@@ -72,7 +75,7 @@ sub process_batch {
         $matcher->add_simple_required_check('245', 'a', -1, 0, '', 
                                             '245', 'a', -1, 0, '');
         print "... looking for matches with records already in database\n";
-        $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, \&print_progress);
+        $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
         print "... finished looking for matches\n";
     }
 
@@ -102,8 +105,9 @@ _SUMMARY_
     print "\n";
 }
 
-sub print_progress {
+sub print_progress_and_commit {
     my $recs = shift;
+    $dbh->commit();
     print "... processed $recs records\n";
 }
 
