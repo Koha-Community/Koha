@@ -16,11 +16,11 @@ confirm_updatechild(<!-- TMPL_VAR NAME="borrowernumber" -->);
 
 <!--TMPL_IF NAME="SUCCESS" -->
 <script language="javascript" type="text/javascript">
-//    window.close();
 self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->';
+window.close();
 </script>
-
 <!-- /TMPL_IF  -->
+
 
 
 <!--TMPL_IF NAME="MULTI" -->
@@ -48,6 +48,7 @@ self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=<!
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 <input type="hidden" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
 <input type="hidden" name="cattype" value="<!-- TMPL_VAR NAME="cattype" -->" />
+<input type="hidden" name="catcode_multi" value="<!-- TMPL_VAR NAME="CATCODE_MULTI" -->" />
 <input class="submit" type="submit" value="Submit"/>
 <script language="javascript" type="text/javascript">
 </script>
