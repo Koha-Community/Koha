@@ -204,7 +204,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
               <select name="status" size="1"  disabled="disabled">
             <!--TMPL_ELSE-->
               <!--TMPL_IF Name="serialsadditems"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
                <!--TMPL_ELSE -->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" >
                <!--/TMPL_IF--> 
@@ -253,10 +253,10 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
   <!--TMPL_IF Name="serialsadditems"-->
           <tr>
           <td colspan="5">
-      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: se-resize;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
+      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
              Items   </a>
         <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
-        <legend><a style="cursor: se-resize;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
                 Items</a>
         </legend>
           <div id="cataloguing_additem_itemlist">
@@ -358,10 +358,10 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
   <!--TMPL_IF Name="serialsadditems"-->
           <tr>
           <td colspan="5">
-      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: se-resize;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
+      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
              Item</a>
         <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
-        <legend><a style="cursor: se-resize;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
                 Item</a>
         </legend>
           <div id="cataloguing_additem_itemlist">
