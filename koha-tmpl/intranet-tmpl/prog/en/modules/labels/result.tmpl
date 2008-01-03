@@ -2,7 +2,6 @@
 <script type="text/javascript">
 <!--
 
-
 function add_item(itemnum,batch_id){
 
  var getstr='';
@@ -66,12 +65,12 @@ function add_item3(itemnumber){
 			<!-- TMPL_IF name=total -->
 			&nbsp;<b>Results <!-- TMPL_VAR name="from" --> to <!-- TMPL_VAR name="to" --> of <!-- TMPL_VAR name="total" --></b><br><br>
 			<!-- TMPL_ELSE -->
-			&nbsp; No results found<br>
+			&nbsp; No results found<br />
 			<!-- /TMPL_IF -->
 		</p>
 	</div>
 <form name='resultform'>
-	<span class="no"><a class="button" href="#" onclick="history.go(-1)" > &laquo; Back</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="button" href="#" onclick="window.close()">[ Done ]</a></span>
+	<span class="no"><a class="button" href="#" onclick="history.go(-1)" > &laquo; Back</a>&nbsp;&nbsp;&nbsp;&nbsp; <a class="icon addchecked" href="#" onclick="window.close()">[ Done ]</a></span>
 <input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->); return false" />
 	<table>
 	<tr>
@@ -82,7 +81,7 @@ function add_item3(itemnumber){
 		<th>Add</th>
 	</tr>
 	<!-- TMPL_LOOP name="result" -->
-		<!-- TMPL_IF name="even" -->
+		<!-- TMPL_IF name="highlight" -->
 			<tr class="highlight">
 		<!-- TMPL_ELSE -->
 			<tr>
@@ -103,14 +102,9 @@ function add_item3(itemnumber){
 					<!-- TMPL_IF name="itemcallnumber" --><!-- TMPL_VAR name="itemcallnumber" --><br /> <!-- /TMPL_IF -->
 					<!-- TMPL_IF name="dateaccessioned" -->[<!-- TMPL_VAR name="dateaccessioned" -->]<br /> <!-- /TMPL_IF -->
 					<!-- TMPL_IF name="barcode" --> <!-- TMPL_VAR name="barcode" --> <!-- /TMPL_IF -->
-
 				</td>
 				<td>
-					<a onclick="add_item(<!-- TMPL_VAR NAME="itemnumber" -->,<!-- TMPL_VAR NAME="batch_id" -->); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a>
-
-
-
-
+					<a onclick="add_item('<!-- TMPL_VAR NAME="itemnumber" -->',<!-- TMPL_VAR NAME="batch_id" -->); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a>
 
 <!-- /NEW -->
 				</td>

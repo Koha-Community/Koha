@@ -11,16 +11,19 @@ function Plugin(batch_id) {
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels</div>
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
+ <div id="doc3" class="yui-t2">
+  <div id="bd">
+   <div id="yui-main">
 	<div class="yui-b">
+
+<!-- TMPL_IF NAME="message" -->
+	<!-- TMPL_LOOP NAME="message_loop" -->
+	<div style="color: red; margin: 5pt; font-weight: bold;" class="message"><!-- TMPL_VAR NAME="message_text" --></div>
+	<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
 
 <!-- TMPL_UNLESS NAME="batch_id" -->
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-
 <!-- TMPL_IF NAME="batches" -->
 <div class="yui-g">
 
@@ -28,7 +31,7 @@ function Plugin(batch_id) {
 <h2>Label Batches</h2>
 <table>
 <tr>
-        <th>Batch id</th>
+        <th>ID</th>
         <th>#</th>
         <th>Edit</th>
         <th>Delete</th>
@@ -36,19 +39,16 @@ function Plugin(batch_id) {
 </tr>
 <!-- TMPL_LOOP NAME="batches" -->
 <tr>
-        <td>
-                <!-- TMPL_VAR NAME="batch_id" -->
-        </td>
-        <td>
-                <!-- TMPL_VAR NAME="num" --> records
-        </td>
+        <td><!-- TMPL_VAR NAME="batch_id" --></td>
+        <td><!-- TMPL_VAR NAME="num" --> records</td>
         <td>
                 <a href="/cgi-bin/koha/labels/label-manager.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Edit</a>
         </td>
         <td>
                 <a href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete</a>
+				<!-- FIXME: should use POST to change server state, not GET -->
         </td>
-          <td>
+        <td>
 		  <a style="float: left;"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch  <!-- TMPL_VAR NAME="batch_id" --></a>
         </td></tr>
 <!-- /TMPL_LOOP -->
@@ -60,7 +60,7 @@ function Plugin(batch_id) {
 </div>
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="label-status.inc" -->
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /batches -->
 
 <!-- TMPL_ELSE -->
 
@@ -86,6 +86,7 @@ function Plugin(batch_id) {
 											onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->)}}
                                         });
 		new YAHOO.widget.Button("deletebatch");
+		new YAHOO.widget.Button("dedup");
 		new YAHOO.widget.Button("generate");
 	}
 
@@ -94,6 +95,8 @@ function Plugin(batch_id) {
 	<ul class="toolbar">
 	<li id="additemsc"><a id="additems" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->); return false;">Add item(s) to batch</a></li>
 	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete current batch</a></li>
+				<!-- FIXME: should use POST to change server state, not GET -->
+	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Remove duplicate barcodes</a></li>
 	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Generate PDF for Batch</a></li>
 </ul></div>
 
@@ -101,31 +104,28 @@ function Plugin(batch_id) {
 
 <table>
 <tr>
-        <th>Label Number</th>
+        <th>Label<br />Num.</th>
         <th>Summary</th>
-        <th>Item Type</th>
+        <th>Item<br />Type</th>
         <th>Barcode</th>
         <th>Delete</th>
 </tr>
 <!-- TMPL_LOOP NAME="resultsloop" -->
 <tr>
+        <td><!-- TMPL_VAR NAME="labelno" --></td>
+        <td><b><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> <!-- TMPL_VAR NAME="title" --></a></b>:
+			<!-- TMPL_VAR NAME="author" -->:
+            <!-- TMPL_VAR NAME="isbn" --></td>
+        <td><!-- TMPL_VAR NAME="itemtype" --></td>
+        <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
-                <!-- TMPL_VAR NAME="labelno" -->
-        </td>
-        <td>
-                <b> <a href="/cgi-bin/koha/detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"> <!-- TMPL_VAR NAME="title" -->:</a></b> <!-- TMPL_VAR NAME="author" -->:
-                <!-- TMPL_VAR NAME="isbn" -->         </td>
-        <td>           <!-- TMPL_VAR NAME="itemtype" -->         </td>
-        <td>          <!-- TMPL_VAR NAME="barcode" -->         </td>
-        <td>
-                <a href="/cgi-bin/koha/labels/label-manager.pl?op=delete&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete</a>
+                <a href="/cgi-bin/koha/labels/label-manager.pl?op=delete&amp;labelid=<!-- TMPL_VAR NAME="labelid" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete</a>
+				<!-- FIXME: should use POST to change server state, not GET -->
         </td>
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
-
-
-<!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS --><!-- batch_id -->
 
 </div>
 </div>

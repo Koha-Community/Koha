@@ -10,8 +10,15 @@ use HTML::Template::Pro;
 #use Data::Dumper;
 #use Smart::Comments;
 
+use vars qw($debug);
+
+BEGIN { 
+	$debug = $ENV{DEBUG} || 0;
+}
+
 my $dbh            = C4::Context->dbh;
 my $query          = new CGI;
+$query->param('debug') and $debug = $query->param('debug');
 my $op             = $query->param('op');
 my $layout_id      = $query->param('layout_id');
 my $layoutname     = $query->param('layoutname');
@@ -49,6 +56,7 @@ my $active_template_name = $active_template->{'tmpl_code'};
 #    $batch_id  = get_highest_batch();
 #}
 
+my @messages;
 my ($itemnumber) = @itemnumber if (scalar(@itemnumber) == 1);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -111,9 +119,14 @@ elsif ( $op eq 'deleteall' ) {
 	$sth2->finish;
 }
 elsif ( $op eq 'delete' ) {
-	my $query2 = "DELETE FROM labels where itemnumber = ?";
+	my @labelids = $query->param('labelid');
+	scalar @labelids or push @messages, "ERROR: No labelid(s) supplied for deletion.";
+	my $ins = "?," x (scalar @labelids);
+	$ins =~ s/\,$//;
+	my $query2 = "DELETE FROM labels WHERE labelid IN ($ins) ";
+	$debug and push @messages, "query2: $query2 -- (@labelids)";
 	my $sth2   = $dbh->prepare($query2);
-	$sth2->execute($itemnumber);
+	$sth2->execute(@labelids);
 	$sth2->finish;
 }
 elsif ( $op eq 'delete_batch' ) {
@@ -129,17 +142,18 @@ elsif ( $op eq 'set_active_layout' ) {
 	print $query->redirect("label-home.pl");
 	exit;
 }
+elsif ( $op eq 'deduplicate' ) {
+	my $return = deduplicate_batch($batch_id);
+	my $msg = (($return) ? "Removed $return" : "Error revoving") . " duplicate items from Batch $batch_id";
+	push @messages, $msg;
+}
 
 #  first lets do a read of the labels table , to get the a list of the
 # currently entered items to be prinited
-#use Data::Dumper;
 my @batches = get_batches();
 my @resultsloop = get_label_items($batch_id);
-#warn $batches[0];
-#warn $batch_id;
+#warn "$batches[0] (id $batch_id)";
 #warn Dumper(@resultsloop);
-
-my $tmpl =GetActiveLabelTemplate();
 
 #calc-ing number of sheets
 #my $number_of_results = scalar @resultsloop;
@@ -148,6 +162,15 @@ my $tmpl =GetActiveLabelTemplate();
 #my $start_results    = ( $number_of_results + $startrow );
 #my $labels_remaining = ( $tot_labels - $start_results );
 
+if (scalar @messages) {
+	$template->param(message => 1);
+	my @complex = ();
+	foreach (@messages) {
+		my %hash = (message_text => $_);
+		push @complex, \%hash;
+	}
+	$template->param(message_loop => \@complex);
+}
 $template->param(
     batch_id => $batch_id,
 	batch_count => scalar @resultsloop,
@@ -156,7 +179,7 @@ $template->param(
 
     resultsloop => \@resultsloop,
     batches => \@batches,
-	tmpl_desc => $tmpl->{'tmpl_desc'},
+	tmpl_desc => $active_template->{'tmpl_desc'},
 
     #  startrow         => $startrow,
     #  sheets           => $sheets_needed,

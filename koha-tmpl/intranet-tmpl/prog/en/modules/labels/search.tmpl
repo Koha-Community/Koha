@@ -3,13 +3,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <style type="text/css">#custom-doc { width:47.23em;*width:46.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
 </head>
-<body>
+<body onload="document.getElementById('marclist').select();">
 
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
 
 <h1>Catalog item search
-
 <!-- TMPL_IF name="batch_id" -->
  for batch <!-- TMPL_VAR NAME="batch_id" -->
 <!-- /TMPL_IF  -->
@@ -20,7 +19,7 @@
 	<input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
 	<fieldset class="rows">
 <ol><li>
-  <select name="idx">
+  <select name="idx" disabled><!-- FIXME: script does keyword search regardless -->
     <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
     <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
     <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
@@ -35,9 +34,9 @@
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
     <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
 </select>
-   <input type="text" size="30" name="marclist" title="Enter search terms" value=""/>  
+   <input type="text" size="30" id="marclist" name="marclist" title="Enter search terms" value=""/>  
 </li><li>
-<select name="idx">
+<select name="idx" disabled><!-- FIXME: script does keyword search regardless -->
     <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
     <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
     <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
@@ -52,7 +51,7 @@
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
     <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
 </select>
-   <input type="text" size="30" name="q" title="Enter search terms" value="" />
+   <input type="text" size="30" name="q" title="Enter search terms" value="" disabled/><!-- FIXME: script doesn't "catch" q param -->
 </li>
 </ol>
 </fieldset>
@@ -118,7 +117,7 @@
 -->
     <tr><th scope="row">Document Type</th>
                 <td colspan="2">
-                    <select name="Filter">
+                    <select name="Filter" disabled><!-- FIXME: script returns ALL type regardless-->
                         <option value="">All Item Types</option>
                         <!-- TMPL_LOOP name="itemtypeloop" -->
                             <!-- TMPL_IF name="selected" -->

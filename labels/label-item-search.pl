@@ -19,7 +19,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use CGI;
 use C4::Auth;
 use HTML::Template::Pro;
@@ -47,69 +46,59 @@ my $op              = $query->param('op');
 my $batch_id        = $query->param('batch_id');
 my $dateaccessioned = $query->param('dateaccessioned');
 
-### $query;
-
 my $dbh = C4::Context->dbh;
 
-my $startfrom = $query->param('startfrom');
-$startfrom = 0 if ( !defined $startfrom );
+my $startfrom = $query->param('startfrom') || 0;
 my ( $template, $loggedinuser, $cookie );
-my $resultsperpage;
+my (@marclist,@and_or,@excluding,@operator,@value,$orderby,@tags,$results,$total,$error,$marcresults);
+my $resultsperpage = $query->param('resultsperpage') || 19;
 
+my $show_results = 0;
 if ( $op eq "do_search" ) {
-    my @marclist  = $query->param('marclist');
-    my @and_or    = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator  = $query->param('operator');
-    my @value     = $query->param('value');
-
-    $resultsperpage = $query->param('resultsperpage');
-    $resultsperpage = 19 if ( !defined $resultsperpage );
-    my $orderby = $query->param('orderby');
-
-    # builds tag and subfield arrays
-    my @tags;
-
-    my ( $results, $total ) ;
+    @marclist  = $query->param('marclist');
+    @and_or    = $query->param('and_or');
+    @excluding = $query->param('excluding');
+    @operator  = $query->param('operator');
+    @value     = $query->param('value');
+    $orderby   = $query->param('orderby');
+	if (scalar @marclist) {
       #catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
       #  $startfrom * $resultsperpage,
       #  $resultsperpage, $orderby );
+		($error, $marcresults) = SimpleSearch($marclist[0]);
+		if ($marcresults) {
+			$show_results = scalar @$marcresults;
+		} else {
+			warn "ERROR label-item-search: no results from SimpleSearch";
+			# leave $show_results undef
+		}
+	}
+}
 
-#use Data::Dumper;
-	my $searchquery=$marclist[0];
-	my ($error, $marcresults) = SimpleSearch($searchquery);
-	my $hits = scalar @$marcresults;
-	my @results;
-
-	for(my $i=0;$i<$hits;$i++) {
-		my %resultsloop;
+if ( $show_results ) {
+	my $hits = $show_results;
+	my (@results,@results2);
+	for(my $i=0; $i<$hits; $i++) {
 		my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
 		my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 		#build the hash for the template.
-		%resultsloop=%$biblio;
-		$resultsloop{highlight}       = ($i % 2)?(1):(0);
-		#warn $resultsloop{biblionumber};
-		push @results, \%resultsloop;
-	}
-    my @results2;
-    my $i;
-    for ( $i = 0 ; $i <= ( $hits - 1 ) ; $i++ ) {
-        my $itemnums = get_itemnumbers_of($results[$i]->{'biblionumber'});
-
-        my $iii = $itemnums->{$results[$i]->{'biblionumber'} } ;
-        my $item_results;
-		if ($iii ) {
-			$item_results =  &GetItemInfosOf( @$iii );
-        }
-        foreach my $item (keys %$item_results) {
-			for my $bibdata (keys %{$results[$i]}) {
-#warn Dumper($bibdata);        
-#warn Dumper($results[$i]->{$bibdata});
-				$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata} unless exists $item_results->{$item}{$bibdata};
+		$biblio->{highlight}       = ($i % 2)?(1):(0);
+		#warn $biblio->{biblionumber};
+		push @results, $biblio;
+		my $biblionumber = $biblio->{'biblionumber'};
+        my $itemnums = get_itemnumbers_of($biblionumber);
+        my $iii = $itemnums->{$biblionumber} ;
+		if ($iii) {
+			my $item_results =  &GetItemInfosOf( @$iii );
+        	foreach my $item (keys %$item_results) {
+				for my $bibdata (keys %{$results[$i]}) {
+					#warn Dumper($bibdata);        
+					#warn Dumper($results[$i]->{$bibdata});
+					$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
+				}
+            	push @results2, $item_results->{$item};
 			}
-            push @results2, $item_results->{$item};
-        }
-
+		}
     }
    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
@@ -132,6 +121,8 @@ if ( $op eq "do_search" ) {
 
     my @field_data = ();
 
+	# FIXME: this relies on symmetric order of CGI params that IS NOT GUARANTEED by spec.
+
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
         push @field_data, { term => "marclist",  val => $marclist[$i] };
         push @field_data, { term => "and_or",    val => $and_or[$i] };
@@ -141,7 +132,6 @@ if ( $op eq "do_search" ) {
     }
 
     my @numbers = ();
-
     if ( $total > $resultsperpage ) {
         for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
             if ( $i < 16 ) {
@@ -159,14 +149,8 @@ if ( $op eq "do_search" ) {
     }
 
     my $from = $startfrom * $resultsperpage + 1;
-    my $to;
-
-    if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
-        $to = $total;
-    }
-    else {
-        $to = ( ( $startfrom + 1 ) * $resultsperpage );
-    }
+	my $temp = ( $startfrom + 1 ) * $resultsperpage;
+    my $to   = ($total < $temp) ? $total : $temp;
 
     # this gets the results of the search (which are bibs)
     # and then does a lookup on all items that exist for that bib
@@ -174,21 +158,20 @@ if ( $op eq "do_search" ) {
     # items attached to the bibs not thew bibs themselves
 
    # my @results2;
-    for (my $i = 0 ; $i <= ( $total - 1 ) ; $i++ )
-    {    #total-1 coz the array starts at 0
-            #warn $i;
-            #warn Dumper $results->[$i]{'bibid'};
-        my $type = 'intra';
-        my @item_results =
-          &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
-
-        foreach my $item (@item_results) {
-            #warn Dumper $item;
-            push @results2, $item;
-        }
-
-    }
-
+    # for (my $i = 0 ; $i < $total ; $i++ )
+    # {
+        #warn $i;
+        #warn Dumper $results->[$i]{'bibid'};
+    #     my $type = 'intra';
+    #     my @item_results = &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
+			# FIXME: ItemInfo doesn't exist !!
+# 		push @results2,\@item_results;
+        # foreach my $item (@item_results) {
+        #	warn Dumper $item;
+        #	push @results2, $item;
+        # }
+#     }
+# 
     $template->param(
         result         => \@results2,
         startfrom      => $startfrom,
@@ -207,9 +190,7 @@ if ( $op eq "do_search" ) {
 }
 
 #
-#
 #   search section
-#
 #
 
 else {
@@ -224,7 +205,6 @@ else {
         }
     );
 
-
    #using old rel2.2 getitemtypes for testing!!!!, not devweek's GetItemTypes()
 
     my $itemtypes = GetItemTypes;
@@ -236,8 +216,6 @@ else {
                             );  
             push @itemtypeloop, \%row;
     }  
-
-
     $template->param(
     itemtypeloop =>\@itemtypeloop,
         batch_id     => $batch_id,
