@@ -1550,10 +1550,10 @@ sub _set_defaults_for_add {
     }
 
     # various item status fields cannot be null
-    $item->{'notforloan'} = 0 unless exists $item->{'notforloan'} and defined $item->{'notforloan'};
-    $item->{'damaged'}    = 0 unless exists $item->{'damaged'}    and defined $item->{'damaged'};
-    $item->{'itemlost'}   = 0 unless exists $item->{'itemlost'}   and defined $item->{'itemlost'};
-    $item->{'wthdrawn'}   = 0 unless exists $item->{'wthdrawn'}   and defined $item->{'wthdrawn'};
+    $item->{'notforloan'} = 0 unless exists $item->{'notforloan'} and defined $item->{'notforloan'} and $item->{'notforloan'} ne '';
+    $item->{'damaged'}    = 0 unless exists $item->{'damaged'}    and defined $item->{'damaged'}    and $item->{'damaged'} ne '';
+    $item->{'itemlost'}   = 0 unless exists $item->{'itemlost'}   and defined $item->{'itemlost'}   and $item->{'itemlost'} ne '';
+    $item->{'wthdrawn'}   = 0 unless exists $item->{'wthdrawn'}   and defined $item->{'wthdrawn'}   and $item->{'wthdrawn'} ne '';
 }
 
 =head2 _koha_new_item
