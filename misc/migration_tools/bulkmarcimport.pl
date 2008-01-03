@@ -215,7 +215,6 @@ $commitnum = $commit;
 
 }
 
-my $dbh = C4::Context->dbh();
 $dbh->{AutoCommit} = 0;
 RECORD: while ( my $record = $batch->next() ) {
     $i++;
@@ -230,13 +229,22 @@ RECORD: while ( my $record = $batch->next() ) {
     }
 
     unless ($test_parameter) {
-        my ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref );
-        eval { ( $bibid, $oldbibitemnum, $itemnumbers_ref, $errors_ref ) = AddBiblioAndItems( $record, '' ); };
+        my ( $biblionumber, $biblioitemnumber, $itemnumbers_ref, $errors_ref );
+        eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio($record, '', { defer_marc_save => 1 }) };
         if ( $@ ) {
-            warn "ERROR: Adding biblio and or items $bibid failed: $@\n";
+            warn "ERROR: Adding biblio $biblionumber failed: $@\n";
+            next RECORD;
+        } 
+        eval { ( $itemnumbers_ref, $errors_ref ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
+        if ( $@ ) {
+            warn "ERROR: Adding items to bib $biblionumber failed: $@\n";
+            # if we failed because of an exception, assume that 
+            # the MARC columns in biblioitems were not set.
+            ModBiblioMarc( $record, $biblionumber, '' );
+            next RECORD;
         } 
         if ($#{ $errors_ref } > -1) { 
-            report_item_errors($bibid, $errors_ref);
+            report_item_errors($biblionumber, $errors_ref);
         }
 
         $dbh->commit() if (0 == $i % $commitnum);
@@ -259,11 +267,11 @@ print "$i MARC records done in $timeneeded seconds\n";
 exit 0;
 
 sub report_item_errors {
-    my $bibid = shift;
+    my $biblionumber = shift;
     my $errors_ref = shift;
 
     foreach my $error (@{ $errors_ref }) {
-        my $msg = "Item not added (bib $bibid, item tag #$error->{'item_sequence'}, barcode $error->{'item_barcode'}): ";
+        my $msg = "Item not added (bib $biblionumber, item tag #$error->{'item_sequence'}, barcode $error->{'item_barcode'}): ";
         my $error_code = $error->{'error_code'};
         $error_code =~ s/_/ /g;
         $msg .= "$error_code $error->{'error_information'}";

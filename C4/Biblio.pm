@@ -40,8 +40,10 @@ use vars qw($VERSION @ISA @EXPORT);
 
 # EXPORTED FUNCTIONS.
 
-# to add biblios or items
-push @EXPORT, qw( &AddBiblio &AddBiblioAndItems );
+# to add biblios
+push @EXPORT, qw( 
+  &AddBiblio
+);
 
 # to get something
 push @EXPORT, qw(
@@ -180,14 +182,37 @@ When modifying a biblio or an item, the behaviour is quite similar.
 =over 4
 
 ($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
-Exported function (core API) for adding a new biblio to koha.
 
 =back
+
+Exported function (core API) for adding a new biblio to koha.
+
+The first argument is a C<MARC::Record> object containing the
+bib to add, while the second argument is the desired MARC
+framework code.
+
+This function also accepts a third, optional argument: a hashref
+to additional options.  The only defined option is C<defer_marc_save>,
+which if present and mapped to a true value, causes C<AddBiblio>
+to omit the call to save the MARC in C<bibilioitems.marc>
+and C<biblioitems.marcxml>  This option is provided B<only>
+for the use of scripts such as C<bulkmarcimport.pl> that may need
+to do some manipulation of the MARC record for item parsing before
+saving it and which cannot afford the performance hit of saving
+the MARC record twice.  Consequently, do not use that option
+unless you can guarantee that C<ModBiblioMarc> will be called.
 
 =cut
 
 sub AddBiblio {
-    my ( $record, $frameworkcode ) = @_;
+    my $record = shift;
+    my $frameworkcode = shift;
+    my $options = @_ ? shift : undef;
+    my $defer_marc_save = 0;
+    if (defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'}) {
+        $defer_marc_save = 1;
+    }
+
     my ($biblionumber,$biblioitemnumber,$error);
     my $dbh = C4::Context->dbh;
     # transform the data into koha-table style data
@@ -199,156 +224,12 @@ sub AddBiblio {
     _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
     # now add the record
-    $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+    $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
       
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio") 
         if C4::Context->preference("CataloguingLog");
 
     return ( $biblionumber, $biblioitemnumber );
-}
-
-=head2 AddBiblioAndItems
-
-=over 4
-
-($biblionumber,$biblioitemnumber, $itemnumber_ref, $error_ref) = AddBiblioAndItems($record, $frameworkcode);
-
-=back
-
-Efficiently add a biblio record and create item records from its
-embedded item fields.  This routine is suitable for batch jobs.
-
-The goal of this API is to have a similar effect to using AddBiblio
-and AddItems in succession, but without inefficient repeated
-parsing of the MARC XML bib record.
-
-One functional difference is that the duplicate item barcode 
-check is implemented in this API, instead of relying on
-the caller to do it, like AddItem does.
-
-This function returns the biblionumber and biblioitemnumber of the
-new bib, an arrayref of new itemsnumbers, and an arrayref of item
-errors encountered during the processing.  Each entry in the errors
-list is a hashref containing the following keys:
-
-=over 2
-
-=item item_sequence
-
-Sequence number of original item tag in the MARC record.
-
-=item item_barcode
-
-Item barcode, provide to assist in the construction of
-useful error messages.
-
-=item error_condition
-
-Code representing the error condition.  Can be 'duplicate_barcode',
-'invalid_homebranch', or 'invalid_holdingbranch'.
-
-=item error_information
-
-Additional information appropriate to the error condition.
-
-=back
-
-=cut
-
-sub AddBiblioAndItems {
-    my ( $record, $frameworkcode ) = @_;
-    my ($biblionumber,$biblioitemnumber,$error);
-    my @itemnumbers = ();
-    my @errors = ();
-    my $dbh = C4::Context->dbh;
-
-    # transform the data into koha-table style data
-    # FIXME - this paragraph copied from AddBiblio
-    my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
-    ($biblionumber,$error) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
-    $olddata->{'biblionumber'} = $biblionumber;
-    ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
-
-    # FIXME - this paragraph copied from AddBiblio
-    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
-
-    # now we loop through the item tags and start creating items
-    my @bad_item_fields = ();
-    my ($itemtag, $itemsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
-    my $item_sequence_num = 0;
-    ITEMFIELD: foreach my $item_field ($record->field($itemtag)) {
-        $item_sequence_num++;
-        # we take the item field and stick it into a new
-        # MARC record -- this is required so far because (FIXME)
-        # TransformMarcToKoha requires a MARC::Record, not a MARC::Field
-        # and there is no TransformMarcFieldToKoha
-        my $temp_item_marc = MARC::Record->new();
-        $temp_item_marc->append_fields($item_field);
-    
-        # add biblionumber and biblioitemnumber
-        my $item = TransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
-        $item->{'biblionumber'} = $biblionumber;
-        $item->{'biblioitemnumber'} = $biblioitemnumber;
-
-        # check for duplicate barcode
-        my %item_errors = C4::Items::CheckItemPreSave($item);
-        if (%item_errors) {
-            push @errors, _repack_item_errors($item_sequence_num, $item, \%item_errors);
-            push @bad_item_fields, $item_field;
-            next ITEMFIELD;
-        }
-
-        C4::Items::_set_defaults_for_add($item);
-        C4::Items::_set_derived_columns_for_add($item);
-        my ( $itemnumber, $error ) = C4::Items::_koha_new_item( $dbh, $item, $item->{barcode} );
-        warn $error if $error;
-        push @itemnumbers, $itemnumber; # FIXME not checking error
-        $item->{'itemnumber'} = $itemnumber;
-
-        &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item")
-        if C4::Context->preference("CataloguingLog"); 
-
-        my $new_item_marc = C4::Items::_marc_from_item_hash($item, $frameworkcode);
-        $item_field->replace_with($new_item_marc->field($itemtag));
-    }
-
-    # remove any MARC item fields for rejected items
-    foreach my $item_field (@bad_item_fields) {
-        $record->delete_field($item_field);
-    }
-
-    # now add the record
-    # FIXME - this paragraph copied from AddBiblio -- however, moved  since
-    # since we need to create the items row and plug in the itemnumbers in the
-    # MARC
-    $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode );
-
-    # FIXME - when using this API, do we log both bib and item add, or just
-    #         bib
-    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$biblionumber,"biblio")
-        if C4::Context->preference("CataloguingLog");
-
-    return ( $biblionumber, $biblioitemnumber, \@itemnumbers, \@errors);
-    
-}
-
-sub _repack_item_errors {
-    my $item_sequence_num = shift;
-    my $item_ref = shift;
-    my $error_ref = shift;
-
-    my @repacked_errors = ();
-
-    foreach my $error_code (sort keys %{ $error_ref }) {
-        my $repacked_error = {};
-        $repacked_error->{'item_sequence'} = $item_sequence_num;
-        $repacked_error->{'item_barcode'} = exists($item_ref->{'barcode'}) ? $item_ref->{'barcode'} : '';
-        $repacked_error->{'error_code'} = $error_code;
-        $repacked_error->{'error_information'} = $error_ref->{$error_code};
-        push @repacked_errors, $repacked_error;
-    } 
-
-    return @repacked_errors;
 }
 
 =head2 ModBiblio
