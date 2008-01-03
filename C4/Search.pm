@@ -1019,10 +1019,11 @@ sub buildQuery {
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
 
-# available is defined as (items.notloan is NULL) and (items.itemlost > 0 or NULL) (last clause handles NULL values for lost in zebra)
-# all records not indexed in the onloan register and allrecords not indexed in the lost register, or where the value of lost is equal to or less than 0
+# 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
+# In English:
+# all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
             $availability_limit .=
-"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and ((lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
             $limit_cgi  .= "&limit=available";
             $limit_desc .= "";
         }

@@ -31,7 +31,6 @@ use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
-
 use vars qw($VERSION @ISA @EXPORT);
 
 # TODO: fix version
@@ -323,24 +322,14 @@ sub AddBiblioAndItems {
             warn "ERROR: cannot add item $item->{'barcode'} for biblio $biblionumber: duplicate barcode\n";
         }
 
-        # figure out what item type to use -- biblioitem-level or item-level
-        my $itemtype;
-        if (C4::Context->preference('item-level_itypes')) {
-            $itemtype = $item->{'itype'};
-        } else {
-            $itemtype = $olddata->{'itemtype'};
+        # Make sure item statuses are set to 0 if empty or NULL in both the item and the MARC
+        for ('notforloan', 'damaged','itemlost','wthdrawn') {
+            if (!$item->{$_} or $item->{$_} eq "") {
+                $item->{$_} = 0;
+                &MARCitemchange( $temp_item_marc, "items.$_", 0 );
+            }
         }
-
-        # FIXME - notforloan stuff copied from AddItem
-        my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype=?");
-        $sth->execute($itemtype);
-        my $notforloan = $sth->fetchrow;
-        ##Change the notforloan field if $notforloan found
-        if ( $notforloan > 0 ) {
-            $item->{'notforloan'} = $notforloan;
-            &MARCitemchange( $temp_item_marc, "items.notforloan", $notforloan );
-        }
-
+ 
         # FIXME - dateaccessioned stuff copied from AddItem
         if ( !$item->{'dateaccessioned'} || $item->{'dateaccessioned'} eq '' ) {
 
@@ -422,7 +411,6 @@ sub _repack_item_errors {
 sub AddItem {
     my ( $record, $biblionumber ) = @_;
     my $dbh = C4::Context->dbh;
-    
     # add item in old-DB
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $record, $frameworkcode );
@@ -4141,7 +4129,6 @@ my ($itemnumber,$error) = _koha_new_items( $dbh, $item, $barcode );
 sub _koha_new_items {
     my ( $dbh, $item, $barcode ) = @_;
     my $error;
-
     my ($items_cn_sort) = GetClassSort($item->{'items.cn_source'}, $item->{'itemcallnumber'}, "");
 
     # if dateaccessioned is provided, use it. Otherwise, set to NOW()

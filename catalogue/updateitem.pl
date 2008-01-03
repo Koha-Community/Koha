@@ -39,68 +39,80 @@ my $damaged=$cgi->param('damaged');
 
 my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
+
 # get the rest of this item's information
 my $item_data_hashref = GetItem($itemnumber, undef);
-my $newitemdata;
+
+# make sure item statuses are set to 0 if empty or NULL
+for ($damaged,$itemlost,$wthdrawn) {
+    if (!$_ or $_ eq "") {
+        $_ = 0;
+    }
+}
+
 # modify MARC item if input differs from items table.
 if ( $itemnotes ne $item_data_hashref->{'itemnotes'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemnotes', $itemnotes);
-	$newitemdata->{'itemnotes'} = $itemnotes;
+    $item_data_hashref->{'itemnotes'} = $itemnotes;
 } elsif ($itemlost ne $item_data_hashref->{'itemlost'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.itemlost', $itemlost);
-	$newitemdata->{'itemlost'} = $itemlost;
+    $item_data_hashref->{'itemlost'} = $itemlost;
 } elsif ($wthdrawn ne $item_data_hashref->{'wthdrawn'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.wthdrawn', $wthdrawn);
-	$newitemdata->{'wthdrawn'} = $wthdrawn;
+    $item_data_hashref->{'wthdrawn'} = $wthdrawn;
 } elsif ($damaged ne $item_data_hashref->{'damaged'}) {
     ModItemInMarconefield($biblionumber, $itemnumber, 'items.damaged', $damaged);
-	$newitemdata->{'damaged'} = $damaged;
+    $item_data_hashref->{'damaged'} = $damaged;
 } else {
-	#nothings changed, so do nothing.
-	print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+    #nothings changed, so do nothing.
+    print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
 }
 
 # FIXME: eventually we'll use Biblio.pm, but it's currently too buggy  (is this current ??)
+# yes as of dec 30 2007, ModItem doesn't update zebra for status changes, it requires
+# a MARC record be passed in
 #ModItem( $dbh,'',$biblionumber,$itemnumber,'',$item_hashref );
-	$newitemdata->{'itemnumber'} = $itemnumber;
-#	&C4::Biblio::_koha_modify_item($dbh,$newitemdata);
-
-	my $sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
-	$sth->execute($wthdrawn,$itemlost,$damaged,$itemnotes,$itemnumber);
-	&ModZebra($biblionumber,"specialUpdate","biblioserver");
-	
+#   &C4::Biblio::_koha_modify_item($dbh,$item_data_hashref);
+    my $sth = $dbh->prepare("UPDATE items SET wthdrawn=?,itemlost=?,damaged=?,itemnotes=? WHERE itemnumber=?");
+    $sth->execute($wthdrawn,$itemlost,$damaged,$itemnotes,$itemnumber);
+    &ModZebra($biblionumber,"specialUpdate","biblioserver");
+    
 # check issues iff itemlost.
- # FIXME : is there documentation or enforcement that itemlost value must be '1'?  if no replacement price, then borrower just doesn't get charged?
+# http://wiki.koha.org/doku.php?id=en:development:kohastatuses
+# lost ==1 Lost, lost==2 longoverdue, lost==3 lost and paid for
+# FIXME: itemlost should be set to 3 after payment is made, should be a warning to the interface that
+# a charge has been added
+# FIXME : if no replacement price, borrower just doesn't get charged?
 if ($itemlost==1) {
-	my $sth=$dbh->prepare("SELECT * FROM issues WHERE (itemnumber=? AND returndate IS NULL)");
-	$sth->execute($itemnumber);
-	my $issues=$sth->fetchrow_hashref();
+    my $sth=$dbh->prepare("SELECT * FROM issues WHERE (itemnumber=? AND returndate IS NULL)");
+    $sth->execute($itemnumber);
+    my $issues=$sth->fetchrow_hashref();
 
-	# if a borrower lost the item, add a replacement cost to the their record
-	if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
+    # if a borrower lost the item, add a replacement cost to the their record
+    if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
 
-		# first make sure the borrower hasn't already been charged for this item
-		my $sth1=$dbh->prepare("SELECT * from accountlines
-		WHERE borrowernumber=? AND itemnumber=?");
-		$sth1->execute($issues->{'borrowernumber'},$itemnumber);
-		my $existing_charge_hashref=$sth1->fetchrow_hashref();
+        # first make sure the borrower hasn't already been charged for this item
+        my $sth1=$dbh->prepare("SELECT * from accountlines
+        WHERE borrowernumber=? AND itemnumber=?");
+        $sth1->execute($issues->{'borrowernumber'},$itemnumber);
+        my $existing_charge_hashref=$sth1->fetchrow_hashref();
 
-		# OK, they haven't
-		unless ($existing_charge_hashref) {
-			# This item is on issue ... add replacement cost to the borrower's record and mark it returned
-			my $accountno = getnextacctno('',$issues->{'borrowernumber'},$dbh);
-			my $sth2=$dbh->prepare("INSERT INTO accountlines
-			(borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-			VALUES
-			(?,?,now(),?,?,'L',?,?)");
-			$sth2->execute($issues->{'borrowernumber'},$accountno,$item_data_hashref->{'replacementprice'},
-			"Lost Item $item_data_hashref->{'title'} $item_data_hashref->{'barcode'}",
-			$item_data_hashref->{'replacementprice'},$itemnumber);
-			$sth2->finish;
-		# FIXME: Log this ?
-		}
-	}
-	$sth->finish;
+        # OK, they haven't
+        unless ($existing_charge_hashref) {
+            # This item is on issue ... add replacement cost to the borrower's record and mark it returned
+            my $accountno = getnextacctno('',$issues->{'borrowernumber'},$dbh);
+            my $sth2=$dbh->prepare("INSERT INTO accountlines
+            (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+            VALUES
+            (?,?,now(),?,?,'L',?,?)");
+            $sth2->execute($issues->{'borrowernumber'},$accountno,$item_data_hashref->{'replacementprice'},
+            "Lost Item $item_data_hashref->{'title'} $item_data_hashref->{'barcode'}",
+            $item_data_hashref->{'replacementprice'},$itemnumber);
+            $sth2->finish;
+        # FIXME: Log this ?
+        }
+    }
+    $sth->finish;
 }
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");

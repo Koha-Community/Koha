@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# small script that import an iso2709 file into koha 2.0
+# Import an iso2709 file into Koha 3
 
 use strict;
 # use warnings;
@@ -189,6 +189,7 @@ if ($delete) {
     $dbh->do("truncate biblio");
     $dbh->do("truncate biblioitems");
     $dbh->do("truncate items");
+    $dbh->do("truncate zebraqueue");
 }
 if ($fk_off) {
 	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
