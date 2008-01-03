@@ -29,8 +29,8 @@
 
 	//]]>
 	</script>
-	
-  <span id="newmenuc"><form name="f2" method="post" action="authorities.pl">
+  <form name="f2" method="post" action="authorities.pl">	
+  <span id="newmenuc">
 	<label for="add_authtypecode">New: </label>
         <select id="add_authtypecode" name="authtypecode">
 <!-- TMPL_LOOP name="authtypesloop" -->
@@ -42,5 +42,5 @@
 <!-- /TMPL_LOOP -->
         </select>
       <input type="submit" value="Add" class="button" />
-  </form></span>
+  </span></form>
 </div>

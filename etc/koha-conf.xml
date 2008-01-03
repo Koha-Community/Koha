@@ -14,6 +14,61 @@
     <directory>__ZEBRA_DATA_DIR__/biblios</directory>
     <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
+     <!-- <docpath>xsl</docpath> -->
+     <!-- <stylesheet>xsl/default.xsl</stylesheet> -->
+     <!-- <maximumrecordsize>2000000</maximumrecordsize> -->
+     <retrievalinfo>
+       <retrieval syntax="usmarc" name="F"/>
+       <retrieval syntax="usmarc" name="B"/>
+       </retrieval>
+       <retrieval syntax="xml" name="marcxml"
+                  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2DC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="mods">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2MODS.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rdfdc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="utils">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slimUtils.xsl"/>
+         </backend>
+       </retrieval>
+     </retrievalinfo>
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__DB_HOST__</host>
+            <port>9999</port>
+            <database>biblios</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
 </server>
 <serverinfo id="biblioserver">
         <ccl2rpn>__ZEBRA_CONF_DIR__/ccl.properties</ccl2rpn>
@@ -25,6 +80,62 @@
 <server id="authorityserver"  listenref="authorityserver" >
     <directory>__ZEBRA_DATA_DIR__/authorities</directory>
     <config>__ZEBRA_CONF_DIR__/zebra-authorities.cfg</config>
+    <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
+     <!-- <docpath>xsl</docpath> -->
+     <!-- <stylesheet>xsl/default.xsl</stylesheet> -->
+     <!-- <maximumrecordsize>2000000</maximumrecordsize> -->
+     <retrievalinfo>
+       <retrieval syntax="usmarc" name="F"/>
+       <retrieval syntax="usmarc" name="B"/>
+       </retrieval>
+       <retrieval syntax="xml" name="marcxml"
+                  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2DC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="mods">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2MODS.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rdfdc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="utils">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slimUtils.xsl"/>
+         </backend>
+       </retrieval>
+     </retrievalinfo>
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-authorities.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__DB_HOST__</host>
+            <port>9999</port>
+            <database>authorities</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
 </server>
 <serverinfo id="authorityserver">
     <ccl2rpn>__ZEBRA_CONF_DIR__/ccl.properties</ccl2rpn>
@@ -50,7 +161,7 @@
  <opacdir>__OPAC_CGI_DIR__/opac</opacdir>
  <opachtdocs>__OPAC_TMPL_DIR__</opachtdocs>
  <intrahtdocs>__INTRANET_TMPL_DIR__</intrahtdocs>
- <includes>__INTRANET_TMPL_DIR__/default/en/includes/</includes>
+ <includes>__INTRANET_TMPL_DIR__/prog/en/includes/</includes>
  <logdir>__LOG_DIR__</logdir>
 </config>
 </yazgfs>

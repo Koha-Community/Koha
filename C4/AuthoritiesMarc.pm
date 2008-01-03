@@ -199,7 +199,7 @@ sub SearchAuthorities {
         my @authtypecode;
         my @auths=split / /,$authtypecode ;
         foreach my  $auth (@auths){
-            $query .=" \@attr 1=Authority/format-id \@attr 5=100 ".$auth; ##No truncation on authtype
+            $query .=" \@attr 1=authtype \@attr 5=100 ".$auth; ##No truncation on authtype
             push @authtypecode ,$auth;
             $n++;
         }
@@ -217,7 +217,7 @@ sub SearchAuthorities {
                 if (@$tags[$i] eq "mainmainentry") {
                 $attr =" \@attr 1=Heading ";
                 }elsif (@$tags[$i] eq "mainentry") {
-                $attr =" \@attr 1=Heading-Entity ";
+                $attr =" \@attr 1=Heading ";
                 }else{
                 $attr =" \@attr 1=Any ";
                 }
@@ -243,9 +243,7 @@ sub SearchAuthorities {
           $query=$q2;    
         }         
         ## Adding order
-	# I get an error 207 from zebra 'cannot sort according to sequence', so I'm modifying as below - JF
-        #$query=' @or  @attr 7=1 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingAsc");
-        #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading-Entity 1'.$query if ($sortby eq "HeadingDsc");
+        #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
 	$query=' @or  @attr 7=1 @attr 1=Heading 0'.$query if ($sortby eq "HeadingAsc");
 	$query=' @or  @attr 7=2 @attr 1=Heading 0'.$query if ($sortby eq "HeadingDsc");
         
@@ -784,8 +782,13 @@ sub BuildSummary{
 ## give this a Marc record to return summary
   my ($record,$authid,$authtypecode)=@_;
   my $dbh=C4::Context->dbh;
-  my $authref = GetAuthType($authtypecode);
-  my $summary = $authref->{summary};
+  my $summary;
+  # handle $authtypecode is NULL or eq ""
+  if ($authtypecode) {
+  	my $authref = GetAuthType($authtypecode);
+  	$summary = $authref->{summary};
+  }
+  # FIXME: should use I18N.pm
   my %language;
   $language{'fre'}="Français";
   $language{'eng'}="Anglais";

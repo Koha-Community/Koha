@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- $Id: explain.xml,v 1.14 2006/09/27 13:35:09 marc Exp $ -->
+
+<!-- this file configures the SRU/SRW explain response -->
+<!-- see: http://explain.z3950.org/dtd/commentary.html -->
+<!-- validate this using zeerex-2.0.xsd -->
+<!-- Extensions see: http://explain.z3950.org/dtd/extensions.html -->
+
+<explain xmlns="http://explain.z3950.org/dtd/2.0/">
+
+  <!-- try stylesheet url: http://./?stylesheet=docpath/sru2.xsl -->
+  <serverInfo protocol="SRW/SRU/Z39.50">
+
+    <host>__DB_HOST__</host>
+
+    <port>9999</port>
+    <!-- <database numRecs="1314" lastUpdate="2006-03-15 09-05-33">
+         Default</database> -->
+    <database>authorities</database>
+        <!--<authentication>
+      <user>kohauser</user>
+      <group>kohagroup</group>
+      <password>zebrastripes</password>
+    </authentication>-->
+  </serverInfo>
+
+  <databaseInfo>
+
+    <title lang="en" primary="true">Koha 3 Authority SRU/SRW/Z39.50 server</title>
+
+    <description lang="en" primary="true">
+      Koha 3 Authority Server
+    </description>
+
+    <author>Joshua Ferraro, LibLime, http://liblime.com,
+            Marc Cromme, Mike Taylor, Index Data Aps, 
+            http://www.indexdata.dk</author>
+
+    <contact>Joshua Ferraro, jmf(at)liblime(dot)com</contact>
+
+    <!--<langUsage codes="en fr">
+        The records are in English and French.
+        </langUsage>  -->
+    <!-- <extend>Partially crawled web data</extend> -->
+   
+    <history>
+      Created for Koha 3
+      http://koha.org
+    </history>
+
+    <implementation  identifier="zebra" version="1.4">
+      <title>Index Data YAZ/ZEBRA http://www.indexdata.dk/zebra</title>
+    </implementation>
+    
+    <links> 
+      <!--<link type="www">http://foo.indexdata.dk:80</link>-->
+      <link type="z39.50">http://__DB_HOST__:9999</link>
+      <link type="srw">http://__DB_HOST__:9999</link>
+      <link type="sru">http://__DB_HOST__:9999</link>
+      <!--<link type="oai"></link>
+      <link type="rss"></link>
+      <link type="icon"></link> -->
+    </links>
+    
+  </databaseInfo>
+
+  <!--
+  <metaInfo>
+    <dateModified>2002-03-29 19:00:00</dateModified>
+    <aggregatedFrom> z39.50r://gondolin.hist.liv.ac.uk:210/IR-Explain-1?
+                   id=ghlau-1;esn=F;rs=XML </aggregatedFrom>
+    <dateAggregated>2002-03-30 06:30:00</dateAggregated>
+  </metaInfo>
+  -->
+
+
+  <indexInfo>
+    <set name="cql" identifier="info:srw/cql-context-set/1/cql-v1.1">
+      <title>CQL Standard Set</title>
+    </set>
+    <set name="rec" identifier="info:srw/cql-context-set/2/rec-1.0">
+      <title>Record Standard Set</title>
+    </set>
+    <set name="alvis" identifier="http://indexdata.dk/zebra/xslt/1">
+      <title>Alvis Set</title>
+    </set>
+    <set name="dc" identifier="info:srw/cql-context-set/1/dc-v1.1">
+      <title>Dublin Core Set</title>
+    </set>
+    <set name="bib1" identifier="1.2.840.10003.3.1">
+      <title>BIB-1 Z39.50 Standard Set</title>
+    </set>
+
+
+    <!-- CQL standard index -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">CQL Server Choice</title>
+      <map><name set="cql">serverChoice</name></map>
+      <map>
+        <attr type="1" set="bib1">text</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">CQL All</title>
+      <map><name set="cql">all</name></map>
+      <map>
+        <attr type="1" set="bib1">text</attr>
+      </map>
+    </index>
+
+    <!-- Record ID index -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Record ID</title>
+      <map><name set="rec">id</name></map>
+      <map>
+        <attr type="1" set="bib1">rec:id</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+
+    <!-- Alvis indexes -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Text Relevance Ranked</title>
+      <map><name set="alvis">text</name></map>
+      <map>
+        <attr type="1" set="bib1">text</attr>
+        <attr type="2" set="bib1">102</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Anchor Text</title>
+      <map><name set="alvis">anchortext</name></map>
+      <map>
+        <attr type="1" set="bib1">anchortext</attr>
+        <attr type="2" set="bib1">102</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Date Modified</title>
+      <map><name set="alvis">date-modified</name></map>
+      <map>
+        <attr type="1" set="bib1">ac:date-modified</attr>
+        <attr type="4" set="bib1">5</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Date Checked</title>
+      <map><name set="alvis">date-checked</name></map>
+      <map>
+        <attr type="1" set="bib1">ac:date-checked</attr>
+        <attr type="4" set="bib1">5</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Identifier Url</title>
+      <map><name set="alvis">identifier-url</name></map>
+      <map>
+        <attr type="1" set="bib1">ac:identifier-url</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <!--<index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Identifier Server</title>
+      <map><name set="alvis">identifier-server</name></map>
+      <map>
+        <attr type="1" set="bib1">ac:identifier-server</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index> -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Topic Class</title>
+      <map><name set="alvis">topic-class</name></map>
+      <map>
+        <attr type="1" set="bib1">an:topic-class</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Language</title>
+      <map><name set="alvis">language</name></map>
+      <map>
+        <attr type="1" set="bib1">an:language</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Date</title>
+      <map><name set="alvis">entity-date</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-date</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Disease</title>
+      <map><name set="alvis">entity-disease</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-disease</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Gene</title>
+      <map><name set="alvis">entity-gene</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-gene</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Location</title>
+      <map><name set="alvis">entity-location</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-location</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <!--<index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Mail</title>
+      <map><name set="alvis">entity-mail</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-mail</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>-->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Person</title>
+      <map><name set="alvis">entity-person</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-person</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <!-- <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Protein</title>
+      <map><name set="alvis">entity-protein</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-protein</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index> -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Species</title>
+      <map><name set="alvis">entity-species</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-species</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity URL</title>
+      <map><name set="alvis">entity-url</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-url</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Organism</title>
+      <map><name set="alvis">entity-organism</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-organism</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Symptom</title>
+      <map><name set="alvis">entity-symptom</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-symptom</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Chemical</title>
+      <map><name set="alvis">entity-chemical</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-chemical</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Entity Drug</title>
+      <map><name set="alvis">entity-drug</name></map>
+      <map>
+        <attr type="1" set="bib1">la:entity-drug</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Lemma Canonical </title>
+      <map><name set="alvis">lemma-canonical</name></map>
+      <map>
+        <attr type="1" set="bib1">la:lemma-canonical</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Syntactic Noun</title>
+      <map><name set="alvis">syntactic-noun</name></map>
+      <map>
+        <attr type="1" set="bib1">la:syntactic-noun</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Syntactic Verb</title>
+      <map><name set="alvis">syntactic-verb</name></map>
+      <map>
+        <attr type="1" set="bib1">la:syntactic-verb</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Syntactic Adjective</title>
+      <map><name set="alvis">syntactic-adjective</name></map>
+      <map>
+        <attr type="1" set="bib1">la:syntactic-adjective</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Word Form</title>
+      <map><name set="alvis">word-form</name></map>
+      <map>
+        <attr type="1" set="bib1">la:word-form</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index>
+    <!-- <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis NLP Term Form</title>
+      <map><name set="alvis">term-form</name></map>
+      <map>
+        <attr type="1" set="bib1">la:term-form</attr>
+        <attr type="4" set="bib1">3</attr>
+      </map>
+    </index> -->
+    <!-- <index search="true" scan="true" sort="false">
+      <title lang="en">Alvis Wpcats</title>
+      <map><name set="alvis">wpcats</name></map>
+      <map>
+        <attr type="1" set="bib1">wpcats</attr>
+      </map>
+    </index> -->
+
+    <!-- Dublin Core Indexes -->
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Title</title>
+      <map><name set="dc">title</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:title</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Creator</title>
+      <map><name set="dc">creator</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:creator</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Subject</title>
+      <map><name set="dc">subject</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:subject</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Description</title>
+      <map><name set="dc">description</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:description</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Publisher</title>
+      <map><name set="dc">publisher</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:publisher</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Contributor</title>
+      <map><name set="dc">contributor</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:contributor</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Date</title>
+      <map><name set="dc">date</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:date</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Type</title>
+      <map><name set="dc">type</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:type</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Format</title>
+      <map><name set="dc">format</name></map>
+      <map>
+        <attr type="1" set="bib1"></attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Identifier</title>
+      <map><name set="dc">identifier</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:identifier</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Source</title>
+      <map><name set="dc">source</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:source</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Language</title>
+      <map><name set="dc">language</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:language</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Relation</title>
+      <map><name set="dc">relation</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:relation</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Coverage</title>
+      <map><name set="dc">coverage</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:coverage</attr>
+      </map>
+    </index>
+    <index search="true" scan="true" sort="false">
+      <title lang="en">DC Rights</title>
+      <map><name set="dc">rights</name></map>
+      <map>
+        <attr type="1" set="bib1">dc:rights</attr>
+      </map>
+    </index>
+
+  </indexInfo>
+
+  <!-- Z39.50 stuff ... not allowed in one and the same explain together with 
+       <schemaInfo>, sic ..
+  <recordInfo>
+    <recordSyntax identifier="1.2.840.10003.5.109.10">
+      <elementSet name="F">
+        <title lang="en" primary="true">Full XML Record</title>
+      </elementSet>
+    </recordSyntax>
+  </recordInfo>
+  -->
+
+  <schemaInfo>
+
+    <schema identifier="http://www.loc.gov/zing/srw/dcschema/v1.0/"
+            location="http://www.loc.gov/zing/srw/dc.xsd" 
+            name="dc"
+            retrieve="true">
+      <title lang="en">Dublin Core</title>
+    </schema>
+
+    <schema identifier="http://indexdata.dk/dc-short"
+            location="" 
+            name="dc-short"
+            retrieve="true">
+      <title lang="en">Dublin Core Short Form</title>
+    </schema>
+
+    <!--<schema identifier="http://indexdata.dk/snippet"
+            location="" 
+            name="snippet"
+            retrieve="true">
+      <title lang="en">Snippet - Not Implemented</title>
+    </schema> -->
+
+    <!--<schema identifier="http://indexdata.dk/help"
+            location="" 
+            name="help"
+            retrieve="true">
+      <title lang="en">Help - Not Implemented</title>
+    </schema> -->
+
+    <schema identifier="http://indexdata.dk/pretty"
+            location="" 
+            name="pretty"
+            retrieve="true">
+      <title lang="en">Pretty</title>
+    </schema>
+
+    <schema identifier="http://indexdata.dk/D9.1"
+            location="" 
+            name="D9.1"
+            retrieve="true">
+      <title lang="en">Alvis D9.1 Schema</title>
+    </schema>
+
+    <schema identifier="http://alvis.info/enriched/"
+            location="http://project.alvis.info/alvis_docs/alvis-document.xsd" 
+            name="alvis"
+            retrieve="true">
+      <title lang="en">Alvis Enriched</title>
+    </schema>
+
+    <schema identifier="http://indexdata.dk/zebra/xslt/1"
+            location="" 
+            name="index"
+            retrieve="true">
+      <title lang="en">Zebra Indexing</title>
+    </schema>
+
+  </schemaInfo>
+ 
+  <configInfo>
+
+    <!-- searchRetrieve settings -->
+
+    <!-- default context set -->
+    <default type="contextSet">cql</default>
+
+    <default type="index">all</default>
+
+    <!-- default relation -->
+    <default type="relation">=</default>
+
+    <!-- relation supported by the server or index -->
+    <supports type="relation">&lt;</supports> <!-- 2=1 OK -->
+    <supports type="relation">&lt;=</supports> <!-- 2=2 OK -->
+    <supports type="relation">=</supports> <!-- 2=3 OK -->
+    <supports type="relation">&gt;=</supports> <!-- 2=4 OK -->
+    <supports type="relation">&gt;</supports> <!-- 2=5 OK -->
+    <!-- <supports type="relation">&lt;&gt;</supports> --><!-- 2=6 DEAD !!! -->
+    <!-- <supports type="relation">all</supports> --><!-- 2=3 OK -->
+    <!-- <supports type="relation">any</supports> --><!-- 2=3 OK -->
+
+    <!-- relation modifier supported by the server or index -->
+    <!-- <supports type="relationModifier">relevant</supports> --><!-- 2=102 OK, makes no difference .. sic -->
+    <!-- <supports type="relationModifier">phonetic</supports> --> <!-- 2=100 DEAD -->
+    <!-- <supports type="relationModifier">stem</supports> --> <!-- 2=101 DEAD !! -->
+
+    <!-- support proximity (Empty) -->
+    <!-- <supports type="proximity"></supports> --> <!-- DEAD,  title = (house prox/distance=1/unit=word  the) FAILS -->
+
+    <!-- proximity modifier supported by the server or index 
+         (relation, distance, unit, ordering) -->
+    <!-- <supports type="proximityModifier"></supports> -->
+
+    <!-- boolean modifier supported by the server or index -->
+    <!-- <supports type="booleanModifier"></supports> -->
+
+    <!-- masking character supported (* or ?) -->
+    <supports type="maskingCharacter">*</supports>
+    <supports type="maskingCharacter">?</supports>
+
+    <!-- anchoring supported? (^ character) -->
+    <!-- empty terms supported (Empty) -->
+    <supports type="emptyTerm"></supports>
+
+    <!-- sorting settings -->
+
+    <!-- default schema used in sorting, in short name form -->
+    <!-- <default type="sortSchema"></default> -->
+    <!-- MIKE: deprecated -->
+
+    <!-- server support sort -->
+
+    <!-- supported sortmodifier (ascending, missingValue, caseSensitive) -->
+    <!-- <supports type="sortModifier"></supports> -->
+
+    <!-- presentation settings --> 
+
+    <!-- default number of records that a server will return at once  -->
+    <default type="numberOfRecords">0</default>
+
+    <!-- default schema used for retrieved records -->
+    <default type="retrieveSchema">index</default>
+    <!-- default stylesheet URL, or if stylesheets are supported -->
+    <setting type="stylesheet">docpath/sru.xsl</setting>
+
+    <!-- default record packing returned (string or xml) -->
+    <default type="recordPacking">xml</default>
+
+    <!-- maximum number of records that a server will return at once -->
+    <!-- <setting type="maximumRecords">1000</setting> -->
+
+    <!-- support result sets (Empty) -->
+    <!-- <supports type="resultSets"></supports>  --> 
+
+    <!-- XPath retrieval supported -->
+    <!-- <supports type="recordXPath"></supports> -->
+
+    <!-- scan settings -->
+
+    <!-- scan operation supported -->
+    <supports type="scan"></supports>
+
+    <!-- default number of terms to be returned in scan -->
+    <default type="numberOfTerms">20</default>
+
+    <!-- other server settings -->
+
+    <!-- older version of the protocol supported  -->
+    <!-- <supports type="version">1.1</supports> -->
+
+    <!-- number of seconds that a result set will be maintained for -->
+    <setting type="resultSetTTL">0</setting>
+
+    <!-- A type of extraRequestData available in the
+         searchRetrieveRequest. The extra*Data fields are represented as two
+         space separated words, the first the identifier for the extension and
+         the second the individual element name from the extension. If there is
+         only one word, then it is the extension id and all elements from
+         within are supported. -->
+    <!-- <supports type="extraSearchData"></supports> -->
+
+    <!-- A type of extraRequestData available in the explainRequest -->
+    <!-- <supports type="extraExplainData"></supports> -->
+
+    <!-- A type of extraRequestData available in the scanRequest -->
+    <!-- <supports type="extraScanData"></supports> -->
+    <!-- The URI identifier of a supported profile -->
+    <!-- <supports type="profile"></supports> -->
+  </configInfo>
+   
+</explain>

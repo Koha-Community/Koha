@@ -4,11 +4,11 @@
 <script type="text/javascript" >
 //<![CDATA[
 function confirm_deletion(id) {
-	
-	var is_confirmed = confirm('Are you sure you want to delete this authority?');
-	if (is_confirmed) {
-		window.location="authorities-home.pl?op=delete&amp;authid="+id;
-	}
+    
+    var is_confirmed = confirm('Are you sure you want to delete this authority?');
+    if (is_confirmed) {
+        window.location="authorities-home.pl?op=delete&amp;authid="+id;
+    }
 }
 function Help() {
     newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
@@ -35,11 +35,10 @@ function searchauthority() {
 <div id="doc" class="yui-t7">
    
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-g">
-	
-	<!-- TMPL_INCLUDE NAME="authorities-toolbar.inc" -->
-
+    <div id="yui-main">
+    <div class="yui-g">
+    
+    <!-- TMPL_INCLUDE NAME="authorities-toolbar.inc" -->
 <h1>Authority search results</h1>
 
 <!-- TMPL_IF name="total" -->
@@ -84,71 +83,8 @@ function searchauthority() {
 
 <!-- TMPL_ELSE -->
   No results found
-  
-  <fieldset id="authorities_authorities_home_search">
-  <legend>Authority search</legend>
-
-  <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="post">
-    <input type="hidden" name="op" value="do_search" />
-    <input type="hidden" name="type" value="intranet" />
-    <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-
-    <p><label for="authtypecode">Search on</label>
-          <select id="authtypecode" name="authtypecode">
-<!-- TMPL_LOOP NAME="authtypesloop" -->
-  <!-- TMPL_IF name="selected" -->
-            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
-  <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="authtypetext" --></option>
-  <!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-          </select>
-          <label for="value_mainmainentry">Main entry ($a only)</label>
-          <input type="hidden" name="marclist" value="mainmainentry" />
-          <select name="operator">
-	    <option value="contains">contains</option>
-	    <option value="start">starts with</option>
-            <option value="is">is exactly</option>
-        </select>
-        <input id="value_mainmainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-    </p>
-    <p>
-        <label for="value_mainentry">Main entry</label>
-        <input type="hidden" name="marclist" value="mainentry" />
-        <input type="hidden" name="and_or" value="and" />
-        <input type="hidden" name="excluding" value="" />
-        <select name="operator">
-            <option value="contains">contains</option>
-            <option value="start">starts with</option>
-            <option value="is">is exactly</option>
-        </select>
-        <input id="value_mainentry" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-      </p>
-    <p><label for="value_anywhere">Anywhere</label>
-          <input type="hidden" name="marclist" value="" />
-          <input type="hidden" name="and_or" value="and" />
-          <input type="hidden" name="excluding" value="" />
-          <select name="operator">
-            <option value="contains">contains</option>
-            <option value="start">starts with</option>
-            <option value="is">is exactly</option>
-          </select>
-          <input id="value_anywhere" type="text" name="value" value="<!-- TMPL_VAR NAME="value" -->" />
-    </p>
-
-    <div id="action">
-          <p><label>Order by :</label><select name="orderby">
-         <option value="">None</option>
-	    <option value="HeadingAsc" selected="SELECTED">Heading Ascendant</option>
-	    <option value="HeadingDsc">Heading Descendant</option>
-	  </select>
-      <input type="submit" value="Start search">
-      </p>
-    </div>
-  </form>
-</fieldset>
 <!-- /TMPL_IF -->
 </div>
 </div>
-
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

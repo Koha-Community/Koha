@@ -1,19 +1,6 @@
-# $Id: record_authorities_unimarc.abs,v 1.1.2.1 2006/11/28 10:11:56 tipaul Exp $
-
-# indexing rules. It
-# results in a server which provides a passable Bath level 0 and 1 service
-############################################################################
-# IMPORTANT : this file MUST be renamed record.abs : this name is "hardcoded" in zebra
-# the default record.abs is designed for MARC21.
-############################################################################
-# NOTE: This is designed to be used with the grs.marcxml input filter
-# for ISO2709 (ANSI Z39.2) or grs.xml for MARCXML-formatted records. It
-# won't work for the old grs.marc input filter, which yields a different
-# internal structure.
-
+# This is a fairly simple set of MARC21 Authority indexing rules
 encoding utf-8
 name authorities
-#attset auth1.att
 attset bib1.att
 attset gils.att
 esetname F @
@@ -21,166 +8,62 @@ esetname B @
 
 marc usmarc.mar
 systag sysno rank
-xpath disable
+xpath enable
 
 all any
-melm 001		Local-Number
-melm 152$b		Authority/format-id
-#melm 005        Version-id
-#melm 015        IASDN
+melm 001 Local-Number
+#melm 942$a authtype
+melm 152$b authtype
 
+# Personal Name
+melm 100 Personal-name:w,Personal-name:p,Personal-name:s,Heading:w,Heading:p,Heading:s
+melm 100$a Personal-name-heading:w,Personal-name-heading:p,Personal-name-heading:s,Personal-name:w,Personal-name:p,Heading:w,Heading:p,Heading:s
+melm 400 Personal-name-see:w,Personal-name-see:p,Personal-name-see:s,See:w,See:p,See:s
+melm 500 Personal-name-see-also:w,Personal-name-see-also:p,Personal-name-see-also:s,See-also:w,See-also:p,See-also:s
 
-########################
-# Coded fields
-########################
-#melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),auth-status:n:range(data,8,1),auth-status:s:range(data,8,1),language:n:range(data,9,3),language:s:range(data,9,3),char-encoding:w:range(data,13,4),char-encoding:s:range(data,13,4),ff100-17:w:range(data,17,3),ff100-21:w:range(data,21,2),ff100-23:w:range(data,23,1)
+# Corporate Name
+melm 110$a Corporate-name-heading:w,Corporate-name-heading:p,Corporate-name-heading:s,Corporate-name:w,Corporate-name:p,Heading:w,Heading:p,Heading:s
+melm 110 Corporate-name:w,Corporate-name:p,Corporate-name:s,Heading:w,Heading:p,Heading:s
+melm 410 Corporate-name-see:w,Corporate-name-see:p,Corporate-name-see:s,See:w,See:p,See:s
+melm 510 Corporate-name-see-also:w,Corporate-name-see-also:p,Corporate-name-see-also:s,See-also:w,See-also:p,See-also:s
 
-#melm 101$a     Language
-#melm 102$a     Country-heading
-# Subject-Heading
-#melm 106$a     Vaut 0(inutilisable sujet-matiere),1 (utilisable sujet-matiere)ou 2(utilisable uniquement sujet-matiere)
-#melm 120$a Obligatoire sur Autorite NP : Sexe et discrimination
-#melm 123$a Obligatoire sur Autorite GEO : Localisation
-#melm 150$a Obligatoire sur Autorite CO : Type de collectivite
-# 4XX$3 5XX$3 7XX$3 authority number
-# 4XX$5 5XX$5 7XX$5 Linking type
-# 4XX$7 5XX$7 7XX$7 Script Cataloguing
-# 4XX$8 5XX$8 7XX$8 Language
+# Meeting Name
+melm 111$a Conference-name-heading:w,Conference-name-heading:p,Conference-name-heading:s,Conference-name:w,Conference-name:p,Heading:w,Heading:p,Heading:s
+melm 111 Conference-name:w,Conference-name:p,Conference-name:s,Heading:w,Heading:p,Heading:s
+melm 411 Conference-name-see:w,Conference-name-see:p,Conference-name-see:s,See:w,See:p,See:s
+melm 511 Conference-name-see-also:w,Conference-name-see-also:p,Conference-name-see-also:s,See-also:w,See-also:p,See-also:s
 
+# Uniform Title
+melm 130$a Title-uniform-heading:w,Title-uniform-heading:p,Title-uniform-heading:s,Title-uniform:w,Title-uniform:p,Heading:w,Heading:p,Heading:s
+melm 130 Title-uniform:w,Title-uniform:p,Title-uniform:s,Heading:w,Heading:p,Heading:s
+melm 431 Title-uniform-see:w,Title-uniform-see:p,Title-uniform-see:s,See:w,See:p,See:s
+melm 531 Title-uniform-see-also:w,Title-uniform-see-also:p,Title-uniform-see-also:s,See-also:w,See-also:p,See-also:s
 
-############ HEADINGS ##################
-melm 100$a Heading:w,Heading:p,Heading:s,personal-heading,personal-heading:w,personal-heading:s,personal-heading:p
-melm 110$a Heading:w,Heading:p,Heading:s,corporate-heading
-melm 110$a Heading:w,Heading:p,Heading:s,Conference-heading
-melm 115$a Heading:w,Heading:p,Heading:s,Name-geographic
-#melm 216 Name-corporate
-melm 120$a Heading:w,Heading:p,Heading:s,personal-heading,personal-heading:w,personal-heading:s,personal-heading:p
-melm 130$a Heading:w,Heading:p,Heading:s,Title-Uniform,Title-Uniform:w,Title-Uniform:s,Title-Uniform:p
-melm 135$a Heading:w,Heading:p,Heading:s,Title-Uniform,Title-Uniform:w,Title-Uniform:s,Title-Uniform:p
-melm 150$a Heading:w,Heading:p,Heading:s,Subject-heading,Subject-heading:w,Subject-heading:s,Subject-heading:p
+# Topical Term
+melm 150$a Subject-heading:w,Subject-heading:p,Subject-heading:s,Subject:w,Subject:p,Heading:w,Heading:p,Heading:s
+melm 150 Subject:w,Subject:p,Subject:s,Heading:w,Heading:p,Heading:s
+melm 450 Subject-see:w,Subject-see:p,Subject-see:s,See:w,See:p,See:s
+melm 550 Subject-see-also:w,Subject-see-also:p,Subject-see-also:s,See-also:w,See-also:p,See-also:s
 
-melm 100 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,personal-Heading-Entity,personal-Heading-Entity:w,personal-Heading-Entity:s,personal-Heading-Entity:p
-melm 110 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,corporate-Heading-Entity
-melm 110 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,Conference-Heading-Entity
-melm 115 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,Name-geographic-Entity
-#melm 216 Name-corporate
-melm 120 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,personal-Heading-Entity,personal-Heading-Entity:w,personal-Heading-Entity:s,personal-Heading-Entity:p
-melm 130 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,Title-Uniform-entity,Title-Uniform-entity:w,Title-Uniform:s,Title-Uniform-entity:p
-melm 135 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,Title-Uniform-entity,Title-Uniform-entity:w,Title-Uniform:s,Title-Uniform-entity:p
-melm 150 Heading-Entity:w,Heading-Entity:p,Heading-Entity:s,Subject-Thesaurus
+# Geographic Name
+melm 151$a Name-geographic-heading:w,Name-geographic-heading:w,Name-geographic-heading:s,Name-geographic:w,Name-geographic:p,Heading:w,Heading:p,Heading:s
+melm 151 Name-geographic:w,Name-geographic:p,Name-geographic:s,Heading:w,Heading:p,Heading:s
+melm 451 Name-geographic-see:w,Name-geographic-see:p,Name-geographic-see:s,See:w,See:p,See:s
+melm 551 Name-geographic-see-also:w,Name-geographic-see-also:p,Name-geographic-see-also:s,See-also:w,See-also:p,See-also:s
 
-#210 Heading - Corporate Body Name
-#215 Heading - Territorial or Geographical Name
-#216 Heading - Trademark
-#220 Heading - Family Name
-#230 Heading - Uniform Title
-#235 Heading - Collective Uniform Title
-#240 Heading - Name/Title
-#245 Heading - Name/Collective Uniform Title
-#250 Heading - Topical Subject
-#260 Heading - Place Access
-#280 Heading - Form, Genre or Physical Characteristics
-#melm 712		Author,Author:p,Author:s
+# Geographic Term
+melm 155$a Term-geographic-heading:w,Term-geographic-heading:p,Term-geographic-heading:s,Term-geographic:w,Term-geographic:p,Heading:w,Heading:p,Heading:s
+melm 155 Term-geographic:w,Term-geographic:p,Term-geographic:s,Heading:w,Heading:p,Heading:s
+melm 455 Term-geographic-see:w,Term-geographic-see:p,Term-geographic-see:s,See:w,See:p,See:s
+melm 555 Term-geographic-see-also:w,Term-geographic-see-also:p,Term-geographic-see-also:s,See-also:w,See-also:p,See-also:s
 
-############# Rejected forms ##################
-#melm 400$a See, See:w,See:p,See:s,personal-see,personal-see:w,personal-see:s,personal-see:p
-#melm 410$a See, See:w,See:p,See:s,corporate-see
-#melm 410$a See, See:w,See:p,See:s,Conference-see
-#melm 415$a See, See:w,See:p,See:s,Name-geographic-see
-##melm 416 Name-corporate
-#melm 440$a See, See:w,See:p,See:s,personal-see,personal-see:w,personal-see:s,personal-see:p
-#melm 430$a See, See:w,See:p,See:s,Title-Uniform-see,Title-Uniform-see:w,Title-Uniform-see:s,Title-Uniform-see:p
-#melm 435$a See, See:w,See:p,See:s,Title-Uniform-see,Title-Uniform-see:w,Title-Uniform-see:s,Title-Uniform-see:p
-#melm 450$a See, See:w,See:p,See:s,Subject-see,Subject-see:w,Subject-see:s,Subject-see,:p
-#melm 400 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,personal-See-Entity,personal-See-Entity:w,personal-See-Entity:s,personal-See-Entity:p
-#melm 410 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,corporate-See-Entity
-#melm 410 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,Conference-See-Entity
-#melm 415 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,Name-geographic-See-Entity
-##melm 416 Name-corporate
-#melm 440 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,personal-See-Entity,personal-See-Entity:w,personal-See-Entity:s,personal-See-Entity:p
-#melm 430 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,Title-Uniform-See-Entity,Title-Uniform-See-Entity:w,Title-Uniform-See-Entity:s,Title-Uniform-See-Entity:p
-#melm 435 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,Title-Uniform-See-Entity,Title-Uniform-See-Entity:w,Title-Uniform-See-Entity:s,Title-Uniform-See-Entity:p
-#melm 450 See-Entity, See-Entity:w,See-Entity:p,See-Entity:s,Subject-See-Entity,Subject-See-Entity:w,Subject-See-Entity:s,Subject-See-Entity,:p
-#
-##410 Heading - Corporate Body Name
-##415 Heading - Territorial or Geographical Name
-##416 Heading - Trademark
-##440 Heading - Family Name
-##430 Heading - Uniform Title
-##435 Heading - Collective Uniform Title
-##440 Heading - Name/Title
-##445 Heading - Name/Collective Uniform Title
-##450 Heading - Topical Subject
-##460 Heading - Place Access
-##480 Heading - Form, Genre or Physical Characteristics
-##melm 714		Author,Author:p,Author:s
-#
-############# Related forms ##################
-#melm 500$a personal-see-also,personal-see-also:w,personal-see-also:s,personal-see-also:p
-#melm 510$a corporate-see-also
-#melm 510$a Conference-see-also
-#melm 515$a Name-geographic-see-also
-##melm 416 Name-corporate
-#melm 540$a personal-see-also,personal-see-also:w,personal-see-also:s,personal-see-also:p
-#melm 530$a Title-Uniform-see-also,Title-Uniform-see-also:w,Title-Uniform-see-also:s,Title-Uniform-see-also:p
-#melm 535$a Title-Uniform-see-also,Title-Uniform-see-also:w,Title-Uniform-see-also:s,Title-Uniform-see-also:p
-#melm 550$a Subject-see-also,Subject-see-also:w,Subject-see-also:s,Subject-see-also:p
-##510 Heading - Corporate Body Name
-##515 Heading - Territorial or Geographical Name
-##516 Heading - Trademark
-##550 Heading - Family Name
-##530 Heading - Uniform Title
-##535 Heading - Collective Uniform Title
-##540 Heading - Name/Title
-###545 Heading - Name/Collective Uniform Title
-##550 Heading - Topical Subject
-##560 Heading - Place Access
-##580 Heading - Form, Genre or Physical Characteristics
-##melm 714		Author,Author:p,Author:s
-#
-############# Parallel forms ##################
-#melm 700$a personal-parallel,personal-parallel:w,personal-parallel:s,personal-parallel:p
-#melm 710$a corporate-parallel
-#melm 710$a Conference-parallel
-#melm 715$a Name-geographic-parallel
-##melm 716 Name-corporate
-#melm 770$a personal-parallel,personal-parallel:w,personal-parallel:s,personal-parallel:p
-#melm 730$a Title-Uniform-parallel,Title-Uniform-parallel:w,Title-Uniform-parallel:s,Title-Uniform-parallel:p
-#melm 735$a Title-Uniform-parallel,Title-Uniform-parallel:w,Title-Uniform-parallel:s,Title-Uniform-parallel:p
-#melm 750$a Subject-parallel,Subject-parallel:w,Subject-parallel:s,Subject-parallel:p
-#
-########### NOTES #################
-#melm 300$a		Note	!:w,!:p
-#melm 301$a		Note	!:w,!:p
-#melm 302$a		Note	!:w,!:p
-#melm 303$a		Note	!:w,!:p
-#melm 304$a		Note	!:w,!:p
-#melm 305$a		Note	!:w,!:p
-#melm 306$a		Note	!:w,!:p
-#melm 307$a		Note	!:w,!:p
-#melm 308$a		Note	!:w,!:p
-#melm 310$a		Note	!:w,!:p
-#melm 311$a		Note	!:w,!:p
-#melm 312$a		Note	!:w,!:p
-#melm 313$a		Note	!:w,!:p
-#melm 314$a		Note	!:w,!:p
-#melm 315$a		Note	!:w,!:p
-#melm 316$a		Note	!:w,!:p
-#melm 317$a		Note	!:w,!:p
-#melm 318$a		Note	!:w,!:p
-#melm 320$a		Note	!:w,!:p
-#melm 321$a		Note	!:w,!:p
-#melm 322$a		Note	!:w,!:p
-#melm 323$a		Note	!:w,!:p
-#melm 324$a		Note	!:w,!:p
-#melm 325$a		Note	!:w,!:p
-#melm 326$a		Note	!:w,!:p
-#melm 327$a		Note	!:w,!:p
-#melm 328$a		Note	!:w,!:p
-#melm 330$a		Note	!:w,!:p
-#melm 332$a		Note	!:w,!:p
-#melm 333$a		Note	!:w,!:p
-#melm 336$a		Note	!:w,!:p
-#melm 337$a		Note	!:w,!:p
-#melm 345$a		Note	!:w,!:p
-#####
+# NOTE: subdivisions management missing from Koha
+# General Subdivision
+melm 180 Subject-subdivision,Heading:w,Heading:p,Heading:s
+# Geographic Subdivision
+melm 181 Geographic-subdivision,Heading:w,Heading:p,Heading:s
+# Chronological Subdivision
+melm 182 Chronological-subdivision,Heading:w,Heading:p,Heading:s
+# Form Subdivision
+melm 185 Form-subdivision,Heading:w,Heading:p,Heading:s
+
