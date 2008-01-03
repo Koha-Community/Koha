@@ -1239,19 +1239,21 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 
   # FIXME: need to skip title, subtitle, author, etc., as they are handled below
             next if $highlight_field->tag() =~ /(^00)/;    # skip fixed fields
-            my $match;
-            my $field = $highlight_field->as_string();
-            for my $term ( keys %$span_terms_hashref ) {
-                if ( ( $field =~ /$term/i ) && ( length($term) > 3 ) ) {
-                    $field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+            for my $subfield ($highlight_field->subfields()) {
+                my $match;
+                next if $subfield->[0] eq '9';
+                my $field = $subfield->[1];
+                for my $term ( keys %$span_terms_hashref ) {
+                    if ( ( $field =~ /$term/i ) && (( length($term) > 3 ) || ($field =~ / $term /i)) ) {
+                        $field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
                     $match++;
+                    }
                 }
+                $searchhighlightblob .= $field . " ... " if $match;
             }
 
-            # FIXME: we might want to limit the size of these fields if we
-            # want to get fancy
-            $searchhighlightblob .= $field . " ... " if $match;
         }
+        $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
         $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
 
 # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
@@ -1348,7 +1350,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                 $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{branchname} = $item->{'branchname'};
                 $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{location} = $locations{ $item->{location} };
                 $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{itemcallnumber} = $item->{itemcallnumber};
-		$onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+        $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date}  }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{due_date} }->{longoverdue}++;
@@ -1389,7 +1391,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{branchname} = $item->{'branchname'};
                     $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{location} = $locations{ $item->{location} };
                     $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{itemcallnumber} = $item->{itemcallnumber};
-		    $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+            $other_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} . $item->{status} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
 
                 # item is available
@@ -1400,7 +1402,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{branchname} = $item->{'branchname'};
                     $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{location} = $locations{ $item->{location} };
                     $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{itemcallnumber} = $item->{itemcallnumber};
-		    $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+            $available_items->{ $item->{'homebranch'} . '--' . $item->{location} . $item->{'itype'} . $item->{'itemcallnumber'} }->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
             }
         }    # notforloan, item level and biblioitem level
