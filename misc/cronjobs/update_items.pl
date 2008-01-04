@@ -37,7 +37,7 @@ GetOptions(
 	'h' => \$help,
 );
 
-if ($h) {
+if ($help) {
     print $USAGE."\n";
     exit;
 }
@@ -71,7 +71,6 @@ my $biblioserverdir = C4::Context->zebraconfig('biblioserver')->{directory};
 unless (-d "$biblioserverdir/specialUpdate") {
     system("mkdir -p $biblioserverdir/specialUpdate");
     print "Info: created $biblioserverdir/specialUpdate\n";
-    $created_dir_or_file++;
 }
 
 my $outfile = "$biblioserverdir/specialUpdate/$filename";
@@ -111,7 +110,6 @@ print "fetching marc and items data, updating\n";
 #
 my ($itemnumberTag,$itemnumberSubfield) = GetMarcFromKohaField("items.itemnumber","");
 my ($date_dueTag,$date_dueSubfield) = GetMarcFromKohaField("items.issues","");
-my (
 while (my $biblionumber=$biblionumber_sth->fetchrow) {
 	$count++;
 
