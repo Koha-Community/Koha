@@ -1063,10 +1063,12 @@ sub buildQuery {
         $_ =~ s/^ //g;     # remove any beginning spaces
         $_ =~ s/ $//g;     # remove any ending spaces
         $_ =~ s/==/=/g;    # remove double == from query
-
     }
     $query_cgi =~ s/^&//; # remove unnecessary & from beginning of the query cgi
 
+    for ($query_cgi,$simple_query) {
+        $_ =~ s/"//g;
+    }
     # append the limit to the query
     $query .= " " . $limit;
 
