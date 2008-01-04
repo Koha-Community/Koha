@@ -32,6 +32,19 @@ use C4::Search;
 use C4::Circulation;
 use C4::Accounts;
 
+INIT {
+    # an ugly hack to ensure that 
+    # various subs get imported
+    # into C4::Reserves' symbol table
+    # FIXME: hopefully can remove once
+    #        we get a better idea of exactly
+    #        how Exporter/use/require/import
+    #        should be used with modules
+    #        that currently call functions
+    #        from each other.
+    import C4::Items;
+}
+
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
 
 my $library_name = C4::Context->preference("LibraryName");
