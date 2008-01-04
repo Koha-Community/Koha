@@ -1432,12 +1432,12 @@ sub ReNewSubscription {
      );
 
     # renew subscription
-    my $query = qq|
+    $query = qq|
         UPDATE subscription
         SET    startdate=?,numberlength=?,weeklength=?,monthlength=?
         WHERE  subscriptionid=?
     |;
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute( format_date_in_iso($startdate),
         $numberlength, $weeklength, $monthlength, $subscriptionid );
         

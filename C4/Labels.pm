@@ -400,8 +400,8 @@ sub SetActiveTemplate {
     my $sth   = $dbh->prepare($query);
     $sth->execute();
 
-    my $query = "UPDATE labels_templates SET active = 1 WHERE tmpl_id = ?";
-    my $sth   = $dbh->prepare($query);
+    $query = "UPDATE labels_templates SET active = 1 WHERE tmpl_id = ?";
+    $sth   = $dbh->prepare($query);
     $sth->execute($tmpl_id);
     $sth->finish;
 }
@@ -414,8 +414,8 @@ sub set_active_layout {
     my $sth         = $dbh->prepare($query);
     $sth->execute();
 
-    my $query = "UPDATE labels_conf SET active = 1 WHERE id = ?";
-    my $sth   = $dbh->prepare($query);
+    $query = "UPDATE labels_conf SET active = 1 WHERE id = ?";
+    $sth   = $dbh->prepare($query);
     $sth->execute($layout_id);
     $sth->finish;
 }
@@ -511,12 +511,12 @@ sub add_layout {
     my $query2 = "update labels_conf set active = NULL";
     my $sth2   = $dbh->prepare($query2);
     $sth2->execute();
-    my $query2 = "INSERT INTO labels_conf
+    $query2 = "INSERT INTO labels_conf
             ( barcodetype, title, subtitle, isbn,issn, itemtype, barcode,
               dewey, class, subclass, itemcallnumber, author, printingtype,
                 guidebox, startlabel, layoutname, active )
                values ( ?, ?, ?, ?, ?, ?, ?,  ?,?, ?, ?, ?, ?, ?,?,?, 1 )";
-    my $sth2 = $dbh->prepare($query2);
+    $sth2 = $dbh->prepare($query2);
     $sth2->execute(
         $barcodetype, $title, $subtitle, $isbn, $issn,
 
@@ -1196,7 +1196,7 @@ sub draw_boundaries {
     ) = @_;
 
     my $y_pos_initial = ( ( 792 - 36 ) - 90 );
-    my $y_pos         = $y_pos_initial;
+    $y_pos            = $y_pos_initial; # FIXME - why are we ignoring the y_pos parameter by redefining it?
     my $i             = 1;
 
     for ( $i = 1 ; $i <= 8 ; $i++ ) {

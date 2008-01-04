@@ -131,9 +131,6 @@ plugin : the true value_builded. The screen that is open in the popup window.
 
 sub plugin {
 my ($input) = @_;
-    my $index = $input->param("index");
-    my $result =  $input->param("result");
-
     my $query=new CGI;
     my $op = $query->param('op');
     my $authtypecode = $query->param('authtypecode');

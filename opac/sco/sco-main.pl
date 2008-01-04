@@ -46,7 +46,8 @@ my $cnt = 0;
 #warn "issuerid: " . $issuerid;
 my ($issuer, $flags) = GetMemberDetails($issuerid);
 my $item = GetItem(undef,$barcode);
-my ($borrower, $flags) = GetMemberDetails(undef,$userid);
+my $borrower;
+($borrower, $flags) = GetMemberDetails(undef,$userid);
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;

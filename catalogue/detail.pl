@@ -141,7 +141,6 @@ foreach my $item (@items) {
 $template->param( norequests => $norequests );
 
 ## get notes and subjects from MARC record
-    my $dbh              = C4::Context->dbh;
     my $marcflavour      = C4::Context->preference("marcflavour");
     my $record           = GetMarcBiblio($biblionumber);
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );

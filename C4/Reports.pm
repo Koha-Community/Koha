@@ -83,8 +83,8 @@ my $htdocs = C4::Context->config('intrahtdocs');
 my $section='intranet';
 my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section);                                                                                 
 
-my $columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
-open (COLUMNS,$columns_def_file);
+my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
+open (COLUMNS,$full_path_to_columns_def_file);
 while (my $input = <COLUMNS>){
 	my @row =split(/\t/,$input);
 	$columns{$row[0]}=$row[1];

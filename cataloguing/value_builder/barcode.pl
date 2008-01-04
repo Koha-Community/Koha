@@ -71,7 +71,6 @@ sub plugin_javascript {
         $hour = "0".$sec;
 	}
 
-	my $dbh = C4::Context->dbh;
 	my $date = "$year";
 
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.barcode");

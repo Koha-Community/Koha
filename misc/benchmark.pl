@@ -82,7 +82,7 @@ $b1->add_run($run1);
 $b->add_run($run1);
 
 # send HTTP request sequences to server and time responses
-my $ro = $b1->execute;
+$ro = $b1->execute;
 # calculate hits/sec
 print ("\t".$b1->total_time."ms\t".(1000*$b1->total_requests/$b1->total_time)." biblios/sec\n");
 print "ALERT : ".$b1->total_responses_failed." failures\n" if $b1->total_responses_failed;
@@ -107,7 +107,7 @@ $b2->add_run($run2);
 $b->add_run($run2);
 
 # send HTTP request sequences to server and time responses
-my $ro = $b2->execute;
+$ro = $b2->execute;
 # calculate hits/sec
 print ("\t".$b2->total_time."ms\t".(1000*$b2->total_requests/$b2->total_time)." borrowers/sec\n");
 
@@ -123,7 +123,7 @@ $b4->concurrency( $concurrency );
 my @issues;
 my @returns;
 print "Issues detail          ";
-my $sth = $dbh->prepare("SELECT barcode FROM items WHERE itemnumber=?");
+$sth = $dbh->prepare("SELECT barcode FROM items WHERE itemnumber=?");
 my $sth2 = $dbh->prepare("SELECT borrowernumber FROM borrowers WHERE borrowernumber=?");
 for (my $i=1;$i<=$max_tries;$i++) {
     my $rand_borrowernumber;
@@ -151,7 +151,7 @@ $b3->add_run($run3);
 $b->add_run($run3);
 
 # send HTTP request sequences to server and time responses
-my $ro = $b3->execute;
+$ro = $b3->execute;
 # calculate hits/sec
 print ("\t".$b3->total_time."ms\t".(1000*$b3->total_requests/$b3->total_time)." issues/sec\n");
 
@@ -163,10 +163,10 @@ $b4->add_run($run4);
 $b->add_run($run4);
 
 # send HTTP request sequences to server and time responses
-my $ro = $b4->execute;
+$ro = $b4->execute;
 # calculate hits/sec
 print ("\t".$b4->total_time."ms\t".(1000*$b4->total_requests/$b4->total_time)." returns/sec\n");
 
 print "Benchmarking everything";
-my $ro = $b->execute;
+$ro = $b->execute;
 print ("\t".$b->total_time."ms\t".(1000*$b->total_requests/$b->total_time)." operations/sec\n");

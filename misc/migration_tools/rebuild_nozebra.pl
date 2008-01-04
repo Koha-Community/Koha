@@ -164,7 +164,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
 }
 print "\nInserting records...\n";
 $i=0;
-my $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('biblioserver',?,?,?)");
+$sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('biblioserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
         if (length($result{$key}->{$index}) > 1000000) {
@@ -181,11 +181,10 @@ print "\n***********************************\n";
 print "***** building AUTHORITIES indexes *****\n";
 print "***********************************\n";
 
-my $sth;
 $sth=$dbh->prepare("select authid from auth_header order by authid $limit");
 $sth->execute();
-my $i=0;
-my %result;
+$i=0;
+%result = ();
 while (my ($authid) = $sth->fetchrow) {
     $i++;
     print "\r$i";
@@ -266,7 +265,7 @@ while (my ($authid) = $sth->fetchrow) {
 }
 print "\nInserting...\n";
 $i=0;
-my $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('authorityserver',?,?,?)");
+$sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('authorityserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
         if (length($result{$key}->{$index}) > 1000000) {

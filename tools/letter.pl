@@ -116,45 +116,36 @@ if ( $op eq 'add_form' ) {
 
     # build field list
     my @SQLfieldname;
-    my %line = ( 'value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname' );
-    push @SQLfieldname, \%line;
-    my %line = ( 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' );
-    push @SQLfieldname, \%line;
-    my %line = ( 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' );
-    push @SQLfieldname, \%line;
+    push @SQLfieldname, { 'value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname' };
+    push @SQLfieldname, { 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' };
+    push @SQLfieldname, { 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' };
     my $sth2 = $dbh->prepare("SHOW COLUMNS from branches");
     $sth2->execute;
-    my %line = ( 'value' => "", 'text' => '---BRANCHES---' );
-    push @SQLfieldname, \%line;
+    push @SQLfieldname, { 'value' => "", 'text' => '---BRANCHES---' };
 
     while ( ( my $field ) = $sth2->fetchrow_array ) {
-        my %line = ( 'value' => "branches." . $field, 'text' => "branches." . $field );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "branches." . $field, 'text' => "branches." . $field };
     }
 
     # add acquisition specific tables
     if ( index( $module, "acquisition" ) > 0 ) {
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqorders");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---ORDERS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---ORDERS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "aqorders." . $field,
                 'text'  => "aqorders." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
 
         # add issues specific tables
@@ -162,79 +153,62 @@ if ( $op eq 'add_form' ) {
     elsif ( index( $module, "issues" ) > 0 ) {
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BOOKSELLERS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "aqbooksellers." . $field,
                 'text'  => "aqbooksellers." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from serial");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---SERIALS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---SERIALS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = ( 'value' => "serial." . $field, 'text' => "serial." . $field );
-            push @SQLfieldname, \%line;
+            push @SQLfieldname, { 'value' => "serial." . $field, 'text' => "serial." . $field };
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from subscription");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---SUBSCRIPTION---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---SUBSCRIPTION---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "subscription." . $field,
                 'text'  => "subscription." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
-        my %line = ('value' => "",             'text' => '---Biblio---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "",             'text' => '---Biblio---' };
 		foreach(qw(title author serial)) {
-        	my %line = ('value' => "biblio.$_", 'text' => ucfirst($_));
-        	push @SQLfieldname, \%line;
+        	push @SQLfieldname, { 'value' => "biblio.$_", 'text' => ucfirst($_) };
 		}
     }
     else {
         $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BIBLIO---' );
+        push @SQLfieldname, { 'value' => "", 'text' => '---BIBLIO---' };
 
-        push @SQLfieldname, \%line;
         while ( ( my $field ) = $sth2->fetchrow_array ) {
 
-# note : %line is redefined, otherwise \%line contains the same value for every entry of the list
-            my %line = ( 'value' => "biblio." . $field, 'text' => "biblio." . $field );
-            push @SQLfieldname, \%line;
+            push @SQLfieldname, { 'value' => "biblio." . $field, 'text' => "biblio." . $field };
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BIBLIOITEMS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---BIBLIOITEMS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "biblioitems." . $field,
                 'text'  => "biblioitems." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
-        my %line = ( 'value' => "", 'text' => '---ITEMS---' );
-        push @SQLfieldname, \%line;
-        my %line = ( 'value' => "items.content", 'text' => 'items.content' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---ITEMS---' };
+        push @SQLfieldname, { 'value' => "items.content", 'text' => 'items.content' };
 
         $sth2 = $dbh->prepare("SHOW COLUMNS from borrowers");
         $sth2->execute;
-        my %line = ( 'value' => "", 'text' => '---BORROWERS---' );
-        push @SQLfieldname, \%line;
+        push @SQLfieldname, { 'value' => "", 'text' => '---BORROWERS---' };
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-            my %line = (
+            push @SQLfieldname, {
                 'value' => "borrowers." . $field,
                 'text'  => "borrowers." . $field
-            );
-            push @SQLfieldname, \%line;
+            };
         }
     }
     if ($code) {

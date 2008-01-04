@@ -46,7 +46,7 @@ my $i=0;
 my $starttime = time();
 
 $|=1; # flushes output
-my $starttime = gettimeofday;
+$starttime = gettimeofday;
 
 #1st of all, find item MARC tag.
 my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber",'');
