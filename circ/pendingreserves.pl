@@ -25,6 +25,12 @@ use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 
+use vars qw($debug);
+
+BEGIN {
+    $debug = $ENV{DEBUG} || 0;
+}
+
 my $input = new CGI;
 my $order = $input->param('order');
 my $startdate=$input->param('from');
@@ -64,8 +70,7 @@ my $todaysdate =
 
 my $dbh    = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere) = ("","");
-warn format_date_in_iso($startdate);
-warn format_date_in_iso($enddate);
+$debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
 $sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
 $sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
 
