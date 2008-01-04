@@ -261,13 +261,14 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('', '785', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 1, 0, NULL),
 		('', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-		('', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
 		('', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
 		('', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
 		('', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -1643,7 +1644,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -1745,12 +1747,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('PERSO_NAME', '700', 'ESTABLISHED HEADING LINKING ENTRY--PERSONAL NAME', 'ESTABLISHED HEADING LINKING ENTRY--PERSONAL NAME', 1, 0, NULL),
 		('PERSO_NAME', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('PERSO_NAME', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('PERSO_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('PERSO_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('PERSO_NAME', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('PERSO_NAME', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('PERSO_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('PERSO_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('PERSO_NAME', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('PERSO_NAME', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('PERSO_NAME', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -2554,7 +2557,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('PERSO_NAME', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('PERSO_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('PERSO_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('PERSO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('PERSO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('PERSO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -2667,12 +2671,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('CORPO_NAME', '785', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 1, 0, NULL),
 		('CORPO_NAME', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('CORPO_NAME', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('CORPO_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('CORPO_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('CORPO_NAME', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('CORPO_NAME', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('CORPO_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('CORPO_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('CORPO_NAME', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('CORPO_NAME', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('CORPO_NAME', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -3462,7 +3467,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('CORPO_NAME', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('CORPO_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('CORPO_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('CORPO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('CORPO_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('CORPO_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -3565,12 +3571,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('MEETI_NAME', '711', 'ESTABLISHED HEADING LINKING ENTRY--MEETING NAME', 'ESTABLISHED HEADING LINKING ENTRY--MEETING NAME', 1, 0, NULL),
 		('MEETI_NAME', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('MEETI_NAME', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('MEETI_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('MEETI_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('MEETI_NAME', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('MEETI_NAME', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('MEETI_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('MEETI_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('MEETI_NAME', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('MEETI_NAME', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('MEETI_NAME', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -4375,7 +4382,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('MEETI_NAME', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('MEETI_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('MEETI_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('MEETI_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('MEETI_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('MEETI_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -4485,12 +4493,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('UNIF_TITLE', '730', 'ESTABLISHED HEADING LINKING ENTRY--UNIFORM TITLE', 'ESTABLISHED HEADING LINKING ENTRY--UNIFORM TITLE', 1, 0, NULL),
 		('UNIF_TITLE', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('UNIF_TITLE', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('UNIF_TITLE', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('UNIF_TITLE', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('UNIF_TITLE', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('UNIF_TITLE', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('UNIF_TITLE', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('UNIF_TITLE', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('UNIF_TITLE', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('UNIF_TITLE', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('UNIF_TITLE', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -5326,7 +5335,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('UNIF_TITLE', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('UNIF_TITLE', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('UNIF_TITLE', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('UNIF_TITLE', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('UNIF_TITLE', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('UNIF_TITLE', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -5427,12 +5437,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('CHRON_TERM', '782', 'SUBDIVISION LINKING ENTRY--CHRONOLOGICAL SUBDIVISION', 'SUBDIVISION LINKING ENTRY--CHRONOLOGICAL SUBDIVISION', 1, 0, NULL),
 		('CHRON_TERM', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('CHRON_TERM', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('CHRON_TERM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('CHRON_TERM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('CHRON_TERM', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('CHRON_TERM', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('CHRON_TERM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('CHRON_TERM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('CHRON_TERM', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('CHRON_TERM', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('CHRON_TERM', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -6192,7 +6203,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('CHRON_TERM', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('CHRON_TERM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('CHRON_TERM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('CHRON_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('CHRON_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('CHRON_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -6293,12 +6305,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('TOPIC_TERM', '780', 'SUBDIVISION LINKING ENTRY--GENERAL SUBDIVISION', 'SUBDIVISION LINKING ENTRY--GENERAL SUBDIVISION', 1, 0, NULL),
 		('TOPIC_TERM', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('TOPIC_TERM', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('TOPIC_TERM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('TOPIC_TERM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('TOPIC_TERM', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('TOPIC_TERM', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('TOPIC_TERM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('TOPIC_TERM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('TOPIC_TERM', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('TOPIC_TERM', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('TOPIC_TERM', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -7062,7 +7075,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('TOPIC_TERM', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('TOPIC_TERM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('TOPIC_TERM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('TOPIC_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('TOPIC_TERM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('TOPIC_TERM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -7163,12 +7177,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('GEOGR_NAME', '781', 'SUBDIVISION LINKING ENTRY--GEOGRAPHIC SUBDIVISION', 'SUBDIVISION LINKING ENTRY--GEOGRAPHIC SUBDIVISION', 1, 0, NULL),
 		('GEOGR_NAME', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('GEOGR_NAME', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('GEOGR_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('GEOGR_NAME', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('GEOGR_NAME', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('GEOGR_NAME', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('GEOGR_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('GEOGR_NAME', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('GEOGR_NAME', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('GEOGR_NAME', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('GEOGR_NAME', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -7930,7 +7945,8 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('GEOGR_NAME', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('GEOGR_NAME', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('GEOGR_NAME', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('GEOGR_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('GEOGR_NAME', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('GEOGR_NAME', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 
 -- ******************************************************
@@ -8032,12 +8048,13 @@ INSERT INTO `auth_tag_structure` (`authtypecode`, `tagfield`, `liblibrarian`, `l
 		('GENRE/FORM', '785', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 'SUBDIVISION LINKING ENTRY--FORM SUBDIVISION', 1, 0, NULL),
 		('GENRE/FORM', '788', 'COMPLEX LINKING ENTRY DATA', 'COMPLEX LINKING ENTRY DATA', 0, 0, NULL),
 		('GENRE/FORM', '856', 'ELECTRONIC LOCATION AND ACCESS', 'ELECTRONIC LOCATION AND ACCESS', 1, 0, NULL),
-		('GENRE/FORM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL);
+		('GENRE/FORM', '880', 'ALTERNATE GRAPHIC REPRESENTATION', 'ALTERNATE GRAPHIC REPRESENTATION', 1, 0, NULL),
+        ('GENRE/FORM', '942', 'KOHA INTERNAL USE', 'KOHA INTERNAL USE', 0, 1, NULL);
 
 
 INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `tab`, `authorised_value`, `value_builder`, `seealso`, `isurl`, `hidden`, `linkid`, `kohafield`, `frameworkcode`) VALUES
 		('GENRE/FORM', '000', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_leader_authorities.pl', NULL, 0, 0, '', '', ''),
-                ('GENRE/FORM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
+                ('GENRE/FORM', '001', '@', 'control field', 'control field', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', 'auth_header.authid', ''),
                 ('GENRE/FORM', '003', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_003.pl', NULL, 0, 0, '', '', ''),
                 ('GENRE/FORM', '005', '@', 'control field', 'control field', 0, 1, 0, NULL, 'marc21_field_005.pl', NULL, 0, 0, '', '', ''),
                 ('GENRE/FORM', '008', '@', 'fixed length control field', 'fixed length control field', 0, 1, 0, NULL, 'marc21_field_008_authorities.pl', NULL, 0, 0, '', '', ''),
@@ -8803,6 +8820,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('GENRE/FORM', '880', '6', '6', '6', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('GENRE/FORM', '880', '7', '7', '7', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('GENRE/FORM', '880', '8', '8', '8', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
-		('GENRE/FORM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', '');
+		('GENRE/FORM', '880', '9', '9', '9', 1, 0, 8, NULL, NULL, NULL, 0, 0, '', '', ''),
+		('GENRE/FORM', '942', 'a', 'Koha auth type', 'Koha auth type', 0, 1, 9, NULL, NULL, NULL, 0, 8, '', 'auth_header.authtypecode', '');
 
 

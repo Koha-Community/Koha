@@ -23,6 +23,8 @@ use C4::Koha;
 use MARC::Record;
 use C4::Biblio;
 use C4::Search;
+use C4::AuthoritiesMarc::MARC21;
+use C4::AuthoritiesMarc::UNIMARC;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -523,7 +525,17 @@ sub AddAuthority {
           );
         }      
   }    
-  $record->add_fields('152','','','b'=>$authtypecode) unless ($record->field('152') && $record->subfield('152','b'));
+
+  my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
+  if (!$authid and $format eq "MARC21") {
+    # only need to do this fix when modifying an existing authority
+    C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location($record, $auth_type_tag, $auth_type_subfield);
+  } 
+
+  unless ($record->field($auth_type_tag) && $record->subfield($auth_type_tag, $auth_type_subfield)) {
+    $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode); 
+  }
+
   if (!$authid) {
     my $sth=$dbh->prepare("select max(authid) from auth_header");
     $sth->execute;
@@ -592,6 +604,7 @@ sub ModAuthority {
       my $cgidir = C4::Context->intranetdir ."/cgi-bin";
       unless (opendir(DIR,"$cgidir")) {
               $cgidir = C4::Context->intranetdir."/";
+              closedir(DIR);
       }
   
       my $filename = $cgidir."/tmp/modified_authorities/$authid.authid";
@@ -617,13 +630,24 @@ returns xml form of record $authid
 sub GetAuthorityXML {
   # Returns MARC::XML of the authority passed in parameter.
   my ( $authid ) = @_;
-  my $dbh=C4::Context->dbh;
-  my $sth =
-      $dbh->prepare("select marcxml from auth_header where authid=? "  );
-  $sth->execute($authid);
-  my ($marcxml)=$sth->fetchrow;
-  return $marcxml;
-
+  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
+  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
+  if ($format eq "MARC21") {
+    # for MARC21, call GetAuthority instead of
+    # getting the XML directly since we may
+    # need to fix up the location of the authority
+    # code -- note that this is reasonably safe
+    # because GetAuthorityXML is used only by the 
+    # indexing processes like zebraqueue_start.pl
+    my $record = GetAuthority($authid);
+    return $record->as_xml_record($format);
+  } else {
+    my $dbh=C4::Context->dbh;
+    my $sth = $dbh->prepare("select marcxml from auth_header where authid=? "  );
+    $sth->execute($authid);
+    my ($marcxml)=$sth->fetchrow;
+    return $marcxml;
+  }
 }
 
 =head2 GetAuthority 
@@ -639,11 +663,15 @@ Returns MARC::Record of the authority passed in parameter.
 sub GetAuthority {
     my ($authid)=@_;
     my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("select marcxml from auth_header where authid=?");
+    my $sth=$dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
     $sth->execute($authid);
-    my ($marcxml) = $sth->fetchrow;
+    my ($authtypecode, $marcxml) = $sth->fetchrow;
     my $record=MARC::Record->new_from_xml($marcxml,'UTF-8',(C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
     $record->encoding('UTF-8');
+    if (C4::Context->preference("marcflavour") eq "MARC21") {
+      my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
+      C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location($record, $auth_type_tag, $auth_type_subfield);
+    }
     return ($record);
 }
 
@@ -1224,6 +1252,42 @@ sub merge {
 # 
 #   }#foreach $marc
 }#sub
+
+=head2 get_auth_type_location
+
+=over 4
+
+my ($tag, $subfield) = get_auth_type_location($auth_type_code);
+
+=back
+
+Get the tag and subfield used to store the heading type
+for indexing purposes.  The C<$auth_type> parameter is
+optional; if it is not supplied, assume ''.
+
+This routine searches the MARC authority framework
+for the tag and subfield whose kohafield is 
+C<auth_header.authtypecode>; if no such field is
+defined in the framework, default to the hardcoded value
+specific to the MARC format.
+
+=cut
+
+sub get_auth_type_location {
+    my $auth_type_code = @_ ? shift : '';
+
+    my ($tag, $subfield) = GetAuthMARCFromKohaField('auth_header.authtypecode', $auth_type_code);
+    if (defined $tag and defined $subfield and $tag != 0 and $subfield != 0) {
+        return ($tag, $subfield);
+    } else {
+        if (C4::Context->preference('marcflavour') eq "MARC21")  {
+            return C4::AuthoritiesMarc::MARC21::default_auth_type_location();
+        } else {
+            return C4::AuthoritiesMarc::UNIMARC::default_auth_type_location();
+        }
+    }
+}
+
 END { }       # module clean-up code here (global destructor)
 
 =head1 AUTHOR
