@@ -245,7 +245,7 @@
         <p>
         <label for="available-items">Only items currently available</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
         <p>
-        <label for="branchloop">Individual Libraries:</label><select name="limit" id="branchloop" onchange="if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}">
+        <label for="branchloop">Individual Libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">All Libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <option value="homebranch:<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
