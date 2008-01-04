@@ -6,6 +6,9 @@
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+	.highlight { background-color: #ffffcc;}
+</style>
 <!-- TMPL_IF NAME="add_form" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -99,7 +102,6 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_form" -->
-        
 
 <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
 <input type="hidden" name="op" value="add_validate" />
@@ -110,22 +112,28 @@
 	<!-- TMPL_ELSE -->
 		New currency
 	<!-- /TMPL_IF --></legend>
-	<ol><!-- TMPL_IF NAME="searchfield" -->
+	<ol>
 		<li>
+	<!-- TMPL_IF NAME="searchfield" -->
 			<span class="label">Currency: </span>
 			<input type="hidden" name="currency" id="currency" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-			</li>
 	<!-- TMPL_ELSE -->
-		<li>
 			<label for="currency">Currency: </label>
 			<input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" />
-			</li>
 	<!-- /TMPL_IF -->
-
-        	<li>
+		</li>
+        <li>
 			<label for="rate">Rate: </label>
 			<input type="text" name="rate" id="rate" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="rate" -->" />
-			</li></ol>
+		</li>
+        <li>
+			<label for="symbol">Symbol: </label>
+			<input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="symbol" -->" />
+		</li>
+        <li>
+			<label for="currency">Last Updated: </label><!-- TMPL_VAR NAME="timestamp" -->
+		</li>
+		</ol>
         </fieldset>
 		
 		<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form)" /> </fieldset>
@@ -189,14 +197,22 @@
 		<tr>
 			<th>Currency</th>
 			<th>Rate</th>
+			<th>Symbol</th>
+			<th>Last Updated</th>
 			<th colspan="2">&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr>
-			<td><!-- TMPL_VAR NAME="currency" --></td>
+		<!-- TMPL_IF NAME="toggle" -->
+		<tr class="highlight"><td class="highlight">
+		<!-- TMPL_ELSE -->
+		<tr><td>
+		<!-- /TMPL_IF -->
+			    <!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
+			<td><!-- TMPL_VAR NAME="symbol" --></td>
+			<td><!-- TMPL_VAR NAME="timestamp" --></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
+            <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
@@ -205,13 +221,11 @@
 		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
 	<!-- /TMPL_IF -->
 
-
 	<!-- TMPL_IF NAME="ltcount" -->
 		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>	
-	<!-- /TMPL_iF -->
+	<!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
-
 
 </div>
 </div>

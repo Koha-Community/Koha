@@ -41,6 +41,7 @@ use strict;
 use CGI;
 use C4::Context;
 use C4::Auth;
+use C4::Dates qw(format_date);
 use C4::Output;
 
 sub StringSearch  {
@@ -49,14 +50,14 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $query="Select currency,rate from currency where (currency like \"$data[0]%\") order by currency";
+	my $query="Select * from currency where (currency like \"$data[0]%\") order by currency";
 	my $sth=$dbh->prepare($query);
 	$sth->execute;
 	my @results;
 	my $cnt=0;
 	while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
-	$cnt ++;
+		$cnt++;
 	}
 	#  $sth->execute;
 	$sth->finish;
@@ -94,14 +95,16 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select currency,rate from currency where currency=?");
+		my $sth=$dbh->prepare("select * from currency where currency=?");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-
-	$template->param(currency => $data->{'currency'},
-			 rate => $data->{'rate'});
+	foreach (keys %$data) {
+		$template->param($_ => $data->{$_});
+	}
+	my $date = $template->param('timestamp');
+	($date) and $template->param('timestamp' => format_date($date));
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -113,14 +116,14 @@ if ($op eq 'add_form') {
 	$check->execute($input->param('currency'));
 	if ( $check->fetchrow )
 	{
-		my $sth = $dbh->prepare("UPDATE currency SET rate = ? WHERE currency = ?");
-		$sth->execute($input->param('rate'),$input->param('currency'));
+		my $sth = $dbh->prepare("UPDATE currency SET rate = ?, symbol = ?, timestamp = ? WHERE currency = ?");
+		$sth->execute($input->param('rate'),$input->param('symbol'),C4::Dates->new->output('iso'),$input->param('currency'));
 		$sth->finish;
 	}
 	else
 	{
-		my $sth = $dbh->prepare("INSERT INTO currency (currency, rate) VALUES (?,?)");
-		$sth->execute($input->param('currency'),$input->param('rate'));
+		my $sth = $dbh->prepare("INSERT INTO currency (currency, rate, symbol) VALUES (?,?,?)");
+		$sth->execute($input->param('currency'),$input->param('rate'),$input->param('symbol'));
 		$sth->finish;
 	}	 
 
@@ -162,21 +165,16 @@ if ($op eq 'add_form') {
 
 	my ($count,$results)=StringSearch($searchfield,'web');
 	my @loop;
-	my $toggle = 'white';
+	my $toggle = 0;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row = ( currency => $results->[$i]{'currency'},
+		my %row = (
+			currency => $results->[$i]{'currency'},
 			    rate => $results->[$i]{'rate'},
-			    toggle => $toggle);
+			  symbol => $results->[$i]{'symbol'},
+		   timestamp => format_date($results->[$i]{'timestamp'}),
+		);
+		($i % 2) and $row{toggle} = 1;
 		push @loop, \%row;
-
-                if ( $toggle eq 'white' )
-                {
-                        $toggle = '#ffffcc';
-                }
-                else
-                {
-                        $toggle = 'white';
-                }
 	}
 	$template->param(loop => \@loop);
 

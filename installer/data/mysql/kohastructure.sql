@@ -656,6 +656,8 @@ CREATE TABLE `class_sources` (
 DROP TABLE IF EXISTS `currency`;
 CREATE TABLE `currency` (
   `currency` varchar(10) NOT NULL default '',
+  `symbol` varchar(5) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `rate` float(7,5) default NULL,
   PRIMARY KEY  (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
