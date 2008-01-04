@@ -1198,7 +1198,27 @@ install :: all install_koha warn_koha_env_vars
     $install .= "\t\$(NOECHO) \$(ECHO) For other post-installation tasks, please consult the README.\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
 
+    if ($config{'INSTALL_ZEBRA'} eq "yes") {
+        $install .= _update_zebra_conf_target();
+    }
+
     return $install;
+}
+
+=head 2 _update_zebra_conf_target
+
+Add an installation target for updating
+Zebra's configuration files.
+
+=cut
+
+sub _update_zebra_conf_target {
+
+    my $target = "\nupdate_zebra_conf ::\n";
+    $target   .= "\tumask 022; \$(MOD_INSTALL) \\\n";
+    $target .= "\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR) \n";
+
+    return $target;
 }
 
 sub postamble {
