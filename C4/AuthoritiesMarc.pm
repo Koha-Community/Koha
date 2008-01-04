@@ -64,9 +64,11 @@ returns tag and subfield linked to kohafield
 
 Comment :
 Suppose Kohafield is only linked to ONE subfield
+
 =back
 
 =cut
+
 sub GetAuthMARCFromKohaField {
 #AUTHfind_marc_from_kohafield
   my ( $kohafield,$authtypecode ) = @_;
@@ -1223,8 +1225,6 @@ sub merge {
 #   }#foreach $marc
 }#sub
 END { }       # module clean-up code here (global destructor)
-
-=back
 
 =head1 AUTHOR
 
