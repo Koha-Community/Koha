@@ -132,7 +132,7 @@ function confirmDelete(s,n){
         <fieldset class="action">
         <!-- TMPL_IF name="manageshelf" -->
         <!-- TMPL_IF NAME="itemsloop" -->
-            <input type="submit" value="Remove selected Items" onclick="return confirm('Are you sure you want to remove these items from the shelf?')" />
+            <input type="submit" value="Remove selected Items" onclick="return confirm(_('Are you sure you want to remove these items from the shelf?'))" />
         <!-- /TMPL_IF --><!-- /itemsloop -->
         <!-- /TMPL_IF --><!-- /manageshelf -->
         </fieldset>
@@ -260,7 +260,7 @@ function confirmDelete(s,n){
 <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
 </td>
 <td><!-- TMPL_VAR NAME="shelfvirtualcount" --> </td>
-<td><!-- TMPL_IF name="mine" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a> <a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1" onclick="return confirmDelete('Are you sure you want to remove this List?')">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<td><!-- TMPL_IF name="mine" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a> <a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1" onclick="return confirmDelete(_('Are you sure you want to remove this List?'))">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->

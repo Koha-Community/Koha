@@ -14,13 +14,13 @@
 	function yuiToolbar() {   
 	
 		var newmenu = [
-			<!-- TMPL_LOOP name="authtypesloop" -->{ text: "New <!-- TMPL_VAR name="authtypetext" -->", url: "/cgi-bin/koha/authorities/authorities.pl?authtypecode=<!-- TMPL_VAR name="value" -->"},
+			<!-- TMPL_LOOP name="authtypesloop" -->{ text: "<!-- TMPL_VAR name="authtypetext" -->", url: "/cgi-bin/koha/authorities/authorities.pl?authtypecode=<!-- TMPL_VAR name="value" -->"},
 <!-- /TMPL_LOOP -->
 		]
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "New Authority",
+	        label: _("New Authority"),
 	        name: "newmenubutton",
 	        menu: newmenu,
 	        container: "newmenuc"
