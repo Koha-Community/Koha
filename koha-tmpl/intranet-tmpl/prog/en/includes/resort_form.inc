@@ -66,7 +66,7 @@
  <!-- /TMPL_IF -->
 
  <!-- TMPL_IF NAME="acqdate_dsc" -->
-<option value="acqdate_asc"selected="selected">Acquisition Date: Oldest to Newest</option>
+<option value="acqdate_asc" selected="selected">Acquisition Date: Oldest to Newest</option>
 <!-- TMPL_ELSE -->
 <option value="acqdate_asc">Acquisition Date: Oldest to Newest</option>
  <!-- /TMPL_IF -->

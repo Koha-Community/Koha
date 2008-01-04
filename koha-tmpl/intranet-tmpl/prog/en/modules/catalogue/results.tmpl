@@ -318,22 +318,8 @@ $(window).load(function() {
                                     <!-- TMPL_IF NAME="availablecount" --><!-- TMPL_VAR NAME="availablecount" --><!-- /TMPL_IF --> available:
                                     <ul>
                                     <!-- TMPL_LOOP NAME="available_items_loop" -->
-                                        <li
-                                        <!-- TMPL_IF NAME="item-level_itypes" -->
-                                        <!-- TMPL_IF name="imageurl" -->
-                                        style="
-                                            list-style: none;
-                                            list-style-type: none; 
-                                            background-image: url(<!-- TMPL_VAR name=imageurl -->);
-                                            background-repeat: no-repeat;
-                                            background-position: 0 50%;
-                                            padding: 3px 0 3px 30px;
-                                            margin: .4em 0;
-                                        " title="<!-- TMPL_VAR name="description" -->"
-                                        <!-- /TMPL_IF -->
-                                        <!-- /TMPL_IF -->
-                                        >
-
+                                        
+                                        <!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name=imageurl -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0; " title="<!-- TMPL_VAR name="description" -->"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
 
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
@@ -348,21 +334,12 @@ $(window).load(function() {
                                    <!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:
                                     <ul>
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
-                                        <li
+                                        
                                         <!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        style="
-                                            list-style: none;
-                                            list-style-type: none; 
-                                            background-image: url(<!-- TMPL_VAR name=imageurl -->);
-                                            background-repeat: no-repeat;
-                                            background-position: 0 50%;
-                                            padding: 3px 0 3px 30px;
-                                            margin: .4em 0;
-                                        " title="<!-- TMPL_VAR name="description" -->"
-                                        <!-- /TMPL_IF -->
-                                        <!-- /TMPL_IF -->
-                                        >
+                                        <li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name=imageurl -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+                                        <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->                                        
 
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
@@ -375,20 +352,12 @@ $(window).load(function() {
                                     <!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:
                                     <ul>
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
-                                        <li
+                                        
                                         <!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        style="                                            list-style: none;
-                                            list-style-type: none; 
-                                            background-image: url(<!-- TMPL_VAR name=imageurl -->);
-                                            background-repeat: no-repeat;
-                                            background-position: 0 50%;
-                                            padding: 3px 0 3px 30px;
-                                            margin: .4em 0;
-                                        " title="<!-- TMPL_VAR name="description" -->"
-                                        <!-- /TMPL_IF -->
-                                        <!-- /TMPL_IF -->
-                                        >
+                                        <li style="list-style: none; list-style-type: none; background-image: url(<!-- TMPL_VAR name=imageurl -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+                                        <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->                                       >
 
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
