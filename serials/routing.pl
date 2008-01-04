@@ -130,7 +130,7 @@ if ($op eq 'new') {
     $new = 1;
 } else {
 # for modify routing list default
-    $new => 0;
+    $new = 0;
 }
 
 $template->param(
