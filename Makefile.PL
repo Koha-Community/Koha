@@ -244,8 +244,7 @@ my $target_map = {
   './members'                   => 'INTRANET_CGI_DIR',
   './misc'                      => { target => 'SCRIPT_DIR', trimdir => -1 }, 
   './misc/bin'                  => { target => 'SCRIPT_DIR', trimdir => -1 }, 
-  './misc/info'                 => { target => 'DOC_DIR', trimdir => 2 },
-  './misc/release notes'        => { target => 'DOC_DIR', trimdir => 2 },
+  './misc/release_notes'        => { target => 'DOC_DIR', trimdir => 2 },
   './misc/translator'           => { target => 'MISC_DIR', trimdir => 2 }, 
   './misc/installer_devel_notes' => 'NONE',
   './opac'                      => 'OPAC_CGI_DIR',
@@ -370,10 +369,14 @@ my %config_defaults = (
   'DB_USER'           => 'kohaadmin',
   'DB_PASS'           => 'katikoan',
   'INSTALL_ZEBRA'     => 'yes',
+  'INSTALL_SRU'       => 'yes',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_USER'        => 'kohauser',
   'ZEBRA_PASS'        => 'zebrastripes',
+  'ZEBRA_SRU_HOST'    => 'localhost',
+  'ZEBRA_SRU_BIBLIOS_PORT'    => '9998',
+  'ZEBRA_SRU_AUTHORITIES_PORT'    => '9999',
   'KOHA_USER'         => 'koha',
   'KOHA_GROUP'        => 'koha',
 );
@@ -407,6 +410,7 @@ my %valid_config_values = (
   'INSTALL_MODE'  => { 'standard' => 1, 'single' => 1, 'dev' => 1 },
   'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
   'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
+  'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
 );
@@ -431,7 +435,9 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/ZEBRA_CONF_DIR/etc/passwd',
         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
-        'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg'
+        'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg',
+        'blib/ZEBRA_CONF_DIR/explain-authorities.xml',
+        'blib/ZEBRA_CONF_DIR/explain-biblios.xml'
     );
     if ($config{'INSTALL_MODE'} ne 'dev') {
         push @{ $pl_files->{'rewrite-config.PL'} }, (
@@ -866,6 +872,38 @@ Please specify Zebra database user);
 Please specify the Zebra database password);
         $config{'ZEBRA_PASS'} = _get_value('ZEBRA_PASS', $msg, $defaults->{'ZEBRA_PASS'}, $valid_values);
 
+        $msg = q(
+Since you've chosen to use Zebra, you can enable the SRU/
+Z39.50 Server if you so choose, but you must specify a
+few configuration options for it.
+
+Please note that if you choose *NOT* to configure SRU,
+koha-conf.xml will still contain some references to SRU
+settings.  Those references will be ignored by Koha.
+
+Install the SRU configuration files?);
+        $msg .= _add_valid_values_disp('INSTALL_SRU', $valid_values);
+        $config{'INSTALL_SRU'} = _get_value('INSTALL_SRU', $msg, $defaults->{'INSTALL_SRU'}, $valid_values);
+
+        if ($config{'INSTALL_SRU'} eq 'yes') {
+            $msg = q(
+Since you've chosen to configure SRU, you must
+specify the host and port(s) that the SRU
+Servers (bibliographic and authority) should run on.
+);
+            $msg = q(
+SRU Database host?);
+            $config{'ZEBRA_SRU_HOST'} = _get_value('ZEBRA_SRU_HOST', $msg, $defaults->{'ZEBRA_SRU_HOST'}, $valid_values);
+
+            $msg = q(
+SRU port for bibliographic data?);
+            $config{'ZEBRA_SRU_BIBLIOS_PORT'} = _get_value('ZEBRA_SRU_BIBLIOS_PORT', $msg, $defaults->{'ZEBRA_SRU_BIBLIOS_PORT'}, $valid_values);
+
+            $msg = q(
+SRU port for authority data?);
+            $config{'ZEBRA_SRU_AUTHORITIES_PORT'} = _get_value('ZEBRA_SRU_AUTHORITIES_PORT', $msg, $defaults->{'ZEBRA_SRU_AUTHORITIES_PORT'}, $valid_values);
+
+        }
     }
 
     print "\n\n";

@@ -12,6 +12,7 @@ use HTTP::Request::Common;
 my $cgi = new CGI;
 binmode(STDOUT, "utf8"); #output as utf8
 my $baseurl = C4::Context->preference('OPACBaseURL');
+warn "Warning: OPACBaseURL not set in system preferences" unless $baseurl;
 
 my $id = $cgi->param('id');
 my $format = $cgi->param('format');

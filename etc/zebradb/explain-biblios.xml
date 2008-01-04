@@ -12,7 +12,7 @@
   <!-- try stylesheet url: http://./?stylesheet=docpath/sru2.xsl -->
   <serverInfo protocol="SRW/SRU/Z39.50">
 
-    <host>__WEBSERVER_HOST__</host>
+    <host>__ZEBRA_SRU_HOST__</host>
 
     <port>9999</port>
     <!-- <database numRecs="1314" lastUpdate="2006-03-15 09-05-33">
@@ -55,9 +55,9 @@
     
     <links> 
       <!--<link type="www">http://foo.indexdata.dk:80</link>-->
-      <link type="z39.50">http://__WEBSERVER_HOST__:9999</link>
-      <link type="srw">http://__WEBSERVER_HOST__:9999</link>
-      <link type="sru">http://__WEBSERVER_HOST__:9999</link>
+      <link type="z39.50">http://__ZEBRA_SRU_HOST__:__ZEBRA_SRU_BIBLIOS_PORT__</link>
+      <link type="srw">http://__ZEBRA_SRU_HOST__:__ZEBRA_SRU_BIBLIOS_PORT__</link>
+      <link type="sru">http://__ZEBRA_SRU_HOST__:__ZEBRA_SRU_BIBLIOS_PORT__</link>
       <!--<link type="oai"></link>
       <link type="rss"></link>
       <link type="icon"></link> -->
