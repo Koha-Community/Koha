@@ -262,7 +262,7 @@ if ($fk_off) {
 $dbh->do("UPDATE systempreferences SET value=$CataloguingLog WHERE variable='CataloguingLog'");
 
 my $timeneeded = gettimeofday - $starttime;
-print "$i MARC records done in $timeneeded seconds\n";
+print "\n$i MARC records done in $timeneeded seconds\n";
 
 exit 0;
 

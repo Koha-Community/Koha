@@ -14,19 +14,24 @@ Installation Instructions
 All commands can be performed as a system user with sudo privileges,
 as indicated or by running the command directly as root.
 
-Your locale should be set to UTF-8, as should Apache2 and MySQL 5.
-This step is VERY IMPORTANT for a UNICODE compliant system. Please 
-read over the following document carefully:
-
-http://wiki.koha.org/doku.php?id=encodingscratchpad
-
 1. Prepare System and Install Dependencies
 
 1.1 Install Debian Etch via Businesscard CD
 
 See http://www.debian.org/releases/etch/debian-installer/
 
-1.2 Set up apt sources for Git, Yaz and Zebra packages
+1.2 Set up your locale
+
+Your locale should be set to UTF-8, as should Apache2 and MySQL 5.
+This step is VERY IMPORTANT for a UNICODE compliant system. Please 
+read over the following document carefully:
+
+http://wiki.koha.org/doku.php?id=encodingscratchpad
+
+IMPORTANT:  You _MUST_ follow all the steps outlined there for
+            Apache2, MySQL 5, etc. BEFORE you install Koha.
+
+1.3 Set up apt sources for Git, Yaz and Zebra packages
 
 Edit your /etc/apt/sources.list file and add the following:
 
@@ -53,9 +58,9 @@ Run the following command to update your system:
     $ sudo apt-get -t etch-backports install git-core git-email
     $ sudo apt-get install yaz idzebra-2.0 idzebra-2.0-doc
 
-1.3 Get Koha
+1.4 Get Koha
 
-1.3.1 Option A: Download Koha via Git (optional)
+1.4.1 Option A: Download Koha via Git (optional)
 
     $ git clone git://git.koha.org/pub/scm/koha.git kohaclone
     $ cd kohaclone
@@ -65,12 +70,15 @@ Note: for more information about Git, please see the Koha Git Usage Guide:
 
     http://wiki.koha.org/doku.php?id=en:development:git_usage
 
-1.3.2 Option B: Download Koha from koha.org
+1.4.2 Option B: Download Koha from http://download.koha.org
 
-1.4 Install additional Debian dependencies
+    $ wget http://download.koha.org/koha-3.XX.XX.XX.tar.gz
+    ( Note: use the latest stable version)
 
-IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT available from the package maintainer.
-            You have been warned!
+1.5 Install additional Debian dependencies
+
+IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT
+            available from the package maintainer. You have been warned!
 
 Using the debian.packages file included in the Koha source tree,
 run the following:
@@ -87,7 +95,7 @@ Choose [I]nstall and accept packages to be installed (hit return)
 
 Choose [C]onfigure, [R]emove and [Q]uit until dselect has completed.
 
-1.5 Install Perl dependencies that aren't packaged into Debian Etch
+1.6 Install Perl dependencies that aren't packaged into Debian Etch
 sources
 
 Run the following command:
@@ -151,6 +159,7 @@ When the configuration is completed CPAN will install the Perl modules.
 
     You must be sure you're using the XML::LibXML SAX parser, not Expat or PurePerl, both of which have outstanding bugs with pre-composed characters. You can test your SAX parser by running:
 
+    $ cd koha
     $ misc/sax_parser_print.pl 
 
     You should see something like::
@@ -293,7 +302,31 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
     Point your browser to http://<servername>:8080/
 
-    It should redirect you to the Web installer where you can continue the setup.
+    It should redirect you to the Web Installer where you can continue the setup.
+    You can install the sample data for libraries, patrons, etc. via the Web Installer
+
+7. What next?
+
+    Once the installer has completed, you can import and index MARC records from the
+    command line thusly (Note: you can also use the 'Stage MARC records for import' from
+    the Tools area of Koha's Staff Client to import a batch of MARC records):
+
+    $ export KOHA_CONF=/usr/share/koha/etc/koha-conf.xml
+      (note: use the correct path to your koha-conf.xml)
+
+7.1 Import:
+    $ misc/migration-tools/bulkmarcimport.pl -file /path/to/marc.iso2709
+
+7.2 Fast Index:
+    $ misc/migration-tools/rebuild_zebra.pl -b -w
+
+    Once the indexing has completed, you will be able to search for records in your
+    system. NOTE: if you don't run the Fast Index utility, and you have the zebraqueue
+    daemon running, the indexin process will happen in the background, but it will be
+    orders of magnitude slower.
+
+    To enable the SRU servers, you'll need to edit your koha-conf.xml and change the
+    <listen> options to listen on a TCP port; then restart the zebra daemon.
 
 Uninstall Instructions
 =============================
