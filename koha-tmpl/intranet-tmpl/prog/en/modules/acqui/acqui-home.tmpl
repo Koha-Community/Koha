@@ -55,37 +55,7 @@
 </div>
 </div>
 
-<div class="yui-u"><div id="acqui_acqui_home_currency">
-<!-- TMPL_IF NAME="loop_currency" -->
-    <h2>Exchange rates</h2>
-    <form action="/cgi-bin/koha/acqui/currency.pl">
-    <table>
-        <tr>
-            <th>Currency</th>
-            <th>Rate</th>
-			<th>&nbsp;</th>
-        </tr>
-        <!-- TMPL_LOOP name="loop_currency" -->
-            <tr>
-                <td>
-                    <label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
-                </td>
-                <td>
-                        <input type="hidden" name="type" value="change" />
-                        <input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
-                </td>
-				<td><input type="submit" value="Save" /></td>
-            </tr>
-        <!-- /TMPL_LOOP -->
-    </table>
-    </form>
-<!-- TMPL_ELSE -->
-    <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button">
-    Add Currency
-    </a>
-<!-- /TMPL_IF -->
-</div>
-
+<div class="yui-u">
     <!-- TMPL_IF name="nobudget" -->
     <!-- TMPL_ELSE -->
     <h2>Budgets and funds</h2>
@@ -125,7 +95,38 @@
     </div>
     <p>Use your reload button [ctrl + r] to get the most recent figures.
     Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
-    <!-- /TMPL_IF --></div>
+    <!-- /TMPL_IF -->
+    <div id="acqui_acqui_home_currency">
+    <!-- TMPL_IF NAME="loop_currency" -->
+        <h2>Exchange rates</h2>
+        <form action="/cgi-bin/koha/acqui/currency.pl">
+        <table>
+            <tr>
+                <th>Currency</th>
+                <th>Rate</th>
+                <th>&nbsp;</th>
+            </tr>
+            <!-- TMPL_LOOP name="loop_currency" -->
+                <tr>
+                    <td>
+                        <label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
+                    </td>
+                    <td>
+                            <input type="hidden" name="type" value="change" />
+                            <input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
+                    </td>
+                    <td><input type="submit" value="Save" /></td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        </form>
+    <!-- TMPL_ELSE -->
+        <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button">
+        Add Currency
+        </a>
+    <!-- /TMPL_IF -->
+    </div>
+</div>
     
 </div>
 
