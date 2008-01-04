@@ -103,8 +103,13 @@
        <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
        <li><label for="quantity">Quantity ordered: </label><span class="label"> <!-- TMPL_VAR NAME="quantity" --> </span></li>
         <li><label for="quantityrec">Quantity received: </label>
-          <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_IF NAME="quantityreceived" --><!-- TMPL_VAR NAME="quantityreceivedplus1" --><!-- TMPL_ELSE -->1<!-- /TMPL_IF -->" />
-          <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_IF NAME="quantityreceived" --><!-- TMPL_VAR NAME="quantityreceived" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->" />
+            <!-- TMPL_IF NAME="quantityreceived" -->
+                <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+            <!-- TMPL_ELSE -->
+                <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="1" />
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
+            <!-- /TMPL_IF -->
 		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /> --></li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
         <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" /></li>
