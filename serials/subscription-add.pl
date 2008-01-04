@@ -28,6 +28,8 @@ use C4::Branch; # GetBranches
 use C4::Serials;
 use C4::Letters;
 
+#use Smart::Comments;
+
 my $query = new CGI;
 my $op = $query->param('op');
 my $dbh = C4::Context->dbh;
@@ -121,6 +123,9 @@ if ($op eq 'mod'||$op eq 'dup') {
     	$subs->{$_} = format_date($subs->{$_});
 	}
     $subs->{'letter'}='' unless($subs->{'letter'});
+    $irregularity   = $subs->{'irregularity'};
+    $numberpattern  = $subs->{'numberpattern'};
+
 
     if($subs->{numberlength} > 0){
         $sublength = $subs->{numberlength};
@@ -208,7 +213,7 @@ if ($op eq 'addsubscription') {
     my $internalnotes = $query->param('internalnotes');
     my $hemisphere = $query->param('hemisphere') || 1;
 	my $letter = $query->param('letter');
-    ### BugFIX : hdl doesnot know what innerloops or letter stand for but it seems necessary. So he adds them.
+    # ## BugFIX : hdl doesnot know what innerloops or letter stand for but it seems necessary. So he adds them.
     my $manualhistory = $query->param('manualhist');
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
