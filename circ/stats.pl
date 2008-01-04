@@ -29,6 +29,12 @@ use C4::Auth;
 use Date::Manip;
 use C4::Stats;
 
+use vars qw($debug);
+
+BEGIN {
+	$debug = $ENV{DEBUG} || 0;
+}
+
 my $input = new CGI;
 my $time  = $input->param('time');
 
@@ -65,7 +71,7 @@ if ( $time eq 'daybefore' ) {
 if ( $time eq 'month' ) {
     $date  = ParseDate('1 month ago');
     $date2 = ParseDate('today');
-    warn "d : $date // d2 : $date2";
+    $debug and warn "d : $date // d2 : $date2";
 }
 if ( $time =~ /\// ) {
     $date  = ParseDate($time);
@@ -74,7 +80,7 @@ if ( $time =~ /\// ) {
 }
 $date  = UnixDate( $date,  '%Y-%m-%d' );
 $date2 = UnixDate( $date2, '%Y-%m-%d' );
-warn "d : $date // d2 : $date2";
+$debug and warn "d : $date // d2 : $date2";
 my @payments = TotalPaid( $date, $date2 );
 my $count    = @payments;
 my $total    = 0;
@@ -85,7 +91,7 @@ my %row;
 my $i = 0;
 
 while ( $i < $count ) {
-    warn " pay : " . $payments[$i]{'timestamp'};
+    $debug and warn " pay : " . $payments[$i]{'timestamp'};
     my $time     = $payments[$i]{'datetime'};
     my $payments = $payments[$i]{'value'};
     my $charge   = 0;
