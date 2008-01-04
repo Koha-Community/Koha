@@ -43,6 +43,22 @@ use C4::Log; # logaction
 
 use Data::Dumper;
 
+INIT {
+    # an ugly hack to ensure that 
+    # various subs get imported
+    # into C4::Circulation's symbol table
+    # FIXME: hopefully can remove once
+    #        we get a better idea of exactly
+    #        how Exporter/use/require/import
+    #        should be used with modules
+    #        that currently call functions
+    #        from each other.
+    import C4::Items;
+    import C4::Members;
+    import C4::Reserves;
+    import C4::Overdues;
+}
+
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
 
 # set the version for version checking
