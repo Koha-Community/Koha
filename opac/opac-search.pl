@@ -164,7 +164,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Search;
-use C4::Languages; # getAllLanguages
+use C4::Languages qw/getTranslatedLanguages getAllLanguages/;
 use C4::Koha;
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches

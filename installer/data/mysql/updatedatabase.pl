@@ -868,6 +868,68 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+#-- http://www.w3.org/International/articles/language-tags/
+
+#-- RFC4646
+$DBversion = "3.00.00.045";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+CREATE TABLE language_subtag_registry (
+        subtag varchar(25),
+        type varchar(25), -- language-script-region-variant-extension-privateuse
+        description varchar(25), -- only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
+        added date,
+        KEY `subtag` (`subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+#-- TODO: add suppress_scripts
+#-- this maps three letter codes defined in iso639.2 back to their
+#-- two letter equivilents in rfc4646 (LOC maintains iso639+)
+ $dbh->do("CREATE TABLE language_rfc4646_to_iso639 (
+        rfc4646_subtag varchar(25),
+        iso639_2_code varchar(25),
+        KEY `rfc4646_subtag` (`rfc4646_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+ $dbh->do("CREATE TABLE language_descriptions (
+        subtag varchar(25),
+        type varchar(25),
+        lang varchar(25),
+        description varchar(255),
+        KEY `lang` (`lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+#-- bi-directional support, keyed by script subcode
+ $dbh->do("CREATE TABLE language_script_bidi (
+        rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
+        bidi varchar(3), -- rtl ltr
+        KEY `rfc4646_subtag` (`rfc4646_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+#-- BIDI Stuff, Arabic and Hebrew
+ $dbh->do("INSERT INTO language_script_bidi(rfc4646_subtag,bidi)
+VALUES( 'Arab', 'rtl'");
+ $dbh->do("INSERT INTO language_script_bidi(rfc4646_subtag,bidi)
+VALUES( 'Hebr', 'rtl')");
+
+#-- TODO: need to map language subtags to script subtags for detection
+#-- of bidi when script is not specified (like ar, he)
+ $dbh->do("CREATE TABLE language_script_mapping (
+        language_subtag varchar(25),
+        script_subtag varchar(25),
+        KEY `language_subtag` (`language_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+#-- Default mappings between script and language subcodes
+ $dbh->do("INSERT INTO language_script_mapping(language_subtag,script_subtag)
+VALUES( 'ar', 'Arab')");
+ $dbh->do("INSERT INTO language_script_mapping(language_subtag,script_subtag)
+VALUES( 'he', 'Hebr')");
+
+        print "Upgrade to $DBversion done (adding language subtag registry and basic BiDi support NOTE: You should import the subtag registry SQL)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

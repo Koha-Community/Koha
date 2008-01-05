@@ -77,7 +77,7 @@ sub gettemplate {
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
 	# if the template doesn't exist, load the English one as a last resort
-	my $filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
+	my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
 	unless (-f $filename) {
 		$lang = 'en';
 		$filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
@@ -141,7 +141,8 @@ sub themelanguage {
 	# Set some defaults for language and theme
 	# First, check the user's preferences
 	my $lang;
-	$lang = accept_language($ENV{HTTP_ACCEPT_LANGUAGE},getTranslatedLanguages($interface,'prog'));
+	my $http_accept_language = regex_lang_subtags($ENV{HTTP_ACCEPT_LANGUAGE})->{language};
+	$lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
 
 	# But, if there's a cookie set, obey it
 	$lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');

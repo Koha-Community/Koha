@@ -1836,6 +1836,54 @@ CREATE TABLE `services_throttle` (
   PRIMARY KEY  (`service_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- http://www.w3.org/International/articles/language-tags/
+
+-- RFC4646
+DROP TABLE IF EXISTS language_subtag_registry;
+CREATE TABLE language_subtag_registry (
+        subtag varchar(25),
+        type varchar(25), -- language-script-region-variant-extension-privateuse
+        description varchar(25), -- only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
+        added date,
+        KEY `subtag` (`subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- TODO: add suppress_scripts
+-- this maps three letter codes defined in iso639.2 back to their
+-- two letter equivilents in rfc4646 (LOC maintains iso639+)
+DROP TABLE IF EXISTS language_rfc4646_to_iso639;
+CREATE TABLE language_rfc4646_to_iso639 (
+        rfc4646_subtag varchar(25),
+        iso639_2_code varchar(25),
+        KEY `rfc4646_subtag` (`rfc4646_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS language_descriptions;
+CREATE TABLE language_descriptions (
+        subtag varchar(25),
+        type varchar(25),
+        lang varchar(25),
+        description varchar(255),
+        KEY `lang` (`lang`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- bi-directional support, keyed by script subcode
+DROP TABLE IF EXISTS language_script_bidi;
+CREATE TABLE language_script_bidi (
+        rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
+        bidi varchar(3), -- rtl ltr
+        KEY `rfc4646_subtag` (`rfc4646_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- TODO: need to map language subtags to script subtags for detection
+-- of bidi when script is not specified (like ar, he)
+DROP TABLE IF EXISTS language_script_mapping;
+CREATE TABLE language_script_mapping (
+        language_subtag varchar(25),
+        script_subtag varchar(25),
+        KEY `language_subtag` (`language_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

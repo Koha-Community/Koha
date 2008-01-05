@@ -11,7 +11,7 @@ listed, please inform your systems administrator.</p>
 <form name="language" method="post">
 <select name="language">
   <!--TMPL_LOOP Name="languages"-->
-  <option value="<!--TMPL_VAR Name="value" -->"><!--TMPL_VAR Name="description"-->
+  <option value="<!--TMPL_VAR Name="value" -->"><!-- TMPL_IF NAME="description" --><!--TMPL_VAR Name="description"--><!-- TMPL_ELSE --><!--TMPL_VAR Name="value" --><!-- /TMPL_IF -->
 <!--   </option> -->
   <!--/TMPL_LOOP -->
 </select>
