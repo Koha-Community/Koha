@@ -32,6 +32,14 @@ $(document).ready(function() {
 <strong>Insufficient privileges.</strong>
 <p>Other fields updated.</p>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CANT_DELETE_STAFF" -->
+<h3>Unable to delete staff user</h3>
+<p>Insufficient privileges.</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CANT_DELETE_OTHERLIBRARY" -->
+<h3>Unable to delete patrons from other libraries with current settings</h3>
+<p>Insufficient privileges.</p>
+<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="CANT_DELETE" -->
 <h3>Unable to delete patron:</h3>
 <p>Insufficient privileges.</p>

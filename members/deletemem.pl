@@ -36,9 +36,14 @@ my $input = new CGI;
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
-
-
+my ($template, $borrowernumber, $cookie)
+                = get_template_and_user({template_name => "members/deletemem.tmpl",
+                                        query => $input,
+                                        type => "intranet",
+                                        authnotrequired => 0,
+                                        flagsrequired => {borrowers => 1},
+                                        debug => 1,
+                                        });
 
 #print $input->header;
 my $member=$input->param('member');
@@ -48,21 +53,22 @@ my ($countissues,$issues)=GetPendingIssues($member);
 
 my ($bor)=GetMemberDetails($member,'');
 my $flags=$bor->{flags};
-
 my $userenv = C4::Context->userenv;
-if(C4::Auth::haspermission(undef,$userenv->{'id'},{'staffaccess'=>1})) {
-  print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
-	exit 1;
+if ($bor->{category_type} eq "S") {
+    unless(C4::Auth::haspermission(undef,$userenv->{'id'},{'staffaccess'=>1})) {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_STAFF");
+        exit 1;
+    }
 }
 
 if (C4::Context->preference("IndependantBranches")) {
-	unless ($userenv->{flags} == 1){
-		unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
-#			warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
-			print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE");
-			exit 1;
-		}
-	}
+    unless ($userenv->{flags} == 1){
+        unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
+#           warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
+            print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
+            exit 1;
+        }
+    }
 }
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
@@ -70,32 +76,23 @@ $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 $sth->finish;
 if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
-
-	my ($template, $borrowernumber, $cookie)
-		= get_template_and_user({template_name => "members/deletemem.tmpl",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-					flagsrequired => {borrowers => 1},
-					debug => 1,
-					});
-	#   print $input->header;
-	$template->param(borrowernumber => $member);
-	if ($countissues >0) {
-		$template->param(ItemsOnIssues => $countissues);
-	}
-	if ($flags->{'CHARGES'} ne '') {
-		$template->param(charges => $flags->{'CHARGES'}->{'amount'});
-	}
-	if ($data ne '') {
-		$template->param(guarantees => 1);
-	}
+    #   print $input->header;
+    $template->param(borrowernumber => $member);
+    if ($countissues >0) {
+        $template->param(ItemsOnIssues => $countissues);
+    }
+    if ($flags->{'CHARGES'} ne '') {
+        $template->param(charges => $flags->{'CHARGES'}->{'amount'});
+    }
+    if ($data ne '') {
+        $template->param(guarantees => 1);
+    }
 output_html_with_http_headers $input, $cookie, $template->output;
 
 } else {
-	MoveMemberToDeleted($member);
-	DelMember($member);
-	print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+    MoveMemberToDeleted($member);
+    DelMember($member);
+    print $input->redirect("/cgi-bin/koha/members/members-home.pl");
 }
 
 
