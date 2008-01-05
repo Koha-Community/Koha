@@ -40,7 +40,7 @@ binmode(STDOUT, ":utf8");
 use Getopt::Long;
 
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off);
+my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format);
 
 $|=1;
 
@@ -55,6 +55,7 @@ GetOptions(
     'c:s' => \$char_encoding,
     'v:s' => \$verbose,
     'fk' => \$fk_off,
+    'm:s' => \$format,
 );
 
 # FIXME:  Management of error conditions needed for record parsing problems
@@ -203,7 +204,12 @@ my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
-my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+my $batch;
+if ($format =~ /XML/i) {
+    $batch = MARC::Batch->new( 'XML', $input_marc_file );
+} else {
+    $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+}
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
