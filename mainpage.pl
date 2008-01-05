@@ -49,8 +49,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         authnotrequired => 0,
         flagsrequired   => {
             catalogue => 1,
-            circulate => 1,
-            borrowers => 1,
         },
     }
 );
