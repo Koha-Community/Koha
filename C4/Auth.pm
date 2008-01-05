@@ -211,7 +211,7 @@ sub get_template_and_user {
         }
 
         if ( $flags && $flags->{updatecharges} == 1 ) {
-            $template->param( CAN_user_updatecharge => 1 );
+            $template->param( CAN_user_updatecharges => 1 );
         }
 
         if ( $flags && $flags->{acquisition} == 1 ) {

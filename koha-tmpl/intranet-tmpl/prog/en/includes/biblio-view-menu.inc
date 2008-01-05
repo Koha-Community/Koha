@@ -1,16 +1,19 @@
 <div id="menu">
 <ul>
-	<!-- TMPL_IF NAME="detailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
-	<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal</a></li>
+    <!-- TMPL_IF NAME="detailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal</a></li>
 <!-- TMPL_IF NAME="marcview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC</a></li>
-	<!-- TMPL_IF NAME="isbdview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
-	<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li>
-	<!-- TMPL_IF NAME="moredetailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
-	<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Items</a></li>
-	<li>
-	<!-- TMPL_IF NAME="holdsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></li>
-<!-- TMPL_IF name="subscriptionsnumber" --><li><a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&amp;title_filter=<!-- TMPL_VAR NAME="subscriptiontitle" -->">Subscription(s)</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="isbdview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li>
+    <!-- TMPL_IF NAME="moredetailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Items</a></li>
+    <li>
+    <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
+    <!-- TMPL_IF NAME="holdsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></li>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF name="subscriptionsnumber" --><li><a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&amp;title_filter=<!-- TMPL_VAR NAME="subscriptiontitle" -->">Subscription(s)</a></li><!-- /TMPL_IF -->
 </ul>
 <ul>
 <!-- TMPL_IF NAME="issuehistoryview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
