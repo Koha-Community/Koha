@@ -29,7 +29,7 @@ use strict;
 require Exporter;
 
 use C4::Context;
-use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description);
+use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
 
 use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
@@ -49,12 +49,7 @@ C4::Output - Functions for managing templates
 
 @ISA    = qw(Exporter);
 push @EXPORT, qw(
-  &themelanguage &gettemplate setlanguagecookie pagination_bar
-);
-
-#Output
-push @EXPORT, qw(
-    &output_html_with_http_headers
+  &themelanguage &gettemplate setlanguagecookie pagination_bar &output_html_with_http_headers
 );
 
 
@@ -78,7 +73,6 @@ sub gettemplate {
     }
     my $path = C4::Context->preference('intranet_includes') || 'includes';
 
-    #    warn "PATH : $path";
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
@@ -108,18 +102,18 @@ sub gettemplate {
     );
 
 	# Bidirectionality
-	my $language_subtags_hashref = regex_lang_subtags($lang);
+	my $current_lang = regex_lang_subtags($lang);
 	my $bidi;
-	$bidi = get_bidi($language_subtags_hashref->{script}) if $language_subtags_hashref->{script};
+	$bidi = get_bidi($current_lang->{script}) if $current_lang->{script};
 
 	# Languages
-	my $current_lang = regex_lang_subtags($lang);
 	my @template_languages;
 	my $languages_loop = getTranslatedLanguages($interface,$theme);
+
 	for my $language_hashref (@$languages_loop) {
 			$language_hashref->{'current_lang'} = $current_lang->{'language'};
 			$language_hashref->{'native_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'language_code'},'language');
-			warn "($language_hashref->{'language_code'},$language_hashref->{'current_lang'},$language_hashref->{'script_code'}";
+			#warn "($language_hashref->{'language_code'},$language_hashref->{'current_lang'},$language_hashref->{'script_code'}";
 			$language_hashref->{'locale_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
 			$language_hashref->{'language_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
 			$language_hashref->{'script_description'} = language_get_description($language_hashref->{'script_code'},$language_hashref->{'current_lang'},'script');
@@ -142,21 +136,24 @@ sub gettemplate {
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-    my ( $htdocs, $tmpl, $section, $query ) = @_;
+    my ( $htdocs, $tmpl, $interface, $query ) = @_;
 
-    #   if (!$query) {
-    #     warn "no query";
-    #   }
+	# Set some defaults for language and theme
+	# First, check the user's preferences
+	my $lang;
+	$lang = accept_language($ENV{HTTP_ACCEPT_LANGUAGE},getTranslatedLanguages($interface,'prog'));
 
-	# set some defaults for language and theme
-	my $lang = $query->cookie('KohaOpacLanguage');
+	# But, if there's a cookie set, obey it
+	$lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
+
+	# Fall back to English
 	$lang = 'en' unless $lang;
 	my $theme = 'prog';
 
     my $dbh = C4::Context->dbh;
     my @languages;
     my @themes;
-    if ( $section eq "intranet" ) {
+    if ( $interface eq "intranet" ) {
         @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
         pop @languages, $lang if $lang;
@@ -185,7 +182,7 @@ sub themelanguage {
         foreach my $la (@languages) {
             for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
                 $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-                if ( -e "$htdocs/$th/$la/modules/$tmpl" ) {
+                if ( -e "$htdocs/$th/$la/".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
                     $theme = $th;
                     $lang  = $la;
                     last THEME;

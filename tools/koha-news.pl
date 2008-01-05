@@ -29,7 +29,7 @@ use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use C4::Output;
 use C4::NewsChannels;
-use C4::Languages;
+use C4::Languages qw(getTranslatedLanguages);
 use Date::Calc qw/Date_to_Days Today/;
 
 my $cgi = new CGI;

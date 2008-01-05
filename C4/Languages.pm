@@ -39,7 +39,7 @@ use C4::Languages;
 =cut
 $VERSION = 3.00;
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description);
+@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
 my $DEBUG = 0;
 
 =head2 getFrameworkLanguages
@@ -392,6 +392,66 @@ sub get_bidi {
 	return $bidi;
 };
 
+sub accept_language {
+	# referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
+	my 	($clientPreferences,$supportedLanguages) = @_;
+	# There should be no whitespace anways, but a cleanliness/sanity check
+	$clientPreferences =~ s/\s//g;
+  
+	# Prepare the list of client-acceptable languages
+	my @languages = ();
+	foreach my $tag (split(/,/, $clientPreferences)) {
+		my ($language, $quality) = split(/\;/, $tag);
+		$quality =~ s/^q=//i if $quality;
+		$quality = 1 unless $quality;
+		next if $quality <= 0;
+		# We want to force the wildcard to be last
+		$quality = 0 if ($language eq '*');
+		# Pushing lowercase language here saves processing later
+		push(@languages, { quality => $quality,
+		       language => $language,
+		       lclanguage => lc($language) });
+	}
+	# Prepare the list of server-supported languages
+	my %supportedLanguages = ();
+	my %secondaryLanguages = ();
+	foreach my $language (@$supportedLanguages) {
+		warn "SUP: ".$language->{language_code};
+		$supportedLanguages{lc($language->{language_code})} = $language->{language_code};
+		if ($language->{language_code} =~ /^([^-]+)-?/) {
+			$secondaryLanguages{lc($1)} = $language->{language_code};
+		}
+	}
+
+	# Reverse sort the list, making best quality at the front of the array
+	@languages = sort { $b->{quality} <=> $a->{quality} } @languages;
+	my $secondaryMatch = '';
+	foreach my $tag (@languages) {
+		if (exists($supportedLanguages{$tag->{lclanguage}})) {
+			# Client en-us eq server en-us
+			return $supportedLanguages{$tag->{language}} if exists($supportedLanguages{$tag->{language}});
+			return $supportedLanguages{$tag->{lclanguage}};
+		} elsif (exists($secondaryLanguages{$tag->{lclanguage}})) {
+			# Client en eq server en-us
+			return $secondaryLanguages{$tag->{language}} if exists($secondaryLanguages{$tag->{language}});
+			return $supportedLanguages{$tag->{lclanguage}};
+		} elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+			# Client en-gb eq server en-us
+			$secondaryMatch = $secondaryLanguages{$1};
+		} elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+			# Client en-us eq server en
+			$secondaryMatch = $supportedLanguages{$1};
+		} elsif ($tag->{lclanguage} eq '*') {
+		# * matches every language not already specified.
+		# It doesn't care which we pick, so let's pick the default,
+		# if available, then the first in the array.
+		#return $acceptor->defaultLanguage() if $acceptor->defaultLanguage();
+		return $supportedLanguages->[0];
+		}
+	}
+	# No primary matches. Secondary? (ie, en-us requested and en supported)
+	return $secondaryMatch if $secondaryMatch;
+}
 1;
 
 __END__
