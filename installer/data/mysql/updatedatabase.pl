@@ -853,6 +853,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.044";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE deletedborrowers
+  ADD `altcontactfirstname` varchar(255) default NULL,
+  ADD `altcontactsurname` varchar(255) default NULL,
+  ADD `altcontactaddress1` varchar(255) default NULL,
+  ADD `altcontactaddress2` varchar(255) default NULL,
+  ADD `altcontactaddress3` varchar(255) default NULL,
+  ADD `altcontactzipcode` varchar(50) default NULL,
+  ADD `altcontactphone` varchar(50) default NULL
+");
+        print "Upgrade to $DBversion done (syncing deletedborrowers table with borrowers table)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

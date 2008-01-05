@@ -785,6 +785,13 @@ CREATE TABLE `deletedborrowers` (
   `contactnote` varchar(255) default NULL,
   `sort1` varchar(80) default NULL,
   `sort2` varchar(80) default NULL,
+  `altcontactfirstname` varchar(255) default NULL,
+  `altcontactsurname` varchar(255) default NULL,
+  `altcontactaddress1` varchar(255) default NULL,
+  `altcontactaddress2` varchar(255) default NULL,
+  `altcontactaddress3` varchar(255) default NULL,
+  `altcontactzipcode` varchar(50) default NULL,
+  `altcontactphone` varchar(50) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

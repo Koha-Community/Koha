@@ -32,8 +32,8 @@ use C4::Accounts;
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-	$VERSION = 3.02;
-	$debug = $ENV{DEBUG} || 0;
+    $VERSION = 3.02;
+    $debug = $ENV{DEBUG} || 0;
 }
 
 =head1 NAME
@@ -77,7 +77,7 @@ push @EXPORT, qw(
   &GetRoadTypes 
   &GetRoadTypeDetails 
   &GetSortDetails
-  &GetTitles	
+  &GetTitles    
   
   &GetMemberAccountRecords
   &GetBorNotifyAcctRecord
@@ -116,11 +116,11 @@ push @EXPORT, qw(
 push @EXPORT, qw(
   &checkuniquemember 
   &checkuserpassword
-	&Check_Userid
+    &Check_Userid
   &fixEthnicity
   &ethnicitycategories 
   &fixup_cardnumber
-	&checkcardnumber
+    &checkcardnumber
 );
 
 =item SearchMember
@@ -155,24 +155,24 @@ C<$count> is the number of elements in C<$borrowers>.
 #used by member enquiries from the intranet
 #called by member.pl and circ/circulation.pl
 sub SearchMember {
-	my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
-	my $dbh   = C4::Context->dbh;
-	my $query = "";
-	my $count;
-	my @data;
-	my @bind = ();
-	
-	# this is used by circulation everytime a new borrowers cardnumber is scanned
-	# so we can check an exact match first, if that works return, otherwise do the rest
-	$query = "SELECT * FROM borrowers
-		LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
-		";
-	my $sth = $dbh->prepare("$query WHERE cardnumber = ?");
-	$sth->execute($searchstring);
-	my $data = $sth->fetchall_arrayref({});
-	if (@$data){
-		return ( scalar(@$data), $data );
-	}
+    my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = "";
+    my $count;
+    my @data;
+    my @bind = ();
+    
+    # this is used by circulation everytime a new borrowers cardnumber is scanned
+    # so we can check an exact match first, if that works return, otherwise do the rest
+    $query = "SELECT * FROM borrowers
+        LEFT JOIN categories ON borrowers.categorycode=categories.categorycode
+        ";
+    my $sth = $dbh->prepare("$query WHERE cardnumber = ?");
+    $sth->execute($searchstring);
+    my $data = $sth->fetchall_arrayref({});
+    if (@$data){
+        return ( scalar(@$data), $data );
+    }
     $sth->finish;
 
     if ( $type eq "simple" )    # simple search for one letter only
@@ -196,36 +196,36 @@ sub SearchMember {
           if (C4::Context->userenv && C4::Context->userenv->{flags}!=1 && C4::Context->userenv->{'branch'}){
             $query.=" borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'})." AND " unless (C4::Context->userenv->{'branch'} eq "insecure");
           }      
-		}     
- 		$query.="((surname LIKE ? OR surname LIKE ?
-				OR firstname  LIKE ? OR firstname LIKE ?
-				OR othernames LIKE ? OR othernames LIKE ?)
-		" .
-		($category_type?" AND category_type = ".$dbh->quote($category_type):"");
-		@bind = (
-			"$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
-			"$data[0]%", "% $data[0]%"
-		);
-		for ( my $i = 1 ; $i < $count ; $i++ ) {
-			$query = $query . " AND (" . " surname LIKE ? OR surname LIKE ?
-				OR firstname  LIKE ? OR firstname LIKE ?
-				OR othernames LIKE ? OR othernames LIKE ?)";
-			push( @bind,
-				"$data[$i]%",   "% $data[$i]%", "$data[$i]%",
-				"% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
+        }     
+        $query.="((surname LIKE ? OR surname LIKE ?
+                OR firstname  LIKE ? OR firstname LIKE ?
+                OR othernames LIKE ? OR othernames LIKE ?)
+        " .
+        ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
+        @bind = (
+            "$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
+            "$data[0]%", "% $data[0]%"
+        );
+        for ( my $i = 1 ; $i < $count ; $i++ ) {
+            $query = $query . " AND (" . " surname LIKE ? OR surname LIKE ?
+                OR firstname  LIKE ? OR firstname LIKE ?
+                OR othernames LIKE ? OR othernames LIKE ?)";
+            push( @bind,
+                "$data[$i]%",   "% $data[$i]%", "$data[$i]%",
+                "% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
 
-			# FIXME - .= <<EOT;
-		}
-		$query = $query . ") OR cardnumber LIKE ?
-		order by $orderby";
-		push( @bind, $searchstring );
+            # FIXME - .= <<EOT;
+        }
+        $query = $query . ") OR cardnumber LIKE ?
+        order by $orderby";
+        push( @bind, $searchstring );
 
-		# FIXME - .= <<EOT;
+        # FIXME - .= <<EOT;
     }
 
     $sth = $dbh->prepare($query);
 
-	$debug and print STDERR "Q $orderby : $query\n";
+    $debug and print STDERR "Q $orderby : $query\n";
     $sth->execute(@bind);
     my @results;
     $data = $sth->fetchall_arrayref({});
@@ -349,7 +349,7 @@ sub GetMemberDetails {
     my $borrower = $sth->fetchrow_hashref;
     my ($amount) = GetMemberAccountRecords( $borrowernumber);
     $borrower->{'amountoutstanding'} = $amount;
-	# FIXME - patronflags calls GetMemberAccountRecords... just have patronflags return $amount
+    # FIXME - patronflags calls GetMemberAccountRecords... just have patronflags return $amount
     my $flags = patronflags( $borrower);
     my $accessflagshash;
 
@@ -417,7 +417,7 @@ sub patronflags {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge");
         $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
-		$flaginfo{'amount'} = sprintf "%.02f",$amount;
+        $flaginfo{'amount'} = sprintf "%.02f",$amount;
         if ( $amount > $noissuescharge ) {
             $flaginfo{'noissues'} = 1;
         }
@@ -503,30 +503,30 @@ sub GetMember {
     my ( $information, $type ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
-	my $select = "
+    my $select = "
 SELECT borrowers.*, categories.category_type, categories.description
 FROM borrowers 
 LEFT JOIN categories on borrowers.categorycode=categories.categorycode 
 ";
-	if ($type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber'){
-		$information = uc $information;
-		$sth = $dbh->prepare("$select WHERE $type=?");
+    if ($type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber'){
+        $information = uc $information;
+        $sth = $dbh->prepare("$select WHERE $type=?");
     } else {
-		$sth = $dbh->prepare("$select WHERE borrowernumber=?");
-	}
+        $sth = $dbh->prepare("$select WHERE borrowernumber=?");
+    }
     $sth->execute($information);
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     ($data) and return ($data);
 
     if ($type eq 'cardnumber' || $type eq 'firstname') {    # otherwise, try with firstname
-		$sth = $dbh->prepare("$select WHERE firstname like ?");
-		$sth->execute($information);
-		$data = $sth->fetchrow_hashref;
-		$sth->finish;
-		return ($data);
+        $sth = $dbh->prepare("$select WHERE firstname like ?");
+        $sth->execute($information);
+        $data = $sth->fetchrow_hashref;
+        $sth->finish;
+        return ($data);
     }
-	return undef;        
+    return undef;        
 }
 
 =item GetMemberIssuesAndFines
@@ -589,21 +589,21 @@ Modify borrower's data.  All date fields should ALREADY be in ISO format.
 sub ModMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-	my $iso_re = C4::Dates->new()->regexp('iso');
-	foreach (qw(dateofbirth dateexpiry dateenrolled)) {
-		if (my $tempdate = $data{$_}) {									# assignment, not comparison
-			($tempdate =~ /$iso_re/) and next;							# Congatulations, you sent a valid ISO date.
-			warn "ModMember given $_ not in ISO format ($tempdate)";
-			if (my $tempdate2 = format_date_in_iso($tempdate)) { 		# assignment, not comparison
-				$data{$_} = $tempdate2;
-   			} else {
-				warn "ModMember cannot convert '$tempdate' (from syspref)";
-			}
-		}
-	}
-	if (!$data{'dateofbirth'}){
-		undef $data{'dateofbirth'};
-	}
+    my $iso_re = C4::Dates->new()->regexp('iso');
+    foreach (qw(dateofbirth dateexpiry dateenrolled)) {
+        if (my $tempdate = $data{$_}) {                                 # assignment, not comparison
+            ($tempdate =~ /$iso_re/) and next;                          # Congatulations, you sent a valid ISO date.
+            warn "ModMember given $_ not in ISO format ($tempdate)";
+            if (my $tempdate2 = format_date_in_iso($tempdate)) {        # assignment, not comparison
+                $data{$_} = $tempdate2;
+            } else {
+                warn "ModMember cannot convert '$tempdate' (from syspref)";
+            }
+        }
+    }
+    if (!$data{'dateofbirth'}){
+        undef $data{'dateofbirth'};
+    }
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
     my %hashborrowerfields;  
@@ -621,13 +621,13 @@ sub ModMember {
         $data{'password'} = md5_base64( $data{'password'} )  if ($data{'password'} ne "");
         delete $data{'password'} if ($data{password} eq "");
     }
-	foreach (keys %data)
-	{ push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}); }
+    foreach (keys %data)
+    { push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}); }
     $query .= join (',',@parameters) . "\n WHERE borrowernumber=? \n";
-	$debug and print STDERR "$query (executed w/ arg: $data{'borrowernumber'})";
-	$sth = $dbh->prepare($query);
-	$sth->execute($data{'borrowernumber'});
-	$sth->finish;
+    $debug and print STDERR "$query (executed w/ arg: $data{'borrowernumber'})";
+    $sth = $dbh->prepare($query);
+    $sth->execute($data{'borrowernumber'});
+    $sth->finish;
 
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
 # so when we update information for an adult we should check for guarantees and update the relevant part
@@ -659,79 +659,79 @@ sub AddMember {
     my $dbh = C4::Context->dbh;
     $data{'userid'} = '' unless $data{'password'};
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
-	
-	# WE SHOULD NEVER PASS THIS SUBROUTINE ANYTHING OTHER THAN ISO DATES
-	# IF YOU UNCOMMENT THESE LINES YOU BETTER HAVE A DARN COMPELLING REASON
+    
+    # WE SHOULD NEVER PASS THIS SUBROUTINE ANYTHING OTHER THAN ISO DATES
+    # IF YOU UNCOMMENT THESE LINES YOU BETTER HAVE A DARN COMPELLING REASON
 #    $data{'dateofbirth'}  = format_date_in_iso( $data{'dateofbirth'} );
 #    $data{'dateenrolled'} = format_date_in_iso( $data{'dateenrolled'});
 #    $data{'dateexpiry'}   = format_date_in_iso( $data{'dateexpiry'}  );
-	# This query should be rewritten to use "?" at execute.
-	if (!$data{'dateofbirth'}){
-		undef ($data{'dateofbirth'});
-	}
+    # This query should be rewritten to use "?" at execute.
+    if (!$data{'dateofbirth'}){
+        undef ($data{'dateofbirth'});
+    }
     my $query =
         "insert into borrowers set cardnumber=" . $dbh->quote( $data{'cardnumber'} )
-      . ",surname=" 	. $dbh->quote( $data{'surname'} )
-      . ",firstname=" 	. $dbh->quote( $data{'firstname'} )
-      . ",title=" 		. $dbh->quote( $data{'title'} )
-      . ",othernames=" 	. $dbh->quote( $data{'othernames'} )
-      . ",initials=" 	. $dbh->quote( $data{'initials'} )
+      . ",surname="     . $dbh->quote( $data{'surname'} )
+      . ",firstname="   . $dbh->quote( $data{'firstname'} )
+      . ",title="       . $dbh->quote( $data{'title'} )
+      . ",othernames="  . $dbh->quote( $data{'othernames'} )
+      . ",initials="    . $dbh->quote( $data{'initials'} )
       . ",streetnumber=". $dbh->quote( $data{'streetnumber'} )
-      . ",streettype=" 	. $dbh->quote( $data{'streettype'} )
-      . ",address=" 	. $dbh->quote( $data{'address'} )
-      . ",address2=" 	. $dbh->quote( $data{'address2'} )
-      . ",zipcode=" 	. $dbh->quote( $data{'zipcode'} )
-      . ",city=" 		. $dbh->quote( $data{'city'} )
-      . ",phone=" 		. $dbh->quote( $data{'phone'} )
-      . ",email=" 		. $dbh->quote( $data{'email'} )
-      . ",mobile=" 		. $dbh->quote( $data{'mobile'} )
-      . ",phonepro=" 	. $dbh->quote( $data{'phonepro'} )
-      . ",opacnote=" 	. $dbh->quote( $data{'opacnote'} )
+      . ",streettype="  . $dbh->quote( $data{'streettype'} )
+      . ",address="     . $dbh->quote( $data{'address'} )
+      . ",address2="    . $dbh->quote( $data{'address2'} )
+      . ",zipcode="     . $dbh->quote( $data{'zipcode'} )
+      . ",city="        . $dbh->quote( $data{'city'} )
+      . ",phone="       . $dbh->quote( $data{'phone'} )
+      . ",email="       . $dbh->quote( $data{'email'} )
+      . ",mobile="      . $dbh->quote( $data{'mobile'} )
+      . ",phonepro="    . $dbh->quote( $data{'phonepro'} )
+      . ",opacnote="    . $dbh->quote( $data{'opacnote'} )
       . ",guarantorid=" . $dbh->quote( $data{'guarantorid'} )
       . ",dateofbirth=" . $dbh->quote( $data{'dateofbirth'} )
-      . ",branchcode=" 	. $dbh->quote( $data{'branchcode'} )
+      . ",branchcode="  . $dbh->quote( $data{'branchcode'} )
       . ",categorycode=" . $dbh->quote( $data{'categorycode'} )
       . ",dateenrolled=" . $dbh->quote( $data{'dateenrolled'} )
       . ",contactname=" . $dbh->quote( $data{'contactname'} )
       . ",borrowernotes=" . $dbh->quote( $data{'borrowernotes'} )
-      . ",dateexpiry=" 	. $dbh->quote( $data{'dateexpiry'} )
+      . ",dateexpiry="  . $dbh->quote( $data{'dateexpiry'} )
       . ",contactnote=" . $dbh->quote( $data{'contactnote'} )
-      . ",B_address=" 	. $dbh->quote( $data{'B_address'} )
-      . ",B_zipcode=" 	. $dbh->quote( $data{'B_zipcode'} )
-      . ",B_city=" 		. $dbh->quote( $data{'B_city'} )
-      . ",B_phone=" 	. $dbh->quote( $data{'B_phone'} )
-      . ",B_email=" 	. $dbh->quote( $data{'B_email'} )
-      . ",password=" 	. $dbh->quote( $data{'password'} )
-      . ",userid=" 		. $dbh->quote( $data{'userid'} )
-      . ",sort1=" 		. $dbh->quote( $data{'sort1'} )
-      . ",sort2=" 		. $dbh->quote( $data{'sort2'} )
+      . ",B_address="   . $dbh->quote( $data{'B_address'} )
+      . ",B_zipcode="   . $dbh->quote( $data{'B_zipcode'} )
+      . ",B_city="      . $dbh->quote( $data{'B_city'} )
+      . ",B_phone="     . $dbh->quote( $data{'B_phone'} )
+      . ",B_email="     . $dbh->quote( $data{'B_email'} )
+      . ",password="    . $dbh->quote( $data{'password'} )
+      . ",userid="      . $dbh->quote( $data{'userid'} )
+      . ",sort1="       . $dbh->quote( $data{'sort1'} )
+      . ",sort2="       . $dbh->quote( $data{'sort2'} )
       . ",contacttitle=" . $dbh->quote( $data{'contacttitle'} )
-      . ",emailpro=" 	. $dbh->quote( $data{'emailpro'} )
+      . ",emailpro="    . $dbh->quote( $data{'emailpro'} )
       . ",contactfirstname=" . $dbh->quote( $data{'contactfirstname'} )
-	  . ",sex=" 		. $dbh->quote( $data{'sex'} )
-	  . ",fax=" 		. $dbh->quote( $data{'fax'} )
+      . ",sex="         . $dbh->quote( $data{'sex'} )
+      . ",fax="         . $dbh->quote( $data{'fax'} )
       . ",relationship=" . $dbh->quote( $data{'relationship'} )
       . ",B_streetnumber=" . $dbh->quote( $data{'B_streetnumber'} )
       . ",B_streettype=" . $dbh->quote( $data{'B_streettype'} )
       . ",gonenoaddress=" . $dbh->quote( $data{'gonenoaddress'} )
-      . ",lost=" 		. $dbh->quote( $data{'lost'} )
-      . ",debarred=" 	. $dbh->quote( $data{'debarred'} )
-      . ",ethnicity=" 	. $dbh->quote( $data{'ethnicity'} )
-      . ",ethnotes=" 	. $dbh->quote( $data{'ethnotes'} ) 
-	  . ",altcontactsurname=" 	. $dbh->quote( $data{'altcontactsurname'} ) 
-	  . ",altcontactfirstname=" 	. $dbh->quote( $data{'altcontactfirstname'} ) 
-	  . ",altcontactaddress1=" 	. $dbh->quote( $data{'altcontactaddress1'} ) 
-	  . ",altcontactaddress2=" 	. $dbh->quote( $data{'altcontactaddress2'} ) 
-	  . ",altcontactaddress3=" 	. $dbh->quote( $data{'altcontactaddress3'} ) 
-	  . ",altcontactzipcode=" 	. $dbh->quote( $data{'altcontactzipcode'} ) 
-	  . ",altcontactphone=" 	. $dbh->quote( $data{'altcontactphone'} ) ;
-	$debug and print STDERR "AddMember SQL: ($query)\n";
+      . ",lost="        . $dbh->quote( $data{'lost'} )
+      . ",debarred="    . $dbh->quote( $data{'debarred'} )
+      . ",ethnicity="   . $dbh->quote( $data{'ethnicity'} )
+      . ",ethnotes="    . $dbh->quote( $data{'ethnotes'} ) 
+      . ",altcontactsurname="   . $dbh->quote( $data{'altcontactsurname'} ) 
+      . ",altcontactfirstname="     . $dbh->quote( $data{'altcontactfirstname'} ) 
+      . ",altcontactaddress1="  . $dbh->quote( $data{'altcontactaddress1'} ) 
+      . ",altcontactaddress2="  . $dbh->quote( $data{'altcontactaddress2'} ) 
+      . ",altcontactaddress3="  . $dbh->quote( $data{'altcontactaddress3'} ) 
+      . ",altcontactzipcode="   . $dbh->quote( $data{'altcontactzipcode'} ) 
+      . ",altcontactphone="     . $dbh->quote( $data{'altcontactphone'} ) ;
+    $debug and print STDERR "AddMember SQL: ($query)\n";
     my $sth = $dbh->prepare($query);
-	# 	print "Executing SQL: $query\n";
+    #   print "Executing SQL: $query\n";
     $sth->execute();
     $sth->finish;
-    $data{'borrowernumber'} = $dbh->{'mysql_insertid'}; 	# unneeded w/ autoincrement ?  
-	# mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
+    $data{'borrowernumber'} = $dbh->{'mysql_insertid'};     # unneeded w/ autoincrement ?  
+    # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     
     &logaction(C4::Context->userenv->{'number'},"MEMBERS","CREATE",$data{'borrowernumber'},"") 
         if C4::Context->preference("BorrowersLog");
@@ -748,8 +748,8 @@ sub AddMember {
 }
 
 sub Check_Userid {
-	my ($uid,$member) = @_;
-	my $dbh = C4::Context->dbh;
+    my ($uid,$member) = @_;
+    my $dbh = C4::Context->dbh;
     # Make sure the userid chosen is unique and not theirs if non-empty. If it is not,
     # Then we need to tell the user and have them create a new one.
     my $sth =
@@ -759,9 +759,9 @@ sub Check_Userid {
     if ( ( $uid ne '' ) && ( my $row = $sth->fetchrow_hashref ) ) {
         return 0;
     }
-	else {
-		return 1;
-	}
+    else {
+        return 1;
+    }
 }
 
 
@@ -931,10 +931,10 @@ sub UpdateGuarantees {
         # the array, which is probably better done as a foreach loop.
         #
         my $guaquery = qq|UPDATE borrowers 
-			  SET address='$data{'address'}',fax='$data{'fax'}',
- 			      B_city='$data{'B_city'}',mobile='$data{'mobile'}',city='$data{'city'}',phone='$data{'phone'}'
- 			  WHERE borrowernumber='$guarantees->[$i]->{'borrowernumber'}'
-		|;
+              SET address='$data{'address'}',fax='$data{'fax'}',
+                  B_city='$data{'B_city'}',mobile='$data{'mobile'}',city='$data{'city'}',phone='$data{'phone'}'
+              WHERE borrowernumber='$guarantees->[$i]->{'borrowernumber'}'
+        |;
         my $sth3 = $dbh->prepare($guaquery);
         $sth3->execute;
         $sth3->finish;
@@ -1169,8 +1169,8 @@ sub checkuniquemember {
     my ( $collectivity, $surname, $firstname, $dateofbirth ) = @_;
     my $dbh = C4::Context->dbh;
     my $request = ($collectivity) ?
-		"SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? " :
-		"SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=? and dateofbirth=? ";
+        "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? " :
+        "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=? and dateofbirth=? ";
     my $sth = $dbh->prepare($request);
     if ($collectivity) {
         $sth->execute( uc($surname) );
@@ -1184,23 +1184,23 @@ sub checkuniquemember {
 }
 
 sub checkcardnumber {
-	my ($cardnumber,$borrowernumber) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
-	$query .= " AND borrowernumber <> ?" if ($borrowernumber);
+    my ($cardnumber,$borrowernumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
+    $query .= " AND borrowernumber <> ?" if ($borrowernumber);
   my $sth = $dbh->prepare($query);
   if ($borrowernumber) {
    $sth->execute($cardnumber,$borrowernumber);
   } else { 
-	 $sth->execute($cardnumber);
+     $sth->execute($cardnumber);
   } 
-	if (my $data= $sth->fetchrow_hashref()){
-		return 1;
-	}
-	else {
-		return 0;
-	}
-	$sth->finish();
+    if (my $data= $sth->fetchrow_hashref()){
+        return 1;
+    }
+    else {
+        return 0;
+    }
+    $sth->finish();
 }  
 
 
@@ -1250,14 +1250,14 @@ Return date is also in ISO format.
 
 sub GetExpiryDate {
     my ( $categorycode, $dateenrolled ) = @_;
-    my $enrolmentperiod = 12;	# reasonable default
+    my $enrolmentperiod = 12;   # reasonable default
     if ($categorycode) {
-    	my $dbh = C4::Context->dbh;
-    	my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
-    	$sth->execute($categorycode);
-    	$enrolmentperiod = $sth->fetchrow;
-	}
-	# die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+        $sth->execute($categorycode);
+        $enrolmentperiod = $sth->fetchrow;
+    }
+    # die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
     my @date = split /-/,$dateenrolled;
     return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolmentperiod));
 }
@@ -1299,10 +1299,10 @@ to category descriptions.
 sub GetborCatFromCatType {
     my ( $category_type, $action ) = @_;
     my $dbh     = C4::Context->dbh;
-    my $request = qq|	SELECT categorycode,description 
-			FROM categories 
-			$action
-			ORDER BY categorycode|;
+    my $request = qq|   SELECT categorycode,description 
+            FROM categories 
+            $action
+            ORDER BY categorycode|;
     my $sth = $dbh->prepare($request);
     if ($action) {
         $sth->execute($category_type);
@@ -1486,8 +1486,8 @@ sub GetCities {
     #my ($type_city) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = qq|SELECT cityid,city_zipcode,city_name 
-		FROM cities 
-		ORDER BY city_name|;
+        FROM cities 
+        ORDER BY city_name|;
     my $sth = $dbh->prepare($query);
 
     #$sth->execute($type_city);
@@ -1506,7 +1506,7 @@ sub GetCities {
     my $id = @id;
     $sth->finish;
     if ( $id == 1 ) {
-		# all we have is the one blank row
+        # all we have is the one blank row
         return ();
     }
     else {
@@ -1530,9 +1530,9 @@ sub GetSortDetails {
     my ( $category, $sortvalue ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = qq|SELECT lib 
-		FROM authorised_values 
-		WHERE category=?
-		AND authorised_value=? |;
+        FROM authorised_values 
+        WHERE category=?
+        AND authorised_value=? |;
     my $sth = $dbh->prepare($query);
     $sth->execute( $category, $sortvalue );
     my $lib = $sth->fetchrow;
@@ -1553,8 +1553,8 @@ sub MoveMemberToDeleted {
     my $dbh = C4::Context->dbh;
     my $query;
     $query = qq|SELECT * 
-		  FROM borrowers 
-		  WHERE borrowernumber=?|;
+          FROM borrowers 
+          WHERE borrowernumber=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute($member);
     my @data = $sth->fetchrow_array;
@@ -1579,12 +1579,12 @@ This function remove directly a borrower whitout writing it on deleteborrower.
 sub DelMember {
     my $dbh            = C4::Context->dbh;
     my $borrowernumber = shift;
-	warn "in delmember with $borrowernumber";
+    #warn "in delmember with $borrowernumber";
     return unless $borrowernumber;    # borrowernumber is mandatory.
 
     my $query = qq|DELETE 
- 		  FROM  reserves 
- 		  WHERE borrowernumber=?|;
+          FROM  reserves 
+          WHERE borrowernumber=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     $sth->finish;
@@ -1603,7 +1603,7 @@ sub DelMember {
 
 =head2 ExtendMemberSubscriptionTo (OUEST-PROVENCE)
 
-	$date = ExtendMemberSubscriptionTo($borrowerid, $date);
+    $date = ExtendMemberSubscriptionTo($borrowerid, $date);
 
 Extending the subscription to a given date or to the expiry date calculated on ISO date.
 Returns ISO date.
@@ -1690,13 +1690,13 @@ Looks up the different title . Returns array  with all borrowers title
 sub GetTitles {
     my @borrowerTitle = split /,|\|/,C4::Context->preference('BorrowersTitles');
     unshift( @borrowerTitle, "" );
-	my $count=@borrowerTitle;
-	if ($count == 1){
-		return ();
-	}
-	else {
-		return ( \@borrowerTitle);
-	}
+    my $count=@borrowerTitle;
+    if ($count == 1){
+        return ();
+    }
+    else {
+        return ( \@borrowerTitle);
+    }
 }
 
 
