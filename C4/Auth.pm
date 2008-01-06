@@ -456,7 +456,7 @@ sub checkauth {
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison (?)
+    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison 
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session){
@@ -535,7 +535,7 @@ sub checkauth {
             _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
             $cookie = $query->cookie(CGISESSID => $sessionID);
             if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
-                $loggedin = 1;
+				$loggedin = 1;
             }
             else {
                 $info{'nopermission'} = 1;
@@ -590,6 +590,15 @@ sub checkauth {
                     $branchname = GetBranchName($branchcode);
                 }
                 my $branches = GetBranches();
+                if (C4::Context->boolean_preference('IndependantBranches') && C4::Context->boolean_preference('Autolocation')){
+				    # we have to check they are coming from the right ip range
+					my $domain = $branches->{$branchcode}->{'branchip'};
+					if ($ip !~ /^$domain/){
+						$loggedin=0;
+						$info{'wrongip'} = 1;
+					}
+				}
+
                 my @branchesloop;
                 foreach my $br ( keys %$branches ) {
                     #     now we work with the treatment of ip
@@ -644,6 +653,7 @@ sub checkauth {
                 $info{'invalid_username_or_password'} = 1;
                 C4::Context->_unset_userenv($sessionID);
             }
+
         }
     }
     my $insecure = C4::Context->boolean_preference('insecure');
@@ -706,7 +716,9 @@ sub checkauth {
         IndependantBranches     => C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
         yuipath            => C4::Context->preference("yuipath"),
+		wrongip            => $info{'wrongip'}
     );
+    
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     my $self_url = $query->url( -absolute => 1 );
