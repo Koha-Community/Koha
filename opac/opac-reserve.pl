@@ -279,7 +279,7 @@ else {
         $template->param( too_many_reserves => scalar($reserves));
     }
     foreach my $res (@$reserves) {
-        if ( $res->{'biblionumber'} == $biblionumber ) {
+        if ( $res->{'biblionumber'} == $biblionumber && $res->{'borrowernumber'} == $borrowernumber) {
             $template->param( message => 1 );
             $noreserves = 1;
             $template->param( already_reserved => 1 );
