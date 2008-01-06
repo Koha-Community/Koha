@@ -262,6 +262,7 @@ if ($op eq 'add_form') {
 	# add more_subfields empty lines for add if needed
 	for (my $i=1;$i<=$more_subfields;$i++) {
 		my %row_data;  # get a fresh hash for the row data
+        $row_data{'new_subfield'} = 1;
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id => "tab$i",
                                         -values =>
