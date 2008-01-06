@@ -908,7 +908,7 @@ CREATE TABLE language_subtag_registry (
 
 #-- BIDI Stuff, Arabic and Hebrew
  $dbh->do("INSERT INTO language_script_bidi(rfc4646_subtag,bidi)
-VALUES( 'Arab', 'rtl'");
+VALUES( 'Arab', 'rtl')");
  $dbh->do("INSERT INTO language_script_bidi(rfc4646_subtag,bidi)
 VALUES( 'Hebr', 'rtl')");
 
