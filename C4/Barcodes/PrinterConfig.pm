@@ -16,14 +16,17 @@ package C4::Barcodes::PrinterConfig;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use vars qw($VERSION @EXPORT);
 
 use PDF::API2;
 use PDF::API2::Page;
 
-# set the version for version checking
-$VERSION = 0.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 0.02;
+	require Exporter;
+	@EXPORT = qw(&labelsPage &getLabelPosition setPositionsForX setPositionsForY);
+}
 
 =head1 NAME
 
@@ -44,8 +47,6 @@ environment of the pdf file.
 =over 2
 
 =cut
-
-@EXPORT = qw(&labelsPage &getLabelPosition setPositionsForX setPositionsForY);
 
 my @positionsForX; # Takes all the X positions of the pdf file.
 my @positionsForY; # Takes all the Y positions of the pdf file.
