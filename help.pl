@@ -32,10 +32,10 @@ sub gethelptemplate {
 
     my $htdocs;
     $htdocs = C4::Context->config('intrahtdocs');
-    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet" );
+    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet", $query );
     unless ( -e "$htdocs/$theme/$lang/$tmplbase" ) {
         $tmplbase = "modules/help/nohelp.tmpl";
-        ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet" );
+        ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, "intranet", $query );
     }
     my $template = HTML::Template->new(
         filename          => "$htdocs/$theme/$lang/$tmplbase",
