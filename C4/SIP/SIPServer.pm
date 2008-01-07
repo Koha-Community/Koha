@@ -18,7 +18,13 @@ use Sip::MsgType;
 
 use constant LOG_SIP => "local6"; # Local alias for the logging facility
 
-our @ISA = qw(Net::Server::PreFork);
+use vars qw(@ISA $VERSION);
+
+BEGIN {
+	$VERSION = 1.00;
+	@ISA = qw(Net::Server::PreFork);
+}
+
 #
 # Main
 #
@@ -268,3 +274,6 @@ sub sip_protocol_loop {
 	$expect = '';
     }
 }
+
+1;
+__END__
