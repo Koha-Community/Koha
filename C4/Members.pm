@@ -1132,10 +1132,11 @@ sub GetBorNotifyAcctRecord {
                 FROM accountlines 
                 WHERE borrowernumber=? 
                     AND notify_id=? 
-                    AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
                     AND amountoutstanding != '0' 
                 ORDER BY notify_id,accounttype
                 ");
+#                    AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
+
     $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {

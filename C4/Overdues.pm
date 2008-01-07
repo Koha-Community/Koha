@@ -695,9 +695,9 @@ return $result;
 }
 
 
-=item AmountNotify
+=item NumberNotifyId
 
-(@notify) = &AmountNotify($borrowernumber);
+(@notify) = &NumberNotifyId($borrowernumber);
 
 Returns amount for all file per borrowers
 C<@notify> array contains all file per borrowers
@@ -733,19 +733,19 @@ C<$notifyid> is the file number
 
 C<$totalnotify> contains amount of a file
 
-C<$notify_id> contains the file number for the borrower number nad item number
+C<$notify_id> contains the file number for the borrower number and item number
 
 =cut
 
 sub AmountNotify{
-    my ($notifyid)=@_;
+    my ($notifyid,$borrowernumber)=@_;
     my $dbh = C4::Context->dbh;
     my $query=qq|    SELECT sum(amountoutstanding)
             FROM accountlines
-            WHERE notify_id=?|;
+            WHERE notify_id=? AND borrowernumber = ?|;
     my $sth=$dbh->prepare($query);
-        $sth->execute($notifyid);
-          my $totalnotify=$sth->fetchrow;
+	$sth->execute($notifyid,$borrowernumber);
+	my $totalnotify=$sth->fetchrow;
     $sth->finish;
     return ($totalnotify);
 }

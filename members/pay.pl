@@ -99,7 +99,7 @@ if ( $check == 0 ) {
           GetBorNotifyAcctRecord( $borrowernumber, $notify[$j] );
         for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
             my %line;
-            if ( $accts->[$i]{'amountoutstanding'} > 0 ) {
+            if ( $accts->[$i]{'amountoutstanding'} != 0 ) {
                 $accts->[$i]{'amount'}            += 0.00;
                 $accts->[$i]{'amountoutstanding'} += 0.00;
                 $line{i}           = $j . "" . $i;
@@ -119,13 +119,14 @@ if ( $check == 0 ) {
             push( @loop_pay, \%line );
         }
 
-        my $totalnotify = AmountNotify( $notify[$j] );
+        my $totalnotify = AmountNotify( $notify[$j], $borrowernumber );
         ( $totalnotify = '0' ) if ( $totalnotify =~ /^0.00/ );
         push @allfile,
           {
             'loop_pay' => \@loop_pay,
             'notify'   => $notify[$j],
-            'total'    => $totalnotify
+            'total'    =>  sprintf( "%.2f",$totalnotify),
+			
           };
     }
 	
