@@ -30,31 +30,13 @@ use C4::Search;
 use C4::Letters;
 use C4::Log; # logaction
 
-require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION = 3.00;	# set version for version checking
-
-=head1 NAME
-
-C4::Serials - Give functions for serializing.
-
-=head1 SYNOPSIS
-
-  use C4::Serials;
-
-=head1 DESCRIPTION
-
-Give all XYZ functions
-
-=head1 FUNCTIONS
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-    
+BEGIN {
+	$VERSION = 3.01;	# set version for version checking
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
     &NewSubscription    &ModSubscription    &DelSubscription    &GetSubscriptions
     &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
     &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
@@ -74,9 +56,24 @@ Give all XYZ functions
     &check_routing &updateClaim &removeMissingIssue
     
     &old_newsubscription &old_modsubscription &old_getserials
-);
+	);
+}
 
 =head2 GetSuppliersWithLateIssues
+
+=head1 NAME
+
+C4::Serials - Give functions for serializing.
+
+=head1 SYNOPSIS
+
+  use C4::Serials;
+
+=head1 DESCRIPTION
+
+Give all XYZ functions
+
+=head1 FUNCTIONS
 
 =over 4
 
@@ -2732,9 +2729,8 @@ sub itemdata {
     return ($data);
 }
 
-END { }    # module clean-up code here (global destructor)
-
 1;
+__END__
 
 =back
 
