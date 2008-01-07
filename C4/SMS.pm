@@ -2,30 +2,30 @@ package C4::SMS;
 #Written by tgarip@neu.edu.tr for SMS message sending and other SMS related services
 
 use strict;
-require Exporter;
 use LWP::UserAgent;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
-$VERSION = 0.01;
+
 my $user=C4::Context->config('smsuser');
 my $pwd=C4::Context->config('smspass');
 my $uri ="https://spgw.kktcell.com/smshttpproxy/SmsHttpProxyServlet";
 
-
-
-@ISA = qw(Exporter);
-
-@EXPORT = qw(
-&get_sms_auth 
-&send_sms 
-&read_sms
-&error_codes
-&parse_phone
-&parse_message
-&write_sms
-&mod_sms
-&kill_sms
-);
+BEGIN {
+	require Exporter;
+	@ISA = qw(Exporter);
+	$VERSION = 0.02;
+	@EXPORT = qw(
+		&get_sms_auth 
+		&send_sms 
+		&read_sms
+		&error_codes
+		&parse_phone
+		&parse_message
+		&write_sms
+		&mod_sms
+		&kill_sms
+	);
+}
 
 sub get_sms_auth {
     my $ua      = LWP::UserAgent->new;
