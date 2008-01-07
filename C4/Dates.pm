@@ -23,9 +23,11 @@ use POSIX qw(strftime);
 use Date::Calc qw(check_date check_time);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION = 0.03;
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(DHTMLcalendar format_date_in_iso format_date);
+BEGIN {
+	$VERSION = 0.03;
+	@ISA = qw(Exporter);
+	@EXPORT_OK = qw(DHTMLcalendar format_date_in_iso format_date);
+}
 
 my $prefformat = C4::Context->preference('dateformat');
 my $debug = $ENV{'DEBUG'} || 0;
