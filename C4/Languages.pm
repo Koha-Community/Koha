@@ -19,10 +19,23 @@ package C4::Languages;
 # Suite 330, Boston, MA  02111-1307 USA
 
 
-use strict; use warnings; #FIXME: turn off warnings before release
-require Exporter;
+use strict; 
+use warnings;	#FIXME: turn off warnings before release
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+BEGIN {
+	$VERSION = 3.00;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&getFrameworkLanguages
+		&getTranslatedLanguages
+		&getAllLanguages
+	);
+	@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
+	$DEBUG = 0;
+}
 
 =head1 NAME
 
@@ -35,12 +48,6 @@ use C4::Languages;
 =head1 DESCRIPTION
 
 =head1 FUNCTIONS
-
-=cut
-$VERSION = 3.00;
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
-my $DEBUG = 0;
 
 =head2 getFrameworkLanguages
 
