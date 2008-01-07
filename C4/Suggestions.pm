@@ -19,15 +19,29 @@ package C4::Suggestions;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Output;
 use C4::Dates qw(format_date);
 use Mail::Sendmail;
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		&NewSuggestion
+		&SearchSuggestion
+		&GetSuggestion
+		&GetSuggestionByStatus
+		&DelSuggestion
+		&CountSuggestion
+		&ModStatus
+		&ConnectSuggestionAndBiblio
+		&GetSuggestionFromBiblionumber
+	);
+}
 
 =head1 NAME
 
@@ -53,21 +67,6 @@ All suggestions of a borrower can be seen by the borrower itself.
 Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head1 FUNCTIONS
-
-=cut
-
-@ISA = qw(Exporter);
-@EXPORT = qw(
-    &NewSuggestion
-    &SearchSuggestion
-    &GetSuggestion
-    &GetSuggestionByStatus
-    &DelSuggestion
-    &CountSuggestion
-    &ModStatus
-    &ConnectSuggestionAndBiblio
-    &GetSuggestionFromBiblionumber
- );
 
 =head2 SearchSuggestion
 
