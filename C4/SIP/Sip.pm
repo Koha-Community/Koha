@@ -15,20 +15,24 @@ use POSIX qw(strftime);
 use Sip::Constants qw(SIP_DATETIME);
 use Sip::Checksum qw(checksum);
 
-our @ISA = qw(Exporter);
+use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
-our @EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
+BEGIN {
+	$VERSION = 1.00;
+	@ISA = qw(Exporter);
+
+	@EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
 		    denied sipbool boolspace write_msg read_SIP_packet
 		    $error_detection $protocol_version $field_delimiter
 		    $last_response);
 
-our %EXPORT_TAGS = (
+	%EXPORT_TAGS = (
 		    all => [qw(y_or_n timestamp add_field maybe_add
 			       add_count denied sipbool boolspace write_msg
 			       read_SIP_packet
 			       $error_detection $protocol_version
 			       $field_delimiter $last_response)]);
-
+}
 
 our $error_detection = 0;
 our $protocol_version = 1;
