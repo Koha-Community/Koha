@@ -17,6 +17,7 @@ package C4::Context;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use vars qw($VERSION $AUTOLOAD $context @context_stack);
 
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
@@ -51,17 +52,13 @@ BEGIN {
 			}       
 		CGI::Carp->set_message(\&handle_errors);
     }  	# else there is no browser to send fatals to!
+	$VERSION = '3.00.00.036';
 }
 
 use DBI;
 use ZOOM;
 use XML::Simple;
-
 use C4::Boolean;
-
-use vars qw($VERSION $AUTOLOAD $context @context_stack);
-
-$VERSION = '3.00.00.036';
 
 =head1 NAME
 
