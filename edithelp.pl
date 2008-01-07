@@ -97,7 +97,7 @@ elsif ( $type eq 'modify' ) {
     $referer =~ /.*koha\/(.*)\.pl.*/;
     my $from   = "help/$1.tmpl";
     my $htdocs = C4::Context->config('intrahtdocs');
-    my ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet" );
+    my ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet", $input );
     eval {
         open( INFILE, "$htdocs/$theme/$lang/modules/$from" ) || die "Can't open file";
     };
