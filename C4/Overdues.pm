@@ -1147,7 +1147,7 @@ display is filtered by branch
 
 sub GetOverduesForBranch {
     my ( $branch, $location) = @_;
-	my $itype_link =  (C4::context->preference('item-level_itypes')) ?  " items.itype " :  " biblioitems.itemtype ";
+	my $itype_link =  (C4::Context->preference('item-level_itypes')) ?  " items.itype " :  " biblioitems.itemtype ";
     if ( not $location ) {
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("
