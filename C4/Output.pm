@@ -26,7 +26,6 @@ package C4::Output;
 # templates.
 
 use strict;
-require Exporter;
 
 use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
@@ -34,8 +33,18 @@ use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language
 use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	push @EXPORT, qw(
+		&themelanguage &gettemplate setlanguagecookie pagination_bar
+	);
+	push @EXPORT, qw(
+		&output_html_with_http_headers
+	);
+}
 
 =head1 NAME
 
@@ -46,12 +55,6 @@ C4::Output - Functions for managing templates
 =over 2
 
 =cut
-
-@ISA    = qw(Exporter);
-push @EXPORT, qw(
-  &themelanguage &gettemplate setlanguagecookie pagination_bar &output_html_with_http_headers
-);
-
 
 #FIXME: this is a quick fix to stop rc1 installing broken
 #Still trying to figure out the correct fix.
