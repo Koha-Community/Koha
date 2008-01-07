@@ -19,39 +19,21 @@ package C4::Overdues;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
-use C4::Context;
 use Date::Calc qw/Today/;
-use vars qw($VERSION @ISA @EXPORT);
-use C4::Accounts;
 use Date::Manip qw/UnixDate/;
+use C4::Context;
+use C4::Accounts;
 use C4::Log; # logaction
 
-# set the version for version checking
-$VERSION = 3.00;
+use vars qw($VERSION @ISA @EXPORT);
 
-=head1 NAME
-
-C4::Circulation::Fines - Koha module dealing with fines
-
-=head1 SYNOPSIS
-
-  use C4::Overdues;
-
-=head1 DESCRIPTION
-
-This module contains several functions for dealing with fines for
-overdue items. It is primarily used by the 'misc/fines2.pl' script.
-
-=head1 FUNCTIONS
-
-=over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-# subs to rename (and maybe merge some...)
-push @EXPORT, qw(
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	# subs to rename (and maybe merge some...)
+	push @EXPORT, qw(
         &CalcFine
         &Getoverdues
         &checkoverdues
@@ -74,31 +56,47 @@ push @EXPORT, qw(
         &GetOverduesForBranch
         &RemoveNotifyLine
         &AddNotifyLine
-);
-# subs to remove
-push @EXPORT, qw(
+	);
+	# subs to remove
+	push @EXPORT, qw(
         &BorType
-);
+	);
 
-#
-# All subs to move : check that an equivalent don't exist already before moving
-#
+	# check that an equivalent don't exist already before moving
 
-# subs to move to Circulation.pm
-push @EXPORT, qw(
+	# subs to move to Circulation.pm
+	push @EXPORT, qw(
         &GetIssuingRules
         &GetIssuesIteminfo
-);
-# subs to move to Members.pm
-push @EXPORT, qw(
+	);
+	# subs to move to Members.pm
+	push @EXPORT, qw(
         &CheckBorrowerDebarred
         &UpdateBorrowerDebarred
-);
-# subs to move to Biblio.pm
-push @EXPORT, qw(
+	);
+	# subs to move to Biblio.pm
+	push @EXPORT, qw(
         &GetItems
         &ReplacementCost
-);
+	);
+}
+
+=head1 NAME
+
+C4::Circulation::Fines - Koha module dealing with fines
+
+=head1 SYNOPSIS
+
+  use C4::Overdues;
+
+=head1 DESCRIPTION
+
+This module contains several functions for dealing with fines for
+overdue items. It is primarily used by the 'misc/fines2.pl' script.
+
+=head1 FUNCTIONS
+
+=over 2
 
 =item Getoverdues
 
