@@ -151,6 +151,7 @@ my %itemtypes;
 my @duedates;
 #die @items;
 my %itemhash;
+my $forloan;
 foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
@@ -175,6 +176,9 @@ foreach my $itm (@items) {
         }
     }
 	$itemhash{$itm->{'itemnumber'}}=$itm;
+	if (!$itm->{'notforloan'} && !$itm->{'itemnotforloan'}){
+		$forloan=1;
+	}
 }
 
 $template->param( ITEMS => \@duedates );
@@ -424,6 +428,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 
 # display infos
 $template->param(
+	forloan           => $forloan,
     bibitemloop       => \@bibitemloop,
 );
 output_html_with_http_headers $query, $cookie, $template->output;

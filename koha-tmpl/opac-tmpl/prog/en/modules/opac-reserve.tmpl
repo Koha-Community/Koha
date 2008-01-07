@@ -80,14 +80,16 @@
                     <!-- /TMPL_LOOP -->
             </select>
             </p>
+			<!-- TMPL_IF NAME="forloan" -->
             <p> <label for="requestany">Place a hold on the next available copy </label>
             <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
             </p>
+
             <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
             <input type="submit" value="Place Hold" />
             <input type="hidden" name="all" value="1"/></p>
             <input type="hidden" name="place_reserve" value="1"/>
-
+			<!-- /TMPL_IF -->            
         <!-- TMPL_LOOP name="bibitemloop" -->    
 
             <!-- TMPL_UNLESS NAME="item-level_itypes" -->
