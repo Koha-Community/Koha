@@ -18,90 +18,90 @@ package C4::Biblio;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-
-require Exporter;
 # use utf8;
-use C4::Context;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
+
+use C4::Context;
 use C4::Koha;
 use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
+
 use vars qw($VERSION @ISA @EXPORT);
 
-# TODO: fix version
-# $VERSION = ?;
+BEGIN {
+	$VERSION = 1.00;
 
-@ISA = qw( Exporter );
+	require Exporter;
+	@ISA = qw( Exporter );
 
-# EXPORTED FUNCTIONS.
+	# to add biblios
+	push @EXPORT, qw( 
+		&AddBiblio
+	);
 
-# to add biblios
-push @EXPORT, qw( 
-  &AddBiblio
-);
+	# to get something
+	push @EXPORT, qw(
+		&GetBiblio
+		&GetBiblioData
+		&GetBiblioItemData
+		&GetBiblioItemInfosOf
+		&GetBiblioItemByBiblioNumber
+		&GetBiblioFromItemNumber
 
-# to get something
-push @EXPORT, qw(
-  &GetBiblio
-  &GetBiblioData
-  &GetBiblioItemData
-  &GetBiblioItemInfosOf
-  &GetBiblioItemByBiblioNumber
-  &GetBiblioFromItemNumber
-  
-  &GetMarcNotes
-  &GetMarcSubjects
-  &GetMarcBiblio
-  &GetMarcAuthors
-  &GetMarcSeries
-  GetMarcUrls
-  &GetUsedMarcStructure
+		&GetMarcNotes
+		&GetMarcSubjects
+		&GetMarcBiblio
+		&GetMarcAuthors
+		&GetMarcSeries
+		GetMarcUrls
+		&GetUsedMarcStructure
 
-  &GetXmlBiblio
+		&GetXmlBiblio
 
-  &GetAuthorisedValueDesc
-  &GetMarcStructure
-  &GetMarcFromKohaField
-  &GetFrameworkCode
-  &GetPublisherNameFromIsbn
-  &TransformKohaToMarc
-);
+		&GetAuthorisedValueDesc
+		&GetMarcStructure
+		&GetMarcFromKohaField
+		&GetFrameworkCode
+		&GetPublisherNameFromIsbn
+		&TransformKohaToMarc
+	);
 
-# To modify something
-push @EXPORT, qw(
-  &ModBiblio
-  &ModBiblioframework
-  &ModZebra
-);
+	# To modify something
+	push @EXPORT, qw(
+		&ModBiblio
+		&ModBiblioframework
+		&ModZebra
+	);
 
-# To delete something
-push @EXPORT, qw(
-  &DelBiblio
-);
+	# To delete something
+	push @EXPORT, qw(
+		&DelBiblio
+	);
 
-# Internal functions
-# those functions are exported but should not be used
-# they are usefull is few circumstances, so are exported.
-# but don't use them unless you're a core developer ;-)
-push @EXPORT, qw(
-  &ModBiblioMarc
-);
+	# Internal functions
+	# those functions are exported but should not be used
+	# they are usefull is few circumstances, so are exported.
+	# but don't use them unless you're a core developer ;-)
+	push @EXPORT, qw(
+		&ModBiblioMarc
+	);
 
-# Others functions
-push @EXPORT, qw(
-  &TransformMarcToKoha
-  &TransformHtmlToMarc2
-  &TransformHtmlToMarc
-  &TransformHtmlToXml
-  &PrepareItemrecordDisplay
-  &char_decode
-  &GetNoZebraIndexes
-);
+	# Others functions
+	push @EXPORT, qw(
+		&TransformMarcToKoha
+		&TransformHtmlToMarc2
+		&TransformHtmlToMarc
+		&TransformHtmlToXml
+		&PrepareItemrecordDisplay
+		&char_decode
+		&GetNoZebraIndexes
+	);
+}
 
 =head1 NAME
 
@@ -3130,8 +3130,6 @@ sub set_service_options {
     }
     return $serviceOptions;
 }
-
-END { }    # module clean-up code here (global destructor)
 
 1;
 
