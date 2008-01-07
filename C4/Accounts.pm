@@ -19,7 +19,6 @@ package C4::Accounts;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
@@ -28,8 +27,16 @@ use C4::Items;
 #use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&recordpayment &fixaccounts &makepayment &manualinvoice
+		&getnextacctno &reconcileaccount
+	);
+}
 
 =head1 NAME
 
@@ -46,12 +53,6 @@ including looking up and modifying the amount of money owed by a
 patron.
 
 =head1 FUNCTIONS
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(&recordpayment &fixaccounts &makepayment &manualinvoice
-  &getnextacctno &reconcileaccount);
 
 =head2 recordpayment
 
@@ -538,7 +539,6 @@ END { }    # module clean-up code here (global destructor)
 
 1;
 __END__
-
 
 =head1 SEE ALSO
 
