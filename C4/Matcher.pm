@@ -25,8 +25,10 @@ use C4::Biblio;
 
 use vars qw($VERSION);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+}
 
 =head1 NAME
 
@@ -821,6 +823,7 @@ sub _normalize {
 }
 
 1;
+__END__
 
 =head1 AUTHOR
 
