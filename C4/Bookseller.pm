@@ -17,21 +17,21 @@ package C4::Bookseller;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
 use strict;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-    &GetBookSeller &GetBooksellersWithLateOrders
-    &ModBookseller
-    &DelBookseller
-    &AddBookseller
-);
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&GetBookSeller &GetBooksellersWithLateOrders
+		&ModBookseller
+		&DelBookseller
+		&AddBookseller
+	);
+}
 
 
 =head1 NAME
@@ -49,10 +49,6 @@ add a new bookseller, to modify it or to get some informations around
 a bookseller.
 
 =head1 FUNCTIONS
-
-=cut
-
-#-------------------------------------------------------------------#
 
 =head2 GetBookSeller
 
@@ -259,7 +255,6 @@ sub DelBookseller {
     my $sth=$dbh->prepare("DELETE FROM aqbooksellers WHERE id=?");
     $sth->execute($id);
 }
-END { }    # module clean-up code here (global destructor)
 
 1;
 
