@@ -81,9 +81,19 @@ if (   $query->param('Oldkey')
     }
 }
 else {
-
+   
     # Called Empty, Ask for data.
     $template->param( 'Ask_data' => '1' );
+	if (!$query->param('Oldkey') && ($query->param('Newkey') || $query->param('Confirm'))){
+		# Old password is empty but one of the others isnt
+		$template->param( 'Error_messages' => '1' );
+		$template->param( 'WrongPass'      => '1' );
+	}
+	elsif ($query->param('Oldkey') && (!$query->param('Newkey') || !$query->param('Confirm'))){
+		# Oldpassword is entered but one of the other fields is empty
+		$template->param( 'Error_messages' => '1' );
+		$template->param( 'PassMismatch'   => '1' );
+	}
 }
 
 $template->param(firstname => $borr->{'firstname'},
