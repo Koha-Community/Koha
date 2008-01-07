@@ -1,6 +1,5 @@
 package C4::Boolean;
 
-
 #package to handle Boolean values in the parameters table
 # Note: This is just a utility module; it should not be instantiated.
 
@@ -24,12 +23,21 @@ package C4::Boolean;
 
 use strict;
 use POSIX;
-require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
-# set the version for version checking
-$VERSION = 0.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 0.02;
+	require Exporter;
+	@EXPORT = qw(
+		&INVALID_BOOLEAN_STRING_EXCEPTION
+    );
+	@EXPORT_OK = qw(
+		true_p
+    );
+	@ISA = qw(Exporter);
+}
 
 =head1 NAME
 
@@ -52,15 +60,6 @@ Boolean values in a consistent way which makes common sense.
 =over 2
 
 =cut
-
-@ISA = qw(Exporter);
-@EXPORT = (
-	&INVALID_BOOLEAN_STRING_EXCEPTION
-    );
-
-@EXPORT_OK = qw(
-	true_p
-    );
 
 sub INVALID_BOOLEAN_STRING_EXCEPTION ()
     { 'The given value does not seem to be interpretable as a Boolean value' }
