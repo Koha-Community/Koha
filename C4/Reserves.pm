@@ -24,7 +24,6 @@ package C4::Reserves;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
@@ -32,25 +31,9 @@ use C4::Search;
 use C4::Circulation;
 use C4::Accounts;
 
-INIT {
-    # an ugly hack to ensure that 
-    # various subs get imported
-    # into C4::Reserves' symbol table
-    # FIXME: hopefully can remove once
-    #        we get a better idea of exactly
-    #        how Exporter/use/require/import
-    #        should be used with modules
-    #        that currently call functions
-    #        from each other.
-    import C4::Items;
-}
-
-our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 my $library_name = C4::Context->preference("LibraryName");
-
-# set the version for version checking
-$VERSION = 3.00;
 
 =head1 NAME
 
@@ -96,32 +79,35 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 =cut
 
-@ISA = qw(Exporter);
-
-@EXPORT = qw(
-  &AddReserve
+BEGIN {
+    # set the version for version checking
+    $VERSION = 3.01;
+	require Exporter;
+    @ISA = qw(Exporter);
+    @EXPORT = qw(
+        &AddReserve
   
-  &GetReservesFromItemnumber
-  &GetReservesFromBiblionumber
-  &GetReservesFromBorrowernumber
-  &GetReservesForBranch
-  &GetReservesToBranch
-  &GetReserveCount
-  &GetReserveFee
-
-  &GetOtherReserves
-  
-  &ModReserveFill
-  &ModReserveAffect
-  &ModReserve
-  &ModReserveStatus
-  &ModReserveCancelAll
-  &ModReserveMinusPriority
-
-  &CheckReserves
-  &CancelReserve
-);
-
+        &GetReservesFromItemnumber
+        &GetReservesFromBiblionumber
+        &GetReservesFromBorrowernumber
+        &GetReservesForBranch
+        &GetReservesToBranch
+        &GetReserveCount
+        &GetReserveFee
+    
+        &GetOtherReserves
+        
+        &ModReserveFill
+        &ModReserveAffect
+        &ModReserve
+        &ModReserveStatus
+        &ModReserveCancelAll
+        &ModReserveMinusPriority
+        
+        &CheckReserves
+        &CancelReserve
+    );
+}    
 
 =item AddReserve
 
@@ -1167,3 +1153,4 @@ Koha Developement team <info@koha.org>
 
 =cut
 
+1;
