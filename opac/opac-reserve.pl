@@ -150,10 +150,12 @@ my %types;
 my %itemtypes;
 my @duedates;
 #die @items;
+my %itemhash;
 foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
     $itm->{ $itm->{'publictype'} } = 1;
+	warn $itm->{'notforloan'};
     my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
         'a', ( $itm->{'biblioitemnumber'} ) );
     $fee = sprintf "%.02f", $fee;
@@ -172,6 +174,7 @@ foreach my $itm (@items) {
             push @{ $types{$pty}->{'items'} }, $itm;
         }
     }
+	$itemhash{$itm->{'itemnumber'}}=$itm;
 }
 
 $template->param( ITEMS => \@duedates );
@@ -322,7 +325,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     foreach
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
     {
-        my $item = $iteminfos_of->{$itemnumber};
+		my $item = $itemhash{$itemnumber};
 
         $item->{homebranchname} =
           $branches->{ $item->{homebranch} }{branchname};
@@ -360,7 +363,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         }
 
         # Management of the notforloan document
-        if ( $item->{notforloan} ) {
+        if ( $item->{notforloan} || $item->{itemnotforloan}) {
             $item->{backgroundcolor} = 'other';
             $item->{notforloanvalue} =
               $notforloan_label_of->{ $item->{notforloan} };
