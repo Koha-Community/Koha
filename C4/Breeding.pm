@@ -22,12 +22,16 @@ use C4::Biblio;
 use C4::Koha;
 use MARC::File::USMARC;
 use C4::ImportBatch;
-require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = 0.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 0.02;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(&ImportBreeding &BreedingSearch);
+}
 
 =head1 NAME
 
@@ -55,11 +59,6 @@ C4::Breeding : module to add biblios to import_records via
     the records can be properly encoded or not, we try to reencode them in utf-8 if needed.
     works perfectly with BNF server, that sends UNIMARC latin1 records. Should work with other servers too.
     the FixEncoding sub is in Koha.pm, as it's a general usage sub.
-
-=cut
-
-@ISA = qw(Exporter);
-@EXPORT = qw(&ImportBreeding &BreedingSearch);
 
 =head2 ImportBreeding
 
@@ -213,5 +212,6 @@ sub BreedingSearch {
     return($count, @results);
 } # sub breedingsearch
 
+1;
+__END__
 
-END { }       # module clean-up code here (global destructor)

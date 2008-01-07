@@ -17,7 +17,6 @@ package C4::AuthoritiesMarc;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Koha;
 use MARC::Record;
@@ -28,34 +27,37 @@ use C4::AuthoritiesMarc::UNIMARC;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
 
-@ISA = qw(Exporter);
-@EXPORT = qw(
-    &GetTagsLabels
-    &GetAuthType
-    &GetAuthTypeCode
-    &GetAuthMARCFromKohaField 
-    &AUTHhtml2marc
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+	    &GetTagsLabels
+	    &GetAuthType
+	    &GetAuthTypeCode
+    	&GetAuthMARCFromKohaField 
+    	&AUTHhtml2marc
 
-    &AddAuthority
-    &ModAuthority
-    &DelAuthority
-    &GetAuthority
-    &GetAuthorityXML
+    	&AddAuthority
+    	&ModAuthority
+    	&DelAuthority
+    	&GetAuthority
+    	&GetAuthorityXML
     
-    &CountUsage
-    &CountUsageChildren
-    &SearchAuthorities
+    	&CountUsage
+    	&CountUsageChildren
+    	&SearchAuthorities
     
-    &BuildSummary
-    &BuildUnimarcHierarchies
-    &BuildUnimarcHierarchy
+    	&BuildSummary
+    	&BuildUnimarcHierarchies
+    	&BuildUnimarcHierarchy
     
-    &merge
-    &FindDuplicateAuthority
- );
+    	&merge
+    	&FindDuplicateAuthority
+ 	);
+}
 
 =head2 GetAuthMARCFromKohaField 
 
@@ -95,6 +97,7 @@ returns ref to array result and count of results returned
 =back
 
 =cut
+
 sub SearchAuthorities {
     my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
 #     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
@@ -372,6 +375,7 @@ counts Usage of narrower terms of Authid in bibliorecords.
 =back
 
 =cut
+
 sub CountUsageChildren {
   my ($authid) = @_;
 }
@@ -386,6 +390,7 @@ returns authtypecode of an authid
 =back
 
 =cut
+
 sub GetAuthTypeCode {
 #AUTHfind_authtypecode
   my ($authid) = @_;
@@ -422,6 +427,7 @@ where attribute takes values in :
 =back
 
 =cut
+
 sub GetTagsLabels {
   my ($forlibrarian,$authtypecode)= @_;
   my $dbh=C4::Context->dbh;
@@ -504,6 +510,7 @@ Either Create Or Modify existing authority.
 =back
 
 =cut
+
 sub AddAuthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
   my ($record,$authid,$authtypecode) = @_;
@@ -627,6 +634,7 @@ returns xml form of record $authid
 =back
 
 =cut
+
 sub GetAuthorityXML {
   # Returns MARC::XML of the authority passed in parameter.
   my ( $authid ) = @_;
@@ -660,6 +668,7 @@ Returns MARC::Record of the authority passed in parameter.
 =back
 
 =cut
+
 sub GetAuthority {
     my ($authid)=@_;
     my $dbh=C4::Context->dbh;
@@ -688,6 +697,7 @@ else
 =back
 
 =cut
+
 sub GetAuthType {
     my ($authtypecode) = @_;
     my $dbh=C4::Context->dbh;
@@ -983,6 +993,7 @@ Example of text:
 =back
 
 =cut
+
 sub BuildUnimarcHierarchies{
   my $authid = shift @_;
 #   warn "authid : $authid";
@@ -1046,6 +1057,7 @@ Those two latest ones should disappear soon.
 =back
 
 =cut
+
 sub BuildUnimarcHierarchy{
   my $record = shift @_;
   my $class = shift @_;
@@ -1085,6 +1097,7 @@ return a hashref in order auth_header table data
 =back
 
 =cut
+
 sub GetHeaderAuthority{
   my $authid = shift @_;
   my $sql= "SELECT * from auth_header WHERE authid = ?";
@@ -1128,6 +1141,7 @@ Then we should add some new parameter : bibliotargettag, authtargettag
 =back
 
 =cut
+
 sub merge {
     my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
     my $dbh=C4::Context->dbh;
@@ -1290,6 +1304,9 @@ sub get_auth_type_location {
 
 END { }       # module clean-up code here (global destructor)
 
+1;
+__END__
+
 =head1 AUTHOR
 
 Koha Developement team <info@koha.org>
@@ -1297,3 +1314,4 @@ Koha Developement team <info@koha.org>
 Paul POULAIN paul.poulain@free.fr
 
 =cut
+

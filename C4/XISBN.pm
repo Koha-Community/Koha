@@ -26,26 +26,27 @@ use LWP::UserAgent;
 use HTTP::Request::Common;
 
 use strict;
-require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION = 3.0;
+BEGIN {
+	require Exporter;
+	$VERSION = 3.01;
+	@ISA = qw(Exporter);
+	@EXPORT_OK = qw(
+		&get_xisbns
+		&get_biblio_from_xisbn
+	);
+}
+
 =head1 NAME
 
 C4::XISBN - Functions for retrieving XISBN content in Koha
 
 =head1 FUNCTIONS
 
-This module provides facilities for retrieving XISBN, ThingISBN and XISBN content in Koha
+This module provides facilities for retrieving ThingISBN and XISBN content in Koha
 
 =cut
-
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(
-  &get_xisbns
-  &get_biblio_from_xisbn
-);
 
 sub get_biblio_from_xisbn {
     my $xisbn = shift;
@@ -60,8 +61,8 @@ sub get_biblio_from_xisbn {
         $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
     }
     return ($xbiblio);
-
 }
+
 =head1 get_xisbns($isbn);
 
 =head2 $isbn is an ISBN string
@@ -155,9 +156,14 @@ sub _service_throttle {
     return undef;
 }
 
+1;
+__END__
+
 =head1 NOTES
 
 =head1 AUTHOR
 
 Joshua Ferraro <jmf@liblime.com>
+
 =cut
+

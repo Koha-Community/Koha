@@ -23,8 +23,28 @@ use C4::Koha;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&GetBranchCategory
+		&GetBranchName
+		&GetBranch
+		&GetBranches
+		&GetBranchDetail
+		&get_branchinfos_of
+		&ModBranch
+		&CheckBranchCategorycode
+		&GetBranchInfo
+		&GetCategoryTypes
+		&GetBranchCategories
+		&GetBranchesInCategory
+		&ModBranchCategoryInfo
+		&DelBranch
+		&DelBranchCategory
+	);
+}
 
 =head1 NAME
 
@@ -39,27 +59,6 @@ use C4::Branch;
 The functions in this module deal with branches.
 
 =head1 FUNCTIONS
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-   &GetBranchCategory
-   &GetBranchName
-   &GetBranch
-   &GetBranches
-   &GetBranchDetail
-   &get_branchinfos_of
-   &ModBranch
-   &CheckBranchCategorycode
-   &GetBranchInfo
-   &GetCategoryTypes
-   &GetBranchCategories
-   &GetBranchesInCategory
-   &ModBranchCategoryInfo
-   &DelBranch
-   &DelBranchCategory
-);
 
 =head2 GetBranches
 
@@ -83,7 +82,6 @@ foreach my $thisbranch (keys %$branches) {
             );
     push @branchloop, \%row;
 }
-
 
 =head3 in TEMPLATE
             <select name="branch">
@@ -523,7 +521,8 @@ sub CheckBranchCategorycode {
     return $total;
 }
 
-
+1;
+__END__
 
 =head1 AUTHOR
 

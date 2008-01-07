@@ -24,12 +24,18 @@ use Mail::Sendmail;
 # use C4::Suggestions;
 use C4::Members;
 use C4::Log;
-require Exporter;
 
-our ( $VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS );
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	require Exporter;
+	# set the version for version checking
+	$VERSION = 3.01;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+	&GetLetters &getletter &addalert &getalert &delalert &findrelatedto &SendAlerts
+	);
+}
 
 =head1 NAME
 
@@ -47,10 +53,6 @@ C4::Letters - Give functions for Letters management
   Letters are managed through "alerts" sent by Koha on some events. All "alert" related functions are in this module too.
 
 =cut
-
-@ISA = qw(Exporter);
-@EXPORT =
-  qw(&GetLetters &getletter &addalert &getalert &delalert &findrelatedto &SendAlerts);
 
 =head2 GetLetters
 
@@ -485,4 +487,5 @@ sub parseletter {
     }
 }
 
-END { }    # module clean-up code here (global destructor)
+1;
+__END__

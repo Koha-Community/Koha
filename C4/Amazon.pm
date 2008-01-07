@@ -19,16 +19,22 @@ package C4::Amazon;
 
 use XML::Simple;
 use LWP::Simple;
-
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
 use strict;
-require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-$VERSION = 0.02;
+BEGIN {
+	require Exporter;
+	$VERSION = 0.03;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		&get_amazon_details
+		&check_search_inside
+	);
+}
 
 =head1 NAME
 
@@ -37,15 +43,6 @@ C4::Amazon - Functions for retrieving Amazon.com content in Koha
 =head1 FUNCTIONS
 
 This module provides facilities for retrieving Amazon.com content in Koha
-
-=cut
-
-@ISA = qw(Exporter);
-
-@EXPORT = qw(
-  &get_amazon_details
-  &check_search_inside
-);
 
 =head1 get_amazon_details($isbn);
 
@@ -99,6 +96,9 @@ sub check_search_inside {
         return $available;
 }
 
+1;
+__END__
+
 =head1 NOTES
 
 =head1 AUTHOR
@@ -106,4 +106,3 @@ sub check_search_inside {
 Joshua Ferraro <jmf@liblime.com>
 
 =cut
-1;

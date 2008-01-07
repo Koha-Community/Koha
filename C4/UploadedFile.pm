@@ -25,8 +25,10 @@ use IO::File;
 
 use vars qw($VERSION);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.00;
+}
 
 =head1 NAME
 
@@ -314,6 +316,9 @@ sub fh {
     my $self = shift;
     return $self->{'fh'};
 }
+
+1;
+__END__
 
 =head1 AUTHOR
 

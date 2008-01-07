@@ -25,8 +25,10 @@ use Digest::MD5;
 
 use vars qw($VERSION);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.00;
+}
 
 =head1 NAME
 
@@ -304,6 +306,9 @@ sub fetch {
     bless $self, $class;
     return $self;
 }
+
+1;
+__END__
 
 =head1 AUTHOR
 
