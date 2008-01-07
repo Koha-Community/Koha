@@ -17,10 +17,7 @@ package C4::Print;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
 use strict;
-require Exporter;
-
 use C4::Context;
 use C4::Circulation;
 use C4::Members;
@@ -28,9 +25,13 @@ use C4::Dates qw(format_date);
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(&remoteprint &printreserve &printslip);
+}
 
 =head1 NAME
 
@@ -47,11 +48,6 @@ The functions in this module handle sending text to a printer.
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(&remoteprint &printreserve &printslip);
 
 =item remoteprint
 
