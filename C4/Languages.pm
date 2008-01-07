@@ -233,7 +233,7 @@ sub _get_language_dirs {
         next if $language =~/css$/;
         next if $language =~/CVS$/;
         next if $language =~/\.txt$/i;     #Don't read the readme.txt !
-		next if $language =~/img/;
+		next if $language =~/img|images/;
         push @languages, $language;
     }
         return (@languages);

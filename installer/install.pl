@@ -407,7 +407,7 @@ elsif ( $step && $step == 3 ) {
             # we can have some variants of marc flavour, by having different directories, like : unimarc_small and unimarc_full, for small and complete unimarc frameworks.
             # marc_cleaned finds the marcflavour, without the variant.
             my $marc_cleaned = 'MARC21';
-            $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/;
+            $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/i;
           my $request =
             $dbh->prepare(
               "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
