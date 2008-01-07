@@ -6,9 +6,20 @@
 
 use CGI;
 use C4::Circulation;
+use C4::Auth;
 
 my $query = new CGI;
 
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
+	{
+		  template_name   => "opac-user.tmpl",
+		  query           => $query,
+		  type            => "opac",
+		  authnotrequired => 0,
+		  flagsrequired   => { borrow => 1 },
+		  debug           => 1,
+	}
+); 
 my $itemnumber     = $query->param('item');
 my $borrowernumber = $query->param("borrowernumber");
 
