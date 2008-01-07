@@ -22,13 +22,27 @@ package C4::VirtualShelves;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+        &GetShelves &GetShelfContents &GetShelf
+
+        &AddToShelf &AddToShelfFromBiblio &AddShelf
+
+        &ModShelf
+        &ShelfPossibleAction
+        &DelFromShelf &DelShelf
+	);
+}
+
+my $dbh = C4::Context->dbh;
 
 =head1 NAME
 
@@ -47,21 +61,6 @@ items to and from virtualshelves.
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-        &GetShelves &GetShelfContents &GetShelf
-
-        &AddToShelf &AddToShelfFromBiblio &AddShelf
-
-        &ModShelf
-        &ShelfPossibleAction
-        &DelFromShelf &DelShelf
-);
-
-my $dbh = C4::Context->dbh;
 
 =item GetShelves
 
