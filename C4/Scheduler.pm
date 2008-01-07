@@ -18,17 +18,19 @@ package C4::Scheduler;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use Schedule::At;
-# set the version for version checking
-$VERSION = 0.01;
 
-@ISA = qw(Exporter);
-@EXPORT =
-  qw(get_jobs get_at_jobs get_at_job add_at_job remove_at_job);
+BEGIN {
+	# set the version for version checking
+	$VERSION = 0.02;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT =
+		qw(get_jobs get_at_jobs get_at_job add_at_job remove_at_job);
+}
 
 =head1 NAME
 
@@ -97,10 +99,11 @@ sub remove_at_job {
 	Schedule::At::remove(JOBID => $jobid);
 }
 
+1;
+__END__
+
 =head1 AUTHOR
 
 Chris Cormack <crc@liblime.com>
 
 =cut
-
-1;
