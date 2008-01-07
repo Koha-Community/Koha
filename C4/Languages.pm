@@ -22,7 +22,7 @@ package C4::Languages;
 use strict; 
 use warnings;	#FIXME: turn off warnings before release
 use C4::Context;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 BEGIN {
 	$VERSION = 3.00;

@@ -19,7 +19,6 @@ package C4::Members;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use Digest::MD5 qw(md5_base64);
@@ -32,8 +31,75 @@ use C4::Accounts;
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
 BEGIN {
-    $VERSION = 3.02;
-    $debug = $ENV{DEBUG} || 0;
+	$VERSION = 3.02;
+	$debug = $ENV{DEBUG} || 0;
+	require Exporter;
+	@ISA = qw(Exporter);
+	#Get data
+	push @EXPORT, qw(
+		&SearchMember 
+		&GetMemberDetails
+		&GetMember
+
+		&GetGuarantees 
+
+		&GetMemberIssuesAndFines
+		&GetPendingIssues
+		&GetAllIssues
+
+		&get_institutions 
+		&getzipnamecity 
+		&getidcity
+
+		&GetAge 
+		&GetCities 
+		&GetRoadTypes 
+		&GetRoadTypeDetails 
+		&GetSortDetails
+		&GetTitles	
+
+		&GetMemberAccountRecords
+		&GetBorNotifyAcctRecord
+
+		&GetborCatFromCatType 
+		&GetBorrowercategory
+
+		&GetBorrowersWhoHaveNotBorrowedSince
+		&GetBorrowersWhoHaveNeverBorrowed
+		&GetBorrowersWithIssuesHistoryOlderThan
+
+		&GetExpiryDate
+	);
+
+	#Modify data
+	push @EXPORT, qw(
+		&ModMember
+		&changepassword
+	);
+
+	#Delete data
+	push @EXPORT, qw(
+		&DelMember
+	);
+
+	#Insert data
+	push @EXPORT, qw(
+		&AddMember
+		&add_member_orgs
+		&MoveMemberToDeleted
+		&ExtendMemberSubscriptionTo 
+	);
+
+	#Check data
+	push @EXPORT, qw(
+		&checkuniquemember 
+		&checkuserpassword
+		&Check_Userid
+		&fixEthnicity
+		&ethnicitycategories 
+		&fixup_cardnumber
+		&checkcardnumber
+	);
 }
 
 =head1 NAME
@@ -51,77 +117,6 @@ This module contains routines for adding, modifying and deleting members/patrons
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA = qw(Exporter);
-
-#Get data
-push @EXPORT, qw(
-  &SearchMember 
-  &GetMemberDetails
-  &GetMember
-  
-  &GetGuarantees 
-  
-  &GetMemberIssuesAndFines
-  &GetPendingIssues
-  &GetAllIssues
-  
-  &get_institutions 
-  &getzipnamecity 
-  &getidcity
-   
-  &GetAge 
-  &GetCities 
-  &GetRoadTypes 
-  &GetRoadTypeDetails 
-  &GetSortDetails
-  &GetTitles    
-  
-  &GetMemberAccountRecords
-  &GetBorNotifyAcctRecord
-  
-  &GetborCatFromCatType 
-  &GetBorrowercategory
-  
-  
-  &GetBorrowersWhoHaveNotBorrowedSince
-  &GetBorrowersWhoHaveNeverBorrowed
-  &GetBorrowersWithIssuesHistoryOlderThan
-  
-  &GetExpiryDate
-);
-
-#Modify data
-push @EXPORT, qw(
-  &ModMember
-  &changepassword
-);
-  
-#Delete data
-push @EXPORT, qw(
-  &DelMember
-);
-
-#Insert data
-push @EXPORT, qw(
-  &AddMember
-  &add_member_orgs
-  &MoveMemberToDeleted
-  &ExtendMemberSubscriptionTo 
-);
-
-#Check data
-push @EXPORT, qw(
-  &checkuniquemember 
-  &checkuserpassword
-    &Check_Userid
-  &fixEthnicity
-  &ethnicitycategories 
-  &fixup_cardnumber
-    &checkcardnumber
-);
 
 =item SearchMember
 
