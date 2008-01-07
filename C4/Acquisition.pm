@@ -19,7 +19,6 @@ package C4::Acquisition;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Dates qw(format_date);
 use MARC::Record;
@@ -28,8 +27,20 @@ use Time::localtime;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&GetBasket &NewBasket &CloseBasket
+		&GetPendingOrders &GetOrder &GetOrders
+		&GetOrderNumber &GetLateOrders &NewOrder &DelOrder
+		&SearchOrder &GetHistory &GetRecentAcqui
+		&ModOrder &ModReceiveOrder &ModOrderBiblioNumber
+		&GetParcels &GetParcel
+	);
+}
 
 # used in receiveorder subroutine
 # to provide library specific handling
@@ -52,25 +63,9 @@ orders, basket and parcels.
 
 =over 2
 
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &GetBasket &NewBasket &CloseBasket
-  &GetPendingOrders &GetOrder &GetOrders
-  &GetOrderNumber &GetLateOrders &NewOrder &DelOrder
-  &SearchOrder &GetHistory &GetRecentAcqui
-  &ModOrder &ModReceiveOrder &ModOrderBiblioNumber
-  &GetParcels &GetParcel
-);
-
 =head2 FUNCTIONS ABOUT BASKETS
 
 =over 2
-
-=cut
-
-#------------------------------------------------------------#
 
 =head3 GetBasket
 
@@ -1175,10 +1170,7 @@ sub GetRecentAcqui {
     return \@results;
 }
 
-END { }    # module clean-up code here (global destructor)
-
 1;
-
 __END__
 
 =back
