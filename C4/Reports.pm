@@ -18,7 +18,6 @@ package C4::Reports;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
@@ -28,15 +27,18 @@ use XML::Dumper;
 # use Smart::Comments;
 # use Data::Dumper;
 
-# set the version for version checking
-$VERSION = 0.11;
-
-@ISA = qw(Exporter);
-@EXPORT =
-  qw(get_report_types get_report_areas get_columns build_query get_criteria
-  save_report get_saved_reports execute_query get_saved_report create_compound run_compound
-  get_column_type get_distinct_values save_dictionary get_from_dictionary
-  delete_definition delete_report format_results get_sql );
+BEGIN {
+	# set the version for version checking
+	$VERSION = 0.12;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		get_report_types get_report_areas get_columns build_query get_criteria
+		save_report get_saved_reports execute_query get_saved_report create_compound run_compound
+		get_column_type get_distinct_values save_dictionary get_from_dictionary
+		delete_definition delete_report format_results get_sql
+	);
+}
 
 our %table_areas;
 $table_areas{'1'} =
@@ -627,10 +629,11 @@ sub get_sql {
 	return $data->{'savedsql'};
 }
 
+1;
+__END__
+
 =head1 AUTHOR
 
 Chris Cormack <crc@liblime.com>
 
 =cut
-
-1;
