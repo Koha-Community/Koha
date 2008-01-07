@@ -19,12 +19,43 @@ package C4::Koha;
 
 
 use strict;
-require Exporter;
 use C4::Context;
 use C4::Output;
-our ($VERSION,@ISA,@EXPORT);
+use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
-$VERSION = 3.00;
+BEGIN {
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&slashifyDate
+		&DisplayISBN
+		&subfield_is_koha_internal_p
+		&GetPrinters &GetPrinter
+		&GetItemTypes &getitemtypeinfo
+		&GetCcodes
+		&get_itemtypeinfos_of
+		&getframeworks &getframeworkinfo
+		&getauthtypes &getauthtype
+		&getallthemes
+		&getFacets
+		&displayServers
+		&getnbpages
+		&getitemtypeimagesrcfromurl
+		&get_infos_of
+		&get_notforloan_label_of
+		&getitemtypeimagedir
+		&getitemtypeimagesrc
+		&GetAuthorisedValues
+		&FixEncoding
+		&GetKohaAuthorisedValues
+		&GetAuthValCode
+		&GetManagedTagSubfields
+
+		$DEBUG
+	);
+	$DEBUG = 0;
+}
 
 =head1 NAME
 
@@ -42,39 +73,6 @@ $VERSION = 3.00;
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &slashifyDate
-  &DisplayISBN
-  &subfield_is_koha_internal_p
-  &GetPrinters &GetPrinter
-  &GetItemTypes &getitemtypeinfo
-  &GetCcodes
-  &get_itemtypeinfos_of
-  &getframeworks &getframeworkinfo
-  &getauthtypes &getauthtype
-  &getallthemes
-  &getFacets
-  &displayServers
-  &getnbpages
-  &getitemtypeimagesrcfromurl
-  &get_infos_of
-  &get_notforloan_label_of
-  &getitemtypeimagedir
-  &getitemtypeimagesrc
-  &GetAuthorisedValues
-  &FixEncoding
-  &GetKohaAuthorisedValues
-  &GetAuthValCode
-  &GetManagedTagSubfields
-
-  $DEBUG
-  );
-
-my $DEBUG = 0;
 
 =head2 slashifyDate
 
