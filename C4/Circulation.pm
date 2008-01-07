@@ -43,26 +43,48 @@ use C4::Log; # logaction
 
 use Data::Dumper;
 
-INIT {
-    # an ugly hack to ensure that 
-    # various subs get imported
-    # into C4::Circulation's symbol table
-    # FIXME: hopefully can remove once
-    #        we get a better idea of exactly
-    #        how Exporter/use/require/import
-    #        should be used with modules
-    #        that currently call functions
-    #        from each other.
-    import C4::Items;
-    import C4::Members;
-    import C4::Reserves;
-    import C4::Overdues;
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	@ISA    = qw(Exporter);
+
+	# FIXME subs that should probably be elsewhere
+	push @EXPORT, qw(
+		&FixOverduesOnReturn
+		&cuecatbarcodedecode
+	);
+
+	# subs to deal with issuing a book
+	push @EXPORT, qw(
+		&CanBookBeIssued
+		&CanBookBeRenewed
+		&AddIssue
+		&AddRenewal
+		&GetRenewCount
+		&GetItemIssue
+		&GetItemIssues
+		&GetBorrowerIssues
+		&GetIssuingCharges
+		&GetBiblioIssues
+		&AnonymiseIssueHistory
+	);
+
+	# subs to deal with returns
+	push @EXPORT, qw(
+		&AddReturn
+	);
+
+	# subs to deal with transfers
+	push @EXPORT, qw(
+		&transferbook
+		&GetTransfers
+		&GetTransfersFromTo
+		&updateWrongTransfer
+		&DeleteTransfer
+	);
 }
-
-our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,%EXPORT_TAGS);
-
-# set the version for version checking
-$VERSION = 3.00;
 
 =head1 NAME
 
@@ -80,47 +102,6 @@ Also deals with stocktaking.
 
 =head1 FUNCTIONS
 
-=cut
-
-@ISA    = qw(Exporter);
-
-# FIXME subs that should probably be elsewhere
-push @EXPORT, qw(
-  &FixOverduesOnReturn
-  &cuecatbarcodedecode
-);
-
-# subs to deal with issuing a book
-push @EXPORT, qw(
-  &CanBookBeIssued
-  &CanBookBeRenewed
-  &AddIssue
-  &AddRenewal
-  &GetRenewCount
-  &GetItemIssue
-  &GetItemIssues
-  &GetBorrowerIssues
-  &GetIssuingCharges
-  &GetBiblioIssues
-  &AnonymiseIssueHistory
-);
-# subs to deal with returns
-push @EXPORT, qw(
-  &AddReturn
-);
-
-# subs to deal with transfers
-push @EXPORT, qw(
-  &transferbook
-  &GetTransfers
-  &GetTransfersFromTo
-  &updateWrongTransfer
-  &DeleteTransfer
-);
-
-# FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
-# FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
-
 =head2 decode
 
 =head3 $str = &decode($chunk);
@@ -133,6 +114,9 @@ returns it.
 =back
 
 =cut
+
+# FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
+# FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
 
 sub cuecatbarcodedecode {
     my ($barcode) = @_;
@@ -1467,6 +1451,7 @@ Returns patrons currently having a book. nothing if item is not issued atm
 C<$itemnumber> is the itemnumber
 
 Returns an array of hashes
+
 =cut
 
 sub GetItemIssue {
@@ -1505,6 +1490,7 @@ C<$itemnumber> is the itemnumber
 C<$history> is 0 if you want actuel "issuer" (if it exist) and 1 if you want issues history
 
 Returns an array of hashes
+
 =cut
 
 sub GetItemIssues {
@@ -1979,6 +1965,7 @@ sub updateWrongTransfer {
 
 $items = UpdateHoldingbranch($branch,$itmenumber);
 Simple methode for updating hodlingbranch in items BDD line
+
 =cut
 
 sub UpdateHoldingbranch {
@@ -1993,7 +1980,9 @@ this function return a new date due after checked if it's a repeatable or specia
 C<$date_due>   = returndate calculate with no day check
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 
+
 =cut
+
 # Why not create calendar object?  - 
 # TODO add 'duedate' option to useDaysMode .
 sub CheckValidDatedue { 
@@ -2018,6 +2007,7 @@ for (my $i=0;$i<2;$i++){
 	my $newdatedue=C4::Dates->new(sprintf("%04d-%02d-%02d",$years,$month,$day),'iso');
 return $newdatedue;
 }
+
 =head2 CheckRepeatableHolidays
 
 $countrepeatable = CheckRepeatableHoliday($itemnumber,$week_day,$branchcode);
@@ -2052,7 +2042,9 @@ C<$month>   = the month of datedue
 C<$day>     = the day of datedue
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 
+
 =cut
+
 sub CheckSpecialHolidays{
 my ($years,$month,$day,$itemnumber,$branchcode) = @_;
 my $dbh = C4::Context->dbh;
@@ -2078,7 +2070,9 @@ C<$month>   = the month of datedue
 C<$day>     = the day of datedue
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 
+
 =cut
+
 sub CheckRepeatableSpecialHolidays{
 my ($month,$day,$itemnumber,$branchcode) = @_;
 my $dbh = C4::Context->dbh;
