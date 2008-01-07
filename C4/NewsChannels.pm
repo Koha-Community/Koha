@@ -25,7 +25,16 @@ use C4::Dates qw(format_date);
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN { 
-		$VERSION = 3.00;	# set the version for version checking
+	$VERSION = 3.01;	# set the version for version checking
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		&GetNewsToDisplay
+		&news_channels &get_new_channel &del_channels &add_channel &update_channel
+		&news_channels_categories &get_new_channel_category &del_channels_categories
+		&add_channel_category &update_channel_category &news_channels_by_category
+		&add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
+		&add_opac_electronic &upd_opac_electronic &del_opac_electronic &get_opac_electronic &get_opac_electronics
+	);
 }
 
 =head1 NAME
@@ -39,20 +48,6 @@ This module provides the functions needed to admin the news channels and its cat
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-
-@ISA = qw(Exporter);
-@EXPORT = qw(
-  &GetNewsToDisplay
-  &news_channels &get_new_channel &del_channels &add_channel &update_channel
-  &news_channels_categories &get_new_channel_category &del_channels_categories
-  &add_channel_category &update_channel_category &news_channels_by_category
-  &add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
-  &add_opac_electronic &upd_opac_electronic &del_opac_electronic &get_opac_electronic &get_opac_electronics
-);
-
 
 =item news_channels
 
@@ -411,14 +406,14 @@ sub get_opac_electronics {
     my $count = 0;
     while (my $row = $sth->fetchrow_hashref) {
             push @opac_electronic, $row;
-
-    
         $count++;
     }
 
     return ($count,\@opac_electronic);
 }
-END { }    # module clean-up code here (global destructor)
+
+1;
+__END__
 
 =back
 
