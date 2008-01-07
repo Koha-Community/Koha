@@ -18,13 +18,18 @@ package C4::Review;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use C4::Context;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.00;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(getreview savereview updatereview numberofreviews
+		getreviews getallreviews approvereview deletereview);
+}
 
 =head1 NAME
 
@@ -33,7 +38,6 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
 =head1 SYNOPSIS
 
   use C4::Review;
-
 
   my $review=getreview($biblionumber,$borrowernumber);
   savereview($biblionumber,$borrowernumber,$review);
@@ -48,22 +52,11 @@ Review.pm provides many routines for manipulating reviews.
 
 =head1 FUNCTIONS
 
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(getreview savereview updatereview numberofreviews
-  getreviews getallreviews approvereview deletereview);
-
-use vars qw();
-
-my $DEBUG = 0;
-
 =head2 getreview
 
   $review = getreview($biblionumber,$borrowernumber);
 
 Takes a borrowernumber and a biblionumber and returns the review of that biblio
-
 
 =cut
 
