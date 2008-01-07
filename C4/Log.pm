@@ -1,4 +1,4 @@
-package C4::Log; #assumes C4/Log
+package C4::Log;
 
 #package to deal with Logging Actions in DB
 
@@ -24,12 +24,15 @@ use strict;
 use C4::Context;
 use C4::Dates qw(format_date);
 
-require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.01;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(&logaction &GetLogStatus &displaylog &GetLogs);
+}
 
 =head1 NAME
 
@@ -46,11 +49,6 @@ The functions in this module perform various functions in order to log all the o
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA = qw(Exporter);
-@EXPORT = qw(&logaction &GetLogStatus &displaylog &GetLogs);
 
 =item logaction
 
@@ -215,8 +213,6 @@ sub GetLogs {
     }
     return \@logs;
 }
-
-END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
