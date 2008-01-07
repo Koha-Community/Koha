@@ -23,8 +23,16 @@ require Exporter;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&UpdateStats
+		&TotalPaid
+	);
+}
+
 
 =head1 NAME
 
@@ -42,14 +50,6 @@ the Koha database, which acts as an activity log.
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-    &UpdateStats
-    &TotalPaid
-);
 
 =item UpdateStats
 
