@@ -37,7 +37,7 @@ VALUES( 'intranet', 'i', 'fr', '????');
 
 -- Theme (t)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
-VALUES ( 'prog', 't', 'United Kingdom','2005-10-16');
+VALUES ( 'prog', 't', 'Prog','2005-10-16');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'prog', 'i', 'en', 'Prog');
@@ -62,6 +62,22 @@ VALUES( 'ar', 'language', 'en', 'Arabic');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'ar', 'language', 'fr', 'Arabe');
+
+-- Armenian
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'hy', 'language', 'Armenian','2005-10-16');
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'hy','hy');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'hy', 'language', 'hy', '&#1344;&#1377;&#1397;&#1381;&#1408;&#1383;&#1398;');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hy', 'language', 'en', 'Armenian');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'hy', 'language', 'fr', 'Armenian');
 
 -- Bulgarian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
