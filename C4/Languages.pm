@@ -384,7 +384,7 @@ sub get_bidi {
 	my ($language_script)= @_;
 	my $dbh = C4::Context->dbh;
 	my $bidi;
-	my $sth = $dbh->prepare('SELECT bidi FROM language_bidi WHERE rfc4646_subtag=?');
+	my $sth = $dbh->prepare('SELECT bidi FROM language_script_bidi WHERE rfc4646_subtag=?');
 	$sth->execute($language_script);
 	while (my $result = $sth->fetchrow_hashref) {
 		$bidi = $result->{'bidi'};
