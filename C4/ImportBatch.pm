@@ -22,32 +22,15 @@ use C4::Context;
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
-require Exporter;
-
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-# set the version for version checking
-$VERSION = 3.00;
-
-=head1 NAME
-
-C4::ImportBatch - manage batches of imported MARC records
-
-=head1 SYNOPSIS
-
-=over 4
-
-use C4::ImportBatch;
-
-=back
-
-=head1 FUNCTIONS
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
     GetZ3950BatchId
     GetImportRecordMarc
     AddImportBatch
@@ -77,7 +60,22 @@ use C4::ImportBatch;
     SetImportRecordStatus
     GetImportRecordMatches
     SetImportRecordMatches
-);
+	);
+}
+
+=head1 NAME
+
+C4::ImportBatch - manage batches of imported MARC records
+
+=head1 SYNOPSIS
+
+=over 4
+
+use C4::ImportBatch;
+
+=back
+
+=head1 FUNCTIONS
 
 =head2 GetZ3950BatchId
 
@@ -1168,6 +1166,7 @@ sub _update_batch_record_counts {
 }
 
 1;
+__END__
 
 =head1 AUTHOR
 
