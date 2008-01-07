@@ -7,7 +7,6 @@ package C4::Z3950;
 
 # Licensed under the GPL
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -34,14 +33,20 @@ use DBI;
 use C4::Input;
 use C4::Biblio;
 
-#------------------
-
-require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT);
 
-# set the version for version checking
-$VERSION = 3.00;
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.01;
+	require Exporter;
+	@ISA = qw(Exporter);
+	@EXPORT = qw(
+		&getz3950servers
+		&z3950servername
+		&addz3950queue
+		&checkz3950searchdone
+	);
+}
 
 =head1 NAME
 
@@ -60,17 +65,6 @@ entering Z39.50 lookup requests.
 
 =over 2
 
-=cut
-
-@ISA = qw(Exporter);
-@EXPORT = qw(
-	&getz3950servers
-	&z3950servername
-	&addz3950queue
-	&checkz3950searchdone
-);
-
-#------------------------------------------------
 =item getz3950servers
 
   @servers= &getz3950servers(checked);
@@ -81,6 +75,7 @@ C<$checked> should always be true (1) => returns only active servers.
 If 0 => returns all servers
 
 =cut
+
 sub getz3950servers {
 	my ($checked) = @_;
 	my $dbh = C4::Context->dbh;
@@ -109,6 +104,7 @@ C<$server_id> is the Z39.50 server ID to look up.
 C<$dbh> is ignored.
 
 =cut
+
 #'
 
 sub z3950servername {
@@ -164,6 +160,7 @@ C<&addz3950queue> returns an error message. If it was successful, the
 error message is the empty string.
 
 =cut
+
 #'
 sub addz3950queue {
 	use strict;
@@ -274,6 +271,7 @@ Returns the number of pending z3950 requests
 C<$random> is the random z3950 query number.
 
 =cut
+
 sub checkz3950searchdone {
 	my ($z3950random) = @_;
 	my $dbh = C4::Context->dbh;
