@@ -18,6 +18,7 @@ package C4::Reports;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use CGI;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
@@ -83,7 +84,8 @@ our %columns;
 my $columns_def_file = "columns.def";
 my $htdocs = C4::Context->config('intrahtdocs');                       
 my $section='intranet';
-my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section);                                                                                 
+my $cgi = new CGI;
+my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section,$cgi);
 
 my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
 open (COLUMNS,$full_path_to_columns_def_file);
