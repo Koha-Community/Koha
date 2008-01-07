@@ -19,8 +19,6 @@ package C4::Items;
 
 use strict;
 
-require Exporter;
-
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
@@ -33,35 +31,38 @@ require C4::Reserves;
 
 use vars qw($VERSION @ISA @EXPORT);
 
-my $VERSION = 3.00;
+BEGIN {
+    $VERSION = 3.01;
 
-@ISA = qw( Exporter );
+	require Exporter;
+    @ISA = qw( Exporter );
 
-# function exports
-@EXPORT = qw(
-    GetItem
-    AddItemFromMarc
-    AddItem
-    AddItemBatchFromMarc
-    ModItemFromMarc
-    ModItem
-    ModDateLastSeen
-    ModItemTransfer
-    DelItem
-
-    CheckItemPreSave
-
-    GetItemStatus
-    GetItemLocation
-    GetLostItems
-    GetItemsForInventory
-    GetItemsCount
-    GetItemInfosOf
-    GetItemsByBiblioitemnumber
-    GetItemsInfo
-    get_itemnumbers_of
-    GetItemnumberFromBarcode
-);
+    # function exports
+    @EXPORT = qw(
+        GetItem
+        AddItemFromMarc
+        AddItem
+        AddItemBatchFromMarc
+        ModItemFromMarc
+        ModItem
+        ModDateLastSeen
+        ModItemTransfer
+        DelItem
+    
+        CheckItemPreSave
+    
+        GetItemStatus
+        GetItemLocation
+        GetLostItems
+        GetItemsForInventory
+        GetItemsCount
+        GetItemInfosOf
+        GetItemsByBiblioitemnumber
+        GetItemsInfo
+        get_itemnumbers_of
+        GetItemnumberFromBarcode
+    );
+}
 
 =head1 NAME
 
@@ -379,7 +380,7 @@ sub ModItem {
     my $dbh           = @_ ? shift : C4::Context->dbh;
     my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
 
-    $item->{'itemnumber'} = $itemnumber;
+    $item->{'itemnumber'} = $itemnumber or return undef;
     _set_derived_columns_for_mod($item);
     _do_column_fixes_for_mod($item);
     # FIXME add checks
@@ -393,10 +394,11 @@ sub ModItem {
     _koha_modify_item($dbh, $item);
 
     # update biblio MARC XML
-    my $whole_item = GetItem($itemnumber);
-    my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode);
+    my $whole_item = GetItem($itemnumber) or die "FAILED GetItem($itemnumber)";
+    my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode) or die "FAILED _marc_from_item_hash($whole_item, $frameworkcode)";
     _replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
-    
+	(C4::Context->userenv eq '0') and die "userenv is '0', not hashref";         # logaction line would crash anyway
+	($new_item_marc       eq '0') and die "$new_item_marc is '0', not hashref";  # logaction line would crash anyway
     logaction(C4::Context->userenv->{'number'},"CATALOGUING","MODIFY",$itemnumber,$new_item_marc->as_formatted)
         if C4::Context->preference("CataloguingLog");
 }
