@@ -1,3 +1,8 @@
+<h5>Guided Reports</h5>
+	<ul>
+		<li><a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports</a></li>
+	</ul>
+
 <h5>Statistics wizards</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
@@ -26,4 +31,5 @@
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by Item Type</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Checkouts by patron category</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
+		<li><a href="/cgi-bin/koha/reports/stats.screen.pl">Till Reconciliation</a></li>
 	</ul>

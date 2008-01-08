@@ -7,67 +7,71 @@
 <body>   
 <!-- TMPL_INCLUDE NAME="header.inc" -->                                    
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
-&rsaquo; Till Reconciliation
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Till Reconciliation
 </div>
-<div id="doc3" class="yui-t1"> 
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <h1>Till Reconciliation</h1>
 
-<h4>Search between two dates</h4>
+<fieldset><legend>Search between two dates</legend>
 <form action="stats.screen.pl" method="post">
-  <label>Start Date</label>
-  <input type="text" name="time" size="10" value="<!-- TMPL_IF NAME="date" --><!-- TMPL_VAR NAME="date" --><!-- TMPL_ELSE -->today<!-- /TMPL_IF -->" id="from"> 
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" />
+  <label for="from">Start Date: </label>
+  <input type="text" name="time" size="10" value="<!-- TMPL_IF NAME="date" --><!-- TMPL_VAR NAME="date" --><!-- TMPL_ELSE -->today<!-- /TMPL_IF -->" id="from" /> 
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" alt="Show Calendar" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "from",
-     ifFormat       :    "%Y-%m-%d",
+     ifFormat       :    "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
      button         :    "buttonfrom1",
      align          :    "Tl"
      });
      </script>
-  <label>End Date</label>
-  <input type="text" name="time2" size="10" value="<!-- TMPL_IF NAME="date2" --><!-- TMPL_VAR NAME="date2" --><!-- TMPL_ELSE -->tomorrow<!-- /TMPL_IF -->" id="to">
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonto1" style="cursor: pointer;" />
+  <label for="to">End Date: </label>
+  <input type="text" name="time2" size="10" value="<!-- TMPL_IF NAME="date2" --><!-- TMPL_VAR NAME="date2" --><!-- TMPL_ELSE -->tomorrow<!-- /TMPL_IF -->" id="to" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonto1" alt="Show Calendar" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "to",
-     ifFormat       :    "%Y-%m-%d",
+     ifFormat       :    "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
      button         :    "buttonto1",
      align          :    "Tl"
      });
      </script>
-  <input type="submit" value="To Screen" name="submit" class="button">
-<!--  <input type="submit" value="To Excel" name="submit" class="button"> -->
+  <input type="submit" value="To Screen" name="submit" class="submit" />
+<!--  <input type="submit" value="To Excel" name="submit" class="button"> --></fieldset>
 </form>
 
 <h2>Payments</h2>
 
-        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+        <table>
                 <tr>
-                        <th class="cell-header">Branch</th>
-                        <th class="cell-header">Date/time</th>
-                        <th class="cell-header">Surname</th>
-                        <th class="cell-header">Firstname</th>
-                        <th class="cell-header">Description</th>
-                        <th class="cell-header">Charge Type</th>
-                        <th class="cell-header">Invoice Amount</th>
-                        <th class="cell-header">Payment Type</th>
-                        <th class="cell-header">Payment Amount</th>
+                        <th>Branch</th>
+                        <th>Date/time</th>
+                        <th>Surname</th>
+                        <th>Firstname</th>
+                        <th>Description</th>
+                        <th>Charge Type</th>
+                        <th>Invoice Amount</th>
+                        <th>Payment Type</th>
+                        <th>Payment Amount</th>
                 </tr>
 
                 <!-- TMPL_LOOP NAME=loop1 -->
                 <tr>
-                     <td class="cell"><!-- TMPL_VAR NAME="branch" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="datetime" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="surname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="firstname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="description" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="accounttype" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="amount" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="type" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="value" --></td>
+                     <td><!-- TMPL_VAR NAME="branch" --></td>
+                        <td><!-- TMPL_VAR NAME="datetime" --></td>
+                        <td><!-- TMPL_VAR NAME="surname" --></td>
+                        <td><!-- TMPL_VAR NAME="firstname" --></td>
+                        <td><!-- TMPL_VAR NAME="description" --></td>
+                        <td><!-- TMPL_VAR NAME="accounttype" --></td>
+                        <td><!-- TMPL_VAR NAME="amount" --></td>
+                        <td><!-- TMPL_VAR NAME="type" --></td>
+                        <td><!-- TMPL_VAR NAME="value" --></td>
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>
@@ -79,68 +83,68 @@
 
 <h2>Credits</h2>
 
-        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+        <table>
                 <tr>
-                        <th class="cell-header">Branch</th>
-                        <th class="cell-header">Date/time</th>
-                        <th class="cell-header">Surname</th>
-                        <th class="cell-header">Firstname</th>
-                        <th class="cell-header">Description</th>
-                        <th class="cell-header">Charge Type</th>
-                        <th class="cell-header">Invoice Amount</th>
+                        <th>Branch</th>
+                        <th>Date/time</th>
+                        <th>Surname</th>
+                        <th>Firstname</th>
+                        <th>Description</th>
+                        <th>Charge Type</th>
+                        <th>Invoice Amount</th>
                 </tr>
 
                 <!-- TMPL_LOOP NAME=loop2 -->
                 <tr>
-                     <td class="cell"><!-- TMPL_VAR NAME="creditbranch" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditdate" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditsurname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditfirstname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditdescription" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditaccounttype" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="creditamount" --></td>
+                     <td><!-- TMPL_VAR NAME="creditbranch" --></td>
+                        <td><!-- TMPL_VAR NAME="creditdate" --></td>
+                        <td><!-- TMPL_VAR NAME="creditsurname" --></td>
+                        <td><!-- TMPL_VAR NAME="creditfirstname" --></td>
+                        <td><!-- TMPL_VAR NAME="creditdescription" --></td>
+                        <td><!-- TMPL_VAR NAME="creditaccounttype" --></td>
+                        <td><!-- TMPL_VAR NAME="creditamount" --></td>
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>
 <p>
-        <b>Total amount credits: $<!-- TMPL_VAR NAME="totalcredits" --></b>
-        <br>
-        <b>Total number written off: <!-- TMPL_VAR NAME="totalwritten" --> charges</b>
+       <ul><li> <b>Total amount credits: $<!-- TMPL_VAR NAME="totalcredits" --></b></li>
+        <li><b>Total number written off: <!-- TMPL_VAR NAME="totalwritten" --> charges</b></li></ul>
 </p>
 
 
 <h2>Refunds</h2>
 
-        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+        <table>
                 <tr>
-                        <th class="cell-header">Branch</th>
-                        <th class="cell-header">Date/time</th>
-                        <th class="cell-header">Surname</th>
-                        <th class="cell-header">Firstname</th>
-                        <th class="cell-header">Description</th>
-                        <th class="cell-header">Charge Type</th>
-                        <th class="cell-header">Invoice Amount</th>
+                        <th>Branch</th>
+                        <th>Date/time</th>
+                        <th>Surname</th>
+                        <th>Firstname</th>
+                        <th>Description</th>
+                        <th>Charge Type</th>
+                        <th>Invoice Amount</th>
                 </tr>
 
                 <!-- TMPL_LOOP NAME=loop3 -->
                 <tr>
-                     <td class="cell"><!-- TMPL_VAR NAME="refundbranch" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refunddate" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refundsurname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refundfirstname" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refunddescription" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refundaccounttype" --></td>
-                        <td class="cell"><!-- TMPL_VAR NAME="refundamount" --></td>
+                     <td><!-- TMPL_VAR NAME="refundbranch" --></td>
+                        <td><!-- TMPL_VAR NAME="refunddate" --></td>
+                        <td><!-- TMPL_VAR NAME="refundsurname" --></td>
+                        <td><!-- TMPL_VAR NAME="refundfirstname" --></td>
+                        <td><!-- TMPL_VAR NAME="refunddescription" --></td>
+                        <td><!-- TMPL_VAR NAME="refundaccounttype" --></td>
+                        <td><!-- TMPL_VAR NAME="refundamount" --></td>
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>
 <p>
-        <b>Total amount refunds: $<!-- TMPL_VAR NAME="totalrefund" --></b>
-</p>
-<p>
-        <b>Total amount of cash collected:$ <!-- TMPL_VAR NAME="totalcash" --> </b>
+        <ul><li><b>Total amount refunds: $<!-- TMPL_VAR NAME="totalrefund" --></b></li>
+        <li><b>Total amount of cash collected:$ <!-- TMPL_VAR NAME="totalcash" --> </b></li></ul>
 </p>
 </div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
-
-

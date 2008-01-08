@@ -268,7 +268,8 @@ else {
         totalcredits => $totalcredits,
         totalwritten => $totalwritten,
         totalrefund  => $totalrefunds,
-        totalcash    => $totalcash
+        totalcash    => $totalcash,
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
