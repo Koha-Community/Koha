@@ -597,8 +597,10 @@ sub _new_dbh
     $db_port = "" unless defined $db_port;
     my $db_user   = $context->config("user");
     my $db_passwd = $context->config("pass");
+    # MJR added or die here, as we can't work without dbh
     my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-         $db_user, $db_passwd);
+         $db_user, $db_passwd) or die $DBI::errstr;
+    if (
     if ( $db_driver eq 'mysql' ) { 
         # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
         # this is better than modifying my.cnf (and forcing all communications to be in utf8)
