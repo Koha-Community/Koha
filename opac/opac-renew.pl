@@ -23,7 +23,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $itemnumber     = $query->param('item');
 my $borrowernumber = $query->param("borrowernumber");
 
-my $status = CanBookBeRenewed( $borrowernumber, $itemnumber );
+my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
 if ( $status == 1 ) {
     AddRenewal( $borrowernumber, $itemnumber );
 }

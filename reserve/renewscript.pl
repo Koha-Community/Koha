@@ -65,7 +65,8 @@ my $borrowernumber = $input->param("borrowernumber");
 my $failedrenews;
 foreach my $itemno (@data) {
     # check status before renewing issue
-    if (CanBookBeRenewed($borrowernumber,$itemno)){
+	my ($renewokay,$error) = CanBookBeRenewed($borrowernumber,$itemno);
+    if ($renewokay){
         AddRenewal($borrowernumber,$itemno,$branch);
     }
 	else {

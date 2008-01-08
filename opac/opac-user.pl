@@ -116,7 +116,7 @@ foreach my $issue ( @$issues ) {
     $issue->{$publictype} = 1;
 
     # check if item is renewable
-    my $status = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
+    my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
 	($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
 
     $issue->{'status'} = $status;

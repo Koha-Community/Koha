@@ -404,6 +404,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_ELSE -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+		    <!-- TMPL_VAR NAME="can_renew_error" -->
 		<!-- /TMPL_IF -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
@@ -446,6 +448,14 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_ELSE -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
+		<!-- TMPL_ELSE -->
+		    <!-- TMPL_IF EXPR="can_renew_error eq 'on_reserve'" -->
+			    On Hold
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF EXPR="can_renew_error eq 'too_many'" -->
+			    Too Many Renewals
+			<!-- /TMPL_IF -->
+			
 		<!-- /TMPL_IF -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>

@@ -770,7 +770,7 @@ sub CanBookBeIssued {
 
         # Already issued to current borrower. Ask whether the loan should
         # be renewed.
-        my ($CanBookBeRenewed) = CanBookBeRenewed(
+        my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
             $borrower->{'borrowernumber'},
             $item->{'itemnumber'}
         );
@@ -1562,7 +1562,7 @@ sub GetBiblioIssues {
 
 =head2 CanBookBeRenewed
 
-$ok = &CanBookBeRenewed($borrowernumber, $itemnumber);
+($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber);
 
 Find out whether a borrowed item may be renewed.
 
@@ -1576,7 +1576,7 @@ C<$itemnumber> is the number of the item to renew.
 C<$CanBookBeRenewed> returns a true value iff the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
 must be allowed for the item's type; and the borrower must not have
-already renewed the loan.
+already renewed the loan. $error will contain the reason the renewal can not proceed
 
 =cut
 
@@ -1587,6 +1587,7 @@ sub CanBookBeRenewed {
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
     my $renewokay = 0;
+	my $error;
 
     # Look in the issues table for this item, lent to this borrower,
     # and not yet returned.
@@ -1621,15 +1622,19 @@ sub CanBookBeRenewed {
         if ( $renews && $renews >= $data1->{'renewals'} ) {
             $renewokay = 1;
         }
+        else {
+			$error="too_many";
+		}
         $sth2->finish;
         my ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
+			$error="on_reserve"
         }
 
     }
     $sth1->finish;
-    return ($renewokay);
+    return ($renewokay,$error);
 }
 
 =head2 AddRenewal

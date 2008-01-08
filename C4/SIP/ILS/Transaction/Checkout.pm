@@ -60,9 +60,10 @@ sub do_checkout {
 	}
 	foreach my $confirmation ( keys %$needsconfirmation ) {
 		if ($confirmation eq 'RENEW_ISSUE'){
-			if (!CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber})){
+			my ($renewokay,$renewerror)= CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
+			if (! $renewokay){
 				$noerror = 0;
-				warn "cant renew $borrower->{borrowernumber} $self->{item}->{itemnumber}";
+				warn "cant renew $borrower->{borrowernumber} $self->{item}->{itemnumber} $renewerror";
 			}
 		}
 		else {

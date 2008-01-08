@@ -36,7 +36,8 @@ sub new {
 sub do_renew {
 	my $self = shift;
 	my $borrower = my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
-	if (CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber})){
+	my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
+	if ($renewokay){
 		my $datedue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
 		$self->{'due'} = $datedue;
 		$self->ok(1);
