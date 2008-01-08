@@ -102,7 +102,7 @@ EOF
 
         # do something if it works....
         warn "Mail sent ok\n";
-        print $query->redirect('/cgi-bin/koha/opac-user.pl');
+        print $query->redirect('/cgi-bin/koha/opac-user.pl?patronupdate=sent');
         exit;
     }
     else {

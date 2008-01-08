@@ -23,6 +23,8 @@
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
         <h2>Hello, <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="hint">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
         
+		<!-- TMPL_IF NAME="patronupdate" --><div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div><!-- /TMPL_IF -->
+		
         <!-- TMPL_IF NAME="opacnote"-->
             <h3>Message from the library</h3>
             <p><!-- TMPL_VAR name="opacnote" --></p>
