@@ -319,7 +319,12 @@ for (var i=0;i<ItemsNodes.length;i++){
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
             <td>
             <!-- TMPL_IF name="norenew" -->
-                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
+			    <!-- TMPL_IF EXPR="norenew_reason eq 'on_reserve'" -->
+                    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF EXPR="norenew_reason eq 'too_many'" -->
+				    Too Many Renewals
+				<!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="red" -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" onClick="javascript:uncheck_sibling(this);" />

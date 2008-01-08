@@ -238,11 +238,11 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
     $row{'charge'} = sprintf( "%.2f", $charge );
 
-    #check item is not reserved
-    my ( $restype, $reserves ) = CheckReserves( $issue->[$i]{'itemnumber'} );
-    $row{'norenew'} = ($restype) ? 1 : 0;
+	my ( $renewokay,$renewerror ) = CanBookBeRenewed( $borrowernumber, $issue->[$i]{'itemnumber'});
+	$row{'norenew'} = !$renewokay;
+	$row{'norenew_reason'} = $renewerror;
 	$row{'renew_failed'} = $renew_failed[$issue->[$i]{'itemnumber'}];		
-  $row{'return_failed'} = $return_failed[$issue->[$i]{'barcode'}];   
+	$row{'return_failed'} = $return_failed[$issue->[$i]{'barcode'}];   
     push( @issuedata, \%row );
 }
 
