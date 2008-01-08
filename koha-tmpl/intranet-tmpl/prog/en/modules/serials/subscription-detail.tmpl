@@ -105,19 +105,21 @@ function popup(subscriptionid) {
 	<div class="yui-b">
 	<!-- TMPL_INCLUDE NAME="serials-toolbar.inc" -->
 
-    <h1>Subscription #<!--TMPL_VAR name="subscriptionid"--></h1>
+    <h1>Subscription for <!-- TMPL_VAR name="bibliotitle" --> </h1>
     <!--TMPL_IF Name="abouttoexpire"--><div class="problem">Subscription is near its end. It should be renewed now.</div><!--/TMPL_IF-->
     
     <div id="subscription_info">
         <h2>Subscription information</h2>
-        <p><label>Librarian identity:</label> <!-- TMPL_VAR name="librarian" --></p>
-        <p><label>Supplier:</label> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="aqbooksellerid"-->"><!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</a></p>
-        <p><label>Biblio:</label> <i>(<!-- TMPL_VAR name="bibnum" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="bibnum" -->"><!-- TMPL_VAR name="bibliotitle" --></a></p><br />
-<!-- TMPL_IF name="branchcode" --><p><label>Branch :</label> <!-- TMPL_VAR name="branchcode" -->&nbsp;</p><!-- /TMPL_IF -->
-        <!-- TMPL_IF name="callnumber" --><p><label>Call Number:</label> <!-- TMPL_VAR name="callnumber" -->&nbsp;</p><!-- /TMPL_IF -->
-        <!-- TMPL_IF name="letter" --><p><label>Patron alert with:</label> <!-- TMPL_VAR name="letter" -->&nbsp;</p><!-- /TMPL_IF -->
-        <!-- TMPL_IF name="notes" --><p><label>Notes:</label> <!-- TMPL_VAR name="notes" --></p><!-- /TMPL_IF -->
-        <!-- TMPL_IF name="internalnotes" --><p><label>Management Notes:</label> <!-- TMPL_VAR name="internalnotes" --></p><!-- /TMPL_IF -->
+		<ul>
+		<li><span class="label">Subscription ID: </span><!--TMPL_VAR name="subscriptionid"--></li>
+        <li><span class="label">Librarian identity:</span> <!-- TMPL_VAR name="librarian" --></li>
+        <li><span class="label">Supplier:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="aqbooksellerid"-->"><!-- TMPL_VAR name="aqbooksellername" -->&nbsp;</a></li>
+        <li><span class="label">Biblio:</span> <i>(<!-- TMPL_VAR name="bibnum" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="bibnum" -->"><!-- TMPL_VAR name="bibliotitle" --></a></li><br />
+<!-- TMPL_IF name="branchcode" --><li><span class="label">Branch :</span> <!-- TMPL_VAR name="branchcode" -->&nbsp;</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="callnumber" --><li><span class="label">Call Number:</span> <!-- TMPL_VAR name="callnumber" -->&nbsp;</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="letter" --><li><span class="label">Patron alert with:</span> <!-- TMPL_VAR name="letter" -->&nbsp;</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="notes" --><li><span class="label">Notes:</span> <!-- TMPL_VAR name="notes" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF name="internalnotes" --><li><span class="label">Management Notes:</span> <!-- TMPL_VAR name="internalnotes" --></li><!-- /TMPL_IF -->
         
     </div>
     <div id="subscription_planning">
@@ -350,7 +352,7 @@ function popup(subscriptionid) {
         <table cellpadding="0" cellspacing="0">
         <tr>
             <td><label>Start date</label></td>
-            <td> <!-- TMPL_VAR name="histstartdate" --> </td>
+            <td> <!-- TMPL_VAR name="startdate" --> </td>
         </tr>
         <tr>
             <td><label>End date</label></td>

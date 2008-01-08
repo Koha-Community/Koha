@@ -98,6 +98,7 @@ $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 $template->param($subs);
 
 $template->param(
+	subscriptionid => $subscriptionid,
     routing => $routing,
     serialslist => \@serialslist,
     totalissues => $totalissues,

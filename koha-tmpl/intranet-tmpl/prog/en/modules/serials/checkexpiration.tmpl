@@ -27,7 +27,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Check Expiration </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; List subscriptions nearing expiry. </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -38,17 +38,17 @@
 <h1>Check expiration</h1>
 
 <fieldset>
-    <legend>Select record which will expire</legend>
+    <legend>Filter results :</legend>
     
     <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
          
-        <p><label for="title">Filter on title</label>
+        <p><label for="title">Title</label>
         <input id="title" type="text" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" /></p>
 
-        <p><label for="issn">Filter on ISSN</label>
+        <p><label for="issn">ISSN</label>
         <input id="issn" type="text" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" /></p>
 
-        <p><label for="date">with expiration date before</label>
+        <p><label for="date">Expiring before</label>
         <input id="date" type="text" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" class="focus" />
             <script type="text/javascript">
                 Calendar.setup(
@@ -66,11 +66,11 @@
 <p>
     <b><!-- TMPL_VAR NAME="numsubscription"--></b> subscription(s)
         <!-- TMPL_IF NAME="title"-->
-        with title like <b><!-- TMPL_VAR NAME="title"--></b>
+        with title matching <span class="title"><!-- TMPL_VAR NAME="title"--></class>
         <!-- TMPL_IF NAME="issn"-->and <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="issn"-->
-        ISSN like <b><!-- TMPL_VAR NAME="issn" --></b>
+        with ISSN matching <b><!-- TMPL_VAR NAME="issn" --></b>
     <!-- /TMPL_IF -->
         will expire before <b><!-- TMPL_VAR NAME="date" --></b>
 </p>
