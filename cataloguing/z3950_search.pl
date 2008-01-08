@@ -62,7 +62,7 @@ my @serverloop = ();
 my @serverhost;
 my @breeding_loop = ();
 
-my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
+my $DEBUG = 1;    # if set to 1, many debug message are send on syslog.
 
 unless ($random)
 {    # this var is not useful anymore just kept to keep rel2_2 compatibility
@@ -83,7 +83,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param( frameworkcode => $frameworkcode, );
 
 if ( $op ne "do_search" ) {
-    my $sth = $dbh->prepare("select id,host,checked from z3950servers  order by host");
+    my $sth = $dbh->prepare("select id,host,name,checked from z3950servers  order by host");
     $sth->execute();
     my $serverloop = $sth->fetchall_arrayref( {} );
     $template->param(
@@ -160,7 +160,7 @@ else {
           || $DEBUG
           && warn( "somthing went wrong: " . $oConnection[$s]->errmsg() );
 
-        #$oResult[$z] = $oConnection[$z]->search_pqf($query);
+        # $oResult[$z] = $oConnection[$z]->search_pqf($query);
     }
 
   AGAIN:
