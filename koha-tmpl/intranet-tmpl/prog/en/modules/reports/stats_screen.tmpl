@@ -1,0 +1,136 @@
+<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+
+<h1>Till Reconciliation</h1>
+
+<h4>Search between two dates</h4>
+<form action="stats.screen.pl" method="post">
+  <label>Start Date</label>
+  <input type="text" name="time" size="10" value="<!-- TMPL_IF NAME="date" --><!-- TMPL_VAR NAME="date" --><!-- TMPL_ELSE -->today<!-- /TMPL_IF -->" id="from"> 
+  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" />
+     <script type="text/javascript">
+     Calendar.setup({
+     inputField     :    "from",
+     ifFormat       :    "%d/%m/%Y",
+     button         :    "buttonfrom1",
+     align          :    "Tl"
+     });
+     </script>
+
+  <label>End Date</label>
+  <input type="text" name="time2" size="10" value="<!-- TMPL_IF NAME="date2" --><!-- TMPL_VAR NAME="date2" --><!-- TMPL_ELSE -->tomorrow<!-- /TMPL_IF -->" id="to">
+  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonto1" style="cursor: pointer;" />
+     <script type="text/javascript">
+     Calendar.setup({
+     inputField     :    "to",
+     ifFormat       :    "%d/%m/%Y",
+     button         :    "buttonto1",
+     align          :    "Tl"
+     });
+     </script>
+  <input type="submit" value="To Screen" name="submit" class="button">
+  <input type="submit" value="To Excel" name="submit" class="button"> (dd/mm/yyyy)
+</form>
+
+<h2>Payments</h2>
+
+        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+                <tr>
+                        <th class="cell-header">Branch</th>
+                        <th class="cell-header">Date/time</th>
+                        <th class="cell-header">Surname</th>
+                        <th class="cell-header">Firstname</th>
+                        <th class="cell-header">Description</th>
+                        <th class="cell-header">Charge Type</th>
+                        <th class="cell-header">Invoice Amount</th>
+                        <th class="cell-header">Payment Type</th>
+                        <th class="cell-header">Payment Amount</th>
+                </tr>
+
+                <!-- TMPL_LOOP NAME=loop1 -->
+                <tr>
+                     <td class="cell"><!-- TMPL_VAR NAME="branch" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="datetime" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="surname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="firstname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="description" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="accounttype" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="amount" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="type" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="value" --></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+
+<p>
+        <b>Total amount paid: $<!-- TMPL_VAR NAME="totalpaid" --></b>
+</p>
+
+
+<h2>Credits</h2>
+
+        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+                <tr>
+                        <th class="cell-header">Branch</th>
+                        <th class="cell-header">Date/time</th>
+                        <th class="cell-header">Surname</th>
+                        <th class="cell-header">Firstname</th>
+                        <th class="cell-header">Description</th>
+                        <th class="cell-header">Charge Type</th>
+                        <th class="cell-header">Invoice Amount</th>
+                </tr>
+
+                <!-- TMPL_LOOP NAME=loop2 -->
+                <tr>
+                     <td class="cell"><!-- TMPL_VAR NAME="creditbranch" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditdate" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditsurname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditfirstname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditdescription" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditaccounttype" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="creditamount" --></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+<p>
+        <b>Total amount credits: $<!-- TMPL_VAR NAME="totalcredits" --></b>
+        <br>
+        <b>Total number written off: <!-- TMPL_VAR NAME="totalwritten" --> charges</b>
+</p>
+
+
+<h2>Refunds</h2>
+
+        <table border="0" cellspacing="0" cellpadding="0" class="collapse">
+                <tr>
+                        <th class="cell-header">Branch</th>
+                        <th class="cell-header">Date/time</th>
+                        <th class="cell-header">Surname</th>
+                        <th class="cell-header">Firstname</th>
+                        <th class="cell-header">Description</th>
+                        <th class="cell-header">Charge Type</th>
+                        <th class="cell-header">Invoice Amount</th>
+                </tr>
+
+                <!-- TMPL_LOOP NAME=loop3 -->
+                <tr>
+                     <td class="cell"><!-- TMPL_VAR NAME="refundbranch" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refunddate" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refundsurname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refundfirstname" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refunddescription" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refundaccounttype" --></td>
+                        <td class="cell"><!-- TMPL_VAR NAME="refundamount" --></td>
+                </tr>
+                <!-- /TMPL_LOOP -->
+        </table>
+<p>
+        <b>Total amount refunds: $<!-- TMPL_VAR NAME="totalrefund" --></b>
+</p>
+<p>
+        <b>Total amount of cash collected:$ <!-- TMPL_VAR NAME="totalcash" --> </b>
+</p>
+<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
+</body>
+</html>
+
+
