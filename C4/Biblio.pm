@@ -748,7 +748,7 @@ sub GetMarcBiblio {
     my $record = MARC::Record->new();
     if ($marcxml) {
         $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour'))};
-        if ($@) {warn $@;}
+        if ($@) {warn " problem with :$biblionumber : $@ \n$marcxml";}
 #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
     } else {
