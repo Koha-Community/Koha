@@ -1,15 +1,30 @@
 print "WARNING: This module (C4::Date) is obsolete.  
 Developers should use C4::Dates instead!\n";
 
-BEGIN { $| = 1; print "1..4\n"; }
-END {print "not ok 1\n" unless $loaded;}
-use C4::Date;
-$loaded = 1;
-print "ok 1\n";
+use strict;
+use warnings;
+
+use Test::More tests => 4;
+
+BEGIN {
+    use C4::Context;
+    package C4::Context;
+    no warnings;
+    sub preference {
+        my $self = shift;
+        my $pref = shift;
+        return 'us' if $pref eq "dateformat";
+        return;
+    }
+    use warnings;
+    package main;
+    use_ok('C4::Date');
+}
 
 # testing format_date_in_iso
 my $format= display_date_format ();
 my $date;
+my $invaliddate;
 if ($format eq 'mm/dd/yyyy'){
    $date = '05/21/1973';
 }
@@ -20,48 +35,23 @@ elsif ($format eq 'yyyy-mm-dd'){
    $date = '1973-05-21';
 }
 $date=format_date_in_iso($date);
-if ($date eq '1973-05-21'){
-  print "ok 2\n";
-}
-else {
-  print "not ok 2\n";
-}
+is($date, '1973-05-21', 'format_date_in_iso');
 
 # test format date
 $date=format_date($date);
 if ($format eq 'mm/dd/yyyy'){
-  if ($date eq '05/21/1973'){
-    print "ok 3\n";
-  }
-  else {
-    print "not ok 3\n";
-  }
+  is($date, '05/21/1973', 'format_date');
 }
 elsif ($format eq 'dd/mm/yyyy'){
-  if ($date eq '21/05/1973'){
-    print "ok 3\n";
-  }
-  else {
-    print "not ok 3\n";
-  }
+  is($date, '21/05/1973', 'format_date');
 }
 elsif ($format eq 'yyyy-mm-dd'){
-  if ($date eq '1973-05-21'){
-    print "ok 3\n";
-  }
-  else {
-    print "not ok 3\n";
-  }
-}
-else {
-  print "not ok3\n";
+  is($date, '1973-05-21', 'format_date');
 }
 
 # test 4 fixdate
 
 ($date,$invaliddate) = fixdate('2007','06','31');
 if ($invaliddate){
-  print "ok 4\n";
-} else {
-  print "not ok 4\n";
+  ok($invaliddate, 'fixdate');
 }
