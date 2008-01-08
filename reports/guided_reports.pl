@@ -16,13 +16,12 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
-use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
-use strict;
-use C4::Auth;
-use CGI;
-use C4::Output;
-use C4::Reports;
 
+use strict;
+use CGI;
+use C4::Reports;
+use C4::Auth;
+use C4::Output;
 =head1 NAME
 
 Script to control the guided report creation
@@ -36,6 +35,7 @@ Script to control the guided report creation
 
 my $input = new CGI;
 my $referer = $input->referer();
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "reports/guided_reports_start.tmpl",
