@@ -324,11 +324,11 @@ var textbox = '';
             }
         }
         textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=" + document.f.lastvalue1.value +" /><\/td>\n";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=\"" + document.f.lastvalue1.value +  "\" /><\/td>\n";
         if(y){
-            textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")' value=" + document.f.lastvalue2.value + " /><\/td>\n";
+            textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")' value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='lastvaluetemp3' size='4' onkeyup='moreoptionsupdate(\"lastvalue3\")' value=" + document.f.lastvalue3.value + " /><\/td>\n";
+                textbox +="<td><input type='text' name='lastvaluetemp3' size='4' onkeyup='moreoptionsupdate(\"lastvalue3\")' value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
             }
         }
         textbox +="<\/tr>\n";
@@ -341,7 +341,7 @@ var textbox = '';
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=" + document.f.issuesexpected1.value + " ><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
+          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -961,9 +961,9 @@ window.onload = irregular_order();
                     <option value="2">1/week</option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity3" -->
-                    <option value="3" selected="selected">1/2 weeks (2/month)</option>
+                    <option value="3" selected="selected">1/2 weeks </option>
                 <!-- TMPL_ELSE -->
-                    <option value="3">1/2 weeks (2/months)</option>
+                    <option value="3">1/2 weeks </option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity4" -->
                     <option value="4" selected="selected">1/3 weeks</option>
