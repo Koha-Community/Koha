@@ -573,29 +573,26 @@ sub getcredits {
 } 
 
 
-sub getrefunds {                                                                                                                                           
-	    my ( $date, $date2 ) = @_;                                                                                                                             
-	    my $dbh = C4::Context->dbh;                                                                                                                            
-	                                                                                                                                                           
-	    my $sth = $dbh->prepare(                                                                                                                               
-			        "Select *,                                                                                                                                         
-                  date_FORMAT(timestamp, '%Y-%m-%d %H:%i' ) as datetime                                                                                      
-                  from accountlines,borrowers                                                                                                                
-                  where (accounttype = 'REF'                                                                                                                 
-					                  and accountlines.borrowernumber = borrowers.borrowernumber                                                                                 
-					                  and date  >=?  and date  <?)"                                                                                                              
-      );                                                                                                                                                     
-                                                                                                                                                           
-    $sth->execute( $date, $date2 );                                                                                                                        
-                                                                                                                                                           
-    my $i = 0;                                                                                                                                             
-    my @results;                                                                                                                                           
-    while ( my $data = $sth->fetchrow_hashref ) {                                                                                                          
-		            $results[$i] = $data ;                                                                                                                         
-		            $i++;                                                                                                                                          
-		    }                                                                                                                                                      
-                                                                                                                                                           
-    return (@results);                                                                                                                                     
+sub getrefunds {
+	my ( $date, $date2 ) = @_;
+	my $dbh = C4::Context->dbh;
+	
+	my $sth = $dbh->prepare(
+			        "SELECT *,timestamp AS datetime                                                                                      
+                  FROM accountlines,borrowers
+                  WHERE (accounttype = 'REF'
+					  AND accountlines.borrowernumber = borrowers.borrowernumber
+					                  AND date  >=?  AND date  <?)"
+    );
+
+    $sth->execute( $date, $date2 );
+
+    my @results;
+    while ( my $data = $sth->fetchrow_hashref ) {
+		push @results,$data;
+		
+	}
+    return (@results);
 }
 END { }    # module clean-up code here (global destructor)
 

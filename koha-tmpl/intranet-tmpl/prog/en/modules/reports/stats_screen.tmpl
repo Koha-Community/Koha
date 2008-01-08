@@ -1,34 +1,45 @@
-<!-- TMPL_INCLUDE NAME="reportswcal-top.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --> 
+<title>Koha &rsaquo; Reports &rsaquo; Till Reconciliation</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" --> 
 
+</head>    
+<body>   
+<!-- TMPL_INCLUDE NAME="header.inc" -->                                    
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+&rsaquo; Till Reconciliation
+</div>
+<div id="doc3" class="yui-t1"> 
 <h1>Till Reconciliation</h1>
 
 <h4>Search between two dates</h4>
 <form action="stats.screen.pl" method="post">
   <label>Start Date</label>
   <input type="text" name="time" size="10" value="<!-- TMPL_IF NAME="date" --><!-- TMPL_VAR NAME="date" --><!-- TMPL_ELSE -->today<!-- /TMPL_IF -->" id="from"> 
-  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "from",
-     ifFormat       :    "%d/%m/%Y",
+     ifFormat       :    "%Y-%m-%d",
      button         :    "buttonfrom1",
      align          :    "Tl"
      });
      </script>
-
   <label>End Date</label>
   <input type="text" name="time2" size="10" value="<!-- TMPL_IF NAME="date2" --><!-- TMPL_VAR NAME="date2" --><!-- TMPL_ELSE -->tomorrow<!-- /TMPL_IF -->" id="to">
-  <img src="<!-- TMPL_VAR Name="themelang" -->/includes/calendar/cal.gif" id="buttonto1" style="cursor: pointer;" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonto1" style="cursor: pointer;" />
      <script type="text/javascript">
      Calendar.setup({
      inputField     :    "to",
-     ifFormat       :    "%d/%m/%Y",
+     ifFormat       :    "%Y-%m-%d",
      button         :    "buttonto1",
      align          :    "Tl"
      });
      </script>
   <input type="submit" value="To Screen" name="submit" class="button">
-  <input type="submit" value="To Excel" name="submit" class="button"> (dd/mm/yyyy)
+<!--  <input type="submit" value="To Excel" name="submit" class="button"> -->
 </form>
 
 <h2>Payments</h2>
@@ -129,8 +140,7 @@
 <p>
         <b>Total amount of cash collected:$ <!-- TMPL_VAR NAME="totalcash" --> </b>
 </p>
-<!-- TMPL_INCLUDE NAME="reports-bottom.inc" -->
-</body>
-</html>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
 
