@@ -72,18 +72,18 @@ sub UpdateStats {
     my (
         $branch,         $type,
         $amount,   $other,          $itemnum,
-        $itemtype, $borrowernumber
+        $itemtype, $borrowernumber, $accountno
       )
       = @_;
     my $dbh = C4::Context->dbh;
-    # FIXME - Use $dbh->do() instead
     my $sth = $dbh->prepare(
-        "Insert into statistics (datetime,branch,type,value,
-                                        other,itemnumber,itemtype,borrowernumber) values (now(),?,?,?,?,?,?,?)"
+        "INSERT INTO statistics (datetime,branch,type,value,
+                                        other,itemnumber,itemtype,borrowernumber,proccode) VALUES (now(),?,?,?,?,?,?,?,?)"
     );
     $sth->execute(
         $branch,    $type,    $amount,
         $other,     $itemnum, $itemtype, $borrowernumber,
+		$accountno
     );
     $sth->finish;
 }
@@ -109,6 +109,7 @@ sub TotalPaid {
         $query .= " ORDER BY branch, type";
     }
     my $sth = $dbh->prepare($query);
+warn $query;
     $sth->execute();
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {

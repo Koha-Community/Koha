@@ -29,12 +29,13 @@ use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
 	# set the version for version checking
-	$VERSION = 3.01;
+	$VERSION = 3.02;
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&recordpayment &fixaccounts &makepayment &manualinvoice
-		&getnextacctno &reconcileaccount
+		&getnextacctno &reconcileaccount &getcharges &getcredits
+		&getrefunds
 	);
 }
 
@@ -126,7 +127,7 @@ sub recordpayment {
     );
     $usth->execute( $borrowernumber, $nextaccntno, 0 - $data, 0 - $amountleft );
     $usth->finish;
-    UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber );
+    UpdateStats( $branch, 'payment', $data, '', '', '', $borrowernumber, $nextaccntno );
     $sth->finish;
 }
 
@@ -535,6 +536,67 @@ sub refund {
     return ($amountleft);
 }
 
+sub getcharges {
+	my ( $borrowerno, $timestamp, $accountno ) = @_;
+	my $dbh        = C4::Context->dbh;
+	my $timestamp2 = $timestamp - 1;
+	my $query      = "";
+	my $sth = $dbh->prepare(
+			"SELECT * FROM accountlines WHERE borrowernumber=? AND accountno = ?"
+          );
+	$sth->execute( $borrowerno, $accountno );
+	
+    my @results;
+    while ( my $data = $sth->fetchrow_hashref ) {
+		push @results,$data;
+	}
+    return (@results);
+}
+
+
+sub getcredits {
+	my ( $date, $date2 ) = @_;
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare(
+			        "SELECT * FROM accountlines,borrowers
+      WHERE amount < 0 AND accounttype <> 'Pay' AND accountlines.borrowernumber = borrowers.borrowernumber
+	  AND timestamp >=TIMESTAMP(?) AND timestamp < TIMESTAMP(?)"
+      );  
+
+    $sth->execute( $date, $date2 );                                                                                                              
+    my @results;          
+    while ( my $data = $sth->fetchrow_hashref ) {
+		$data->{'date'} = $data->{'timestamp'};
+		push @results,$data;
+	}
+    return (@results);
+} 
+
+
+sub getrefunds {                                                                                                                                           
+	    my ( $date, $date2 ) = @_;                                                                                                                             
+	    my $dbh = C4::Context->dbh;                                                                                                                            
+	                                                                                                                                                           
+	    my $sth = $dbh->prepare(                                                                                                                               
+			        "Select *,                                                                                                                                         
+                  date_FORMAT(timestamp, '%Y-%m-%d %H:%i' ) as datetime                                                                                      
+                  from accountlines,borrowers                                                                                                                
+                  where (accounttype = 'REF'                                                                                                                 
+					                  and accountlines.borrowernumber = borrowers.borrowernumber                                                                                 
+					                  and date  >=?  and date  <?)"                                                                                                              
+      );                                                                                                                                                     
+                                                                                                                                                           
+    $sth->execute( $date, $date2 );                                                                                                                        
+                                                                                                                                                           
+    my $i = 0;                                                                                                                                             
+    my @results;                                                                                                                                           
+    while ( my $data = $sth->fetchrow_hashref ) {                                                                                                          
+		            $results[$i] = $data ;                                                                                                                         
+		            $i++;                                                                                                                                          
+		    }                                                                                                                                                      
+                                                                                                                                                           
+    return (@results);                                                                                                                                     
+}
 END { }    # module clean-up code here (global destructor)
 
 1;

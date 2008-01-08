@@ -22,80 +22,53 @@ use C4::Auth;
 use C4::Context;
 use Date::Manip;
 use C4::Stats;
+use C4::Accounts;
 
-&Date_Init("DateFormat=non-US");    # set non-USA date, eg:19/08/2005
+#use strict;
+#use CGI;
+#use C4::Output;
+#use HTML::Template;
+#use C4::Auth;
+#use C4::Interface::CGI::Output;
+#use C4::Context;
+#use Date::Manip;
+#use C4::Stats;
+#use Text::CSV_XS;
+#use Data::Dumper;
+
 
 my $input = new CGI;
 my $time  = $input->param('time');
 my $time2 = $input->param('time2');
-
-if (   $input->param('submit') eq "To Excel"
-    || $input->param('submit_x') eq "To Excel" )
-{
-    print $input->redirect(
-        "/cgi-bin/koha/stats.print.pl?time=$time&time2=$time2");
-}
+my $op    = $input->param('submit');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "stats_screen.tmpl",
+        template_name   => "reports/stats_screen.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 1,
-        flagsrequired   => { reports => 1 },
+        flagsrequired   => { borrowers => 1 },
         debug           => 1,
     }
 );
 
-my $date;
-my $date2;
-if ( $time eq 'yesterday' ) {
-    $date  = ParseDate('yesterday');
-    $date2 = ParseDate('today');
-}
-if ( $time eq 'today' ) {
-    $date  = ParseDate('today');
-    $date2 = ParseDate('tomorrow');
-}
-if ( $time eq 'daybefore' ) {
-    $date  = ParseDate('2 days ago');
-    $date2 = ParseDate('yesterday');
-}
-if ( $time eq 'month' ) {
-    $date  = ParseDate('1 month ago');
-    $date2 = ParseDate('today');
+( $time  = "today" )    if !$time;
+( $time2 = "tomorrow" ) if !$time2;
 
-}
-if ( $time =~ /\// ) {
-    $date  = ParseDate($time);
-    $date2 = ParseDateDelta('+ 1 day');
-    $date2 = DateCalc( $date, $date2 );
-}
-
-# if time is blank
-if ( $time eq '' ) {
-    $date  = ParseDate('today');
-    $date2 = ParseDate('tomorrow');
-}
-
-# if script is called with a start and finsh date range...
-if ( $time ne '' && $time2 ne '' ) {
-    $date  = ParseDate($time);
-    $date2 = ParseDate($time2);
-}
-
+my $date  = ParseDate($time);
+my $date2 = ParseDate($time2);
 $date  = UnixDate( $date,  '%Y-%m-%d' );
 $date2 = UnixDate( $date2, '%Y-%m-%d' );
-
-# warn "MASON: TIME: $time, $time2";
-# warn "MASON: DATE: $date, $date2";
+warn "MASON: TIME: $time, $time2";
+warn "MASON: DATE: $date, $date2";
 
 # get a list of every payment
-my @payments = TotalPaid( $date, $date2, 0 );
+my @payments = TotalPaid( $date, $date2 );
 
 my $count = @payments;
 
-# print "MASON: number of payments=$count\n";
+warn "MASON: number of payments=$count\n";
 
 my $i            = 0;
 my $totalcharges = 0;
@@ -106,66 +79,63 @@ my @loop1;
 my @loop2;
 
 # lets get a a list of all individual item charges paid for by that payment
-while ( $i < $count ) {
 
-    my $count;
+foreach my $payment (@payments) {
+
     my @charges;
-
-    if ( $payments[$i]{'type'} ne 'writeoff' ) {
+    if ( $payment->{'type'} ne 'writeoff' ) {
 
         @charges = getcharges(
-            $payments[$i]{'borrowernumber'},
-            $payments[$i]{'timestamp'},
-            $payments[$i]{'proccode'}
+            $payment->{'borrowernumber'},
+            $payment->{'timestamp'},
+            $payment->{'proccode'}
         );
         $totalcharges++;
-        $count = @charges;
+        my $count = @charges;
 
    # getting each of the charges and putting them into a array to be printed out
    #this loops per charge per person
         for ( my $i2 = 0 ; $i2 < $count ; $i2++ ) {
-            my $hour = substr( $payments[$i]{'timestamp'}, 8,  2 );
-            my $min  = substr( $payments[$i]{'timestamp'}, 10, 2 );
-            my $sec  = substr( $payments[$i]{'timestamp'}, 12, 2 );
+            my $hour = substr( $payment->{'timestamp'}, 8,  2 );
+            my $min  = substr( $payment->{'timestamp'}, 10, 2 );
+            my $sec  = substr( $payment->{'timestamp'}, 12, 2 );
             my $time = "$hour:$min:$sec";
-            my $time2 = "$payments[$i]{'date'}";
+            my $time2 = "$payment->{'date'}";
 
-#               my $branch=Getpaidbranch($time2,$payments[$i]{'borrowernumber'});
-            my $branch = $payments[$i]{'branch'};
+  #               my $branch=Getpaidbranch($time2,$payment->{'borrowernumber'});
+            my $branch = $payment->{'branch'};
 
-#	       if ($payments[$i]{'borrowernumber'} == 18265){
-#               warn "$payments[$i]{'branch'} $branch $payments[$i]{'borrowernumber'}";#
-#		   }
-# lets build up a row
+            # lets build up a row
             my %rows1 = (
                 branch      => $branch,
-                datetime    => $payments[$i]->{'datetime'},
-                surname     => $payments[$i]->{'surname'},
-                firstname   => $payments[$i]->{'firstname'},
+                datetime    => $payment->{'datetime'},
+                surname     => $payment->{'surname'},
+                firstname   => $payment->{'firstname'},
                 description => $charges[$i2]->{'description'},
                 accounttype => $charges[$i2]->{'accounttype'},
                 amount      => sprintf( "%.2f", $charges[$i2]->{'amount'} )
                 ,    # rounding amounts to 2dp
-                type  => $payments[$i]->{'type'},
-                value => sprintf( "%.2f", $payments[$i]->{'value'} )
+                type  => $payment->{'type'},
+                value => sprintf( "%.2f", $payment->{'value'} )
             );       # rounding amounts to 2dp
 
             push( @loop1, \%rows1 );
-            $totalpaid = $totalpaid + $payments[$i]->{'value'};
+
         }
+            $totalpaid = $totalpaid + $payment->{'value'};
+			warn "totalpaid = $totalpaid";		
     }
     else {
         ++$totalwritten;
     }
 
-    $i++;            #increment the while loop
 }
 
 #get credits and append to the bottom of payments
 my @credits = getcredits( $date, $date2 );
 
-$count = @credits;
-$i     = 0;
+my $count = @credits;
+my $i     = 0;
 
 while ( $i < $count ) {
 
@@ -195,9 +165,9 @@ $i     = 0;
 
 while ( $i < $count ) {
 
-    my %rows2 = (
+    my %rows3 = (
         refundbranch      => $refunds[$i]->{'branchcode'},
-        refunddate        => $refunds[$i]->{'date'},
+        refunddate        => $refunds[$i]->{'datetime'},
         refundsurname     => $refunds[$i]->{'surname'},
         refundfirstname   => $refunds[$i]->{'firstname'},
         refunddescription => $refunds[$i]->{'description'},
@@ -205,25 +175,101 @@ while ( $i < $count ) {
         refundamount      => sprintf( "%.2f", $refunds[$i]->{'amount'} )
     );
 
-    push( @loop3, \%rows2 );
+    push( @loop3, \%rows3 );
     $totalrefunds = $totalrefunds + $refunds[$i]->{'amount'};
     $i++;    #increment the while loop
 }
 
 my $totalcash = $totalpaid - $totalrefunds;
 
-$template->param(
-    date         => $time,
-    date2        => $time2,
-    loop1        => \@loop1,
-    loop2        => \@loop2,
-    loop3        => \@loop3,
-    totalpaid    => $totalpaid,
-    totalcredits => $totalcredits,
-    totalwritten => $totalwritten,
-    totalrefund  => $totalrefunds,
-    totalcash    => $totalcash
-);
+if ( $op eq 'To Excel' ) {
 
-output_html_with_http_headers $input, $cookie, $template->output;
+    my $csv = Text::CSV_XS->new(
+        {
+            'quote_char'  => '"',
+            'escape_char' => '"',
+            'sep_char'    => ',',
+            'binary'      => 1
+        }
+    );
+
+    print $input->header(
+        -type       => 'application/vnd.ms-excel',
+        -attachment => "stats.csv",
+    );
+    print
+"Branch, Datetime, Surname, Firstnames, Description, Type, Invoice amount, Payment type, Payment Amount\n";
+
+    $DB::single = 1;
+
+    for my $row (@loop1) {
+        my @array = (
+            $row->{'branch'},      $row->{'datetime'},
+            $row->{'surname'},     $row->{'firstname'},
+            $row->{'description'}, $row->{'accounttype'},
+            $row->{'amount'},      $row->{'type'},
+            $row->{'value'}
+        );
+
+        $csv->combine(@array);
+        my $string = $csv->string(@array);
+        print $string, "\n";
+    }
+    print ",,,,,,,\n";
+    print
+"Branch, Date/time, Surname, Firstname, Description, Charge Type, Invoice Amount\n";
+
+    for my $row (@loop2) {
+
+        my @array = (
+            $row->{'creditbranch'},      $row->{'creditdate'},
+            $row->{'creditsurname'},     $row->{'creditfirstname'},
+            $row->{'creditdescription'}, $row->{'creditaccounttype'},
+            $row->{'creditamount'}
+        );
+
+        $csv->combine(@array);
+        my $string = $csv->string(@array);
+        print $string, "\n";
+    }
+    print ",,,,,,,\n";
+    print
+"Branch, Date/time, Surname, Firstname, Description, Charge Type, Invoice Amount\n";
+
+    for my $row (@loop3) {
+        my @array = (
+            $row->{'refundbranch'},      $row->{'refunddate'},
+            $row->{'refundsurname'},     $row->{'refundfirstname'},
+            $row->{'refunddescription'}, $row->{'refundaccounttype'},
+            $row->{'refundamount'}
+        );
+
+        $csv->combine(@array);
+        my $string = $csv->string(@array);
+        print $string, "\n";
+
+    }
+
+    print ",,,,,,,\n";
+    print ",,,,,,,\n";
+    print ",,Total Amount Paid, $totalpaid\n";
+    print ",,Total Number Written, $totalwritten\n";
+    print ",,Total Amount Credits, $totalcredits\n";
+    print ",,Total Amount Refunds, $totalrefunds\n";
+}
+else {
+    $template->param(
+        date         => $time,
+        date2        => $time2,
+        loop1        => \@loop1,
+        loop2        => \@loop2,
+        loop3        => \@loop3,
+        totalpaid    => $totalpaid,
+        totalcredits => $totalcredits,
+        totalwritten => $totalwritten,
+        totalrefund  => $totalrefunds,
+        totalcash    => $totalcash
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
+}
 
