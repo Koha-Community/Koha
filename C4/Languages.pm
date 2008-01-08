@@ -21,6 +21,7 @@ package C4::Languages;
 
 use strict; 
 use warnings;	#FIXME: turn off warnings before release
+use Carp;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -401,29 +402,34 @@ sub get_bidi {
 
 sub accept_language {
 	# referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
-	my 	($clientPreferences,$supportedLanguages) = @_;
-	# There should be no whitespace anways, but a cleanliness/sanity check
-	$clientPreferences =~ s/\s//g;
-  
-	# Prepare the list of client-acceptable languages
+	# FIXME: since this is only used in Output.pm as of Jan 8 2008, maybe it should be IN Output.pm
+	my ($clientPreferences,$supportedLanguages) = @_;
 	my @languages = ();
-	foreach my $tag (split(/,/, $clientPreferences)) {
-		my ($language, $quality) = split(/\;/, $tag);
-		$quality =~ s/^q=//i if $quality;
-		$quality = 1 unless $quality;
-		next if $quality <= 0;
-		# We want to force the wildcard to be last
-		$quality = 0 if ($language eq '*');
-		# Pushing lowercase language here saves processing later
-		push(@languages, { quality => $quality,
+	if ($clientPreferences) {
+		# There should be no whitespace anways, but a cleanliness/sanity check
+		$clientPreferences =~ s/\s//g;
+
+		# Prepare the list of client-acceptable languages
+		foreach my $tag (split(/,/, $clientPreferences)) {
+			my ($language, $quality) = split(/\;/, $tag);
+			$quality =~ s/^q=//i if $quality;
+			$quality = 1 unless $quality;
+			next if $quality <= 0;
+			# We want to force the wildcard to be last
+			$quality = 0 if ($language eq '*');
+			# Pushing lowercase language here saves processing later
+			push(@languages, { quality => $quality,
 		       language => $language,
 		       lclanguage => lc($language) });
+		}
+	} else {
+		carp "accept_language(x,y) called with no clientPreferences (x).";
 	}
 	# Prepare the list of server-supported languages
 	my %supportedLanguages = ();
 	my %secondaryLanguages = ();
 	foreach my $language (@$supportedLanguages) {
-		warn "SUP: ".$language->{language_code};
+		# warn "Language supported: " . $language->{language_code};
 		$supportedLanguages{lc($language->{language_code})} = $language->{language_code};
 		if ($language->{language_code} =~ /^([^-]+)-?/) {
 			$secondaryLanguages{lc($1)} = $language->{language_code};
@@ -446,6 +452,7 @@ sub accept_language {
 			# Client en-gb eq server en-us
 			$secondaryMatch = $secondaryLanguages{$1};
 		} elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+			# FIXME: We just checked the exact same conditional!
 			# Client en-us eq server en
 			$secondaryMatch = $supportedLanguages{$1};
 		} elsif ($tag->{lclanguage} eq '*') {
@@ -458,6 +465,7 @@ sub accept_language {
 	}
 	# No primary matches. Secondary? (ie, en-us requested and en supported)
 	return $secondaryMatch if $secondaryMatch;
+	return undef;	# else, we got nothing.
 }
 1;
 
