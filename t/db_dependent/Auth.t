@@ -9,6 +9,9 @@ use warnings;
 use Test::More tests => 6;
 
 BEGIN {
+	use FindBin;
+	use lib $FindBin::Bin;
+	use override_context_prefs;
         use_ok('C4::Auth', qw(checkpw));
         use_ok('C4::Context');
 }
