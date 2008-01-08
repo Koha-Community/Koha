@@ -137,7 +137,7 @@ elsif ( $phase eq 'Choose this type' ) {
     );
 
     # get columns
-    my $columns = get_columns($area);
+    my $columns = get_columns($area,$input);
     $template->param( 'columns' => $columns );
 }
 
@@ -156,7 +156,7 @@ elsif ( $phase eq 'Choose these columns' ) {
         'type'   => $type,
         'column' => $column,
     );
-    my $criteria = get_criteria($area);
+    my $criteria = get_criteria($area,$input);
     $template->param( 'criteria' => $criteria,
 	'definitions' => $definitions);
 }

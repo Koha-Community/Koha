@@ -80,21 +80,6 @@ $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
 $criteria{'5'} = ['borrowers.branchcode'];
 
-our %columns;
-my $columns_def_file = "columns.def";
-my $htdocs = C4::Context->config('intrahtdocs');                       
-my $section='intranet';
-my $cgi = new CGI;
-my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section,$cgi);
-
-my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
-open (COLUMNS,$full_path_to_columns_def_file);
-while (my $input = <COLUMNS>){
-	my @row =split(/\t/,$input);
-	$columns{$row[0]}=$row[1];
-}
-
-close COLUMNS;
 
 =head1 NAME
    
@@ -186,29 +171,30 @@ This will return a list of all columns for a report area
 sub get_columns {
 
     # this calls the internal fucntion _get_columns
-    my ($area) = @_;
+    my ($area,$cgi) = @_;
     my $tables = $table_areas{$area};
     my @allcolumns;
     foreach my $table (@$tables) {
-        my @columns = _get_columns($table);
+        my @columns = _get_columns($table,$cgi);
         push @allcolumns, @columns;
     }
     return ( \@allcolumns );
 }
 
 sub _get_columns {
-    my ($tablename) = @_;
+    my ($tablename,$cgi) = @_;
     my $dbh         = C4::Context->dbh();
     my $sth         = $dbh->prepare("show columns from $tablename");
     $sth->execute();
     my @columns;
+	my $column_defs = _get_column_defs($cgi);
 	my %tablehash;
 	$tablehash{'table'}=$tablename;
 	push @columns, \%tablehash;
     while ( my $data = $sth->fetchrow_arrayref() ) {
         my %temphash;
         $temphash{'name'}        = "$tablename.$data->[0]";
-        $temphash{'description'} = $columns{"$tablename.$data->[0]"};
+        $temphash{'description'} = $column_defs->{"$tablename.$data->[0]"};
         push @columns, \%temphash;
     }
     $sth->finish();
@@ -288,16 +274,17 @@ sub _build_query {
     return ($query);
 }
 
-=item get_criteria($area);
+=item get_criteria($area,$cgi);
 
 Returns an arraref to hashrefs suitable for using in a tmpl_loop. With the criteria and available values.
 
 =cut
 
 sub get_criteria {
-    my ($area) = @_;
+    my ($area,$cgi) = @_;
     my $dbh    = C4::Context->dbh();
     my $crit   = $criteria{$area};
+	my $column_defs = _get_column_defs($cgi);
     my @criteria_array;
     foreach my $localcrit (@$crit) {
         my ( $value, $type )   = split( /\|/, $localcrit );
@@ -306,7 +293,7 @@ sub get_criteria {
 			my %temp;
             $temp{'name'}   = $value;
             $temp{'date'}   = 1;
-			$temp{'description'} = $columns{$value};
+			$temp{'description'} = $column_defs->{$value};
             push @criteria_array, \%temp;
         }
         else {
@@ -323,7 +310,7 @@ sub get_criteria {
             $sth->finish();
             my %temp;
             $temp{'name'}   = $value;
-			$temp{'description'} = $columns{$value};
+			$temp{'description'} = $column_defs->{$value};
             $temp{'values'} = \@values;
             push @criteria_array, \%temp;
         }
@@ -631,6 +618,24 @@ sub get_sql {
 	return $data->{'savedsql'};
 }
 
+sub _get_column_defs {
+	my ($cgi) = @_;
+	my %columns;
+	my $columns_def_file = "columns.def";
+	my $htdocs = C4::Context->config('intrahtdocs');                       
+	my $section='intranet';
+	my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section,$cgi);
+
+	my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
+	open (COLUMNS,$full_path_to_columns_def_file);
+	while (my $input = <COLUMNS>){
+		my @row =split(/\t/,$input);
+		$columns{$row[0]}=$row[1];
+	}
+
+	close COLUMNS;
+	return \%columns;
+}
 1;
 __END__
 
