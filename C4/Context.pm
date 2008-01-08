@@ -433,7 +433,6 @@ sub preference
     my $retval;            # Return value
     my $dbh = C4::Context->dbh or return 0;
     # Look up systempreferences.variable==$var
-    warn $var;
     $retval = $dbh->selectrow_array(<<EOT);
         SELECT    value
         FROM    systempreferences
