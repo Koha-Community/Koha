@@ -9,6 +9,61 @@ $(document).ready(function() {
 <!-- TMPL_IF NAME="patronimages" -->$(window).load(function() {
 			verify_patron_images();
 		 });<!-- /TMPL_IF -->
+function uncheck_sibling(me){
+nodename=me.getAttribute("name");
+if (nodename =="barcodes[]"){
+    var Node=me.parentNode.previousSibling;
+    while (Node.nodeName!="TD"){Node=Node.previousSibling}
+    var Nodes=Node.childNodes;
+    for (var i=0;i<Nodes.length;i++){
+      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+        Nodes[i].checked=false;
+      }     
+   }   
+
+}else {
+    var Node=me.parentNode.nextSibling;
+    while (Node.nodeName!="TD"){Node=Node.nextSibling}
+    var Nodes=Node.childNodes;
+    for (var i=0;i<Nodes.length;i++){
+      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+        Nodes[i].checked=false;
+      }     
+   }   
+}
+}
+function checkall(myname){
+var ItemsNodes=document.getElementsByName('items[]');
+var BarcodesNodes=document.getElementsByName('barcodes[]');
+if (myname =="barcodes[]"){
+for (var i=0;i<ItemsNodes.length;i++){
+    ItemsNodes[i].checked=false;
+}   
+for (var i=0;i<BarcodesNodes.length;i++){
+    BarcodesNodes[i].checked=true;
+}   
+}else {
+for (var i=0;i<BarcodesNodes.length;i++){
+    BarcodesNodes[i].checked=false;
+}   
+for (var i=0;i<ItemsNodes.length;i++){
+    ItemsNodes[i].checked=true;
+}   
+}
+}
+function uncheckall(myname){
+var ItemsNodes=document.getElementsByName('items[]');
+var BarcodesNodes=document.getElementsByName('barcodes[]');
+if (myname =="barcodes[]"){
+for (var i=0;i<BarcodesNodes.length;i++){
+    BarcodesNodes[i].checked=false;
+}   
+}else {
+for (var i=0;i<ItemsNodes.length;i++){
+    ItemsNodes[i].checked=false;
+}   
+}
+}
 //]]>
 </script>
 
@@ -267,17 +322,19 @@ $(document).ready(function() {
                 <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
             <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="red" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" onClick="javascript:uncheck_sibling(this);" />
             <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" onClick="javascript:uncheck_sibling(this);" />
             <!-- /TMPL_IF -->
-            <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
             <!-- /TMPL_IF -->
             </td>
-            <td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
+            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onClick="javascript:uncheck_sibling(this);" /></td>
 			<!-- TMPL_IF NAME="renew_failed" -->
 			<td>Renewal Failed</td>
 			<!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="return_failed" -->
+      <td>Return Failed</td>
+      <!-- /TMPL_IF -->
         </tr>
         <!-- /tmpl_loop -->
         <tr>
@@ -287,8 +344,11 @@ $(document).ready(function() {
         </tr>
         </table>
         <fieldset class="action">
-        <input type="submit" name="renew_checked" value="Renew checked items" />
-        <input type="submit" name="renew_all" value="Renew all" />
+        <input type="submit" name="renew_checked" value="Renew or Return checked items" />
+        <input type="submit" name="renew_all" value="Renew all" onClick="checkall('items[]');"/>
+        <input type="submit" name="return_all" value="Return all" onClick="checkall('barcodes[]');"/>
+        <input type="button" name="renew_all" value="Uncheck all Renew" onClick="uncheckall('items[]');"/>
+        <input type="button" name="return_all" value="Uncheck all Returns" onClick="uncheckall('barcodes[]');"/>
         </fieldset>
     </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
 	</div>

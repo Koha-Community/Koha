@@ -61,9 +61,12 @@ my $input = new CGI;
 $debug or $debug = $input->param('debug') || 0;
 my $print = $input->param('print');
 my @failedrenews = $input->param('failedrenew');
+my @failedreturns = $input->param('failedreturn');
 my $error = $input->param('error');
 my @renew_failed;
-for (@failedrenews) { $renew_failed[$_] = 1; }
+for my $renew (@failedrenews) { $renew_failed[$renew] = 1; }
+my @return_failed;
+for my $failedret (@failedreturns) { $return_failed[$failedret] = 1; }
 
 my $template_name;
 
@@ -239,6 +242,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     my ( $restype, $reserves ) = CheckReserves( $issue->[$i]{'itemnumber'} );
     $row{'norenew'} = ($restype) ? 1 : 0;
 	$row{'renew_failed'} = $renew_failed[$issue->[$i]{'itemnumber'}];		
+  $row{'return_failed'} = $return_failed[$issue->[$i]{'barcode'}];   
     push( @issuedata, \%row );
 }
 

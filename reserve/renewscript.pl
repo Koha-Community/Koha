@@ -24,8 +24,23 @@
 
 use CGI;
 use C4::Circulation;
+use C4::Auth;
 
 my $input = new CGI;
+
+#Set Up User_env
+# And assures user is loggedin  and has correct accreditations.
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "members/moremember.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers => 1 },
+        debug           => 1,
+    }
+);
 
 #
 # find items to renew, all items or a selection of items
@@ -38,7 +53,10 @@ if ($input->param('renew_all')) {
 else {
     @data = $input->param('items[]');
 }
+my @barcodes = $input->param('barcodes[]');
 my $branch=$input->param('branch');
+
+# warn "barcodes : @barcodes";
 #
 # renew items
 #
@@ -54,17 +72,24 @@ foreach my $itemno (@data) {
 		$failedrenews.="&failedrenew=$itemno";        
 	}
 }
+my $failedreturn;
+foreach my $barcode (@barcodes) {
+    # check status before renewing issue  
+   my ( $returned, $messages, $issueinformation, $borrower ) = 
+    AddReturn($barcode,$branch,1);
+   $failedreturn.="&failedreturn=$barcode" unless ($returned);
+}
 
 #
 # redirection to the referrer page
 #
 if ($input->param('destination') eq "circ"){
     print $input->redirect(
-        '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber.$failedrenews
+        '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber.$failedrenews.$failedreturn
     );
 }
 else {
     print $input->redirect(
-        '/cgi-bin/koha/members/moremember.pl?borrowernumber='.$borrowernumber.$failedrenews
+        '/cgi-bin/koha/members/moremember.pl?borrowernumber='.$borrowernumber.$failedrenews.$failedreturn
     );
 }
