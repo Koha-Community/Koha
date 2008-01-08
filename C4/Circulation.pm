@@ -1173,7 +1173,8 @@ sub AddReturn {
     
     # get information on item
     my $iteminformation = GetItemIssue( GetItemnumberFromBarcode($barcode));
-    my $biblio = GetBiblioFromItemNumber($iteminformation->{'itemnumber'});
+    my $biblio = GetBiblioItemData($iteminformation->{'biblioitemnumber'});
+#     use Data::Dumper;warn Data::Dumper::Dumper($iteminformation);  
     unless ($iteminformation->{'itemnumber'} ) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
@@ -1191,11 +1192,11 @@ sub AddReturn {
             $messages->{'IsPermanent'} = $hbr;
         }
 		
-		# if independent branches are on and returning to different branch, refuse the return
+		    # if independent branches are on and returning to different branch, refuse the return
         if ($hbr ne C4::Context->userenv->{'branch'} && C4::Context->preference("IndependantBranches")){
-			$messages->{'Wrongbranch'} = 1;
-			$doreturn=0;
-		}
+			  $messages->{'Wrongbranch'} = 1;
+			  $doreturn=0;
+		    }
 			
         # check that the book has been cancelled
         if ( $iteminformation->{'wthdrawn'} ) {
@@ -1222,18 +1223,18 @@ sub AddReturn {
     
     # continue to deal with returns cases, but not only if we have an issue
     
-    # the holdingbranch is updated if the document is returned in an other location .
-    if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
-		UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
-		#         	reload iteminformation holdingbranch with the userenv value
-		$iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
-	}
+        # the holdingbranch is updated if the document is returned in an other location .
+        if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
+		        UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
+		        #         	reload iteminformation holdingbranch with the userenv value
+		        $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+        }
         ModDateLastSeen( $iteminformation->{'itemnumber'} );
         ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
-		
-		if ($iteminformation->{borrowernumber}){
-			($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
- 		}       
+		    
+		    if ($iteminformation->{borrowernumber}){
+			  ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+        }       
         # fix up the accounts.....
         if ( $iteminformation->{'itemlost'} ) {
             $messages->{'WasLost'} = 1;
@@ -1287,7 +1288,7 @@ sub AddReturn {
         UpdateStats(
             $branch, 'return', '0', '',
             $iteminformation->{'itemnumber'},
-            $iteminformation->{'itemtype'},
+            $biblio->{'itemtype'},
             $borrower->{'borrowernumber'}
         );
         
@@ -1750,7 +1751,7 @@ sub GetRenewCount {
         my $data2 = $sth2->fetchrow_hashref();
         $renewsallowed = $data2->{'renewalsallowed'};
         $renewsleft = $renewsallowed - $renewcount;
-        warn "Renewcount:$renewcount RenewsAll:$renewsallowed RenewLeft:$renewsleft";
+#         warn "Renewcount:$renewcount RenewsAll:$renewsallowed RenewLeft:$renewsleft";
         return ($renewcount,$renewsallowed,$renewsleft);
 }
 =head2 GetIssuingCharges
