@@ -107,7 +107,8 @@ my $strsth =
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE isnull(cancellationdate)
  $sqldatewhere
- AND reserves.found is NULL ";
+ AND reserves.found is NULL 
+ AND reserves.itemnumber is NULL";
 
 if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND items.holdingbranch=? ";
@@ -148,6 +149,46 @@ while ( my $data = $sth->fetchrow_hashref ) {
             notes            => $previous eq $this?"":$data->{notes},
             notificationdate => $previous eq $this?"":$data->{notificationdate},
             reminderdate     => $previous eq $this?"":$data->{reminderdate}
+        }
+    );
+    $previous=$this;
+}
+
+$sth->finish;
+$strsth=~ s/AND reserves.itemnumber is NULL/AND reserves.itemnumber is NOT NULL/;
+$strsth=~ s/LEFT JOIN items ON items.biblionumber=reserves.biblionumber/LEFT JOIN items ON items.biblionumber=reserves.itemnumber/;
+$sth = $dbh->prepare($strsth);                                                                                                                          
+if (C4::Context->preference('IndependantBranches')){
+	$sth->execute(C4::Context->userenv->{'branch'});
+}     
+else {
+	$sth->execute(); 
+}              
+while ( my $data = $sth->fetchrow_hashref ) {
+    $this=$data->{biblionumber}.":".$data->{borrowernumber};
+    my @itemlist;
+    push(
+        @reservedata,
+        {
+            reservedate      => $previous eq $this?"":format_date( $data->{reservedate} ),
+            priority         => $previous eq $this?"":$data->{priority},
+            name             => $previous eq $this?"":$data->{borrower},
+            title            => $previous eq $this?"":$data->{title},
+            author           => $previous eq $this?"":$data->{author},
+            borrowernumber   => $previous eq $this?"":$data->{borrowernumber},
+            itemnum          => $previous eq $this?"":$data->{itemnumber},
+            phone            => $previous eq $this?"":$data->{phone},
+            email            => $previous eq $this?"":$data->{email},
+            biblionumber     => $previous eq $this?"":$data->{biblionumber},
+            statusw          => ( $data->{found} eq "w" ),
+            statusf          => ( $data->{found} eq "f" ),
+            holdingbranch    => $data->{holdingbranch},
+            branch           => $previous eq $this?"":$data->{branch},
+            itemcallnumber   => $data->{itemcallnumber},
+            notes            => $previous eq $this?"":$data->{notes},
+            notificationdate => $previous eq $this?"":$data->{notificationdate},
+            reminderdate     => $previous eq $this?"":$data->{reminderdate},
+			thisitemonly     => 1,
         }
     );
     $previous=$this;
