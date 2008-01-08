@@ -62,7 +62,7 @@ my @serverloop = ();
 my @serverhost;
 my @breeding_loop = ();
 
-my $DEBUG = 1;    # if set to 1, many debug message are send on syslog.
+my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
 
 unless ($random)
 {    # this var is not useful anymore just kept to keep rel2_2 compatibility
