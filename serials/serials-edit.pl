@@ -222,6 +222,14 @@ if ($op eq 'serialchangestatus') {
           my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
           if ($item=~/^N/){
             #New Item
+            # add serialid to item record 
+            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber");
+			my $field = $record->field($tagfield);
+            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.serialid");            
+			if ($tagsubfield ) {
+              $field->update($tagsubfield => $itemhash{$item}->{'serial'});
+			}
+			
             # if autoBarcode is ON, calculate barcode...
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
             if (C4::Context->preference("autoBarcode") ne  'OFF'  ) {
@@ -230,10 +238,8 @@ if ($op eq 'serialchangestatus') {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;
-                $newbarcode++;
-                # OK, we have the new barcode, now create the entry in MARC record
-                $record->add_fields( $tagfield, "1", "0",
-                    $tagsubfield => $newbarcode );
+                # OK, we have the new barcode, add the entry in MARC record # FIXME -> should be  using barcode plugin here.
+                $field->update( $tagsubfield => ++$newbarcode );
               }
             }
             # check for item barcode # being unique
@@ -241,7 +247,7 @@ if ($op eq 'serialchangestatus') {
   #           push @errors,"barcode_not_unique" if($exists);
             $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
             # if barcode exists, don't create, but report The problem.
-            unless ($exists){
+			unless ($exists){
               my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
               AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
             }

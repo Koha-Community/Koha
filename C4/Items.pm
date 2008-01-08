@@ -109,35 +109,40 @@ of C<C4::Items>
 
 =over 4
 
-$item = GetItem($itemnumber,$barcode);
+$item = GetItem($itemnumber,$barcode,$serial);
 
 =back
 
 Return item information, for a given itemnumber or barcode.
 The return value is a hashref mapping item column
-names to values.
+names to values.  If C<$serial> is true, include serial publication data.
 
 =cut
 
 sub GetItem {
-    my ($itemnumber,$barcode) = @_;
+    my ($itemnumber,$barcode, $serial) = @_;
     my $dbh = C4::Context->dbh;
+	my $data;
     if ($itemnumber) {
         my $sth = $dbh->prepare("
             SELECT * FROM items 
             WHERE itemnumber = ?");
         $sth->execute($itemnumber);
-        my $data = $sth->fetchrow_hashref;
-        return $data;
+        $data = $sth->fetchrow_hashref;
     } else {
         my $sth = $dbh->prepare("
             SELECT * FROM items 
             WHERE barcode = ?"
             );
-        $sth->execute($barcode);
-        my $data = $sth->fetchrow_hashref;
-        return $data;
+        $sth->execute($barcode);		
+        $data = $sth->fetchrow_hashref;
     }
+    if ( $serial) {      
+    my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serial where itemnumber=?");
+        $ssth->execute($data->{'itemnumber'}) ;
+        ($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
+    }		
+    return $data;
 }    # sub GetItem
 
 =head2 AddItemFromMarc
@@ -161,7 +166,6 @@ sub AddItemFromMarc {
     # parse item hash from MARC
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $source_item_marc, $frameworkcode );
-
     return AddItem($item, $biblionumber, $dbh, $frameworkcode);
 }
 
@@ -199,7 +203,7 @@ sub AddItem {
     _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
     # FIXME - checks here
-    my ( $itemnumber, $error ) = _koha_new_item( $dbh, $item, $item->{barcode} );
+	my ( $itemnumber, $error ) = _koha_new_item( $dbh, $item, $item->{barcode} );
     $item->{'itemnumber'} = $itemnumber;
 
     # create MARC tag representing item and add to bib
@@ -1086,7 +1090,7 @@ sub GetItemsInfo {
     $sth->execute($biblionumber);
     my $i = 0;
     my @results;
-    my ( $date_due, $count_reserves );
+    my ( $date_due, $count_reserves, $serial );
 
     my $isth    = $dbh->prepare(
         "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname,borrowers.branchcode as bcode
@@ -1094,7 +1098,8 @@ sub GetItemsInfo {
         WHERE  itemnumber = ?
             AND returndate IS NULL"
        );
-    while ( my $data = $sth->fetchrow_hashref ) {
+	my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serial where itemnumber=?");
+	while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = '';
         $isth->execute( $data->{'itemnumber'} );
         if ( my $idata = $isth->fetchrow_hashref ) {
@@ -1110,7 +1115,12 @@ sub GetItemsInfo {
         }
         }
         }
-        if ( $datedue eq '' ) {
+		if ( $data->{'serial'}) {	
+			$ssth->execute($data->{'itemnumber'}) ;
+			($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
+			$serial = 1;
+        }
+		if ( $datedue eq '' ) {
             my ( $restype, $reserves ) =
               C4::Reserves::CheckReserves( $data->{'itemnumber'} );
             if ($restype) {
@@ -1118,7 +1128,7 @@ sub GetItemsInfo {
             }
         }
         $isth->finish;
-
+        $ssth->finish;
         #get branch information.....
         my $bsth = $dbh->prepare(
             "SELECT * FROM branches WHERE branchcode = ?
@@ -1193,8 +1203,11 @@ sub GetItemsInfo {
         $i++;
     }
     $sth->finish;
-
-    return (@results);
+	if($serial) {
+		return( sort { $b->{'publisheddate'} cmp $a->{'publisheddate'} } @results );
+	} else {
+    	return (@results);
+	}
 }
 
 =head2 get_itemnumbers_of
@@ -1574,7 +1587,7 @@ sub _koha_new_item {
     my ( $dbh, $item, $barcode ) = @_;
     my $error;
 
-    my $query = 
+    my $query =
            "INSERT INTO items SET
             biblionumber        = ?,
             biblioitemnumber    = ?,
@@ -1607,10 +1620,10 @@ sub _koha_new_item {
             ccode               = ?,
             itype               = ?,
             materials           = ?,
-            uri                 = ?
+            uri                 = ?,
           ";
     my $sth = $dbh->prepare($query);
-    $sth->execute(
+   $sth->execute(
             $item->{'biblionumber'},
             $item->{'biblioitemnumber'},
             $barcode,

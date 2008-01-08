@@ -62,6 +62,7 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       =
   GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;
+$dat->{'serial'}=1 if $subscriptionsnumber;
 foreach my $subscription (@subscriptions) {
     my %cell;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
@@ -73,7 +74,7 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
-$dat->{'count'} = @items;
+$dat->{'count'} = scalar(@items);
 
 #adding RequestOnOpac filter to allow or not the display of plce reserve button
 # FIXME - use me or delete me.

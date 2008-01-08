@@ -930,6 +930,16 @@ VALUES( 'he', 'Hebr')");
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.046";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `serial` CHANGE `itemnumber` `itemnumber` int(11) default NULL");
+    $dbh->do("ALTER TABLE `subscription` CHANGE `numberlength` `numberlength` int(11) default NULL , 
+    		 CHANGE `weeklength` `weeklength` int(11) default NULL");
+    $dbh->do("ALTER TABLE `serial` ADD UNIQUE KEY `serialitemidx` (`itemnumber`)");
+	print "Upgrade to $DBversion done (Update serial table, add index on itemnumber. )\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

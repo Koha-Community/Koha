@@ -87,7 +87,8 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('990', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 9, '', '', '', NULL),
 		('990', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('990', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, '', '', '', NULL),
-		('990', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL);
+		('990', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL),
+		('990', 's', 'Serial record flag', 'Serial record', 0, 0, 'biblio.serial', 9, '', '', '', NULL, -5, '', '', '', NULL);
 
 
 -- ******************************************************

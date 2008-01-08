@@ -178,7 +178,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 	<tr>
 		<th>Numbered</th>
 		<th>Published on</th>
-		<th>planned for</th>
+		<th>Planned for</th>
 		<th>Status</th>
 		<th>Notes</th>
 	</tr>
@@ -263,7 +263,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
         <!-- TMPL_LOOP NAME="items" -->
         <div id="item<!-- TMPL_VAR NAME="serialid" --><!-- TMPL_VAR NAME="countitems" -->" class="items">
         <!-- TMPL_LOOP NAME="iteminformation" -->
-               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
    
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
@@ -272,12 +272,12 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
                 <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                <!-- TMPL_IF NAME="repeatable" -->
+                <!-- TMPL_IF NAME="ITEM_SUBFIELDS_ARE_NOT_REPEATABLE" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
         
             </div>
-        <!-- /tmpl_loop -->
+        <!-- /tmpl_loop --><!-- /iteminformation -->
         
         <input type="hidden" name="moditem" value="" /> 
         <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
@@ -287,7 +287,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
         <input type="hidden" name="itemid" value="<!-- TMPL_VAR NAME="itemid" -->" />
         <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         </div>
-        <!--/TMPL_LOOP-->
+        <!--/TMPL_LOOP--> <!-- /items -->
         </div>
         </fieldset>
     </td>
@@ -367,7 +367,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
           <div id="cataloguing_additem_itemlist">
         <div id="item<!-- TMPL_VAR NAME="serialid" --><!-- TMPL_VAR NAME="countitems" -->" class="items">
         <!-- TMPL_LOOP NAME="iteminformation" -->
-               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
    
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
@@ -376,7 +376,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
                 <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                <!-- TMPL_IF NAME="repeatable" -->
+                <!-- TMPL_IF NAME="ITEM_SUBFIELDS_ARE_NOT_REPEATABLE" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
         </div>

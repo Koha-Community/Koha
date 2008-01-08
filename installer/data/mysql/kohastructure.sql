@@ -1535,10 +1535,11 @@ CREATE TABLE `serial` (
   `planneddate` date default NULL,
   `notes` text,
   `publisheddate` date default NULL,
-  `itemnumber` text,
+  `itemnumber` int(11) default NULL,
   `claimdate` date default NULL,
   `routingnotes` text,
-  PRIMARY KEY  (`serialid`)
+  PRIMARY KEY  (`serialid`),
+  KEY serialitem (`itemnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1623,9 +1624,9 @@ CREATE TABLE `subscription` (
   `aqbooksellerid` int(11) default 0,
   `cost` int(11) default 0,
   `aqbudgetid` int(11) default 0,
-  `weeklength` tinyint(4) default 0,
-  `monthlength` tinyint(4) default 0,
-  `numberlength` tinyint(4) default 0,
+  `weeklength` int(11) default 0,
+  `monthlength` int(11) default 0,
+  `numberlength` int(11) default 0,
   `periodicity` tinyint(4) default 0,
   `dow` varchar(100) default '',
   `numberingmethod` varchar(100) default '',

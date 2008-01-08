@@ -19,6 +19,7 @@ use strict;
 use CGI;
 use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days);
 use C4::Koha;
+use C4::Biblio;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Acquisition;
@@ -163,7 +164,6 @@ if ($op eq 'mod'||$op eq 'dup') {
 }
 
 if ($op eq 'addsubscription') {
-
     my $auser = $query->param('user');
     my $branchcode = $query->param('branchcode');
     my $aqbooksellerid = $query->param('aqbooksellerid');

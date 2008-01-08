@@ -1943,7 +1943,7 @@ sub PrepareItemrecordDisplay {
     my ( $itemtagfield, $itemtagsubfield ) =
       &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
-    my $itemrecord = GetMarcItem( $bibnum, $itemnum) if ($itemnum);
+    my $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum) if ($itemnum);
     my @loop_data;
     my $authorised_values_sth =
       $dbh->prepare(

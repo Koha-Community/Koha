@@ -208,7 +208,8 @@
             <th>Status</th>
             <th>Date Due</th>
 			<th>Last Seen</th>
-            <th>Volume</th>
+            <!-- TMPL_IF NAME="serial" --><th>Copy / Vol</th>
+            <th>Published</th><!-- /TMPL_IF -->
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
         <tr>
@@ -238,7 +239,8 @@
                 <!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="datedue" --></td>
 			<td><!-- TMPL_VAR NAME="datelastseen" --></td>
-            <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+            <!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
+			<td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="type" -->
             <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
             <!-- /TMPL_IF -->

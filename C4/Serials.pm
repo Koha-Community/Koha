@@ -1389,6 +1389,16 @@ sub NewSubscription {
     &logaction(C4::Context->userenv->{'number'},"SERIAL","ADD",$subscriptionid,"") 
         if C4::Context->preference("SubscriptionLog");
     
+#set serial flag on biblio if not already set.
+    my ($null, ($bib)) = GetBiblio($biblionumber);
+    if( ! $bib->{'serial'} ) {
+        my $record = GetMarcBiblio($biblionumber);
+        my ($tag,$subf) = GetMarcFromKohaField('biblio.serial',$bib->{'frameworkcode'});
+        if($tag) {
+            $record->field($tag)->update( $subf => 1 );
+        }
+        ModBiblio($record,$biblionumber,$bib->{'frameworkcode'});
+    }    
     return $subscriptionid;
 }
 
