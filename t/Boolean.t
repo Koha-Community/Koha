@@ -18,7 +18,7 @@ sub f ($) {
    };
    if ($@) {
       $it = $@;
-      $it =~ s/ at \S+ line \d+$\.\n//s;
+      $it =~ s/ at \S+ line \d+\.\n//s;
    }
    return $it;
 }

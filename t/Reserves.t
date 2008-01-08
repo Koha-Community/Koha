@@ -10,5 +10,8 @@ use Test::More tests => 1;
 
 BEGIN {
         use_ok('C4::Reserves');
+	use FindBin;
+	use lib $FindBin::Bin;
+	use override_context_prefs;
 }
 

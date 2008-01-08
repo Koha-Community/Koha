@@ -160,7 +160,7 @@ sub themelanguage {
     if ( $interface eq "intranet" ) {
         @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
-        pop @languages, $lang if $lang;		# FIXME: pop takes only 1 arg. and if $lang always TRUE!
+        push @languages, $lang if $lang;
     }
     else {
       # we are in the opac here, what im trying to do is let the individual user

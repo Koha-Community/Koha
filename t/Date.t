@@ -7,17 +7,9 @@ use warnings;
 use Test::More tests => 4;
 
 BEGIN {
-    use C4::Context;
-    package C4::Context;
-    no warnings;
-    sub preference {
-        my $self = shift;
-        my $pref = shift;
-        return 'us' if $pref eq "dateformat";
-        return;
-    }
-    use warnings;
-    package main;
+    use FindBin;
+    use lib $FindBin::Bin;
+    use override_context_prefs;
     use_ok('C4::Date');
 }
 
