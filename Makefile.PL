@@ -1108,6 +1108,9 @@ sub test {
     my $self = shift;
     my $test = $self->SUPER::test(@_);
     $test =~ s!\$\(INST_LIB\)!blib/PERL_MODULE_DIR!g;
+
+    # set KOHA_CONF 
+    $test =~ s!\$\(FULLPERLRUN\)!KOHA_CONF=blib/KOHA_CONF_DIR/koha-conf.xml \$(FULLPERLRUN)!g;
     return $test;
 }
 
