@@ -40,6 +40,7 @@ BEGIN {
 	@ISA = qw( Exporter );
 
 	# to add biblios
+# EXPORTED FUNCTIONS.
 	push @EXPORT, qw( 
 		&AddBiblio
 	);
@@ -60,7 +61,6 @@ BEGIN {
 		&GetMarcSeries
 		GetMarcUrls
 		&GetUsedMarcStructure
-
 		&GetXmlBiblio
 
 		&GetAuthorisedValueDesc
@@ -77,12 +77,10 @@ BEGIN {
 		&ModBiblioframework
 		&ModZebra
 	);
-
 	# To delete something
 	push @EXPORT, qw(
 		&DelBiblio
 	);
-
 	# Internal functions
 	# those functions are exported but should not be used
 	# they are usefull is few circumstances, so are exported.
@@ -90,7 +88,6 @@ BEGIN {
 	push @EXPORT, qw(
 		&ModBiblioMarc
 	);
-
 	# Others functions
 	push @EXPORT, qw(
 		&TransformMarcToKoha
@@ -98,7 +95,6 @@ BEGIN {
 		&TransformHtmlToMarc
 		&TransformHtmlToXml
 		&PrepareItemrecordDisplay
-		&char_decode
 		&GetNoZebraIndexes
 	);
 }
@@ -1724,202 +1720,6 @@ sub TransformMarcToKohaOneField {
 
 =head1  OTHER FUNCTIONS
 
-=head2 char_decode
-
-=over 4
-
-my $string = char_decode( $string, $encoding );
-
-converts ISO 5426 coded string to UTF-8
-sloppy code : should be improved in next issue
-
-=back
-
-=cut
-
-sub char_decode {
-    my ( $string, $encoding ) = @_;
-    $_ = $string;
-
-    $encoding = C4::Context->preference("marcflavour") unless $encoding;
-    if ( $encoding eq "UNIMARC" ) {
-
-        #         s/\xe1/Æ/gm;
-        s/\xe2/Ğ/gm;
-        s/\xe9/Ø/gm;
-        s/\xec/ş/gm;
-        s/\xf1/æ/gm;
-        s/\xf3/ğ/gm;
-        s/\xf9/ø/gm;
-        s/\xfb/ß/gm;
-        s/\xc1\x61/à/gm;
-        s/\xc1\x65/è/gm;
-        s/\xc1\x69/ì/gm;
-        s/\xc1\x6f/ò/gm;
-        s/\xc1\x75/ù/gm;
-        s/\xc1\x41/À/gm;
-        s/\xc1\x45/È/gm;
-        s/\xc1\x49/Ì/gm;
-        s/\xc1\x4f/Ò/gm;
-        s/\xc1\x55/Ù/gm;
-        s/\xc2\x41/Á/gm;
-        s/\xc2\x45/É/gm;
-        s/\xc2\x49/Í/gm;
-        s/\xc2\x4f/Ó/gm;
-        s/\xc2\x55/Ú/gm;
-        s/\xc2\x59/İ/gm;
-        s/\xc2\x61/á/gm;
-        s/\xc2\x65/é/gm;
-        s/\xc2\x69/í/gm;
-        s/\xc2\x6f/ó/gm;
-        s/\xc2\x75/ú/gm;
-        s/\xc2\x79/ı/gm;
-        s/\xc3\x41/Â/gm;
-        s/\xc3\x45/Ê/gm;
-        s/\xc3\x49/Î/gm;
-        s/\xc3\x4f/Ô/gm;
-        s/\xc3\x55/Û/gm;
-        s/\xc3\x61/â/gm;
-        s/\xc3\x65/ê/gm;
-        s/\xc3\x69/î/gm;
-        s/\xc3\x6f/ô/gm;
-        s/\xc3\x75/û/gm;
-        s/\xc4\x41/Ã/gm;
-        s/\xc4\x4e/Ñ/gm;
-        s/\xc4\x4f/Õ/gm;
-        s/\xc4\x61/ã/gm;
-        s/\xc4\x6e/ñ/gm;
-        s/\xc4\x6f/õ/gm;
-        s/\xc8\x41/Ä/gm;
-        s/\xc8\x45/Ë/gm;
-        s/\xc8\x49/Ï/gm;
-        s/\xc8\x61/ä/gm;
-        s/\xc8\x65/ë/gm;
-        s/\xc8\x69/ï/gm;
-        s/\xc8\x6F/ö/gm;
-        s/\xc8\x75/ü/gm;
-        s/\xc8\x76/ÿ/gm;
-        s/\xc9\x41/Ä/gm;
-        s/\xc9\x45/Ë/gm;
-        s/\xc9\x49/Ï/gm;
-        s/\xc9\x4f/Ö/gm;
-        s/\xc9\x55/Ü/gm;
-        s/\xc9\x61/ä/gm;
-        s/\xc9\x6f/ö/gm;
-        s/\xc9\x75/ü/gm;
-        s/\xca\x41/Å/gm;
-        s/\xca\x61/å/gm;
-        s/\xd0\x43/Ç/gm;
-        s/\xd0\x63/ç/gm;
-
-        # this handles non-sorting blocks (if implementation requires this)
-        $string = nsb_clean($_);
-    }
-    elsif ( $encoding eq "USMARC" || $encoding eq "MARC21" ) {
-        ##MARC-8 to UTF-8
-
-        s/\xe1\x61/à/gm;
-        s/\xe1\x65/è/gm;
-        s/\xe1\x69/ì/gm;
-        s/\xe1\x6f/ò/gm;
-        s/\xe1\x75/ù/gm;
-        s/\xe1\x41/À/gm;
-        s/\xe1\x45/È/gm;
-        s/\xe1\x49/Ì/gm;
-        s/\xe1\x4f/Ò/gm;
-        s/\xe1\x55/Ù/gm;
-        s/\xe2\x41/Á/gm;
-        s/\xe2\x45/É/gm;
-        s/\xe2\x49/Í/gm;
-        s/\xe2\x4f/Ó/gm;
-        s/\xe2\x55/Ú/gm;
-        s/\xe2\x59/İ/gm;
-        s/\xe2\x61/á/gm;
-        s/\xe2\x65/é/gm;
-        s/\xe2\x69/í/gm;
-        s/\xe2\x6f/ó/gm;
-        s/\xe2\x75/ú/gm;
-        s/\xe2\x79/ı/gm;
-        s/\xe3\x41/Â/gm;
-        s/\xe3\x45/Ê/gm;
-        s/\xe3\x49/Î/gm;
-        s/\xe3\x4f/Ô/gm;
-        s/\xe3\x55/Û/gm;
-        s/\xe3\x61/â/gm;
-        s/\xe3\x65/ê/gm;
-        s/\xe3\x69/î/gm;
-        s/\xe3\x6f/ô/gm;
-        s/\xe3\x75/û/gm;
-        s/\xe4\x41/Ã/gm;
-        s/\xe4\x4e/Ñ/gm;
-        s/\xe4\x4f/Õ/gm;
-        s/\xe4\x61/ã/gm;
-        s/\xe4\x6e/ñ/gm;
-        s/\xe4\x6f/õ/gm;
-        s/\xe6\x41/Ă/gm;
-        s/\xe6\x45/Ĕ/gm;
-        s/\xe6\x65/ĕ/gm;
-        s/\xe6\x61/ă/gm;
-        s/\xe8\x45/Ë/gm;
-        s/\xe8\x49/Ï/gm;
-        s/\xe8\x65/ë/gm;
-        s/\xe8\x69/ï/gm;
-        s/\xe8\x76/ÿ/gm;
-        s/\xe9\x41/A/gm;
-        s/\xe9\x4f/O/gm;
-        s/\xe9\x55/U/gm;
-        s/\xe9\x61/a/gm;
-        s/\xe9\x6f/o/gm;
-        s/\xe9\x75/u/gm;
-        s/\xea\x41/A/gm;
-        s/\xea\x61/a/gm;
-
-        #Additional Turkish characters
-        s/\x1b//gm;
-        s/\x1e//gm;
-        s/(\xf0)s/\xc5\x9f/gm;
-        s/(\xf0)S/\xc5\x9e/gm;
-        s/(\xf0)c/ç/gm;
-        s/(\xf0)C/Ç/gm;
-        s/\xe7\x49/\\xc4\xb0/gm;
-        s/(\xe6)G/\xc4\x9e/gm;
-        s/(\xe6)g/ğ\xc4\x9f/gm;
-        s/\xB8/ı/gm;
-        s/\xB9/£/gm;
-        s/(\xe8|\xc8)o/ö/gm;
-        s/(\xe8|\xc8)O/Ö/gm;
-        s/(\xe8|\xc8)u/ü/gm;
-        s/(\xe8|\xc8)U/Ü/gm;
-        s/\xc2\xb8/\xc4\xb1/gm;
-        s/¸/\xc4\xb1/gm;
-
-        # this handles non-sorting blocks (if implementation requires this)
-        $string = nsb_clean($_);
-    }
-    return ($string);
-}
-
-=head2 nsb_clean
-
-=over 4
-
-my $string = nsb_clean( $string, $encoding );
-
-=back
-
-=cut
-
-sub nsb_clean {
-    my $NSB      = '\x88';    # NSB : begin Non Sorting Block
-    my $NSE      = '\x89';    # NSE : Non Sorting Block end
-                              # handles non sorting blocks
-    my ($string) = @_;
-    $_ = $string;
-    s/$NSB/(/gm;
-    s/[ ]{0,1}$NSE/) /gm;
-    $string = $_;
-    return ($string);
-}
 
 =head2 PrepareItemrecordDisplay
 

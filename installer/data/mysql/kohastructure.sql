@@ -1810,6 +1810,7 @@ CREATE TABLE `z3950servers` (
   `icon` text,
   `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
+  `encoding` text NULL default 'utf8',
   `description` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

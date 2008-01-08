@@ -31,7 +31,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name like ?) order by rank,name");
+	my $sth=$dbh->prepare("Select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name like ?) order by rank,name");
 	$sth->execute("$data[0]\%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref) {
@@ -73,7 +73,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($searchfield) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+		my $sth=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name = ?) order by rank,name");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -85,7 +85,10 @@ if ($op eq 'add_form') {
 			 userid => $data->{'userid'},
 			 password => $data->{'password'},
 			 checked => $data->{'checked'},
-			 rank => $data->{'rank'});
+			 rank => $data->{'rank'},
+       syntax => $data->{'syntax'},
+       encoding => $data->{'encoding'},
+       );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -95,7 +98,7 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("select * from z3950servers where name=?");
 	$sth->execute($input->param('searchfield'));
 	if ($sth->rows) {
-		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=? where name=?");
+		$sth=$dbh->prepare("update z3950servers set host=?, port=?, db=?, userid=?, password=?, name=?, checked=?, rank=?,syntax=?,encoding=? where name=?");
 		$sth->execute($input->param('host'),
 		      $input->param('port'),
 		      $input->param('db'),
@@ -105,6 +108,7 @@ if ($op eq 'add_form') {
 		      $input->param('checked'),
 		      $input->param('rank'),
 			 $input->param('syntax'),
+          $input->param('encoding'),
 		      $input->param('searchfield'),
 		      );
 	} else {
@@ -118,6 +122,7 @@ if ($op eq 'add_form') {
 		      $input->param('checked'),
 		      $input->param('rank'),
 			 $input->param('syntax'),
+          $input->param('encoding'),
 		      );
 	}
 	$sth->finish;
@@ -128,7 +133,7 @@ if ($op eq 'add_form') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
 
-	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax from z3950servers where (name = ?) order by rank,name");
+	my $sth2=$dbh->prepare("select host,port,db,userid,password,name,id,checked,rank,syntax,encoding from z3950servers where (name = ?) order by rank,name");
 	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -139,7 +144,9 @@ if ($op eq 'add_form') {
                          userid => $data->{'userid'},
                          password => $data->{'password'},
                          checked => $data->{'checked'},
-                         rank => $data->{'rank'});
+                         rank => $data->{'rank'},
+                         syntax => $data->{'syntax'},
+                         encoding => $data->{'encoding'}            );
 
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -170,6 +177,7 @@ if ($op eq 'add_form') {
 			checked => $results->[$i]{'checked'},
 			rank => $results->[$i]{'rank'},
 			syntax => $results->[$i]{'syntax'},
+      encoding => $results->[$i]{'encoding'},
 			toggle => $toggle);
 		push @loop, \%row;
 

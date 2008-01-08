@@ -86,7 +86,7 @@ sub ImportBreeding {
     # FIXME -- not sure that this kind of checking is actually needed
     my $searchbreeding = $dbh->prepare("select import_record_id from import_biblios where isbn=? and title=?");
     
-    $encoding = C4::Context->preference("marcflavour") unless $encoding;
+#     $encoding = C4::Context->preference("marcflavour") unless $encoding;
     # fields used for import results
     my $imported=0;
     my $alreadyindb = 0;
@@ -94,8 +94,9 @@ sub ImportBreeding {
     my $notmarcrecord = 0;
     my $breedingid;
     for (my $i=0;$i<=$#marcarray;$i++) {
-        my $marcrecord = FixEncoding($marcarray[$i]."\x1D");
-       
+        my $marcrecord = FixEncoding($marcarray[$i]."\x1D",$encoding);
+#         warn "$i : $marcarray[$i]";
+#         warn "FixEncoding : ".$marcrecord->as_formatted;
         # FIXME - currently this does nothing 
         my @warnings = $marcrecord->warnings();
         

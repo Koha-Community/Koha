@@ -130,7 +130,13 @@
                 <option value="CATMARC">CATMARC</option>
                 <option value="MALMARC">MALMARC</option>
                 </select>
-		</li></ol>
+		</li><li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
+                <select name="encoding">
+                <option selected="selected" value="utf8">utf8</option>
+                <option value="ISO_5426">Iso5426 (MARC8 ANSEL)</option>
+                <option value="ISO_6937">ISO_6937</option>
+                </select>
+    </li></ol>
         </fieldset>
 		
 		<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
@@ -156,6 +162,8 @@
                 <li><strong>Password: </strong><!-- TMPL_VAR NAME="password" --></li>
                 <li><strong>Checked: </strong><!-- TMPL_VAR NAME="checked" --></li>
                 <li><strong>Rank: </strong><!-- TMPL_VAR NAME="rank" --></li>
+                <li><strong>Syntax: </strong><!-- TMPL_VAR NAME="syntax" --></li>
+                <li><strong>Encoding: </strong><!-- TMPL_VAR NAME="encoding" --></li>
  	</ul>                <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="submit" value="Delete this Server" /></form>  <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="Do Not Delete" /></form>
 
 
@@ -193,10 +201,10 @@
                 You searched for <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->		
 <table>
-                <tr><th>Target:</th><th>Hostname/Port:</th><th>Database:</th><th>Userid:</th><th>Password:</th><th>Checked:</th><th>Rank:</th>       			<th>Syntax:</th><th colspan="2">&nbsp;</th>
+                <tr><th>Target:</th><th>Hostname/Port:</th><th>Database:</th><th>Userid:</th><th>Password:</th><th>Checked:</th><th>Rank:</th>       			<th>Syntax:</th><th>Encoding:</th><th colspan="2">&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="name" --></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>
+               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="name" --></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><!-- TMPL_VAR NAME="encoding" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>
                 <!-- /TMPL_LOOP -->
 	</table>
 
