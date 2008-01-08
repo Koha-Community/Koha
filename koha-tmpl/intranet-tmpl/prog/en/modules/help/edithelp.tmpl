@@ -25,14 +25,14 @@ tinyMCE.init({
 	<h1>Online Help</h1>
 <!-- TMPL_IF NAME="error" -->
 <h5><!-- TMPL_VAR NAME="error" --></h5>
-<!-- TMPL_ELSE -->
-<form action="/cgi-bin/koha/edithelp.pl" method=post>
-<input type="hidden" name="referer" value="<!-- TMPL_VAR NAME="referer" -->">
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->">
-<textarea name="help" cols="60" rows="20"><!-- TMPL_VAR NAME="help" --></textarea>
-<input type="submit" name="submit" value="Submit">
-</form>
 <!-- /TMPL_IF -->
+<form action="/cgi-bin/koha/edithelp.pl" method=post>
+<input type="hidden" name="referer" value="<!-- TMPL_VAR NAME='referer' -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME='type' -->" />
+<textarea name="help" cols="60" rows="20"><!-- TMPL_VAR NAME="help" --></textarea>
+<input type="submit" name="submit" value="Submit" />
+</form>
 	</div>
 	
 <!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+
