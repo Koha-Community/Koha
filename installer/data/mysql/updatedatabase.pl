@@ -932,10 +932,11 @@ VALUES( 'he', 'Hebr')");
 
 $DBversion = "3.00.00.046";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `serial` CHANGE `itemnumber` `itemnumber` int(11) default NULL");
     $dbh->do("ALTER TABLE `subscription` CHANGE `numberlength` `numberlength` int(11) default NULL , 
     		 CHANGE `weeklength` `weeklength` int(11) default NULL");
-    $dbh->do("ALTER TABLE `serial` ADD UNIQUE KEY `serialitemidx` (`itemnumber`)");
+    $dbh->do("ALTER TABLE `serial` ADD UNIQUE KEY `serialitemidx` (`serialitem`)");
+    $dbh->do("CREATE TABLE `serialitems` (`serialid` int(11) NOT NULL, `itemnumber` int(11) NOT NULL, UNIQUE KEY (`serialid`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("INSERT INTO `serialitems` SELECT `serialid`,`itemnumber` from serial where NOT ISNULL(itemnumber) && itemnumber <> '' && itemnumber NOT LIKE '%,%'");
 	print "Upgrade to $DBversion done (Update serial table, add index on itemnumber. )\n";
     SetVersion ($DBversion);
 }

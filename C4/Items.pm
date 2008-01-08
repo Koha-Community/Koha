@@ -1586,7 +1586,9 @@ Perform the actual insert into the C<items> table.
 sub _koha_new_item {
     my ( $dbh, $item, $barcode ) = @_;
     my $error;
-
+use Data::Dumper;
+warn Dumper($item);
+warn $barcode;
     my $query =
            "INSERT INTO items SET
             biblionumber        = ?,
@@ -1620,7 +1622,7 @@ sub _koha_new_item {
             ccode               = ?,
             itype               = ?,
             materials           = ?,
-            uri                 = ?,
+			uri                 = ?
           ";
     my $sth = $dbh->prepare($query);
    $sth->execute(

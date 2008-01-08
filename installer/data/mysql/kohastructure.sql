@@ -1535,11 +1535,10 @@ CREATE TABLE `serial` (
   `planneddate` date default NULL,
   `notes` text,
   `publisheddate` date default NULL,
-  `itemnumber` int(11) default NULL,
+  `itemnumber` text default NULL,
   `claimdate` date default NULL,
   `routingnotes` text,
   PRIMARY KEY  (`serialid`),
-  KEY serialitem (`itemnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1883,6 +1882,13 @@ CREATE TABLE language_script_mapping (
         language_subtag varchar(25),
         script_subtag varchar(25),
         KEY `language_subtag` (`language_subtag`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS serialitems;
+CREATE TABLE serialitem (
+        serialid int(11) NOT NULL,
+        itemnumber int(11) NOT NULL,
+        UNIQUE KEY `serialididx` (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
