@@ -206,10 +206,7 @@ foreach my $thisbranch (sort keys %$branches) {
 				-multiple => 0 );
 	
 	my @mime = ( C4::Context->preference("MIME") );
-	foreach my $mime (@mime){
-		warn "".$mime;
-	}
-	
+	# warn 'MIME(s): ' . join ' ', @mime;
 	my $CGIextChoice=CGI::scrolling_list(
 				-name => 'MIME',
 				-id => 'MIME',
