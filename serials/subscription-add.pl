@@ -120,7 +120,7 @@ if ($op eq 'mod'||$op eq 'dup') {
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }  
 	for (qw(startdate firstacquidate histstartdate enddate)) {
-    	$subs->{$_} = format_date($subs->{$_});
+    	$subs->{$_} = format_date($subs->{$_}) if $subs->{$_};
 	}
     $subs->{'letter'}='' unless($subs->{'letter'});
     $irregularity   = $subs->{'irregularity'};

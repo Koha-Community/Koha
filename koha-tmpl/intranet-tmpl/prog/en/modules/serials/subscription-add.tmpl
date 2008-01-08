@@ -798,19 +798,18 @@ window.onload = irregular_order();
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --> Modify subscription to <i><!-- TMPL_VAR name="bibliotitle" --></i><!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --> Modify subscription for <span class="title"><!-- TMPL_VAR name="bibliotitle" --></span><!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t7">
    
    <div id="bd">
    <div class="yui-g">
-
-<!-- TMPL_IF name="mod" -->
+<h1><!-- TMPL_IF name="mod" --> Modify subscription for <i><!-- TMPL_VAR name="bibliotitle" --></i><!-- TMPL_ELSE -->Add a new subscription<!-- /TMPL_IF --></h1>
     <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
+<!-- TMPL_IF name="mod" -->
         <input type="hidden" name="op" value="modsubscription" />
         <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
 <!-- TMPL_ELSE -->
-    <form method="post" action="/cgi-bin/koha/serials/subscription-add.pl" name="f">
         <input type="hidden" name="op" value="addsubscription" />
 <!-- /TMPL_IF -->
 <input type="hidden" name="user" value="<!-- TMPL_VAR name="loggedinusername" -->" />
@@ -819,14 +818,15 @@ window.onload = irregular_order();
 
 	<div class="yui-u first">
     <fieldset id="subscription_add_information" class="rows">
-	<legend>Subscription information for subscription #<!--TMPL_VAR name="subscriptionid"--></legend>
+	<legend>Subscription details</legend>
 	<ol>
+	<li><span class="label">Subscription #</span> <!--TMPL_VAR name="subscriptionid"--></li>
         <li>
             <span class="label">Librarian: </span>            <!-- TMPL_VAR name="loggedinusername" -->
         </li>
         <li>
-            <label for="aqbooksellerid">Supplier: (*)</label>
-            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a Supplier</a></div>
+            <label for="aqbooksellerid">Vendor: </label>
+            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a vendor</a></div>
         </li>
         <li>
             <label for="biblionumber">Biblio: (*)</label>
@@ -842,31 +842,32 @@ window.onload = irregular_order();
             <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
         </li>
         <li>
-            <label for="branchcode">Branch</label>
+            <label for="branchcode">Library</label>
             
                 <select name="branchcode" id="branchcode">
-                    <option value="">Any branch</option>
+                    <!-- TMPL_UNLESS NAME="Independantbranches" --><option value="">Any branch</option><!-- /TMPL_UNLESS -->
                     <!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- TMPL_ELSE -->
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
-                </select> (select a branch)
+                </select> (select a library)
             
         </li>
         <li>
-            <label for="notes">Notes</label>
+            <label for="notes">Public note</label>
             <textarea name="notes" id="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea>
         </li>
         <li>
-            <label for="internalnotes">Management Notes</label>
+            <label for="internalnotes">Nonpublic note</label>
             <textarea name="internalnotes" id="internalnotes" cols="30" rows="2"><!-- TMPL_VAR name="internalnotes" --></textarea>
         </li>
         <li>
-            <label for="letter">Patron alert with </label>
+            <label for="letter">Patron notification </label>
             
-                <select name="letter" id="letter">
-                    <option value="">un-activated</option>
+               <!-- TMPL_IF NAME="letterloop" -->
+			   <select name="letter" id="letter">
+                    <option value="">none</option>
                 <!-- TMPL_LOOP name="letterloop" -->
 				<!-- TMPL_IF name="selected" -->
                     <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="lettername" --></option>
@@ -874,16 +875,19 @@ window.onload = irregular_order();
                     <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="lettername" --></option>
 <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-                </select> <div class="inputnote">(select a notice and patrons on the routing list will receive notices for this subscription)</div>
-            
+                </select> 
+				<div class="inputnote">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
+            	<!-- /TMPL_ELSE -->
+				<div class="inputnote">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
+				<!-- /TMPL_IF -->
         </li>
 	</ol>
 
             <div class="warning"><b>Note:</b>
             
                 <ul>
-                    <li>Remember you <b>must</b> create a biblio</li>
-                    <li>You <b>must</b> select a supplier</li>
+                    <li>The subscription <b>must</b> be associated with a bibliographic record.</li>
+                    <li>You <b>must</b> select a vendor if you wish to generate claims.</li>
                 </ul></div>
             
 
@@ -893,10 +897,10 @@ window.onload = irregular_order();
 <div class="yui-u">
 <div id="subscription_form_planning">
 	<fieldset class="rows">
-	<legend>Planning</legend>
+	<legend>Serials planning</legend>
     <ol>
         <li>
-           <label for="firstacquidate"> First Issue ETA:</label>
+           <label for="firstacquidate"> First issue publication date:</label>
             
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;" />
@@ -925,9 +929,9 @@ window.onload = irregular_order();
                 <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
                 <option value="" selected="selected">-- please choose --</option>
                 <!-- TMPL_IF name="periodicity16" -->
-                <option value="16" selected="selected">Without Periodicity</option>
+                <option value="16" selected="selected">Without periodicity</option>
                 <!-- TMPL_ELSE -->
-                    <option value="16">Without Periodicity</option>
+                    <option value="16">Without periodicity</option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity48" -->
                 <option value="48" selected="selected">Unknown</option>
@@ -1008,9 +1012,9 @@ window.onload = irregular_order();
                     <option value="11">1/2 years</option>
                 <!-- /TMPL_IF -->
                 </select></li>
-				<li><label for="manuallist"> Manual History:</label> <input type="checkbox" name="manualhist" id="manuallist" value="1" /></li>
+				<li><label for="manuallist"> Manual history:</label> <input type="checkbox" name="manualhist" id="manuallist" value="1" /></li>
         <li>
-           <label for="numberpattern"> Numbering Pattern:</label>
+           <label for="numberpattern"> Numbering pattern:</label>
             
                 <select name="numbering_pattern" size="1" id="numberpattern" onchange="num_pattern()">
                     <option value="" selected="selected">-- please choose --</option>
@@ -1060,10 +1064,10 @@ window.onload = irregular_order();
                 <li id="irregularity"></li>
    	           <li id="displayexample"></li>
         <li>
-           <label for="startdate"> Begins On: (*)</label>
+           <label for="startdate"> Subscription start date: (*)</label>
             
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" />
+                <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" style="border-width: 0px;" />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -1084,7 +1088,7 @@ window.onload = irregular_order();
             
         </li>
         <li>
-            <label for="subtype">Subscription length</label>
+            <label for="subtype">Subscription length:</label>
             
                 <select name="subtype" id="subtype">
                     <!-- TMPL_LOOP NAME="subtype" -->
@@ -1165,45 +1169,36 @@ window.onload = irregular_order();
     </ol>
 	</fieldset>
 </div>
+    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" />
+</div>
+
+</form>
+</div>
+
 <!--TMPL_IF Name="history"-->
 <div id="subscription_form_history">
-    <h2>History</h2>
+    <h2>Subscription history</h2>
     <table>
         <tr>
-          <td>Starting date</td>
-          <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /> (the date of the 1st subscription)</td>
+          <td>Subscription start date</td>
+          <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /> (start date of the 1st subscription)</td>
         </tr>
         <tr>
-          <td>Ending date</td>
-          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty subscription is still active)</td>
+          <td>Subscription end date</td>
+          <td><input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" />(if empty, subscription is still active)</td>
         </tr>
         <tr>
             <td>Received issues</td>
-            <td><textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></td>
+            <td><textarea name="recievedlist" cols="60" rows="5" disabled="true" ><!-- TMPL_VAR name="recievedlist" --></textarea></td>
         </tr>
         <tr>
             <td>Missing issues</td>
-            <td><textarea name="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea></td>
-        </tr>
-        <tr>
-            <td>OPAC notes</td>
-            <td><textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></td>
-        </tr>
-        <tr>
-            <td>Librarian notes</td>
-            <td><textarea name="librariannote" cols="60" rows="5"><!-- TMPL_VAR name="librariannote" --></textarea></td>
+            <td><textarea name="missinglist" cols="60" rows="5" disabled="true"><!-- TMPL_VAR name="missinglist" --></textarea></td>
         </tr>
     </table>
 </div>
 <!--/TMPL_IF-->
 
-
-    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" />
-</div>
-
-</form>
-
-</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

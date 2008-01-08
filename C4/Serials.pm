@@ -1354,13 +1354,13 @@ sub NewSubscription {
     my $subscriptionid = $dbh->{'mysql_insertid'};
     $query             = qq(
         INSERT INTO subscriptionhistory
-            (biblionumber, subscriptionid, histstartdate, enddate, missinglist, recievedlist, opacnote, librariannote)
+            (biblionumber, subscriptionid, histstartdate,  opacnote, librariannote)
         VALUES (?,?,?,?,?,?,?,?)
         );
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $subscriptionid,
         format_date_in_iso($startdate),
-        0, "", "", "", "$notes" );
+        $notes,$internalnotes );
 
    # reread subscription to get a hash (for calculation of the 1st issue number)
     $query = qq(
