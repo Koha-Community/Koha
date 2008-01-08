@@ -64,9 +64,7 @@ my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 # FIXME - POD
 sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
-    if ( !$query ) {
-        warn "no query in gettemplate";
-    }
+    ($query) or warn "no query in gettemplate";
     my $htdocs;
     if ( $interface ne "intranet" ) {
         $htdocs = C4::Context->config('opachtdocs');
@@ -140,13 +138,15 @@ sub gettemplate {
 # FIXME - POD
 sub themelanguage {
     my ( $htdocs, $tmpl, $interface, $query ) = @_;
+    ($query) or warn "no query in themelanguage";
 
 	# Set some defaults for language and theme
 	# First, check the user's preferences
 	my $lang;
 	my $http_accept_language = regex_lang_subtags($ENV{HTTP_ACCEPT_LANGUAGE})->{language};
-	$lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
-
+	if ($http_accept_language) {
+		$lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
+	} 
 	# But, if there's a cookie set, obey it
 	$lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
 
@@ -160,23 +160,20 @@ sub themelanguage {
     if ( $interface eq "intranet" ) {
         @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
-        pop @languages, $lang if $lang;
+        pop @languages, $lang if $lang;		# FIXME: pop takes only 1 arg. and if $lang always TRUE!
     }
     else {
-
       # we are in the opac here, what im trying to do is let the individual user
       # set the theme they want to use.
       # and perhaps the them as well.
         #my $lang = $query->cookie('KohaOpacLanguage');
-        if ($lang) {
-
+        if ($lang) {						# FIXME: if $lang always TRUE!
             push @languages, $lang;
-            @themes = split " ", C4::Context->preference("opacthemes");
         }
         else {
             @languages = split " ", C4::Context->preference("opaclanguages");
-            @themes    = split " ", C4::Context->preference("opacthemes");
         }
+        @themes = split " ", C4::Context->preference("opacthemes");
     }
 
  # searches through the themes and languages. First template it find it returns.
