@@ -147,7 +147,7 @@ else {
               || $DEBUG
               && warn( "" . $oConnection[$s]->errmsg() );
             $serverhost[$s] = $server->{host};
-            $encoding[$s]   = $server->{syntax};
+            $encoding[$s]   = $server->{encoding};
             $s++;
         }    ## while fetch
     }    # foreach
@@ -198,7 +198,7 @@ else {
                     my $rec = $oResult[$k]->record($i);
                     my $marcrecord;
                     $marcdata   = $rec->raw();
-                    $marcrecord = FixEncoding($marcdata);
+                    $marcrecord = FixEncoding($marcdata,$encoding[$k]);
 ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
