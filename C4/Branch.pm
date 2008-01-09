@@ -480,12 +480,20 @@ sets the data from the editbranch form, and writes to the database...
 =cut
 
 sub ModBranchCategoryInfo {
-
     my ($data) = @_;
     my $dbh    = C4::Context->dbh;
-    my $sth    = $dbh->prepare("replace branchcategories (categorycode,categoryname,codedescription,categorytype) values (?,?,?,?)");
-    $sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'} );
-    $sth->finish;
+	if ($data->{'add'}){
+		# we are doing an insert
+		my $sth   = $dbh->prepare("INSERT INTO branchcategories (categorycode,categoryname,codedescription,categorytype) VALUES (?,?,?,?)");
+		$sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'} );
+		$sth->finish();		
+	}
+	else {
+		# modifying
+		my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=? WHERE categorycode=?");
+		$sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},uc( $data->{'categorycode'} ) );
+		$sth->finish();
+	}
 }
 
 =head2 DeleteBranchCategory

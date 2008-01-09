@@ -223,6 +223,11 @@
     <h3><!-- TMPL_IF NAME="categorycode" -->Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Add Group<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
     <input type="hidden" name="op" value="addcategory_validate" />
+	<!-- TMPL_IF NAME="categorycode" -->
+	<input type="hidden" name="add" value="0">
+	<!-- TMPL_ELSE -->
+	<input type="hidden" name="add" value="1">
+	<!-- /TMPL_IF -->
     <fieldset class="rows">
         
         <ol><li>
