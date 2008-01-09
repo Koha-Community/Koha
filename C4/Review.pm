@@ -77,19 +77,18 @@ sub savereview {
     my $dbh   = C4::Context->dbh;
     my $query = "INSERT INTO reviews (borrowernumber,biblionumber,
 	review,approved,datereviewed) VALUES 
-  (?,?,?,?,now())";
+  (?,?,?,0,now())";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $biblionumber, $review, 0 );
+    $sth->execute( $borrowernumber, $biblionumber, $review);
     $sth->finish();
 }
 
 sub updatereview {
     my ( $biblionumber, $borrowernumber, $review ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "UPDATE reviews SET review=?,datereviewed=now(),approved=?
-  WHERE borrowernumber=? and biblionumber=?";
+    my $query = "UPDATE reviews SET review=?,datereviewed=now(),approved=0  WHERE borrowernumber=? and biblionumber=?";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $review, 0, $borrowernumber, $biblionumber );
+    $sth->execute( $review, $borrowernumber, $biblionumber );
     $sth->finish();
 }
 
