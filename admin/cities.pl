@@ -88,16 +88,16 @@ if ($op eq 'add_form') {
  	my $sth;
 	
 	if ($input->param('cityid') ){
-		$sth=$dbh->prepare("replace cities (cityid,city_name,city_zipcode) values (?,?,?) ");
-		$sth->execute(map { $input->param($_) } ('cityid','city_name','city_zipcode'));
+		$sth=$dbh->prepare("UPDATE cities SET city_name=?,city_zipcode=? WHERE cityid=?");
+		$sth->execute($input->param('city_name'),$input->param('city_zipcode'),$input->param('cityid'));
 	
 	}
 	else{	
-		$sth=$dbh->prepare("replace cities (city_name,city_zipcode) values (?,?)");
-		$sth->execute(map { $input->param($_) } ('city_name','city_zipcode'));
+		$sth=$dbh->prepare("INSERT INTO cities (city_name,city_zipcode) values (?,?)");
+		$sth->execute($input->param('city_name'),$input->param('city_zipcode'));
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=cities.pl\"></html>";
+	print $input->redirect("/cgi-bin/koha/admin/cities.pl");
 	exit;
 # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
