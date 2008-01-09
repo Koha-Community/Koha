@@ -75,14 +75,14 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('942', '2', 'Source of classification or shelving scheme', 'Source of classification or shelving scheme', 0, 0, 'biblioitems.cn_source', 9, 'cn_source', '', '', NULL, 0, '', '', '', NULL),
 		('942', '6', 'Koha normalized classification for sorting', 'Koha normalized classification for sorting', 0, 0, 'biblioitems.cn_sort', -1, '', '', '', 0, 7, '', '', '', NULL),
 		('942', 'a', 'Institution code [OBSOLETE]', 'Institution code [OBSOLETE]', 0, 0, '', 9, '', '', '', NULL, -5, '', '', '', NULL),
-		('942', 'c', 'Koha (default) item type', 'Koha item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
+		('942', 'c', 'Koha [default] item type', 'Koha item type', 0, 1, 'biblioitems.itemtype', 9, 'itemtypes', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'e', 'Edition', 'Edition', 0, 0, 'biblioitems.cn_edition', 9, 'CN_EDITION', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'h', 'Classification part', 'Classification part', 0, 0, 'biblioitems.cn_class', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'i', 'Item part', 'Item part', 1, 0, 'biblioitems.cn_item', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'k', 'Call number prefix', 'Call number prefix', 0, 0, 'biblioitems.cn_prefix', 9, '', '', '', NULL, 0, '', '', '', NULL),
 		('942', 'm', 'Call number suffix', 'Call number suffix', 0, 0, 'biblioitems.cn_suffix', 9, '', '', '', 0, 0, '', '', '', NULL),
 		('942', 'n', 'Suppress in OPAC', 'Suppress in OPAC', 0, 0, NULL, 9, '', '', '', 0, 0, '', '', '', NULL),
-		('942', 's', 'Serial record flag', 'Serial record', 0, 0, 'biblio.serial', 9, '', '', '', NULL, -5, '', '', '', NULL),;
+		('942', 's', 'Serial record flag', 'Serial record', 0, 0, 'biblio.serial', 9, '', '', '', NULL, -5, '', '', '', NULL);
 
 
 -- ******************************************************

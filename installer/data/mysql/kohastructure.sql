@@ -1538,7 +1538,7 @@ CREATE TABLE `serial` (
   `itemnumber` text default NULL,
   `claimdate` date default NULL,
   `routingnotes` text,
-  PRIMARY KEY  (`serialid`),
+  PRIMARY KEY  (`serialid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1810,7 +1810,7 @@ CREATE TABLE `z3950servers` (
   `icon` text,
   `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
-  `encoding` text NULL default 'utf8',
+  `encoding` text default NULL,
   `description` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
