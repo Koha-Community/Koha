@@ -89,16 +89,16 @@ if ($op eq 'add_form') {
  	my $sth;
 	
 	if ($input->param('roadtypeid') ){
-		$sth=$dbh->prepare("replace roadtype (roadtypeid,road_type) values (?,?) ");
-		$sth->execute(map { $input->param($_) } ('roadtypeid','road_type'));
+		$sth=$dbh->prepare("UPDATE roadtype SET road_type=? WHERE roadtypeid=?");
+		$sth->execute($input->param('roadtypeid'),$input->param('road_type'));
 	
 	}
 	else{	
-		$sth=$dbh->prepare("replace roadtype (road_type) values (?)");
-		$sth->execute(map { $input->param($_) } ('road_type'));
+		$sth=$dbh->prepare("INSERT INTO roadtype (road_type) VALUES (?)");
+		$sth->execute($input->param('road_type'));
 	}
 	$sth->finish;
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=roadtype.pl\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/roadtype.pl");
 	exit;
 
 # END $OP eq ADD_VALIDATE
