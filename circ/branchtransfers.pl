@@ -31,6 +31,7 @@ use C4::Items;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Branch; # GetBranches
 use C4::Koha;
+use C4::Members;
 
 ###############################################
 #  Getting state
@@ -209,6 +210,12 @@ foreach my $code ( keys %$messages ) {
 
     if ( $code eq 'WasReturned' ) {
         $err{errwasreturned} = 1;
+		$err{borrowernumber}=$messages->{'WasReturned'};
+		my $borrower = GetMember($messages->{'WasReturned'},'borrowernumber');
+		$err{title}=$borrower->{'title'};
+		$err{firstname}=$borrower->{'firstname'};
+		$err{surname}=$borrower->{'surname'};
+		$err{cardnumber} =$borrower->{'cardnumber'};
     }
     push( @errmsgloop, \%err );
 }

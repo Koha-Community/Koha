@@ -142,8 +142,9 @@
                         <li>Item is already at destination library.</li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errwasreturned" -->
-                        <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->"><!-- TMPL_VAR Name="borrowernumber" --></a>
-<!-- TMPL_VAR Name="name" --> and has been returned.</li>
+                        <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->">
+<!-- TMPL_VAR Name="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+(<!--TMPL_VAR NAME="cardnumber" -->)</a> and has been returned.</li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
 			</ul></div><!-- /yui-u -->
