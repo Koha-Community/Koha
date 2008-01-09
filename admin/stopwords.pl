@@ -104,7 +104,7 @@ if ($op eq 'add_form') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
 	my @tab = split / |,/, $input->param('word');
-	my $sth=$dbh->prepare("replace stopwords (word) values (?)");
+	my $sth=$dbh->prepare("INSERT INTO stopwords (word) VALUES (?)");
 	foreach my $insert_value (@tab) {
 		$sth->execute($insert_value);
 	}
