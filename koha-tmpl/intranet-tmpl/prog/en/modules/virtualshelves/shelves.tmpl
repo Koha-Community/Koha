@@ -85,48 +85,46 @@ function confirmDelete(s,n){
 <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
     <table>
             <tr>
-                <th class="checkall">
-                   &nbsp;
-                </th>
-                <th>&nbsp;</th>
+                <th class="checkall">&nbsp;</th>
+                <th>Type</th>
                 <th>Title</th>
+                <th>Author</th>
                 <th>Call No.</th>
                 <th>&nbsp;</th>
             </tr>
-        <!-- TMPL_LOOP NAME="itemsloop" -->
-            <!-- TMPL_IF name="color" -->
-            <tr class="highlight">
-            <!-- TMPL_ELSE -->
-            <tr>
-            <!-- /TMPL_IF -->
-                    <td>
-                        <input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
-                    </td>
-                    <td>
-                        <img src="<!-- TMPL_VAR NAME="themelang" -->/../img/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-                    </td>
-                    <td> <p>
-                <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                            <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
-                            </a>
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                                <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                    <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
-                                </a>
-                            <!-- TMPL_ELSE -->
-                                <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                    <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
-                                </a>
-                            <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                    </p>
-                    <p><!-- TMPL_VAR NAME="author" --></p></td>
-                    <td><!-- TMPL_VAR NAME="classification" --></td>
-                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></td>
-        </tr>
-        <!-- /TMPL_LOOP --><!-- /itemsloop -->
+		<!-- TMPL_LOOP NAME="itemsloop" -->
+			<!-- TMPL_IF name="color" -->
+			<tr class="highlight">
+			<!-- TMPL_ELSE -->
+			<tr>
+			<!-- /TMPL_IF -->
+			<td>
+				<input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
+			</td>
+			<td>
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+			</td>
+			<td>
+			<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+				<a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+				<a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+				<!-- TMPL_ELSE -->
+				<a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+			<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a>
+			</td>
+			<td><!-- TMPL_VAR NAME="author" --></td>
+			<td><!-- TMPL_VAR NAME="classification" --></td>
+			<td>
+			<!-- TMPL_UNLESS name="notforloan" -->
+			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
+			<!-- /TMPL_UNLESS -->
+			</td>
+			</tr>
+		<!-- /TMPL_LOOP --><!-- /itemsloop -->
     </table>
             </fieldset>
         <fieldset class="action">

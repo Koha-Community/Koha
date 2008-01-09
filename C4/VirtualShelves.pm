@@ -356,8 +356,9 @@ sub ShelfPossibleAction {
     my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
     my ( $owner, $category ) = $sth->fetchrow;
-    return 1 if (($category >= 3 or $owner eq $user) && $action eq 'manage' );
-    return 1 if (($category >= 2 or $owner eq $user) && $action eq 'view' );
+    return 1 if ($owner eq $user);
+    return 1 if ( $category >= 3);
+    return 1 if (($category >= 2) && $action eq 'view' );
     return 0;
 }
 

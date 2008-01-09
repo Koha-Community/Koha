@@ -156,11 +156,13 @@ SWITCH: {
 			foreach (grep {$i++ % 2} @$items) {		# every other item
 				$_->{toggle} = 1;
 			}
+			my $manageshelf = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
+			($manageshelf) and $showadd = 1;
             $template->param(
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
                 viewshelf   => $query->param('viewshelf'),
-                manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
+                manageshelf => $manageshelf,
                 itemsloop   => $items,
             );
         } # else {;}  # FIXME - some kind of warning *may* be in order
@@ -227,11 +229,11 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 		$line{'firstname'} = $shelflist->{$element}->{'firstname'};
 		$line{ 'surname' } = $shelflist->{$element}->{ 'surname' };
 	}
-	if ($shelflist->{$element}->{'category'} eq 2) {
-		push (@shelvesloop,     \%line);
-	} elsif ($shelflist->{$element}->{'category'} eq 1) {
+	if ($shelflist->{$element}->{'category'} eq '1') {
         push (@shelveslooppriv, \%line);
-    }
+    } else {
+		push (@shelvesloop,     \%line);
+	}
 }
 
 $template->param(
