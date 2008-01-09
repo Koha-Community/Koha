@@ -113,9 +113,16 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("REPLACE printers (printername,printqueue,printtype) values (?,?,?)");
-	$sth->execute($input->param('printername'),$input->param('printqueue'),$input->param('printtype'));
-	$sth->finish;
+	if ($input->param('add')){
+		my $sth=$dbh->prepare("INSERT INTO printers (printername,printqueue,printtype) VALUES (?,?,?)");
+		$sth->execute($input->param('printername'),$input->param('printqueue'),$input->param('printtype'));
+		$sth->finish;
+	}
+	else {
+		my $sth=$dbh->prepare("UPDATE printers SET printqueue=?,printtype=? WHERE printername=?");
+		$sth->execute($input->param('printqueue'),$input->param('printtype'),$input->param('printername'));
+		$sth->finish;
+	}
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
