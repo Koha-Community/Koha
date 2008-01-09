@@ -148,9 +148,18 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("replace letter (module,code,name,title,content) values (?,?,?,?,?)");
-	$sth->execute(map {$input->param('module')} qw(code name title content));
-	$sth->finish;
+	if ($query->param('add')){
+		# need to do an insert
+		my $sth=$dbh->prepare("INSERT INTO letter  (module,code,name,title,content) VALUES (?,?,?,?,?)");
+		$sth->execute(map {$input->param('module')} qw(code name title content));
+		$sth->finish;
+	}
+	else {
+		# do an update
+		my $sth=$dbh->prepare("UPDATE letter SET module=?,name=?,title=?,content=? WHERE code=?");
+		$sth->execute(map {$input->param('module')} qw(name title content code));
+		$sth->finish;
+	}
 	print $input->redirect("letter.pl");
 	exit;
 ################## DELETE_CONFIRM ##################################

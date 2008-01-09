@@ -159,6 +159,11 @@
 		<form action="/cgi-bin/koha/tools/letter.pl" name="Aform" method="post">
 		<input type="hidden" name="op" value="add_validate" />
 		<input type="hidden" name="checked" value="0" />
+		<!-- TMPL_IF name="modify" -->
+		<input type="hidden" name="add" value="0" />
+		<!-- TMPL_ELSE -->
+		<input type="hidden" name="add" value="1" />
+		<!-- /TMPL_IF -->
 		<fieldset class="rows">
 		<legend><!-- TMPL_IF name="modify" -->Modify notice<!-- TMPL_ELSE -->Add notice<!-- /TMPL_IF --></legend>
 		<ol>
