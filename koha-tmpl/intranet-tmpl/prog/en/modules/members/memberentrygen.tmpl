@@ -35,9 +35,9 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <!-- TMPL_ELSE --> 
 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> &rsaquo; <strong>Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"-->Staff <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></strong></div>
+patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></strong><!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<!-- TMPL_IF NAME="opadd" --><div id="doc" class="yui-t7"><!-- TMPL_ELSE --><div id="doc3" class="yui-t2"><!-- /TMPL_IF -->
    
    <div id="bd">
 	<div id="yui-main">
@@ -59,8 +59,8 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 	<!-- TMPL_IF NAME="check_member" -->
 		<p>
 		<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
-			<div id="problem">
-				Duplicate suspected
+			<div class="dialog error">
+				<h3>Duplicate suspected</h3>
 				<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >Detail</a>
 				Duplicate ?
 				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&amp;category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a> 
@@ -81,7 +81,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 		</div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF Name="nok" -->
-		<div id="problem">
+		<div class="dialog error">
 			<p>The following fields are wrong. Please fix them.</p>
 			<ul>
 			<!-- TMPL_IF NAME="ERROR_login_exist" -->
@@ -175,7 +175,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
                 <label for="dateofbirth">
                 <!-- /TMPL_IF-->
                 Date of birth: </label>
-                <input type="text" id="dateofbirth" name="dateofbirth" size="20" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateofbirth);"<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+				
+	<!-- TMPL_IF NAME="metric" -->			
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+<!-- TMPL_ELSE -->
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="<!-- TMPL_VAR NAME="dateofbirth" -->" />
+<!-- /TMPL_IF -->
+
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
         <script language="JavaScript" type="text/javascript">
             Calendar.setup(
@@ -209,16 +215,28 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 			Other name: </label>
 			<input type="text" id="othernames" name="othernames" size="20"  value="<!-- TMPL_VAR NAME="othernames" -->" />
 <!-- TMPL_IF NAME="mandatoryothernames" --><span class="required">Required</span><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="I" --><input type="hidden" name="sex" value="N" /><!-- /TMPL_IF -->
 		</li>
-    <!--TMPL_IF Name="I"-->
-        <input type="hidden" name="sex" value="N" />
-    <!--TMPL_ELSE-->
-		<li class="radio">  
-				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F"  <!-- TMPL_IF NAME="female" --> checked="checked" <!-- /TMPL_IF --> />
-				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" <!-- TMPL_IF NAME="male" --> checked="checked" <!-- /TMPL_IF --> />
-				<label for="sex-male">? </label><input type="radio" name="sex" id="sex-male" value="" <!-- TMPL_IF NAME="none" --> checked="checked" <!-- /TMPL_IF --> />
+    <!--TMPL_UNLESS Name="I"-->
+		<li class="radio">
+		
+		<!-- TMPL_IF NAME="female" -->
+				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" checked="checked"  />
+<!-- TMPL_ELSE -->
+				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
+<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="male" -->
+		<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" checked="checked" />
+<!-- TMPL_ELSE -->
+				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="none" -->
+				<label for="sex-none">? </label><input type="radio" name="sex" id="sex-none" value=""  checked="checked"  />
+<!-- TMPL_ELSE -->
+				<label for="sex-none">? </label><input type="radio" name="sex" id="sex-none" value="" />
+<!-- /TMPL_IF -->
        	</li>
-    <!--/TMPL_IF-->
+    <!--/TMPL_UNLESS-->
 <!--TMPL_IF EXPR="showguarantor"-->  <li><label for="">Guarantor: </label>
   <select name="relationship" id="relationship" >
     <!-- TMPL_LOOP name="relshiploop" -->
@@ -443,18 +461,18 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
         <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
 		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
             <li>
-                <!-- TMPL_IF NAME="mandatorycontacnote" -->
-                <label for="contacnote" class="required">
+                <!-- TMPL_IF NAME="mandatorycontactnote" -->
+                <label for="contactnote" class="required">
                 <!--TMPL_ELSE-->
-                <label for="contacnote">
+                <label for="contactnote">
                 <!-- /TMPL_IF-->
                 Contact note: </label>
                 <textarea id="contactnote" name="contactnote" cols="40" rows="2"><!-- TMPL_VAR NAME="contactnote" --></textarea>
-        <!-- TMPL_IF NAME="mandatorycontacnote" --><span class="required">Required</span><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="mandatorycontactnote" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
 			</ol>
 		</fieldset>
-		<fieldset class="rows" id="memberentry_address">       
+		<fieldset class="rows" id="memberentry_altaddress">       
 		    <legend>Alternate Contact</legend><ol>
 			<li>
 			    <!-- TMPL_IF NAME="mandatoryaltcontactfirstname" -->
@@ -463,7 +481,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactfirstname">
 				<!-- /TMPL_IF -->
 				Firstname:</label>
-				<input type="text" name="altcontactfirstname" value="<!-- TMPL_VAR NAME="altcontactfirstname" -->">
+				<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="<!-- TMPL_VAR NAME="altcontactfirstname" -->" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactfirstname" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -473,7 +491,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactsurname">
 				<!-- /TMPL_IF -->
 				Surname:</label>
-				<input type="text" name="altcontactsurname" value="<!-- TMPL_VAR NAME="altcontactsurname" -->">
+				<input type="text" name="altcontactsurname" id="altcontactsurname" value="<!-- TMPL_VAR NAME="altcontactsurname" -->" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactsurname" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -483,7 +501,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactaddress1">
 				<!-- /TMPL_IF -->
 				Address line 1:</label>
-				<input type="text" name="altcontactaddress1" value="<!-- TMPL_VAR NAME="altcontactaddress1" -->" size="40">
+				<input type="text" name="altcontactaddress1" id="altcontactaddress1" value="<!-- TMPL_VAR NAME="altcontactaddress1" -->" size="40" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactaddress1" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -493,7 +511,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactaddress2">
 				<!-- /TMPL_IF -->
 				Address line 2:</label>
-				<input type="text" name="altcontactaddress2" value="<!-- TMPL_VAR NAME="altcontactaddress2" -->" size="40">
+				<input type="text" name="altcontactaddress2" id="altcontactaddress2" value="<!-- TMPL_VAR NAME="altcontactaddress2" -->" size="40" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactaddress2" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -503,7 +521,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactaddress3">
 				<!-- /TMPL_IF -->
 				City, State:</label>
-				<input type="text" name="altcontactaddress3" value="<!-- TMPL_VAR NAME="altcontactaddress3" -->" size="40">
+				<input type="text" name="altcontactaddress3" id="altcontactaddress3" value="<!-- TMPL_VAR NAME="altcontactaddress3" -->" size="40" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactaddress3" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -513,7 +531,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactzipcode">
 				<!-- /TMPL_IF -->
 				ZIP/Post code:</label>
-				<input type="text" name="altcontactzipcode" value="<!-- TMPL_VAR NAME="altcontactzipcode" -->" size="5">
+				<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="<!-- TMPL_VAR NAME="altcontactzipcode" -->" size="5" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactzipcode" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
 			<li>
@@ -523,7 +541,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 				<label for="altcontactphone">
 				<!-- /TMPL_IF -->
 				Phone:</label>
-				<input type="text" name="altcontactphone" value="<!-- TMPL_VAR NAME="altcontactphone" -->">
+				<input type="text" name="altcontactphone" id="altcontactphone" value="<!-- TMPL_VAR NAME="altcontactphone" -->" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactphone" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
             </ol>
@@ -577,12 +595,21 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
         <label for="categorycode">Category: </label>
         <select id="categorycode" name="categorycode">
         <!-- TMPL_LOOP NAME="typeloop" -->
-        <optgroup label="<!-- TMPL_IF EXPR="typename eq 'C'" -->Child<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'A'" -->Adult<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'S'" -->Staff<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'I'" -->Organisation<!-- /TMPL_IF --><!-- TMPL_IF EXPR="typename eq 'P'" -->Professional<!-- /TMPL_IF -->">
+		<!-- TMPL_IF EXPR="typename eq 'C'" --><optgroup label="Child"><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="typename eq 'A'" --><optgroup label="Adult"><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="typename eq 'S'" --><optgroup label="Staff"><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="typename eq 'I'" --><optgroup label="Organisation"><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="typename eq 'P'" --><optgroup label="Professional"><!-- /TMPL_IF -->
                 <!-- TMPL_LOOP NAME="categoryloop" -->
-                <option value="<!-- TMPL_VAR NAME="categorycode" -->" <!-- TMPL_IF NAME="categorycodeselected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="categoryname" --></option>
+				<!-- TMPL_IF NAME="categorycodeselected" -->
+               <option value="<!-- TMPL_VAR NAME="categorycode" -->" selected="selected"><!-- TMPL_VAR NAME="categoryname" --></option>
+				<!-- TMPL_ELSE -->
+<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="categoryname" --></option>
+				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
         </optgroup>
         <!-- /TMPL_LOOP -->
+		</select>
     <!-- TMPL_ELSE -->
         <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a professionnal<!--/TMPL_IF--><!--TMPL_IF Name="S"-->a Staff Member<!--/TMPL_IF-->.</span>
               <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
@@ -693,7 +720,13 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 			<label for="userid">
 			<!-- /TMPL_IF-->
 			OPAC Login: </label>
-			<input type="text" id="userid" name="userid" size="20" <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="userid" -->" />
+
+<!-- TMPL_IF NAME="NoUpdateLogin" -->
+<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="<!-- TMPL_VAR NAME="userid" -->" />
+<!-- TMPL_ELSE -->
+<input type="text" id="userid" name="userid" size="20" value="<!-- TMPL_VAR NAME="userid" -->" />
+<!-- /TMPL_IF -->
+
 	  <!-- TMPL_IF NAME="mandatoryuserid" --><span class="required">Required</span><!-- /TMPL_IF -->
 		</li>
 		<li>
@@ -704,13 +737,25 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 			<!-- /TMPL_IF-->
 			Password: </label>
 			<!--TMPL_IF NAME="opadd"-->
-				<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="<!-- TMPL_VAR NAME="password" -->" />
+			<!-- TMPL_IF NAME="NoUpdateLogin" -->
+				<input type="text" id="password" name="password" size="20"  disabled="disabled" value="<!-- TMPL_VAR NAME="password" -->" />
+<!-- TMPL_ELSE -->
+				<input type="text" id="password" name="password" size="20" value="<!-- TMPL_VAR NAME="password" -->" />
+<!-- /TMPL_IF -->
 			<!--TMPL_ELSE-->
-				<!--TMPL_IF NAME="password"-->
-					<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="****" />
-				<!--TMPL_ELSE-->
-					<input type="text" id="password" name="password" size="20"  <!-- TMPL_IF NAME="NoUpdateLogin" -->disabled='true'<!-- /TMPL_IF --> value="" />
-				<!--/TMPL_IF-->
+			<!--TMPL_IF NAME="password"-->
+				<!-- TMPL_IF NAME="NoUpdateLogin" -->
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="****" />
+				<!-- TMPL_ELSE -->
+					<input type="text" id="password" name="password" size="20" value="****" />
+				<!-- /TMPL_IF -->
+			<!--TMPL_ELSE-->
+				<!-- TMPL_IF NAME="NoUpdateLogin" -->
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="" />
+				<!-- TMPL_ELSE -->
+					<input type="text" id="password" name="password" size="20" value="" />
+				<!-- /TMPL_IF -->
+			<!--/TMPL_IF-->
 			<!--/TMPL_IF-->
 	  <!-- TMPL_IF NAME="mandatorypassword" --><span class="required">Required</span><!-- /TMPL_IF -->
 		</li></ol>
@@ -760,8 +805,8 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --><!-- /
 </div>
 </div>
 
-<div class="yui-b">
+<!-- TMPL_UNLESS NAME="opadd" --><div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-menu.inc" -->
-</div>
+</div><!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

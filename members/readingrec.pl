@@ -81,6 +81,7 @@ for (my $i=0;$i<$count;$i++){
 	( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
 
 $template->param(
+						readingrecordview => 1,
 						biblionumber => $data->{'biblionumber'},
 						title => $data->{'title'},
 						initials => $data->{'initials'},
