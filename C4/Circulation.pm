@@ -569,12 +569,6 @@ The borrower number of the last three patrons who borrowed this item.
 sub itemissues {
     my ( $bibitem, $biblio ) = @_;
     my $dbh = C4::Context->dbh;
-
-    # FIXME - If this function die()s, the script will abort, and the
-    # user won't get anything; depending on how far the script has
-    # gotten, the user might get a blank page. It would be much better
-    # to at least print an error message. The easiest way to do this
-    # is to set $SIG{__DIE__}.
     my $sth =
       $dbh->prepare("Select * from items where items.biblioitemnumber = ?")
       || die $dbh->errstr;
@@ -607,13 +601,8 @@ sub itemissues {
             $data->{'borrower'} = $data2->{'borrowernumber'};
         }
         else {
-            if ( $data->{'wthdrawn'} eq '1' ) {
-                $data->{'date_due'} = 'Cancelled';
-            }
-            else {
-                $data->{'date_due'} = 'Available';
-            }    # else
-        }    # else
+            $data->{'date_due'} = ($data->{'wthdrawn'} eq '1') ? 'Cancelled' : 'Available';
+        }
 
         $sth2->finish;
 
@@ -647,7 +636,7 @@ sub itemissues {
 
 =head2 CanBookBeIssued
 
-$issuingimpossible, $needsconfirmation = 
+( $issuingimpossible, $needsconfirmation ) = 
         CanBookBeIssued( $borrower, $barcode, $duedatespec, $inprocess );
 C<$duedatespec> is a C4::Dates object.
 C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
@@ -794,44 +783,30 @@ sub CanBookBeIssued {
     # See if the item is on reserve.
     my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
-        my $resbor = $res->{'borrowernumber'};
+		my $resbor = $res->{'borrowernumber'};
+		my ( $resborrower, $flags ) = GetMemberDetails( $resbor, 0 );
+		my $branches  = GetBranches();
+		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
         {
-
             # The item is on reserve and waiting, but has been
             # reserved by some other patron.
-            my ( $resborrower, $flags ) =
-              GetMemberDetails( $resbor, 0 );
-            my $branches   = GetBranches();
-            my $branchname =
-              $branches->{ $res->{'branchcode'} }->{'branchname'};
             $needsconfirmation{RESERVE_WAITING} =
 "$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
-
-# CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'}); Doesn't belong in a checking subroutine.
         }
         elsif ( $restype eq "Reserved" ) {
-
             # The item is on reserve for someone else.
-            my ( $resborrower, $flags ) =
-              GetMemberDetails( $resbor, 0 );
-            my $branches   = GetBranches();
-            my $branchname =
-              $branches->{ $res->{'branchcode'} }->{'branchname'};
             $needsconfirmation{RESERVED} =
 "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
         }
     }
     if ( C4::Context->preference("LibraryName") eq "Horowhenua Library Trust" ) {
         if ( $borrower->{'categorycode'} eq 'W' ) {
-            my %issuingimpossible;
-            return ( \%issuingimpossible, \%needsconfirmation );
-        } else {
-            return ( \%issuingimpossible, \%needsconfirmation );
+            my %emptyhash;
+            return ( \%emptyhash, \%needsconfirmation );
         }
-    } else {
-        return ( \%issuingimpossible, \%needsconfirmation );
-    }
+	}
+	return ( \%issuingimpossible, \%needsconfirmation );
 }
 
 =head2 AddIssue
