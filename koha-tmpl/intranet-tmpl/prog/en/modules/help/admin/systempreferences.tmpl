@@ -1,8 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Online Help &rsaquo; System Preferences &rsaquo; System Preferences Administration</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-</head>
-<body>
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
 <h1>System preferences administration</h1>
 <p>This page allows you to set the system preferences that control much of the basic behavior of Koha. These parameters should be set before any other parameters.</p>
@@ -44,7 +40,7 @@
 	</code>
 </li>
 
-<li><b>KohaAdminEmailAddress --</b> The email address that will receive requests from borrowers for modification of their records.</li>
+<li><b>KohaAdminEmailAddress --</b> The email address that will receive requests from patrons for modification of their records.</li>
 
 <li><b>ldapserver and ldapinfos --</b> Koha 2.0 can use Perl LDAP (Lightweight Directory Access Protocol, see http://search.cpan.org/~gbarr/perl-ldap-0.3202/lib/Net/LDAP.pod) to manage user access and privileges. To avoid a useless Perl package for libraries without ldap, all what is related to LDAP has been moved to KohaInstall/modules/C4/Auth_with_ldap.pm. Ask your system administrator to set up LDAP with Auth_with_ldap.pm (perldoc Auth_with_ldap.pm for help). Those 2 parameters are useless in 2.2 and have should not appear on a new install.</li>
 
@@ -54,11 +50,11 @@
 
 <li><b>marcflavour --</b> Your MARC flavor (MARC21 or UNIMARC). This choice tells Koha how to interpret your MARC records.</li>
 
-<li><b>maxoutstanding --</b> The maximum amount of outstanding charges a borrower may have before he/she is barred from making reserve requests. The number represents units of your local currency (e.g. "5" means $5.00, if the dollar is your local currency.)</li>
+<li><b>maxoutstanding --</b> The maximum amount of outstanding charges a patron may have before he/she is barred from making reserve requests. The number represents units of your local currency (e.g. "5" means $5.00, if the dollar is your local currency.)</li>
 
 <li><b>maxreserves --</b> The maximum number of holds a patron can place.</li>
 
-<li><b>noissuescharge --</b> The maximum amount of outstanding charges a borrower may have before he/she is barred from checking out items. The number represents units of your local currency (e.g. "5" means $5.00, if the dollar is your local currency.)</li>
+<li><b>noissuescharge --</b> The maximum amount of outstanding charges a patron may have before he/she is barred from checking out items. The number represents units of your local currency (e.g. "5" means $5.00, if the dollar is your local currency.)</li>
 
 <li><b>opaclanguages --</b> Set your language preference. (Despite the name, this choice controls the language used for all Koha screens, not just the OPAC). The top language in your list will be tried first.</li>
 
@@ -73,4 +69,5 @@
 <li><b>timeout --</b> Inactivity timeout period (in seconds). If a workstation is idle for longer than this period, the user will have to login again.</li>
 
 <li><b>virtualshelves --</b> Set virtual shelves management on or off ("1" or "0"). Users can set up and manage their own "virtual shelves" of favorite library items if this feature is turned on.</li></ul>
-<!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
+
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

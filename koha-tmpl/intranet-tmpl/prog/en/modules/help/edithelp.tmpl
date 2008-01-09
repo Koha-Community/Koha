@@ -1,5 +1,4 @@
-<html>
-<head>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Online Help</title>
 <script language="javascript" type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
 <script language="javascript" type="text/javascript">
@@ -19,20 +18,29 @@ tinyMCE.init({
 	plugin_insertdate_timeFormat : "%H:%M:%S",
 });
 </script>
+<!-- TMPL_IF name="intranetstylesheet" -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="intranetstylesheet" -->" />
+<!-- TMPL_ELSE -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="intranetcolorstylesheet" -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->" />
+<!-- /TMPL_IF -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/help.css" />
 </head>
-<body>
-	<div id="main-compact">
+<body id="help">
 	<h1>Online Help</h1>
 <!-- TMPL_IF NAME="error" -->
 <h5><!-- TMPL_VAR NAME="error" --></h5>
 <!-- /TMPL_IF -->
-<form action="/cgi-bin/koha/edithelp.pl" method=post>
-<input type="hidden" name="referer" value="<!-- TMPL_VAR NAME='referer' -->" />
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME='type' -->" />
+<form action="/cgi-bin/koha/edithelp.pl" method="post">
+<input type="hidden" name="referer" value="<!-- TMPL_VAR NAME="referer" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <textarea name="help" cols="60" rows="20"><!-- TMPL_VAR NAME="help" --></textarea>
-<input type="submit" name="submit" value="Submit" />
+<fieldset class="action"><input type="submit" name="submit" class="submit" value="Submit" /> <a class="cancel" href="#" onclick="history.back(); return false;">Cancel</a></fieldset>
 </form>
-	</div>
 	
-<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+</body>
+</html>
+
 
