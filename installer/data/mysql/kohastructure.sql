@@ -1886,7 +1886,7 @@ CREATE TABLE language_script_mapping (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS serialitems;
-CREATE TABLE serialitem (
+CREATE TABLE serialitems (
         serialid int(11) NOT NULL,
         itemnumber int(11) NOT NULL,
         UNIQUE KEY `serialididx` (`serialid`)
