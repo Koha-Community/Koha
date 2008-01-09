@@ -142,6 +142,7 @@ if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
 
 #     $cnt  =  1;
     $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+	
     $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
@@ -179,6 +180,9 @@ else {
 			  $template->param("guarantor$_" => $guarantor->{$_});
         }
     }
+	if ($category_type eq 'C'){
+		$template->param('C' => 1);
+	}
 }
 
 #Independant branches management
