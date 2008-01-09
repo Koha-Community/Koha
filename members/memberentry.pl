@@ -235,7 +235,7 @@ if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
 		&ModMember(%newdata);    
 	}
 	print scalar ($destination eq "circ") ? 
-		$input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$data{'cardnumber'}") :
+		$input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber") :
 		$input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber") ;
 	exit;		# You can only send 1 redirect!  After that, content or other headers don't matter.
 }
