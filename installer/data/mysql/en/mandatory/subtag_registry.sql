@@ -40,10 +40,10 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'prog', 't', 'Prog','2005-10-16');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'prog', 'i', 'en', 'Prog');
+VALUES( 'prog', 't', 'en', 'Prog');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'prog', 'i', 'fr', 'Prog');
+VALUES( 'prog', 't', 'fr', 'Prog');
 
 -- LANGUAGES
 

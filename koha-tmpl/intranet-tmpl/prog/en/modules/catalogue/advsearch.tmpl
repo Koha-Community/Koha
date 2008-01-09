@@ -112,9 +112,9 @@
 		<option value="">No Limit</option>
 		<!-- TMPL_LOOP NAME="search_languages_loop" -->
 		<!-- TMPL_IF NAME="selected" -->
-		<option value="ln:<!-- TMPL_VAR NAME="language_code" -->" selected="selected"><!-- TMPL_VAR NAME="language_name" --> <!-- TMPL_IF NAME="language_locale_name" -->(<!-- TMPL_VAR NAME="language_locale_name" -->)<!-- /TMPL_IF --></option>
+		<option value="ln:<!-- TMPL_VAR NAME="iso639_2_code" -->" selected="selected"><!-- TMPL_VAR NAME="language_description" --></option>
 		<!-- TMPL_ELSE -->
-		<option value="ln:<!-- TMPL_VAR NAME="language_code" -->"><!-- TMPL_VAR NAME="language_name" --> <!-- TMPL_IF NAME="language_locale_name" -->(<!-- TMPL_VAR NAME="language_locale_name" -->)<!-- /TMPL_IF --></option>
+		<option value="ln:<!-- TMPL_VAR NAME="iso639_2_code" -->"><!-- TMPL_VAR NAME="language_description" --></option>
 		<!-- /TMPL_IF -->
 		
 		<!-- /TMPL_LOOP -->

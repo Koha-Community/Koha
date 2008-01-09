@@ -5,6 +5,7 @@ function _(s) { return s } // dummy function for gettext
  $(document).ready(function() {
  	$(".focus").focus();
 	$('#toplevelmenu').clickMenu(); 
+	$('#i18nMenu').clickMenu();
 	$('#header_search').tabs({
 		onShow: function() {
 	        $('#header_search').find('div:visible').find('input').eq(0).focus();

@@ -667,19 +667,8 @@ else {
 
     # LANGUAGE SELECTION page by default
     # using opendir + language Hash
-
-    my $langavail = getTranslatedLanguages();
-
-    my @languages;
-    foreach (@$langavail) {
-        push @languages,
-          {
-            'value'       => $_->{'language_code'},
-            'description' => $_->{'language_name'}
-          }
-          if ( $_->{'language_code'} );
-    }
-    $template->param( languages => \@languages );
+    my $languages_loop = getTranslatedLanguages();
+    $template->param( installer_languages_loop => $languages_loop );
     if ($dbh) {
         my $rq =
           $dbh->prepare(

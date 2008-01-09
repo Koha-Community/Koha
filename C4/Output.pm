@@ -34,16 +34,16 @@ use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	# set the version for version checking
-	$VERSION = 3.01;
-	require Exporter;
-	@ISA    = qw(Exporter);
-	push @EXPORT, qw(
-		&themelanguage &gettemplate setlanguagecookie pagination_bar
-	);
-	push @EXPORT, qw(
-		&output_html_with_http_headers
-	);
+    # set the version for version checking
+    $VERSION = 3.01;
+    require Exporter;
+    @ISA    = qw(Exporter);
+    push @EXPORT, qw(
+        &themelanguage &gettemplate setlanguagecookie pagination_bar
+    );
+    push @EXPORT, qw(
+        &output_html_with_http_headers
+    );
 }
 
 =head1 NAME
@@ -77,14 +77,14 @@ sub gettemplate {
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
-	# if the template doesn't exist, load the English one as a last resort
-	my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
-	unless (-f $filename) {
-		$lang = 'en';
-		$filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
-	}
+    # if the template doesn't exist, load the English one as a last resort
+    my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
+    unless (-f $filename) {
+        $lang = 'en';
+        $filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
+    }
     my $template       = HTML::Template::Pro->new(
-		filename          => $filename,
+        filename          => $filename,
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
@@ -102,34 +102,16 @@ sub gettemplate {
         lang                => $lang
     );
 
-	# Bidirectionality
-	my $current_lang = regex_lang_subtags($lang);
-	my $bidi;
-	$bidi = get_bidi($current_lang->{script}) if $current_lang->{script};
-
-	# Languages
-	my @template_languages;
-	my $languages_loop = getTranslatedLanguages($interface,$theme);
-
-	for my $language_hashref (@$languages_loop) {
-			$language_hashref->{'current_lang'} = $current_lang->{'language'};
-			$language_hashref->{'native_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'language_code'},'language');
-			#warn "($language_hashref->{'language_code'},$language_hashref->{'current_lang'},$language_hashref->{'script_code'}";
-			$language_hashref->{'locale_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
-			$language_hashref->{'language_description'} = language_get_description($language_hashref->{'language_code'},$language_hashref->{'current_lang'},'language');
-			$language_hashref->{'script_description'} = language_get_description($language_hashref->{'script_code'},$language_hashref->{'current_lang'},'script');
-			$language_hashref->{'region_description'} = language_get_description($language_hashref->{'region_code'},$language_hashref->{'current_lang'},'region');
-			$language_hashref->{'variant_description'} = language_get_description($language_hashref->{'variant_code'},$language_hashref->{'current_lang'},'variant');
-
-		if ($language_hashref->{'language_lang'} eq $lang) {
-			$language_hashref->{current}++;
-		}
-		push @template_languages, $language_hashref;
-	}
-	# load the languages ( for switching from one template to another )
-	$template->param(	languages_loop => \@template_languages,
-						bidi => $bidi
-	);
+    # Bidirectionality
+    my $current_lang = regex_lang_subtags($lang);
+    my $bidi;
+    $bidi = get_bidi($current_lang->{script}) if $current_lang->{script};
+    # Languages
+    my $languages_loop = getTranslatedLanguages($interface,$theme,$lang);
+    $template->param(
+            languages_loop => $languages_loop,
+            bidi => $bidi
+    ) unless @$languages_loop<2;
 
     return $template;
 }
@@ -140,19 +122,18 @@ sub themelanguage {
     my ( $htdocs, $tmpl, $interface, $query ) = @_;
     ($query) or warn "no query in themelanguage";
 
-	# Set some defaults for language and theme
-	# First, check the user's preferences
-	my $lang;
-	my $http_accept_language = regex_lang_subtags($ENV{HTTP_ACCEPT_LANGUAGE})->{language};
-	if ($http_accept_language) {
-		$lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
-	} 
-	# But, if there's a cookie set, obey it
-	$lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
-
-	# Fall back to English
-	$lang = 'en' unless $lang;
-	my $theme = 'prog';
+    # Set some defaults for language and theme
+    # First, check the user's preferences
+    my $lang;
+    my $http_accept_language = regex_lang_subtags($ENV{HTTP_ACCEPT_LANGUAGE})->{language};
+    if ($http_accept_language) {
+        $lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
+    } 
+    # But, if there's a cookie set, obey it
+    $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
+    # Fall back to English
+    $lang = 'en' unless $lang;
+    my $theme = 'prog';
 
     my $dbh = C4::Context->dbh;
     my @languages;
@@ -160,14 +141,14 @@ sub themelanguage {
     if ( $interface eq "intranet" ) {
         @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
-        push @languages, $lang if $lang;
+        @languages = ($lang,@languages) if $lang;
     }
     else {
       # we are in the opac here, what im trying to do is let the individual user
       # set the theme they want to use.
       # and perhaps the them as well.
         #my $lang = $query->cookie('KohaOpacLanguage');
-        if ($lang) {						# FIXME: if $lang always TRUE!
+        if ($lang) {                        # FIXME: if $lang always TRUE!
             push @languages, $lang;
         }
         else {
@@ -178,18 +159,20 @@ sub themelanguage {
 
  # searches through the themes and languages. First template it find it returns.
  # Priority is for getting the theme right.
-  THEME:
+    THEME:
     foreach my $th (@themes) {
         foreach my $la (@languages) {
-            for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
-                $la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-                if ( -e "$htdocs/$th/$la/".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
+            #for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
+                warn "$htdocs/$th/$la/modules/$interface-"."tmpl";
+                #$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
+                if ( -e "$htdocs/$th/$la/modules/$interface-"."tmpl") {
+                #".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
                     $theme = $th;
                     $lang  = $la;
                     last THEME;
                 }
                 last unless $la =~ /[-_]/;
-            }
+            #}
         }
     }
     return ( $theme, $lang );
@@ -363,8 +346,8 @@ sub output_html_with_http_headers ($$$) {
         -type    => 'text/html',
         -charset => 'UTF-8',
         -cookie  => $cookie,
-		-Pragma => 'no-cache',
-		-'Cache-Control' => 'no-cache',
+        -Pragma => 'no-cache',
+        -'Cache-Control' => 'no-cache',
     ), $html;
 }
 

@@ -20,22 +20,22 @@ package C4::Languages;
 
 
 use strict; 
-use warnings;	#FIXME: turn off warnings before release
+use warnings;   #FIXME: turn off warnings before release
 use Carp;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
 BEGIN {
-	$VERSION = 3.00;
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-		&getFrameworkLanguages
-		&getTranslatedLanguages
-		&getAllLanguages
-	);
-	@EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
-	$DEBUG = 0;
+    $VERSION = 3.00;
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
+        &getFrameworkLanguages
+        &getTranslatedLanguages
+        &getAllLanguages
+    );
+    @EXPORT_OK = qw(getFrameworkLanguages getTranslatedLanguages getAllLanguages get_bidi regex_lang_subtags language_get_description accept_language);
+    $DEBUG = 0;
 }
 
 =head1 NAME
@@ -80,9 +80,9 @@ sub getFrameworkLanguages {
 
             if ($dirname eq $language_set->{language_code}) {
                 push @languages, {
-					'language_code'=>$dirname, 
-					'language_description'=>$language_set->{language_description}, 
-					'native_descrition'=>$language_set->{language_native_description} }
+                    'language_code'=>$dirname, 
+                    'language_description'=>$language_set->{language_description}, 
+                    'native_descrition'=>$language_set->{language_native_description} }
             }
         }
     }
@@ -104,7 +104,7 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getTranslatedLanguages {
-    my ($interface, $theme) = @_;
+    my ($interface, $theme, $current_language) = @_;
     my $htdocs;
     my $all_languages = getAllLanguages();
     my @languages;
@@ -114,26 +114,26 @@ sub getTranslatedLanguages {
         $htdocs = C4::Context->config('opachtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             (@languages) = _get_language_dirs($htdocs,$theme);
-            return _build_languages_arrayref($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language);
         }
         else {
             for my $theme ( _get_themes('opac') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _build_languages_arrayref($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language);
         }
     }
     elsif ($interface && $interface eq 'intranet' ) {
         $htdocs = C4::Context->config('intrahtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             @languages = _get_language_dirs($htdocs,$theme);
-            return _build_languages_arrayref($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language);
         }
         else {
-            foreach my $theme ( _get_themes('opac') ) {
+            foreach my $theme ( _get_themes('intranet') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _build_languages_arrayref($all_languages,@languages);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language);
         }
     }
     else {
@@ -145,7 +145,7 @@ sub getTranslatedLanguages {
         foreach my $theme ( _get_themes('opac') ) {
             push @languages, _get_language_dirs($htdocs,$theme);
         }
-        return _build_languages_arrayref($all_languages,@languages);
+        return _build_languages_arrayref($all_languages,\@languages,$current_language);
     }
 }
 
@@ -164,35 +164,25 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getAllLanguages {
-	my @languages_loop;
-	my $dbh=C4::Context->dbh;
-	my $current_language = 'en';
-	my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
-	$sth->execute();
-	while (my $language_subtag_registry = $sth->fetchrow_hashref) {
+    my @languages_loop;
+    my $dbh=C4::Context->dbh;
+    my $current_language = 'en';
+    my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
+    $sth->execute();
+    while (my $language_subtag_registry = $sth->fetchrow_hashref) {
 
-		# pull out all the script descriptions for each language
-		my $sth2= $dbh->prepare('SELECT * FROM language_descriptions WHERE type=\'language\' AND subtag =?');
-		$sth2->execute($language_subtag_registry->{subtag});
+        # pull out all the script descriptions for each language
+        my $sth2= $dbh->prepare("SELECT * FROM language_descriptions LEFT JOIN language_rfc4646_to_iso639 on language_rfc4646_to_iso639.rfc4646_subtag = language_descriptions.subtag WHERE type='language' AND subtag =?");
+        $sth2->execute($language_subtag_registry->{subtag});
 
-		# add the correct description info
-		while (my $language_descriptions = $sth2->fetchrow_hashref) {
-			
-			# Insert the language description using the current language script
-			#if ( $language_subtag_registry->{subtag}
-			if ( $current_language eq $language_descriptions->{lang} ) {
-				$language_subtag_registry->{language_description} = $language_descriptions->{description};
-				#warn "CUR:".$language_subtag_registry->{description};
-			}
-
-			# Insert the language name using the script	native to the language (FIXME: should really be based on script)
-			if  ($language_subtag_registry->{subtag} eq $language_descriptions->{lang}) {
-				$language_subtag_registry->{language_native_description} = $language_descriptions->{description};
-				#warn "NAT: Desc:$language_descriptions->{description} SubtagDesc: $language_subtag_registry->{language_description}";
-			}
-		}	
-		push @languages_loop, $language_subtag_registry;
-	}
+        # add the correct description info
+        while (my $language_descriptions = $sth2->fetchrow_hashref) {
+	    # fill in the ISO6329 code
+	    $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
+            $language_subtag_registry->{language_description} = $language_descriptions->{description};
+        }
+        push @languages_loop, $language_subtag_registry;
+    }
     return \@languages_loop;
 }
 
@@ -232,19 +222,19 @@ Internal function, returns an array of directory names, excluding non-language d
 
 sub _get_language_dirs {
     my ($htdocs,$theme) = @_;
-    my @languages;
+    my @lang_strings;
     opendir D, "$htdocs/$theme";
-    for my $language ( readdir D ) {
-        next if $language =~/^\./;
-        next if $language eq 'all';
-        next if $language =~/png$/;
-        next if $language =~/css$/;
-        next if $language =~/CVS$/;
-        next if $language =~/\.txt$/i;     #Don't read the readme.txt !
-		next if $language =~/img|images/;
-        push @languages, $language;
+    for my $lang_string ( readdir D ) {
+        next if $lang_string =~/^\./;
+        next if $lang_string eq 'all';
+        next if $lang_string =~/png$/;
+        next if $lang_string =~/css$/;
+        next if $lang_string =~/CVS$/;
+        next if $lang_string =~/\.txt$/i;     #Don't read the readme.txt !
+        next if $lang_string =~/img|images/;
+        push @lang_strings, $lang_string;
     }
-        return (@languages);
+        return (@lang_strings);
 }
 
 =head2 _build_languages_arrayref 
@@ -256,51 +246,63 @@ FIXME: this could be rewritten and simplified using map
 =cut
 
 sub _build_languages_arrayref {
-        my ($all_languages,@languages) = @_;
-        my @final_languages;
-        my %seen_languages;
-		my %found_languages;
-		# Loop through the languages, pick the ones that are translated
-        for my $language (@languages) {
+        my ($all_languages,$translated_languages,$current_language) = @_;
+        my @translated_languages = @$translated_languages;
+        my @languages_loop; # the final reference to an array of hashrefs
+        my %seen_languages; # the language tags we've seen
+        my %found_languages;
+        my $language_groups;
+        my $track_language_groups;
+        my $current_language_regex = regex_lang_subtags($current_language);
+        # Loop through the translated languages
+        for my $translated_language (@translated_languages) {
 
-			# separate the language string into its subtag types
-			my $language_subtags_hashref = regex_lang_subtags($language);
-            unless ($seen_languages{$language}) {
-                for my $language_code (@$all_languages) {
-                    if ($language_subtags_hashref->{language} eq $language_code->{'subtag'}) {
-						$language_code->{'language_lang'} = $language;
-						$language_code->{'language_code'} = $language_subtags_hashref->{'language'};
-						$language_code->{'script_code'} = $language_subtags_hashref->{'script'};
-						$language_code->{'region_code'} = $language_subtags_hashref->{'region'};
-						$language_code->{'variant_code'} = $language_subtags_hashref->{'variant'};
-                        push @final_languages, $language_code;
-						$found_languages{$language}++;
-                    }
-                }
-                $seen_languages{$language}++;
-
-				# Handle languages not in our database with their code
-				unless ($found_languages{$language}) {
-					my $language_code;
-					$language_code->{'language_lang'} = $language;
-					$language_code->{'language_code'} = $language;
-					push @final_languages, $language_code;
-				}
-            }
+            # separate the language string into its subtag types
+            my $language_subtags_hashref = regex_lang_subtags($translated_language);
+            
+            # group this language, key by langtag
+            $language_subtags_hashref->{'sublanguage_current'} = 1 if $translated_language eq $current_language;
+            $language_subtags_hashref->{'rfc4646_subtag'} = $translated_language;
+            $language_subtags_hashref->{'native_description'} = language_get_description($language_subtags_hashref->{language},$language_subtags_hashref->{language},'language');
+            $language_subtags_hashref->{'script_description'} = language_get_description($language_subtags_hashref->{script},$language_subtags_hashref->{'language'},'script');
+            $language_subtags_hashref->{'region_description'} = language_get_description($language_subtags_hashref->{region},$language_subtags_hashref->{'language'},'region');
+            $language_subtags_hashref->{'variant_description'} = language_get_description($language_subtags_hashref->{variant},$language_subtags_hashref->{'language'},'variant');
+            $track_language_groups->{$language_subtags_hashref->{'language'}}++;
+            push ( @{ $language_groups->{$language_subtags_hashref->{language}} }, $language_subtags_hashref );
         }
-        return \@final_languages;
+        # $key is a language subtag like 'en'
+        while( my ($key, $value) = each %$language_groups) {
+            push @languages_loop,  {
+                            # this is only use if there is one
+                            rfc4646_subtag => @$value[0]->{rfc4646_subtag},
+                            native_description => language_get_description($key,$key,'language'),
+                            language => $key,
+                            sublanguages_loop => $value,
+                            plural => $track_language_groups->{$key} >1 ? 1 : 0,
+                            current => $current_language_regex->{language} eq $key ? 1 : 0,
+                           };
+        }
+        return \@languages_loop;
 }
 
 sub language_get_description {
-	my ($script,$lang,$type) = @_;
-	my $dbh = C4::Context->dbh;
-	my $desc;
-	my $sth = $dbh->prepare('SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?');
-	$sth->execute($script,$lang,$type);
-	while (my $descriptions = $sth->fetchrow_hashref) {
-		$desc = $descriptions->{'description'};
-	}
-	return $desc;
+    my ($script,$lang,$type) = @_;
+    my $dbh = C4::Context->dbh;
+    my $desc;
+    my $sth = $dbh->prepare("SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?");
+    #warn "QUERY: SELECT description FROM language_descriptions WHERE subtag=$script AND lang=$lang AND type=$type";
+    $sth->execute($script,$lang,$type);
+    while (my $descriptions = $sth->fetchrow_hashref) {
+        $desc = $descriptions->{'description'};
+    }
+    unless ($desc) {
+        $sth = $dbh->prepare("SELECT description FROM language_descriptions WHERE subtag=? AND lang=? AND type=?");
+        $sth->execute($script,'en',$type);
+        while (my $descriptions = $sth->fetchrow_hashref) {
+            $desc = $descriptions->{'description'};
+        }
+    }
+    return $desc;
 }
 =head2 regex_lang_subtags
 
@@ -374,8 +376,9 @@ sub regex_lang_subtags {
 
     #my $root = qr{(?: ($language) (?: $s ($script) )? 40% (?: $s ($region) )? 40% (?: $s ($variant) )? 10% (?: $s ($extension) )? 5% (?: $s ($privateuse) )? 5% ) 90% | ($grandfathered) 5% | ($privateuse) 5% };
 
-	$string =~  qr{^ (?:($language)) (?:$s($script))? (?:$s($region))?  (?:$s($variant))?  (?:$s($extension))?  (?:$s($privateuse))? $}xi;  # |($grandfathered) | ($privateuse) $}xi;
-	my %subtag = (
+    $string =~  qr{^ (?:($language)) (?:$s($script))? (?:$s($region))?  (?:$s($variant))?  (?:$s($extension))?  (?:$s($privateuse))? $}xi;  # |($grandfathered) | ($privateuse) $}xi;
+    my %subtag = (
+        'rfc4646_subtag' => $string,
         'language' => $1,
         'script' => $2,
         'region' => $3,
@@ -389,83 +392,83 @@ sub regex_lang_subtags {
 # Script Direction Resources:
 # http://www.w3.org/International/questions/qa-scripts
 sub get_bidi {
-	my ($language_script)= @_;
-	my $dbh = C4::Context->dbh;
-	my $bidi;
-	my $sth = $dbh->prepare('SELECT bidi FROM language_script_bidi WHERE rfc4646_subtag=?');
-	$sth->execute($language_script);
-	while (my $result = $sth->fetchrow_hashref) {
-		$bidi = $result->{'bidi'};
-	}
-	return $bidi;
+    my ($language_script)= @_;
+    my $dbh = C4::Context->dbh;
+    my $bidi;
+    my $sth = $dbh->prepare('SELECT bidi FROM language_script_bidi WHERE rfc4646_subtag=?');
+    $sth->execute($language_script);
+    while (my $result = $sth->fetchrow_hashref) {
+        $bidi = $result->{'bidi'};
+    }
+    return $bidi;
 };
 
 sub accept_language {
-	# referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
-	# FIXME: since this is only used in Output.pm as of Jan 8 2008, maybe it should be IN Output.pm
-	my ($clientPreferences,$supportedLanguages) = @_;
-	my @languages = ();
-	if ($clientPreferences) {
-		# There should be no whitespace anways, but a cleanliness/sanity check
-		$clientPreferences =~ s/\s//g;
+    # referenced http://search.cpan.org/src/CGILMORE/I18N-AcceptLanguage-1.04/lib/I18N/AcceptLanguage.pm
+    # FIXME: since this is only used in Output.pm as of Jan 8 2008, maybe it should be IN Output.pm
+    my ($clientPreferences,$supportedLanguages) = @_;
+    my @languages = ();
+    if ($clientPreferences) {
+        # There should be no whitespace anways, but a cleanliness/sanity check
+        $clientPreferences =~ s/\s//g;
 
-		# Prepare the list of client-acceptable languages
-		foreach my $tag (split(/,/, $clientPreferences)) {
-			my ($language, $quality) = split(/\;/, $tag);
-			$quality =~ s/^q=//i if $quality;
-			$quality = 1 unless $quality;
-			next if $quality <= 0;
-			# We want to force the wildcard to be last
-			$quality = 0 if ($language eq '*');
-			# Pushing lowercase language here saves processing later
-			push(@languages, { quality => $quality,
-		       language => $language,
-		       lclanguage => lc($language) });
-		}
-	} else {
-		carp "accept_language(x,y) called with no clientPreferences (x).";
-	}
-	# Prepare the list of server-supported languages
-	my %supportedLanguages = ();
-	my %secondaryLanguages = ();
-	foreach my $language (@$supportedLanguages) {
-		# warn "Language supported: " . $language->{language_code};
-		$supportedLanguages{lc($language->{language_code})} = $language->{language_code};
-		if ($language->{language_code} =~ /^([^-]+)-?/) {
-			$secondaryLanguages{lc($1)} = $language->{language_code};
-		}
-	}
+        # Prepare the list of client-acceptable languages
+        foreach my $tag (split(/,/, $clientPreferences)) {
+            my ($language, $quality) = split(/\;/, $tag);
+            $quality =~ s/^q=//i if $quality;
+            $quality = 1 unless $quality;
+            next if $quality <= 0;
+            # We want to force the wildcard to be last
+            $quality = 0 if ($language eq '*');
+            # Pushing lowercase language here saves processing later
+            push(@languages, { quality => $quality,
+               language => $language,
+               lclanguage => lc($language) });
+        }
+    } else {
+        carp "accept_language(x,y) called with no clientPreferences (x).";
+    }
+    # Prepare the list of server-supported languages
+    my %supportedLanguages = ();
+    my %secondaryLanguages = ();
+    foreach my $language (@$supportedLanguages) {
+        # warn "Language supported: " . $language->{language_code};
+        $supportedLanguages{lc($language->{language_code})} = $language->{language_code};
+        if ($language->{language_code} =~ /^([^-]+)-?/) {
+            $secondaryLanguages{lc($1)} = $language->{language_code};
+        }
+    }
 
-	# Reverse sort the list, making best quality at the front of the array
-	@languages = sort { $b->{quality} <=> $a->{quality} } @languages;
-	my $secondaryMatch = '';
-	foreach my $tag (@languages) {
-		if (exists($supportedLanguages{$tag->{lclanguage}})) {
-			# Client en-us eq server en-us
-			return $supportedLanguages{$tag->{language}} if exists($supportedLanguages{$tag->{language}});
-			return $supportedLanguages{$tag->{lclanguage}};
-		} elsif (exists($secondaryLanguages{$tag->{lclanguage}})) {
-			# Client en eq server en-us
-			return $secondaryLanguages{$tag->{language}} if exists($secondaryLanguages{$tag->{language}});
-			return $supportedLanguages{$tag->{lclanguage}};
-		} elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
-			# Client en-gb eq server en-us
-			$secondaryMatch = $secondaryLanguages{$1};
-		} elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
-			# FIXME: We just checked the exact same conditional!
-			# Client en-us eq server en
-			$secondaryMatch = $supportedLanguages{$1};
-		} elsif ($tag->{lclanguage} eq '*') {
-		# * matches every language not already specified.
-		# It doesn't care which we pick, so let's pick the default,
-		# if available, then the first in the array.
-		#return $acceptor->defaultLanguage() if $acceptor->defaultLanguage();
-		return $supportedLanguages->[0];
-		}
-	}
-	# No primary matches. Secondary? (ie, en-us requested and en supported)
-	return $secondaryMatch if $secondaryMatch;
-	return undef;	# else, we got nothing.
+    # Reverse sort the list, making best quality at the front of the array
+    @languages = sort { $b->{quality} <=> $a->{quality} } @languages;
+    my $secondaryMatch = '';
+    foreach my $tag (@languages) {
+        if (exists($supportedLanguages{$tag->{lclanguage}})) {
+            # Client en-us eq server en-us
+            return $supportedLanguages{$tag->{language}} if exists($supportedLanguages{$tag->{language}});
+            return $supportedLanguages{$tag->{lclanguage}};
+        } elsif (exists($secondaryLanguages{$tag->{lclanguage}})) {
+            # Client en eq server en-us
+            return $secondaryLanguages{$tag->{language}} if exists($secondaryLanguages{$tag->{language}});
+            return $supportedLanguages{$tag->{lclanguage}};
+        } elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+            # Client en-gb eq server en-us
+            $secondaryMatch = $secondaryLanguages{$1};
+        } elsif ($tag->{lclanguage} =~ /^([^-]+)-/ && exists($secondaryLanguages{$1}) && $secondaryMatch eq '') {
+            # FIXME: We just checked the exact same conditional!
+            # Client en-us eq server en
+            $secondaryMatch = $supportedLanguages{$1};
+        } elsif ($tag->{lclanguage} eq '*') {
+        # * matches every language not already specified.
+        # It doesn't care which we pick, so let's pick the default,
+        # if available, then the first in the array.
+        #return $acceptor->defaultLanguage() if $acceptor->defaultLanguage();
+        return $supportedLanguages->[0];
+        }
+    }
+    # No primary matches. Secondary? (ie, en-us requested and en supported)
+    return $secondaryMatch if $secondaryMatch;
+    return undef;   # else, we got nothing.
 }
 1;
 
