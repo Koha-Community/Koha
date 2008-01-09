@@ -19,10 +19,12 @@ package C4::Suggestions;
 
 
 use strict;
+use CGI;
+use Mail::Sendmail;
+
 use C4::Context;
 use C4::Output;
 use C4::Dates qw(format_date);
-use Mail::Sendmail;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -385,7 +387,7 @@ sub ModStatus {
     $sth = $dbh->prepare($queryMail);
     $sth->execute($suggestionid);
     my $emailinfo = $sth->fetchrow_hashref;
-    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl","intranet");
+    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl", "intranet", CGI->new());
 
     $template->param(
         byemail => $emailinfo->{byemail},
