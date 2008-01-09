@@ -90,7 +90,7 @@ if ($op eq 'add_form') {
 	
 	if ($input->param('roadtypeid') ){
 		$sth=$dbh->prepare("UPDATE roadtype SET road_type=? WHERE roadtypeid=?");
-		$sth->execute($input->param('roadtypeid'),$input->param('road_type'));
+		$sth->execute($input->param('road_type'),$input->param('roadtypeid'));
 	
 	}
 	else{	
