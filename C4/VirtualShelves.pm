@@ -163,9 +163,13 @@ gives a desc sort.
 Returns a reference-to-array, whose elements are references-to-hash,
 as returned by C<C4::Biblio::GetBiblioFromItemNumber>.
 
+Note: the notforloan status comes from the itemtype, and where it equals 0
+it does not ensure that related items.notforloan status is likewise 0. The
+caller has to check any items on their own, possibly with CanBookBeIssued
+from C4::Circulation.
+
 =cut
 
-#'
 sub GetShelfContents {
     my ( $shelfnumber ,$sortfield) = @_;
     my $dbh=C4::Context->dbh();
@@ -174,23 +178,27 @@ sub GetShelfContents {
 		$sthsort->execute($shelfnumber);
 		($sortfield) = $sthsort->fetchrow_array;
 	}
-	my @itemlist;
     my $query =
-       " SELECT vc.biblionumber,vc.shelfnumber,biblio.*
-         FROM   virtualshelfcontents vc LEFT JOIN biblio on vc.biblionumber=biblio.biblionumber
+       " SELECT vc.biblionumber, vc.shelfnumber,
+	   			biblio.*, biblioitems.itemtype, itemtypes.*
+         FROM   virtualshelfcontents vc
+		 LEFT JOIN biblio      ON      vc.biblionumber =      biblio.biblionumber
+		 LEFT JOIN biblioitems ON  biblio.biblionumber = biblioitems.biblionumber
+		 LEFT JOIN itemtypes   ON biblioitems.itemtype = itemtypes.itemtype
          WHERE  vc.shelfnumber=? ";
-    my @bind = ($shelfnumber);
 	if($sortfield) {
-		#$sortfield = $dbh->quote($sortfield);
 		$query .= " ORDER BY `$sortfield` ";
 		$query .= " DESC " if ($sortfield eq 'copyrightdate');
 	}
     my $sth = $dbh->prepare($query);
-    $sth->execute(@bind);
-    while ( my $item = $sth->fetchrow_hashref ) {
-        push( @itemlist, $item );
-    }
-   return ( \@itemlist );
+	$sth->execute($shelfnumber);
+	return $sth->fetchall_arrayref({});	
+	# Like the perldoc says,
+	# returns reference-to-array, where each element is reference-to-hash of the row:
+	#   like [ $sth->fetchrow_hashref(), $sth->fetchrow_hashref() ... ] 
+	# Suitable for use in TMPL_LOOP.
+	# See http://search.cpan.org/~timb/DBI-1.601/DBI.pm#fetchall_arrayref
+	# or newer, for your version of DBI.
 }
 
 =item AddShelf
