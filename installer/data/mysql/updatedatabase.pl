@@ -863,7 +863,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
   ADD `altcontactaddress3` varchar(255) default NULL,
   ADD `altcontactzipcode` varchar(50) default NULL,
   ADD `altcontactphone` varchar(50) default NULL
-");
+  ");
+  $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
+('OPACBaseURL',NULL,'Specify the Base URL of the OPAC, e.g., opac.mylibrary.com, the http:// will be added automatically by Koha.',NULL,'Free'),
+('language','en','Set the default language in the staff client.',NULL,'Languages'),
+('QueryAutoTruncate',1,'If ON, query truncation is enabled by default',NULL,'YesNo'),
+('QueryRemoveStopwords',0,'If ON, stopwords listed in the Administration area will be removed from queries',NULL,'YesNo')
+  ");
         print "Upgrade to $DBversion done (syncing deletedborrowers table with borrowers table)\n";
     SetVersion ($DBversion);
 }

@@ -105,7 +105,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesNeedReturns',1,'If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type)  VALUES ('DebugLevel',2,'Define the level of debugging information sent to the browser when errors are encountered (set to 0 in production). 0=none, 1=some, 2=most','0|1|2','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebra',1,'If ON, Zebra indexing is turned off, simpler setup, but slower searches','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('NoZebraIndexes',0,'Enter a specific hash for NoZebra indexes. Enter : \'indexname\' => \'100a,245a,500*\',\'index2\' => \'...\'','','Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SessionStorage','mysql','Use database or a temporary file for storing session data','mysql|Pg|tmp','Choice');  
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('CircAutocompl',1,'If ON, autocompletion is enabled for the Circulation input',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingSerials',1,'If ON, serials routing is enabled',NULL,'YesNo');
@@ -127,7 +126,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 
 -- I18N/L10N
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the preferred order for translations. The specified language will be tried first.',NULL,'Languages');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the default language in the OPAC.',NULL,'Languages');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguagesdisplay',0,'If ON, enables display of Change Language feature on OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles','Mr|Mrs|Miss|Ms','Define appropriate Titles for patrons',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist',0,'Default Goods and Services tax rate NOT in %, but in numeric form (0.12 for 12%), set to 0 to disable GST','','free');
@@ -166,6 +165,8 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesCalendar',"noFinesWhenClosed",'Specify whether to use the Calendar in calculating duedates and fines',"ignoreCalendar|noFinesWhenClosed",'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('previousIssuesDefaultSortOrder',"asc",'Specify the sort order of Previous Issues on the circulation page',"asc|desc",'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('todaysIssuesDefaultSortOrder',"desc",'Specify the sort order of Todays Issues on the circulation page',"asc|desc",'Choice');
-
-
-
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACBaseURL',NULL,'Specify the Base URL of the OPAC, e.g., opac.mylibrary.com, the http:// will be added automatically by Koha.',NULL,'Free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('language','en','Set the default language in the staff client.',NULL,'Languages');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryAutoTruncate',1,'If ON, query truncation is enabled by default',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryRemoveStopwords',0,'If ON, stopwords listed in the Administration area will be removed from queries',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NoZebraIndexes','\'title\' => \'130a,210a,222a,240a,243a,245a,245b,246a,246b,247a,247b,250a,250b,440a,830a\',\r\n\'author\' => \'100a,100b,100c,100d,110a,111a,111b,111c,111d,245c,700a,710a,711a,800a,810a,811a\',\r\n\'isbn\' => \'020a\',\r\n\'issn\' => \'022a\',\r\n\'lccn\' => \'010a\',\r\n\'biblionumber => \'999c\',\r\n\'itemtype\' => \'942c\',\r\n\'publisher\' => \'260b\',\r\n\'date\' => \'260c\',\r\n\'note\' => \'500a, 501a,504a,505a,508a,511a,518a,520a,521a,522a,524a,526a,530a,533a,538a,541a,546a,555a,556a,562a,563a,583a,585a,582a\',\r\n\'subject\' => \'600*,610*,611*,630*,650*,651*,653*,654*,655*,662*,690*\',\r\n\'dewey\' => \'082\',\r\n\'bc\' => \'952p\',\r\n\'callnum\' => \'952o\',\r\n\'an\' => \'6009,6109,6119\',\r\n\'host-item\' => \'952a,952c\'','','Enter a specific hash for NoZebra indexes. Enter : \'indexname\' => \'100a,245a,500*\',\'index2\' => \'...\'','Free');

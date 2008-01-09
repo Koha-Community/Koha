@@ -14,6 +14,6 @@
     <li <!-- TMPL_IF NAME="Patrons" -->class="active" <!-- /TMPL_IF -->><a title="Patrons" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Patrons">Patrons</a></li>
     <li <!-- TMPL_IF NAME="Searching" -->class="active" <!-- /TMPL_IF -->><a title="Searching" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Searching">Searching</a></li>
     <li <!-- TMPL_IF NAME="StaffClient" -->class="active" <!-- /TMPL_IF -->><a title="Staff Client" href="/cgi-bin/koha/admin/systempreferences.pl?tab=StaffClient">Staff Client</a></li>
-    <li <!-- TMPL_IF NAME="" -->class="active" <!-- /TMPL_IF -->><a href="/cgi-bin/koha/admin/systempreferences.pl?">Other</a></li>
+    <li <!-- TMPL_IF NAME="" -->class="active" <!-- /TMPL_IF -->><a href="/cgi-bin/koha/admin/systempreferences.pl">Local Use</a></li>
 </ul>
 </div>

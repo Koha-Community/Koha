@@ -81,6 +81,7 @@ my %tabsysprefs;
     $tabsysprefs{DebugLevel}="Admin";
     $tabsysprefs{SessionStorage}="Admin";
     $tabsysprefs{noItemTypeImages}="Admin";
+    $tabsysprefs{OPACBaseURL}="Admin";
 
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";
@@ -179,6 +180,7 @@ my %tabsysprefs;
     $tabsysprefs{dateformat}="I18N/L10N";
     $tabsysprefs{opaclanguages}="I18N/L10N";
     $tabsysprefs{opacthemes}="I18N/L10N";
+    $tabsysprefs{language}="I18N/L10N";
 
 # Searching
     $tabsysprefs{defaultSortField}="Searching";
@@ -194,7 +196,8 @@ my %tabsysprefs;
     $tabsysprefs{QueryWeightFields}="Searching";
     $tabsysprefs{expandedSearchOption}="Searching";
     $tabsysprefs{sortbynonfiling}="Searching";
-
+    $tabsysprefs{QueryAutoTruncate}="Searching";
+    $tabsysprefs{QueryRemoveStopwords}="Searching";
 
 # OPAC
     $tabsysprefs{AmazonAssocTag}="OPAC";
@@ -568,7 +571,7 @@ if ($op eq 'add_form') {
         $row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'variable'};
         push(@loop_data, \%row_data);
     }
-    $tab=($tab?$tab:"Others");
+    $tab=($tab?$tab:"Local Use");
     $template->param(loop => \@loop_data, $tab => 1);
     if ($offset>0) {
         my $prevpage = $offset-$pagesize;
