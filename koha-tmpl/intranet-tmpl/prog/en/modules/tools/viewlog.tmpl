@@ -43,42 +43,24 @@
 				//	}
 				// }
 
-				function get_limit (date,did) {
-					var dvalue = document.getElementById(did).value;
-					if (dvalue == "") { return false; }
-					var limitDate = Date_from_syspref(dvalue);
-					if (debug && debug > 5) {
-						var month = date.getMonth() + 1;
-						var dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
-						alert("comparing to " + did + " date:\n" 
-								+ (limitDate > date) + "\n    date: " + date 
-								+ "\nincoming:\n" + dateString + "\nlimitdate: " + limitDate
-						);
-					}
-					return limitDate;
-				}
+				// return true if the date is blocked.
+				function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
+				function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
 
-				function validatefrom(date) {return (get_limit(date,'to'  ) < date);}  // true or false
-				function validateto  (date) {return (get_limit(date,'from') > date);}  // true or false
-
-				Calendar.setup(
-				{
+				Calendar.setup({
 					inputField : "from",
 					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 					button : "openCalendarFrom",
-					disableFunc : validatefrom,
-					dateStatusFunc : validatefrom
-				}
-				);
-				Calendar.setup(
-		   		{
+					disableFunc : disable_from,
+					dateStatusFunc : disable_from
+				});
+				Calendar.setup({
 					inputField : "to",
 					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 					button : "openCalendarTo",
-					disableFunc : validateto,
-					dateStatusFunc : validateto
-				}
-				);
+					disableFunc : disable_to,
+					dateStatusFunc : disable_to
+				});
 		    </script>
 		</p>
 

@@ -53,14 +53,21 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
-use C4::Dates qw(format_date_in_iso);
+use C4::Dates;
+
+use vars qw($debug);
+
+BEGIN {
+        $debug = $ENV{DEBUG} || 0;
+}
 
 my $input          = new CGI;
-my $title          = $input->param('title');
+$debug or $debug = $input->param('debug') || 0;
+my $title          = $input->param( 'title');
 my $author         = $input->param('author');
-my $name           = $input->param('name');
-my $from_placed_on = $input->param('fromplacedon');
-my $to_placed_on   = format_date_in_iso($input->param('toplacedon'));
+my $name           = $input->param( 'name' );
+my $from_placed_on = C4::Dates->new($input->param('from'));
+my $to_placed_on   = C4::Dates->new($input->param(  'to'));
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -74,8 +81,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $from_iso = ($from_placed_on->output('iso') || 0);
+my   $to_iso = (  $to_placed_on->output('iso') || 0);
 my ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) =
-  &GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
+  &GetHistory( $title, $author, $name, $from_iso, $to_iso );
   
 $template->param(
     suggestions_loop        => $order_loop,
@@ -86,9 +95,11 @@ $template->param(
     title                   => $title,
     author                  => $author,
     name                    => $name,
-    from_placed_on          => $from_placed_on,
-    to_placed_on            => $to_placed_on,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    from_placed_on          => $from_placed_on->output('syspref'),
+    to_placed_on            =>   $to_placed_on->output('syspref'),
+    DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),
+	dateformat              => C4::Dates->new()->format(),
+    debug                   => $debug,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

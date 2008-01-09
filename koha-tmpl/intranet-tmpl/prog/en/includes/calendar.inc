@@ -23,5 +23,24 @@ function Date_from_syspref(dstring) {
 		return 0;
 	}
 }
+
+function get_Calendar_limit (date,did) {
+	// this function could be moved to a static calendar-extras.js file
+	var dvalue = document.getElementById(did).value;
+	if (dvalue == "") { return false; }
+	var limitDate = Date_from_syspref(dvalue);
+	if (debug && debug > 5) {
+		var month = date.getMonth() + 1;
+		var dateString = date.getFullYear() + '-' + month + '-' + date.getDate();
+		alert("Comparing incoming (" + dateString + ") vs "
+			+ "'" + did + "' limit\n"
+			+ "\n thisdate: " + date
+			+ "\nlimitdate: " + limitDate
+			+ "\nlimit > thisdate : " + (limitDate > date) 
+			+ "\nlimit < thisdate : " + (limitDate < date) 
+		);
+	}
+	return limitDate;
+}
 //]]>
 </script>
