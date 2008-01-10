@@ -66,6 +66,7 @@ if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
 } else {
     #nothings changed, so do nothing.
     print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+	exit;
 }
 
 ModItem($item_changes, $biblionumber, $itemnumber);

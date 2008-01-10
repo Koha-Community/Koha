@@ -67,6 +67,7 @@ my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) { 
     print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
+	exit;
 }
 
 #coping with subscriptions
