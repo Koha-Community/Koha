@@ -178,12 +178,12 @@ SWITCH: {
         }
         $template->param( paramsloop => \@paramsloop );
         my ($shelflist) = GetShelves( $loggedinuser, 2 );
-        my $color = '';
+        my $color = 0;
         my @shelvesloop;
         foreach my $element ( sort keys %$shelflist ) {
             my %line;
-            ( $color eq 1 ) ? ( $color = 0 ) : ( $color = 1 );
-            $line{'toggle'}            = $color;
+			$color = ($color==1) ? 0 : 1;
+            $color and $line{'toggle'} = $color;
             $line{'shelf'}             = $element;
             $line{'shelfname'}         = $shelflist->{$element}->{'shelfname'};
             $line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
@@ -224,6 +224,15 @@ $template->param(
     shelvesloop     => \@shelvesloop,
     numberCanManage => $numberCanManage,
 );
+if ($template->param('viewshelf') or
+	$template->param( 'shelves' ) or
+	$template->param(  'edit'   ) ) {
+	$template->param(vseflag => 1);
+}
+if ($template->param( 'shelves' ) or
+	$template->param(  'edit'   ) ) {
+	$template->param( seflag => 1);
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
