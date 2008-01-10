@@ -227,12 +227,12 @@ if ($op eq 'serialchangestatus') {
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
             if (C4::Context->preference("autoBarcode") ne  'OFF'  ) {
               eval {    $record->field($tagfield)->subfield($tagsubfield) };
-              if ($@) {
+		  if ($@) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;
                 # OK, we have the new barcode, add the entry in MARC record # FIXME -> should be  using barcode plugin here.
-                $field->update( $tagsubfield => ++$newbarcode );
+                $record->field($tagfield)->update( $tagsubfield => ++$newbarcode );
               }
             }
             # check for item barcode # being unique
