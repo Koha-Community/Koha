@@ -302,12 +302,8 @@ Adds an itemnumber to Serial record
 sub AddItem2Serial {
     my ( $serialid, $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        UPDATE serial SET itemnumber=IF(itemnumber IS NULL, $itemnumber, CONCAT(itemnumber,",",$itemnumber))
-        WHERE  serialid = ?
-    |;
-    my $rq = $dbh->prepare($query);
-    $rq->execute($serialid);
+    my $rq = $dbh->prepare("INSERT INTO `serialitems` SET serialid=? , itemnumber=?");
+    $rq->execute($serialid, $itemnumber);
     return $rq->rows;
 }
 

@@ -70,6 +70,7 @@ if (@subscriptionid){
     }
     $subs->{'abouttoexpire'}=abouttoexpire($subs->{'subscriptionid'});
     $subs->{'subscriptionexpired'}=HasSubscriptionExpired($subs->{'subscriptionid'});
+    $subs->{'subscriptionid'} = $subscriptionid;  # FIXME - why was this lost ?
     push @$subscriptiondescs,$subs;
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);

@@ -222,13 +222,6 @@ if ($op eq 'serialchangestatus') {
           my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
           if ($item=~/^N/){
             #New Item
-            # add serialid to item record 
-            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.itemnumber");
-			my $field = $record->field($tagfield);
-            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.serialid");            
-			if ($tagsubfield ) {
-              $field->update($tagsubfield => $itemhash{$item}->{'serial'});
-			}
 			
             # if autoBarcode is ON, calculate barcode...
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");

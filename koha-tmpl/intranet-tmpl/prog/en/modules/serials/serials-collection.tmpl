@@ -75,7 +75,7 @@ $(document).ready(function() {
 </tr>
 <!--TMPL_LOOP Name="subscriptions"-->
 	<tr>
-      <td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">#<!-- TMPL_VAR name="subscriptionid" --></a> </td>
+      <td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->"># <!-- TMPL_VAR name="subscriptionid" --></a> </td>
       <td>         <!--TMPL_IF name="periodicity1" -->
                         1/day
                 <!-- /TMPL_IF -->
@@ -147,8 +147,9 @@ $(document).ready(function() {
       </tr>
 <!--/TMPL_LOOP -->
 <!--TMPL_IF Name="subscr"-->
+<!--TMPL_UNLESS Name="onesubscription"-->
 <tr ><td colspan="7">  <a href="serials-collection.pl?biblionumber=<!--TMPL_VAR Name="biblionumber" -->">See any subscription attached to this biblio</a></td>
-</tr>
+</tr><!-- /TMPL_UNLESS -->
 <!--/TMPL_IF-->
 </table>
 <!--/TMPL_IF -->
