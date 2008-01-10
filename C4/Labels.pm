@@ -18,8 +18,6 @@ package C4::Labels;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
-
 use vars qw($VERSION @ISA @EXPORT);
 
 use PDF::Reuse;
@@ -28,7 +26,34 @@ use Algorithm::CheckDigits;
 # use Data::Dumper;
 # use Smart::Comments;
 
-$VERSION = 0.02;
+BEGIN {
+	$VERSION = 0.03;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&get_label_options &get_label_items
+		&build_circ_barcode &draw_boundaries
+		&drawbox &GetActiveLabelTemplate
+		&GetAllLabelTemplates &DeleteTemplate
+		&GetSingleLabelTemplate &SaveTemplate
+		&CreateTemplate &SetActiveTemplate
+		&SaveConf &DrawSpineText &GetTextWrapCols
+		&GetUnitsValue &DrawBarcode
+		&get_printingtypes
+		&get_layouts
+		&get_barcode_types
+		&get_batches &delete_batch
+		&add_batch &SetFontSize &printText
+		&GetItemFields
+		&get_text_fields
+		get_layout &save_layout &add_layout
+		&set_active_layout &by_order
+		&build_text_dropbox
+		&delete_layout &get_active_layout
+		&get_highest_batch
+		&deduplicate_batch
+	);
+}
 
 =head1 NAME
 
@@ -37,33 +62,6 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 =head1 FUNCTIONS
 
 =over 2
-
-=cut
-
-@ISA    = qw(Exporter);
-@EXPORT = qw(
-  &get_label_options &get_label_items
-  &build_circ_barcode &draw_boundaries
-  &drawbox &GetActiveLabelTemplate
-  &GetAllLabelTemplates &DeleteTemplate
-  &GetSingleLabelTemplate &SaveTemplate
-  &CreateTemplate &SetActiveTemplate
-  &SaveConf &DrawSpineText &GetTextWrapCols
-  &GetUnitsValue &DrawBarcode
-  &get_printingtypes
-  &get_layouts
-  &get_barcode_types
-  &get_batches &delete_batch
-  &add_batch &SetFontSize &printText
-  &GetItemFields
-  &get_text_fields
-  get_layout &save_layout &add_layout
-  &set_active_layout &by_order
-  &build_text_dropbox
-  &delete_layout &get_active_layout
-  &get_highest_batch
-  &deduplicate_batch
-);
 
 =item get_label_options;
 
