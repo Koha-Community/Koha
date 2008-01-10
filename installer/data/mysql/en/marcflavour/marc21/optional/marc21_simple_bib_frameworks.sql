@@ -79,10 +79,6 @@
 -- ********************************
 
 
-TRUNCATE biblio_framework;
-TRUNCATE marc_subfield_structure;
-TRUNCATE marc_tag_structure;
-
 INSERT INTO `biblio_framework` (`frameworkcode`,`frameworktext`) VALUES
 		('BKS', 'Books, Booklets, Workbooks'),
 		('CF', 'CD-ROMs, DVD-ROMs, General Online Resources'),
