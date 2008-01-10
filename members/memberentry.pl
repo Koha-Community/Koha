@@ -264,7 +264,10 @@ if (C4::Context->preference("IndependantBranches")) {
   }
 }
 if ($op eq 'add'){
-  $template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1);
+	my $arg2 = $newdata{'dateenrolled'} || sprintf('%04d-%02d-%02d', Today()); 
+	$data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
+	$template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1);
+	
 } 
 if ($op eq "modify")  {
   $template->param( updtype => 'M',modify => 1 );
