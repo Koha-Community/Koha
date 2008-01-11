@@ -46,10 +46,10 @@ function confirm_deletion() {
 
 	function yuiToolbar() {
 	    var editmenu = [
-	        { text: "Edit Record", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=" },
+	        { text: _("Edit Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=" },
 	        { text: "Edit Items", url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
-	        { text: "Edit as New (Duplicate)", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=duplicate" },
-			{ text: "Delete Record", <!-- TMPL_IF NAME="count" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
+	        { text: _("Edit as New (Duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=duplicate" },
+			{ text: _("Delete Record"), <!-- TMPL_IF NAME="count" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
 	    ];
 		
 		var savemenu = [
@@ -62,7 +62,7 @@ function confirm_deletion() {
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "Save",
+	        label: _("Save"),
 	        name: "savemenubutton",
 	        menu: savemenu,
 	        container: "savemenuc"
@@ -70,7 +70,7 @@ function confirm_deletion() {
 	    
 		new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "Edit",
+	        label: _("Edit"),
 	        name: "editmenubutton",
 	        menu: editmenu,
 	        container: "editmenuc",
@@ -80,7 +80,7 @@ function confirm_deletion() {
 		var addtoshelfButton = new YAHOO.widget.Button({
                                             id: "addtoshelf", 
                                             type: "button", 
-                                            label: "Add to List", 
+                                            label: _("Add to List"), 
                                             container: "addtoshelfc",
 											onclick: {fn: addToShelf }
                                         });
@@ -88,7 +88,7 @@ function confirm_deletion() {
 		var printbiblioButton = new YAHOO.widget.Button({
                                             id: "printbiblio", 
                                             type: "button", 
-                                            label: "Print", 
+                                            label: _("Print"), 
                                             container: "printbiblioc",
 											onclick: {fn: printBiblio }
                                         });
