@@ -516,6 +516,7 @@ WriteMakefile(
 'Test::More' => 0.62,
 'Text::CSV' => 0.01,
 'Text::CSV_XS' => 0.32,
+'Text::Iconv' => 1.7,
 'Text::Wrap' => 2005.082401,
 'Time::HiRes' => 1.86,
 'Time::localtime' => 1.02,
