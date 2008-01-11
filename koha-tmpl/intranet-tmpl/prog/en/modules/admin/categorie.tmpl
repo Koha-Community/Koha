@@ -54,14 +54,15 @@
 		    ok=1;
 			_alertString += "- description missing\n";
 		}
-		if (!isNum(ff.upperagelimit,0)) {
+		if (!isNum(ff.upperagelimit,0) && ff.category_type.value=='C') {
 		    ok=1;
-			_alertString += "- upperagelimit is not a number\n";
+		  	_alertString += "- upperagelimit is not a number\n";
+				
 		}
 		
 		if (ok) { // if there is a problem
 			alert(_alertString);
-            return;
+             return false;
         }
         // if all is good
 		ff.submit();
@@ -131,7 +132,7 @@
 	</li></ol>
 </fieldset>
 
-	<fieldset class="action"><input type="submit" value="Save" onclick="Check(this.form);" /> </fieldset>
+	<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form);" /> </fieldset>
 	</form>
 
 <!-- /TMPL_IF -->

@@ -187,7 +187,7 @@ if ($op eq 'save' || $op eq 'insert'){
     my $age = GetAge($newdata{dateofbirth});
     my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
 	my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
-    if (($age > $high) or ($age < $low)) {
+    if (($high && ($age > $high)) or ($age < $low)) {
       push @errors, 'ERROR_age_limitations';
 	  $template->param('ERROR_age_limitations' => "$low to $high");
     }
