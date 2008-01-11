@@ -33,7 +33,7 @@ INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'intranet', 'i', 'en', 'Staff Client');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'intranet', 'i', 'fr', '????');
+VALUES( 'intranet', 'i', 'fr', 'Français');
 
 -- Theme (t)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
