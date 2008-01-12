@@ -22,6 +22,7 @@ package C4::VirtualShelves;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use Carp;
 use C4::Context;
 use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
@@ -393,13 +394,13 @@ sub DelFromShelf {
 
 #'
 sub DelShelf {
-	my ( $shelfnumber ) = @_;
+	unless (@_) {
+		carp "DelShelf called without valid argument (shelfnumber)";
+		return undef;
+	}
 	my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
-	$sth->execute($shelfnumber);
-	return 0;
+	return $sth->execute(shift);
 }
-
-END { }    # module clean-up code here (global destructor)
 
 1;
 

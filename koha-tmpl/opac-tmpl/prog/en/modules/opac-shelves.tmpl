@@ -75,13 +75,16 @@
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="shelves" -->
-        <!-- TMPL_IF NAME="status1" -->
-        <p class="error"><!-- TMPL_VAR NAME="string1" --></p>
-        <!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="paramsloop" -->
-            <!-- TMPL_IF NAME="status" -->
-        <p class="error"><!-- TMPL_VAR NAME="string" --></p>
-            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="delete_ok" -->
+				<p class="message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</p>
+			<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="delete_fail" -->
+				<p class="error">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</p>
+			<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="unrecognized" -->
+				<p class="error">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</p>
+			<!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     <!-- /TMPL_IF --><!-- /shelves -->
 
