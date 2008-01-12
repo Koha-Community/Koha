@@ -163,7 +163,7 @@ sub themelanguage {
     foreach my $th (@themes) {
         foreach my $la (@languages) {
             #for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
-                warn "$htdocs/$th/$la/modules/$interface-"."tmpl";
+                # warn "$htdocs/$th/$la/modules/$interface-"."tmpl";
                 #$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
                 if ( -e "$htdocs/$th/$la/modules/$interface-"."tmpl") {
                 #".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
