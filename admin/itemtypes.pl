@@ -55,20 +55,12 @@ sub StringSearch {
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
     my @data = split( ' ', $searchstring );
-    my $count = @data;
-    my $sth =
-      $dbh->prepare(
-        "Select * from itemtypes where (description like ?) order by itemtype");
+    my $sth = $dbh->prepare(
+        "SELECT * FROM itemtypes WHERE (description LIKE ?) ORDER BY itemtype"
+	);
     $sth->execute("$data[0]%");
-    my @results;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-
-    #  $sth->execute;
-    $sth->finish;
-    return ( scalar(@results), \@results );
+    return $sth->fetchall_arrayref({});		# return ref-to-array of ref-to-hashes
+								# like [ fetchrow_hashref(), fetchrow_hashref() ... ]
 }
 
 my $input       = new CGI;
@@ -89,38 +81,31 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+$template->param(script_name => $script_name);
 if ($op) {
-    $template->param(
-        script_name => $script_name,
-        $op         => 1
-    );    # we show only the TMPL_VAR names $op
+	$template->param($op  => 1); # we show only the TMPL_VAR names $op
+} else {
+    $template->param(else => 1);
 }
-else {
-    $template->param(
-        script_name => $script_name,
-        else        => 1
-    );    # we show only the TMPL_VAR names $op
-}
+
+my $dbh = C4::Context->dbh;
+
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
-
-    #start the page and read in includes
     #---- if primkey exists, it's a modify action, so read values to modify...
     my $data;
     if ($itemtype) {
-        my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("select * from itemtypes where itemtype=?");
         $sth->execute($itemtype);
         $data = $sth->fetchrow_hashref;
-        $sth->finish;
     }
 
     # build list of images
     my $imagedir_filesystem = getitemtypeimagedir();
     my $imagedir_web        = getitemtypeimagesrc();
     opendir( DIR, $imagedir_filesystem )
-      or warn "can't opendir " . $imagedir_filesystem . ": " . $!;
+      or warn "cannot opendir " . $imagedir_filesystem . ": " . $!;
     my @imagelist;
     my $i              = 0;
     my $image_per_line = 12;
@@ -146,7 +131,7 @@ if ( $op eq 'add_form' ) {
     closedir DIR;
 
     my $remote_image = undef;
-    if ( defined $data->{imageurl} and $data->{imageurl} =~ m/^http/ ) {
+    if ( defined $data->{imageurl} and $data->{imageurl} =~ /^http/i ) {
         $remote_image = $data->{imageurl};
     }
 
@@ -168,9 +153,6 @@ if ( $op eq 'add_form' ) {
     # called by add_form, used to insert/modify data in DB
 }
 elsif ( $op eq 'add_validate' ) {
-    my $dbh = C4::Context->dbh;
-
-    my $modif = '';
     my $query = "
         SELECT itemtype
         FROM   itemtypes
@@ -178,12 +160,8 @@ elsif ( $op eq 'add_validate' ) {
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute($itemtype);
-    if ( $sth->fetchrow ) {
-        $modif = 1;
-    }
-
-    if ($modif) {    # it 's a modification
-        my $query = '
+    if ( $sth->fetchrow ) {		# it's a modification
+        my $query2 = '
             UPDATE itemtypes
             SET    description = ?
                  , renewalsallowed = ?
@@ -193,15 +171,14 @@ elsif ( $op eq 'add_validate' ) {
                  , summary = ?
             WHERE itemtype = ?
         ';
-        my $sth = $dbh->prepare($query);
+        $sth = $dbh->prepare($query2);
         $sth->execute(
             $input->param('description'),
             $input->param('renewalsallowed'),
             $input->param('rentalcharge'),
             ( $input->param('notforloan') ? 1 : 0 ),
             (
-                $input->param('image') eq 'removeImage' ? ''
-                : (
+                $input->param('image') eq 'removeImage' ? '' : (
                       $input->param('image') eq 'remoteImage'
                     ? $input->param('remoteImage')
                     : $input->param('image') . ""
@@ -219,21 +196,21 @@ elsif ( $op eq 'add_validate' ) {
                 (?,?,?,?,?,?,?);
             ";
         my $sth = $dbh->prepare($query);
+		my $image = $input->param('image');
         $sth->execute(
             $input->param('itemtype'),
             $input->param('description'),
             $input->param('renewalsallowed'),
             $input->param('rentalcharge'),
             $input->param('notforloan') ? 1 : 0,
-            $input->param('image') eq 'removeImage' ? ''
-            : $input->param('image') eq 'remoteImage'
-            ? $input->param('remoteImage')
-            : $input->param('image'),
+            $image eq 'removeImage' ?           ''                 :
+            $image eq 'remoteImage' ? $input->param('remoteImage') :
+            $image,
             $input->param('summary'),
         );
     }
 
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
+    print $input->redirect('itemtypes.pl');
     exit;
 
     # END $OP eq ADD_VALIDATE
@@ -241,10 +218,6 @@ elsif ( $op eq 'add_validate' ) {
     # called by default form, used to confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirm' ) {
-
-    #start the page and read in includes
-    my $dbh = C4::Context->dbh;
-
     # Check both categoryitem and biblioitems, see Bug 199
     my $total = 0;
     for my $table ('biblioitems') {
@@ -253,7 +226,6 @@ elsif ( $op eq 'delete_confirm' ) {
             "select count(*) as total from $table where itemtype=?");
         $sth->execute($itemtype);
         $total += $sth->fetchrow_hashref->{total};
-        $sth->finish;
     }
 
     my $sth =
@@ -262,8 +234,6 @@ elsif ( $op eq 'delete_confirm' ) {
       );
     $sth->execute($itemtype);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-
     $template->param(
         itemtype        => $itemtype,
         description     => $data->{description},
@@ -278,41 +248,30 @@ elsif ( $op eq 'delete_confirm' ) {
   # called by delete_confirm, used to effectively confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirmed' ) {
-
-    #start the page and read in includes
-    my $dbh      = C4::Context->dbh;
     my $itemtype = uc( $input->param('itemtype') );
     my $sth      = $dbh->prepare("delete from itemtypes where itemtype=?");
     $sth->execute($itemtype);
     $sth = $dbh->prepare("delete from issuingrules where itemtype=?");
     $sth->execute($itemtype);
-    $sth->finish;
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=itemtypes.pl\"></html>";
+    print $input->redirect('itemtypes.pl');
     exit;
-
     # END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
-    my ( $count, $results ) = StringSearch( $searchfield, 'web' );
-
+    my ($results) = StringSearch( $searchfield, 'web' );
     my $page = $input->param('page') || 1;
     my $first = ( $page - 1 ) * $pagesize;
 
     # if we are on the last page, the number of the last word to display
     # must not exceed the length of the results array
     my $last = min( $first + $pagesize - 1, scalar @{$results} - 1, );
-
     my $toggle = 0;
     my @loop;
-    foreach my $result ( @{$results}[ $first .. $last ] ) {
-        my $itemtype = $result;
-        $itemtype->{toggle} = ( $toggle++ % 2 eq 0 ? 1 : 0 );
-        $itemtype->{imageurl} =
-          getitemtypeimagesrcfromurl( $itemtype->{imageurl} );
-        $itemtype->{rentalcharge} =
-          sprintf( '%.2f', $itemtype->{rentalcharge} );
-
+    foreach my $itemtype ( @{$results}[ $first .. $last ] ) {
+        $itemtype->{toggle} = ($toggle++ % 2) ? 0 : 1 ;
+        $itemtype->{imageurl} = getitemtypeimagesrcfromurl( $itemtype->{imageurl} );
+        $itemtype->{rentalcharge} = sprintf( '%.2f', $itemtype->{rentalcharge} );
         push( @loop, $itemtype );
     }
 
