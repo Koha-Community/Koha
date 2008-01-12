@@ -77,7 +77,7 @@ sub dmy_map ($$) {
 		return  @{$aref}; 
 	}
 	# $debug and 
-	carp "Illegal Date '$val' does not match '$dformat' format: " . $self->visual() . "\n";
+	carp "Illegal Date '$val' does not match '$dformat' format: " . $self->visual();
 	return 0;
 }
 
@@ -85,11 +85,11 @@ sub _check_date_and_time {
     my $chron_ref = shift;
     my ($year, $month, $day) = _chron_to_ymd($chron_ref);
     unless (check_date($year, $month, $day)) {
-        carp "Illegal date specified (year = $year, month = $month, day = $day)\n";
+        carp "Illegal date specified (year = $year, month = $month, day = $day)";
     }
     my ($hour, $minute, $second) = _chron_to_hms($chron_ref);
     unless (check_time($hour, $minute, $second)) {
-        carp "Illegal time specified (hour = $hour, minute = $minute, second = $second)\n";
+        carp "Illegal time specified (hour = $hour, minute = $minute, second = $second)";
     }
 }
 
