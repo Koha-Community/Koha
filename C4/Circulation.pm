@@ -1594,7 +1594,7 @@ sub CanBookBeRenewed {
         if ( my $data2 = $sth2->fetchrow_hashref ) {
             $renews = $data2->{'renewalsallowed'};
         }
-        if ( $renews && $renews >= $data1->{'renewals'} ) {
+        if ( $renews && $renews > $data1->{'renewals'} ) {
             $renewokay = 1;
         }
         else {
