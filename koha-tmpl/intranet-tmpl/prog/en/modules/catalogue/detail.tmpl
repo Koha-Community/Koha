@@ -194,7 +194,7 @@ function verify_images() {
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
-                <!-- TMPL_IF Name="notforloan" -->
+                <!-- TMPL_IF Name="itemnotforloan" -->
                     Not for loan 
                     <!-- TMPL_IF Name="notforloanvalue" -->
                         (<!-- TMPL_VAR NAME="notforloanvalue" -->)
@@ -218,9 +218,9 @@ function verify_images() {
                         <!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS NAME="onloan" --><!-- TMPL_UNLESS NAME="itemlost" --><!-- TMPL_UNLESS NAME="wthdrawn" --><!-- TMPL_UNLESS NAME="damaged" --><!-- TMPL_UNLESS NAME="transfertwhen" --><!-- TMPL_UNLESS NAME="reservedate" -->
+                <!-- TMPL_UNLESS name="itemnotforloan" --><!-- TMPL_UNLESS NAME="onloan" --><!-- TMPL_UNLESS NAME="itemlost" --><!-- TMPL_UNLESS NAME="wthdrawn" --><!-- TMPL_UNLESS NAME="damaged" --><!-- TMPL_UNLESS NAME="transfertwhen" --><!-- TMPL_UNLESS NAME="reservedate" -->
                                         Available
-                <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
+                <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
                         
                     </td>
                     <td><!-- TMPL_VAR NAME="datelastseen" --></td>

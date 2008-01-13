@@ -1163,7 +1163,7 @@ sub GetItemsInfo {
             $sthnflstatus->execute( $authorised_valuecode,
                 $data->{itemnotforloan} );
             my ($lib) = $sthnflstatus->fetchrow;
-            $data->{notforloan} = $lib;
+            $data->{notforloanvalue} = $lib;
         }
 
         # my stack procedures
