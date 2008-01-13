@@ -222,6 +222,7 @@ $template->param(
     waiting_count      => $wcount,
     textmessaging      => $borr->{textmessaging},
 	patronupdate => $patronupdate,
+	OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

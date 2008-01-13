@@ -251,6 +251,7 @@ my %tabsysprefs;
     $tabsysprefs{OpacTopissue}="OPACFeatures";
     $tabsysprefs{OpacBrowser}="OPACFeatures";
     $tabsysprefs{kohaspsuggest} = "OPACFeatures";
+    $tabsysprefs{OpacRenewalAllowed} = "OPACFeatures";
 
 # LOGFeatures
     $tabsysprefs{CataloguingLog}  = "LOGFeatures";

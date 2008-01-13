@@ -132,7 +132,9 @@
         <th colspan="2">Title</th>
         <th>Call No.</th>
         <th>Due</th>
+        <!-- TMPL_IF name="OpacRenewalAllowed" -->
         <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_UNLESS -->
+        <!-- /TMPL_IF -->
         <th>Fines</th>
         </tr>
         <!-- TMPL_LOOP NAME="ISSUES" -->
@@ -172,15 +174,17 @@
                 <!-- TMPL_ELSE -->
                     <td><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS name="patron_flagged" -->
-                <td>
-                    <!-- TMPL_IF NAME="status" -->
-                        <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
-                    <!-- TMPL_ELSE -->
-                        Not renewable
-                    <!-- /TMPL_IF -->
-                </td>
-                <!-- /TMPL_UNLESS -->
+                <!-- TMPL_IF name="OpacRenewalAllowed" -->
+                    <!-- TMPL_UNLESS name="patron_flagged" -->
+                    <td>
+                        <!-- TMPL_IF NAME="status" -->
+                            <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
+                        <!-- TMPL_ELSE -->
+                            Not renewable
+                        <!-- /TMPL_IF -->
+                    </td>
+                    <!-- /TMPL_UNLESS -->
+                <!-- /TMPL_IF -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
             </tr>
         <!-- /TMPL_LOOP -->
