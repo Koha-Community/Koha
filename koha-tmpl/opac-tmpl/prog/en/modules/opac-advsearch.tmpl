@@ -48,7 +48,7 @@
     <fieldset>
     <legend>Search for:</legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
-    
+        <p>
         <!-- TMPL_IF NAME="expanded_options" -->
             <!-- TMPL_IF NAME="search_boxes_label" -->
                 <!-- p tag was here -->
@@ -185,6 +185,7 @@
             <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
+        </p>
     <!-- /TMPL_LOOP -->
 
     </fieldset>
