@@ -195,19 +195,24 @@ function verify_images() {
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF Name="notforloan" -->
-                                        Not for loan <!-- TMPL_IF Name="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
+                    Not for loan 
+                    <!-- TMPL_IF Name="notforloanvalue" -->
+                        (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
                             
                 <!-- TMPL_IF NAME="reservedate"-->
                     <!-- TMPL_IF NAME="waitingdate" -->
-                                        Waiting<!-- TMPL_ELSE -->On hold
+                        Waiting
+                    <!-- TMPL_ELSE -->
+                        On hold
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="canreservefromotherbranches" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->"><!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" --></a><!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="waitingdate" -->
-                                        at<!-- TMPL_ELSE -->expected at
+                        at<!-- TMPL_ELSE -->expected at
                     <!-- /TMPL_IF -->   <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
-                                        since
+                    since
                     <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" -->
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF -->
