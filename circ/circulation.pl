@@ -260,26 +260,30 @@ if ($borrowernumber) {
 
 if ($barcode) {
    # $barcode = cuecatbarcodedecode($barcode);
-    
-	if ($issueconfirmed) {
-        AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
-        $inprocess = 1;
-    }
-    else {
-        my ( $error, $question ) =
-          CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
-        my $noerror    = 1;
-        my $noquestion = 1;
-#         Get the item title for more information
-    	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
-    
-        foreach my $impossible ( keys %$error ) {
+	# always check for blockers on issuing
+	my ( $error, $question ) =
+	  CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
+	my $noerror    = 1;
+	foreach my $impossible ( keys %$error ) {
             $template->param(
                 $impossible => $$error{$impossible},
                 IMPOSSIBLE  => 1
             );
             $noerror = 0;
         }
+    
+	if ($issueconfirmed && $noerror) {
+		# we have no blockers for issuing and any issues needing confirmation have been resolved
+        AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
+        $inprocess = 1;
+    }
+	elsif ($issueconfirmed){
+	}
+    else {
+        my $noquestion = 1;
+#         Get the item title for more information
+    	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
+    
         foreach my $needsconfirmation ( keys %$question ) {
             $template->param(
                 $needsconfirmation => $$question{$needsconfirmation},
