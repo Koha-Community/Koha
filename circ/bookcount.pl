@@ -35,7 +35,7 @@ use C4::Dates qw/format_date/;
 my $input        = new CGI;
 my $itm          = $input->param('itm');
 my $bi           = $input->param('bi');
-my $biblionumber = $input->param('biblioitemnumber');
+my $biblionumber = $input->param('biblionumber');
 my $branches     = GetBranches;
 
 my $idata = itemdatanum($itm);
