@@ -245,6 +245,9 @@ if ($borrowernumber) {
 		# borrower card soon to expire warn librarian
 		$template->param("warndeparture" => format_date($borrower->{dateexpiry}),
 			flagged       => "1",);
+		if ( C4::Context->preference('ReturnBeforeExpiry')){
+			$template->param("returnbeforeexpiry" => 1);
+		}
 	}
     $template->param(
         overduecount => $od,

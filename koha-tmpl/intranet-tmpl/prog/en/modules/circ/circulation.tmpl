@@ -273,6 +273,12 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			
 			</li>
 			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF NAME="returnbeforeexpiry" -->
+			 <li><span class="circ-hlt">Set due date to expiry:</span> You have the ReturnBeforeExpiry system preference enabled this means if the
+			 expiry date is before the date due, the date due will be set to the expiry date
+			 </li>
+			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF NAME = "expired" -->
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
