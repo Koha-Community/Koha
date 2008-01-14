@@ -80,7 +80,11 @@ my $supplier = $query->param('supplier');
 
 my @suppliers = GetBookSeller($supplier);
 my $count = scalar @suppliers;
-
+if ($count == 1){
+	$template->param( supplier_name => $suppliers[0]->{'name'},
+		id => $suppliers[0]->{'id'}
+	);
+}
 # check if we have to "close" a basket before building page
 my $op     = $query->param('op');
 my $basket = $query->param('basketno');

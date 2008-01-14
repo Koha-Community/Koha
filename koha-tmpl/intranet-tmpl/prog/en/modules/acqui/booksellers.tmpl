@@ -15,8 +15,11 @@
 	<div class="yui-b">
 	
 <!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
-	
+<!-- TMPL_IF EXPR="count == 1" -->	
+<h1> <!-- TMPL_VAR NAME="supplier_name" --> </h1>
+<!-- TMPL_ELSE -->
 <h1>You searched on <b>vendor <!-- TMPL_VAR name="supplier" -->,</b> <!-- TMPL_VAR name="count" --> results found</h1>
+<!-- /TMPL_IF -->
 <div id="acqui_order_supplierlist">
 	<table>
 	<tr>
