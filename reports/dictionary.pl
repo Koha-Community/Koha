@@ -185,7 +185,7 @@ elsif ($phase eq 'New Term step 6'){
 	my $sql=$input->param('sql');
 	save_dictionary($definition_name,$definition_description,$sql,$area);
 	$no_html=1;
-	print $input->redirect("/cgi-bin/koha/reports/guided_reports.pl?phase=View%20Dictionary");	
+	print $input->redirect("/cgi-bin/koha/reports/dictionary.pl?phase=View%20Dictionary");	
 
 }
 elsif ($phase eq 'Delete Definition'){
