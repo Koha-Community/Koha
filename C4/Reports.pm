@@ -590,10 +590,12 @@ sub get_from_dictionary {
 		$sth->execute();
 	}
 	my @loop;
+	my @reports = ( 'Circulation', 'Catalog', 'Patrons', 'Acquisitions', 'Accounts');
 	while (my $data = $sth->fetchrow_hashref()){
+		$data->{'areaname'}=$reports[$data->{'area'}-1];
 		push @loop,$data;
 		
-		}
+	}
 	$sth->finish();
 	return (\@loop);
 }
