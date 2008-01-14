@@ -10,6 +10,7 @@ a:hover {
 
 body {
 	text-align : left;
+  	padding:0 0 2em 0;
 }
 
 br.clear {
@@ -53,6 +54,9 @@ h6 {
 
 h1,h2,h3,h4,h5,h6 {
 	margin : .3em 0;
+}
+
+html {
 }
 
 p {
@@ -133,6 +137,7 @@ ol li {
 #header {
 	background-color : #F3F3F3;
 	border-bottom : 1px solid #E8E8E8;
+	line-height : 2em;
 }
 
 #header:after { /* clearing without presentational markup, IE gets extra treatment */
@@ -158,11 +163,6 @@ ol li {
 
 #sitetitle h1 a {
 	text-decoration : none;
-}
-
-#toplevelnav {
-	float : left;
-	line-height : 2em;
 }
 
 #submenu {
@@ -322,114 +322,6 @@ div#reserves,div#checkouts {
 	font-weight : bold;
 }
 
-/* ClickMenu Overrides */
-
-ul#toplevelmenu li {
-	display : inline;
-	list-style: none;
-}
-
-ul#toplevelmenu li ul {
-}
-
-div.cmDiv
-{
-	border: 0;
-	background-color: #F3F3F3;
-}
-
-.clickMenu li.more a {
-	background-image: url("../../img/more-arrow.gif");
-	background-position: right;
-	background-repeat: no-repeat;
-	padding-right : 13px;
-}
-
-.clickMenu li.more li a {
-	background-image : none;
-	padding-right : 0;
-	white-space : nowrap;
-}
-
-.clickMenu
-{
-	margin: 0;
-	padding: 0;
-	cursor: default;
-}
-.clickMenu, .clickMenu ul
-{
-	list-style: none;
-}
-.clickMenu ul
-{
-	margin: 0;
-	padding: 2px;
-	border: 0;
-	background-color: #F3F3F3;
-	min-width: 100px; /* ie doesnt know this :/ */
-	//float: left;/*ie again*/
-	//width: 100%;/*and again*/
-}
-.clickMenu div.outerbox
-{
-	display: none;
-	min-width: 106px; /* firefox produces animation-flickering when the box is bigger than this :/ */
-}
-.clickMenu div.inner
-{
-	//top: 20px; /* for ie */
-	left: 0;
-	margin: 0;
-}
-.clickMenu div.inner div.outerbox
-{
-	margin: 0;
-	left: 98px;
-	//left: 90px; /* for ie */
-	top: -3px;
-}
-.clickMenu li
-{
-	list-style-type : none;
-	position: relative;
-	padding: 0 20px 0 2px;
-	/*white-space: nowrap; does not really work in ie */
-}
-.clickMenu li.main
-{
-	float: left;
-	padding: 0 10px;
-	background-color: #F3F3F3;
-	//height: 20px; /* for ie */
-}
-.clickMenu li.main li
-{
-	z-index: 2;
-	min-width: 78px;
-}
-.clickMenu li.hover
-{
-	z-index: 1 !important; /* the hover z-index has to be below the normal one the hovering items may be drawn over a submenu */
-	background-color : transparent;
-}
-.clickMenu img.liArrow
-{
-	position: absolute;
-	right: 5px;
-	top: 0.41em;
-}
-.clickMenu ul a {
-	cursor: default;
-}
-
-ul.innerBox a {
-	cursor : pointer;
-}
-
-ul.innerBox {
-	border: 1px solid #E8E8E8;
-}
 
 div.yui-b h5 {
 	font-size : 100%;
@@ -1134,30 +1026,6 @@ div.message input.approve {
  	text-decoration : underline;
  }
  
- #changelanguage {
-	background-color : #F3F3F3;
- 	border-top : 1px solid #E8E8E8;
-	font-size : 93%;
-	margin-top : 2em;
-	padding : .3em .5em .5em .5em;
- }
- 
- #changelanguage ul {
- 	margin : 0;
-	padding : 0;
- }
- 
- #changelanguage li {
- 	border-left : 1px solid #CCC;
- 	display : inline;
-	list-style : none;
-	padding : 0 .5em;
- }
- 
- #changelanguage li:first-child {
- 	border-left : 0;
- }
- 
 .required {
     color : #C00;
 }
@@ -1415,3 +1283,151 @@ input[type=submit]:active, input[type=button]:active, input.submit:active {
     font-size:75%;
 	font-style : italic;
 }
+
+/* Define a new style for each menu */
+	
+.yui-skin-sam .yuimenu {
+	line-height: 2;/* ~24px */
+	*line-height: 1.9; /* For IE */
+}
+
+a.yuimenuitemlabel {
+}
+	
+.yui-skin-sam .yuimenu .bd {
+	border-width: 1px;
+	border-color: #ddd #666 #666 #ddd;
+	border-style: solid;
+	background-color: #fff;
+}
+
+.yui-skin-sam #sublangs li.yuimenuitem {
+	/*
+	For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode:
+	Used to collapse superfluous white space between <li> 
+	elements that is triggered by the "display" property of the
+	<a> elements being set to "block."
+	*/
+	_border-bottom: solid 1px #ccc;
+}
+	
+	
+/* Define a new style for a MenuItem instance's "selected" state. */
+.yui-skin-sam #sublangs .yuimenuitem-selected {
+	background-color: #82AAE1;
+}
+.yui-skin-sam #sublangs .yuimenuitemlabel-selected {
+	color: #fff;
+}
+		
+#toplevelnav {
+	float : left;
+	margin-left : .5em;
+}
+
+ul#toplevelmenu {
+	padding : 0;
+}
+		
+ul#toplevelmenu li {
+	display: inline;
+	padding : 0 .6em;
+}
+		
+ul#toplevelmenu li.more a {
+	background-image:url(../../img/more-arrow.gif);
+	background-position:right center;
+	background-repeat:no-repeat;
+	padding-right:13px;
+}
+		
+ul#toplevelmenu li.more ul li a {
+	background-image : none;
+	padding-right : 20px;
+}
+
+ul#toplevelmenu li.more ul li a.yuimenuitemlabel {
+	padding: .2em 20px .2em 20px;
+}
+		
+ul#menu li a, ul#toplevelmenu li a {
+	text-decoration : none;
+}
+ul#menu li ul li, ul#toplevelmenu li ul li {
+	display :block;
+	padding :0;
+}
+ul#menu li ul li a, ul#toplevelmenu li ul li a {
+	text-decoration : none;
+}
+
+ul#i18nMenu {
+ 	margin : 0;
+	padding : .2em 0;
+ }
+ 
+ul#i18nMenu li {
+ 	border-left : 1px solid #CCC;
+ 	display : inline;
+	list-style : none;
+	padding : 0 10px;
+ }
+ 
+ul#i18nMenu li:first-child {
+ 	border-left : 0;
+ }
+ 
+ul#i18nMenu li ul li {
+ 	border : 0;
+ 	display : block;
+	padding : 0;
+ }
+ 
+ 		
+ul#i18nMenu li.more a {
+	background-image:url(../../img/more-up-arrow.gif);
+	background-position:right center;
+	background-repeat:no-repeat;
+	padding-right:13px;
+}
+		
+ul#i18nMenu li.more ul li a {
+	background-image : none;
+	padding-right : 20px;
+}
+ 
+ div#changelanguage{
+	background-color: #fff;
+	border-top: 1px solid #CCC;
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height: 2em;
+ }
+ 
+ @media screen{
+  body>div#changelanguage {
+   position: fixed;
+  }
+ }
+ 
+ * html body{
+  overflow:hidden;
+ } 
+ 
+ * html div#doc1{
+  height:100%;
+  overflow:auto;
+ }
+  
+ * html div#doc2{
+  height:100%;
+  overflow:auto;
+ }
+  
+ * html div#doc3{
+  height:100%;
+  overflow:auto;
+ }
+ 
