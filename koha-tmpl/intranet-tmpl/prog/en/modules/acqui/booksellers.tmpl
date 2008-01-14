@@ -36,7 +36,11 @@
 			</td>
 			<td>	<a href="parcels.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Receive order</a>
 			</td>
-			<td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->"><!-- TMPL_VAR name="name" --></a></td>
+			<!-- TMPL_IF NAME="name"-->
+			  <td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->"><!-- TMPL_VAR name="name" --></a></td>
+			<!-- TMPL_ELSE -->
+			  <td><a href="supplier.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">NO NAME</a></td>
+			<!-- /TMPL_IF -->
 			<td>	<table>
 				    <!-- TMPL_IF NAME="loop_basket"-->
 						<tr>
