@@ -80,7 +80,7 @@ elsif ($phase eq 'New Term step 2'){
 elsif ($phase eq 'New Term step 3'){
 	# Choosing the columns
 	my $area = $input->param('areas');
-	my $columns = get_columns($area);
+	my $columns = get_columns($area,$input);
 	my $definition_name=$input->param('definition_name');
 	my $definition_description=$input->param('definition_description');		
 	$template->param( 'step_3' => 1,
