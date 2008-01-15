@@ -32,7 +32,7 @@ use C4::Members;
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
 my $startfrom = $input->param('startfrom')||1;
-my $resultsperpage = $input->param('resultsperpage')||10;
+my $resultsperpage = $input->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
 
 my ($template, $loggedinuser, $cookie);
 if($quicksearch){
