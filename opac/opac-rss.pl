@@ -72,7 +72,7 @@ my $size = $cgi->param('size') || 50;
 
 # the filename of the cached rdf file.
 my $filename = md5_base64($query);
-my $rss = new XML::RSS( version => '1.0' );
+my $rss = new XML::RSS( version => '1.0', encoding=>C4::Context->preference("TemplateEncoding"), output=>C4::Context->preference("TemplateEncoding"),language=>C4::Context->preference('opaclanguages'));
 
 # the site URL
 my $url = $cgi->url();
@@ -108,14 +108,16 @@ if ( -e "rss/$filename" ) {
 if ($RDF_update_needed) {
 
     #     warn "RDF update in progress";
+    utf8::decode($query);
+    my $libname=utf8::decode(C4::Context->preference("LibraryName"));
     $rss->channel(
         title       => "Koha : $query",
-        description => C4::Context->preference("LibraryName"),
+        description => $libname,
         link        => $short_url,
         dc          => {
             date     => "$year-$month-$day:$hour:$min:$sec",
             subject  => "Koha",
-            creator  => C4::Context->preference("LibraryName"),
+            creator  => $libname,
             rights   => "Copyright $year",
             language => C4::Context->preference("opaclanguages"),
         },
@@ -141,6 +143,8 @@ if ($RDF_update_needed) {
         }
         unless ($already_in_feed) {
             pop( @{ $rss->{'items'} } ) if ( @{ $rss->{'items'} } >= $size );
+            utf8::decode($biblio->{'title'});
+            utf8::decode($biblio->{'author'});
             $rss->add_item(
                 title       => $biblio->{'title'},
                 description => $biblio->{'author'},
