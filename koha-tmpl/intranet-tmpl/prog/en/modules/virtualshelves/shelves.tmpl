@@ -6,10 +6,12 @@
 //<![CDATA[ 
 
 $(document).ready(function(){
+	$("#addbarcode").focus();
     $("th.checkall").html("<a href=\"/cgi-bin/koha/shelves.pl\" id=\"CheckAll\"><img src=\"<!-- TMPL_VAR NAME="themelang" -->/../img/checkall.gif\" height=\"18\" width=\"18\" alt=\"Check All\" title=\"Check All\" border=\"0\" /></a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         $("#CheckAll img").attr("src","<!-- TMPL_VAR NAME="themelang" -->/../img/checknone.gif").attr("title","Check None").attr("alt","Check None");
+																	// FIXME: a checknone.gif image should be made!
         $("#CheckAll").attr("id","CheckNone");
         return false;
     });
@@ -21,12 +23,13 @@ $(document).ready(function(){
     });
 });
 
-function confirmDelete(s,n){
-        if (window.confirm(s)) {
-            location.href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1"; } else { 
-        return false;
-        }
-    }
+	function confirmDelete(message,n){
+		if (window.confirm(message)) {
+			location.href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1";
+		} else { 
+			return false;
+		}
+	}
     /**
      * this function checks all checkbox 
      * or uncheck all if there are already checked.
@@ -35,10 +38,9 @@ function confirmDelete(s,n){
         var checkboxes = document.getElementsByTagName('input');
         var nbCheckbox = checkboxes.length;
         var check = areAllChecked();
-        check = !check;
         for(var i=0;i<nbCheckbox;i++){
             if(checkboxes[i].getAttribute('type') == "checkbox" ){
-                checkboxes[i].checked = check;
+                checkboxes[i].checked = (check) ? 0 : 1;
             }
         }
     }
@@ -71,6 +73,29 @@ function confirmDelete(s,n){
   <div id="yui-main">
    <div class="yui-g"><!-- TMPL_INCLUDE NAME="virtualshelves-toolbar.inc" -->
    </div>
+
+<!-- TMPL_IF NAME="paramsloop" -->
+<!-- TMPL_LOOP NAME="paramsloop" -->
+<div class="yui-ge">
+    <div class="yui-u first">
+        <!-- TMPL_IF NAME="already" --><div class="dialog alert">A List named <!-- TMPL_VAR NAME="already" --> already exists!</div><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="status" --><div class="dialog alert"><!-- TMPL_VAR NAME="string" --></div><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="nobarcode" --><div class="dialog alert">ERROR: No barcode given.</div><!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="noshelfnumber" --><div class="dialog alert">ERROR: No shelfnumber given.</div><!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="nopermission" -->
+		<div class="dialog alert">ERROR: You do not have adequate permission for that action on list <!-- TMPL_VAR NAME="nopermission" -->.</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="failgetitem" -->
+		<div class="dialog alert">ERROR: No item found with barcode <!-- TMPL_VAR NAME="failgetitem" -->.</div>
+		<!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="duplicatebiblio" -->
+		<div class="dialog alert">A record matching barcode <b><!-- TMPL_VAR NAME="duplicatebiblio" --></b> has already been added.</div>
+		<!-- /TMPL_IF --> 
+	</div>
+</div>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF --> 
+
 <!-- TMPL_IF NAME="viewshelf" -->
    <div class="yui-g">
     <!-- TMPL_IF NAME="itemsloop" -->
@@ -141,8 +166,9 @@ function confirmDelete(s,n){
 	<!-- /TMPL_IF -->
    </div>
 <!-- /TMPL_IF --><!-- /viewshelf -->
-   <div class="yui-g">
+
 <!-- TMPL_IF name="manageshelf" -->
+<div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
  <fieldset class="brief">
     <legend>Add an item to <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
@@ -157,8 +183,8 @@ function confirmDelete(s,n){
         </ol>
  </fieldset>
 </form>
+</div>
 <!-- /TMPL_IF --><!-- /manageshelf -->
-   </div>
 
 <!-- TMPL_IF name="debug" -->
   <!-- TMPL_IF name="edit" --><div>Edit is on (<!-- TMPL_VAR name="shelfname" -->)</div><!-- /TMPL_IF -->
@@ -168,15 +194,6 @@ function confirmDelete(s,n){
 <!-- TMPL_IF NAME="seflag" -->
 <div class="yui-ge">
     <div class="yui-u first">
-        <!-- TMPL_IF NAME="already" --><div class="dialog alert">A List with that name already exists!</div><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="status1" -->
-            <div class="dialog alert"><!-- TMPL_VAR NAME="string1" --></div>
-        <!-- /TMPL_IF -->
-        <!-- TMPL_LOOP NAME="paramsloop" -->
-            <!-- TMPL_IF NAME="status" -->
-            <div class="dialog alert"><!-- TMPL_VAR NAME="string" --></div>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
     <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl">
         <fieldset class="rows">
 
@@ -240,7 +257,7 @@ function confirmDelete(s,n){
 <h3>Lists</h3>
 <table>
 <tr><th>Name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
-<!-- TMPL_LOOP NAME="shelvesloop" -->
+<!-- TMPL_LOOP NAME="shelvesloopall" -->
 <tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
 <td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
 <td>

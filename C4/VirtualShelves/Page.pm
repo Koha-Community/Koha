@@ -53,22 +53,36 @@ sub shelfpage ($$$$$) {
 	($pages{$type}) or $type = 'opac';
 	$query or die "No query";
 	$template or die "No template";
+	$template->param( { loggedinuser => $loggedinuser } );
+	my @paramsloop;
+	# getting the Shelves list
+	my $shelflist = GetShelves( $loggedinuser, 2 );
+	my $op = $query->param('op');
 
 # the format of this is unindented for ease of diff comparison to the old script
+# Note: do not mistake the assignment statements below for comparisons!
 
 if ( $query->param('modifyshelfcontents') ) {
-    my $shelfnumber = $query->param('viewshelf');
-    my $barcode     = $query->param('addbarcode');
-    my ($item) = GetItem( 0, $barcode );
-    my ($biblio) = GetBiblioFromItemNumber($item->{'itemnumber'});
-    if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
-        AddToShelf( $biblio->{'biblionumber'}, $shelfnumber );
-        foreach ( $query->param ) {
-			/REM-(\d*)/ or next;
-			$debug and warn "SHELVES: user $loggedinuser removing item $1 from shelf $shelfnumber";
-			DelFromShelf( $1, $shelfnumber );	 # $1 is biblionumber
-        }
-    }
+	my ($shelfnumber,$barcode,$item,$biblio);
+    if ($shelfnumber = $query->param('viewshelf')) {
+    	if (ShelfPossibleAction($loggedinuser, $shelfnumber, 'manage')) {
+    		if ($barcode = $query->param('addbarcode')) {
+    			if ($item = GetItem( 0, $barcode )) {
+    				$biblio = GetBiblioFromItemNumber($item->{'itemnumber'});
+        			AddToShelf($biblio->{'biblionumber'}, $shelfnumber) or 
+						push @paramsloop, {duplicatebiblio=>$barcode};
+				} else { push @paramsloop, {failgetitem=>$barcode}; }
+        	} else { 
+				(grep {/REM-(\d+)/} $query->param) or push @paramsloop, {nobarcode=>1};
+        		foreach ($query->param) {
+					/REM-(\d+)/ or next;
+					$debug and warn 
+						"SHELVES: user $loggedinuser removing item $1 from shelf $shelfnumber";
+					DelFromShelf($1, $shelfnumber);	 # $1 is biblionumber
+				}
+			}
+		} else { push @paramsloop, {nopermission=>$shelfnumber}; }
+    } else { push @paramsloop, {noshelfnumber=>1}; }
 }
 
 my $showadd = 1;
@@ -87,10 +101,6 @@ if (defined $shelf_type) {
 	$template->param(showprivateshelves => 1);
 }
 
-# getting the Shelves list
-my $shelflist = GetShelves( $loggedinuser, 2 );
-$template->param( { loggedinuser => $loggedinuser } );
-my $op = $query->param('op');
 
 SWITCH: {
 	if ( $op ) {
@@ -112,9 +122,8 @@ SWITCH: {
 		}
 		last SWITCH;
 	}
-    if ( $query->param('viewshelf') ) {
+    if (my $shelfnumber = $query->param('viewshelf') ) {
         #check that the user can view the shelf
-        my $shelfnumber = $query->param('viewshelf');
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
 			$showadd = 1;
@@ -127,11 +136,11 @@ SWITCH: {
             $template->param(
                 shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
                 shelfnumber => $shelfnumber,
-                viewshelf   => $query->param('viewshelf'),
+                viewshelf   => $shelfnumber,
                 manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
                 itemsloop => $items,
             );
-        }
+        } else { push @paramsloop, {nopermission=>$shelfnumber}; }
         last SWITCH;
     }
     if ( $query->param('shelves') ) {
@@ -144,16 +153,14 @@ SWITCH: {
 
             if ( $shelfnumber == -1 ) {    #shelf already exists.
 				$showadd = 1;
-                $template->param(
-                        shelfnumber => $shelfnumber,
-                        already     => 1
-                );
+				push @paramsloop, { already => $newshelf };
+                $template->param(shelfnumber => $shelfnumber);
             } else {
             	print $query->redirect($pages{$type}->{redirect} . "?viewshelf=$shelfnumber");
             	exit;
 			}
         }
-        my @paramsloop;
+		my $stay = 1;
         foreach ( $query->param() ) {
             /DEL-(\d+)/ or next;
 			my $number = $1;
@@ -163,6 +170,7 @@ SWITCH: {
 				if (DelShelf($number)) {
 					delete $shelflist->{$number};
 					$line{delete_ok}   = $name;
+					$stay = 0;
 				} else {
 					$line{delete_fail} = $name;
 				}
@@ -170,19 +178,18 @@ SWITCH: {
 				$line{unrecognized} = $number;
 	  		}
 			push(@paramsloop, \%line);
-            # print $query->redirect("/cgi-bin/koha/virtualshelves/shelves.pl"); exit;
+            # print $query->redirect($pages{$type}->{redirect});
+			# exit;
 		}
 		$showadd = 1;
-		$template->param(
-			paramsloop => \@paramsloop,
-			shelves    => 1,
-		);
+		$stay and $template->param(shelves => 1);
 		last SWITCH;
 	}
 }
 
+(@paramsloop) and $template->param(paramsloop => \@paramsloop);
 # rebuild shelflist in case a shelf has been added
-$shelflist = GetShelves( $loggedinuser, 2 );
+# $shelflist = GetShelves( $loggedinuser, 2 );
 $showadd and $template->param(showadd => 1);
 my $i = 0;
 my @shelvesloop;
@@ -259,22 +266,21 @@ __END__
 
 =item C<op>
 
-    Op can be equals to:
-        * modifsave to save change on the shelves
-        * modif to change the template to allow to modify the shelves.
+    Op can be:
+        * modif: show the template allowing modification of the shelves;
+        * modifsave: save changes from modif mode.
 
 =item C<viewshelf>
 
-    To load the template with 'viewshelves param' which allow to read the shelves information.
+    Load template with 'viewshelves param' displaying the shelf's information.
 
 =item C<shelves>
 
-    If equals to 1. then call the function shelves which add
-    or delete a shelf.
+    If the param shelves == 1, then add or delete a shelf.
 
 =item C<addshelf>
 
-    If the param shelves = 1 then addshelf must be equals to the name of the shelf to add.
+    If the param shelves == 1, then addshelf is the name of the shelf to add.
 
 =back
 

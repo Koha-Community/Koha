@@ -1,4 +1,4 @@
-/**
+	/**
 	 * this function checks all checkbox 
 	 * or uncheck all if there are already checked.
 	 */
@@ -6,10 +6,9 @@
 		var checkboxes = document.getElementsByTagName('input');
 		var nbCheckbox = checkboxes.length;
 		var check = areAllChecked();
-		check = !check;
 		for(var i=0;i<nbCheckbox;i++){
 			if(checkboxes[i].getAttribute('type') == "checkbox" ){
-				checkboxes[i].checked = check;
+				checkboxes[i].checked = (check) ? 0 : 1;
 			}
 		}
 	}
@@ -30,14 +29,10 @@
 	}
 
 function confirmDelete(message) {
-	var agree = confirm(message);
-	if(agree) {
-		return true;
-	} else {
-		return false;
-	}
+	return (confirm(message) ? true : false);
 }
 
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
-	}
+}
+

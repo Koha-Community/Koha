@@ -257,17 +257,15 @@ sub AddToShelf {
     my $sth = $dbh->prepare($query);
 
     $sth->execute( $shelfnumber, $biblionumber );
-    unless ( $sth->rows ) {
-        # already on shelf
-        my $query = qq(
-            INSERT INTO virtualshelfcontents
-                (shelfnumber, biblionumber, flags)
-            VALUES
-                (?, ?, 0)
-        );
-        $sth = $dbh->prepare($query);
-        $sth->execute( $shelfnumber, $biblionumber );
-    }
+    ($sth->rows) and return undef;	# already on shelf
+	my $query = qq(
+		INSERT INTO virtualshelfcontents
+			(shelfnumber, biblionumber, flags)
+		VALUES
+			(?, ?, 0)
+	);
+	$sth = $dbh->prepare($query);
+	$sth->execute( $shelfnumber, $biblionumber );
 }
 
 =item AddToShelfFromBiblio
