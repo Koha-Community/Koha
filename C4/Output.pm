@@ -132,28 +132,25 @@ sub themelanguage {
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
     # Fall back to English
-    $lang = 'en' unless $lang;
+    my @languages = split " ", C4::Context->preference("opaclanguages");
+    if ($lang){  
+        @languages=($lang,@languages);
+    } else {
+        $lang = $languages[0];
+    }      
     my $theme = 'prog';
 
     my $dbh = C4::Context->dbh;
     my @languages;
     my @themes;
     if ( $interface eq "intranet" ) {
-        @languages = split " ", C4::Context->preference("opaclanguages");
         @themes    = split " ", C4::Context->preference("template");
-        @languages = ($lang,@languages) if $lang;
     }
     else {
       # we are in the opac here, what im trying to do is let the individual user
       # set the theme they want to use.
       # and perhaps the them as well.
         #my $lang = $query->cookie('KohaOpacLanguage');
-        if ($lang) {                        # FIXME: if $lang always TRUE!
-            push @languages, $lang;
-        }
-        else {
-            @languages = split " ", C4::Context->preference("opaclanguages");
-        }
         @themes = split " ", C4::Context->preference("opacthemes");
     }
 
